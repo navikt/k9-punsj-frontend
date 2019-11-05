@@ -1,0 +1,18 @@
+{
+  "Ja":       "Ja",
+  "Nei":      "Nei",
+  "VetIkke":  "Vet ikke",
+
+  "locale.nb": "Bokmål - norsk",
+  "locale.nn": "Nynorsk - norsk",
+
+  "startPage.tittel": "K9-punsj",
+
+  "skjema.fodselsnr":                   "Fødselsnummer",
+  "skjema.arbeidsforhold":              "Arbeidsforhold",
+  "skjema.arbeidsforhold.arbeidstaker": "Arbeidstaker",
+  "skjema.arbeidsforhold.selvstendig":  "Selvstednig næringsdrivende",
+  "skjema.arbeidsforhold.frilanser":    "Frilanser",
+  "skjema.arbeidsforhold.annet":        "Annet",
+  "skjema.arbeidsforhold.ikke_oppgitt": "Ikke oppgitt"
+}

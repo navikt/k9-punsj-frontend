@@ -1,0 +1,23 @@
+{
+  "mapper1": [
+    {
+      "mappe_id": "8144556",
+      "innsendinger": [],
+      "innhold": {"søker": {"fødselsnummer": "15049228314"}},
+      "mangler": []
+    },
+    {
+      "mappe_id": "56564546",
+      "innsendinger": [],
+      "innhold": {"søker": {"fødselsnummer": "15049228314"}},
+      "mangler": []
+    },
+    {
+      "mappe_id": "25656566",
+      "innsendinger": [],
+      "innhold": {"søker": {"fødselsnummer": "15049228314"}},
+      "mangler": []
+    }
+  ],
+  "mapper2": []
+}
