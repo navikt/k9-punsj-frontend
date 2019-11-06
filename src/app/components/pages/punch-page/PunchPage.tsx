@@ -1,4 +1,19 @@
+import {PunchStep} from "app/models/enums";
+import {IMappe, IPunchState} from 'app/models/types';
+import {
+    backFromForm,
+    chooseMappeAction,
+    closeMappeAction,
+    findMapper,
+    newMappeAction,
+    openMappeAction,
+    setIdentAction,
+    setMapperAction,
+    undoSearchForMapperAction
+} from 'app/state/actions';
+import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
+
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {HoyreChevron, VenstreChevron} from "nav-frontend-chevron";
 import {Flatknapp, Knapp} from "nav-frontend-knapper";
@@ -13,21 +28,6 @@ import {InjectedIntlProps, injectIntl} from 'react-intl';
 // import {Document, Page as PdfPage} from 'react-pdf';
 import {connect} from 'react-redux';
 
-import {PunchStep} from "../../../models/enums";
-
-import {IMappe, IPunchState} from '../../../models/types';
-import {
-    backFromForm,
-    chooseMappeAction,
-    closeMappeAction,
-    findMapper,
-    newMappeAction,
-    openMappeAction,
-    setIdentAction,
-    setMapperAction,
-    undoSearchForMapperAction
-} from '../../../state/actions';
-import {RootStateType} from '../../../state/RootState';
 import Page from '../../page/Page';
 import PunchForm from "./PunchForm";
 import './punchPage.less';
@@ -78,7 +78,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
                     <Panel className="punch_form" border={true}>
                         <div>
                             <Input
-                                label={intlHelper(intl, 'skjema.fodselsnr')}
+                                label={`${intlHelper(intl, 'skjema.fodselsnr')}:`}
                                 onBlur={this.handleIdentBlur}
                                 onKeyPress={this.handleIdentKeyPress}
                                 disabled={punchState.step > PunchStep.START}

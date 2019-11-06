@@ -1,6 +1,6 @@
-import {PunchStep} from "../enums/PunchStep";
-import {IMappe} from "./Mappe";
+import {PunchStep} from "app/models/enums";
 import {IError} from "./Error";
+import {IMappe} from "./Mappe";
 
 export interface IPunchState {
     step:                   PunchStep;

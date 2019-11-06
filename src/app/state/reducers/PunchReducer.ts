@@ -1,6 +1,5 @@
-import {PunchActionKeys} from "../../models/enums/PunchActionKeys";
-import {PunchStep} from "../../models/enums/PunchStep";
-import {IPunchState} from "../../models/types";
+import {PunchActionKeys, PunchStep} from "app/models/enums";
+import {IPunchState} from "app/models/types";
 import {IPunchActionTypes} from "../actions";
 
 const initialState: IPunchState = {
@@ -11,7 +10,7 @@ const initialState: IPunchState = {
     mapperRequestError: undefined
 };
 
-function PunchReducer(
+export function PunchReducer(
     punchState: IPunchState = initialState,
     action: IPunchActionTypes
 ): IPunchState {
@@ -93,5 +92,3 @@ function PunchReducer(
         default: return punchState;
     }
 }
-
-export default PunchReducer;

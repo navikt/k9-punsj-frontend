@@ -1,7 +1,8 @@
 import {combineReducers} from "redux";
-import PunchReducer from "./reducers/PunchReducer";
+import {PunchFormReducer, PunchReducer} from "./reducers";
 
 export const rootReducer = combineReducers({
+    punchFormState: PunchFormReducer,
     punchState: PunchReducer
 });
 
