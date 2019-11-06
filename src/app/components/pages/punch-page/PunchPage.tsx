@@ -13,7 +13,7 @@ import {InjectedIntlProps, injectIntl} from 'react-intl';
 // import {Document, Page as PdfPage} from 'react-pdf';
 import {connect} from 'react-redux';
 
-import {PunchStep} from "../../../models/enums/PunchStep";
+import {PunchStep} from "../../../models/enums";
 
 import {IMappe, IPunchState} from '../../../models/types';
 import {

@@ -8,7 +8,7 @@ For å kjøre opp applikasjonen:
 npm install
 npm start
 ````
-Følgende kommando vil kjøre opp testdata generert av Jsonserver:
+Følgende kommando vil kjøre opp testdata generert av Jsonserver på port 4000:
 ````
 npm run mock:api
 ````
