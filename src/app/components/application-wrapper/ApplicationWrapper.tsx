@@ -13,7 +13,7 @@ interface IApplicationWrapperProps {
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = ({ locale, onChangeLocale, children }) => {
     return (
         <IntlProvider locale={locale}>
-            <Normaltekst tag="div">
+            <Normaltekst tag="div" className="fit-window-height">
                 <LanguageToggle locale={locale} toggle={onChangeLocale} />
                 <Router>{children}</Router>
             </Normaltekst>

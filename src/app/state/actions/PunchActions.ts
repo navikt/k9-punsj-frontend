@@ -1,6 +1,6 @@
-import {ApiPath, get} from "../../apiConfig";
-import {PunchActionKeys} from "../../models/enums/PunchActionKeys";
-import {IError, IMappe} from "../../models/types";
+import {ApiPath, get} from "app/apiConfig";
+import {PunchActionKeys} from "app/models/enums";
+import {IError, IFagsak, IMappe} from "app/models/types";
 
 interface ISetIdentAction           {type: PunchActionKeys.IDENT_SET,               ident: string}
 
@@ -9,16 +9,25 @@ interface IFindMapperLoadingAction  {type: PunchActionKeys.MAPPER_LOAD,         
 interface IFindMapperErrorAction    {type: PunchActionKeys.MAPPER_REQUEST_ERROR,    error: IError}
 interface IUndoSearchForMapper      {type: PunchActionKeys.MAPPER_UNDO_SEARCH}
 
+interface ISetFagsakerAction        {type: PunchActionKeys.FAGSAKER_SET,            fagsaker: IFagsak[]}
+interface IFindFagsakerLoadAction   {type: PunchActionKeys.FAGSAKER_LOAD,           isLoading: boolean}
+interface IFindFagsakerErrorAction  {type: PunchActionKeys.FAGSAKER_REQUEST_ERROR,  error: IError}
+
 interface IOpenMappeAction          {type: PunchActionKeys.MAPPE_OPEN,              mappe: IMappe}
 interface ICloseMappeAction         {type: PunchActionKeys.MAPPE_CLOSE}
 interface IChooseMappeAction        {type: PunchActionKeys.MAPPE_CHOOSE,            mappe: IMappe}
 interface INewMappeAction           {type: PunchActionKeys.MAPPE_NEW}
 interface IUndoChoiceOfMappeAction  {type: PunchActionKeys.MAPPE_UNDO_CHOICE}
 
+interface IOpenFagsakAction         {type: PunchActionKeys.FAGSAK_OPEN,             fagsak: IFagsak}
+interface ICloseFagsakAction        {type: PunchActionKeys.FAGSAK_CLOSE}
+
 type        IIdentActionTypes       = ISetIdentAction;
 type        IMapperActionTypes      = ISetMapperAction | IFindMapperErrorAction | IFindMapperLoadingAction | IUndoSearchForMapper;
+type        IFagsakerActionTypes    = ISetFagsakerAction | IFindFagsakerLoadAction | IFindFagsakerErrorAction;
 type        IMappeinfoActionTypes   = IOpenMappeAction | ICloseMappeAction | IChooseMappeAction | INewMappeAction | IUndoChoiceOfMappeAction;
-export type IPunchActionTypes       = IIdentActionTypes | IMapperActionTypes | IMappeinfoActionTypes;
+type        IFagsakinfoActionTypes  = IOpenFagsakAction | ICloseFagsakAction;
+export type IPunchActionTypes       = IIdentActionTypes | IMapperActionTypes | IFagsakerActionTypes | IMappeinfoActionTypes | IFagsakinfoActionTypes;
 
 export function setIdentAction(ident: string):                  ISetIdentAction             {return {type: PunchActionKeys.IDENT_SET, ident}}
 
@@ -32,8 +41,7 @@ export function findMapper(ident: string) {return (dispatch: any) => {
     return get(ApiPath.MAPPER_FIND, {ident}).then(response => {
         if (response.ok) {
             return response.json()
-                           .then(mapper => dispatch(setMapperAction(mapper)))
-                           .then(action => !action.mapper.length && dispatch(newMappeAction()));
+                           .then(mapper => dispatch(setMapperAction(mapper)));
         }
         return dispatch(findMapperErrorAction({
             status:     response.status,
@@ -43,11 +51,32 @@ export function findMapper(ident: string) {return (dispatch: any) => {
     });
 }}
 
+export function setFagsakerAction(fagsaker: IFagsak[]):         ISetFagsakerAction          {return {type: PunchActionKeys.FAGSAKER_SET, fagsaker}}
+export function findFagsakerLoadAction(isLoading: boolean):     IFindFagsakerLoadAction     {return {type: PunchActionKeys.FAGSAKER_LOAD, isLoading}}
+export function findFagsakerErrorAction(error: IError):         IFindFagsakerErrorAction    {return {type: PunchActionKeys.FAGSAKER_REQUEST_ERROR, error}}
+
+export function findFagsaker(ident: string) {return (dispatch: any) => {
+    dispatch(findFagsakerLoadAction(true));
+    return get(ApiPath.FAGSAKER_FIND, {ident}).then(response => {
+        if (response.ok) {
+            return response.json().then(fagsaker => dispatch(setFagsakerAction(fagsaker)));
+        }
+        return dispatch(findFagsakerErrorAction({
+            status:     response.status,
+            statusText: response.statusText,
+            url:        response.url
+        }));
+    })
+}}
+
 export function openMappeAction(mappe: IMappe):                 IOpenMappeAction            {return {type: PunchActionKeys.MAPPE_OPEN, mappe}}
 export function closeMappeAction():                             ICloseMappeAction           {return {type: PunchActionKeys.MAPPE_CLOSE}}
 export function chooseMappeAction(mappe: IMappe):               IChooseMappeAction          {return {type: PunchActionKeys.MAPPE_CHOOSE, mappe}}
 export function newMappeAction():                               INewMappeAction             {return {type: PunchActionKeys.MAPPE_NEW}}
 export function undoChoiceOfMappeAction():                      IUndoChoiceOfMappeAction    {return {type: PunchActionKeys.MAPPE_UNDO_CHOICE}}
+
+export function openFagsakAction(fagsak: IFagsak):              IOpenFagsakAction           {return {type: PunchActionKeys.FAGSAK_OPEN, fagsak}}
+export function closeFagsakAction():                            ICloseFagsakAction          {return {type: PunchActionKeys.FAGSAK_CLOSE}}
 
 export function backFromForm(chosenMappe?: IMappe) {return (dispatch: any) => {
     return !!chosenMappe ? dispatch(undoChoiceOfMappeAction()) : dispatch(undoSearchForMapperAction());

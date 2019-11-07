@@ -19,5 +19,28 @@
       "mangler": []
     }
   ],
-  "mapper2": []
+  "mapper2": [],
+  "fagsak1": [
+    {
+      "fagsak_id": "1234",
+      "url": "https://intern.nav.no/k9-sak/fagsak/1234",
+      "fra_og_med": "2019-01-01",
+      "til_og_med": "2019-05-05",
+      "barn": {
+        "navn": "Barn Barnesen",
+        "fødselsdato": "2017-02-02"
+      }
+    },
+    {
+      "fagsak_id": "4321",
+      "url": "https://intern.nav.no/k9-sak/fagsak/4321",
+      "fra_og_med": "2019-02-13",
+      "til_og_med": null,
+      "barn": {
+        "navn": "Barn Andre Barnesen",
+        "fødselsdato": "2015-02-02"
+      }
+    }
+  ],
+  "fagsak2": []
 }

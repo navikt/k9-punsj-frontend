@@ -1,5 +1,11 @@
 {
   "/mapper/15049228314*": "/mapper1",
   "/mapper/123": "/mapper1",
-  "/mapper/1234": "/mapper2"
+  "/mapper/1234": "/mapper2",
+  "/mapper/12345": "/mapper1",
+  "/mapper/123456": "/mapper2",
+  "/fagsak/123?ytelse=pleiepenger_sykt_barn": "/fagsak1",
+  "/fagsak/1234?ytelse=pleiepenger_sykt_barn": "/fagsak2",
+  "/fagsak/12345?ytelse=pleiepenger_sykt_barn": "/fagsak2",
+  "/fagsak/123456?ytelse=pleiepenger_sykt_barn": "/fagsak1"
 }

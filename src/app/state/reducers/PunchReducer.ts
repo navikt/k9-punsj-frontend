@@ -6,8 +6,11 @@ const initialState: IPunchState = {
     step: PunchStep.START,
     ident: "",
     mapper: [],
+    fagsaker: [],
     isMapperLoading: false,
-    mapperRequestError: undefined
+    isFagsakerLoading: false,
+    mapperRequestError: undefined,
+    fagsakerRequestError: undefined
 };
 
 export function PunchReducer(
@@ -56,10 +59,38 @@ export function PunchReducer(
                 mapperRequestError: undefined
             };
 
+        case PunchActionKeys.FAGSAKER_SET:
+            return {
+                ...punchState,
+                step: PunchStep.CHOOSE_SOKNAD,
+                fagsaker: action.fagsaker,
+                isFagsakerLoading: false,
+                fagsakerRequestError: undefined
+            };
+
+        case PunchActionKeys.FAGSAKER_LOAD:
+            return {
+                ...punchState,
+                step: PunchStep.CHOOSE_SOKNAD,
+                fagsaker: [],
+                isFagsakerLoading: action.isLoading,
+                fagsakerRequestError: undefined
+            };
+
+        case PunchActionKeys.FAGSAKER_REQUEST_ERROR:
+            return {
+                ...punchState,
+                step: PunchStep.START,
+                fagsaker: [],
+                isFagsakerLoading: false,
+                fagsakerRequestError: action.error
+            };
+
         case PunchActionKeys.MAPPE_OPEN:
             return {
                 ...punchState,
-                chosenMappe: action.mappe
+                chosenMappe: action.mappe,
+                chosenFagsak: undefined
             };
 
         case PunchActionKeys.MAPPE_CLOSE:
@@ -86,7 +117,21 @@ export function PunchReducer(
             return {
                 ...punchState,
                 step: PunchStep.CHOOSE_SOKNAD,
+                chosenMappe: undefined,
+                chosenFagsak: undefined
+            };
+
+        case PunchActionKeys.FAGSAK_OPEN:
+            return {
+                ...punchState,
+                chosenFagsak: action.fagsak,
                 chosenMappe: undefined
+            };
+
+        case PunchActionKeys.FAGSAK_CLOSE:
+            return {
+                ...punchState,
+                chosenFagsak: undefined
             };
 
         default: return punchState;

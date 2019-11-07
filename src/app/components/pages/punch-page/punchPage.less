@@ -2,72 +2,82 @@
 
 .punch {
 
-  max-width: 100%;
-  margin: 0 1rem;
+  max-width:      100%;
+  margin:         0 1rem;
+  flex-basis:     100%;
+  display:        flex;
+  flex-direction: column;
 
-  h1 {
-    width: 100%;
-  }
+  h1 {width: 100%}
 
   .panels-wrapper {
 
-    display: flex;
+    flex-basis:     100%;
+    display:        flex;
     flex-direction: row;
-    min-height: 1000px;
+    padding-bottom: 1rem;
+    min-height:     100px;
 
     .punch_pdf {
-      width: 100%;
-      padding: 3px;
-      margin-right: 0.5rem;
+
+      width:            100%;
+      padding:          3px;
+      margin-right:     0.5rem;
       background-color: @navGra20;
-      transition: width .2s;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
+      transition:       width .2s;
+      display:          flex;
+      flex-direction:   column;
+      align-items:      stretch;
 
       iframe {
         border-width: 0;
-        flex-basis: 100%;
+        flex-basis:   100%;
       }
 
       button {background-color: white}
 
       .knapperad {
-        display: flex;
+
+        display:        flex;
         flex-direction: row;
-        align-content: space-between;
+        align-content:  space-between;
 
         .knapp {
-          flex-grow: 1;
+          flex-grow:  1;
           margin-top: 4px;
+
           &.knapp1 {margin-right: 2px}
+
           &.knapp2 {margin-left: 2px}
         }
       }
 
       .button_open {
-        width: 100%;
+        width:   100%;
         padding: 0;
-        height: 100%;
+        height:  100%;
         display: none;
       }
     }
 
     .punch_form {
       margin-left: 0.5rem;
-      flex-basis: 100%;
+      flex-basis:  100%;
+      overflow-y:  auto;
     }
 
     &.pdf_closed .punch_pdf {
       width: 50px;
+
       iframe, .knapperad {display: none}
+
       .button_open {display: block}
     }
   }
 
   .punch_mappetabell tbody tr:hover {
     background-color: @navLysBlaLighten80;
-    cursor: pointer;
+    cursor:           pointer;
   }
 
   .bold-label label {
@@ -81,7 +91,7 @@
 
 .punch_mappemodal_knapperad {
 
-  display: flex;
+  display:         flex;
   justify-content: space-around;
 
   .knapp1 {
