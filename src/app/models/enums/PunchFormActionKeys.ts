@@ -1,4 +1,4 @@
 export enum PunchFormActionKeys {
 
-    TILSYN_SET = 'PUNCH_FORM_TILSYN_SET'
+    OPPHOLD_SET = 'PUNCH_FROM_OPPHOLD_SET'
 }

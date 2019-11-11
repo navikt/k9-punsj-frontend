@@ -6,3 +6,4 @@ export * from './Person';
 export * from './PunchFormState';
 export * from './PunchState';
 export * from './QueryResponse';
+export * from './Soknad';

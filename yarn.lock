@@ -6623,6 +6623,21 @@ nav-frontend-core@^4.0.10:
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-4.0.10.tgz#efb05bdc9c5cf20d41d4b3a13e764be7df915392"
   integrity sha512-bMdl7PB2GrqcliWkv4Sz6iZGBJbWuJ8ZhLBRfnu/6cESytW71x/py9ZTQ8sKT9Vh7M+cugW80Q89I+G7pUNk2w==
 
+nav-frontend-core@^4.0.11:
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-4.0.11.tgz#826a242141fedfee54337cbf1578d1d7be7da3e2"
+  integrity sha512-sm9ZX2EFRBJbBkkr6uDvGkg5KT2GXJPIfmkkqrADqWkBu1SsEiy9p8qzLYQE3EE1pK1bt19kZmadGVkDyQXmvQ==
+
+nav-frontend-etiketter-style@^0.3.19:
+  version "0.3.19"
+  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter-style/-/nav-frontend-etiketter-style-0.3.19.tgz#a92f270568bb24ed161cc1d80e75482bca885bcc"
+  integrity sha512-uYKumqkGDFaUAuMHOdHWgzdYuvqj5Bn/B3Je/v86+ATuZZ8NOyz7ANgWA8CLhM+tBMiIwB/Q/4gBu9w1O13ObQ==
+
+nav-frontend-etiketter@^1.0.28:
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter/-/nav-frontend-etiketter-1.0.28.tgz#467b3898b35023f2688b3593e64767c1bee05c90"
+  integrity sha512-f05Y2SpEofWbjGuqCz5E7uygmhaJrqwe7HFq761eNgPfvtkkWg5D9O76QP5d0dJIpbynptT1Aghr/qkbG8A6+g==
+
 nav-frontend-ikoner-assets@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-1.0.2.tgz#003773b22c31730faa9fe4bcaade44fb1491dc7a"
@@ -6688,10 +6703,10 @@ nav-frontend-skjema-style@^1.0.46:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema-style/-/nav-frontend-skjema-style-1.0.47.tgz#903786d33c8ce3bd2154031206c9b0562488201d"
   integrity sha512-eFKyyK4vK2CVq5nO4jNvf86EBefMh/s3THxzGbHAExXvXFNZhMI5m1lPlcLQQ5rOzBqWfC3cVqkU5xfOIfgbLw==
 
-nav-frontend-skjema@^1.0.73:
-  version "1.0.75"
-  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-1.0.75.tgz#e7ace631a307b4a3bb34aabbb4585b68744c0ac9"
-  integrity sha512-mT12znxvyt2OvWIIiDb+MiNL3PIzYYby1q6Qx9zbz6bl5sBlMy36bSF40mpfa9kYGnE3FVvH3SYPRhMGsXld4g==
+nav-frontend-skjema@^1.0.77:
+  version "1.0.77"
+  resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-1.0.77.tgz#5798ac7783849bd080eebe4d0a4ce952a4398c6b"
+  integrity sha512-0EJ70n69Wuu/723WTGzrKy0lBdVhg4C5aN/jFhsudj88jXDaveQYLIEm6vpyLRTkbKH1FFGl6HNMQmIUKdpvFA==
 
 nav-frontend-spinner-style@^0.2.5:
   version "0.2.5"
@@ -6713,6 +6728,11 @@ nav-frontend-stegindikator@0.0.40:
   resolved "https://registry.yarnpkg.com/nav-frontend-stegindikator/-/nav-frontend-stegindikator-0.0.40.tgz#08f9407ca62f3d2fc06ee31374f1c1674d741a2b"
   integrity sha512-5du86wGacZm//aOafAV9XfSE6eTTkn8YW+vzgXyTOXvLzMT6VmRzYVLqEuqFMcgbUkbLjq/PdstlmQ8s9G4DxQ==
 
+nav-frontend-tabell-style@^0.2.18:
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/nav-frontend-tabell-style/-/nav-frontend-tabell-style-0.2.18.tgz#ba8172f8ab30161f237581396e435c2edaa51700"
+  integrity sha512-Q2xRM4zgM7M40cbCnTDqGDuqcJbqeicWqwDkS1HCHq8P/RpHIiBuRE5rewdpusbdmPra84XwZ2YGbO9aYhP9iw==
+
 nav-frontend-typografi-style@^1.0.16:
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.16.tgz#0fdaabf9ebee049a89cac29eca4910bb27bbc578"
@@ -6720,10 +6740,10 @@ nav-frontend-typografi-style@^1.0.16:
   dependencies:
     nav-frontend-core "^4.0.10"
 
-nav-frontend-typografi@^2.0.15:
-  version "2.0.15"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.15.tgz#f6dc5c8a430556da1e5c61efa045d816d437d4c5"
-  integrity sha512-PK6hHwBvRqjb2CHFyG/ryhZb8x+E9K0DdjjcIUWeCXHImIIdZFno8zXkL9Bvu96f8BSPMMPBF5xJgCKdBsaDiw==
+nav-frontend-typografi@^2.0.16:
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.16.tgz#ff7e31cfefb0e16c27e8a2c0cf74517a95b2123e"
+  integrity sha512-6yKv3hlnwLD11cnAkHnbHYu0Mht0Ac81GkKVc1AfRs2qQTYlcGANjytGd6zks5/tqaSz5nmSCdcBIuB+O8euGA==
 
 nav-frontend-veileder-style@^2.0.9:
   version "2.0.9"
@@ -8246,6 +8266,11 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
+redux-devtools-extension@^2.13.8:
+  version "2.13.8"
+  resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.8.tgz#37b982688626e5e4993ff87220c9bbb7cd2d96e1"
+  integrity sha512-8qlpooP2QqPtZHQZRhx3x3OP5skEV1py/zUdMY28WNAocbafxdG2tRD1MWE7sp8obGMNYuLWanhhQ7EQvT1FBg==
+
 redux@^4.0.0, redux@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
@@ -8399,7 +8424,7 @@ request-promise-native@^1.0.5, request-promise-native@^1.0.7:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@^2.83.0, request@^2.87.0, request@^2.88.0, request@latest:
+request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -9929,6 +9954,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript-string-operations@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/typescript-string-operations/-/typescript-string-operations-1.3.1.tgz#461b886cc9ccd4dd16810b1f248b2e6f6580956b"
+  integrity sha512-DsT4kq8k3WT48EhdI/6DanReYGbX4Wg18z8vSeHH2wMfSFqdjiI40jrVABDH2WZ1RhCt7WoN/iY+LPhxrUHCqw==
 
 typescript@3.6.4:
   version "3.6.4"

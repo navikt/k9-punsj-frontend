@@ -1,5 +1,5 @@
 export interface IPerson {
-    fodselsnummer?: string;
+    norsk_identitetsnummer?: string;
     fodselsdato?: Date;
     navn?: string;
 }

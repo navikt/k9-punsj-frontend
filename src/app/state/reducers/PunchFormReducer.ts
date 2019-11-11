@@ -3,7 +3,12 @@ import {IPunchFormState} from "app/models/types";
 import {IPunchFormActionTypes} from "app/state/actions/PunchFormActions";
 
 const initialState: IPunchFormState = {
-    tilsyn: JaNeiVetikke.VET_IKKE
+    tilsyn: JaNeiVetikke.VET_IKKE,
+    soknad: {
+        medlemskap: {
+            opphold: []
+        }
+    }
 };
 
 export function PunchFormReducer(
@@ -13,10 +18,17 @@ export function PunchFormReducer(
 
     switch (action.type) {
 
-        case PunchFormActionKeys.TILSYN_SET: return {
-            ...punchFormState,
-            tilsyn: action.tilsyn
-        };
+        case PunchFormActionKeys.OPPHOLD_SET:
+            return {
+                ...punchFormState,
+                soknad: {
+                    ...punchFormState.soknad,
+                    medlemskap: {
+                        ...punchFormState.soknad.medlemskap,
+                        opphold: action.opphold
+                    }
+                }
+            };
 
         default: return punchFormState;
     }

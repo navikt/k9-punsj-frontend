@@ -1,7 +1,8 @@
-import {JaNeiVetikke, PunchFormActionKeys} from "app/models/enums";
+import {PunchFormActionKeys} from "app/models/enums";
+import {IOpphold} from "../../models/types";
 
-interface ISetTilsynAction {type: PunchFormActionKeys.TILSYN_SET, tilsyn: JaNeiVetikke}
+interface ISetOppholdAction {type: PunchFormActionKeys.OPPHOLD_SET, opphold: IOpphold[]}
 
-export type IPunchFormActionTypes = ISetTilsynAction;
+export type IPunchFormActionTypes = ISetOppholdAction;
 
-export function setTilsynAction(tilsyn: JaNeiVetikke): ISetTilsynAction {return {type: PunchFormActionKeys.TILSYN_SET, tilsyn}}
+export function setOppholdAction(opphold: IOpphold[]): ISetOppholdAction {return {type: PunchFormActionKeys.OPPHOLD_SET, opphold}}
