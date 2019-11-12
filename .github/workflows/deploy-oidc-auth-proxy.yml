@@ -1,0 +1,20 @@
+name: Deploy OIDC auth proxy
+on:
+  push:
+    paths:
+      - 'nais/dev/k9-punsj-oidc-auth-proxy.yml'
+    branches:
+      - master
+jobs:
+  deploy-dev:
+    name: Deploye til DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploye til dev
+        uses: navikt/deployment-cli/action@0.4.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          cluster: dev-fss
+          team: k9saksbehandling
+          resources: nais/dev/k9-punsj-oidc-auth-proxy.yml
