@@ -10,6 +10,8 @@ jobs:
     name: Deploye til DEV
     runs-on: ubuntu-latest
     steps:
+      - name: Hente kode
+        uses: actions/checkout@v1
       - name: Deploye til dev
         uses: navikt/deployment-cli/action@0.4.1
         env:
