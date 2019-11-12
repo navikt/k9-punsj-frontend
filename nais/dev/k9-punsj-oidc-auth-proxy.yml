@@ -10,7 +10,7 @@ spec:
     port: 8080
     liveness:
         path: isalive
-        initialDelay: 20
+        initialDelay: 15
         periodSeconds: 5
         timeout: 1
         failureThreshold: 10
