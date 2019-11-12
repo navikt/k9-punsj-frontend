@@ -54,4 +54,4 @@ spec:
         - name: APPLICATION_BASE_URL
           value: https://k9-punsj-frontend.nais.preprod.local
         - name: PROXY_CONFIG
-          value: '{"apis":[{"path”:”k9-punsj”,”url":"https://k9-punsj.nais.preprod.local","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
+          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.nais.preprod.local","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
