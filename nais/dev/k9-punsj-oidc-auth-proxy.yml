@@ -6,7 +6,7 @@ metadata:
     labels:
         team: k9saksbehandling
 spec:
-    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.12-6778852
+    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.12-ce64c7d
     port: 8080
     liveness:
         path: isalive
@@ -54,4 +54,4 @@ spec:
         - name: APPLICATION_BASE_URL
           value: https://k9-punsj-frontend.nais.preprod.local
         - name: PROXY_CONFIG
-          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.nais.preprod.local","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
+          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.nais.preprod.local/api","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
