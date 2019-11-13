@@ -1,3 +1,18 @@
+import _ from "lodash";
+import * as React from 'react';
+import {InjectedIntlProps, injectIntl} from 'react-intl';
+// import {Document, Page as PdfPage} from 'react-pdf';
+import {connect} from 'react-redux';
+
+import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {HoyreChevron, VenstreChevron} from "nav-frontend-chevron";
+import {Flatknapp, Knapp} from "nav-frontend-knapper";
+import ModalWrapper from "nav-frontend-modal";
+import {Panel} from 'nav-frontend-paneler';
+import {Input} from 'nav-frontend-skjema';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import 'nav-frontend-tabell-style';
+
 import {PunchStep} from "app/models/enums";
 import {IFagsak, IMappe, IPunchState} from 'app/models/types';
 import {
@@ -16,21 +31,6 @@ import {
 } from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
-import {HoyreChevron, VenstreChevron} from "nav-frontend-chevron";
-import {Flatknapp, Knapp} from "nav-frontend-knapper";
-import ModalWrapper from "nav-frontend-modal";
-import {Panel} from 'nav-frontend-paneler';
-import {Input} from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import 'nav-frontend-tabell-style';
-
-import * as React from 'react';
-import {InjectedIntlProps, injectIntl} from 'react-intl';
-// import {Document, Page as PdfPage} from 'react-pdf';
-import {connect} from 'react-redux';
-
 import Page from '../../page/Page';
 import PunchForm from "./PunchForm";
 import './punchPage.less';
@@ -135,7 +135,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
 
             case PunchStep.FILL_FORM: return (<>
                 <p><Knapp onClick={() => this.props.backFromForm(punchState.chosenMappe)}>Gå tilbake</Knapp></p>
-                <PunchForm/>
+                <PunchForm soknad={_.get(punchState.chosenMappe, 'innhold')}/>
             </>);
         }
     }

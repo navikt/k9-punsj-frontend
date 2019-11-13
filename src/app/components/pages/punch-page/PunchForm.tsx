@@ -12,6 +12,11 @@ import _ from 'lodash';
 import * as React from 'react';
 import {InjectedIntlProps, injectIntl} from "react-intl";
 import {connect} from "react-redux";
+import {CountrySelect} from "../../country-select/CountrySelect";
+
+interface IPunchFormComponentProps {
+    soknad?: ISoknad;
+}
 
 interface IPunchFormStateProps {
     punchFormState: IPunchFormState;
@@ -27,21 +32,20 @@ interface IPunchFormPageState {
     opphold: IOpphold[];
 }
 
-type IPunchFormProps = InjectedIntlProps & IPunchFormStateProps & IPunchFormDispatchProps;
+type IPunchFormProps = IPunchFormComponentProps & InjectedIntlProps & IPunchFormStateProps & IPunchFormDispatchProps;
 
 class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
     state: IPunchFormPageState = {opphold: []};
 
     componentDidMount(): void {
-
-        if (!!this.props.punchState.chosenMappe && !!this.props.punchState.chosenMappe.innhold) {
-            this.props.setSoknadAction(this.props.punchState.chosenMappe.innhold);
-            this.setState({opphold: this.props.punchState.chosenMappe.innhold.medlemskap.opphold});
+        const {soknad} = this.props;
+        if (!!soknad) {
+            this.props.setSoknadAction(soknad);
+            this.setState({opphold: _.get(soknad, 'medlemskap.opphold', [])});
         } else {
-            this.setState({opphold: this.props.punchFormState.soknad.medlemskap.opphold});
+            this.setState({opphold: _.get(this.props.punchFormState.soknad, 'medlemskap.opphold', [])});
         }
-
     }
 
     render() {
@@ -148,11 +152,12 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 <tbody>
                     {Object.keys(soknad.medlemskap.opphold).map((key) => (
                         <tr key={key}>
-                            <td><Input
+                            <td><CountrySelect
                                 name={`opphold_land_${key}`}
                                 onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
                                 onBlur={() => this.setOpphold()}
-                                defaultValue={_.get(this.state.opphold[key], 'land', '')}
+                                selectedCountry={_.get(this.state.opphold[key], 'land', '')}
+                                unselectedOption={"Velg …"}
                                 label=""
                             /></td>
                             <td><Input
@@ -223,7 +228,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             <h2>Beredskap</h2>
             <Checkbox
                 label="Beredskap"
-                defaultChecked={_.get(soknad, 'beredskap.svar', false)}
+                defaultChecked={_.get(this.props.soknad, 'beredskap.svar', false)}
             />
             <TextareaControlled
                 label="Tilleggsopplysninger:"
@@ -232,7 +237,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             <h2>Nattevåk</h2>
             <Checkbox
                 label="Nattevåk"
-                defaultChecked={_.get(soknad, 'nattevaak.svar', false)}
+                defaultChecked={_.get(this.props.soknad, 'nattevaak.svar', false)}
             />
             <TextareaControlled
                 label="Tilleggsopplysninger:"
