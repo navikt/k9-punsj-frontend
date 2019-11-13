@@ -1,43 +1,95 @@
 {
   "mapper1": [
     {
-      "mappe_id": "8144556",
+      "mappe_id":     "8144556",
       "innsendinger": [],
-      "innhold": {"søker": {"fødselsnummer": "15049228314"}},
-      "mangler": []
+      "innhold":      {
+        "versjon":             "0.0.1",
+        "mottatt_dato":        "2019-10-20T07:15:36.124Z",
+        "soker":               {
+          "norsk_identitetsnummer": "12345678901",
+          "spraak_valg":            "nb"
+        },
+        "medsoker":            {
+          "norsk_identitetsnummer": "12345678902"
+        },
+        "periode":             {
+          "fra_og_med": "2018-12-30",
+          "til_og_med": "2019-10-20"
+        },
+        "relasjon_til_barnet": "Mor",
+        "barn":                {},
+        "medlemskap":          {
+          "opphold":                          [
+            {
+              "periode": {
+                "fra_og_med": "2018-12-30",
+                "til_og_med": "2019-10-10"
+              },
+              "land":    "SWE"
+            },
+            {
+              "periode": {
+                "fra_og_med": "2018-10-10",
+                "til_og_med": "2019-10-19"
+              },
+              "land":    "NOR"
+            }
+          ],
+          "har_bodd_i_utlandet_siste_12_mnd": true,
+          "skal_bo_i_utlandet_neste_12_mnd":  true
+        },
+        "beredskap":           {
+          "svar":                true,
+          "tilleggsinformasjon": "Beredskapsforklaring: Lorem ipsum æÆøØåÅ."
+        },
+        "nattevaak":           {
+          "svar":                true,
+          "tilleggsinformasjon": "Nattevåksforklaring: Lorem ipsum æÆøØåÅ."
+        }
+      },
+      "mangler":      []
     },
     {
-      "mappe_id": "56564546",
+      "mappe_id":     "56564546",
       "innsendinger": [],
-      "innhold": {"søker": {"fødselsnummer": "15049228314"}},
-      "mangler": []
+      "innhold":      {
+        "soker": {
+          "norsk_identitetsnummer": "15049228314"
+        }
+      },
+      "mangler":      []
     },
     {
-      "mappe_id": "25656566",
+      "mappe_id":     "25656566",
       "innsendinger": [],
-      "innhold": {"søker": {"fødselsnummer": "15049228314"}},
-      "mangler": []
+      "innhold":      {
+        "soker": {
+          "norsk_identitetsnummer": "15049228314"
+        }
+      },
+      "mangler":      []
     }
   ],
   "mapper2": [],
   "fagsak1": [
     {
-      "fagsak_id": "1234",
-      "url": "https://intern.nav.no/k9-sak/fagsak/1234",
+      "fagsak_id":  "1234",
+      "url":        "https://intern.nav.no/k9-sak/fagsak/1234",
       "fra_og_med": "2019-01-01",
       "til_og_med": "2019-05-05",
-      "barn": {
-        "navn": "Barn Barnesen",
+      "barn":       {
+        "navn":        "Barn Barnesen",
         "fødselsdato": "2017-02-02"
       }
     },
     {
-      "fagsak_id": "4321",
-      "url": "https://intern.nav.no/k9-sak/fagsak/4321",
+      "fagsak_id":  "4321",
+      "url":        "https://intern.nav.no/k9-sak/fagsak/4321",
       "fra_og_med": "2019-02-13",
       "til_og_med": null,
-      "barn": {
-        "navn": "Barn Andre Barnesen",
+      "barn":       {
+        "navn":        "Barn Andre Barnesen",
         "fødselsdato": "2015-02-02"
       }
     }

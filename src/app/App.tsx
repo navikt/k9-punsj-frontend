@@ -1,5 +1,6 @@
 import Modal from 'nav-frontend-modal';
 
+import moment from "moment";
 import * as React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux'
@@ -23,6 +24,7 @@ const localeFromSessionStorage = getLocaleFromSessionStorage();
 
 const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
+    moment.locale(localeFromSessionStorage);
     return (
         <Provider store={store}>
             <ApplicationWrapper

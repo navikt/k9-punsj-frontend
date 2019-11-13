@@ -1,10 +1,12 @@
-import {JaNeiVetikke, PunchFormActionKeys} from "app/models/enums";
+import {PunchFormActionKeys} from "app/models/enums";
 import {IPunchFormState} from "app/models/types";
 import {IPunchFormActionTypes} from "app/state/actions/PunchFormActions";
 
 const initialState: IPunchFormState = {
-    tilsyn: JaNeiVetikke.VET_IKKE,
     soknad: {
+        soker: {
+            norsk_identitetsnummer: ''
+        },
         medlemskap: {
             opphold: []
         }
@@ -17,6 +19,12 @@ export function PunchFormReducer(
 ): IPunchFormState {
 
     switch (action.type) {
+
+        case PunchFormActionKeys.SOKNAD_SET:
+            return {
+                ...punchFormState,
+                soknad: action.soknad
+            };
 
         case PunchFormActionKeys.OPPHOLD_SET:
             return {

@@ -34,6 +34,7 @@ import {connect} from 'react-redux';
 import Page from '../../page/Page';
 import PunchForm from "./PunchForm";
 import './punchPage.less';
+import SoknadReadMode from "./SoknadReadMode";
 
 interface IPunchPageStateProps {
     punchState: IPunchState;
@@ -197,7 +198,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
                     isOpen={!!chosenMappe && mappe_id === chosenMappe.mappe_id}
                 >
                     <div className="modal_content">
-                        <p>Viser info om mappe {mappe_id}.</p>
+                        {!!chosenMappe && !!chosenMappe.innhold && <SoknadReadMode soknad={chosenMappe.innhold}/>}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => this.chooseMappe(mappe)}>Velg denne</Knapp>
                             <Knapp className="knapp2" onClick={this.closeMappe}>Lukk</Knapp>

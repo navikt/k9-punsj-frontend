@@ -1,25 +1,26 @@
-import {Ukedag} from "app/models/enums/Ukedag";
-import {IOpphold, IPunchFormState, IPunchState} from "app/models/types";
-import {setOppholdAction} from "app/state/actions";
+import {IOpphold, IPunchFormState, IPunchState, ISoknad} from "app/models/types";
+import {setOppholdAction, setSoknadAction} from "app/state/actions";
 import {RootStateType} from "app/state/RootState";
+import intlHelper from "../../../utils/intlUtils";
 
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {Knapp} from "nav-frontend-knapper";
 import Lukknapp from "nav-frontend-lukknapp";
-import {Checkbox, Input, Select} from "nav-frontend-skjema";
+import {Checkbox, Input, Select, TextareaControlled} from "nav-frontend-skjema";
 
+import _ from 'lodash';
 import * as React from 'react';
 import {InjectedIntlProps, injectIntl} from "react-intl";
 import {connect} from "react-redux";
-import intlHelper from "../../../utils/intlUtils";
 
 interface IPunchFormStateProps {
     punchFormState: IPunchFormState;
-    punchState: IPunchState;
+    punchState:     IPunchState;
 }
 
 interface IPunchFormDispatchProps {
-    setOppholdAction: typeof setOppholdAction;
+    setSoknadAction:    typeof setSoknadAction;
+    setOppholdAction:   typeof setOppholdAction;
 }
 
 interface IPunchFormPageState {
@@ -33,8 +34,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     state: IPunchFormPageState = {opphold: []};
 
     componentDidMount(): void {
-        const initialState = {opphold: this.props.punchFormState.soknad.medlemskap.opphold};
-        this.setState(initialState);
+
+        if (!!this.props.punchState.chosenMappe && !!this.props.punchState.chosenMappe.innhold) {
+            this.props.setSoknadAction(this.props.punchState.chosenMappe.innhold);
+            this.setState({opphold: this.props.punchState.chosenMappe.innhold.medlemskap.opphold});
+        } else {
+            this.setState({opphold: this.props.punchFormState.soknad.medlemskap.opphold});
+        }
+
     }
 
     render() {
@@ -45,7 +52,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             ? `Fortsett å fylle ut informasjon om mappe ${punchState.chosenMappe.mappe_id}.`
             : `Fødselsnummeret har ingen tilknyttede, ufullstendige søknader. Fyll ut skjemaet for å opprette en ny.`;
 
-        const tilsynukedager = [];
+/*        const tilsynukedager = [];
         for (const ukedag in Object.keys(Ukedag).filter(key => isNaN(Number(Ukedag[key])))) {
             if (Number(ukedag) < 5) {
                 tilsynukedager.push(
@@ -56,28 +63,36 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                     </tr>
                 );
             }
-        }
+        }*/
 
         return (<>
             <AlertStripeInfo>{infomelding}</AlertStripeInfo>
-            <h2>Opplysninger om søkeren</h2>
+            <h2>{intlHelper(intl, 'skjema.soker.opplysninger')}</h2>
             <Select
                 name="sprak"
-                label="Søkerens språk:"
+                label={`${intlHelper(intl, 'skjema.soker.sprak')}:`}
                 className="bold-label"
             >
-                <option value='nb'>Bokmål</option>
-                <option value='nn'>Nynorsk</option>
+                <option
+                    value='nb'
+                    selected={_.get(soknad, 'soker.spraak_valg') === 'nb'}
+                >Bokmål</option>
+                <option
+                    value='nn'
+                    selected={_.get(soknad, 'soker.spraak_valg') === 'nn'}
+                >Nynorsk</option>
             </Select>
             <Input
                 name="medsoker"
-                label="Medsøkers fødselsnummer:"
+                label={`${intlHelper(intl, 'skjema.soker.medsoker.fnr')}:`}
                 className="bold-label"
+                defaultValue={_.get(soknad, 'medsoker.norsk_identitetsnummer', '')}
             />
             <Input
                 name="relasjon"
-                label="Slektskap/relasjon til barnet:"
+                label={`${intlHelper(intl, 'skjema.soker.relasjon')}:`}
                 className="bold-label"
+                defaultValue={_.get(soknad, 'relasjon_til_barnet', '')}
             />
             {/*<Fieldset legend="Arbeidsforhold 1:">
                 {Object.values(Arbeidsforhold).map(arbeidsforhold => (
@@ -109,25 +124,25 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 label="Arbeidsgiverens navn og adresse:"
                 defaultValue=""
             />*/}
-            <h2>Opplysninger om barnet</h2>
+            <h2>{intlHelper(intl, 'skjema.barn.opplysninger')}</h2>
             <Input
                 name="barnetsnavn"
-                label="Barnets navn:"
+                label={`${intlHelper(intl, 'skjema.barn.navn')}:`}
                 className="bold-label"
             />
             <Input
                 name="barnetsfnr"
-                label="Barnets fødselsnummer:"
+                label={`${intlHelper(intl, 'skjema.barn.fnr')}:`}
                 className="bold-label"
             />
-            <h2>Opphold i utlandet</h2>
-            {this.state.opphold.length && <table className="tabell tabell--stripet">
+            <h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
+            {!!this.state.opphold.length && <table className="tabell tabell--stripet">
                 <thead>
                     <tr>
-                        <th>Land</th>
-                        <th>Fra og med</th>
-                        <th>Til og med</th>
-                        <th>Slett</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,7 +152,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                 name={`opphold_land_${key}`}
                                 onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
                                 onBlur={() => this.setOpphold()}
-                                value={this.state.opphold[key] && this.state.opphold[key].land}
+                                defaultValue={_.get(this.state.opphold[key], 'land', '')}
                                 label=""
                             /></td>
                             <td><Input
@@ -145,6 +160,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                 onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
                                 onBlur={() => this.setOpphold()}
                                 type="date"
+                                defaultValue={_.get(this.state.opphold[key], 'periode.fra_og_med', '')}
                                 label=""
                             /></td>
                             <td><Input
@@ -152,6 +168,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                 onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
                                 onBlur={() => this.setOpphold()}
                                 type="date"
+                                defaultValue={_.get(this.state.opphold[key], 'periode.til_og_med', '')}
                                 label=""
                             /></td>
                             <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
@@ -159,7 +176,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                     ))}
                 </tbody>
             </table>}
-            <Knapp onClick={this.addOpphold}>Legg til</Knapp>
+            <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
             {/*<h2>Opplysninger om tilsyn av barnet</h2>
             <Fieldset legend="Skal barnet gå i barnehage eller på skole/SFO eller være i annet etablert tilsyn i pleiepengeperioden?">
                 {Object.values(JaNeiVetikke).map(janeivetikke => (
@@ -204,19 +221,37 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             <h2>Legeerklæring</h2>
             <TextareaControlled name="legeerklaering" label="" defaultValue=""/>*/}
             <h2>Beredskap</h2>
+            <Checkbox
+                label="Beredskap"
+                defaultChecked={_.get(soknad, 'beredskap.svar', false)}
+            />
+            <TextareaControlled
+                label="Tilleggsopplysninger:"
+                defaultValue={_.get(soknad, 'beredskap.tilleggsinformasjon', '')}
+            />
             <h2>Nattevåk</h2>
+            <Checkbox
+                label="Nattevåk"
+                defaultChecked={_.get(soknad, 'nattevaak.svar', false)}
+            />
+            <TextareaControlled
+                label="Tilleggsopplysninger:"
+                defaultValue={_.get(soknad, 'nattevaak.tilleggsinformasjon', '')}
+            />
             <h2>Søknad om pleiepenger</h2>
             <Input
                 name="fom"
                 type="date"
                 label="Fra og med:"
                 className="bold-label"
+                defaultValue={_.get(soknad, 'periode.fra_og_med', '')}
             />
             <Input
                 name="tom"
                 type="date"
                 label="Til og med:"
                 className="bold-label"
+                defaultValue={_.get(soknad, 'periode.til_og_med', '')}
             />
             <Checkbox
                 name="underskrift"
@@ -243,7 +278,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     };
 
     private addOpphold = () => {
-        this.state.opphold.push({});
+        this.state.opphold.push({land: '', periode: {}});
         this.forceUpdate();
         this.setOpphold();
     };
@@ -261,11 +296,12 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
 function mapStateToProps(state: RootStateType) {return {
     punchFormState: state.punchFormState,
-    punchState: state.punchState
+    punchState:     state.punchState
 }}
 
 function mapDispatchToProps(dispatch: any) {return {
-    setOppholdAction: (opphold: IOpphold[]) => dispatch(setOppholdAction(opphold))
+    setSoknadAction:    (soknad: ISoknad)       => dispatch(setSoknadAction(soknad)),
+    setOppholdAction:   (opphold: IOpphold[])   => dispatch(setOppholdAction(opphold))
 }}
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm));

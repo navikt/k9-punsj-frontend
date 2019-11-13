@@ -1,4 +1,4 @@
-import { Locale } from 'app/models/types/Locale';
+import { Locale } from 'app/models/types';
 
 const LocaleSessionKey = 'selectedLocale';
 

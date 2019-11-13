@@ -3,3 +3,4 @@ export * from './JaNeiVetikke';
 export * from './PunchActionKeys';
 export * from './PunchFormActionKeys';
 export * from './PunchStep';
+export * from './TimeFormat';

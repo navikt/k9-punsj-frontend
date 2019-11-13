@@ -38,10 +38,10 @@ interface IOpphold {
 
 interface IBeredskap {
     svar?: boolean;
-    tilleggsinformasjon: string;
+    tilleggsinformasjon?: string;
 }
 
 interface INattevaak {
     svar?: boolean;
-    tilleggsinformasjon: string;
+    tilleggsinformasjon?: string;
 }

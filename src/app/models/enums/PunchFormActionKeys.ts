@@ -1,4 +1,4 @@
 export enum PunchFormActionKeys {
-
-    OPPHOLD_SET = 'PUNCH_FROM_OPPHOLD_SET'
+    SOKNAD_SET = 'PUNCH_FORM_SOKNAD_SET',
+    OPPHOLD_SET = 'PUNCH_FORM_OPPHOLD_SET'
 }
