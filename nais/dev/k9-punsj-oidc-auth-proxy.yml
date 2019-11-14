@@ -63,4 +63,3 @@ spec:
           value: k9-punsj-oidc-auth-proxy-redis.default.svc.nais.local
         - name: REDIS_PORT
           value: '6379'
-          
