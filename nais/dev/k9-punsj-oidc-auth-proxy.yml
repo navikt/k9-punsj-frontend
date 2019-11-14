@@ -6,7 +6,7 @@ metadata:
     labels:
         team: k9saksbehandling
 spec:
-    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.14-c53e24b
+    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.14-3f45681
     port: 8080
     liveness:
         path: isalive
