@@ -35,6 +35,7 @@ import Page from '../../page/Page';
 import PunchForm from "./PunchForm";
 import './punchPage.less';
 import SoknadReadMode from "./SoknadReadMode";
+import {ApiPath, apiUrl} from "../../../apiConfig";
 
 interface IPunchPageStateProps {
     punchState: IPunchState;
@@ -74,8 +75,8 @@ class PunchPage extends React.Component<IPunchPageProps> {
                 <h1>{intlHelper(intl, 'startPage.tittel')}</h1>
                 <div className="panels-wrapper" id="panels-wrapper">
                     <Panel className="punch_pdf" border={true}>
-                        <iframe src="http://localhost:8080/api/journalpost/1/dokument/1" width="100%" height="500px"/>
-                        {/*                        <Document file="http://localhost:8080/api/journalpost/1/dokument/1">
+                        <iframe src={apiUrl(ApiPath.DOKUMENT, {journalpost_id: 1, dokument_id: 1})}/>
+                        {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
                             <PdfPage pageNumber={1}/>
                         </Document>*/}
                         <div className="knapperad">
