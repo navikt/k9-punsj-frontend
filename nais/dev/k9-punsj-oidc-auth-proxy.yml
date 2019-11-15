@@ -6,7 +6,7 @@ metadata:
     labels:
         team: k9saksbehandling
 spec:
-    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.14-2ba27f8
+    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.15-e111b96
     port: 8080
     liveness:
         path: isalive
@@ -48,7 +48,7 @@ spec:
         - name: DISCOVERY_URL
           value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
         - name: LOGIN_SCOPES
-          value: 'openid 304cf945-d49f-43e7-b6a4-5ad6a08e0589/.default'
+          value: 'openid profile 304cf945-d49f-43e7-b6a4-5ad6a08e0589/.default'
         - name: OIDC_AUTH_PROXY_BASE_URL
           value: https://k9-punsj-oidc-auth-proxy.nais.preprod.local
         - name: APPLICATION_BASE_URL
