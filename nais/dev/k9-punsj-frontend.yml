@@ -6,7 +6,7 @@ metadata:
     labels:
         team: k9saksbehandling
 spec:
-    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.11.15-e111b96
+    image: {{ image }}:{{ tag }}
     port: 8080
     liveness:
         path: health/isAlive
@@ -32,5 +32,5 @@ spec:
         max: 1
         cpuThresholdPercentage: 90
     env:
-        - name: OIDC-AUTH-PROXY
-          value: https://k9-punsj-frontend.nais.preprod.local
+        - name: OIDC_AUTH_PROXY
+          value: https://k9-punsj-oidc-auth-proxy.nais.preprod.local
