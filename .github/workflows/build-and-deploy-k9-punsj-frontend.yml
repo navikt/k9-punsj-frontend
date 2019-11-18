@@ -1,0 +1,50 @@
+name: Build and deploy K9-punsj-frontend
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENCE'
+      - 'CODEOWNERS'
+      - 'nais/dev/k9-punsj-oidc-auth-proxy.yml'
+      - 'nais/dev/k9-punsj-oidc-auth-proxy-redis.yml'
+      - 'nais/dev/k9-punsj-oidc-auth-proxy-redis-exporter.yml'
+    branches:
+      - master
+jobs:
+  deploy-dev:
+    name: Deploye til DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hente kode
+        uses: actions/checkout@v1
+      - name: Sette opp Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Installere moduler
+        run: npm install
+      - name: Bygge kode
+        run: npm run build
+      - name: Sette Docker-navn og -tag
+        env:
+          DOCKER_IMAGE: docker.pkg.github.com/${{ github.repository }}/k9-punsj-frontend
+        run: |
+          echo $DOCKER_IMAGE > .docker_image
+          echo "$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" > .docker_tag
+      - name: Bygge Docker image
+        run: docker build . --pull -t $(cat .docker_image):$(cat .docker_tag)
+      - name: Laste opp Docker image
+        run: |
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker push $(cat .docker_image):$(cat .docker_tag)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploye til dev
+        uses: navikt/deployment-cli/action@0.4.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          cluster: dev-fss
+          team: k9saksbehandling
+          resources: nais/dev/k9-punsj-frontend.yml
