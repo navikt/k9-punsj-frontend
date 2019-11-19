@@ -1,6 +1,6 @@
 import {getEnvironmentVariable} from "./utils";
 
-export const URL_BACKEND = getEnvironmentVariable('OIDC_AUTH_PROXY') + '/api/k9-punsj';
+export const URL_BACKEND = getEnvironmentVariable('OIDC_AUTH_PROXY') + '/api';
 
 export enum ApiPath {
     MAPPER_FIND     = '/pleiepenger-sykt-barn-soknad/mapper/{ident}',
