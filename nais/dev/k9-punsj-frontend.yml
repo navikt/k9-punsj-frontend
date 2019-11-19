@@ -33,4 +33,4 @@ spec:
         cpuThresholdPercentage: 90
     env:
         - name: OIDC_AUTH_PROXY
-          value: https://k9-punsj.nais.preprod.local
+          value: https://k9-punsj-oidc-auth-proxy.nais.preprod.local
