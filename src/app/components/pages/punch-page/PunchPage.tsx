@@ -13,6 +13,8 @@ import {Input} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
 
+import {ApiPath} from "app/apiConfig";
+import Page from 'app/components/page/Page';
 import {PunchStep} from "app/models/enums";
 import {IFagsak, IMappe, IPunchState} from 'app/models/types';
 import {
@@ -30,12 +32,11 @@ import {
     undoSearchForMapperAction
 } from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
+import {apiUrl} from "app/utils";
 import intlHelper from 'app/utils/intlUtils';
-import Page from '../../page/Page';
 import PunchForm from "./PunchForm";
 import './punchPage.less';
 import SoknadReadMode from "./SoknadReadMode";
-import {ApiPath, apiUrl} from "../../../apiConfig";
 
 interface IPunchPageStateProps {
     punchState: IPunchState;

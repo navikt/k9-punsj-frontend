@@ -1,5 +1,5 @@
 import {PunchFormActionKeys} from "app/models/enums";
-import {IOpphold, ISoknad} from "../../models/types";
+import {IOpphold, ISoknad} from "app/models/types";
 
 interface ISetSoknadAction {type: PunchFormActionKeys.SOKNAD_SET, soknad: ISoknad}
 interface ISetOppholdAction {type: PunchFormActionKeys.OPPHOLD_SET, opphold: IOpphold[]}

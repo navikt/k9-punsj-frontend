@@ -2,9 +2,9 @@ import * as React from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import {InjectedIntlProps, injectIntl} from "react-intl";
 
-import {TimeFormat} from "../../../models/enums";
-import {ISoknad} from "../../../models/types";
-import {datetime} from "../../../utils/timeUtils";
+import {TimeFormat} from "app/models/enums";
+import {ISoknad} from "app/models/types";
+import {datetime} from "app/utils";
 
 interface ISoknadReadModeProps {
     soknad: ISoknad;

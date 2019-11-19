@@ -1,6 +1,6 @@
 import {PunchActionKeys, PunchStep} from "app/models/enums";
 import {IPunchState} from "app/models/types";
-import {IPunchActionTypes} from "../actions";
+import {IPunchActionTypes} from "app/state/actions";
 
 const initialState: IPunchState = {
     step: PunchStep.START,

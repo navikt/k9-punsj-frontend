@@ -1,7 +1,7 @@
 import {IOpphold, IPunchFormState, IPunchState, ISoknad} from "app/models/types";
 import {setOppholdAction, setSoknadAction} from "app/state/actions";
 import {RootStateType} from "app/state/RootState";
-import intlHelper from "../../../utils/intlUtils";
+import intlHelper from "app/utils/intlUtils";
 
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {Knapp} from "nav-frontend-knapper";

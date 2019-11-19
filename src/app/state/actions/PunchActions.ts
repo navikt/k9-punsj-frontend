@@ -1,6 +1,7 @@
-import {ApiPath, get} from "app/apiConfig";
+import {ApiPath} from "app/apiConfig";
 import {PunchActionKeys} from "app/models/enums";
 import {IError, IFagsak, IMappe} from "app/models/types";
+import {get} from "app/utils";
 
 interface ISetIdentAction           {type: PunchActionKeys.IDENT_SET,               ident: string}
 
