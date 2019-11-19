@@ -1,3 +1,4 @@
+export * from './AuthState';
 export * from './Error';
 export * from './Fagsak';
 export * from './Locale';

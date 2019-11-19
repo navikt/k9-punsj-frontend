@@ -1,4 +1,5 @@
 export * from './Arbeidsforhold';
+export * from './AuthActionKeys';
 export * from './JaNeiVetikke';
 export * from './PunchActionKeys';
 export * from './PunchFormActionKeys';
