@@ -13,7 +13,7 @@ import {Input} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
 
-import {ApiPath} from "app/apiConfig";
+import {ApiPath, URL_BACKEND} from "app/apiConfig";
 import Page from 'app/components/page/Page';
 import {PunchStep} from "app/models/enums";
 import {IFagsak, IMappe, IPunchState} from 'app/models/types';
@@ -76,7 +76,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
                 <h1>{intlHelper(intl, 'startPage.tittel')}</h1>
                 <div className="panels-wrapper" id="panels-wrapper">
                     <Panel className="punch_pdf" border={true}>
-                        <iframe src={apiUrl(ApiPath.DOKUMENT, {journalpost_id: 1, dokument_id: 1})}/>
+                        <iframe src={!!URL_BACKEND ? apiUrl(ApiPath.DOKUMENT, {journalpost_id: 1, dokument_id: 1}) : undefined}/>
                         {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
                             <PdfPage pageNumber={1}/>
                         </Document>*/}
