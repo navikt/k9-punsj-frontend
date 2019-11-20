@@ -68,7 +68,7 @@
     "@types/react-aria-menubutton":        "^6.2.2",
     "@types/react-document-title":         "^2.0.3",
     "@types/react-dom":                    "^16.9.4",
-    "@types/react-intl":                   "^2.3.18",
+    "@types/react-intl":                   "^3.0.0",
     "@types/react-pdf":                    "^4.0.3",
     "@types/react-router-dom":             "^5.1.0",
     "autoprefixer":                        "^9.7.2",
