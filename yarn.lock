@@ -5029,7 +5029,7 @@ nav-frontend-knapper@^1.0.36:
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-1.0.36.tgz#56f73e581262af87e9f347ac4b04e86e46af55c1"
   integrity sha512-TExIWfx0lUh6Md9+a9rPoeF6r43FtNcrIrSygTNguUleORnvBqC16WJjJa//botU+97PrMlgwyeqLpkovmWFCA==
 
-nav-frontend-lenker-style@^0.2.21:
+nav-frontend-lenker-style@^0.2.24:
   version "0.2.24"
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.24.tgz#c4ea13384d0257520cdc6c3f526eb0f0dae81a95"
   integrity sha512-OH8MzavrX7tT/BssDpu4vVPzmsBPPC7ybS5iPzhbIebgSwViisnoCFeDHnZQ3RUGEsyNm0DzztJEjLbVNnQyCg==
