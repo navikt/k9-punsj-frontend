@@ -5019,10 +5019,10 @@ nav-frontend-lenker-style@^0.2.24:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.24.tgz#c4ea13384d0257520cdc6c3f526eb0f0dae81a95"
   integrity sha512-OH8MzavrX7tT/BssDpu4vVPzmsBPPC7ybS5iPzhbIebgSwViisnoCFeDHnZQ3RUGEsyNm0DzztJEjLbVNnQyCg==
 
-nav-frontend-lukknapp-style@^0.2.20:
-  version "0.2.20"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.20.tgz#9665dbd2ce261074ed04ca53c1cf0be0fc7001ed"
-  integrity sha512-IqVKknGtq+M0tmPiC7enfF2fDnHQCGcndM+rRgDw7PuEIM6CfGRa1tUHRV2mz9aF+21UjMY9vrd+6/HupMVWFg==
+nav-frontend-lukknapp-style@^0.2.21:
+  version "0.2.21"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.21.tgz#6fdd8b61428a5def9181fc77cffea688e3bfd13f"
+  integrity sha512-nBNcCPtlUU0iskvOtO9c+zEYwJUx5snQ6b3MBHP9zgZNTpVRo0re5CE9GRYxqcQFkxHBYTsWrdI2lB0f7MyOvA==
 
 nav-frontend-lukknapp@^1.0.22:
   version "1.0.22"
