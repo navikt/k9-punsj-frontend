@@ -1,18 +1,16 @@
-import {IOpphold, IPunchFormState, IPunchState, ISoknad} from "app/models/types";
-import {setOppholdAction, setSoknadAction} from "app/state/actions";
-import {RootStateType} from "app/state/RootState";
-import intlHelper from "app/utils/intlUtils";
-
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
-import {Knapp} from "nav-frontend-knapper";
-import Lukknapp from "nav-frontend-lukknapp";
-import {Checkbox, Input, Select, TextareaControlled} from "nav-frontend-skjema";
-
-import _ from 'lodash';
-import * as React from 'react';
-import {InjectedIntlProps, injectIntl} from "react-intl";
-import {connect} from "react-redux";
-import {CountrySelect} from "../../country-select/CountrySelect";
+import {CountrySelect}                                   from 'app/components/country-select/CountrySelect';
+import {IOpphold, IPunchFormState, IPunchState, ISoknad} from 'app/models/types';
+import {setOppholdAction, setSoknadAction}               from 'app/state/actions';
+import {RootStateType}                                   from 'app/state/RootState';
+import intlHelper                                        from 'app/utils/intlUtils';
+import _                                                 from 'lodash';
+import {AlertStripeInfo}                                 from 'nav-frontend-alertstriper';
+import {Knapp}                                           from 'nav-frontend-knapper';
+import Lukknapp                                          from 'nav-frontend-lukknapp';
+import {Checkbox, Input, Select, TextareaControlled}     from 'nav-frontend-skjema';
+import * as React                                        from 'react';
+import {InjectedIntlProps, injectIntl}                   from 'react-intl';
+import {connect}                                         from 'react-redux';
 
 interface IPunchFormComponentProps {
     soknad?: ISoknad;

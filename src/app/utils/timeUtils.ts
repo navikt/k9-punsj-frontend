@@ -1,7 +1,6 @@
-import moment from "moment";
-
-import {TimeFormat} from "../models/enums";
-import intlHelper from "./intlUtils";
+import {TimeFormat} from 'app/models/enums';
+import moment       from 'moment';
+import intlHelper   from './intlUtils';
 
 export const datetime = (
     intl: ReactIntl.InjectedIntl,

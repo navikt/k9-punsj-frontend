@@ -1,9 +1,7 @@
-import countries from "i18n-iso-countries";
-import * as React from "react";
-
-import {Select, SelectProps} from "nav-frontend-skjema";
-
-import {getLocaleFromSessionStorage} from "../../utils/localeUtils";
+import {getLocaleFromSessionStorage} from 'app/utils';
+import countries                     from 'i18n-iso-countries';
+import {Select, SelectProps}         from 'nav-frontend-skjema';
+import * as React                    from 'react';
 
 interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     selectedCountry?:  string;

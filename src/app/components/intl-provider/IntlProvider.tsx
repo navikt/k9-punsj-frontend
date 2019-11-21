@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { addLocaleData, IntlProvider as Provider } from 'react-intl';
-import * as nbLocaleData from 'react-intl/locale-data/nb';
-import * as nnLocaleData from 'react-intl/locale-data/nn';
-import { Locale } from '../../models/types/Locale';
+import {Locale}                                  from 'app/models/types';
+import * as React                                from 'react';
+import {addLocaleData, IntlProvider as Provider} from 'react-intl';
+import * as nbLocaleData                         from 'react-intl/locale-data/nb';
+import * as nnLocaleData                         from 'react-intl/locale-data/nn';
 
 const bokmalstekster = require('../../i18n/nb.json');
 const nynorsktekster = require('../../i18n/nn.json');

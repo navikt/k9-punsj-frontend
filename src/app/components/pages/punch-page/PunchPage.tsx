@@ -1,22 +1,7 @@
-import _ from "lodash";
-import * as React from 'react';
-import {InjectedIntlProps, injectIntl} from 'react-intl';
-// import {Document, Page as PdfPage} from 'react-pdf';
-import {connect} from 'react-redux';
-
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
-import {HoyreChevron, VenstreChevron} from "nav-frontend-chevron";
-import {Flatknapp, Knapp} from "nav-frontend-knapper";
-import ModalWrapper from "nav-frontend-modal";
-import {Panel} from 'nav-frontend-paneler';
-import {Input} from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import 'nav-frontend-tabell-style';
-
-import {ApiPath, URL_BACKEND} from "app/apiConfig";
-import Page from 'app/components/page/Page';
-import {PunchStep} from "app/models/enums";
-import {IFagsak, IMappe, IPunchState} from 'app/models/types';
+import {ApiPath, URL_BACKEND}          from 'app/apiConfig';
+import Page                            from 'app/components/page/Page';
+import {PunchStep}                     from 'app/models/enums';
+import {IFagsak, IMappe, IPunchState}  from 'app/models/types';
 import {
     backFromForm,
     chooseMappeAction,
@@ -30,13 +15,26 @@ import {
     setIdentAction,
     setMapperAction,
     undoSearchForMapperAction
-} from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
-import {apiUrl} from "app/utils";
-import intlHelper from 'app/utils/intlUtils';
-import PunchForm from "./PunchForm";
+}                                      from 'app/state/actions';
+import {RootStateType}                 from 'app/state/RootState';
+import {apiUrl}                        from 'app/utils';
+import intlHelper                      from 'app/utils/intlUtils';
+import _                               from 'lodash';
+import {AlertStripeInfo}               from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}  from 'nav-frontend-chevron';
+import {Flatknapp, Knapp}              from 'nav-frontend-knapper';
+import ModalWrapper                    from 'nav-frontend-modal';
+import {Panel}                         from 'nav-frontend-paneler';
+import {Input}                         from 'nav-frontend-skjema';
+import NavFrontendSpinner              from 'nav-frontend-spinner';
+import 'nav-frontend-tabell-style';
+import * as React                      from 'react';
+import {InjectedIntlProps, injectIntl} from 'react-intl';
+// import {Document, Page as PdfPage} from 'react-pdf';
+import {connect}                       from 'react-redux';
+import PunchForm                       from './PunchForm';
 import './punchPage.less';
-import SoknadReadMode from "./SoknadReadMode";
+import SoknadReadMode                  from './SoknadReadMode';
 
 interface IPunchPageStateProps {
     punchState: IPunchState;
