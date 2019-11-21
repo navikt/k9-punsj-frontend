@@ -4969,10 +4969,10 @@ nav-datovelger@^4.3.0:
     lodash.isequal "4.5.0"
     lodash.throttle "4.1.1"
 
-nav-frontend-alertstriper-style@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.5.tgz#ad072883ce76b702f3452faaf90b965b7c5ad2ae"
-  integrity sha512-I8ri3vb5lU22jJGPCCBrHJr2WMd5oYsU6VHxAHHUx6jqZSkRA026oWJxHByzgrdvWFeRA4WzoclAuajfxq9lmw==
+nav-frontend-alertstriper-style@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.6.tgz#f5a5f20879ec9755f614339c2e6f3ba40af6468a"
+  integrity sha512-9TtDQFZQrSH1bw1xJOLI+Cb2HbV066ZsyyZ08p9/YgW5xiaVP8g9D25boBOV0/953pzol6UTiIvKAhymKTjIPw==
 
 nav-frontend-alertstriper@^3.0.6:
   version "3.0.6"
