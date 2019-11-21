@@ -1,13 +1,14 @@
 {
   "mapper1": [
     {
+      "id": "8144556",
       "mappe_id":     "8144556",
       "innsendinger": [],
       "innhold":      {
         "versjon":             "0.0.1",
         "mottatt_dato":        "2019-10-20T07:15:36.124Z",
         "soker":               {
-          "norsk_identitetsnummer": "12345678901",
+          "norsk_identitetsnummer": "123",
           "spraak_valg":            "nb"
         },
         "medsoker":            {
@@ -94,5 +95,6 @@
       }
     }
   ],
-  "fagsak2": []
+  "fagsak2": [],
+  "dokument": {}
 }

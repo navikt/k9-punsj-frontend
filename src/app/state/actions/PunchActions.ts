@@ -1,9 +1,10 @@
-import {ApiPath}                 from 'app/apiConfig';
-import {PunchActionKeys}         from 'app/models/enums';
-import {IError, IFagsak, IMappe} from 'app/models/types';
-import {get}                     from 'app/utils';
+import {ApiPath}                    from 'app/apiConfig';
+import {PunchActionKeys, PunchStep} from 'app/models/enums';
+import {IError, IFagsak, IMappe}    from 'app/models/types';
+import {get}                        from 'app/utils';
 
 interface ISetIdentAction           {type: PunchActionKeys.IDENT_SET,               ident: string}
+interface ISetStepAction            {type: PunchActionKeys.STEP_SET,                step: PunchStep}
 
 interface ISetMapperAction          {type: PunchActionKeys.MAPPER_SET,              mapper: IMappe[]}
 interface IFindMapperLoadingAction  {type: PunchActionKeys.MAPPER_LOAD,             isLoading: boolean}
@@ -24,13 +25,15 @@ interface IOpenFagsakAction         {type: PunchActionKeys.FAGSAK_OPEN,         
 interface ICloseFagsakAction        {type: PunchActionKeys.FAGSAK_CLOSE}
 
 type        IIdentActionTypes       = ISetIdentAction;
+type        IStepActionTypes        = ISetStepAction;
 type        IMapperActionTypes      = ISetMapperAction | IFindMapperErrorAction | IFindMapperLoadingAction | IUndoSearchForMapper;
 type        IFagsakerActionTypes    = ISetFagsakerAction | IFindFagsakerLoadAction | IFindFagsakerErrorAction;
 type        IMappeinfoActionTypes   = IOpenMappeAction | ICloseMappeAction | IChooseMappeAction | INewMappeAction | IUndoChoiceOfMappeAction;
 type        IFagsakinfoActionTypes  = IOpenFagsakAction | ICloseFagsakAction;
-export type IPunchActionTypes       = IIdentActionTypes | IMapperActionTypes | IFagsakerActionTypes | IMappeinfoActionTypes | IFagsakinfoActionTypes;
+export type IPunchActionTypes       = IIdentActionTypes | IStepActionTypes | IMapperActionTypes | IFagsakerActionTypes | IMappeinfoActionTypes | IFagsakinfoActionTypes;
 
 export function setIdentAction(ident: string):                  ISetIdentAction             {return {type: PunchActionKeys.IDENT_SET, ident}}
+export function setStepAction(step: PunchStep):                 ISetStepAction              {return {type: PunchActionKeys.STEP_SET, step}}
 
 export function setMapperAction(mapper: IMappe[]):              ISetMapperAction            {return {type: PunchActionKeys.MAPPER_SET, mapper}}
 export function findMapperLoadingAction(isLoading: boolean):    IFindMapperLoadingAction    {return {type: PunchActionKeys.MAPPER_LOAD, isLoading}}

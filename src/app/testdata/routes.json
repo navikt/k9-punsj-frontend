@@ -7,5 +7,7 @@
   "/fagsak/123?ytelse=pleiepenger_sykt_barn": "/fagsak1",
   "/fagsak/1234?ytelse=pleiepenger_sykt_barn": "/fagsak2",
   "/fagsak/12345?ytelse=pleiepenger_sykt_barn": "/fagsak2",
-  "/fagsak/123456?ytelse=pleiepenger_sykt_barn": "/fagsak1"
+  "/fagsak/123456?ytelse=pleiepenger_sykt_barn": "/fagsak1",
+  "/journalpost/1/dokument/1": "/dokument",
+  "/pleiepenger-sykt-barn-soknad/mappe/8144556": "/mapper1/8144556"
 }
