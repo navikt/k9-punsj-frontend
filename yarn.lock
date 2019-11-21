@@ -368,7 +368,7 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react-router-dom@^5.1.0":
+"@types/react-router-dom@^5.1.2":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.2.tgz#853f229f1f297513c0be84f7c914a08b778cfdf5"
   integrity sha512-kRx8hoBflE4Dp7uus+j/0uMHR5uGTAvQtc4A3vOTWKS+epe0leCuxEx7HNT7XGUd1lH53/moWM51MV2YUyhzAg==
@@ -4969,10 +4969,10 @@ nav-datovelger@^4.3.0:
     lodash.isequal "4.5.0"
     lodash.throttle "4.1.1"
 
-nav-frontend-alertstriper-style@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.5.tgz#ad072883ce76b702f3452faaf90b965b7c5ad2ae"
-  integrity sha512-I8ri3vb5lU22jJGPCCBrHJr2WMd5oYsU6VHxAHHUx6jqZSkRA026oWJxHByzgrdvWFeRA4WzoclAuajfxq9lmw==
+nav-frontend-alertstriper-style@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.6.tgz#f5a5f20879ec9755f614339c2e6f3ba40af6468a"
+  integrity sha512-9TtDQFZQrSH1bw1xJOLI+Cb2HbV066ZsyyZ08p9/YgW5xiaVP8g9D25boBOV0/953pzol6UTiIvKAhymKTjIPw==
 
 nav-frontend-alertstriper@^3.0.6:
   version "3.0.6"
@@ -5004,10 +5004,10 @@ nav-frontend-js-utils@^1.0.8:
   resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.8.tgz#1c1ecec8d90b125157097b22b227ef0b53045432"
   integrity sha512-GFDedxAONjvcrkdtq9mz2r+Im7KkWXcgrhh9HtGIUTR5By7n33SBAk0SdfnLt18Q3HWEbnsa/jOWHDRHrQE7Zg==
 
-nav-frontend-knapper-style@^0.3.31:
-  version "0.3.31"
-  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.31.tgz#cb177bf81643f47ae4b1a7cc3e4db613d7926914"
-  integrity sha512-xHASg5ilK7vV+Dablaq6QG1Zzt3pQ95vXO+yRnYy0qEB3kjbGMinwmH/6aUcE5iUn51Yokz0PhwEdG35eczVuQ==
+nav-frontend-knapper-style@^0.3.32:
+  version "0.3.32"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.32.tgz#7f6b1bf1b413199e0518fd3682b38dbd41478598"
+  integrity sha512-ezaB1PiFXRKts3h7uo2xIFEEU48n9dWgENFaFG08Fgr2Y7PdUVxbomj+XdiCQx0kkpIYpDAYn1QO5FiEfQ9+4g==
 
 nav-frontend-knapper@^1.0.36:
   version "1.0.36"
@@ -5019,10 +5019,10 @@ nav-frontend-lenker-style@^0.2.24:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.24.tgz#c4ea13384d0257520cdc6c3f526eb0f0dae81a95"
   integrity sha512-OH8MzavrX7tT/BssDpu4vVPzmsBPPC7ybS5iPzhbIebgSwViisnoCFeDHnZQ3RUGEsyNm0DzztJEjLbVNnQyCg==
 
-nav-frontend-lukknapp-style@^0.2.20:
-  version "0.2.20"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.20.tgz#9665dbd2ce261074ed04ca53c1cf0be0fc7001ed"
-  integrity sha512-IqVKknGtq+M0tmPiC7enfF2fDnHQCGcndM+rRgDw7PuEIM6CfGRa1tUHRV2mz9aF+21UjMY9vrd+6/HupMVWFg==
+nav-frontend-lukknapp-style@^0.2.21:
+  version "0.2.21"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.21.tgz#6fdd8b61428a5def9181fc77cffea688e3bfd13f"
+  integrity sha512-nBNcCPtlUU0iskvOtO9c+zEYwJUx5snQ6b3MBHP9zgZNTpVRo0re5CE9GRYxqcQFkxHBYTsWrdI2lB0f7MyOvA==
 
 nav-frontend-lukknapp@^1.0.22:
   version "1.0.22"
@@ -5064,10 +5064,10 @@ nav-frontend-spinner-style@^0.2.5:
   resolved "https://registry.yarnpkg.com/nav-frontend-spinner-style/-/nav-frontend-spinner-style-0.2.5.tgz#c782c63589776e768a45d6049047b1a60b6805be"
   integrity sha512-PWSfscmNMbrnXRcXQUgBquU5479bNmO/sw3IwML6s6K/qyEYggRvJdGCbBEYyxXmoeDDjXGd2tkIVy5gja387A==
 
-nav-frontend-spinner@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-1.0.19.tgz#78a2574c20c193bb5a11374d42eea3f406e8f2f9"
-  integrity sha512-XqB4Jyg9/hfmR599aFYwbAtH5DsI3L1LzE7VQvREZ7mrNg4mEXzlvNIzIHE0kHPaB9Eoycy8i083P2YPrk3k/Q==
+nav-frontend-spinner@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-1.0.20.tgz#4c4c7f6f5c56680f1245365b36ae656466bd6802"
+  integrity sha512-4/40Cyo/T8T78lCMEkXtBeaiIne+HD77zt8DKnTaFXYpUY4J725BNbUo2tocBs+ac1nJwQ6r8VV4UXzLuH+0Og==
 
 nav-frontend-tabell-style@^0.2.18:
   version "0.2.18"
@@ -6221,10 +6221,10 @@ react-aria-menubutton@^6.2.0:
     prop-types "^15.6.0"
     teeny-tap "^0.2.0"
 
-react-bootstrap@^1.0.0-beta.15:
-  version "1.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.0-beta.15.tgz#c029440691098497c967e97a3f241e16a04db777"
-  integrity sha512-DybdjxDxm3P2xncpHlxxTC/JXX1PGPj2ca0x8n8b+FQTKVqmmCmc0wokpjsSyaifxO5AX+yQzeTph52jNtHYkA==
+react-bootstrap@^1.0.0-beta.16:
+  version "1.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.0-beta.16.tgz#42da0314aee6754494e478687b8e6953de1aaf62"
+  integrity sha512-wjb+3CwviDWAaz4O3gQpd2XMDNqbOiqOOzpLm5aLPcp1wTsQsVRhyM+rTPmO3hYU8auA2eNpTYLz08/fAcMqDA==
   dependencies:
     "@babel/runtime" "^7.4.2"
     "@restart/context" "^2.1.4"
@@ -7816,10 +7816,10 @@ tslint-react@^4.1.0:
   dependencies:
     tsutils "^3.9.1"
 
-tslint@^5.20.0:
-  version "5.20.0"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.20.0.tgz#fac93bfa79568a5a24e7be9cdde5e02b02d00ec1"
-  integrity sha512-2vqIvkMHbnx8acMogAERQ/IuINOq6DFqgF8/VDvhEkBqQh/x6SP0Y+OHnKth9/ZcHQSroOZwUQSN18v8KKF0/g==
+tslint@^5.20.1:
+  version "5.20.1"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.20.1.tgz#e401e8aeda0152bc44dd07e614034f3f80c67b7d"
+  integrity sha512-EcMxhzCFt8k+/UP5r8waCf/lzmeSyVlqxqMEDQE7rWYiQky8KpIBz1JAoYXfROHrPZ1XXd43q8yQnULOLiBRQg==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     builtin-modules "^1.1.1"
