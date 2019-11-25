@@ -1,6 +1,7 @@
-import {URL_AUTH_CHECK, URL_AUTH_LOGIN} from 'app/apiConfig';
-import {AuthActionKeys}                 from 'app/models/enums';
-import {IError}                         from 'app/models/types';
+import {URL_AUTH_CHECK} from 'app/apiConfig';
+import {AuthActionKeys} from 'app/models/enums';
+import {IError}         from 'app/models/types';
+import {loginUrl}       from 'app/utils';
 
 interface IAuthLoadAction       {type: AuthActionKeys.LOAD}
 interface IAuthRedirectAction   {type: AuthActionKeys.REDIRECT, redirectUrl: string}
@@ -19,7 +20,7 @@ export function checkAuth() {return (dispatch: any) => {
     fetch(URL_AUTH_CHECK, {credentials: 'include'}).then(response => {
         switch (response.status) {
             case 200:   return dispatch(authOkAction());
-            case 401:   return dispatch(redirectAction(URL_AUTH_LOGIN));
+            case 401:   return dispatch(redirectAction(loginUrl()));
             default:    return dispatch(authErrorAction(response));
         }
     });

@@ -1,7 +1,10 @@
 import {JaNeiVetikke} from "app/models/enums";
-import {ISoknad} from "./Soknad";
+import {IError}       from 'app/models/types/Error';
+import {ISoknad}      from "./Soknad";
 
 export interface IPunchFormState {
-    tilsyn?: JaNeiVetikke;
-    soknad: ISoknad;
+    mappe?: IMappe;
+    isMappeLoading: boolean;
+    error?: IError;
+    //tilsyn?: JaNeiVetikke;
 }

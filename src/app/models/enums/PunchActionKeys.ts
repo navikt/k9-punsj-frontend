@@ -1,6 +1,7 @@
 export enum PunchActionKeys {
 
     IDENT_SET = 'PUNCH_IDENT_SET',
+    STEP_SET = 'PUNCH_STEP_SET',
 
     MAPPER_SET = 'PUNCH_MAPPER_SET',
     MAPPER_LOAD = 'PUNCH_MAPPER_LOAD',

@@ -1,6 +1,6 @@
-import {PunchActionKeys, PunchStep} from "app/models/enums";
-import {IPunchState} from "app/models/types";
-import {IPunchActionTypes} from "app/state/actions";
+import {PunchActionKeys, PunchStep} from 'app/models/enums';
+import {IPunchState}                from 'app/models/types';
+import {IPunchActionTypes}          from 'app/state/actions';
 
 const initialState: IPunchState = {
     step: PunchStep.START,
@@ -22,7 +22,17 @@ export function PunchReducer(
         case PunchActionKeys.IDENT_SET:
             return {
                 ...punchState,
-                ident: action.ident
+                ident: action.ident,
+                isMapperLoading: false,
+                isFagsakerLoading: false,
+                mapperRequestError: undefined,
+                fagsakerRequestError: undefined
+            };
+
+        case PunchActionKeys.STEP_SET:
+            return {
+                ...punchState,
+                step: action.step
             };
 
         case PunchActionKeys.MAPPER_SET:
@@ -54,9 +64,14 @@ export function PunchReducer(
             return {
                 ...punchState,
                 step: PunchStep.START,
+                ident: '',
                 mapper: [],
+                fagsaker: [],
+                chosenMappe: undefined,
                 isMapperLoading: false,
-                mapperRequestError: undefined
+                isFagsakerLoading: false,
+                mapperRequestError: undefined,
+                fagsakerRequestError: undefined
             };
 
         case PunchActionKeys.FAGSAKER_SET:
@@ -116,7 +131,7 @@ export function PunchReducer(
         case PunchActionKeys.MAPPE_UNDO_CHOICE:
             return {
                 ...punchState,
-                step: PunchStep.CHOOSE_SOKNAD,
+                step: !punchState.fagsaker.length && !punchState.mapper.length ? PunchStep.START : PunchStep.CHOOSE_SOKNAD,
                 chosenMappe: undefined,
                 chosenFagsak: undefined
             };

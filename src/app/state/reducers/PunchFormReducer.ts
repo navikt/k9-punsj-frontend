@@ -1,16 +1,9 @@
-import {PunchFormActionKeys} from "app/models/enums";
-import {IPunchFormState} from "app/models/types";
-import {IPunchFormActionTypes} from "app/state/actions/PunchFormActions";
+import {PunchFormActionKeys}   from 'app/models/enums';
+import {IPunchFormState}       from 'app/models/types';
+import {IPunchFormActionTypes} from 'app/state/actions/PunchFormActions';
 
 const initialState: IPunchFormState = {
-    soknad: {
-        soker: {
-            norsk_identitetsnummer: ''
-        },
-        medlemskap: {
-            opphold: []
-        }
-    }
+    isMappeLoading: false
 };
 
 export function PunchFormReducer(
@@ -20,21 +13,39 @@ export function PunchFormReducer(
 
     switch (action.type) {
 
+        case PunchFormActionKeys.MAPPE_LOAD:
+            return {
+                ...punchFormState,
+                isMappeLoading: true
+            };
+
+        case PunchFormActionKeys.MAPPE_REQUEST_ERROR:
+            return {
+                ...punchFormState,
+                isMappeLoading: false,
+                error: action.error
+            };
+
+        case PunchFormActionKeys.MAPPE_SET:
+            return {
+                ...punchFormState,
+                isMappeLoading: false,
+                mappe: action.mappe
+            };
+
+        case PunchFormActionKeys.MAPPE_RESET:
+            return {
+                ...punchFormState,
+                isMappeLoading: false,
+                mappe: undefined
+            };
+
         case PunchFormActionKeys.SOKNAD_SET:
             return {
                 ...punchFormState,
-                soknad: action.soknad
-            };
-
-        case PunchFormActionKeys.OPPHOLD_SET:
-            return {
-                ...punchFormState,
-                soknad: {
-                    ...punchFormState.soknad,
-                    medlemskap: {
-                        ...punchFormState.soknad.medlemskap,
-                        opphold: action.opphold
-                    }
+                mappe: {
+                    ...punchFormState.mappe,
+                    innhold: action.soknad
                 }
             };
 
