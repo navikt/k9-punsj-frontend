@@ -7,13 +7,14 @@ import {
     ISoknad
 }                         from 'app/models/types';
 import {
+    backFromFormAction,
     getMappe,
     resetMappeAction,
     setIdentAction,
     setSoknadAction,
     setStepAction,
     undoChoiceOfMappeAction
-}                         from 'app/state/actions';
+} from 'app/state/actions';
 import {RootStateType}    from 'app/state/RootState';
 import {
     changePath,
@@ -59,6 +60,7 @@ interface IPunchFormDispatchProps {
     setStepAction:              typeof setStepAction;
     setSoknadAction:            typeof setSoknadAction;
     undoChoiceOfMappeAction:    typeof undoChoiceOfMappeAction;
+    backFromFormAction:         typeof backFromFormAction;
 }
 
 interface IPunchFormPageState {
@@ -104,13 +106,8 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     };
 
     componentDidMount(): void {
-
         const {id} = this.props.match.params;
-        if (this.isSoknadNew()) {
-            this.props.resetMappeAction();
-        } else {
-            this.props.getMappe(id);
-        }
+        this.props.getMappe(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
     }
 
@@ -118,7 +115,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
             this.setState({soknad: mappe.innhold, isFetched: true});
-            this.props.setIdentAction(_.get(mappe.innhold.soker, 'norsk_identitetsnummer', ''));
+            this.props.setIdentAction(mappe.norsk_ident || mappe.innhold?.soker?.norsk_identitetsnummer || '');
         }
     }
 
@@ -126,9 +123,11 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
         const {intl, punchFormState} = this.props;
         const {soknad} = this.state;
-        const infomelding = this.isSoknadNew()
-            ? `Fødselsnummeret har ingen tilknyttede, ufullstendige søknader. Fyll ut skjemaet for å opprette en ny.`
-            : `Fortsett å fylle ut informasjon om mappe ${this.props.match.params.id}.`;
+        const infomelding = "Fyll ut informasjon.";/*this.isSoknadNew()
+            ? (punchState.mapper.length || punchState.fagsaker.length
+                ? `Fyll ut skjemaet for å opprette en ny søknad.`
+                : `Fødselsnummeret har ingen tilknyttede, ufullstendige søknader. Fyll ut skjemaet for å opprette en ny.`)
+            : `Fortsett å fylle ut informasjon om mappe ${this.props.match.params.id}.`;*/
 
         /*        const tilsynukedager = [];
                 for (const ukedag in Object.keys(Ukedag).filter(key => isNaN(Number(Ukedag[key])))) {
@@ -221,47 +220,49 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 className="bold-label"
             />
             <h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
-            {!!this.state.soknad.medlemskap.opphold.length && <table className="tabell tabell--stripet">
-                <thead>
-                <tr>
-                    <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
-                    <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
-                    <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
-                    <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {Object.keys(soknad.medlemskap.opphold).map((key) => (
-                    <tr key={key}>
-                        <td><CountrySelect
-                            name={`opphold_land_${key}`}
-                            onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
-                            onBlur={() => this.setOpphold()}
-                            selectedCountry={_.get(this.state.soknad.medlemskap.opphold[key], 'land', '')}
-                            unselectedOption={'Velg …'}
-                            label=""
-                        /></td>
-                        <td><Input
-                            name={`opphold_fom_${key}`}
-                            onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
-                            onBlur={() => this.setOpphold()}
-                            type="date"
-                            value={_.get(this.state.soknad.medlemskap.opphold[key], 'periode.fra_og_med', '')}
-                            label=""
-                        /></td>
-                        <td><Input
-                            name={`opphold_tom_${key}`}
-                            onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
-                            onBlur={() => this.setOpphold()}
-                            type="date"
-                            value={_.get(this.state.soknad.medlemskap.opphold[key], 'periode.til_og_med', '')}
-                            label=""
-                        /></td>
-                        <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
+            {!!soknad?.medlemskap?.opphold.length && (
+                <table className="tabell tabell--stripet">
+                    <thead>
+                    <tr>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>}
+                    </thead>
+                    <tbody>
+                    {Object.keys(soknad.medlemskap.opphold).map((key) => (
+                        <tr key={key}>
+                            <td><CountrySelect
+                                name={`opphold_land_${key}`}
+                                onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
+                                onBlur={() => this.setOpphold()}
+                                selectedCountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
+                                unselectedOption={'Velg …'}
+                                label=""
+                            /></td>
+                            <td><Input
+                                name={`opphold_fom_${key}`}
+                                onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
+                                onBlur={() => this.setOpphold()}
+                                type="date"
+                                value={_.get(soknad.medlemskap!.opphold[key], 'periode.fra_og_med', '')}
+                                label=""
+                            /></td>
+                            <td><Input
+                                name={`opphold_tom_${key}`}
+                                onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
+                                onBlur={() => this.setOpphold()}
+                                type="date"
+                                value={_.get(soknad.medlemskap!.opphold[key], 'periode.til_og_med', '')}
+                                label=""
+                            /></td>
+                            <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
             <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
             {/*<h2>Opplysninger om tilsyn av barnet</h2>
             <Fieldset legend="Skal barnet gå i barnehage eller på skole/SFO eller være i annet etablert tilsyn i pleiepengeperioden?">
@@ -354,22 +355,16 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         </>);
     }
 
-    private isSoknadNew = () => this.props.match.params.id === 'ny';
-
     private updateSoknadState(soknad: Partial<ISoknad>) {
         this.setState({soknad: {...this.state.soknad, ...soknad}});
     }
 
     private handleBackButtonClick = () => {
-
         const {punchState, punchPaths} = this.props;
-
-        if (!punchState.mapper.length && !punchState.fagsaker.length) {
-            changePath(getPath(punchPaths, PunchStep.START));
-        } else {
-            changePath(getPath(punchPaths, PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
-        }
+        this.props.backFromFormAction();
+        this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
+        changePath(getPath(punchPaths, PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
     };
 
     private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({
@@ -378,33 +373,33 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     });
 
     private handleOppholdLandChange = (index: number, land: string) => {
-        this.state.soknad.medlemskap.opphold[index].land = land;
+        this.state.soknad.medlemskap!.opphold[index].land = land;
         this.forceUpdate();
     };
 
     private handleOppholdFomChange = (index: number, fom: string) => {
-        this.state.soknad.medlemskap.opphold[index].periode = {...this.state.soknad.medlemskap.opphold[index].periode, fra_og_med: fom};
+        this.state.soknad.medlemskap!.opphold[index].periode = {...this.state.soknad.medlemskap!.opphold[index].periode, fra_og_med: fom};
         this.forceUpdate();
     };
 
     private handleOppholdTomChange = (index: number, tom: string) => {
-        this.state.soknad.medlemskap.opphold[index].periode = {...this.state.soknad.medlemskap.opphold[index].periode, til_og_med: tom};
+        this.state.soknad.medlemskap!.opphold[index].periode = {...this.state.soknad.medlemskap!.opphold[index].periode, til_og_med: tom};
         this.forceUpdate();
     };
 
     private addOpphold = () => {
-        this.state.soknad.medlemskap.opphold.push({land: '', periode: {}});
+        this.state.soknad.medlemskap!.opphold.push({land: '', periode: {}});
         this.forceUpdate();
         this.setOpphold();
     };
 
     private removeOpphold = (index: number) => {
-        this.state.soknad.medlemskap.opphold.splice(index, 1);
+        this.state.soknad.medlemskap!.opphold.splice(index, 1);
         this.forceUpdate();
         this.setOpphold();
     };
 
-    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.medlemskap, opphold: this.state.soknad.medlemskap.opphold}});
+    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});
 
     private updateSoknad = (soknad: Partial<ISoknad>) => this.props.setSoknadAction({...this.props.punchFormState.mappe.innhold, ...soknad});
 
@@ -422,7 +417,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction:             (ident: string)     => dispatch(setIdentAction(ident)),
     setStepAction:              (step: PunchStep)   => dispatch(setStepAction(step)),
     setSoknadAction:            (soknad: ISoknad)   => dispatch(setSoknadAction(soknad)),
-    undoChoiceOfMappeAction:    ()                  => dispatch(undoChoiceOfMappeAction())
+    undoChoiceOfMappeAction:    ()                  => dispatch(undoChoiceOfMappeAction()),
+    backFromFormAction:         ()                  => dispatch(backFromFormAction())
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm)));

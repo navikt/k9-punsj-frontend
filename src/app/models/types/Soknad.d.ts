@@ -9,7 +9,7 @@ export interface ISoknad {
     periode?: IPeriode;
     relasjon_til_barnet?: string;
     barn?: IBarn;
-    medlemskap: IMedlemskap;
+    medlemskap?: IMedlemskap;
     beredskap?: IBeredskap;
     nattevaak?: INattevaak;
 }

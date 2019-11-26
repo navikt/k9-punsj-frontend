@@ -1,14 +1,13 @@
 {
   "/pleiepenger-sykt-barn-soknad/mapper/15049228314*": "/mapper1",
-  "/pleiepenger-sykt-barn-soknad/mapper/123": "/mapper1",
-  "/pleiepenger-sykt-barn-soknad/mapper/1234": "/mapper2",
-  "/pleiepenger-sykt-barn-soknad/mapper/12345": "/mapper1",
-  "/pleiepenger-sykt-barn-soknad/mapper/123456": "/mapper2",
+  "/pleiepenger-sykt-barn-soknad/mapper/:norsk_ident": "/mapper1?norsk_ident=:norsk_ident",
   "/fagsak/123?ytelse=pleiepenger_sykt_barn": "/fagsak1",
   "/fagsak/1234?ytelse=pleiepenger_sykt_barn": "/fagsak2",
   "/fagsak/12345?ytelse=pleiepenger_sykt_barn": "/fagsak2",
   "/fagsak/123456?ytelse=pleiepenger_sykt_barn": "/fagsak1",
+  "/fagsak/:norsk_ident?ytelse=pleiepenger_sykt_barn": "/fagsak2?norsk_ident=:norsk_ident",
   "/journalpost/1/dokument/1": "/dokument",
   "/journalpost/123/dokument/470164680": "/dokument",
-  "/pleiepenger-sykt-barn-soknad/mappe/8144556": "/mapper1/8144556"
+  "/pleiepenger-sykt-barn-soknad/mappe/:mappe_id": "/mapper1/:mappe_id",
+  "/pleiepenger-sykt-barn-soknad": "/mapper1"
 }

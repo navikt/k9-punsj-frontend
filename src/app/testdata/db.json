@@ -1,111 +1,1039 @@
 {
-  "mapper1":     [
+  "mapper1": [
     {
-      "id":           "8144556",
-      "mappe_id":     "8144556",
+      "id": "8144556",
+      "mappe_id": "8144556",
       "innsendinger": [],
-      "innhold":      {
-        "versjon":             "0.0.1",
-        "mottatt_dato":        "2019-10-20T07:15:36.124Z",
-        "soker":               {
+      "innhold": {
+        "versjon": "0.0.1",
+        "mottatt_dato": "2019-10-20T07:15:36.124Z",
+        "soker": {
           "norsk_identitetsnummer": "123",
-          "spraak_valg":            "nb"
+          "spraak_valg": "nb"
         },
-        "medsoker":            {
+        "medsoker": {
           "norsk_identitetsnummer": "12345678902"
         },
-        "periode":             {
+        "periode": {
           "fra_og_med": "2018-12-30",
           "til_og_med": "2019-10-20"
         },
         "relasjon_til_barnet": "Mor",
-        "barn":                {},
-        "medlemskap":          {
-          "opphold":                          [
+        "barn": {},
+        "medlemskap": {
+          "opphold": [
             {
               "periode": {
                 "fra_og_med": "2018-12-30",
                 "til_og_med": "2019-10-10"
               },
-              "land":    "SWE"
+              "land": "SWE"
             },
             {
               "periode": {
                 "fra_og_med": "2018-10-10",
                 "til_og_med": "2019-10-19"
               },
-              "land":    "NOR"
+              "land": "NOR"
             }
           ],
           "har_bodd_i_utlandet_siste_12_mnd": true,
-          "skal_bo_i_utlandet_neste_12_mnd":  true
+          "skal_bo_i_utlandet_neste_12_mnd": true
         },
-        "beredskap":           {
-          "svar":                true,
+        "beredskap": {
+          "svar": true,
           "tilleggsinformasjon": "Beredskapsforklaring: Lorem ipsum æÆøØåÅ."
         },
-        "nattevaak":           {
-          "svar":                true,
+        "nattevaak": {
+          "svar": true,
           "tilleggsinformasjon": "Nattevåksforklaring: Lorem ipsum æÆøØåÅ."
         }
       },
-      "mangler":      []
+      "mangler": []
     },
     {
-      "mappe_id":     "56564546",
+      "mappe_id": "56564546",
       "innsendinger": [],
-      "innhold":      {
+      "innhold": {
         "soker": {
           "norsk_identitetsnummer": "15049228314"
         }
       },
-      "mangler":      []
+      "mangler": []
     },
     {
-      "mappe_id":     "25656566",
+      "mappe_id": "25656566",
       "innsendinger": [],
-      "innhold":      {
+      "innhold": {
         "soker": {
           "norsk_identitetsnummer": "15049228314"
         }
       },
-      "mangler":      []
+      "mangler": []
+    },
+    {
+      "norsk_ident": "56789012345",
+      "journalpost_id": "string",
+      "innhold": {
+        "søker": {
+          "fødselsnummer": "56789012345"
+        }
+      },
+      "mappe_id": "rEPrPnn"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "DFecQeY"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "Nh0syQ2"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "D9rOA2N"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "Ho67wpU"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "oiux7h2"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "F8n-QMM"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "bTAflpE"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "ZK_KaDp"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "h-yGWzs"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "vlMqdv1"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "x7FSjGK"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "43Zci2x"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "zUA2U0h"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "Ljcfds1"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "2rd8Kmr"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "bQm15z2"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "mlx9BVC"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "tyy6fW0"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "FmFca9u"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "-p5ocj6"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "cHqrDB-"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "hy7V_RM"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "VrSWqGG"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "DBtfwpN"
+    },
+    {
+      "norsk_ident": "65485",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65485"
+        }
+      },
+      "mappe_id": "Wtwd0R9"
+    },
+    {
+      "norsk_ident": "65485",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65485"
+        }
+      },
+      "mappe_id": "kZOW2wD"
+    },
+    {
+      "norsk_ident": "487",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "487"
+        }
+      },
+      "mappe_id": "0-rINGO"
+    },
+    {
+      "norsk_ident": "487",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "487"
+        }
+      },
+      "mappe_id": "9Mt1hf1"
+    },
+    {
+      "norsk_ident": "689",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "689"
+        }
+      },
+      "mappe_id": "cYLH5Gk"
+    },
+    {
+      "norsk_ident": "689",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "689"
+        }
+      },
+      "mappe_id": "oqhBiYO"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "Rma1TdB"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "WR0Va2s"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "db3Pay2"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "dVEQ076"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "i3JMGCV"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "Xl_IsA4"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "Ap8QDmJ"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "HnOoH8x"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "p5M19Yc"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "j1fUUKL"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "eKnF-wW"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "mHmPNqA"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "eIqLV9k"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "2Bgd30S"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "UdQ7j6k"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "Fxu0TU3"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "pzEsBBh"
+    },
+    {
+      "norsk_ident": "598",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "598"
+        }
+      },
+      "mappe_id": "Z9fpFap"
+    },
+    {
+      "norsk_ident": "476",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "476"
+        }
+      },
+      "mappe_id": "rI4Kuep"
+    },
+    {
+      "norsk_ident": "476",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "476"
+        }
+      },
+      "mappe_id": "pLk2zjZ"
+    },
+    {
+      "norsk_ident": "457",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "457"
+        }
+      },
+      "mappe_id": "KbGw7Qj"
+    },
+    {
+      "norsk_ident": "457",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "457"
+        }
+      },
+      "mappe_id": "sYNgf1f"
+    },
+    {
+      "norsk_ident": "458",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "458"
+        }
+      },
+      "mappe_id": "FLOlHAq"
+    },
+    {
+      "norsk_ident": "458",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "458"
+        }
+      },
+      "mappe_id": "guUOYs3"
+    },
+    {
+      "norsk_ident": "459",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "459"
+        }
+      },
+      "mappe_id": "S2boBGk"
+    },
+    {
+      "norsk_ident": "459",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "459"
+        }
+      },
+      "mappe_id": "HDn240H"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "vmIlrcl"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "izas3Iy"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "0NAed9h"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "QtO3hXo"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "EFUqTtD"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "d0gKZKA"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "l4rPGTJ"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "3zL4H30"
+    },
+    {
+      "norsk_ident": "1258",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1258"
+        }
+      },
+      "mappe_id": "qsjFWJw"
+    },
+    {
+      "norsk_ident": "1258",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1258"
+        }
+      },
+      "mappe_id": "7mLWg_3"
+    },
+    {
+      "norsk_ident": "1258",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1258"
+        }
+      },
+      "mappe_id": "G1XbHDy"
+    },
+    {
+      "norsk_ident": "1456",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1456"
+        }
+      },
+      "mappe_id": "Vbxg3M4"
+    },
+    {
+      "norsk_ident": "1456",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1456"
+        }
+      },
+      "mappe_id": "HFtJEXu"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "uQJrEeP"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "ghtftN_"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "GGPvqAy"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "sQzC2ia"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "pMOHoCG"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "-YJEcwz"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "9afD33r"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "dl9WWxM"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "D8WKTS9"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "IlUoZfn"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "Al7lEnF"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "twEZ3OY"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "TY7stn0"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "Whg0dMJ"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "l50NL98"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "0YlMr5t"
+    },
+    {
+      "norsk_ident": "87",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "87"
+        }
+      },
+      "mappe_id": "5FiX9m8"
+    },
+    {
+      "norsk_ident": "87",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "87"
+        }
+      },
+      "mappe_id": "P8p2OZA"
+    },
+    {
+      "norsk_ident": "258",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "258"
+        }
+      },
+      "mappe_id": "g6238fE"
+    },
+    {
+      "norsk_ident": "258",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "258"
+        }
+      },
+      "mappe_id": "D276Dyo"
+    },
+    {
+      "norsk_ident": "548",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548"
+        }
+      },
+      "mappe_id": "YjdWBzh"
+    },
+    {
+      "norsk_ident": "548",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548"
+        }
+      },
+      "mappe_id": "a3EUcJt"
+    },
+    {
+      "norsk_ident": "658921",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "658921"
+        }
+      },
+      "mappe_id": "8RcW_tH"
+    },
+    {
+      "norsk_ident": "658921",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "658921"
+        }
+      },
+      "mappe_id": "zfNljOr"
+    },
+    {
+      "norsk_ident": "126556",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "126556"
+        }
+      },
+      "mappe_id": "aA4pSl6"
+    },
+    {
+      "norsk_ident": "126556",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "126556"
+        }
+      },
+      "mappe_id": "db-Zakp"
+    },
+    {
+      "norsk_ident": "145876",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "145876"
+        }
+      },
+      "mappe_id": "ZU503RC"
+    },
+    {
+      "norsk_ident": "145876",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "145876"
+        }
+      },
+      "mappe_id": "AOZsOq_"
+    },
+    {
+      "norsk_ident": "145876",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "145876"
+        }
+      },
+      "mappe_id": "wRlY46A"
+    },
+    {
+      "norsk_ident": "548662",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548662"
+        }
+      },
+      "mappe_id": "629NYe3"
+    },
+    {
+      "norsk_ident": "548662",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548662"
+        }
+      },
+      "mappe_id": "WjUGM_4"
+    },
+    {
+      "norsk_ident": "123652555",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123652555"
+        }
+      },
+      "mappe_id": "Js4UFou"
+    },
+    {
+      "norsk_ident": "123652555",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123652555"
+        }
+      },
+      "mappe_id": "ifeHzA8"
     }
   ],
-  "mapper2":     [],
-  "fagsak1":     [
+  "mapper2": [],
+  "fagsak1": [
     {
-      "fagsak_id":  "1234",
-      "url":        "https://intern.nav.no/k9-sak/fagsak/1234",
+      "fagsak_id": "1234",
+      "url": "https://intern.nav.no/k9-sak/fagsak/1234",
       "fra_og_med": "2019-01-01",
       "til_og_med": "2019-05-05",
-      "barn":       {
-        "navn":        "Barn Barnesen",
+      "barn": {
+        "navn": "Barn Barnesen",
         "fødselsdato": "2017-02-02"
       }
     },
     {
-      "fagsak_id":  "4321",
-      "url":        "https://intern.nav.no/k9-sak/fagsak/4321",
+      "fagsak_id": "4321",
+      "url": "https://intern.nav.no/k9-sak/fagsak/4321",
       "fra_og_med": "2019-02-13",
       "til_og_med": null,
-      "barn":       {
-        "navn":        "Barn Andre Barnesen",
+      "barn": {
+        "navn": "Barn Andre Barnesen",
         "fødselsdato": "2015-02-02"
       }
     }
   ],
-  "fagsak2":     [],
-  "dokument":    {
+  "fagsak2": [],
+  "dokument": {
     "dette": "er",
-    "et":    "testdokument"
+    "et": "testdokument"
   },
   "journalpost": [
     {
-      "id":             "123",
+      "mappe_id": "123",
       "journalpost_id": "453481599",
-      "norsk_ident":    "26037019339",
-      "dokumenter":     [
+      "norsk_ident": "26037019339",
+      "dokumenter": [
         {
           "dokument_id": "470164680"
         },

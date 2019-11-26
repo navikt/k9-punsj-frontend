@@ -12,7 +12,6 @@ import {
     findFagsaker,
     findMapper,
     getJournalpost,
-    newMappeAction,
     openFagsakAction,
     openMappeAction,
     setIdentAction,
@@ -50,7 +49,6 @@ interface IPunchPageDispatchProps {
     openFagsakAction:           typeof openFagsakAction;
     closeFagsakAction:          typeof closeFagsakAction;
     chooseMappeAction:          typeof chooseMappeAction;
-    newMappeAction:             typeof newMappeAction;
 }
 
 interface IPunchPageComponentProps {
@@ -76,6 +74,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
     }
 
     render() {
+        console.log('render punchpage');
         const {intl} = this.props;
         return (
             <Page
@@ -211,8 +210,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     closeMappeAction:           ()                      => dispatch(closeMappeAction()),
     openFagsakAction:           (fagsak: IFagsak)       => dispatch(openFagsakAction(fagsak)),
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
-    chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
-    newMappeAction:             ()                      => dispatch(newMappeAction())
+    chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe))
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage)));

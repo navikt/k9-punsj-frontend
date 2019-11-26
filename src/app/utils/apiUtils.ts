@@ -4,12 +4,28 @@ import {String}                           from 'typescript-string-operations';
 export const apiUrl = (path: ApiPath, parameters?: any) =>
     URL_API + (!!parameters ? String.Format(path, parameters) : path);
 
-export async function get(
-    path: ApiPath,
-    parameters?: any,
-    callbackIfAuth?: (response: Response) => Promise<Response>
-): Promise<Response> {
+export async function get(path: ApiPath,
+                          parameters?: any,
+                          callbackIfAuth?: (response: Response) => Promise<Response>): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {credentials: 'include'});
+    if (response.status === 401) {
+        login();
+    } else if (!!callbackIfAuth) {
+        await callbackIfAuth(response);
+    }
+    return response;
+}
+
+export async function post(path: ApiPath,
+                           parameters?: any,
+                           body?: any,
+                           callbackIfAuth?: (response: Response) => Promise<Response>): Promise<Response> {
+    const response = await fetch(apiUrl(path, parameters), {
+        method: 'post',
+        credentials: 'include',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    });
     if (response.status === 401) {
         login();
     } else if (!!callbackIfAuth) {

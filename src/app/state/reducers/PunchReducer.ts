@@ -36,6 +36,27 @@ export function PunchReducer(
                 step: action.step
             };
 
+        case PunchActionKeys.BACK_FROM_FORM:
+            return {
+                ...punchState,
+                step: PunchStep.CHOOSE_SOKNAD,
+                mappeid: undefined
+            };
+
+        case PunchActionKeys.BACK_FROM_MAPPER:
+            return {
+                ...punchState,
+                step: PunchStep.START,
+                ident: '',
+                mapper: [],
+                fagsaker: [],
+                chosenMappe: undefined,
+                isMapperLoading: false,
+                isFagsakerLoading: false,
+                mapperRequestError: undefined,
+                fagsakerRequestError: undefined
+            };
+
         case PunchActionKeys.JOURNALPOST_SET:
             return {
                 ...punchState,
@@ -85,20 +106,6 @@ export function PunchReducer(
                 mapperRequestError: action.error
             };
 
-        case PunchActionKeys.MAPPER_UNDO_SEARCH:
-            return {
-                ...punchState,
-                step: PunchStep.START,
-                ident: '',
-                mapper: [],
-                fagsaker: [],
-                chosenMappe: undefined,
-                isMapperLoading: false,
-                isFagsakerLoading: false,
-                mapperRequestError: undefined,
-                fagsakerRequestError: undefined
-            };
-
         case PunchActionKeys.FAGSAKER_SET:
             return {
                 ...punchState,
@@ -146,13 +153,6 @@ export function PunchReducer(
                 chosenMappe: action.mappe
             };
 
-        case PunchActionKeys.MAPPE_NEW:
-            return {
-                ...punchState,
-                step: PunchStep.FILL_FORM,
-                chosenMappe: undefined
-            };
-
         case PunchActionKeys.MAPPE_UNDO_CHOICE:
             return {
                 ...punchState,
@@ -172,6 +172,32 @@ export function PunchReducer(
             return {
                 ...punchState,
                 chosenFagsak: undefined
+            };
+
+        case PunchActionKeys.MAPPE_CREATE_REQUEST:
+            return {
+                ...punchState,
+                mappeid: undefined,
+                isAwaitingMappeCreation: true,
+                createMappeRequestError: undefined
+            };
+
+        case PunchActionKeys.MAPPE_CREATE_SUCCESS:
+            return {
+                ...punchState,
+                mappeid: action.id,
+                isAwaitingMappeCreation: false,
+                createMappeRequestError: undefined,
+                mapper: [],
+                fagsaker: []
+            };
+
+        case PunchActionKeys.MAPPE_CREATE_ERROR:
+            return {
+                ...punchState,
+                mappeid: undefined,
+                isAwaitingMappeCreation: false,
+                createMappeRequestError: action.error
             };
 
         default: return punchState;

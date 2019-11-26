@@ -17,4 +17,7 @@ export interface IPunchState {
     fagsakerRequestError?:      IError;
     chosenMappe?:               IMappe;
     chosenFagsak?:              IFagsak;
+    mappeid?:                   string;
+    isAwaitingMappeCreation?:   boolean;
+    createMappeRequestError?:   IError;
 }

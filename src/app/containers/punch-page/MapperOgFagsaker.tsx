@@ -5,9 +5,9 @@ import {
     chooseMappeAction,
     closeFagsakAction,
     closeMappeAction,
+    createMappe,
     findFagsaker,
     findMapper,
-    newMappeAction,
     openFagsakAction,
     openMappeAction,
     setIdentAction,
@@ -40,7 +40,7 @@ interface IMapperOgFagsakerDispatchProps {
     openFagsakAction:           typeof openFagsakAction;
     closeFagsakAction:          typeof closeFagsakAction;
     chooseMappeAction:          typeof chooseMappeAction;
-    newMappeAction:             typeof newMappeAction;
+    createMappe:                typeof createMappe;
 }
 
 interface IMapperOgFagsakerComponentProps {
@@ -53,10 +53,15 @@ type IMapperOgFagsakerProps = InjectedIntlProps &
                               IMapperOgFagsakerDispatchProps;
 
 const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
-
     const {punchState, punchPaths} = props;
     const {mapper, fagsaker} = punchState;
     const {ident} = useParams();
+    console.log('sadasdasdads', punchState.isAwaitingMappeCreation);
+
+    if (!!punchState.mappeid) {
+        changePath(getPath(punchPaths, PunchStep.FILL_FORM, {id: punchState.mappeid}));
+        return null;
+    }
 
     if (!ident || ident === '' || !window.location.hash.match(getPath(punchPaths, PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
         return null;
@@ -67,7 +72,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         return null;
     }
 
-    if (punchState.isMapperLoading || punchState.isFagsakerLoading) {
+    if (punchState.isMapperLoading || punchState.isFagsakerLoading || punchState.isAwaitingMappeCreation) {
         return <div><NavFrontendSpinner/></div>;
     }
 
@@ -78,12 +83,9 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         return null;
     }
 
-    const newMappe = () => {
-        changePath(getPath(punchPaths, PunchStep.FILL_FORM, {id: 'ny'}));
-        props.newMappeAction();
-    };
+    const newMappe = () => props.createMappe(punchState.ident);
 
-    if (!mapper.length && !fagsaker.length) {
+    if (!mapper.length && !fagsaker.length && !punchState.isAwaitingMappeCreation) {
         newMappe();
         return null;
     }
@@ -245,7 +247,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     openFagsakAction:           (fagsak: IFagsak)       => dispatch(openFagsakAction(fagsak)),
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
     chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
-    newMappeAction:             ()                      => dispatch(newMappeAction())
+    createMappe:                (ident: string)         => dispatch(createMappe(ident))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapperOgFagsaker));
