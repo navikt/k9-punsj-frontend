@@ -42,7 +42,7 @@ export function undoSearchForMapperAction():                    IUndoSearchForMa
 
 export function findMapper(ident: string) {return (dispatch: any) => {
     dispatch(findMapperLoadingAction(true));
-    return get(ApiPath.MAPPER_FIND, {ident}).then(response => {
+    return get(ApiPath.MAPPER_FIND, {ident}, response => {
         if (response.ok) {
             return response.json()
                            .then(mapper => dispatch(setMapperAction(mapper)));
@@ -61,7 +61,7 @@ export function findFagsakerErrorAction(error: IError):         IFindFagsakerErr
 
 export function findFagsaker(ident: string) {return (dispatch: any) => {
     dispatch(findFagsakerLoadAction(true));
-    return get(ApiPath.FAGSAKER_FIND, {ident}).then(response => {
+    return get(ApiPath.FAGSAKER_FIND, {ident}, response => {
         if (response.ok) {
             return response.json().then(fagsaker => dispatch(setFagsakerAction(fagsaker)));
         }

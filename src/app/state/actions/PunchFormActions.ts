@@ -20,7 +20,7 @@ export function setSoknadAction(soknad: ISoknad):       ISetSoknadAction        
 
 export function getMappe(id: string) {return (dispatch: any) => {
     dispatch(getMappeLoadingAction());
-    return get(ApiPath.MAPPE_GET, {id}).then(response => {
+    return get(ApiPath.MAPPE_GET, {id}, response => {
         if (response.ok) {
             return response.json()
                            .then(mappe => dispatch(setMappeAction(mappe)));
