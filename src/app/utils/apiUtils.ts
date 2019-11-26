@@ -13,7 +13,7 @@ export function get(path: ApiPath, parameters?: any) {
     });
 }
 
-export const loginUrl = () => String.Format(URL_AUTH_LOGIN, {uri: window.location.href});
+export const loginUrl = () => String.Format(URL_AUTH_LOGIN, {uri: encodeURIComponent(window.location.href)});
 
 export function login() {
     window.location.href = loginUrl();
