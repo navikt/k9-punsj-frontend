@@ -1,7 +1,7 @@
-import {ApiPath}                           from 'app/apiConfig';
-import {PunchFormActionKeys}               from 'app/models/enums';
-import {IError, IMappe, IOpphold, ISoknad} from 'app/models/types';
-import {get}                               from 'app/utils';
+import {ApiPath}                 from 'app/apiConfig';
+import {PunchFormActionKeys}     from 'app/models/enums';
+import {IError, IMappe, ISoknad} from 'app/models/types';
+import {get}                     from 'app/utils';
 
 interface IGetMappeLoadingAction    {type: PunchFormActionKeys.MAPPE_LOAD}
 interface IGetMappeErrorAction      {type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error: IError}
@@ -12,11 +12,11 @@ interface ISetSoknadAction          {type: PunchFormActionKeys.SOKNAD_SET,      
 type IMappeActionTypes = IGetMappeLoadingAction | IGetMappeErrorAction | ISetMappeAction | IResetMappeAction;
 export type IPunchFormActionTypes = IMappeActionTypes | ISetSoknadAction;
 
-export function getMappeLoadingAction():                IGetMappeLoadingAction  {return {type: PunchFormActionKeys.MAPPE_LOAD}}
-export function getMappeErrorAction(error: IError):     IGetMappeErrorAction    {return {type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error}}
-export function setMappeAction(mappe: IMappe):          ISetMappeAction         {return {type: PunchFormActionKeys.MAPPE_SET, mappe}}
-export function resetMappeAction():                     IResetMappeAction       {return {type: PunchFormActionKeys.MAPPE_RESET}}
-export function setSoknadAction(soknad: ISoknad):       ISetSoknadAction        {return {type: PunchFormActionKeys.SOKNAD_SET, soknad}}
+export const getMappeLoadingAction  = ():                   IGetMappeLoadingAction  => ({type: PunchFormActionKeys.MAPPE_LOAD});
+export const getMappeErrorAction    = (error: IError):      IGetMappeErrorAction    => ({type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error});
+export const setMappeAction         = (mappe: IMappe):      ISetMappeAction         => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
+export const resetMappeAction       = ():                   IResetMappeAction       => ({type: PunchFormActionKeys.MAPPE_RESET});
+export const setSoknadAction        = (soknad: ISoknad):    ISetSoknadAction        => ({type: PunchFormActionKeys.SOKNAD_SET, soknad});
 
 export function getMappe(id: string) {return (dispatch: any) => {
     dispatch(getMappeLoadingAction());

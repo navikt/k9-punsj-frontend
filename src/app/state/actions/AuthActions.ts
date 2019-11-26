@@ -10,10 +10,10 @@ interface IAuthErrorAction      {type: AuthActionKeys.ERROR,    error: IError}
 
 export type IAuthActionTypes = IAuthLoadAction | IAuthRedirectAction | IAuthOkAction | IAuthErrorAction;
 
-function loadingAction():                       IAuthLoadAction     {return {type: AuthActionKeys.LOAD}}
-function redirectAction(redirectUrl: string):   IAuthRedirectAction {return {type: AuthActionKeys.REDIRECT, redirectUrl}}
-function authOkAction():                        IAuthOkAction       {return {type: AuthActionKeys.OK}}
-function authErrorAction(error: IError):        IAuthErrorAction    {return {type: AuthActionKeys.ERROR,    error}}
+const loadingAction     = ():                       IAuthLoadAction     => ({type: AuthActionKeys.LOAD});
+const redirectAction    = (redirectUrl: string):    IAuthRedirectAction => ({type: AuthActionKeys.REDIRECT, redirectUrl});
+const authOkAction      = ():                       IAuthOkAction       => ({type: AuthActionKeys.OK});
+const authErrorAction   = (error: IError):          IAuthErrorAction    => ({type: AuthActionKeys.ERROR,    error});
 
 export function checkAuth() {return (dispatch: any) => {
     dispatch(loadingAction());

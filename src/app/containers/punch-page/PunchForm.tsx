@@ -170,16 +170,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 label={`${intlHelper(intl, 'skjema.soker.medsoker.fnr')}:`}
                 className="bold-label"
                 value={_.get(soknad, 'medsoker.norsk_identitetsnummer', '')}
-                onChange={(event) => this.updateSoknadState({medsoker: {norsk_identitetsnummer: event.target.value}})}
-                onBlur={(event => this.updateSoknad({medsoker: {norsk_identitetsnummer: event.target.value}}))}
+                {...this.changeAndBlurUpdates(event => ({medsoker: {norsk_identitetsnummer: event.target.value}}))}
             />
             <Input
                 name="relasjon"
                 label={`${intlHelper(intl, 'skjema.soker.relasjon')}:`}
                 className="bold-label"
                 value={_.get(soknad, 'relasjon_til_barnet', '')}
-                onChange={(event => this.updateSoknadState({relasjon_til_barnet: event.target.value}))}
-                onBlur={(event => this.updateSoknad({relasjon_til_barnet: event.target.value}))}
+                {...this.changeAndBlurUpdates(event => ({relasjon_til_barnet: event.target.value}))}
             />
             {/*<Fieldset legend="Arbeidsforhold 1:">
                 {Object.values(Arbeidsforhold).map(arbeidsforhold => (
@@ -312,27 +310,23 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             <Checkbox
                 label="Beredskap"
                 checked={_.get(soknad, 'beredskap.svar', false)}
-                onChange={event => this.updateSoknadState({beredskap: {...soknad.beredskap, svar: event.target.checked}})}
-                onBlur={event => this.updateSoknad({beredskap: {...soknad.beredskap, svar: event.target.checked}})}
+                {...this.changeAndBlurUpdates(event => ({beredskap: {...soknad.beredskap, svar: event.target.checked}}))}
             />
             <Textarea
                 label="Tilleggsopplysninger:"
                 value={_.get(soknad, 'beredskap.tilleggsinformasjon', '')}
-                onChange={event => this.updateSoknadState({beredskap: {...soknad.beredskap, tilleggsinformasjon: event.target.value}})}
-                onBlur={event => this.updateSoknad({beredskap: {...soknad.beredskap, tilleggsinformasjon: event.target.value}})}
+                {...this.changeAndBlurUpdates(event => ({beredskap: {...soknad.beredskap, tilleggsinformasjon: event.target.value}}))}
             />
             <h2>Nattevåk</h2>
             <Checkbox
                 label="Nattevåk"
                 checked={_.get(soknad, 'nattevaak.svar', false)}
-                onChange={event => this.updateSoknadState({nattevaak: {...soknad.nattevaak, svar: event.target.checked}})}
-                onBlur={event => this.updateSoknad({nattevaak: {...soknad.nattevaak, svar: event.target.checked}})}
+                {...this.changeAndBlurUpdates(event => ({nattevaak: {...soknad.nattevaak, svar: event.target.checked}}))}
             />
             <Textarea
                 label="Tilleggsopplysninger:"
                 value={_.get(soknad, 'nattevaak.tilleggsinformasjon', '')}
-                onChange={event => this.updateSoknadState({nattevaak: {...soknad.nattevaak, tilleggsinformasjon: event.target.value}})}
-                onBlur={event => this.updateSoknadState({nattevaak: {...soknad.nattevaak, tilleggsinformasjon: event.target.value}})}
+                {...this.changeAndBlurUpdates(event => ({nattevaak: {...soknad.nattevaak, tilleggsinformasjon: event.target.value}}))}
             />
             <h2>Søknad om pleiepenger</h2>
             <Input
@@ -341,8 +335,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 label="Fra og med:"
                 className="bold-label"
                 value={_.get(soknad, 'periode.fra_og_med', '')}
-                onChange={event => this.updateSoknadState({periode: {...soknad.periode, fra_og_med: event.target.value}})}
-                onBlur={event => this.updateSoknad({periode: {...soknad.periode, fra_og_med: event.target.value}})}
+                {...this.changeAndBlurUpdates(event => ({periode: {...soknad.periode, fra_og_med: event.target.value}}))}
             />
             <Input
                 name="tom"
@@ -350,8 +343,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 label="Til og med:"
                 className="bold-label"
                 value={_.get(soknad, 'periode.til_og_med', '')}
-                onChange={event => this.updateSoknadState({periode: {...soknad.periode, til_og_med: event.target.value}})}
-                onBlur={event => this.updateSoknad({periode: {...soknad.periode, til_og_med: event.target.value}})}
+                {...this.changeAndBlurUpdates(event => ({periode: {...soknad.periode, til_og_med: event.target.value}}))}
             />
             <Checkbox
                 name="underskrift"
@@ -379,6 +371,11 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         }
         this.props.undoChoiceOfMappeAction();
     };
+
+    private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({
+        onChange:   (event: any) => this.updateSoknadState(change(event)),
+        onBlur:     (event: any) => this.updateSoknad(change(event))
+    });
 
     private handleOppholdLandChange = (index: number, land: string) => {
         this.state.soknad.medlemskap.opphold[index].land = land;
@@ -414,22 +411,18 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     // private handleTilsynChange = (event: any) => this.props.setTilsynAction(event.target.value);
 }
 
-function mapStateToProps(state: RootStateType) {
-    return {
-        punchFormState: state.punchFormState,
-        punchState: state.punchState
-    };
-}
+const mapStateToProps = (state: RootStateType) => ({
+    punchFormState: state.punchFormState,
+    punchState: state.punchState
+});
 
-function mapDispatchToProps(dispatch: any) {
-    return {
-        getMappe:                   (id: string)        => dispatch(getMappe(id)),
-        resetMappeAction:           ()                  => dispatch(resetMappeAction()),
-        setIdentAction:             (ident: string)     => dispatch(setIdentAction(ident)),
-        setStepAction:              (step: PunchStep)   => dispatch(setStepAction(step)),
-        setSoknadAction:            (soknad: ISoknad)   => dispatch(setSoknadAction(soknad)),
-        undoChoiceOfMappeAction:    ()                  => dispatch(undoChoiceOfMappeAction())
-    };
-}
+const mapDispatchToProps = (dispatch: any) => ({
+    getMappe:                   (id: string)        => dispatch(getMappe(id)),
+    resetMappeAction:           ()                  => dispatch(resetMappeAction()),
+    setIdentAction:             (ident: string)     => dispatch(setIdentAction(ident)),
+    setStepAction:              (step: PunchStep)   => dispatch(setStepAction(step)),
+    setSoknadAction:            (soknad: ISoknad)   => dispatch(setSoknadAction(soknad)),
+    undoChoiceOfMappeAction:    ()                  => dispatch(undoChoiceOfMappeAction())
+});
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm)));

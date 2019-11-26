@@ -232,11 +232,9 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
     </>);
 };
 
-function mapStateToProps(state: RootStateType) {return {
-    punchState: state.punchState
-}}
+const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState});
 
-function mapDispatchToProps(dispatch: any) {return {
+const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
     setStepAction:              (step: PunchStep)       => dispatch(setStepAction(step)),
     findMapper:                 (ident: string)         => dispatch(findMapper(ident)),
@@ -248,6 +246,6 @@ function mapDispatchToProps(dispatch: any) {return {
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
     chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
     newMappeAction:             ()                      => dispatch(newMappeAction())
-}}
+});
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapperOgFagsaker));

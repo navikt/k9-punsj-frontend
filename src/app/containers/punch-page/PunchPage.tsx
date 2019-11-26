@@ -155,13 +155,9 @@ class PunchPage extends React.Component<IPunchPageProps> {
     };
 }
 
-function mapStateToProps(state: RootStateType) {
-    return {
-        punchState: state.punchState
-    };
-}
+const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState});
 
-function mapDispatchToProps(dispatch: any) {return {
+const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
     findMapper:                 (ident: string)         => dispatch(findMapper(ident)),
     findFagsaker:               (ident: string)         => dispatch(findFagsaker(ident)),
@@ -172,6 +168,6 @@ function mapDispatchToProps(dispatch: any) {return {
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
     chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
     newMappeAction:             ()                      => dispatch(newMappeAction())
-}}
+});
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage));
