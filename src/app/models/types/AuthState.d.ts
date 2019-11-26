@@ -5,4 +5,5 @@ export interface IAuthState {
     redirectUrl?:   string;
     loggedIn:       boolean;
     error?:         IError;
+    userName?:      string;
 }

@@ -1,3 +1,4 @@
+import Header                    from '@navikt/nap-header';
 import IntlProvider              from 'app/components/intl-provider/IntlProvider';
 import LanguageToggle            from 'app/components/language-toggle/LanguageToggle';
 import {IAuthState}              from 'app/models/types';
@@ -55,7 +56,8 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
     return (
         <IntlProvider {...{locale}}>
             <Normaltekst tag="div" className="fit-window-height">
-                <LanguageToggle {...{locale}} toggle={props.onChangeLocale} />
+                <Header title="K9-punsj" userName={props.authState.userName!}/>
+                <LanguageToggle {...{locale}} toggle={props.onChangeLocale}/>
                 <Router>{props.children}</Router>
             </Normaltekst>
         </IntlProvider>

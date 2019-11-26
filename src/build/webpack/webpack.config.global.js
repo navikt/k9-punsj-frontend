@@ -14,7 +14,7 @@ const webpackConfig = {
         publicPath: '/dist'
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
+        extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.less'],
         alias: {
             app: path.resolve(__dirname, './../../app'),
             common: path.resolve(__dirname, './../../common')
