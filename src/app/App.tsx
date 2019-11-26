@@ -7,7 +7,7 @@ import {Route, Switch}                         from 'react-router-dom';
 import {applyMiddleware, compose, createStore} from 'redux';
 
 import ApplicationWrapper                                       from './components/application-wrapper/ApplicationWrapper';
-import PunchPage                                                from './components/pages/punch-page/PunchPage';
+import PunchPage                                                from './containers/punch-page/PunchPage';
 import {Locale}                                                 from './models/types';
 import {logger, thunk}                                          from './state/middleware';
 import {rootReducer}                                            from './state/RootState';

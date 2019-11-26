@@ -1,4 +1,4 @@
-import SoknadReadMode                        from 'app/components/pages/punch-page/SoknadReadMode';
+import SoknadReadMode                        from 'app/containers/punch-page/SoknadReadMode';
 import {PunchStep}                           from 'app/models/enums';
 import {IFagsak, IMappe, IPath, IPunchState} from 'app/models/types';
 import {

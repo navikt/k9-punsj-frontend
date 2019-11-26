@@ -1,7 +1,8 @@
 import {ApiPath}                             from 'app/apiConfig';
 import Page                                  from 'app/components/page/Page';
-import MapperOgFagsaker                      from 'app/components/pages/punch-page/MapperOgFagsaker';
-import PunchForm                             from 'app/components/pages/punch-page/PunchForm';
+import MapperOgFagsaker                      from 'app/containers/punch-page/MapperOgFagsaker';
+import PunchForm                             from 'app/containers/punch-page/PunchForm';
+import 'app/containers/punch-page/punchPage.less';
 import {PunchStep}                           from 'app/models/enums';
 import {IFagsak, IMappe, IPath, IPunchState} from 'app/models/types';
 import {
@@ -30,7 +31,6 @@ import {InjectedIntlProps, injectIntl}       from 'react-intl';
 // import {Document, Page as PdfPage} from 'react-pdf';
 import {connect}                             from 'react-redux';
 import {HashRouter, Route, Switch}           from 'react-router-dom';
-import './punchPage.less';
 
 interface IPunchPageStateProps {
     punchState: IPunchState;
