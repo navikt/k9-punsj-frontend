@@ -5042,10 +5042,10 @@ nav-frontend-modal-style@^0.3.31:
   resolved "https://registry.yarnpkg.com/nav-frontend-modal-style/-/nav-frontend-modal-style-0.3.31.tgz#e30b73d6e9a5ae89d86c78a6386d3644ceb8f12c"
   integrity sha512-CO5dPHbBJAdyI6k3Xjnbn9inmg4KV/q9iFZxve+Rg/x6f5xKBJU2159Hr6klPhDodrATVdd42fy+gOxV+mPEJQ==
 
-nav-frontend-modal@^1.0.29:
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/nav-frontend-modal/-/nav-frontend-modal-1.0.29.tgz#cbadd9992d5d9d4c9fa7ce00d3b4b10ccc36d894"
-  integrity sha512-pb+X7TRvT3OGeLs48XLxhJhRFt1C1KUPxWnZqnbAn4E0iXMiaPw4KVLEq9n2nFHB1kjBpdMEK6PYiICZjlCRow==
+nav-frontend-modal@^1.0.31:
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/nav-frontend-modal/-/nav-frontend-modal-1.0.31.tgz#4228f3b5e1eca79fdf33a4ce18b59d5fd82677b7"
+  integrity sha512-vkHqGGwtkjLQ6sZb/xfF2sj7KDbWBg6b5GajOx/2wTJypsQiR9SvYnrN7fmjztkFZyNvbwlbUlh40FSK/H3pnw==
 
 nav-frontend-paneler-style@^0.3.17:
   version "0.3.17"
