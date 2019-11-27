@@ -1,36 +1,39 @@
-import {ApiPath}                             from 'app/apiConfig';
-import Page                                  from 'app/components/page/Page';
-import MapperOgFagsaker                      from 'app/containers/punch-page/MapperOgFagsaker';
-import PunchForm                             from 'app/containers/punch-page/PunchForm';
+import {ApiPath}                                                    from 'app/apiConfig';
+import Page                                                         from 'app/components/page/Page';
+import MapperOgFagsaker                                             from 'app/containers/punch-page/MapperOgFagsaker';
+import PunchForm                                                    from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
-import {PunchStep}                           from 'app/models/enums';
-import {IFagsak, IMappe, IPath, IPunchState} from 'app/models/types';
+import {PunchStep}                                                  from 'app/models/enums';
+import {IFagsak, IMappe, IPath, IPunchState}                        from 'app/models/types';
 import {
-    backFromForm,
     chooseMappeAction,
     closeFagsakAction,
     closeMappeAction,
     findFagsaker,
     findMapper,
+    getJournalpost,
     newMappeAction,
     openFagsakAction,
     openMappeAction,
     setIdentAction,
     undoSearchForMapperAction
-}                                            from 'app/state/actions';
-import {RootStateType}                       from 'app/state/RootState';
-import {apiUrl, changePath, getPath}         from 'app/utils';
-import intlHelper                            from 'app/utils/intlUtils';
-import {HoyreChevron, VenstreChevron}        from 'nav-frontend-chevron';
-import {Flatknapp, Knapp}                    from 'nav-frontend-knapper';
-import {Panel}                               from 'nav-frontend-paneler';
-import {Input}                               from 'nav-frontend-skjema';
+}                                                                   from 'app/state/actions';
+import {RootStateType}                                              from 'app/state/RootState';
+import {apiUrl, changePath, getPath}                                from 'app/utils';
+import intlHelper                                                   from 'app/utils/intlUtils';
+import {AlertStripeFeil}                                            from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}                               from 'nav-frontend-chevron';
+import {Flatknapp, Knapp}                                           from 'nav-frontend-knapper';
+import {Panel}                                                      from 'nav-frontend-paneler';
+import {Input}                                                      from 'nav-frontend-skjema';
+import NavFrontendSpinner                                           from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import * as React                            from 'react';
-import {InjectedIntlProps, injectIntl}       from 'react-intl';
+import * as React                                                   from 'react';
+import {Col, Container, Row}                                        from 'react-bootstrap';
+import {InjectedIntlProps, injectIntl}                              from 'react-intl';
 // import {Document, Page as PdfPage} from 'react-pdf';
-import {connect}                             from 'react-redux';
-import {HashRouter, Route, Switch}           from 'react-router-dom';
+import {connect}                                                    from 'react-redux';
+import {HashRouter, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
 
 interface IPunchPageStateProps {
     punchState: IPunchState;
@@ -38,6 +41,7 @@ interface IPunchPageStateProps {
 
 interface IPunchPageDispatchProps {
     setIdentAction:             typeof setIdentAction;
+    getJournalpost:             typeof getJournalpost;
     findMapper:                 typeof findMapper;
     findFagsaker:               typeof findFagsaker;
     undoSearchForMapperAction:  typeof undoSearchForMapperAction;
@@ -47,10 +51,17 @@ interface IPunchPageDispatchProps {
     closeFagsakAction:          typeof closeFagsakAction;
     chooseMappeAction:          typeof chooseMappeAction;
     newMappeAction:             typeof newMappeAction;
-    backFromForm:               typeof backFromForm;
 }
 
-type IPunchPageProps = InjectedIntlProps & IPunchPageStateProps & IPunchPageDispatchProps;
+interface IPunchPageComponentProps {
+    match?: any;
+}
+
+type IPunchPageProps = InjectedIntlProps &
+                       RouteComponentProps &
+                       IPunchPageComponentProps &
+                       IPunchPageStateProps &
+                       IPunchPageDispatchProps;
 
 class PunchPage extends React.Component<IPunchPageProps> {
 
@@ -60,49 +71,82 @@ class PunchPage extends React.Component<IPunchPageProps> {
         {step: PunchStep.FILL_FORM,     path: '/skjema/{id}'}
     ];
 
-    private pdfUrl = apiUrl(ApiPath.DOKUMENT, {journalpost_id: 1, dokument_id: 1});
+    componentDidMount(): void {
+        this.props.getJournalpost(this.props.match.params.journalpostid);
+    }
 
     render() {
-        const {intl, punchState} = this.props;
-
+        const {intl} = this.props;
         return (
             <Page
                 title={intlHelper(intl, 'startPage.tittel')}
                 className="punch"
             >
                 <h1>{intlHelper(intl, 'startPage.tittel')}</h1>
-                <div className="panels-wrapper" id="panels-wrapper">
-                    <Panel className="punch_pdf" border={true}>
-                        <iframe src={this.pdfUrl}/>
-                        {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
-                            <PdfPage pageNumber={1}/>
-                        </Document>*/}
-                        <div className="knapperad">
-                            <Flatknapp onClick={this.openPdfWindow} className="knapp1">Åpne i nytt vindu</Flatknapp>
-                            <Flatknapp onClick={this.togglePdf} className="knapp2"><VenstreChevron/> Skjul</Flatknapp>
-                        </div>
-                        <Flatknapp
-                            onClick={this.togglePdf}
-                            className="button_open"
-                        ><HoyreChevron/></Flatknapp>
-                    </Panel>
-                    <Panel className="punch_form" border={true}>
-                        <div>
-                            <Input
-                                label={`${intlHelper(intl, 'skjema.fodselsnr')}:`}
-                                onChange={this.handleIdentBlur}
-                                onKeyPress={this.handleIdentKeyPress}
-                                value={punchState.ident}
-                                disabled={punchState.step > PunchStep.START}
-                                feil={!!punchState.mapperRequestError ? {feilmelding: 'Det skjedde en feil i søket. Er nummeret riktig?'} : undefined}
-                            />
-                        </div>
-                        {this.underFnr()}
-                    </Panel>
-                </div>
+                {this.content()}
             </Page>
         );
     }
+
+    private content() {
+
+        const {intl, punchState} = this.props;
+
+        if (punchState.isJournalpostLoading) {
+            return <Container style={{height: '100%'}}>
+                <Row className="justify-content-center align-items-center" style={{height: '100%'}}>
+                    <Col xs={'auto'}><NavFrontendSpinner/></Col>
+                </Row>
+            </Container>;
+        }
+
+        if (!!punchState.journalpostRequestError) {
+            return <AlertStripeFeil>Det skjedde en feil i uthenting av journalpost.</AlertStripeFeil>;
+        }
+
+        if (!punchState.journalpost) {
+            return null;
+        }
+
+        if (!punchState.journalpost.dokumenter.length) {
+            return <AlertStripeFeil>Journalposten har ingen tilhørende dokumenter.</AlertStripeFeil>;
+        }
+
+        return <div className="panels-wrapper" id="panels-wrapper">
+            <Panel className="punch_pdf" border={true}>
+                <iframe src={this.pdfUrl()}/>
+                {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
+                            <PdfPage pageNumber={1}/>
+                        </Document>*/}
+                <div className="knapperad">
+                    <Flatknapp onClick={this.openPdfWindow} className="knapp1">Åpne i nytt vindu</Flatknapp>
+                    <Flatknapp onClick={this.togglePdf} className="knapp2"><VenstreChevron/> Skjul</Flatknapp>
+                </div>
+                <Flatknapp
+                    onClick={this.togglePdf}
+                    className="button_open"
+                ><HoyreChevron/></Flatknapp>
+            </Panel>
+            <Panel className="punch_form" border={true}>
+                <div>
+                    <Input
+                        label={`${intlHelper(intl, 'skjema.fodselsnr')}:`}
+                        onChange={this.handleIdentBlur}
+                        onKeyPress={this.handleIdentKeyPress}
+                        value={punchState.ident}
+                        disabled={punchState.step > PunchStep.START}
+                        feil={!!punchState.mapperRequestError ? {feilmelding: 'Det skjedde en feil i søket. Er nummeret riktig?'} : undefined}
+                    />
+                </div>
+                {this.underFnr()}
+            </Panel>
+        </div>;
+    }
+
+    private pdfUrl = () =>  apiUrl(ApiPath.DOKUMENT, {
+        journalpost_id: this.props.match.params.journalpostid,
+        dokument_id: this.props.punchState.journalpost!.dokumenter[0].dokument_id
+    });
 
     private getPath(step: PunchStep, values?: any) {
         return getPath(this.paths, step, values);
@@ -116,7 +160,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
     };
 
     private openPdfWindow = () => {
-        window.open(this.pdfUrl, '_blank', 'toolbar=0,location=0,menubar=0');
+        window.open(this.pdfUrl(), '_blank', 'toolbar=0,location=0,menubar=0');
         this.togglePdf();
     };
 
@@ -159,6 +203,7 @@ const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState
 
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
+    getJournalpost:             (id: string)            => dispatch(getJournalpost(id)),
     findMapper:                 (ident: string)         => dispatch(findMapper(ident)),
     findFagsaker:               (ident: string)         => dispatch(findFagsaker(ident)),
     undoSearchForMapperAction:  ()                      => dispatch(undoSearchForMapperAction()),
@@ -170,4 +215,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     newMappeAction:             ()                      => dispatch(newMappeAction())
 });
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage)));

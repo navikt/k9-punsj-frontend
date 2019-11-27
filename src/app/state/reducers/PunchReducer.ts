@@ -5,6 +5,7 @@ import {IPunchActionTypes}          from 'app/state/actions';
 const initialState: IPunchState = {
     step: PunchStep.START,
     ident: "",
+    journalpost: undefined,
     mapper: [],
     fagsaker: [],
     isMapperLoading: false,
@@ -33,6 +34,30 @@ export function PunchReducer(
             return {
                 ...punchState,
                 step: action.step
+            };
+
+        case PunchActionKeys.JOURNALPOST_SET:
+            return {
+                ...punchState,
+                journalpost: action.journalpost,
+                isJournalpostLoading: false,
+                journalpostRequestError: undefined
+            };
+
+        case PunchActionKeys.JOURNALPOST_LOAD:
+            return {
+                ...punchState,
+                journalpost: undefined,
+                isJournalpostLoading: true,
+                journalpostRequestError: undefined
+            };
+
+        case PunchActionKeys.JOURNALPOST_REQUEST_ERROR:
+            return {
+                ...punchState,
+                journalpost: undefined,
+                isJournalpostLoading: false,
+                journalpostRequestError: undefined
             };
 
         case PunchActionKeys.MAPPER_SET:
