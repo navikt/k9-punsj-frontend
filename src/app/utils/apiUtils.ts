@@ -9,7 +9,7 @@ export async function get(
     parameters?: any,
     callbackIfAuth?: (response: Response) => Promise<Response>
 ): Promise<Response> {
-    const response = await fetch(apiUrl(path, parameters));
+    const response = await fetch(apiUrl(path, parameters), {credentials: 'same-origin'});
     if (response.status === 401) {
         login();
     } else if (!!callbackIfAuth) {
