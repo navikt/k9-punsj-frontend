@@ -1,7 +1,7 @@
 {
-  "mapper1": [
+  "mapper1":     [
     {
-      "id": "8144556",
+      "id":           "8144556",
       "mappe_id":     "8144556",
       "innsendinger": [],
       "innhold":      {
@@ -72,8 +72,8 @@
       "mangler":      []
     }
   ],
-  "mapper2": [],
-  "fagsak1": [
+  "mapper2":     [],
+  "fagsak1":     [
     {
       "fagsak_id":  "1234",
       "url":        "https://intern.nav.no/k9-sak/fagsak/1234",
@@ -95,6 +95,24 @@
       }
     }
   ],
-  "fagsak2": [],
-  "dokument": {}
+  "fagsak2":     [],
+  "dokument":    {
+    "dette": "er",
+    "et":    "testdokument"
+  },
+  "journalpost": [
+    {
+      "id":             "123",
+      "journalpost_id": "453481599",
+      "norsk_ident":    "26037019339",
+      "dokumenter":     [
+        {
+          "dokument_id": "470164680"
+        },
+        {
+          "dokument_id": "470164681"
+        }
+      ]
+    }
+  ]
 }
