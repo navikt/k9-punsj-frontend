@@ -1,111 +1,249 @@
 {
-  "mapper1":     [
+  "mapper1": [
     {
-      "id":           "8144556",
-      "mappe_id":     "8144556",
+      "id": "8144556",
+      "mappe_id": "8144556",
       "innsendinger": [],
-      "innhold":      {
-        "versjon":             "0.0.1",
-        "mottatt_dato":        "2019-10-20T07:15:36.124Z",
-        "soker":               {
+      "innhold": {
+        "versjon": "0.0.1",
+        "mottatt_dato": "2019-10-20T07:15:36.124Z",
+        "soker": {
           "norsk_identitetsnummer": "123",
-          "spraak_valg":            "nb"
+          "spraak_valg": "nb"
         },
-        "medsoker":            {
+        "medsoker": {
           "norsk_identitetsnummer": "12345678902"
         },
-        "periode":             {
+        "periode": {
           "fra_og_med": "2018-12-30",
           "til_og_med": "2019-10-20"
         },
         "relasjon_til_barnet": "Mor",
-        "barn":                {},
-        "medlemskap":          {
-          "opphold":                          [
+        "barn": {},
+        "medlemskap": {
+          "opphold": [
             {
               "periode": {
                 "fra_og_med": "2018-12-30",
                 "til_og_med": "2019-10-10"
               },
-              "land":    "SWE"
+              "land": "SWE"
             },
             {
               "periode": {
                 "fra_og_med": "2018-10-10",
                 "til_og_med": "2019-10-19"
               },
-              "land":    "NOR"
+              "land": "NOR"
             }
           ],
           "har_bodd_i_utlandet_siste_12_mnd": true,
-          "skal_bo_i_utlandet_neste_12_mnd":  true
+          "skal_bo_i_utlandet_neste_12_mnd": true
         },
-        "beredskap":           {
-          "svar":                true,
+        "beredskap": {
+          "svar": true,
           "tilleggsinformasjon": "Beredskapsforklaring: Lorem ipsum æÆøØåÅ."
         },
-        "nattevaak":           {
-          "svar":                true,
+        "nattevaak": {
+          "svar": true,
           "tilleggsinformasjon": "Nattevåksforklaring: Lorem ipsum æÆøØåÅ."
         }
       },
-      "mangler":      []
+      "mangler": []
     },
     {
-      "mappe_id":     "56564546",
+      "mappe_id": "56564546",
       "innsendinger": [],
-      "innhold":      {
+      "innhold": {
         "soker": {
           "norsk_identitetsnummer": "15049228314"
         }
       },
-      "mangler":      []
+      "mangler": []
     },
     {
-      "mappe_id":     "25656566",
+      "mappe_id": "25656566",
       "innsendinger": [],
-      "innhold":      {
+      "innhold": {
         "soker": {
           "norsk_identitetsnummer": "15049228314"
         }
       },
-      "mangler":      []
+      "mangler": []
+    },
+    {
+      "norsk_ident": "56789012345",
+      "journalpost_id": "string",
+      "innhold": {
+        "søker": {
+          "fødselsnummer": "56789012345"
+        }
+      },
+      "mappe_id": "rEPrPnn"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "DFecQeY"
+    },
+    {
+      "norsk_ident": "548694",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548694"
+        }
+      },
+      "mappe_id": "bbnAUVD"
+    },
+    {
+      "norsk_ident": "548694",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548694"
+        }
+      },
+      "mappe_id": "54T1q00"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "j2XxN1T"
+    },
+    {
+      "norsk_ident": "1234",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1234"
+        }
+      },
+      "mappe_id": "dcCNA5l"
+    },
+    {
+      "norsk_ident": "12",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "12"
+        }
+      },
+      "mappe_id": "jCO5jqD"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "uSTdQa7"
+    },
+    {
+      "norsk_ident": "1",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "1"
+        }
+      },
+      "mappe_id": "4e43gtu"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "5NYFNBs"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "H4rYkSH"
+    },
+    {
+      "norsk_ident": "66545846",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "66545846"
+        }
+      },
+      "mappe_id": "tro_WTC"
+    },
+    {
+      "norsk_ident": "548",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "548"
+        }
+      },
+      "mappe_id": "YGIkc20"
+    },
+    {
+      "norsk_ident": "6895",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "6895"
+        }
+      },
+      "mappe_id": "0NAqfpO"
+    },
+    {
+      "norsk_ident": "45578",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "45578"
+        }
+      },
+      "mappe_id": "owrULeR"
     }
   ],
-  "mapper2":     [],
-  "fagsak1":     [
+  "mapper2": [],
+  "fagsak1": [
     {
-      "fagsak_id":  "1234",
-      "url":        "https://intern.nav.no/k9-sak/fagsak/1234",
+      "norsk_ident": "123",
+      "fagsak_id": "1234",
+      "url": "https://intern.nav.no/k9-sak/fagsak/1234",
       "fra_og_med": "2019-01-01",
       "til_og_med": "2019-05-05",
-      "barn":       {
-        "navn":        "Barn Barnesen",
+      "barn": {
+        "navn": "Barn Barnesen",
         "fødselsdato": "2017-02-02"
       }
     },
     {
-      "fagsak_id":  "4321",
-      "url":        "https://intern.nav.no/k9-sak/fagsak/4321",
+      "norsk_ident": "123",
+      "fagsak_id": "4321",
+      "url": "https://intern.nav.no/k9-sak/fagsak/4321",
       "fra_og_med": "2019-02-13",
       "til_og_med": null,
-      "barn":       {
-        "navn":        "Barn Andre Barnesen",
+      "barn": {
+        "navn": "Barn Andre Barnesen",
         "fødselsdato": "2015-02-02"
       }
     }
   ],
-  "fagsak2":     [],
-  "dokument":    {
+  "fagsak2": [],
+  "dokument": {
     "dette": "er",
-    "et":    "testdokument"
+    "et": "testdokument"
   },
   "journalpost": [
     {
-      "id":             "123",
+      "mappe_id": "123",
       "journalpost_id": "453481599",
-      "norsk_ident":    "26037019339",
-      "dokumenter":     [
+      "norsk_ident": "26037019339",
+      "dokumenter": [
         {
           "dokument_id": "470164680"
         },

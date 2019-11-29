@@ -1,7 +1,6 @@
-import {PunchStep}             from "app/models/enums";
-import {IFagsak, IJournalpost} from "app/models/types";
-import {IError}                from "./Error";
-import {IMappe}                from "./Mappe";
+import {PunchStep}    from 'app/models/enums';
+import {IJournalpost} from 'app/models/types';
+import {IError}       from './Error';
 
 export interface IPunchState {
     step:                       PunchStep;
@@ -9,12 +8,4 @@ export interface IPunchState {
     journalpost?:               IJournalpost;
     isJournalpostLoading?:      boolean;
     journalpostRequestError?:   IError;
-    mapper:                     IMappe[];
-    fagsaker:                   IFagsak[];
-    isMapperLoading?:           boolean;
-    isFagsakerLoading?:         boolean;
-    mapperRequestError?:        IError;
-    fagsakerRequestError?:      IError;
-    chosenMappe?:               IMappe;
-    chosenFagsak?:              IFagsak;
 }
