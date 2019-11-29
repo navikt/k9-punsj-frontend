@@ -4,6 +4,7 @@ export * from './Fagsak';
 export * from './Journalpost';
 export * from './Locale';
 export * from './Mappe';
+export * from './MapperOgFagsakerState';
 export * from './Path';
 export * from './Person';
 export * from './PunchFormState';

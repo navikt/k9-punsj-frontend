@@ -1,6 +1,6 @@
-import SoknadReadMode                        from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep}                           from 'app/models/enums';
-import {IFagsak, IMappe, IPath, IPunchState} from 'app/models/types';
+import SoknadReadMode                                                from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep}                                                   from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPath, IPunchState} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -10,23 +10,25 @@ import {
     findMapper,
     openFagsakAction,
     openMappeAction,
+    resetMappeidAction,
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                            from 'app/state/actions';
-import {RootStateType}                       from 'app/state/RootState';
-import {changePath, getPath}                 from 'app/utils';
-import {AlertStripeInfo}                     from 'nav-frontend-alertstriper';
-import {Knapp}                               from 'nav-frontend-knapper';
-import ModalWrapper                          from 'nav-frontend-modal';
-import NavFrontendSpinner                    from 'nav-frontend-spinner';
-import * as React                            from 'react';
-import {InjectedIntlProps, injectIntl}       from 'react-intl';
-import {connect}                             from 'react-redux';
-import {useParams}                           from 'react-router-dom';
+}                                                                    from 'app/state/actions';
+import {RootStateType}                                               from 'app/state/RootState';
+import {changePath, getPath}                                         from 'app/utils';
+import {AlertStripeFeil, AlertStripeInfo}                            from 'nav-frontend-alertstriper';
+import {Knapp}                                                       from 'nav-frontend-knapper';
+import ModalWrapper                                                  from 'nav-frontend-modal';
+import NavFrontendSpinner                                            from 'nav-frontend-spinner';
+import * as React                                                    from 'react';
+import {InjectedIntlProps, injectIntl}                               from 'react-intl';
+import {connect}                                                     from 'react-redux';
+import {useParams}                                                   from 'react-router-dom';
 
 interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;
+    mapperOgFagsakerState: IMapperOgFagsakerState;
 }
 
 interface IMapperOgFagsakerDispatchProps {
@@ -41,6 +43,7 @@ interface IMapperOgFagsakerDispatchProps {
     closeFagsakAction:          typeof closeFagsakAction;
     chooseMappeAction:          typeof chooseMappeAction;
     createMappe:                typeof createMappe;
+    resetMappeidAction:         typeof resetMappeidAction;
 }
 
 interface IMapperOgFagsakerComponentProps {
@@ -53,13 +56,25 @@ type IMapperOgFagsakerProps = InjectedIntlProps &
                               IMapperOgFagsakerDispatchProps;
 
 const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
-    const {punchState, punchPaths} = props;
-    const {mapper, fagsaker} = punchState;
-    const {ident} = useParams();
-    console.log('sadasdasdads', punchState.isAwaitingMappeCreation);
 
-    if (!!punchState.mappeid) {
-        changePath(getPath(punchPaths, PunchStep.FILL_FORM, {id: punchState.mappeid}));
+    const {punchState, mapperOgFagsakerState, punchPaths} = props;
+    const {mapper, fagsaker} = mapperOgFagsakerState;
+    const {ident} = useParams();
+
+    React.useEffect(() => {
+        if (!!ident && ident !== '') {
+            props.setIdentAction(ident);
+            props.findMapper(ident);
+            props.findFagsaker(ident);
+            props.setStepAction(PunchStep.CHOOSE_SOKNAD);
+        } else {
+            changePath(getPath(punchPaths, PunchStep.START));
+        }
+    }, [ident]);
+
+    if (!!mapperOgFagsakerState.mappeid) {
+        props.resetMappeidAction();
+        changePath(getPath(punchPaths, PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
         return null;
     }
 
@@ -67,25 +82,25 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         return null;
     }
 
-    if (punchState.mapperRequestError || punchState.fagsakerRequestError) {
-        changePath(getPath(punchPaths, PunchStep.START));
-        return null;
+    const backButton = <p><Knapp onClick={undoSearchForMapperAndFagsaker}>Til startsiden</Knapp></p>;
+
+    if (mapperOgFagsakerState.mapperRequestError || mapperOgFagsakerState.fagsakerRequestError) {
+        return <>
+            <AlertStripeFeil>Det oppsto en tilkoblingsfeil.</AlertStripeFeil>
+            {backButton}
+        </>;
     }
 
-    if (punchState.isMapperLoading || punchState.isFagsakerLoading || punchState.isAwaitingMappeCreation) {
+    if (punchState.step !== PunchStep.CHOOSE_SOKNAD ||
+        mapperOgFagsakerState.isMapperLoading ||
+        mapperOgFagsakerState.isFagsakerLoading ||
+        mapperOgFagsakerState.isAwaitingMappeCreation) {
         return <div><NavFrontendSpinner/></div>;
-    }
-
-    if (ident !== punchState.ident || punchState.step !== PunchStep.CHOOSE_SOKNAD) {
-        props.setIdentAction(ident);
-        props.findMapper(ident);
-        props.findFagsaker(ident);
-        return null;
     }
 
     const newMappe = () => props.createMappe(punchState.ident);
 
-    if (!mapper.length && !fagsaker.length && !punchState.isAwaitingMappeCreation) {
+    if (!mapper.length && !fagsaker.length) {
         newMappe();
         return null;
     }
@@ -102,7 +117,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
 
         for (const mappe of mapper) {
             const {mappe_id} = mappe;
-            const {chosenMappe} = props.punchState;
+            const {chosenMappe} = props.mapperOgFagsakerState;
             rows.push(
                 <tr key={mappe_id} onClick={() => props.openMappeAction(mappe)}>
                     <td>{mappe_id}</td>
@@ -153,7 +168,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
 
         for (const fagsak of fagsaker) {
             const {fagsak_id} = fagsak;
-            const {chosenFagsak} = props.punchState;
+            const {chosenFagsak} = props.mapperOgFagsakerState;
             rows.push(
                 <tr key={fagsak_id} onClick={() => props.openFagsakAction(fagsak)}>
                     <td>{fagsak_id}</td>
@@ -204,7 +219,6 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         props.undoSearchForMapperAction();
     }
 
-    const backButton = <p><Knapp onClick={undoSearchForMapperAndFagsaker}>Gå tilbake</Knapp></p>;
     const newSoknadButton = <p><Knapp onClick={newMappe}>Opprett ny søknad</Knapp></p>;
 
     if (mapper.length && !fagsaker.length) {
@@ -234,7 +248,10 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
     </>);
 };
 
-const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState});
+const mapStateToProps = (state: RootStateType) => ({
+    punchState:             state.punchState,
+    mapperOgFagsakerState:  state.mapperOgFagsakerState
+});
 
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
@@ -247,7 +264,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     openFagsakAction:           (fagsak: IFagsak)       => dispatch(openFagsakAction(fagsak)),
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
     chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
-    createMappe:                (ident: string)         => dispatch(createMappe(ident))
+    createMappe:                (ident: string)         => dispatch(createMappe(ident)),
+    resetMappeidAction:         ()                      => dispatch(resetMappeidAction())
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapperOgFagsaker));

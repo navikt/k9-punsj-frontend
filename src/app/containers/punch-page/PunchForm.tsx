@@ -123,31 +123,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
         const {intl, punchFormState} = this.props;
         const {soknad} = this.state;
-        const infomelding = "Fyll ut informasjon.";/*this.isSoknadNew()
-            ? (punchState.mapper.length || punchState.fagsaker.length
-                ? `Fyll ut skjemaet for å opprette en ny søknad.`
-                : `Fødselsnummeret har ingen tilknyttede, ufullstendige søknader. Fyll ut skjemaet for å opprette en ny.`)
-            : `Fortsett å fylle ut informasjon om mappe ${this.props.match.params.id}.`;*/
-
-        /*        const tilsynukedager = [];
-                for (const ukedag in Object.keys(Ukedag).filter(key => isNaN(Number(Ukedag[key])))) {
-                    if (Number(ukedag) < 5) {
-                        tilsynukedager.push(
-                            <tr key={ukedag}>
-                                <td>{intlHelper(intl, `Ukedag.${ukedag}`)}</td>
-                                <td><Input name={`tilsyn_${ukedag}_timer`} label=""/></td>
-                                <td><Input name={`tilsyn_${ukedag}_minutter`} label=""/></td>
-                            </tr>
-                        );
-                    }
-                }*/
+        const infomelding = "Fyll ut informasjon.";
 
         if (punchFormState.isMappeLoading) {
             return <NavFrontendSpinner/>;
         }
 
         return (<>
-            <p><Knapp onClick={this.handleBackButtonClick}>Gå tilbake</Knapp></p>
+            <p><Knapp onClick={this.handleBackButtonClick}>Til søknadsoversikten</Knapp></p>
             <AlertStripeInfo>{infomelding}</AlertStripeInfo>
             <h2>{intlHelper(intl, 'skjema.soker.opplysninger')}</h2>
             <Select
@@ -178,36 +161,6 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 value={_.get(soknad, 'relasjon_til_barnet', '')}
                 {...this.changeAndBlurUpdates(event => ({relasjon_til_barnet: event.target.value}))}
             />
-            {/*<Fieldset legend="Arbeidsforhold 1:">
-                {Object.values(Arbeidsforhold).map(arbeidsforhold => (
-                    <Radio
-                        key={`arbeidsforhold1_${arbeidsforhold}`}
-                        name="arbeidsforhold1"
-                        label={intlHelper(intl, `skjema.arbeidsforhold.${arbeidsforhold}`)}
-                        value={arbeidsforhold}
-                    />
-                ))}
-            </Fieldset>
-            <TextareaControlled
-                name="arbeidsgiver1"
-                label="Arbeidsgiverens navn og adresse:"
-                defaultValue=""
-            />
-            <Fieldset legend="Arbeidsforhold 2:">
-                {Object.values(Arbeidsforhold).map(arbeidsforhold => (
-                    <Radio
-                        key={`arbeidsforhold1_${arbeidsforhold}`}
-                        name="arbeidsforhold2"
-                        label={intlHelper(intl, `skjema.arbeidsforhold.${arbeidsforhold}`)}
-                        value={arbeidsforhold}
-                    />
-                ))}
-            </Fieldset>
-            <TextareaControlled
-                name="arbeidsgiver2"
-                label="Arbeidsgiverens navn og adresse:"
-                defaultValue=""
-            />*/}
             <h2>{intlHelper(intl, 'skjema.barn.opplysninger')}</h2>
             <Input
                 name="barnetsnavn"
@@ -264,49 +217,6 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 </table>
             )}
             <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
-            {/*<h2>Opplysninger om tilsyn av barnet</h2>
-            <Fieldset legend="Skal barnet gå i barnehage eller på skole/SFO eller være i annet etablert tilsyn i pleiepengeperioden?">
-                {Object.values(JaNeiVetikke).map(janeivetikke => (
-                    <Radio
-                        key={`tilsyn_${janeivetikke}`}
-                        name="tilsyn"
-                        label={intlHelper(intl, janeivetikke)}
-                        value={janeivetikke}
-                        onChange={this.handleTilsynChange}
-                        checked={this.props.punchFormState.tilsyn === janeivetikke}
-                    />
-                ))}
-            </Fieldset>
-            {
-                this.props.punchFormState.tilsyn === JaNeiVetikke.JA && (<>
-                    <AlertStripeInfo>Før opp hele timer/minutter med tilsyn på ukedager.</AlertStripeInfo>
-                    <table className="tabell tabell--stripet">
-                        <thead>
-                            <tr>
-                                <th>Ukedag</th>
-                                <th>Timer</th>
-                                <th>Minutter</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Object.keys(Ukedag)
-                                   .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
-                                   .filter(ukedag => Number(ukedag) < 5)
-                                   .map(ukedag => (
-                                        <tr key={ukedag}>
-                                            <td>{intlHelper(intl, `Ukedag.${ukedag}`)}</td>
-                                            <td><Input name={`tilsyn_${ukedag}_timer`} label=""/></td>
-                                            <td><Input name={`tilsyn_${ukedag}_minutter`} label=""/></td>
-                                        </tr>
-                                   ))}
-                        </tbody>
-                    </table>
-                </>)
-            }
-            <h2>Tilleggsopplysninger</h2>
-            <TextareaControlled name="tilleggsopplysninger" label="" defaultValue=""/>
-            <h2>Legeerklæring</h2>
-            <TextareaControlled name="legeerklaering" label="" defaultValue=""/>*/}
             <h2>Beredskap</h2>
             <Checkbox
                 label="Beredskap"
@@ -361,7 +271,6 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
     private handleBackButtonClick = () => {
         const {punchState, punchPaths} = this.props;
-        this.props.backFromFormAction();
         this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
         changePath(getPath(punchPaths, PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
@@ -402,8 +311,6 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});
 
     private updateSoknad = (soknad: Partial<ISoknad>) => this.props.setSoknadAction({...this.props.punchFormState.mappe.innhold, ...soknad});
-
-    // private handleTilsynChange = (event: any) => this.props.setTilsynAction(event.target.value);
 }
 
 const mapStateToProps = (state: RootStateType) => ({

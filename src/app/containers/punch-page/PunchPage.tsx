@@ -15,6 +15,7 @@ import {
     openFagsakAction,
     openMappeAction,
     setIdentAction,
+    setStepAction,
     undoSearchForMapperAction
 }                                                                   from 'app/state/actions';
 import {RootStateType}                                              from 'app/state/RootState';
@@ -40,6 +41,7 @@ interface IPunchPageStateProps {
 
 interface IPunchPageDispatchProps {
     setIdentAction:             typeof setIdentAction;
+    setStepAction:              typeof setStepAction;
     getJournalpost:             typeof getJournalpost;
     findMapper:                 typeof findMapper;
     findFagsaker:               typeof findFagsaker;
@@ -74,7 +76,6 @@ class PunchPage extends React.Component<IPunchPageProps> {
     }
 
     render() {
-        console.log('render punchpage');
         const {intl} = this.props;
         return (
             <Page
@@ -134,7 +135,6 @@ class PunchPage extends React.Component<IPunchPageProps> {
                         onKeyPress={this.handleIdentKeyPress}
                         value={punchState.ident}
                         disabled={punchState.step > PunchStep.START}
-                        feil={!!punchState.mapperRequestError ? {feilmelding: 'Det skjedde en feil i søket. Er nummeret riktig?'} : undefined}
                     />
                 </div>
                 {this.underFnr()}
@@ -177,7 +177,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
                         children={<MapperOgFagsaker punchPaths={this.paths}/>}
                     />
                     <Route path={this.getPath(PunchStep.START)}>
-                        <p><Knapp onClick={this.findSoknader}>Hent søknader</Knapp></p>
+                        <StartPage findSoknader={this.findSoknader} setStepAction={this.props.setStepAction}/>
                     </Route>
                 </Switch>
             </HashRouter>
@@ -202,6 +202,7 @@ const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState
 
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
+    setStepAction:              (step: number)          => dispatch(setStepAction(step)),
     getJournalpost:             (id: string)            => dispatch(getJournalpost(id)),
     findMapper:                 (ident: string)         => dispatch(findMapper(ident)),
     findFagsaker:               (ident: string)         => dispatch(findFagsaker(ident)),
@@ -214,3 +215,13 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage)));
+
+interface IStartPageProps {
+    findSoknader: () => void;
+    setStepAction: (step: number) => void;
+}
+
+const StartPage: React.FunctionComponent<IStartPageProps> = (props: IStartPageProps) => {
+    React.useEffect(() => {props.setStepAction(PunchStep.START)}, []);
+    return <p><Knapp onClick={props.findSoknader}>Hent søknader</Knapp></p>;
+};

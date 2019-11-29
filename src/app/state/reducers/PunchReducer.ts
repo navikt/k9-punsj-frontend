@@ -5,13 +5,7 @@ import {IPunchActionTypes}          from 'app/state/actions';
 const initialState: IPunchState = {
     step: PunchStep.START,
     ident: "",
-    journalpost: undefined,
-    mapper: [],
-    fagsaker: [],
-    isMapperLoading: false,
-    isFagsakerLoading: false,
-    mapperRequestError: undefined,
-    fagsakerRequestError: undefined
+    journalpost: undefined
 };
 
 export function PunchReducer(
@@ -24,10 +18,6 @@ export function PunchReducer(
             return {
                 ...punchState,
                 ident: action.ident,
-                isMapperLoading: false,
-                isFagsakerLoading: false,
-                mapperRequestError: undefined,
-                fagsakerRequestError: undefined
             };
 
         case PunchActionKeys.STEP_SET:
@@ -39,22 +29,14 @@ export function PunchReducer(
         case PunchActionKeys.BACK_FROM_FORM:
             return {
                 ...punchState,
-                step: PunchStep.CHOOSE_SOKNAD,
-                mappeid: undefined
+                step: PunchStep.CHOOSE_SOKNAD
             };
 
         case PunchActionKeys.BACK_FROM_MAPPER:
             return {
                 ...punchState,
                 step: PunchStep.START,
-                ident: '',
-                mapper: [],
-                fagsaker: [],
-                chosenMappe: undefined,
-                isMapperLoading: false,
-                isFagsakerLoading: false,
-                mapperRequestError: undefined,
-                fagsakerRequestError: undefined
+                ident: ''
             };
 
         case PunchActionKeys.JOURNALPOST_SET:
@@ -79,125 +61,6 @@ export function PunchReducer(
                 journalpost: undefined,
                 isJournalpostLoading: false,
                 journalpostRequestError: undefined
-            };
-
-        case PunchActionKeys.MAPPER_SET:
-            return {
-                ...punchState,
-                step: PunchStep.CHOOSE_SOKNAD,
-                mapper: action.mapper,
-                isMapperLoading: false,
-                mapperRequestError: undefined
-            };
-
-        case PunchActionKeys.MAPPER_LOAD:
-            return {
-                ...punchState,
-                step: PunchStep.CHOOSE_SOKNAD,
-                isMapperLoading: action.isLoading,
-                mapperRequestError: undefined
-            };
-
-        case PunchActionKeys.MAPPER_REQUEST_ERROR:
-            return {
-                ...punchState,
-                step: PunchStep.START,
-                isMapperLoading: false,
-                mapperRequestError: action.error
-            };
-
-        case PunchActionKeys.FAGSAKER_SET:
-            return {
-                ...punchState,
-                step: PunchStep.CHOOSE_SOKNAD,
-                fagsaker: action.fagsaker,
-                isFagsakerLoading: false,
-                fagsakerRequestError: undefined
-            };
-
-        case PunchActionKeys.FAGSAKER_LOAD:
-            return {
-                ...punchState,
-                step: PunchStep.CHOOSE_SOKNAD,
-                fagsaker: [],
-                isFagsakerLoading: action.isLoading,
-                fagsakerRequestError: undefined
-            };
-
-        case PunchActionKeys.FAGSAKER_REQUEST_ERROR:
-            return {
-                ...punchState,
-                step: PunchStep.START,
-                fagsaker: [],
-                isFagsakerLoading: false,
-                fagsakerRequestError: action.error
-            };
-
-        case PunchActionKeys.MAPPE_OPEN:
-            return {
-                ...punchState,
-                chosenMappe: action.mappe,
-                chosenFagsak: undefined
-            };
-
-        case PunchActionKeys.MAPPE_CLOSE:
-            return {
-                ...punchState,
-                chosenMappe: undefined
-            };
-
-        case PunchActionKeys.MAPPE_CHOOSE:
-            return {
-                ...punchState,
-                step: PunchStep.FILL_FORM,
-                chosenMappe: action.mappe
-            };
-
-        case PunchActionKeys.MAPPE_UNDO_CHOICE:
-            return {
-                ...punchState,
-                step: !punchState.fagsaker.length && !punchState.mapper.length ? PunchStep.START : PunchStep.CHOOSE_SOKNAD,
-                chosenMappe: undefined,
-                chosenFagsak: undefined
-            };
-
-        case PunchActionKeys.FAGSAK_OPEN:
-            return {
-                ...punchState,
-                chosenFagsak: action.fagsak,
-                chosenMappe: undefined
-            };
-
-        case PunchActionKeys.FAGSAK_CLOSE:
-            return {
-                ...punchState,
-                chosenFagsak: undefined
-            };
-
-        case PunchActionKeys.MAPPE_CREATE_REQUEST:
-            return {
-                ...punchState,
-                mappeid: undefined,
-                isAwaitingMappeCreation: true,
-                createMappeRequestError: undefined
-            };
-
-        case PunchActionKeys.MAPPE_CREATE_SUCCESS:
-            return {
-                ...punchState,
-                mappeid: action.id,
-                isAwaitingMappeCreation: false,
-                createMappeRequestError: undefined,
-                mapper: [],
-                fagsaker: []
-            };
-
-        case PunchActionKeys.MAPPE_CREATE_ERROR:
-            return {
-                ...punchState,
-                mappeid: undefined,
-                isAwaitingMappeCreation: false,
-                createMappeRequestError: action.error
             };
 
         default: return punchState;
