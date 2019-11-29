@@ -137,15 +137,11 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 name="sprak"
                 label={`${intlHelper(intl, 'skjema.soker.sprak')}:`}
                 className="bold-label"
+                value={soknad.soker?.spraak_valg || 'nb'}
+                {...this.changeAndBlurUpdates(event => ({soker: {spraak_valg: event.target.value}}))}
             >
-                <option
-                    value='nb'
-                    selected={_.get(soknad, 'soker.spraak_valg') === 'nb'}
-                >Bokmål</option>
-                <option
-                    value='nn'
-                    selected={_.get(soknad, 'soker.spraak_valg') === 'nn'}
-                >Nynorsk</option>
+                <option value='nb'>Bokmål</option>
+                <option value='nn'>Nynorsk</option>
             </Select>
             <Input
                 name="medsoker"
@@ -190,8 +186,8 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                 name={`opphold_land_${key}`}
                                 onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
                                 onBlur={() => this.setOpphold()}
-                                selectedCountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
-                                unselectedOption={'Velg …'}
+                                selectedcountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
+                                unselectedoption={'Velg …'}
                                 label=""
                             /></td>
                             <td><Input
@@ -297,6 +293,11 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     };
 
     private addOpphold = () => {
+        if (!this.state.soknad.medlemskap) {
+            this.state.soknad = {...this.state.soknad, medlemskap: {opphold: []}};
+        } else if (!this.state.soknad.medlemskap.opphold) {
+            this.state.soknad.medlemskap = {...this.state.soknad.medlemskap, opphold: []};
+        }
         this.state.soknad.medlemskap!.opphold.push({land: '', periode: {}});
         this.forceUpdate();
         this.setOpphold();

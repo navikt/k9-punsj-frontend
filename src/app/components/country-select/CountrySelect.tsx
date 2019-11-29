@@ -4,8 +4,8 @@ import {Select, SelectProps}         from 'nav-frontend-skjema';
 import * as React                    from 'react';
 
 interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
-    selectedCountry?:  string;
-    unselectedOption?: string;
+    selectedcountry?:  string;
+    unselectedoption?: string;
 }
 
 interface ICountry {
@@ -21,13 +21,12 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     const countryList: ICountry[] = [];
     Object.keys(countries.getAlpha3Codes()).map(code => countryList.push({code, name: countries.getName(code, locale)}));
     countryList.sort((a,b) => (a.name > b.name) ? 1 : -1);
-    if (!!props.unselectedOption) {countryList.unshift({code: '', name: props.unselectedOption})}
+    if (!!props.unselectedoption) {countryList.unshift({code: '', name: props.unselectedoption})}
 
-    return (<Select {...props}>
+    return (<Select {...props} value={props.selectedcountry}>
         {countryList.map(country => <option
             key={country.code}
             value={country.code}
-            selected={props.selectedCountry === country.code}
         >{country.name}</option>)}
     </Select>);
 };
