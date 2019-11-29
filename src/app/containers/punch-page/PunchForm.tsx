@@ -1,51 +1,33 @@
-import {CountrySelect}    from 'app/components/country-select/CountrySelect';
-import {PunchStep}        from 'app/models/enums';
+import {CountrySelect}                                from 'app/components/country-select/CountrySelect';
+import {PunchStep}                                    from 'app/models/enums';
+import {IPath, IPunchFormState, IPunchState, ISoknad} from 'app/models/types';
 import {
-    IPath,
-    IPunchFormState,
-    IPunchState,
-    ISoknad
-}                         from 'app/models/types';
-import {
-    backFromFormAction,
     getMappe,
     resetMappeAction,
     setIdentAction,
-    setSoknadAction,
     setStepAction,
-    undoChoiceOfMappeAction
-} from 'app/state/actions';
-import {RootStateType}    from 'app/state/RootState';
-import {
-    changePath,
-    getPath
-}                         from 'app/utils';
-import intlHelper         from 'app/utils/intlUtils';
-import _                  from 'lodash';
-import {AlertStripeInfo}  from 'nav-frontend-alertstriper';
-import {Knapp}            from 'nav-frontend-knapper';
-import Lukknapp           from 'nav-frontend-lukknapp';
-import {
-    Checkbox,
-    Input,
-    Select,
-    Textarea
-}                         from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import * as React         from 'react';
-import {
-    InjectedIntlProps,
-    injectIntl
-}                         from 'react-intl';
-import {connect}          from 'react-redux';
-import {
-    RouteComponentProps,
-    withRouter
-}                         from 'react-router-dom';
+    submitSoknad,
+    undoChoiceOfMappeAction,
+    updateSoknad
+}                                                     from 'app/state/actions';
+import {RootStateType}                                from 'app/state/RootState';
+import {changePath, getPath}                          from 'app/utils';
+import intlHelper                                     from 'app/utils/intlUtils';
+import _                                              from 'lodash';
+import {AlertStripeInfo}                              from 'nav-frontend-alertstriper';
+import {Knapp}                                        from 'nav-frontend-knapper';
+import Lukknapp                                       from 'nav-frontend-lukknapp';
+import {Checkbox, Input, Select, Textarea}            from 'nav-frontend-skjema';
+import NavFrontendSpinner                             from 'nav-frontend-spinner';
+import * as React                                     from 'react';
+import {InjectedIntlProps, injectIntl}                from 'react-intl';
+import {connect}                                      from 'react-redux';
+import {RouteComponentProps, withRouter}              from 'react-router-dom';
 
 interface IPunchFormComponentProps {
-    punchPaths: IPath[];
-    match?:     any;
+    punchPaths:     IPath[];
+    journalpostid:  string;
+    match?:         any;
 }
 
 interface IPunchFormStateProps {
@@ -58,9 +40,9 @@ interface IPunchFormDispatchProps {
     resetMappeAction:           typeof resetMappeAction;
     setIdentAction:             typeof setIdentAction;
     setStepAction:              typeof setStepAction;
-    setSoknadAction:            typeof setSoknadAction;
     undoChoiceOfMappeAction:    typeof undoChoiceOfMappeAction;
-    backFromFormAction:         typeof backFromFormAction;
+    updateSoknad:               typeof updateSoknad;
+    submitSoknad:               typeof submitSoknad;
 }
 
 interface IPunchFormPageState {
@@ -124,6 +106,11 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         const {intl, punchFormState} = this.props;
         const {soknad} = this.state;
         const infomelding = "Fyll ut informasjon.";
+
+        if (punchFormState.isComplete) {
+            changePath(getPath(this.props.punchPaths, PunchStep.COMPLETED));
+            return null;
+        }
 
         if (punchFormState.isMappeLoading) {
             return <NavFrontendSpinner/>;
@@ -257,7 +244,10 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 label="Søknaden er underskrevet"
                 className="bold-label"
             />
-            <p><Knapp>Send inn</Knapp></p>
+            <p><Knapp
+                onClick={() => this.props.submitSoknad(this.props.match.params.id)}
+                disabled={!punchFormState.mappe?.mangler || punchFormState.mappe.mangler.length}
+            >Send inn</Knapp></p>
         </>);
     }
 
@@ -309,9 +299,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         this.setOpphold();
     };
 
-    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});
+    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});
 
-    private updateSoknad = (soknad: Partial<ISoknad>) => this.props.setSoknadAction({...this.props.punchFormState.mappe.innhold, ...soknad});
+    private updateSoknad = (soknad: Partial<ISoknad>) => this.props.updateSoknad(
+        this.props.match.params.id,
+        this.props.punchState.ident,
+        this.props.journalpostid,
+        {...this.props.punchFormState.mappe.innhold, ...soknad}
+    );
 }
 
 const mapStateToProps = (state: RootStateType) => ({
@@ -320,13 +315,16 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getMappe:                   (id: string)        => dispatch(getMappe(id)),
-    resetMappeAction:           ()                  => dispatch(resetMappeAction()),
-    setIdentAction:             (ident: string)     => dispatch(setIdentAction(ident)),
-    setStepAction:              (step: PunchStep)   => dispatch(setStepAction(step)),
-    setSoknadAction:            (soknad: ISoknad)   => dispatch(setSoknadAction(soknad)),
-    undoChoiceOfMappeAction:    ()                  => dispatch(undoChoiceOfMappeAction()),
-    backFromFormAction:         ()                  => dispatch(backFromFormAction())
+    getMappe:                   (id: string)                => dispatch(getMappe(id)),
+    resetMappeAction:           ()                          => dispatch(resetMappeAction()),
+    setIdentAction:             (ident: string)             => dispatch(setIdentAction(ident)),
+    setStepAction:              (step: PunchStep)           => dispatch(setStepAction(step)),
+    undoChoiceOfMappeAction:    ()                          => dispatch(undoChoiceOfMappeAction()),
+    updateSoknad:               (mappeid: string,
+                                 norskIdent: string,
+                                 journalpostid: string,
+                                 soknad: Partial<ISoknad>)  => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
+    submitSoknad:               (mappeid: string)           => dispatch(submitSoknad(mappeid))
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm)));
