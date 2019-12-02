@@ -17,28 +17,32 @@ export function AuthReducer(
         case AuthActionKeys.LOAD:
             return {
                 isLoading: true,
-                loggedIn: false
+                loggedIn: false,
+                userName: undefined
             };
 
         case AuthActionKeys.REDIRECT:
             return {
                 loggedIn: false,
                 redirectUrl: action.redirectUrl,
-                isLoading: false
+                isLoading: false,
+                userName: undefined
             };
 
         case AuthActionKeys.OK:
             return {
                 loggedIn: true,
                 redirectUrl: undefined,
-                isLoading: false
+                isLoading: false,
+                userName: action.name
             };
 
         case AuthActionKeys.ERROR:
             return {
                 error: action.error,
                 isLoading: false,
-                loggedIn: false
+                loggedIn: false,
+                userName: undefined
             };
 
         default: return authState;
