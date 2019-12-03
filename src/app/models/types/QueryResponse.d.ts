@@ -1,9 +1,5 @@
-export interface IQueryResponse {
-    mangler?: IMangel[];
-}
+import {IInputError} from 'app/models/types/InputError';
 
-interface IMangel {
-    attributt?: string;
-    ugyldig_verdi?: any;
-    melding?: string;
+export interface IQueryResponse {
+    mangler?: IInputError[];
 }

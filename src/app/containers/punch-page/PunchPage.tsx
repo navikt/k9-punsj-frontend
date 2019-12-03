@@ -68,7 +68,8 @@ class PunchPage extends React.Component<IPunchPageProps> {
     private paths: IPath[] = [
         {step: PunchStep.START,         path: '/'},
         {step: PunchStep.CHOOSE_SOKNAD, path: '/hentsoknader/{ident}'},
-        {step: PunchStep.FILL_FORM,     path: '/skjema/{id}'}
+        {step: PunchStep.FILL_FORM,     path: '/skjema/{id}'},
+        {step: PunchStep.COMPLETED,     path: '/fullfort'}
     ];
 
     componentDidMount(): void {
@@ -170,12 +171,15 @@ class PunchPage extends React.Component<IPunchPageProps> {
                 <Switch>
                     <Route
                         path={this.getPath(PunchStep.FILL_FORM)}
-                        children={<PunchForm punchPaths={this.paths}/>}
+                        children={<PunchForm punchPaths={this.paths} journalpostid={this.props.match.params.journalpostid}/>}
                     />
                     <Route
                         path={this.getPath(PunchStep.CHOOSE_SOKNAD)}
                         children={<MapperOgFagsaker punchPaths={this.paths}/>}
                     />
+                    <Route path={this.getPath(PunchStep.COMPLETED)}>
+                        <p>Søknaden er sendt til behandling.</p>
+                    </Route>
                     <Route path={this.getPath(PunchStep.START)}>
                         <StartPage findSoknader={this.findSoknader} setStepAction={this.props.setStepAction}/>
                     </Route>

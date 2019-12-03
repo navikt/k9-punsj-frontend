@@ -1,10 +1,14 @@
-import {JaNeiVetikke} from "app/models/enums";
-import {IError}       from 'app/models/types/Error';
-import {ISoknad}      from "./Soknad";
+import {IError}      from 'app/models/types/Error';
+import {IInputError} from 'app/models/types/InputError';
 
 export interface IPunchFormState {
     mappe?: Partial<IMappe>;
     isMappeLoading: boolean;
     error?: IError;
-    //tilsyn?: JaNeiVetikke;
+    isAwaitingUpdateResponse?: boolean;
+    isAwaitingSubmitResponse?: boolean;
+    updateMappeError?: IError;
+    submitMappeError?: IError;
+    inputErrors?: IInputError[];
+    isComplete?: boolean;
 }

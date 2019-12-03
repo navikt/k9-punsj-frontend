@@ -154,13 +154,34 @@
       "mappe_id": "4e43gtu"
     },
     {
+      "mappe_id": "5NYFNBs",
       "norsk_ident": "123",
+      "journalpost_id": "123",
       "innhold": {
         "soker": {
           "norsk_identitetsnummer": "123"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": "fgh"
+        },
+        "relasjon_til_barnet": "weew",
+        "beredskap": {
+          "svar": true,
+          "tilleggsinformasjon": "werrwer"
+        },
+        "medlemskap": {
+          "opphold": [
+            {
+              "land": "",
+              "periode": {}
+            },
+            {
+              "land": "",
+              "periode": {}
+            }
+          ]
         }
-      },
-      "mappe_id": "5NYFNBs"
+      }
     },
     {
       "norsk_ident": "123",
@@ -206,6 +227,92 @@
         }
       },
       "mappe_id": "owrULeR"
+    },
+    {
+      "norsk_ident": "65",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "65"
+        }
+      },
+      "mappe_id": "eVo-_R_"
+    },
+    {
+      "norsk_ident": "15049228314",
+      "journalpost_id": "123",
+      "innhold": {
+        "medsoker": {
+          "norsk_identitetsnummer": ""
+        }
+      }
+    },
+    {
+      "norsk_ident": "5486",
+      "journalpost_id": "RlOOioy",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "5486"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": ""
+        }
+      }
+    },
+    {
+      "norsk_ident": "5487",
+      "journalpost_id": "F14SZjU",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "5487"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": ""
+        }
+      }
+    },
+    {
+      "norsk_ident": "5478",
+      "journalpost_id": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "5478"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": ""
+        }
+      }
+    },
+    {
+      "mappe_id": "xj60OQj",
+      "norsk_ident": "126",
+      "journalpost_id": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "126"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": "3"
+        },
+        "relasjon_til_barnet": ""
+      }
+    },
+    {
+      "norsk_ident": "523",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "523"
+        }
+      },
+      "mappe_id": "zeArejA"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "960pou5"
     }
   ],
   "mapper2": [],

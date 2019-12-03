@@ -10,6 +10,7 @@ export enum ApiPath {
     MAPPE_GET       = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     MAPPE_CREATE    = '/pleiepenger-sykt-barn-soknad',
     MAPPE_UPDATE    = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
+    MAPPE_SUBMIT    = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     FAGSAKER_FIND   = '/fagsak/{ident}?ytelse=pleiepenger_sykt_barn',
     JOURNALPOST_GET = '/journalpost/{journalpost_id}',
     DOKUMENT        = '/journalpost/{journalpost_id}/dokument/{dokument_id}'

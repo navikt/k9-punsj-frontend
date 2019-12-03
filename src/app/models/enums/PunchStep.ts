@@ -1,5 +1,6 @@
 export enum PunchStep {
     START,
     CHOOSE_SOKNAD,
-    FILL_FORM
+    FILL_FORM,
+    COMPLETED
 }
