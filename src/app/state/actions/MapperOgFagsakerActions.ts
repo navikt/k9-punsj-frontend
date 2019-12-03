@@ -65,7 +65,7 @@ export function findFagsaker(ident: string) {return (dispatch: any) => {
     dispatch(findFagsakerLoadAction(true));
     return get(ApiPath.FAGSAKER_FIND, {ident}, response => {
         if (response.ok) {
-            return response.json().then(fagsaker => dispatch(setFagsakerAction(fagsaker)));
+            return response.json().then(r => dispatch(setFagsakerAction(r.fagsaker || [])));
         }
         return dispatch(findFagsakerErrorAction({
             status:     response.status,
@@ -87,13 +87,14 @@ export function createMappeRequestAction():                     ICreateMappeRequ
 export function createMappeSuccessAction(id: string):           ICreateMappeSuccessAction       {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_SUCCESS, id}}
 export function createMappeErrorAction(error: IError):          ICreateMappeErrorAction         {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_ERROR, error}}
 
-export function createMappe(ident: string) {return (dispatch: any) => {
+export function createMappe(ident: string, journalpostid: string) {return (dispatch: any) => {
 
     dispatch(createMappeRequestAction());
 
-    const requestBody: Partial<IMappe> = {
+    const requestBody = {
         norsk_ident: ident,
-        innhold: {soker: {norsk_identitetsnummer: ident}}
+        journalpost_id: journalpostid,
+        innhold: {søker: {fødselsnummer: ident}}
     };
 
     return post(ApiPath.MAPPE_CREATE, undefined, requestBody, response => {

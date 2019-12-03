@@ -9,23 +9,24 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                     from 'app/state/actions';
-import {RootStateType}                                from 'app/state/RootState';
-import {changePath, getPath}                          from 'app/utils';
-import intlHelper                                     from 'app/utils/intlUtils';
-import _                                              from 'lodash';
-import {AlertStripeInfo}                              from 'nav-frontend-alertstriper';
-import {Knapp}                                        from 'nav-frontend-knapper';
-import Lukknapp                                       from 'nav-frontend-lukknapp';
-import {Checkbox, Input, Select, Textarea}            from 'nav-frontend-skjema';
-import NavFrontendSpinner                             from 'nav-frontend-spinner';
-import * as React                                     from 'react';
-import {InjectedIntlProps, injectIntl}                from 'react-intl';
-import {connect}                                      from 'react-redux';
+}                                                      from 'app/state/actions';
+import {RootStateType}                                 from 'app/state/RootState';
+import {changePath, getPath}                           from 'app/utils';
+import intlHelper                                      from 'app/utils/intlUtils';
+import _                                               from 'lodash';
+import {AlertStripeInfo}                               from 'nav-frontend-alertstriper';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
+import {Knapp}                                         from 'nav-frontend-knapper';
+import Lukknapp                                        from 'nav-frontend-lukknapp';
+import {Checkbox, Input, Select, Textarea}             from 'nav-frontend-skjema';
+import NavFrontendSpinner                              from 'nav-frontend-spinner';
+import * as React                                      from 'react';
+import {InjectedIntlProps, injectIntl}                 from 'react-intl';
+import {connect}                                       from 'react-redux';
 import {RouteComponentProps, withRouter}              from 'react-router-dom';
 
 interface IPunchFormComponentProps {
-    punchPaths:     IPath[];
+    getPunchPath:   (step: PunchStep, values?: any) => string;
     journalpostid:  string;
     match?:         any;
 }
@@ -48,6 +49,7 @@ interface IPunchFormDispatchProps {
 interface IPunchFormPageState {
     soknad:     ISoknad;
     isFetched:  boolean;
+    showStatus: boolean;
 }
 
 type IPunchFormProps = IPunchFormComponentProps
@@ -84,7 +86,8 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 tilleggsinformasjon: ''
             }
         },
-        isFetched: false
+        isFetched: false,
+        showStatus: false
     };
 
     componentDidMount(): void {
@@ -108,7 +111,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         const infomelding = "Fyll ut informasjon.";
 
         if (punchFormState.isComplete) {
-            changePath(getPath(this.props.punchPaths, PunchStep.COMPLETED));
+            changePath(this.props.getPunchPath(PunchStep.COMPLETED));
             return null;
         }
 
@@ -117,6 +120,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         }
 
         return (<>
+            {this.statusetikett()}
             <p><Knapp onClick={this.handleBackButtonClick}>Til søknadsoversikten</Knapp></p>
             <AlertStripeInfo>{infomelding}</AlertStripeInfo>
             <h2>{intlHelper(intl, 'skjema.soker.opplysninger')}</h2>
@@ -125,7 +129,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 label={`${intlHelper(intl, 'skjema.soker.sprak')}:`}
                 className="bold-label"
                 value={soknad.soker?.spraak_valg || 'nb'}
-                {...this.changeAndBlurUpdates(event => ({soker: {spraak_valg: event.target.value}}))}
+                {...this.onChangeOnlyUpdate(event => ({soker: {spraak_valg: event.target.value}}))}
             >
                 <option value='nb'>Bokmål</option>
                 <option value='nn'>Nynorsk</option>
@@ -204,7 +208,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             <Checkbox
                 label="Beredskap"
                 checked={_.get(soknad, 'beredskap.svar', false)}
-                {...this.changeAndBlurUpdates(event => ({beredskap: {...soknad.beredskap, svar: event.target.checked}}))}
+                {...this.onChangeOnlyUpdate(event => ({beredskap: {...soknad.beredskap, svar: event.target.checked}}))}
             />
             <Textarea
                 label="Tilleggsopplysninger:"
@@ -215,7 +219,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             <Checkbox
                 label="Nattevåk"
                 checked={_.get(soknad, 'nattevaak.svar', false)}
-                {...this.changeAndBlurUpdates(event => ({nattevaak: {...soknad.nattevaak, svar: event.target.checked}}))}
+                {...this.onChangeOnlyUpdate(event => ({nattevaak: {...soknad.nattevaak, svar: event.target.checked}}))}
             />
             <Textarea
                 label="Tilleggsopplysninger:"
@@ -251,21 +255,26 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         </>);
     }
 
-    private updateSoknadState(soknad: Partial<ISoknad>) {
-        this.setState({soknad: {...this.state.soknad, ...soknad}});
+    private updateSoknadState(soknad: Partial<ISoknad>, showStatus: boolean) {
+        this.setState({soknad: {...this.state.soknad, ...soknad}, showStatus});
     }
 
     private handleBackButtonClick = () => {
-        const {punchState, punchPaths} = this.props;
+        const {punchState, getPunchPath} = this.props;
         this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
-        changePath(getPath(punchPaths, PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
+        changePath(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
     };
 
     private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({
-        onChange:   (event: any) => this.updateSoknadState(change(event)),
+        onChange:   (event: any) => this.updateSoknadState(change(event), false),
         onBlur:     (event: any) => this.updateSoknad(change(event))
     });
+
+    private onChangeOnlyUpdate = (change: (event: any) => Partial<ISoknad>) => ({onChange: (event: any) => {
+        this.updateSoknadState(change(event), true);
+        this.updateSoknad(change(event));
+    }});
 
     private handleOppholdLandChange = (index: number, land: string) => {
         this.state.soknad.medlemskap!.opphold[index].land = land;
@@ -301,12 +310,33 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
     private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});
 
-    private updateSoknad = (soknad: Partial<ISoknad>) => this.props.updateSoknad(
-        this.props.match.params.id,
-        this.props.punchState.ident,
-        this.props.journalpostid,
-        {...this.props.punchFormState.mappe.innhold, ...soknad}
-    );
+    private updateSoknad = (soknad: Partial<ISoknad>) => {
+        this.setState({showStatus: true});
+        return this.props.updateSoknad(
+            this.props.match.params.id,
+            this.props.punchState.ident,
+            this.props.journalpostid,
+            {...this.props.punchFormState.mappe.innhold, ...soknad}
+        );
+    };
+
+    private statusetikett() {
+
+        if (!this.state.showStatus) {
+            return null;
+        }
+
+        const {punchFormState} = this.props;
+        const className = "statusetikett";
+
+        if (punchFormState.isAwaitingUpdateResponse) {
+            return <EtikettFokus {...{className}}>Lagrer …</EtikettFokus>;
+        }
+        if (!!punchFormState.updateMappeError) {
+            return <EtikettAdvarsel {...{className}}>Lagring feilet</EtikettAdvarsel>;
+        }
+        return <EtikettSuksess {...{className}}>Lagret</EtikettSuksess>;
+    }
 }
 
 const mapStateToProps = (state: RootStateType) => ({

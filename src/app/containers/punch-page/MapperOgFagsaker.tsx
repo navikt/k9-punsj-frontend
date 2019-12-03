@@ -47,7 +47,8 @@ interface IMapperOgFagsakerDispatchProps {
 }
 
 interface IMapperOgFagsakerComponentProps {
-    punchPaths: IPath[];
+    journalpostid:  string;
+    getPunchPath:   (step: PunchStep, values?: any) => string;
 }
 
 type IMapperOgFagsakerProps = InjectedIntlProps &
@@ -57,7 +58,7 @@ type IMapperOgFagsakerProps = InjectedIntlProps &
 
 const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
 
-    const {punchState, mapperOgFagsakerState, punchPaths} = props;
+    const {punchState, mapperOgFagsakerState, getPunchPath} = props;
     const {mapper, fagsaker} = mapperOgFagsakerState;
     const {ident} = useParams();
 
@@ -68,17 +69,17 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             props.findFagsaker(ident);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            changePath(getPath(punchPaths, PunchStep.START));
+            changePath(getPunchPath(PunchStep.IDENT));
         }
     }, [ident]);
 
     if (!!mapperOgFagsakerState.mappeid) {
         props.resetMappeidAction();
-        changePath(getPath(punchPaths, PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
+        changePath(getPunchPath(PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
         return null;
     }
 
-    if (!ident || ident === '' || !window.location.hash.match(getPath(punchPaths, PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
+    if (!ident || ident === '' || !window.location.hash.match(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
         return null;
     }
 
@@ -98,7 +99,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         return <div><NavFrontendSpinner/></div>;
     }
 
-    const newMappe = () => props.createMappe(punchState.ident);
+    const newMappe = () => props.createMappe(punchState.ident, props.journalpostid);
 
     if (!mapper.length && !fagsaker.length) {
         newMappe();
@@ -107,7 +108,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
 
     const chooseMappe = (mappe: IMappe) => {
         props.chooseMappeAction(mappe);
-        changePath(getPath(props.punchPaths, PunchStep.FILL_FORM, {id: mappe.mappe_id}));
+        changePath(getPunchPath(PunchStep.FILL_FORM, {id: mappe.mappe_id}));
     };
 
     function showMapper() {
@@ -215,7 +216,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
     }
 
     function undoSearchForMapperAndFagsaker() {
-        changePath(getPath(props.punchPaths, PunchStep.START));
+        changePath(getPunchPath(PunchStep.IDENT));
         props.undoSearchForMapperAction();
     }
 
@@ -264,7 +265,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     openFagsakAction:           (fagsak: IFagsak)       => dispatch(openFagsakAction(fagsak)),
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
     chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
-    createMappe:                (ident: string)         => dispatch(createMappe(ident)),
+    createMappe:                (ident: string,
+                                 journalpostid: string) => dispatch(createMappe(ident, journalpostid)),
     resetMappeidAction:         ()                      => dispatch(resetMappeidAction())
 });
 

@@ -1,6 +1,7 @@
 export * from './AuthState';
 export * from './Error';
 export * from './Fagsak';
+export * from './FordelingState';
 export * from './Journalpost';
 export * from './Locale';
 export * from './Mappe';

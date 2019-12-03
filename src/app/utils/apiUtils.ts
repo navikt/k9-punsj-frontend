@@ -19,19 +19,27 @@ export async function get(path: ApiPath,
 export async function post(path: ApiPath,
                            parameters?: any,
                            body?: any,
-                           callbackIfAuth?: (response: Response) => Promise<Response>): Promise<Response> {
-    const response = await fetch(apiUrl(path, parameters), {
-        method: 'post',
-        credentials: 'include',
-        body: JSON.stringify(body),
-        headers: {'Content-Type': 'application/json'}
-    });
-    if (response.status === 401) {
-        login();
-    } else if (!!callbackIfAuth) {
-        await callbackIfAuth(response);
+                           callbackIfAuth?: (response: Response) => Promise<Response>,
+                           callbackIfError?: (error: any) => any): Promise<Response> {
+    try {
+        const response = await fetch(apiUrl(path, parameters), {
+            method: 'post',
+            credentials: 'include',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+        if (response.status === 401) {
+            login();
+        } else if (!!callbackIfAuth) {
+            await callbackIfAuth(response);
+        }
+        return response;
+    } catch (error) {
+        if (!!callbackIfError) {
+            return callbackIfError(error);
+        }
+        return error;
     }
-    return response;
 }
 
 export async function put(path: ApiPath,
