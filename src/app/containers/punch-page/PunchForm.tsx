@@ -1,6 +1,6 @@
-import {CountrySelect}                                from 'app/components/country-select/CountrySelect';
-import {PunchStep}                                    from 'app/models/enums';
-import {IPath, IPunchFormState, IPunchState, ISoknad} from 'app/models/types';
+import {CountrySelect}                                 from 'app/components/country-select/CountrySelect';
+import {PunchStep}                                     from 'app/models/enums';
+import {IPunchFormState, IPunchState, ISoknad}         from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -11,7 +11,7 @@ import {
     updateSoknad
 }                                                      from 'app/state/actions';
 import {RootStateType}                                 from 'app/state/RootState';
-import {changePath, getPath}                           from 'app/utils';
+import {changePath}                                    from 'app/utils';
 import intlHelper                                      from 'app/utils/intlUtils';
 import _                                               from 'lodash';
 import {AlertStripeInfo}                               from 'nav-frontend-alertstriper';
@@ -23,7 +23,7 @@ import NavFrontendSpinner                              from 'nav-frontend-spinne
 import * as React                                      from 'react';
 import {InjectedIntlProps, injectIntl}                 from 'react-intl';
 import {connect}                                       from 'react-redux';
-import {RouteComponentProps, withRouter}              from 'react-router-dom';
+import {RouteComponentProps, withRouter}               from 'react-router-dom';
 
 interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;

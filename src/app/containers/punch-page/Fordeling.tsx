@@ -26,8 +26,8 @@ interface IFordelingComponentProps {
 
 type IFordelingProps = InjectedIntlProps &
                        IFordelingStateProps &
-                       IFordelingDispatchProps
-                       & IFordelingComponentProps;
+                       IFordelingDispatchProps &
+                       IFordelingComponentProps;
 
 const Fordeling: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
 
@@ -49,9 +49,9 @@ const Fordeling: React.FunctionComponent<IFordelingProps> = (props: IFordelingPr
             onChange={event => props.setSakstypeAction((event.target as HTMLInputElement).value as Sakstype)}
             checked={sakstype}
         />
-        {sakstype === Sakstype.PPSB
-            ? <Knapp onClick={punch}>Pønsj søknad</Knapp>
-            : <Knapp>Omfordel</Knapp>}
+        {sakstype === Sakstype.PLEIEPENGER_SYKT_BARN
+            ? <Knapp onClick={punch}>{intlHelper(intl, 'fordeling.knapp.punsj')}</Knapp>
+            : <Knapp>{intlHelper(intl, 'fordeling.knapp.omfordel')}</Knapp>}
     </>;
 };
 

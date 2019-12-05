@@ -3,7 +3,7 @@ import {IFordelingState}               from 'app/models/types';
 import {IFordelingActionTypes}         from 'app/state/actions';
 
 const initialState: IFordelingState = {
-    sakstype: Sakstype.PPSB
+    sakstype: Sakstype.PLEIEPENGER_SYKT_BARN
 };
 
 export function FordelingReducer(

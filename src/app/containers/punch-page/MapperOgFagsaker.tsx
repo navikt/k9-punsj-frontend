@@ -1,6 +1,6 @@
-import SoknadReadMode                                                from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep}                                                   from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPath, IPunchState} from 'app/models/types';
+import SoknadReadMode                                         from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep}                                            from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -14,17 +14,17 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                                                    from 'app/state/actions';
-import {RootStateType}                                               from 'app/state/RootState';
-import {changePath, getPath}                                         from 'app/utils';
-import {AlertStripeFeil, AlertStripeInfo}                            from 'nav-frontend-alertstriper';
-import {Knapp}                                                       from 'nav-frontend-knapper';
-import ModalWrapper                                                  from 'nav-frontend-modal';
-import NavFrontendSpinner                                            from 'nav-frontend-spinner';
-import * as React                                                    from 'react';
-import {InjectedIntlProps, injectIntl}                               from 'react-intl';
-import {connect}                                                     from 'react-redux';
-import {useParams}                                                   from 'react-router-dom';
+}                                                             from 'app/state/actions';
+import {RootStateType}                                        from 'app/state/RootState';
+import {changePath}                                           from 'app/utils';
+import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
+import {Knapp}                                                from 'nav-frontend-knapper';
+import ModalWrapper                                           from 'nav-frontend-modal';
+import NavFrontendSpinner                                     from 'nav-frontend-spinner';
+import * as React                                             from 'react';
+import {InjectedIntlProps, injectIntl}                        from 'react-intl';
+import {connect}                                              from 'react-redux';
+import {useParams}                                            from 'react-router-dom';
 
 interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;

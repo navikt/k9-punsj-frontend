@@ -1,6 +1,6 @@
-import {MapperOgFagsakerActionKeys, PunchStep}           from 'app/models/enums';
-import {IMapperOgFagsakerState}                          from 'app/models/types';
-import {IMapperOgFagsakerActionTypes, IPunchActionTypes} from 'app/state/actions';
+import {MapperOgFagsakerActionKeys}   from 'app/models/enums';
+import {IMapperOgFagsakerState}       from 'app/models/types';
+import {IMapperOgFagsakerActionTypes} from 'app/state/actions';
 
 const initialState: IMapperOgFagsakerState = {
     mapper: [],
