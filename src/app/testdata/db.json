@@ -313,6 +313,56 @@
         }
       },
       "mappe_id": "960pou5"
+    },
+    {
+      "norsk_ident": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "123"
+        }
+      },
+      "mappe_id": "e9b4Qdx"
+    },
+    {
+      "mappe_id": "ShCWRuH",
+      "norsk_ident": "567",
+      "journalpost_id": "123",
+      "innhold": {
+        "soker": {
+          "spraak_valg": "nb"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": "sadasdasds"
+        },
+        "relasjon_til_barnet": "asdasd",
+        "beredskap": {
+          "svar": false,
+          "tilleggsinformasjon": ""
+        },
+        "periode": {
+          "fra_og_med": "2019-12-14",
+          "til_og_med": "2019-12-21"
+        },
+        "nattevaak": {
+          "svar": false
+        },
+        "medlemskap": {
+          "opphold": []
+        }
+      }
+    },
+    {
+      "mappe_id": "K4rOVwH",
+      "norsk_ident": "658",
+      "journalpost_id": "123",
+      "innhold": {
+        "soker": {
+          "norsk_identitetsnummer": "658"
+        },
+        "medsoker": {
+          "norsk_identitetsnummer": "tytyu"
+        }
+      }
     }
   ],
   "mapper2": [],

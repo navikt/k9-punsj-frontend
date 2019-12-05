@@ -1,23 +1,12 @@
 import {ApiPath}                                                    from 'app/apiConfig';
 import Page                                                         from 'app/components/page/Page';
+import Fordeling                                                    from 'app/containers/punch-page/Fordeling';
 import MapperOgFagsaker                                             from 'app/containers/punch-page/MapperOgFagsaker';
 import PunchForm                                                    from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
 import {PunchStep}                                                  from 'app/models/enums';
-import {IFagsak, IMappe, IPath, IPunchState}                        from 'app/models/types';
-import {
-    chooseMappeAction,
-    closeFagsakAction,
-    closeMappeAction,
-    findFagsaker,
-    findMapper,
-    getJournalpost,
-    openFagsakAction,
-    openMappeAction,
-    setIdentAction,
-    setStepAction,
-    undoSearchForMapperAction
-}                                                                   from 'app/state/actions';
+import {IPath, IPunchState}                                         from 'app/models/types';
+import {getJournalpost, setIdentAction, setStepAction}              from 'app/state/actions';
 import {RootStateType}                                              from 'app/state/RootState';
 import {apiUrl, changePath, getPath}                                from 'app/utils';
 import intlHelper                                                   from 'app/utils/intlUtils';
@@ -40,17 +29,9 @@ interface IPunchPageStateProps {
 }
 
 interface IPunchPageDispatchProps {
-    setIdentAction:             typeof setIdentAction;
-    setStepAction:              typeof setStepAction;
-    getJournalpost:             typeof getJournalpost;
-    findMapper:                 typeof findMapper;
-    findFagsaker:               typeof findFagsaker;
-    undoSearchForMapperAction:  typeof undoSearchForMapperAction;
-    openMappeAction:            typeof openMappeAction;
-    closeMappeAction:           typeof closeMappeAction;
-    openFagsakAction:           typeof openFagsakAction;
-    closeFagsakAction:          typeof closeFagsakAction;
-    chooseMappeAction:          typeof chooseMappeAction;
+    setIdentAction: typeof setIdentAction;
+    setStepAction:  typeof setStepAction;
+    getJournalpost: typeof getJournalpost;
 }
 
 interface IPunchPageComponentProps {
@@ -66,7 +47,8 @@ type IPunchPageProps = InjectedIntlProps &
 class PunchPage extends React.Component<IPunchPageProps> {
 
     private paths: IPath[] = [
-        {step: PunchStep.START,         path: '/'},
+        {step: PunchStep.FORDELING,     path: '/'},
+        {step: PunchStep.IDENT,         path: '/ident'},
         {step: PunchStep.CHOOSE_SOKNAD, path: '/hentsoknader/{ident}'},
         {step: PunchStep.FILL_FORM,     path: '/skjema/{id}'},
         {step: PunchStep.COMPLETED,     path: '/fullfort'}
@@ -130,13 +112,13 @@ class PunchPage extends React.Component<IPunchPageProps> {
             </Panel>
             <Panel className="punch_form" border={true}>
                 <div>
-                    <Input
+                    {punchState.step > PunchStep.FORDELING && <Input
                         label={`${intlHelper(intl, 'skjema.fodselsnr')}:`}
                         onChange={this.handleIdentBlur}
                         onKeyPress={this.handleIdentKeyPress}
                         value={punchState.ident}
-                        disabled={punchState.step > PunchStep.START}
-                    />
+                        disabled={punchState.step > PunchStep.IDENT}
+                    />}
                 </div>
                 {this.underFnr()}
             </Panel>
@@ -145,12 +127,10 @@ class PunchPage extends React.Component<IPunchPageProps> {
 
     private pdfUrl = () =>  apiUrl(ApiPath.DOKUMENT, {
         journalpost_id: this.props.match.params.journalpostid,
-        dokument_id: this.props.punchState.journalpost!.dokumenter[0].dokument_id
+        dokument_id:    this.props.punchState.journalpost!.dokumenter[0].dokument_id
     });
 
-    private getPath(step: PunchStep, values?: any) {
-        return getPath(this.paths, step, values);
-    }
+    private getPath = (step: PunchStep, values?: any) => getPath(this.paths, step, values);
 
     private togglePdf = () => {
         const panelsWrapper = document.getElementById('panels-wrapper');
@@ -165,24 +145,32 @@ class PunchPage extends React.Component<IPunchPageProps> {
     };
 
     private underFnr() {
-
+        const commonProps = {journalpostid: this.props.match.params.journalpostid, getPunchPath: this.getPath};
         return (
             <HashRouter>
                 <Switch>
                     <Route
                         path={this.getPath(PunchStep.FILL_FORM)}
-                        children={<PunchForm punchPaths={this.paths} journalpostid={this.props.match.params.journalpostid}/>}
+                        children={<PunchForm {...commonProps}/>}
                     />
                     <Route
                         path={this.getPath(PunchStep.CHOOSE_SOKNAD)}
-                        children={<MapperOgFagsaker punchPaths={this.paths}/>}
+                        children={<MapperOgFagsaker {...commonProps}/>}
                     />
                     <Route path={this.getPath(PunchStep.COMPLETED)}>
                         <p>Søknaden er sendt til behandling.</p>
                     </Route>
-                    <Route path={this.getPath(PunchStep.START)}>
-                        <StartPage findSoknader={this.findSoknader} setStepAction={this.props.setStepAction}/>
+                    <Route path={this.getPath(PunchStep.IDENT)}>
+                        <IdentPage
+                            findSoknader={this.findSoknader}
+                            setStepAction={this.props.setStepAction}
+                            getPunchPath={this.getPath}
+                        />
                     </Route>
+                    <Route
+                        path={this.getPath(PunchStep.FORDELING)}
+                        children={<Fordeling getPunchPath={this.getPath}/>}
+                    />
                 </Switch>
             </HashRouter>
         );
@@ -205,27 +193,23 @@ class PunchPage extends React.Component<IPunchPageProps> {
 const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState});
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
-    setStepAction:              (step: number)          => dispatch(setStepAction(step)),
-    getJournalpost:             (id: string)            => dispatch(getJournalpost(id)),
-    findMapper:                 (ident: string)         => dispatch(findMapper(ident)),
-    findFagsaker:               (ident: string)         => dispatch(findFagsaker(ident)),
-    undoSearchForMapperAction:  ()                      => dispatch(undoSearchForMapperAction()),
-    openMappeAction:            (mappe: IMappe)         => dispatch(openMappeAction(mappe)),
-    closeMappeAction:           ()                      => dispatch(closeMappeAction()),
-    openFagsakAction:           (fagsak: IFagsak)       => dispatch(openFagsakAction(fagsak)),
-    closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
-    chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe))
+    setIdentAction: (ident: string) => dispatch(setIdentAction(ident)),
+    setStepAction:  (step: number)  => dispatch(setStepAction(step)),
+    getJournalpost: (id: string)    => dispatch(getJournalpost(id))
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage)));
 
-interface IStartPageProps {
-    findSoknader: () => void;
-    setStepAction: (step: number) => void;
+interface IIdentPageProps {
+    findSoknader:   ()                  => void;
+    setStepAction:  (step: number)      => void;
+    getPunchPath:   (step: PunchStep)   => string;
 }
 
-const StartPage: React.FunctionComponent<IStartPageProps> = (props: IStartPageProps) => {
-    React.useEffect(() => {props.setStepAction(PunchStep.START)}, []);
-    return <p><Knapp onClick={props.findSoknader}>Hent søknader</Knapp></p>;
+const IdentPage: React.FunctionComponent<IIdentPageProps> = (props: IIdentPageProps) => {
+    React.useEffect(() => {props.setStepAction(PunchStep.IDENT)}, []);
+    return <p>
+        <Knapp onClick={props.findSoknader}>Hent søknader</Knapp>
+        <Knapp onClick={() => changePath(props.getPunchPath(PunchStep.FORDELING))}>Tilbake</Knapp>
+    </p>;
 };

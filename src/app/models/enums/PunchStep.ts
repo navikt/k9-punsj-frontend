@@ -1,5 +1,6 @@
 export enum PunchStep {
-    START,
+    FORDELING,
+    IDENT,
     CHOOSE_SOKNAD,
     FILL_FORM,
     COMPLETED

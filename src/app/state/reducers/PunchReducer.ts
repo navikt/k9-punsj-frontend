@@ -3,7 +3,7 @@ import {IPunchState}                from 'app/models/types';
 import {IPunchActionTypes}          from 'app/state/actions';
 
 const initialState: IPunchState = {
-    step: PunchStep.START,
+    step: PunchStep.FORDELING,
     ident: "",
     journalpost: undefined
 };
@@ -35,7 +35,7 @@ export function PunchReducer(
         case PunchActionKeys.BACK_FROM_MAPPER:
             return {
                 ...punchState,
-                step: PunchStep.START,
+                step: PunchStep.IDENT,
                 ident: ''
             };
 

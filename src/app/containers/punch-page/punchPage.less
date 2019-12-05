@@ -8,6 +8,7 @@
   display:        flex;
   flex-direction: column;
   height:         100%;
+  position:       relative;
 
   h1 {width: 100%}
 
@@ -65,6 +66,14 @@
       margin-left: 0.5rem;
       flex-basis:  100%;
       overflow-y:  auto;
+
+      .statusetikett {
+        position: absolute;
+        top:      1rem;
+        right:    0;
+        z-index:  5;
+        // box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.3);
+      }
     }
 
     &.pdf_closed .punch_pdf {
@@ -107,7 +116,7 @@
 .soknad-read-mode {
 
   > .row {
-    padding: 1rem 0;
+    padding:       1rem 0;
     border-bottom: 1px solid #00000026;
   }
 
