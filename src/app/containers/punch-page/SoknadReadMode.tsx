@@ -14,7 +14,7 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
     render() {
         const {intl, soknad} = this.props;
         return (
-            <Container className="soknad-read-mode">
+            <Container className="read-modal soknad-read-mode">
                 <Row>
                     <Col>Fødselsnummer:</Col>
                     <Col>{!!soknad.soker && soknad.soker.norsk_identitetsnummer}</Col>

@@ -1,3 +1,4 @@
+import FagsakReadMode                                         from 'app/containers/punch-page/FagsakReadMode';
 import SoknadReadMode                                         from 'app/containers/punch-page/SoknadReadMode';
 import {PunchStep, TimeFormat}                                from 'app/models/enums';
 import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
@@ -186,7 +187,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
                     isOpen={!!chosenFagsak && fagsak_id === chosenFagsak.fagsak_id}
                 >
                     <div className="modal_content">
-                        <p>Viser info om fagsak {fagsak_id}.</p>
+                        <FagsakReadMode {...{fagsak}}/>
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1">Velg denne</Knapp>
                             <Knapp className="knapp2" onClick={props.closeFagsakAction}>Lukk</Knapp>

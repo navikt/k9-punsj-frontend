@@ -113,11 +113,16 @@
   }
 }
 
-.soknad-read-mode {
+@read-modal-table-border: 1px solid #00000026;
+
+.read-modal {
+
+  margin-bottom: 1rem;
+  border-top:    @read-modal-table-border;
 
   > .row {
     padding:       1rem 0;
-    border-bottom: 1px solid #00000026;
+    border-bottom: @read-modal-table-border;
   }
 
   .col {
