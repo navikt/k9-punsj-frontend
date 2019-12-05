@@ -1,5 +1,5 @@
 import SoknadReadMode                                         from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep}                                            from 'app/models/enums';
+import {PunchStep, TimeFormat}                                from 'app/models/enums';
 import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
 import {
     chooseMappeAction,
@@ -16,7 +16,7 @@ import {
     undoSearchForMapperAction
 }                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
-import {changePath}                                           from 'app/utils';
+import {changePath, datetime}                                 from 'app/utils';
 import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
 import {Knapp}                                                from 'nav-frontend-knapper';
 import ModalWrapper                                           from 'nav-frontend-modal';
@@ -58,7 +58,7 @@ type IMapperOgFagsakerProps = InjectedIntlProps &
 
 const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
 
-    const {punchState, mapperOgFagsakerState, getPunchPath} = props;
+    const {intl, punchState, mapperOgFagsakerState, getPunchPath} = props;
     const {mapper, fagsaker} = mapperOgFagsakerState;
     const {ident} = useParams();
 
@@ -168,14 +168,14 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         const rows = [];
 
         for (const fagsak of fagsaker) {
-            const {fagsak_id} = fagsak;
+            const {fagsak_id, barn, fra_og_med, til_og_med} = fagsak;
             const {chosenFagsak} = props.mapperOgFagsakerState;
             rows.push(
                 <tr key={fagsak_id} onClick={() => props.openFagsakAction(fagsak)}>
-                    <td>{fagsak_id}</td>
-                    <td>Test</td>
-                    <td>Test</td>
-                    <td>Test</td>
+                    <td>{barn?.navn}</td>
+                    <td>{barn?.fødselsdato && datetime(intl, TimeFormat.DATE_SHORT, barn.fødselsdato)}</td>
+                    <td>{fra_og_med && datetime(intl, TimeFormat.DATE_SHORT, fra_og_med)}</td>
+                    <td>{til_og_med && datetime(intl, TimeFormat.DATE_SHORT, til_og_med)}</td>
                 </tr>
             );
             modaler.push(
@@ -200,12 +200,12 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             <h2>Fagsaker</h2>
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
-                <tr>
-                    <th>Fagsak-ID</th>
-                    <th>Ident</th>
-                    <th>Navn</th>
-                    <th>Periode</th>
-                </tr>
+                    <tr>
+                        <th>Barnets navn</th>
+                        <th>Fødselsdato</th>
+                        <th>Fra og med</th>
+                        <th>Til og med</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {rows}
