@@ -6,7 +6,7 @@ metadata:
     labels:
         team: k9saksbehandling
 spec:
-    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.12.05-e25a360
+    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy:2019.12.06-95f3f31
     port: 8080
     liveness:
         path: isalive
@@ -63,3 +63,7 @@ spec:
           value: k9-punsj-oidc-auth-proxy-redis.default.svc.nais.local
         - name: REDIS_PORT
           value: '6379'
+        - name: CORS_ALLOWED_HEADERS
+          value: 'Content-Type,Referer,X-Nav-NorskIdent'
+        - name: CORS_EXPOSED_HEADERS
+          value: 'Location'
