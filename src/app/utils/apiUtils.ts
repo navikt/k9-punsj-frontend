@@ -6,8 +6,12 @@ export const apiUrl = (path: ApiPath, parameters?: any) =>
 
 export async function get(path: ApiPath,
                           parameters?: any,
+                          headers?: HeadersInit,
                           callbackIfAuth?: (response: Response) => Promise<Response>): Promise<Response> {
-    const response = await fetch(apiUrl(path, parameters), {credentials: 'include'});
+    const response = await fetch(apiUrl(path, parameters), {
+        credentials: 'include',
+        headers: new Headers(headers)
+    });
     if (response.status === 401) {
         login();
     } else if (!!callbackIfAuth) {
@@ -18,6 +22,7 @@ export async function get(path: ApiPath,
 
 export async function post(path: ApiPath,
                            parameters?: any,
+                           headers?: HeadersInit,
                            body?: any,
                            callbackIfAuth?: (response: Response) => Promise<Response>,
                            callbackIfError?: (error: any) => any): Promise<Response> {
@@ -26,7 +31,7 @@ export async function post(path: ApiPath,
             method: 'post',
             credentials: 'include',
             body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
+            headers: {'Content-Type': 'application/json', ...headers}
         });
         if (response.status === 401) {
             login();

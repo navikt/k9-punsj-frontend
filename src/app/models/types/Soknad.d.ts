@@ -7,6 +7,8 @@ export interface ISoknad {
     soker?: ISoker;
     medsoker?: ISoker;
     periode?: IPeriode;
+    fra_og_med?: string;
+    til_og_med?: string;
     relasjon_til_barnet?: string;
     barn?: IBarn;
     medlemskap?: IMedlemskap;

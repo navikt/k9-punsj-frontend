@@ -7,7 +7,7 @@ export const URL_API = URL_BACKEND + '/api/k9-punsj';
 // export const URL_API = IS_OICD_AUTH_PROXY_SET ? URL_BACKEND + '/api/k9-punsj' : 'http://localhost:5000'; // 'http://localhost:7081/api';
 
 export enum ApiPath {
-    MAPPER_FIND     = '/pleiepenger-sykt-barn-soknad/mapper/{ident}',
+    MAPPER_FIND     = '/pleiepenger-sykt-barn-soknad/mapper',
     MAPPE_GET       = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     MAPPE_CREATE    = '/pleiepenger-sykt-barn-soknad',
     MAPPE_UPDATE    = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
