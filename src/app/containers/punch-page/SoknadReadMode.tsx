@@ -21,11 +21,11 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
                 </Row>
                 <Row>
                     <Col>Medsøkers fødselsnummer:</Col>
-                    <Col>{soknad.medsoker && soknad.medsoker.norsk_identitetsnummer}</Col>
+                    <Col>{!!soknad.medsoker && soknad.medsoker.norsk_identitetsnummer}</Col>
                 </Row>
                 <Row>
                     <Col>Periode:</Col>
-                    <Col>{soknad.periode && <Container>
+                    <Col>{!!soknad.periode && <Container>
                         <Row>
                             <Col>Fra og med:</Col>
                             <Col>{datetime(intl, TimeFormat.DATE_SHORT, soknad.periode.fra_og_med, 'YYYY-MM-DD')}</Col>

@@ -1,6 +1,7 @@
 import {CountrySelect}                                 from 'app/components/country-select/CountrySelect';
 import {PunchStep}                                     from 'app/models/enums';
 import {IPunchFormState, IPunchState, ISoknad}         from 'app/models/types';
+import {IInputError}                                   from 'app/models/types/InputError';
 import {
     getMappe,
     resetMappeAction,
@@ -14,7 +15,7 @@ import {RootStateType}                                 from 'app/state/RootState
 import {changePath}                                    from 'app/utils';
 import intlHelper                                      from 'app/utils/intlUtils';
 import _                                               from 'lodash';
-import {AlertStripeInfo}                               from 'nav-frontend-alertstriper';
+import {AlertStripeInfo, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
 import {Knapp}                                         from 'nav-frontend-knapper';
 import Lukknapp                                        from 'nav-frontend-lukknapp';
@@ -66,10 +67,8 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 norsk_identitetsnummer: '',
                 spraak_valg: 'nb'
             },
-            periode: {
-                fra_og_med: undefined,
-                til_og_med: undefined
-            },
+            fra_og_med: undefined,
+            til_og_med: undefined,
             relasjon_til_barnet: '',
             barn: {},
             medlemskap: {
@@ -99,8 +98,8 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormPageState>, snapshot?: any): void {
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
-            this.setState({soknad: mappe.innhold, isFetched: true});
-            this.props.setIdentAction(mappe.norsk_ident || mappe.innhold?.soker?.norsk_identitetsnummer || '');
+            this.setState({soknad: this.getSoknadFromStore(), isFetched: true});
+            this.props.setIdentAction(this.getSoknadFromStore()?.soker?.norsk_identitetsnummer || '');
         }
     }
 
@@ -108,7 +107,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
         const {intl, punchFormState} = this.props;
         const {soknad} = this.state;
-        const infomelding = "Fyll ut informasjon.";
+        const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
         if (punchFormState.isComplete) {
             changePath(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -119,10 +118,16 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             return <NavFrontendSpinner/>;
         }
 
+        if (!soknad) {
+            return null;
+        }
+
         return (<>
             {this.statusetikett()}
             <p><Knapp onClick={this.handleBackButtonClick}>Til søknadsoversikten</Knapp></p>
-            <AlertStripeInfo>{infomelding}</AlertStripeInfo>
+            {isSoknadComplete
+                ? <AlertStripeSuksess>Søknaden er fullstending og kan sendes inn.</AlertStripeSuksess>
+                : <AlertStripeInfo>Fyll ut informasjon.</AlertStripeInfo>}
             <h2>{intlHelper(intl, 'skjema.soker.opplysninger')}</h2>
             <Select
                 name="sprak"
@@ -153,57 +158,71 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 name="barnetsnavn"
                 label={`${intlHelper(intl, 'skjema.barn.navn')}:`}
                 className="bold-label"
+                value={_.get(soknad, 'barn.navn', '')}
+                {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, navn: event.target.value}}))}
             />
             <Input
                 name="barnetsfnr"
                 label={`${intlHelper(intl, 'skjema.barn.fnr')}:`}
                 className="bold-label"
+                value={_.get(soknad, 'barn.norsk_identitetsnummer', '')}
+                {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_identitetsnummer: event.target.value}}))}
             />
             <h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
-            {!!soknad?.medlemskap?.opphold.length && (
+            {!!soknad?.medlemskap?.opphold?.length && (
                 <table className="tabell tabell--stripet">
                     <thead>
-                    <tr>
-                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
-                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
-                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
-                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
-                    </tr>
+                        <tr>
+                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
+                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
+                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
+                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {Object.keys(soknad.medlemskap.opphold).map((key) => (
-                        <tr key={key}>
-                            <td><CountrySelect
-                                name={`opphold_land_${key}`}
-                                onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
-                                onBlur={() => this.setOpphold()}
-                                selectedcountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
-                                unselectedoption={'Velg …'}
-                                label=""
-                            /></td>
-                            <td><Input
-                                name={`opphold_fom_${key}`}
-                                onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
-                                onBlur={() => this.setOpphold()}
-                                type="date"
-                                value={_.get(soknad.medlemskap!.opphold[key], 'periode.fra_og_med', '')}
-                                label=""
-                            /></td>
-                            <td><Input
-                                name={`opphold_tom_${key}`}
-                                onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
-                                onBlur={() => this.setOpphold()}
-                                type="date"
-                                value={_.get(soknad.medlemskap!.opphold[key], 'periode.til_og_med', '')}
-                                label=""
-                            /></td>
-                            <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
-                        </tr>
-                    ))}
+                        {Object.keys(soknad.medlemskap.opphold).map((key) => (
+                            <tr key={key}>
+                                <td><CountrySelect
+                                    name={`opphold_land_${key}`}
+                                    onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
+                                    onBlur={() => this.setOpphold()}
+                                    selectedcountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
+                                    unselectedoption={'Velg …'}
+                                    label=""
+                                /></td>
+                                <td><Input
+                                    name={`opphold_fom_${key}`}
+                                    onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
+                                    onBlur={() => this.setOpphold()}
+                                    type="date"
+                                    value={_.get(soknad.medlemskap!.opphold[key], 'periode.fra_og_med', '')}
+                                    label=""
+                                /></td>
+                                <td><Input
+                                    name={`opphold_tom_${key}`}
+                                    onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
+                                    onBlur={() => this.setOpphold()}
+                                    type="date"
+                                    value={_.get(soknad.medlemskap!.opphold[key], 'periode.til_og_med', '')}
+                                    label=""
+                                /></td>
+                                <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             )}
             <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
+            <Checkbox
+                label="Har bodd i utlandet i løpet av de siste 12 månedene"
+                checked={_.get(soknad, 'medlemskap.har_bodd_i_utlandet_siste_12_mnd', false)}
+                {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, har_bodd_i_utlandet_siste_12_mnd: event.target.checked}}))}
+            />
+            <Checkbox
+                label="Skal bo i utlandet i løpet av de neste 12 månedene"
+                checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
+                {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
+            />
             <h2>Beredskap</h2>
             <Checkbox
                 label="Beredskap"
@@ -232,16 +251,18 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 type="date"
                 label="Fra og med:"
                 className="bold-label"
-                value={_.get(soknad, 'periode.fra_og_med', '')}
-                {...this.changeAndBlurUpdates(event => ({periode: {...soknad.periode, fra_og_med: event.target.value}}))}
+                value={_.get(soknad, 'fra_og_med', '')}
+                {...this.changeAndBlurUpdates(event => ({fra_og_med: event.target.value}))}
+                feil={!!this.getErrorMessage('fra_og_med') ? {feilmelding: this.getErrorMessage('fra_og_med')} : undefined}
             />
             <Input
                 name="tom"
                 type="date"
                 label="Til og med:"
                 className="bold-label"
-                value={_.get(soknad, 'periode.til_og_med', '')}
-                {...this.changeAndBlurUpdates(event => ({periode: {...soknad.periode, til_og_med: event.target.value}}))}
+                value={_.get(soknad, 'til_og_med', '')}
+                {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
+                feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
             />
             <Checkbox
                 name="underskrift"
@@ -249,11 +270,23 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 className="bold-label"
             />
             <p><Knapp
-                onClick={() => this.props.submitSoknad(this.props.match.params.id)}
-                disabled={!punchFormState.mappe?.mangler || punchFormState.mappe.mangler.length}
+                onClick={() => this.props.submitSoknad(this.props.match.params.id, this.props.punchState.ident)}
+                disabled={!isSoknadComplete}
             >Send inn</Knapp></p>
         </>);
     }
+
+    private getSoknadFromStore = () => {
+        const {personlig} = this.props.punchFormState.mappe;
+        return personlig?.[Object.keys(personlig)[0]]?.innhold;
+    };
+
+    private getManglerFromStore = () => {
+        const personlig = this.props.punchFormState.mappe?.personlig;
+        return personlig?.[Object.keys(personlig)[0]]?.mangler;
+    };
+
+    private getErrorMessage = (attribute: string) => this.getManglerFromStore()?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
 
     private updateSoknadState(soknad: Partial<ISoknad>, showStatus: boolean) {
         this.setState({soknad: {...this.state.soknad, ...soknad}, showStatus});
@@ -316,7 +349,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             this.props.match.params.id,
             this.props.punchState.ident,
             this.props.journalpostid,
-            {...this.props.punchFormState.mappe.innhold, ...soknad}
+            {...this.getSoknadFromStore(), ...soknad}
         );
     };
 
@@ -354,7 +387,8 @@ const mapDispatchToProps = (dispatch: any) => ({
                                  norskIdent: string,
                                  journalpostid: string,
                                  soknad: Partial<ISoknad>)  => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
-    submitSoknad:               (mappeid: string)           => dispatch(submitSoknad(mappeid))
+    submitSoknad:               (mappeid: string,
+                                 ident: string)             => dispatch(submitSoknad(mappeid, ident))
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm)));

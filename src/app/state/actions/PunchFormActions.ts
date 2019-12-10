@@ -36,8 +36,8 @@ export const updateSoknadErrorAction        = (error: IError):          IUpdateS
 
 export function getMappe(id: string) {return (dispatch: any) => {
     dispatch(getMappeLoadingAction());
-    return get(ApiPath.MAPPE_GET, {id}, response => {
-        if (response.ok) {
+    return get(ApiPath.MAPPE_GET, {id}, undefined,response => {
+        if (response.ok || response.status === 400) {
             return response.json()
                            .then(mappe => dispatch(setMappeAction(mappe)));
         }
@@ -52,24 +52,26 @@ export function updateSoknad(mappeid: string,
                              soknad: ISoknad) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     const request = {
-        mappe_id: mappeid,
-        norsk_ident: norskIdent,
-        journalpost_id: journalpostid,
-        innhold: soknad
+        personlig: {
+            [norskIdent]: {
+                journalpost_id: journalpostid,
+                innhold: soknad
+            }
+        }
     };
     return put(ApiPath.MAPPE_UPDATE, {id: mappeid}, request, response => {
         switch (response.status) {
             case 200:
                 return response.json()
                                .then(mappe => {
-                                   dispatch(setSoknadAction(mappe.innhold));
+                                   dispatch(setMappeAction(mappe));
                                    dispatch(updateSoknadSuccessAction());
                                });
             case 400:
                 return response.json()
                                .then(mappe => {
-                                   dispatch(setSoknadAction(mappe.innhold));
-                                   dispatch(updateSoknadSuccessAction(mappe.mangler));
+                                   dispatch(setMappeAction(mappe));
+                                   dispatch(updateSoknadSuccessAction(mappe.personlig?.[norskIdent]?.mangler));
                                });
             default:
                 const {status, statusText, url} = response;
@@ -83,9 +85,9 @@ export const submitSoknadSuccessAction      = ():                       ISubmitS
 export const submitSoknadUncompleteAction   = (errors: IInputError[]):  ISubmitSoknadUncompleteAction   => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors});
 export const submitSoknadErrorAction        = (error: IError):          ISubmitSoknadErrorAction        => ({type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error});
 
-export function submitSoknad(mappeid: string) {return (dispatch: any) => {
+export function submitSoknad(mappeid: string, ident: string) {return (dispatch: any) => {
     dispatch(submitSoknadRequestAction());
-    post(ApiPath.MAPPE_SUBMIT, {id: mappeid}, undefined, response => {
+    post(ApiPath.MAPPE_SUBMIT, {id: mappeid}, {'X-Nav-NorskIdent': ident}, undefined, response => {
         switch (response.status) {
             case 202: return dispatch(submitSoknadSuccessAction());
             case 400: return response.json().then(mappe => dispatch(submitSoknadUncompleteAction(mappe.mangler)));

@@ -4,18 +4,18 @@ import Fordeling                                                    from 'app/co
 import MapperOgFagsaker                                             from 'app/containers/punch-page/MapperOgFagsaker';
 import PunchForm                                                    from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
-import {PunchStep}                                                  from 'app/models/enums';
-import {IPath, IPunchState}                                         from 'app/models/types';
-import {getJournalpost, setIdentAction, setStepAction}              from 'app/state/actions';
-import {RootStateType}                                              from 'app/state/RootState';
-import {apiUrl, changePath, getPath}                                from 'app/utils';
-import intlHelper                                                   from 'app/utils/intlUtils';
-import {AlertStripeFeil}                                            from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}                               from 'nav-frontend-chevron';
-import {Flatknapp, Knapp}                                           from 'nav-frontend-knapper';
-import {Panel}                                                      from 'nav-frontend-paneler';
-import {Input}                                                      from 'nav-frontend-skjema';
-import NavFrontendSpinner                                           from 'nav-frontend-spinner';
+import {PunchStep}                                     from 'app/models/enums';
+import {IPath, IPunchState}                            from 'app/models/types';
+import {getJournalpost, setIdentAction, setStepAction} from 'app/state/actions';
+import {RootStateType}                                 from 'app/state/RootState';
+import {apiUrl, changePath, getPath}                   from 'app/utils';
+import intlHelper                                      from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}                  from 'nav-frontend-chevron';
+import {Flatknapp, Knapp}                              from 'nav-frontend-knapper';
+import {Panel}                                         from 'nav-frontend-paneler';
+import {Input}                                         from 'nav-frontend-skjema';
+import NavFrontendSpinner                              from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
 import * as React                                                   from 'react';
 import {Col, Container, Row}                                        from 'react-bootstrap';
@@ -158,7 +158,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
                         children={<MapperOgFagsaker {...commonProps}/>}
                     />
                     <Route path={this.getPath(PunchStep.COMPLETED)}>
-                        <p>Søknaden er sendt til behandling.</p>
+                        <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>
                     </Route>
                     <Route path={this.getPath(PunchStep.IDENT)}>
                         <IdentPage

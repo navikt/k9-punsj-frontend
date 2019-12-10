@@ -1,6 +1,6 @@
-import {IFagsak, IJournalpost} from 'app/models/types';
-import {IError}                from './Error';
-import {IMappe}                from './Mappe';
+import {IFagsak} from 'app/models/types';
+import {IError}  from './Error';
+import {IMappe}  from './Mappe';
 
 export interface IMapperOgFagsakerState {
     mapper:                     IMappe[];

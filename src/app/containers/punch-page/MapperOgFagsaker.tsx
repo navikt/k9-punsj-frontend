@@ -120,12 +120,18 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         for (const mappe of mapper) {
             const {mappe_id} = mappe;
             const {chosenMappe} = props.mapperOgFagsakerState;
+            const soknad = mappe.personlig?.[Object.keys(mappe.personlig)[0]]?.innhold;
+            const rowContent = [
+                soknad?.barn?.navn,
+                soknad?.barn?.norsk_identitetsnummer,
+                soknad?.fra_og_med,
+                soknad?.til_og_med
+            ];
             rows.push(
                 <tr key={mappe_id} onClick={() => props.openMappeAction(mappe)}>
-                    <td>{mappe_id}</td>
-                    <td>Test</td>
-                    <td>Test</td>
-                    <td>Test</td>
+                    {rowContent.filter(v => !!v).length
+                        ? rowContent.map((v, i) => <td key={`${mappe_id}_${i}`}>{v}</td>)
+                        : <td colSpan={4} className="punch_mappetabell_tom_soknad">Tom søknad</td>}
                 </tr>
             );
             modaler.push(
@@ -136,31 +142,31 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
                     isOpen={!!chosenMappe && mappe_id === chosenMappe.mappe_id}
                 >
                     <div className="modal_content">
-                        {!!chosenMappe && !!chosenMappe.innhold && <SoknadReadMode soknad={chosenMappe.innhold}/>}
+                        {!!chosenMappe?.personlig?.[ident!]?.innhold && <SoknadReadMode soknad={chosenMappe.personlig[ident!].innhold}/>}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>Velg denne</Knapp>
                             <Knapp className="knapp2" onClick={props.closeMappeAction}>Lukk</Knapp>
                         </div>
                     </div>
                 </ModalWrapper>
-            )
+            );
         }
 
-        return (<>
+        return <>
             <h2>Ufullstendige søknader</h2>
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
                     <tr>
-                        <th>Mappe-ID</th>
-                        <th>Ident</th>
-                        <th>Navn</th>
-                        <th>Periode</th>
+                        <th>Barnets navn</th>
+                        <th>Fødselsnr.</th>
+                        <th>Fra og med</th>
+                        <th>Til og med</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>
             </table>
             {modaler}
-        </>);
+        </>;
     }
 
     function showFagsaker() {
@@ -194,10 +200,10 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
                         </div>
                     </div>
                 </ModalWrapper>
-            )
+            );
         }
 
-        return (<>
+        return <>
             <h2>Fagsaker</h2>
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
@@ -213,7 +219,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
                 </tbody>
             </table>
             {modaler}
-        </>);
+        </>;
     }
 
     function undoSearchForMapperAndFagsaker() {
@@ -224,30 +230,30 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
     const newSoknadButton = <p><Knapp onClick={newMappe}>Opprett ny søknad</Knapp></p>;
 
     if (mapper.length && !fagsaker.length) {
-        return (<>
+        return <>
             {backButton}
             <AlertStripeInfo>Det finnes ufullstendige søknader knyttet til identitetsnummeret. Velg søknaden som hører til dokumentet eller opprett en ny.</AlertStripeInfo>
             {showMapper()}
             {newSoknadButton}
-        </>);
+        </>;
     }
 
     if (fagsaker.length && !mapper.length) {
-        return (<>
+        return <>
             {backButton}
             <AlertStripeInfo>Det finnes fagsaker knyttet til identitetsnummeret. Velg saken som hører til dokumentet eller opprett en ny søknad.</AlertStripeInfo>
             {newSoknadButton}
             {showFagsaker()}
-        </>);
+        </>;
     }
 
-    return (<>
+    return <>
         {backButton}
         <AlertStripeInfo>Det finnes ufullstendige søknader og fagsaker knyttet til identitetsnummeret. Velg søknaden eller fagsaken som hører til dokumentet eller opprett en ny søknad.</AlertStripeInfo>
         {showMapper()}
         {newSoknadButton}
         {showFagsaker()}
-    </>);
+    </>;
 };
 
 const mapStateToProps = (state: RootStateType) => ({
