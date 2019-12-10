@@ -81,7 +81,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
-    "css-loader": "^3.2.1",
+    "css-loader": "^3.3.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-harddisk-plugin": "^1.0.1",
     "intl": "^1.2.5",
