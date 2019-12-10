@@ -1,6 +1,4 @@
-import {TimeFormat}                    from 'app/models/enums';
 import {ISoknad}                       from 'app/models/types';
-import {datetime}                      from 'app/utils';
 import * as React                      from 'react';
 import {Col, Container, Row}           from 'react-bootstrap';
 import {InjectedIntlProps, injectIntl} from 'react-intl';
@@ -15,7 +13,7 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
         const {intl, soknad} = this.props;
         return (
             <Container className="read-modal soknad-read-mode">
-                <Row>
+                {/*<Row>
                     <Col>Fødselsnummer:</Col>
                     <Col>{!!soknad.soker && soknad.soker.norsk_identitetsnummer}</Col>
                 </Row>
@@ -39,10 +37,14 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
                 <Row>
                     <Col>Relasjon til barnet:</Col>
                     <Col>{soknad.relasjon_til_barnet}</Col>
+                </Row>*/}
+                <Row>
+                    <Col>Barnets norske identifikasjonsnummer:</Col>
+                    <Col>{soknad.barn?.norsk_ident}</Col>
                 </Row>
                 <Row>
-                    <Col>Barn:</Col>
-                    <Col/>
+                    <Col>Barnets fødselsdato:</Col>
+                    <Col>{soknad.barn?.foedselsdato}</Col>
                 </Row>
             </Container>
         );

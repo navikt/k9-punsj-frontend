@@ -24,7 +24,7 @@ const FagsakReadMode: React.FunctionComponent<IFagsakReadModeProps> = (props: IF
         </Row>
         <Row>
             <Col>Barnets fødselsdato:</Col>
-            <Col>{barn?.fødselsdato && datetime(intl, TimeFormat.DATE_SHORT, barn.fødselsdato)}</Col>
+            <Col>{barn?.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, barn.foedselsdato)}</Col>
         </Row>
         <Row>
             <Col>Periode:</Col>

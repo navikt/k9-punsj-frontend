@@ -1,7 +1,6 @@
-import {CountrySelect}                                 from 'app/components/country-select/CountrySelect';
-import {PunchStep}                                     from 'app/models/enums';
-import {IPunchFormState, IPunchState, ISoknad}         from 'app/models/types';
-import {IInputError}                                   from 'app/models/types/InputError';
+import {PunchStep}                                       from 'app/models/enums';
+import {IPunchFormState, IPunchState, ISoknad}           from 'app/models/types';
+import {IInputError}                                     from 'app/models/types/InputError';
 import {
     getMappe,
     resetMappeAction,
@@ -10,21 +9,21 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                      from 'app/state/actions';
-import {RootStateType}                                 from 'app/state/RootState';
-import {changePath}                                    from 'app/utils';
-import intlHelper                                      from 'app/utils/intlUtils';
-import _                                               from 'lodash';
-import {AlertStripeInfo, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
-import {Knapp}                                         from 'nav-frontend-knapper';
-import Lukknapp                                        from 'nav-frontend-lukknapp';
-import {Checkbox, Input, Select, Textarea}             from 'nav-frontend-skjema';
-import NavFrontendSpinner                              from 'nav-frontend-spinner';
-import * as React                                      from 'react';
-import {InjectedIntlProps, injectIntl}                 from 'react-intl';
-import {connect}                                       from 'react-redux';
-import {RouteComponentProps, withRouter}               from 'react-router-dom';
+}                                                        from 'app/state/actions';
+import {RootStateType}                                   from 'app/state/RootState';
+import {changePath}                                      from 'app/utils';
+import intlHelper                                        from 'app/utils/intlUtils';
+import _                                                 from 'lodash';
+import {AlertStripeInfo, AlertStripeSuksess}             from 'nav-frontend-alertstriper';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}   from 'nav-frontend-etiketter';
+import {Knapp}                                           from 'nav-frontend-knapper';
+import {Panel}                                           from 'nav-frontend-paneler';
+import {Checkbox, Input, Select, SkjemaGruppe, Textarea} from 'nav-frontend-skjema';
+import NavFrontendSpinner                                from 'nav-frontend-spinner';
+import * as React                                        from 'react';
+import {InjectedIntlProps, injectIntl}                   from 'react-intl';
+import {connect}                                         from 'react-redux';
+import {RouteComponentProps, withRouter}                 from 'react-router-dom';
 
 interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -48,42 +47,40 @@ interface IPunchFormDispatchProps {
 }
 
 interface IPunchFormPageState {
-    soknad:     ISoknad;
-    isFetched:  boolean;
-    showStatus: boolean;
+    soknad:             ISoknad;
+    isFetched:          boolean;
+    showStatus:         boolean;
+    periodeInFocus?:    number;
 }
 
-type IPunchFormProps = IPunchFormComponentProps
-                       & RouteComponentProps
-                       & InjectedIntlProps
-                       & IPunchFormStateProps
-                       & IPunchFormDispatchProps;
+type IPunchFormProps = IPunchFormComponentProps &
+                       RouteComponentProps &
+                       InjectedIntlProps &
+                       IPunchFormStateProps &
+                       IPunchFormDispatchProps;
 
 class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
     state: IPunchFormPageState = {
         soknad: {
-            soker: {
-                norsk_identitetsnummer: '',
-                spraak_valg: 'nb'
+            perioder: [{
+                fra_og_med: '',
+                til_og_med: '',
+                beredskap: {
+                    svar: false,
+                    tilleggsinformasjon: ''
+                },
+                nattevaak: {
+                    svar: false,
+                    tilleggsinformasjon: ''
+                }
+            }],
+            spraak: 'nb',
+            barn: {
+                norsk_ident: '',
+                foedselsdato: ''
             },
-            fra_og_med: undefined,
-            til_og_med: undefined,
-            relasjon_til_barnet: '',
-            barn: {},
-            medlemskap: {
-                opphold: [],
-                har_bodd_i_utlandet_siste_12_mnd: false,
-                skal_bo_i_utlandet_neste_12_mnd: false
-            },
-            beredskap: {
-                svar: false,
-                tilleggsinformasjon: ''
-            },
-            nattevaak: {
-                svar: false,
-                tilleggsinformasjon: ''
-            }
+            signert: false
         },
         isFetched: false,
         showStatus: false
@@ -93,13 +90,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         const {id} = this.props.match.params;
         this.props.getMappe(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
+        this.setState(this.state);
     }
 
     componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormPageState>, snapshot?: any): void {
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
-            this.setState({soknad: this.getSoknadFromStore(), isFetched: true});
-            this.props.setIdentAction(this.getSoknadFromStore()?.soker?.norsk_identitetsnummer || '');
+            this.setState({soknad: {...this.state.soknad, ...this.getSoknadFromStore()}, isFetched: true});
+            this.props.setIdentAction(Object.keys(mappe.personlig)[0] || '');
         }
     }
 
@@ -124,51 +122,121 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
         return (<>
             {this.statusetikett()}
-            <p><Knapp onClick={this.handleBackButtonClick}>Til søknadsoversikten</Knapp></p>
+            <p><Knapp onClick={this.handleBackButtonClick}>{intlHelper(intl, 'skjema.knapp.tilbake')}</Knapp></p>
             {isSoknadComplete
                 ? <AlertStripeSuksess>Søknaden er fullstending og kan sendes inn.</AlertStripeSuksess>
                 : <AlertStripeInfo>Fyll ut informasjon.</AlertStripeInfo>}
-            <h2>{intlHelper(intl, 'skjema.soker.opplysninger')}</h2>
+            <h2>Opplysninger om barn og søker</h2>
             <Select
                 name="sprak"
-                label={`${intlHelper(intl, 'skjema.soker.sprak')}:`}
+                label={intlHelper(intl, 'skjema.spraak')}
                 className="bold-label"
-                value={soknad.soker?.spraak_valg || 'nb'}
-                {...this.onChangeOnlyUpdate(event => ({soker: {spraak_valg: event.target.value}}))}
+                value={soknad.spraak || 'nb'}
+                {...this.onChangeOnlyUpdate(event => ({spraak: event.target.value}))}
+                feil={this.getErrorMessage('spraak')}
             >
                 <option value='nb'>Bokmål</option>
                 <option value='nn'>Nynorsk</option>
             </Select>
-            <Input
-                name="medsoker"
-                label={`${intlHelper(intl, 'skjema.soker.medsoker.fnr')}:`}
-                className="bold-label"
-                value={_.get(soknad, 'medsoker.norsk_identitetsnummer', '')}
-                {...this.changeAndBlurUpdates(event => ({medsoker: {norsk_identitetsnummer: event.target.value}}))}
-            />
-            <Input
-                name="relasjon"
-                label={`${intlHelper(intl, 'skjema.soker.relasjon')}:`}
-                className="bold-label"
-                value={_.get(soknad, 'relasjon_til_barnet', '')}
-                {...this.changeAndBlurUpdates(event => ({relasjon_til_barnet: event.target.value}))}
-            />
-            <h2>{intlHelper(intl, 'skjema.barn.opplysninger')}</h2>
-            <Input
-                name="barnetsnavn"
-                label={`${intlHelper(intl, 'skjema.barn.navn')}:`}
-                className="bold-label"
-                value={_.get(soknad, 'barn.navn', '')}
-                {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, navn: event.target.value}}))}
-            />
-            <Input
-                name="barnetsfnr"
-                label={`${intlHelper(intl, 'skjema.barn.fnr')}:`}
-                className="bold-label"
-                value={_.get(soknad, 'barn.norsk_identitetsnummer', '')}
-                {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_identitetsnummer: event.target.value}}))}
-            />
-            <h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
+            <SkjemaGruppe feil={this.getErrorMessage('barn')}>
+                <Input
+                    label={intlHelper(intl, 'skjema.barn.ident')}
+                    className="bold-label"
+                    value={_.get(soknad, 'barn.norsk_ident', '')}
+                    {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_ident: event.target.value}}))}
+                    feil={this.getErrorMessage('barn.norsk_ident')}
+                />
+                <Input
+                    type="date"
+                    label={intlHelper(intl, 'skjema.barn.foedselsdato')}
+                    className="bold-label"
+                    value={_.get(soknad, 'barn.foedselsdato', '')}
+                    {...this.changeAndBlurUpdates(event => ({
+                        barn: {
+                            ...soknad.barn,
+                            foedselsdato: event.target.value
+                        }
+                    }))}
+                    feil={this.getErrorMessage('barn.foedselsdato')}
+                />
+            </SkjemaGruppe>
+            <h2>{intlHelper(intl, 'skjema.perioder.overskrift')}</h2>
+            <SkjemaGruppe feil={this.getErrorMessage('perioder')}>
+                {soknad?.perioder?.map((periode, i) => (
+                    <Panel
+                        key={`periode_${i}`}
+                        className={`periodepanel${this.state.periodeInFocus === i ? ' focus' : ''}`}
+                        border={true}
+                    >
+                        <Input
+                            type="date"
+                            label={intlHelper(intl, 'skjema.perioder.fom')}
+                            className="bold-label"
+                            value={_.get(periode, 'fra_og_med', '')}
+                            onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
+                            onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                            feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
+                            onFocus={() => this.setPeriodeFocus(i)}
+                        />
+                        <Input
+                            type="date"
+                            label={intlHelper(intl, 'skjema.perioder.tom')}
+                            className="bold-label"
+                            value={_.get(periode, 'til_og_med', '')}
+                            onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
+                            onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                            feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
+                            onFocus={() => this.setPeriodeFocus(i)}
+                        />
+                        <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].beredskap`)}>
+                            <Checkbox
+                                label={intlHelper(intl, 'skjema.perioder.beredskap.svar')}
+                                checked={_.get(periode, 'beredskap.svar', false)}
+                                onChange={event => {this.handlePeriodeChange(i, 'beredskap.svar', event.target.checked); this.setPerioder()}}
+                                className="bold-label"
+                                feil={this.getErrorMessage(`perioder[${i}].beredskap.svar`)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                                onBlur={this.unsetPeriodeFocus}
+                            />
+                            <Textarea
+                                label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
+                                value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
+                                onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
+                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                            />
+                        </SkjemaGruppe>
+                        <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
+                            <Checkbox
+                                label={intlHelper(intl, 'skjema.perioder.nattevaak.svar')}
+                                checked={_.get(periode, 'nattevaak.svar', false)}
+                                onChange={event => {this.handlePeriodeChange(i, 'nattevaak.svar', event.target.checked); this.setPerioder()}}
+                                className="bold-label"
+                                feil={this.getErrorMessage(`perioder[${i}].nattevaak.svar`)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                                onBlur={this.unsetPeriodeFocus}
+                            />
+                            <Textarea
+                                label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
+                                value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
+                                onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
+                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                            />
+                        </SkjemaGruppe>
+                        <Knapp
+                            disabled={soknad.perioder!.length === 1}
+                            onClick={() => this.removePeriode(i)}
+                            onFocus={() => this.setPeriodeFocus(i)}
+                            onBlur={this.unsetPeriodeFocus}
+                        >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
+                    </Panel>
+                ))}
+            </SkjemaGruppe>
+            <Knapp onClick={this.addPeriode}>{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
+            {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
             {!!soknad?.medlemskap?.opphold?.length && (
                 <table className="tabell tabell--stripet">
                     <thead>
@@ -263,21 +331,24 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 value={_.get(soknad, 'til_og_med', '')}
                 {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
                 feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
-            />
+            />*/}
+            <h2>{intlHelper(intl, 'skjema.signatur.overskrift')}</h2>
             <Checkbox
-                name="underskrift"
-                label="Søknaden er underskrevet"
+                label={intlHelper(intl, 'skjema.signatur.bekreftelse')}
                 className="bold-label"
+                checked={_.get(soknad, 'signert', false)}
+                {...this.onChangeOnlyUpdate(event => ({signert: event.target.checked}))}
+                feil={this.getErrorMessage('signert')}
             />
             <p><Knapp
                 onClick={() => this.props.submitSoknad(this.props.match.params.id, this.props.punchState.ident)}
                 disabled={!isSoknadComplete}
-            >Send inn</Knapp></p>
+            >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
         </>);
     }
 
     private getSoknadFromStore = () => {
-        const {personlig} = this.props.punchFormState.mappe;
+        const personlig = this.props.punchFormState.mappe?.personlig;
         return personlig?.[Object.keys(personlig)[0]]?.innhold;
     };
 
@@ -286,7 +357,10 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         return personlig?.[Object.keys(personlig)[0]]?.mangler;
     };
 
-    private getErrorMessage = (attribute: string) => this.getManglerFromStore()?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
+    private getErrorMessage = (attribute: string) => {
+        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
+        return !!errorMsg ? {feilmelding: intlHelper(this.props.intl, `skjema.feil.${errorMsg}`)} : undefined;
+    };
 
     private updateSoknadState(soknad: Partial<ISoknad>, showStatus: boolean) {
         this.setState({soknad: {...this.state.soknad, ...soknad}, showStatus});
@@ -300,16 +374,37 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     };
 
     private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({
-        onChange:   (event: any) => this.updateSoknadState(change(event), false),
-        onBlur:     (event: any) => this.updateSoknad(change(event))
+        onChange: (event: any) => this.updateSoknadState(change(event), false),
+        onBlur: (event: any) => this.updateSoknad(change(event))
     });
 
-    private onChangeOnlyUpdate = (change: (event: any) => Partial<ISoknad>) => ({onChange: (event: any) => {
-        this.updateSoknadState(change(event), true);
-        this.updateSoknad(change(event));
-    }});
+    private onChangeOnlyUpdate = (change: (event: any) => Partial<ISoknad>) => ({
+        onChange: (event: any) => {
+            this.updateSoknadState(change(event), true);
+            this.updateSoknad(change(event));
+        }
+    });
 
-    private handleOppholdLandChange = (index: number, land: string) => {
+    private handlePeriodeChange = (index: number, path: string, value: string | boolean) => {
+        _.set(this.state.soknad.perioder![index], path, value);
+        this.forceUpdate();
+    };
+
+    private addPeriode = () => {
+        this.state.soknad.perioder!.push({});
+        this.forceUpdate();
+        this.setPerioder();
+    };
+
+    private removePeriode = (index: number) => {
+        this.state.soknad.perioder!.splice(index, 1);
+        this.forceUpdate();
+        this.setPerioder();
+    };
+
+    private setPerioder = () => this.updateSoknad({perioder: this.state.soknad.perioder});
+
+    /*private handleOppholdLandChange = (index: number, land: string) => {
         this.state.soknad.medlemskap!.opphold[index].land = land;
         this.forceUpdate();
     };
@@ -341,7 +436,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         this.setOpphold();
     };
 
-    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});
+    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});*/
 
     private updateSoknad = (soknad: Partial<ISoknad>) => {
         this.setState({showStatus: true});
@@ -370,6 +465,9 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         }
         return <EtikettSuksess {...{className}}>Lagret</EtikettSuksess>;
     }
+
+    private setPeriodeFocus = (index: number) => this.setState({periodeInFocus: index});
+    private unsetPeriodeFocus = () => this.setState({periodeInFocus: undefined});
 }
 
 const mapStateToProps = (state: RootStateType) => ({

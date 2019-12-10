@@ -122,10 +122,10 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = mappe.personlig?.[Object.keys(mappe.personlig)[0]]?.innhold;
             const rowContent = [
-                soknad?.barn?.navn,
-                soknad?.barn?.norsk_identitetsnummer,
-                soknad?.fra_og_med,
-                soknad?.til_og_med
+                soknad?.barn?.norsk_ident,
+                soknad?.barn?.foedselsdato,
+                soknad?.perioder?.[0]?.fra_og_med,
+                soknad?.perioder?.[0]?.til_og_med
             ];
             rows.push(
                 <tr key={mappe_id} onClick={() => props.openMappeAction(mappe)}>
@@ -157,8 +157,8 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
                     <tr>
-                        <th>Barnets navn</th>
-                        <th>Fødselsnr.</th>
+                        <th>Barnets fødselsnr.</th>
+                        <th>Barnets fødselsdato</th>
                         <th>Fra og med</th>
                         <th>Til og med</th>
                     </tr>
@@ -180,7 +180,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             rows.push(
                 <tr key={fagsak_id} onClick={() => props.openFagsakAction(fagsak)}>
                     <td>{barn?.navn}</td>
-                    <td>{barn?.fødselsdato && datetime(intl, TimeFormat.DATE_SHORT, barn.fødselsdato)}</td>
+                    <td>{barn?.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, barn.foedselsdato)}</td>
                     <td>{fra_og_med && datetime(intl, TimeFormat.DATE_SHORT, fra_og_med)}</td>
                     <td>{til_og_med && datetime(intl, TimeFormat.DATE_SHORT, til_og_med)}</td>
                 </tr>
