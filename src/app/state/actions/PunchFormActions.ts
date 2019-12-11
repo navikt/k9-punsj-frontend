@@ -49,7 +49,7 @@ export function getMappe(id: string) {return (dispatch: any) => {
 export function updateSoknad(mappeid: string,
                              norskIdent: string,
                              journalpostid: string,
-                             soknad: ISoknad) {return (dispatch: any) => {
+                             soknad: Partial<ISoknad>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     const request = {
         personlig: {

@@ -8,20 +8,20 @@ import {PunchStep}                                     from 'app/models/enums';
 import {IPath, IPunchState}                            from 'app/models/types';
 import {getJournalpost, setIdentAction, setStepAction} from 'app/state/actions';
 import {RootStateType}                                 from 'app/state/RootState';
-import {apiUrl, changePath, getPath}                   from 'app/utils';
-import intlHelper                                      from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}                  from 'nav-frontend-chevron';
-import {Flatknapp, Knapp}                              from 'nav-frontend-knapper';
-import {Panel}                                         from 'nav-frontend-paneler';
-import {Input}                                         from 'nav-frontend-skjema';
-import NavFrontendSpinner                              from 'nav-frontend-spinner';
+import {apiUrl, changePath, getPath}         from 'app/utils';
+import intlHelper                            from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}        from 'nav-frontend-chevron';
+import {Flatknapp, Knapp}                    from 'nav-frontend-knapper';
+import {Panel}                               from 'nav-frontend-paneler';
+import {Checkbox, Input}                     from 'nav-frontend-skjema';
+import NavFrontendSpinner                    from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import * as React                                                   from 'react';
-import {Col, Container, Row}                                        from 'react-bootstrap';
-import {InjectedIntlProps, injectIntl}                              from 'react-intl';
+import * as React                            from 'react';
+import {Col, Container, Row}                 from 'react-bootstrap';
+import {InjectedIntlProps, injectIntl}       from 'react-intl';
 // import {Document, Page as PdfPage} from 'react-pdf';
-import {connect}                                                    from 'react-redux';
+import {connect}                             from 'react-redux';
 import {HashRouter, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
 
 interface IPunchPageStateProps {
@@ -113,11 +113,12 @@ class PunchPage extends React.Component<IPunchPageProps> {
             <Panel className="punch_form" border={true}>
                 <div>
                     {punchState.step > PunchStep.FORDELING && <Input
-                        label={`${intlHelper(intl, 'skjema.fodselsnr')}:`}
+                        label={intlHelper(intl, 'skjema.ident')}
                         onChange={this.handleIdentBlur}
                         onKeyPress={this.handleIdentKeyPress}
                         value={punchState.ident}
                         disabled={punchState.step > PunchStep.IDENT}
+                        className="bold-label"
                     />}
                 </div>
                 {this.underFnr()}

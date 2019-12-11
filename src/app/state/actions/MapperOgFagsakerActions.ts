@@ -95,7 +95,26 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
         personlig: {
             [ident]: {
                 journalpost_id: journalpostid,
-                innhold: {soker: {norsk_identitetsnummer: ident}}
+                innhold: {
+                    perioder: [{
+                        fra_og_med: undefined,
+                        til_og_med: undefined,
+                        beredskap: {
+                            svar: false,
+                            tilleggsinformasjon: ''
+                        },
+                        nattevaak: {
+                            svar: false,
+                            tilleggsinformasjon: ''
+                        }
+                    }],
+                    spraak: 'nb',
+                    barn: {
+                        norsk_ident: '',
+                        foedselsdato: ''
+                    },
+                    signert: false
+                }
             }
         }
     };
