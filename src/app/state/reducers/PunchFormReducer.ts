@@ -14,6 +14,9 @@ export function PunchFormReducer(
 
     switch (action.type) {
 
+        case PunchFormActionKeys.RESET:
+            return initialState;
+
         case PunchFormActionKeys.MAPPE_LOAD:
             return {
                 ...punchFormState,
@@ -39,15 +42,6 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isMappeLoading: false,
                 mappe: undefined
-            };
-
-        case PunchFormActionKeys.SOKNAD_SET:
-            return {
-                ...punchFormState,
-                mappe: {
-                    ...punchFormState.mappe,
-                    innhold: action.soknad
-                }
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_REQUEST:

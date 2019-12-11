@@ -4,12 +4,13 @@ import {IError, IMappe, ISoknad} from 'app/models/types';
 import {IInputError}             from 'app/models/types/InputError';
 import {get, post, put}          from 'app/utils';
 
+interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
+
 interface IGetMappeLoadingAction        {type: PunchFormActionKeys.MAPPE_LOAD}
 interface IGetMappeErrorAction          {type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error: IError}
 interface ISetMappeAction               {type: PunchFormActionKeys.MAPPE_SET, mappe: Partial<IMappe>}
 interface IResetMappeAction             {type: PunchFormActionKeys.MAPPE_RESET}
 
-interface ISetSoknadAction              {type: PunchFormActionKeys.SOKNAD_SET, soknad: ISoknad}
 interface IUpdateSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST}
 interface IUpdateSoknadSuccessAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors?: IInputError[]}
 interface IUpdateSoknadErrorAction      {type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error: IError}
@@ -20,16 +21,17 @@ interface ISubmitSoknadUncompleteAction {type: PunchFormActionKeys.SOKNAD_SUBMIT
 interface ISubmitSoknadErrorAction      {type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error: IError}
 
 type IMappeActionTypes = IGetMappeLoadingAction | IGetMappeErrorAction | ISetMappeAction | IResetMappeAction;
-type ISoknadUpdateActionTypes = ISetSoknadAction | IUpdateSoknadRequestAction | IUpdateSoknadSuccessAction | IUpdateSoknadErrorAction;
+type ISoknadUpdateActionTypes = IUpdateSoknadRequestAction | IUpdateSoknadSuccessAction | IUpdateSoknadErrorAction;
 type ISoknadSubmitActionTypes = ISubmitSoknadRequestAction | ISubmitSoknadSuccessAction | ISubmitSoknadUncompleteAction | ISubmitSoknadErrorAction;
-export type IPunchFormActionTypes = IMappeActionTypes | ISoknadUpdateActionTypes | ISoknadSubmitActionTypes;
+export type IPunchFormActionTypes = IResetPunchFormAction | IMappeActionTypes | ISoknadUpdateActionTypes | ISoknadSubmitActionTypes;
+
+export const resetPunchFormAction           = ():                       IResetPunchFormAction           => ({type: PunchFormActionKeys.RESET});
 
 export const getMappeLoadingAction          = ():                       IGetMappeLoadingAction          => ({type: PunchFormActionKeys.MAPPE_LOAD});
 export const getMappeErrorAction            = (error: IError):          IGetMappeErrorAction            => ({type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error});
 export const setMappeAction                 = (mappe: Partial<IMappe>): ISetMappeAction                 => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
 export const resetMappeAction               = ():                       IResetMappeAction               => ({type: PunchFormActionKeys.MAPPE_RESET});
 
-export const setSoknadAction                = (soknad: ISoknad):        ISetSoknadAction                => ({type: PunchFormActionKeys.SOKNAD_SET, soknad});
 export const updateSoknadRequestAction      = ():                       IUpdateSoknadRequestAction      => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
 export const updateSoknadSuccessAction      = (errors?: IInputError[]): IUpdateSoknadSuccessAction      => ({type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors});
 export const updateSoknadErrorAction        = (error: IError):          IUpdateSoknadErrorAction        => ({type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error});

@@ -3,23 +3,23 @@ import {IPunchFormState, IPunchState, ISoknad}           from 'app/models/types'
 import {IInputError}                                     from 'app/models/types/InputError';
 import {
     getMappe,
-    resetMappeAction,
+    resetMappeAction, resetPunchFormAction,
     setIdentAction,
     setStepAction,
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                        from 'app/state/actions';
-import {RootStateType}                                   from 'app/state/RootState';
-import {changePath}                                      from 'app/utils';
-import intlHelper                                        from 'app/utils/intlUtils';
-import _                                                 from 'lodash';
-import {AlertStripeInfo, AlertStripeSuksess}             from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}   from 'nav-frontend-etiketter';
-import {Knapp}                                           from 'nav-frontend-knapper';
-import {Panel}                                           from 'nav-frontend-paneler';
-import {Checkbox, Input, Select, SkjemaGruppe, Textarea} from 'nav-frontend-skjema';
-import NavFrontendSpinner                                from 'nav-frontend-spinner';
+} from 'app/state/actions';
+import {RootStateType}                                        from 'app/state/RootState';
+import {changePath}                                           from 'app/utils';
+import intlHelper                                             from 'app/utils/intlUtils';
+import _                                                      from 'lodash';
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
+import {Knapp}                                                from 'nav-frontend-knapper';
+import {Panel}                                                from 'nav-frontend-paneler';
+import {Checkbox, Input, Select, SkjemaGruppe, Textarea}      from 'nav-frontend-skjema';
+import NavFrontendSpinner                                     from 'nav-frontend-spinner';
 import * as React                                        from 'react';
 import {InjectedIntlProps, injectIntl}                   from 'react-intl';
 import {connect}                                         from 'react-redux';
@@ -44,6 +44,7 @@ interface IPunchFormDispatchProps {
     undoChoiceOfMappeAction:    typeof undoChoiceOfMappeAction;
     updateSoknad:               typeof updateSoknad;
     submitSoknad:               typeof submitSoknad;
+    resetPunchFormAction:       typeof resetPunchFormAction;
 }
 
 interface IPunchFormPageState {
@@ -116,16 +117,25 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             return <NavFrontendSpinner/>;
         }
 
+        if (!!punchFormState.error) {
+            return <>
+                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', {id: this.props.match.params.id})}</AlertStripeFeil>
+                <p><Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp></p>
+            </>;
+        }
+
         if (!soknad) {
             return null;
         }
 
         return (<>
             {this.statusetikett()}
-            <p><Knapp onClick={this.handleBackButtonClick}>{intlHelper(intl, 'skjema.knapp.tilbake')}</Knapp></p>
-            {isSoknadComplete
-                ? <AlertStripeSuksess>Søknaden er fullstending og kan sendes inn.</AlertStripeSuksess>
-                : <AlertStripeInfo>Fyll ut informasjon.</AlertStripeInfo>}
+            {this.backButton()}
+            {!!punchFormState.updateMappeError && <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>}
+            {!!punchFormState.submitMappeError && <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>}
+            {!punchFormState.updateMappeError && !punchFormState.submitMappeError && (isSoknadComplete
+                ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
+                : <AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>)}
             <h2>Opplysninger om barn og søker</h2>
             <Select
                 name="sprak"
@@ -347,6 +357,12 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         </>);
     }
 
+    private backButton() {
+        return <p><Knapp onClick={this.handleBackButtonClick}>
+            {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
+        </Knapp></p>;
+    }
+
     private getSoknadFromStore = () => {
         const personlig = this.props.punchFormState.mappe?.personlig;
         return personlig?.[Object.keys(personlig)[0]]?.innhold;
@@ -374,6 +390,11 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
         changePath(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
+    };
+
+    private handleStartButtonClick = () => {
+        this.props.resetPunchFormAction();
+        changePath(this.props.getPunchPath(PunchStep.FORDELING));
     };
 
     private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({
@@ -489,7 +510,8 @@ const mapDispatchToProps = (dispatch: any) => ({
                                  journalpostid: string,
                                  soknad: Partial<ISoknad>)  => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
     submitSoknad:               (mappeid: string,
-                                 ident: string)             => dispatch(submitSoknad(mappeid, ident))
+                                 ident: string)             => dispatch(submitSoknad(mappeid, ident)),
+    resetPunchFormAction:       ()                          => dispatch(resetPunchFormAction())
 });
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm)));
