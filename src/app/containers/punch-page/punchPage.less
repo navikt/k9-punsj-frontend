@@ -63,9 +63,12 @@
     }
 
     .punch_form {
+
       margin-left: 0.5rem;
       flex-basis:  100%;
       overflow-y:  auto;
+
+      > .knapperad .knapp1 {margin-right: 1rem}
 
       .statusetikett {
         position: absolute;
@@ -76,13 +79,12 @@
 
       .periodepanel {
 
-        background-color: tint(@navLysGra, 67%);
+        background-color: tint(@navLysGra, 75%);
         margin-bottom:    1rem;
 
-        &.focus, &:hover {
-          box-shadow:       0 2px 4px 0 @navGra20;
-          background-color: tint(@navLysGra, 75%);
-        }
+        &.focus, &:hover {border-color: @navBla}
+
+        &.focus {box-shadow: 0 2px 4px 0 @navGra20}
 
         .knapp {
           width: 100%;
