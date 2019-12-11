@@ -359,7 +359,10 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
     private getErrorMessage = (attribute: string) => {
         const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
-        return !!errorMsg ? {feilmelding: intlHelper(this.props.intl, `skjema.feil.${errorMsg}`)} : undefined;
+        return !!errorMsg ? {feilmelding: intlHelper(
+            this.props.intl,
+            `skjema.feil.${attribute}.${errorMsg}`.replace(/\[\d+]/, '[]')
+        )} : undefined;
     };
 
     private updateSoknadState(soknad: Partial<ISoknad>, showStatus: boolean) {
