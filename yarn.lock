@@ -195,17 +195,10 @@
   dependencies:
     tslib "^1.9.3"
 
-"@snyk/cli-interface@2.3.0":
+"@snyk/cli-interface@2.3.0", "@snyk/cli-interface@^2.0.3":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@snyk/cli-interface/-/cli-interface-2.3.0.tgz#9d38f815a5cf2be266006954c2a058463d531e08"
   integrity sha512-ecbylK5Ol2ySb/WbfPj0s0GuLQR+KWKFzUgVaoNHaSoN6371qRWwf2uVr+hPUP4gXqCai21Ug/RDArfOhlPwrQ==
-  dependencies:
-    tslib "^1.9.3"
-
-"@snyk/cli-interface@^2.0.3":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@snyk/cli-interface/-/cli-interface-2.1.0.tgz#2e7ecd9457c91b78ce3e5b91451e823f218a25af"
-  integrity sha512-b/magC8iNQP9QhSDeV9RQDSaY3sNy57k0UH1Y/sMOSvVLHLsA7dOi/HrPWTiLouyGqcuYzwjkz7bNbu8cwmVDQ==
   dependencies:
     tslib "^1.9.3"
 
@@ -229,22 +222,10 @@
   dependencies:
     lodash "^4.17.13"
 
-"@snyk/dep-graph@1.13.1", "@snyk/dep-graph@^1.13.1":
+"@snyk/dep-graph@1.13.1", "@snyk/dep-graph@^1.11.0", "@snyk/dep-graph@^1.13.1":
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/@snyk/dep-graph/-/dep-graph-1.13.1.tgz#45721f7e21136b62d1cdd99b3319e717d9071dfb"
   integrity sha512-Ww2xvm5UQgrq9eV0SdTBCh+w/4oI2rCx5vn1IOSeypaR0CO4p+do1vm3IDZ2ugg4jLSfHP8+LiD6ORESZMkQ2w==
-  dependencies:
-    graphlib "^2.1.5"
-    lodash "^4.7.14"
-    object-hash "^1.3.1"
-    semver "^6.0.0"
-    source-map-support "^0.5.11"
-    tslib "^1.9.3"
-
-"@snyk/dep-graph@^1.11.0":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@snyk/dep-graph/-/dep-graph-1.13.0.tgz#855f628da0b833dd16c02c2f977507bbf090b894"
-  integrity sha512-e0XcLH6Kgs/lunf6iDjbxEnm9+JYFEJn6eo/PlEUW+SMWBZ2uEXHBTDNp9oxjJou48PngzWMveEkniBAN+ulOQ==
   dependencies:
     graphlib "^2.1.5"
     lodash "^4.7.14"
@@ -2376,15 +2357,15 @@ dotenv@^8.1.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
-dotnet-deps-parser@4.5.2:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/dotnet-deps-parser/-/dotnet-deps-parser-4.5.2.tgz#f3223fa2b9d0d247c3e855d6b5a292904c2c8109"
-  integrity sha512-bk5Q1luEwQ10rrBwZbtTxUNadaLz2dM6xzOLoTK+oUBcaq6saCeELmkIgdG+Fwkn58XRgLQvOySVS0gp4OG6RA==
+dotnet-deps-parser@4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/dotnet-deps-parser/-/dotnet-deps-parser-4.7.0.tgz#eaa0810c37a43fbcae12892b031ec3b73b4697a7"
+  integrity sha512-dmXi1UzukjjgjMuov65Ibv4fGJyVXPj2mVyEkLZob4Q2aQ5WJYAn6R2MWckq0N9X1CE6rrdvROAyXl/v/aGLpw==
   dependencies:
     "@types/xml2js" "0.4.3"
     lodash "^4.17.11"
     source-map-support "^0.5.7"
-    tslib "^1.9.3"
+    tslib "^1.10.0"
     xml2js "0.4.19"
 
 duplexer3@^0.1.4:
@@ -7106,13 +7087,13 @@ snyk-nodejs-lockfile-parser@1.16.1:
     tslib "^1.9.3"
     uuid "^3.3.2"
 
-snyk-nuget-plugin@1.13.1:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/snyk-nuget-plugin/-/snyk-nuget-plugin-1.13.1.tgz#e94f6b129b62f7c0134851be233deab5a472518b"
-  integrity sha512-2AQVeahBK7Rt38p0Acl1fMsFQu3dsqoRODPoRaS0IM/bOBzVdAkDF9pCb5yKMREGpMZcyRFkt8Q+hGiUk0Nlfg==
+snyk-nuget-plugin@1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/snyk-nuget-plugin/-/snyk-nuget-plugin-1.14.0.tgz#085c397ab3da8d00ef4778d25c3e56b6a1bea460"
+  integrity sha512-RqXZQEA1s9LIA3euvLtx17UQQ1/q/sHkUf6p0sgTxG2D1xQI8vMtrbDxYgfpPwaHK22AjGaeK3J0TgPND5qZdw==
   dependencies:
     debug "^3.1.0"
-    dotnet-deps-parser "4.5.2"
+    dotnet-deps-parser "4.7.0"
     jszip "^3.1.5"
     lodash "^4.17.14"
     snyk-paket-parser "1.5.0"
@@ -7216,10 +7197,10 @@ snyk-try-require@1.3.1, snyk-try-require@^1.1.1, snyk-try-require@^1.3.1:
     lru-cache "^4.0.0"
     then-fs "^2.0.0"
 
-snyk@^1.258.1:
-  version "1.258.1"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.258.1.tgz#95046164594f63275e25a8f75eabd8608d989ffa"
-  integrity sha512-+ofhHwi6L8sYEVrohNpYEWdKSa4mVGl8KXeKCfZhe5gERM2TBj9wlQZx7UKxsM9hjHv7iqeZlFp1HfPqcqtPhw==
+snyk@^1.259.0:
+  version "1.259.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.259.0.tgz#8d9416638291adcd257e0130b4f89948ce42ceb1"
+  integrity sha512-miPuJtJeJ7rX3620ZeoDum5z9tNbpbwogqlOlccYY6UiAUFWnmEhqFxpSeGMq3aguj+rYmyGwClhP2LooGgUaA==
   dependencies:
     "@snyk/cli-interface" "2.3.0"
     "@snyk/dep-graph" "1.13.1"
@@ -7251,7 +7232,7 @@ snyk@^1.258.1:
     snyk-module "1.9.1"
     snyk-mvn-plugin "2.7.0"
     snyk-nodejs-lockfile-parser "1.16.1"
-    snyk-nuget-plugin "1.13.1"
+    snyk-nuget-plugin "1.14.0"
     snyk-php-plugin "1.7.0"
     snyk-policy "1.13.5"
     snyk-python-plugin "^1.14.0"
@@ -7335,15 +7316,7 @@ source-map-support@^0.4.15:
   dependencies:
     source-map "^0.5.6"
 
-source-map-support@^0.5.11, source-map-support@^0.5.7, source-map-support@~0.5.12:
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.13.tgz#31b24a9c2e73c2de85066c0feb7d44767ed52932"
-  integrity sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==
-  dependencies:
-    buffer-from "^1.0.0"
-    source-map "^0.6.0"
-
-source-map-support@^0.5.3:
+source-map-support@^0.5.11, source-map-support@^0.5.3, source-map-support@^0.5.7, source-map-support@~0.5.12:
   version "0.5.16"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.16.tgz#0ae069e7fe3ba7538c64c98515e35339eac5a042"
   integrity sha512-efyLRJDr68D9hBBNIPWFjhpFzURh+KJykQwvMyW5UiZzYwoF6l4YMMDIJJEyFWxWCqfyxLzz6tSfUFR+kXXsVQ==
