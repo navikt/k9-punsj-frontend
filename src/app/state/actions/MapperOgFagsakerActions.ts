@@ -65,7 +65,8 @@ export function findFagsaker(ident: string) {return (dispatch: any) => {
     dispatch(findFagsakerLoadAction(true));
     return get(ApiPath.FAGSAKER_FIND, {ident}, undefined,response => {
         if (response.ok) {
-            return response.json().then(r => dispatch(setFagsakerAction(r.fagsaker || [])));
+            // return response.json().then(r => dispatch(setFagsakerAction(r.fagsaker || [])));
+            return response.json().then(r => dispatch(setFagsakerAction([]))); // TODO: Avklare hvorvidt fagsaker skal vises eller ikke
         }
         return dispatch(findFagsakerErrorAction({
             status:     response.status,
