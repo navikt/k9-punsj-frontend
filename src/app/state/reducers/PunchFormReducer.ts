@@ -1,6 +1,7 @@
-import {PunchFormActionKeys}   from 'app/models/enums';
-import {IPunchFormState}       from 'app/models/types';
-import {IPunchFormActionTypes} from 'app/state/actions/PunchFormActions';
+import {PunchFormActionKeys}                   from 'app/models/enums';
+import {IPunchFormState}                       from 'app/models/types';
+import {IPunchFormActionTypes}                 from 'app/state/actions/PunchFormActions';
+import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IPunchFormState = {
     isMappeLoading: false,
@@ -9,11 +10,12 @@ const initialState: IPunchFormState = {
 
 export function PunchFormReducer(
     punchFormState: IPunchFormState = initialState,
-    action: IPunchFormActionTypes
+    action: IPunchFormActionTypes | LocationChangeAction
 ): IPunchFormState {
 
     switch (action.type) {
 
+        case LOCATION_CHANGE:
         case PunchFormActionKeys.RESET:
             return initialState;
 

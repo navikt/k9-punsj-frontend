@@ -102,6 +102,10 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         }
     }
 
+    componentWillUnmount(): void {
+        this.props.resetPunchFormAction();
+    }
+
     render() {
 
         const {intl, punchFormState} = this.props;

@@ -1,6 +1,7 @@
-import {MapperOgFagsakerActionKeys}   from 'app/models/enums';
-import {IMapperOgFagsakerState}       from 'app/models/types';
-import {IMapperOgFagsakerActionTypes} from 'app/state/actions';
+import {MapperOgFagsakerActionKeys}            from 'app/models/enums';
+import {IMapperOgFagsakerState}                from 'app/models/types';
+import {IMapperOgFagsakerActionTypes}          from 'app/state/actions';
+import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IMapperOgFagsakerState = {
     mapper: [],
@@ -13,9 +14,12 @@ const initialState: IMapperOgFagsakerState = {
 
 export function MapperOgFagsakerReducer(
     mapperOgFagsakerState: IMapperOgFagsakerState = initialState,
-    action: IMapperOgFagsakerActionTypes
+    action: IMapperOgFagsakerActionTypes | LocationChangeAction
 ): IMapperOgFagsakerState {
     switch (action.type) {
+
+        case LOCATION_CHANGE:
+            return initialState;
 
         case MapperOgFagsakerActionKeys.MAPPER_SET:
             return {

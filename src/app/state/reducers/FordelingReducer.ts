@@ -1,6 +1,7 @@
-import {FordelingActionKeys, Sakstype} from 'app/models/enums';
-import {IFordelingState}               from 'app/models/types';
-import {IFordelingActionTypes}         from 'app/state/actions';
+import {FordelingActionKeys, Sakstype}         from 'app/models/enums';
+import {IFordelingState}                       from 'app/models/types';
+import {IFordelingActionTypes}                 from 'app/state/actions';
+import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IFordelingState = {
     sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -10,10 +11,13 @@ const initialState: IFordelingState = {
 
 export function FordelingReducer(
     fordelingState: IFordelingState = initialState,
-    action: IFordelingActionTypes
+    action: IFordelingActionTypes | LocationChangeAction
 ): IFordelingState {
 
     switch (action.type) {
+
+        case LOCATION_CHANGE:
+            return initialState;
 
         case FordelingActionKeys.SAKSTYPE_SET:
             return {
