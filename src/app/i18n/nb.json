@@ -65,5 +65,6 @@
   "skjema.feil.perioder[].beredskap.tilleggsinformasjon.MAA_SETTES": "Tilleggsinformasjon må oppgis.",
   "skjema.feil.perioder[].nattevaak.svar.MAA_SETTES":                "Feltet må besvares.",
   "skjema.feil.perioder[].nattevaak.tilleggsinformasjon.MAA_SETTES": "Tilleggsinformasjon må oppgis.",
-  "skjema.feil.signert.MAA_SIGNERES":                                "Søknaden må signeres."
+  "skjema.feil.signert.MAA_SIGNERES":                                "Søknaden må signeres.",
+  "skjema.feil.signert.MAA_SETTES":                                  "Søknaden må signeres."
 }

@@ -4,24 +4,24 @@ import Fordeling                                                    from 'app/co
 import MapperOgFagsaker                                             from 'app/containers/punch-page/MapperOgFagsaker';
 import PunchForm                                                    from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
-import {PunchStep}                                     from 'app/models/enums';
-import {IPath, IPunchState}                            from 'app/models/types';
-import {getJournalpost, setIdentAction, setStepAction} from 'app/state/actions';
-import {RootStateType}                                 from 'app/state/RootState';
-import {apiUrl, changePath, getPath}         from 'app/utils';
-import intlHelper                            from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}        from 'nav-frontend-chevron';
-import {Flatknapp, Knapp}                    from 'nav-frontend-knapper';
-import {Panel}                               from 'nav-frontend-paneler';
-import {Checkbox, Input}                     from 'nav-frontend-skjema';
-import NavFrontendSpinner                    from 'nav-frontend-spinner';
+import {PunchStep}                                                  from 'app/models/enums';
+import {IPath, IPunchState}                                         from 'app/models/types';
+import {getJournalpost, setIdentAction, setStepAction}              from 'app/state/actions';
+import {RootStateType}                                              from 'app/state/RootState';
+import {apiUrl, changePath, getPath}                                from 'app/utils';
+import intlHelper                                                   from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess}                        from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}                               from 'nav-frontend-chevron';
+import {Flatknapp, Knapp}                                           from 'nav-frontend-knapper';
+import {Panel}                                                      from 'nav-frontend-paneler';
+import {Input}                                                      from 'nav-frontend-skjema';
+import NavFrontendSpinner                                           from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import * as React                            from 'react';
-import {Col, Container, Row}                 from 'react-bootstrap';
-import {InjectedIntlProps, injectIntl}       from 'react-intl';
+import * as React                                                   from 'react';
+import {Col, Container, Row}                                        from 'react-bootstrap';
+import {InjectedIntlProps, injectIntl}                              from 'react-intl';
 // import {Document, Page as PdfPage} from 'react-pdf';
-import {connect}                             from 'react-redux';
+import {connect}                                                    from 'react-redux';
 import {HashRouter, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
 
 interface IPunchPageStateProps {
@@ -96,20 +96,6 @@ class PunchPage extends React.Component<IPunchPageProps> {
         }
 
         return <div className="panels-wrapper" id="panels-wrapper">
-            <Panel className="punch_pdf" border={true}>
-                <iframe src={this.pdfUrl()}/>
-                {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
-                            <PdfPage pageNumber={1}/>
-                        </Document>*/}
-                <div className="knapperad">
-                    <Flatknapp onClick={this.openPdfWindow} className="knapp1">Åpne i nytt vindu</Flatknapp>
-                    <Flatknapp onClick={this.togglePdf} className="knapp2"><VenstreChevron/> Skjul</Flatknapp>
-                </div>
-                <Flatknapp
-                    onClick={this.togglePdf}
-                    className="button_open"
-                ><HoyreChevron/></Flatknapp>
-            </Panel>
             <Panel className="punch_form" border={true}>
                 <div>
                     {punchState.step > PunchStep.FORDELING && <Input
@@ -122,6 +108,20 @@ class PunchPage extends React.Component<IPunchPageProps> {
                     />}
                 </div>
                 {this.underFnr()}
+            </Panel>
+            <Panel className="punch_pdf" border={true}>
+                <iframe src={this.pdfUrl()}/>
+                {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
+                            <PdfPage pageNumber={1}/>
+                        </Document>*/}
+                <div className="knapperad">
+                    <Flatknapp onClick={this.togglePdf} className="knapp1">Skjul <HoyreChevron/></Flatknapp>
+                    <Flatknapp onClick={this.openPdfWindow} className="knapp2">Åpne i nytt vindu</Flatknapp>
+                </div>
+                <Flatknapp
+                    onClick={this.togglePdf}
+                    className="button_open"
+                ><VenstreChevron/></Flatknapp>
             </Panel>
         </div>;
     }

@@ -105,7 +105,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     render() {
 
         const {intl, punchFormState} = this.props;
-        const {soknad} = this.state;
+        const {soknad, periodeInFocus} = this.state;
         const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
         if (punchFormState.isComplete) {
@@ -161,12 +161,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                     label={intlHelper(intl, 'skjema.barn.foedselsdato')}
                     className="bold-label"
                     value={_.get(soknad, 'barn.foedselsdato', '')}
-                    {...this.changeAndBlurUpdates(event => ({
-                        barn: {
-                            ...soknad.barn,
-                            foedselsdato: event.target.value
-                        }
-                    }))}
+                    {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, foedselsdato: event.target.value}}))}
                     feil={this.getErrorMessage('barn.foedselsdato')}
                 />
             </SkjemaGruppe>
@@ -175,7 +170,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                 {soknad?.perioder?.map((periode, i) => (
                     <Panel
                         key={`periode_${i}`}
-                        className={`periodepanel${this.state.periodeInFocus === i ? ' focus' : ''}`}
+                        className={`periodepanel${periodeInFocus !== undefined ? (periodeInFocus === i ? ' focus' : ' notFocus') : ''}`}
                         border={true}
                     >
                         <Input

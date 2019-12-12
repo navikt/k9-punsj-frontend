@@ -38,9 +38,9 @@ export type IMapperOgFagsakerActionTypes = IMapperActionTypes |
                                            ICreateMappeActions |
                                            IResetMappeidAction;
 
-export function setMapperAction(mapper: IMappe[]):                  ISetMapperAction                {return {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper}}
-export function findMapperLoadingAction(isLoading: boolean):        IFindMapperLoadingAction        {return {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading}}
-export function findMapperErrorAction(error: IError):               IFindMapperErrorAction          {return {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, error}}
+export function setMapperAction(mapper: IMappe[]):              ISetMapperAction                {return {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper}}
+export function findMapperLoadingAction(isLoading: boolean):    IFindMapperLoadingAction        {return {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading}}
+export function findMapperErrorAction(error: IError):           IFindMapperErrorAction          {return {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, error}}
 
 export function findMapper(ident: string) {return (dispatch: any) => {
     dispatch(findMapperLoadingAction(true));
@@ -98,23 +98,12 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
                 journalpost_id: journalpostid,
                 innhold: {
                     perioder: [{
-                        fra_og_med: undefined,
-                        til_og_med: undefined,
-                        beredskap: {
-                            svar: false,
-                            tilleggsinformasjon: ''
-                        },
-                        nattevaak: {
-                            svar: false,
-                            tilleggsinformasjon: ''
-                        }
+                        beredskap: {svar: false},
+                        nattevaak: {svar: false}
                     }],
                     spraak: 'nb',
-                    barn: {
-                        norsk_ident: '',
-                        foedselsdato: ''
-                    },
-                    signert: false
+                    barn: {},
+                    signert: undefined
                 }
             }
         }
