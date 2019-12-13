@@ -207,14 +207,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                 onFocus={() => this.setPeriodeFocus(i)}
                                 onBlur={this.unsetPeriodeFocus}
                             />
-                            <Textarea
+                            {!!periode.beredskap?.svar && <Textarea
                                 label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
                                 value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
                                 onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
                                 onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
                                 feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
                                 onFocus={() => this.setPeriodeFocus(i)}
-                            />
+                            />}
                         </SkjemaGruppe>
                         <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
                             <Checkbox
@@ -226,14 +226,14 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                 onFocus={() => this.setPeriodeFocus(i)}
                                 onBlur={this.unsetPeriodeFocus}
                             />
-                            <Textarea
+                            {!!periode.nattevaak?.svar && <Textarea
                                 label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
                                 value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
                                 onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
                                 onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
                                 feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
                                 onFocus={() => this.setPeriodeFocus(i)}
-                            />
+                            />}
                         </SkjemaGruppe>
                         <Knapp
                             disabled={soknad.perioder!.length === 1}
