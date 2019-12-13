@@ -1,7 +1,7 @@
-import FagsakReadMode                                                   from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode                                                   from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep, TimeFormat}                                          from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPeriode, IPunchState} from 'app/models/types';
+import FagsakReadMode                                         from 'app/containers/punch-page/FagsakReadMode';
+import SoknadReadMode                                         from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep, TimeFormat}                                from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -15,9 +15,9 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                                                       from 'app/state/actions';
-import {RootStateType}                                                  from 'app/state/RootState';
-import {changePath, datetime}                                           from 'app/utils';
+}                                                             from 'app/state/actions';
+import {RootStateType}                                        from 'app/state/RootState';
+import {changePath, datetime}                                 from 'app/utils';
 import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
 import {Knapp}                                                from 'nav-frontend-knapper';
 import ModalWrapper                                           from 'nav-frontend-modal';

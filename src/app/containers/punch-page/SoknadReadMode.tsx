@@ -17,31 +17,6 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
         const colClassName = 'd-flex align-items-center';
         return (
             <Container className="read-modal soknad-read-mode">
-                {/*<Row>
-                    <Col>Fødselsnummer:</Col>
-                    <Col>{!!soknad.soker && soknad.soker.norsk_identitetsnummer}</Col>
-                </Row>
-                <Row>
-                    <Col>Medsøkers fødselsnummer:</Col>
-                    <Col>{!!soknad.medsoker && soknad.medsoker.norsk_identitetsnummer}</Col>
-                </Row>
-                <Row>
-                    <Col>Periode:</Col>
-                    <Col>{!!soknad.periode && <Container>
-                        <Row>
-                            <Col>Fra og med:</Col>
-                            <Col>{datetime(intl, TimeFormat.DATE_SHORT, soknad.periode.fra_og_med, 'YYYY-MM-DD')}</Col>
-                        </Row>
-                        <Row>
-                            <Col>Til og med:</Col>
-                            <Col>{datetime(intl, TimeFormat.DATE_SHORT, soknad.periode.til_og_med, 'YYYY-MM-DD')}</Col>
-                        </Row>
-                    </Container>}</Col>
-                </Row>
-                <Row>
-                    <Col>Relasjon til barnet:</Col>
-                    <Col>{soknad.relasjon_til_barnet}</Col>
-                </Row>*/}
                 <Row className="align-content-center">
                     <Col className={colClassName}>Barnets fødsels-/D-nr. eller fødselsdato:</Col>
                     <Col className={colClassName}>{!!soknad.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad.barn?.foedselsdato}</Col>
@@ -54,7 +29,7 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
                     <Col className={colClassName}>Perioder:</Col>
                     <Col className={colClassName}>
                         {!!soknad.perioder && soknad.perioder.length > 0 && <ul className="periodeliste">
-                            {soknad.perioder.map(p => <li>{this.periodeItem(p)}</li>)}
+                            {soknad.perioder.map((p, i) => <li key={`periodelisteelement_${i}`}>{this.periodeItem(p)}</li>)}
                         </ul>}
                     </Col>
                 </Row>

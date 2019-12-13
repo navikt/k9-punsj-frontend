@@ -1,29 +1,32 @@
-import {PunchStep}                                       from 'app/models/enums';
-import {IPunchFormState, IPunchState, ISoknad}           from 'app/models/types';
-import {IInputError}                                     from 'app/models/types/InputError';
+import {Arbeidsforhold, PunchStep}                            from 'app/models/enums';
+import {IPeriode, IPunchFormState, IPunchState, ISoknad}      from 'app/models/types';
+import {IInputError}                                          from 'app/models/types/InputError';
 import {
     getMappe,
-    resetMappeAction, resetPunchFormAction,
+    resetMappeAction,
+    resetPunchFormAction,
     setIdentAction,
     setStepAction,
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-} from 'app/state/actions';
+}                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
 import {changePath}                                           from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
 import _                                                      from 'lodash';
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
+import {Lukknapp}                                             from 'nav-frontend-ikonknapper';
 import {Knapp}                                                from 'nav-frontend-knapper';
 import {Panel}                                                from 'nav-frontend-paneler';
 import {Checkbox, Input, Select, SkjemaGruppe, Textarea}      from 'nav-frontend-skjema';
 import NavFrontendSpinner                                     from 'nav-frontend-spinner';
-import * as React                                        from 'react';
-import {InjectedIntlProps, injectIntl}                   from 'react-intl';
-import {connect}                                         from 'react-redux';
-import {RouteComponentProps, withRouter}                 from 'react-router-dom';
+import * as React                                             from 'react';
+import {Col, Container, Row}                                  from 'react-bootstrap';
+import {InjectedIntlProps, injectIntl}                        from 'react-intl';
+import {connect}                                              from 'react-redux';
+import {RouteComponentProps, withRouter}                      from 'react-router-dom';
 
 interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -189,76 +192,103 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                             className={`periodepanel${periodeInFocus !== undefined ? (periodeInFocus === i ? ' focus' : ' notFocus') : ''}`}
                             border={true}
                         >
-                            <Input
-                                type="date"
-                                label={intlHelper(intl, 'skjema.perioder.fom')}
-                                className="bold-label"
-                                value={_.get(periode, 'fra_og_med', '')}
-                                onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
-                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                                disabled={!soknad.signert}
-                            />
-                            <Input
-                                type="date"
-                                label={intlHelper(intl, 'skjema.perioder.tom')}
-                                className="bold-label"
-                                value={_.get(periode, 'til_og_med', '')}
-                                onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
-                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                                disabled={!soknad.signert}
-                            />
-                            <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].beredskap`)}>
-                                <Checkbox
-                                    label={intlHelper(intl, 'skjema.perioder.beredskap.svar')}
-                                    checked={_.get(periode, 'beredskap.svar', false)}
-                                    onChange={event => {this.handlePeriodeChange(i, 'beredskap.svar', event.target.checked); this.setPerioder()}}
-                                    className="bold-label"
-                                    feil={this.getErrorMessage(`perioder[${i}].beredskap.svar`)}
-                                    onFocus={() => this.setPeriodeFocus(i)}
-                                    onBlur={this.unsetPeriodeFocus}
-                                    disabled={!soknad.signert}
-                                />
-                                {!!periode.beredskap?.svar && <Textarea
-                                    label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
-                                    value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
-                                    onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
-                                    onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                    feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
-                                    onFocus={() => this.setPeriodeFocus(i)}
-                                    disabled={!soknad.signert}
-                                />}
-                            </SkjemaGruppe>
-                            <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
-                                <Checkbox
-                                    label={intlHelper(intl, 'skjema.perioder.nattevaak.svar')}
-                                    checked={_.get(periode, 'nattevaak.svar', false)}
-                                    onChange={event => {this.handlePeriodeChange(i, 'nattevaak.svar', event.target.checked); this.setPerioder()}}
-                                    className="bold-label"
-                                    feil={this.getErrorMessage(`perioder[${i}].nattevaak.svar`)}
-                                    onFocus={() => this.setPeriodeFocus(i)}
-                                    onBlur={this.unsetPeriodeFocus}
-                                    disabled={!soknad.signert}
-                                />
-                                {!!periode.nattevaak?.svar && <Textarea
-                                    label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
-                                    value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
-                                    onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
-                                    onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                    feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
-                                    onFocus={() => this.setPeriodeFocus(i)}
-                                    disabled={!soknad.signert}
-                                />}
-                            </SkjemaGruppe>
-                            <Knapp
-                                disabled={soknad.perioder!.length === 1 || !soknad.signert}
-                                onClick={() => this.removePeriode(i)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                                onBlur={this.unsetPeriodeFocus}
-                            >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
+                            <Container>
+                                <Row>
+                                    <Col><Input
+                                        type="date"
+                                        label={intlHelper(intl, 'skjema.perioder.fom')}
+                                        className="bold-label"
+                                        value={_.get(periode, 'fra_og_med', '')}
+                                        onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
+                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                        feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        disabled={!soknad.signert}
+                                    /></Col>
+                                    <Col><Input
+                                        type="date"
+                                        label={intlHelper(intl, 'skjema.perioder.tom')}
+                                        className="bold-label"
+                                        value={_.get(periode, 'til_og_med', '')}
+                                        onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
+                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                        feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        disabled={!soknad.signert}
+                                    /></Col>
+                                </Row>
+                                <Row><Col><SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].beredskap`)}>
+                                    <Checkbox
+                                        label={intlHelper(intl, 'skjema.perioder.beredskap.svar')}
+                                        checked={_.get(periode, 'beredskap.svar', false)}
+                                        onChange={event => {this.handlePeriodeChange(i, 'beredskap.svar', event.target.checked); this.setPerioder()}}
+                                        className="bold-label"
+                                        feil={this.getErrorMessage(`perioder[${i}].beredskap.svar`)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        onBlur={this.unsetPeriodeFocus}
+                                        disabled={!soknad.signert}
+                                    />
+                                    {!!periode.beredskap?.svar && <Textarea
+                                        label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
+                                        value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
+                                        onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
+                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                        feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        disabled={!soknad.signert}
+                                    />}
+                                </SkjemaGruppe></Col></Row>
+                                <Row><Col><SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
+                                    <Checkbox
+                                        label={intlHelper(intl, 'skjema.perioder.nattevaak.svar')}
+                                        checked={_.get(periode, 'nattevaak.svar', false)}
+                                        onChange={event => {this.handlePeriodeChange(i, 'nattevaak.svar', event.target.checked); this.setPerioder()}}
+                                        className="bold-label"
+                                        feil={this.getErrorMessage(`perioder[${i}].nattevaak.svar`)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        onBlur={this.unsetPeriodeFocus}
+                                        disabled={!soknad.signert}
+                                    />
+                                    {!!periode.nattevaak?.svar && <Textarea
+                                        label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
+                                        value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
+                                        onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
+                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                        feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        disabled={!soknad.signert}
+                                    />}
+                                </SkjemaGruppe></Col></Row>
+                                <Row><Col>
+                                    <h3>Arbeidsforhold</h3>
+                                    <div className="periode_arbeid">
+                                        {Object.values(Arbeidsforhold).map(af => <Panel border={true} key={`periode_arbeid_${af}`}>
+                                            <Container>
+                                                <Row>
+                                                    <Col className="arbeidsforholdstype"><Knapp
+                                                        title="Klikk for å legge til"
+                                                        onClick={() => this.addArbeidsforhold(periode, af)}
+                                                    >+ {intlHelper(intl, `arbeidsforhold.${af}`)}</Knapp></Col>
+                                                </Row>
+                                                {_.get(periode, ['arbeidsgivere', af], []).map((afinfo: any, afindex: number) => (
+                                                    <Row key={`periode_${i}_${af}_${afindex}`} className="arbeidsforholdslisteelement">
+                                                        {this.arbeidsforhold(i, af, afindex, afinfo)}
+                                                        <Col className="d-flex align-items-center" xs="auto">
+                                                            <Lukknapp onClick={() => this.removeArbeidsforhold(periode, af, afindex)}/>
+                                                        </Col>
+                                                    </Row>
+                                                ))}
+                                            </Container>
+                                        </Panel>)}
+                                    </div>
+                                    <Knapp
+                                        disabled={soknad.perioder!.length === 1 || !soknad.signert}
+                                        onClick={() => this.removePeriode(i)}
+                                        onFocus={() => this.setPeriodeFocus(i)}
+                                        onBlur={this.unsetPeriodeFocus}
+                                    >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
+                                </Col></Row>
+                            </Container>
                         </Panel>
                     ))}
                 </SkjemaGruppe>
@@ -367,6 +397,33 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
         </>);
     }
 
+    private arbeidsforhold(periodeindex: number, af: Arbeidsforhold, afindex: number, afinfo: any) {
+        const {soknad} = this.state;
+        const periode = soknad.perioder![periodeindex];
+        switch (af) {
+            case Arbeidsforhold.ARBEIDSTAKER:
+                return <>
+                    <Col><Input
+                        label="Organisasjonsnummer:"
+                        value={_.get(afinfo, 'organisasjonsnummer', '')}
+                        onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'organisasjonsnummer', event.target.value)}
+                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                        onFocus={() => this.setPeriodeFocus(periodeindex)}
+                        disabled={!soknad.signert}
+                    /></Col>
+                    <Col><Input
+                        label="Fraværsgrad i prosent:"
+                        value={_.get(afinfo, 'grad', '')}
+                        onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'grad', event.target.value)}
+                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                        onFocus={() => this.setPeriodeFocus(periodeindex)}
+                        disabled={!soknad.signert}
+                    /></Col>
+                </>;
+            default: return <Col><p>Annet</p></Col>;
+        }
+    }
+
     private backButton() {
         return <p><Knapp onClick={this.handleBackButtonClick}>
             {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
@@ -431,9 +488,32 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     };
 
     private removePeriode = (index: number) => {
+        this.unsetPeriodeFocus();
         this.state.soknad.perioder!.splice(index, 1);
         this.forceUpdate();
         this.setPerioder();
+    };
+
+    private addArbeidsforhold(periode: IPeriode, arbeidsforhold: Arbeidsforhold) {
+        if (!periode.arbeidsgivere?.[arbeidsforhold]) {
+            _.set(periode, ['arbeidsgivere', arbeidsforhold], [{}]);
+        } else {
+            periode.arbeidsgivere![arbeidsforhold]!.push({});
+        }
+        this.forceUpdate();
+        this.setPerioder();
+    }
+
+    private removeArbeidsforhold = (periode: IPeriode, arbeidsforhold: Arbeidsforhold, afindex: number) => {
+        this.unsetPeriodeFocus();
+        periode.arbeidsgivere![arbeidsforhold]!.splice(afindex, 1);
+        this.forceUpdate();
+        this.setPerioder();
+    };
+
+    private handleArbeidsforholdChange = (periode: IPeriode, arbeidsforhold: Arbeidsforhold, afindex: number, path: string, value: string | boolean) => {
+        _.set(periode.arbeidsgivere![arbeidsforhold]![afindex], path, value);
+        this.forceUpdate();
     };
 
     private setPerioder = () => this.updateSoknad({perioder: this.state.soknad.perioder});

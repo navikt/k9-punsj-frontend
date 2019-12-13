@@ -5079,6 +5079,11 @@ nav-frontend-ikonknapper@0.0.10:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.10.tgz#8f304e0c11661b71eb5bc1a59cf33fe99e6588b0"
   integrity sha512-LxvNnIXwkYUxv/we8leTkeYK4a08fPjMT7/cSwR4h9Jfx2jqm283ktpLyJLH7eQotsUGa9sWYfmdSYPZQji/Vw==
 
+nav-frontend-ikonknapper@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.11.tgz#475c96f65fc9e716c08bc16aaa3375b25a2f686d"
+  integrity sha512-T2LzG6FV84qyJpHSByQ+AjFDhNTppzTSKwSykrBHVNQmV1btk3kPBvseSnaDzkd3IVYw8oY/uuaxY9rz9ykDNg==
+
 nav-frontend-js-utils@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.8.tgz#1c1ecec8d90b125157097b22b227ef0b53045432"
@@ -5089,10 +5094,20 @@ nav-frontend-knapper-style@^0.3.32:
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.32.tgz#7f6b1bf1b413199e0518fd3682b38dbd41478598"
   integrity sha512-ezaB1PiFXRKts3h7uo2xIFEEU48n9dWgENFaFG08Fgr2Y7PdUVxbomj+XdiCQx0kkpIYpDAYn1QO5FiEfQ9+4g==
 
+nav-frontend-knapper-style@^0.3.33:
+  version "0.3.33"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.33.tgz#f3ad20b98dfe1c9e4d912ea63250fb7fb10ee400"
+  integrity sha512-ERzZIs5/wwiVif/LUZJf+Vl5yChUf9WTFeJs8XvZ85LMjRTISYwL8Ytp5UYj88gfJjNaEWSPzDDAWlY3ag2k8Q==
+
 nav-frontend-knapper@^1.0.37:
   version "1.0.37"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-1.0.37.tgz#79075100f757c0589f19632b47449d1aec242bab"
   integrity sha512-ZLSKtYwF5ZJWDp2fQMJK1wfL7wrZ38PA3FZatYht5RbyPCg66o6hsy9aziijD/VNUAPvRZfa7YhxVPSCr95Evg==
+
+nav-frontend-knapper@^1.0.38:
+  version "1.0.38"
+  resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-1.0.38.tgz#782bc02bc4025e8bece1d8397b6353fab1adfbbc"
+  integrity sha512-9LB1M6B5VlerGkb+jOJRX6NORBZXyAIoAuc9Am5czXPGHw34dL25nNA+QYVeh482RwagAE94pnyZkBptrShhag==
 
 nav-frontend-lenker-style@^0.2.24:
   version "0.2.24"
