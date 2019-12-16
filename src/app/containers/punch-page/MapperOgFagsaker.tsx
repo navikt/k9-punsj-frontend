@@ -1,7 +1,7 @@
-import FagsakReadMode                                         from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode                                         from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep, TimeFormat}                                from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
+import FagsakReadMode                                                   from 'app/containers/punch-page/FagsakReadMode';
+import SoknadReadMode                                                   from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep, TimeFormat}                                          from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPeriode, IPunchState} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -15,9 +15,9 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                                             from 'app/state/actions';
-import {RootStateType}                                        from 'app/state/RootState';
-import {changePath, datetime}                                 from 'app/utils';
+}                                                                       from 'app/state/actions';
+import {RootStateType}                                                  from 'app/state/RootState';
+import {changePath, datetime}                                           from 'app/utils';
 import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
 import {Knapp}                                                from 'nav-frontend-knapper';
 import ModalWrapper                                           from 'nav-frontend-modal';
@@ -84,7 +84,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
         return null;
     }
 
-    const backButton = <p><Knapp onClick={undoSearchForMapperAndFagsaker}>Til startsiden</Knapp></p>;
+    const backButton = <p><Knapp onClick={undoSearchForMapperAndFagsaker}>Tilbake</Knapp></p>;
 
     if (mapperOgFagsakerState.mapperRequestError || mapperOgFagsakerState.fagsakerRequestError) {
         return <>
@@ -122,10 +122,9 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = mappe.personlig?.[Object.keys(mappe.personlig)[0]]?.innhold;
             const rowContent = [
-                soknad?.barn?.norsk_ident,
-                soknad?.barn?.foedselsdato,
-                soknad?.perioder?.[0]?.fra_og_med,
-                soknad?.perioder?.[0]?.til_og_med
+                !!soknad?.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad?.barn?.foedselsdato,
+                soknad?.perioder?.filter(p => !!p.fra_og_med).sort((a,b) => (a.fra_og_med! > b.fra_og_med!) ? 1 : -1)?.[0]?.fra_og_med, // Viser tidligste startdato
+                soknad?.perioder?.filter(p => !!p.til_og_med).sort((a,b) => (a.til_og_med! < b.til_og_med!) ? 1 : -1)?.[0]?.til_og_med // Viser seneste sluttdato
             ];
             rows.push(
                 <tr key={mappe_id} onClick={() => props.openMappeAction(mappe)}>
@@ -157,8 +156,7 @@ const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
                     <tr>
-                        <th>Barnets fødselsnr.</th>
-                        <th>Barnets fødselsdato</th>
+                        <th>Barnets fødsels-/D-nr. eller fødselsdato</th>
                         <th>Fra og med</th>
                         <th>Til og med</th>
                     </tr>

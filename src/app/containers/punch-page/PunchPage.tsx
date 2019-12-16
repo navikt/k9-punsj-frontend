@@ -210,7 +210,7 @@ interface IIdentPageProps {
 const IdentPage: React.FunctionComponent<IIdentPageProps> = (props: IIdentPageProps) => {
     React.useEffect(() => {props.setStepAction(PunchStep.IDENT)}, []);
     return <div className="knapperad">
-        <Knapp onClick={props.findSoknader} className="knapp knapp1">Hent søknader</Knapp>
+        <Knapp onClick={props.findSoknader} className="knapp knapp1">Åpne skjema</Knapp>
         <Knapp onClick={() => changePath(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">Tilbake</Knapp>
     </div>;
 };

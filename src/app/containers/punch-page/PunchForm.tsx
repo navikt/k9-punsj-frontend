@@ -140,219 +140,230 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
             {!punchFormState.updateMappeError && !punchFormState.submitMappeError && (isSoknadComplete
                 ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
                 : <AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>)}
-            <h2>Opplysninger om barn og søker</h2>
-            <Select
-                name="sprak"
-                label={intlHelper(intl, 'skjema.spraak')}
-                className="bold-label"
-                value={soknad.spraak || 'nb'}
-                {...this.onChangeOnlyUpdate(event => ({spraak: event.target.value}))}
-                feil={this.getErrorMessage('spraak')}
-            >
-                <option value='nb'>Bokmål</option>
-                <option value='nn'>Nynorsk</option>
-            </Select>
-            <SkjemaGruppe feil={this.getErrorMessage('barn')}>
-                <Input
-                    label={intlHelper(intl, 'skjema.barn.ident')}
-                    className="bold-label"
-                    value={_.get(soknad, 'barn.norsk_ident', '')}
-                    {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_ident: event.target.value}}))}
-                    feil={this.getErrorMessage('barn.norsk_ident')}
-                />
-                <Input
-                    type="date"
-                    label={intlHelper(intl, 'skjema.barn.foedselsdato')}
-                    className="bold-label"
-                    value={_.get(soknad, 'barn.foedselsdato', '')}
-                    {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, foedselsdato: event.target.value}}))}
-                    feil={this.getErrorMessage('barn.foedselsdato')}
-                />
-            </SkjemaGruppe>
-            <h2>{intlHelper(intl, 'skjema.perioder.overskrift')}</h2>
-            <SkjemaGruppe feil={this.getErrorMessage('perioder')}>
-                {soknad?.perioder?.map((periode, i) => (
-                    <Panel
-                        key={`periode_${i}`}
-                        className={`periodepanel${periodeInFocus !== undefined ? (periodeInFocus === i ? ' focus' : ' notFocus') : ''}`}
-                        border={true}
-                    >
-                        <Input
-                            type="date"
-                            label={intlHelper(intl, 'skjema.perioder.fom')}
-                            className="bold-label"
-                            value={_.get(periode, 'fra_og_med', '')}
-                            onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
-                            onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                            feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
-                            onFocus={() => this.setPeriodeFocus(i)}
-                        />
-                        <Input
-                            type="date"
-                            label={intlHelper(intl, 'skjema.perioder.tom')}
-                            className="bold-label"
-                            value={_.get(periode, 'til_og_med', '')}
-                            onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
-                            onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                            feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
-                            onFocus={() => this.setPeriodeFocus(i)}
-                        />
-                        <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].beredskap`)}>
-                            <Checkbox
-                                label={intlHelper(intl, 'skjema.perioder.beredskap.svar')}
-                                checked={_.get(periode, 'beredskap.svar', false)}
-                                onChange={event => {this.handlePeriodeChange(i, 'beredskap.svar', event.target.checked); this.setPerioder()}}
-                                className="bold-label"
-                                feil={this.getErrorMessage(`perioder[${i}].beredskap.svar`)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                                onBlur={this.unsetPeriodeFocus}
-                            />
-                            {!!periode.beredskap?.svar && <Textarea
-                                label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
-                                value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
-                                onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
-                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                            />}
-                        </SkjemaGruppe>
-                        <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
-                            <Checkbox
-                                label={intlHelper(intl, 'skjema.perioder.nattevaak.svar')}
-                                checked={_.get(periode, 'nattevaak.svar', false)}
-                                onChange={event => {this.handlePeriodeChange(i, 'nattevaak.svar', event.target.checked); this.setPerioder()}}
-                                className="bold-label"
-                                feil={this.getErrorMessage(`perioder[${i}].nattevaak.svar`)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                                onBlur={this.unsetPeriodeFocus}
-                            />
-                            {!!periode.nattevaak?.svar && <Textarea
-                                label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
-                                value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
-                                onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
-                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
-                                onFocus={() => this.setPeriodeFocus(i)}
-                            />}
-                        </SkjemaGruppe>
-                        <Knapp
-                            disabled={soknad.perioder!.length === 1}
-                            onClick={() => this.removePeriode(i)}
-                            onFocus={() => this.setPeriodeFocus(i)}
-                            onBlur={this.unsetPeriodeFocus}
-                        >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
-                    </Panel>
-                ))}
-            </SkjemaGruppe>
-            <Knapp onClick={this.addPeriode}>{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
-            {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
-            {!!soknad?.medlemskap?.opphold?.length && (
-                <table className="tabell tabell--stripet">
-                    <thead>
-                        <tr>
-                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
-                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
-                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
-                            <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Object.keys(soknad.medlemskap.opphold).map((key) => (
-                            <tr key={key}>
-                                <td><CountrySelect
-                                    name={`opphold_land_${key}`}
-                                    onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
-                                    onBlur={() => this.setOpphold()}
-                                    selectedcountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
-                                    unselectedoption={'Velg …'}
-                                    label=""
-                                /></td>
-                                <td><Input
-                                    name={`opphold_fom_${key}`}
-                                    onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
-                                    onBlur={() => this.setOpphold()}
-                                    type="date"
-                                    value={_.get(soknad.medlemskap!.opphold[key], 'periode.fra_og_med', '')}
-                                    label=""
-                                /></td>
-                                <td><Input
-                                    name={`opphold_tom_${key}`}
-                                    onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
-                                    onBlur={() => this.setOpphold()}
-                                    type="date"
-                                    value={_.get(soknad.medlemskap!.opphold[key], 'periode.til_og_med', '')}
-                                    label=""
-                                /></td>
-                                <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
-            <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
-            <Checkbox
-                label="Har bodd i utlandet i løpet av de siste 12 månedene"
-                checked={_.get(soknad, 'medlemskap.har_bodd_i_utlandet_siste_12_mnd', false)}
-                {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, har_bodd_i_utlandet_siste_12_mnd: event.target.checked}}))}
-            />
-            <Checkbox
-                label="Skal bo i utlandet i løpet av de neste 12 månedene"
-                checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
-                {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
-            />
-            <h2>Beredskap</h2>
-            <Checkbox
-                label="Beredskap"
-                checked={_.get(soknad, 'beredskap.svar', false)}
-                {...this.onChangeOnlyUpdate(event => ({beredskap: {...soknad.beredskap, svar: event.target.checked}}))}
-            />
-            <Textarea
-                label="Tilleggsopplysninger:"
-                value={_.get(soknad, 'beredskap.tilleggsinformasjon', '')}
-                {...this.changeAndBlurUpdates(event => ({beredskap: {...soknad.beredskap, tilleggsinformasjon: event.target.value}}))}
-            />
-            <h2>Nattevåk</h2>
-            <Checkbox
-                label="Nattevåk"
-                checked={_.get(soknad, 'nattevaak.svar', false)}
-                {...this.onChangeOnlyUpdate(event => ({nattevaak: {...soknad.nattevaak, svar: event.target.checked}}))}
-            />
-            <Textarea
-                label="Tilleggsopplysninger:"
-                value={_.get(soknad, 'nattevaak.tilleggsinformasjon', '')}
-                {...this.changeAndBlurUpdates(event => ({nattevaak: {...soknad.nattevaak, tilleggsinformasjon: event.target.value}}))}
-            />
-            <h2>Søknad om pleiepenger</h2>
-            <Input
-                name="fom"
-                type="date"
-                label="Fra og med:"
-                className="bold-label"
-                value={_.get(soknad, 'fra_og_med', '')}
-                {...this.changeAndBlurUpdates(event => ({fra_og_med: event.target.value}))}
-                feil={!!this.getErrorMessage('fra_og_med') ? {feilmelding: this.getErrorMessage('fra_og_med')} : undefined}
-            />
-            <Input
-                name="tom"
-                type="date"
-                label="Til og med:"
-                className="bold-label"
-                value={_.get(soknad, 'til_og_med', '')}
-                {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
-                feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
-            />*/}
             <h2>{intlHelper(intl, 'skjema.signatur.overskrift')}</h2>
             <Checkbox
                 label={intlHelper(intl, 'skjema.signatur.bekreftelse')}
-                className="bold-label"
+                className="signatur-checkbox bold-label"
                 checked={_.get(soknad, 'signert', false)}
                 {...this.onChangeOnlyUpdate(event => ({signert: event.target.checked}))}
                 feil={this.getErrorMessage('signert')}
             />
-            <p><Knapp
-                onClick={() => this.props.submitSoknad(this.props.match.params.id, this.props.punchState.ident)}
-                disabled={!isSoknadComplete}
-            >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
+            <div className={!soknad.signert ? 'disabled-punch-form' : undefined}>
+                <h2>Opplysninger om barn og søker</h2>
+                <Select
+                    name="sprak"
+                    label={intlHelper(intl, 'skjema.spraak')}
+                    className="bold-label"
+                    value={soknad.spraak || 'nb'}
+                    {...this.onChangeOnlyUpdate(event => ({spraak: event.target.value}))}
+                    feil={this.getErrorMessage('spraak')}
+                    disabled={!soknad.signert}
+                >
+                    <option value='nb'>Bokmål</option>
+                    <option value='nn'>Nynorsk</option>
+                </Select>
+                <SkjemaGruppe feil={this.getErrorMessage('barn')}>
+                    <Input
+                        label={intlHelper(intl, 'skjema.barn.ident')}
+                        className="bold-label"
+                        value={_.get(soknad, 'barn.norsk_ident', '')}
+                        {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_ident: event.target.value}}))}
+                        feil={this.getErrorMessage('barn.norsk_ident')}
+                        disabled={!soknad.signert}
+                    />
+                    <Input
+                        type="date"
+                        label={intlHelper(intl, 'skjema.barn.foedselsdato')}
+                        className="bold-label"
+                        value={_.get(soknad, 'barn.foedselsdato', '')}
+                        {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, foedselsdato: event.target.value}}))}
+                        feil={this.getErrorMessage('barn.foedselsdato')}
+                        disabled={!soknad.signert}
+                    />
+                </SkjemaGruppe>
+                <h2>{intlHelper(intl, 'skjema.perioder.overskrift')}</h2>
+                <SkjemaGruppe feil={this.getErrorMessage('perioder')}>
+                    {soknad?.perioder?.map((periode, i) => (
+                        <Panel
+                            key={`periode_${i}`}
+                            className={`periodepanel${periodeInFocus !== undefined ? (periodeInFocus === i ? ' focus' : ' notFocus') : ''}`}
+                            border={true}
+                        >
+                            <Input
+                                type="date"
+                                label={intlHelper(intl, 'skjema.perioder.fom')}
+                                className="bold-label"
+                                value={_.get(periode, 'fra_og_med', '')}
+                                onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
+                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                                disabled={!soknad.signert}
+                            />
+                            <Input
+                                type="date"
+                                label={intlHelper(intl, 'skjema.perioder.tom')}
+                                className="bold-label"
+                                value={_.get(periode, 'til_og_med', '')}
+                                onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
+                                onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                                disabled={!soknad.signert}
+                            />
+                            <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].beredskap`)}>
+                                <Checkbox
+                                    label={intlHelper(intl, 'skjema.perioder.beredskap.svar')}
+                                    checked={_.get(periode, 'beredskap.svar', false)}
+                                    onChange={event => {this.handlePeriodeChange(i, 'beredskap.svar', event.target.checked); this.setPerioder()}}
+                                    className="bold-label"
+                                    feil={this.getErrorMessage(`perioder[${i}].beredskap.svar`)}
+                                    onFocus={() => this.setPeriodeFocus(i)}
+                                    onBlur={this.unsetPeriodeFocus}
+                                    disabled={!soknad.signert}
+                                />
+                                {!!periode.beredskap?.svar && <Textarea
+                                    label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
+                                    value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
+                                    onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
+                                    onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                    feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
+                                    onFocus={() => this.setPeriodeFocus(i)}
+                                    disabled={!soknad.signert}
+                                />}
+                            </SkjemaGruppe>
+                            <SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
+                                <Checkbox
+                                    label={intlHelper(intl, 'skjema.perioder.nattevaak.svar')}
+                                    checked={_.get(periode, 'nattevaak.svar', false)}
+                                    onChange={event => {this.handlePeriodeChange(i, 'nattevaak.svar', event.target.checked); this.setPerioder()}}
+                                    className="bold-label"
+                                    feil={this.getErrorMessage(`perioder[${i}].nattevaak.svar`)}
+                                    onFocus={() => this.setPeriodeFocus(i)}
+                                    onBlur={this.unsetPeriodeFocus}
+                                    disabled={!soknad.signert}
+                                />
+                                {!!periode.nattevaak?.svar && <Textarea
+                                    label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
+                                    value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
+                                    onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
+                                    onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                    feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
+                                    onFocus={() => this.setPeriodeFocus(i)}
+                                    disabled={!soknad.signert}
+                                />}
+                            </SkjemaGruppe>
+                            <Knapp
+                                disabled={soknad.perioder!.length === 1 || !soknad.signert}
+                                onClick={() => this.removePeriode(i)}
+                                onFocus={() => this.setPeriodeFocus(i)}
+                                onBlur={this.unsetPeriodeFocus}
+                            >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
+                        </Panel>
+                    ))}
+                </SkjemaGruppe>
+                <Knapp onClick={this.addPeriode} disabled={!soknad.signert}>{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
+                {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
+                {!!soknad?.medlemskap?.opphold?.length && (
+                    <table className="tabell tabell--stripet">
+                        <thead>
+                            <tr>
+                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
+                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
+                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
+                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.keys(soknad.medlemskap.opphold).map((key) => (
+                                <tr key={key}>
+                                    <td><CountrySelect
+                                        name={`opphold_land_${key}`}
+                                        onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
+                                        onBlur={() => this.setOpphold()}
+                                        selectedcountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
+                                        unselectedoption={'Velg …'}
+                                        label=""
+                                    /></td>
+                                    <td><Input
+                                        name={`opphold_fom_${key}`}
+                                        onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
+                                        onBlur={() => this.setOpphold()}
+                                        type="date"
+                                        value={_.get(soknad.medlemskap!.opphold[key], 'periode.fra_og_med', '')}
+                                        label=""
+                                    /></td>
+                                    <td><Input
+                                        name={`opphold_tom_${key}`}
+                                        onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
+                                        onBlur={() => this.setOpphold()}
+                                        type="date"
+                                        value={_.get(soknad.medlemskap!.opphold[key], 'periode.til_og_med', '')}
+                                        label=""
+                                    /></td>
+                                    <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+                <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
+                <Checkbox
+                    label="Har bodd i utlandet i løpet av de siste 12 månedene"
+                    checked={_.get(soknad, 'medlemskap.har_bodd_i_utlandet_siste_12_mnd', false)}
+                    {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, har_bodd_i_utlandet_siste_12_mnd: event.target.checked}}))}
+                />
+                <Checkbox
+                    label="Skal bo i utlandet i løpet av de neste 12 månedene"
+                    checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
+                    {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
+                />
+                <h2>Beredskap</h2>
+                <Checkbox
+                    label="Beredskap"
+                    checked={_.get(soknad, 'beredskap.svar', false)}
+                    {...this.onChangeOnlyUpdate(event => ({beredskap: {...soknad.beredskap, svar: event.target.checked}}))}
+                />
+                <Textarea
+                    label="Tilleggsopplysninger:"
+                    value={_.get(soknad, 'beredskap.tilleggsinformasjon', '')}
+                    {...this.changeAndBlurUpdates(event => ({beredskap: {...soknad.beredskap, tilleggsinformasjon: event.target.value}}))}
+                />
+                <h2>Nattevåk</h2>
+                <Checkbox
+                    label="Nattevåk"
+                    checked={_.get(soknad, 'nattevaak.svar', false)}
+                    {...this.onChangeOnlyUpdate(event => ({nattevaak: {...soknad.nattevaak, svar: event.target.checked}}))}
+                />
+                <Textarea
+                    label="Tilleggsopplysninger:"
+                    value={_.get(soknad, 'nattevaak.tilleggsinformasjon', '')}
+                    {...this.changeAndBlurUpdates(event => ({nattevaak: {...soknad.nattevaak, tilleggsinformasjon: event.target.value}}))}
+                />
+                <h2>Søknad om pleiepenger</h2>
+                <Input
+                    name="fom"
+                    type="date"
+                    label="Fra og med:"
+                    className="bold-label"
+                    value={_.get(soknad, 'fra_og_med', '')}
+                    {...this.changeAndBlurUpdates(event => ({fra_og_med: event.target.value}))}
+                    feil={!!this.getErrorMessage('fra_og_med') ? {feilmelding: this.getErrorMessage('fra_og_med')} : undefined}
+                />
+                <Input
+                    name="tom"
+                    type="date"
+                    label="Til og med:"
+                    className="bold-label"
+                    value={_.get(soknad, 'til_og_med', '')}
+                    {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
+                    feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
+                />*/}
+                <p><Knapp
+                    onClick={() => this.props.submitSoknad(this.props.match.params.id, this.props.punchState.ident)}
+                    disabled={!isSoknadComplete}
+                >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
+            </div>
         </>);
     }
 
