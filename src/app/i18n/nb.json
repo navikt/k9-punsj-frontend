@@ -30,6 +30,8 @@
   "fordeling.sakstype.ANNET":                                        "Annet",
   "fordeling.knapp.punsj":                                           "Pønsj søknad",
   "fordeling.knapp.omfordel":                                        "Omfordel",
+  "arbeidsforhold.arbeidstaker":                                     "Arbeidstaker",
+  "arbeidsforhold.annet":                                            "Annet",
   "mappe.lesemodus.periode.fra":                                     "Fra {fom} {bn, select, b {med beredskap} n {med nattevåk} bn {med beredskap og nattevåk} other {}}",
   "mappe.lesemodus.periode.til":                                     "Til {tom} {bn, select, b {med beredskap} n {med nattevåk} bn {med beredskap og nattevåk} other {}}",
   "mappe.lesemodus.periode.fratil":                                  "Fra {fom} til {tom} {bn, select, b {med beredskap} n {med nattevåk} bn {med beredskap og nattevåk} other {}}",
