@@ -278,6 +278,12 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                                         </Col>
                                                     </Row>
                                                 ))}
+                                                {_.get(periode, ['arbeidsgivere', af], []).length > 0 && <Row>
+                                                    <Col className="leggtilarbeidsforhold"><Knapp
+                                                        title="Klikk for å legge til"
+                                                        onClick={() => this.addArbeidsforhold(periode, af)}
+                                                    >Legg til</Knapp></Col>
+                                                </Row>}
                                             </Container>
                                         </Panel>)}
                                     </div>
