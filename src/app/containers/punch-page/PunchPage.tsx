@@ -20,7 +20,6 @@ import 'nav-frontend-tabell-style';
 import * as React                                                   from 'react';
 import {Col, Container, Row}                                        from 'react-bootstrap';
 import {InjectedIntlProps, injectIntl}                              from 'react-intl';
-// import {Document, Page as PdfPage} from 'react-pdf';
 import {connect}                                                    from 'react-redux';
 import {HashRouter, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
 
@@ -65,7 +64,6 @@ class PunchPage extends React.Component<IPunchPageProps> {
                 title={intlHelper(intl, 'startPage.tittel')}
                 className="punch"
             >
-                <h1>{intlHelper(intl, 'startPage.tittel')}</h1>
                 {this.content()}
             </Page>
         );
@@ -109,11 +107,8 @@ class PunchPage extends React.Component<IPunchPageProps> {
                 </div>
                 {this.underFnr()}
             </Panel>
-            <Panel className="punch_pdf" border={true}>
+            <Panel className="punch_pdf">
                 <iframe src={this.pdfUrl()}/>
-                {/*<Document file="http://localhost:8080/api/journalpost/1/dokument/1">
-                            <PdfPage pageNumber={1}/>
-                        </Document>*/}
                 <div className="knapperad">
                     <Flatknapp onClick={this.togglePdf} className="knapp1">Skjul <HoyreChevron/></Flatknapp>
                     <Flatknapp onClick={this.openPdfWindow} className="knapp2">Åpne i nytt vindu</Flatknapp>

@@ -395,7 +395,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                     {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
                     feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
                 />*/}
-                <p><Knapp
+                <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.match.params.id, this.props.punchState.ident)}
                     disabled={!isSoknadComplete}
                 >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>

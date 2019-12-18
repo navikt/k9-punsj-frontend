@@ -1,10 +1,10 @@
 @import '~bootstrap/dist/css/bootstrap-grid.min.css';
 @import '~nav-frontend-typografi-style/src/fontimports';
 @import '~nav-datovelger/dist/datovelger/styles/datovelger.css';
-
+@import (reference) '~nav-frontend-core/less/_variabler';
 
 body {
-  background-color: white;
+  background-color: @navLysGra;
   font-family:      @font-family;
 }
 
@@ -12,6 +12,7 @@ body {
   height:         100vh;
   display:        flex;
   flex-direction: column;
+  position:       relative;
 }
 
 .header {
