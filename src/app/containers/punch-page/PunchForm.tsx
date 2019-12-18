@@ -1,6 +1,7 @@
-import {Arbeidsforhold, PunchStep}                            from 'app/models/enums';
-import {IPeriode, IPunchFormState, IPunchState, ISoknad}      from 'app/models/types';
-import {IInputError}                                          from 'app/models/types/InputError';
+import DeleteButton                                      from 'app/components/delete-button/DeleteButton';
+import {Arbeidsforhold, PunchStep}                       from 'app/models/enums';
+import {IPeriode, IPunchFormState, IPunchState, ISoknad} from 'app/models/types';
+import {IInputError}                                     from 'app/models/types/InputError';
 import {
     getMappe,
     resetMappeAction,
@@ -10,7 +11,7 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                             from 'app/state/actions';
+}                                                        from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
 import {changePath}                                           from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
@@ -274,7 +275,10 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                                                     <Row key={`periode_${i}_${af}_${afindex}`} className="arbeidsforholdslisteelement">
                                                         {this.arbeidsforhold(i, af, afindex, afinfo)}
                                                         <Col className="d-flex align-items-center" xs="auto">
-                                                            <Lukknapp onClick={() => this.removeArbeidsforhold(periode, af, afindex)}/>
+                                                            <DeleteButton
+                                                                onClick={() => this.removeArbeidsforhold(periode, af, afindex)}
+                                                                title={intlHelper(intl, 'skjema.perioder.arbeidsforhold.slett')}
+                                                            />
                                                         </Col>
                                                     </Row>
                                                 ))}

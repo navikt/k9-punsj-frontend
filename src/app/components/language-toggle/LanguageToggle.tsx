@@ -7,7 +7,7 @@ import {InjectedIntl, InjectedIntlProps, injectIntl} from 'react-intl';
 import './languageToggle.less';
 import NorwayFlagSVG                                 from './NorwayFlagSVG';
 
-const { NedChevron } = require('nav-frontend-chevron');
+const {NedChevron} = require('nav-frontend-chevron');
 
 interface IProps {
     toggle: (locale: Locale) => void;
