@@ -408,29 +408,43 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     }
 
     private arbeidsforhold(periodeindex: number, af: Arbeidsforhold, afindex: number, afinfo: any) {
+        const {intl} = this.props;
         const {soknad} = this.state;
         const periode = soknad.perioder![periodeindex];
         switch (af) {
             case Arbeidsforhold.ARBEIDSTAKER:
                 return <>
                     <Col><Input
-                        label="Organisasjonsnummer:"
+                        label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.arbeidstaker.orgnr')}
                         value={_.get(afinfo, 'organisasjonsnummer', '')}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'organisasjonsnummer', event.target.value)}
                         onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
                         onFocus={() => this.setPeriodeFocus(periodeindex)}
                         disabled={!soknad.signert}
+                        feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].organisasjonsnummer`)}
                     /></Col>
                     <Col><Input
-                        label="Fraværsgrad i prosent:"
+                        label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.arbeidstaker.fravaeriprosent')}
                         value={_.get(afinfo, 'grad', '')}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'grad', event.target.value)}
                         onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
                         onFocus={() => this.setPeriodeFocus(periodeindex)}
                         disabled={!soknad.signert}
+                        feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].prosent`)}
                     /></Col>
                 </>;
-            default: return <Col><p>Annet</p></Col>;
+            default:
+                return <Col>
+                    <Checkbox
+                        label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.annet.selvstendig')}
+                        checked={_.get(afinfo, 'selvstendig', false)}
+                        onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ANNET, afindex, 'selvstendig', event.target.checked)}
+                        onFocus={() => this.setPeriodeFocus(periodeindex)}
+                        onBlur={this.unsetPeriodeFocus}
+                        disabled={!soknad.signert}
+                        feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.annet[${afindex}].selvstendig`)}
+                    />
+                </Col>;
         }
     }
 

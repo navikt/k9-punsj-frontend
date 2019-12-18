@@ -33,4 +33,6 @@ interface IArbeidstaker {
     grad?: number;
 }
 
-interface IAnnet {}
+interface IAnnet {
+    selvstendig?: boolean;
+}
