@@ -1,16 +1,16 @@
-import {TimeFormat}                    from 'app/models/enums';
-import {IFagsak}                       from 'app/models/types';
-import {datetime}                      from 'app/utils';
-import Lenke                           from 'nav-frontend-lenker';
-import * as React                      from 'react';
-import {Col, Container, Row}           from 'react-bootstrap';
-import {InjectedIntlProps, injectIntl} from 'react-intl';
+import {TimeFormat}                        from 'app/models/enums';
+import {IFagsak}                           from 'app/models/types';
+import {datetime}                          from 'app/utils';
+import Lenke                               from 'nav-frontend-lenker';
+import * as React                          from 'react';
+import {Col, Container, Row}               from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 
 interface IFagsakReadModeComponentProps {
     fagsak: IFagsak;
 }
 
-type IFagsakReadModeProps = InjectedIntlProps & IFagsakReadModeComponentProps;
+type IFagsakReadModeProps = WrappedComponentProps & IFagsakReadModeComponentProps;
 
 const FagsakReadMode: React.FunctionComponent<IFagsakReadModeProps> = (props: IFagsakReadModeProps) => {
 

@@ -1,7 +1,7 @@
-import DeleteButton                                      from 'app/components/delete-button/DeleteButton';
-import {Arbeidsforhold, PunchStep}                       from 'app/models/enums';
-import {IPeriode, IPunchFormState, IPunchState, ISoknad} from 'app/models/types';
-import {IInputError}                                     from 'app/models/types/InputError';
+import DeleteButton                                           from 'app/components/delete-button/DeleteButton';
+import {Arbeidsforhold, PunchStep}                            from 'app/models/enums';
+import {IPeriode, IPunchFormState, IPunchState, ISoknad}      from 'app/models/types';
+import {IInputError}                                          from 'app/models/types/InputError';
 import {
     getMappe,
     resetMappeAction,
@@ -11,28 +11,26 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                        from 'app/state/actions';
+}                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
 import {changePath}                                           from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
 import _                                                      from 'lodash';
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
-import {Lukknapp}                                             from 'nav-frontend-ikonknapper';
 import {Knapp}                                                from 'nav-frontend-knapper';
 import {Panel}                                                from 'nav-frontend-paneler';
 import {Checkbox, Input, Select, SkjemaGruppe, Textarea}      from 'nav-frontend-skjema';
 import NavFrontendSpinner                                     from 'nav-frontend-spinner';
 import * as React                                             from 'react';
 import {Col, Container, Row}                                  from 'react-bootstrap';
-import {InjectedIntlProps, injectIntl}                        from 'react-intl';
+import {injectIntl, WrappedComponentProps}                    from 'react-intl';
 import {connect}                                              from 'react-redux';
-import {RouteComponentProps, withRouter}                      from 'react-router-dom';
 
 interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
     journalpostid:  string;
-    match?:         any;
+    id:             string;
 }
 
 interface IPunchFormStateProps {
@@ -59,12 +57,11 @@ interface IPunchFormPageState {
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
-                       RouteComponentProps &
-                       InjectedIntlProps &
+                       WrappedComponentProps &
                        IPunchFormStateProps &
                        IPunchFormDispatchProps;
 
-class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
+export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
     state: IPunchFormPageState = {
         soknad: {
@@ -92,7 +89,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     };
 
     componentDidMount(): void {
-        const {id} = this.props.match.params;
+        const {id} = this.props;
         this.props.getMappe(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
@@ -127,7 +124,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
 
         if (!!punchFormState.error) {
             return <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', {id: this.props.match.params.id})}</AlertStripeFeil>
+                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', {id: this.props.id})}</AlertStripeFeil>
                 <p><Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp></p>
             </>;
         }
@@ -400,7 +397,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
                     feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
                 />*/}
                 <p className="sendknapp-wrapper"><Knapp
-                    onClick={() => this.props.submitSoknad(this.props.match.params.id, this.props.punchState.ident)}
+                    onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
                     disabled={!isSoknadComplete}
                 >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
             </div>
@@ -579,7 +576,7 @@ class PunchForm extends React.Component<IPunchFormProps, IPunchFormPageState> {
     private updateSoknad = (soknad: Partial<ISoknad>) => {
         this.setState({showStatus: true});
         return this.props.updateSoknad(
-            this.props.match.params.id,
+            this.props.id,
             this.props.punchState.ident,
             this.props.journalpostid,
             {...this.getSoknadFromStore(), ...soknad}
@@ -628,4 +625,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetPunchFormAction:       ()                          => dispatch(resetPunchFormAction())
 });
 
-export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchForm)));
+export const PunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));

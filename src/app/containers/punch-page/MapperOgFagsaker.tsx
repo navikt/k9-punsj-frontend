@@ -23,7 +23,7 @@ import {Knapp}                                                from 'nav-frontend
 import ModalWrapper                                           from 'nav-frontend-modal';
 import NavFrontendSpinner                                     from 'nav-frontend-spinner';
 import * as React                                             from 'react';
-import {InjectedIntlProps, injectIntl}                        from 'react-intl';
+import {injectIntl, WrappedComponentProps}                    from 'react-intl';
 import {connect}                                              from 'react-redux';
 import {useParams}                                            from 'react-router-dom';
 
@@ -52,12 +52,12 @@ interface IMapperOgFagsakerComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
 }
 
-type IMapperOgFagsakerProps = InjectedIntlProps &
+type IMapperOgFagsakerProps = WrappedComponentProps &
                               IMapperOgFagsakerComponentProps &
                               IMapperOgFagsakerStateProps &
                               IMapperOgFagsakerDispatchProps;
 
-const MapperOgFagsaker: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
+export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
 
     const {intl, punchState, mapperOgFagsakerState, getPunchPath} = props;
     const {mapper, fagsaker} = mapperOgFagsakerState;
@@ -275,4 +275,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetMappeidAction:         ()                      => dispatch(resetMappeidAction())
 });
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapperOgFagsaker));
+export const MapperOgFagsaker = injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapperOgFagsakerComponent));

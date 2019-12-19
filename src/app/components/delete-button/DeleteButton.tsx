@@ -1,6 +1,6 @@
 import FilledVersionBin1SVG        from 'app/components/delete-button/FilledVersionBin1SVG';
 import {Flatknapp, KnappBaseProps} from 'nav-frontend-knapper';
-import React                       from 'react';
+import * as React                  from 'react';
 import './delete-button.less';
 
 const classNames = require('classnames');
