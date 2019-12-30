@@ -1,8 +1,8 @@
 import {ApiPath}                                       from 'app/apiConfig';
 import Page                                            from 'app/components/page/Page';
-import {Fordeling}                                       from 'app/containers/punch-page/Fordeling';
-import {MapperOgFagsaker}                                from 'app/containers/punch-page/MapperOgFagsaker';
-import {PunchForm}                                       from 'app/containers/punch-page/PunchForm';
+import {Fordeling}                                     from 'app/containers/punch-page/Fordeling';
+import {MapperOgFagsaker}                              from 'app/containers/punch-page/MapperOgFagsaker';
+import {PunchForm}                                     from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
 import {PunchStep}                                     from 'app/models/enums';
 import {IPath, IPunchState}                            from 'app/models/types';
@@ -37,6 +37,7 @@ export interface IPunchPageComponentProps {
     match?: any;
     step: PunchStep;
     journalpostid: string;
+    paths: IPath[];
 }
 
 type IPunchPageProps = WrappedComponentProps &
@@ -46,14 +47,6 @@ type IPunchPageProps = WrappedComponentProps &
                        IPunchPageDispatchProps;
 
 export class PunchPageComponent extends React.Component<IPunchPageProps> {
-
-    private paths: IPath[] = [
-        {step: PunchStep.FORDELING,     path: '/'},
-        {step: PunchStep.IDENT,         path: '/ident'},
-        {step: PunchStep.CHOOSE_SOKNAD, path: '/hentsoknader/{ident}'},
-        {step: PunchStep.FILL_FORM,     path: '/skjema/{id}'},
-        {step: PunchStep.COMPLETED,     path: '/fullfort'}
-    ];
 
     componentDidMount(): void {
         this.props.getJournalpost(this.props.journalpostid);
@@ -128,7 +121,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         dokument_id:    this.props.punchState.journalpost!.dokumenter[0].dokument_id
     });
 
-    private getPath = (step: PunchStep, values?: any) => getPath(this.paths, step, values);
+    private getPath = (step: PunchStep, values?: any) => getPath(this.props.paths, step, values);
 
     private togglePdf = () => {
         const panelsWrapper = document.getElementById('panels-wrapper');

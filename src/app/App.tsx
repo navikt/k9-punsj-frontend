@@ -43,7 +43,7 @@ export const App: React.FunctionComponent = () => {
                 exact={true}
                 key={`hashroute_${step}`}
                 path={getPath(paths, step)}
-                children={<PunchPage {...{journalpostid, step}}/>}
+                children={<PunchPage {...{journalpostid, step, paths}}/>}
             />)}
         </HashRouter>
     };
