@@ -60,10 +60,11 @@ const setupPunchPage = (journalpostid: string, hash: string, punchState: IPunchS
 
     const punchPageComponentProps: IPunchPageComponentProps = {
         step: punchState.step,
-        journalpostid
+        journalpostid,
+        paths: []
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
 
     return shallow(
         <PunchPageComponent
@@ -115,6 +116,7 @@ describe('PunchPage', () => {
         });
 
         expect(punchPage.find('MapperOgFagsaker')).toHaveLength(1);
+        expect(punchPage.find('MapperOgFagsaker').prop('journalpostid')).toEqual(journalpostid);
     });
 
     it('Laster inn søknadsskjema', () => {
@@ -144,5 +146,4 @@ describe('PunchPage', () => {
 
         expect(punchPage.find('AlertStripeSuksess')).toHaveLength(1);
     });
-
 });

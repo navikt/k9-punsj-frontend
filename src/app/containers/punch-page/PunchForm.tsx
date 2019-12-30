@@ -27,18 +27,18 @@ import {Col, Container, Row}                                  from 'react-bootst
 import {injectIntl, WrappedComponentProps}                    from 'react-intl';
 import {connect}                                              from 'react-redux';
 
-interface IPunchFormComponentProps {
+export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
     journalpostid:  string;
     id:             string;
 }
 
-interface IPunchFormStateProps {
+export interface IPunchFormStateProps {
     punchFormState: IPunchFormState;
     punchState:     IPunchState;
 }
 
-interface IPunchFormDispatchProps {
+export interface IPunchFormDispatchProps {
     getMappe:                   typeof getMappe;
     resetMappeAction:           typeof resetMappeAction;
     setIdentAction:             typeof setIdentAction;
@@ -49,7 +49,7 @@ interface IPunchFormDispatchProps {
     resetPunchFormAction:       typeof resetPunchFormAction;
 }
 
-interface IPunchFormPageState {
+export interface IPunchFormComponentState {
     soknad:             ISoknad;
     isFetched:          boolean;
     showStatus:         boolean;
@@ -61,9 +61,9 @@ type IPunchFormProps = IPunchFormComponentProps &
                        IPunchFormStateProps &
                        IPunchFormDispatchProps;
 
-export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormPageState> {
+export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
 
-    state: IPunchFormPageState = {
+    state: IPunchFormComponentState = {
         soknad: {
             perioder: [{
                 fra_og_med: '',
@@ -95,7 +95,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState(this.state);
     }
 
-    componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormPageState>, snapshot?: any): void {
+    componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormComponentState>, snapshot?: any): void {
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
             this.setState({soknad: {...this.state.soknad, ...this.getSoknadFromStore()}, isFetched: true});
