@@ -995,13 +995,13 @@
   resolved "https://registry.yarnpkg.com/@navikt/nap-bem-utils/-/nap-bem-utils-1.0.1.tgz#dd7edcee164611c187e3f548ad0463c9c10da8c8"
   integrity sha512-byL60wB0nRHY0S6oHnca2kILUElni0rbbPUrj832bGGMgVqqYRy45D9OWPV6IzGIHItJcfCSEzjWHeZCftBerQ==
 
-"@navikt/nap-header@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@navikt/nap-header/-/nap-header-1.0.2.tgz#4798a5050d60b5d4d251ca1306f69170fca67305"
-  integrity sha512-ZWQgFHFxhKBga+qOQ1YjZAx78sn9JdrZ49EHBm5bYjZC4NUDImqeN48E/NtB+kbLZ1SDkdnoh3vYQvFb97lUhA==
+"@navikt/nap-header@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@navikt/nap-header/-/nap-header-1.0.7.tgz#a6d2d6d4873d81fdfed7c47817d223abc19de737"
+  integrity sha512-7RQcWxPn4/4m2EMmXhepq8aXpvJMyZD6S/o8g58AU6pDd+QvWTWDuSKmCi13Ii+QybS3YsMLeT8K+PBM6oIpIw==
   dependencies:
     "@navikt/nap-bem-utils" "1.0.1"
-    "@navikt/nap-popover" "1.0.1"
+    "@navikt/nap-popover" "1.0.3"
     classnames "^2.2.6"
     lodash.throttle "^4.1.1"
     nav-frontend-chevron "^1.0.10"
@@ -1016,13 +1016,13 @@
     nav-frontend-typografi-style "^1.0.17"
     prop-types "^15.7.2"
 
-"@navikt/nap-popover@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@navikt/nap-popover/-/nap-popover-1.0.1.tgz#4cd6da66ef0f73c652c5db7d562921044f67588a"
-  integrity sha512-1hlzenhY4BND7lOVgsY25c2unSkEWhhvDO3/ARJpYmZvPIh7rXAJdIsRqUOZB84PVN5e7UOPONTr9SjrkHz7kg==
+"@navikt/nap-popover@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@navikt/nap-popover/-/nap-popover-1.0.3.tgz#474638aa770e83c31d5758da50d76e984569d6ba"
+  integrity sha512-ptC5z98vGacwpMPPqhTwmJK+4AuYLgPfXLEcOuxP1h/BWPAuTVMQIbLzIc+9OXdj6d8I0kIK7DydJcg/JosW9A==
   dependencies:
     prop-types "^15.7.2"
-    react-popper "^1.3.5"
+    react-popper "^1.3.7"
 
 "@restart/context@^2.1.4":
   version "2.1.4"
@@ -3292,6 +3292,18 @@ deep-equal@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.1.0.tgz#3103cdf8ab6d32cf4a8df7865458f2b8d33f3745"
   integrity sha512-ZbfWJq/wN1Z273o7mUSjILYqehAktR2NVoSrOukDkU9kg2v/Uv89yU4Cvz8seJeAmtN5oqiefKq8FPuXOboqLw==
+  dependencies:
+    is-arguments "^1.0.4"
+    is-date-object "^1.0.1"
+    is-regex "^1.0.4"
+    object-is "^1.0.1"
+    object-keys "^1.1.1"
+    regexp.prototype.flags "^1.2.0"
+
+deep-equal@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.1.1.tgz#b5c98c942ceffaf7cb051e24e1434a25a2e6076a"
+  integrity sha512-yd9c5AdiqVcR+JjcwUQb9DkhJc8ngNr0MahEBGvDiJw8puWab2yZlh+nkasOnZP+EGTAP6rRp2JzJhJZzvNF8g==
   dependencies:
     is-arguments "^1.0.4"
     is-date-object "^1.0.1"
@@ -7052,22 +7064,12 @@ nav-frontend-js-utils@^1.0.8:
   resolved "https://registry.yarnpkg.com/nav-frontend-js-utils/-/nav-frontend-js-utils-1.0.8.tgz#1c1ecec8d90b125157097b22b227ef0b53045432"
   integrity sha512-GFDedxAONjvcrkdtq9mz2r+Im7KkWXcgrhh9HtGIUTR5By7n33SBAk0SdfnLt18Q3HWEbnsa/jOWHDRHrQE7Zg==
 
-nav-frontend-knapper-style@^0.3.32:
-  version "0.3.32"
-  resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.32.tgz#7f6b1bf1b413199e0518fd3682b38dbd41478598"
-  integrity sha512-ezaB1PiFXRKts3h7uo2xIFEEU48n9dWgENFaFG08Fgr2Y7PdUVxbomj+XdiCQx0kkpIYpDAYn1QO5FiEfQ9+4g==
-
-nav-frontend-knapper-style@^0.3.33:
+nav-frontend-knapper-style@^0.3.32, nav-frontend-knapper-style@^0.3.33:
   version "0.3.33"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper-style/-/nav-frontend-knapper-style-0.3.33.tgz#f3ad20b98dfe1c9e4d912ea63250fb7fb10ee400"
   integrity sha512-ERzZIs5/wwiVif/LUZJf+Vl5yChUf9WTFeJs8XvZ85LMjRTISYwL8Ytp5UYj88gfJjNaEWSPzDDAWlY3ag2k8Q==
 
-nav-frontend-knapper@^1.0.37:
-  version "1.0.37"
-  resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-1.0.37.tgz#79075100f757c0589f19632b47449d1aec242bab"
-  integrity sha512-ZLSKtYwF5ZJWDp2fQMJK1wfL7wrZ38PA3FZatYht5RbyPCg66o6hsy9aziijD/VNUAPvRZfa7YhxVPSCr95Evg==
-
-nav-frontend-knapper@^1.0.38:
+nav-frontend-knapper@^1.0.37, nav-frontend-knapper@^1.0.38:
   version "1.0.38"
   resolved "https://registry.yarnpkg.com/nav-frontend-knapper/-/nav-frontend-knapper-1.0.38.tgz#782bc02bc4025e8bece1d8397b6353fab1adfbbc"
   integrity sha512-9LB1M6B5VlerGkb+jOJRX6NORBZXyAIoAuc9Am5czXPGHw34dL25nNA+QYVeh482RwagAE94pnyZkBptrShhag==
@@ -8551,13 +8553,14 @@ react-overlays@^2.1.0:
     uncontrollable "^7.0.0"
     warning "^4.0.3"
 
-react-popper@^1.3.5:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-1.3.6.tgz#32122f83af8fda01bdd4f86625ddacaf64fdd06d"
-  integrity sha512-kLTfa9z8n+0jJvRVal9+vIuirg41rObg4Bbrvv/ZfsGPQDN9reyVVSxqnHF1ZNgXgV7x11PeUfd5ItF8DZnqhg==
+react-popper@^1.3.7:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-1.3.7.tgz#f6a3471362ef1f0d10a4963673789de1baca2324"
+  integrity sha512-nmqYTx7QVjCm3WUZLeuOomna138R1luC4EqkW3hxJUrAe+3eNz3oFCLYdnPwILfn0mX1Ew2c3wctrjlUMYYUww==
   dependencies:
     "@babel/runtime" "^7.1.2"
     create-react-context "^0.3.0"
+    deep-equal "^1.1.1"
     popper.js "^1.14.4"
     prop-types "^15.6.1"
     typed-styles "^0.0.7"
