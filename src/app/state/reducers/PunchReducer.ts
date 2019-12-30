@@ -3,7 +3,7 @@ import {IPunchState}                           from 'app/models/types';
 import {IPunchActionTypes}                     from 'app/state/actions';
 import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
-const initialState: IPunchState = {
+export const initialState: IPunchState = {
     step: PunchStep.FORDELING,
     ident: '',
     journalpost: undefined

@@ -1,49 +1,51 @@
-import {ApiPath}                                                    from 'app/apiConfig';
-import Page                                                         from 'app/components/page/Page';
-import Fordeling                                                    from 'app/containers/punch-page/Fordeling';
-import MapperOgFagsaker                                             from 'app/containers/punch-page/MapperOgFagsaker';
-import PunchForm                                                    from 'app/containers/punch-page/PunchForm';
+import {ApiPath}                                       from 'app/apiConfig';
+import Page                                            from 'app/components/page/Page';
+import {Fordeling}                                       from 'app/containers/punch-page/Fordeling';
+import {MapperOgFagsaker}                                from 'app/containers/punch-page/MapperOgFagsaker';
+import {PunchForm}                                       from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
-import {PunchStep}                                                  from 'app/models/enums';
-import {IPath, IPunchState}                                         from 'app/models/types';
-import {getJournalpost, setIdentAction, setStepAction}              from 'app/state/actions';
-import {RootStateType}                                              from 'app/state/RootState';
-import {apiUrl, changePath, getPath}                                from 'app/utils';
-import intlHelper                                                   from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess}                        from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}                               from 'nav-frontend-chevron';
-import {Flatknapp, Knapp}                                           from 'nav-frontend-knapper';
-import {Panel}                                                      from 'nav-frontend-paneler';
-import {Input}                                                      from 'nav-frontend-skjema';
-import NavFrontendSpinner                                           from 'nav-frontend-spinner';
+import {PunchStep}                                     from 'app/models/enums';
+import {IPath, IPunchState}                            from 'app/models/types';
+import {getJournalpost, setIdentAction, setStepAction} from 'app/state/actions';
+import {RootStateType}                                 from 'app/state/RootState';
+import {apiUrl, changePath, getPath}                   from 'app/utils';
+import intlHelper                                      from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}                  from 'nav-frontend-chevron';
+import {Flatknapp, Knapp}                              from 'nav-frontend-knapper';
+import {Panel}                                         from 'nav-frontend-paneler';
+import {Input}                                         from 'nav-frontend-skjema';
+import NavFrontendSpinner                              from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import * as React                                                   from 'react';
-import {Col, Container, Row}                                        from 'react-bootstrap';
-import {InjectedIntlProps, injectIntl}                              from 'react-intl';
-import {connect}                                                    from 'react-redux';
-import {HashRouter, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
+import * as React                                      from 'react';
+import {Col, Container, Row}                           from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}             from 'react-intl';
+import {connect}                                       from 'react-redux';
+import {RouteComponentProps, withRouter}               from 'react-router';
 
-interface IPunchPageStateProps {
+export interface IPunchPageStateProps {
     punchState: IPunchState;
 }
 
-interface IPunchPageDispatchProps {
+export interface IPunchPageDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction:  typeof setStepAction;
     getJournalpost: typeof getJournalpost;
 }
 
-interface IPunchPageComponentProps {
+export interface IPunchPageComponentProps {
     match?: any;
+    step: PunchStep;
+    journalpostid: string;
 }
 
-type IPunchPageProps = InjectedIntlProps &
+type IPunchPageProps = WrappedComponentProps &
                        RouteComponentProps &
                        IPunchPageComponentProps &
                        IPunchPageStateProps &
                        IPunchPageDispatchProps;
 
-class PunchPage extends React.Component<IPunchPageProps> {
+export class PunchPageComponent extends React.Component<IPunchPageProps> {
 
     private paths: IPath[] = [
         {step: PunchStep.FORDELING,     path: '/'},
@@ -54,7 +56,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
     ];
 
     componentDidMount(): void {
-        this.props.getJournalpost(this.props.match.params.journalpostid);
+        this.props.getJournalpost(this.props.journalpostid);
     }
 
     render() {
@@ -122,7 +124,7 @@ class PunchPage extends React.Component<IPunchPageProps> {
     }
 
     private pdfUrl = () =>  apiUrl(ApiPath.DOKUMENT, {
-        journalpost_id: this.props.match.params.journalpostid,
+        journalpost_id: this.props.journalpostid,
         dokument_id:    this.props.punchState.journalpost!.dokumenter[0].dokument_id
     });
 
@@ -141,35 +143,16 @@ class PunchPage extends React.Component<IPunchPageProps> {
     };
 
     private underFnr() {
-        const commonProps = {journalpostid: this.props.match.params.journalpostid, getPunchPath: this.getPath};
-        return (
-            <HashRouter>
-                <Switch>
-                    <Route
-                        path={this.getPath(PunchStep.FILL_FORM)}
-                        children={<PunchForm {...commonProps}/>}
-                    />
-                    <Route
-                        path={this.getPath(PunchStep.CHOOSE_SOKNAD)}
-                        children={<MapperOgFagsaker {...commonProps}/>}
-                    />
-                    <Route path={this.getPath(PunchStep.COMPLETED)}>
-                        <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>
-                    </Route>
-                    <Route path={this.getPath(PunchStep.IDENT)}>
-                        <IdentPage
-                            findSoknader={this.findSoknader}
-                            setStepAction={this.props.setStepAction}
-                            getPunchPath={this.getPath}
-                        />
-                    </Route>
-                    <Route
-                        path={this.getPath(PunchStep.FORDELING)}
-                        children={<Fordeling getPunchPath={this.getPath}/>}
-                    />
-                </Switch>
-            </HashRouter>
-        );
+        const commonProps = {journalpostid: this.props.journalpostid, getPunchPath: this.getPath};
+        switch (this.props.step) {
+            case PunchStep.FORDELING:       return <Fordeling getPunchPath={this.getPath}/>;
+            case PunchStep.IDENT:           return <IdentPage findSoknader={this.findSoknader}
+                                                              setStepAction={this.props.setStepAction}
+                                                              getPunchPath={this.getPath}/>;
+            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps}/>;
+            case PunchStep.FILL_FORM:       return <PunchForm {...commonProps} id={this.props.match.params.id}/>;
+            case PunchStep.COMPLETED:       return <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>;
+        }
     }
 
     private findSoknader = () => {
@@ -194,8 +177,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (id: string)    => dispatch(getJournalpost(id))
 });
 
-export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPage)));
-
 interface IIdentPageProps {
     findSoknader:   ()                  => void;
     setStepAction:  (step: number)      => void;
@@ -209,3 +190,5 @@ const IdentPage: React.FunctionComponent<IIdentPageProps> = (props: IIdentPagePr
         <Knapp onClick={() => changePath(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">Tilbake</Knapp>
     </div>;
 };
+
+export const PunchPage = withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponent)));

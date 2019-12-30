@@ -9,7 +9,7 @@ import {Knapp}                                      from 'nav-frontend-knapper';
 import {RadioPanelGruppe}                           from 'nav-frontend-skjema';
 import NavFrontendSpinner                           from 'nav-frontend-spinner';
 import React, {useEffect}                           from 'react';
-import {InjectedIntlProps, injectIntl}              from 'react-intl';
+import {injectIntl, WrappedComponentProps}          from 'react-intl';
 import {connect}                                    from 'react-redux';
 
 interface IFordelingStateProps {
@@ -27,12 +27,12 @@ interface IFordelingComponentProps {
     getPunchPath: (step: PunchStep) => string;
 }
 
-type IFordelingProps = InjectedIntlProps &
+type IFordelingProps = WrappedComponentProps &
                        IFordelingStateProps &
                        IFordelingDispatchProps &
                        IFordelingComponentProps;
 
-const Fordeling: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
+const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
 
     const {intl, fordelingState} = props;
     const {sakstype} = fordelingState;
@@ -79,4 +79,6 @@ const mapDispatchToProps = (dispatch: any) => ({
                          sakstype: Sakstype)    => dispatch(omfordel(journalpostid, sakstype))
 });
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Fordeling));
+const Fordeling = injectIntl(connect(mapStateToProps, mapDispatchToProps)(FordelingComponent));
+
+export {Fordeling, FordelingComponent};

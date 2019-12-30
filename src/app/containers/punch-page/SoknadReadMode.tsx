@@ -1,16 +1,16 @@
-import {TimeFormat}                    from 'app/models/enums';
-import {IPeriode, ISoknad}             from 'app/models/types';
-import {datetime}                      from 'app/utils';
-import intlHelper                      from 'app/utils/intlUtils';
-import * as React                      from 'react';
-import {Col, Container, Row}           from 'react-bootstrap';
-import {InjectedIntlProps, injectIntl} from 'react-intl';
+import {TimeFormat}                        from 'app/models/enums';
+import {IPeriode, ISoknad}                 from 'app/models/types';
+import {datetime}                          from 'app/utils';
+import intlHelper                          from 'app/utils/intlUtils';
+import * as React                          from 'react';
+import {Col, Container, Row}               from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 
 interface ISoknadReadModeProps {
     soknad: ISoknad;
 }
 
-class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadModeProps> {
+class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadReadModeProps> {
 
     render() {
         const {intl, soknad} = this.props;
@@ -29,7 +29,7 @@ class SoknadReadMode extends React.Component<InjectedIntlProps & ISoknadReadMode
                     <Col className={colClassName}>Perioder:</Col>
                     <Col className={colClassName}>
                         {!!soknad.perioder && soknad.perioder.length > 0 && <ul className="periodeliste">
-                            {soknad.perioder.map((p, i) => <li key={`periodelisteelement_${i}`}>{this.periodeItem(p)}</li>)}
+                            {soknad.perioder.map((p: IPeriode, i: number) => <li key={`periodelisteelement_${i}`}>{this.periodeItem(p)}</li>)}
                         </ul>}
                     </Col>
                 </Row>

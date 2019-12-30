@@ -24,6 +24,8 @@ jobs:
           node-version: 12.x
       - name: Installere moduler
         run: npm install
+      - name: Kjøre tester
+        run: npm run test
       - name: Bygge kode
         run: npm run build
       - name: Sette Docker-navn og -tag

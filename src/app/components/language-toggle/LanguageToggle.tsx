@@ -1,11 +1,11 @@
-import {Locale}                                      from 'app/models/types/Locale';
-import intlHelper                                    from 'app/utils/intlUtils';
+import {Locale}                                       from 'app/models/types/Locale';
+import intlHelper                                     from 'app/utils/intlUtils';
 import 'nav-frontend-lenker-style';
-import * as React                                    from 'react';
-import {Button, Menu, MenuItem, Wrapper}             from 'react-aria-menubutton';
-import {InjectedIntl, InjectedIntlProps, injectIntl} from 'react-intl';
+import * as React                                     from 'react';
+import {Button, Menu, MenuItem, Wrapper}              from 'react-aria-menubutton';
+import {injectIntl, IntlShape, WrappedComponentProps} from 'react-intl';
 import './languageToggle.less';
-import NorwayFlagSVG                                 from './NorwayFlagSVG';
+import NorwayFlagSVG                                  from './NorwayFlagSVG';
 
 const {NedChevron} = require('nav-frontend-chevron');
 
@@ -16,7 +16,7 @@ interface IProps {
 
 const AvailableLocales: Locale[] = ['nb', 'nn'];
 
-const renderMenuItem = (intl: InjectedIntl, locale: Locale) => {
+const renderMenuItem = (intl: IntlShape, locale: Locale) => {
     return (
         <li key={locale}>
             <MenuItem className="languageToggle__menu__item">
@@ -31,7 +31,7 @@ const renderMenuItem = (intl: InjectedIntl, locale: Locale) => {
     );
 };
 
-const LanguageToggle: React.StatelessComponent<IProps & InjectedIntlProps> = ({
+const LanguageToggle: React.StatelessComponent<IProps & WrappedComponentProps> = ({
     intl,
     locale,
     toggle: toggleLanguage
