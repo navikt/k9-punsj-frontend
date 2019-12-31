@@ -818,12 +818,19 @@
   dependencies:
     "@formatjs/intl-utils" "^1.6.0"
 
-"@formatjs/intl-relativetimeformat@4.5.1", "@formatjs/intl-relativetimeformat@^4.5.1":
+"@formatjs/intl-relativetimeformat@4.5.1":
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-4.5.1.tgz#167298f3ca61123ac4cc4e45d09e55678dd7d369"
   integrity sha512-s32xwuxvkozX6NxUVAnEGZU1/k3HA3kSsRXtpCvftnCWsshNAUsUWLS/6GpfHcjLfY1XEGptSKouTasyGLZdsg==
   dependencies:
     "@formatjs/intl-utils" "^1.6.0"
+
+"@formatjs/intl-relativetimeformat@^4.5.1", "@formatjs/intl-relativetimeformat@^4.5.4":
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-4.5.4.tgz#dcf1e27ffa39e8985a3590ffe11e1ddda9d326a8"
+  integrity sha512-RmIQQLeUzL77ShfsZglTUtONBDGFCbbxvU9xWtEhaoaKKb3xD2e4apUG7iaDoOrghsEcjdYDzqDY2vQZyyg+kQ==
+  dependencies:
+    "@formatjs/intl-utils" "^2.0.1"
 
 "@formatjs/intl-unified-numberformat@2.2.0", "@formatjs/intl-unified-numberformat@^2.2.0":
   version "2.2.0"
@@ -836,6 +843,11 @@
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-1.6.0.tgz#43b094232b9ef98b57a270bcecee99168d329e9f"
   integrity sha512-5D0C4tQgNFJNaJ17BYum0GfAcKNK3oa1VWzgkv/AN7i52fg4r69ZLcpEGpf6tZiX9Qld8CDwTQOeFt6fuOqgVw==
+
+"@formatjs/intl-utils@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.0.1.tgz#6d310808e34b60184564cf3800526f012eb9d622"
+  integrity sha512-g5C+Pfka3lJyQhkB1dvC0g6g3y0uUNYxNyFKjFk7VhVt4m/+wXT1FLK1TDuOgpsrGWstZ/Pt4g5tpgPgTR4s6w==
 
 "@formatjs/macro@0.2.6", "@formatjs/macro@^0.2.6":
   version "0.2.6"
