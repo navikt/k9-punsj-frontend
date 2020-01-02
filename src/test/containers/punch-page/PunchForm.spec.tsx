@@ -4,7 +4,7 @@ import {
     IPunchFormStateProps,
     PunchFormComponent
 }                                                     from 'app/containers/punch-page/PunchForm';
-import {IJournalpost, IPunchFormState}                from 'app/models/types';
+import {IJournalpost, IPunchFormState, IPunchState}   from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
 import {configure, shallow}                           from 'enzyme';
 import Adapter                                        from 'enzyme-adapter-react-16';
@@ -20,7 +20,12 @@ jest.mock('app/utils/pathUtils');
 
 configure({adapter: new Adapter()});
 
-const setupPunchForm = (punchFormState: Partial<IPunchFormState>, ident: string, mappeid: string) => {
+const setupPunchForm = (
+    punchFormStateSetup: Partial<IPunchFormState>,
+    ident: string,
+    mappeid: string,
+    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>
+) => {
 
     const journalpostid = '200';
 
@@ -36,7 +41,8 @@ const setupPunchForm = (punchFormState: Partial<IPunchFormState>, ident: string,
         resetPunchFormAction: jest.fn(),
         submitSoknad: jest.fn(),
         undoChoiceOfMappeAction: jest.fn(),
-        updateSoknad: jest.fn()
+        updateSoknad: jest.fn(),
+        ...punchFormDispatchPropsSetup
     };
 
     const journalpost: IJournalpost = {
@@ -45,21 +51,21 @@ const setupPunchForm = (punchFormState: Partial<IPunchFormState>, ident: string,
         norsk_ident: '12345678901'
     };
 
-    const punchState = {
+    const punchState: IPunchState = {
         journalpost,
         ident,
         step: 3,
         isJournalpostLoading: false
     };
 
-    const finalPunchFormState = {
+    const punchFormState: IPunchFormState = {
         isMappeLoading: false,
-        ...punchFormState
+        ...punchFormStateSetup
     };
 
     const punchFormStateProps: IPunchFormStateProps = {
         punchState,
-        punchFormState: finalPunchFormState
+        punchFormState: punchFormState
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
@@ -92,6 +98,28 @@ describe('PunchForm', () => {
         expect(punchForm.find('h2').at(0).text()).toEqual('skjema.signatur.overskrift');
     });
 
+    it('Henter mappeinformasjon', () => {
+
+        const ident = '123';
+        const mappeid = 'abc';
+        const getMappe = jest.fn();
+
+        setupPunchForm({}, ident, mappeid, {getMappe});
+
+        expect(getMappe).toHaveBeenCalledTimes(1);
+        expect(getMappe).toHaveBeenCalledWith(mappeid);
+    });
+
+    it('Viser spinner når mappen lastes inn', () => {
+
+        const ident = '123';
+        const mappeid = 'abc';
+
+        const punchForm = setupPunchForm({isMappeLoading: true}, ident, mappeid);
+
+        expect(punchForm.find('NavFrontendSpinner')).toHaveLength(1);
+    });
+
     it('Viser feilmelding når mappen ikke er funnet', () => {
 
         const ident = '123';
@@ -101,5 +129,36 @@ describe('PunchForm', () => {
 
         expect(punchForm.find('AlertStripeFeil')).toHaveLength(1);
         expect(punchForm.find('AlertStripeFeil').prop('children')).toEqual('skjema.feil.ikke_funnet');
+    });
+
+    it('Oppdaterer mappe når det gjøres endringer', () => {
+
+        const ident = '123';
+        const mappeid = 'abc';
+        const updateSoknad = jest.fn();
+
+        const punchForm = setupPunchForm({}, ident, mappeid, {updateSoknad});
+
+        punchForm.find('Checkbox[label="skjema.signatur.bekreftelse"]')
+                 .simulate('change', {target: {checked: true}});
+
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({signert: true}));
+    });
+
+    it('Sender inn søknad', () => {
+
+        const ident = '123';
+        const mappeid = 'abc';
+        const submitSoknad = jest.fn();
+
+        const punchForm = setupPunchForm({}, ident, mappeid, {submitSoknad});
+
+        punchForm.find('.sendknapp-wrapper')
+                 .find('Knapp')
+                 .simulate('click');
+
+        expect(submitSoknad).toHaveBeenCalledTimes(1);
+        expect(submitSoknad).toHaveBeenCalledWith(mappeid, ident);
     });
 });

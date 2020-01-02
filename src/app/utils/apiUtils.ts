@@ -1,5 +1,8 @@
 import {ApiPath, URL_API, URL_AUTH_LOGIN} from 'app/apiConfig';
+import {getLocation, redirect}            from 'app/utils/browserUtils';
 import {String}                           from 'typescript-string-operations';
+
+const Headers = require('fetch-headers');
 
 export const apiUrl = (path: ApiPath, parameters?: any) =>
     URL_API + (!!parameters ? String.Format(path, parameters) : path);
@@ -65,8 +68,8 @@ export async function put(path: ApiPath,
     return response;
 }
 
-export const loginUrl = () => String.Format(URL_AUTH_LOGIN, {uri: encodeURIComponent(window.location.href)});
+export const loginUrl = () => String.Format(URL_AUTH_LOGIN, {uri: encodeURIComponent(getLocation())});
 
 export function login() {
-    window.location.href = loginUrl();
+    redirect(loginUrl());
 }
