@@ -17,6 +17,7 @@ import {Panel}                                         from 'nav-frontend-panele
 import {Input}                                         from 'nav-frontend-skjema';
 import NavFrontendSpinner                              from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
+import {Resizable}                                     from 're-resizable';
 import * as React                                      from 'react';
 import {Col, Container, Row}                           from 'react-bootstrap';
 import {injectIntl, WrappedComponentProps}             from 'react-intl';
@@ -89,19 +90,25 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         }
 
         return <div className="panels-wrapper" id="panels-wrapper">
-            <Panel className="punch_form" border={true}>
-                <div>
-                    {punchState.step > PunchStep.FORDELING && <Input
-                        label={intlHelper(intl, 'skjema.ident')}
-                        onChange={this.handleIdentBlur}
-                        onKeyPress={this.handleIdentKeyPress}
-                        value={punchState.ident}
-                        disabled={punchState.step > PunchStep.IDENT}
-                        className="bold-label"
-                    />}
-                </div>
-                {this.underFnr()}
-            </Panel>
+                <Panel className="punch_form" border={true}>
+                    <div>
+                        {punchState.step > PunchStep.FORDELING && <Input
+                            label={intlHelper(intl, 'skjema.ident')}
+                            onChange={this.handleIdentBlur}
+                            onKeyPress={this.handleIdentKeyPress}
+                            value={punchState.ident}
+                            disabled={punchState.step > PunchStep.IDENT}
+                            className="bold-label"
+                        />}
+                    </div>
+                    {this.underFnr()}
+                </Panel>
+            <Resizable
+                className="punch_pdf_wrapper"
+                enable={{top: false, right: false, bottom: false, left: true, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false}}
+                defaultSize={{width: '50%', height: '100%'}}
+                minWidth={400}
+            >
             <Panel className="punch_pdf">
                 <iframe src={this.pdfUrl()}/>
                 <div className="knapperad">
@@ -113,6 +120,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
                     className="button_open"
                 ><VenstreChevron/></Flatknapp>
             </Panel>
+                              </Resizable>
         </div>;
     }
 

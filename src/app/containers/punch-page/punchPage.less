@@ -20,13 +20,19 @@
     padding-bottom: 1rem;
     min-height:     100px;
 
+    .punch_pdf_wrapper {
+      width:          100%;
+      display:        flex;
+      flex-direction: column;
+      align-items:    stretch;
+    }
+
     .punch_pdf {
 
-      width:            100%;
       padding:          4px;
       margin-left:      0.5rem;
       background-color: @navGra40;
-      transition:       width .2s;
+      height:           100%;
       display:          flex;
       flex-direction:   column;
       align-items:      stretch;
@@ -162,8 +168,11 @@
       .sendknapp-wrapper {margin-bottom: 0}
     }
 
-    &.pdf_closed .punch_pdf {
-      width: 50px;
+    &.pdf_closed .punch_pdf_wrapper {
+      width:      54px !important;
+      min-width:  54px !important;
+      transition: width .2s, min-width .2s;
+      div {cursor: default !important}
       iframe, .knapperad {display: none}
       .button_open {display: block}
     }
