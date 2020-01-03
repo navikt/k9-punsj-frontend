@@ -9,8 +9,8 @@ export function getPath(paths: IPath[], step: number, values?: any) {
 }
 
 function formatForRouter(path: string) {
-    return path.replace('{', ':')
-               .replace('}', '');
+    return path.replace(/{/g, ':')
+               .replace(/}/g, '');
 }
 
 export function changePath(path: string) {
