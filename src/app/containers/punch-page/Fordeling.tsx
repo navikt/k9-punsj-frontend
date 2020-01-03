@@ -12,18 +12,18 @@ import React, {useEffect}                           from 'react';
 import {injectIntl, WrappedComponentProps}          from 'react-intl';
 import {connect}                                    from 'react-redux';
 
-interface IFordelingStateProps {
+export interface IFordelingStateProps {
     punchState: IPunchState;
     fordelingState: IFordelingState;
 }
 
-interface IFordelingDispatchProps {
+export interface IFordelingDispatchProps {
     setStepAction:      typeof setStepAction;
     setSakstypeAction:  typeof setSakstypeAction;
     omfordel:           typeof omfordel;
 }
 
-interface IFordelingComponentProps {
+export interface IFordelingComponentProps {
     getPunchPath: (step: PunchStep) => string;
 }
 

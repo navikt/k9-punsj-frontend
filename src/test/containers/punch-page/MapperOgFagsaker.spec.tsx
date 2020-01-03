@@ -14,13 +14,17 @@ jest.mock('react-intl');
 jest.mock('react-router');
 jest.mock('app/containers/punch-page/FagsakReadMode', () => ({FagsakReadMode: () => <></>}));
 jest.mock('app/containers/punch-page/SoknadReadMode', () => ({SoknadReadMode: () => <></>}));
-jest.mock('app/utils/browserUtils', () => ({getHash: () => '#/hentsoknader/testident'}));
+jest.mock('app/utils/browserUtils', () => ({getHash: () => '#/hentsoknader/testident', setHash: jest.fn()}));
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/pathUtils');
 
 configure({adapter: new Adapter()});
 
-const setupMapperOgFagsaker = (ident: string, mapperOgFagsakerStatePartial: Partial<IMapperOgFagsakerState>) => {
+const setupMapperOgFagsaker = (
+    ident: string,
+    mapperOgFagsakerStatePartial?: Partial<IMapperOgFagsakerState>,
+    mapperOgFagsakerDispatchPropsPartial?: Partial<IMapperOgFagsakerDispatchProps>
+) => {
 
     const journalpostid = '200';
 
@@ -40,7 +44,8 @@ const setupMapperOgFagsaker = (ident: string, mapperOgFagsakerStatePartial: Part
         openMappeAction: jest.fn(),
         resetMappeidAction: jest.fn(),
         setStepAction: jest.fn(),
-        undoSearchForMapperAction: jest.fn()
+        undoSearchForMapperAction: jest.fn(),
+        ...mapperOgFagsakerDispatchPropsPartial
     };
 
     const journalpost: IJournalpost = {
@@ -96,8 +101,31 @@ describe('MapperOgFagsaker', () => {
                 mangler: []
             }}
         };
+
         const mapperOgFagsaker = setupMapperOgFagsaker(ident, {mapper: [mappe]});
 
         expect(mapperOgFagsaker.find('.punch_mappetabell')).toHaveLength(1);
+    });
+
+    it('Velger en ufullstendig søknad', () => {
+
+        const ident = '1234';
+        const mappe: IMappe = {
+            mappe_id: '567',
+            personlig: {[ident]: {
+                    innhold: {},
+                    innsendinger: [],
+                    mangler: []
+                }}
+        };
+        const chooseMappeAction = jest.fn();
+
+        const mapperOgFagsaker = setupMapperOgFagsaker(ident, {mapper: [mappe]}, {chooseMappeAction});
+
+        mapperOgFagsaker.find('ModalWrapper .punch_mappemodal_knapperad .knapp1')
+                        .simulate('click');
+
+        expect(chooseMappeAction).toHaveBeenCalledTimes(1);
+        expect(chooseMappeAction).toHaveBeenCalledWith(mappe);
     });
 });
