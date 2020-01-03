@@ -12,7 +12,3 @@ function formatForRouter(path: string) {
     return path.replace(/{/g, ':')
                .replace(/}/g, '');
 }
-
-export function changePath(path: string) {
-    window.location.hash = path;
-}

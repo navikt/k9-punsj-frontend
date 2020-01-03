@@ -18,9 +18,9 @@ jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-jest.mock('app/containers/punch-page/Fordeling', () => {return {Fordeling: () => <></>}});
-jest.mock('app/containers/punch-page/MapperOgFagsaker', () => {return {MapperOgFagsaker: () => <></>}});
-jest.mock('app/containers/punch-page/PunchForm', () => {return {PunchForm: () => <></>}});
+jest.mock('app/containers/punch-page/Fordeling', () => ({Fordeling: () => <></>}));
+jest.mock('app/containers/punch-page/MapperOgFagsaker', () => ({MapperOgFagsaker: () => <></>}));
+jest.mock('app/containers/punch-page/PunchForm', () => ({PunchForm: () => <></>}));
 
 configure({adapter: new Adapter()});
 

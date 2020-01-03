@@ -8,7 +8,7 @@ import {PunchStep}                                     from 'app/models/enums';
 import {IPath, IPunchState}                            from 'app/models/types';
 import {getJournalpost, setIdentAction, setStepAction} from 'app/state/actions';
 import {RootStateType}                                 from 'app/state/RootState';
-import {apiUrl, changePath, getPath}                   from 'app/utils';
+import {apiUrl, getPath, setHash}                      from 'app/utils';
 import intlHelper                                      from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
 import {HoyreChevron, VenstreChevron}                  from 'nav-frontend-chevron';
@@ -150,14 +150,14 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
             case PunchStep.IDENT:           return <IdentPage findSoknader={this.findSoknader}
                                                               setStepAction={this.props.setStepAction}
                                                               getPunchPath={this.getPath}/>;
-            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps}/>;
+            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} ident={this.props.match.params.ident}/>;
             case PunchStep.FILL_FORM:       return <PunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:       return <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>;
         }
     }
 
     private findSoknader = () => {
-        changePath(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: this.props.punchState.ident}));
+        setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: this.props.punchState.ident}));
     };
 
     private handleIdentBlur = (event: any) => this.props.setIdentAction(event.target.value);
@@ -165,7 +165,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
     private handleIdentKeyPress = (event: any) => {
         if (event.key === 'Enter') {
             this.handleIdentBlur(event);
-            changePath(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: event.target.value}));
+            setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: event.target.value}));
         }
     };
 }
@@ -188,7 +188,7 @@ const IdentPage: React.FunctionComponent<IIdentPageProps> = (props: IIdentPagePr
     React.useEffect(() => {props.setStepAction(PunchStep.IDENT)}, []);
     return <div className="knapperad">
         <Knapp onClick={props.findSoknader} className="knapp knapp1">Åpne skjema</Knapp>
-        <Knapp onClick={() => changePath(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">Tilbake</Knapp>
+        <Knapp onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">Tilbake</Knapp>
     </div>;
 };
 

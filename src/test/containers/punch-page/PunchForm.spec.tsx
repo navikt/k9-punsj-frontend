@@ -65,7 +65,7 @@ const setupPunchForm = (
 
     const punchFormStateProps: IPunchFormStateProps = {
         punchState,
-        punchFormState: punchFormState
+        punchFormState
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {

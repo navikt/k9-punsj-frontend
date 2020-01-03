@@ -2,7 +2,7 @@ import {PunchStep, Sakstype}                        from 'app/models/enums';
 import {IFordelingState, IPunchState}               from 'app/models/types';
 import {omfordel, setSakstypeAction, setStepAction} from 'app/state/actions';
 import {RootStateType}                              from 'app/state/RootState';
-import {changePath}                                 from 'app/utils';
+import {setHash}                                    from 'app/utils';
 import intlHelper                                   from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeSuksess}        from 'nav-frontend-alertstriper';
 import {Knapp}                                      from 'nav-frontend-knapper';
@@ -37,7 +37,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const {intl, fordelingState} = props;
     const {sakstype} = fordelingState;
 
-    const punch = () => changePath(props.getPunchPath(PunchStep.IDENT));
+    const punch = () => setHash(props.getPunchPath(PunchStep.IDENT));
 
     useEffect(() => {props.setStepAction(PunchStep.FORDELING);}, []);
 

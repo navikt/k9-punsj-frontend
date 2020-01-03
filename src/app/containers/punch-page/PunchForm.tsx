@@ -13,7 +13,7 @@ import {
     updateSoknad
 }                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
-import {changePath}                                           from 'app/utils';
+import {setHash}                                              from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
 import _                                                      from 'lodash';
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
@@ -114,7 +114,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
         if (punchFormState.isComplete) {
-            changePath(this.props.getPunchPath(PunchStep.COMPLETED));
+            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
             return null;
         }
 
@@ -477,12 +477,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const {punchState, getPunchPath} = this.props;
         this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
-        changePath(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
+        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
     };
 
     private handleStartButtonClick = () => {
         this.props.resetPunchFormAction();
-        changePath(this.props.getPunchPath(PunchStep.FORDELING));
+        setHash(this.props.getPunchPath(PunchStep.FORDELING));
     };
 
     private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({

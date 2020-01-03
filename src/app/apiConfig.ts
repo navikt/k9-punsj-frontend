@@ -1,4 +1,4 @@
-import {getEnvironmentVariable} from './utils';
+import {getEnvironmentVariable} from 'app/utils';
 
 const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
 const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';

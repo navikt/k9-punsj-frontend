@@ -17,7 +17,7 @@ import {
     undoSearchForMapperAction
 }                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
-import {changePath, datetime}                                 from 'app/utils';
+import {datetime, getHash, setHash}                           from 'app/utils';
 import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
 import {Knapp}                                                from 'nav-frontend-knapper';
 import ModalWrapper                                           from 'nav-frontend-modal';
@@ -25,14 +25,13 @@ import NavFrontendSpinner                                     from 'nav-frontend
 import * as React                                             from 'react';
 import {injectIntl, WrappedComponentProps}                    from 'react-intl';
 import {connect}                                              from 'react-redux';
-import {useParams}                                            from 'react-router-dom';
 
-interface IMapperOgFagsakerStateProps {
+export interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;
     mapperOgFagsakerState: IMapperOgFagsakerState;
 }
 
-interface IMapperOgFagsakerDispatchProps {
+export interface IMapperOgFagsakerDispatchProps {
     setIdentAction:             typeof setIdentAction;
     setStepAction:              typeof setStepAction;
     findMapper:                 typeof findMapper;
@@ -47,8 +46,9 @@ interface IMapperOgFagsakerDispatchProps {
     resetMappeidAction:         typeof resetMappeidAction;
 }
 
-interface IMapperOgFagsakerComponentProps {
+export interface IMapperOgFagsakerComponentProps {
     journalpostid:  string;
+    ident:          string;
     getPunchPath:   (step: PunchStep, values?: any) => string;
 }
 
@@ -59,9 +59,8 @@ type IMapperOgFagsakerProps = WrappedComponentProps &
 
 export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
 
-    const {intl, punchState, mapperOgFagsakerState, getPunchPath} = props;
+    const {intl, punchState, mapperOgFagsakerState, getPunchPath, ident} = props;
     const {mapper, fagsaker} = mapperOgFagsakerState;
-    const {ident} = useParams();
 
     React.useEffect(() => {
         if (!!ident && ident !== '') {
@@ -70,17 +69,17 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             props.findFagsaker(ident);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            changePath(getPunchPath(PunchStep.IDENT));
+            setHash(getPunchPath(PunchStep.IDENT));
         }
     }, [ident]);
 
     if (!!mapperOgFagsakerState.mappeid) {
         props.resetMappeidAction();
-        changePath(getPunchPath(PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
+        setHash(getPunchPath(PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
         return null;
     }
 
-    if (!ident || ident === '' || !window.location.hash.match(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
+    if (!ident || ident === '' || !getHash().match(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
         return null;
     }
 
@@ -109,7 +108,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     const chooseMappe = (mappe: IMappe) => {
         props.chooseMappeAction(mappe);
-        changePath(getPunchPath(PunchStep.FILL_FORM, {id: mappe.mappe_id}));
+        setHash(getPunchPath(PunchStep.FILL_FORM, {id: mappe.mappe_id}));
     };
 
     function showMapper() {
@@ -221,7 +220,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
     }
 
     function undoSearchForMapperAndFagsaker() {
-        changePath(getPunchPath(PunchStep.IDENT));
+        setHash(getPunchPath(PunchStep.IDENT));
         props.undoSearchForMapperAction();
     }
 
