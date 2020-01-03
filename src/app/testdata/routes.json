@@ -1,7 +1,0 @@
-{
-  "/pleiepenger-sykt-barn-soknad/mapper/:norsk_ident": "/mapper1?norsk_ident=:norsk_ident",
-  "/fagsak/:norsk_ident\\?ytelse=pleiepenger_sykt_barn": "/fagsak1?norsk_ident=:norsk_ident",
-  "/journalpost/:journalpost_id/dokument/:dokument_id": "/dokument",
-  "/pleiepenger-sykt-barn-soknad/mappe/:mappe_id": "/mapper1/:mappe_id",
-  "/pleiepenger-sykt-barn-soknad": "/mapper1"
-}

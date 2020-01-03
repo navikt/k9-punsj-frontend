@@ -9,25 +9,19 @@ npm install
 npm start
 ````
 
-## Teststub
-Applikasjonen kan kjøres uten backend ved hjelp av teststub generert av Jsonserver.
+## Backend-mock
+Applikasjonen er avhengig av [oidc-auth-proxy](https://github.com/navikt/oidc-auth-proxy) og [k9-punsj](https://github.com/navikt/k9-punsj). Disse har innebygget mocking.
 
-Følgende kommando installerer Jsonserver:
+For å kjøre opp mock i **oidc-auth-proxy**:
 ````
-npm install -g json-server
+npm run start-dev-with-mocks
 ````
 
-Følgende kommando vil kjøre opp testdata generert av Jsonserver på port 4000:
-````
-npm run mock:api
-````
-Testdataen er plassert i `src/app/testdata`.
+For å kjøre opp mock i **k9-punsj**, kjør *K9PunsjApplicationWithMocks*.
 
 ## To do
-* Fastsette inputfelter
-* Håndtere hele flyten
-* Tilpasse design
-* Tekster
+* Utvide for flere søkere
+* Utvide søknadsskjemaet
 
 ## Henvendelser
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.

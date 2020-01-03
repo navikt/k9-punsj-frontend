@@ -64,8 +64,7 @@
     "build":         "node ./src/build/scripts/production-build.js",
     "test":          "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --config ./jest.config.json",
     "eject":         "react-scripts eject",
-    "snyk-protect":  "snyk protect",
-    "mock:api":      "json-server --watch ./src/app/testdata/db.json --id mappe_id --routes ./src/app/testdata/routes.json --port 5000"
+    "snyk-protect":  "snyk protect"
   },
   "devDependencies": {
     "@babel/core":                              "^7.7.7",
