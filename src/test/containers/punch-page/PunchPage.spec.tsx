@@ -4,7 +4,7 @@ import {
     IPunchPageStateProps,
     PunchPageComponent
 }                                                     from 'app/containers/punch-page/PunchPage';
-import {IJournalpost, IPunchState}                    from 'app/models/types';
+import {IError, IJournalpost, IPunchState}            from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
 import {configure, shallow}                           from 'enzyme';
 import Adapter                                        from 'enzyme-adapter-react-16';
@@ -24,7 +24,15 @@ jest.mock('app/containers/punch-page/PunchForm', () => ({PunchForm: () => <></>}
 
 configure({adapter: new Adapter()});
 
-const setupPunchPage = (journalpostid: string, hash: string, punchState: IPunchState, mappeid?: string) => {
+const setupPunchPage = (
+    journalpostinfo: string | IJournalpost,
+    hash: string,
+    punchStatePartial?: Partial<IPunchState>,
+    mappeid?: string,
+    punchPageDispatchPropsPartial?: Partial<IPunchPageDispatchProps>
+) => {
+
+    const journalpostid = typeof journalpostinfo === 'string' ? journalpostinfo : journalpostinfo.journalpost_id;
 
     const routeComponentProps = {
         match: {params: {id: mappeid}},
@@ -39,19 +47,22 @@ const setupPunchPage = (journalpostid: string, hash: string, punchState: IPunchS
     const punchPageDispatchProps: IPunchPageDispatchProps = {
         getJournalpost: jest.fn(),
         setIdentAction: jest.fn(),
-        setStepAction: jest.fn()
+        setStepAction: jest.fn(),
+        ...punchPageDispatchPropsPartial
     };
 
-    const journalpost: IJournalpost = {
+    const journalpost: IJournalpost = typeof journalpostinfo === 'string' ? {
         dokumenter: [{dokument_id: '123'}],
         journalpost_id: journalpostid,
         norsk_ident: '12345678901'
-    };
+    } : journalpostinfo;
 
-    punchState = {
+    const punchState: IPunchState = {
         journalpost,
         isJournalpostLoading: false,
-        ...punchState
+        step: 0,
+        ident: '',
+        ...punchStatePartial
     };
 
     const punchPageStateProps: IPunchPageStateProps = {
@@ -78,6 +89,59 @@ const setupPunchPage = (journalpostid: string, hash: string, punchState: IPunchS
 };
 
 describe('PunchPage', () => {
+
+    it('Henter journalpost og viser dokument', () => {
+
+        const journalpostid = '200';
+        const getJournalpost = jest.fn();
+        const dokumentid = '123';
+        const ident = '54321098765';
+        const journalpost = {
+            dokumenter: [{dokument_id: dokumentid}],
+            journalpost_id: journalpostid,
+            norsk_ident: ident
+        };
+
+        const punchPage = setupPunchPage(journalpost,'#/', {ident}, undefined, {getJournalpost});
+
+        expect(getJournalpost).toHaveBeenCalledTimes(1);
+        expect(getJournalpost).toHaveBeenCalledWith(journalpostid);
+        expect(punchPage.find('iframe').prop('src')).toContain(journalpostid);
+        expect(punchPage.find('iframe').prop('src')).toContain(dokumentid);
+    });
+
+    it('Viser feilmelding hvis journalpost ikke finnes', () => {
+
+        const journalpostRequestError: IError = {status: 404};
+
+        const punchPage = setupPunchPage('200','#/', {journalpostRequestError});
+
+        expect(punchPage.find('AlertStripeFeil')).toHaveLength(1);
+        expect(punchPage.find('AlertStripeFeil').children().text()).toEqual('startPage.feil.journalpost');
+    });
+
+    it('Viser spinner mens journalpost lastes inn', () => {
+
+        const punchPage = setupPunchPage('200','#/', {isJournalpostLoading: true});
+
+        expect(punchPage.find('NavFrontendSpinner')).toHaveLength(1);
+    });
+
+    it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
+
+        const journalpostid = '200';
+        const ident = '54321098765';
+        const journalpost = {
+            dokumenter: [],
+            journalpost_id: journalpostid,
+            norsk_ident: ident
+        };
+
+        const punchPage = setupPunchPage(journalpost,'#/', {ident});
+
+        expect(punchPage.find('AlertStripeFeil')).toHaveLength(1);
+        expect(punchPage.find('AlertStripeFeil').children().text()).toEqual('startPage.feil.ingendokumenter');
+    });
 
     it('Laster inn fordelingsskjema', () => {
 

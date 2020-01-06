@@ -1,23 +1,26 @@
 import '@babel/polyfill';
-import {ApiPath}                from 'app/apiConfig';
-import {apiUrl, get, post, put} from 'app/utils';
-import {redirect}               from 'app/utils/browserUtils';
-import fetchMock                from 'fetch-mock';
+import {ApiPath}                                        from 'app/apiConfig';
+import {apiUrl, convertResponseToError, get, post, put} from 'app/utils';
+import {redirect}                                       from 'app/utils/browserUtils';
+import fetchMock                                        from 'fetch-mock';
+const Headers = require('fetch-headers');
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
 
-describe('apiUtils', () => {
-
-    beforeEach(() => {
-        fetchMock.reset();
-        jest.resetAllMocks();
-    });
-
+describe('apiUrl', () => {
     it('Genererer URL med parametre', () => {
         const id = 'abc123';
         const url = apiUrl(ApiPath.MAPPE_GET, {id});
         expect(url).toContain(id);
+    });
+});
+
+describe('get', () => {
+
+    beforeEach(() => {
+        fetchMock.reset();
+        jest.resetAllMocks();
     });
 
     it('Utfører get-spørring', async () => {
@@ -60,6 +63,14 @@ describe('apiUtils', () => {
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith(expect.objectContaining(response));
     });
+});
+
+describe('post', () => {
+
+    beforeEach(() => {
+        fetchMock.reset();
+        jest.resetAllMocks();
+    });
 
     it('Utfører post-spørring', async () => {
 
@@ -98,6 +109,14 @@ describe('apiUtils', () => {
 
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith(expect.objectContaining(response));
+    });
+});
+
+describe('put', () => {
+
+    beforeEach(() => {
+        fetchMock.reset();
+        jest.resetAllMocks();
     });
 
     it('Utfører put-spørring', async () => {
@@ -143,4 +162,31 @@ describe('apiUtils', () => {
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith(expect.objectContaining(response));
     });
+});
+
+describe('convertResponseToError', () => {
+    it('Henter feilinformasjon fra respons', () => {
+        const url = 'http://testurl.test/';
+        const status = 404;
+        const statusText = 'Not found';
+        const respons: Response = {
+            url,
+            status,
+            statusText,
+            ok: false,
+            type: 'cors',
+            redirected: false,
+            headers: new Headers(),
+            body: null,
+            bodyUsed: false,
+            trailer: new Promise<Headers>(jest.fn),
+            clone: jest.fn(),
+            arrayBuffer: jest.fn(),
+            blob: jest.fn(),
+            formData: jest.fn(),
+            json: jest.fn(),
+            text: jest.fn()
+        };
+        expect(convertResponseToError(respons)).toEqual({url, status, statusText});
+    })
 });

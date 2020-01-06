@@ -1,8 +1,8 @@
-import {ApiPath}                 from 'app/apiConfig';
-import {PunchFormActionKeys}     from 'app/models/enums';
-import {IError, IMappe, ISoknad} from 'app/models/types';
-import {IInputError}             from 'app/models/types/InputError';
-import {get, post, put}          from 'app/utils';
+import {ApiPath}                                from 'app/apiConfig';
+import {PunchFormActionKeys}                    from 'app/models/enums';
+import {IError, IMappe, ISoknad}                from 'app/models/types';
+import {IInputError}                            from 'app/models/types/InputError';
+import {convertResponseToError, get, post, put} from 'app/utils';
 
 interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
 
@@ -43,8 +43,7 @@ export function getMappe(id: string) {return (dispatch: any) => {
             return response.json()
                            .then(mappe => dispatch(setMappeAction(mappe)));
         }
-        const {status, statusText, url} = response;
-        return dispatch(getMappeErrorAction({status, statusText, url}));
+        return dispatch(getMappeErrorAction(convertResponseToError(response)));
     });
 }}
 
@@ -76,8 +75,7 @@ export function updateSoknad(mappeid: string,
                                    dispatch(updateSoknadSuccessAction(mappe.personlig?.[norskIdent]?.mangler));
                                });
             default:
-                const {status, statusText, url} = response;
-                return dispatch(updateSoknadErrorAction({status, statusText, url}));
+                return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
         }
     });
 }}
@@ -94,8 +92,7 @@ export function submitSoknad(mappeid: string, ident: string) {return (dispatch: 
             case 202: return dispatch(submitSoknadSuccessAction());
             case 400: return response.json().then(mappe => dispatch(submitSoknadUncompleteAction(mappe.mangler)));
             default:
-                const {status, statusText, url} = response;
-                return dispatch(submitSoknadErrorAction({status, statusText, url}));
+                return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
         }
     });
 }}

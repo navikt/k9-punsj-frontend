@@ -19,6 +19,13 @@ npm run start-dev-with-mocks
 
 For å kjøre opp mock i **k9-punsj**, kjør *K9PunsjApplicationWithMocks*.
 
+## Enhetstester
+Alle enhetstester er plassert i [src/test](src/test). De kan kjøres med følgende kommando:
+````
+npm run test
+````
+Testene kjører automatisk når ny kode dyttes til [master](https://github.com/navikt/k9-punsj-frontend).
+
 ## To do
 * Utvide for flere søkere
 * Utvide søknadsskjemaet

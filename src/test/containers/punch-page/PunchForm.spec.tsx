@@ -5,6 +5,7 @@ import {
     PunchFormComponent
 }                                                     from 'app/containers/punch-page/PunchForm';
 import {IJournalpost, IPunchFormState, IPunchState}   from 'app/models/types';
+import {IPeriode}                                     from 'app/models/types/Soknad';
 import intlHelper                                     from 'app/utils/intlUtils';
 import {configure, shallow}                           from 'enzyme';
 import Adapter                                        from 'enzyme-adapter-react-16';
@@ -138,12 +139,34 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
 
         const punchForm = setupPunchForm({}, ident, mappeid, {updateSoknad});
+        const findSignaturCheckbox = () => punchForm.find('Checkbox[label="skjema.signatur.bekreftelse"]');
 
-        punchForm.find('Checkbox[label="skjema.signatur.bekreftelse"]')
-                 .simulate('change', {target: {checked: true}});
+        findSignaturCheckbox().simulate('change', {target: {checked: true}});
 
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({signert: true}));
+        expect(findSignaturCheckbox().prop('checked')).toBeTruthy();
+    });
+
+    it('Skjemaet skal inneholde én periode i starten', () => {
+
+        const punchForm = setupPunchForm({}, '123', 'abc');
+        expect(punchForm.find('.periodepanel')).toHaveLength(1);
+    });
+
+    it('Legger til periode når man klikker på "Legg til periode"-knappen', () => {
+
+        const ident = '123';
+        const mappeid = 'abc';
+        const updateSoknad = jest.fn();
+        const punchForm = setupPunchForm({}, ident, mappeid, {updateSoknad});
+        const numberOfPeriods = () => punchForm.find('.periodepanel').length;
+        const numberOfPeriodsBefore = numberOfPeriods();
+
+        punchForm.find('#addperiod').simulate('click');
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({perioder: expect.any(Array)}));
+        expect(numberOfPeriods()).toEqual(numberOfPeriodsBefore + 1);
     });
 
     it('Sender inn søknad', () => {

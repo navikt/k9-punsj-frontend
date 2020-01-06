@@ -1,7 +1,7 @@
-import {ApiPath}                    from 'app/apiConfig';
-import {PunchActionKeys, PunchStep} from 'app/models/enums';
-import {IError, IJournalpost}       from 'app/models/types';
-import {get}                        from 'app/utils';
+import {ApiPath}                     from 'app/apiConfig';
+import {PunchActionKeys, PunchStep}  from 'app/models/enums';
+import {IError, IJournalpost}        from 'app/models/types';
+import {convertResponseToError, get} from 'app/utils';
 
 interface ISetIdentAction                   {type: PunchActionKeys.IDENT_SET, ident: string}
 
@@ -25,7 +25,6 @@ export function setIdentAction(ident: string):                      ISetIdentAct
 
 export function setStepAction(step: PunchStep):                     ISetStepAction                  {return {type: PunchActionKeys.STEP_SET, step}}
 export function undoSearchForMapperAction():                        IBackFromMapperOgFagsakerAction {return {type: PunchActionKeys.BACK_FROM_MAPPER}}
-export function backFromFormAction():                               IBackFromFormAction             {return {type: PunchActionKeys.BACK_FROM_FORM}}
 
 export function setJournalpostAction(journalpost: IJournalpost):    ISetJournalpostAction           {return {type: PunchActionKeys.JOURNALPOST_SET, journalpost}}
 export function getJournalpostLoadAction():                         IGetJournalpostLoadAction       {return {type: PunchActionKeys.JOURNALPOST_LOAD}}
@@ -38,10 +37,6 @@ export function getJournalpost(journalpostid: string) {return (dispatch: any) =>
             return response.json()
                            .then(journalpost => dispatch(setJournalpostAction(journalpost)));
         }
-        return dispatch(getJournalpostErrorAction({
-            status:     response.status,
-            statusText: response.statusText,
-            url:        response.url
-        }));
+        return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
     });
 }}

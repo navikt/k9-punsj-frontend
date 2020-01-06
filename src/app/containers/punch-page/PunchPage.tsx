@@ -78,7 +78,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         }
 
         if (!!punchState.journalpostRequestError) {
-            return <AlertStripeFeil>Det skjedde en feil i uthenting av journalpost.</AlertStripeFeil>;
+            return <AlertStripeFeil>{intlHelper(intl, 'startPage.feil.journalpost')}</AlertStripeFeil>;
         }
 
         if (!punchState.journalpost) {
@@ -86,7 +86,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         }
 
         if (!punchState.journalpost.dokumenter.length) {
-            return <AlertStripeFeil>Journalposten har ingen tilhørende dokumenter.</AlertStripeFeil>;
+            return <AlertStripeFeil>{intlHelper(intl, 'startPage.feil.ingendokumenter')}</AlertStripeFeil>;
         }
 
         return <div className="panels-wrapper" id="panels-wrapper">

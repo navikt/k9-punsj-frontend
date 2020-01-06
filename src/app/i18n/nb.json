@@ -22,6 +22,8 @@
   "Ukedag.5":                                                        "Lørdag",
   "Ukedag.6":                                                        "Søndag",
   "startPage.tittel":                                                "K9-punsj",
+  "startPage.feil.journalpost":                                      "Kunne ikke finne journalpost.",
+  "startPage.feil.ingendokumenter":                                  "Journalposten har ingen tilhørende dokumenter.",
   "fordeling.overskrift":                                            "Hva gjelder journalposten?",
   "fordeling.sakstype.PLEIEPENGER_SYKT_BARN":                        "Pleiepenger sykt barn",
   "fordeling.sakstype.OMSORGSPENGER":                                "Omsorgspenger",

@@ -1,7 +1,7 @@
 import {ApiPath}                       from 'app/apiConfig';
 import {FordelingActionKeys, Sakstype} from 'app/models/enums';
 import {IError}                        from 'app/models/types';
-import {post}                          from 'app/utils';
+import {convertResponseToError, post}  from 'app/utils';
 
 interface ISetSakstypeAction        {type: FordelingActionKeys.SAKSTYPE_SET, sakstype: Sakstype}
 
@@ -40,8 +40,7 @@ export const omfordel = (journalpostid: string, sakstype: Sakstype) => {return (
         {ytelse},
         response => {
             if (response.status === 204) {return dispatch(omfordelingSuccessAction())}
-            const {status, statusText, url} = response;
-            return dispatch(omfordelingErrorAction({status, statusText, url}));
+            return dispatch(omfordelingErrorAction(convertResponseToError(response)));
         }
     );
 }};

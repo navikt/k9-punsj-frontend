@@ -1,7 +1,7 @@
-import {ApiPath}                    from 'app/apiConfig';
-import {MapperOgFagsakerActionKeys} from 'app/models/enums';
-import {IError, IFagsak, IMappe}    from 'app/models/types';
-import {get, post}                  from 'app/utils';
+import {ApiPath}                           from 'app/apiConfig';
+import {MapperOgFagsakerActionKeys}        from 'app/models/enums';
+import {IError, IFagsak, IMappe}           from 'app/models/types';
+import {convertResponseToError, get, post} from 'app/utils';
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
@@ -68,11 +68,7 @@ export function findFagsaker(ident: string) {return (dispatch: any) => {
             // return response.json().then(r => dispatch(setFagsakerAction(r.fagsaker || [])));
             return response.json().then(r => dispatch(setFagsakerAction([]))); // TODO: Avklare hvorvidt fagsaker skal vises eller ikke
         }
-        return dispatch(findFagsakerErrorAction({
-            status:     response.status,
-            statusText: response.statusText,
-            url:        response.url
-        }));
+        return dispatch(findFagsakerErrorAction(convertResponseToError(response)));
     })
 }}
 
@@ -114,11 +110,7 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
             return response.json()
                            .then(mappe => dispatch(createMappeSuccessAction(mappe.mappe_id)));
         }
-        return dispatch(createMappeErrorAction({
-            status:     response.status,
-            statusText: response.statusText,
-            url:        response.url
-        }));
+        return dispatch(createMappeErrorAction(convertResponseToError(response)));
     });
 }}
 

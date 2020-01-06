@@ -234,6 +234,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
                                         onFocus={() => this.setPeriodeFocus(i)}
                                         disabled={!soknad.signert}
+                                        maxLength={0}
                                     />}
                                 </SkjemaGruppe></Col></Row>
                                 <Row><Col><SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
@@ -255,6 +256,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
                                         onFocus={() => this.setPeriodeFocus(i)}
                                         disabled={!soknad.signert}
+                                        maxLength={0}
                                     />}
                                 </SkjemaGruppe></Col></Row>
                                 <Row><Col>
@@ -299,7 +301,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Panel>
                     ))}
                 </SkjemaGruppe>
-                <Knapp onClick={this.addPeriode} disabled={!soknad.signert}>{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
+                <Knapp
+                    id="addperiod"
+                    onClick={this.addPeriode}
+                    disabled={!soknad.signert}
+                >{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
                 {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
                 {!!soknad?.medlemskap?.opphold?.length && (
                     <table className="tabell tabell--stripet">
