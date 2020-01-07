@@ -12,12 +12,21 @@ npm start
 ## Backend-mock
 Applikasjonen er avhengig av [oidc-auth-proxy](https://github.com/navikt/oidc-auth-proxy) og [k9-punsj](https://github.com/navikt/k9-punsj). Disse har innebygget mocking.
 
-For å kjøre opp mock i **oidc-auth-proxy**:
+###For å kjøre opp mock i **oidc-auth-proxy**:
+Oppdater "test.env" i oidc-auth-proxy:
+````
+CLIENT_ID=k9-punsj
+PROXY_CONFIG={"apis":[{"path":"k9-punsj","url":"http://localhost:8085/api","scopes":"k9-punsj/.default"}]}
+````
+
 ````
 npm run start-dev-with-mocks
 ````
 
 For å kjøre opp mock i **k9-punsj**, kjør *K9PunsjApplicationWithMocks*.
+
+* Erstatt i filen MockConfiguration.kt: 
+"AZURE_V2_discovery_url" to "http://localhost:8082/.well-known/openid-configuration",
 
 ## Enhetstester
 Alle enhetstester er plassert i [src/test](src/test). De kan kjøres med følgende kommando:
