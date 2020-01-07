@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpackConfig = require('./webpack.config.global.js');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 require('dotenv').config();
 
@@ -20,6 +21,8 @@ webpackConfig.plugins.push(
         outputPath: path.resolve(__dirname, '../../../dist/dev')
     })
 );
+
+webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 
 webpackConfig.module.rules.push({
     test: /\.js$/,
