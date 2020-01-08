@@ -5,11 +5,11 @@ import {IntlProvider as Provider} from 'react-intl';
 const bokmalstekster = require('../../i18n/nb.json');
 const nynorsktekster = require('../../i18n/nn.json');
 
-export interface IntlProviderProps {
+export interface IIntlProviderProps {
     locale: Locale;
 }
 
-const MockIntlProvider: React.FunctionComponent<IntlProviderProps> = ({ locale, children }) => {
+const MockIntlProvider: React.FunctionComponent<IIntlProviderProps> = ({ locale, children }) => {
     const messages = locale === 'nb' ? bokmalstekster : nynorsktekster;
     return (
         <Provider locale={locale} messages={messages}>
