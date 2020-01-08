@@ -1,10 +1,10 @@
-import {TimeFormat}                        from 'app/models/enums';
-import {IPeriode, ISoknad}                 from 'app/models/types';
-import {datetime}                          from 'app/utils';
-import intlHelper                          from 'app/utils/intlUtils';
-import * as React                          from 'react';
-import {Col, Container, Row}               from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {TimeFormat}                                   from 'app/models/enums';
+import {IPeriodeMedBeredskapNattevaakArbeid, ISoknad} from 'app/models/types';
+import {datetime}                                     from 'app/utils';
+import intlHelper                                     from 'app/utils/intlUtils';
+import * as React                                     from 'react';
+import {Col, Container, Row}                          from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}            from 'react-intl';
 
 interface ISoknadReadModeProps {
     soknad: ISoknad;
@@ -29,7 +29,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col className={colClassName}>Perioder:</Col>
                     <Col className={colClassName}>
                         {!!soknad.perioder && soknad.perioder.length > 0 && <ul className="periodeliste">
-                            {soknad.perioder.map((p: IPeriode, i: number) => <li key={`periodelisteelement_${i}`}>{this.periodeItem(p)}</li>)}
+                            {soknad.perioder.map((p: IPeriodeMedBeredskapNattevaakArbeid, i: number) => <li key={`periodelisteelement_${i}`}>{this.periodeItem(p)}</li>)}
                         </ul>}
                     </Col>
                 </Row>
@@ -37,7 +37,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
         );
     }
 
-    private periodeItem(periode: IPeriode) {
+    private periodeItem(periode: IPeriodeMedBeredskapNattevaakArbeid) {
         const {fra_og_med, til_og_med, nattevaak, beredskap} = periode;
         const fom = !!fra_og_med && datetime(this.props.intl, TimeFormat.DATE_SHORT, fra_og_med);
         const tom = !!til_og_med && datetime(this.props.intl, TimeFormat.DATE_SHORT, til_og_med);

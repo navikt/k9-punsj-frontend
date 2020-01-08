@@ -8,3 +8,4 @@ export * from './PunchFormActionKeys';
 export * from './PunchStep';
 export * from './Sakstype';
 export * from './TimeFormat';
+export * from './Ukedag';
