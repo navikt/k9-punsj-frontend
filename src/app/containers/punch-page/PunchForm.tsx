@@ -1,7 +1,16 @@
-import DeleteButton                                           from 'app/components/delete-button/DeleteButton';
-import {Arbeidsforhold, PunchStep}                            from 'app/models/enums';
-import {IPeriode, IPunchFormState, IPunchState, ISoknad}      from 'app/models/types';
-import {IInputError}                                          from 'app/models/types/InputError';
+import DeleteButton                                                                           from 'app/components/delete-button/DeleteButton';
+import {Periodepaneler}                                                                       from 'app/containers/punch-page/Periodepaneler';
+import {Arbeidsforhold, PunchStep, Ukedag}                                                    from 'app/models/enums';
+import {
+    IInputError,
+    IPeriodeinfo,
+    IPeriodeMedBeredskapNattevaakArbeid,
+    IPunchFormState,
+    IPunchState,
+    ISoknad,
+    ITilsyn,
+    UkedagNumber
+}                                                                                             from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -11,21 +20,37 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                             from 'app/state/actions';
-import {RootStateType}                                        from 'app/state/RootState';
-import {setHash}                                              from 'app/utils';
-import intlHelper                                             from 'app/utils/intlUtils';
-import _                                                      from 'lodash';
-import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
-import {Knapp}                                                from 'nav-frontend-knapper';
-import {Panel}                                                from 'nav-frontend-paneler';
-import {Checkbox, Input, Select, SkjemaGruppe, Textarea}      from 'nav-frontend-skjema';
-import NavFrontendSpinner                                     from 'nav-frontend-spinner';
-import * as React                                             from 'react';
-import {Col, Container, Row}                                  from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                    from 'react-intl';
-import {connect}                                              from 'react-redux';
+}                                                                                             from 'app/state/actions';
+import {RootStateType}                                                                        from 'app/state/RootState';
+import {convertNumberToUkedag, durationToString, hoursFromString, minutesFromString, setHash} from 'app/utils';
+import intlHelper
+                                                                                              from 'app/utils/intlUtils';
+import _                                                                                      from 'lodash';
+import {
+    AlertStripeFeil,
+    AlertStripeInfo,
+    AlertStripeSuksess
+}                                                                                             from 'nav-frontend-alertstriper';
+import {
+    EtikettAdvarsel,
+    EtikettFokus,
+    EtikettSuksess
+}                                                                                             from 'nav-frontend-etiketter';
+import {Knapp}                                                                                from 'nav-frontend-knapper';
+import {Panel}                                                                                from 'nav-frontend-paneler';
+import {
+    Checkbox,
+    Input,
+    Select,
+    SkjemaGruppe,
+    Textarea
+}                                                                                             from 'nav-frontend-skjema';
+import NavFrontendSpinner
+                                                                                              from 'nav-frontend-spinner';
+import * as React                                                                             from 'react';
+import {Col, Container, Row}                                                                  from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}                                                    from 'react-intl';
+import {connect}                                                                              from 'react-redux';
 
 export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -77,6 +102,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     tilleggsinformasjon: ''
                 }
             }],
+            tilsynsordning: [],
             spraak: 'nb',
             barn: {
                 norsk_ident: '',
@@ -132,6 +158,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (!soknad) {
             return null;
         }
+
+        const initialTilsyn: ITilsyn = {
+            periode: {fraOgMed: '', tilOgMed: ''},
+            mandag: null,
+            tirsdag: null,
+            onsdag: null,
+            torsdag: null,
+            fredag: null
+        };
 
         return (<>
             {this.statusetikett()}
@@ -402,6 +437,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
                     feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
                 />*/}
+                <h2>Opplysninger om tilsyn av barnet</h2>
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.tilsynsordning!}
+                    component={this.tilsyn}
+                    panelid={i => `tilsynpanel_${i}`}
+                    initialPeriodeinfo={initialTilsyn}
+                    editSoknad={tilsynsordning => this.updateSoknad({tilsynsordning})}
+                    editSoknadState={tilsynsordning => this.updateSoknadState({tilsynsordning}, true)}
+                    textLeggTil="skjema.tilsyn.leggtilperiode"
+                    textFjern="skjema.tilsyn.fjernperiode"
+                />
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
                     disabled={!isSoknadComplete}
@@ -409,6 +456,63 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             </div>
         </>);
     }
+
+    private tilsyn = (tilsyn: ITilsyn,
+                      periodeindex: number,
+                      updatePeriodeinfoInSoknad: (info: Partial<IPeriodeinfo>) => any,
+                      updatePeriodeinfoInSoknadState: (info: Partial<IPeriodeinfo>) => any) => {
+        return <table className="tabell tabell--stripet">
+            <thead>
+            <tr>
+                <th>Ukedag</th>
+                <th>Timer</th>
+                <th>Minutter</th>
+            </tr>
+            </thead>
+            <tbody>
+            {Object.keys(Ukedag)
+                   .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
+                   .filter(ukedag => Number(ukedag) < 5)
+                   .map(ukedag => {
+                       const ukedagstr = convertNumberToUkedag(Number(ukedag) as UkedagNumber);
+                       const duration = tilsyn?.[ukedagstr];
+                       const hours = hoursFromString(duration);
+                       const minutes = minutesFromString(duration);
+                       return <tr key={ukedag}>
+                           <td>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</td>
+                           <td>
+                               <Select
+                                   label=""
+                                   value={hours}
+                                   onChange={event => {
+                                       const newHours = +event.target.value;
+                                       const newMinutes = newHours === 24 ? 0 : minutes;
+                                       updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                       updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                   }}
+                               >
+                                   {Array.from(Array(25).keys()).map(int => <option value={int} key={int}>{int}</option>)}
+                               </Select>
+                           </td>
+                           <td>
+                               <Select
+                                   label=""
+                                   value={minutes}
+                                   onChange={event => {
+                                       const newMinutes = +event.target.value;
+                                       updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)});
+                                       updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
+                                   }}
+                                   disabled={hours === 24}
+                               >
+                                   {Array.from(Array(60).keys()).map(int => <option value={int} key={int}>{int}</option>)}
+                               </Select>
+                           </td>
+                       </tr>;
+                   })}
+            </tbody>
+        </table>;
+    };
 
     private arbeidsforhold(periodeindex: number, af: Arbeidsforhold, afindex: number, afinfo: any) {
         const {intl} = this.props;
@@ -521,7 +625,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setPerioder();
     };
 
-    private addArbeidsforhold(periode: IPeriode, arbeidsforhold: Arbeidsforhold) {
+    private addArbeidsforhold(periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold) {
         if (!periode.arbeidsgivere?.[arbeidsforhold]) {
             _.set(periode, ['arbeidsgivere', arbeidsforhold], [{}]);
         } else {
@@ -531,14 +635,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setPerioder();
     }
 
-    private removeArbeidsforhold = (periode: IPeriode, arbeidsforhold: Arbeidsforhold, afindex: number) => {
+    private removeArbeidsforhold = (periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold, afindex: number) => {
         this.unsetPeriodeFocus();
         periode.arbeidsgivere![arbeidsforhold]!.splice(afindex, 1);
         this.forceUpdate();
         this.setPerioder();
     };
 
-    private handleArbeidsforholdChange = (periode: IPeriode, arbeidsforhold: Arbeidsforhold, afindex: number, path: string, value: string | boolean) => {
+    private handleArbeidsforholdChange = (periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold, afindex: number, path: string, value: string | boolean) => {
         _.set(periode.arbeidsgivere![arbeidsforhold]![afindex], path, value);
         this.forceUpdate();
     };

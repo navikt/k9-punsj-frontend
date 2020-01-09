@@ -59,6 +59,8 @@
   "skjema.perioder.arbeidsforhold.arbeidstaker.orgnr":               "Organisasjonsnummer:",
   "skjema.perioder.arbeidsforhold.arbeidstaker.fravaeriprosent":     "Fraværsgrad i prosent:",
   "skjema.perioder.arbeidsforhold.annet.selvstendig":                "Selvstendig næringsdrivende",
+  "skjema.tilsyn.fjernperiode":                                      "Fjern tilsynsperiode",
+  "skjema.tilsyn.leggtilperiode":                                    "Legg til tilsynsperiode",
   "skjema.signatur.overskrift":                                      "Signatur",
   "skjema.signatur.bekreftelse":                                     "Søknaden er signert",
   "skjema.melding.fyll_ut":                                          "Fyll ut informasjon.",

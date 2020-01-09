@@ -1,7 +1,8 @@
-import {TimeFormat} from 'app/models/enums';
-import moment       from 'moment';
-import {IntlShape}  from 'react-intl';
-import intlHelper   from './intlUtils';
+import {TimeFormat}           from 'app/models/enums';
+import {Ukedag, UkedagNumber} from 'app/models/types';
+import moment                 from 'moment';
+import {IntlShape}            from 'react-intl';
+import intlHelper             from './intlUtils';
 
 export const datetime = (
     intl: IntlShape,
@@ -17,6 +18,19 @@ export function durationToString(hours: number, minutes: number) {
 export function hoursFromString(iso8601duration: string) {
     return Math.floor(moment.duration(iso8601duration).asHours());
 }
+
 export function minutesFromString(iso8601duration: string) {
     return moment.duration(iso8601duration).asMinutes()%60;
+}
+
+export function convertNumberToUkedag(num: UkedagNumber): Ukedag {
+    switch (num) {
+        case 0: return 'mandag';
+        case 1: return 'tirsdag';
+        case 2: return 'onsdag';
+        case 3: return 'torsdag';
+        case 4: return 'fredag';
+        case 5: return 'lørdag';
+        case 6: return 'søndag';
+    }
 }

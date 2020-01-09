@@ -3,6 +3,7 @@ import {ApiPath}                                        from 'app/apiConfig';
 import {apiUrl, convertResponseToError, get, post, put} from 'app/utils';
 import {redirect}                                       from 'app/utils/browserUtils';
 import fetchMock                                        from 'fetch-mock';
+
 const Headers = require('fetch-headers');
 
 jest.mock('app/utils/envUtils');

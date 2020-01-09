@@ -5,7 +5,6 @@ import {
     PunchFormComponent
 }                                                     from 'app/containers/punch-page/PunchForm';
 import {IJournalpost, IPunchFormState, IPunchState}   from 'app/models/types';
-import {IPeriode}                                     from 'app/models/types/Soknad';
 import intlHelper                                     from 'app/utils/intlUtils';
 import {configure, shallow}                           from 'enzyme';
 import Adapter                                        from 'enzyme-adapter-react-16';
