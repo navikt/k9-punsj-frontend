@@ -46,11 +46,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }
 
     if (fordelingState.omfordelingDone) {
-        return <AlertStripeSuksess>Journalposten er omfordelt.</AlertStripeSuksess>;
+        return <AlertStripeSuksess>{intlHelper(intl, 'fordeling.omfordeling.utfort')}</AlertStripeSuksess>;
     }
 
     return <>
-        {!!fordelingState.omfordelingError && <AlertStripeFeil>Det oppsto en feil. Prøv igjen senere.</AlertStripeFeil>}
+        {!!fordelingState.omfordelingError && <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>}
         <RadioPanelGruppe
             name="fordeling"
             legend={intlHelper(intl, 'fordeling.overskrift')}

@@ -4,13 +4,16 @@ import intlHelper                                                  from 'app/uti
 import classNames                                                  from 'classnames';
 import {Knapp}                                                     from 'nav-frontend-knapper';
 import {Panel}                                                     from 'nav-frontend-paneler';
+import {SkjemaGruppe}                                              from 'nav-frontend-skjema';
+import {SkjemaelementFeil}                                         from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
 import * as React                                                  from 'react';
 import {IntlShape}                                                 from 'react-intl';
 
 export type PeriodeComponent<T> = (info: Periodeinfo<T>,
                                    periodeindex: number,
                                    updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<T>>) => any,
-                                   updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<T>>) => any) => React.ReactElement;
+                                   updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<T>>) => any,
+                                   feilkodeprefiksMedIndeks?: string) => React.ReactElement;
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -23,12 +26,14 @@ export interface IPeriodepanelerProps {
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
+    getErrorMessage?: (kode: string) => (SkjemaelementFeil | undefined);
+    feilkodeprefiks?: string;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, editSoknad, editSoknadState} = props;
+    const {intl, editSoknad, editSoknadState, getErrorMessage, feilkodeprefiks} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: IPeriodeinfo = {...props.periods[index], ...periodeinfo};
@@ -51,34 +56,37 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         return newArray;
     };
 
-    return <>
+    return <SkjemaGruppe feil={getErrorMessage && feilkodeprefiks && getErrorMessage(feilkodeprefiks) || undefined}>
         {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
             const panelid = props.panelid(periodeindex);
             return <Panel className={classNames('periodepanel', props.panelClassName)} border={true} id={panelid} key={periodeindex}>
-                <PeriodInput
-                    periode={periodeinfo.periode}
-                    intl={props.intl}
-                    onChange={(periode) => {editSoknadState(editPeriode(periodeindex, periode))}}
-                    onBlur={(periode) => {editSoknad(editPeriode(periodeindex, periode))}}
-                />
-                {props.component(
-                    periodeinfo,
-                    periodeindex,
-                    info => editSoknad(editInfo(periodeindex, info)),
-                    info => editSoknadState(editInfo(periodeindex, info))
-                )}
-                <div className="periodebunn">
-                    <Knapp
-                        onClick={() => {
-                            const newArray: IPeriodeinfo[] = removePeriode(periodeindex);
-                            editSoknadState(newArray);
-                            editSoknad(newArray);
-                        }}
-                        className="fjernperiodeknapp"
-                    >
-                        {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
-                    </Knapp>
-                </div>
+                <SkjemaGruppe feil={getErrorMessage && feilkodeprefiks && getErrorMessage(`${feilkodeprefiks}[${periodeindex}]`) || undefined}>
+                    <PeriodInput
+                        periode={periodeinfo.periode}
+                        intl={props.intl}
+                        onChange={(periode) => {editSoknadState(editPeriode(periodeindex, periode))}}
+                        onBlur={(periode) => {editSoknad(editPeriode(periodeindex, periode))}}
+                    />
+                    {props.component(
+                        periodeinfo,
+                        periodeindex,
+                        info => editSoknad(editInfo(periodeindex, info)),
+                        info => editSoknadState(editInfo(periodeindex, info)),
+                        `${feilkodeprefiks}[${periodeindex}]`
+                    )}
+                    <div className="periodebunn">
+                        <Knapp
+                            onClick={() => {
+                                const newArray: IPeriodeinfo[] = removePeriode(periodeindex);
+                                editSoknadState(newArray);
+                                editSoknad(newArray);
+                            }}
+                            className="fjernperiodeknapp"
+                        >
+                            {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
+                        </Knapp>
+                    </div>
+                </SkjemaGruppe>
             </Panel>
         })}
         <Knapp
@@ -91,5 +99,5 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         >
             {intlHelper(intl, props.textLeggTil || 'skjema.perioder.legg_til')}
         </Knapp>
-    </>;
+    </SkjemaGruppe>;
 };

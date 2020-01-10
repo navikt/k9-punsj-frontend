@@ -55,6 +55,18 @@ describe('PerodInput', () => {
         expect(periodInput.find('SkjemaGruppe').prop('feil')).toEqual(errorMessage);
     });
 
+    it('Skal vise feilmelding for fom-dato', () => {
+        const errorMessageFom: SkjemaelementFeil = {feilmelding: 'Lorem ipsum solor sit amet'};
+        const periodInput = setupPeriodInput({errorMessageFom});
+        expect(periodInput.find(`#${inputIdFom}`).prop('feil')).toEqual(errorMessageFom);
+    });
+
+    it('Skal vise feilmelding for tom-dato', () => {
+        const errorMessageTom: SkjemaelementFeil = {feilmelding: 'Lorem ipsum solor sit amet'};
+        const periodInput = setupPeriodInput({errorMessageTom});
+        expect(periodInput.find(`#${inputIdTom}`).prop('feil')).toEqual(errorMessageTom);
+    });
+
     it('Skal kalle onChange med ny fom-dato', () => {
         const fraOgMed = '2020-01-01';
         const tilOgMed = '2020-02-01';

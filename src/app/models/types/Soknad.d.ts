@@ -8,12 +8,14 @@ export interface ISoknad {
     spraak?: Locale;
     barn?: IBarn;
     signert?: boolean;
+    beredskap?: Periodeinfo<IJaNeiTilleggsinformasjon>[];
+    nattevaak?: Periodeinfo<IJaNeiTilleggsinformasjon>[];
     tilsynsordning?: Periodeinfo<ITilsyn>[];
 }
 
 interface IPeriodeMedBeredskapNattevaakArbeid {
-    fra_og_med?: string;
-    til_og_med?: string;
+    fraOgMed?: string;
+    tilOgMed?: string;
     beredskap?: IJaNeiTilleggsinformasjon;
     nattevaak?: IJaNeiTilleggsinformasjon;
     arbeidsgivere?: IArbeidsgivere;

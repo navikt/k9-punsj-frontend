@@ -1,6 +1,7 @@
 import {ApiPath}                           from 'app/apiConfig';
 import {MapperOgFagsakerActionKeys}        from 'app/models/enums';
 import {IError, IFagsak, IMappe}           from 'app/models/types';
+import {MappeRules}                        from 'app/rules';
 import {convertResponseToError, get, post} from 'app/utils';
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
@@ -47,7 +48,10 @@ export function findMapper(ident: string) {return (dispatch: any) => {
     return get(ApiPath.MAPPER_FIND, undefined, {'X-Nav-NorskIdent': ident}, response => {
         if (response.ok) {
             return response.json()
-                           .then(r => dispatch(setMapperAction(r.mapper)));
+                           .then(r => {
+                               const {mapper} = r;
+                               dispatch(setMapperAction(MappeRules.isMapperResponseValid(mapper) ? mapper : []));
+                           });
         }
         return dispatch(findMapperErrorAction({
             status:     response.status,
@@ -88,7 +92,7 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
 
     dispatch(createMappeRequestAction());
 
-    const requestBody = {
+    const requestBody: Partial<IMappe> = {
         personlig: {
             [ident]: {
                 journalpost_id: journalpostid,
@@ -97,6 +101,8 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
                         beredskap: {svar: false},
                         nattevaak: {svar: false}
                     }],
+                    beredskap: [],
+                    nattevaak: [],
                     spraak: 'nb',
                     barn: {},
                     signert: undefined

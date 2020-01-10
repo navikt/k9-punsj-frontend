@@ -1,12 +1,12 @@
-import {IPeriodepanelerProps, Periodepaneler} from 'app/containers/punch-page/Periodepaneler';
-import {IPeriodeinfo, Periodeinfo}            from 'app/models/types';
-import intlHelper                             from 'app/utils/intlUtils';
-import {configure, shallow}                   from 'enzyme';
-import Adapter                                from 'enzyme-adapter-react-16';
-import {Input}                                from 'nav-frontend-skjema';
-import * as React                             from 'react';
-import {createIntl, IntlShape}                from 'react-intl';
-import {mocked}                               from 'ts-jest/utils';
+import {IPeriodepanelerProps, PeriodeComponent, Periodepaneler} from 'app/containers/punch-page/Periodepaneler';
+import {Periodeinfo}                                            from 'app/models/types';
+import intlHelper                                               from 'app/utils/intlUtils';
+import {configure, shallow}                                     from 'enzyme';
+import Adapter                                                  from 'enzyme-adapter-react-16';
+import {Input}                                                  from 'nav-frontend-skjema';
+import * as React                                               from 'react';
+import {createIntl, IntlShape}                                  from 'react-intl';
+import {mocked}                                                 from 'ts-jest/utils';
 
 configure({adapter: new Adapter()});
 
@@ -31,10 +31,11 @@ const testperioder: Testperiodeinfo[] = [
 
 const testinputid = (periodeindex: number) => `testperiode_${periodeindex}_testinput`;
 
-const testkomponent = (info: Testperiodeinfo,
-                       periodeindex: number,
-                       updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
-                       updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>) => any) => {
+const testkomponent: PeriodeComponent<ITestperiodeinfo> = (info: Testperiodeinfo,
+                                                           periodeindex: number,
+                                                           updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
+                                                           updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>) => any,
+                                                           feilkodeprefiksMedIndeks?: string) => {
     return <Input
         label=""
         id={testinputid(periodeindex)}
@@ -42,6 +43,7 @@ const testkomponent = (info: Testperiodeinfo,
         value={info.test}
         onChange={event => updatePeriodeinfoInSoknadState({test: event.target.value})}
         onBlur={event => updatePeriodeinfoInSoknad({test: event.target.value})}
+        feil={feilkodeprefiksMedIndeks ? {feilmelding: `Feilmelding med kode ${feilkodeprefiksMedIndeks}`} : undefined}
     />;
 };
 
@@ -101,6 +103,15 @@ describe('Periodepaneler', () => {
         expect(periodepaneler.find(`#${testinputid(1)}`).prop('value')).toEqual(testperioder[1].test);
     });
 
+    it('Viser feilmelding i infokomponent', () => {
+        const feilkodeprefiks = 'test';
+        const periodepaneler = setupPeriodepaneler({feilkodeprefiks});
+        expect(periodepaneler.find('.testinput')).toHaveLength(testperioder.length);
+        expect(periodepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
+        expect(periodepaneler.find(`#${testinputid(1)}`).prop('feil'))
+            .toEqual({feilmelding: `Feilmelding med kode ${feilkodeprefiks}[1]`});
+    });
+
     it('Kaller updatePeriodeinfoInSoknadState med ny verdi', () => {
         const editSoknadState = jest.fn();
         const periodepaneler = setupPeriodepaneler({editSoknadState});
@@ -123,5 +134,19 @@ describe('Periodepaneler', () => {
         const panelClassName = 'rattata';
         const periodepaneler = setupPeriodepaneler({panelClassName});
         periodepaneler.find('Panel').forEach(panel => expect(panel.prop('className')).toEqual(`periodepanel ${panelClassName}`));
+    });
+
+    it('Skal vise feilmelding for alle perioder', () => {
+        const feilkodeprefiks = 'test';
+        const getErrorMessage = jest.fn();
+        setupPeriodepaneler({getErrorMessage, feilkodeprefiks});
+        expect(getErrorMessage).toHaveBeenCalledWith(feilkodeprefiks);
+    });
+
+    it('Skal vise feilmeldinger for enkeltperioder', () => {
+        const feilkodeprefiks = 'test';
+        const getErrorMessage = jest.fn();
+        const periodepaneler = setupPeriodepaneler({getErrorMessage, feilkodeprefiks});
+        periodepaneler.find('Panel').forEach(panel => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}[${panel.prop('key')}]`));
     });
 });

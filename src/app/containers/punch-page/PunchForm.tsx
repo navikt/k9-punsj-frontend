@@ -1,17 +1,21 @@
-import DeleteButton                        from 'app/components/delete-button/DeleteButton';
-import {NumberSelect}                      from 'app/components/number-select/NumberSelect';
-import {PeriodeComponent, Periodepaneler}  from 'app/containers/punch-page/Periodepaneler';
-import {Arbeidsforhold, PunchStep, Ukedag} from 'app/models/enums';
+import DeleteButton                                                                           from 'app/components/delete-button/DeleteButton';
+import {NumberSelect}                                                                         from 'app/components/number-select/NumberSelect';
+import {
+    PeriodeComponent,
+    Periodepaneler
+}                                                                                             from 'app/containers/punch-page/Periodepaneler';
+import {Arbeidsforhold, PunchStep, Ukedag}                                                    from 'app/models/enums';
 import {
     IInputError,
-    IPeriodeinfo,
+    IJaNeiTilleggsinformasjon,
     IPeriodeMedBeredskapNattevaakArbeid,
     IPunchFormState,
     IPunchState,
     ISoknad,
-    ITilsyn, Periodeinfo,
+    ITilsyn,
+    Periodeinfo,
     UkedagNumber
-}                                          from 'app/models/types';
+}                                                                                             from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -21,7 +25,7 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                          from 'app/state/actions';
+}                                                                                             from 'app/state/actions';
 import {RootStateType}                                                                        from 'app/state/RootState';
 import {convertNumberToUkedag, durationToString, hoursFromString, minutesFromString, setHash} from 'app/utils';
 import intlHelper
@@ -92,17 +96,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     state: IPunchFormComponentState = {
         soknad: {
             perioder: [{
-                fra_og_med: '',
-                til_og_med: '',
-                beredskap: {
-                    svar: false,
-                    tilleggsinformasjon: ''
-                },
-                nattevaak: {
-                    svar: false,
-                    tilleggsinformasjon: ''
-                }
+                fraOgMed: '',
+                tilOgMed: ''
             }],
+            beredskap: [],
+            nattevaak: [],
             tilsynsordning: [],
             spraak: 'nb',
             barn: {
@@ -169,6 +167,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             fredag: null
         };
 
+        const initialBeredskap: Periodeinfo<IJaNeiTilleggsinformasjon> = {
+            periode: {fraOgMed: '', tilOgMed: ''},
+            svar: false,
+            tilleggsinformasjon: ''
+        };
+
+        const initialNattevaak: Periodeinfo<IJaNeiTilleggsinformasjon> = {
+            periode: {fraOgMed: '', tilOgMed: ''},
+            svar: false,
+            tilleggsinformasjon: ''
+        };
+
         return (<>
             {this.statusetikett()}
             {this.backButton()}
@@ -218,6 +228,36 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         disabled={!soknad.signert}
                     />
                 </SkjemaGruppe>
+                <h2>Beredskap</h2>
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.beredskap!}
+                    component={this.beredskap}
+                    panelid={i => `beredskapspanel_${i}`}
+                    initialPeriodeinfo={initialBeredskap}
+                    editSoknad={beredskap => this.updateSoknad({beredskap})}
+                    editSoknadState={beredskap => this.updateSoknadState({beredskap}, true)}
+                    textLeggTil="skjema.beredskap.leggtilperiode"
+                    textFjern="skjema.beredskap.fjernperiode"
+                    panelClassName="beredskapspanel"
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'beredskap'}
+                />
+                <h2>Nattevåk</h2>
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.nattevaak!}
+                    component={this.nattevaak}
+                    panelid={i => `nattevaakspanel_${i}`}
+                    initialPeriodeinfo={initialNattevaak}
+                    editSoknad={nattevaak => this.updateSoknad({nattevaak})}
+                    editSoknadState={nattevaak => this.updateSoknadState({nattevaak}, true)}
+                    textLeggTil="skjema.nattevaak.leggtilperiode"
+                    textFjern="skjema.nattevaak.fjernperiode"
+                    panelClassName="nattevaakspanel"
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'nattevaak'}
+                />
                 <h2>{intlHelper(intl, 'skjema.perioder.overskrift')}</h2>
                 <SkjemaGruppe feil={this.getErrorMessage('perioder')}>
                     {soknad?.perioder?.map((periode, i) => (
@@ -251,52 +291,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         disabled={!soknad.signert}
                                     /></Col>
                                 </Row>
-                                <Row><Col><SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].beredskap`)}>
-                                    <Checkbox
-                                        label={intlHelper(intl, 'skjema.perioder.beredskap.svar')}
-                                        checked={_.get(periode, 'beredskap.svar', false)}
-                                        onChange={event => {this.handlePeriodeChange(i, 'beredskap.svar', event.target.checked); this.setPerioder()}}
-                                        className="bold-label"
-                                        feil={this.getErrorMessage(`perioder[${i}].beredskap.svar`)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
-                                        onBlur={this.unsetPeriodeFocus}
-                                        disabled={!soknad.signert}
-                                    />
-                                    {!!periode.beredskap?.svar && <Textarea
-                                        label={intlHelper(intl, 'skjema.perioder.beredskap.tilleggsinfo')}
-                                        value={_.get(periode, 'beredskap.tilleggsinformasjon', '')}
-                                        onChange={event => this.handlePeriodeChange(i, 'beredskap.tilleggsinformasjon', event.target.value)}
-                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                        feil={this.getErrorMessage(`perioder[${i}].beredskap.tillegsinformasjon`)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
-                                        disabled={!soknad.signert}
-                                        maxLength={0}
-                                    />}
-                                </SkjemaGruppe></Col></Row>
-                                <Row><Col><SkjemaGruppe feil={this.getErrorMessage(`perioder[${i}].nattevaak`)}>
-                                    <Checkbox
-                                        label={intlHelper(intl, 'skjema.perioder.nattevaak.svar')}
-                                        checked={_.get(periode, 'nattevaak.svar', false)}
-                                        onChange={event => {this.handlePeriodeChange(i, 'nattevaak.svar', event.target.checked); this.setPerioder()}}
-                                        className="bold-label"
-                                        feil={this.getErrorMessage(`perioder[${i}].nattevaak.svar`)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
-                                        onBlur={this.unsetPeriodeFocus}
-                                        disabled={!soknad.signert}
-                                    />
-                                    {!!periode.nattevaak?.svar && <Textarea
-                                        label={intlHelper(intl, 'skjema.perioder.nattevaak.tilleggsinfo')}
-                                        value={_.get(periode, 'nattevaak.tilleggsinformasjon', '')}
-                                        onChange={event => this.handlePeriodeChange(i, 'nattevaak.tilleggsinformasjon', event.target.value)}
-                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                                        feil={this.getErrorMessage(`perioder[${i}].nattevaak.tilleggsinformasjon`)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
-                                        disabled={!soknad.signert}
-                                        maxLength={0}
-                                    />}
-                                </SkjemaGruppe></Col></Row>
                                 <Row><Col>
-                                    <h3>Arbeidsforhold</h3>
                                     <div className="periode_arbeid">
                                         {Object.values(Arbeidsforhold).map(af => <Panel border={true} key={`periode_arbeid_${af}`}>
                                             <Container>
@@ -450,6 +445,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     textLeggTil="skjema.tilsyn.leggtilperiode"
                     textFjern="skjema.tilsyn.fjernperiode"
                     panelClassName="tilsynpanel"
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'tilsynsordning'}
                 />
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
@@ -459,10 +456,75 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
+    private beredskap: PeriodeComponent<IJaNeiTilleggsinformasjon> = (beredskap: Periodeinfo<IJaNeiTilleggsinformasjon>,
+                                                                      periodeindex: number,
+                                                                      updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
+                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
+                                                                      feilprefiks: string) => {
+        const {intl} = this.props;
+        const {soknad} = this.state;
+        return <div className="janeitilleggsinfo">
+            <Checkbox
+                label={intlHelper(intl, 'skjema.beredskap.svar')}
+                checked={beredskap.svar}
+                onChange={event => {
+                    const svar = event.target.checked;
+                    updatePeriodeinfoInSoknadState({svar});
+                    updatePeriodeinfoInSoknad({svar});
+                }}
+                className="bold-label"
+                feil={this.getErrorMessage(`${feilprefiks}.svar`)}
+                disabled={!soknad.signert}
+            />
+            {!!beredskap?.svar && <Textarea
+                label={intlHelper(intl, 'skjema.beredskap.tilleggsinfo')}
+                value={beredskap.tilleggsinformasjon || ''}
+                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value})}
+                onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
+                feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
+                disabled={!soknad.signert}
+                maxLength={0}
+            />}
+        </div>;
+    };
+
+    private nattevaak: PeriodeComponent<IJaNeiTilleggsinformasjon> = (nattevaak: Periodeinfo<IJaNeiTilleggsinformasjon>,
+                                                                      periodeindex: number,
+                                                                      updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
+                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
+                                                                      feilprefiks: string) => {
+        const {intl} = this.props;
+        const {soknad} = this.state;
+        return <div className="janeitilleggsinfo">
+            <Checkbox
+                label={intlHelper(intl, 'skjema.nattevaak.svar')}
+                checked={nattevaak.svar}
+                onChange={event => {
+                    const svar = event.target.checked;
+                    updatePeriodeinfoInSoknadState({svar});
+                    updatePeriodeinfoInSoknad({svar});
+                }}
+                className="bold-label"
+                feil={this.getErrorMessage(`${feilprefiks}.svar`)}
+                disabled={!soknad.signert}
+            />
+            {!!nattevaak?.svar && <Textarea
+                label={intlHelper(intl, 'skjema.nattevaak.tilleggsinfo')}
+                value={nattevaak.tilleggsinformasjon || ''}
+                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value})}
+                onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
+                feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
+                disabled={!soknad.signert}
+                maxLength={0}
+            />}
+        </div>;
+    };
+
     private tilsyn: PeriodeComponent<ITilsyn> = (tilsyn: Periodeinfo<ITilsyn>,
                                                  periodeindex: number,
                                                  updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilsyn>>) => any,
-                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilsyn>>) => any) => {
+                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilsyn>>) => any,
+                                                 feilprefiks: string) => {
         return <Container className="tilsyntabell"><Row noGutters={true}>
             {Object.keys(Ukedag)
                    .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
@@ -472,37 +534,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                        const duration = tilsyn?.[ukedagstr];
                        const hours = hoursFromString(duration);
                        const minutes = minutesFromString(duration);
-                       return <Col className="tilsyntabell_ukedag" key={ukedag}><Container>
-                           <Row noGutters={true}><Col>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</Col></Row>
-                           <Row noGutters={true}>
-                               <Col>
-                                   <NumberSelect
-                                       label="Timer"
-                                       value={hours}
-                                       onChange={event => {
-                                           const newHours = +event.target.value;
-                                           const newMinutes = newHours === 24 ? 0 : minutes;
-                                           updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)});
-                                           updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
-                                       }}
-                                       to={24}
-                                   />
-                               </Col>
-                               <Col>
-                                   <NumberSelect
-                                       label="Min."
-                                       value={minutes}
-                                       onChange={event => {
-                                           const newMinutes = +event.target.value;
-                                           updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)});
-                                           updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
-                                       }}
-                                       disabled={hours === 24}
-                                       to={59}
-                                   />
-                               </Col>
-                           </Row>
-                       </Container></Col>;
+                       return <Col className="tilsyntabell_ukedag" key={ukedag}>
+                           <SkjemaGruppe feil={this.getErrorMessage(`${feilprefiks}.${ukedagstr}`)}><Container>
+                               <Row noGutters={true}><Col>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</Col></Row>
+                               <Row noGutters={true}>
+                                   <Col>
+                                       <NumberSelect
+                                           label="Timer"
+                                           value={hours}
+                                           onChange={event => {
+                                               const newHours = +event.target.value;
+                                               const newMinutes = newHours === 24 ? 0 : minutes;
+                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                               updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                           }}
+                                           to={24}
+                                       />
+                                   </Col>
+                                   <Col>
+                                       <NumberSelect
+                                           label="Min."
+                                           value={minutes}
+                                           onChange={event => {
+                                               const newMinutes = +event.target.value;
+                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)});
+                                               updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
+                                           }}
+                                           disabled={hours === 24}
+                                           to={59}
+                                       />
+                                   </Col>
+                               </Row>
+                           </Container></SkjemaGruppe>
+                       </Col>;
                    })}
         </Row></Container>;
     };
