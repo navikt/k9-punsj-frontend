@@ -1,6 +1,6 @@
 import {IPeriodeinfo} from 'app/models/types/Periodeinfo';
 
-export interface ITilsyn extends IPeriodeinfo {
+export interface ITilsyn {
     mandag?:    string | null;
     tirsdag?:   string | null;
     onsdag?:    string | null;

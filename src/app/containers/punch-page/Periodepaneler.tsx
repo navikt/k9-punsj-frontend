@@ -1,19 +1,21 @@
-import {PeriodInput}            from 'app/components/period-input/PeriodInput';
-import {IPeriode, IPeriodeinfo} from 'app/models/types';
-import intlHelper               from 'app/utils/intlUtils';
-import classNames               from 'classnames';
-import {Knapp}                  from 'nav-frontend-knapper';
-import {Panel}                  from 'nav-frontend-paneler';
-import * as React               from 'react';
-import {IntlShape}              from 'react-intl';
+import {PeriodInput}                                               from 'app/components/period-input/PeriodInput';
+import {IPeriode, IPeriodeinfo, Periodeinfo, PeriodeinfoExtension} from 'app/models/types';
+import intlHelper                                                  from 'app/utils/intlUtils';
+import classNames                                                  from 'classnames';
+import {Knapp}                                                     from 'nav-frontend-knapper';
+import {Panel}                                                     from 'nav-frontend-paneler';
+import * as React                                                  from 'react';
+import {IntlShape}                                                 from 'react-intl';
+
+export type PeriodeComponent<T> = (info: Periodeinfo<T>,
+                                   periodeindex: number,
+                                   updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<T>>) => any,
+                                   updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<T>>) => any) => React.ReactElement;
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
     periods: IPeriodeinfo[]; // Liste over periodisert informasjon
-    component: (info: IPeriodeinfo,
-                periodeindex: number,
-                updatePeriodeinfoInSoknad: (info: Partial<IPeriodeinfo>) => any,
-                updatePeriodeinfoInSoknadState: (info: Partial<IPeriodeinfo>) => any) => React.ReactElement; // Skal returnere et React-element for en gitt periode i lista
+    component: PeriodeComponent<PeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialPeriodeinfo: IPeriodeinfo; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeinfo[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)

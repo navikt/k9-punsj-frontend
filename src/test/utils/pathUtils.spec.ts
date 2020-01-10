@@ -1,7 +1,7 @@
 import {IPath}   from 'app/models/types';
 import {getPath} from 'app/utils/pathUtils';
 
-describe('pathUtils', () => {
+describe('getPath', () => {
 
     const paths: IPath[] = [
         {step: 0, path: '/test/{id1}?id2={id2}'},

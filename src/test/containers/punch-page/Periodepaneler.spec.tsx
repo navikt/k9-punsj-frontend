@@ -1,5 +1,5 @@
 import {IPeriodepanelerProps, Periodepaneler} from 'app/containers/punch-page/Periodepaneler';
-import {IPeriodeinfo}                         from 'app/models/types';
+import {IPeriodeinfo, Periodeinfo}            from 'app/models/types';
 import intlHelper                             from 'app/utils/intlUtils';
 import {configure, shallow}                   from 'enzyme';
 import Adapter                                from 'enzyme-adapter-react-16';
@@ -13,15 +13,17 @@ configure({adapter: new Adapter()});
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
 
-interface ITestperiodeinfo extends IPeriodeinfo {
-    test: string
+interface ITestperiodeinfo {
+    test: string;
 }
 
-const testperiode0 = {periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-01-31'}, test: 'abc'};
-const testperiode1 = {periode: {fraOgMed: '2020-02-01', tilOgMed: '2020-02-29'}, test: 'bca'};
-const testperiode2 = {periode: {fraOgMed: '2020-03-01', tilOgMed: '2020-03-31'}, test: 'cab'};
+type Testperiodeinfo = Periodeinfo<ITestperiodeinfo>;
 
-const testperioder: ITestperiodeinfo[] = [
+const testperiode0: Testperiodeinfo = {periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-01-31'}, test: 'abc'};
+const testperiode1: Testperiodeinfo = {periode: {fraOgMed: '2020-02-01', tilOgMed: '2020-02-29'}, test: 'bca'};
+const testperiode2: Testperiodeinfo = {periode: {fraOgMed: '2020-03-01', tilOgMed: '2020-03-31'}, test: 'cab'};
+
+const testperioder: Testperiodeinfo[] = [
     testperiode0,
     testperiode1,
     testperiode2
@@ -29,10 +31,10 @@ const testperioder: ITestperiodeinfo[] = [
 
 const testinputid = (periodeindex: number) => `testperiode_${periodeindex}_testinput`;
 
-const testkomponent = (info: ITestperiodeinfo,
+const testkomponent = (info: Testperiodeinfo,
                        periodeindex: number,
-                       updatePeriodeinfoInSoknad: (info: Partial<ITestperiodeinfo>) => any,
-                       updatePeriodeinfoInSoknadState: (info: Partial<ITestperiodeinfo>) => any) => {
+                       updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
+                       updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>) => any) => {
     return <Input
         label=""
         id={testinputid(periodeindex)}
@@ -43,7 +45,7 @@ const testkomponent = (info: ITestperiodeinfo,
     />;
 };
 
-const initialperiodetest: ITestperiodeinfo = {periode: {fraOgMed: '2020-04-01', tilOgMed: '2020-04-30'}, test: 'cba'};
+const initialperiodetest: Testperiodeinfo = {periode: {fraOgMed: '2020-04-01', tilOgMed: '2020-04-30'}, test: 'cba'};
 
 const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodepanelerProps>) => {
 

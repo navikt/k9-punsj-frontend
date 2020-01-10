@@ -1,13 +1,14 @@
-import {ITilsyn}      from 'app/models/types/Tilsyn';
-import {Locale}       from './Locale';
-import {IPerson}      from './Person';
+import {Periodeinfo} from 'app/models/types/Periodeinfo';
+import {ITilsyn}     from 'app/models/types/Tilsyn';
+import {Locale}      from './Locale';
+import {IPerson}     from './Person';
 
 export interface ISoknad {
     perioder?: IPeriodeMedBeredskapNattevaakArbeid[];
     spraak?: Locale;
     barn?: IBarn;
     signert?: boolean;
-    tilsynsordning?: ITilsyn[];
+    tilsynsordning?: Periodeinfo<ITilsyn>[];
 }
 
 interface IPeriodeMedBeredskapNattevaakArbeid {

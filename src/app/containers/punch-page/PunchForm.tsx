@@ -1,7 +1,7 @@
-import DeleteButton                                                                           from 'app/components/delete-button/DeleteButton';
-import {NumberSelect}                                                                         from 'app/components/number-select/NumberSelect';
-import {Periodepaneler}                                                                       from 'app/containers/punch-page/Periodepaneler';
-import {Arbeidsforhold, PunchStep, Ukedag}                                                    from 'app/models/enums';
+import DeleteButton                        from 'app/components/delete-button/DeleteButton';
+import {NumberSelect}                      from 'app/components/number-select/NumberSelect';
+import {PeriodeComponent, Periodepaneler}  from 'app/containers/punch-page/Periodepaneler';
+import {Arbeidsforhold, PunchStep, Ukedag} from 'app/models/enums';
 import {
     IInputError,
     IPeriodeinfo,
@@ -9,9 +9,9 @@ import {
     IPunchFormState,
     IPunchState,
     ISoknad,
-    ITilsyn,
+    ITilsyn, Periodeinfo,
     UkedagNumber
-}                                                                                             from 'app/models/types';
+}                                          from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -21,7 +21,7 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                                                             from 'app/state/actions';
+}                                          from 'app/state/actions';
 import {RootStateType}                                                                        from 'app/state/RootState';
 import {convertNumberToUkedag, durationToString, hoursFromString, minutesFromString, setHash} from 'app/utils';
 import intlHelper
@@ -160,7 +160,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
-        const initialTilsyn: ITilsyn = {
+        const initialTilsyn: Periodeinfo<ITilsyn> = {
             periode: {fraOgMed: '', tilOgMed: ''},
             mandag: null,
             tirsdag: null,
@@ -459,10 +459,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
-    private tilsyn = (tilsyn: ITilsyn,
-                      periodeindex: number,
-                      updatePeriodeinfoInSoknad: (info: Partial<IPeriodeinfo>) => any,
-                      updatePeriodeinfoInSoknadState: (info: Partial<IPeriodeinfo>) => any) => {
+    private tilsyn: PeriodeComponent<ITilsyn> = (tilsyn: Periodeinfo<ITilsyn>,
+                                                 periodeindex: number,
+                                                 updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilsyn>>) => any,
+                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilsyn>>) => any) => {
         return <Container className="tilsyntabell"><Row noGutters={true}>
             {Object.keys(Ukedag)
                    .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
