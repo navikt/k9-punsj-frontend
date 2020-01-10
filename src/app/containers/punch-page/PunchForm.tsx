@@ -1,4 +1,5 @@
 import DeleteButton                                                                           from 'app/components/delete-button/DeleteButton';
+import {NumberSelect}                                                                         from 'app/components/number-select/NumberSelect';
 import {Periodepaneler}                                                                       from 'app/containers/punch-page/Periodepaneler';
 import {Arbeidsforhold, PunchStep, Ukedag}                                                    from 'app/models/enums';
 import {
@@ -448,6 +449,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     editSoknadState={tilsynsordning => this.updateSoknadState({tilsynsordning}, true)}
                     textLeggTil="skjema.tilsyn.leggtilperiode"
                     textFjern="skjema.tilsyn.fjernperiode"
+                    panelClassName="tilsynpanel"
                 />
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
@@ -461,15 +463,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                       periodeindex: number,
                       updatePeriodeinfoInSoknad: (info: Partial<IPeriodeinfo>) => any,
                       updatePeriodeinfoInSoknadState: (info: Partial<IPeriodeinfo>) => any) => {
-        return <table className="tabell tabell--stripet">
-            <thead>
-            <tr>
-                <th>Ukedag</th>
-                <th>Timer</th>
-                <th>Minutter</th>
-            </tr>
-            </thead>
-            <tbody>
+        return <Container className="tilsyntabell"><Row noGutters={true}>
             {Object.keys(Ukedag)
                    .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
                    .filter(ukedag => Number(ukedag) < 5)
@@ -478,40 +472,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                        const duration = tilsyn?.[ukedagstr];
                        const hours = hoursFromString(duration);
                        const minutes = minutesFromString(duration);
-                       return <tr key={ukedag}>
-                           <td>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</td>
-                           <td>
-                               <Select
-                                   label=""
-                                   value={hours}
-                                   onChange={event => {
-                                       const newHours = +event.target.value;
-                                       const newMinutes = newHours === 24 ? 0 : minutes;
-                                       updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)});
-                                       updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
-                                   }}
-                               >
-                                   {Array.from(Array(25).keys()).map(int => <option value={int} key={int}>{int}</option>)}
-                               </Select>
-                           </td>
-                           <td>
-                               <Select
-                                   label=""
-                                   value={minutes}
-                                   onChange={event => {
-                                       const newMinutes = +event.target.value;
-                                       updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)});
-                                       updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
-                                   }}
-                                   disabled={hours === 24}
-                               >
-                                   {Array.from(Array(60).keys()).map(int => <option value={int} key={int}>{int}</option>)}
-                               </Select>
-                           </td>
-                       </tr>;
+                       return <Col className="tilsyntabell_ukedag" key={ukedag}><Container>
+                           <Row noGutters={true}><Col>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</Col></Row>
+                           <Row noGutters={true}>
+                               <Col>
+                                   <NumberSelect
+                                       label="Timer"
+                                       value={hours}
+                                       onChange={event => {
+                                           const newHours = +event.target.value;
+                                           const newMinutes = newHours === 24 ? 0 : minutes;
+                                           updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                           updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                       }}
+                                       to={24}
+                                   />
+                               </Col>
+                               <Col>
+                                   <NumberSelect
+                                       label="Min."
+                                       value={minutes}
+                                       onChange={event => {
+                                           const newMinutes = +event.target.value;
+                                           updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)});
+                                           updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
+                                       }}
+                                       disabled={hours === 24}
+                                       to={59}
+                                   />
+                               </Col>
+                           </Row>
+                       </Container></Col>;
                    })}
-            </tbody>
-        </table>;
+        </Row></Container>;
     };
 
     private arbeidsforhold(periodeindex: number, af: Arbeidsforhold, afindex: number, afinfo: any) {

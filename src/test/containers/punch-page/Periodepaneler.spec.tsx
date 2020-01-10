@@ -116,4 +116,10 @@ describe('Periodepaneler', () => {
         expect(editSoknad).toHaveBeenCalledTimes(1);
         expect(editSoknad).toHaveBeenCalledWith(expect.arrayContaining([{...testperioder[1], test: newValue}]));
     });
+
+    it('Gir egendefinert klassenavn til alle periodepaneler', () => {
+        const panelClassName = 'rattata';
+        const periodepaneler = setupPeriodepaneler({panelClassName});
+        periodepaneler.find('Panel').forEach(panel => expect(panel.prop('className')).toEqual(`periodepanel ${panelClassName}`));
+    });
 });

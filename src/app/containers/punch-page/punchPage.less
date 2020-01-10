@@ -111,12 +111,43 @@
 
         .periodebunn {
 
-          display: flex;
+          display:         flex;
           justify-content: flex-end;
 
           .fjernperiodeknapp {
-            margin: 1rem;
+            margin:        1rem;
             margin-bottom: 0;
+          }
+        }
+
+        &.tilsynpanel {
+          .tilsyntabell {
+            padding:          .5rem;
+            text-align:       center;
+            background-color: @white;
+            border-color:     @navGra20;
+            border-style:     solid;
+            border-width:     1px 0;
+            .skjemaelement, .skjemaelement__label {margin: 0;}
+            .row:first-child {font-weight: bold}
+
+            .tilsyntabell_ukedag {
+
+              padding: 0;
+              .container {padding: .5rem}
+              &:not(:first-child) {border-left: 1px solid @navGra20}
+
+              .col:first-child select {
+                border-top-right-radius:    0;
+                border-bottom-right-radius: 0;
+                &:not(:focus) {border-right-width: 0}
+              }
+
+              .col:last-child select {
+                border-top-left-radius:    0;
+                border-bottom-left-radius: 0;
+              }
+            }
           }
         }
 

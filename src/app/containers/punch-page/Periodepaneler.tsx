@@ -1,6 +1,7 @@
 import {PeriodInput}            from 'app/components/period-input/PeriodInput';
 import {IPeriode, IPeriodeinfo} from 'app/models/types';
 import intlHelper               from 'app/utils/intlUtils';
+import classNames               from 'classnames';
 import {Knapp}                  from 'nav-frontend-knapper';
 import {Panel}                  from 'nav-frontend-paneler';
 import * as React               from 'react';
@@ -19,6 +20,7 @@ export interface IPeriodepanelerProps {
     editSoknadState: (periodeinfo: IPeriodeinfo[]) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
     textLeggTil?: string;
     textFjern?: string;
+    panelClassName?: string;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
@@ -50,7 +52,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     return <>
         {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
             const panelid = props.panelid(periodeindex);
-            return <Panel className="periodepanel" border={true} id={panelid} key={periodeindex}>
+            return <Panel className={classNames('periodepanel', props.panelClassName)} border={true} id={panelid} key={periodeindex}>
                 <PeriodInput
                     periode={periodeinfo.periode}
                     intl={props.intl}
