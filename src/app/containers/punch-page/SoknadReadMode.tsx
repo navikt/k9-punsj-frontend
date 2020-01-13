@@ -38,9 +38,9 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
     }
 
     private periodeItem(periode: IPeriodeMedBeredskapNattevaakArbeid) {
-        const {fra_og_med, til_og_med, nattevaak, beredskap} = periode;
-        const fom = !!fra_og_med && datetime(this.props.intl, TimeFormat.DATE_SHORT, fra_og_med);
-        const tom = !!til_og_med && datetime(this.props.intl, TimeFormat.DATE_SHORT, til_og_med);
+        const {fraOgMed, tilOgMed, nattevaak, beredskap} = periode;
+        const fom = !!fraOgMed && datetime(this.props.intl, TimeFormat.DATE_SHORT, fraOgMed);
+        const tom = !!tilOgMed && datetime(this.props.intl, TimeFormat.DATE_SHORT, tilOgMed);
         const bn = !!nattevaak?.svar && !!beredskap?.svar ? 'bn' : (!!beredskap?.svar ? 'b' : (!!nattevaak?.svar ? 'n' : ''));
         if (!!fom && !!tom) {
             return intlHelper(this.props.intl, 'mappe.lesemodus.periode.fratil', {fom, tom, bn});
