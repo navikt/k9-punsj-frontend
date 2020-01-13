@@ -83,7 +83,6 @@ export interface IPunchFormComponentState {
     soknad:             ISoknad;
     isFetched:          boolean;
     showStatus:         boolean;
-    periodeInFocus?:    number;
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -135,7 +134,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     render() {
 
         const {intl, punchFormState} = this.props;
-        const {soknad, periodeInFocus} = this.state;
+        const {soknad} = this.state;
         const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
         if (punchFormState.isComplete) {
@@ -263,7 +262,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     {soknad?.perioder?.map((periode, i) => (
                         <Panel
                             key={`periode_${i}`}
-                            className={`periodepanel${periodeInFocus !== undefined ? (periodeInFocus === i ? ' focus' : ' notFocus') : ''}`}
+                            className="periodepanel"
                             border={true}
                         >
                             <Container>
@@ -274,9 +273,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         className="bold-label"
                                         value={_.get(periode, 'fra_og_med', '')}
                                         onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
-                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                        onBlur={() => this.setPerioder()}
                                         feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
                                         disabled={!soknad.signert}
                                     /></Col>
                                     <Col><Input
@@ -285,9 +283,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         className="bold-label"
                                         value={_.get(periode, 'til_og_med', '')}
                                         onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
-                                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
+                                        onBlur={() => this.setPerioder()}
                                         feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
                                         disabled={!soknad.signert}
                                     /></Col>
                                 </Row>
@@ -324,8 +321,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     <Knapp
                                         disabled={soknad.perioder!.length === 1 || !soknad.signert}
                                         onClick={() => this.removePeriode(i)}
-                                        onFocus={() => this.setPeriodeFocus(i)}
-                                        onBlur={this.unsetPeriodeFocus}
                                     >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
                                 </Col></Row>
                             </Container>
@@ -582,8 +577,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.arbeidstaker.orgnr')}
                         value={_.get(afinfo, 'organisasjonsnummer', '')}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'organisasjonsnummer', event.target.value)}
-                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                        onFocus={() => this.setPeriodeFocus(periodeindex)}
+                        onBlur={() => this.setPerioder()}
                         disabled={!soknad.signert}
                         feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].organisasjonsnummer`)}
                     /></Col>
@@ -591,8 +585,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.arbeidstaker.fravaeriprosent')}
                         value={_.get(afinfo, 'grad', '')}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'grad', event.target.value)}
-                        onBlur={() => {this.setPerioder(); this.unsetPeriodeFocus()}}
-                        onFocus={() => this.setPeriodeFocus(periodeindex)}
+                        onBlur={() => this.setPerioder()}
                         disabled={!soknad.signert}
                         feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].prosent`)}
                     /></Col>
@@ -603,8 +596,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.annet.selvstendig')}
                         checked={_.get(afinfo, 'selvstendig', false)}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ANNET, afindex, 'selvstendig', event.target.checked)}
-                        onFocus={() => this.setPeriodeFocus(periodeindex)}
-                        onBlur={this.unsetPeriodeFocus}
                         disabled={!soknad.signert}
                         feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.annet[${afindex}].selvstendig`)}
                     />
@@ -676,7 +667,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private removePeriode = (index: number) => {
-        this.unsetPeriodeFocus();
         this.state.soknad.perioder!.splice(index, 1);
         this.forceUpdate();
         this.setPerioder();
@@ -693,7 +683,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private removeArbeidsforhold = (periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold, afindex: number) => {
-        this.unsetPeriodeFocus();
         periode.arbeidsgivere![arbeidsforhold]!.splice(afindex, 1);
         this.forceUpdate();
         this.setPerioder();
@@ -767,9 +756,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return <EtikettSuksess {...{className}}>Lagret</EtikettSuksess>;
     }
-
-    private setPeriodeFocus = (index: number) => this.setState({periodeInFocus: index});
-    private unsetPeriodeFocus = () => this.setState({periodeInFocus: undefined});
 }
 
 const mapStateToProps = (state: RootStateType) => ({

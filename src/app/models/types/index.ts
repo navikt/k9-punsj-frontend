@@ -14,7 +14,6 @@ export * from './Person';
 export * from './PunchFormState';
 export * from './PunchPath';
 export * from './PunchState';
-export * from './QueryResponse';
 export * from './Soknad';
 export * from './Tilsyn';
 export * from './Ukedag';

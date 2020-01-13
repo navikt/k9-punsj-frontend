@@ -1,4 +1,4 @@
-import {IPeriodeinfo, PeriodeinfoExtension} from 'app/models/types/Periodeinfo';
+import {PeriodeinfoExtension} from 'app/models/types/Periodeinfo';
 
 export interface ITilsyn implements PeriodeinfoExtension {
     mandag?:    string | null;
