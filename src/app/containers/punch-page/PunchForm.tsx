@@ -235,7 +235,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     panelid={i => `beredskapspanel_${i}`}
                     initialPeriodeinfo={initialBeredskap}
                     editSoknad={beredskap => this.updateSoknad({beredskap})}
-                    editSoknadState={beredskap => this.updateSoknadState({beredskap}, true)}
+                    editSoknadState={(beredskap, showStatus) => this.updateSoknadState({beredskap}, showStatus)}
                     textLeggTil="skjema.beredskap.leggtilperiode"
                     textFjern="skjema.beredskap.fjernperiode"
                     panelClassName="beredskapspanel"
@@ -250,7 +250,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     panelid={i => `nattevaakspanel_${i}`}
                     initialPeriodeinfo={initialNattevaak}
                     editSoknad={nattevaak => this.updateSoknad({nattevaak})}
-                    editSoknadState={nattevaak => this.updateSoknadState({nattevaak}, true)}
+                    editSoknadState={(nattevaak, showStatus) => this.updateSoknadState({nattevaak}, showStatus)}
                     textLeggTil="skjema.nattevaak.leggtilperiode"
                     textFjern="skjema.nattevaak.fjernperiode"
                     panelClassName="nattevaakspanel"
@@ -436,7 +436,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     panelid={i => `tilsynpanel_${i}`}
                     initialPeriodeinfo={initialTilsyn}
                     editSoknad={tilsynsordning => this.updateSoknad({tilsynsordning})}
-                    editSoknadState={tilsynsordning => this.updateSoknadState({tilsynsordning}, true)}
+                    editSoknadState={(tilsynsordning, showStatus) => this.updateSoknadState({tilsynsordning}, showStatus)}
                     textLeggTil="skjema.tilsyn.leggtilperiode"
                     textFjern="skjema.tilsyn.fjernperiode"
                     panelClassName="tilsynpanel"
@@ -454,7 +454,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private beredskap: PeriodeComponent<IJaNeiTilleggsinformasjon> = (beredskap: Periodeinfo<IJaNeiTilleggsinformasjon>,
                                                                       periodeindex: number,
                                                                       updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
-                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
+                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>, showStatus?: boolean) => any,
                                                                       feilprefiks: string) => {
         const {intl} = this.props;
         const {soknad} = this.state;
@@ -464,7 +464,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 checked={beredskap.svar}
                 onChange={event => {
                     const svar = event.target.checked;
-                    updatePeriodeinfoInSoknadState({svar});
+                    updatePeriodeinfoInSoknadState({svar}, true);
                     updatePeriodeinfoInSoknad({svar});
                 }}
                 className="bold-label"
@@ -474,7 +474,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             {!!beredskap?.svar && <Textarea
                 label={intlHelper(intl, 'skjema.beredskap.tilleggsinfo')}
                 value={beredskap.tilleggsinformasjon || ''}
-                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value})}
+                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
                 disabled={!soknad.signert}
@@ -486,7 +486,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private nattevaak: PeriodeComponent<IJaNeiTilleggsinformasjon> = (nattevaak: Periodeinfo<IJaNeiTilleggsinformasjon>,
                                                                       periodeindex: number,
                                                                       updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
-                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
+                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>, showStatus?: boolean) => any,
                                                                       feilprefiks: string) => {
         const {intl} = this.props;
         const {soknad} = this.state;
@@ -496,7 +496,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 checked={nattevaak.svar}
                 onChange={event => {
                     const svar = event.target.checked;
-                    updatePeriodeinfoInSoknadState({svar});
+                    updatePeriodeinfoInSoknadState({svar}, true);
                     updatePeriodeinfoInSoknad({svar});
                 }}
                 className="bold-label"
@@ -506,7 +506,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             {!!nattevaak?.svar && <Textarea
                 label={intlHelper(intl, 'skjema.nattevaak.tilleggsinfo')}
                 value={nattevaak.tilleggsinformasjon || ''}
-                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value})}
+                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
                 disabled={!soknad.signert}
@@ -518,7 +518,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private tilsyn: PeriodeComponent<ITilsyn> = (tilsyn: Periodeinfo<ITilsyn>,
                                                  periodeindex: number,
                                                  updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilsyn>>) => any,
-                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilsyn>>) => any,
+                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilsyn>>, showStatus?: boolean) => any,
                                                  feilprefiks: string) => {
         return <Container className="tilsyntabell"><Row noGutters={true}>
             {Object.keys(Ukedag)
@@ -540,7 +540,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                            onChange={event => {
                                                const newHours = +event.target.value;
                                                const newMinutes = newHours === 24 ? 0 : minutes;
-                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)});
+                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)}, true);
                                                updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
                                            }}
                                            to={24}
@@ -552,7 +552,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                            value={minutes}
                                            onChange={event => {
                                                const newMinutes = +event.target.value;
-                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)});
+                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)}, true);
                                                updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
                                            }}
                                            disabled={hours === 24}
@@ -627,8 +627,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         )} : undefined;
     };
 
-    private updateSoknadState(soknad: Partial<ISoknad>, showStatus: boolean) {
-        this.setState({soknad: {...this.state.soknad, ...soknad}, showStatus});
+    private updateSoknadState(soknad: Partial<ISoknad>, showStatus?: boolean) {
+        this.setState({soknad: {...this.state.soknad, ...soknad}, showStatus: !!showStatus});
     }
 
     private handleBackButtonClick = () => {

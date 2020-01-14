@@ -34,14 +34,14 @@ const testinputid = (periodeindex: number) => `testperiode_${periodeindex}_testi
 const testkomponent: PeriodeComponent<ITestperiodeinfo> = (info: Testperiodeinfo,
                                                            periodeindex: number,
                                                            updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
-                                                           updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>) => any,
+                                                           updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
                                                            feilkodeprefiksMedIndeks?: string) => {
     return <Input
         label=""
         id={testinputid(periodeindex)}
         className="testinput"
         value={info.test}
-        onChange={event => updatePeriodeinfoInSoknadState({test: event.target.value})}
+        onChange={event => updatePeriodeinfoInSoknadState({test: event.target.value}, false)}
         onBlur={event => updatePeriodeinfoInSoknad({test: event.target.value})}
         feil={feilkodeprefiksMedIndeks ? {feilmelding: `Feilmelding med kode ${feilkodeprefiksMedIndeks}`} : undefined}
     />;
@@ -118,7 +118,7 @@ describe('Periodepaneler', () => {
         const newValue = 'Hihihi';
         periodepaneler.find(`#${testinputid(1)}`).simulate('change', {target: {value: newValue}});
         expect(editSoknadState).toHaveBeenCalledTimes(1);
-        expect(editSoknadState).toHaveBeenCalledWith(expect.arrayContaining([{...testperioder[1], test: newValue}]));
+        expect(editSoknadState).toHaveBeenCalledWith(expect.arrayContaining([{...testperioder[1], test: newValue}]), false);
     });
 
     it('Kaller updatePeriodeinfoInSoknad med ny verdi', () => {

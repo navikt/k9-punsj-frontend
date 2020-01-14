@@ -12,7 +12,7 @@ import {IntlShape}                                                 from 'react-i
 export type PeriodeComponent<T> = (info: Periodeinfo<T>,
                                    periodeindex: number,
                                    updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<T>>) => any,
-                                   updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<T>>) => any,
+                                   updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any,
                                    feilkodeprefiksMedIndeks?: string) => React.ReactElement;
 
 export interface IPeriodepanelerProps {
@@ -22,7 +22,7 @@ export interface IPeriodepanelerProps {
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialPeriodeinfo: IPeriodeinfo; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeinfo[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (periodeinfo: IPeriodeinfo[]) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
+    editSoknadState: (periodeinfo: IPeriodeinfo[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
@@ -71,7 +71,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         periodeinfo,
                         periodeindex,
                         info => editSoknad(editInfo(periodeindex, info)),
-                        info => editSoknadState(editInfo(periodeindex, info)),
+                        (info, showStatus) => editSoknadState(editInfo(periodeindex, info), showStatus),
                         `${feilkodeprefiks}[${periodeindex}]`
                     )}
                     <div className="periodebunn">
