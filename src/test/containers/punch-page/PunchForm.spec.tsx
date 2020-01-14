@@ -89,79 +89,61 @@ const setupPunchForm = (
 describe('PunchForm', () => {
 
     it('Viser skjema', () => {
-
         const ident = '123';
         const mappeid = 'abc';
-
         const punchForm = setupPunchForm({}, ident, mappeid);
-
-        expect(punchForm.find('h2').at(0).text()).toEqual('skjema.signatur.overskrift');
+        expect(punchForm.find('h2')).toHaveLength(5);
     });
 
     it('Henter mappeinformasjon', () => {
-
         const ident = '123';
         const mappeid = 'abc';
         const getMappe = jest.fn();
-
         setupPunchForm({}, ident, mappeid, {getMappe});
-
         expect(getMappe).toHaveBeenCalledTimes(1);
         expect(getMappe).toHaveBeenCalledWith(mappeid);
     });
 
     it('Viser spinner når mappen lastes inn', () => {
-
         const ident = '123';
         const mappeid = 'abc';
-
         const punchForm = setupPunchForm({isMappeLoading: true}, ident, mappeid);
-
         expect(punchForm.find('NavFrontendSpinner')).toHaveLength(1);
     });
 
     it('Viser feilmelding når mappen ikke er funnet', () => {
-
         const ident = '123';
         const mappeid = 'abc';
-
         const punchForm = setupPunchForm({error: {status: 404}}, ident, mappeid);
-
         expect(punchForm.find('AlertStripeFeil')).toHaveLength(1);
         expect(punchForm.find('AlertStripeFeil').prop('children')).toEqual('skjema.feil.ikke_funnet');
     });
 
     it('Oppdaterer mappe når det gjøres endringer', () => {
-
         const ident = '123';
         const mappeid = 'abc';
         const updateSoknad = jest.fn();
-
+        const newSprak = 'nn';
         const punchForm = setupPunchForm({}, ident, mappeid, {updateSoknad});
-        const findSignaturCheckbox = () => punchForm.find('Checkbox[label="skjema.signatur.bekreftelse"]');
-
-        findSignaturCheckbox().simulate('change', {target: {checked: true}});
-
+        const findSpraakSelect = () => punchForm.find('Select[label="skjema.spraak"]');
+        findSpraakSelect().simulate('change', {target: {value: newSprak}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({signert: true}));
-        expect(findSignaturCheckbox().prop('checked')).toBeTruthy();
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({spraak: newSprak}));
+        expect(findSpraakSelect().prop('value')).toEqual(newSprak);
     });
 
     it('Skjemaet skal inneholde én periode i starten', () => {
-
         const punchForm = setupPunchForm({}, '123', 'abc');
         expect(punchForm.find('.periodepanel')).toHaveLength(1);
     });
 
     it('Legger til periode når man klikker på "Legg til periode"-knappen', () => {
-
         const ident = '123';
         const mappeid = 'abc';
         const updateSoknad = jest.fn();
         const punchForm = setupPunchForm({}, ident, mappeid, {updateSoknad});
         const numberOfPeriods = () => punchForm.find('.periodepanel').length;
         const numberOfPeriodsBefore = numberOfPeriods();
-
         punchForm.find('#addperiod').simulate('click');
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({perioder: expect.any(Array)}));
@@ -169,17 +151,13 @@ describe('PunchForm', () => {
     });
 
     it('Sender inn søknad', () => {
-
         const ident = '123';
         const mappeid = 'abc';
         const submitSoknad = jest.fn();
-
         const punchForm = setupPunchForm({}, ident, mappeid, {submitSoknad});
-
         punchForm.find('.sendknapp-wrapper')
                  .find('Knapp')
                  .simulate('click');
-
         expect(submitSoknad).toHaveBeenCalledTimes(1);
         expect(submitSoknad).toHaveBeenCalledWith(mappeid, ident);
     });

@@ -105,8 +105,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             barn: {
                 norsk_ident: '',
                 foedselsdato: ''
-            },
-            signert: false
+            }
         },
         isFetched: false,
         showStatus: false
@@ -186,16 +185,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             {!punchFormState.updateMappeError && !punchFormState.submitMappeError && (isSoknadComplete
                 ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
                 : <AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>)}
-            <h2>{intlHelper(intl, 'skjema.signatur.overskrift')}</h2>
-            <Checkbox
-                label={intlHelper(intl, 'skjema.signatur.bekreftelse')}
-                className="signatur-checkbox bold-label"
-                checked={_.get(soknad, 'signert', false)}
-                {...this.onChangeOnlyUpdate(event => ({signert: event.target.checked}))}
-                feil={this.getErrorMessage('signert')}
-            />
-            <div className={!soknad.signert ? 'disabled-punch-form' : undefined}>
-                <h2>Opplysninger om barn og søker</h2>
+            <div>
+                <h2>{intlHelper(intl, 'skjema.opplysningerombarnogsoker')}</h2>
                 <Select
                     name="sprak"
                     label={intlHelper(intl, 'skjema.spraak')}
@@ -203,10 +194,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     value={soknad.spraak || 'nb'}
                     {...this.onChangeOnlyUpdate(event => ({spraak: event.target.value}))}
                     feil={this.getErrorMessage('spraak')}
-                    disabled={!soknad.signert}
                 >
-                    <option value='nb'>Bokmål</option>
-                    <option value='nn'>Nynorsk</option>
+                    <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
+                    <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
                 </Select>
                 <SkjemaGruppe feil={this.getErrorMessage('barn')}>
                     <Input
@@ -215,7 +205,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         value={_.get(soknad, 'barn.norsk_ident', '')}
                         {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_ident: event.target.value}}))}
                         feil={this.getErrorMessage('barn.norsk_ident')}
-                        disabled={!soknad.signert}
                     />
                     <Input
                         type="date"
@@ -224,10 +213,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         value={_.get(soknad, 'barn.foedselsdato', '')}
                         {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, foedselsdato: event.target.value}}))}
                         feil={this.getErrorMessage('barn.foedselsdato')}
-                        disabled={!soknad.signert}
                     />
                 </SkjemaGruppe>
-                <h2>Beredskap</h2>
+                <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
                 <Periodepaneler
                     intl={intl}
                     periods={soknad.beredskap!}
@@ -242,7 +230,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     getErrorMessage={this.getErrorMessage}
                     feilkodeprefiks={'beredskap'}
                 />
-                <h2>Nattevåk</h2>
+                <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
                 <Periodepaneler
                     intl={intl}
                     periods={soknad.nattevaak!}
@@ -275,7 +263,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
                                         onBlur={() => this.setPerioder()}
                                         feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
-                                        disabled={!soknad.signert}
                                     /></Col>
                                     <Col><Input
                                         type="date"
@@ -285,7 +272,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
                                         onBlur={() => this.setPerioder()}
                                         feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
-                                        disabled={!soknad.signert}
                                     /></Col>
                                 </Row>
                                 <Row><Col>
@@ -319,7 +305,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         </Panel>)}
                                     </div>
                                     <Knapp
-                                        disabled={soknad.perioder!.length === 1 || !soknad.signert}
+                                        disabled={soknad.perioder!.length === 1}
                                         onClick={() => this.removePeriode(i)}
                                     >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
                                 </Col></Row>
@@ -330,7 +316,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <Knapp
                     id="addperiod"
                     onClick={this.addPeriode}
-                    disabled={!soknad.signert}
                 >{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
                 {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
                 {!!soknad?.medlemskap?.opphold?.length && (
@@ -457,29 +442,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                                       updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>, showStatus?: boolean) => any,
                                                                       feilprefiks: string) => {
         const {intl} = this.props;
-        const {soknad} = this.state;
-        return <div className="janeitilleggsinfo">
-            <Checkbox
-                label={intlHelper(intl, 'skjema.beredskap.svar')}
-                checked={beredskap.svar}
-                onChange={event => {
-                    const svar = event.target.checked;
-                    updatePeriodeinfoInSoknadState({svar}, true);
-                    updatePeriodeinfoInSoknad({svar});
-                }}
-                className="bold-label"
-                feil={this.getErrorMessage(`${feilprefiks}.svar`)}
-                disabled={!soknad.signert}
-            />
-            {!!beredskap?.svar && <Textarea
+        return <div className="tilleggsinfo">
+            <Textarea
                 label={intlHelper(intl, 'skjema.beredskap.tilleggsinfo')}
                 value={beredskap.tilleggsinformasjon || ''}
                 onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
-                disabled={!soknad.signert}
                 maxLength={0}
-            />}
+            />
         </div>;
     };
 
@@ -489,29 +460,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                                       updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>, showStatus?: boolean) => any,
                                                                       feilprefiks: string) => {
         const {intl} = this.props;
-        const {soknad} = this.state;
-        return <div className="janeitilleggsinfo">
-            <Checkbox
-                label={intlHelper(intl, 'skjema.nattevaak.svar')}
-                checked={nattevaak.svar}
-                onChange={event => {
-                    const svar = event.target.checked;
-                    updatePeriodeinfoInSoknadState({svar}, true);
-                    updatePeriodeinfoInSoknad({svar});
-                }}
-                className="bold-label"
-                feil={this.getErrorMessage(`${feilprefiks}.svar`)}
-                disabled={!soknad.signert}
-            />
-            {!!nattevaak?.svar && <Textarea
+        return <div className="tilleggsinfo">
+            <Textarea
                 label={intlHelper(intl, 'skjema.nattevaak.tilleggsinfo')}
                 value={nattevaak.tilleggsinformasjon || ''}
                 onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
-                disabled={!soknad.signert}
                 maxLength={0}
-            />}
+            />
         </div>;
     };
 
@@ -578,7 +535,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         value={_.get(afinfo, 'organisasjonsnummer', '')}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'organisasjonsnummer', event.target.value)}
                         onBlur={() => this.setPerioder()}
-                        disabled={!soknad.signert}
                         feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].organisasjonsnummer`)}
                     /></Col>
                     <Col><Input
@@ -586,7 +542,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         value={_.get(afinfo, 'grad', '')}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'grad', event.target.value)}
                         onBlur={() => this.setPerioder()}
-                        disabled={!soknad.signert}
                         feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].prosent`)}
                     /></Col>
                 </>;
@@ -596,7 +551,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.annet.selvstendig')}
                         checked={_.get(afinfo, 'selvstendig', false)}
                         onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ANNET, afindex, 'selvstendig', event.target.checked)}
-                        disabled={!soknad.signert}
                         feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.annet[${afindex}].selvstendig`)}
                     />
                 </Col>;

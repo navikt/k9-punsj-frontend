@@ -7,9 +7,8 @@ export interface ISoknad {
     perioder?: IPeriodeMedBeredskapNattevaakArbeid[];
     spraak?: Locale;
     barn?: IBarn;
-    signert?: boolean;
-    beredskap?: Periodeinfo<IJaNeiTilleggsinformasjon>[];
-    nattevaak?: Periodeinfo<IJaNeiTilleggsinformasjon>[];
+    beredskap?: Periodeinfo<ITilleggsinformasjon>[];
+    nattevaak?: Periodeinfo<ITilleggsinformasjon>[];
     tilsynsordning?: Periodeinfo<ITilsyn>[];
 }
 
@@ -25,6 +24,10 @@ interface IBarn extends IPerson {}
 
 interface IJaNeiTilleggsinformasjon {
     svar?: boolean;
+    tilleggsinformasjon?: string;
+}
+
+interface ITilleggsinformsjon {
     tilleggsinformasjon?: string;
 }
 

@@ -104,8 +104,7 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
                     beredskap: [],
                     nattevaak: [],
                     spraak: 'nb',
-                    barn: {},
-                    signert: undefined
+                    barn: {}
                 }
             }
         }
