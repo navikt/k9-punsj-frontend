@@ -4,7 +4,7 @@ import {
     PeriodeComponent,
     Periodepaneler
 }                                                                                             from 'app/containers/punch-page/Periodepaneler';
-import {Arbeidsforhold, PunchStep, Ukedag}                                                    from 'app/models/enums';
+import {Arbeidsforhold, JaNeiVetikke, PunchStep, Ukedag}                                      from 'app/models/enums';
 import {
     IInputError,
     IJaNeiTilleggsinformasjon,
@@ -12,10 +12,10 @@ import {
     IPunchFormState,
     IPunchState,
     ISoknad,
-    ITilsyn,
+    ITilsyn, ITilsynsordning,
     Periodeinfo,
     UkedagNumber
-}                                                                                             from 'app/models/types';
+} from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -46,6 +46,7 @@ import {Panel}                                                                  
 import {
     Checkbox,
     Input,
+    RadioPanelGruppe,
     Select,
     SkjemaGruppe,
     Textarea
@@ -100,7 +101,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }],
             beredskap: [],
             nattevaak: [],
-            tilsynsordning: [],
+            tilsynsordning: {
+                iTilsynsordning: JaNeiVetikke.NEI,
+                opphold: []
+            },
             spraak: 'nb',
             barn: {
                 norsk_ident: '',
@@ -413,27 +417,48 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
                     feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
                 />*/}
-                <h2>Opplysninger om tilsyn av barnet</h2>
-                <Periodepaneler
-                    intl={intl}
-                    periods={soknad.tilsynsordning!}
-                    component={this.tilsyn}
-                    panelid={i => `tilsynpanel_${i}`}
-                    initialPeriodeinfo={initialTilsyn}
-                    editSoknad={tilsynsordning => this.updateSoknad({tilsynsordning})}
-                    editSoknadState={(tilsynsordning, showStatus) => this.updateSoknadState({tilsynsordning}, showStatus)}
-                    textLeggTil="skjema.tilsyn.leggtilperiode"
-                    textFjern="skjema.tilsyn.fjernperiode"
-                    panelClassName="tilsynpanel"
-                    getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'tilsynsordning'}
-                />
+                <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
+                <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning')} className="tilsynsordning">
+                    <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning.iTilsynsordning')} className="janeivetikke">
+                        <RadioPanelGruppe
+                            radios={Object.values(JaNeiVetikke).map(jnv => ({label: intlHelper(intl, jnv), value: jnv}))}
+                            name="tilsynjaneivetikke"
+                            legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
+                            onChange={event => this.updateTilsynsordning((event.target as HTMLInputElement).value as JaNeiVetikke)}
+                            checked={soknad.tilsynsordning!.iTilsynsordning}
+                        />
+                    </SkjemaGruppe>
+                    {soknad.tilsynsordning!.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
+                        intl={intl}
+                        periods={soknad.tilsynsordning!.opphold!}
+                        component={this.tilsyn}
+                        panelid={i => `tilsynpanel_${i}`}
+                        initialPeriodeinfo={initialTilsyn}
+                        editSoknad={opphold => this.updateSoknad({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}})}
+                        editSoknadState={(opphold, showStatus) => this.updateSoknadState({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}}, showStatus)}
+                        textLeggTil="skjema.tilsyn.leggtilperiode"
+                        textFjern="skjema.tilsyn.fjernperiode"
+                        panelClassName="tilsynpanel"
+                        getErrorMessage={this.getErrorMessage}
+                        feilkodeprefiks={'tilsynsordning.opphold'}
+                        minstEn={true}
+                    />}
+                </SkjemaGruppe>
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
                     disabled={!isSoknadComplete}
                 >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
             </div>
         </>);
+    }
+
+    private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
+        let tilsynsordning: ITilsynsordning = {...this.state.soknad.tilsynsordning, iTilsynsordning: jaNeiVetikke};
+        if (jaNeiVetikke === JaNeiVetikke.JA && tilsynsordning.opphold!.length === 0) {
+            tilsynsordning.opphold!.push({periode: {}});
+        }
+        this.updateSoknadState({tilsynsordning}, true);
+        this.updateSoknad({tilsynsordning});
     }
 
     private beredskap: PeriodeComponent<IJaNeiTilleggsinformasjon> = (beredskap: Periodeinfo<IJaNeiTilleggsinformasjon>,

@@ -103,6 +103,27 @@
         }
       }
 
+      .tilsynsordning {
+
+        .leggtilperiodeknapp {margin-top: 1rem}
+        .periodepanel {
+          margin-bottom: 0;
+          margin-top: 1rem;
+        }
+
+        .inputPanelGruppe__inner {
+
+          display: flex;
+
+          .inputPanel {
+            flex-grow: 1;
+            margin-bottom: 0;
+            &:not(:first-child) {margin-left: .5rem}
+            &:not(:last-child) {margin-right: .5rem}
+          }
+        }
+      }
+
       .periodepanel {
 
         background-color: tint(@navLysGra, 75%);
@@ -126,6 +147,9 @@
         }
 
         &.tilsynpanel {
+
+          &:first-child {margin-top: 1rem}
+
           .tilsyntabell {
             padding:          .5rem;
             text-align:       center;

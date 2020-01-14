@@ -23,11 +23,13 @@ export interface IPeriodepanelerProps {
     initialPeriodeinfo: IPeriodeinfo; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeinfo[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
     editSoknadState: (periodeinfo: IPeriodeinfo[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
+    className?: string;
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
     getErrorMessage?: (kode: string) => (SkjemaelementFeil | undefined);
     feilkodeprefiks?: string;
+    minstEn?: boolean;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
@@ -56,7 +58,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         return newArray;
     };
 
-    return <SkjemaGruppe feil={getErrorMessage && feilkodeprefiks && getErrorMessage(feilkodeprefiks) || undefined}>
+    return <SkjemaGruppe
+        feil={getErrorMessage && feilkodeprefiks && getErrorMessage(feilkodeprefiks) || undefined}
+        className={classNames('periodepaneler', props.className)}
+    >
         {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
             const panelid = props.panelid(periodeindex);
             return <Panel className={classNames('periodepanel', props.panelClassName)} border={true} id={panelid} key={periodeindex}>
@@ -82,6 +87,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 editSoknad(newArray);
                             }}
                             className="fjernperiodeknapp"
+                            disabled={props.minstEn && props.periods.length < 2}
                         >
                             {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
                         </Knapp>

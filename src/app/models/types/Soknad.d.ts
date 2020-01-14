@@ -1,7 +1,8 @@
-import {Periodeinfo} from 'app/models/types/Periodeinfo';
-import {ITilsyn}     from 'app/models/types/Tilsyn';
-import {Locale}      from './Locale';
-import {IPerson}     from './Person';
+import {JaNeiVetikke} from 'app/models/enums';
+import {Periodeinfo}  from 'app/models/types/Periodeinfo';
+import {ITilsyn}      from 'app/models/types/Tilsyn';
+import {Locale}       from './Locale';
+import {IPerson}      from './Person';
 
 export interface ISoknad {
     perioder?: IPeriodeMedBeredskapNattevaakArbeid[];
@@ -9,7 +10,12 @@ export interface ISoknad {
     barn?: IBarn;
     beredskap?: Periodeinfo<ITilleggsinformasjon>[];
     nattevaak?: Periodeinfo<ITilleggsinformasjon>[];
-    tilsynsordning?: Periodeinfo<ITilsyn>[];
+    tilsynsordning?: ITilsynsordning;
+}
+
+interface ITilsynsordning {
+    iTilsynsordning?: JaNeiVetikke,
+    opphold?: Periodeinfo<ITilsyn>[];
 }
 
 interface IPeriodeMedBeredskapNattevaakArbeid {
