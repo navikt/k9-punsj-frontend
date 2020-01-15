@@ -19,3 +19,16 @@ body {
 .header {
   width: 100%;
 }
+
+.horizontalRadios .inputPanelGruppe__inner {
+
+  display: flex;
+
+  .inputPanel {
+    flex-grow:     1;
+    flex-basis:    0;
+    margin-bottom: 0;
+    &:not(:first-child) {margin-left: .5rem}
+    &:not(:last-child) {margin-right: .5rem}
+  }
+}

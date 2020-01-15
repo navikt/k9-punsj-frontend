@@ -1,21 +1,23 @@
-import DeleteButton                                                                           from 'app/components/delete-button/DeleteButton';
 import {NumberSelect}                                                                         from 'app/components/number-select/NumberSelect';
 import {
     PeriodeComponent,
     Periodepaneler
 }                                                                                             from 'app/containers/punch-page/Periodepaneler';
-import {Arbeidsforhold, JaNeiVetikke, PunchStep, Ukedag}                                      from 'app/models/enums';
+import {JaNeiVetikke, PunchStep, Ukedag}                                                      from 'app/models/enums';
 import {
+    IArbeidstaker,
+    IFrilanser,
     IInputError,
-    IJaNeiTilleggsinformasjon,
-    IPeriodeMedBeredskapNattevaakArbeid,
     IPunchFormState,
     IPunchState,
+    ISelvstendigNaerinsdrivende,
     ISoknad,
-    ITilsyn, ITilsynsordning,
+    ITilleggsinformasjon,
+    ITilsyn,
+    ITilsynsordning,
     Periodeinfo,
     UkedagNumber
-} from 'app/models/types';
+}                                                                                             from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -42,9 +44,7 @@ import {
     EtikettSuksess
 }                                                                                             from 'nav-frontend-etiketter';
 import {Knapp}                                                                                from 'nav-frontend-knapper';
-import {Panel}                                                                                from 'nav-frontend-paneler';
 import {
-    Checkbox,
     Input,
     RadioPanelGruppe,
     Select,
@@ -95,10 +95,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     state: IPunchFormComponentState = {
         soknad: {
-            perioder: [{
-                fraOgMed: '',
-                tilOgMed: ''
-            }],
+            arbeidsgivere: {
+                arbeidstaker: [],
+                selvstendigNæringsdrivende: [],
+                frilanser: []
+            },
             beredskap: [],
             nattevaak: [],
             tilsynsordning: {
@@ -160,6 +161,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
+        const initialArbeidstaker: Periodeinfo<IArbeidstaker> = {
+            periode: {fraOgMed: '', tilOgMed: ''},
+            skalJobbeProsent: 100.00,
+            organisasjonsnummer: '',
+            norskIdent: null
+        };
+
+        const initialSelvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende> = {periode: {fraOgMed: '', tilOgMed: ''}};
+        const initialFrilanser: Periodeinfo<IFrilanser> = {periode: {fraOgMed: '', tilOgMed: ''}};
+
         const initialTilsyn: Periodeinfo<ITilsyn> = {
             periode: {fraOgMed: '', tilOgMed: ''},
             mandag: null,
@@ -169,15 +180,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             fredag: null
         };
 
-        const initialBeredskap: Periodeinfo<IJaNeiTilleggsinformasjon> = {
+        const initialBeredskap: Periodeinfo<ITilleggsinformasjon> = {
             periode: {fraOgMed: '', tilOgMed: ''},
-            svar: false,
             tilleggsinformasjon: ''
         };
 
-        const initialNattevaak: Periodeinfo<IJaNeiTilleggsinformasjon> = {
+        const initialNattevaak: Periodeinfo<ITilleggsinformasjon> = {
             periode: {fraOgMed: '', tilOgMed: ''},
-            svar: false,
             tilleggsinformasjon: ''
         };
 
@@ -219,6 +228,50 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         feil={this.getErrorMessage('barn.foedselsdato')}
                     />
                 </SkjemaGruppe>
+                <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
+                <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.arbeidsgivere!.arbeidstaker!}
+                    component={this.arbeidstaker}
+                    panelid={i => `arbeidstakerpanel_${i}`}
+                    initialPeriodeinfo={initialArbeidstaker}
+                    editSoknad={arbeidstaker => this.updateSoknad({arbeidsgivere: {...soknad.arbeidsgivere, arbeidstaker}})}
+                    editSoknadState={(arbeidstaker, showStatus) => this.updateSoknadState({arbeidsgivere: {...soknad.arbeidsgivere, arbeidstaker}}, showStatus)}
+                    textLeggTil="skjema.arbeid.arbeidstaker.leggtilperiode"
+                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                    panelClassName="arbeidstakerpanel"
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'arbeidsgivere.arbeidstaker'}
+                />
+                <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.arbeidsgivere!.selvstendigNæringsdrivende!}
+                    panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
+                    initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
+                    editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeidsgivere: {...soknad.arbeidsgivere, selvstendigNæringsdrivende}})}
+                    editSoknadState={(selvstendigNæringsdrivende, showStatus) => this.updateSoknadState({arbeidsgivere: {...soknad.arbeidsgivere, selvstendigNæringsdrivende}}, showStatus)}
+                    textLeggTil="skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode"
+                    textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
+                    panelClassName="selvstendignaeringsdrivendepanel"
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'arbeidsgivere.selvstendigNæringsdrivende'}
+                />
+                <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.arbeidsgivere!.frilanser!}
+                    panelid={i => `frilanserpanel_${i}`}
+                    initialPeriodeinfo={initialFrilanser}
+                    editSoknad={frilanser => this.updateSoknad({arbeidsgivere: {...soknad.arbeidsgivere, frilanser}})}
+                    editSoknadState={(frilanser, showStatus) => this.updateSoknadState({arbeidsgivere: {...soknad.arbeidsgivere, frilanser}}, showStatus)}
+                    textLeggTil="skjema.arbeid.frilanser.leggtilperiode"
+                    textFjern="skjema.arbeid.frilanser.fjernperiode"
+                    panelClassName="frilanserpanel"
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'arbeidsgivere.frilanser'}
+                />
                 <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
                 <Periodepaneler
                     intl={intl}
@@ -249,78 +302,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     getErrorMessage={this.getErrorMessage}
                     feilkodeprefiks={'nattevaak'}
                 />
-                <h2>{intlHelper(intl, 'skjema.perioder.overskrift')}</h2>
-                <SkjemaGruppe feil={this.getErrorMessage('perioder')}>
-                    {soknad?.perioder?.map((periode, i) => (
-                        <Panel
-                            key={`periode_${i}`}
-                            className="periodepanel"
-                            border={true}
-                        >
-                            <Container>
-                                <Row>
-                                    <Col><Input
-                                        type="date"
-                                        label={intlHelper(intl, 'skjema.perioder.fom')}
-                                        className="bold-label"
-                                        value={_.get(periode, 'fra_og_med', '')}
-                                        onChange={event => this.handlePeriodeChange(i, 'fra_og_med', event.target.value)}
-                                        onBlur={() => this.setPerioder()}
-                                        feil={this.getErrorMessage(`perioder[${i}].fra_og_med`)}
-                                    /></Col>
-                                    <Col><Input
-                                        type="date"
-                                        label={intlHelper(intl, 'skjema.perioder.tom')}
-                                        className="bold-label"
-                                        value={_.get(periode, 'til_og_med', '')}
-                                        onChange={event => this.handlePeriodeChange(i, 'til_og_med', event.target.value)}
-                                        onBlur={() => this.setPerioder()}
-                                        feil={this.getErrorMessage(`perioder[${i}].til_og_med`)}
-                                    /></Col>
-                                </Row>
-                                <Row><Col>
-                                    <div className="periode_arbeid">
-                                        {Object.values(Arbeidsforhold).map(af => <Panel border={true} key={`periode_arbeid_${af}`}>
-                                            <Container>
-                                                <Row>
-                                                    <Col className="arbeidsforholdstype"><Knapp
-                                                        title="Klikk for å legge til"
-                                                        onClick={() => this.addArbeidsforhold(periode, af)}
-                                                    >+ {intlHelper(intl, `arbeidsforhold.${af}`)}</Knapp></Col>
-                                                </Row>
-                                                {_.get(periode, ['arbeidsgivere', af], []).map((afinfo: any, afindex: number) => (
-                                                    <Row key={`periode_${i}_${af}_${afindex}`} className="arbeidsforholdslisteelement">
-                                                        {this.arbeidsforhold(i, af, afindex, afinfo)}
-                                                        <Col className="d-flex align-items-center" xs="auto">
-                                                            <DeleteButton
-                                                                onClick={() => this.removeArbeidsforhold(periode, af, afindex)}
-                                                                title={intlHelper(intl, 'skjema.perioder.arbeidsforhold.slett')}
-                                                            />
-                                                        </Col>
-                                                    </Row>
-                                                ))}
-                                                {_.get(periode, ['arbeidsgivere', af], []).length > 0 && <Row>
-                                                    <Col className="leggtilarbeidsforhold"><Knapp
-                                                        title="Klikk for å legge til"
-                                                        onClick={() => this.addArbeidsforhold(periode, af)}
-                                                    >Legg til</Knapp></Col>
-                                                </Row>}
-                                            </Container>
-                                        </Panel>)}
-                                    </div>
-                                    <Knapp
-                                        disabled={soknad.perioder!.length === 1}
-                                        onClick={() => this.removePeriode(i)}
-                                    >{intlHelper(intl, 'skjema.perioder.fjern')}</Knapp>
-                                </Col></Row>
-                            </Container>
-                        </Panel>
-                    ))}
-                </SkjemaGruppe>
-                <Knapp
-                    id="addperiod"
-                    onClick={this.addPeriode}
-                >{intlHelper(intl, 'skjema.perioder.legg_til')}</Knapp>
                 {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
                 {!!soknad?.medlemskap?.opphold?.length && (
                     <table className="tabell tabell--stripet">
@@ -421,6 +402,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning')} className="tilsynsordning">
                     <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning.iTilsynsordning')} className="janeivetikke">
                         <RadioPanelGruppe
+                            className="horizontalRadios"
                             radios={Object.values(JaNeiVetikke).map(jnv => ({label: intlHelper(intl, jnv), value: jnv}))}
                             name="tilsynjaneivetikke"
                             legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
@@ -452,8 +434,74 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
+    private arbeidstaker: PeriodeComponent<IArbeidstaker> = (arbeidstaker: Periodeinfo<IArbeidstaker>,
+                                                             periodeindex: number,
+                                                             updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IArbeidstaker>>) => any,
+                                                             updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IArbeidstaker>>, showStatus?: boolean) => any,
+                                                             feilprefiks: string) => {
+        const {intl} = this.props;
+        type OrgOrPers = 'o' | 'p';
+        const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
+            let organisasjonsnummer: string | null;
+            let norskIdent: string | null;
+            if (orgOrPers === 'o') {
+                organisasjonsnummer = '';
+                norskIdent = null;
+            } else {
+                organisasjonsnummer = null;
+                norskIdent = '';
+            }
+            updatePeriodeinfoInSoknadState({organisasjonsnummer, norskIdent});
+            updatePeriodeinfoInSoknad({organisasjonsnummer, norskIdent});
+        };
+        const selectedType: OrgOrPers = arbeidstaker.organisasjonsnummer === null ? 'p' : 'o';
+        return <SkjemaGruppe feil={this.getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
+            <Container className="infoContainer">
+                <Row noGutters={true}>
+                    <Col>
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            radios={[
+                                {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'), value: 'o'},
+                                {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'), value: 'p'}
+                            ]}
+                            name={`arbeidsgivertype_${periodeindex}`}
+                            legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
+                            onChange={event => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
+                            checked={selectedType}
+                        />
+                    </Col>
+                </Row>
+                <Row noGutters={true}>
+                    <Col>
+                        <Input
+                            label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
+                            value={arbeidstaker.skalJobbeProsent}
+                            onChange={event => updatePeriodeinfoInSoknadState({skalJobbeProsent: Number(event.target.value)})}
+                            onBlur={event => updatePeriodeinfoInSoknad({skalJobbeProsent: Number(event.target.value)})}
+                            feil={this.getErrorMessage(`${feilprefiks}.skalJobbeProsent`)}
+                        />
+                    </Col>
+                    <Col>
+                        {selectedType === 'o'
+                            ? <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
+                                     value={arbeidstaker.organisasjonsnummer || ''}
+                                     onChange={event => updatePeriodeinfoInSoknadState({organisasjonsnummer: event.target.value})}
+                                     onBlur={event => updatePeriodeinfoInSoknad({organisasjonsnummer: event.target.value})}
+                                     feil={this.getErrorMessage(`${feilprefiks}.organisasjonsnummer`)}/>
+                            : <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
+                                     value={arbeidstaker.norskIdent || ''}
+                                     onChange={event => updatePeriodeinfoInSoknadState({norskIdent: event.target.value})}
+                                     onBlur={event => updatePeriodeinfoInSoknad({norskIdent: event.target.value})}
+                                     feil={this.getErrorMessage(`${feilprefiks}.norskIdent`)}/>}
+                    </Col>
+                </Row>
+            </Container>
+        </SkjemaGruppe>;
+    };
+
     private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
-        let tilsynsordning: ITilsynsordning = {...this.state.soknad.tilsynsordning, iTilsynsordning: jaNeiVetikke};
+        const tilsynsordning: ITilsynsordning = {...this.state.soknad.tilsynsordning, iTilsynsordning: jaNeiVetikke};
         if (jaNeiVetikke === JaNeiVetikke.JA && tilsynsordning.opphold!.length === 0) {
             tilsynsordning.opphold!.push({periode: {}});
         }
@@ -461,11 +509,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.updateSoknad({tilsynsordning});
     }
 
-    private beredskap: PeriodeComponent<IJaNeiTilleggsinformasjon> = (beredskap: Periodeinfo<IJaNeiTilleggsinformasjon>,
-                                                                      periodeindex: number,
-                                                                      updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
-                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>, showStatus?: boolean) => any,
-                                                                      feilprefiks: string) => {
+    private beredskap: PeriodeComponent<ITilleggsinformasjon> = (beredskap: Periodeinfo<ITilleggsinformasjon>,
+                                                                 periodeindex: number,
+                                                                 updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilleggsinformasjon>>) => any,
+                                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilleggsinformasjon>>, showStatus?: boolean) => any,
+                                                                 feilprefiks: string) => {
         const {intl} = this.props;
         return <div className="tilleggsinfo">
             <Textarea
@@ -479,11 +527,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </div>;
     };
 
-    private nattevaak: PeriodeComponent<IJaNeiTilleggsinformasjon> = (nattevaak: Periodeinfo<IJaNeiTilleggsinformasjon>,
-                                                                      periodeindex: number,
-                                                                      updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>) => any,
-                                                                      updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IJaNeiTilleggsinformasjon>>, showStatus?: boolean) => any,
-                                                                      feilprefiks: string) => {
+    private nattevaak: PeriodeComponent<ITilleggsinformasjon> = (nattevaak: Periodeinfo<ITilleggsinformasjon>,
+                                                                 periodeindex: number,
+                                                                 updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilleggsinformasjon>>) => any,
+                                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilleggsinformasjon>>, showStatus?: boolean) => any,
+                                                                 feilprefiks: string) => {
         const {intl} = this.props;
         return <div className="tilleggsinfo">
             <Textarea
@@ -548,40 +596,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </Row></Container>;
     };
 
-    private arbeidsforhold(periodeindex: number, af: Arbeidsforhold, afindex: number, afinfo: any) {
-        const {intl} = this.props;
-        const {soknad} = this.state;
-        const periode = soknad.perioder![periodeindex];
-        switch (af) {
-            case Arbeidsforhold.ARBEIDSTAKER:
-                return <>
-                    <Col><Input
-                        label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.arbeidstaker.orgnr')}
-                        value={_.get(afinfo, 'organisasjonsnummer', '')}
-                        onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'organisasjonsnummer', event.target.value)}
-                        onBlur={() => this.setPerioder()}
-                        feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].organisasjonsnummer`)}
-                    /></Col>
-                    <Col><Input
-                        label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.arbeidstaker.fravaeriprosent')}
-                        value={_.get(afinfo, 'grad', '')}
-                        onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ARBEIDSTAKER, afindex, 'grad', event.target.value)}
-                        onBlur={() => this.setPerioder()}
-                        feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.arbeidstaker[${afindex}].prosent`)}
-                    /></Col>
-                </>;
-            default:
-                return <Col>
-                    <Checkbox
-                        label={intlHelper(intl, 'skjema.perioder.arbeidsforhold.annet.selvstendig')}
-                        checked={_.get(afinfo, 'selvstendig', false)}
-                        onChange={event => this.handleArbeidsforholdChange(periode, Arbeidsforhold.ANNET, afindex, 'selvstendig', event.target.checked)}
-                        feil={this.getErrorMessage(`perioder[${periodeindex}].arbeidsgivere.annet[${afindex}].selvstendig`)}
-                    />
-                </Col>;
-        }
-    }
-
     private backButton() {
         return <p><Knapp onClick={this.handleBackButtonClick}>
             {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
@@ -633,46 +647,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.updateSoknad(change(event));
         }
     });
-
-    private handlePeriodeChange = (index: number, path: string, value: string | boolean) => {
-        _.set(this.state.soknad.perioder![index], path, value);
-        this.forceUpdate();
-    };
-
-    private addPeriode = () => {
-        this.state.soknad.perioder!.push({});
-        this.forceUpdate();
-        this.setPerioder();
-    };
-
-    private removePeriode = (index: number) => {
-        this.state.soknad.perioder!.splice(index, 1);
-        this.forceUpdate();
-        this.setPerioder();
-    };
-
-    private addArbeidsforhold(periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold) {
-        if (!periode.arbeidsgivere?.[arbeidsforhold]) {
-            _.set(periode, ['arbeidsgivere', arbeidsforhold], [{}]);
-        } else {
-            periode.arbeidsgivere![arbeidsforhold]!.push({});
-        }
-        this.forceUpdate();
-        this.setPerioder();
-    }
-
-    private removeArbeidsforhold = (periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold, afindex: number) => {
-        periode.arbeidsgivere![arbeidsforhold]!.splice(afindex, 1);
-        this.forceUpdate();
-        this.setPerioder();
-    };
-
-    private handleArbeidsforholdChange = (periode: IPeriodeMedBeredskapNattevaakArbeid, arbeidsforhold: Arbeidsforhold, afindex: number, path: string, value: string | boolean) => {
-        _.set(periode.arbeidsgivere![arbeidsforhold]![afindex], path, value);
-        this.forceUpdate();
-    };
-
-    private setPerioder = () => this.updateSoknad({perioder: this.state.soknad.perioder});
 
     /*private handleOppholdLandChange = (index: number, land: string) => {
         this.state.soknad.medlemskap!.opphold[index].land = land;

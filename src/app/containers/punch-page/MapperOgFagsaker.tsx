@@ -1,16 +1,7 @@
-import FagsakReadMode                      from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode                      from 'app/containers/punch-page/SoknadReadMode';
-import {
-    PunchStep,
-    TimeFormat
-}                                          from 'app/models/enums';
-import {
-    IFagsak,
-    IMappe,
-    IMapperOgFagsakerState,
-    IPeriodeMedBeredskapNattevaakArbeid,
-    IPunchState
-}                                          from 'app/models/types';
+import FagsakReadMode                                                       from 'app/containers/punch-page/FagsakReadMode';
+import SoknadReadMode                                                       from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep, TimeFormat}                                              from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPeriodeinfo, IPunchState, Soknad} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -24,19 +15,16 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                          from 'app/state/actions';
-import {RootStateType}                     from 'app/state/RootState';
-import {datetime, getHash, setHash}        from 'app/utils';
-import {
-    AlertStripeFeil,
-    AlertStripeInfo
-}                                          from 'nav-frontend-alertstriper';
-import {Knapp}                             from 'nav-frontend-knapper';
-import ModalWrapper                        from 'nav-frontend-modal';
-import NavFrontendSpinner                  from 'nav-frontend-spinner';
-import * as React                          from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
-import {connect}                           from 'react-redux';
+}                                                                           from 'app/state/actions';
+import {RootStateType}                                                      from 'app/state/RootState';
+import {datetime, getHash, setHash}                                         from 'app/utils';
+import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
+import {Knapp}                                                from 'nav-frontend-knapper';
+import ModalWrapper                                           from 'nav-frontend-modal';
+import NavFrontendSpinner                                     from 'nav-frontend-spinner';
+import * as React                                             from 'react';
+import {injectIntl, WrappedComponentProps}                    from 'react-intl';
+import {connect}                                              from 'react-redux';
 
 export interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;
@@ -131,11 +119,11 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         for (const mappe of mapper) {
             const mappeid = mappe.mappe_id as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
-            const soknad = mappe.personlig?.[Object.keys(mappe.personlig)[0]]?.innhold;
+            const soknad = new Soknad(mappe.personlig?.[Object.keys(mappe.personlig)[0]]?.innhold || {});
             const rowContent = [
                 !!soknad?.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad?.barn?.foedselsdato,
-                soknad?.perioder?.filter((p: IPeriodeMedBeredskapNattevaakArbeid) => !!p.fraOgMed).sort((a: IPeriodeMedBeredskapNattevaakArbeid, b: IPeriodeMedBeredskapNattevaakArbeid) => (a.fraOgMed! > b.fraOgMed!) ? 1 : -1)?.[0]?.fraOgMed, // Viser tidligste startdato
-                soknad?.perioder?.filter((p: IPeriodeMedBeredskapNattevaakArbeid) => !!p.tilOgMed).sort((a: IPeriodeMedBeredskapNattevaakArbeid, b: IPeriodeMedBeredskapNattevaakArbeid) => (a.tilOgMed! < b.tilOgMed!) ? 1 : -1)?.[0]?.tilOgMed // Viser seneste sluttdato
+                soknad?.getFom(), // Viser tidligste startdato
+                soknad?.getTom() // Viser seneste sluttdato
             ];
             rows.push(
                 <tr key={mappeid} onClick={() => props.openMappeAction(mappe)}>

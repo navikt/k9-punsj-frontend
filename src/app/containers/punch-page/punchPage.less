@@ -93,34 +93,12 @@
         z-index:  5;
       }
 
-      .signatur-checkbox {
-
-        display: flex;
-
-        .skjemaelement__feilmelding {
-          margin-top:  0;
-          margin-left: 1rem;
-        }
-      }
-
       .tilsynsordning {
 
         .leggtilperiodeknapp {margin-top: 1rem}
         .periodepanel {
           margin-bottom: 0;
-          margin-top: 1rem;
-        }
-
-        .inputPanelGruppe__inner {
-
-          display: flex;
-
-          .inputPanel {
-            flex-grow: 1;
-            margin-bottom: 0;
-            &:not(:first-child) {margin-left: .5rem}
-            &:not(:last-child) {margin-right: .5rem}
-          }
+          margin-top:    1rem;
         }
       }
 
@@ -135,9 +113,22 @@
           display:         flex;
           justify-content: flex-end;
 
-          .fjernperiodeknapp {
-            margin:        1rem;
+          .fjernperiodeknapp {margin: 1rem 1rem 0}
+        }
+
+        &.kunperiode .fjernperiodeknapp {margin-top: 0}
+
+        &.arbeidstakerpanel {
+
+          .skjemaelement {
+            margin-top: 1rem;
             margin-bottom: 0;
+          }
+
+          .infoContainer {
+            padding: 1rem .5rem 0 .5rem;
+            .col {padding: 0 .5rem}
+            label {font-weight: bold}
           }
         }
 
@@ -181,47 +172,6 @@
         }
 
         &:hover {border-color: @navBla}
-
-        .periode_arbeid {
-
-          margin-bottom: 1rem;
-
-          .panel {
-            padding:       0;
-            margin-bottom: 1rem;
-            border-color:  @navGra60;
-
-            .row:first-child, .row:last-child {
-
-              .knapp {
-                border-width: 0;
-                padding:      0 1rem;
-                width:        100%;
-              }
-
-              .col {padding: 0}
-            }
-
-            &:hover {border-color: @navBla}
-            .row:not(:last-child) {border-bottom: 1px solid @navGra20}
-            .row:first-child .knapp {justify-content: left}
-
-            .arbeidsforholdslisteelement:hover {
-              border-color:     @navBla;
-              border-top-width: 1px;
-              border-top-style: solid;
-              margin-top:       -1px;
-              background-color: @navLysBlaLighten80;
-            }
-
-            .arbeidsforholdstype {font-weight: bold}
-
-            .skjemaelement {
-              margin-bottom: 1rem;
-              margin-top:    1rem;
-            }
-          }
-        }
       }
 
       .sendknapp-wrapper {margin-bottom: 0}

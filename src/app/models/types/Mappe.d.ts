@@ -1,5 +1,5 @@
 import {IInputError} from 'app/models/types/InputError';
-import {ISoknad}     from './Soknad';
+import {ISoknad}     from 'app/models/types/Soknad';
 
 export interface IMappe {
     mappe_id?: string;

@@ -1,10 +1,10 @@
-import {TimeFormat}                                   from 'app/models/enums';
-import {IPeriodeMedBeredskapNattevaakArbeid, ISoknad} from 'app/models/types';
-import {datetime}                                     from 'app/utils';
-import intlHelper                                     from 'app/utils/intlUtils';
-import * as React                                     from 'react';
-import {Col, Container, Row}                          from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}            from 'react-intl';
+import {TimeFormat}                        from 'app/models/enums';
+import {IPeriodeinfo, ISoknad}             from 'app/models/types';
+import {datetime}                          from 'app/utils';
+import intlHelper                          from 'app/utils/intlUtils';
+import * as React                          from 'react';
+import {Col, Container, Row}               from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 
 interface ISoknadReadModeProps {
     soknad: ISoknad;
@@ -25,19 +25,11 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col className={colClassName}>Søkerens språk:</Col>
                     <Col className={colClassName}>{intlHelper(intl, `locale.${soknad.spraak}`)}</Col>
                 </Row>
-                <Row className="align-content-center">
-                    <Col className={colClassName}>Perioder:</Col>
-                    <Col className={colClassName}>
-                        {!!soknad.perioder && soknad.perioder.length > 0 && <ul className="periodeliste">
-                            {soknad.perioder.map((p: IPeriodeMedBeredskapNattevaakArbeid, i: number) => <li key={`periodelisteelement_${i}`}>{this.periodeItem(p)}</li>)}
-                        </ul>}
-                    </Col>
-                </Row>
             </Container>
         );
     }
 
-    private periodeItem(periode: IPeriodeMedBeredskapNattevaakArbeid) {
+    private periodeItem(periode: IPeriodeinfo) {
         const {fraOgMed, tilOgMed, nattevaak, beredskap} = periode;
         const fom = !!fraOgMed && datetime(this.props.intl, TimeFormat.DATE_SHORT, fraOgMed);
         const tom = !!tilOgMed && datetime(this.props.intl, TimeFormat.DATE_SHORT, tilOgMed);

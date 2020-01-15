@@ -97,14 +97,16 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
             [ident]: {
                 journalpost_id: journalpostid,
                 innhold: {
-                    perioder: [{
-                        beredskap: {svar: false},
-                        nattevaak: {svar: false}
-                    }],
+                    arbeidsgivere: {
+                        arbeidstaker: [],
+                        selvstendigNæringsdrivende: [],
+                        frilanser: []
+                    },
                     beredskap: [],
                     nattevaak: [],
                     spraak: 'nb',
-                    barn: {}
+                    barn: {},
+                    tilsynsordning: {}
                 }
             }
         }

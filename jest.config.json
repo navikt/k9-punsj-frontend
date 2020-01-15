@@ -6,7 +6,8 @@
     "ts",
     "tsx",
     "node",
-    "less"
+    "less",
+    "d.ts"
   ],
   "moduleNameMapper":           {
     "\\.(css|jpg|png|svg|less)$": "<rootDir>/node_modules/jest-css-modules",

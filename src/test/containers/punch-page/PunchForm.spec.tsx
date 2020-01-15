@@ -132,24 +132,6 @@ describe('PunchForm', () => {
         expect(findSpraakSelect().prop('value')).toEqual(newSprak);
     });
 
-    it('Skjemaet skal inneholde én periode i starten', () => {
-        const punchForm = setupPunchForm({}, '123', 'abc');
-        expect(punchForm.find('.periodepanel')).toHaveLength(1);
-    });
-
-    it('Legger til periode når man klikker på "Legg til periode"-knappen', () => {
-        const ident = '123';
-        const mappeid = 'abc';
-        const updateSoknad = jest.fn();
-        const punchForm = setupPunchForm({}, ident, mappeid, {updateSoknad});
-        const numberOfPeriods = () => punchForm.find('.periodepanel').length;
-        const numberOfPeriodsBefore = numberOfPeriods();
-        punchForm.find('#addperiod').simulate('click');
-        expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident, expect.any(String), expect.objectContaining({perioder: expect.any(Array)}));
-        expect(numberOfPeriods()).toEqual(numberOfPeriodsBefore + 1);
-    });
-
     it('Sender inn søknad', () => {
         const ident = '123';
         const mappeid = 'abc';

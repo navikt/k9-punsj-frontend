@@ -1,7 +1,7 @@
-import {IPeriode} from 'app/models/types/Periode';
+import {IPeriode} from './Periode';
 
 export type Periodeinfo<T> = {
-    periode: IPeriode;
+    periode?: IPeriode;
 } & T;
 
 export interface PeriodeinfoExtension {
@@ -9,6 +9,6 @@ export interface PeriodeinfoExtension {
 }
 
 export interface IPeriodeinfo {
-    periode: IPeriode;
+    periode?: IPeriode;
     [key: string]: any;
 };

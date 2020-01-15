@@ -18,9 +18,9 @@ export type PeriodeComponent<T> = (info: Periodeinfo<T>,
 export interface IPeriodepanelerProps {
     intl: IntlShape;
     periods: IPeriodeinfo[]; // Liste over periodisert informasjon
-    component: PeriodeComponent<PeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
+    component?: PeriodeComponent<PeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
-    initialPeriodeinfo: IPeriodeinfo; // Objektet som legges til når man legger til en ny periode i lista
+    initialPeriodeinfo: Periodeinfo<PeriodeinfoExtension>; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeinfo[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
     editSoknadState: (periodeinfo: IPeriodeinfo[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
     className?: string;
@@ -35,7 +35,7 @@ export interface IPeriodepanelerProps {
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, editSoknad, editSoknadState, getErrorMessage, feilkodeprefiks} = props;
+    const {intl, component, editSoknad, editSoknadState, getErrorMessage, feilkodeprefiks} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: IPeriodeinfo = {...props.periods[index], ...periodeinfo};
@@ -64,15 +64,20 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     >
         {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
             const panelid = props.panelid(periodeindex);
-            return <Panel className={classNames('periodepanel', props.panelClassName)} border={true} id={panelid} key={periodeindex}>
+            return <Panel
+                className={classNames('periodepanel', props.panelClassName, !component ? 'kunperiode' : '')}
+                border={true}
+                id={panelid}
+                key={periodeindex}
+            >
                 <SkjemaGruppe feil={getErrorMessage && feilkodeprefiks && getErrorMessage(`${feilkodeprefiks}[${periodeindex}]`) || undefined}>
                     <PeriodInput
-                        periode={periodeinfo.periode}
+                        periode={periodeinfo.periode || {}}
                         intl={props.intl}
                         onChange={(periode) => {editSoknadState(editPeriode(periodeindex, periode))}}
                         onBlur={(periode) => {editSoknad(editPeriode(periodeindex, periode))}}
                     />
-                    {props.component(
+                    {!!component && component(
                         periodeinfo,
                         periodeindex,
                         info => editSoknad(editInfo(periodeindex, info)),

@@ -5,6 +5,7 @@ import {SkjemaelementFeil}   from 'nav-frontend-skjema/lib/skjemaelement-feilmel
 import * as React            from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {IntlShape}           from 'react-intl';
+import './periodInput.less';
 
 export interface IPeriodInputProps {
     periode: IPeriode;
@@ -24,7 +25,7 @@ export interface IPeriodInputProps {
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
     const {periode, intl, onChange, onBlur, onFocus, disabled} = props;
-    return <SkjemaGruppe feil={props.errorMessage}>
+    return <SkjemaGruppe feil={props.errorMessage} className="period-input">
         <Container>
             <Row>
                 <Col>
