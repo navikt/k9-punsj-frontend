@@ -130,7 +130,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         for (const mappe of mapper) {
             const mappeid = mappe.mappe_id as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
-            const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.innhold || {});
+            const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
             const rowContent = [
                 !!soknad?.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad?.barn?.foedselsdato,
                 soknad?.getFom(), // Viser tidligste startdato
@@ -151,7 +151,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
                     isOpen={!!chosenMappe && mappeid === chosenMappe.mappe_id}
                 >
                     <div className="modal_content">
-                        {chosenMappe?.personlig?.[ident!]?.innhold && <SoknadReadMode soknad={chosenMappe.personlig[ident!].innhold!}/>}
+                        {chosenMappe?.personer?.[ident!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personlig[ident!].soeknad!}/>}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>Velg denne</Knapp>
                             <Knapp className="knapp2" onClick={props.closeMappeAction}>Lukk</Knapp>

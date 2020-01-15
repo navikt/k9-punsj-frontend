@@ -53,10 +53,10 @@ export function updateSoknad(mappeid: string,
                              soknad: Partial<ISoknad>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     const request = {
-        personlig: {
+        personer: {
             [norskIdent]: {
-                journalpost_id: journalpostid,
-                innhold: soknad
+                journalpostId: journalpostid,
+                soeknad: soknad
             }
         }
     };
@@ -72,7 +72,7 @@ export function updateSoknad(mappeid: string,
                 return response.json()
                                .then(mappe => {
                                    dispatch(setMappeAction(mappe));
-                                   dispatch(updateSoknadSuccessAction(mappe.personlig?.[norskIdent]?.mangler));
+                                   dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent]?.mangler));
                                });
             default:
                 return dispatch(updateSoknadErrorAction(convertResponseToError(response)));

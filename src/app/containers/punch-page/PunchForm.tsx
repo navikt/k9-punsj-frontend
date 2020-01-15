@@ -603,12 +603,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private getSoknadFromStore = () => {
-        const personlig = this.props.punchFormState.mappe?.personlig;
-        return personlig?.[Object.keys(personlig)[0]]?.innhold;
+        const personlig = this.props.punchFormState.mappe?.personer;
+        return personlig?.[Object.keys(personlig)[0]]?.soeknad;
     };
 
     private getManglerFromStore = () => {
-        const personlig = this.props.punchFormState.mappe?.personlig;
+        const personlig = this.props.punchFormState.mappe?.personer;
         return personlig?.[Object.keys(personlig)[0]]?.mangler;
     };
 

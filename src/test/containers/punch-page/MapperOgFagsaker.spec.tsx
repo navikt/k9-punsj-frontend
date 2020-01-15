@@ -96,7 +96,7 @@ describe('MapperOgFagsaker', () => {
         const mappe: IMappe = {
             mappe_id: '567',
             personer: {[ident]: {
-                innhold: {},
+                soeknad: {},
                 innsendinger: [],
                 mangler: []
             }}
@@ -113,10 +113,10 @@ describe('MapperOgFagsaker', () => {
         const mappe: IMappe = {
             mappe_id: '567',
             personer: {[ident]: {
-                    innhold: {},
-                    innsendinger: [],
-                    mangler: []
-                }}
+                soeknad: {},
+                innsendinger: [],
+                mangler: []
+            }}
         };
         const chooseMappeAction = jest.fn();
 
