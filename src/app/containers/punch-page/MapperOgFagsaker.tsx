@@ -87,7 +87,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     if (mapperOgFagsakerState.mapperRequestError || mapperOgFagsakerState.fagsakerRequestError) {
         return <>
-            <AlertStripeFeil>Det oppsto en tilkoblingsfeil.</AlertStripeFeil>
+            <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>
             {backButton}
         </>;
     }
@@ -99,12 +99,23 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         return <div><NavFrontendSpinner/></div>;
     }
 
+    if (mapperOgFagsakerState.createMappeRequestError) {
+        return <>
+            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
+            {backButton}
+        </>;
+    }
+
     const newMappe = () => props.createMappe(punchState.ident, props.journalpostid);
 
-    if (!mapper.length && !fagsaker.length) {
+    if (!mapper.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
         newMappe();
         return null;
     }
+
+    const technicalError = mapperOgFagsakerState.isMappeCreated && !mapperOgFagsakerState.mappeid
+        ? <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
+        : null;
 
     const chooseMappe = (mappe: IMappe) => {
         props.chooseMappeAction(mappe);
@@ -119,7 +130,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         for (const mappe of mapper) {
             const mappeid = mappe.mappe_id as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
-            const soknad = new Soknad(mappe.personlig?.[Object.keys(mappe.personlig)[0]]?.innhold || {});
+            const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.innhold || {});
             const rowContent = [
                 !!soknad?.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad?.barn?.foedselsdato,
                 soknad?.getFom(), // Viser tidligste startdato
@@ -229,6 +240,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
     if (mapper.length && !fagsaker.length) {
         return <>
             {backButton}
+            {technicalError}
             <AlertStripeInfo>Det finnes ufullstendige søknader knyttet til identitetsnummeret. Velg søknaden som hører til dokumentet eller opprett en ny.</AlertStripeInfo>
             {showMapper()}
             {newSoknadButton}
@@ -238,6 +250,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
     if (fagsaker.length && !mapper.length) {
         return <>
             {backButton}
+            {technicalError}
             <AlertStripeInfo>Det finnes fagsaker knyttet til identitetsnummeret. Velg saken som hører til dokumentet eller opprett en ny søknad.</AlertStripeInfo>
             {newSoknadButton}
             {showFagsaker()}
@@ -246,6 +259,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     return <>
         {backButton}
+        {technicalError}
         <AlertStripeInfo>Det finnes ufullstendige søknader og fagsaker knyttet til identitetsnummeret. Velg søknaden eller fagsaken som hører til dokumentet eller opprett en ny søknad.</AlertStripeInfo>
         {showMapper()}
         {newSoknadButton}

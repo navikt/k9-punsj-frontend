@@ -127,7 +127,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
             this.setState({soknad: {...this.state.soknad, ...this.getSoknadFromStore()}, isFetched: true});
-            this.props.setIdentAction(Object.keys(mappe.personlig)[0] || '');
+            this.props.setIdentAction(Object.keys(mappe.personer)[0] || '');
         }
     }
 

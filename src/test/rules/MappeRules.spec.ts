@@ -18,9 +18,9 @@ describe('MappeRules.isMappeResponseValid', () => {
     it ('Skal være sann når mapperesponsen er gyldig', () => {
         const mappe: IMappe = {
             mappe_id: '123',
-            personlig: {
+            personer: {
                 '123': {
-                    innhold: {}
+                    soeknad: {}
                 }
             }
         };
@@ -30,16 +30,16 @@ describe('MappeRules.isMappeResponseValid', () => {
     it ('Skal være usann når det mangler personer', () => {
         const mappe: IMappe = {
             mappe_id: '123',
-            personlig: {}
+            personer: {}
         };
         expect(MappeRules.isMappeResponseValid(mappe)).toBeFalsy();
     });
 
     it ('Skal være usann når mappeid ikke er satt', () => {
         const mappe: IMappe = {
-            personlig: {
+            personer: {
                 '123': {
-                    innhold: {}
+                    soeknad: {}
                 }
             }
         };
@@ -57,9 +57,9 @@ describe('MappeRules.isMapperResponseValid', () => {
     it('Skal være sann når alle mapper er gyldige', () => {
         const mapper: IMappe[] = [{
             mappe_id: '123',
-            personlig: {
+            personer: {
                 '123': {
-                    innhold: {}
+                    soeknad: {}
                 }
             }
         }];

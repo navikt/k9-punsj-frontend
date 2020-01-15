@@ -8,11 +8,11 @@ export class MappeRules {
 
     public static isMappeResponseValid(mappeResponse: IMappe): boolean {
         return !!(!!mappeResponse.mappe_id &&
-                  !!mappeResponse.personlig &&
-                  Object.keys(mappeResponse.personlig).length > 0 &&
-                  Object.keys(mappeResponse.personlig).every(key =>
-                      !!mappeResponse.personlig![key]!.innhold &&
-                      MappeRules.isSoknadResponseValid(mappeResponse.personlig![key].innhold)));
+                  !!mappeResponse.personer &&
+                  Object.keys(mappeResponse.personer).length > 0 &&
+                  Object.keys(mappeResponse.personer).every(key =>
+                  !!mappeResponse.personer![key]!.soeknad &&
+                  MappeRules.isSoknadResponseValid(mappeResponse.personer![key].soeknad)));
     }
 
     public static isSoknadResponseValid(soknad?: ISoknad): boolean {

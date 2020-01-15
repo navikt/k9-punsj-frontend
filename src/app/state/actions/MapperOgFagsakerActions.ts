@@ -53,11 +53,7 @@ export function findMapper(ident: string) {return (dispatch: any) => {
                                dispatch(setMapperAction(MappeRules.isMapperResponseValid(mapper) ? mapper : []));
                            });
         }
-        return dispatch(findMapperErrorAction({
-            status:     response.status,
-            statusText: response.statusText,
-            url:        response.url
-        }));
+        return dispatch(findMapperErrorAction(convertResponseToError(response)));
     });
 }}
 
@@ -73,7 +69,7 @@ export function findFagsaker(ident: string) {return (dispatch: any) => {
             return response.json().then(r => dispatch(setFagsakerAction([]))); // TODO: Avklare hvorvidt fagsaker skal vises eller ikke
         }
         return dispatch(findFagsakerErrorAction(convertResponseToError(response)));
-    })
+    });
 }}
 
 export function openMappeAction(mappe: IMappe):                 IOpenMappeAction                {return {type: MapperOgFagsakerActionKeys.MAPPE_OPEN, mappe}}
@@ -93,20 +89,14 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
     dispatch(createMappeRequestAction());
 
     const requestBody: Partial<IMappe> = {
-        personlig: {
+        personer: {
             [ident]: {
-                journalpost_id: journalpostid,
-                innhold: {
-                    arbeidsgivere: {
-                        arbeidstaker: [],
-                        selvstendigNæringsdrivende: [],
-                        frilanser: []
-                    },
+                journalpostId: journalpostid,
+                soeknad: {
                     beredskap: [],
                     nattevaak: [],
                     spraak: 'nb',
-                    barn: {},
-                    tilsynsordning: {}
+                    barn: {}
                 }
             }
         }
@@ -115,7 +105,7 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
     return post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, response => {
         if (response.status === 201) {
             return response.json()
-                           .then(mappe => dispatch(createMappeSuccessAction(mappe.mappe_id)));
+                           .then(mappe => dispatch(createMappeSuccessAction(mappe.mappeId)));
         }
         return dispatch(createMappeErrorAction(convertResponseToError(response)));
     });

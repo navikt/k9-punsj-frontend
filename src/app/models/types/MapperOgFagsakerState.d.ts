@@ -14,4 +14,5 @@ export interface IMapperOgFagsakerState {
     isAwaitingMappeCreation?:   boolean;
     createMappeRequestError?:   IError;
     mappeid?:                   string;
+    isMappeCreated?:            boolean;
 }
