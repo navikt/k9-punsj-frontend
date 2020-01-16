@@ -29,7 +29,14 @@ import {
     updateSoknad
 }                                                                                             from 'app/state/actions';
 import {RootStateType}                                                                        from 'app/state/RootState';
-import {convertNumberToUkedag, durationToString, hoursFromString, minutesFromString, setHash} from 'app/utils';
+import {
+    convertNumberToUkedag,
+    durationToString,
+    hoursFromString,
+    isWeekdayWithinPeriod,
+    minutesFromString,
+    setHash
+} from 'app/utils';
 import intlHelper
                                                                                               from 'app/utils/intlUtils';
 import _                                                                                      from 'lodash';
@@ -552,13 +559,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                  feilprefiks: string) => {
         return <Container className="tilsyntabell"><Row noGutters={true}>
             {Object.keys(Ukedag)
+                   .map(ukedag => Number(ukedag) as UkedagNumber)
                    .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
-                   .filter(ukedag => Number(ukedag) < 5)
+                   .filter(ukedag => ukedag < 5)
                    .map(ukedag => {
-                       const ukedagstr = convertNumberToUkedag(Number(ukedag) as UkedagNumber);
+                       const ukedagstr = convertNumberToUkedag(ukedag);
                        const duration = tilsyn?.[ukedagstr];
                        const hours = hoursFromString(duration);
                        const minutes = minutesFromString(duration);
+                       const isWeekdayOutOfPeriod = !isWeekdayWithinPeriod(ukedag, tilsyn.periode);
                        return <Col className="tilsyntabell_ukedag" key={ukedag}>
                            <SkjemaGruppe feil={this.getErrorMessage(`${feilprefiks}.${ukedagstr}`)}><Container>
                                <Row noGutters={true}><Col>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</Col></Row>
@@ -573,6 +582,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)}, true);
                                                updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
                                            }}
+                                           disabled={isWeekdayOutOfPeriod}
                                            to={24}
                                        />
                                    </Col>
@@ -585,7 +595,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)}, true);
                                                updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
                                            }}
-                                           disabled={hours === 24}
+                                           disabled={hours === 24 || isWeekdayOutOfPeriod}
                                            to={59}
                                        />
                                    </Col>

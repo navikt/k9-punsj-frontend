@@ -1,8 +1,8 @@
-import {TimeFormat}           from 'app/models/enums';
-import {Ukedag, UkedagNumber} from 'app/models/types';
-import moment                 from 'moment';
-import {IntlShape}            from 'react-intl';
-import intlHelper             from './intlUtils';
+import {TimeFormat}                     from 'app/models/enums';
+import {IPeriode, Ukedag, UkedagNumber} from 'app/models/types';
+import moment                           from 'moment';
+import {IntlShape}                      from 'react-intl';
+import intlHelper                       from './intlUtils';
 
 export const datetime = (
     intl: IntlShape,
@@ -32,5 +32,28 @@ export function convertNumberToUkedag(num: UkedagNumber): Ukedag {
         case 4: return 'fredag';
         case 5: return 'lørdag';
         case 6: return 'søndag';
+    }
+}
+
+export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) {
+
+    if (!period || !period.fraOgMed || period.fraOgMed === '' || !period.tilOgMed || period.tilOgMed === '') {return true}
+
+    const start = moment(period.fraOgMed);
+    const end = moment(period.tilOgMed);
+
+    if (end.isBefore(start)) {return false}
+    if (end.diff(start, 'days') >= 6) {return true;}
+
+    const isoWeekday = weekday + 1;
+    const isoWeekdayStart = start.isoWeekday();
+    const isoWeekdayEnd = end.isoWeekday();
+
+    if (isoWeekdayStart < isoWeekdayEnd) {
+        return isoWeekday >= isoWeekdayStart && isoWeekday <= isoWeekdayEnd;
+    } else if (isoWeekdayStart > isoWeekdayEnd) {
+        return isoWeekday >= isoWeekdayStart || isoWeekday <= isoWeekdayEnd;
+    } else {
+        return isoWeekday === isoWeekdayStart;
     }
 }

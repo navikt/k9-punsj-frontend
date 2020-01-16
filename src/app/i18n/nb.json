@@ -104,5 +104,7 @@
   "skjema.feil.perioder[].nattevaak.svar.MAA_SETTES":                "Feltet må besvares.",
   "skjema.feil.perioder[].nattevaak.tilleggsinformasjon.MAA_SETTES": "Tilleggsinformasjon må oppgis.",
   "skjema.feil.signert.MAA_SIGNERES":                                "Søknaden må signeres.",
-  "skjema.feil.signert.MAA_SETTES":                                  "Søknaden må signeres."
+  "skjema.feil.signert.MAA_SETTES":                                  "Søknaden må signeres.",
+  "skjema.feil.arbeidsgivere.MAA_SETTES":                            "Arbeidsforhold må være satt.",
+  "skjema.feil.tilsynsordning.MAA_SETTES":                           "Tilsynsordning må være satt."
 }

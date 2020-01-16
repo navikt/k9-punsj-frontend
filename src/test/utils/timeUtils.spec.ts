@@ -1,4 +1,11 @@
-import {convertNumberToUkedag, durationToString, hoursFromString, minutesFromString} from 'app/utils';
+import {IPeriode} from 'app/models/types';
+import {
+    convertNumberToUkedag,
+    durationToString,
+    hoursFromString,
+    isWeekdayWithinPeriod,
+    minutesFromString
+}                 from 'app/utils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/apiUtils');
@@ -31,4 +38,67 @@ describe('convertNumberToUkedag', () => {
         expect(convertNumberToUkedag(5)).toEqual('lørdag');
         expect(convertNumberToUkedag(6)).toEqual('søndag');
     });
+});
+
+describe('isWeekdayWithinPeriod', () => {
+
+    const mandag = 0;
+    const tirsdag = 1;
+    const onsdag = 2;
+    const torsdag = 3;
+    const fredag = 4;
+    const lordag = 5;
+    const sondag = 6;
+
+    const periodeSomErLengreEnnEnUke = {fraOgMed: '2019-12-01', tilOgMed: '2020-01-31'};
+    const fraTirsdagTilTorsdag = {fraOgMed: '2019-12-31', tilOgMed: '2020-01-02'};
+    const fraLordagTilTirsdag = {fraOgMed: '2020-01-04', tilOgMed: '2020-01-07'};
+    const bareTorsdag = {fraOgMed: '2020-01-02', tilOgMed: '2020-01-02'};
+
+    it('Blir sann når fullstendig periode ikke er oppgitt', () => {
+        expect(isWeekdayWithinPeriod(torsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, {})).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, {fraOgMed: '2020-01-01'})).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, {fraOgMed: '2020-01-01', tilOgMed: ''})).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, {tilOgMed: '2020-01-01'})).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, {fraOgMed: '', tilOgMed: '2020-01-01'})).toBeTruthy();
+    });
+
+    it('Blir usann når periode ikke er gyldig', () => {
+        expect(isWeekdayWithinPeriod(torsdag, {fraOgMed: '2020-01-02', tilOgMed: '2019-12-31'})).toBeFalsy();
+    });
+
+    it('Blir sann når gitt ukedag inngår i perioden', () => {
+        expect(isWeekdayWithinPeriod(mandag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(tirsdag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(onsdag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(fredag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(lordag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(sondag, periodeSomErLengreEnnEnUke)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(tirsdag, fraTirsdagTilTorsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(onsdag, fraTirsdagTilTorsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, fraTirsdagTilTorsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(lordag, fraLordagTilTirsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(sondag, fraLordagTilTirsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(mandag, fraLordagTilTirsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(tirsdag, fraLordagTilTirsdag)).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, bareTorsdag)).toBeTruthy();
+    });
+
+    it('Blir usann når gitt ukedag ikke inngår i periden', () => {
+        expect(isWeekdayWithinPeriod(mandag, fraTirsdagTilTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(fredag, fraTirsdagTilTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(lordag, fraTirsdagTilTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(sondag, fraTirsdagTilTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(onsdag, fraLordagTilTirsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(torsdag, fraLordagTilTirsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(fredag, fraLordagTilTirsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(mandag, bareTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(tirsdag, bareTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(onsdag, bareTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(fredag, bareTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(lordag, bareTorsdag)).toBeFalsy();
+        expect(isWeekdayWithinPeriod(sondag, bareTorsdag)).toBeFalsy();
+    })
 });
