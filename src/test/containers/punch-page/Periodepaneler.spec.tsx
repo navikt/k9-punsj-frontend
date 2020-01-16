@@ -149,4 +149,18 @@ describe('Periodepaneler', () => {
         const periodepaneler = setupPeriodepaneler({getErrorMessage, feilkodeprefiks});
         periodepaneler.find('Panel').forEach(panel => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}[${panel.prop('key')}]`));
     });
+
+    it('Kaller onAdd når en periode legges til', () => {
+        const onAdd = jest.fn();
+        const periodepaneler = setupPeriodepaneler({onAdd});
+        periodepaneler.find('.leggtilperiodeknapp').simulate('click');
+        expect(onAdd).toHaveBeenCalledTimes(1);
+    });
+
+    it('Kaller onRemove når en periode fjernes', () => {
+        const onRemove = jest.fn();
+        const periodepaneler = setupPeriodepaneler({onRemove});
+        periodepaneler.find('#testperiode_1 .fjernperiodeknapp').simulate('click');
+        expect(onRemove).toHaveBeenCalledTimes(1);
+    });
 });

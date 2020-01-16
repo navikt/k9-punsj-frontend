@@ -30,6 +30,8 @@ export interface IPeriodepanelerProps {
     getErrorMessage?: (kode: string) => (SkjemaelementFeil | undefined);
     feilkodeprefiks?: string;
     minstEn?: boolean;
+    onAdd?: () => any;
+    onRemove?: () => any;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
@@ -90,6 +92,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 const newArray: IPeriodeinfo[] = removePeriode(periodeindex);
                                 editSoknadState(newArray);
                                 editSoknad(newArray);
+                                !!props.onRemove && props.onRemove();
                             }}
                             className="fjernperiodeknapp"
                             disabled={props.minstEn && props.periods.length < 2}
@@ -105,6 +108,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 const newArray: IPeriodeinfo[] = addPeriode();
                 editSoknadState(newArray);
                 editSoknad(newArray);
+                !!props.onAdd && props.onAdd();
             }}
             className="leggtilperiodeknapp"
         >

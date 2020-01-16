@@ -1,9 +1,6 @@
-import {NumberSelect}                                                                         from 'app/components/number-select/NumberSelect';
-import {
-    PeriodeComponent,
-    Periodepaneler
-}                                                                                             from 'app/containers/punch-page/Periodepaneler';
-import {JaNeiVetikke, PunchStep, Ukedag}                                                      from 'app/models/enums';
+import {NumberSelect}                                            from 'app/components/number-select/NumberSelect';
+import {PeriodeComponent, Periodepaneler}                        from 'app/containers/punch-page/Periodepaneler';
+import {JaNeiVetikke, PunchStep, Ukedag}                         from 'app/models/enums';
 import {
     IArbeidstaker,
     IFrilanser,
@@ -17,7 +14,7 @@ import {
     ITilsynsordning,
     Periodeinfo,
     UkedagNumber
-}                                                                                             from 'app/models/types';
+}                                                                from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -27,8 +24,8 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                                                             from 'app/state/actions';
-import {RootStateType}                                                                        from 'app/state/RootState';
+}                                                                from 'app/state/actions';
+import {RootStateType}                                           from 'app/state/RootState';
 import {
     convertNumberToUkedag,
     durationToString,
@@ -36,34 +33,19 @@ import {
     isWeekdayWithinPeriod,
     minutesFromString,
     setHash
-} from 'app/utils';
-import intlHelper
-                                                                                              from 'app/utils/intlUtils';
-import _                                                                                      from 'lodash';
-import {
-    AlertStripeFeil,
-    AlertStripeInfo,
-    AlertStripeSuksess
-}                                                                                             from 'nav-frontend-alertstriper';
-import {
-    EtikettAdvarsel,
-    EtikettFokus,
-    EtikettSuksess
-}                                                                                             from 'nav-frontend-etiketter';
-import {Knapp}                                                                                from 'nav-frontend-knapper';
-import {
-    Input,
-    RadioPanelGruppe,
-    Select,
-    SkjemaGruppe,
-    Textarea
-}                                                                                             from 'nav-frontend-skjema';
-import NavFrontendSpinner
-                                                                                              from 'nav-frontend-spinner';
-import * as React                                                                             from 'react';
-import {Col, Container, Row}                                                                  from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                                                    from 'react-intl';
-import {connect}                                                                              from 'react-redux';
+}                                                                from 'app/utils';
+import {numberToString, stringToNumber}                          from 'app/utils/formatUtils';
+import intlHelper                                                from 'app/utils/intlUtils';
+import _                                                         from 'lodash';
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess}    from 'nav-frontend-alertstriper';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}           from 'nav-frontend-etiketter';
+import {Knapp}                                                   from 'nav-frontend-knapper';
+import {Input, RadioPanelGruppe, Select, SkjemaGruppe, Textarea} from 'nav-frontend-skjema';
+import NavFrontendSpinner                                        from 'nav-frontend-spinner';
+import * as React                                                from 'react';
+import {Col, Container, Row}                                     from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}                       from 'react-intl';
+import {connect}                                                 from 'react-redux';
 
 export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -91,6 +73,7 @@ export interface IPunchFormComponentState {
     soknad:             ISoknad;
     isFetched:          boolean;
     showStatus:         boolean;
+    tgStrings:          string[];
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -120,7 +103,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }
         },
         isFetched: false,
-        showStatus: false
+        showStatus: false,
+        tgStrings: [] // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
     };
 
     componentDidMount(): void {
@@ -133,7 +117,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormComponentState>, snapshot?: any): void {
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
-            this.setState({soknad: {...this.state.soknad, ...this.getSoknadFromStore()}, isFetched: true});
+            const soknadFromStore = this.getSoknadFromStore();
+            this.setState({soknad: {...this.state.soknad, ...soknadFromStore}, tgStrings: this.tgStrings(soknadFromStore), isFetched: true});
             this.props.setIdentAction(Object.keys(mappe.personer)[0] || '');
         }
     }
@@ -170,7 +155,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const initialArbeidstaker: Periodeinfo<IArbeidstaker> = {
             periode: {fraOgMed: '', tilOgMed: ''},
-            skalJobbeProsent: 100.00,
+            skalJobbeProsent: 100.0,
             organisasjonsnummer: '',
             norskIdent: null
         };
@@ -196,6 +181,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             periode: {fraOgMed: '', tilOgMed: ''},
             tilleggsinformasjon: ''
         };
+
+        const updateTgStrings = () => this.setState({tgStrings: this.tgStrings(soknad)});
 
         return (<>
             {this.statusetikett()}
@@ -250,6 +237,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     panelClassName="arbeidstakerpanel"
                     getErrorMessage={this.getErrorMessage}
                     feilkodeprefiks={'arbeidsgivere.arbeidstaker'}
+                    onAdd={updateTgStrings}
+                    onRemove={updateTgStrings}
                 />
                 <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
                 <Periodepaneler
@@ -441,12 +430,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
+    private tgStrings(soknad: ISoknad) {
+        // Genrerer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
+        const tgStrings: string[] = [];
+        soknad.arbeidsgivere
+              ?.arbeidstaker
+              ?.forEach((a: IArbeidstaker) => tgStrings.push(numberToString(this.props.intl, a.skalJobbeProsent || 100, 1)));
+        return tgStrings;
+    }
+
     private arbeidstaker: PeriodeComponent<IArbeidstaker> = (arbeidstaker: Periodeinfo<IArbeidstaker>,
                                                              periodeindex: number,
                                                              updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IArbeidstaker>>) => any,
                                                              updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IArbeidstaker>>, showStatus?: boolean) => any,
                                                              feilprefiks: string) => {
         const {intl} = this.props;
+        const {tgStrings} = this.state;
         type OrgOrPers = 'o' | 'p';
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
@@ -483,9 +482,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <Col>
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
-                            value={arbeidstaker.skalJobbeProsent}
-                            onChange={event => updatePeriodeinfoInSoknadState({skalJobbeProsent: Number(event.target.value)})}
-                            onBlur={event => updatePeriodeinfoInSoknad({skalJobbeProsent: Number(event.target.value)})}
+                            value={tgStrings[periodeindex]}
+                            onChange={event => {
+                                updatePeriodeinfoInSoknadState({skalJobbeProsent: stringToNumber(event.target.value)});
+                                tgStrings[periodeindex] = event.target.value;
+                                this.setState({tgStrings});
+                            }}
+                            onBlur={event => {
+                                updatePeriodeinfoInSoknad({skalJobbeProsent: stringToNumber(event.target.value)});
+                                this.setState({tgStrings: this.tgStrings(this.state.soknad)})
+                            }}
+                            onFocus={event => event.target.selectionStart = 0}
                             feil={this.getErrorMessage(`${feilprefiks}.skalJobbeProsent`)}
                         />
                     </Col>
