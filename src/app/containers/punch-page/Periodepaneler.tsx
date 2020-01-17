@@ -9,11 +9,17 @@ import {SkjemaelementFeil}                                         from 'nav-fro
 import * as React                                                  from 'react';
 import {IntlShape}                                                 from 'react-intl';
 
+export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
+export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
+export type GetErrorMessage = (kode: string) => (SkjemaelementFeil | undefined);
+
 export type PeriodeComponent<T> = (info: Periodeinfo<T>,
                                    periodeindex: number,
-                                   updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<T>>) => any,
-                                   updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any,
-                                   feilkodeprefiksMedIndeks?: string) => React.ReactElement;
+                                   updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<T>,
+                                   updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
+                                   feilkodeprefiksMedIndeks?: string,
+                                   getErrorMessage?: GetErrorMessage,
+                                   intl?: IntlShape) => React.ReactElement;
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -84,7 +90,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         periodeindex,
                         info => editSoknad(editInfo(periodeindex, info)),
                         (info, showStatus) => editSoknadState(editInfo(periodeindex, info), showStatus),
-                        `${feilkodeprefiks}[${periodeindex}]`
+                        `${feilkodeprefiks}[${periodeindex}]`,
+                        getErrorMessage,
+                        intl
                     )}
                     <div className="periodebunn">
                         <Knapp

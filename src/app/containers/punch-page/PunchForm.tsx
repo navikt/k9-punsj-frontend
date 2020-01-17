@@ -1,6 +1,8 @@
-import {NumberSelect}                                            from 'app/components/number-select/NumberSelect';
-import {PeriodeComponent, Periodepaneler}                        from 'app/containers/punch-page/Periodepaneler';
-import {JaNeiVetikke, PunchStep, Ukedag}                         from 'app/models/enums';
+import {Periodepaneler}                                       from 'app/containers/punch-page/Periodepaneler';
+import {pfArbeidstaker}                                       from 'app/containers/punch-page/pfArbeidstaker';
+import {pfTilleggsinformasjon}                                from 'app/containers/punch-page/pfTilleggsinformasjon';
+import {pfTilsyn}                                             from 'app/containers/punch-page/pfTilsyn';
+import {JaNeiVetikke, PunchStep}                              from 'app/models/enums';
 import {
     IArbeidstaker,
     IFrilanser,
@@ -12,9 +14,8 @@ import {
     ITilleggsinformasjon,
     ITilsyn,
     ITilsynsordning,
-    Periodeinfo,
-    UkedagNumber
-}                                                                from 'app/models/types';
+    Periodeinfo
+}                                                             from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -24,28 +25,19 @@ import {
     submitSoknad,
     undoChoiceOfMappeAction,
     updateSoknad
-}                                                                from 'app/state/actions';
-import {RootStateType}                                           from 'app/state/RootState';
-import {
-    convertNumberToUkedag,
-    durationToString,
-    hoursFromString,
-    isWeekdayWithinPeriod,
-    minutesFromString,
-    setHash
-}                                                                from 'app/utils';
-import {numberToString, stringToNumber}                          from 'app/utils/formatUtils';
-import intlHelper                                                from 'app/utils/intlUtils';
-import _                                                         from 'lodash';
-import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess}    from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}           from 'nav-frontend-etiketter';
-import {Knapp}                                                   from 'nav-frontend-knapper';
-import {Input, RadioPanelGruppe, Select, SkjemaGruppe, Textarea} from 'nav-frontend-skjema';
-import NavFrontendSpinner                                        from 'nav-frontend-spinner';
-import * as React                                                from 'react';
-import {Col, Container, Row}                                     from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                       from 'react-intl';
-import {connect}                                                 from 'react-redux';
+}                                                             from 'app/state/actions';
+import {RootStateType}                                        from 'app/state/RootState';
+import {numberToString, setHash}                              from 'app/utils';
+import intlHelper                                             from 'app/utils/intlUtils';
+import _                                                      from 'lodash';
+import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
+import {Knapp}                                                from 'nav-frontend-knapper';
+import {Input, RadioPanelGruppe, Select, SkjemaGruppe}        from 'nav-frontend-skjema';
+import NavFrontendSpinner                                     from 'nav-frontend-spinner';
+import * as React                                             from 'react';
+import {injectIntl, WrappedComponentProps}                    from 'react-intl';
+import {connect}                                              from 'react-redux';
 
 export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -85,7 +77,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     state: IPunchFormComponentState = {
         soknad: {
-            arbeidsgivere: {
+            arbeid: {
                 arbeidstaker: [],
                 selvstendigNæringsdrivende: [],
                 frilanser: []
@@ -226,12 +218,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.arbeidsgivere!.arbeidstaker!}
-                    component={this.arbeidstaker}
+                    periods={soknad.arbeid!.arbeidstaker!}
+                    component={pfArbeidstaker(this.state, tgStrings => this.setState({tgStrings}), this.tgStrings)}
                     panelid={i => `arbeidstakerpanel_${i}`}
                     initialPeriodeinfo={initialArbeidstaker}
-                    editSoknad={arbeidstaker => this.updateSoknad({arbeidsgivere: {...soknad.arbeidsgivere, arbeidstaker}})}
-                    editSoknadState={(arbeidstaker, showStatus) => this.updateSoknadState({arbeidsgivere: {...soknad.arbeidsgivere, arbeidstaker}}, showStatus)}
+                    editSoknad={arbeidstaker => this.updateSoknad({arbeid: {...soknad.arbeid, arbeidstaker}})}
+                    editSoknadState={(arbeidstaker, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, arbeidstaker}}, showStatus)}
                     textLeggTil="skjema.arbeid.arbeidstaker.leggtilperiode"
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     panelClassName="arbeidstakerpanel"
@@ -243,11 +235,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.arbeidsgivere!.selvstendigNæringsdrivende!}
+                    periods={soknad.arbeid!.selvstendigNæringsdrivende!}
                     panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
                     initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-                    editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeidsgivere: {...soknad.arbeidsgivere, selvstendigNæringsdrivende}})}
-                    editSoknadState={(selvstendigNæringsdrivende, showStatus) => this.updateSoknadState({arbeidsgivere: {...soknad.arbeidsgivere, selvstendigNæringsdrivende}}, showStatus)}
+                    editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}})}
+                    editSoknadState={(selvstendigNæringsdrivende, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}}, showStatus)}
                     textLeggTil="skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode"
                     textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
                     panelClassName="selvstendignaeringsdrivendepanel"
@@ -257,11 +249,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.arbeidsgivere!.frilanser!}
+                    periods={soknad.arbeid!.frilanser!}
                     panelid={i => `frilanserpanel_${i}`}
                     initialPeriodeinfo={initialFrilanser}
-                    editSoknad={frilanser => this.updateSoknad({arbeidsgivere: {...soknad.arbeidsgivere, frilanser}})}
-                    editSoknadState={(frilanser, showStatus) => this.updateSoknadState({arbeidsgivere: {...soknad.arbeidsgivere, frilanser}}, showStatus)}
+                    editSoknad={frilanser => this.updateSoknad({arbeid: {...soknad.arbeid, frilanser}})}
+                    editSoknadState={(frilanser, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, frilanser}}, showStatus)}
                     textLeggTil="skjema.arbeid.frilanser.leggtilperiode"
                     textFjern="skjema.arbeid.frilanser.fjernperiode"
                     panelClassName="frilanserpanel"
@@ -272,7 +264,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <Periodepaneler
                     intl={intl}
                     periods={soknad.beredskap!}
-                    component={this.beredskap}
+                    component={pfTilleggsinformasjon('beredskap')}
                     panelid={i => `beredskapspanel_${i}`}
                     initialPeriodeinfo={initialBeredskap}
                     editSoknad={beredskap => this.updateSoknad({beredskap})}
@@ -287,7 +279,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <Periodepaneler
                     intl={intl}
                     periods={soknad.nattevaak!}
-                    component={this.nattevaak}
+                    component={pfTilleggsinformasjon('nattevaak')}
                     panelid={i => `nattevaakspanel_${i}`}
                     initialPeriodeinfo={initialNattevaak}
                     editSoknad={nattevaak => this.updateSoknad({nattevaak})}
@@ -409,7 +401,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     {soknad.tilsynsordning!.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
                         intl={intl}
                         periods={soknad.tilsynsordning!.opphold!}
-                        component={this.tilsyn}
+                        component={pfTilsyn}
                         panelid={i => `tilsynpanel_${i}`}
                         initialPeriodeinfo={initialTilsyn}
                         editSoknad={opphold => this.updateSoknad({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}})}
@@ -430,88 +422,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
-    private tgStrings(soknad: ISoknad) {
-        // Genrerer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
+    private tgStrings = (soknad: ISoknad) => {
+        // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
         const tgStrings: string[] = [];
-        soknad.arbeidsgivere
+        soknad.arbeid
               ?.arbeidstaker
               ?.forEach((a: IArbeidstaker) => tgStrings.push(numberToString(this.props.intl, a.skalJobbeProsent || 100, 1)));
         return tgStrings;
-    }
-
-    private arbeidstaker: PeriodeComponent<IArbeidstaker> = (arbeidstaker: Periodeinfo<IArbeidstaker>,
-                                                             periodeindex: number,
-                                                             updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IArbeidstaker>>) => any,
-                                                             updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IArbeidstaker>>, showStatus?: boolean) => any,
-                                                             feilprefiks: string) => {
-        const {intl} = this.props;
-        const {tgStrings} = this.state;
-        type OrgOrPers = 'o' | 'p';
-        const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
-            let organisasjonsnummer: string | null;
-            let norskIdent: string | null;
-            if (orgOrPers === 'o') {
-                organisasjonsnummer = '';
-                norskIdent = null;
-            } else {
-                organisasjonsnummer = null;
-                norskIdent = '';
-            }
-            updatePeriodeinfoInSoknadState({organisasjonsnummer, norskIdent});
-            updatePeriodeinfoInSoknad({organisasjonsnummer, norskIdent});
-        };
-        const selectedType: OrgOrPers = arbeidstaker.organisasjonsnummer === null ? 'p' : 'o';
-        return <SkjemaGruppe feil={this.getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
-            <Container className="infoContainer">
-                <Row noGutters={true}>
-                    <Col>
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={[
-                                {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'), value: 'o'},
-                                {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'), value: 'p'}
-                            ]}
-                            name={`arbeidsgivertype_${periodeindex}`}
-                            legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                            onChange={event => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
-                            checked={selectedType}
-                        />
-                    </Col>
-                </Row>
-                <Row noGutters={true}>
-                    <Col>
-                        <Input
-                            label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
-                            value={tgStrings[periodeindex]}
-                            onChange={event => {
-                                updatePeriodeinfoInSoknadState({skalJobbeProsent: stringToNumber(event.target.value)});
-                                tgStrings[periodeindex] = event.target.value;
-                                this.setState({tgStrings});
-                            }}
-                            onBlur={event => {
-                                updatePeriodeinfoInSoknad({skalJobbeProsent: stringToNumber(event.target.value)});
-                                this.setState({tgStrings: this.tgStrings(this.state.soknad)})
-                            }}
-                            onFocus={event => event.target.selectionStart = 0}
-                            feil={this.getErrorMessage(`${feilprefiks}.skalJobbeProsent`)}
-                        />
-                    </Col>
-                    <Col>
-                        {selectedType === 'o'
-                            ? <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                     value={arbeidstaker.organisasjonsnummer || ''}
-                                     onChange={event => updatePeriodeinfoInSoknadState({organisasjonsnummer: event.target.value})}
-                                     onBlur={event => updatePeriodeinfoInSoknad({organisasjonsnummer: event.target.value})}
-                                     feil={this.getErrorMessage(`${feilprefiks}.organisasjonsnummer`)}/>
-                            : <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
-                                     value={arbeidstaker.norskIdent || ''}
-                                     onChange={event => updatePeriodeinfoInSoknadState({norskIdent: event.target.value})}
-                                     onBlur={event => updatePeriodeinfoInSoknad({norskIdent: event.target.value})}
-                                     feil={this.getErrorMessage(`${feilprefiks}.norskIdent`)}/>}
-                    </Col>
-                </Row>
-            </Container>
-        </SkjemaGruppe>;
     };
 
     private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
@@ -522,96 +439,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.updateSoknadState({tilsynsordning}, true);
         this.updateSoknad({tilsynsordning});
     }
-
-    private beredskap: PeriodeComponent<ITilleggsinformasjon> = (beredskap: Periodeinfo<ITilleggsinformasjon>,
-                                                                 periodeindex: number,
-                                                                 updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilleggsinformasjon>>) => any,
-                                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilleggsinformasjon>>, showStatus?: boolean) => any,
-                                                                 feilprefiks: string) => {
-        const {intl} = this.props;
-        return <div className="tilleggsinfo">
-            <Textarea
-                label={intlHelper(intl, 'skjema.beredskap.tilleggsinfo')}
-                value={beredskap.tilleggsinformasjon || ''}
-                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
-                onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
-                feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
-                maxLength={0}
-            />
-        </div>;
-    };
-
-    private nattevaak: PeriodeComponent<ITilleggsinformasjon> = (nattevaak: Periodeinfo<ITilleggsinformasjon>,
-                                                                 periodeindex: number,
-                                                                 updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilleggsinformasjon>>) => any,
-                                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilleggsinformasjon>>, showStatus?: boolean) => any,
-                                                                 feilprefiks: string) => {
-        const {intl} = this.props;
-        return <div className="tilleggsinfo">
-            <Textarea
-                label={intlHelper(intl, 'skjema.nattevaak.tilleggsinfo')}
-                value={nattevaak.tilleggsinformasjon || ''}
-                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
-                onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
-                feil={this.getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
-                maxLength={0}
-            />
-        </div>;
-    };
-
-    private tilsyn: PeriodeComponent<ITilsyn> = (tilsyn: Periodeinfo<ITilsyn>,
-                                                 periodeindex: number,
-                                                 updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<ITilsyn>>) => any,
-                                                 updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<ITilsyn>>, showStatus?: boolean) => any,
-                                                 feilprefiks: string) => {
-        return <Container className="tilsyntabell"><Row noGutters={true}>
-            {Object.keys(Ukedag)
-                   .map(ukedag => Number(ukedag) as UkedagNumber)
-                   .filter(ukedag => isNaN(Number(Ukedag[ukedag])))
-                   .filter(ukedag => ukedag < 5)
-                   .map(ukedag => {
-                       const ukedagstr = convertNumberToUkedag(ukedag);
-                       const duration = tilsyn?.[ukedagstr];
-                       const hours = hoursFromString(duration);
-                       const minutes = minutesFromString(duration);
-                       const isWeekdayOutOfPeriod = !isWeekdayWithinPeriod(ukedag, tilsyn.periode);
-                       return <Col className="tilsyntabell_ukedag" key={ukedag}>
-                           <SkjemaGruppe feil={this.getErrorMessage(`${feilprefiks}.${ukedagstr}`)}><Container>
-                               <Row noGutters={true}><Col>{intlHelper(this.props.intl, `Ukedag.${ukedag}`)}</Col></Row>
-                               <Row noGutters={true}>
-                                   <Col>
-                                       <NumberSelect
-                                           label="Timer"
-                                           value={hours}
-                                           onChange={event => {
-                                               const newHours = +event.target.value;
-                                               const newMinutes = newHours === 24 ? 0 : minutes;
-                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(newHours, newMinutes)}, true);
-                                               updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(newHours, newMinutes)});
-                                           }}
-                                           disabled={isWeekdayOutOfPeriod}
-                                           to={24}
-                                       />
-                                   </Col>
-                                   <Col>
-                                       <NumberSelect
-                                           label="Min."
-                                           value={minutes}
-                                           onChange={event => {
-                                               const newMinutes = +event.target.value;
-                                               updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)}, true);
-                                               updatePeriodeinfoInSoknad({[ukedagstr]: durationToString(hours, newMinutes)});
-                                           }}
-                                           disabled={hours === 24 || isWeekdayOutOfPeriod}
-                                           to={59}
-                                       />
-                                   </Col>
-                               </Row>
-                           </Container></SkjemaGruppe>
-                       </Col>;
-                   })}
-        </Row></Container>;
-    };
 
     private backButton() {
         return <p><Knapp onClick={this.handleBackButtonClick}>

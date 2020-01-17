@@ -8,7 +8,7 @@ import {ISelvstendigNaerinsdrivende}       from './SelvstendigNaerinsdrivende';
 import {ITilsyn}                           from './Tilsyn';
 
 export interface ISoknad {
-    arbeidsgivere?: IArbeidsgivere;
+    arbeid?: IArbeidsgiver;
     spraak?: Locale;
     barn?: IBarn;
     beredskap?: Array<Periodeinfo<ITilleggsinformasjon>>;
@@ -18,7 +18,7 @@ export interface ISoknad {
 
 export class Soknad implements ISoknad {
 
-    arbeidsgivere?: IArbeidsgivere;
+    arbeid?: IArbeidsgiver;
     spraak?: Locale;
     barn?: IBarn;
     beredskap?: Array<Periodeinfo<ITilleggsinformasjon>>;
@@ -28,7 +28,7 @@ export class Soknad implements ISoknad {
 
     constructor(soknad: ISoknad) {
 
-        this.arbeidsgivere = soknad.arbeidsgivere;
+        this.arbeid = soknad.arbeid;
         this.spraak = soknad.spraak;
         this.barn = soknad.barn;
         this.beredskap = soknad.beredskap;
@@ -36,9 +36,9 @@ export class Soknad implements ISoknad {
         this.tilsynsordning = soknad.tilsynsordning;
 
         this.allPeriods = [];
-        !!this.arbeidsgivere?.arbeidstaker?.length && this.allPeriods.push(...this.arbeidsgivere.arbeidstaker);
-        !!this.arbeidsgivere?.selvstendigNæringsdrivende?.length && this.allPeriods.push(...this.arbeidsgivere.selvstendigNæringsdrivende);
-        !!this.arbeidsgivere?.frilanser?.length && this.allPeriods.push(...this.arbeidsgivere.frilanser);
+        !!this.arbeid?.arbeidstaker?.length && this.allPeriods.push(...this.arbeid.arbeidstaker);
+        !!this.arbeid?.selvstendigNæringsdrivende?.length && this.allPeriods.push(...this.arbeid.selvstendigNæringsdrivende);
+        !!this.arbeid?.frilanser?.length && this.allPeriods.push(...this.arbeid.frilanser);
         !!this.beredskap?.length && this.allPeriods.push(...this.beredskap);
         !!this.nattevaak?.length && this.allPeriods.push(...this.nattevaak);
         !!this.tilsynsordning?.opphold?.length && this.allPeriods.push(...this.tilsynsordning.opphold);
@@ -63,7 +63,7 @@ export class Soknad implements ISoknad {
     }
 }
 
-export interface IArbeidsgivere {
+export interface IArbeidsgiver {
     arbeidstaker?: Array<Periodeinfo<IArbeidstaker>>;
     selvstendigNæringsdrivende?: Array<Periodeinfo<ISelvstendigNaerinsdrivende>>;
     frilanser?: Array<Periodeinfo<IFrilanser>>;

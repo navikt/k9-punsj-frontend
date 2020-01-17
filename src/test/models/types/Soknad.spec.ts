@@ -39,7 +39,7 @@ const tilsynUtenPeriode = {
 };
 
 const soknadMedFlerePerioder = new Soknad({
-    arbeidsgivere: {
+    arbeid: {
         arbeidstaker: [arbeidstaker0, arbeidstaker1],
         frilanser: [frilanser0]
     },
@@ -51,7 +51,7 @@ const soknadMedFlerePerioder = new Soknad({
 });
 
 const soknadUtenPerioder = new Soknad({
-    arbeidsgivere: {
+    arbeid: {
         arbeidstaker: [arbeidstakerUtenPeriode],
     },
     tilsynsordning: {
