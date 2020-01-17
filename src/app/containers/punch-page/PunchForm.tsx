@@ -199,6 +199,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 </Select>
                 <SkjemaGruppe feil={this.getErrorMessage('barn')}>
                     <Input
+                        id="barn-ident"
                         label={intlHelper(intl, 'skjema.barn.ident')}
                         className="bold-label"
                         value={_.get(soknad, 'barn.norsk_ident', '')}
@@ -206,6 +207,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         feil={this.getErrorMessage('barn.norsk_ident')}
                     />
                     <Input
+                        id="barn-fdato"
                         type="date"
                         label={intlHelper(intl, 'skjema.barn.foedselsdato')}
                         className="bold-label"
@@ -228,7 +230,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     panelClassName="arbeidstakerpanel"
                     getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'arbeidsgivere.arbeidstaker'}
+                    feilkodeprefiks={'arbeid.arbeidstaker'}
                     onAdd={updateTgStrings}
                     onRemove={updateTgStrings}
                 />
@@ -244,7 +246,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
                     panelClassName="selvstendignaeringsdrivendepanel"
                     getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'arbeidsgivere.selvstendigNæringsdrivende'}
+                    feilkodeprefiks={'arbeid.selvstendigNæringsdrivende'}
                 />
                 <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
                 <Periodepaneler
@@ -258,7 +260,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     textFjern="skjema.arbeid.frilanser.fjernperiode"
                     panelClassName="frilanserpanel"
                     getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'arbeidsgivere.frilanser'}
+                    feilkodeprefiks={'arbeid.frilanser'}
                 />
                 <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
                 <Periodepaneler

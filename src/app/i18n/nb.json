@@ -83,6 +83,8 @@
   "skjema.nattevaak.leggtilperiode":                                 "Legg til nattevåksperiode",
   "skjema.tilsyn.overskrift":                                        "Opplysninger om tilyn av barnet",
   "skjema.tilsyn.janeivetikke":                                      "Skal barnet gå i barnehage eller på skole/sfo. eller være i annet etablert tilsyn i pleiepengeperioden?",
+  "skjema.tilsyn.timer":                                             "Timer",
+  "skjema.tilsyn.minutter":                                          "Min.",
   "skjema.tilsyn.fjernperiode":                                      "Fjern tilsynsperiode",
   "skjema.tilsyn.leggtilperiode":                                    "Legg til tilsynsperiode",
   "skjema.signatur.overskrift":                                      "Signatur",

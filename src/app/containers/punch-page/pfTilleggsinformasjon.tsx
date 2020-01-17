@@ -28,7 +28,7 @@ export function pfTilleggsinformasjon(path: string): PeriodeComponent<ITilleggsi
                 value={periodeinfo.tilleggsinformasjon || ''}
                 onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
-                feil={getErrorMessage(`${feilprefiks}.tillegsinformasjon`)}
+                feil={getErrorMessage(`${feilprefiks}.tilleggsinformasjon`)}
                 maxLength={0}
             />
         </div>;

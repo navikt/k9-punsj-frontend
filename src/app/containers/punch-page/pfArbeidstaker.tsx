@@ -70,6 +70,7 @@ export function pfArbeidstaker(parentState: IPunchFormComponentState,
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
                             value={tgStrings[periodeindex]}
+                            className="arbeidstaker-tilstedevaerelse"
                             onChange={event => {
                                 updatePeriodeinfoInSoknadState({skalJobbeProsent: stringToNumber(event.target.value)});
                                 tgStrings[periodeindex] = event.target.value;
@@ -87,11 +88,13 @@ export function pfArbeidstaker(parentState: IPunchFormComponentState,
                         {selectedType === 'o'
                             ? <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                                      value={arbeidstaker.organisasjonsnummer || ''}
+                                     className="arbeidstaker-organisasjonsnummer"
                                      onChange={event => updatePeriodeinfoInSoknadState({organisasjonsnummer: event.target.value})}
                                      onBlur={event => updatePeriodeinfoInSoknad({organisasjonsnummer: event.target.value})}
                                      feil={getErrorMessage(`${feilprefiks}.organisasjonsnummer`)}/>
                             : <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                                      value={arbeidstaker.norskIdent || ''}
+                                     className="arbeidstaker-norskIdent"
                                      onChange={event => updatePeriodeinfoInSoknadState({norskIdent: event.target.value})}
                                      onBlur={event => updatePeriodeinfoInSoknad({norskIdent: event.target.value})}
                                      feil={getErrorMessage(`${feilprefiks}.norskIdent`)}/>}

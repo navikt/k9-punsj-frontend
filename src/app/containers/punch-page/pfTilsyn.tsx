@@ -4,7 +4,7 @@ import {
     PeriodeComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-} from 'app/containers/punch-page/Periodepaneler';
+}                     from 'app/containers/punch-page/Periodepaneler';
 import {Ukedag}       from 'app/models/enums';
 import {
     ITilsyn,
@@ -19,15 +19,14 @@ import {
     minutesFromString
 }                     from 'app/utils';
 import intlHelper     from 'app/utils/intlUtils';
-import {SkjemaGruppe}                                from 'nav-frontend-skjema';
-import {SkjemaelementFeil}                           from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
-import * as React          from 'react';
+import {SkjemaGruppe} from 'nav-frontend-skjema';
+import * as React     from 'react';
 import {
     Col,
     Container,
     Row
-}                          from 'react-bootstrap';
-import {IntlShape}         from 'react-intl';
+}                     from 'react-bootstrap';
+import {IntlShape}    from 'react-intl';
 
 export const pfTilsyn: PeriodeComponent<ITilsyn> = (
     tilsyn: Periodeinfo<ITilsyn>,
@@ -56,8 +55,9 @@ export const pfTilsyn: PeriodeComponent<ITilsyn> = (
                            <Row noGutters={true}>
                                <Col>
                                    <NumberSelect
-                                       label="Timer"
+                                       label={intlHelper(intl, 'skjema.tilsyn.timer')}
                                        value={hours}
+                                       className="tilsyn-timer"
                                        onChange={event => {
                                            const newHours = +event.target.value;
                                            const newMinutes = newHours === 24 ? 0 : minutes;
@@ -70,8 +70,9 @@ export const pfTilsyn: PeriodeComponent<ITilsyn> = (
                                </Col>
                                <Col>
                                    <NumberSelect
-                                       label="Min."
+                                       label={intlHelper(intl, 'skjema.tilsyn.minutter')}
                                        value={minutes}
+                                       className="tilsyn-minutter"
                                        onChange={event => {
                                            const newMinutes = +event.target.value;
                                            updatePeriodeinfoInSoknadState({[ukedagstr]: durationToString(hours, newMinutes)}, true);
