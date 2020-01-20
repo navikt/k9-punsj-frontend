@@ -93,6 +93,17 @@
         z-index:  5;
       }
 
+      .arbeidsknapper {
+        .col {
+          padding: 0 .5rem;
+          flex-grow: 1;
+          flex-basis: 0;
+          .knapp {width: 100%}
+          &:first-child {padding-left: 0}
+          &:last-child {padding-right: 0}
+        }
+      }
+
       .tilsynsordning {
 
         .leggtilperiodeknapp {margin-top: 1rem}

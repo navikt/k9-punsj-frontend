@@ -32,13 +32,14 @@ import {numberToString, setHash}                              from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
 import _                                                      from 'lodash';
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
-import {Knapp}                                                from 'nav-frontend-knapper';
-import {Input, RadioPanelGruppe, Select, SkjemaGruppe}        from 'nav-frontend-skjema';
-import NavFrontendSpinner                                     from 'nav-frontend-spinner';
-import * as React                                             from 'react';
-import {injectIntl, WrappedComponentProps}                    from 'react-intl';
-import {connect}                                              from 'react-redux';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
+import {Knapp}                                         from 'nav-frontend-knapper';
+import {Input, RadioPanelGruppe, Select, SkjemaGruppe} from 'nav-frontend-skjema';
+import NavFrontendSpinner                              from 'nav-frontend-spinner';
+import * as React                                      from 'react';
+import {injectIntl, WrappedComponentProps}             from 'react-intl';
+import {connect}                                       from 'react-redux';
+import {Col, Container, Row}                           from 'react-bootstrap';
 
 export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -186,6 +187,53 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const updateTgStrings = () => this.setState({tgStrings: this.tgStrings(soknad)});
 
+        const harSoknadArbeidsperioder = !!soknad.getNumberOfWorkPeriods();
+
+        const arbeidstakerperioder = <Periodepaneler
+            intl={intl}
+            periods={soknad.arbeid.arbeidstaker}
+            component={pfArbeidstaker(this.state, tgStrings => this.setState({tgStrings}), this.tgStrings)}
+            panelid={i => `arbeidstakerpanel_${i}`}
+            initialPeriodeinfo={initialArbeidstaker}
+            editSoknad={arbeidstaker => this.updateSoknad({arbeid: {...soknad.arbeid, arbeidstaker}})}
+            editSoknadState={(arbeidstaker, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, arbeidstaker}}, showStatus)}
+            textLeggTil={`skjema.arbeid.arbeidstaker.leggtilperiode`}
+            textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+            panelClassName="arbeidstakerpanel"
+            getErrorMessage={this.getErrorMessage}
+            feilkodeprefiks={'arbeid.arbeidstaker'}
+            onAdd={updateTgStrings}
+            onRemove={updateTgStrings}
+        />;
+
+        const selvstendigperioder = <Periodepaneler
+            intl={intl}
+            periods={soknad.arbeid.selvstendigNæringsdrivende}
+            panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
+            initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
+            editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}})}
+            editSoknadState={(selvstendigNæringsdrivende, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}}, showStatus)}
+            textLeggTil={`skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode`}
+            textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
+            panelClassName="selvstendignaeringsdrivendepanel"
+            getErrorMessage={this.getErrorMessage}
+            feilkodeprefiks={'arbeid.selvstendigNæringsdrivende'}
+        />;
+
+        const frilanserperioder = <Periodepaneler
+            intl={intl}
+            periods={soknad.arbeid.frilanser}
+            panelid={i => `frilanserpanel_${i}`}
+            initialPeriodeinfo={initialFrilanser}
+            editSoknad={frilanser => this.updateSoknad({arbeid: {...soknad.arbeid, frilanser}})}
+            editSoknadState={(frilanser, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, frilanser}}, showStatus)}
+            textLeggTil={`skjema.arbeid.frilanser.leggtilperiode`}
+            textFjern="skjema.arbeid.frilanser.fjernperiode"
+            panelClassName="frilanserpanel"
+            getErrorMessage={this.getErrorMessage}
+            feilkodeprefiks={'arbeid.frilanser'}
+        />;
+
         return (<>
             {this.statusetikett()}
             {this.backButton()}
@@ -227,51 +275,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />
                 </SkjemaGruppe>
                 <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
-                <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
-                <Periodepaneler
-                    intl={intl}
-                    periods={soknad.arbeid.arbeidstaker}
-                    component={pfArbeidstaker(this.state, tgStrings => this.setState({tgStrings}), this.tgStrings)}
-                    panelid={i => `arbeidstakerpanel_${i}`}
-                    initialPeriodeinfo={initialArbeidstaker}
-                    editSoknad={arbeidstaker => this.updateSoknad({arbeid: {...soknad.arbeid, arbeidstaker}})}
-                    editSoknadState={(arbeidstaker, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, arbeidstaker}}, showStatus)}
-                    textLeggTil="skjema.arbeid.arbeidstaker.leggtilperiode"
-                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-                    panelClassName="arbeidstakerpanel"
-                    getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'arbeid.arbeidstaker'}
-                    onAdd={updateTgStrings}
-                    onRemove={updateTgStrings}
-                />
-                <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
-                <Periodepaneler
-                    intl={intl}
-                    periods={soknad.arbeid.selvstendigNæringsdrivende}
-                    panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
-                    initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-                    editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}})}
-                    editSoknadState={(selvstendigNæringsdrivende, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}}, showStatus)}
-                    textLeggTil="skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode"
-                    textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
-                    panelClassName="selvstendignaeringsdrivendepanel"
-                    getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'arbeid.selvstendigNæringsdrivende'}
-                />
-                <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-                <Periodepaneler
-                    intl={intl}
-                    periods={soknad.arbeid.frilanser}
-                    panelid={i => `frilanserpanel_${i}`}
-                    initialPeriodeinfo={initialFrilanser}
-                    editSoknad={frilanser => this.updateSoknad({arbeid: {...soknad.arbeid, frilanser}})}
-                    editSoknadState={(frilanser, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, frilanser}}, showStatus)}
-                    textLeggTil="skjema.arbeid.frilanser.leggtilperiode"
-                    textFjern="skjema.arbeid.frilanser.fjernperiode"
-                    panelClassName="frilanserpanel"
-                    getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'arbeid.frilanser'}
-                />
+                {harSoknadArbeidsperioder ? <>
+                    <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
+                    {arbeidstakerperioder}
+                    <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
+                    {selvstendigperioder}
+                    <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+                    {frilanserperioder}
+                </> : <Container className="arbeidsknapper"><Row>
+                    <Col>{arbeidstakerperioder}</Col>
+                    <Col>{selvstendigperioder}</Col>
+                    <Col>{frilanserperioder}</Col>
+                </Row></Container>}
                 <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
                 <Periodepaneler
                     intl={intl}
