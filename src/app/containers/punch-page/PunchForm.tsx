@@ -28,18 +28,18 @@ import {
     updateSoknad
 }                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
-import {numberToString, setHash}                              from 'app/utils';
+import {setHash}                                              from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
 import _                                                      from 'lodash';
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
-import {Knapp}                                         from 'nav-frontend-knapper';
-import {Input, RadioPanelGruppe, Select, SkjemaGruppe} from 'nav-frontend-skjema';
-import NavFrontendSpinner                              from 'nav-frontend-spinner';
-import * as React                                      from 'react';
-import {injectIntl, WrappedComponentProps}             from 'react-intl';
-import {connect}                                       from 'react-redux';
-import {Col, Container, Row}                           from 'react-bootstrap';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
+import {Knapp}                                                from 'nav-frontend-knapper';
+import {Input, RadioPanelGruppe, Select, SkjemaGruppe}        from 'nav-frontend-skjema';
+import NavFrontendSpinner                                     from 'nav-frontend-spinner';
+import * as React                                             from 'react';
+import {Col, Container, Row}                                  from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}                    from 'react-intl';
+import {connect}                                              from 'react-redux';
 
 export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
