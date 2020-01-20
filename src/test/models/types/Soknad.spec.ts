@@ -1,5 +1,8 @@
-import {JaNeiVetikke}                                                                           from 'app/models/enums';
-import {IArbeidstaker, IFrilanser, ISoknad, ITilleggsinformasjon, ITilsyn, Periodeinfo, Soknad} from 'app/models/types';
+import {JaNeiVetikke}                                                                  from 'app/models/enums';
+import {IArbeidstaker, IFrilanser, ITilleggsinformasjon, ITilsyn, Periodeinfo, Soknad} from 'app/models/types';
+import {createIntl}                                                                    from 'react-intl';
+
+jest.mock('app/utils/envUtils');
 
 const datoTidligst = '2019-01-01';
 const dato1 = '2019-04-01';
@@ -18,6 +21,11 @@ const arbeidstaker0: Periodeinfo<IArbeidstaker> = {
 const arbeidstaker1: Periodeinfo<IArbeidstaker> = {
     periode: {fraOgMed: dato2, tilOgMed: datoSenest},
     skalJobbeProsent: 50.00,
+    norskIdent: '12345678901'
+};
+
+const arbeidstakerUtenTilstedevaerelsesgrad: Periodeinfo<IArbeidstaker> = {
+    periode: {fraOgMed: dato2, tilOgMed: datoSenest},
     norskIdent: '12345678901'
 };
 
@@ -49,6 +57,12 @@ const soknadMedFlerePerioder = new Soknad({
         opphold: [tilsyn0]
     }
 });
+
+const soknadMedPeriodeUtenTilstedevaerelsesgrad = new Soknad({arbeid: {arbeidstaker: [
+    arbeidstaker0,
+    arbeidstakerUtenTilstedevaerelsesgrad,
+    arbeidstaker1
+]}});
 
 const soknadUtenPerioder = new Soknad({
     arbeid: {
@@ -89,5 +103,29 @@ describe('Soknad.getTom', () => {
 
     it('Returnerer null når søknaden er tom', () => {
         expect(tomSoknad.getTom()).toBeNull();
+    });
+});
+
+describe('Soknad.GetNumberOfWorkPeriods', () => {
+
+    it('Finner antallet arbeidsperioder', () => {
+        expect(soknadMedFlerePerioder.getNumberOfWorkPeriods()).toEqual(3);
+    });
+
+    it('Returenrer 0 når søknaden er tom', () => {
+        expect(tomSoknad.getNumberOfWorkPeriods()).toEqual(0);
+    });
+});
+
+describe('Soknad.generateTgStrings', () => {
+
+    const intl = createIntl({locale: 'nb', defaultLocale: 'nb'});
+
+    it('Lager array med strings av tilstedeværelsesgrad', () => {
+        expect(soknadMedFlerePerioder.generateTgStrings(intl)).toEqual(["50,0", "50,0"]);
+    });
+
+    it('Lager array med strings av tilstedeværelsesgrad med "0,0" når tilstedeværelsesgrad er udefinert', () => {
+        expect(soknadMedPeriodeUtenTilstedevaerelsesgrad.generateTgStrings(intl)).toEqual(["50,0", "0,0", "50,0"]);
     });
 });

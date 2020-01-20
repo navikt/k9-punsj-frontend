@@ -1,11 +1,10 @@
-import {IPeriode} from 'app/models/types';
 import {
     convertNumberToUkedag,
     durationToString,
     hoursFromString,
     isWeekdayWithinPeriod,
     minutesFromString
-}                 from 'app/utils';
+} from 'app/utils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/apiUtils');

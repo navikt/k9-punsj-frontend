@@ -14,7 +14,8 @@ import {
     ITilleggsinformasjon,
     ITilsyn,
     ITilsynsordning,
-    Periodeinfo
+    Periodeinfo,
+    Soknad
 }                                                             from 'app/models/types';
 import {
     getMappe,
@@ -99,6 +100,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         tgStrings: [] // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
     };
 
+    private initialTilsyn: Periodeinfo<ITilsyn> = {
+        periode: {fraOgMed: '', tilOgMed: ''},
+        mandag: null,
+        tirsdag: null,
+        onsdag: null,
+        torsdag: null,
+        fredag: null
+    };
+
     componentDidMount(): void {
         const {id} = this.props;
         this.props.getMappe(id);
@@ -122,7 +132,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     render() {
 
         const {intl, punchFormState} = this.props;
-        const {soknad} = this.state;
+        const soknad = new Soknad(this.state.soknad);
         const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
         if (punchFormState.isComplete) {
@@ -190,7 +200,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     name="sprak"
                     label={intlHelper(intl, 'skjema.spraak')}
                     className="bold-label"
-                    value={soknad.spraak || 'nb'}
+                    value={soknad.spraak}
                     {...this.onChangeOnlyUpdate(event => ({spraak: event.target.value}))}
                     feil={this.getErrorMessage('spraak')}
                 >
@@ -220,7 +230,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.arbeid!.arbeidstaker!}
+                    periods={soknad.arbeid.arbeidstaker}
                     component={pfArbeidstaker(this.state, tgStrings => this.setState({tgStrings}), this.tgStrings)}
                     panelid={i => `arbeidstakerpanel_${i}`}
                     initialPeriodeinfo={initialArbeidstaker}
@@ -237,7 +247,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.arbeid!.selvstendigNæringsdrivende!}
+                    periods={soknad.arbeid.selvstendigNæringsdrivende}
                     panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
                     initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
                     editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}})}
@@ -251,7 +261,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.arbeid!.frilanser!}
+                    periods={soknad.arbeid.frilanser}
                     panelid={i => `frilanserpanel_${i}`}
                     initialPeriodeinfo={initialFrilanser}
                     editSoknad={frilanser => this.updateSoknad({arbeid: {...soknad.arbeid, frilanser}})}
@@ -265,7 +275,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.beredskap!}
+                    periods={soknad.beredskap}
                     component={pfTilleggsinformasjon('beredskap')}
                     panelid={i => `beredskapspanel_${i}`}
                     initialPeriodeinfo={initialBeredskap}
@@ -280,7 +290,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
                 <Periodepaneler
                     intl={intl}
-                    periods={soknad.nattevaak!}
+                    periods={soknad.nattevaak}
                     component={pfTilleggsinformasjon('nattevaak')}
                     panelid={i => `nattevaakspanel_${i}`}
                     initialPeriodeinfo={initialNattevaak}
@@ -397,12 +407,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             name="tilsynjaneivetikke"
                             legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
                             onChange={event => this.updateTilsynsordning((event.target as HTMLInputElement).value as JaNeiVetikke)}
-                            checked={soknad.tilsynsordning!.iTilsynsordning}
+                            checked={soknad.tilsynsordning.iTilsynsordning}
                         />
                     </SkjemaGruppe>
-                    {soknad.tilsynsordning!.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
+                    {soknad.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
                         intl={intl}
-                        periods={soknad.tilsynsordning!.opphold!}
+                        periods={soknad.tilsynsordning.opphold!}
                         component={pfTilsyn}
                         panelid={i => `tilsynpanel_${i}`}
                         initialPeriodeinfo={initialTilsyn}
@@ -424,19 +434,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
-    private tgStrings = (soknad: ISoknad) => {
+    private tgStrings = (iSoknad?: ISoknad) => {
         // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
-        const tgStrings: string[] = [];
-        soknad.arbeid
-              ?.arbeidstaker
-              ?.forEach((a: IArbeidstaker) => tgStrings.push(numberToString(this.props.intl, a.skalJobbeProsent || 100, 1)));
-        return tgStrings;
+        const soknad = new Soknad(iSoknad || this.state.soknad);
+        return soknad.generateTgStrings(this.props.intl);
     };
 
     private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
         const tilsynsordning: ITilsynsordning = {...this.state.soknad.tilsynsordning, iTilsynsordning: jaNeiVetikke};
         if (jaNeiVetikke === JaNeiVetikke.JA && tilsynsordning.opphold!.length === 0) {
-            tilsynsordning.opphold!.push({periode: {}});
+            tilsynsordning.opphold!.push(this.initialTilsyn);
         }
         this.updateSoknadState({tilsynsordning}, true);
         this.updateSoknad({tilsynsordning});

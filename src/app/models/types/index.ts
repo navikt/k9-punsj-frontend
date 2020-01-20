@@ -18,5 +18,4 @@ export * from './PunchPath';
 export * from './PunchState';
 export * from './SelvstendigNaerinsdrivende';
 export * from './Soknad';
-export * from './Tilsyn';
 export * from './Ukedag';

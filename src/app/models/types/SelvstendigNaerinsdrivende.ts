@@ -1,5 +1,5 @@
-import {IPeriode}    from 'app/models/types/Periode';
-import {Periodeinfo} from 'app/models/types/Periodeinfo';
+import {IPeriode, Periode} from 'app/models/types/Periode';
+import {Periodeinfo}       from 'app/models/types/Periodeinfo';
 
 export interface ISelvstendigNaerinsdrivende {}
 
@@ -7,7 +7,7 @@ export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvste
 
     periode: Required<IPeriode>;
 
-    constructor(selvstendigNaeringsdrivende: ISelvstendigNaerinsdrivende) {
-        this.periode = new Periode(selvstendigNaeringsdrivende.periode || {}).generateDefaultValues();
+    constructor(selvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende>) {
+        this.periode = new Periode(selvstendigNaeringsdrivende.periode || {});
     }
 }

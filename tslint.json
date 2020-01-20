@@ -31,6 +31,12 @@
     "jsdoc-format":                  false,
     "prefer-conditional-expression": false,
     "no-unused-variable":            false,
-    "no-unused-expression":          false
+    "no-unused-expression":          false,
+    "variable-name":                 {
+      "options": [
+        "allow-pascal-case",
+        "allow-snake-case"
+      ]
+    }
   }
 }

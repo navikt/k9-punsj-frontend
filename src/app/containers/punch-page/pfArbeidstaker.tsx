@@ -3,23 +3,22 @@ import {
     PeriodeComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-} from 'app/containers/punch-page/Periodepaneler';
-import {IPunchFormComponentState}              from 'app/containers/punch-page/PunchForm';
-import {IArbeidstaker, ISoknad, Periodeinfo}   from 'app/models/types';
-import {stringToNumber}                        from 'app/utils/formatUtils';
-import intlHelper                              from 'app/utils/intlUtils';
-import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
-import {SkjemaelementFeil}                     from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
-import * as React                              from 'react';
-import {Col, Container, Row}                   from 'react-bootstrap';
-import {IntlShape}                             from 'react-intl';
+}                                               from 'app/containers/punch-page/Periodepaneler';
+import {IPunchFormComponentState}               from 'app/containers/punch-page/PunchForm';
+import {Arbeidstaker, IArbeidstaker, OrgOrPers} from 'app/models/types';
+import {stringToNumber}                         from 'app/utils/formatUtils';
+import intlHelper                               from 'app/utils/intlUtils';
+import {Input, RadioPanelGruppe, SkjemaGruppe}  from 'nav-frontend-skjema';
+import * as React                               from 'react';
+import {Col, Container, Row}                    from 'react-bootstrap';
+import {IntlShape}                              from 'react-intl';
 
 export function pfArbeidstaker(parentState: IPunchFormComponentState,
                                setTgStringsInParentState: (tgStrings: string[]) => any,
-                               generateTgStrings: (soknad: ISoknad) => string[]): PeriodeComponent<IArbeidstaker> {
+                               generateTgStrings: () => string[]): PeriodeComponent<IArbeidstaker> {
 
     return (
-        arbeidstaker: Periodeinfo<IArbeidstaker>,
+        arbeidstaker: Arbeidstaker,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstaker>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IArbeidstaker>,
@@ -29,8 +28,6 @@ export function pfArbeidstaker(parentState: IPunchFormComponentState,
     ) => {
 
         const {tgStrings} = parentState;
-
-        type OrgOrPers = 'o' | 'p';
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
@@ -46,7 +43,7 @@ export function pfArbeidstaker(parentState: IPunchFormComponentState,
             updatePeriodeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
 
-        const selectedType: OrgOrPers = arbeidstaker.organisasjonsnummer === null ? 'p' : 'o';
+        const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
 
         return <SkjemaGruppe feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
             <Container className="infoContainer">
@@ -78,7 +75,7 @@ export function pfArbeidstaker(parentState: IPunchFormComponentState,
                             }}
                             onBlur={event => {
                                 updatePeriodeinfoInSoknad({skalJobbeProsent: stringToNumber(event.target.value)});
-                                setTgStringsInParentState(generateTgStrings(parentState.soknad));
+                                setTgStringsInParentState(generateTgStrings());
                             }}
                             onFocus={event => event.target.selectionStart = 0}
                             feil={getErrorMessage(`${feilprefiks}.skalJobbeProsent`)}

@@ -2,18 +2,18 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                                                  from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                            from 'app/containers/punch-page/pfArbeidstaker';
-import {pfTilleggsinformasjon}                                     from 'app/containers/punch-page/pfTilleggsinformasjon';
-import {IPunchFormComponentState}                                  from 'app/containers/punch-page/PunchForm';
-import {IArbeidstaker, ISoknad, ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
-import intlHelper                                                  from 'app/utils/intlUtils';
-import {configure, shallow}                                        from 'enzyme';
-import Adapter                                                     from 'enzyme-adapter-react-16';
-import {RadioProps}                                                from 'nav-frontend-skjema';
-import {createIntl, IntlShape}                                     from 'react-intl';
-import {mocked}                                                    from 'ts-jest/utils';
+}                                                                       from 'app/containers/punch-page/Periodepaneler';
+import {pfArbeidstaker}                                                 from 'app/containers/punch-page/pfArbeidstaker';
+import {IPunchFormComponentState}                                       from 'app/containers/punch-page/PunchForm';
+import {Arbeidstaker, IArbeidstaker, ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
+import intlHelper                                                       from 'app/utils/intlUtils';
+import {configure, shallow}                                             from 'enzyme';
+import Adapter                                                          from 'enzyme-adapter-react-16';
+import {RadioProps}                                                     from 'nav-frontend-skjema';
+import {createIntl, IntlShape}                                          from 'react-intl';
+import {mocked}                                                         from 'ts-jest/utils';
 
+jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
 configure({adapter: new Adapter()});
@@ -58,7 +58,7 @@ const setupPfArbeidstaker = (
     optionalIntl?: IntlShape,
     optionalPunchFormComponentState?: IPunchFormComponentState,
     optionalSetTgStringsInParentState?: (tgStrings: string[]) => any,
-    optionalGenerateTgStrings?: (soknad: ISoknad) => string[]
+    optionalGenerateTgStrings?: () => string[]
 ) => {
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
@@ -68,7 +68,7 @@ const setupPfArbeidstaker = (
         optionalSetTgStringsInParentState || testSetTgStringsInParentState,
         optionalGenerateTgStrings || testGenerateTgStrings
     )(
-        optionalPeriodeinfo || testPeriodeinfo,
+        new Arbeidstaker(optionalPeriodeinfo || testPeriodeinfo),
         optionalPeriodeindex || testPeriodeindex,
         optionalUpdatePeriodeinfoInSoknad || testUpdatePeriodeinfoInSoknad,
         optionalUpdatePeriodeinfoInSoknadState || testUpdatePeriodeinfoInSoknadState,
