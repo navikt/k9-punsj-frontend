@@ -81,7 +81,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         soknad: {
             arbeid: {
                 arbeidstaker: [],
-                selvstendigNæringsdrivende: [],
+                selvstendigNaeringsdrivende: [],
                 frilanser: []
             },
             beredskap: [],
@@ -208,16 +208,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const selvstendigperioder = <Periodepaneler
             intl={intl}
-            periods={soknad.arbeid.selvstendigNæringsdrivende}
+            periods={soknad.arbeid.selvstendigNaeringsdrivende}
             panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
             initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-            editSoknad={selvstendigNæringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}})}
-            editSoknadState={(selvstendigNæringsdrivende, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, selvstendigNæringsdrivende}}, showStatus)}
+            editSoknad={selvstendigNaeringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNaeringsdrivende}})}
+            editSoknadState={(selvstendigNaeringsdrivende, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, selvstendigNaeringsdrivende}}, showStatus)}
             textLeggTil={`skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode`}
             textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
             panelClassName="selvstendignaeringsdrivendepanel"
             getErrorMessage={this.getErrorMessage}
-            feilkodeprefiks={'arbeid.selvstendigNæringsdrivende'}
+            feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
         />;
 
         const frilanserperioder = <Periodepaneler

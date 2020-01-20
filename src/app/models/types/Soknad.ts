@@ -38,7 +38,7 @@ export class Soknad implements Required<ISoknad> {
 
         this.workPeriods = [];
         this.workPeriods.push(...this.arbeid.arbeidstaker);
-        this.workPeriods.push(...this.arbeid.selvstendigNæringsdrivende);
+        this.workPeriods.push(...this.arbeid.selvstendigNaeringsdrivende);
         this.workPeriods.push(...this.arbeid.frilanser);
 
         this.allPeriods = [];
@@ -77,19 +77,19 @@ export class Soknad implements Required<ISoknad> {
 
 export interface IArbeid {
     arbeidstaker?: Array<Periodeinfo<IArbeidstaker>>;
-    selvstendigNæringsdrivende?: Array<Periodeinfo<ISelvstendigNaerinsdrivende>>;
+    selvstendigNaeringsdrivende?: Array<Periodeinfo<ISelvstendigNaerinsdrivende>>;
     frilanser?: Array<Periodeinfo<IFrilanser>>;
 }
 
 class Arbeid implements Required<IArbeid> {
 
     arbeidstaker: Arbeidstaker[];
-    selvstendigNæringsdrivende: SelvstendigNaerinsdrivende[];
+    selvstendigNaeringsdrivende: SelvstendigNaerinsdrivende[];
     frilanser: Frilanser[];
 
     constructor(arbeid: IArbeid) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(a => new Arbeidstaker(a));
-        this.selvstendigNæringsdrivende = (arbeid.selvstendigNæringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
+        this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
         this.frilanser = (arbeid.frilanser || []).map(f => new Frilanser(f));
     }
 }
