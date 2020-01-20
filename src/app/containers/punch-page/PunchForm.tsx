@@ -92,7 +92,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             },
             spraak: 'nb',
             barn: {
-                norsk_ident: '',
+                norskIdent: '',
                 foedselsdato: ''
             }
         },
@@ -260,9 +260,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         id="barn-ident"
                         label={intlHelper(intl, 'skjema.barn.ident')}
                         className="bold-label"
-                        value={_.get(soknad, 'barn.norsk_ident', '')}
-                        {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norsk_ident: event.target.value}}))}
-                        feil={this.getErrorMessage('barn.norsk_ident')}
+                        value={_.get(soknad, 'barn.norskIdent', '')}
+                        {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norskIdent: event.target.value}}))}
+                        feil={this.getErrorMessage('barn.norskIdent')}
                     />
                     <Input
                         id="barn-fdato"

@@ -134,7 +134,7 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({}, {updateSoknad});
         punchForm.find('#barn-ident').simulate('blur', {target: {value: newIdent}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, {barn: expect.objectContaining({norsk_ident: newIdent})});
+        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, {barn: expect.objectContaining({norskIdent: newIdent})});
     });
 
     it('Oppdaterer felt når barnets fødselsnummer endres', () => {

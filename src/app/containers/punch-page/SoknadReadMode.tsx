@@ -19,7 +19,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
             <Container className="read-modal soknad-read-mode">
                 <Row className="align-content-center">
                     <Col className={colClassName}>Barnets fødsels-/D-nr. eller fødselsdato:</Col>
-                    <Col className={colClassName}>{!!soknad.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad.barn?.foedselsdato}</Col>
+                    <Col className={colClassName}>{!!soknad.barn?.norskIdent ? soknad.barn.norskIdent : soknad.barn?.foedselsdato}</Col>
                 </Row>
                 <Row className="align-content-center">
                     <Col className={colClassName}>Søkerens språk:</Col>

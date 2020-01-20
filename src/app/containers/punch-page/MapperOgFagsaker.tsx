@@ -132,7 +132,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
             const rowContent = [
-                !!soknad?.barn?.norsk_ident ? soknad.barn.norsk_ident : soknad?.barn?.foedselsdato,
+                !!soknad?.barn?.norskIdent ? soknad.barn.norskIdent : soknad?.barn?.foedselsdato,
                 soknad?.getFom(), // Viser tidligste startdato
                 soknad?.getTom() // Viser seneste sluttdato
             ];

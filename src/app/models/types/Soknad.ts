@@ -111,17 +111,17 @@ class Tilsynsordning implements Required<ITilsynsordning> {
 }
 
 export interface IBarn {
-    norsk_ident?: string;
+    norskIdent?: string;
     foedselsdato?: string;
 }
 
 class Barn implements Required<IBarn> {
 
-    norsk_ident: string;
+    norskIdent: string;
     foedselsdato: string;
 
     constructor(barn: IBarn) {
-        this.norsk_ident = barn.norsk_ident || '';
+        this.norskIdent = barn.norskIdent || '';
         this.foedselsdato = barn.foedselsdato || '';
     }
 }

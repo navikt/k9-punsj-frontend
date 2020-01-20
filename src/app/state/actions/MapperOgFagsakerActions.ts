@@ -1,8 +1,8 @@
-import {ApiPath}                           from 'app/apiConfig';
-import {MapperOgFagsakerActionKeys}        from 'app/models/enums';
-import {IError, IFagsak, IMappe}           from 'app/models/types';
-import {MappeRules}                        from 'app/rules';
-import {convertResponseToError, get, post} from 'app/utils';
+import {ApiPath}                                  from 'app/apiConfig';
+import {JaNeiVetikke, MapperOgFagsakerActionKeys} from 'app/models/enums';
+import {IError, IFagsak, IMappe}                  from 'app/models/types';
+import {MappeRules}                               from 'app/rules';
+import {convertResponseToError, get, post}        from 'app/utils';
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
@@ -93,10 +93,19 @@ export function createMappe(ident: string, journalpostid: string) {return (dispa
             [ident]: {
                 journalpostId: journalpostid,
                 soeknad: {
+                    arbeid: {
+                        arbeidstaker: [],
+                        selvstendigNaeringsdrivende: [],
+                        frilanser: []
+                    },
                     beredskap: [],
                     nattevaak: [],
                     spraak: 'nb',
-                    barn: {}
+                    barn: {},
+                    tilsynsordning: {
+                        iTilsynsordning: JaNeiVetikke.NEI,
+                        opphold: []
+                    }
                 }
             }
         }
