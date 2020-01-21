@@ -94,7 +94,7 @@ describe('MapperOgFagsaker', () => {
 
         const ident = '1234';
         const mappe: IMappe = {
-            mappe_id: '567',
+            mappeId: '567',
             personer: {[ident]: {
                 soeknad: {},
                 innsendinger: [],
@@ -111,7 +111,7 @@ describe('MapperOgFagsaker', () => {
 
         const ident = '1234';
         const mappe: IMappe = {
-            mappe_id: '567',
+            mappeId: '567',
             personer: {[ident]: {
                 soeknad: {},
                 innsendinger: [],

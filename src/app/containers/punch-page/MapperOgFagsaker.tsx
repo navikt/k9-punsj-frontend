@@ -119,7 +119,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     const chooseMappe = (mappe: IMappe) => {
         props.chooseMappeAction(mappe);
-        setHash(getPunchPath(PunchStep.FILL_FORM, {id: mappe.mappe_id}));
+        setHash(getPunchPath(PunchStep.FILL_FORM, {id: mappe.mappeId}));
     };
 
     function showMapper() {
@@ -128,7 +128,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         const rows = [];
 
         for (const mappe of mapper) {
-            const mappeid = mappe.mappe_id as string;
+            const mappeid = mappe.mappeId as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
             const rowContent = [

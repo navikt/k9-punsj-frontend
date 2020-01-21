@@ -3,14 +3,15 @@ import {
     IPunchFormDispatchProps,
     IPunchFormStateProps,
     PunchFormComponent
-}                                                     from 'app/containers/punch-page/PunchForm';
-import {IJournalpost, IPunchFormState, IPunchState}   from 'app/models/types';
-import intlHelper                                     from 'app/utils/intlUtils';
-import {configure, shallow}                           from 'enzyme';
-import Adapter                                        from 'enzyme-adapter-react-16';
-import * as React                                     from 'react';
-import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
-import {mocked}                                       from 'ts-jest/utils';
+}                                                           from 'app/containers/punch-page/PunchForm';
+import {JaNeiVetikke}                                       from 'app/models/enums';
+import {IJournalpost, IMappe, IPunchFormState, IPunchState} from 'app/models/types';
+import intlHelper                                           from 'app/utils/intlUtils';
+import {configure, shallow}                                 from 'enzyme';
+import Adapter                                              from 'enzyme-adapter-react-16';
+import * as React                                           from 'react';
+import {createIntl, IntlShape, WrappedComponentProps}       from 'react-intl';
+import {mocked}                                             from 'ts-jest/utils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -117,7 +118,7 @@ describe('PunchForm', () => {
         expect(punchForm.find('AlertStripeFeil').prop('children')).toEqual('skjema.feil.ikke_funnet');
     });
 
-    it('Oppdaterer mappe når språk endres', () => {
+    it('Oppdaterer mappe og felt når språk endres', () => {
         const updateSoknad = jest.fn();
         const newSprak = 'nn';
         const punchForm = setupPunchForm({}, {updateSoknad});
@@ -130,7 +131,7 @@ describe('PunchForm', () => {
 
     it('Oppdaterer mappe når barnets fødselsnummer endres', () => {
         const updateSoknad = jest.fn();
-        const newIdent = '01010012345';
+        const newIdent = '01012012345';
         const punchForm = setupPunchForm({}, {updateSoknad});
         punchForm.find('#barn-ident').simulate('blur', {target: {value: newIdent}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
@@ -138,10 +139,108 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer felt når barnets fødselsnummer endres', () => {
-        const newIdent = '01010012345';
+        const newIdent = '01012012345';
         const punchForm = setupPunchForm();
         punchForm.find('#barn-ident').simulate('change', {target: {value: newIdent}});
         expect(punchForm.find('#barn-ident').prop('value')).toEqual(newIdent);
+    });
+
+    it('Oppdaterer mappe når barnets fødselsdato endres', () => {
+        const updateSoknad = jest.fn();
+        const newFdato = '2020-01-01';
+        const punchForm = setupPunchForm({}, {updateSoknad});
+        punchForm.find('#barn-fdato').simulate('blur', {target: {value: newFdato}});
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, {barn: expect.objectContaining({foedselsdato: newFdato})});
+    });
+
+    it('Oppdaterer felt når barnets fødselsdato endres', () => {
+        const newFdato = '2020-01-01';
+        const punchForm = setupPunchForm();
+        punchForm.find('#barn-fdato').simulate('change', {target: {value: newFdato}});
+        expect(punchForm.find('#barn-fdato').prop('value')).toEqual(newFdato);
+    });
+
+    it('Viser radioknapper for tilsyn', () => {
+        const punchForm = setupPunchForm();
+        expect(punchForm.find('.tilsynsordning .horizontalRadios')).toHaveLength(1);
+        expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('radios')).toHaveLength(3);
+    });
+
+    it('Viser perioder når tilsyn er satt til ja', () => {
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.JA,
+                            opphold: [{periode: {}}]
+                        }
+                    }
+                }
+            }
+        };
+        const punchForm = setupPunchForm({mappe});
+        expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(JaNeiVetikke.JA);
+        expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(1);
+    });
+
+    it('Viser ikke perioder når tilsyn er satt til nei', () => {
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.NEI,
+                            opphold: [{periode: {}}]
+                        }
+                    }
+                }
+            }
+        };
+        const punchForm = setupPunchForm({mappe});
+        expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(JaNeiVetikke.NEI);
+        expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(0);
+    });
+
+    it('Viser ikke perioder når tilsyn er satt til vet ikke', () => {
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.VET_IKKE,
+                            opphold: [{periode: {}}]
+                        }
+                    }
+                }
+            }
+        };
+        const punchForm = setupPunchForm({mappe});
+        expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(JaNeiVetikke.VET_IKKE);
+        expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(0);
+    });
+
+    it('Oppdaterer mappe og felt når itilsynsordning endres', () => {
+        const updateSoknad = jest.fn();
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.NEI,
+                            opphold: []
+                        }
+                    }
+                }
+            }
+        };
+        const newITilsynsordning = JaNeiVetikke.JA;
+        const punchForm = setupPunchForm({mappe}, {updateSoknad});
+        punchForm.find('.tilsynsordning .horizontalRadios').simulate('change', {target: {value: newITilsynsordning}});
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, expect.objectContaining({tilsynsordning: expect.objectContaining({iTilsynsordning: newITilsynsordning})}));
+        expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(newITilsynsordning);
     });
 
     it('Sender inn søknad', () => {
