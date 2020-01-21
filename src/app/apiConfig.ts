@@ -12,7 +12,7 @@ export enum ApiPath {
     MAPPE_UPDATE            = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     MAPPE_SUBMIT            = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     FAGSAKER_FIND           = '/fagsak/{ident}?ytelse=pleiepenger-sykt-barn',
-    JOURNALPOST_GET         = '/journalpost/{journalpostid}',
+    JOURNALPOST_GET         = '/journalpost/{journalpostId}',
     JOURNALPOST_OMFORDEL    = '/journalpost/{journalpostId}/omfordel',
     DOKUMENT                = '/journalpost/{journalpostId}/dokument/{dokumentId}'
 }

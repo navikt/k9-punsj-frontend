@@ -7,7 +7,7 @@ export class MappeRules {
     }
 
     public static isMappeResponseValid(mappeResponse: IMappe): boolean {
-        return !!(!!mappeResponse.mappe_id &&
+        return !!(!!mappeResponse.mappeId &&
                   !!mappeResponse.personer &&
                   Object.keys(mappeResponse.personer).length > 0 &&
                   Object.keys(mappeResponse.personer).every(key =>
