@@ -323,7 +323,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             {!punchFormState.updateMappeError && !punchFormState.submitMappeError && (isSoknadComplete
                 ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
                 : <AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>)}
-            <div id="soknadsfelter">
+            <SkjemaGruppe feil={this.getErrorMessage('')}>
                 <h2>{intlHelper(intl, 'skjema.opplysningerombarnogsoker')}</h2>
                 <Select
                     name="sprak"
@@ -489,7 +489,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
                     disabled={!isSoknadComplete}
                 >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
-            </div>
+            </SkjemaGruppe>
         </>);
     }
 
@@ -528,7 +528,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
         return !!errorMsg ? {feilmelding: intlHelper(
             this.props.intl,
-            `skjema.feil.${attribute}.${errorMsg}`.replace(/\[\d+]/, '[]')
+            `skjema.feil.${attribute}.${errorMsg}`
+                .replace(/\[\d+]/, '[]')
+                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/gm, 'skjema.feil.fraOgMed.MAA_SETTES')
+                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/gm, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
+                .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/gm, 'skjema.feil.tilOgMed.MAA_SETTES')
         )} : undefined;
     };
 

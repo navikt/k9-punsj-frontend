@@ -43,7 +43,8 @@ export interface IPeriodepanelerProps {
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, component, editSoknad, editSoknadState, getErrorMessage, feilkodeprefiks} = props;
+    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks} = props;
+    const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: IPeriodeinfo = {...props.periods[index], ...periodeinfo};
@@ -67,7 +68,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     };
 
     return <SkjemaGruppe
-        feil={getErrorMessage && feilkodeprefiks && getErrorMessage(feilkodeprefiks) || undefined}
+        feil={getErrorMessage('')}
         className={classNames('periodepaneler', props.className)}
     >
         {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
@@ -78,12 +79,15 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 id={panelid}
                 key={periodeindex}
             >
-                <SkjemaGruppe feil={getErrorMessage && feilkodeprefiks && getErrorMessage(`${feilkodeprefiks}[${periodeindex}]`) || undefined}>
+                <SkjemaGruppe feil={getErrorMessage(`[${periodeindex}]`) || undefined}>
                     <PeriodInput
                         periode={periodeinfo.periode || {}}
                         intl={props.intl}
                         onChange={(periode) => {editSoknadState(editPeriode(periodeindex, periode))}}
                         onBlur={(periode) => {editSoknad(editPeriode(periodeindex, periode))}}
+                        errorMessage={getErrorMessage(`[${periodeindex}].periode`)}
+                        errorMessageFom={getErrorMessage(`[${periodeindex}].periode.fraOgMed`)}
+                        errorMessageTom={getErrorMessage(`[${periodeindex}].periode.tilOgMed`)}
                     />
                     {!!component && component(
                         periodeinfo,
