@@ -32,7 +32,7 @@ export function getJournalpostErrorAction(error: IError):           IGetJournalp
 
 export function getJournalpost(journalpostid: string) {return (dispatch: any) => {
     dispatch(getJournalpostLoadAction());
-    return get(ApiPath.JOURNALPOST_GET, {journalpost_id: journalpostid}, undefined, response => {
+    return get(ApiPath.JOURNALPOST_GET, {journalpostId: journalpostid}, undefined, response => {
         if (response.ok) {
             return response.json()
                            .then(journalpost => dispatch(setJournalpostAction(journalpost)));

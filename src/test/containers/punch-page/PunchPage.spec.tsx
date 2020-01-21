@@ -32,7 +32,7 @@ const setupPunchPage = (
     punchPageDispatchPropsPartial?: Partial<IPunchPageDispatchProps>
 ) => {
 
-    const journalpostid = typeof journalpostinfo === 'string' ? journalpostinfo : journalpostinfo.journalpost_id;
+    const journalpostid = typeof journalpostinfo === 'string' ? journalpostinfo : journalpostinfo.journalpostId;
 
     const routeComponentProps = {
         match: {params: {id: mappeid}},
@@ -52,9 +52,9 @@ const setupPunchPage = (
     };
 
     const journalpost: IJournalpost = typeof journalpostinfo === 'string' ? {
-        dokumenter: [{dokument_id: '123'}],
-        journalpost_id: journalpostid,
-        norsk_ident: '12345678901'
+        dokumenter: [{dokumentId: '123'}],
+        journalpostId: journalpostid,
+        norskIdent: '12345678901'
     } : journalpostinfo;
 
     const punchState: IPunchState = {
@@ -96,10 +96,10 @@ describe('PunchPage', () => {
         const getJournalpost = jest.fn();
         const dokumentid = '123';
         const ident = '54321098765';
-        const journalpost = {
-            dokumenter: [{dokument_id: dokumentid}],
-            journalpost_id: journalpostid,
-            norsk_ident: ident
+        const journalpost: IJournalpost = {
+            dokumenter: [{dokumentId: dokumentid}],
+            journalpostId: journalpostid,
+            norskIdent: ident
         };
 
         const punchPage = setupPunchPage(journalpost,'#/', {ident}, undefined, {getJournalpost});
@@ -131,10 +131,10 @@ describe('PunchPage', () => {
 
         const journalpostid = '200';
         const ident = '54321098765';
-        const journalpost = {
+        const journalpost: IJournalpost = {
             dokumenter: [],
-            journalpost_id: journalpostid,
-            norsk_ident: ident
+            journalpostId: journalpostid,
+            norskIdent: ident
         };
 
         const punchPage = setupPunchPage(journalpost,'#/', {ident});

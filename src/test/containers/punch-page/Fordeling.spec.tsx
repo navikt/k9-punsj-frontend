@@ -42,9 +42,9 @@ const setupFordeling = (
     };
 
     const journalpost: IJournalpost = {
-        dokumenter: [{dokument_id: '123'}],
-        journalpost_id: journalpostid,
-        norsk_ident: '12345678901'
+        dokumenter: [{dokumentId: '123'}],
+        journalpostId: journalpostid,
+        norskIdent: '12345678901'
     };
 
     const punchState: IPunchState = {

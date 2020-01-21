@@ -63,7 +63,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         />
         {sakstype === Sakstype.PLEIEPENGER_SYKT_BARN
             ? <Knapp onClick={punch}>{intlHelper(intl, 'fordeling.knapp.punsj')}</Knapp>
-            : <Knapp onClick={() => props.omfordel(props.punchState.journalpost!.journalpost_id, sakstype)}>{intlHelper(intl, 'fordeling.knapp.omfordel')}</Knapp>}
+            : <Knapp onClick={() => props.omfordel(props.punchState.journalpost!.journalpostId, sakstype)}>{intlHelper(intl, 'fordeling.knapp.omfordel')}</Knapp>}
     </>;
 };
 

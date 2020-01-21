@@ -125,8 +125,8 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
     }
 
     private pdfUrl = () =>  apiUrl(ApiPath.DOKUMENT, {
-        journalpost_id: this.props.journalpostid,
-        dokument_id:    this.props.punchState.journalpost!.dokumenter[0].dokument_id
+        journalpostId: this.props.journalpostid,
+        dokumentId:    this.props.punchState.journalpost!.dokumenter[0].dokumentId
     });
 
     private getPath = (step: PunchStep, values?: any) => getPath(this.props.paths, step, values);

@@ -12,9 +12,9 @@ export enum ApiPath {
     MAPPE_UPDATE            = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     MAPPE_SUBMIT            = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     FAGSAKER_FIND           = '/fagsak/{ident}?ytelse=pleiepenger-sykt-barn',
-    JOURNALPOST_GET         = '/journalpost/{journalpost_id}',
-    JOURNALPOST_OMFORDEL    = '/journalpost/{journalpost_id}/omfordel',
-    DOKUMENT                = '/journalpost/{journalpost_id}/dokument/{dokument_id}'
+    JOURNALPOST_GET         = '/journalpost/{journalpostid}',
+    JOURNALPOST_OMFORDEL    = '/journalpost/{journalpostId}/omfordel',
+    DOKUMENT                = '/journalpost/{journalpostId}/dokument/{dokumentId}'
 }
 
 export const URL_AUTH_CHECK = URL_BACKEND + '/me';

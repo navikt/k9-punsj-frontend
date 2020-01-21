@@ -35,7 +35,7 @@ export const omfordel = (journalpostid: string, sakstype: Sakstype) => {return (
     }
     post(
         ApiPath.JOURNALPOST_OMFORDEL,
-        {journalpost_id: journalpostid},
+        {journalpostId: journalpostid},
         undefined,
         {ytelse},
         response => {

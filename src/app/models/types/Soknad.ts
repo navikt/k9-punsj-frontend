@@ -95,7 +95,7 @@ class Arbeid implements Required<IArbeid> {
 }
 
 export interface ITilsynsordning {
-    iTilsynsordning?: JaNeiVetikke,
+    iTilsynsordning?: JaNeiVetikke;
     opphold?: Array<Periodeinfo<ITilsyn>>;
 }
 
