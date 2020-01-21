@@ -148,10 +148,10 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
                     key={mappeid}
                     onRequestClose={props.closeMappeAction}
                     contentLabel={mappeid}
-                    isOpen={!!chosenMappe && mappeid === chosenMappe.mappe_id}
+                    isOpen={!!chosenMappe && mappeid === chosenMappe.mappeId}
                 >
                     <div className="modal_content">
-                        {chosenMappe?.personer?.[ident!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personlig[ident!].soeknad!}/>}
+                        {chosenMappe?.personer?.[ident!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personer[ident!].soeknad!}/>}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>Velg denne</Knapp>
                             <Knapp className="knapp2" onClick={props.closeMappeAction}>Lukk</Knapp>
