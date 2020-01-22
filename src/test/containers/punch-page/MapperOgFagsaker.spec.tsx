@@ -5,10 +5,12 @@ import {
     MapperOgFagsakerComponent
 }                                                                  from 'app/containers/punch-page/MapperOgFagsaker';
 import {IJournalpost, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
+import intlHelper                                                  from 'app/utils/intlUtils';
 import {configure, shallow}                                        from 'enzyme';
 import Adapter                                                     from 'enzyme-adapter-react-16';
 import * as React                                                  from 'react';
-import {createIntl, WrappedComponentProps}                         from 'react-intl';
+import {createIntl, IntlShape, WrappedComponentProps}              from 'react-intl';
+import {mocked}                                                    from 'ts-jest/utils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -16,6 +18,7 @@ jest.mock('app/containers/punch-page/FagsakReadMode', () => ({FagsakReadMode: ()
 jest.mock('app/containers/punch-page/SoknadReadMode', () => ({SoknadReadMode: () => <></>}));
 jest.mock('app/utils/browserUtils', () => ({getHash: () => '#/hentsoknader/testident', setHash: jest.fn()}));
 jest.mock('app/utils/envUtils');
+jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
 configure({adapter: new Adapter()});
@@ -77,6 +80,8 @@ const setupMapperOgFagsaker = (
         journalpostid,
         ident
     };
+
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
 
     return shallow(
         <MapperOgFagsakerComponent

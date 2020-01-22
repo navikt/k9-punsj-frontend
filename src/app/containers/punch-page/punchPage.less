@@ -236,7 +236,12 @@
   margin-bottom: 1rem;
   border-top:    @read-modal-table-border;
 
-  > .row {
+  ul {
+    margin:               0;
+    padding-inline-start: 20px;
+  }
+
+  .row {
     padding:       1rem 0;
     border-bottom: @read-modal-table-border;
   }
@@ -244,11 +249,13 @@
   .col:first-child {
     padding-left:  0;
     padding-right: .5rem;
+    flex-grow:     1;
   }
 
-  .col:nth-child(2) {
+  .col:last-child {
     padding-left:  .5rem;
     padding-right: 0;
+    flex-grow:     2;
   }
 
   .periodeliste {

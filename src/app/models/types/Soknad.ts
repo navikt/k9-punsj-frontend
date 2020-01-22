@@ -1,6 +1,6 @@
 import {Arbeidstaker, IArbeidstaker}                             from 'app/models/types/Arbeidstaker';
 import {Frilanser, IFrilanser}                                   from 'app/models/types/Frilanser';
-import {IPeriode, Periode}                                       from 'app/models/types/Periode';
+import {Periode}                                                 from 'app/models/types/Periode';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {IntlShape}                                               from 'react-intl';
 import {JaNeiVetikke}                                            from '../enums';
@@ -73,6 +73,10 @@ export class Soknad implements Required<ISoknad> {
     generateTgStrings(intl: IntlShape): string[] {
         return this.arbeid.arbeidstaker.map(a => a.generateTgString(intl));
     }
+
+    getFnrOrFdato(): string {
+        return this.barn.getFnrOrFdato();
+    }
 }
 
 export interface IArbeid {
@@ -102,7 +106,7 @@ export interface ITilsynsordning {
 class Tilsynsordning implements Required<ITilsynsordning> {
 
     iTilsynsordning: JaNeiVetikke;
-    opphold: Array<Required<Periodeinfo<ITilsyn>>>;
+    opphold: Tilsyn[];
 
     constructor(tilsynsordning: ITilsynsordning) {
         this.iTilsynsordning = tilsynsordning.iTilsynsordning || JaNeiVetikke.NEI;
@@ -124,6 +128,10 @@ class Barn implements Required<IBarn> {
         this.norskIdent = barn.norskIdent || '';
         this.foedselsdato = barn.foedselsdato || '';
     }
+
+    getFnrOrFdato(): string {
+        return this.norskIdent || this.foedselsdato;
+    }
 }
 
 export interface ITilleggsinformasjon {
@@ -132,7 +140,7 @@ export interface ITilleggsinformasjon {
 
 class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>> {
 
-    periode: Required<IPeriode>;
+    periode: Periode;
     tilleggsinformasjon: string;
 
     constructor(periodeinfo: Periodeinfo<ITilleggsinformasjon>) {
@@ -151,7 +159,7 @@ export interface ITilsyn {
 
 class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
 
-    periode: Required<IPeriode>;
+    periode: Periode;
     mandag: string | null;
     tirsdag: string | null;
     onsdag: string | null;
@@ -165,5 +173,9 @@ class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
         this.onsdag = periodeinfo.onsdag || null;
         this.torsdag = periodeinfo.torsdag || null;
         this.fredag = periodeinfo.fredag || null;
+    }
+
+    description(intl: IntlShape): string {
+        return this.periode.description(intl);
     }
 }

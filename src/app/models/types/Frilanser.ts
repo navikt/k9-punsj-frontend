@@ -1,13 +1,23 @@
-import {IPeriode, Periode} from 'app/models/types/Periode';
-import {Periodeinfo}       from 'app/models/types/Periodeinfo';
+import {Periode}     from 'app/models/types/Periode';
+import {Periodeinfo} from 'app/models/types/Periodeinfo';
+import intlHelper    from 'app/utils/intlUtils';
+import {IntlShape}   from 'react-intl';
 
 export interface IFrilanser {}
 
 export class Frilanser implements Required<Periodeinfo<IFrilanser>> {
 
-    periode: Required<IPeriode>;
+    periode: Periode;
 
     constructor(frilanser: Periodeinfo<IFrilanser>) {
         this.periode = new Periode(frilanser.periode || {});
+    }
+
+    description(intl: IntlShape): string {
+        return intlHelper(
+            intl,
+            'mappe.lesemodus.arbeid.frilanser.beskrivelse',
+            {...this.periode.generateStringsForDescription(intl)}
+        );
     }
 }

@@ -1,7 +1,7 @@
-import FagsakReadMode                                                       from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode                                                       from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep, TimeFormat}                                              from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPeriodeinfo, IPunchState, Soknad} from 'app/models/types';
+import FagsakReadMode                                                 from 'app/containers/punch-page/FagsakReadMode';
+import SoknadReadMode                                                 from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep, TimeFormat}                                        from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Soknad} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -15,16 +15,17 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                                                           from 'app/state/actions';
-import {RootStateType}                                                      from 'app/state/RootState';
-import {datetime, getHash, setHash}                                         from 'app/utils';
-import {AlertStripeFeil, AlertStripeInfo}                     from 'nav-frontend-alertstriper';
-import {Knapp}                                                from 'nav-frontend-knapper';
-import ModalWrapper                                           from 'nav-frontend-modal';
-import NavFrontendSpinner                                     from 'nav-frontend-spinner';
-import * as React                                             from 'react';
-import {injectIntl, WrappedComponentProps}                    from 'react-intl';
-import {connect}                                              from 'react-redux';
+}                                          from 'app/state/actions';
+import {RootStateType}                     from 'app/state/RootState';
+import {datetime, getHash, setHash}        from 'app/utils';
+import intlHelper                          from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeInfo}  from 'nav-frontend-alertstriper';
+import {Knapp}                             from 'nav-frontend-knapper';
+import ModalWrapper                        from 'nav-frontend-modal';
+import NavFrontendSpinner                  from 'nav-frontend-spinner';
+import * as React                          from 'react';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {connect}                                                      from 'react-redux';
 
 export interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;
@@ -131,10 +132,12 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             const mappeid = mappe.mappeId as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
+            const fom = soknad.getFom();
+            const tom = soknad.getTom();
             const rowContent = [
-                !!soknad?.barn?.norskIdent ? soknad.barn.norskIdent : soknad?.barn?.foedselsdato,
-                soknad?.getFom(), // Viser tidligste startdato
-                soknad?.getTom() // Viser seneste sluttdato
+                !!soknad.barn.norskIdent ? soknad.barn.norskIdent : soknad.barn.foedselsdato,
+                !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
+                !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '' // Viser seneste sluttdato
             ];
             rows.push(
                 <tr key={mappeid} onClick={() => props.openMappeAction(mappe)}>
@@ -153,8 +156,8 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
                     <div className="modal_content">
                         {chosenMappe?.personer?.[ident!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personer[ident!].soeknad!}/>}
                         <div className="punch_mappemodal_knapperad">
-                            <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>Velg denne</Knapp>
-                            <Knapp className="knapp2" onClick={props.closeMappeAction}>Lukk</Knapp>
+                            <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>{intlHelper(intl, 'mappe.lesemodus.knapp.velg')}</Knapp>
+                            <Knapp className="knapp2" onClick={props.closeMappeAction}>{intlHelper(intl, 'mappe.lesemodus.knapp.lukk')}</Knapp>
                         </div>
                     </div>
                 </ModalWrapper>
@@ -162,13 +165,13 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         }
 
         return <>
-            <h2>Ufullstendige søknader</h2>
+            <h2>{intlHelper(intl, 'mapper.tabell.overskrift')}</h2>
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
                     <tr>
-                        <th>Barnets fødsels-/D-nr. eller fødselsdato</th>
-                        <th>Fra og med</th>
-                        <th>Til og med</th>
+                        <th>{intlHelper(intl, 'mapper.tabell.barnetsfnrellerfdato')}</th>
+                        <th>{intlHelper(intl, 'mapper.tabell.fraogmed')}</th>
+                        <th>{intlHelper(intl, 'mapper.tabell.tilogmed')}</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>
