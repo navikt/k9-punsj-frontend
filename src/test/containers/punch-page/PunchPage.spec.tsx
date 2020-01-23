@@ -19,6 +19,7 @@ jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 jest.mock('app/containers/punch-page/Fordeling', () => ({Fordeling: () => <></>}));
+jest.mock('app/containers/punch-page/Ident', () => ({Ident: () => <></>}));
 jest.mock('app/containers/punch-page/MapperOgFagsaker', () => ({MapperOgFagsaker: () => <></>}));
 jest.mock('app/containers/punch-page/PunchForm', () => ({PunchForm: () => <></>}));
 
@@ -91,19 +92,12 @@ const setupPunchPage = (
 describe('PunchPage', () => {
 
     it('Henter journalpost og viser dokument', () => {
-
         const journalpostid = '200';
         const getJournalpost = jest.fn();
         const dokumentid = '123';
         const ident = '54321098765';
-        const journalpost: IJournalpost = {
-            dokumenter: [{dokumentId: dokumentid}],
-            journalpostId: journalpostid,
-            norskIdent: ident
-        };
-
+        const journalpost: IJournalpost = {dokumenter: [{dokumentId: dokumentid}], journalpostId: journalpostid, norskIdent: ident};
         const punchPage = setupPunchPage(journalpost,'#/', {ident}, undefined, {getJournalpost});
-
         expect(getJournalpost).toHaveBeenCalledTimes(1);
         expect(getJournalpost).toHaveBeenCalledWith(journalpostid);
         expect(punchPage.find('iframe').prop('src')).toContain(journalpostid);
@@ -111,103 +105,59 @@ describe('PunchPage', () => {
     });
 
     it('Viser feilmelding hvis journalpost ikke finnes', () => {
-
         const journalpostRequestError: IError = {status: 404};
-
         const punchPage = setupPunchPage('200','#/', {journalpostRequestError});
-
         expect(punchPage.find('AlertStripeFeil')).toHaveLength(1);
         expect(punchPage.find('AlertStripeFeil').children().text()).toEqual('startPage.feil.journalpost');
     });
 
     it('Viser spinner mens journalpost lastes inn', () => {
-
         const punchPage = setupPunchPage('200','#/', {isJournalpostLoading: true});
-
         expect(punchPage.find('NavFrontendSpinner')).toHaveLength(1);
     });
 
     it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
-
         const journalpostid = '200';
         const ident = '54321098765';
-        const journalpost: IJournalpost = {
-            dokumenter: [],
-            journalpostId: journalpostid,
-            norskIdent: ident
-        };
-
+        const journalpost: IJournalpost = {dokumenter: [], journalpostId: journalpostid, norskIdent: ident};
         const punchPage = setupPunchPage(journalpost,'#/', {ident});
-
         expect(punchPage.find('AlertStripeFeil')).toHaveLength(1);
         expect(punchPage.find('AlertStripeFeil').children().text()).toEqual('startPage.feil.ingendokumenter');
     });
 
     it('Laster inn fordelingsskjema', () => {
-
         const journalpostid = '200';
-
-        const punchPage = setupPunchPage(journalpostid,'#/', {
-            step: 0,
-            ident: ''
-        });
-
+        const punchPage = setupPunchPage(journalpostid,'#/', {step: 0, ident: ''});
         expect(punchPage.find('Fordeling')).toHaveLength(1);
     });
 
-    it('Laster inn IdentPage', () => {
-
+    it('Laster inn Ident', () => {
         const journalpostid = '200';
-
-        const punchPage = setupPunchPage(journalpostid, '#/ident', {
-            step: 1,
-            ident: ''
-        });
-
-        expect(punchPage.find('Input')).toHaveLength(1);
-        expect(punchPage.find('IdentPage')).toHaveLength(1);
-        expect(mocked(intlHelper)).toHaveBeenCalledWith(undefined, 'skjema.ident');
+        const punchPage = setupPunchPage(journalpostid, '#/ident', {step: 1, ident: ''});
+        expect(punchPage.find('Ident')).toHaveLength(1);
     });
 
     it('Laster inn oversikt over ufullstendige søknader', () => {
-
         const journalpostid = '200';
         const ident = '12345678901';
-
-        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${ident}`, {
-            step: 2,
-            ident
-        });
-
+        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${ident}`, {step: 2, ident});
         expect(punchPage.find('MapperOgFagsaker')).toHaveLength(1);
         expect(punchPage.find('MapperOgFagsaker').prop('journalpostid')).toEqual(journalpostid);
     });
 
     it('Laster inn søknadsskjema', () => {
-
         const journalpostid = '200';
         const ident = '12345678901';
         const mappeid = 'abc';
-
-        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${mappeid}`, {
-            step: 3,
-            ident
-        }, mappeid);
-
+        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${mappeid}`, {step: 3, ident}, mappeid);
         expect(punchPage.find('PunchForm')).toHaveLength(1);
         expect(punchPage.find('PunchForm').prop('journalpostid')).toEqual(journalpostid);
         expect(punchPage.find('PunchForm').prop('id')).toEqual(mappeid);
     });
 
     it('Viser fullførtmelding', () => {
-
         const journalpostid = '200';
-
-        const punchPage = setupPunchPage(journalpostid, `#/fullfort`, {
-            step: 4,
-            ident: ''
-        });
-
+        const punchPage = setupPunchPage(journalpostid, `#/fullfort`, {step: 4, ident: ''});
         expect(punchPage.find('AlertStripeSuksess')).toHaveLength(1);
     });
 });
