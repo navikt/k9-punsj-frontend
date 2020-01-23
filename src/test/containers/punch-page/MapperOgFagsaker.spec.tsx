@@ -23,8 +23,18 @@ jest.mock('app/utils/pathUtils');
 
 configure({adapter: new Adapter()});
 
+const ident = '1234';
+
+const mappe: IMappe = {
+    mappeId: '567',
+    personer: {[ident]: {
+        soeknad: {},
+        innsendinger: [],
+        mangler: []
+    }}
+};
+
 const setupMapperOgFagsaker = (
-    ident: string,
     mapperOgFagsakerStatePartial?: Partial<IMapperOgFagsakerState>,
     mapperOgFagsakerDispatchPropsPartial?: Partial<IMapperOgFagsakerDispatchProps>
 ) => {
@@ -65,7 +75,7 @@ const setupMapperOgFagsaker = (
     };
 
     const mapperOgFagsakerState: IMapperOgFagsakerState = {
-        mapper: [],
+        mapper: [mappe],
         fagsaker: [],
         ...mapperOgFagsakerStatePartial
     };
@@ -96,40 +106,14 @@ const setupMapperOgFagsaker = (
 describe('MapperOgFagsaker', () => {
 
     it('Viser tabell med ufullstendige søknader', () => {
-
-        const ident = '1234';
-        const mappe: IMappe = {
-            mappeId: '567',
-            personer: {[ident]: {
-                soeknad: {},
-                innsendinger: [],
-                mangler: []
-            }}
-        };
-
-        const mapperOgFagsaker = setupMapperOgFagsaker(ident, {mapper: [mappe]});
-
+        const mapperOgFagsaker = setupMapperOgFagsaker();
         expect(mapperOgFagsaker.find('.punch_mappetabell')).toHaveLength(1);
     });
 
     it('Velger en ufullstendig søknad', () => {
-
-        const ident = '1234';
-        const mappe: IMappe = {
-            mappeId: '567',
-            personer: {[ident]: {
-                soeknad: {},
-                innsendinger: [],
-                mangler: []
-            }}
-        };
         const chooseMappeAction = jest.fn();
-
-        const mapperOgFagsaker = setupMapperOgFagsaker(ident, {mapper: [mappe]}, {chooseMappeAction});
-
-        mapperOgFagsaker.find('ModalWrapper .punch_mappemodal_knapperad .knapp1')
-                        .simulate('click');
-
+        const mapperOgFagsaker = setupMapperOgFagsaker({}, {chooseMappeAction});
+        mapperOgFagsaker.find('ModalWrapper .punch_mappemodal_knapperad .knapp1').simulate('click');
         expect(chooseMappeAction).toHaveBeenCalledTimes(1);
         expect(chooseMappeAction).toHaveBeenCalledWith(mappe);
     });

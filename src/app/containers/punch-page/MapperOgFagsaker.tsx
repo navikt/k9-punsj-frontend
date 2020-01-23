@@ -15,16 +15,16 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                          from 'app/state/actions';
-import {RootStateType}                     from 'app/state/RootState';
-import {datetime, getHash, setHash}        from 'app/utils';
-import intlHelper                          from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeInfo}  from 'nav-frontend-alertstriper';
-import {Knapp}                             from 'nav-frontend-knapper';
-import ModalWrapper                        from 'nav-frontend-modal';
-import NavFrontendSpinner                  from 'nav-frontend-spinner';
-import * as React                          from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+}                                                                     from 'app/state/actions';
+import {RootStateType}                                                from 'app/state/RootState';
+import {datetime, getHash, setHash}                                   from 'app/utils';
+import intlHelper                                                     from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeInfo}                             from 'nav-frontend-alertstriper';
+import {Knapp}                                                        from 'nav-frontend-knapper';
+import ModalWrapper                                                   from 'nav-frontend-modal';
+import NavFrontendSpinner                                             from 'nav-frontend-spinner';
+import * as React                                                     from 'react';
+import {injectIntl, WrappedComponentProps}                            from 'react-intl';
 import {connect}                                                      from 'react-redux';
 
 export interface IMapperOgFagsakerStateProps {
