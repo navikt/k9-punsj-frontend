@@ -1,6 +1,6 @@
 import {Arbeidstaker, IArbeidstaker}                             from 'app/models/types/Arbeidstaker';
 import {Frilanser, IFrilanser}                                   from 'app/models/types/Frilanser';
-import {Periode}                                                 from 'app/models/types/Periode';
+import {IPeriode, Periode}                                       from 'app/models/types/Periode';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {IntlShape}                                               from 'react-intl';
 import {JaNeiVetikke}                                            from '../enums';
@@ -11,6 +11,7 @@ export interface ISoknad {
     arbeid?: IArbeid;
     spraak?: Locale;
     barn?: IBarn;
+    periode?: IPeriode;
     beredskap?: Array<Periodeinfo<ITilleggsinformasjon>>;
     nattevaak?: Array<Periodeinfo<ITilleggsinformasjon>>;
     tilsynsordning?: ITilsynsordning;
@@ -21,6 +22,7 @@ export class Soknad implements Required<ISoknad> {
     arbeid: Arbeid;
     spraak: Locale;
     barn: Barn;
+    periode: Periode;
     beredskap: Tilleggsinformasjon[];
     nattevaak: Tilleggsinformasjon[];
     tilsynsordning: Tilsynsordning;
@@ -32,6 +34,7 @@ export class Soknad implements Required<ISoknad> {
         this.arbeid = new Arbeid(soknad.arbeid || {});
         this.spraak = soknad.spraak || 'nb';
         this.barn = new Barn(soknad.barn || {});
+        this.periode = new Periode(soknad.periode || {});
         this.beredskap = (soknad.beredskap || []).map(b => new Tilleggsinformasjon(b));
         this.nattevaak = (soknad.nattevaak || []).map(n => new Tilleggsinformasjon(n));
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});

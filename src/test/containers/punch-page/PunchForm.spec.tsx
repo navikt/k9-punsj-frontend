@@ -97,7 +97,7 @@ describe('PunchForm', () => {
 
     it('Viser skjema', () => {
         const punchForm = setupPunchForm();
-        expect(punchForm.find('h2')).toHaveLength(5);
+        expect(punchForm.find('h2')).toHaveLength(6);
     });
 
     it('Henter mappeinformasjon', () => {

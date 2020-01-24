@@ -1,8 +1,9 @@
-import {Periodepaneler}                                       from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                       from 'app/containers/punch-page/pfArbeidstaker';
-import {pfTilleggsinformasjon}                                from 'app/containers/punch-page/pfTilleggsinformasjon';
-import {pfTilsyn}                                             from 'app/containers/punch-page/pfTilsyn';
-import {JaNeiVetikke, PunchStep}                              from 'app/models/enums';
+import {PeriodInput}             from 'app/components/period-input/PeriodInput';
+import {Periodepaneler}          from 'app/containers/punch-page/Periodepaneler';
+import {pfArbeidstaker}          from 'app/containers/punch-page/pfArbeidstaker';
+import {pfTilleggsinformasjon}   from 'app/containers/punch-page/pfTilleggsinformasjon';
+import {pfTilsyn}                from 'app/containers/punch-page/pfTilsyn';
+import {JaNeiVetikke, PunchStep} from 'app/models/enums';
 import {
     IArbeidstaker,
     IFrilanser,
@@ -355,6 +356,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         feil={this.getErrorMessage('barn.foedselsdato')}
                     />
                 </SkjemaGruppe>
+                <h2>{intlHelper(intl, 'skjema.periode')}</h2>
+                <PeriodInput
+                    periode={soknad.periode}
+                    {...{intl}}
+                    className="soknadsperiode"
+                    onChange={periode => this.updateSoknadState({periode})}
+                    onBlur={periode => this.updateSoknad({periode})}
+                    errorMessage={this.getErrorMessage('periode')}
+                    errorMessageFom={this.getErrorMessage('periode.fraOgMed')}
+                    errorMessageTom={this.getErrorMessage('periode.tilOgMed')}
+                />
                 <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
                 {arbeidsperioder()}
                 <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>

@@ -1,5 +1,6 @@
 import {IPeriode}            from 'app/models/types';
 import intlHelper            from 'app/utils/intlUtils';
+import classNames            from 'classnames';
 import {Input, SkjemaGruppe} from 'nav-frontend-skjema';
 import {SkjemaelementFeil}   from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
 import * as React            from 'react';
@@ -21,11 +22,12 @@ export interface IPeriodInputProps {
     disabledTom?: boolean;
     inputIdFom?: string;
     inputIdTom?: string;
+    className?: string;
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
     const {periode, intl, onChange, onBlur, onFocus, disabled} = props;
-    return <SkjemaGruppe feil={props.errorMessage} className="period-input">
+    return <SkjemaGruppe feil={props.errorMessage} className={classNames('period-input', props.className)}>
         <Container>
             <Row>
                 <Col>

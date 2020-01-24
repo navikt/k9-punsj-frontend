@@ -110,4 +110,10 @@ describe('PerodInput', () => {
         expect(onBlur).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledWith({fraOgMed, tilOgMed: newTilOgMed});
     });
+
+    it('Skal ha egendefinert klassenavn', () => {
+        const className = 'test';
+        const periodInput = setupPeriodInput({className});
+        expect(periodInput.prop('className')).toContain(className);
+    });
 });

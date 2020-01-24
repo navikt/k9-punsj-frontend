@@ -74,6 +74,7 @@
   "skjema.spraak":                                                  "Søkerens språk:",
   "skjema.barn.ident":                                              "Barnets fødselsnummer/D-nummer:",
   "skjema.barn.foedselsdato":                                       "Barnets fødselsdato:",
+  "skjema.periode":                                                 "Søknadsperiode",
   "skjema.arbeid.overskrift":                                       "Arbeidsforhold",
   "skjema.arbeid.leggtilperiode":                                   "Legg til periode",
   "skjema.arbeid.arbeidstaker.overskrift":                          "Arbeidstaker",
