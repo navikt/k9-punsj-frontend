@@ -91,28 +91,28 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         }
 
         return <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="punch_form" border={true}>
-                    {punchState.step !== PunchStep.IDENT && this.identInput(punchState.step > PunchStep.IDENT)}
-                    {this.underFnr()}
-                </Panel>
+            <Panel className="punch_form" border={true}>
+                {punchState.step !== PunchStep.IDENT && this.identInput(punchState.step > PunchStep.IDENT)}
+                {this.underFnr()}
+            </Panel>
             <Resizable
                 className="punch_pdf_wrapper"
                 enable={{top: false, right: false, bottom: false, left: true, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false}}
                 defaultSize={{width: '50%', height: '100%'}}
                 minWidth={400}
             >
-            <Panel className="punch_pdf">
-                <iframe src={this.pdfUrl()}/>
-                <div className="knapperad">
-                    <Flatknapp onClick={this.togglePdf} className="knapp1">Skjul <HoyreChevron/></Flatknapp>
-                    <Flatknapp onClick={this.openPdfWindow} className="knapp2">Åpne i nytt vindu</Flatknapp>
-                </div>
-                <Flatknapp
-                    onClick={this.togglePdf}
-                    className="button_open"
-                ><VenstreChevron/></Flatknapp>
-            </Panel>
-                              </Resizable>
+                <Panel className="punch_pdf">
+                    <iframe src={this.pdfUrl()}/>
+                    <div className="knapperad">
+                        <Flatknapp onClick={this.togglePdf} className="knapp1">Skjul <HoyreChevron/></Flatknapp>
+                        <Flatknapp onClick={this.openPdfWindow} className="knapp2">Åpne i nytt vindu</Flatknapp>
+                    </div>
+                    <Flatknapp
+                        onClick={this.togglePdf}
+                        className="button_open"
+                    ><VenstreChevron/></Flatknapp>
+                </Panel>
+            </Resizable>
         </div>;
     }
 
