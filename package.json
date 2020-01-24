@@ -83,7 +83,7 @@
     "@types/intl":                              "^1.2.0",
     "@types/jest":                              "^24.9.0",
     "@types/lodash":                            "^4.14.149",
-    "@types/react":                             "^16.9.17",
+    "@types/react":                             "^16.9.19",
     "@types/react-aria-menubutton":             "^6.2.4",
     "@types/react-document-title":              "^2.0.3",
     "@types/react-dom":                         "^16.9.5",
