@@ -14,6 +14,7 @@ export enum ApiPath {
     FAGSAKER_FIND           = '/fagsak/{ident}?ytelse=pleiepenger-sykt-barn',
     JOURNALPOST_GET         = '/journalpost/{journalpostId}',
     JOURNALPOST_OMFORDEL    = '/journalpost/{journalpostId}/omfordel',
+    JOURNALPOST_USIGNERT    = '/journalpost/{journalpostId}/usignert',
     DOKUMENT                = '/journalpost/{journalpostId}/dokument/{dokumentId}'
 }
 

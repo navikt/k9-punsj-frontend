@@ -1,6 +1,7 @@
 import {ApiPath}                                       from 'app/apiConfig';
 import Page                                            from 'app/components/page/Page';
 import {Fordeling}                                     from 'app/containers/punch-page/Fordeling';
+import {Ident}                                         from 'app/containers/punch-page/Ident';
 import {MapperOgFagsaker}                              from 'app/containers/punch-page/MapperOgFagsaker';
 import {PunchForm}                                     from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
@@ -12,7 +13,7 @@ import {apiUrl, getPath, setHash}                      from 'app/utils';
 import intlHelper                                      from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
 import {HoyreChevron, VenstreChevron}                  from 'nav-frontend-chevron';
-import {Flatknapp, Knapp}                              from 'nav-frontend-knapper';
+import {Flatknapp}                                     from 'nav-frontend-knapper';
 import {Panel}                                         from 'nav-frontend-paneler';
 import {Input}                                         from 'nav-frontend-skjema';
 import NavFrontendSpinner                              from 'nav-frontend-spinner';
@@ -91,16 +92,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
 
         return <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="punch_form" border={true}>
-                    <div>
-                        {punchState.step > PunchStep.FORDELING && <Input
-                            label={intlHelper(intl, 'skjema.ident')}
-                            onChange={this.handleIdentBlur}
-                            onKeyPress={this.handleIdentKeyPress}
-                            value={punchState.ident}
-                            disabled={punchState.step > PunchStep.IDENT}
-                            className="bold-label"
-                        />}
-                    </div>
+                    {punchState.step !== PunchStep.IDENT && this.identInput(punchState.step > PunchStep.IDENT)}
                     {this.underFnr()}
                 </Panel>
             <Resizable
@@ -143,13 +135,27 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         this.togglePdf();
     };
 
+    private identInput = (disabled: boolean) => {
+        const {punchState, intl} = this.props;
+        return <div>
+            {punchState.step > PunchStep.FORDELING && <Input
+                label={intlHelper(intl, 'skjema.ident')}
+                onChange={this.handleIdentBlur}
+                onKeyPress={this.handleIdentKeyPress}
+                value={punchState.ident}
+                {...{disabled}}
+                className="bold-label"
+            />}
+        </div>;
+    };
+
     private underFnr() {
         const commonProps = {journalpostid: this.props.journalpostid, getPunchPath: this.getPath};
         switch (this.props.step) {
             case PunchStep.FORDELING:       return <Fordeling getPunchPath={this.getPath}/>;
-            case PunchStep.IDENT:           return <IdentPage findSoknader={this.findSoknader}
-                                                              setStepAction={this.props.setStepAction}
-                                                              getPunchPath={this.getPath}/>;
+            case PunchStep.IDENT:           return <Ident identInput={this.identInput}
+                                                          findSoknader={this.findSoknader}
+                                                          getPunchPath={this.getPath}/>;
             case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} ident={this.props.match.params.ident}/>;
             case PunchStep.FILL_FORM:       return <PunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:       return <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>;
@@ -177,19 +183,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction:  (step: number)  => dispatch(setStepAction(step)),
     getJournalpost: (id: string)    => dispatch(getJournalpost(id))
 });
-
-interface IIdentPageProps {
-    findSoknader:   ()                  => void;
-    setStepAction:  (step: number)      => void;
-    getPunchPath:   (step: PunchStep)   => string;
-}
-
-const IdentPage: React.FunctionComponent<IIdentPageProps> = (props: IIdentPageProps) => {
-    React.useEffect(() => {props.setStepAction(PunchStep.IDENT)}, []);
-    return <div className="knapperad">
-        <Knapp onClick={props.findSoknader} className="knapp knapp1">Åpne skjema</Knapp>
-        <Knapp onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">Tilbake</Knapp>
-    </div>;
-};
 
 export const PunchPage = withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponent)));

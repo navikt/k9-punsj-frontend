@@ -17,5 +17,6 @@ export * from './PunchFormState';
 export * from './PunchPath';
 export * from './PunchState';
 export * from './SelvstendigNaerinsdrivende';
+export * from './SignaturState';
 export * from './Soknad';
 export * from './Ukedag';
