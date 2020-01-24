@@ -1,4 +1,5 @@
 import {Arbeidstaker, IArbeidstaker}                             from 'app/models/types/Arbeidstaker';
+import {SoknadFelles, SoknadIndividuelt}                         from 'app/models/types/DobbelSoknad';
 import {Frilanser, IFrilanser}                                   from 'app/models/types/Frilanser';
 import {IPeriode, Periode}                                       from 'app/models/types/Periode';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
@@ -79,6 +80,16 @@ export class Soknad implements Required<ISoknad> {
 
     getFnrOrFdato(): string {
         return this.barn.getFnrOrFdato();
+    }
+
+    extractFelles(): SoknadFelles {
+        const {barn, periode, beredskap, nattevaak, tilsynsordning} = this; // tslint:disable-line:no-this-assignment
+        return {barn, periode, beredskap, nattevaak, tilsynsordning};
+    }
+
+    extractIndividuelt(): SoknadIndividuelt {
+        const {spraak, arbeid} = this; // tslint:disable-line:no-this-assignment
+        return {spraak, arbeid};
     }
 }
 

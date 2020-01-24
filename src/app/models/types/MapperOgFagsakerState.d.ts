@@ -1,6 +1,6 @@
 import {IFagsak} from 'app/models/types';
 import {IError}  from './Error';
-import {IMappe}  from './Mappe';
+import {IMappe}  from 'app/models/types/Mappe';
 
 export interface IMapperOgFagsakerState {
     mapper:                     IMappe[];
