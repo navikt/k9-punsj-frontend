@@ -137,16 +137,24 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
 
     private identInput = (disabled: boolean) => {
         const {punchState, intl} = this.props;
-        return <div>
-            {punchState.step > PunchStep.FORDELING && <Input
-                label={intlHelper(intl, 'skjema.ident')}
-                onChange={this.handleIdentBlur}
-                onKeyPress={this.handleIdentKeyPress}
+        return punchState.step > PunchStep.FORDELING ? <div>
+            <Input
+                label={intlHelper(intl, 'skjema.ident1')}
+                onChange={this.handleIdent1Blur}
+                onKeyPress={this.handleIdentKeyPress(1)}
                 value={punchState.ident1}
                 {...{disabled}}
                 className="bold-label"
-            />}
-        </div>;
+            />
+            <Input
+                label={intlHelper(intl, 'skjema.ident2')}
+                onChange={this.handleIdent2Blur}
+                onKeyPress={this.handleIdentKeyPress(2)}
+                value={!!punchState.ident2 ? punchState.ident2 : ''}
+                {...{disabled}}
+                className="bold-label"
+            />
+        </div> : <></>;
     };
 
     private underFnr() {
@@ -166,22 +174,24 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
         setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: this.props.punchState.ident1}));
     };
 
-    private handleIdentBlur = (event: any) => this.props.setIdentAction(event.target.value);
+    private handleIdent1Blur = (event: any) => this.props.setIdentAction(event.target.value, this.props.punchState.ident2);
+    private handleIdent2Blur = (event: any) => this.props.setIdentAction(this.props.punchState.ident1, event.target.value);
 
-    private handleIdentKeyPress = (event: any) => {
+    private handleIdentKeyPress(sokernr: 1 | 2) {return (event: any) => {
         if (event.key === 'Enter') {
-            this.handleIdentBlur(event);
+            sokernr === 1 ? this.handleIdent1Blur(event) : this.handleIdent2Blur(event);
             setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: event.target.value}));
         }
-    };
+    }}
 }
 
 const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState});
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident: string) => dispatch(setIdentAction(ident)),
-    setStepAction:  (step: number)  => dispatch(setStepAction(step)),
-    getJournalpost: (id: string)    => dispatch(getJournalpost(id))
+    setIdentAction: (ident1: string,
+                     ident2: string)    => dispatch(setIdentAction(ident1, ident2)),
+    setStepAction:  (step: number)      => dispatch(setStepAction(step)),
+    getJournalpost: (id: string)        => dispatch(getJournalpost(id))
 });
 
 export const PunchPage = withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponent)));
