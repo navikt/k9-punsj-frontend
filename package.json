@@ -35,7 +35,7 @@
     "nav-frontend-modal":           "^1.0.31",
     "nav-frontend-paneler":         "^1.0.21",
     "nav-frontend-skjema":          "^1.0.78",
-    "nav-frontend-spinner":         "^1.0.20",
+    "nav-frontend-spinner":         "^1.0.21",
     "nav-frontend-typografi":       "^2.0.17",
     "popper.js":                    "^1.16.1",
     "promise":                      "^8.0.2",
