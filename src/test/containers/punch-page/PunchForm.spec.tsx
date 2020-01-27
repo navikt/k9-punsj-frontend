@@ -21,20 +21,15 @@ jest.mock('app/utils/pathUtils');
 
 configure({adapter: new Adapter()});
 
-const testMappeid = 'abc';
-const testIdent = '01015012345';
-const testJournalpostid = '200';
+const mappeid = 'abc';
+const ident1 = '01015012345';
+const ident2 = null;
+const journalpostid = '200';
 
 const setupPunchForm = (
     punchFormStateSetup?: Partial<IPunchFormState>,
-    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>,
-    identSetup?: string,
-    mappeidSetup?: string
+    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>
 ) => {
-
-    const journalpostid = testJournalpostid;
-    const ident = identSetup || testIdent;
-    const mappeid = mappeidSetup || testMappeid;
 
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({locale: 'nb', defaultLocale: 'nb'})
@@ -60,7 +55,8 @@ const setupPunchForm = (
 
     const punchState: IPunchState = {
         journalpost,
-        ident,
+        ident1,
+        ident2,
         step: 3,
         isJournalpostLoading: false
     };
@@ -104,7 +100,7 @@ describe('PunchForm', () => {
         const getMappe = jest.fn();
         setupPunchForm({}, {getMappe});
         expect(getMappe).toHaveBeenCalledTimes(1);
-        expect(getMappe).toHaveBeenCalledWith(testMappeid);
+        expect(getMappe).toHaveBeenCalledWith(mappeid);
     });
 
     it('Viser spinner når mappen lastes inn', () => {
@@ -125,7 +121,7 @@ describe('PunchForm', () => {
         const findSpraakSelect = () => punchForm.find('Select[label="skjema.spraak"]');
         findSpraakSelect().simulate('change', {target: {value: newSprak}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, expect.objectContaining({spraak: newSprak}));
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, expect.objectContaining({spraak: newSprak}));
         expect(findSpraakSelect().prop('value')).toEqual(newSprak);
     });
 
@@ -135,7 +131,7 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({}, {updateSoknad});
         punchForm.find('#barn-ident').simulate('blur', {target: {value: newIdent}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, {barn: expect.objectContaining({norskIdent: newIdent})});
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, {barn: expect.objectContaining({norskIdent: newIdent})});
     });
 
     it('Oppdaterer felt når barnets fødselsnummer endres', () => {
@@ -151,7 +147,7 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({}, {updateSoknad});
         punchForm.find('#barn-fdato').simulate('blur', {target: {value: newFdato}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, {barn: expect.objectContaining({foedselsdato: newFdato})});
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, {barn: expect.objectContaining({foedselsdato: newFdato})});
     });
 
     it('Oppdaterer felt når barnets fødselsdato endres', () => {
@@ -239,7 +235,7 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({mappe}, {updateSoknad});
         punchForm.find('.tilsynsordning .horizontalRadios').simulate('change', {target: {value: newITilsynsordning}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(testMappeid, testIdent, testJournalpostid, expect.objectContaining({tilsynsordning: expect.objectContaining({iTilsynsordning: newITilsynsordning})}));
+        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, expect.objectContaining({tilsynsordning: expect.objectContaining({iTilsynsordning: newITilsynsordning})}));
         expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(newITilsynsordning);
     });
 
@@ -250,6 +246,6 @@ describe('PunchForm', () => {
                  .find('Knapp')
                  .simulate('click');
         expect(submitSoknad).toHaveBeenCalledTimes(1);
-        expect(submitSoknad).toHaveBeenCalledWith(testMappeid, testIdent);
+        expect(submitSoknad).toHaveBeenCalledWith(mappeid, ident1);
     });
 });

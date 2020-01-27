@@ -142,7 +142,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
                 label={intlHelper(intl, 'skjema.ident')}
                 onChange={this.handleIdentBlur}
                 onKeyPress={this.handleIdentKeyPress}
-                value={punchState.ident}
+                value={punchState.ident1}
                 {...{disabled}}
                 className="bold-label"
             />}
@@ -163,7 +163,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
     }
 
     private findSoknader = () => {
-        setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: this.props.punchState.ident}));
+        setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: this.props.punchState.ident1}));
     };
 
     private handleIdentBlur = (event: any) => this.props.setIdentAction(event.target.value);

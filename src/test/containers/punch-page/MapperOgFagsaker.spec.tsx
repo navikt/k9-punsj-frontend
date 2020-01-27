@@ -23,11 +23,12 @@ jest.mock('app/utils/pathUtils');
 
 configure({adapter: new Adapter()});
 
-const ident = '1234';
+const ident1 = '1234';
+const ident2 = null;
 
 const mappe: IMappe = {
     mappeId: '567',
-    personer: {[ident]: {
+    personer: {[ident1]: {
         soeknad: {},
         innsendinger: [],
         mangler: []
@@ -69,7 +70,8 @@ const setupMapperOgFagsaker = (
 
     const punchState: IPunchState = {
         journalpost,
-        ident,
+        ident1,
+        ident2,
         step: 2,
         isJournalpostLoading: false
     };
@@ -88,7 +90,7 @@ const setupMapperOgFagsaker = (
     const mapperOgFagsakerComponentProps: IMapperOgFagsakerComponentProps = {
         getPunchPath: () => '#/hentsoknader/testident',
         journalpostid,
-        ident
+        ident: ident1
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);

@@ -498,7 +498,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />}
                 </SkjemaGruppe>
                 <p className="sendknapp-wrapper"><Knapp
-                    onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident)}
+                    onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident1)}
                     disabled={!isSoknadComplete}
                 >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
             </SkjemaGruppe>
@@ -556,7 +556,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const {punchState, getPunchPath} = this.props;
         this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
-        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident}));
+        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident1}));
     };
 
     private handleStartButtonClick = () => {
@@ -614,7 +614,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState({showStatus: true});
         return this.props.updateSoknad(
             this.props.id,
-            this.props.punchState.ident,
+            this.props.punchState.ident1,
             this.props.journalpostid,
             {...this.getSoknadFromStore(), ...soknad}
         );

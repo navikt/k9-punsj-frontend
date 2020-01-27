@@ -107,7 +107,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         </>;
     }
 
-    const newMappe = () => props.createMappe(punchState.ident, props.journalpostid);
+    const newMappe = () => props.createMappe(punchState.ident1, props.journalpostid);
 
     if (!mapper.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
         newMappe();
