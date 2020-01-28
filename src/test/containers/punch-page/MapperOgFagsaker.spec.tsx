@@ -77,7 +77,8 @@ const setupMapperOgFagsaker = (
     };
 
     const mapperOgFagsakerState: IMapperOgFagsakerState = {
-        mapper: [mappe],
+        mapperSoker1: [mappe],
+        mapperSoker2: [],
         fagsaker: [],
         ...mapperOgFagsakerStatePartial
     };
@@ -90,7 +91,7 @@ const setupMapperOgFagsaker = (
     const mapperOgFagsakerComponentProps: IMapperOgFagsakerComponentProps = {
         getPunchPath: () => '#/hentsoknader/testident',
         journalpostid,
-        ident: ident1
+        ident1
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);

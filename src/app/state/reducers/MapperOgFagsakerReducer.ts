@@ -4,7 +4,8 @@ import {IMapperOgFagsakerActionTypes}          from 'app/state/actions';
 import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IMapperOgFagsakerState = {
-    mapper: [],
+    mapperSoker1: [],
+    mapperSoker2: [],
     fagsaker: [],
     isMapperLoading: false,
     isFagsakerLoading: false,
@@ -24,7 +25,7 @@ export function MapperOgFagsakerReducer(
         case MapperOgFagsakerActionKeys.MAPPER_SET:
             return {
                 ...mapperOgFagsakerState,
-                mapper: action.mapper,
+                mapperSoker1: action.mapper,
                 isMapperLoading: false,
                 mapperRequestError: undefined
             };
@@ -123,7 +124,7 @@ export function MapperOgFagsakerReducer(
                 isMappeCreated: true,
                 isAwaitingMappeCreation: false,
                 createMappeRequestError: undefined,
-                mapper: [],
+                mapperSoker1: [],
                 fagsaker: []
             };
 

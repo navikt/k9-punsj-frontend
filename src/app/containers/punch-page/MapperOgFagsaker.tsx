@@ -49,7 +49,7 @@ export interface IMapperOgFagsakerDispatchProps {
 
 export interface IMapperOgFagsakerComponentProps {
     journalpostid:  string;
-    ident:          string;
+    ident1:         string;
     getPunchPath:   (step: PunchStep, values?: any) => string;
 }
 
@@ -60,19 +60,19 @@ type IMapperOgFagsakerProps = WrappedComponentProps &
 
 export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
 
-    const {intl, punchState, mapperOgFagsakerState, getPunchPath, ident} = props;
-    const {mapper, fagsaker} = mapperOgFagsakerState;
+    const {intl, punchState, mapperOgFagsakerState, getPunchPath, ident1} = props;
+    const {mapperSoker1, fagsaker} = mapperOgFagsakerState;
 
     React.useEffect(() => {
-        if (!!ident && ident !== '') {
-            props.setIdentAction(ident);
-            props.findMapper(ident);
-            props.findFagsaker(ident);
+        if (!!ident1 && ident1 !== '') {
+            props.setIdentAction(ident1);
+            props.findMapper(ident1);
+            props.findFagsaker(ident1);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
             setHash(getPunchPath(PunchStep.IDENT));
         }
-    }, [ident]);
+    }, [ident1]);
 
     if (!!mapperOgFagsakerState.mappeid) {
         props.resetMappeidAction();
@@ -80,7 +80,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         return null;
     }
 
-    if (!ident || ident === '' || !getHash().match(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
+    if (!ident1 || ident1 === '' || !getHash().match(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
         return null;
     }
 
@@ -109,7 +109,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     const newMappe = () => props.createMappe(punchState.ident1, props.journalpostid);
 
-    if (!mapper.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
+    if (!mapperSoker1.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
         newMappe();
         return null;
     }
@@ -128,7 +128,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         const modaler = [];
         const rows = [];
 
-        for (const mappe of mapper) {
+        for (const mappe of mapperSoker1) {
             const mappeid = mappe.mappeId as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
@@ -154,7 +154,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
                     isOpen={!!chosenMappe && mappeid === chosenMappe.mappeId}
                 >
                     <div className="modal_content">
-                        {chosenMappe?.personer?.[ident!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personer[ident!].soeknad!}/>}
+                        {chosenMappe?.personer?.[ident1!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personer[ident1!].soeknad!}/>}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>{intlHelper(intl, 'mappe.lesemodus.knapp.velg')}</Knapp>
                             <Knapp className="knapp2" onClick={props.closeMappeAction}>{intlHelper(intl, 'mappe.lesemodus.knapp.lukk')}</Knapp>
@@ -240,7 +240,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     const newSoknadButton = <p><Knapp onClick={newMappe}>Opprett ny søknad</Knapp></p>;
 
-    if (mapper.length && !fagsaker.length) {
+    if (mapperSoker1.length && !fagsaker.length) {
         return <>
             {backButton}
             {technicalError}
@@ -250,7 +250,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         </>;
     }
 
-    if (fagsaker.length && !mapper.length) {
+    if (fagsaker.length && !mapperSoker1.length) {
         return <>
             {backButton}
             {technicalError}

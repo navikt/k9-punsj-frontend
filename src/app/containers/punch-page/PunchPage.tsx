@@ -164,7 +164,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
             case PunchStep.IDENT:           return <Ident identInput={this.identInput}
                                                           findSoknader={this.findSoknader}
                                                           getPunchPath={this.getPath}/>;
-            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} ident={this.props.match.params.ident}/>;
+            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} ident1={this.props.match.params.ident}/>;
             case PunchStep.FILL_FORM:       return <PunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:       return <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>;
         }

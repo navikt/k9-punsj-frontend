@@ -3,7 +3,8 @@ import {IError}  from './Error';
 import {IMappe}  from 'app/models/types/Mappe';
 
 export interface IMapperOgFagsakerState {
-    mapper:                     IMappe[];
+    mapperSoker1:               IMappe[];
+    mapperSoker2:               IMappe[];
     fagsaker:                   IFagsak[];
     isMapperLoading?:           boolean;
     isFagsakerLoading?:         boolean;
