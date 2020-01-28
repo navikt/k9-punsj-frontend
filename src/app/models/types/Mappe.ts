@@ -19,7 +19,7 @@ export class Mappe implements IMappe {
 
     mappeId: string;
     personer: {[key: string]: Personlig};
-    private idents: string[];
+    idents: string[];
 
     constructor(mappe: IMappe) {
         this.mappeId = mappe.mappeId || '';

@@ -123,7 +123,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (!!mappe && !this.state.isFetched) {
             const soknadFromStore = this.getSoknadFromStore();
             this.setState({soknad: {...this.state.soknad, ...soknadFromStore}, tgStrings: this.tgStrings(soknadFromStore), isFetched: true});
-            this.props.setIdentAction(Object.keys(mappe.personer)[0] || '');
+            this.props.setIdentAction(Object.keys(mappe.personer)[0] || '', Object.keys(mappe.personer)[1] || null);
         }
     }
 
@@ -554,9 +554,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private handleBackButtonClick = () => {
         const {punchState, getPunchPath} = this.props;
+        const {ident1, ident2} = punchState;
         this.props.resetMappeAction();
         this.props.undoChoiceOfMappeAction();
-        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: punchState.ident1}));
+        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: !!ident2 ? `${ident1}&${ident2}` : ident1}));
     };
 
     private handleStartButtonClick = () => {
@@ -647,7 +648,8 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     getMappe:                   (id: string)                => dispatch(getMappe(id)),
     resetMappeAction:           ()                          => dispatch(resetMappeAction()),
-    setIdentAction:             (ident: string)             => dispatch(setIdentAction(ident)),
+    setIdentAction:             (ident1: string,
+                                 ident2: string | null)     => dispatch(setIdentAction(ident1, ident2)),
     setStepAction:              (step: PunchStep)           => dispatch(setStepAction(step)),
     undoChoiceOfMappeAction:    ()                          => dispatch(undoChoiceOfMappeAction()),
     updateSoknad:               (mappeid: string,

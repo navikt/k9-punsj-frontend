@@ -1,7 +1,8 @@
-import FagsakReadMode                                                 from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode                                                 from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep, TimeFormat}                                        from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Soknad} from 'app/models/types';
+import FagsakReadMode                                                        from 'app/containers/punch-page/FagsakReadMode';
+import SoknadReadMode
+                                                                             from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep, TimeFormat}                                               from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Mappe, Soknad} from 'app/models/types';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -15,17 +16,17 @@ import {
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                                                     from 'app/state/actions';
-import {RootStateType}                                                from 'app/state/RootState';
-import {datetime, getHash, setHash}                                   from 'app/utils';
-import intlHelper                                                     from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeInfo}                             from 'nav-frontend-alertstriper';
-import {Knapp}                                                        from 'nav-frontend-knapper';
-import ModalWrapper                                                   from 'nav-frontend-modal';
-import NavFrontendSpinner                                             from 'nav-frontend-spinner';
-import * as React                                                     from 'react';
-import {injectIntl, WrappedComponentProps}                            from 'react-intl';
-import {connect}                                                      from 'react-redux';
+}                                                                            from 'app/state/actions';
+import {RootStateType}                                                       from 'app/state/RootState';
+import {datetime, getHash, setHash}                                          from 'app/utils';
+import intlHelper                                                            from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeInfo}                                    from 'nav-frontend-alertstriper';
+import {Knapp}                                                               from 'nav-frontend-knapper';
+import ModalWrapper                                                          from 'nav-frontend-modal';
+import NavFrontendSpinner                                                    from 'nav-frontend-spinner';
+import * as React                                                            from 'react';
+import {injectIntl, WrappedComponentProps}                                   from 'react-intl';
+import {connect}                                                             from 'react-redux';
 
 export interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;
@@ -50,6 +51,7 @@ export interface IMapperOgFagsakerDispatchProps {
 export interface IMapperOgFagsakerComponentProps {
     journalpostid:  string;
     ident1:         string;
+    ident2:         string | null;
     getPunchPath:   (step: PunchStep, values?: any) => string;
 }
 
@@ -60,19 +62,19 @@ type IMapperOgFagsakerProps = WrappedComponentProps &
 
 export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsakerProps> = (props: IMapperOgFagsakerProps) => {
 
-    const {intl, punchState, mapperOgFagsakerState, getPunchPath, ident1} = props;
-    const {mapperSoker1, fagsaker} = mapperOgFagsakerState;
+    const {intl, punchState, mapperOgFagsakerState, getPunchPath, ident1, ident2} = props;
+    const {mapper, fagsaker} = mapperOgFagsakerState;
 
     React.useEffect(() => {
         if (!!ident1 && ident1 !== '') {
-            props.setIdentAction(ident1);
-            props.findMapper(ident1);
+            props.setIdentAction(ident1, ident2);
+            props.findMapper(ident1, ident2);
             props.findFagsaker(ident1);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
             setHash(getPunchPath(PunchStep.IDENT));
         }
-    }, [ident1]);
+    }, [ident1, ident2]);
 
     if (!!mapperOgFagsakerState.mappeid) {
         props.resetMappeidAction();
@@ -107,9 +109,9 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         </>;
     }
 
-    const newMappe = () => props.createMappe(punchState.ident1, props.journalpostid);
+    const newMappe = () => props.createMappe(props.journalpostid, punchState.ident1, punchState.ident2);
 
-    if (!mapperSoker1.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
+    if (!mapper.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
         newMappe();
         return null;
     }
@@ -128,7 +130,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         const modaler = [];
         const rows = [];
 
-        for (const mappe of mapperSoker1) {
+        for (const mappe of mapper) {
             const mappeid = mappe.mappeId as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
             const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
@@ -240,7 +242,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
 
     const newSoknadButton = <p><Knapp onClick={newMappe}>Opprett ny søknad</Knapp></p>;
 
-    if (mapperSoker1.length && !fagsaker.length) {
+    if (mapper.length && !fagsaker.length) {
         return <>
             {backButton}
             {technicalError}
@@ -250,7 +252,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         </>;
     }
 
-    if (fagsaker.length && !mapperSoker1.length) {
+    if (fagsaker.length && !mapper.length) {
         return <>
             {backButton}
             {technicalError}
@@ -276,9 +278,11 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction:             (ident: string)         => dispatch(setIdentAction(ident)),
+    setIdentAction:             (ident1: string,
+                                 ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction:              (step: PunchStep)       => dispatch(setStepAction(step)),
-    findMapper:                 (ident: string)         => dispatch(findMapper(ident)),
+    findMapper:                 (ident1: string,
+                                 ident2: string | null) => dispatch(findMapper(ident1, ident2)),
     findFagsaker:               (ident: string)         => dispatch(findFagsaker(ident)),
     undoSearchForMapperAction:  ()                      => dispatch(undoSearchForMapperAction()),
     openMappeAction:            (mappe: IMappe)         => dispatch(openMappeAction(mappe)),
@@ -286,8 +290,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     openFagsakAction:           (fagsak: IFagsak)       => dispatch(openFagsakAction(fagsak)),
     closeFagsakAction:          ()                      => dispatch(closeFagsakAction()),
     chooseMappeAction:          (mappe: IMappe)         => dispatch(chooseMappeAction(mappe)),
-    createMappe:                (ident: string,
-                                 journalpostid: string) => dispatch(createMappe(ident, journalpostid)),
+    createMappe:                (journalpostid: string,
+                                 ident1: string,
+                                 ident2: string | null) => dispatch(createMappe(journalpostid, ident1, ident2)),
     resetMappeidAction:         ()                      => dispatch(resetMappeidAction())
 });
 

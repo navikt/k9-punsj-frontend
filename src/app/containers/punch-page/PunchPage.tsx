@@ -1,29 +1,30 @@
-import {ApiPath}                                       from 'app/apiConfig';
-import Page                                            from 'app/components/page/Page';
-import {Fordeling}                                     from 'app/containers/punch-page/Fordeling';
-import {Ident}                                         from 'app/containers/punch-page/Ident';
-import {MapperOgFagsaker}                              from 'app/containers/punch-page/MapperOgFagsaker';
-import {PunchForm}                                     from 'app/containers/punch-page/PunchForm';
+import {ApiPath}                                           from 'app/apiConfig';
+import Page                                                from 'app/components/page/Page';
+import {Fordeling}                                         from 'app/containers/punch-page/Fordeling';
+import {Ident}                                             from 'app/containers/punch-page/Ident';
+import {IMapperOgFagsakerComponentProps, MapperOgFagsaker} from 'app/containers/punch-page/MapperOgFagsaker';
+import {PunchForm}                                         from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
-import {PunchStep}                                     from 'app/models/enums';
-import {IPath, IPunchState}                            from 'app/models/types';
-import {getJournalpost, setIdentAction, setStepAction} from 'app/state/actions';
-import {RootStateType}                                 from 'app/state/RootState';
-import {apiUrl, getPath, setHash}                      from 'app/utils';
-import intlHelper                                      from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}                  from 'nav-frontend-chevron';
-import {Flatknapp}                                     from 'nav-frontend-knapper';
-import {Panel}                                         from 'nav-frontend-paneler';
-import {Input}                                         from 'nav-frontend-skjema';
-import NavFrontendSpinner                              from 'nav-frontend-spinner';
+import {PunchStep}                                         from 'app/models/enums';
+import {IPath, IPunchState}                                from 'app/models/types';
+import {IdentRules}                                        from 'app/rules';
+import {getJournalpost, setIdentAction, setStepAction}     from 'app/state/actions';
+import {RootStateType}                                     from 'app/state/RootState';
+import {apiUrl, getPath, setHash}                          from 'app/utils';
+import intlHelper                                          from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess}               from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}                      from 'nav-frontend-chevron';
+import {Flatknapp}                                         from 'nav-frontend-knapper';
+import {Panel}                                             from 'nav-frontend-paneler';
+import {Input}                                             from 'nav-frontend-skjema';
+import NavFrontendSpinner                                  from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import {Resizable}                                     from 're-resizable';
-import * as React                                      from 'react';
-import {Col, Container, Row}                           from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}             from 'react-intl';
-import {connect}                                       from 'react-redux';
-import {RouteComponentProps, withRouter}               from 'react-router';
+import {Resizable}                                         from 're-resizable';
+import * as React                                          from 'react';
+import {Col, Container, Row}                               from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}                 from 'react-intl';
+import {connect}                                           from 'react-redux';
+import {RouteComponentProps, withRouter}                   from 'react-router';
 
 export interface IPunchPageStateProps {
     punchState: IPunchState;
@@ -137,22 +138,28 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
 
     private identInput = (disabled: boolean) => {
         const {punchState, intl} = this.props;
+        const {ident1, ident2} = punchState;
+        const skalViseFeilmelding = (ident: string | null) =>  ident && ident.length && !disabled && !IdentRules.isIdentValid(ident);
         return punchState.step > PunchStep.FORDELING ? <div>
             <Input
                 label={intlHelper(intl, 'skjema.ident1')}
                 onChange={this.handleIdent1Blur}
                 onKeyPress={this.handleIdentKeyPress(1)}
-                value={punchState.ident1}
+                value={ident1}
                 {...{disabled}}
                 className="bold-label"
+                maxLength={11}
+                feil={skalViseFeilmelding(ident1) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigformat')} : undefined}
             />
             <Input
                 label={intlHelper(intl, 'skjema.ident2')}
                 onChange={this.handleIdent2Blur}
                 onKeyPress={this.handleIdentKeyPress(2)}
-                value={!!punchState.ident2 ? punchState.ident2 : ''}
+                value={!!ident2 ? ident2 : ''}
                 {...{disabled}}
                 className="bold-label"
+                maxLength={11}
+                feil={skalViseFeilmelding(ident2) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigformat')} : undefined}
             />
         </div> : <></>;
     };
@@ -164,14 +171,28 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
             case PunchStep.IDENT:           return <Ident identInput={this.identInput}
                                                           findSoknader={this.findSoknader}
                                                           getPunchPath={this.getPath}/>;
-            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} ident1={this.props.match.params.ident}/>;
+            case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} {...this.extractIdents()}/>;
             case PunchStep.FILL_FORM:       return <PunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:       return <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>;
         }
     }
 
+    private extractIdents(): Pick<IMapperOgFagsakerComponentProps, 'ident1' | 'ident2'> {
+        const {ident} = this.props.match.params;
+        return (/^\d+&\d+$/.test(ident))
+            ? {ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0]}
+            : {ident1: ident, ident2: null};
+    }
+
+    private redirectToNextStep(ident1: string, ident2: string | null) {
+        if (IdentRules.areIdentsValid(ident1, ident2)) {
+            const ident = ident1 && ident2 ? `${ident1}&${ident2}` : ident1;
+            setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident}));
+        }
+    }
+
     private findSoknader = () => {
-        setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: this.props.punchState.ident1}));
+        this.redirectToNextStep(this.props.punchState.ident1, this.props.punchState.ident2);
     };
 
     private handleIdent1Blur = (event: any) => this.props.setIdentAction(event.target.value, this.props.punchState.ident2);
@@ -179,8 +200,15 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
 
     private handleIdentKeyPress(sokernr: 1 | 2) {return (event: any) => {
         if (event.key === 'Enter') {
-            sokernr === 1 ? this.handleIdent1Blur(event) : this.handleIdent2Blur(event);
-            setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, {ident: event.target.value}));
+            let {ident1, ident2} = this.props.punchState;
+            if (sokernr === 1) {
+                this.handleIdent1Blur(event);
+                ident1 = event.target.value;
+            } else {
+                this.handleIdent2Blur(event);
+                ident2 = event.target.value;
+            }
+            this.redirectToNextStep(ident1, ident2);
         }
     }}
 }
@@ -189,9 +217,9 @@ const mapStateToProps = (state: RootStateType) => ({punchState: state.punchState
 
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string,
-                     ident2: string)    => dispatch(setIdentAction(ident1, ident2)),
-    setStepAction:  (step: number)      => dispatch(setStepAction(step)),
-    getJournalpost: (id: string)        => dispatch(getJournalpost(id))
+                     ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setStepAction:  (step: number)          => dispatch(setStepAction(step)),
+    getJournalpost: (id: string)            => dispatch(getJournalpost(id))
 });
 
 export const PunchPage = withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponent)));
