@@ -50,6 +50,7 @@
   "ident.feil.ugyldigformat":                                       "Identitetsnummeret må bestå av elleve sifre.",
   "arbeidsforhold.arbeidstaker":                                    "Arbeidstaker",
   "arbeidsforhold.annet":                                           "Annet",
+  "mapper.infoboks":                                                "Det finnes påbegynte søknader knyttet til {antallSokere, plural, one {identitetsnummeret} other {identitetsnumrene}}. Velg søknaden som hører til dokumentet eller opprett en ny.",
   "mapper.tabell.overskrift":                                       "Ufullstendige søknader",
   "mapper.tabell.barnetsfnrellerfdato":                             "Barnets fødsels-/D-nr. eller fødselsdato",
   "mapper.tabell.fraogmed":                                         "Fra og med",

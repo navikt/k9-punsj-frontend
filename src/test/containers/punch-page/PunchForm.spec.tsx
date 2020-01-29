@@ -44,6 +44,7 @@ const setupPunchForm = (
         submitSoknad: jest.fn(),
         undoChoiceOfMappeAction: jest.fn(),
         updateSoknad: jest.fn(),
+        updateSoknader: jest.fn(),
         ...punchFormDispatchPropsSetup
     };
 
@@ -126,12 +127,13 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer mappe når barnets fødselsnummer endres', () => {
-        const updateSoknad = jest.fn();
+        const updateSoknader = jest.fn();
         const newIdent = '01012012345';
-        const punchForm = setupPunchForm({}, {updateSoknad});
+        const punchForm = setupPunchForm({}, {updateSoknader});
         punchForm.find('#barn-ident').simulate('blur', {target: {value: newIdent}});
-        expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, {barn: expect.objectContaining({norskIdent: newIdent})});
+        expect(updateSoknader).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({barn: expect.objectContaining({norskIdent: newIdent})});
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, expectedUpdatedSoknad);
     });
 
     it('Oppdaterer felt når barnets fødselsnummer endres', () => {
@@ -142,12 +144,13 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer mappe når barnets fødselsdato endres', () => {
-        const updateSoknad = jest.fn();
+        const updateSoknader = jest.fn();
         const newFdato = '2020-01-01';
-        const punchForm = setupPunchForm({}, {updateSoknad});
+        const punchForm = setupPunchForm({}, {updateSoknader});
         punchForm.find('#barn-fdato').simulate('blur', {target: {value: newFdato}});
-        expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, {barn: expect.objectContaining({foedselsdato: newFdato})});
+        expect(updateSoknader).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({barn: expect.objectContaining({foedselsdato: newFdato})});
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, expectedUpdatedSoknad);
     });
 
     it('Oppdaterer felt når barnets fødselsdato endres', () => {
@@ -218,7 +221,7 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer mappe og felt når itilsynsordning endres', () => {
-        const updateSoknad = jest.fn();
+        const updateSoknader = jest.fn();
         const mappe: IMappe = {
             personer: {
                 '0101501234': {
@@ -232,10 +235,11 @@ describe('PunchForm', () => {
             }
         };
         const newITilsynsordning = JaNeiVetikke.JA;
-        const punchForm = setupPunchForm({mappe}, {updateSoknad});
+        const punchForm = setupPunchForm({mappe}, {updateSoknader});
         punchForm.find('.tilsynsordning .horizontalRadios').simulate('change', {target: {value: newITilsynsordning}});
-        expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, expect.objectContaining({tilsynsordning: expect.objectContaining({iTilsynsordning: newITilsynsordning})}));
+        expect(updateSoknader).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({tilsynsordning: expect.objectContaining({iTilsynsordning: newITilsynsordning})});
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, expectedUpdatedSoknad);
         expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(newITilsynsordning);
     });
 

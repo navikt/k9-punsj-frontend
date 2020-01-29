@@ -1,6 +1,6 @@
 import {ApiPath}                                from 'app/apiConfig';
 import {PunchFormActionKeys}                    from 'app/models/enums';
-import {IError, IMappe, ISoknad}                from 'app/models/types';
+import {IError, IMappe, ISoknad, ISoknadFelles} from 'app/models/types';
 import {IInputError}                            from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
 
@@ -12,12 +12,12 @@ interface ISetMappeAction               {type: PunchFormActionKeys.MAPPE_SET, ma
 interface IResetMappeAction             {type: PunchFormActionKeys.MAPPE_RESET}
 
 interface IUpdateSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST}
-interface IUpdateSoknadSuccessAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors?: IInputError[]}
+interface IUpdateSoknadSuccessAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors1?: IInputError[], errors2?: IInputError[]}
 interface IUpdateSoknadErrorAction      {type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error: IError}
 
 interface ISubmitSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST}
 interface ISubmitSoknadSuccessAction    {type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS}
-interface ISubmitSoknadUncompleteAction {type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors: IInputError[]}
+interface ISubmitSoknadUncompleteAction {type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors1: IInputError[], errors2?: IInputError[]}
 interface ISubmitSoknadErrorAction      {type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error: IError}
 
 type IMappeActionTypes = IGetMappeLoadingAction | IGetMappeErrorAction | ISetMappeAction | IResetMappeAction;
@@ -25,16 +25,16 @@ type ISoknadUpdateActionTypes = IUpdateSoknadRequestAction | IUpdateSoknadSucces
 type ISoknadSubmitActionTypes = ISubmitSoknadRequestAction | ISubmitSoknadSuccessAction | ISubmitSoknadUncompleteAction | ISubmitSoknadErrorAction;
 export type IPunchFormActionTypes = IResetPunchFormAction | IMappeActionTypes | ISoknadUpdateActionTypes | ISoknadSubmitActionTypes;
 
-export const resetPunchFormAction           = ():                       IResetPunchFormAction           => ({type: PunchFormActionKeys.RESET});
+export const resetPunchFormAction           = ():                                                   IResetPunchFormAction       => ({type: PunchFormActionKeys.RESET});
 
-export const getMappeLoadingAction          = ():                       IGetMappeLoadingAction          => ({type: PunchFormActionKeys.MAPPE_LOAD});
-export const getMappeErrorAction            = (error: IError):          IGetMappeErrorAction            => ({type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error});
-export const setMappeAction                 = (mappe: Partial<IMappe>): ISetMappeAction                 => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
-export const resetMappeAction               = ():                       IResetMappeAction               => ({type: PunchFormActionKeys.MAPPE_RESET});
+export const getMappeLoadingAction          = ():                                                   IGetMappeLoadingAction      => ({type: PunchFormActionKeys.MAPPE_LOAD});
+export const getMappeErrorAction            = (error: IError):                                      IGetMappeErrorAction        => ({type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error});
+export const setMappeAction                 = (mappe: Partial<IMappe>):                             ISetMappeAction             => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
+export const resetMappeAction               = ():                                                   IResetMappeAction           => ({type: PunchFormActionKeys.MAPPE_RESET});
 
-export const updateSoknadRequestAction      = ():                       IUpdateSoknadRequestAction      => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
-export const updateSoknadSuccessAction      = (errors?: IInputError[]): IUpdateSoknadSuccessAction      => ({type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors});
-export const updateSoknadErrorAction        = (error: IError):          IUpdateSoknadErrorAction        => ({type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error});
+export const updateSoknadRequestAction      = ():                                                   IUpdateSoknadRequestAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
+export const updateSoknadSuccessAction      = (errors1?: IInputError[], errors2?: IInputError[]):   IUpdateSoknadSuccessAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors1, errors2});
+export const updateSoknadErrorAction        = (error: IError):                                      IUpdateSoknadErrorAction    => ({type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error});
 
 export function getMappe(id: string) {return (dispatch: any) => {
     dispatch(getMappeLoadingAction());
@@ -56,7 +56,7 @@ export function updateSoknad(mappeid: string,
         personer: {
             [norskIdent]: {
                 journalpostId: journalpostid,
-                soeknad: soknad
+                soeknad: {...soknad, periode: undefined} // TODO: Implementere periode i backend
             }
         }
     };
@@ -80,10 +80,54 @@ export function updateSoknad(mappeid: string,
     });
 }}
 
-export const submitSoknadRequestAction      = ():                       ISubmitSoknadRequestAction      => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
-export const submitSoknadSuccessAction      = ():                       ISubmitSoknadSuccessAction      => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS});
-export const submitSoknadUncompleteAction   = (errors: IInputError[]):  ISubmitSoknadUncompleteAction   => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors});
-export const submitSoknadErrorAction        = (error: IError):          ISubmitSoknadErrorAction        => ({type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error});
+export function updateSoknader(mappeid: string,
+                               norskIdent1: string,
+                               norskIdent2: string | null,
+                               journalpostid: string,
+                               soknad1: Partial<ISoknad>,
+                               soknad2: Partial<ISoknad> | null) {return (dispatch: any) => {
+
+    if (!norskIdent2 || !soknad2) {
+        return dispatch(updateSoknad(mappeid, norskIdent1, journalpostid, soknad1));
+    }
+
+    dispatch(updateSoknadRequestAction());
+    const request = {
+        personer: {
+            [norskIdent1]: {
+                journalpostId: journalpostid,
+                soeknad: {...soknad1, periode: undefined} // TODO: Implementere periode i backend
+            },
+            [norskIdent2]: {
+                journalpostId: journalpostid,
+                soeknad: {...soknad2, periode: undefined} // TODO: Implementere periode i backend
+            }
+        }
+    };
+    return put(ApiPath.MAPPE_UPDATE, {id: mappeid}, request, response => {
+        switch (response.status) {
+            case 200:
+                return response.json()
+                               .then(mappe => {
+                                   dispatch(setMappeAction(mappe));
+                                   dispatch(updateSoknadSuccessAction());
+                               });
+            case 400:
+                return response.json()
+                               .then(mappe => {
+                                   dispatch(setMappeAction(mappe));
+                                   dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler, mappe.personer?.[norskIdent2]?.mangler));
+                               });
+            default:
+                return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
+        }
+    });
+}}
+
+export const submitSoknadRequestAction      = ():                                                   ISubmitSoknadRequestAction      => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
+export const submitSoknadSuccessAction      = ():                                                   ISubmitSoknadSuccessAction      => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS});
+export const submitSoknadUncompleteAction   = (errors1: IInputError[], errors2?: IInputError[]):    ISubmitSoknadUncompleteAction   => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors1, errors2});
+export const submitSoknadErrorAction        = (error: IError):                                      ISubmitSoknadErrorAction        => ({type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error});
 
 export function submitSoknad(mappeid: string, ident: string) {return (dispatch: any) => {
     dispatch(submitSoknadRequestAction());

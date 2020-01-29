@@ -118,6 +118,6 @@ describe('MapperOgFagsaker', () => {
         const mapperOgFagsaker = setupMapperOgFagsaker({}, {chooseMappeAction});
         mapperOgFagsaker.find('ModalWrapper .punch_mappemodal_knapperad .knapp1').simulate('click');
         expect(chooseMappeAction).toHaveBeenCalledTimes(1);
-        expect(chooseMappeAction).toHaveBeenCalledWith(mappe);
+        expect(chooseMappeAction).toHaveBeenCalledWith(expect.objectContaining({mappeId: mappe.mappeId}));
     });
 });

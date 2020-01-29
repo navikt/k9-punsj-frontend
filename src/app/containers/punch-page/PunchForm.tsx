@@ -1,23 +1,30 @@
-import {PeriodInput}             from 'app/components/period-input/PeriodInput';
-import {Periodepaneler}          from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}          from 'app/containers/punch-page/pfArbeidstaker';
-import {pfTilleggsinformasjon}   from 'app/containers/punch-page/pfTilleggsinformasjon';
-import {pfTilsyn}                from 'app/containers/punch-page/pfTilsyn';
-import {JaNeiVetikke, PunchStep} from 'app/models/enums';
+import {PeriodInput}                                          from 'app/components/period-input/PeriodInput';
+import {Periodepaneler}                                       from 'app/containers/punch-page/Periodepaneler';
+import {pfArbeidstaker}                                       from 'app/containers/punch-page/pfArbeidstaker';
+import {pfTilleggsinformasjon}                                from 'app/containers/punch-page/pfTilleggsinformasjon';
+import {pfTilsyn}                                             from 'app/containers/punch-page/pfTilsyn';
+import {JaNeiVetikke, PunchStep}                              from 'app/models/enums';
 import {
-    IArbeidstaker,
+    Arbeidstaker,
+    DobbelSoknad,
+    IDobbelSoknad,
     IFrilanser,
     IInputError,
     IPunchFormState,
     IPunchState,
     ISelvstendigNaerinsdrivende,
     ISoknad,
+    ISoknadFelles,
+    ISoknadIndividuelt,
     ITilleggsinformasjon,
     ITilsyn,
     ITilsynsordning,
+    Mappe,
     Periodeinfo,
-    Soknad
-}                                                             from 'app/models/types';
+    SoknadFelles,
+    SoknadIndividuelt, Tilleggsinformasjon,
+    Tilsyn
+} from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -26,12 +33,12 @@ import {
     setStepAction,
     submitSoknad,
     undoChoiceOfMappeAction,
-    updateSoknad
+    updateSoknad,
+    updateSoknader
 }                                                             from 'app/state/actions';
 import {RootStateType}                                        from 'app/state/RootState';
 import {setHash}                                              from 'app/utils';
 import intlHelper                                             from 'app/utils/intlUtils';
-import _                                                      from 'lodash';
 import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
 import {Knapp}                                                from 'nav-frontend-knapper';
@@ -60,15 +67,17 @@ export interface IPunchFormDispatchProps {
     setStepAction:              typeof setStepAction;
     undoChoiceOfMappeAction:    typeof undoChoiceOfMappeAction;
     updateSoknad:               typeof updateSoknad;
+    updateSoknader:             typeof updateSoknader;
     submitSoknad:               typeof submitSoknad;
     resetPunchFormAction:       typeof resetPunchFormAction;
 }
 
 export interface IPunchFormComponentState {
-    soknad:             ISoknad;
+    dobbelSoknad:       IDobbelSoknad;
     isFetched:          boolean;
     showStatus:         boolean;
-    tgStrings:          string[];
+    tgStrings1:         string[];
+    tgStrings2:         string[];
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -79,27 +88,24 @@ type IPunchFormProps = IPunchFormComponentProps &
 export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
 
     state: IPunchFormComponentState = {
-        soknad: {
-            arbeid: {
-                arbeidstaker: [],
-                selvstendigNaeringsdrivende: [],
-                frilanser: []
+        dobbelSoknad: {
+            felles: {
+                barn: {},
+                periode: {},
+                beredskap: [],
+                nattevaak: [],
+                tilsynsordning: {}
             },
-            beredskap: [],
-            nattevaak: [],
-            tilsynsordning: {
-                iTilsynsordning: JaNeiVetikke.NEI,
-                opphold: []
+            soker1: {
+                spraak: 'nb',
+                arbeid: {}
             },
-            spraak: 'nb',
-            barn: {
-                norskIdent: '',
-                foedselsdato: ''
-            }
+            soker2: null
         },
         isFetched: false,
         showStatus: false,
-        tgStrings: [] // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
+        tgStrings1: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
+        tgStrings2: []
     };
 
     private initialTilsyn: Periodeinfo<ITilsyn> = {
@@ -121,8 +127,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormComponentState>, snapshot?: any): void {
         const {mappe} = this.props.punchFormState;
         if (!!mappe && !this.state.isFetched) {
-            const soknadFromStore = this.getSoknadFromStore();
-            this.setState({soknad: {...this.state.soknad, ...soknadFromStore}, tgStrings: this.tgStrings(soknadFromStore), isFetched: true});
+            const dobbelSoknadFromStore = this.getDobbelSoknadFromStore();
+            this.setState({
+                dobbelSoknad: dobbelSoknadFromStore,
+                tgStrings1: this.tgStrings(dobbelSoknadFromStore.soker1),
+                tgStrings2: this.tgStrings(dobbelSoknadFromStore.soker2),
+                isFetched: true
+            });
             this.props.setIdentAction(Object.keys(mappe.personer)[0] || '', Object.keys(mappe.personer)[1] || null);
         }
     }
@@ -134,7 +145,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     render() {
 
         const {intl, punchFormState} = this.props;
-        const soknad = new Soknad(this.state.soknad);
+        const soknad = new DobbelSoknad(
+            new SoknadFelles(this.state.dobbelSoknad.felles),
+            new SoknadIndividuelt(this.state.dobbelSoknad.soker1),
+            !!this.state.dobbelSoknad.soker2 ? new SoknadIndividuelt(this.state.dobbelSoknad.soker2) : undefined
+        );
+        const soknad1 = soknad.soknad1();
+        const soknad2 = soknad.soknad2();
+        const {felles, soker1, soker2} = soknad;
         const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
         if (punchFormState.isComplete) {
@@ -157,47 +175,47 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
-        const initialArbeidstaker: Periodeinfo<IArbeidstaker> = {
+        const initialArbeidstaker = new Arbeidstaker({
             periode: {fraOgMed: '', tilOgMed: ''},
             skalJobbeProsent: 100.0,
             organisasjonsnummer: '',
             norskIdent: null
-        };
+        });
 
         const initialSelvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende> = {periode: {fraOgMed: '', tilOgMed: ''}};
         const initialFrilanser: Periodeinfo<IFrilanser> = {periode: {fraOgMed: '', tilOgMed: ''}};
 
-        const initialTilsyn: Periodeinfo<ITilsyn> = {
+        const initialTilsyn = new Tilsyn({
             periode: {fraOgMed: '', tilOgMed: ''},
             mandag: null,
             tirsdag: null,
             onsdag: null,
             torsdag: null,
             fredag: null
-        };
+        });
 
-        const initialBeredskap: Periodeinfo<ITilleggsinformasjon> = {
+        const initialBeredskap = new Tilleggsinformasjon({
             periode: {fraOgMed: '', tilOgMed: ''},
             tilleggsinformasjon: ''
-        };
+        });
 
-        const initialNattevaak: Periodeinfo<ITilleggsinformasjon> = {
+        const initialNattevaak = new Tilleggsinformasjon({
             periode: {fraOgMed: '', tilOgMed: ''},
             tilleggsinformasjon: ''
-        };
+        });
 
-        const updateTgStrings = () => this.setState({tgStrings: this.tgStrings(soknad)});
+        const updateTgStrings = () => this.setState({tgStrings1: this.tgStrings(soker1)});
 
-        const {arbeid} = soknad;
+        const {arbeid} = soker1;
 
         const arbeidstakerperioder = (harOverskrift?: boolean) => <Periodepaneler
             intl={intl}
             periods={arbeid.arbeidstaker}
-            component={pfArbeidstaker(this.state, tgStrings => this.setState({tgStrings}), this.tgStrings)}
+            component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker1))}
             panelid={i => `arbeidstakerpanel_${i}`}
             initialPeriodeinfo={initialArbeidstaker}
-            editSoknad={arbeidstaker => this.updateSoknad({arbeid: {...soknad.arbeid, arbeidstaker}})}
-            editSoknadState={(arbeidstaker, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, arbeidstaker}}, showStatus)}
+            editSoknad={arbeidstaker => this.updateSoknadIndividuelt({arbeid: {...arbeid, arbeidstaker}}, 1)}
+            editSoknadState={(arbeidstaker, showStatus) => this.updateIndividuellSoknadState({arbeid: {...arbeid, arbeidstaker}}, 1, showStatus)}
             textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.arbeidstaker.leggtilperiode'}
             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
             panelClassName="arbeidstakerpanel"
@@ -209,11 +227,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const selvstendigperioder = (harOverskrift?: boolean) => <Periodepaneler
             intl={intl}
-            periods={soknad.arbeid.selvstendigNaeringsdrivende}
+            periods={arbeid.selvstendigNaeringsdrivende}
             panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
             initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-            editSoknad={selvstendigNaeringsdrivende => this.updateSoknad({arbeid: {...soknad.arbeid, selvstendigNaeringsdrivende}})}
-            editSoknadState={(selvstendigNaeringsdrivende, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, selvstendigNaeringsdrivende}}, showStatus)}
+            editSoknad={selvstendigNaeringsdrivende => this.updateSoknadIndividuelt({arbeid: {...arbeid, selvstendigNaeringsdrivende}}, 1)}
+            editSoknadState={(selvstendigNaeringsdrivende, showStatus) => this.updateIndividuellSoknadState({arbeid: {...arbeid, selvstendigNaeringsdrivende}}, 1, showStatus)}
             textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'}
             textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
             panelClassName="selvstendignaeringsdrivendepanel"
@@ -223,11 +241,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const frilanserperioder = (harOverskrift?: boolean) => <Periodepaneler
             intl={intl}
-            periods={soknad.arbeid.frilanser}
+            periods={arbeid.frilanser}
             panelid={i => `frilanserpanel_${i}`}
             initialPeriodeinfo={initialFrilanser}
-            editSoknad={frilanser => this.updateSoknad({arbeid: {...soknad.arbeid, frilanser}})}
-            editSoknadState={(frilanser, showStatus) => this.updateSoknadState({arbeid: {...soknad.arbeid, frilanser}}, showStatus)}
+            editSoknad={frilanser => this.updateSoknadIndividuelt({arbeid: {...arbeid, frilanser}}, 1)}
+            editSoknadState={(frilanser, showStatus) => this.updateIndividuellSoknadState({arbeid: {...arbeid, frilanser}}, 1, showStatus)}
             textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.frilanser.leggtilperiode'}
             textFjern="skjema.arbeid.frilanser.fjernperiode"
             panelClassName="frilanserpanel"
@@ -235,7 +253,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             feilkodeprefiks={'arbeid.frilanser'}
         />;
 
-        const antallArbeidsperioder = soknad.getNumberOfWorkPeriods();
+        const antallArbeidsperioder = soknad1.getNumberOfWorkPeriods();
 
         const arbeidsperioder = () => {
             if (!antallArbeidsperioder) {
@@ -288,12 +306,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const beredskapperioder = <Periodepaneler
             intl={intl}
-            periods={soknad.beredskap}
+            periods={felles.beredskap}
             component={pfTilleggsinformasjon('beredskap')}
             panelid={i => `beredskapspanel_${i}`}
             initialPeriodeinfo={initialBeredskap}
-            editSoknad={beredskap => this.updateSoknad({beredskap})}
-            editSoknadState={(beredskap, showStatus) => this.updateSoknadState({beredskap}, showStatus)}
+            editSoknad={beredskap => this.updateSoknadFelles({beredskap})}
+            editSoknadState={(beredskap, showStatus) => this.updateFellesSoknadState({beredskap}, showStatus)}
             textLeggTil="skjema.beredskap.leggtilperiode"
             textFjern="skjema.beredskap.fjernperiode"
             panelClassName="beredskapspanel"
@@ -303,12 +321,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const nattevaakperioder = <Periodepaneler
             intl={intl}
-            periods={soknad.nattevaak}
+            periods={felles.nattevaak}
             component={pfTilleggsinformasjon('nattevaak')}
             panelid={i => `nattevaakspanel_${i}`}
             initialPeriodeinfo={initialNattevaak}
-            editSoknad={nattevaak => this.updateSoknad({nattevaak})}
-            editSoknadState={(nattevaak, showStatus) => this.updateSoknadState({nattevaak}, showStatus)}
+            editSoknad={nattevaak => this.updateSoknadFelles({nattevaak})}
+            editSoknadState={(nattevaak, showStatus) => this.updateFellesSoknadState({nattevaak}, showStatus)}
             textLeggTil="skjema.nattevaak.leggtilperiode"
             textFjern="skjema.nattevaak.fjernperiode"
             panelClassName="nattevaakspanel"
@@ -330,8 +348,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     name="sprak"
                     label={intlHelper(intl, 'skjema.spraak')}
                     className="bold-label"
-                    value={soknad.spraak}
-                    {...this.onChangeOnlyUpdate(event => ({spraak: event.target.value}))}
+                    value={soker1.spraak}
+                    {...this.onChangeOnlyUpdateIndividuelt(event => ({spraak: event.target.value}))}
                     feil={this.getErrorMessage('spraak')}
                 >
                     <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
@@ -342,8 +360,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         id="barn-ident"
                         label={intlHelper(intl, 'skjema.barn.ident')}
                         className="bold-label"
-                        value={_.get(soknad, 'barn.norskIdent', '')}
-                        {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, norskIdent: event.target.value}}))}
+                        value={felles.barn.norskIdent}
+                        {...this.changeAndBlurUpdatesFelles(event => ({barn: {...felles.barn.values(), norskIdent: event.target.value}}))}
                         feil={this.getErrorMessage('barn.norskIdent')}
                     />
                     <Input
@@ -351,18 +369,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         type="date"
                         label={intlHelper(intl, 'skjema.barn.foedselsdato')}
                         className="bold-label"
-                        value={_.get(soknad, 'barn.foedselsdato', '')}
-                        {...this.changeAndBlurUpdates(event => ({barn: {...soknad.barn, foedselsdato: event.target.value}}))}
+                        value={felles.barn.foedselsdato}
+                        {...this.changeAndBlurUpdatesFelles(event => ({barn: {...felles.barn.values(), foedselsdato: event.target.value}}))}
                         feil={this.getErrorMessage('barn.foedselsdato')}
                     />
                 </SkjemaGruppe>
                 <h2>{intlHelper(intl, 'skjema.periode')}</h2>
                 <PeriodInput
-                    periode={soknad.periode}
+                    periode={felles.periode}
                     {...{intl}}
                     className="soknadsperiode"
-                    onChange={periode => this.updateSoknadState({periode})}
-                    onBlur={periode => this.updateSoknad({periode})}
+                    onChange={periode => this.updateFellesSoknadState({periode})}
+                    onBlur={periode => this.updateSoknadFelles({periode})}
                     errorMessage={this.getErrorMessage('periode')}
                     errorMessageFom={this.getErrorMessage('periode.fraOgMed')}
                     errorMessageTom={this.getErrorMessage('periode.tilOgMed')}
@@ -478,17 +496,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             name="tilsynjaneivetikke"
                             legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
                             onChange={event => this.updateTilsynsordning((event.target as HTMLInputElement).value as JaNeiVetikke)}
-                            checked={soknad.tilsynsordning.iTilsynsordning}
+                            checked={felles.tilsynsordning.iTilsynsordning}
                         />
                     </SkjemaGruppe>
-                    {soknad.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
+                    {felles.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
                         intl={intl}
-                        periods={soknad.tilsynsordning.opphold!}
+                        periods={felles.tilsynsordning.opphold!}
                         component={pfTilsyn}
                         panelid={i => `tilsynpanel_${i}`}
                         initialPeriodeinfo={initialTilsyn}
-                        editSoknad={opphold => this.updateSoknad({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}})}
-                        editSoknadState={(opphold, showStatus) => this.updateSoknadState({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}}, showStatus)}
+                        editSoknad={opphold => this.updateSoknadFelles({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}})}
+                        editSoknadState={(opphold, showStatus) => this.updateFellesSoknadState({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}}, showStatus)}
                         textLeggTil="skjema.tilsyn.leggtilperiode"
                         textFjern="skjema.tilsyn.fjernperiode"
                         panelClassName="tilsynpanel"
@@ -505,19 +523,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </>);
     }
 
-    private tgStrings = (iSoknad?: ISoknad) => {
+    private tgStrings = (soknad: SoknadIndividuelt | null) => {
         // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
-        const soknad = new Soknad(iSoknad || this.state.soknad);
-        return soknad.generateTgStrings(this.props.intl);
+        return soknad ? soknad.arbeid.generateTgStrings(this.props.intl) : [];
     };
 
     private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
-        const tilsynsordning: ITilsynsordning = {...this.state.soknad.tilsynsordning, iTilsynsordning: jaNeiVetikke};
+        const tilsynsordning: ITilsynsordning = {...this.state.dobbelSoknad.felles.tilsynsordning, iTilsynsordning: jaNeiVetikke};
         if (jaNeiVetikke === JaNeiVetikke.JA && tilsynsordning.opphold!.length === 0) {
             tilsynsordning.opphold!.push(this.initialTilsyn);
         }
-        this.updateSoknadState({tilsynsordning}, true);
-        this.updateSoknad({tilsynsordning});
+        this.updateFellesSoknadState({tilsynsordning}, true);
+        this.updateSoknadFelles({tilsynsordning});
     }
 
     private backButton() {
@@ -526,9 +543,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         </Knapp></p>;
     }
 
-    private getSoknadFromStore = () => {
-        const personlig = this.props.punchFormState.mappe?.personer;
-        return personlig?.[Object.keys(personlig)[0]]?.soeknad;
+    private getDobbelSoknadFromStore = () => {
+        const mappe = new Mappe(this.props.punchFormState.mappe || {});
+        return mappe.genererDobbelSoknad();
     };
 
     private getManglerFromStore = () => {
@@ -548,8 +565,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         )} : undefined;
     };
 
-    private updateSoknadState(soknad: Partial<ISoknad>, showStatus?: boolean) {
-        this.setState({soknad: {...this.state.soknad, ...soknad}, showStatus: !!showStatus});
+    private updateFellesSoknadState(fellesSoknad: Partial<ISoknadFelles>, showStatus?: boolean) {
+        this.setState({dobbelSoknad: {
+            ...this.state.dobbelSoknad,
+            felles: {...this.state.dobbelSoknad.felles, ...fellesSoknad}
+        }, showStatus: !!showStatus});
+    }
+
+    private updateIndividuellSoknadState(individuellSoknad: Partial<ISoknadIndividuelt>, nr: 1 | 2, showStatus?: boolean) {
+        this.setState({dobbelSoknad: {
+            ...this.state.dobbelSoknad,
+            [`soker${nr}`]: {...this.state.dobbelSoknad[`soker${nr}`], ...individuellSoknad}
+        }, showStatus: !!showStatus});
     }
 
     private handleBackButtonClick = () => {
@@ -565,15 +592,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         setHash(this.props.getPunchPath(PunchStep.FORDELING));
     };
 
-    private changeAndBlurUpdates = (change: (event: any) => Partial<ISoknad>) => ({
-        onChange: (event: any) => this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad(change(event))
+    private changeAndBlurUpdatesFelles = (change: (event: any) => Partial<ISoknadFelles>) => ({
+        onChange: (event: any) => this.updateFellesSoknadState(change(event), false),
+        onBlur: (event: any) => this.updateSoknadFelles(change(event))
     });
 
-    private onChangeOnlyUpdate = (change: (event: any) => Partial<ISoknad>) => ({
+    private onChangeOnlyUpdateIndividuelt = (change: (event: any) => Partial<ISoknadIndividuelt>) => ({
         onChange: (event: any) => {
-            this.updateSoknadState(change(event), true);
-            this.updateSoknad(change(event));
+            this.updateIndividuellSoknadState(change(event), 1, true);
+            this.updateSoknadIndividuelt(change(event), 1);
         }
     });
 
@@ -611,13 +638,25 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});*/
 
-    private updateSoknad = (soknad: Partial<ISoknad>) => {
+    private updateSoknadIndividuelt = (soknad: Partial<ISoknadIndividuelt>, nr: 1 | 2) => {
         this.setState({showStatus: true});
         return this.props.updateSoknad(
             this.props.id,
-            this.props.punchState.ident1,
+            this.props.punchState[`ident${nr}`],
             this.props.journalpostid,
-            {...this.getSoknadFromStore(), ...soknad}
+            {...this.getDobbelSoknadFromStore().soknad(nr).values(), ...soknad}
+        );
+    };
+
+    private updateSoknadFelles = (soknad: Partial<ISoknadFelles>) => {
+        this.setState({showStatus: true});
+        return this.props.updateSoknader(
+            this.props.id,
+            this.props.punchState.ident1,
+            this.props.punchState.ident2,
+            this.props.journalpostid,
+            {...this.getDobbelSoknadFromStore().soknad1().values(), ...soknad},
+            {...this.getDobbelSoknadFromStore().soknad2().values(), ...soknad}
         );
     };
 
@@ -646,19 +685,25 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getMappe:                   (id: string)                => dispatch(getMappe(id)),
-    resetMappeAction:           ()                          => dispatch(resetMappeAction()),
+    getMappe:                   (id: string)                        => dispatch(getMappe(id)),
+    resetMappeAction:           ()                                  => dispatch(resetMappeAction()),
     setIdentAction:             (ident1: string,
-                                 ident2: string | null)     => dispatch(setIdentAction(ident1, ident2)),
-    setStepAction:              (step: PunchStep)           => dispatch(setStepAction(step)),
-    undoChoiceOfMappeAction:    ()                          => dispatch(undoChoiceOfMappeAction()),
+                                 ident2: string | null)             => dispatch(setIdentAction(ident1, ident2)),
+    setStepAction:              (step: PunchStep)                   => dispatch(setStepAction(step)),
+    undoChoiceOfMappeAction:    ()                                  => dispatch(undoChoiceOfMappeAction()),
     updateSoknad:               (mappeid: string,
                                  norskIdent: string,
                                  journalpostid: string,
-                                 soknad: Partial<ISoknad>)  => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
+                                 soknad: Partial<ISoknad>)          => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
+    updateSoknader:             (mappeid: string,
+                                 norskIdent1: string,
+                                 norskIdent2: string | null,
+                                 journalpostid: string,
+                                 soknad1: Partial<ISoknad>,
+                                 soknad2: Partial<ISoknad> | null)  => dispatch(updateSoknader(mappeid, norskIdent1, norskIdent2, journalpostid, soknad1, soknad2)),
     submitSoknad:               (mappeid: string,
-                                 ident: string)             => dispatch(submitSoknad(mappeid, ident)),
-    resetPunchFormAction:       ()                          => dispatch(resetPunchFormAction())
+                                 ident: string)                     => dispatch(submitSoknad(mappeid, ident)),
+    resetPunchFormAction:       ()                                  => dispatch(resetPunchFormAction())
 });
 
 export const PunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));

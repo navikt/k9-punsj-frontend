@@ -13,6 +13,10 @@ export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvste
         this.periode = new Periode(selvstendigNaeringsdrivende.periode || {});
     }
 
+    values(): Required<Periodeinfo<ISelvstendigNaerinsdrivende>> {
+        return {periode: this.periode.values()};
+    }
+
     description(intl: IntlShape): string {
         return intlHelper(
             intl,

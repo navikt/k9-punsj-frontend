@@ -130,10 +130,12 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         const modaler = [];
         const rows = [];
 
-        for (const mappe of mapper) {
+        for (const iMappe of mapper) {
+            const mappe = new Mappe(iMappe);
             const mappeid = mappe.mappeId as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
-            const soknad = new Soknad(mappe.personer?.[Object.keys(mappe.personer)[0]]?.soeknad || {});
+            const dobbelSoknad = mappe.genererDobbelSoknad();
+            const soknad = dobbelSoknad.soknad1();
             const fom = soknad.getFom();
             const tom = soknad.getTom();
             const rowContent = [
@@ -246,7 +248,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         return <>
             {backButton}
             {technicalError}
-            <AlertStripeInfo>Det finnes ufullstendige søknader knyttet til identitetsnummeret. Velg søknaden som hører til dokumentet eller opprett en ny.</AlertStripeInfo>
+            <AlertStripeInfo>{intlHelper(intl, 'mapper.infoboks', {antallSokere: ident2 ? '2' : '1'})}</AlertStripeInfo>
             {showMapper()}
             {newSoknadButton}
         </>;

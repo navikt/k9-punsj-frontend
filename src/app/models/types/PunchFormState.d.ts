@@ -9,6 +9,7 @@ export interface IPunchFormState {
     isAwaitingSubmitResponse?: boolean;
     updateMappeError?: IError;
     submitMappeError?: IError;
-    inputErrors?: IInputError[];
+    inputErrors1?: IInputError[];
+    inputErrors2?: IInputError[];
     isComplete?: boolean;
 }

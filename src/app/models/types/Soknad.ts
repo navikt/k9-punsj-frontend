@@ -52,6 +52,18 @@ export class Soknad implements Required<ISoknad> {
         this.allPeriods.push(...this.tilsynsordning.opphold);
     }
 
+    values(): Required<ISoknad> {
+        return {
+            spraak: this.spraak,
+            barn: this.barn.values(),
+            periode: this.periode.values(),
+            arbeid: this.arbeid.values(),
+            beredskap: this.beredskap.map(b => b.values()),
+            nattevaak: this.nattevaak.map(n => n.values()),
+            tilsynsordning: this.tilsynsordning.values()
+        };
+    }
+
     getFom(): string | null {
         return this.allPeriods
                    .map(p => p.periode)
@@ -75,7 +87,7 @@ export class Soknad implements Required<ISoknad> {
     }
 
     generateTgStrings(intl: IntlShape): string[] {
-        return this.arbeid.arbeidstaker.map(a => a.generateTgString(intl));
+        return this.arbeid.generateTgStrings(intl);
     }
 
     getFnrOrFdato(): string {
@@ -84,12 +96,12 @@ export class Soknad implements Required<ISoknad> {
 
     extractFelles(): SoknadFelles {
         const {barn, periode, beredskap, nattevaak, tilsynsordning} = this; // tslint:disable-line:no-this-assignment
-        return {barn, periode, beredskap, nattevaak, tilsynsordning};
+        return new SoknadFelles({barn, periode, beredskap, nattevaak, tilsynsordning});
     }
 
     extractIndividuelt(): SoknadIndividuelt {
         const {spraak, arbeid} = this; // tslint:disable-line:no-this-assignment
-        return {spraak, arbeid};
+        return new SoknadIndividuelt({spraak, arbeid});
     }
 }
 
@@ -99,7 +111,7 @@ export interface IArbeid {
     frilanser?: Array<Periodeinfo<IFrilanser>>;
 }
 
-class Arbeid implements Required<IArbeid> {
+export class Arbeid implements Required<IArbeid> {
 
     arbeidstaker: Arbeidstaker[];
     selvstendigNaeringsdrivende: SelvstendigNaerinsdrivende[];
@@ -110,6 +122,16 @@ class Arbeid implements Required<IArbeid> {
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
         this.frilanser = (arbeid.frilanser || []).map(f => new Frilanser(f));
     }
+
+    values(): Required<IArbeid> {
+        return {
+            arbeidstaker: this.arbeidstaker.map(a => a.values()),
+            selvstendigNaeringsdrivende: this.selvstendigNaeringsdrivende.map(s => s.values()),
+            frilanser: this.frilanser.map(f => f.values())
+        };
+    }
+
+    generateTgStrings = (intl: IntlShape): string[] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgString(intl));
 }
 
 export interface ITilsynsordning {
@@ -117,7 +139,7 @@ export interface ITilsynsordning {
     opphold?: Array<Periodeinfo<ITilsyn>>;
 }
 
-class Tilsynsordning implements Required<ITilsynsordning> {
+export class Tilsynsordning implements Required<ITilsynsordning> {
 
     iTilsynsordning: JaNeiVetikke;
     opphold: Tilsyn[];
@@ -126,6 +148,13 @@ class Tilsynsordning implements Required<ITilsynsordning> {
         this.iTilsynsordning = tilsynsordning.iTilsynsordning || JaNeiVetikke.NEI;
         this.opphold = (tilsynsordning.opphold || []).map(o => new Tilsyn(o || {}));
     }
+
+    values(): Required<ITilsynsordning> {
+        return {
+            iTilsynsordning: this.iTilsynsordning,
+            opphold: this.opphold.map(t => t.values())
+        }
+    }
 }
 
 export interface IBarn {
@@ -133,7 +162,7 @@ export interface IBarn {
     foedselsdato?: string;
 }
 
-class Barn implements Required<IBarn> {
+export class Barn implements Required<IBarn> {
 
     norskIdent: string;
     foedselsdato: string;
@@ -141,6 +170,11 @@ class Barn implements Required<IBarn> {
     constructor(barn: IBarn) {
         this.norskIdent = barn.norskIdent || '';
         this.foedselsdato = barn.foedselsdato || '';
+    }
+
+    values(): Required<IBarn> {
+        const {norskIdent, foedselsdato} = this; // tslint:disable-line:no-this-assignment
+        return {norskIdent, foedselsdato};
     }
 
     getFnrOrFdato(): string {
@@ -152,7 +186,7 @@ export interface ITilleggsinformasjon {
     tilleggsinformasjon?: string;
 }
 
-class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>> {
+export class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>> {
 
     periode: Periode;
     tilleggsinformasjon: string;
@@ -160,6 +194,13 @@ class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>>
     constructor(periodeinfo: Periodeinfo<ITilleggsinformasjon>) {
         this.periode = new Periode(periodeinfo.periode || {});
         this.tilleggsinformasjon = periodeinfo.tilleggsinformasjon || '';
+    }
+
+    values(): Required<Periodeinfo<ITilleggsinformasjon>> {
+        return {
+            periode: this.periode.values(),
+            tilleggsinformasjon: this.tilleggsinformasjon
+        };
     }
 }
 
@@ -171,7 +212,7 @@ export interface ITilsyn {
     fredag?:    string | null;
 }
 
-class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
+export class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
 
     periode: Periode;
     mandag: string | null;
@@ -191,5 +232,10 @@ class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
 
     description(intl: IntlShape): string {
         return this.periode.description(intl);
+    }
+
+    values(): Required<Periodeinfo<ITilsyn>> {
+        const {periode, mandag, tirsdag, onsdag, torsdag, fredag} = this; // tslint:disable-line:no-this-assignment
+        return {periode: periode.values(), mandag, tirsdag, onsdag, torsdag, fredag};
     }
 }

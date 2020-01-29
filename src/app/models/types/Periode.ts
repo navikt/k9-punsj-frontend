@@ -24,6 +24,11 @@ export class Periode implements Required<IPeriode> {
         this.tilOgMed = periode.tilOgMed || null;
     }
 
+    values(): Required<IPeriode> {
+        const {fraOgMed, tilOgMed} = this; // tslint:disable-line:no-this-assignment
+        return {fraOgMed, tilOgMed};
+    }
+
     fraOgMedTekstKort(intl: IntlShape) {
         return !!this.fraOgMed ? datetime(intl, TimeFormat.DATE_SHORT, this.fraOgMed) : '';
     }

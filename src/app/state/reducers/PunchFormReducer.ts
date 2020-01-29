@@ -57,7 +57,8 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                inputErrors: action.errors,
+                inputErrors1: action.errors1,
+                inputErrors2: action.errors2,
                 updateMappeError: undefined
             };
 
@@ -80,7 +81,8 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
                 submitMappeError: undefined,
-                inputErrors: undefined,
+                inputErrors1: undefined,
+                inputErrors2: undefined,
                 isComplete: true
             };
 
@@ -89,7 +91,8 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
                 submitMappeError: undefined,
-                inputErrors: action.errors
+                inputErrors1: action.errors1,
+                inputErrors2: action.errors2
             };
 
         case PunchFormActionKeys.SOKAND_SUBMIT_ERROR:

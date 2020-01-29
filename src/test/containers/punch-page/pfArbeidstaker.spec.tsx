@@ -36,12 +36,17 @@ const testIntl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 const testTgString = '100,0';
 const testTgStrings = [testTgString];
 const testPunchFormComponentState: IPunchFormComponentState = {
-    soknad: {
-        arbeid: {
-            arbeidstaker: [testPeriodeinfo]
-        }
+    dobbelSoknad: {
+        soker1: {
+            arbeid: {
+                arbeidstaker: [testPeriodeinfo]
+            }
+        },
+        soker2: null,
+        felles: {}
     },
-    tgStrings: testTgStrings,
+    tgStrings1: testTgStrings,
+    tgStrings2: [],
     isFetched: true,
     showStatus: false
 };
@@ -56,7 +61,7 @@ const setupPfArbeidstaker = (
     optionalFeilprefiks?: string,
     optionalGetErrorMessage?: GetErrorMessage,
     optionalIntl?: IntlShape,
-    optionalPunchFormComponentState?: IPunchFormComponentState,
+    optionalTgStrings?: string[],
     optionalSetTgStringsInParentState?: (tgStrings: string[]) => any,
     optionalGenerateTgStrings?: () => string[]
 ) => {
@@ -64,7 +69,7 @@ const setupPfArbeidstaker = (
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
 
     return shallow(pfArbeidstaker(
-        optionalPunchFormComponentState || testPunchFormComponentState,
+        optionalTgStrings || testTgStrings,
         optionalSetTgStringsInParentState || testSetTgStringsInParentState,
         optionalGenerateTgStrings || testGenerateTgStrings
     )(
@@ -84,7 +89,7 @@ describe('pfArbeidstaker', () => {
 
     it('Virker', () => {
         expect(pfArbeidstaker(
-            testPunchFormComponentState,
+            testTgStrings,
             testSetTgStringsInParentState,
             testGenerateTgStrings
         )).toBeInstanceOf(Function);
