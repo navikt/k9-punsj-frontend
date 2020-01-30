@@ -139,28 +139,29 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
     private identInput = (disabled: boolean) => {
         const {punchState, intl} = this.props;
         const {ident1, ident2} = punchState;
+        const skalViseToFelter = punchState.step === PunchStep.IDENT || ident2;
         const skalViseFeilmelding = (ident: string | null) =>  ident && ident.length && !disabled && !IdentRules.isIdentValid(ident);
         return punchState.step > PunchStep.FORDELING ? <div>
             <Input
-                label={intlHelper(intl, 'skjema.ident1')}
+                label={intlHelper(intl, skalViseToFelter ? 'ident.identifikasjon.felt1' : 'ident.identifikasjon.felt')}
                 onChange={this.handleIdent1Blur}
                 onKeyPress={this.handleIdentKeyPress(1)}
                 value={ident1}
                 {...{disabled}}
-                className="bold-label"
+                className="bold-label ident-soker-1"
                 maxLength={11}
                 feil={skalViseFeilmelding(ident1) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigformat')} : undefined}
             />
-            <Input
-                label={intlHelper(intl, 'skjema.ident2')}
+            {skalViseToFelter && <Input
+                label={intlHelper(intl, 'ident.identifikasjon.felt2')}
                 onChange={this.handleIdent2Blur}
                 onKeyPress={this.handleIdentKeyPress(2)}
                 value={!!ident2 ? ident2 : ''}
                 {...{disabled}}
-                className="bold-label"
+                className="bold-label ident-soker-2"
                 maxLength={11}
                 feil={skalViseFeilmelding(ident2) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigformat')} : undefined}
-            />
+            />}
         </div> : <></>;
     };
 

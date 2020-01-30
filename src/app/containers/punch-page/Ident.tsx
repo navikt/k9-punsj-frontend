@@ -76,7 +76,7 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIde
             className="knapp-usignert"
             onClick={() => props.usignert(punchState.journalpost!.journalpostId)}
         >{intlHelper(intl, 'ident.knapp.usignert')}</Knapp>}
-        <h2>Identifikasjon</h2>
+        <h2>{intlHelper(intl, 'ident.identifikasjon.overskrift')}</h2>
         {props.identInput(signert !== JaNei.JA)}
         <div className="knapperad">
             <Knapp

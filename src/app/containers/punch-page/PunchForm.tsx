@@ -1,9 +1,10 @@
-import {PeriodInput}                                          from 'app/components/period-input/PeriodInput';
-import {Periodepaneler}                                       from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                       from 'app/containers/punch-page/pfArbeidstaker';
-import {pfTilleggsinformasjon}                                from 'app/containers/punch-page/pfTilleggsinformasjon';
-import {pfTilsyn}                                             from 'app/containers/punch-page/pfTilsyn';
-import {JaNeiVetikke, PunchStep}                              from 'app/models/enums';
+import {PeriodInput}                                   from 'app/components/period-input/PeriodInput';
+import {PersonBox}                                     from 'app/components/person-box/PersonBox';
+import {Periodepaneler}                                from 'app/containers/punch-page/Periodepaneler';
+import {pfArbeidstaker}                                from 'app/containers/punch-page/pfArbeidstaker';
+import {pfTilleggsinformasjon}                         from 'app/containers/punch-page/pfTilleggsinformasjon';
+import {pfTilsyn}                                      from 'app/containers/punch-page/pfTilsyn';
+import {JaNeiVetikke, PunchStep}                       from 'app/models/enums';
 import {
     Arbeidstaker,
     DobbelSoknad,
@@ -16,15 +17,15 @@ import {
     ISoknad,
     ISoknadFelles,
     ISoknadIndividuelt,
-    ITilleggsinformasjon,
     ITilsyn,
     ITilsynsordning,
     Mappe,
     Periodeinfo,
     SoknadFelles,
-    SoknadIndividuelt, Tilleggsinformasjon,
+    SoknadIndividuelt,
+    Tilleggsinformasjon,
     Tilsyn
-} from 'app/models/types';
+}                                                      from 'app/models/types';
 import {
     getMappe,
     resetMappeAction,
@@ -35,19 +36,19 @@ import {
     undoChoiceOfMappeAction,
     updateSoknad,
     updateSoknader
-}                                                             from 'app/state/actions';
-import {RootStateType}                                        from 'app/state/RootState';
-import {setHash}                                              from 'app/utils';
-import intlHelper                                             from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess}        from 'nav-frontend-etiketter';
-import {Knapp}                                                from 'nav-frontend-knapper';
-import {Input, RadioPanelGruppe, Select, SkjemaGruppe}        from 'nav-frontend-skjema';
-import NavFrontendSpinner                                     from 'nav-frontend-spinner';
-import * as React                                             from 'react';
-import {Col, Container, Row}                                  from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                    from 'react-intl';
-import {connect}                                              from 'react-redux';
+}                                                      from 'app/state/actions';
+import {RootStateType}                                 from 'app/state/RootState';
+import {setHash}                                       from 'app/utils';
+import intlHelper                                      from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
+import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
+import {Knapp}                                         from 'nav-frontend-knapper';
+import {Input, RadioPanelGruppe, Select, SkjemaGruppe} from 'nav-frontend-skjema';
+import NavFrontendSpinner                              from 'nav-frontend-spinner';
+import * as React                                      from 'react';
+import {Col, Container, Row}                           from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}             from 'react-intl';
+import {connect}                                       from 'react-redux';
 
 export interface IPunchFormComponentProps {
     getPunchPath:   (step: PunchStep, values?: any) => string;
@@ -144,7 +145,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     render() {
 
-        const {intl, punchFormState} = this.props;
+        const {intl, punchFormState, punchState} = this.props;
         const soknad = new DobbelSoknad(
             new SoknadFelles(this.state.dobbelSoknad.felles),
             new SoknadIndividuelt(this.state.dobbelSoknad.soker1),
@@ -204,104 +205,142 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             tilleggsinformasjon: ''
         });
 
-        const updateTgStrings = () => this.setState({tgStrings1: this.tgStrings(soker1)});
+        const sprak = (nr: 1 | 2) => <Select
+            name="sprak"
+            label={intlHelper(intl, 'skjema.spraak')}
+            className="bold-label"
+            value={(nr === 1 || !soker2 ? soker1 : soker2).spraak}
+            {...this.onChangeOnlyUpdateIndividuelt(event => ({spraak: event.target.value}), nr)}
+            feil={this.getErrorMessage('spraak', nr)}
+        >
+            <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
+            <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
+        </Select>;
 
-        const {arbeid} = soker1;
+        const arbeidsperioder = (nr: 1 | 2) => {
 
-        const arbeidstakerperioder = (harOverskrift?: boolean) => <Periodepaneler
-            intl={intl}
-            periods={arbeid.arbeidstaker}
-            component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker1))}
-            panelid={i => `arbeidstakerpanel_${i}`}
-            initialPeriodeinfo={initialArbeidstaker}
-            editSoknad={arbeidstaker => this.updateSoknadIndividuelt({arbeid: {...arbeid, arbeidstaker}}, 1)}
-            editSoknadState={(arbeidstaker, showStatus) => this.updateIndividuellSoknadState({arbeid: {...arbeid, arbeidstaker}}, 1, showStatus)}
-            textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.arbeidstaker.leggtilperiode'}
-            textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-            panelClassName="arbeidstakerpanel"
-            getErrorMessage={this.getErrorMessage}
-            feilkodeprefiks={'arbeid.arbeidstaker'}
-            onAdd={updateTgStrings}
-            onRemove={updateTgStrings}
-        />;
+            const soker = nr === 1 || !soker2 ? soker1 : soker2;
+            const updateTgStrings = () => this.setState({tgStrings1: this.tgStrings(soker1), tgStrings2: soker2 ? this.tgStrings(soker2) : []});
+            const {arbeid} = soker;
+            const errorMessageFunction = (code: string) => this.getErrorMessage(code, nr);
 
-        const selvstendigperioder = (harOverskrift?: boolean) => <Periodepaneler
-            intl={intl}
-            periods={arbeid.selvstendigNaeringsdrivende}
-            panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
-            initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-            editSoknad={selvstendigNaeringsdrivende => this.updateSoknadIndividuelt({arbeid: {...arbeid, selvstendigNaeringsdrivende}}, 1)}
-            editSoknadState={(selvstendigNaeringsdrivende, showStatus) => this.updateIndividuellSoknadState({arbeid: {...arbeid, selvstendigNaeringsdrivende}}, 1, showStatus)}
-            textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'}
-            textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
-            panelClassName="selvstendignaeringsdrivendepanel"
-            getErrorMessage={this.getErrorMessage}
-            feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
-        />;
+            const arbeidstakerperioder = (harOverskrift?: boolean) => <Periodepaneler
+                intl={intl}
+                periods={arbeid.arbeidstaker}
+                component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker))}
+                panelid={i => `arbeidstakerpanel_${i}`}
+                initialPeriodeinfo={initialArbeidstaker}
+                editSoknad={arbeidstaker => this.updateSoknadIndividuelt({arbeid: {...arbeid, arbeidstaker}}, nr)}
+                editSoknadState={(arbeidstaker, showStatus) => this.updateIndividuellSoknadState({
+                    arbeid: {
+                        ...arbeid,
+                        arbeidstaker
+                    }
+                }, nr, showStatus)}
+                textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.arbeidstaker.leggtilperiode'}
+                textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                panelClassName="arbeidstakerpanel"
+                getErrorMessage={errorMessageFunction}
+                feilkodeprefiks={'arbeid.arbeidstaker'}
+                onAdd={updateTgStrings}
+                onRemove={updateTgStrings}
+            />;
 
-        const frilanserperioder = (harOverskrift?: boolean) => <Periodepaneler
-            intl={intl}
-            periods={arbeid.frilanser}
-            panelid={i => `frilanserpanel_${i}`}
-            initialPeriodeinfo={initialFrilanser}
-            editSoknad={frilanser => this.updateSoknadIndividuelt({arbeid: {...arbeid, frilanser}}, 1)}
-            editSoknadState={(frilanser, showStatus) => this.updateIndividuellSoknadState({arbeid: {...arbeid, frilanser}}, 1, showStatus)}
-            textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.frilanser.leggtilperiode'}
-            textFjern="skjema.arbeid.frilanser.fjernperiode"
-            panelClassName="frilanserpanel"
-            getErrorMessage={this.getErrorMessage}
-            feilkodeprefiks={'arbeid.frilanser'}
-        />;
+            const selvstendigperioder = (harOverskrift?: boolean) => <Periodepaneler
+                intl={intl}
+                periods={arbeid.selvstendigNaeringsdrivende}
+                panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
+                initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
+                editSoknad={selvstendigNaeringsdrivende => this.updateSoknadIndividuelt({
+                    arbeid: {
+                        ...arbeid,
+                        selvstendigNaeringsdrivende
+                    }
+                }, nr)}
+                editSoknadState={(selvstendigNaeringsdrivende, showStatus) => this.updateIndividuellSoknadState({
+                    arbeid: {
+                        ...arbeid,
+                        selvstendigNaeringsdrivende
+                    }
+                }, nr, showStatus)}
+                textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'}
+                textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
+                panelClassName="selvstendignaeringsdrivendepanel"
+                getErrorMessage={errorMessageFunction}
+                feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
+            />;
 
-        const antallArbeidsperioder = soknad1.getNumberOfWorkPeriods();
+            const frilanserperioder = (harOverskrift?: boolean) => <Periodepaneler
+                intl={intl}
+                periods={arbeid.frilanser}
+                panelid={i => `frilanserpanel_${i}`}
+                initialPeriodeinfo={initialFrilanser}
+                editSoknad={frilanser => this.updateSoknadIndividuelt({arbeid: {...arbeid, frilanser}}, nr)}
+                editSoknadState={(frilanser, showStatus) => this.updateIndividuellSoknadState({
+                    arbeid: {
+                        ...arbeid,
+                        frilanser
+                    }
+                }, nr, showStatus)}
+                textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.frilanser.leggtilperiode'}
+                textFjern="skjema.arbeid.frilanser.fjernperiode"
+                panelClassName="frilanserpanel"
+                getErrorMessage={errorMessageFunction}
+                feilkodeprefiks={'arbeid.frilanser'}
+            />;
 
-        const arbeidsperioder = () => {
-            if (!antallArbeidsperioder) {
-                return <Container className="arbeidsknapper"><Row>
-                    <Col>{arbeidstakerperioder()}</Col>
-                    <Col>{selvstendigperioder()}</Col>
-                    <Col>{frilanserperioder()}</Col>
-                </Row></Container>;
-            } else if (arbeid.arbeidstaker.length === antallArbeidsperioder) {
-                return <>
-                    <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
-                    {arbeidstakerperioder(true)}
-                    <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
-                    <Container className="arbeidsknapper"><Row>
+            const antallArbeidsperioder = (nr === 1 ? soknad1 : soknad2).getNumberOfWorkPeriods();
+
+            const visning = () => {
+                if (!antallArbeidsperioder) {
+                    return <Container className="arbeidsknapper"><Row>
+                        <Col>{arbeidstakerperioder()}</Col>
                         <Col>{selvstendigperioder()}</Col>
                         <Col>{frilanserperioder()}</Col>
-                    </Row></Container>
-                </>;
-            } else if (arbeid.selvstendigNaeringsdrivende.length === antallArbeidsperioder) {
-                return <>
-                    <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
-                    {selvstendigperioder(true)}
-                    <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
-                    <Container className="arbeidsknapper"><Row>
-                        <Col>{arbeidstakerperioder()}</Col>
-                        <Col>{frilanserperioder()}</Col>
-                    </Row></Container>
-                </>;
-            } else if (arbeid.frilanser.length === antallArbeidsperioder) {
-                return <>
-                    <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-                    {frilanserperioder(true)}
-                    <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
-                    <Container className="arbeidsknapper"><Row>
-                        <Col>{arbeidstakerperioder()}</Col>
-                        <Col>{selvstendigperioder()}</Col>
-                    </Row></Container>
-                </>;
-            } else {
-                return <>
-                    <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
-                    {arbeidstakerperioder(true)}
-                    <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
-                    {selvstendigperioder(true)}
-                    <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-                    {frilanserperioder(true)}
-                </>;
-            }
+                    </Row></Container>;
+                } else if (arbeid.arbeidstaker.length === antallArbeidsperioder) {
+                    return <>
+                        <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
+                        {arbeidstakerperioder(true)}
+                        <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
+                        <Container className="arbeidsknapper"><Row>
+                            <Col>{selvstendigperioder()}</Col>
+                            <Col>{frilanserperioder()}</Col>
+                        </Row></Container>
+                    </>;
+                } else if (arbeid.selvstendigNaeringsdrivende.length === antallArbeidsperioder) {
+                    return <>
+                        <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
+                        {selvstendigperioder(true)}
+                        <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
+                        <Container className="arbeidsknapper"><Row>
+                            <Col>{arbeidstakerperioder()}</Col>
+                            <Col>{frilanserperioder()}</Col>
+                        </Row></Container>
+                    </>;
+                } else if (arbeid.frilanser.length === antallArbeidsperioder) {
+                    return <>
+                        <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+                        {frilanserperioder(true)}
+                        <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
+                        <Container className="arbeidsknapper"><Row>
+                            <Col>{arbeidstakerperioder()}</Col>
+                            <Col>{selvstendigperioder()}</Col>
+                        </Row></Container>
+                    </>;
+                } else {
+                    return <>
+                        <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
+                        {arbeidstakerperioder(true)}
+                        <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
+                        {selvstendigperioder(true)}
+                        <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+                        {frilanserperioder(true)}
+                    </>;
+                }
+            };
+
+            return visning();
         };
 
         const beredskapperioder = <Periodepaneler
@@ -334,6 +373,19 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             feilkodeprefiks={'nattevaak'}
         />;
 
+        const dobbel = (component: (nr: 1 | 2) => React.ReactElement) => {
+            return soker2 ? <div className="dobbel">
+                <div className="dobbel1">
+                    <PersonBox ident={punchState.ident1} header={intlHelper(intl, 'soker1')}/>
+                    {component(1)}
+                </div>
+                <div className="dobbel2">
+                    <PersonBox ident={punchState.ident2!} header={intlHelper(intl, 'soker2')}/>
+                    {component(2)}
+                </div>
+            </div> : component(1)
+        };
+
         return (<>
             {this.statusetikett()}
             {this.backButton()}
@@ -341,21 +393,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             {!!punchFormState.submitMappeError && <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>}
             {!punchFormState.updateMappeError && !punchFormState.submitMappeError && (isSoknadComplete
                 ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
-                : <AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>)}
+                : <></>/*<AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>*/)}
             <SkjemaGruppe feil={this.getErrorMessage('')}>
                 <h2>{intlHelper(intl, 'skjema.opplysningerombarnogsoker')}</h2>
-                <Select
-                    name="sprak"
-                    label={intlHelper(intl, 'skjema.spraak')}
-                    className="bold-label"
-                    value={soker1.spraak}
-                    {...this.onChangeOnlyUpdateIndividuelt(event => ({spraak: event.target.value}))}
-                    feil={this.getErrorMessage('spraak')}
-                >
-                    <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
-                    <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
-                </Select>
-                <SkjemaGruppe feil={this.getErrorMessage('barn')}>
+                {dobbel(sprak)}
+                <SkjemaGruppe feil={this.getErrorMessage('barn')} className="inputs-barn">
                     <Input
                         id="barn-ident"
                         label={intlHelper(intl, 'skjema.barn.ident')}
@@ -386,7 +428,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     errorMessageTom={this.getErrorMessage('periode.tilOgMed')}
                 />
                 <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
-                {arbeidsperioder()}
+                {dobbel(arbeidsperioder)}
                 <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
                 {beredskapperioder}
                 <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
@@ -548,13 +590,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return mappe.genererDobbelSoknad();
     };
 
-    private getManglerFromStore = () => {
+    private getManglerFromStore = (nr?: 1 | 2) => {
+        const {ident1, ident2} = this.props.punchState;
+        const ident = nr === 2 && ident2 ? ident2 : ident1;
         const personlig = this.props.punchFormState.mappe?.personer;
-        return personlig?.[Object.keys(personlig)[0]]?.mangler;
+        return personlig?.[ident]?.mangler;
     };
 
-    private getErrorMessage = (attribute: string) => {
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
+    private getErrorMessage = (attribute: string, nr?: 1 | 2) => {
+        const errorMsg = this.getManglerFromStore(nr)?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
         return !!errorMsg ? {feilmelding: intlHelper(
             this.props.intl,
             `skjema.feil.${attribute}.${errorMsg}`
@@ -597,10 +641,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         onBlur: (event: any) => this.updateSoknadFelles(change(event))
     });
 
-    private onChangeOnlyUpdateIndividuelt = (change: (event: any) => Partial<ISoknadIndividuelt>) => ({
+    private onChangeOnlyUpdateIndividuelt = (change: (event: any) => Partial<ISoknadIndividuelt>, nr: 1 |2) => ({
         onChange: (event: any) => {
-            this.updateIndividuellSoknadState(change(event), 1, true);
-            this.updateSoknadIndividuelt(change(event), 1);
+            this.updateIndividuellSoknadState(change(event), nr, true);
+            this.updateSoknadIndividuelt(change(event), nr);
         }
     });
 

@@ -1,9 +1,7 @@
 import {
     DobbelSoknad,
     SoknadFelles,
-    SoknadFellesMedMangler,
-    SoknadIndividuelt,
-    SoknadIndividueltMedMangler
+    SoknadIndividuelt
 }                        from 'app/models/types/DobbelSoknad';
 import {IInputError}     from 'app/models/types/InputError';
 import {ISoknad, Soknad} from 'app/models/types/Soknad';
@@ -37,8 +35,8 @@ export class Mappe implements IMappe {
         if (this.idents.length) {
 
             const personlig1 = this.personer[this.idents[0]];
-            const felles: SoknadFellesMedMangler = personlig1.extractFelles();
-            const soker1: SoknadIndividueltMedMangler = personlig1.extractIndividuelt();
+            const felles: SoknadFelles = personlig1.extractFelles();
+            const soker1: SoknadIndividuelt = personlig1.extractIndividuelt();
 
             if (this.idents.length === 1) {
                 return new DobbelSoknad(felles, soker1);
@@ -89,11 +87,11 @@ export class Personlig implements Required<IPersonlig> {
         return this.mangler.filter(m => regexp.test(m.attributt!));
     }
 
-    extractFelles(): SoknadFellesMedMangler {
-        return {...this.soeknad.extractFelles(), mangler: this.extractFellesMangler()};
+    extractFelles(): SoknadFelles {
+        return this.soeknad.extractFelles();
     }
 
-    extractIndividuelt(): SoknadIndividueltMedMangler {
-        return  {...this.soeknad.extractIndividuelt(), mangler: this.extractIndividuelleMangler()};
+    extractIndividuelt(): SoknadIndividuelt {
+        return  this.soeknad.extractIndividuelt();
     }
 }
