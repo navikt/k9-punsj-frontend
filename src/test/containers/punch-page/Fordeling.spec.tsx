@@ -23,7 +23,8 @@ jest.mock('app/utils/pathUtils');
 configure({adapter: new Adapter()});
 
 const journalpostid = '200';
-const ident = '678';
+const ident1 = '678';
+const ident2 = null;
 
 const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
@@ -49,7 +50,8 @@ const setupFordeling = (
 
     const punchState: IPunchState = {
         journalpost,
-        ident,
+        ident1,
+        ident2,
         step: 2,
         isJournalpostLoading: false
     };

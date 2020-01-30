@@ -1,8 +1,8 @@
-import {ApiPath}                                  from 'app/apiConfig';
-import {JaNeiVetikke, MapperOgFagsakerActionKeys} from 'app/models/enums';
-import {IError, IFagsak, IMappe}                  from 'app/models/types';
-import {MappeRules}                               from 'app/rules';
-import {convertResponseToError, get, post}        from 'app/utils';
+import {ApiPath}                                      from 'app/apiConfig';
+import {JaNeiVetikke, MapperOgFagsakerActionKeys}     from 'app/models/enums';
+import {IError, IFagsak, IMappe, IPersonlig, ISoknad} from 'app/models/types';
+import {MappeRules}                                   from 'app/rules';
+import {convertResponseToError, get, post}            from 'app/utils';
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
@@ -43,9 +43,10 @@ export function setMapperAction(mapper: IMappe[]):              ISetMapperAction
 export function findMapperLoadingAction(isLoading: boolean):    IFindMapperLoadingAction        {return {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading}}
 export function findMapperErrorAction(error: IError):           IFindMapperErrorAction          {return {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, error}}
 
-export function findMapper(ident: string) {return (dispatch: any) => {
+export function findMapper(ident1: string, ident2: string | null) {return (dispatch: any) => {
     dispatch(findMapperLoadingAction(true));
-    return get(ApiPath.MAPPER_FIND, undefined, {'X-Nav-NorskIdent': ident}, response => {
+    const idents = ident2 ? `${ident1},${ident2}` : ident1;
+    return get(ApiPath.MAPPER_FIND, undefined, {'X-Nav-NorskIdent': idents}, response => {
         if (response.ok) {
             return response.json()
                            .then(r => {
@@ -84,32 +85,32 @@ export function createMappeRequestAction():                     ICreateMappeRequ
 export function createMappeSuccessAction(id: string):           ICreateMappeSuccessAction       {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_SUCCESS, id}}
 export function createMappeErrorAction(error: IError):          ICreateMappeErrorAction         {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_ERROR, error}}
 
-export function createMappe(ident: string, journalpostid: string) {return (dispatch: any) => {
+export function createMappe(journalpostid: string, ident1: string, ident2: string | null) {return (dispatch: any) => {
 
     dispatch(createMappeRequestAction());
 
-    const requestBody: Partial<IMappe> = {
-        personer: {
-            [ident]: {
-                journalpostId: journalpostid,
-                soeknad: {
-                    arbeid: {
-                        arbeidstaker: [],
-                        selvstendigNaeringsdrivende: [],
-                        frilanser: []
-                    },
-                    beredskap: [],
-                    nattevaak: [],
-                    spraak: 'nb',
-                    barn: {},
-                    tilsynsordning: {
-                        iTilsynsordning: JaNeiVetikke.NEI,
-                        opphold: []
-                    }
-                }
+    const initialInfo: IPersonlig = {
+        journalpostId: journalpostid,
+        soeknad: {
+            arbeid: {
+                arbeidstaker: [],
+                selvstendigNaeringsdrivende: [],
+                frilanser: []
+            },
+            beredskap: [],
+            nattevaak: [],
+            spraak: 'nb',
+            barn: {},
+            tilsynsordning: {
+                iTilsynsordning: JaNeiVetikke.NEI,
+                opphold: []
             }
         }
     };
+
+    const requestBody: Partial<IMappe> = !!ident2
+        ? {personer: {[ident1]: initialInfo, [ident2]: initialInfo}}
+        : {personer: {[ident1]: initialInfo}};
 
     return post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, response => {
         if (response.status === 201) {

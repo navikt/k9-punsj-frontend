@@ -49,7 +49,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return <AlertStripeSuksess>{intlHelper(intl, 'fordeling.omfordeling.utfort')}</AlertStripeSuksess>;
     }
 
-    return <>
+    return <div className="fordeling-page">
         {!!fordelingState.omfordelingError && <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>}
         <RadioPanelGruppe
             name="fordeling"
@@ -64,7 +64,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         {sakstype === Sakstype.PLEIEPENGER_SYKT_BARN
             ? <Knapp onClick={punch}>{intlHelper(intl, 'fordeling.knapp.punsj')}</Knapp>
             : <Knapp onClick={() => props.omfordel(props.punchState.journalpost!.journalpostId, sakstype)}>{intlHelper(intl, 'fordeling.knapp.omfordel')}</Knapp>}
-    </>;
+    </div>;
 };
 
 const mapStateToProps = (state: RootStateType) => ({

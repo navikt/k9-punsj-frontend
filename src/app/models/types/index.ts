@@ -1,5 +1,6 @@
 export * from './Arbeidstaker';
 export * from './AuthState';
+export * from './DobbelSoknad';
 export * from './Error';
 export * from './Fagsak';
 export * from './FordelingState';

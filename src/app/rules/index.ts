@@ -1,1 +1,2 @@
-export * from './MappeRules'
+export * from './IdentRules';
+export * from './MappeRules';

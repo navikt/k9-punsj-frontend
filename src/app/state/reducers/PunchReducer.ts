@@ -5,7 +5,8 @@ import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 export const initialState: IPunchState = {
     step: PunchStep.FORDELING,
-    ident: '',
+    ident1: '',
+    ident2: null,
     journalpost: undefined
 };
 
@@ -21,7 +22,8 @@ export function PunchReducer(
         case PunchActionKeys.IDENT_SET:
             return {
                 ...punchState,
-                ident: action.ident,
+                ident1: action.ident1,
+                ident2: action.ident2
             };
 
         case PunchActionKeys.STEP_SET:
@@ -40,7 +42,8 @@ export function PunchReducer(
             return {
                 ...punchState,
                 step: PunchStep.IDENT,
-                ident: ''
+                ident1: '',
+                ident2: null
             };
 
         case PunchActionKeys.JOURNALPOST_SET:

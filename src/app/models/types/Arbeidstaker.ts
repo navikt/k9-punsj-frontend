@@ -32,9 +32,12 @@ export class Arbeidstaker implements Required<Periodeinfo<IArbeidstaker>> {
         }
     }
 
-    generateTgString(intl: IntlShape) {
-        return numberToString(intl, this.skalJobbeProsent, 1);
+    values(): Required<Periodeinfo<IArbeidstaker>> {
+        const {periode, skalJobbeProsent, organisasjonsnummer, norskIdent} = this; // tslint:disable-line:no-this-assignment
+        return {periode: periode.values(), skalJobbeProsent, organisasjonsnummer, norskIdent};
     }
+
+    generateTgString = (intl: IntlShape): string => numberToString(intl, this.skalJobbeProsent, 1);
 
     orgOrPers(): OrgOrPers {
         return this.organisasjonsnummer === null ? 'p' : 'o';

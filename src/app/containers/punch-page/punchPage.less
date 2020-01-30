@@ -84,9 +84,12 @@
         &:hover {background: @navGra60}
       }
 
+      .fordeling-page button {margin-top: .5rem}
+
       .ident-page {
         h2:first-child {margin-top: 0}
         .knapp-usignert, .knapp-tilbake {margin-top: 1rem}
+        .knapperad {margin-top: 1rem}
       }
 
       .knapperad .knapp1 {margin-right: 1rem}
@@ -96,6 +99,22 @@
         top:      60px;
         left:     1rem;
         z-index:  5;
+      }
+
+      .skjemaelement {margin-bottom: 0}
+
+      .ident-soker-2, .inputs-barn .skjemaelement {margin-top: 1rem}
+
+      .dobbel {
+
+        display: flex;
+
+        > div {
+          flex-grow:  1;
+          flex-basis: 50%;
+          &.dobbel1 {padding-right: 1rem}
+          &.dobbel2 {padding-left: 1rem; border-left: 1px solid @navGra20}
+        }
       }
 
       .soknadsperiode {
@@ -126,22 +145,19 @@
 
         background-color: tint(@navLysGra, 75%);
         margin-bottom:    1rem;
-        padding:          1rem 0;
+        padding:          .5rem 0;
 
         .periodebunn {
 
           display:         flex;
           justify-content: flex-end;
 
-          .fjernperiodeknapp {margin: 1rem 1rem 0}
+          .fjernperiodeknapp {margin: .5rem 1rem}
         }
 
-        &.kunperiode .fjernperiodeknapp {margin-top: 0}
-
         &.arbeidstakerpanel {
-          .skjemaelement {margin-bottom: 0}
           .infoContainer {
-            padding: 1rem .5rem 0 .5rem;
+            padding: .5rem;
             .col {padding: 0 .5rem}
             label {font-weight: bold}
             .skjemaelement {margin-top: 1rem}
@@ -149,8 +165,7 @@
         }
 
         &.beredskapspanel, &.nattevaakspanel {
-          .tilleggsinfo {margin: 0 1rem}
-          .fjernperiodeknapp {margin-top: 0}
+          .tilleggsinfo {margin: .5rem 1rem}
         }
 
         &.tilsynpanel {
@@ -159,6 +174,7 @@
 
           .tilsyntabell {
             padding:          .5rem;
+            margin:           .5rem 0;
             text-align:       center;
             background-color: @white;
             border-color:     @navGra20;

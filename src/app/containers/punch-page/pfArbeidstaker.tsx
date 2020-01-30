@@ -13,7 +13,7 @@ import * as React                               from 'react';
 import {Col, Container, Row}                    from 'react-bootstrap';
 import {IntlShape}                              from 'react-intl';
 
-export function pfArbeidstaker(parentState: IPunchFormComponentState,
+export function pfArbeidstaker(tgStrings: string[],
                                setTgStringsInParentState: (tgStrings: string[]) => any,
                                generateTgStrings: () => string[]): PeriodeComponent<IArbeidstaker> {
 
@@ -26,8 +26,6 @@ export function pfArbeidstaker(parentState: IPunchFormComponentState,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
     ) => {
-
-        const {tgStrings} = parentState;
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;

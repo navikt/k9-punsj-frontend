@@ -58,7 +58,8 @@ const setupIdent = (
 
     const punchState: IPunchState = {
         journalpost,
-        ident: fnr,
+        ident1: fnr,
+        ident2: null,
         step: 1,
         isJournalpostLoading: false
     };

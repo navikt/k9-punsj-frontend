@@ -1,5 +1,6 @@
 import {JaNei, PunchStep}                                                from 'app/models/enums';
 import {IPunchState, ISignaturState}                                     from 'app/models/types';
+import {IdentRules}                                                      from 'app/rules';
 import {setSignaturAction, setStepAction, usignert, usignertResetAction} from 'app/state/actions';
 import {RootStateType}                                                   from 'app/state/RootState';
 import {setHash}                                                         from 'app/utils';
@@ -75,13 +76,13 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIde
             className="knapp-usignert"
             onClick={() => props.usignert(punchState.journalpost!.journalpostId)}
         >{intlHelper(intl, 'ident.knapp.usignert')}</Knapp>}
-        <h2>Identifikasjon</h2>
+        <h2>{intlHelper(intl, 'ident.identifikasjon.overskrift')}</h2>
         {props.identInput(signert !== JaNei.JA)}
         <div className="knapperad">
             <Knapp
                 onClick={props.findSoknader}
                 className="knapp knapp1"
-                disabled={signert !== JaNei.JA || !punchState.ident}
+                disabled={signert !== JaNei.JA || !IdentRules.areIdentsValid(punchState.ident1, punchState.ident2)}
             >{intlHelper(intl, 'ident.knapp.nestesteg')}</Knapp>
             <Knapp onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">{intlHelper(intl, 'ident.knapp.forrigesteg')}</Knapp>
         </div>

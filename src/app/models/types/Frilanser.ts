@@ -13,6 +13,10 @@ export class Frilanser implements Required<Periodeinfo<IFrilanser>> {
         this.periode = new Periode(frilanser.periode || {});
     }
 
+    values(): Required<Periodeinfo<IFrilanser>> {
+        return {periode: this.periode.values()};
+    }
+
     description(intl: IntlShape): string {
         return intlHelper(
             intl,
