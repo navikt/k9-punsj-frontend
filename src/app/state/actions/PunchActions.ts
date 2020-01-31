@@ -13,13 +13,16 @@ interface ISetJournalpostAction             {type: PunchActionKeys.JOURNALPOST_S
 interface IGetJournalpostLoadAction         {type: PunchActionKeys.JOURNALPOST_LOAD}
 interface IGetJournalpostErrorAction        {type: PunchActionKeys.JOURNALPOST_REQUEST_ERROR, error: IError}
 
+interface IResetAction                      {type: PunchActionKeys.RESET}
+
 type        IIdentActionTypes       = ISetIdentAction;
 type        INavigationTypes        = ISetStepAction | IBackFromFormAction | IBackFromMapperOgFagsakerAction;
 type        IJournalpostActionTypes = ISetJournalpostAction | IGetJournalpostLoadAction | IGetJournalpostErrorAction;
 
 export type IPunchActionTypes       = IIdentActionTypes |
                                       INavigationTypes |
-                                      IJournalpostActionTypes;
+                                      IJournalpostActionTypes |
+                                      IResetAction;
 
 export function setIdentAction(ident1: string, ident2?: string | null): ISetIdentAction                 {return {type: PunchActionKeys.IDENT_SET, ident1, ident2: ident2 || null}}
 
@@ -40,3 +43,5 @@ export function getJournalpost(journalpostid: string) {return (dispatch: any) =>
         return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
     });
 }}
+
+export function resetPunchAction():                                     IResetAction                    {return {type: PunchActionKeys.RESET}}

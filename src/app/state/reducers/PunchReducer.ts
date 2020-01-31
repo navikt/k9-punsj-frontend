@@ -17,6 +17,7 @@ export function PunchReducer(
     switch (action.type) {
 
         case LOCATION_CHANGE:
+        case PunchActionKeys.RESET:
             return initialState;
 
         case PunchActionKeys.IDENT_SET:

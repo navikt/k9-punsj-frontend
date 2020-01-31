@@ -3,6 +3,7 @@ import SoknadReadMode
                                                                              from 'app/containers/punch-page/SoknadReadMode';
 import {PunchStep, TimeFormat}                                               from 'app/models/enums';
 import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Mappe, Soknad} from 'app/models/types';
+import {IdentRules}                                                          from 'app/rules';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -12,11 +13,11 @@ import {
     findMapper,
     openFagsakAction,
     openMappeAction,
-    resetMappeidAction,
+    resetMappeidAction, resetPunchAction,
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-}                                                                            from 'app/state/actions';
+} from 'app/state/actions';
 import {RootStateType}                                                       from 'app/state/RootState';
 import {datetime, getHash, setHash}                                          from 'app/utils';
 import intlHelper                                                            from 'app/utils/intlUtils';
@@ -46,6 +47,7 @@ export interface IMapperOgFagsakerDispatchProps {
     chooseMappeAction:          typeof chooseMappeAction;
     createMappe:                typeof createMappe;
     resetMappeidAction:         typeof resetMappeidAction;
+    resetPunchAction:           typeof resetPunchAction;
 }
 
 export interface IMapperOgFagsakerComponentProps {
@@ -66,12 +68,14 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
     const {mapper, fagsaker} = mapperOgFagsakerState;
 
     React.useEffect(() => {
-        if (!!ident1 && ident1 !== '') {
+        if (IdentRules.areIdentsValid(ident1, ident2)) {
             props.setIdentAction(ident1, ident2);
             props.findMapper(ident1, ident2);
             props.findFagsaker(ident1);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
+            props.setStepAction(PunchStep.IDENT);
+            props.resetPunchAction();
             setHash(getPunchPath(PunchStep.IDENT));
         }
     }, [ident1, ident2]);
@@ -295,7 +299,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     createMappe:                (journalpostid: string,
                                  ident1: string,
                                  ident2: string | null) => dispatch(createMappe(journalpostid, ident1, ident2)),
-    resetMappeidAction:         ()                      => dispatch(resetMappeidAction())
+    resetMappeidAction:         ()                      => dispatch(resetMappeidAction()),
+    resetPunchAction:           ()                      => dispatch(resetPunchAction())
 });
 
 export const MapperOgFagsaker = injectIntl(connect(mapStateToProps, mapDispatchToProps)(MapperOgFagsakerComponent));

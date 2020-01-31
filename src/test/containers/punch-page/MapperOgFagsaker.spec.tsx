@@ -59,6 +59,7 @@ const setupMapperOgFagsaker = (
         resetMappeidAction: jest.fn(),
         setStepAction: jest.fn(),
         undoSearchForMapperAction: jest.fn(),
+        resetPunchAction: jest.fn(),
         ...mapperOgFagsakerDispatchPropsPartial
     };
 

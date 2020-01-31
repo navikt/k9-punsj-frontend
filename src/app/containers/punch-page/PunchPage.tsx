@@ -150,7 +150,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
                 {...{disabled}}
                 className="bold-label ident-soker-1"
                 maxLength={11}
-                feil={skalViseFeilmelding(ident1) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigformat')} : undefined}
+                feil={skalViseFeilmelding(ident1) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigident')} : undefined}
             />
             {skalViseToFelter && <Input
                 label={intlHelper(intl, 'ident.identifikasjon.felt2')}
@@ -160,7 +160,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps> {
                 {...{disabled}}
                 className="bold-label ident-soker-2"
                 maxLength={11}
-                feil={skalViseFeilmelding(ident2) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigformat')} : undefined}
+                feil={skalViseFeilmelding(ident2) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigident')} : undefined}
             />}
         </div> : <></>;
     };

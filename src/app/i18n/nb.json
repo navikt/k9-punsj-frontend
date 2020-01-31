@@ -52,7 +52,7 @@
   "ident.usignert.sendt":                                           "Det usignerte dokumentet er sendt videre.",
   "ident.usignert.feil.melding":                                    "Det oppsto en feil.",
   "ident.usignert.feil.tilbake":                                    "Tilbake",
-  "ident.feil.ugyldigformat":                                       "Identitetsnummeret må bestå av elleve sifre.",
+  "ident.feil.ugyldigident":                                        "Dette er ikke et gyldig fødsels- eller D-nummer.",
   "arbeidsforhold.arbeidstaker":                                    "Arbeidstaker",
   "arbeidsforhold.annet":                                           "Annet",
   "mapper.infoboks":                                                "Det finnes påbegynte søknader knyttet til {antallSokere, plural, one {identitetsnummeret} other {identitetsnumrene}}. Velg søknaden som hører til dokumentet eller opprett en ny.",
