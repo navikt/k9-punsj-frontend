@@ -7581,10 +7581,10 @@ nav-frontend-ikonknapper@0.0.10:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.10.tgz#8f304e0c11661b71eb5bc1a59cf33fe99e6588b0"
   integrity sha512-LxvNnIXwkYUxv/we8leTkeYK4a08fPjMT7/cSwR4h9Jfx2jqm283ktpLyJLH7eQotsUGa9sWYfmdSYPZQji/Vw==
 
-nav-frontend-ikonknapper@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.11.tgz#475c96f65fc9e716c08bc16aaa3375b25a2f686d"
-  integrity sha512-T2LzG6FV84qyJpHSByQ+AjFDhNTppzTSKwSykrBHVNQmV1btk3kPBvseSnaDzkd3IVYw8oY/uuaxY9rz9ykDNg==
+nav-frontend-ikonknapper@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.12.tgz#c49b832e8dcd983e5f7aac5d2a6f359198b0f4a2"
+  integrity sha512-vaIM9etm3fQClyI8qqRMzbIollq10roLGAjuUi4hM7tuAVPcFWhZWnDG2MbtaJkqNX7gUVOnSgkhIS014xxNCA==
 
 nav-frontend-js-utils@^1.0.8:
   version "1.0.8"
