@@ -56,7 +56,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
     return (
         <IntlProvider {...{locale}}>
             <Normaltekst tag="div" className="fit-window-height">
-                <Header title="K9-punsj" userName={props.authState.userName!}/>
+                <Header title="K9-punsj"/>
                 <LanguageToggle {...{locale}} toggle={props.onChangeLocale}/>
                 <Router>{props.children}</Router>
             </Normaltekst>
