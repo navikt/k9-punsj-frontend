@@ -131,6 +131,10 @@ export class Arbeid implements Required<IArbeid> {
         };
     }
 
+    numberOfWorkPeriods(): number {
+        return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + this.frilanser.length;
+    }
+
     generateTgStrings = (intl: IntlShape): string[] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgString(intl));
 }
 

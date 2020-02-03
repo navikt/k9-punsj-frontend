@@ -1,9 +1,8 @@
-import FagsakReadMode                                                        from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode
-                                                                             from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep, TimeFormat}                                               from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Mappe, Soknad} from 'app/models/types';
-import {IdentRules}                                                          from 'app/rules';
+import FagsakReadMode                                                from 'app/containers/punch-page/FagsakReadMode';
+import SoknadReadMode                                                from 'app/containers/punch-page/SoknadReadMode';
+import {PunchStep, TimeFormat}                                       from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Mappe} from 'app/models/types';
+import {IdentRules}                                                  from 'app/rules';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -13,21 +12,22 @@ import {
     findMapper,
     openFagsakAction,
     openMappeAction,
-    resetMappeidAction, resetPunchAction,
+    resetMappeidAction,
+    resetPunchAction,
     setIdentAction,
     setStepAction,
     undoSearchForMapperAction
-} from 'app/state/actions';
-import {RootStateType}                                                       from 'app/state/RootState';
-import {datetime, getHash, setHash}                                          from 'app/utils';
-import intlHelper                                                            from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeInfo}                                    from 'nav-frontend-alertstriper';
-import {Knapp}                                                               from 'nav-frontend-knapper';
-import ModalWrapper                                                          from 'nav-frontend-modal';
-import NavFrontendSpinner                                                    from 'nav-frontend-spinner';
-import * as React                                                            from 'react';
-import {injectIntl, WrappedComponentProps}                                   from 'react-intl';
-import {connect}                                                             from 'react-redux';
+}                                                                    from 'app/state/actions';
+import {RootStateType}                                               from 'app/state/RootState';
+import {datetime, getHash, setHash}                                  from 'app/utils';
+import intlHelper                                                    from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeInfo}                            from 'nav-frontend-alertstriper';
+import {Knapp}                                                       from 'nav-frontend-knapper';
+import ModalWrapper                                                  from 'nav-frontend-modal';
+import NavFrontendSpinner                                            from 'nav-frontend-spinner';
+import * as React                                                    from 'react';
+import {injectIntl, WrappedComponentProps}                           from 'react-intl';
+import {connect}                                                     from 'react-redux';
 
 export interface IMapperOgFagsakerStateProps {
     punchState: IPunchState;
@@ -162,7 +162,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
                     isOpen={!!chosenMappe && mappeid === chosenMappe.mappeId}
                 >
                     <div className="modal_content">
-                        {chosenMappe?.personer?.[ident1!]?.soeknad && <SoknadReadMode soknad={chosenMappe.personer[ident1!].soeknad!}/>}
+                        {chosenMappe?.personer?.[ident1!]?.soeknad && <SoknadReadMode mappe={new Mappe(chosenMappe)}/>}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>{intlHelper(intl, 'mappe.lesemodus.knapp.velg')}</Knapp>
                             <Knapp className="knapp2" onClick={props.closeMappeAction}>{intlHelper(intl, 'mappe.lesemodus.knapp.lukk')}</Knapp>

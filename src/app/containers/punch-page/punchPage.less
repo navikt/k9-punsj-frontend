@@ -120,7 +120,7 @@
       .soknadsperiode {
         .container {padding: 0}
         .col {
-          padding-top: 0;
+          padding-top:    0;
           padding-bottom: 0;
         }
       }
@@ -262,7 +262,6 @@
 .read-modal {
 
   margin-bottom: 1rem;
-  border-top:    @read-modal-table-border;
 
   ul {
     margin:               0;
@@ -270,20 +269,47 @@
   }
 
   .row {
-    padding:       1rem 0;
     border-bottom: @read-modal-table-border;
   }
 
   .col:first-child {
     padding-left:  0;
     padding-right: .5rem;
-    flex-grow:     1;
+  }
+
+  .alertstripe {
+    margin:                     0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius:  0;
+  }
+
+  .col {
+    margin: 0 .5rem;
+  }
+
+  &.dobbel .row:first-child .col {
+    padding: 0;
+  }
+
+  &.dobbel .row:not(:first-child) .col, &.enkel .col {
+    padding: 1rem .5rem;
+  }
+
+  &.dobbel .row:not(:first-child) .col:not(:first-child) {
+    background-color: #e0f5fb;
   }
 
   .col:last-child {
-    padding-left:  .5rem;
-    padding-right: 0;
-    flex-grow:     2;
+    margin-right: 0 !important;
+  }
+
+  &.enkel {
+    .col:first-child {flex-grow: 1}
+    .col:last-child {flex-grow: 2}
+  }
+
+  &.dobbel {
+    .col {flex-grow: 1}
   }
 
   .periodeliste {
