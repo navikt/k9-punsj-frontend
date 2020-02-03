@@ -1310,6 +1310,17 @@
     nav-frontend-typografi-style "^1.0.17"
     prop-types "^15.7.2"
 
+"@navikt/nap-user-panel@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@navikt/nap-user-panel/-/nap-user-panel-1.0.0.tgz#a4ac7ada637ea1dd0c378c8739b8ed93db4d428c"
+  integrity sha512-zXNplyKJ2Qj/9+dsrdDWQTqmYH6EiLh8ynYYVAu7vz8Df3ikViwjaslKdcHY9eJbogL2fIxhxRoCDtHDkAnwSA==
+  dependencies:
+    "@navikt/nap-bem-utils" "1.0.1"
+    nav-frontend-chevron "^1.0.10"
+    nav-frontend-chevron-style "^0.3.5"
+    nav-frontend-typografi "^2.0.16"
+    nav-frontend-typografi-style "^1.0.17"
+
 "@restart/context@^2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@restart/context/-/context-2.1.4.tgz#a99d87c299a34c28bd85bb489cb07bfd23149c02"

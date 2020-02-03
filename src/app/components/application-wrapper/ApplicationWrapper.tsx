@@ -1,12 +1,13 @@
-import Header                    from '@navikt/nap-header';
-import IntlProvider              from 'app/components/intl-provider/IntlProvider';
-import LanguageToggle            from 'app/components/language-toggle/LanguageToggle';
-import {IAuthState}              from 'app/models/types';
-import {Locale}                  from 'app/models/types/Locale';
-import {checkAuth}               from 'app/state/actions';
-import {RootStateType}           from 'app/state/RootState';
-import NavFrontendSpinner        from 'nav-frontend-spinner';
-import {Normaltekst}             from 'nav-frontend-typografi';
+import Header             from '@navikt/nap-header';
+import UserPanel          from '@navikt/nap-user-panel';
+import IntlProvider       from 'app/components/intl-provider/IntlProvider';
+import LanguageToggle     from 'app/components/language-toggle/LanguageToggle';
+import {IAuthState}       from 'app/models/types';
+import {Locale}           from 'app/models/types/Locale';
+import {checkAuth}        from 'app/state/actions';
+import {RootStateType}    from 'app/state/RootState';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import {Normaltekst}      from 'nav-frontend-typografi';
 import * as React                from 'react';
 import {Col, Container, Row}     from 'react-bootstrap';
 import {connect}                 from 'react-redux';
@@ -56,7 +57,9 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
     return (
         <IntlProvider {...{locale}}>
             <Normaltekst tag="div" className="fit-window-height">
-                <Header title="K9-punsj"/>
+                <Header title="K9-punsj">
+                    <UserPanel name={props.authState.userName!}/>
+                </Header>
                 <LanguageToggle {...{locale}} toggle={props.onChangeLocale}/>
                 <Router>{props.children}</Router>
             </Normaltekst>
