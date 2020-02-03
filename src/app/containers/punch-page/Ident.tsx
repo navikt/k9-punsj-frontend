@@ -1,3 +1,4 @@
+import {IPunchPageComponentState}                                        from 'app/containers/punch-page/PunchPage';
 import {JaNei, PunchStep}                                                from 'app/models/enums';
 import {IPunchState, ISignaturState}                                     from 'app/models/types';
 import {IdentRules}                                                      from 'app/rules';
@@ -27,16 +28,17 @@ export interface IIdentDispatchProps {
 }
 
 export interface IIdentComponentProps {
-    identInput:     (disabled: boolean) => React.ReactElement;
-    findSoknader:   () => void;
-    getPunchPath:   (step: PunchStep) => string;
+    identInput:         (disabled: boolean) => React.ReactElement;
+    identInputValues:   Pick<IPunchPageComponentState, 'ident1' | 'ident2'>;
+    findSoknader:       () => void;
+    getPunchPath:       (step: PunchStep) => string;
 }
 
 type IIdentProps = IIdentStateProps & IIdentDispatchProps & IIdentComponentProps & WrappedComponentProps;
 
 export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIdentProps) => {
 
-    const {intl, signaturState, punchState} = props;
+    const {intl, signaturState, punchState, identInputValues} = props;
     const {signert} = signaturState;
 
     React.useEffect(() => {props.setStepAction(PunchStep.IDENT)}, []);
@@ -82,7 +84,7 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIde
             <Knapp
                 onClick={props.findSoknader}
                 className="knapp knapp1"
-                disabled={signert !== JaNei.JA || !IdentRules.areIdentsValid(punchState.ident1, punchState.ident2)}
+                disabled={signert !== JaNei.JA || !IdentRules.areIdentsValid(identInputValues.ident1, identInputValues.ident2)}
             >{intlHelper(intl, 'ident.knapp.nestesteg')}</Knapp>
             <Knapp onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">{intlHelper(intl, 'ident.knapp.forrigesteg')}</Knapp>
         </div>

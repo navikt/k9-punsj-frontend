@@ -71,6 +71,7 @@ const setupIdent = (
 
     const identComponentProps: IIdentComponentProps = {
         identInput: (disabled: boolean) => <Input value={fnr} {...{disabled}} label=""/>,
+        identInputValues: {ident1: fnr, ident2: ''},
         findSoknader: jest.fn(),
         getPunchPath: jest.fn(),
         ...identComponentPropsPartial

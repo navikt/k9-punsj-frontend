@@ -227,7 +227,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             const arbeidstakerperioder = (harOverskrift?: boolean) => <Periodepaneler
                 intl={intl}
                 periods={arbeid.arbeidstaker}
-                component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker))}
+                component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker), nr)}
                 panelid={i => `arbeidstakerpanel_${i}`}
                 initialPeriodeinfo={initialArbeidstaker}
                 editSoknad={arbeidstaker => this.updateSoknadIndividuelt({arbeid: {...arbeid, arbeidstaker}}, nr)}

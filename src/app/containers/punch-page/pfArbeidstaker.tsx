@@ -4,7 +4,6 @@ import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
 }                                               from 'app/containers/punch-page/Periodepaneler';
-import {IPunchFormComponentState}               from 'app/containers/punch-page/PunchForm';
 import {Arbeidstaker, IArbeidstaker, OrgOrPers} from 'app/models/types';
 import {stringToNumber}                         from 'app/utils/formatUtils';
 import intlHelper                               from 'app/utils/intlUtils';
@@ -15,7 +14,8 @@ import {IntlShape}                              from 'react-intl';
 
 export function pfArbeidstaker(tgStrings: string[],
                                setTgStringsInParentState: (tgStrings: string[]) => any,
-                               generateTgStrings: () => string[]): PeriodeComponent<IArbeidstaker> {
+                               generateTgStrings: () => string[],
+                               sokernr: 1 | 2): PeriodeComponent<IArbeidstaker> {
 
     return (
         arbeidstaker: Arbeidstaker,
@@ -53,7 +53,7 @@ export function pfArbeidstaker(tgStrings: string[],
                                 {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'), value: 'o'},
                                 {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'), value: 'p'}
                             ]}
-                            name={`arbeidsgivertype_${periodeindex}`}
+                            name={`arbeidsgivertype_${sokernr}_${periodeindex}`}
                             legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
                             onChange={event => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
                             checked={selectedType}

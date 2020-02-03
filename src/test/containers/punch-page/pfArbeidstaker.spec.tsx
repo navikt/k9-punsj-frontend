@@ -52,6 +52,7 @@ const testPunchFormComponentState: IPunchFormComponentState = {
 };
 const testSetTgStringsInParentState = jest.fn();
 const testGenerateTgStrings = jest.fn();
+const testSokernr = 1;
 
 const setupPfArbeidstaker = (
     optionalPeriodeinfo?: Periodeinfo<IArbeidstaker>,
@@ -63,7 +64,8 @@ const setupPfArbeidstaker = (
     optionalIntl?: IntlShape,
     optionalTgStrings?: string[],
     optionalSetTgStringsInParentState?: (tgStrings: string[]) => any,
-    optionalGenerateTgStrings?: () => string[]
+    optionalGenerateTgStrings?: () => string[],
+    optionalSokernr?: 1 | 2
 ) => {
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
@@ -71,7 +73,8 @@ const setupPfArbeidstaker = (
     return shallow(pfArbeidstaker(
         optionalTgStrings || testTgStrings,
         optionalSetTgStringsInParentState || testSetTgStringsInParentState,
-        optionalGenerateTgStrings || testGenerateTgStrings
+        optionalGenerateTgStrings || testGenerateTgStrings,
+        optionalSokernr || testSokernr
     )(
         new Arbeidstaker(optionalPeriodeinfo || testPeriodeinfo),
         optionalPeriodeindex || testPeriodeindex,
@@ -91,7 +94,8 @@ describe('pfArbeidstaker', () => {
         expect(pfArbeidstaker(
             testTgStrings,
             testSetTgStringsInParentState,
-            testGenerateTgStrings
+            testGenerateTgStrings,
+            testSokernr
         )).toBeInstanceOf(Function);
     });
 
