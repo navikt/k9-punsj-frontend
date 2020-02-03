@@ -62,7 +62,7 @@
   "mapper.tabell.tilogmed":                                         "Til og med",
   "mappe.lesemodus.spraak":                                         "Søkerens språk:",
   "mappe.lesemodus.barn":                                           "Barnets fødsels-/D-nr. eller fødselsdato:",
-  "mappe.lesemodus.arbeid":                                         "Arbeid",
+  "mappe.lesemodus.arbeid":                                         "Arbeid:",
   "mappe.lesemodus.arbeid.arbeidstaker.beskrivelse":                "Arbeidstaker{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}{op, select, o { for organisasjon med orgnr. {opnr}} p { for person med fnr. {opnr}} other {}}, til stede {tg}%",
   "mappe.lesemodus.arbeid.selvstendigNaeringsdrivende.beskrivelse": "Selvstendig næringsdrivende{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",
   "mappe.lesemodus.arbeid.frilanser.beskrivelse":                   "Frilanser{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",

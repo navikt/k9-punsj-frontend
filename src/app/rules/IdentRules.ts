@@ -3,6 +3,9 @@ export class IdentRules {
     public static REGEX_FNR = /^((((0[1-9]|[12]\d|30)(0[469]|11)|(0[1-9]|[12]\d|3[01])(0[13578]|1[02])|((0[1-9]|1\d|2[0-8])02))\d{2})|2902([02468][048]|[13579][26]))\d{5}$/;
     public static REGEX_DNR = /^((((4[1-9]|[56]\d|70)(0[469]|11)|(4[1-9]|[56]\d|7[01])(0[13578]|1[02])|((4[1-9]|5\d|6[0-8])02))\d{2})|6902([02468][048]|[13579][26]))\d{5}$/;
 
+    public static CONTROL_KEY_1 = [3,7,6,1,8,9,4,5,2];
+    public static CONTROL_KEY_2 = [5,4,3,2,7,6,5,4,3,2];
+
     public static hasIdent11Digits(ident?: any) {
         return typeof ident === 'string' ? /^\d{11}$/.test(ident) : false;
     }
@@ -38,16 +41,7 @@ export class IdentRules {
         }
 
         const d = (index: number) => Number(ident!.charAt(index));
-
-        const result = 11 - ((3 * d(0) +
-                              7 * d(1) +
-                              6 * d(2) +
-                              d(3) +
-                              8 * d(4) +
-                              9 * d(5) +
-                              4 * d(6) +
-                              5 * d(7) +
-                              2 * d(8)) % 11);
+        const result = 11 - this.CONTROL_KEY_1.reduce((s,f,i) => s + f * d(i), 0) % 11;
 
         switch (result) {
             case 11: return 0;
@@ -70,17 +64,7 @@ export class IdentRules {
         }
 
         const d = (index: number) => Number(ident!.charAt(index));
-
-        const result = 11 - ((5 * d(0) +
-                              4 * d(1) +
-                              3 * d(2) +
-                              2 * d(3) +
-                              7 * d(4) +
-                              6 * d(5) +
-                              5 * d(6) +
-                              4 * d(7) +
-                              3 * d(8) +
-                              2 * this.controlDigit1(ident)!) % 11);
+        const result = 11 - this.CONTROL_KEY_2.reduce((s,f,i) => s + f * d(i), 0) % 11;
 
         switch (result) {
             case 11: return 0;

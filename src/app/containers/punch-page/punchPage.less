@@ -292,11 +292,15 @@
   }
 
   &.dobbel .row:not(:first-child) .col, &.enkel .col {
-    padding: 1rem .5rem;
+    padding: 1rem;
   }
 
   &.dobbel .row:not(:first-child) .col:not(:first-child) {
     background-color: #e0f5fb;
+  }
+
+  &.dobbel .felles .col:last-child {
+    color: #669DB4;
   }
 
   .col:last-child {
@@ -304,6 +308,7 @@
   }
 
   &.enkel {
+    border-top: @read-modal-table-border;
     .col:first-child {flex-grow: 1}
     .col:last-child {flex-grow: 2}
   }
