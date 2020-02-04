@@ -80,11 +80,12 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         }
     }, [ident1, ident2]);
 
-    if (!!mapperOgFagsakerState.mappeid) {
-        props.resetMappeidAction();
-        setHash(getPunchPath(PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
-        return null;
-    }
+    React.useEffect(() => {
+        if (!!mapperOgFagsakerState.mappeid && mapperOgFagsakerState.isMappeCreated) {
+            setHash(getPunchPath(PunchStep.FILL_FORM, {id: mapperOgFagsakerState.mappeid}));
+            props.resetMappeidAction();
+        }
+    }, [mapperOgFagsakerState.mappeid]);
 
     if (!ident1 || ident1 === '') {
         return null;
@@ -114,11 +115,6 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
     }
 
     const newMappe = () => props.createMappe(props.journalpostid, punchState.ident1, punchState.ident2);
-
-    if (!mapper.length && !fagsaker.length && !mapperOgFagsakerState.isMappeCreated) {
-        newMappe();
-        return null;
-    }
 
     const technicalError = mapperOgFagsakerState.isMappeCreated && !mapperOgFagsakerState.mappeid
         ? <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
@@ -268,13 +264,22 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         </>;
     }
 
+    if (mapper.length && fagsaker.length) {
+        return <>
+            {backButton}
+            {technicalError}
+            <AlertStripeInfo>Det finnes ufullstendige søknader og fagsaker knyttet til identitetsnummeret. Velg søknaden eller fagsaken som hører til dokumentet eller opprett en ny søknad.</AlertStripeInfo>
+            {showMapper()}
+            {newSoknadButton}
+            {showFagsaker()}
+        </>;
+    }
+
     return <>
         {backButton}
         {technicalError}
-        <AlertStripeInfo>Det finnes ufullstendige søknader og fagsaker knyttet til identitetsnummeret. Velg søknaden eller fagsaken som hører til dokumentet eller opprett en ny søknad.</AlertStripeInfo>
-        {showMapper()}
+        <AlertStripeInfo>{intlHelper(intl, 'mapper.infoboks.ingensoknader', {antallSokere: ident2 ? '2' : '1'})}</AlertStripeInfo>
         {newSoknadButton}
-        {showFagsaker()}
     </>;
 };
 
