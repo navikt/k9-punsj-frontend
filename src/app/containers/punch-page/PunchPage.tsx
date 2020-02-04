@@ -5,12 +5,13 @@ import {Ident}                                             from 'app/containers/
 import {IMapperOgFagsakerComponentProps, MapperOgFagsaker} from 'app/containers/punch-page/MapperOgFagsaker';
 import {PunchForm}                                         from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
+import useQuery                                            from 'app/hooks/useQuery';
 import {PunchStep}                                         from 'app/models/enums';
 import {IPath, IPunchState}                                from 'app/models/types';
 import {IdentRules}                                        from 'app/rules';
 import {getJournalpost, setIdentAction, setStepAction}     from 'app/state/actions';
 import {RootStateType}                                     from 'app/state/RootState';
-import {apiUrl, getPath, setHash}                          from 'app/utils';
+import {apiUrl, getPath, setHash, setQueryInHash}          from 'app/utils';
 import intlHelper                                          from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeSuksess}               from 'nav-frontend-alertstriper';
 import {HoyreChevron, VenstreChevron}                      from 'nav-frontend-chevron';
@@ -36,6 +37,10 @@ export interface IPunchPageDispatchProps {
     getJournalpost: typeof getJournalpost;
 }
 
+export interface IPunchPageQueryProps {
+    dok?: string | null;
+}
+
 export interface IPunchPageComponentProps {
     match?: any;
     step: PunchStep;
@@ -52,9 +57,14 @@ type IPunchPageProps = WrappedComponentProps &
                        RouteComponentProps &
                        IPunchPageComponentProps &
                        IPunchPageStateProps &
-                       IPunchPageDispatchProps;
+                       IPunchPageDispatchProps &
+                       IPunchPageQueryProps;
 
 export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchPageComponentState> {
+
+    private static goToDok(nr: number) {
+        setQueryInHash({dok: nr.toString()});
+    }
 
     state: IPunchPageComponentState = {
         ident1: '',
@@ -86,6 +96,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
     private content() {
 
         const {intl, punchState} = this.props;
+        const dokumenter = this.props.punchState.journalpost?.dokumenter || [];
 
         if (punchState.isJournalpostLoading) {
             return <Container style={{height: '100%'}}>
@@ -119,10 +130,18 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                 minWidth={400}
             >
                 <Panel className="punch_pdf">
+                    {dokumenter.length > 1 && <div className="fleredokumenter">
+                        <div><p>{intlHelper(intl, 'dokument.flere', {doknr: this.dokumentnr().toString(), totalnr: dokumenter.length.toString()})}</p></div>
+                        {dokumenter.map((d,i) => <Flatknapp
+                            key={i}
+                            onClick={() => PunchPageComponent.goToDok(i + 1)}
+                            className={this.dokumentnr() === i + 1 ? 'aktiv' : undefined}
+                        >{i+1}</Flatknapp>)}
+                    </div>}
                     <iframe src={this.pdfUrl()}/>
                     <div className="knapperad">
-                        <Flatknapp onClick={this.togglePdf} className="knapp1">Skjul <HoyreChevron/></Flatknapp>
-                        <Flatknapp onClick={this.openPdfWindow} className="knapp2">Åpne i nytt vindu</Flatknapp>
+                        <Flatknapp onClick={this.togglePdf} className="knapp1">{intlHelper(intl, 'dokument.skjul')} <HoyreChevron/></Flatknapp>
+                        <Flatknapp onClick={this.openPdfWindow} className="knapp2">{intlHelper(intl, 'dokument.nyttvindu')}</Flatknapp>
                     </div>
                     <Flatknapp
                         onClick={this.togglePdf}
@@ -133,12 +152,26 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
         </div>;
     }
 
+    private dokumentnr = () => {
+        let doknr: number;
+        doknr = !!this.props.dok && /^\d+$/.test(this.props.dok) ? Number(this.props.dok) : 1;
+        if (doknr < 1 || doknr > this.props.punchState.journalpost!.dokumenter.length) {
+            doknr = 1;
+        }
+        return doknr;
+    };
+
+    private dokumentid = () => {
+        const dokIndex = this.dokumentnr() - 1;
+        return this.props.punchState.journalpost!.dokumenter[dokIndex].dokumentId;
+    };
+
     private pdfUrl = () =>  apiUrl(ApiPath.DOKUMENT, {
         journalpostId: this.props.journalpostid,
-        dokumentId:    this.props.punchState.journalpost!.dokumenter[0].dokumentId
+        dokumentId:    this.dokumentid()
     });
 
-    private getPath = (step: PunchStep, values?: any) => getPath(this.props.paths, step, values);
+    private getPath = (step: PunchStep, values?: any) => getPath(this.props.paths,step, values, this.props.dok ? {dok: this.props.dok} : undefined);
 
     private togglePdf = () => {
         const panelsWrapper = document.getElementById('panels-wrapper');
@@ -244,4 +277,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (id: string)            => dispatch(getJournalpost(id))
 });
 
-export const PunchPage = withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponent)));
+const PunchPageComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
+    const dok = useQuery().get('dok');
+    return <PunchPageComponent {...props} dok={dok}/>;
+};
+
+export const PunchPage = withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponentWithQuery)));

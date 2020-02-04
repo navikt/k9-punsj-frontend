@@ -19,7 +19,7 @@ import {
     undoSearchForMapperAction
 }                                                                    from 'app/state/actions';
 import {RootStateType}                                               from 'app/state/RootState';
-import {datetime, getHash, setHash}                                  from 'app/utils';
+import {datetime, setHash}                                           from 'app/utils';
 import intlHelper                                                    from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeInfo}                            from 'nav-frontend-alertstriper';
 import {Knapp}                                                       from 'nav-frontend-knapper';
@@ -86,7 +86,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         return null;
     }
 
-    if (!ident1 || ident1 === '' || !getHash().match(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: ''}))) {
+    if (!ident1 || ident1 === '') {
         return null;
     }
 
