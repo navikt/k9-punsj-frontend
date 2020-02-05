@@ -29,7 +29,8 @@
 
     .punch_pdf {
 
-      padding:          4px;
+      @pdfPadding:      3px;
+      padding:          @pdfPadding;
       margin-left:      0.5rem;
       background-color: @navGra40;
       height:           100%;
@@ -39,7 +40,8 @@
 
       .fleredokumenter {
 
-        display: flex;
+        @buttonHeight: 40px;
+        display:       flex;
 
         > div {
           background-color: @white;
@@ -50,15 +52,15 @@
 
         > div, .knapp {
           flex-grow: 1;
-          height:    40px;
+          height:    @buttonHeight;
         }
 
         .knapp {
-          margin-left: 4px;
+          margin-left: @pdfPadding;
           &.aktiv {
             border-bottom-left-radius:  0;
             border-bottom-right-radius: 0;
-            height:                     44px;
+            height:                     calc(@buttonHeight + @pdfPadding);
           }
         }
       }
@@ -78,11 +80,11 @@
 
         .knapp {
           flex-grow:  1;
-          margin-top: 4px;
+          margin-top: @pdfPadding;
 
-          &.knapp1 {margin-right: 2px}
+          &.knapp1 {margin-right: calc(@pdfPadding / 2)}
 
-          &.knapp2 {margin-left: 2px}
+          &.knapp2 {margin-left: calc(@pdfPadding / 2)}
         }
       }
 
