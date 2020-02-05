@@ -65,7 +65,7 @@ export class Soknad implements Required<ISoknad> {
     }
 
     getFom(): string | null {
-        return this.allPeriods
+        return this.periode.fraOgMed || this.allPeriods
                    .map(p => p.periode)
                    .filter(p => !!p)
                    .map(p => p!.fraOgMed)
@@ -74,7 +74,7 @@ export class Soknad implements Required<ISoknad> {
     }
 
     getTom(): string | null {
-        return this.allPeriods
+        return this.periode.tilOgMed || this.allPeriods
                    .map(p => p.periode)
                    .filter(p => !!p)
                    .map(p => p!.tilOgMed)

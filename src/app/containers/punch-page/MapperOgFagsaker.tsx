@@ -136,10 +136,11 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             const {chosenMappe} = props.mapperOgFagsakerState;
             const dobbelSoknad = mappe.genererDobbelSoknad();
             const soknad = dobbelSoknad.soknad1();
-            const fom = soknad.getFom();
-            const tom = soknad.getTom();
+            const {felles} = dobbelSoknad;
+            const fom = dobbelSoknad.getFom();
+            const tom = dobbelSoknad.getTom();
             const rowContent = [
-                !!soknad.barn.norskIdent ? soknad.barn.norskIdent : soknad.barn.foedselsdato,
+                (!!felles.barn.norskIdent ? felles.barn.norskIdent : (felles.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, felles.barn.foedselsdato))) || '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '' // Viser seneste sluttdato
             ];

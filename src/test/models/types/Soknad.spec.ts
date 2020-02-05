@@ -1,6 +1,15 @@
-import {JaNeiVetikke}                                                                  from 'app/models/enums';
-import {IArbeidstaker, IFrilanser, ITilleggsinformasjon, ITilsyn, Periodeinfo, Soknad} from 'app/models/types';
-import {createIntl}                                                                    from 'react-intl';
+import {JaNeiVetikke}                                                                           from 'app/models/enums';
+import {
+    IArbeidstaker,
+    IFrilanser,
+    IPeriode,
+    ITilleggsinformasjon,
+    ITilsyn,
+    Periode,
+    Periodeinfo,
+    Soknad
+} from 'app/models/types';
+import {createIntl}                                                                             from 'react-intl';
 
 jest.mock('app/utils/envUtils');
 
@@ -60,6 +69,10 @@ describe('Soknad', () => {
         }
     });
 
+    const overordnetPeriode: IPeriode = {fraOgMed: dato1, tilOgMed: dato5};
+
+    const soknadMedOverordnetPeriode = new Soknad({...soknadMedFlerePerioder.values(), periode: overordnetPeriode});
+
     const soknadMedPeriodeUtenTilstedevaerelsesgrad = new Soknad({
         arbeid: {
             arbeidstaker: [
@@ -88,6 +101,10 @@ describe('Soknad', () => {
             expect(soknadMedFlerePerioder.getFom()).toEqual(datoTidligst);
         });
 
+        it('Returnerer startdato fra overordnet periode hvis denne er satt', () => {
+            expect(soknadMedOverordnetPeriode.getFom()).toEqual(dato1);
+        });
+
         it('Returnerer null når ingen perioder er satt', () => {
             expect(soknadUtenPerioder.getFom()).toBeNull();
         });
@@ -101,6 +118,10 @@ describe('Soknad', () => {
 
         it('Finner seneste sluttdato', () => {
             expect(soknadMedFlerePerioder.getTom()).toEqual(datoSenest);
+        });
+
+        it('Returnerer sluttdato fra overordnet periode hvis denne er satt', () => {
+            expect(soknadMedOverordnetPeriode.getTom()).toEqual(dato5);
         });
 
         it('Returnerer null når ingen perioder er satt', () => {

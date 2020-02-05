@@ -85,4 +85,34 @@ describe('DobbelSoknad', () => {
             expect(dobbelSoknad.soknad(2)).toMatchObject(soknad2);
         });
     });
+
+    describe('DobbelSoknad.getFom', () => {
+
+        it ('Skal returnere søknadens starttidspunkt når overordnet periode er satt', () => {
+            expect(dobbelSoknad.getFom()).toEqual(periode.fraOgMed);
+        });
+
+        it ('Skal returnere starttidspunkt for tidligste periode når overordnet periode ikke er satt', () => {
+            const tidligStart = '2019-01-01';
+            const fellesSoknadUtenFraOgMed = new SoknadFelles({...felles, periode: {fraOgMed: null, tilOgMed: periode.tilOgMed}});
+            const soker1MedTidligArbeidsperiode = new SoknadIndividuelt({...soker1, arbeid: {frilanser: [{periode: {...periode, fraOgMed: tidligStart}}]}});
+            const dobbelSoknadUtenOverordnetFraOgMedOgMedTidligArbeidsperiode = new DobbelSoknad(fellesSoknadUtenFraOgMed, soker1MedTidligArbeidsperiode, soker2);
+            expect(dobbelSoknadUtenOverordnetFraOgMedOgMedTidligArbeidsperiode.getFom()).toEqual(tidligStart);
+        });
+    });
+
+    describe('DobbelSoknad.getTom', () => {
+
+        it ('Skal returnere søknadens sluttidspunkt når overordnet periode er satt', () => {
+            expect(dobbelSoknad.getTom()).toEqual(periode.tilOgMed);
+        });
+
+        it ('Skal returnere sluttidspunkt for seneste periode når overordnet periode ikke er satt', () => {
+            const senSlutt = '2021-12-31';
+            const fellesSoknadUtenTilOgMed = new SoknadFelles({...felles, periode: {tilOgMed: null, fraOgMed: periode.fraOgMed}});
+            const soker1MedSenArbeidsperiode = new SoknadIndividuelt({...soker1, arbeid: {frilanser: [{periode: {...periode, tilOgMed: senSlutt}}]}});
+            const dobbelSoknadUtenOverordnetTilOgMedOgMedSenArbeidsperiode = new DobbelSoknad(fellesSoknadUtenTilOgMed, soker1MedSenArbeidsperiode, soker2);
+            expect(dobbelSoknadUtenOverordnetTilOgMedOgMedSenArbeidsperiode.getTom()).toEqual(senSlutt);
+        });
+    });
 });

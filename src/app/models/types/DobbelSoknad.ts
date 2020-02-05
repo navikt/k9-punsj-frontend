@@ -40,6 +40,14 @@ export class DobbelSoknad implements IDobbelSoknad {
     soknad(nr: 1 | 2): Soknad {
         return nr === 1 ? this.soknad1() : this.soknad2();
     }
+
+    getFom(): string | null {
+        return this.felles.periode.fraOgMed || [this.soknad1().getFom(), this.soknad2().getFom()].sort()[0];
+    }
+
+    getTom(): string | null {
+        return this.felles.periode.tilOgMed || [this.soknad1().getTom(), this.soknad2().getFom()].sort()[1];
+    }
 }
 
 export class SoknadFelles implements Required<ISoknadFelles> {
