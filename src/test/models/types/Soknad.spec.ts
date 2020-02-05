@@ -1,15 +1,14 @@
-import {JaNeiVetikke}                                                                           from 'app/models/enums';
+import {JaNeiVetikke} from 'app/models/enums';
 import {
     IArbeidstaker,
     IFrilanser,
     IPeriode,
     ITilleggsinformasjon,
     ITilsyn,
-    Periode,
     Periodeinfo,
     Soknad
-} from 'app/models/types';
-import {createIntl}                                                                             from 'react-intl';
+}                     from 'app/models/types';
+import {createIntl}   from 'react-intl';
 
 jest.mock('app/utils/envUtils');
 

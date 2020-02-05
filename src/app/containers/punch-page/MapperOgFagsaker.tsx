@@ -135,7 +135,6 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             const mappeid = mappe.mappeId as string;
             const {chosenMappe} = props.mapperOgFagsakerState;
             const dobbelSoknad = mappe.genererDobbelSoknad();
-            const soknad = dobbelSoknad.soknad1();
             const {felles} = dobbelSoknad;
             const fom = dobbelSoknad.getFom();
             const tom = dobbelSoknad.getTom();

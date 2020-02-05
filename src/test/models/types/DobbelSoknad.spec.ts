@@ -67,16 +67,12 @@ const dobbelSoknad = new DobbelSoknad(felles, soker1, soker2);
 
 describe('DobbelSoknad', () => {
 
-    describe('DobbelSoknad.soknad1', () => {
-        it('Skal generere Soknad for søker 1', () => {
-            expect(dobbelSoknad.soknad1()).toMatchObject(soknad1);
-        });
+    it('Skal generere Soknad for søker 1', () => {
+        expect(dobbelSoknad.soknad1).toMatchObject(soknad1);
     });
 
-    describe('DobbelSoknad.soknad2', () => {
-        it('Skal generere Soknad for søker 2', () => {
-            expect(dobbelSoknad.soknad2()).toMatchObject(soknad2);
-        });
+    it('Skal generere Soknad for søker 2', () => {
+        expect(dobbelSoknad.soknad2).toMatchObject(soknad2);
     });
 
     describe('DobbelSoknad.soknad', () => {

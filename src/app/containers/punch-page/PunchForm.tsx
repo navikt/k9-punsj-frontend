@@ -151,8 +151,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             new SoknadIndividuelt(this.state.dobbelSoknad.soker1),
             !!this.state.dobbelSoknad.soker2 ? new SoknadIndividuelt(this.state.dobbelSoknad.soker2) : undefined
         );
-        const soknad1 = soknad.soknad1();
-        const soknad2 = soknad.soknad2();
+        const {soknad1, soknad2} = soknad;
         const {felles, soker1, soker2} = soknad;
         const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
 
@@ -699,8 +698,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.punchState.ident1,
             this.props.punchState.ident2,
             this.props.journalpostid,
-            {...this.getDobbelSoknadFromStore().soknad1().values(), ...soknad},
-            {...this.getDobbelSoknadFromStore().soknad2().values(), ...soknad}
+            {...this.getDobbelSoknadFromStore().soknad1.values(), ...soknad},
+            {...this.getDobbelSoknadFromStore().soknad2.values(), ...soknad}
         );
     };
 

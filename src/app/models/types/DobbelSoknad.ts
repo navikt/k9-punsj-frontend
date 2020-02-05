@@ -17,6 +17,8 @@ export class DobbelSoknad implements IDobbelSoknad {
     soker1: SoknadIndividuelt;
     soker2: SoknadIndividuelt | null;
     harToSokere: boolean;
+    soknad1: Soknad;
+    soknad2: Soknad;
 
     constructor(
         felles: SoknadFelles,
@@ -27,26 +29,20 @@ export class DobbelSoknad implements IDobbelSoknad {
         this.soker1 = soker1;
         this.soker2 = soker2 || null;
         this.harToSokere = !!soker2;
-    }
-
-    soknad1(): Soknad {
-        return new Soknad({...this.felles, ...this.soker1});
-    }
-
-    soknad2(): Soknad {
-        return new Soknad({...this.felles, ...this.soker2});
+        this.soknad1 = new Soknad({...this.felles, ...this.soker1});
+        this.soknad2 = new Soknad({...this.felles, ...this.soker2});
     }
 
     soknad(nr: 1 | 2): Soknad {
-        return nr === 1 ? this.soknad1() : this.soknad2();
+        return nr === 1 ? this.soknad1 : this.soknad2;
     }
 
     getFom(): string | null {
-        return this.felles.periode.fraOgMed || [this.soknad1().getFom(), this.soknad2().getFom()].sort()[0];
+        return this.felles.periode.fraOgMed || [this.soknad1.getFom(), this.soknad2.getFom()].sort()[0];
     }
 
     getTom(): string | null {
-        return this.felles.periode.tilOgMed || [this.soknad1().getTom(), this.soknad2().getFom()].sort()[1];
+        return this.felles.periode.tilOgMed || [this.soknad1.getTom(), this.soknad2.getFom()].sort()[1];
     }
 }
 

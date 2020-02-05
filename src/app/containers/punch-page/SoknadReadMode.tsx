@@ -16,8 +16,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
     render() {
         const {intl, mappe} = this.props;
         const dobbelSoknad = mappe.genererDobbelSoknad();
-        const soknad1 = dobbelSoknad.soknad1();
-        const soknad2 = dobbelSoknad.soknad2();
+        const {soknad1, soknad2} = dobbelSoknad;
         const {harToSokere} = dobbelSoknad;
         return (
             <Container className={classNames('read-modal soknad-read-mode', harToSokere ? 'dobbel' : 'enkel')}>
