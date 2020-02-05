@@ -56,7 +56,7 @@ export function updateSoknad(mappeid: string,
         personer: {
             [norskIdent]: {
                 journalpostId: journalpostid,
-                soeknad: {...soknad, periode: undefined} // TODO: Implementere periode i backend
+                soeknad: soknad
             }
         }
     };
@@ -96,11 +96,11 @@ export function updateSoknader(mappeid: string,
         personer: {
             [norskIdent1]: {
                 journalpostId: journalpostid,
-                soeknad: {...soknad1, periode: undefined} // TODO: Implementere periode i backend
+                soeknad: soknad1
             },
             [norskIdent2]: {
                 journalpostId: journalpostid,
-                soeknad: {...soknad2, periode: undefined} // TODO: Implementere periode i backend
+                soeknad: soknad2
             }
         }
     };

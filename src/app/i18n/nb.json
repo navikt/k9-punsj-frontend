@@ -137,7 +137,7 @@
   "skjema.feil.spraak.MAA_SETTES":                                  "Språk må være satt.",
   "skjema.feil.barn.MAA_SETTES":                                    "Informasjon om barn må oppgis.",
   "skjema.feil.barn.NORSK_IDENT_ELLER_FOEDSELSDATO_MAA_SETTES":     "Barnets norske identifikasjonsnummer eller fødselsdato må være satt.",
-  "skjema.feil.perioder.MINST_EN_MAA_SETTES":                       "Minst én periode må være satt.",
+  "skjema.feil.periode.MAA_SETTES":                                 "Søknadsperiode må være satt.",
   "skjema.feil.fraOgMed.MAA_SETTES":                                "Startdato må være satt.",
   "skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED":                 "Startdato må være før sluttdato.",
   "skjema.feil.tilOgMed.MAA_SETTES":                                "Sluttdato må være satt.",
