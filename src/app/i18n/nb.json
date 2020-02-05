@@ -44,7 +44,7 @@
   "fordeling.omfordeling.utfort":                                   "Journalposten er omfordelt.",
   "fordeling.omfordeling.feil":                                     "Det oppsto en feil. Prøv igjen senere.",
   "ident.signatur.overskrift":                                      "Signatur",
-  "ident.signatur.etikett":                                         "Er dokumentet signert?",
+  "ident.signatur.etikett":                                         "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
   "ident.identifikasjon.overskrift":                                "Identifikasjon",
   "ident.identifikasjon.felt":                                      "Søkers fødselsnummer eller D-nummer:",
   "ident.identifikasjon.felt1":                                     "Første søkers fødselsnummer eller D-nummer:",
