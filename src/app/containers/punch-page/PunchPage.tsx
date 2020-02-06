@@ -225,7 +225,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                                                           getPunchPath={this.getPath}/>;
             case PunchStep.CHOOSE_SOKNAD:   return <MapperOgFagsaker {...commonProps} {...this.extractIdents()}/>;
             case PunchStep.FILL_FORM:       return <PunchForm {...commonProps} id={this.props.match.params.id}/>;
-            case PunchStep.COMPLETED:       return <AlertStripeSuksess>Søknaden er sendt til behandling.</AlertStripeSuksess>;
+            case PunchStep.COMPLETED:       return <AlertStripeSuksess className="fullfortmelding">Søknaden er sendt til behandling.</AlertStripeSuksess>;
         }
     }
 
