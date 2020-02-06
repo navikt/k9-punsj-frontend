@@ -142,7 +142,7 @@
     "typescript":                               "3.7.5",
     "webpack":                                  "^4.41.5",
     "webpack-bundle-analyzer":                  "^3.6.0",
-    "webpack-dev-server":                       "^3.10.2"
+    "webpack-dev-server":                       "^3.10.3"
   },
   "browserslist":    [
     ">0.2%",
