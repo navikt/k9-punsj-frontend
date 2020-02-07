@@ -1,11 +1,11 @@
-import {PersonBox}                                          from 'app/components/person-box/PersonBox';
-import {JaNeiVetikke}                                       from 'app/models/enums';
-import {Arbeid, Mappe, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types';
-import intlHelper                                           from 'app/utils/intlUtils';
-import classNames                                           from 'classnames';
-import * as React                                           from 'react';
-import {Col, Container, Row}                                from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                  from 'react-intl';
+import {PersonBox}                                                   from 'app/components/person-box/PersonBox';
+import {JaNeiVetikke}                                                from 'app/models/enums';
+import {Arbeid, Mappe, Periode, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types';
+import intlHelper                                                    from 'app/utils/intlUtils';
+import classNames                                                    from 'classnames';
+import * as React                                                    from 'react';
+import {Col, Container, Row}                                         from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}                           from 'react-intl';
 
 interface ISoknadReadModeProps {
     mappe: Mappe;
@@ -26,6 +26,11 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col><PersonBox header={intlHelper(intl, 'soker2')} ident={mappe.idents[1]}/></Col>
                 </Row>}
                 <Row>
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
+                    {this.soknadsperioder(soknad1.perioder)}
+                    {harToSokere && this.soknadsperioder(soknad2.perioder)}
+                </Row>
+                <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.spraak')}</Col>
                     <Col>{intlHelper(intl, `locale.${soknad1.spraak}`)}</Col>
                     {harToSokere && <Col>{intlHelper(intl, `locale.${soknad2.spraak}`)}</Col>}
@@ -58,6 +63,8 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
             </Container>
         );
     }
+
+    private soknadsperioder = (sokandsperioder: Periode[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.description(this.props.intl)}</li>)}</ul></Col>;
 
     private arbeid = (arbeid: Arbeid) => {
         const {intl} = this.props;
