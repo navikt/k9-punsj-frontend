@@ -51,9 +51,9 @@ describe('Mappe', () => {
 describe('Personlig', () => {
 
     const fellesMangler: IInputError[] = [
+        {attributt: 'spraak'},
         {attributt: 'barn'},
         {attributt: 'barn.norskIdent'},
-        {attributt: 'periode.fraOgMed'},
         {attributt: 'beredskap[2]'},
         {attributt: 'beredskap[2]test'},
         {attributt: 'nattevaak'},
@@ -61,7 +61,9 @@ describe('Personlig', () => {
     ];
 
     const individuelleMangler: IInputError[] = [
-        {attributt: 'spraak'},
+        {attributt: 'perioder'},
+        {attributt: 'perioder[1]'},
+        {attributt: 'perioder[1].fraOgMed'},
         {attributt: 'arbeid'},
         {attributt: 'arbeid.arbeidstaker[0]'},
         {attributt: 'arbeid.arbeidstaker[0].periode'}

@@ -1,8 +1,8 @@
-import {ApiPath}                                      from 'app/apiConfig';
-import {JaNeiVetikke, MapperOgFagsakerActionKeys}     from 'app/models/enums';
-import {IError, IFagsak, IMappe, IPersonlig, ISoknad} from 'app/models/types';
-import {MappeRules}                                   from 'app/rules';
-import {convertResponseToError, get, post}            from 'app/utils';
+import {ApiPath}                                  from 'app/apiConfig';
+import {JaNeiVetikke, MapperOgFagsakerActionKeys} from 'app/models/enums';
+import {IError, IFagsak, IMappe, IPersonlig}      from 'app/models/types';
+import {MappeRules}                               from 'app/rules';
+import {convertResponseToError, get, post}        from 'app/utils';
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
@@ -92,6 +92,7 @@ export function createMappe(journalpostid: string, ident1: string, ident2: strin
     const initialInfo: IPersonlig = {
         journalpostId: journalpostid,
         soeknad: {
+            perioder: [{}],
             arbeid: {
                 arbeidstaker: [],
                 selvstendigNaeringsdrivende: [],

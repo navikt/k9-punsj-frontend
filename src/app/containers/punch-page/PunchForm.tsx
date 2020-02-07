@@ -1,4 +1,3 @@
-import {PeriodInput}                                   from 'app/components/period-input/PeriodInput';
 import {PersonBox}                                     from 'app/components/person-box/PersonBox';
 import {Periodepaneler}                                from 'app/containers/punch-page/Periodepaneler';
 import {pfArbeidstaker}                                from 'app/containers/punch-page/pfArbeidstaker';
@@ -11,6 +10,7 @@ import {
     IDobbelSoknad,
     IFrilanser,
     IInputError,
+    IPeriode,
     IPunchFormState,
     IPunchState,
     ISelvstendigNaerinsdrivende,
@@ -91,14 +91,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     state: IPunchFormComponentState = {
         dobbelSoknad: {
             felles: {
+                spraak: 'nb',
                 barn: {},
-                periode: {},
                 beredskap: [],
                 nattevaak: [],
                 tilsynsordning: {}
             },
             soker1: {
-                spraak: 'nb',
+                perioder: [],
                 arbeid: {}
             },
             soker2: null
@@ -153,7 +153,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         );
         const {soknad1, soknad2} = soknad;
         const {felles, soker1, soker2} = soknad;
-        const isSoknadComplete = !!this.getManglerFromStore() && !this.getManglerFromStore().length;
+        const isSoknadComplete = !!this.getManglerFromStore(1) && !this.getManglerFromStore(1).length && !!this.getManglerFromStore(2) && !this.getManglerFromStore(2).length;
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -175,8 +175,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
+        const initialPeriode: IPeriode = {fraOgMed: '', tilOgMed: ''};
+
         const initialArbeidstaker = new Arbeidstaker({
-            periode: {fraOgMed: '', tilOgMed: ''},
+            periode: initialPeriode,
             skalJobbeProsent: 100.0,
             organisasjonsnummer: '',
             norskIdent: null
@@ -186,7 +188,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const initialFrilanser: Periodeinfo<IFrilanser> = {periode: {fraOgMed: '', tilOgMed: ''}};
 
         const initialTilsyn = new Tilsyn({
-            periode: {fraOgMed: '', tilOgMed: ''},
+            periode: initialPeriode,
             mandag: null,
             tirsdag: null,
             onsdag: null,
@@ -195,26 +197,37 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
 
         const initialBeredskap = new Tilleggsinformasjon({
-            periode: {fraOgMed: '', tilOgMed: ''},
+            periode: initialPeriode,
             tilleggsinformasjon: ''
         });
 
         const initialNattevaak = new Tilleggsinformasjon({
-            periode: {fraOgMed: '', tilOgMed: ''},
+            periode: initialPeriode,
             tilleggsinformasjon: ''
         });
 
-        const sprak = (nr: 1 | 2) => <Select
-            name="sprak"
-            label={intlHelper(intl, 'skjema.spraak')}
-            className="bold-label"
-            value={(nr === 1 || !soker2 ? soker1 : soker2).spraak}
-            {...this.onChangeOnlyUpdateIndividuelt(event => ({spraak: event.target.value}), nr)}
-            feil={this.getErrorMessage('spraak', nr)}
-        >
-            <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
-            <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
-        </Select>;
+/*        const perioder = (nr: 1 | 2) => <PeriodInput
+            periode={(nr === 1 ? soker1 : soker2!).periode}
+            {...{intl}}
+            className="soknadsperiode"
+            onChange={periode => this.updateIndividuellSoknadState({periode}, nr)}
+            onBlur={periode => this.updateSoknadIndividuelt({periode}, nr)}
+            errorMessage={this.getErrorMessage('periode')}
+            errorMessageFom={this.getErrorMessage('periode.fraOgMed', nr)}
+            errorMessageTom={this.getErrorMessage('periode.tilOgMed', nr)}
+        />;*/
+
+        const soknadsperioder = (nr: 1 | 2) => <Periodepaneler
+            intl={intl}
+            periods={(nr === 1 ? soker1 : soker2!).perioder.map(periode => ({periode}))}
+            panelid={i => `soknadsperiodepanel_${i}`}
+            initialPeriodeinfo={{periode: initialPeriode}}
+            editSoknad={perioder => this.updateSoknadIndividuelt({perioder: perioder.map(p => p.periode as IPeriode)}, nr)}
+            editSoknadState={(perioder, showStatus) => this.updateIndividuellSoknadState({perioder: perioder.map(p => p.periode as IPeriode)}, nr, showStatus)}
+            getErrorMessage={code => this.getErrorMessage(code.replace(/^perioder\[\d]\.periode/, prefix => prefix.replace(/\.periode$/, '')), nr)}
+            feilkodeprefiks={'perioder'}
+            minstEn={true}
+        />;
 
         const arbeidsperioder = (nr: 1 | 2) => {
 
@@ -395,7 +408,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 : <></>/*<AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>*/)}
             <SkjemaGruppe feil={this.getErrorMessage('')}>
                 <h2>{intlHelper(intl, 'skjema.opplysningerombarnogsoker')}</h2>
-                {dobbel(sprak)}
+                <Select
+                    name="sprak"
+                    label={intlHelper(intl, 'skjema.spraak')}
+                    className="bold-label"
+                    value={felles.spraak}
+                    {...this.onChangeOnlyUpdateFelles(event => ({spraak: event.target.value}))}
+                    feil={this.getErrorMessage('spraak')}
+                >
+                    <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
+                    <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
+                </Select>
                 <SkjemaGruppe feil={this.getErrorMessage('barn')} className="inputs-barn">
                     <Input
                         id="barn-ident"
@@ -416,22 +439,43 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />
                 </SkjemaGruppe>
                 <h2>{intlHelper(intl, 'skjema.periode')}</h2>
-                <PeriodInput
-                    periode={felles.periode}
-                    {...{intl}}
-                    className="soknadsperiode"
-                    onChange={periode => this.updateFellesSoknadState({periode})}
-                    onBlur={periode => this.updateSoknadFelles({periode})}
-                    errorMessage={this.getErrorMessage('periode')}
-                    errorMessageFom={this.getErrorMessage('periode.fraOgMed')}
-                    errorMessageTom={this.getErrorMessage('periode.tilOgMed')}
-                />
+                {dobbel(soknadsperioder)}
                 <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
                 {dobbel(arbeidsperioder)}
-                <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
-                {beredskapperioder}
-                <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
-                {nattevaakperioder}
+                <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
+                <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning')} className="tilsynsordning">
+                    <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning.iTilsynsordning')} className="janeivetikke">
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            radios={Object.values(JaNeiVetikke).map(jnv => ({label: intlHelper(intl, jnv), value: jnv}))}
+                            name="tilsynjaneivetikke"
+                            legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
+                            onChange={event => this.updateTilsynsordning((event.target as HTMLInputElement).value as JaNeiVetikke)}
+                            checked={felles.tilsynsordning.iTilsynsordning}
+                        />
+                    </SkjemaGruppe>
+                    {felles.tilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && <Periodepaneler
+                        intl={intl}
+                        periods={felles.tilsynsordning.opphold!}
+                        component={pfTilsyn}
+                        panelid={i => `tilsynpanel_${i}`}
+                        initialPeriodeinfo={initialTilsyn}
+                        editSoknad={opphold => this.updateSoknadFelles({tilsynsordning: {...felles.tilsynsordning, opphold}})}
+                        editSoknadState={(opphold, showStatus) => this.updateFellesSoknadState({tilsynsordning: {...felles.tilsynsordning, opphold}}, showStatus)}
+                        textLeggTil="skjema.tilsyn.leggtilperiode"
+                        textFjern="skjema.tilsyn.fjernperiode"
+                        panelClassName="tilsynpanel"
+                        getErrorMessage={this.getErrorMessage}
+                        feilkodeprefiks={'tilsynsordning.opphold'}
+                        minstEn={felles.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA}
+                    />}
+                </SkjemaGruppe>
+                {felles.tilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && <>
+                    <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
+                    {beredskapperioder}
+                    <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
+                    {nattevaakperioder}
+                </>}
                 {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
                 {!!soknad?.medlemskap?.opphold?.length && (
                     <table className="tabell tabell--stripet">
@@ -528,34 +572,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
                     feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
                 />*/}
-                <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
-                <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning')} className="tilsynsordning">
-                    <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning.iTilsynsordning')} className="janeivetikke">
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={Object.values(JaNeiVetikke).map(jnv => ({label: intlHelper(intl, jnv), value: jnv}))}
-                            name="tilsynjaneivetikke"
-                            legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
-                            onChange={event => this.updateTilsynsordning((event.target as HTMLInputElement).value as JaNeiVetikke)}
-                            checked={felles.tilsynsordning.iTilsynsordning}
-                        />
-                    </SkjemaGruppe>
-                    {felles.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA && <Periodepaneler
-                        intl={intl}
-                        periods={felles.tilsynsordning.opphold!}
-                        component={pfTilsyn}
-                        panelid={i => `tilsynpanel_${i}`}
-                        initialPeriodeinfo={initialTilsyn}
-                        editSoknad={opphold => this.updateSoknadFelles({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}})}
-                        editSoknadState={(opphold, showStatus) => this.updateFellesSoknadState({tilsynsordning: {iTilsynsordning: JaNeiVetikke.JA, opphold}}, showStatus)}
-                        textLeggTil="skjema.tilsyn.leggtilperiode"
-                        textFjern="skjema.tilsyn.fjernperiode"
-                        panelClassName="tilsynpanel"
-                        getErrorMessage={this.getErrorMessage}
-                        feilkodeprefiks={'tilsynsordning.opphold'}
-                        minstEn={true}
-                    />}
-                </SkjemaGruppe>
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident1)}
                     disabled={!isSoknadComplete}
@@ -602,9 +618,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.intl,
             `skjema.feil.${attribute}.${errorMsg}`
                 .replace(/\[\d+]/, '[]')
-                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/gm, 'skjema.feil.fraOgMed.MAA_SETTES')
-                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/gm, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
-                .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/gm, 'skjema.feil.tilOgMed.MAA_SETTES')
+                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
+                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
+                .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
         )} : undefined;
     };
 
@@ -638,6 +654,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private changeAndBlurUpdatesFelles = (change: (event: any) => Partial<ISoknadFelles>) => ({
         onChange: (event: any) => this.updateFellesSoknadState(change(event), false),
         onBlur: (event: any) => this.updateSoknadFelles(change(event))
+    });
+
+    private onChangeOnlyUpdateFelles = (change: (event: any) => Partial<ISoknadFelles>) => ({
+        onChange: (event: any) => {
+            this.updateFellesSoknadState(change(event), true);
+            this.updateSoknadFelles(change(event));
+        }
     });
 
     private onChangeOnlyUpdateIndividuelt = (change: (event: any) => Partial<ISoknadIndividuelt>, nr: 1 |2) => ({
@@ -699,7 +722,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.punchState.ident2,
             this.props.journalpostid,
             {...this.getDobbelSoknadFromStore().soknad1.values(), ...soknad},
-            {...this.getDobbelSoknadFromStore().soknad2.values(), ...soknad}
+            this.props.punchState.ident2 ? {...this.getDobbelSoknadFromStore().soknad2.values(), ...soknad} : null
         );
     };
 

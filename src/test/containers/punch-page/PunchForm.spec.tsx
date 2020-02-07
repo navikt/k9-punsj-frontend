@@ -94,7 +94,7 @@ describe('PunchForm', () => {
 
     it('Viser skjema', () => {
         const punchForm = setupPunchForm();
-        expect(punchForm.find('h2')).toHaveLength(6);
+        expect(punchForm.find('h2')).toHaveLength(4);
     });
 
     it('Henter mappeinformasjon', () => {
@@ -116,13 +116,13 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer mappe og felt når språk endres', () => {
-        const updateSoknad = jest.fn();
+        const updateSoknader = jest.fn();
         const newSprak = 'nn';
-        const punchForm = setupPunchForm({}, {updateSoknad});
+        const punchForm = setupPunchForm({}, {updateSoknader});
         const findSpraakSelect = () => punchForm.find('Select[label="skjema.spraak"]');
         findSpraakSelect().simulate('change', {target: {value: newSprak}});
-        expect(updateSoknad).toHaveBeenCalledTimes(1);
-        expect(updateSoknad).toHaveBeenCalledWith(mappeid, ident1, journalpostid, expect.objectContaining({spraak: newSprak}));
+        expect(updateSoknader).toHaveBeenCalledTimes(1);
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, ident2, journalpostid, expect.objectContaining({spraak: newSprak}), null);
         expect(findSpraakSelect().prop('value')).toEqual(newSprak);
     });
 
@@ -133,7 +133,7 @@ describe('PunchForm', () => {
         punchForm.find('#barn-ident').simulate('blur', {target: {value: newIdent}});
         expect(updateSoknader).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({barn: expect.objectContaining({norskIdent: newIdent})});
-        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, expectedUpdatedSoknad);
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, null);
     });
 
     it('Oppdaterer felt når barnets fødselsnummer endres', () => {
@@ -150,7 +150,7 @@ describe('PunchForm', () => {
         punchForm.find('#barn-fdato').simulate('blur', {target: {value: newFdato}});
         expect(updateSoknader).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({barn: expect.objectContaining({foedselsdato: newFdato})});
-        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, expectedUpdatedSoknad);
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, null);
     });
 
     it('Oppdaterer felt når barnets fødselsdato endres', () => {
@@ -202,7 +202,7 @@ describe('PunchForm', () => {
         expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(0);
     });
 
-    it('Viser ikke perioder når tilsyn er satt til vet ikke', () => {
+    it('Viser perioder når tilsyn er satt til vet ikke', () => {
         const mappe: IMappe = {
             personer: {
                 '0101501234': {
@@ -217,7 +217,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({mappe});
         expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(JaNeiVetikke.VET_IKKE);
-        expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(0);
+        expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(1);
     });
 
     it('Oppdaterer mappe og felt når itilsynsordning endres', () => {
@@ -239,7 +239,7 @@ describe('PunchForm', () => {
         punchForm.find('.tilsynsordning .horizontalRadios').simulate('change', {target: {value: newITilsynsordning}});
         expect(updateSoknader).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({tilsynsordning: expect.objectContaining({iTilsynsordning: newITilsynsordning})});
-        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, expectedUpdatedSoknad);
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, null);
         expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(newITilsynsordning);
     });
 

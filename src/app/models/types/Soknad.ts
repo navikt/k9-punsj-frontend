@@ -12,7 +12,7 @@ export interface ISoknad {
     arbeid?: IArbeid;
     spraak?: Locale;
     barn?: IBarn;
-    periode?: IPeriode;
+    perioder?: IPeriode[];
     beredskap?: Array<Periodeinfo<ITilleggsinformasjon>>;
     nattevaak?: Array<Periodeinfo<ITilleggsinformasjon>>;
     tilsynsordning?: ITilsynsordning;
@@ -23,7 +23,7 @@ export class Soknad implements Required<ISoknad> {
     arbeid: Arbeid;
     spraak: Locale;
     barn: Barn;
-    periode: Periode;
+    perioder: Periode[];
     beredskap: Tilleggsinformasjon[];
     nattevaak: Tilleggsinformasjon[];
     tilsynsordning: Tilsynsordning;
@@ -35,7 +35,7 @@ export class Soknad implements Required<ISoknad> {
         this.arbeid = new Arbeid(soknad.arbeid || {});
         this.spraak = soknad.spraak || 'nb';
         this.barn = new Barn(soknad.barn || {});
-        this.periode = new Periode(soknad.periode || {});
+        this.perioder = (soknad.perioder || []).map(p => new Periode(p));
         this.beredskap = (soknad.beredskap || []).map(b => new Tilleggsinformasjon(b));
         this.nattevaak = (soknad.nattevaak || []).map(n => new Tilleggsinformasjon(n));
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
@@ -56,7 +56,7 @@ export class Soknad implements Required<ISoknad> {
         return {
             spraak: this.spraak,
             barn: this.barn.values(),
-            periode: this.periode.values(),
+            perioder: this.perioder.map(p => p.values()),
             arbeid: this.arbeid.values(),
             beredskap: this.beredskap.map(b => b.values()),
             nattevaak: this.nattevaak.map(n => n.values()),
@@ -65,21 +65,29 @@ export class Soknad implements Required<ISoknad> {
     }
 
     getFom(): string | null {
-        return this.periode.fraOgMed || this.allPeriods
-                   .map(p => p.periode)
-                   .filter(p => !!p)
+        return this.perioder
                    .map(p => p!.fraOgMed)
                    .filter(fom => !!fom && fom !== '')
-                   .sort((a, b) => (a! > b!) ? 1 : -1)?.[0] || null;
+                   .sort((a, b) => (a! > b!) ? 1 : -1)?.[0]
+               || this.allPeriods
+                      .map(p => p.periode)
+                      .filter(p => !!p)
+                      .map(p => p!.fraOgMed)
+                      .filter(fom => !!fom && fom !== '')
+                      .sort((a, b) => (a! > b!) ? 1 : -1)?.[0] || null;
     }
 
     getTom(): string | null {
-        return this.periode.tilOgMed || this.allPeriods
-                   .map(p => p.periode)
-                   .filter(p => !!p)
+        return this.perioder
                    .map(p => p!.tilOgMed)
                    .filter(tom => !!tom && tom !== '')
-                   .sort((a, b) => (a! < b!) ? 1 : -1)?.[0] || null;
+                   .sort((a, b) => (a! < b!) ? 1 : -1)?.[0]
+               || this.allPeriods
+                      .map(p => p.periode)
+                      .filter(p => !!p)
+                      .map(p => p!.tilOgMed)
+                      .filter(tom => !!tom && tom !== '')
+                      .sort((a, b) => (a! < b!) ? 1 : -1)?.[0] || null;
     }
 
     getNumberOfWorkPeriods(): number {
@@ -95,13 +103,13 @@ export class Soknad implements Required<ISoknad> {
     }
 
     extractFelles(): SoknadFelles {
-        const {barn, periode, beredskap, nattevaak, tilsynsordning} = this; // tslint:disable-line:no-this-assignment
-        return new SoknadFelles({barn, periode, beredskap, nattevaak, tilsynsordning});
+        const {spraak, barn, beredskap, nattevaak, tilsynsordning} = this; // tslint:disable-line:no-this-assignment
+        return new SoknadFelles({spraak, barn, beredskap, nattevaak, tilsynsordning});
     }
 
     extractIndividuelt(): SoknadIndividuelt {
-        const {spraak, arbeid} = this; // tslint:disable-line:no-this-assignment
-        return new SoknadIndividuelt({spraak, arbeid});
+        const {perioder, arbeid} = this; // tslint:disable-line:no-this-assignment
+        return new SoknadIndividuelt({perioder, arbeid});
     }
 }
 

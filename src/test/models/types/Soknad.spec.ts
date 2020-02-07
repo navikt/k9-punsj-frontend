@@ -68,9 +68,12 @@ describe('Soknad', () => {
         }
     });
 
-    const overordnetPeriode: IPeriode = {fraOgMed: dato1, tilOgMed: dato5};
+    const overordnedePerioder: IPeriode[] = [
+        {fraOgMed: dato1, tilOgMed: dato4},
+        {fraOgMed: dato2, tilOgMed: dato5}
+    ];
 
-    const soknadMedOverordnetPeriode = new Soknad({...soknadMedFlerePerioder.values(), periode: overordnetPeriode});
+    const soknadMedOverordnedePerioder = new Soknad({...soknadMedFlerePerioder.values(), perioder: overordnedePerioder});
 
     const soknadMedPeriodeUtenTilstedevaerelsesgrad = new Soknad({
         arbeid: {
@@ -100,8 +103,8 @@ describe('Soknad', () => {
             expect(soknadMedFlerePerioder.getFom()).toEqual(datoTidligst);
         });
 
-        it('Returnerer startdato fra overordnet periode hvis denne er satt', () => {
-            expect(soknadMedOverordnetPeriode.getFom()).toEqual(dato1);
+        it('Returnerer startdato fra overordnede perioder hvis disse er satt', () => {
+            expect(soknadMedOverordnedePerioder.getFom()).toEqual(dato1);
         });
 
         it('Returnerer null når ingen perioder er satt', () => {
@@ -119,8 +122,8 @@ describe('Soknad', () => {
             expect(soknadMedFlerePerioder.getTom()).toEqual(datoSenest);
         });
 
-        it('Returnerer sluttdato fra overordnet periode hvis denne er satt', () => {
-            expect(soknadMedOverordnetPeriode.getTom()).toEqual(dato5);
+        it('Returnerer sluttdato fra overordnede perioder hvis disse er satt', () => {
+            expect(soknadMedOverordnedePerioder.getTom()).toEqual(dato5);
         });
 
         it('Returnerer null når ingen perioder er satt', () => {
