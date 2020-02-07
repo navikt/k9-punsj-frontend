@@ -29,6 +29,7 @@ const renderApp = () =>
 const startServer = (html) => {
     server.use('/dist/js', express.static(path.resolve(__dirname, 'dist/js')));
     server.use('/dist/css', express.static(path.resolve(__dirname, 'dist/css')));
+    server.use('/dist/favicon.png', express.static(path.resolve(__dirname, 'dist/favicon.png')));
 
     server.get('/health/isAlive', (req, res) => res.sendStatus(200));
     server.get('/health/isReady', (req, res) => res.sendStatus(200));
