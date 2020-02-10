@@ -114,7 +114,7 @@
     "jest":                                     "^25.1.0",
     "jest-cli":                                 "^25.1.0",
     "jest-css-modules":                         "^2.1.0",
-    "less":                                     "^3.10.3",
+    "less":                                     "^3.11.0",
     "less-loader":                              "^5.0.0",
     "nav-frontend-alertstriper-style":          "^2.0.7",
     "nav-frontend-chevron-style":               "^0.3.5",
