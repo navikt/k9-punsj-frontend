@@ -2,6 +2,8 @@
 
 Frontend for manuell "punching" av papirsøknader som kommer inn for ytelser i kapittel 9.
 
+[![](https://github.com/navikt/k9-punsj-frontend/workflows/Build%20and%20deploy%20K9-punsj-frontend/badge.svg)](https://github.com/navikt/k9-punsj-frontend/actions?query=workflow%3A%22Build+and+deploy+K9-punsj-frontend%22)
+
 ## Komme i gang
 For å kjøre opp applikasjonen:
 ````
