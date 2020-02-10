@@ -18,7 +18,7 @@ export class DobbelSoknad implements IDobbelSoknad {
     soker2: SoknadIndividuelt | null;
     harToSokere: boolean;
     soknad1: Soknad;
-    soknad2: Soknad;
+    soknad2: Soknad | null;
 
     constructor(
         felles: SoknadFelles,
@@ -30,19 +30,23 @@ export class DobbelSoknad implements IDobbelSoknad {
         this.soker2 = soker2 || null;
         this.harToSokere = !!soker2;
         this.soknad1 = new Soknad({...this.felles, ...this.soker1});
-        this.soknad2 = new Soknad({...this.felles, ...this.soker2});
+        this.soknad2 = this.harToSokere ? new Soknad({...this.felles, ...this.soker2}) : null;
     }
 
-    soknad(nr: 1 | 2): Soknad {
+    soknad(nr: 1 | 2): Soknad | null {
         return nr === 1 ? this.soknad1 : this.soknad2;
     }
 
     getFom(): string | null {
-        return [this.soknad1.getFom(), this.soknad2.getFom()].sort()[0];
+        const fom1 = this.soknad1.getFom();
+        const fom2 = this.harToSokere && this.soknad2!.getFom();
+        return fom1 && fom2 ? [fom1, fom2].sort()[0] : fom1;
     }
 
     getTom(): string | null {
-        return [this.soknad1.getTom(), this.soknad2.getTom()].sort()[1];
+        const tom1 = this.soknad1.getTom();
+        const tom2 = this.harToSokere && this.soknad2!.getTom();
+        return tom1 && tom2 ? [tom1, tom2].sort()[1] : tom1;
     }
 }
 

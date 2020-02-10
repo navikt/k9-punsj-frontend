@@ -28,37 +28,37 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
                     {this.soknadsperioder(soknad1.perioder)}
-                    {harToSokere && this.soknadsperioder(soknad2.perioder)}
+                    {harToSokere && this.soknadsperioder(soknad2!.perioder)}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.spraak')}</Col>
                     <Col>{intlHelper(intl, `locale.${soknad1.spraak}`)}</Col>
-                    {harToSokere && <Col>{intlHelper(intl, `locale.${soknad2.spraak}`)}</Col>}
+                    {harToSokere && <Col>{intlHelper(intl, `locale.${soknad2!.spraak}`)}</Col>}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>
                     <Col>{soknad1.getFnrOrFdato()}</Col>
-                    {harToSokere && <Col>{soknad2.getFnrOrFdato()}</Col>}
+                    {harToSokere && <Col>{soknad2!.getFnrOrFdato()}</Col>}
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.arbeid')}</Col>
                     {this.arbeid(soknad1.arbeid)}
-                    {harToSokere && this.arbeid(soknad2.arbeid)}
-                </Row>
-                <Row className="felles">
-                    <Col>{intlHelper(intl, 'mappe.lesemodus.beredskap')}</Col>
-                    {this.tilleggsinfo(soknad1.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
-                    {harToSokere && this.tilleggsinfo(soknad2.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
-                </Row>
-                <Row className="felles">
-                    <Col>{intlHelper(intl, 'mappe.lesemodus.nattevaak')}</Col>
-                    {this.tilleggsinfo(soknad1.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
-                    {harToSokere && this.tilleggsinfo(soknad2.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
+                    {harToSokere && this.arbeid(soknad2!.arbeid)}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
                     {this.tilsynsordning(soknad1.tilsynsordning)}
-                    {harToSokere && this.tilsynsordning(soknad2.tilsynsordning)}
+                    {harToSokere && this.tilsynsordning(soknad2!.tilsynsordning)}
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.beredskap')}</Col>
+                    {this.tilleggsinfo(soknad1.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
+                    {harToSokere && this.tilleggsinfo(soknad2!.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.nattevaak')}</Col>
+                    {this.tilleggsinfo(soknad1.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
+                    {harToSokere && this.tilleggsinfo(soknad2!.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
                 </Row>
             </Container>
         );

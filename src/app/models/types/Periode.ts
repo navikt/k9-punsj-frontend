@@ -64,7 +64,7 @@ export class Periode implements Required<IPeriode> {
         } else if (!!this.fraOgMed) {
             key = 'periode.fra';
         } else if (!!this.tilOgMed) {
-            key = 'peride.til';
+            key = 'periode.til';
         } else {
             key = 'periode.udefinert';
         }

@@ -67,33 +67,40 @@ const soknad2: ISoknad = {
 };
 
 const dobbelSoknad = new DobbelSoknad(felles, soker1, soker2);
+const dobbelSoknadMedKunEnSoker = new DobbelSoknad(felles, soker1);
 
 describe('DobbelSoknad', () => {
 
     it('Skal generere Soknad for søker 1', () => {
         expect(dobbelSoknad.soknad1).toMatchObject(soknad1);
+        expect(dobbelSoknadMedKunEnSoker.soknad1).toMatchObject(soknad1);
     });
 
     it('Skal generere Soknad for søker 2', () => {
         expect(dobbelSoknad.soknad2).toMatchObject(soknad2);
+        expect(dobbelSoknadMedKunEnSoker.soknad2).toBeNull();
     });
 
     describe('DobbelSoknad.soknad', () => {
         it('Skal generere Soknad for valgt søker', () => {
             expect(dobbelSoknad.soknad(1)).toMatchObject(soknad1);
+            expect(dobbelSoknadMedKunEnSoker.soknad(1)).toMatchObject(soknad1);
             expect(dobbelSoknad.soknad(2)).toMatchObject(soknad2);
+            expect(dobbelSoknadMedKunEnSoker.soknad(2)).toBeNull();
         });
     });
 
     describe('DobbelSoknad.getFom', () => {
         it ('Skal returnere tidligste søknads starttidspunkt', () => {
             expect(dobbelSoknad.getFom()).toEqual(tidligSoknadsperiode.fraOgMed);
+            expect(dobbelSoknadMedKunEnSoker.getFom()).toEqual(tidligSoknadsperiode.fraOgMed);
         });
     });
 
     describe('DobbelSoknad.getTom', () => {
         it ('Skal returnere seneste søknads sluttidspunkt', () => {
             expect(dobbelSoknad.getTom()).toEqual(senSoknadsperiode.tilOgMed);
+            expect(dobbelSoknadMedKunEnSoker.getTom()).toEqual(tidligSoknadsperiode.tilOgMed);
         });
     });
 });

@@ -301,7 +301,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 feilkodeprefiks={'arbeid.frilanser'}
             />;
 
-            const antallArbeidsperioder = (nr === 1 ? soknad1 : soknad2).getNumberOfWorkPeriods();
+            const antallArbeidsperioder = (nr === 1 ? soknad1 : soknad2!).getNumberOfWorkPeriods();
 
             const visning = () => {
                 if (!antallArbeidsperioder) {
@@ -710,7 +710,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.id,
             this.props.punchState[`ident${nr}`],
             this.props.journalpostid,
-            {...this.getDobbelSoknadFromStore().soknad(nr).values(), ...soknad}
+            {...this.getDobbelSoknadFromStore().soknad(nr)!.values(), ...soknad}
         );
     };
 
@@ -722,7 +722,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.punchState.ident2,
             this.props.journalpostid,
             {...this.getDobbelSoknadFromStore().soknad1.values(), ...soknad},
-            this.props.punchState.ident2 ? {...this.getDobbelSoknadFromStore().soknad2.values(), ...soknad} : null
+            this.props.punchState.ident2 ? {...this.getDobbelSoknadFromStore().soknad2!.values(), ...soknad} : null
         );
     };
 
