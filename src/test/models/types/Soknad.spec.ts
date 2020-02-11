@@ -141,7 +141,7 @@ describe('Soknad', () => {
             expect(soknadMedFlerePerioder.getNumberOfWorkPeriods()).toEqual(3);
         });
 
-        it('Returenrer 0 når søknaden er tom', () => {
+        it('Returnerer 0 når søknaden er tom', () => {
             expect(tomSoknad.getNumberOfWorkPeriods()).toEqual(0);
         });
     });

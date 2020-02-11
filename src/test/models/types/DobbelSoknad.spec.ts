@@ -15,6 +15,7 @@ import {
 
 jest.mock('app/utils/envUtils');
 
+const datoMottatt: string = '2020-02-11';
 const periode: IPeriode = {fraOgMed: '2020-01-01', tilOgMed: '2020-01-31'};
 const tidligSoknadsperiode: IPeriode = {fraOgMed: '2020-01-02', tilOgMed: '2020-01-29'};
 const senSoknadsperiode: IPeriode = {fraOgMed: '2020-01-03', tilOgMed: '2020-01-30'};
@@ -29,6 +30,7 @@ const nattevaak: Array<Periodeinfo<ITilleggsinformasjon>> = [{periode, tilleggsi
 const tilsynsordning: ITilsynsordning = {iTilsynsordning: JaNeiVetikke.JA, opphold: [{periode, mandag: 'PT4H40M'}]};
 
 const felles = new SoknadFelles({
+    datoMottatt,
     spraak,
     barn,
     beredskap,
@@ -47,6 +49,7 @@ const soker2 = new SoknadIndividuelt({
 });
 
 const soknad1: ISoknad = {
+    datoMottatt,
     perioder: perioder1,
     spraak,
     arbeid: arbeid1,
@@ -57,6 +60,7 @@ const soknad1: ISoknad = {
 };
 
 const soknad2: ISoknad = {
+    datoMottatt,
     perioder: perioder2,
     spraak,
     arbeid: arbeid2,

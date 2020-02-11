@@ -19,15 +19,13 @@ describe('Mappe', () => {
 
     const setupMappe = (mappePartial?: Partial<IMappe>) => new Mappe({mappeId, personer, ...mappePartial});
 
-    describe('Mappe.constructor', () => {
-        it('Skal generere et objekt med to søkere', () => {
-            const mappe = setupMappe();
-            expect(mappe.mappeId).toEqual(mappeId);
-            expect(mappe.personer[identSoker1].journalpostId).toEqual(journalpostId);
-            expect(mappe.personer[identSoker1].soeknad.arbeid.arbeidstaker[0].organisasjonsnummer).toEqual(orgSoker1);
-            expect(mappe.personer[identSoker2].journalpostId).toEqual(journalpostId);
-            expect(mappe.personer[identSoker2].soeknad.arbeid.arbeidstaker[0].organisasjonsnummer).toEqual(orgSoker2);
-        });
+    it('Skal generere et objekt med to søkere', () => {
+        const mappe = setupMappe();
+        expect(mappe.mappeId).toEqual(mappeId);
+        expect(mappe.personer[identSoker1].journalpostId).toEqual(journalpostId);
+        expect(mappe.personer[identSoker1].soeknad.arbeid.arbeidstaker[0].organisasjonsnummer).toEqual(orgSoker1);
+        expect(mappe.personer[identSoker2].journalpostId).toEqual(journalpostId);
+        expect(mappe.personer[identSoker2].soeknad.arbeid.arbeidstaker[0].organisasjonsnummer).toEqual(orgSoker2);
     });
 
     describe('Mappe.genererDobbelSoknad', () => {
@@ -51,6 +49,7 @@ describe('Mappe', () => {
 describe('Personlig', () => {
 
     const fellesMangler: IInputError[] = [
+        {attributt: 'datoMottatt'},
         {attributt: 'spraak'},
         {attributt: 'barn'},
         {attributt: 'barn.norskIdent'},

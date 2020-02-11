@@ -115,6 +115,23 @@ describe('PunchForm', () => {
         expect(punchForm.find('AlertStripeFeil').prop('children')).toEqual('skjema.feil.ikke_funnet');
     });
 
+    it('Oppdaterer mappe når mottakelsesdato endres', () => {
+        const updateSoknader = jest.fn();
+        const newDato = '2020-02-11';
+        const punchForm = setupPunchForm({}, {updateSoknader});
+        punchForm.find('#soknad-dato').simulate('blur', {target: {value: newDato}});
+        expect(updateSoknader).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({datoMottatt: newDato});
+        expect(updateSoknader).toHaveBeenCalledWith(mappeid, ident1, null, journalpostid, expectedUpdatedSoknad, null);
+    });
+
+    it('Oppdaterer felt når mottakelsesdato endres', () => {
+        const newDato = '2020-02-11';
+        const punchForm = setupPunchForm();
+        punchForm.find('#soknad-dato').simulate('change', {target: {value: newDato}});
+        expect(punchForm.find('#soknad-dato').prop('value')).toEqual(newDato);
+    });
+
     it('Oppdaterer mappe og felt når språk endres', () => {
         const updateSoknader = jest.fn();
         const newSprak = 'nn';
@@ -218,6 +235,60 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({mappe});
         expect(punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')).toEqual(JaNeiVetikke.VET_IKKE);
         expect(punchForm.find('.tilsynsordning Periodepaneler')).toHaveLength(1);
+    });
+
+    it('Viser beredskap og nattevåk når tilsyn er satt til ja', () => {
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.JA,
+                            opphold: [{periode: {}}]
+                        }
+                    }
+                }
+            }
+        };
+        const punchForm = setupPunchForm({mappe});
+        expect(punchForm.find('.beredskapsperioder')).toHaveLength(1);
+        expect(punchForm.find('.nattevaaksperioder')).toHaveLength(1);
+    });
+
+    it('Viser ikke beredskap eller nattevåk når tilsyn er satt til nei', () => {
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.NEI,
+                            opphold: [{periode: {}}]
+                        }
+                    }
+                }
+            }
+        };
+        const punchForm = setupPunchForm({mappe});
+        expect(punchForm.find('.beredskapsperioder')).toHaveLength(0);
+        expect(punchForm.find('.nattevaaksperioder')).toHaveLength(0);
+    });
+
+    it('Viser beredskap og nattevåk når tilsyn er satt til vet ikke', () => {
+        const mappe: IMappe = {
+            personer: {
+                '0101501234': {
+                    soeknad: {
+                        tilsynsordning: {
+                            iTilsynsordning: JaNeiVetikke.VET_IKKE,
+                            opphold: [{periode: {}}]
+                        }
+                    }
+                }
+            }
+        };
+        const punchForm = setupPunchForm({mappe});
+        expect(punchForm.find('.beredskapsperioder')).toHaveLength(1);
+        expect(punchForm.find('.nattevaaksperioder')).toHaveLength(1);
     });
 
     it('Oppdaterer mappe og felt når itilsynsordning endres', () => {

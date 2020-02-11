@@ -355,6 +355,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             editSoknadState={(beredskap, showStatus) => this.updateFellesSoknadState({beredskap}, showStatus)}
             textLeggTil="skjema.beredskap.leggtilperiode"
             textFjern="skjema.beredskap.fjernperiode"
+            className="beredskapsperioder"
             panelClassName="beredskapspanel"
             getErrorMessage={this.getErrorMessage}
             feilkodeprefiks={'beredskap'}
@@ -370,6 +371,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             editSoknadState={(nattevaak, showStatus) => this.updateFellesSoknadState({nattevaak}, showStatus)}
             textLeggTil="skjema.nattevaak.leggtilperiode"
             textFjern="skjema.nattevaak.fjernperiode"
+            className="nattevaaksperioder"
             panelClassName="nattevaakspanel"
             getErrorMessage={this.getErrorMessage}
             feilkodeprefiks={'nattevaak'}
@@ -400,6 +402,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <div className="inputs-soknad">
                     <h2>{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h2>
                     <Input
+                        id="soknad-dato"
                         label={intlHelper(intl, 'skjema.mottakelsesdato')}
                         type="date"
                         className="bold-label"
@@ -408,6 +411,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         feil={this.getErrorMessage('datoMottatt')}
                     />
                     <Select
+                        id="soknad-sprak"
                         name="sprak"
                         label={intlHelper(intl, 'skjema.spraak')}
                         className="bold-label"
