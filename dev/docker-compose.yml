@@ -1,0 +1,17 @@
+  azure-mock:
+    image: docker.pkg.github.com/navikt/azure-mock/azure-mock
+    container_name: azure-mock
+    ports:
+      - "8100:8100"
+    mem_limit: 64M
+  k9-punsj-oidc-auth-proxy:
+    image: docker.pkg.github.com/navikt/oidc-auth-proxy/oidc-auth-proxy
+    container_name: k9-punsj-oidc-auth-proxy
+    restart: on-failure
+    ports:
+      - "8101:8101"
+    env_file:
+      - "./k9-punsj-oidc-auth-proxy.env"
+    depends_on:
+      - azure-mock
+    mem_limit: 64M
