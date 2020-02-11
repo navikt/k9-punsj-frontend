@@ -2,7 +2,7 @@ import {Locale}                                                             from
 import {Periode}                                                            from 'app/models/types/Periode';
 import {Arbeid, Barn, ISoknad, Soknad, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types/Soknad';
 
-export type ISoknadFelles = Pick<ISoknad, 'spraak' | 'barn' | 'beredskap' | 'nattevaak' | 'tilsynsordning'>;
+export type ISoknadFelles = Pick<ISoknad, 'datoMottatt' | 'spraak' | 'barn' | 'beredskap' | 'nattevaak' | 'tilsynsordning'>;
 export type ISoknadIndividuelt = Pick<ISoknad, 'arbeid' | 'perioder'>;
 
 export interface IDobbelSoknad {
@@ -52,6 +52,7 @@ export class DobbelSoknad implements IDobbelSoknad {
 
 export class SoknadFelles implements Required<ISoknadFelles> {
 
+    datoMottatt: string;
     spraak: Locale;
     barn: Barn;
     beredskap: Tilleggsinformasjon[];
@@ -59,6 +60,7 @@ export class SoknadFelles implements Required<ISoknadFelles> {
     tilsynsordning: Tilsynsordning;
 
     constructor(soknadFelles: ISoknadFelles) {
+        this.datoMottatt = soknadFelles.datoMottatt || '';
         this.spraak = soknadFelles.spraak || 'nb';
         this.barn = new Barn(soknadFelles.barn || {});
         this.beredskap = (soknadFelles.beredskap || []).map(b => new Tilleggsinformasjon(b));

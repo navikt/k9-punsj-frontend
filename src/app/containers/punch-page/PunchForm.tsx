@@ -91,6 +91,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     state: IPunchFormComponentState = {
         dobbelSoknad: {
             felles: {
+                datoMottatt: '',
                 spraak: 'nb',
                 barn: {},
                 beredskap: [],
@@ -205,17 +206,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             periode: initialPeriode,
             tilleggsinformasjon: ''
         });
-
-/*        const perioder = (nr: 1 | 2) => <PeriodInput
-            periode={(nr === 1 ? soker1 : soker2!).periode}
-            {...{intl}}
-            className="soknadsperiode"
-            onChange={periode => this.updateIndividuellSoknadState({periode}, nr)}
-            onBlur={periode => this.updateSoknadIndividuelt({periode}, nr)}
-            errorMessage={this.getErrorMessage('periode')}
-            errorMessageFom={this.getErrorMessage('periode.fraOgMed', nr)}
-            errorMessageTom={this.getErrorMessage('periode.tilOgMed', nr)}
-        />;*/
 
         const soknadsperioder = (nr: 1 | 2) => <Periodepaneler
             intl={intl}
@@ -407,19 +397,30 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
                 : <></>/*<AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>*/)}
             <SkjemaGruppe feil={this.getErrorMessage('')}>
-                <h2>{intlHelper(intl, 'skjema.opplysningerombarnogsoker')}</h2>
-                <Select
-                    name="sprak"
-                    label={intlHelper(intl, 'skjema.spraak')}
-                    className="bold-label"
-                    value={felles.spraak}
-                    {...this.onChangeOnlyUpdateFelles(event => ({spraak: event.target.value}))}
-                    feil={this.getErrorMessage('spraak')}
-                >
-                    <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
-                    <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
-                </Select>
+                <div className="inputs-soknad">
+                    <h2>{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h2>
+                    <Input
+                        label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                        type="date"
+                        className="bold-label"
+                        value={felles.datoMottatt}
+                        {...this.changeAndBlurUpdatesFelles(event => ({datoMottatt: event.target.value}))}
+                        feil={this.getErrorMessage('datoMottatt')}
+                    />
+                    <Select
+                        name="sprak"
+                        label={intlHelper(intl, 'skjema.spraak')}
+                        className="bold-label"
+                        value={felles.spraak}
+                        {...this.onChangeOnlyUpdateFelles(event => ({spraak: event.target.value}))}
+                        feil={this.getErrorMessage('spraak')}
+                    >
+                        <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
+                        <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
+                    </Select>
+                </div>
                 <SkjemaGruppe feil={this.getErrorMessage('barn')} className="inputs-barn">
+                    <h2>{intlHelper(intl, 'skjema.opplysningerombarn')}</h2>
                     <Input
                         id="barn-ident"
                         label={intlHelper(intl, 'skjema.barn.ident')}

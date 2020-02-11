@@ -9,6 +9,7 @@ import {Locale}                                                  from './Locale'
 import {Periodeinfo, PeriodeinfoExtension}                       from './Periodeinfo';
 
 export interface ISoknad {
+    datoMottatt?: string;
     arbeid?: IArbeid;
     spraak?: Locale;
     barn?: IBarn;
@@ -20,6 +21,7 @@ export interface ISoknad {
 
 export class Soknad implements Required<ISoknad> {
 
+    datoMottatt: string;
     arbeid: Arbeid;
     spraak: Locale;
     barn: Barn;
@@ -32,6 +34,7 @@ export class Soknad implements Required<ISoknad> {
 
     constructor(soknad: ISoknad) {
 
+        this.datoMottatt = soknad.datoMottatt || '';
         this.arbeid = new Arbeid(soknad.arbeid || {});
         this.spraak = soknad.spraak || 'nb';
         this.barn = new Barn(soknad.barn || {});
@@ -54,6 +57,7 @@ export class Soknad implements Required<ISoknad> {
 
     values(): Required<ISoknad> {
         return {
+            datoMottatt: this.datoMottatt,
             spraak: this.spraak,
             barn: this.barn.values(),
             perioder: this.perioder.map(p => p.values()),
@@ -103,8 +107,8 @@ export class Soknad implements Required<ISoknad> {
     }
 
     extractFelles(): SoknadFelles {
-        const {spraak, barn, beredskap, nattevaak, tilsynsordning} = this; // tslint:disable-line:no-this-assignment
-        return new SoknadFelles({spraak, barn, beredskap, nattevaak, tilsynsordning});
+        const {datoMottatt, spraak, barn, beredskap, nattevaak, tilsynsordning} = this; // tslint:disable-line:no-this-assignment
+        return new SoknadFelles({datoMottatt, spraak, barn, beredskap, nattevaak, tilsynsordning});
     }
 
     extractIndividuelt(): SoknadIndividuelt {

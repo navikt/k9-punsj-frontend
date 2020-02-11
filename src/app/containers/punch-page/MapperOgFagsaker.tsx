@@ -139,6 +139,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             const fom = dobbelSoknad.getFom();
             const tom = dobbelSoknad.getTom();
             const rowContent = [
+                !!felles.datoMottatt ? datetime(intl, TimeFormat.DATE_SHORT, felles.datoMottatt) : '',
                 (!!felles.barn.norskIdent ? felles.barn.norskIdent : (felles.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, felles.barn.foedselsdato))) || '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '' // Viser seneste sluttdato
@@ -173,6 +174,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
             <table className="tabell tabell--stripet punch_mappetabell">
                 <thead>
                     <tr>
+                        <th>{intlHelper(intl, 'mapper.tabell.mottakelsesdato')}</th>
                         <th>{intlHelper(intl, 'mapper.tabell.barnetsfnrellerfdato')}</th>
                         <th>{intlHelper(intl, 'mapper.tabell.fraogmed')}</th>
                         <th>{intlHelper(intl, 'mapper.tabell.tilogmed')}</th>

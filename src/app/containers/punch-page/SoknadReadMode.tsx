@@ -1,6 +1,7 @@
 import {PersonBox}                                                   from 'app/components/person-box/PersonBox';
-import {JaNeiVetikke}                                                from 'app/models/enums';
+import {JaNeiVetikke, TimeFormat}                                    from 'app/models/enums';
 import {Arbeid, Mappe, Periode, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types';
+import {datetime}                                                    from 'app/utils';
 import intlHelper                                                    from 'app/utils/intlUtils';
 import classNames                                                    from 'classnames';
 import * as React                                                    from 'react';
@@ -25,6 +26,11 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col><PersonBox header={intlHelper(intl, 'soker1')} ident={mappe.idents[0]}/></Col>
                     <Col><PersonBox header={intlHelper(intl, 'soker2')} ident={mappe.idents[1]}/></Col>
                 </Row>}
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.mottakelsesdato')}</Col>
+                    {this.mottakelsesdato(soknad1.datoMottatt)}
+                    {harToSokere && this.mottakelsesdato(soknad2!.datoMottatt)}
+                </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
                     {this.soknadsperioder(soknad1.perioder)}
@@ -63,6 +69,8 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
             </Container>
         );
     }
+
+    private mottakelsesdato = (dato: string) => <Col>{datetime(this.props.intl, TimeFormat.DATE_WITH_MONTH_NAME, dato)}</Col>;
 
     private soknadsperioder = (sokandsperioder: Periode[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.description(this.props.intl)}</li>)}</ul></Col>;
 
