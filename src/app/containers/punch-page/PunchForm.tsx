@@ -432,6 +432,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         value={felles.barn.norskIdent}
                         {...this.changeAndBlurUpdatesFelles(event => ({barn: {...felles.barn.values(), norskIdent: event.target.value}}))}
                         feil={this.getErrorMessage('barn.norskIdent')}
+                        maxLength={11}
                     />
                     <Input
                         id="barn-fdato"
@@ -623,6 +624,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.intl,
             `skjema.feil.${attribute}.${errorMsg}`
                 .replace(/\[\d+]/, '[]')
+                .replace(/^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED')
                 .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
                 .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
                 .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')

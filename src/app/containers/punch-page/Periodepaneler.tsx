@@ -72,6 +72,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         className={classNames('periodepaneler', props.className)}
     >
         {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
+            const panelErrorMessage = getErrorMessage(`[${periodeindex}]`);
+            const periodErrorMessage = getErrorMessage(`[${periodeindex}].periode`);
             const panelid = props.panelid(periodeindex);
             return <Panel
                 className={classNames('periodepanel', props.panelClassName, !component ? 'kunperiode' : '')}
@@ -79,13 +81,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 id={panelid}
                 key={periodeindex}
             >
-                <SkjemaGruppe feil={getErrorMessage(`[${periodeindex}]`) || undefined}>
+                <SkjemaGruppe feil={panelErrorMessage?.feilmelding !== periodErrorMessage?.feilmelding && panelErrorMessage || undefined}>
                     <PeriodInput
                         periode={periodeinfo.periode || {}}
                         intl={props.intl}
                         onChange={(periode) => {editSoknadState(editPeriode(periodeindex, periode))}}
                         onBlur={(periode) => {editSoknad(editPeriode(periodeindex, periode))}}
-                        errorMessage={getErrorMessage(`[${periodeindex}].periode`)}
+                        errorMessage={periodErrorMessage}
                         errorMessageFom={getErrorMessage(`[${periodeindex}].periode.fraOgMed`)}
                         errorMessageTom={getErrorMessage(`[${periodeindex}].periode.tilOgMed`)}
                     />
