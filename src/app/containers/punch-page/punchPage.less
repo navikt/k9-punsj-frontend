@@ -249,6 +249,12 @@
       .sendknapp-wrapper {margin-bottom: 0}
 
       .fullfortmelding {margin-top: 1rem}
+
+      .skjema__feilomrade--harFeil {
+        @feilbg: fadeout(@pinkErrorBg, 40%);
+        background-color: @feilbg;
+        box-shadow: 0 0 0 8px @feilbg;
+      }
     }
 
     &.pdf_closed .punch_pdf_wrapper {
