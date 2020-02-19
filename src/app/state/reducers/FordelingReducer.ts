@@ -1,7 +1,7 @@
 import {FordelingActionKeys, Sakstype}         from 'app/models/enums';
 import {IFordelingState}                       from 'app/models/types';
 import {IFordelingActionTypes}                 from 'app/state/actions';
-import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
+import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 const initialState: IFordelingState = {
     sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,

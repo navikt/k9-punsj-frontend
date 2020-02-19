@@ -14,8 +14,8 @@ export interface ISoknad {
     spraak?: Locale;
     barn?: IBarn;
     perioder?: IPeriode[];
-    beredskap?: Array<Periodeinfo<ITilleggsinformasjon>>;
-    nattevaak?: Array<Periodeinfo<ITilleggsinformasjon>>;
+    beredskap?: Periodeinfo<ITilleggsinformasjon>[];
+    nattevaak?: Periodeinfo<ITilleggsinformasjon>[];
     tilsynsordning?: ITilsynsordning;
 }
 
@@ -29,8 +29,8 @@ export class Soknad implements Required<ISoknad> {
     beredskap: Tilleggsinformasjon[];
     nattevaak: Tilleggsinformasjon[];
     tilsynsordning: Tilsynsordning;
-    private workPeriods: Array<Periodeinfo<PeriodeinfoExtension>>;
-    private allPeriods: Array<Periodeinfo<PeriodeinfoExtension>>;
+    private workPeriods: Periodeinfo<PeriodeinfoExtension>[];
+    private allPeriods: Periodeinfo<PeriodeinfoExtension>[];
 
     constructor(soknad: ISoknad) {
 
@@ -118,9 +118,9 @@ export class Soknad implements Required<ISoknad> {
 }
 
 export interface IArbeid {
-    arbeidstaker?: Array<Periodeinfo<IArbeidstaker>>;
-    selvstendigNaeringsdrivende?: Array<Periodeinfo<ISelvstendigNaerinsdrivende>>;
-    frilanser?: Array<Periodeinfo<IFrilanser>>;
+    arbeidstaker?: Periodeinfo<IArbeidstaker>[];
+    selvstendigNaeringsdrivende?: Periodeinfo<ISelvstendigNaerinsdrivende>[];
+    frilanser?: Periodeinfo<IFrilanser>[];
 }
 
 export class Arbeid implements Required<IArbeid> {
@@ -152,7 +152,7 @@ export class Arbeid implements Required<IArbeid> {
 
 export interface ITilsynsordning {
     iTilsynsordning?: JaNeiVetikke;
-    opphold?: Array<Periodeinfo<ITilsyn>>;
+    opphold?: Periodeinfo<ITilsyn>[];
 }
 
 export class Tilsynsordning implements Required<ITilsynsordning> {

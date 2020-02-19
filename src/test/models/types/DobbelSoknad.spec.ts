@@ -25,8 +25,8 @@ const arbeid1: IArbeid = {frilanser: [{periode}]};
 const arbeid2: IArbeid = {selvstendigNaeringsdrivende: [{periode}]};
 const spraak: Locale = 'nb';
 const barn: IBarn = {norskIdent: '01012050190'};
-const beredskap: Array<Periodeinfo<ITilleggsinformasjon>> = [{periode, tilleggsinformasjon: 'Lorem ipsum dolor sit amet.'}];
-const nattevaak: Array<Periodeinfo<ITilleggsinformasjon>> = [{periode, tilleggsinformasjon: 'Mauris at sapien sit amet.'}];
+const beredskap: Periodeinfo<ITilleggsinformasjon>[] = [{periode, tilleggsinformasjon: 'Lorem ipsum dolor sit amet.'}];
+const nattevaak: Periodeinfo<ITilleggsinformasjon>[] = [{periode, tilleggsinformasjon: 'Mauris at sapien sit amet.'}];
 const tilsynsordning: ITilsynsordning = {iTilsynsordning: JaNeiVetikke.JA, opphold: [{periode, mandag: 'PT4H40M'}]};
 
 const felles = new SoknadFelles({

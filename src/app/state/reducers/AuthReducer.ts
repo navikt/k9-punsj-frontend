@@ -1,6 +1,6 @@
-import {AuthActionKeys} from "app/models/enums";
-import {IAuthState} from 'app/models/types';
-import {IAuthActionTypes} from "app/state/actions";
+import {AuthActionKeys}   from 'app/models/enums';
+import {IAuthState}       from 'app/models/types';
+import {IAuthActionTypes} from 'app/state/actions';
 
 const initialState: IAuthState = {
     isLoading:  false,

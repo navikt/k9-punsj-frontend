@@ -1,7 +1,7 @@
 import {PunchFormActionKeys}                   from 'app/models/enums';
 import {IPunchFormState}                       from 'app/models/types';
 import {IPunchFormActionTypes}                 from 'app/state/actions/PunchFormActions';
-import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
+import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 const initialState: IPunchFormState = {
     isMappeLoading: false,

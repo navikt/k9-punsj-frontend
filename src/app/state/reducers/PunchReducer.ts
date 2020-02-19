@@ -1,7 +1,7 @@
 import {PunchActionKeys, PunchStep}            from 'app/models/enums';
 import {IPunchState}                           from 'app/models/types';
 import {IPunchActionTypes}                     from 'app/state/actions';
-import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
+import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 export const initialState: IPunchState = {
     step: PunchStep.FORDELING,
