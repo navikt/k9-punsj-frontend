@@ -1,10 +1,11 @@
 import {PeriodInput}                                               from 'app/components/period-input/PeriodInput';
+import {
+    ListeComponent,
+    Listepaneler,
+    UpdateListeinfoInSoknad,
+    UpdateListeinfoInSoknadState
+}                                                                  from 'app/containers/punch-page/Listepaneler';
 import {IPeriode, IPeriodeinfo, Periodeinfo, PeriodeinfoExtension} from 'app/models/types';
-import intlHelper                                                  from 'app/utils/intlUtils';
-import classNames                                                  from 'classnames';
-import {Knapp}                                                     from 'nav-frontend-knapper';
-import {Panel}                                                     from 'nav-frontend-paneler';
-import {SkjemaGruppe}                                              from 'nav-frontend-skjema';
 import {SkjemaelementFeil}                                         from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
 import * as React                                                  from 'react';
 import {IntlShape}                                                 from 'react-intl';
@@ -43,8 +44,7 @@ export interface IPeriodepanelerProps {
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks} = props;
-    const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
+    const {intl, component, editSoknad, editSoknadState} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: IPeriodeinfo = {...props.periods[index], ...periodeinfo};
@@ -55,78 +55,56 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
 
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, {periode});
 
-    const addPeriode = () => {
-        const newArray = periods;
-        newArray.push(props.initialPeriodeinfo);
-        return newArray;
-    };
+    const periodComponent: ListeComponent<IPeriodeinfo> = (
+        periodeinfo: IPeriodeinfo,
+        periodeindeks: number,
+        updatePeriodeinfoInSoknad: UpdateListeinfoInSoknad<IPeriodeinfo>,
+        updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfo>,
+        feilkodeprefiksMedIndeks: string,
+        getErrorMessage: GetErrorMessage,
+        intlShape: IntlShape
+    ) => <>
+        <PeriodInput
+            periode={periodeinfo.periode || {}}
+            intl={intlShape}
+            onChange={(periode) => {editSoknadState(editPeriode(periodeindeks, periode))}}
+            onBlur={(periode) => {editSoknad(editPeriode(periodeindeks, periode))}}
+            errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
+            errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fraOgMed`)}
+            errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tilOgMed`)}
+        />
+        {!!component && component(
+            periodeinfo,
+            periodeindeks,
+            updatePeriodeinfoInSoknad,
+            updatePeriodeinfoInSoknadState,
+            feilkodeprefiksMedIndeks,
+            getErrorMessage,
+            intlShape
+        )}
+    </>;
 
-    const removePeriode = (index: number) => {
-        const newArray = periods;
-        newArray.splice(index, 1);
-        return newArray;
-    };
-
-    return <SkjemaGruppe
-        feil={getErrorMessage('')}
-        className={classNames('periodepaneler', props.className)}
-    >
-        {!!props.periods && props.periods!.map((periodeinfo, periodeindex) => {
-            const panelErrorMessage = getErrorMessage(`[${periodeindex}]`);
-            const periodErrorMessage = getErrorMessage(`[${periodeindex}].periode`);
-            const panelid = props.panelid(periodeindex);
-            return <Panel
-                className={classNames('periodepanel', props.panelClassName, !component ? 'kunperiode' : '')}
-                border={true}
-                id={panelid}
-                key={periodeindex}
-            >
-                <SkjemaGruppe feil={panelErrorMessage?.feilmelding !== periodErrorMessage?.feilmelding && panelErrorMessage || undefined}>
-                    <PeriodInput
-                        periode={periodeinfo.periode || {}}
-                        intl={props.intl}
-                        onChange={(periode) => {editSoknadState(editPeriode(periodeindex, periode))}}
-                        onBlur={(periode) => {editSoknad(editPeriode(periodeindex, periode))}}
-                        errorMessage={periodErrorMessage}
-                        errorMessageFom={getErrorMessage(`[${periodeindex}].periode.fraOgMed`)}
-                        errorMessageTom={getErrorMessage(`[${periodeindex}].periode.tilOgMed`)}
-                    />
-                    {!!component && component(
-                        periodeinfo,
-                        periodeindex,
-                        info => editSoknad(editInfo(periodeindex, info)),
-                        (info, showStatus) => editSoknadState(editInfo(periodeindex, info), showStatus),
-                        `${feilkodeprefiks}[${periodeindex}]`,
-                        getErrorMessage,
-                        intl
-                    )}
-                    <div className="periodebunn">
-                        <Knapp
-                            onClick={() => {
-                                const newArray: IPeriodeinfo[] = removePeriode(periodeindex);
-                                editSoknadState(newArray);
-                                editSoknad(newArray);
-                                !!props.onRemove && props.onRemove();
-                            }}
-                            className="fjernperiodeknapp"
-                            disabled={props.minstEn && props.periods.length < 2}
-                        >
-                            {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
-                        </Knapp>
-                    </div>
-                </SkjemaGruppe>
-            </Panel>
-        })}
-        <Knapp
-            onClick={() => {
-                const newArray: IPeriodeinfo[] = addPeriode();
-                editSoknadState(newArray);
-                editSoknad(newArray);
-                !!props.onAdd && props.onAdd();
-            }}
-            className="leggtilperiodeknapp"
-        >
-            {intlHelper(intl, props.textLeggTil || 'skjema.perioder.legg_til')}
-        </Knapp>
-    </SkjemaGruppe>;
+    return <Listepaneler
+        intl={intl}
+        items={periods}
+        panelid={props.panelid}
+        initialItem={props.initialPeriodeinfo}
+        editSoknad={editSoknad}
+        editSoknadState={editSoknadState}
+        getErrorMessage={props.getErrorMessage}
+        className={props.className}
+        minstEn={props.minstEn}
+        feilkodeprefiks={props.feilkodeprefiks}
+        component={periodComponent}
+        onAdd={props.onAdd}
+        onRemove={props.onRemove}
+        panelClassName={props.panelClassName}
+        textFjern={props.textFjern || 'skjema.perioder.fjern'}
+        textLeggTil={props.textLeggTil || 'skjema.perioder.legg_til'}
+        overridePanelErrorMessage={!!props.getErrorMessage ? index => {
+            const panelErrorMessage = props.getErrorMessage!(`[${index}]`);
+            const periodErrorMessage = props.getErrorMessage!(`[${index}].periode`);
+            return panelErrorMessage?.feilmelding !== periodErrorMessage?.feilmelding && panelErrorMessage || undefined;
+        } : undefined}
+    />;
 };
