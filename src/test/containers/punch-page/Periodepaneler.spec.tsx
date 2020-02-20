@@ -69,98 +69,13 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodepanele
 
 describe('Periodepaneler', () => {
 
-    it('Viser riktig antall perioder', () => {
+    it('Viser listepaneler', () => {
         const periodepaneler = setupPeriodepaneler();
-        expect(periodepaneler.find('.periodepanel')).toHaveLength(testperioder.length);
+        expect(periodepaneler.find('Listepaneler')).toHaveLength(1);
     });
 
-    it('Legger til en periode', () => {
-        const editSoknadState = jest.fn();
-        const editSoknad = jest.fn();
-        const periodepaneler = setupPeriodepaneler({editSoknadState, editSoknad});
-        periodepaneler.find('.leggtilperiodeknapp').simulate('click');
-        expect(editSoknadState).toHaveBeenCalledTimes(1);
-        expect(editSoknadState).toHaveBeenCalledWith(expect.arrayContaining([...testperioder, initialperiodetest]));
-        expect(editSoknad).toHaveBeenCalledTimes(1);
-        expect(editSoknad).toHaveBeenCalledWith(expect.arrayContaining([...testperioder, initialperiodetest]));
-    });
-
-    it('Fjerner en periode', () => {
-        const editSoknadState = jest.fn();
-        const editSoknad = jest.fn();
-        const periodepaneler = setupPeriodepaneler({editSoknadState, editSoknad});
-        periodepaneler.find('#testperiode_1 .fjernperiodeknapp').simulate('click');
-        expect(editSoknadState).toHaveBeenCalledTimes(1);
-        expect(editSoknadState).toHaveBeenCalledWith(expect.not.arrayContaining([testperiode1]));
-        expect(editSoknad).toHaveBeenCalledTimes(1);
-        expect(editSoknad).toHaveBeenCalledWith(expect.not.arrayContaining([testperiode1]));
-    });
-
-    it('Viser infokomponent i periode', () => {
+    it('Viser perioder som listeelementer', () => {
         const periodepaneler = setupPeriodepaneler();
-        expect(periodepaneler.find('.testinput')).toHaveLength(testperioder.length);
-        expect(periodepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
-        expect(periodepaneler.find(`#${testinputid(1)}`).prop('value')).toEqual(testperioder[1].test);
-    });
-
-    it('Viser feilmelding i infokomponent', () => {
-        const feilkodeprefiks = 'test';
-        const periodepaneler = setupPeriodepaneler({feilkodeprefiks});
-        expect(periodepaneler.find('.testinput')).toHaveLength(testperioder.length);
-        expect(periodepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
-        expect(periodepaneler.find(`#${testinputid(1)}`).prop('feil'))
-            .toEqual({feilmelding: `Feilmelding med kode ${feilkodeprefiks}[1]`});
-    });
-
-    it('Kaller updatePeriodeinfoInSoknadState med ny verdi', () => {
-        const editSoknadState = jest.fn();
-        const periodepaneler = setupPeriodepaneler({editSoknadState});
-        const newValue = 'Hihihi';
-        periodepaneler.find(`#${testinputid(1)}`).simulate('change', {target: {value: newValue}});
-        expect(editSoknadState).toHaveBeenCalledTimes(1);
-        expect(editSoknadState).toHaveBeenCalledWith(expect.arrayContaining([{...testperioder[1], test: newValue}]), false);
-    });
-
-    it('Kaller updatePeriodeinfoInSoknad med ny verdi', () => {
-        const editSoknad = jest.fn();
-        const periodepaneler = setupPeriodepaneler({editSoknad});
-        const newValue = 'Hihihi';
-        periodepaneler.find(`#${testinputid(1)}`).simulate('blur', {target: {value: newValue}});
-        expect(editSoknad).toHaveBeenCalledTimes(1);
-        expect(editSoknad).toHaveBeenCalledWith(expect.arrayContaining([{...testperioder[1], test: newValue}]));
-    });
-
-    it('Gir egendefinert klassenavn til alle periodepaneler', () => {
-        const panelClassName = 'rattata';
-        const periodepaneler = setupPeriodepaneler({panelClassName});
-        periodepaneler.find('Panel').forEach(panel => expect(panel.prop('className')).toEqual(`periodepanel ${panelClassName}`));
-    });
-
-    it('Skal vise feilmelding for alle perioder', () => {
-        const feilkodeprefiks = 'test';
-        const getErrorMessage = jest.fn();
-        setupPeriodepaneler({getErrorMessage, feilkodeprefiks});
-        expect(getErrorMessage).toHaveBeenCalledWith(feilkodeprefiks);
-    });
-
-    it('Skal vise feilmeldinger for enkeltperioder', () => {
-        const feilkodeprefiks = 'test';
-        const getErrorMessage = jest.fn();
-        const periodepaneler = setupPeriodepaneler({getErrorMessage, feilkodeprefiks});
-        periodepaneler.find('Panel').forEach(panel => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}[${panel.prop('key')}]`));
-    });
-
-    it('Kaller onAdd når en periode legges til', () => {
-        const onAdd = jest.fn();
-        const periodepaneler = setupPeriodepaneler({onAdd});
-        periodepaneler.find('.leggtilperiodeknapp').simulate('click');
-        expect(onAdd).toHaveBeenCalledTimes(1);
-    });
-
-    it('Kaller onRemove når en periode fjernes', () => {
-        const onRemove = jest.fn();
-        const periodepaneler = setupPeriodepaneler({onRemove});
-        periodepaneler.find('#testperiode_1 .fjernperiodeknapp').simulate('click');
-        expect(onRemove).toHaveBeenCalledTimes(1);
+        expect(periodepaneler.find('Listepaneler').prop('items')).toEqual(testperioder);
     });
 });

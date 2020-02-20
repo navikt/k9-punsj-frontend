@@ -113,6 +113,8 @@
   "skjema.perioder.tom":                                            "Til og med:",
   "skjema.perioder.fjern":                                          "Fjern periode",
   "skjema.perioder.legg_til":                                       "Legg til periode",
+  "skjema.liste.fjern":                                             "Fjern",
+  "skjema.liste.legg_til":                                          "Legg til",
   "skjema.perioder.arbeidsforhold.slett":                           "Slett",
   "skjema.perioder.arbeidsforhold.arbeidstaker.orgnr":              "Organisasjonsnummer:",
   "skjema.perioder.arbeidsforhold.arbeidstaker.fravaeriprosent":    "Fraværsgrad i prosent:",
