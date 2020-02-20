@@ -188,11 +188,23 @@
         }
 
         &.arbeidstakerpanel {
+
           .infoContainer {
             padding: .5rem;
             .col {padding: 0 .5rem}
             label {font-weight: bold}
             .skjemaelement {margin-top: 1rem}
+          }
+
+          .listepaneler {
+
+            margin: .5rem 1rem;
+            .leggtillisteelementknapp:not(:hover) {background-color: @navBlaLighten80}
+
+            .listepanel {
+              background-color: @white;
+              .arbeidstaker-tilstedevaerelse {margin: .5rem 1rem}
+            }
           }
         }
 
@@ -205,6 +217,7 @@
           &:first-child {margin-top: 1rem}
 
           .tilsyntabell {
+
             padding:          .5rem;
             margin:           .5rem 0;
             text-align:       center;
@@ -308,6 +321,7 @@
   ul {
     margin:               0;
     padding-inline-start: 20px;
+    p {margin: 0}
   }
 
   .row {

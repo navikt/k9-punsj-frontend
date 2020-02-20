@@ -1,6 +1,6 @@
 import {ApiPath}                                from 'app/apiConfig';
 import {PunchFormActionKeys}                    from 'app/models/enums';
-import {IError, IMappe, ISoknad, ISoknadFelles} from 'app/models/types';
+import {IError, IMappe, ISoknad}                from 'app/models/types';
 import {IInputError}                            from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
 

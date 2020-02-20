@@ -1,4 +1,5 @@
 import {PersonBox}                                     from 'app/components/person-box/PersonBox';
+import {Listepaneler}                                  from 'app/containers/punch-page/Listepaneler';
 import {Periodepaneler}                                from 'app/containers/punch-page/Periodepaneler';
 import {pfArbeidstaker}                                from 'app/containers/punch-page/pfArbeidstaker';
 import {pfTilleggsinformasjon}                         from 'app/containers/punch-page/pfTilleggsinformasjon';
@@ -77,8 +78,8 @@ export interface IPunchFormComponentState {
     dobbelSoknad:       IDobbelSoknad;
     isFetched:          boolean;
     showStatus:         boolean;
-    tgStrings1:         string[];
-    tgStrings2:         string[];
+    tgStrings1:         string[][];
+    tgStrings2:         string[][];
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -179,8 +180,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const initialPeriode: IPeriode = {fraOgMed: '', tilOgMed: ''};
 
         const initialArbeidstaker = new Arbeidstaker({
-            periode: initialPeriode,
-            skalJobbeProsent: 100.0,
+            skalJobbeProsent: [{
+                periode: initialPeriode,
+                grad: 100.0
+            }],
             organisasjonsnummer: '',
             norskIdent: null
         });
@@ -226,12 +229,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             const {arbeid} = soker;
             const errorMessageFunction = (code: string) => this.getErrorMessage(code, nr);
 
-            const arbeidstakerperioder = (harOverskrift?: boolean) => <Periodepaneler
+            const arbeidstakerperioder = (harOverskrift?: boolean) => <Listepaneler
                 intl={intl}
-                periods={arbeid.arbeidstaker}
+                items={arbeid.arbeidstaker}
                 component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker), nr)}
                 panelid={i => `arbeidstakerpanel_${i}`}
-                initialPeriodeinfo={initialArbeidstaker}
+                initialItem={initialArbeidstaker}
                 editSoknad={arbeidstaker => this.updateSoknadIndividuelt({arbeid: {...arbeid, arbeidstaker}}, nr)}
                 editSoknadState={(arbeidstaker, showStatus) => this.updateIndividuellSoknadState({
                     arbeid: {
@@ -239,8 +242,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         arbeidstaker
                     }
                 }, nr, showStatus)}
-                textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.arbeidstaker.leggtilperiode'}
-                textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                textLeggTil={harOverskrift ? 'skjema.arbeid.arbeidstaker.leggtilarbeidsgiver' : 'skjema.arbeid.arbeidstaker.leggtilperiode'}
+                textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
                 panelClassName="arbeidstakerpanel"
                 getErrorMessage={errorMessageFunction}
                 feilkodeprefiks={'arbeid.arbeidstaker'}
@@ -536,47 +539,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     label="Skal bo i utlandet i løpet av de neste 12 månedene"
                     checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
                     {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
-                />
-                <h2>Beredskap</h2>
-                <Checkbox
-                    label="Beredskap"
-                    checked={_.get(soknad, 'beredskap.svar', false)}
-                    {...this.onChangeOnlyUpdate(event => ({beredskap: {...soknad.beredskap, svar: event.target.checked}}))}
-                />
-                <Textarea
-                    label="Tilleggsopplysninger:"
-                    value={_.get(soknad, 'beredskap.tilleggsinformasjon', '')}
-                    {...this.changeAndBlurUpdates(event => ({beredskap: {...soknad.beredskap, tilleggsinformasjon: event.target.value}}))}
-                />
-                <h2>Nattevåk</h2>
-                <Checkbox
-                    label="Nattevåk"
-                    checked={_.get(soknad, 'nattevaak.svar', false)}
-                    {...this.onChangeOnlyUpdate(event => ({nattevaak: {...soknad.nattevaak, svar: event.target.checked}}))}
-                />
-                <Textarea
-                    label="Tilleggsopplysninger:"
-                    value={_.get(soknad, 'nattevaak.tilleggsinformasjon', '')}
-                    {...this.changeAndBlurUpdates(event => ({nattevaak: {...soknad.nattevaak, tilleggsinformasjon: event.target.value}}))}
-                />
-                <h2>Søknad om pleiepenger</h2>
-                <Input
-                    name="fom"
-                    type="date"
-                    label="Fra og med:"
-                    className="bold-label"
-                    value={_.get(soknad, 'fra_og_med', '')}
-                    {...this.changeAndBlurUpdates(event => ({fra_og_med: event.target.value}))}
-                    feil={!!this.getErrorMessage('fra_og_med') ? {feilmelding: this.getErrorMessage('fra_og_med')} : undefined}
-                />
-                <Input
-                    name="tom"
-                    type="date"
-                    label="Til og med:"
-                    className="bold-label"
-                    value={_.get(soknad, 'til_og_med', '')}
-                    {...this.changeAndBlurUpdates(event => ({til_og_med: event.target.value}))}
-                    feil={!!this.getErrorMessage('til_og_med') ? {feilmelding: this.getErrorMessage('til_og_med')} : undefined}
                 />*/}
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident1)}

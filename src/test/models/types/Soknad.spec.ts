@@ -22,25 +22,29 @@ describe('Soknad', () => {
     const dato5 = '2020-08-01';
     const datoSenest = '2020-12-31';
 
-    const arbeidstaker0: Periodeinfo<IArbeidstaker> = {
-        periode: {fraOgMed: dato3, tilOgMed: dato4},
-        skalJobbeProsent: 50.00,
+    const arbeidstaker0: IArbeidstaker = {
+        skalJobbeProsent: [{
+            grad: 50.00,
+            periode: {fraOgMed: dato3, tilOgMed: dato4},
+        }],
         organisasjonsnummer: '123456789'
     };
 
-    const arbeidstaker1: Periodeinfo<IArbeidstaker> = {
-        periode: {fraOgMed: dato2, tilOgMed: datoSenest},
-        skalJobbeProsent: 50.00,
+    const arbeidstaker1: IArbeidstaker = {
+        skalJobbeProsent: [{
+            periode: {fraOgMed: dato2, tilOgMed: datoSenest},
+            grad: 50.00
+        }],
         norskIdent: '12345678901'
     };
 
-    const arbeidstakerUtenTilstedevaerelsesgrad: Periodeinfo<IArbeidstaker> = {
-        periode: {fraOgMed: dato2, tilOgMed: datoSenest},
-        norskIdent: '12345678901'
+    const arbeidstakerMedPeriodeUtenTilstedevaerelsesgrad: IArbeidstaker = {
+        norskIdent: '12345678901',
+        skalJobbeProsent: [{periode: {fraOgMed: dato2, tilOgMed: datoSenest}}]
     };
 
-    const arbeidstakerUtenPeriode = {
-        skalJobbeProsent: 100.00,
+    const arbeidstakerUtenPeriode: IArbeidstaker = {
+        skalJobbeProsent: [{grad: 100.00}],
         organisasjonsnummer: '123456789'
     };
 
@@ -79,7 +83,7 @@ describe('Soknad', () => {
         arbeid: {
             arbeidstaker: [
                 arbeidstaker0,
-                arbeidstakerUtenTilstedevaerelsesgrad,
+                arbeidstakerMedPeriodeUtenTilstedevaerelsesgrad,
                 arbeidstaker1
             ]
         }
@@ -150,12 +154,12 @@ describe('Soknad', () => {
 
         const intl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 
-        it('Lager array med strings av tilstedeværelsesgrad', () => {
-            expect(soknadMedFlerePerioder.generateTgStrings(intl)).toEqual(["50,0", "50,0"]);
+        it('Lager todimensjonal array med strings av tilstedeværelsesgrad', () => {
+            expect(soknadMedFlerePerioder.generateTgStrings(intl)).toEqual([["50,0"], ["50,0"]]);
         });
 
-        it('Lager array med strings av tilstedeværelsesgrad med "0,0" når tilstedeværelsesgrad er udefinert', () => {
-            expect(soknadMedPeriodeUtenTilstedevaerelsesgrad.generateTgStrings(intl)).toEqual(["50,0", "0,0", "50,0"]);
+        it('Lager todimensjonal array med strings av tilstedeværelsesgrad med "0,0" når tilstedeværelsesgrad er udefinert', () => {
+            expect(soknadMedPeriodeUtenTilstedevaerelsesgrad.generateTgStrings(intl)).toEqual([["50,0"], ["0,0"], ["50,0"]]);
         });
     });
 });
