@@ -56,6 +56,7 @@
   "ident.usignert.feil.melding":                                       "Det oppsto en feil.",
   "ident.usignert.feil.tilbake":                                       "Tilbake",
   "ident.feil.ugyldigident":                                           "Dette er ikke et gyldig fødsels- eller D-nummer.",
+  "ident.advarsel.samsvarerikke":                                      "{antallIdenter, plural, one {Identitetsnummeret samsvarer ikke} other {Ingen av identitetsnumrene samsvarer}} med det som hører til journalposten. Journalpostens fødsels-/D-nummer er {journalpostident}.",
   "arbeidsforhold.arbeidstaker":                                       "Arbeidstaker",
   "arbeidsforhold.annet":                                              "Annet",
   "mapper.infoboks":                                                   "Det finnes påbegynte søknader knyttet til {antallSokere, plural, one {identitetsnummeret} other {identitetsnumrene}}. Velg søknaden som hører til dokumentet eller opprett en ny.",

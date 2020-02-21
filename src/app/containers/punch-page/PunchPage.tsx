@@ -1,31 +1,31 @@
-import {ApiPath}                                           from 'app/apiConfig';
-import Page                                                from 'app/components/page/Page';
-import {Fordeling}                                         from 'app/containers/punch-page/Fordeling';
-import {Ident}                                             from 'app/containers/punch-page/Ident';
-import {IMapperOgFagsakerComponentProps, MapperOgFagsaker} from 'app/containers/punch-page/MapperOgFagsaker';
-import {PunchForm}                                         from 'app/containers/punch-page/PunchForm';
+import {ApiPath}                                                  from 'app/apiConfig';
+import Page                                                       from 'app/components/page/Page';
+import {Fordeling}                                                from 'app/containers/punch-page/Fordeling';
+import {Ident}                                                    from 'app/containers/punch-page/Ident';
+import {IMapperOgFagsakerComponentProps, MapperOgFagsaker}        from 'app/containers/punch-page/MapperOgFagsaker';
+import {PunchForm}                                                from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
-import useQuery                                            from 'app/hooks/useQuery';
-import {PunchStep}                                         from 'app/models/enums';
-import {IPath, IPunchState}                                from 'app/models/types';
-import {IdentRules}                                        from 'app/rules';
-import {getJournalpost, setIdentAction, setStepAction}     from 'app/state/actions';
-import {RootStateType}                                     from 'app/state/RootState';
-import {apiUrl, getPath, setHash, setQueryInHash}          from 'app/utils';
-import intlHelper                                          from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess}               from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}                      from 'nav-frontend-chevron';
-import {Flatknapp}                                         from 'nav-frontend-knapper';
-import {Panel}                                             from 'nav-frontend-paneler';
-import {Input}                                             from 'nav-frontend-skjema';
-import NavFrontendSpinner                                  from 'nav-frontend-spinner';
+import useQuery                                                   from 'app/hooks/useQuery';
+import {PunchStep}                                                from 'app/models/enums';
+import {IPath, IPunchState}                                       from 'app/models/types';
+import {IdentRules}                                               from 'app/rules';
+import {getJournalpost, setIdentAction, setStepAction}            from 'app/state/actions';
+import {RootStateType}                                            from 'app/state/RootState';
+import {apiUrl, getPath, setHash, setQueryInHash}                 from 'app/utils';
+import intlHelper                                                 from 'app/utils/intlUtils';
+import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {HoyreChevron, VenstreChevron}                             from 'nav-frontend-chevron';
+import {Flatknapp}                                                from 'nav-frontend-knapper';
+import {Panel}                                                    from 'nav-frontend-paneler';
+import {Input}                                                    from 'nav-frontend-skjema';
+import NavFrontendSpinner                                         from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import {Resizable}                                         from 're-resizable';
-import * as React                                          from 'react';
-import {Col, Container, Row}                               from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                 from 'react-intl';
-import {connect}                                           from 'react-redux';
-import {RouteComponentProps, withRouter}                   from 'react-router';
+import {Resizable}                                                from 're-resizable';
+import * as React                                                 from 'react';
+import {Col, Container, Row}                                      from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps}                        from 'react-intl';
+import {connect}                                                  from 'react-redux';
+import {RouteComponentProps, withRouter}                          from 'react-router';
 
 export interface IPunchPageStateProps {
     punchState: IPunchState;
@@ -189,6 +189,9 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
         const {punchState, intl} = this.props;
         const skalViseToFelter = punchState.step === PunchStep.IDENT || punchState.ident2;
         const skalViseFeilmelding = (ident: string | null) =>  ident && ident.length && !disabled && !IdentRules.isIdentValid(ident);
+        const identer = [punchState.ident1, punchState.ident2];
+        const antallIdenter = identer.filter(id => id && id.length).length;
+        const journalpostident = punchState.journalpost?.norskIdent || '';
         return punchState.step > PunchStep.FORDELING ? <div>
             <Input
                 label={intlHelper(intl, skalViseToFelter ? 'ident.identifikasjon.felt1' : 'ident.identifikasjon.felt')}
@@ -212,6 +215,10 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                 maxLength={11}
                 feil={skalViseFeilmelding(punchState.ident2) ? {feilmelding: intlHelper(intl, 'ident.feil.ugyldigident')} : undefined}
             />}
+            {punchState.step === PunchStep.IDENT
+                && antallIdenter > 0
+                && identer.every(ident => !ident || (IdentRules.isIdentValid(ident) && ident !== journalpostident))
+                && <AlertStripeAdvarsel>{intlHelper(intl, 'ident.advarsel.samsvarerikke', {antallIdenter: antallIdenter.toString(), journalpostident})}</AlertStripeAdvarsel>}
         </div> : <></>;
     };
 

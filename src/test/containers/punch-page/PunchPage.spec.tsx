@@ -55,7 +55,7 @@ const setupPunchPage = (
     const journalpost: IJournalpost = typeof journalpostinfo === 'string' ? {
         dokumenter: [{dokumentId: '123'}],
         journalpostId: journalpostid,
-        norskIdent: '12345678901'
+        norskIdent: '12123400036'
     } : journalpostinfo;
 
     const punchState: IPunchState = {
