@@ -1630,10 +1630,10 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^25.1.2":
-  version "25.1.2"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-25.1.2.tgz#1c4c8770c27906c7d8def5d2033df9dbd39f60da"
-  integrity sha512-EsPIgEsonlXmYV7GzUqcvORsSS9Gqxw/OvkGwHfAdpjduNRxMlhsav0O5Kb0zijc/eXSO/uW6SJt9nwull8AUQ==
+"@types/jest@^25.1.3":
+  version "25.1.3"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-25.1.3.tgz#9b0b5addebccfb631175870be8ba62182f1bc35a"
+  integrity sha512-jqargqzyJWgWAJCXX96LBGR/Ei7wQcZBvRv0PLEu9ZByMfcs23keUJrKv9FMR6YZf9YCbfqDqgmY+JUBsnqhrg==
   dependencies:
     jest-diff "^25.1.0"
     pretty-format "^25.1.0"
@@ -1764,10 +1764,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@^16.9.20":
-  version "16.9.20"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.20.tgz#e83285766340fb1a7fafe7e5c4708c53832e3641"
-  integrity sha512-jRrWBr25zzEVNa4QbESKLPluvrZ3W6Odfwrfe2F5vzbrDuNvlpnHa/xbZcXg8RH5D4CE181J5VxrRrLvzRH+5A==
+"@types/react@^16.9.21":
+  version "16.9.21"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.21.tgz#99e274e2ecfab6bb93920e918341daa3198b348d"
+  integrity sha512-xpmenCMeBwJRct8vmIfczlgdOXWIWASoOM857kxKfHlVQvDltRh7IFRVfGws79iO2jkNPXOeWREyKoClzhBaQA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -3038,7 +3038,7 @@ camelcase@^2.0.1:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-2.1.1.tgz#7c1d16d679a1bbe59ca02cacecfb011e201f5a1f"
   integrity sha1-fB0W1nmhu+WcoCys7PsBHiAfWh8=
 
-camelcase@^4.0.0, camelcase@^4.1.0:
+camelcase@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
   integrity sha1-1UVjW+HjPFQmScaRc+Xeas+uNN0=
@@ -7655,10 +7655,10 @@ nav-datovelger@^4.3.0:
     lodash.isequal "4.5.0"
     lodash.throttle "4.1.1"
 
-nav-frontend-alertstriper-style@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.7.tgz#4739c3e451b282565d1a40f16459119e04f61986"
-  integrity sha512-Ld/x6zFJCuGcgM1ETzz3g+7y7dftMx+RT/TSJ5hXO3sfNyZ6gqPTB69ByCh7GYdgp+v3EdNOkXbdIkpbHcQPxQ==
+nav-frontend-alertstriper-style@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/nav-frontend-alertstriper-style/-/nav-frontend-alertstriper-style-2.0.8.tgz#74793c188bbc2f7bb2ddb1d94b72210db4cbd42a"
+  integrity sha512-pHUg+X0QeGWRxDRflZS1r+UPL48M5OZvcrBTlTlu69LV9bu1mnVV+6vmYkwubQl7oEsLTOy5rmHAqKKaPv4vQA==
 
 nav-frontend-alertstriper@^3.0.9:
   version "3.0.9"
@@ -7695,10 +7695,10 @@ nav-frontend-ikoner-assets@^1.0.4:
   resolved "https://registry.yarnpkg.com/nav-frontend-ikoner-assets/-/nav-frontend-ikoner-assets-1.0.4.tgz#3eeb9dbd2aa944aac1cdaac350bb39a140328f9b"
   integrity sha512-XbmUGI6jWTJ4xRj5NG2tE6dTaLx9uK7U7ZD0cHn51Aze0Uxjhf1fAYNZLPLlftJW2v+wsMBnFJKmc6KNxWAbAQ==
 
-nav-frontend-ikonknapper@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.12.tgz#c49b832e8dcd983e5f7aac5d2a6f359198b0f4a2"
-  integrity sha512-vaIM9etm3fQClyI8qqRMzbIollq10roLGAjuUi4hM7tuAVPcFWhZWnDG2MbtaJkqNX7gUVOnSgkhIS014xxNCA==
+nav-frontend-ikonknapper@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ikonknapper/-/nav-frontend-ikonknapper-0.0.13.tgz#4b79885905c700e1a13aa94d6ff112963dfc5388"
+  integrity sha512-tBbEaX9IodcmfI0Ibo/rZEJveFrvi0RxWatVmax61U6k3E/gBaBGSpsX1uFwb7FW1yo0HAxP7+KjQZ3gXqOdjQ==
 
 nav-frontend-js-utils@^1.0.8:
   version "1.0.8"
@@ -7770,10 +7770,10 @@ nav-frontend-spinner-style@^0.2.5:
   resolved "https://registry.yarnpkg.com/nav-frontend-spinner-style/-/nav-frontend-spinner-style-0.2.5.tgz#c782c63589776e768a45d6049047b1a60b6805be"
   integrity sha512-PWSfscmNMbrnXRcXQUgBquU5479bNmO/sw3IwML6s6K/qyEYggRvJdGCbBEYyxXmoeDDjXGd2tkIVy5gja387A==
 
-nav-frontend-spinner@^1.0.21:
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-1.0.21.tgz#bd47723499b385cd2a491f91e329ac8f8f7c238a"
-  integrity sha512-H/UV+MHw5Q/GLeRbxRq/xO5E2z7qyJzx5ambsM4OF/jiK5MaBBkmE/yvKJ/xUsgQwwQPaOOgst2gGk+imiP3QQ==
+nav-frontend-spinner@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-1.0.22.tgz#f5f27760ae0108a4d92cb517eba49d50957a3301"
+  integrity sha512-QpSSyTABV9V9xwv4WhluPBW/ZABOImHP5DGCZIlcASkewNmn8mZIJKfFkciVZqIvP/TFrQN67HJTzAJqx6ajUA==
 
 nav-frontend-tabell-style@^0.2.19:
   version "0.2.19"
@@ -10108,23 +10108,23 @@ snyk-docker-plugin@1.38.0:
     tar-stream "^2.1.0"
     tslib "^1"
 
-snyk-go-parser@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/snyk-go-parser/-/snyk-go-parser-1.3.3.tgz#eac080ba10aed280ef4eebbf2c9f358ce459938d"
-  integrity sha512-h65vi4UDH3ier7+r/E1GTZhruBSbGv3z4dGmzB+pc+g8ljOJd0BfqN6pUPIHB7hjrIbLh6KxT/XtJcV4X7LdeQ==
+snyk-go-parser@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/snyk-go-parser/-/snyk-go-parser-1.4.0.tgz#0fa7e4b9f2cf14c95dbc09206416ac4676436c70"
+  integrity sha512-zcLA8u/WreycCjFKBblYfxszg7Fmnemuu9Ug/CE/jqF0yBXsI5DCWMteUvFkoa8DRntfGTlgf98TRl2aTSc2MQ==
   dependencies:
     toml "^3.0.0"
-    tslib "^1.9.3"
+    tslib "^1.10.0"
 
-snyk-go-plugin@1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/snyk-go-plugin/-/snyk-go-plugin-1.12.0.tgz#a97f8b9c6af167e27bd6db2eb7c1d6f822f01730"
-  integrity sha512-8rba/qn/hrUtPL0tDgdhJvp5HoN/3OMOUTmrtPiI0JHfVW6fqBTM9UnCFXJdK7UCUt9ITKIWIL0UBAzTc4hgKg==
+snyk-go-plugin@1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/snyk-go-plugin/-/snyk-go-plugin-1.13.0.tgz#7d0c7efa3151a893f6744939285f318a9a242c1e"
+  integrity sha512-6lN9S8uO6LE1Y6ZJMZm3EZ8kvvI/vZh8r+JJGAPfVO2C265xymEpFBJ4Nn2or0Q0LlqZ8W8lWi1HUMXXid6k+w==
   dependencies:
     debug "^4.1.1"
     graphlib "^2.1.1"
-    snyk-go-parser "1.3.3"
-    tmp "0.0.33"
+    snyk-go-parser "1.4.0"
+    tmp "0.1.0"
     tslib "^1.10.0"
 
 snyk-gradle-plugin@3.2.4:
@@ -10283,10 +10283,10 @@ snyk-try-require@1.3.1, snyk-try-require@^1.1.1, snyk-try-require@^1.3.1:
     lru-cache "^4.0.0"
     then-fs "^2.0.0"
 
-snyk@^1.294.0:
-  version "1.294.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.294.0.tgz#35759e263c7e8fbe50cfee537955cc374659af00"
-  integrity sha512-F+kDV9GvZUPtkAnssUae1bxoh471fNR2vNDUXsvgdAiZuqHw+N6i/ZTTWuCf3T7GWSuNb5OlGray/5uvS7WJAw==
+snyk@^1.294.1:
+  version "1.294.1"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.294.1.tgz#c0dc6d6a764bf5a8307a53dc95660e82c7d4ba65"
+  integrity sha512-7W5Rd2TYm96ju+1WTuYXv6YWahj9aSHMxBOxvi5CmEazvLBTTTVpY6RdvHkR7Nluna3qf/3zyAQuVciCrQLhwg==
   dependencies:
     "@snyk/cli-interface" "2.3.0"
     "@snyk/configstore" "^3.2.0-rc1"
@@ -10314,7 +10314,7 @@ snyk@^1.294.0:
     semver "^6.0.0"
     snyk-config "^2.2.1"
     snyk-docker-plugin "1.38.0"
-    snyk-go-plugin "1.12.0"
+    snyk-go-plugin "1.13.0"
     snyk-gradle-plugin "3.2.4"
     snyk-module "1.9.1"
     snyk-mvn-plugin "2.9.0"
@@ -10988,7 +10988,7 @@ tmp@0.0.33, tmp@^0.0.33:
   dependencies:
     os-tmpdir "~1.0.2"
 
-tmp@^0.1.0:
+tmp@0.1.0, tmp@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.1.0.tgz#ee434a4e22543082e294ba6201dcc6eafefa2877"
   integrity sha512-J7Z2K08jbGcdA1kkQpJSqLF6T0tdQqpR2pnSUXsIchbPdTI9v3e85cLW0d6WDhwuAleOV71j2xWs8qMPfK7nKw==
@@ -11114,10 +11114,10 @@ tryer@^1.0.1:
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
   integrity sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA==
 
-ts-jest@^25.2.0:
-  version "25.2.0"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-25.2.0.tgz#dfd87c2b71ef4867f5a0a44f40cb9c67e02991ac"
-  integrity sha512-VaRdb0da46eorLfuHEFf0G3d+jeREcV+Wb/SvW71S4y9Oe8SHWU+m1WY/3RaMknrBsnvmVH0/rRjT8dkgeffNQ==
+ts-jest@^25.2.1:
+  version "25.2.1"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-25.2.1.tgz#49bf05da26a8b7fbfbc36b4ae2fcdc2fef35c85d"
+  integrity sha512-TnntkEEjuXq/Gxpw7xToarmHbAafgCaAzOpnajnFC6jI7oo1trMzAHA04eWpc3MhV6+yvhE8uUBAmN+teRJh0A==
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
@@ -11128,7 +11128,7 @@ ts-jest@^25.2.0:
     mkdirp "0.x"
     resolve "1.x"
     semver "^5.5"
-    yargs-parser "10.x"
+    yargs-parser "^16.1.0"
 
 tslib@1.9.3:
   version "1.9.3"
@@ -11265,10 +11265,10 @@ typescript-string-operations@^1.3.2:
   resolved "https://registry.yarnpkg.com/typescript-string-operations/-/typescript-string-operations-1.3.2.tgz#b2fa852398bd221ac67bfcce63484df95ab73bdc"
   integrity sha512-DLIiaICVQw1dJjeSeQE0aa+BfkB1LG20S7otTFOn1Kms8ZA1Ch2A2u5ge9/ozHMZbs0ycvYu2Ql4OxRYv/jrtA==
 
-typescript@3.7.5:
-  version "3.7.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.5.tgz#0692e21f65fd4108b9330238aac11dd2e177a1ae"
-  integrity sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==
+typescript@3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.2.tgz#91d6868aaead7da74f493c553aeff76c0c0b1d5a"
+  integrity sha512-EgOVgL/4xfVrCMbhYKUQTdF37SQn4Iw73H5BgCrF1Abdun7Kwy/QZsE/ssAy0y4LxBbvua3PIbFsbRczWWnDdQ==
 
 uglify-js@3.4.x:
   version "3.4.10"
@@ -11955,13 +11955,6 @@ yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
-
-yargs-parser@10.x:
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-10.1.0.tgz#7202265b89f7e9e9f2e5765e0fe735a905edbaa8"
-  integrity sha512-VCIyR1wJoEBZUqk5PA+oOBF6ypbwh5aNB3I50guxAL/quggdfs4TtNHQrSazFA3fYZ+tEqfs0zIGlv0c/rgjbQ==
-  dependencies:
-    camelcase "^4.1.0"
 
 yargs-parser@^11.1.1:
   version "11.1.1"
