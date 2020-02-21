@@ -1,4 +1,4 @@
-import {Arbeidstaker, IArbeidstaker}                             from 'app/models/types/Arbeidstaker';
+import {Arbeidstaker, IArbeidstaker, Tilstedevaerelsesgrad}      from 'app/models/types/Arbeidstaker';
 import {SoknadFelles, SoknadIndividuelt}                         from 'app/models/types/DobbelSoknad';
 import {Frilanser, IFrilanser}                                   from 'app/models/types/Frilanser';
 import {IPeriode, Periode}                                       from 'app/models/types/Periode';
@@ -44,7 +44,7 @@ export class Soknad implements Required<ISoknad> {
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
 
         this.workPeriods = [];
-        this.workPeriods.push(...this.arbeid.arbeidstaker);
+        this.workPeriods.push(...this.arbeid.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.skalJobbeProsent), []));
         this.workPeriods.push(...this.arbeid.selvstendigNaeringsdrivende);
         this.workPeriods.push(...this.arbeid.frilanser);
 
@@ -98,7 +98,7 @@ export class Soknad implements Required<ISoknad> {
         return this.workPeriods.length;
     }
 
-    generateTgStrings(intl: IntlShape): string[] {
+    generateTgStrings(intl: IntlShape): string[][] {
         return this.arbeid.generateTgStrings(intl);
     }
 
@@ -118,7 +118,7 @@ export class Soknad implements Required<ISoknad> {
 }
 
 export interface IArbeid {
-    arbeidstaker?: Periodeinfo<IArbeidstaker>[];
+    arbeidstaker?: IArbeidstaker[];
     selvstendigNaeringsdrivende?: Periodeinfo<ISelvstendigNaerinsdrivende>[];
     frilanser?: Periodeinfo<IFrilanser>[];
 }
@@ -147,7 +147,7 @@ export class Arbeid implements Required<IArbeid> {
         return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + this.frilanser.length;
     }
 
-    generateTgStrings = (intl: IntlShape): string[] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgString(intl));
+    generateTgStrings = (intl: IntlShape): string[][] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgStrings(intl));
 }
 
 export interface ITilsynsordning {

@@ -10,9 +10,11 @@ const norskIdent = '01015012345';
 
 const setupArbeidstaker = (arbeidstakerPartial?: Partial<IArbeidstaker>) => {
 
-    const arbeidstaker = {
-        periode,
-        skalJobbeProsent: tilstedevaerelsesgrad,
+    const arbeidstaker: IArbeidstaker = {
+        skalJobbeProsent: [{
+            grad: tilstedevaerelsesgrad,
+            periode
+        }],
         organisasjonsnummer,
         ...arbeidstakerPartial
     };
@@ -25,7 +27,7 @@ describe ('Arbeidstaker.generateTgString', () => {
     const intl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 
     it("Skal konvertere tilstedeværelsesgrad til en string", () => {
-        expect(setupArbeidstaker().generateTgString(intl)).toEqual("50,0");
+        expect(setupArbeidstaker().skalJobbeProsent[0].generateTgString(intl)).toEqual("50,0");
     });
 });
 

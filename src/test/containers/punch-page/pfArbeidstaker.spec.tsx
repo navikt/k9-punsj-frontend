@@ -2,30 +2,35 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                                                       from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                                 from 'app/containers/punch-page/pfArbeidstaker';
-import {IPunchFormComponentState}                                       from 'app/containers/punch-page/PunchForm';
-import {Arbeidstaker, IArbeidstaker, ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
-import intlHelper                                                       from 'app/utils/intlUtils';
-import {configure, shallow}                                             from 'enzyme';
-import Adapter                                                          from 'enzyme-adapter-react-16';
-import {RadioProps}                                                     from 'nav-frontend-skjema';
-import {createIntl, IntlShape}                                          from 'react-intl';
-import {mocked}                                                         from 'ts-jest/utils';
+}                                                                                               from 'app/containers/punch-page/Periodepaneler';
+import {pfArbeidstaker}                                                                         from 'app/containers/punch-page/pfArbeidstaker';
+import {IPunchFormComponentState}                                                               from 'app/containers/punch-page/PunchForm';
+import {Arbeidstaker, IArbeidstaker, ITilleggsinformasjon, ITilstedevaerelsesgrad, Periodeinfo} from 'app/models/types';
+import intlHelper
+                                                                                                from 'app/utils/intlUtils';
+import {configure, shallow}                                                                     from 'enzyme';
+import Adapter
+                                                                                                from 'enzyme-adapter-react-16';
+import {RadioProps}                                                                             from 'nav-frontend-skjema';
+import {createIntl, IntlShape}                                                                  from 'react-intl';
+import {mocked}                                                                                 from 'ts-jest/utils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
 configure({adapter: new Adapter()});
 
+const testTilstedevaerelsesgrad: ITilstedevaerelsesgrad = {
+    grad: 100.0
+};
+const testPeriodeinfo: Periodeinfo<ITilstedevaerelsesgrad> = {
+    periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-12-31'},
+    ...testTilstedevaerelsesgrad
+};
 const testArbeidstaker: IArbeidstaker = {
     organisasjonsnummer: '345678912',
     norskIdent: null,
-    skalJobbeProsent: 100.0
-};
-const testPeriodeinfo: Periodeinfo<IArbeidstaker> = {
-    periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-12-31'},
-    ...testArbeidstaker
+    skalJobbeProsent: [testPeriodeinfo]
 };
 const testPeriodeindex = 0;
 const testUpdatePeriodeinfoInSoknad = jest.fn();
@@ -34,12 +39,12 @@ const testFeilprefiks = 'feilprefiks';
 const testGetErrorMessage = jest.fn();
 const testIntl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 const testTgString = '100,0';
-const testTgStrings = [testTgString];
+const testTgStrings = [[testTgString]];
 const testPunchFormComponentState: IPunchFormComponentState = {
     dobbelSoknad: {
         soker1: {
             arbeid: {
-                arbeidstaker: [testPeriodeinfo]
+                arbeidstaker: [testArbeidstaker]
             }
         },
         soker2: null,
@@ -62,9 +67,9 @@ const setupPfArbeidstaker = (
     optionalFeilprefiks?: string,
     optionalGetErrorMessage?: GetErrorMessage,
     optionalIntl?: IntlShape,
-    optionalTgStrings?: string[],
-    optionalSetTgStringsInParentState?: (tgStrings: string[]) => any,
-    optionalGenerateTgStrings?: () => string[],
+    optionalTgStrings?: string[][],
+    optionalSetTgStringsInParentState?: (tgStrings: string[][]) => any,
+    optionalGenerateTgStrings?: () => string[][],
     optionalSokernr?: 1 | 2
 ) => {
 
@@ -128,30 +133,9 @@ describe('pfArbeidstaker', () => {
         expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledWith({organisasjonsnummer: null, norskIdent: ''});
     });
 
-    it('Viser tilstedværelsesgradsfelt', () => {
+    it('Viser periodepaneer', () => {
         const tilleggsinformasjon = setupPfArbeidstaker();
-        expect(tilleggsinformasjon.find('.arbeidstaker-tilstedevaerelse')).toHaveLength(1);
-        expect(tilleggsinformasjon.find('.arbeidstaker-tilstedevaerelse').prop('value')).toEqual(testTgString);
-    });
-
-    it('Kjører updatePeriodeinfoInSoknadState og setTgStringsInParentState på onChange av tilstedeværelsesgrad', () => {
-        const tilleggsinformasjon = setupPfArbeidstaker();
-        const newTgString = '66,7';
-        tilleggsinformasjon.find('.arbeidstaker-tilstedevaerelse').simulate('change', {target: {value: newTgString}});
-        expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledTimes(1);
-        expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledWith({skalJobbeProsent: 66.7});
-        expect(testSetTgStringsInParentState).toHaveBeenCalledTimes(1);
-        expect(testSetTgStringsInParentState).toHaveBeenCalledWith([newTgString]);
-    });
-
-    it('Kjører updatePeriodeinfoInSoknad og setTgStringsInParentState på onBlur av tilstedeværelsesgrad', () => {
-        const tilleggsinformasjon = setupPfArbeidstaker();
-        const newTgString = '66,7';
-        tilleggsinformasjon.find('.arbeidstaker-tilstedevaerelse').simulate('blur', {target: {value: newTgString}});
-        expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledTimes(1);
-        expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledWith({skalJobbeProsent: 66.7});
-        expect(testSetTgStringsInParentState).toHaveBeenCalledTimes(1);
-        expect(testGenerateTgStrings).toHaveBeenCalledTimes(1);
+        expect(tilleggsinformasjon.find('Periodepaneler')).toHaveLength(1);
     });
 
     it('Viser organisasjonsnummerfelt når arbeidsgiver er organisasjon', () => {
@@ -177,10 +161,9 @@ describe('pfArbeidstaker', () => {
     });
 
     it('Viser feilmeldinger', () => {
-        const tilleggsinformasjon = setupPfArbeidstaker();
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.skalJobbeProsent`);
+        setupPfArbeidstaker();
         expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.organisasjonsnummer`);
         expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.norskIdent`);
-        expect(testGetErrorMessage).toHaveBeenCalledTimes(3);
+        expect(testGetErrorMessage).toHaveBeenCalledTimes(2);
     });
 });
