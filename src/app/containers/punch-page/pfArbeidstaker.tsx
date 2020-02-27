@@ -64,7 +64,7 @@ export function pfArbeidstaker(tgStrings: string[][],
                                       className="arbeidstaker-organisasjonsnummer"
                                       onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value})}
                                       onBlur={event => updateListeinfoInSoknad({organisasjonsnummer: event.target.value})}
-                                      feil={getErrorMessage(`${feilprefiks}.organisasjonsnummer`)}/>}
+                                      feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}/>}
                     </Col>
                     <Col>
                         {selectedType === 'p'
@@ -73,7 +73,7 @@ export function pfArbeidstaker(tgStrings: string[][],
                                       className="arbeidstaker-norskIdent"
                                       onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}
                                       onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value})}
-                                      feil={getErrorMessage(`${feilprefiks}.norskIdent`)}/>}
+                                      feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}/>}
                     </Col>
                 </Row>
             </Container>

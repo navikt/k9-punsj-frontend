@@ -36,7 +36,6 @@ export interface IListepanelerProps<T> {
     minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
-    overridePanelErrorMessage?: (itemIndex: number) => (SkjemaelementFeil | undefined);
 }
 
 type ItemInfo = any;
@@ -71,7 +70,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         className={classNames('listepaneler', props.className)}
     >
         {!!props.items && props.items!.map((itemInfo, itemIndex) => {
-            const panelErrorMessage = getErrorMessage(`[${itemIndex}]`);
+            const panelErrorMessage = feilkodeprefiks === 'perioder' ? undefined : getErrorMessage(`[${itemIndex}]`);
             const panelid = props.panelid(itemIndex);
             return <Panel
                 className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
@@ -79,7 +78,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                 id={panelid}
                 key={itemIndex}
             >
-                <SkjemaGruppe feil={props.overridePanelErrorMessage ? props.overridePanelErrorMessage(itemIndex) : panelErrorMessage || undefined}>
+                <SkjemaGruppe feil={panelErrorMessage}>
                     {!!component && component(
                         itemInfo,
                         itemIndex,

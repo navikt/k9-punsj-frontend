@@ -101,10 +101,5 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         panelClassName={props.panelClassName}
         textFjern={props.textFjern || 'skjema.perioder.fjern'}
         textLeggTil={props.textLeggTil || 'skjema.perioder.legg_til'}
-        overridePanelErrorMessage={!!props.getErrorMessage ? index => {
-            const panelErrorMessage = props.getErrorMessage!(`[${index}]`);
-            const periodErrorMessage = props.getErrorMessage!(`[${index}].periode`);
-            return panelErrorMessage?.feilmelding !== periodErrorMessage?.feilmelding && panelErrorMessage || undefined;
-        } : undefined}
     />;
 };

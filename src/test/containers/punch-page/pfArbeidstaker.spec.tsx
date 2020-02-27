@@ -162,8 +162,6 @@ describe('pfArbeidstaker', () => {
 
     it('Viser feilmeldinger', () => {
         setupPfArbeidstaker();
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.organisasjonsnummer`);
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.norskIdent`);
         expect(testGetErrorMessage).toHaveBeenCalledTimes(2);
     });
 });
