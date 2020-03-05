@@ -585,7 +585,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return !!errorMsg ? {feilmelding: intlHelper(
             this.props.intl,
             `skjema.feil.${attribute}.${errorMsg}`
-                .replace(/\[\d+]/, '[]')
+                .replace(/\[\d+]/g, '[]')
                 .replace(/^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED')
                 .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
                 .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
