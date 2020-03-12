@@ -82,11 +82,14 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIde
         {props.identInput(signert !== JaNei.JA)}
         <div className="knapperad">
             <Knapp
-                onClick={props.findSoknader}
+                onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))}
                 className="knapp knapp1"
+            >{intlHelper(intl, 'ident.knapp.forrigesteg')}</Knapp>
+            <Knapp
+                onClick={props.findSoknader}
+                className="knapp knapp2"
                 disabled={signert !== JaNei.JA || !IdentRules.areIdentsValid(identInputValues.ident1, identInputValues.ident2)}
             >{intlHelper(intl, 'ident.knapp.nestesteg')}</Knapp>
-            <Knapp onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))} className="knapp knapp2">{intlHelper(intl, 'ident.knapp.forrigesteg')}</Knapp>
         </div>
     </div>;
 };
