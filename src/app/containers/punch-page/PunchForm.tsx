@@ -540,6 +540,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
                     {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
                 />*/}
+                {!!punchFormState.submitMappeError && <AlertStripeFeil className="margin-top-1">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>}
                 <p className="sendknapp-wrapper"><Knapp
                     onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident1)}
                     disabled={!isSoknadComplete}
