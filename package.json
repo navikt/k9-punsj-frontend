@@ -55,7 +55,7 @@
     "react-router-redux":           "^4.0.8",
     "redux":                        "^4.0.5",
     "redux-devtools-extension":     "^2.13.8",
-    "snyk":                         "^1.294.1",
+    "snyk":                         "^1.303.1",
     "source-map-loader":            "^0.2.4",
     "terser-webpack-plugin":        "^2.3.5",
     "typescript-string-operations": "^1.3.2"
