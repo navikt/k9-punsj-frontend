@@ -30,7 +30,7 @@ export interface IListepanelerProps<T> {
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
-    getErrorMessage?: (kode: string) => (React.ReactNode | boolean | undefined);
+    getErrorMessage?: (kode: string) => GetErrorMessage;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
