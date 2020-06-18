@@ -583,7 +583,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private getErrorMessage = (attribute: string, nr?: 1 | 2) => {
         const errorMsg = this.getManglerFromStore(nr)?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
-        return !!errorMsg ? {feilmelding: intlHelper(
+        return !!errorMsg ? intlHelper(
             this.props.intl,
             `skjema.feil.${attribute}.${errorMsg}`
                 .replace(/\[\d+]/g, '[]')
@@ -591,7 +591,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
                 .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
                 .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-        )} : undefined;
+        ) : undefined;
     };
 
     private updateFellesSoknadState(fellesSoknad: Partial<ISoknadFelles>, showStatus?: boolean) {

@@ -2,7 +2,6 @@ import {IPeriodInputProps, PeriodInput} from 'app/components/period-input/Period
 import intlHelper                       from 'app/utils/intlUtils';
 import {configure, shallow}             from 'enzyme';
 import Adapter                          from 'enzyme-adapter-react-16';
-import {SkjemaelementFeil}              from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
 import * as React                       from 'react';
 import {createIntl, IntlShape}          from 'react-intl';
 import {mocked}                         from 'ts-jest/utils';
@@ -50,19 +49,19 @@ describe('PerodInput', () => {
     });
 
     it('Skal vise feilmelding', () => {
-        const errorMessage: SkjemaelementFeil = {feilmelding: 'Lorem ipsum solor sit amet'};
+        const errorMessage = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({errorMessage});
         expect(periodInput.find('SkjemaGruppe').prop('feil')).toEqual(errorMessage);
     });
 
     it('Skal vise feilmelding for fom-dato', () => {
-        const errorMessageFom: SkjemaelementFeil = {feilmelding: 'Lorem ipsum solor sit amet'};
+        const errorMessageFom = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({errorMessageFom});
         expect(periodInput.find(`#${inputIdFom}`).prop('feil')).toEqual(errorMessageFom);
     });
 
     it('Skal vise feilmelding for tom-dato', () => {
-        const errorMessageTom: SkjemaelementFeil = {feilmelding: 'Lorem ipsum solor sit amet'};
+        const errorMessageTom = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({errorMessageTom});
         expect(periodInput.find(`#${inputIdTom}`).prop('feil')).toEqual(errorMessageTom);
     });

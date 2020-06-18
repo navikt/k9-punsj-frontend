@@ -6,7 +6,7 @@ import {
     UpdateListeinfoInSoknadState
 }                                                                  from 'app/containers/punch-page/Listepaneler';
 import {IPeriode, IPeriodeinfo, Periodeinfo, PeriodeinfoExtension} from 'app/models/types';
-import {SkjemaelementFeil}                                         from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
+import SkjemaelementFeil                                           from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
 import * as React                                                  from 'react';
 import {IntlShape}                                                 from 'react-intl';
 
@@ -34,7 +34,7 @@ export interface IPeriodepanelerProps {
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
-    getErrorMessage?: (kode: string) => (SkjemaelementFeil | undefined);
+    getErrorMessage?: (kode: string) => (React.ReactNode | boolean | undefined);
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
