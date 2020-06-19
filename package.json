@@ -24,7 +24,7 @@
     "moment":                       "^2.23.0",
     "mustache-express":             "^1.3.0",
     "nav-datovelger":               "^4.3.0",
-    "nav-frontend-alertstriper":    "^3.0.9",
+    "nav-frontend-alertstriper":    "^3.0.10",
     "nav-frontend-chevron":         "^1.0.10",
     "nav-frontend-core":            "^5.0.1",
     "nav-frontend-etiketter":       "^1.0.30",
