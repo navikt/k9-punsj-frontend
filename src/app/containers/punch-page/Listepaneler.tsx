@@ -30,7 +30,7 @@ export interface IListepanelerProps<T> {
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
-    getErrorMessage?: (kode: string) => GetErrorMessage;
+    getErrorMessage?: GetErrorMessage;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
