@@ -3,13 +3,12 @@ import classNames          from 'classnames';
 import {Knapp}             from 'nav-frontend-knapper';
 import {Panel}             from 'nav-frontend-paneler';
 import {SkjemaGruppe}      from 'nav-frontend-skjema';
-import {SkjemaelementFeil} from 'nav-frontend-skjema/lib/skjemaelement-feilmelding';
 import * as React          from 'react';
 import {IntlShape}         from 'react-intl';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
-export type GetErrorMessage = (kode: string) => (SkjemaelementFeil | undefined);
+export type GetErrorMessage = (kode: string) => (React.ReactNode | boolean | undefined);
 
 export type ListeComponent<T> = (itemInfo: T,
                                  itemIndex: number,
@@ -31,7 +30,7 @@ export interface IListepanelerProps<T> {
     textLeggTil?: string;
     textFjern?: string;
     panelClassName?: string;
-    getErrorMessage?: (kode: string) => (SkjemaelementFeil | undefined);
+    getErrorMessage?: GetErrorMessage;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;

@@ -43,7 +43,7 @@ const testkomponent: PeriodeComponent<ITestperiodeinfo> = (info: Testperiodeinfo
         value={info.test}
         onChange={event => updatePeriodeinfoInSoknadState({test: event.target.value}, false)}
         onBlur={event => updatePeriodeinfoInSoknad({test: event.target.value})}
-        feil={feilkodeprefiksMedIndeks ? {feilmelding: `Feilmelding med kode ${feilkodeprefiksMedIndeks}`} : undefined}
+        feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
     />;
 };
 

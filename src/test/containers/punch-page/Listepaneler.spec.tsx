@@ -40,7 +40,7 @@ const testkomponent: ListeComponent<ITestItem> = (info: ITestItem,
         value={info.test}
         onChange={event => updateListeinfoInSoknadState({test: event.target.value}, false)}
         onBlur={event => updateListeinfoInSoknad({test: event.target.value})}
-        feil={feilkodeprefiksMedIndeks ? {feilmelding: `Feilmelding med kode ${feilkodeprefiksMedIndeks}`} : undefined}
+        feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
     />;
 };
 
@@ -106,7 +106,7 @@ describe('Listepaneler', () => {
         expect(listepaneler.find('.testinput')).toHaveLength(testItems.length);
         expect(listepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
         expect(listepaneler.find(`#${testinputid(1)}`).prop('feil'))
-            .toEqual({feilmelding: `Feilmelding med kode ${feilkodeprefiks}[1]`});
+            .toEqual(`Feilmelding med kode ${feilkodeprefiks}[1]`);
     });
 
     it('Kaller updateListeinfoInSoknadState med ny verdi', () => {
