@@ -73,7 +73,7 @@ const webpackConfig = {
             plainSprite: true
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
-        new CopyPlugin([{from: 'src/app/favicon.png'}])
+        new CopyPlugin({patterns: [{from: 'src/app/favicon.png'}]})
     ]
 };
 
