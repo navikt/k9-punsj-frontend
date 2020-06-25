@@ -16,7 +16,7 @@ import intlHelper                                                 from 'app/util
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {HoyreChevron, VenstreChevron}                             from 'nav-frontend-chevron';
 import {Flatknapp}                                                from 'nav-frontend-knapper';
-import {Panel}                                                    from 'nav-frontend-paneler';
+import Panel                                                      from 'nav-frontend-paneler';
 import {Input}                                                    from 'nav-frontend-skjema';
 import NavFrontendSpinner                                         from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
