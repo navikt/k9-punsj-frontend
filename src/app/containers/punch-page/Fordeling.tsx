@@ -5,11 +5,11 @@ import {RootStateType}                              from 'app/state/RootState';
 import {setHash}                                    from 'app/utils';
 import intlHelper                                   from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeSuksess}        from 'nav-frontend-alertstriper';
-import {Knapp}                                      from 'nav-frontend-knapper';
-import {RadioPanelGruppe}                           from 'nav-frontend-skjema';
-import NavFrontendSpinner                           from 'nav-frontend-spinner';
-import React, {useEffect}                           from 'react';
-import {injectIntl, WrappedComponentProps}          from 'react-intl';
+import {Knapp}                          from 'nav-frontend-knapper';
+import {Radio, RadioGruppe, RadioPanel} from 'nav-frontend-skjema';
+import NavFrontendSpinner               from 'nav-frontend-spinner';
+import React, {useEffect, useState}        from 'react';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {connect}                                    from 'react-redux';
 
 export interface IFordelingStateProps {
@@ -41,6 +41,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     useEffect(() => {props.setStepAction(PunchStep.FORDELING);}, []);
 
+    const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
+
     if (fordelingState.isAwaitingOmfordelingResponse) {
         return <NavFrontendSpinner/>;
     }
@@ -50,20 +52,73 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }
 
     return <div className="fordeling-page">
-        {!!fordelingState.omfordelingError && <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>}
-        <RadioPanelGruppe
-            name="fordeling"
+        {!!fordelingState.omfordelingError &&
+        <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>
+        }
+        <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
-            radios={Object.keys(Sakstype).map(key => ({
-                label: intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`),
-                value: Sakstype[key]
-            }))}
-            onChange={event => props.setSakstypeAction((event.target as HTMLInputElement).value as Sakstype)}
-            checked={sakstype}
-        />
+            className="fordeling-page__options"
+        >
+            {Object.keys(Sakstype).filter(key => !key.includes(`${Sakstype.OMSORGSPENGER}_`)).map(key => {
+                if (key === Sakstype.OMSORGSPENGER) {
+                    const radioOmsorgspenger = (
+                        <RadioPanel
+                            key={key}
+                            label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                            value={Sakstype[key]}
+                            onChange={() => {
+                                setOmsorgspengerValgt(true);
+                                props.setSakstypeAction(undefined);
+                            }}
+                            checked={omsorgspengerValgt}
+                        />
+                    );
+                    if (omsorgspengerValgt) {
+                        return (
+                            <React.Fragment key={key}>
+                                {radioOmsorgspenger}
+                                <RadioGruppe className="omsorgspenger-radios">
+                                    {Object.keys(Sakstype)
+                                        .filter(sakstypenavn => sakstypenavn.includes(`${Sakstype.OMSORGSPENGER}_`))
+                                        .map(sakstypenavn => (
+                                            <Radio
+                                                key={sakstypenavn}
+                                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype[sakstypenavn]}`)}
+                                                value={Sakstype[sakstypenavn]}
+                                                onChange={() => props.setSakstypeAction(Sakstype[sakstypenavn])}
+                                                name="sakstype"
+                                                checked={Sakstype[sakstypenavn] === sakstype}
+                                            />
+                                        ))
+                                    }
+                                </RadioGruppe>
+                            </React.Fragment>
+                        );
+                    }
+                    return radioOmsorgspenger;
+                }
+                return (
+                    <RadioPanel
+                        key={key}
+                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                        value={Sakstype[key]}
+                        onChange={() => {
+                            props.setSakstypeAction(Sakstype[key]);
+                            setOmsorgspengerValgt(false);
+                        }}
+                        checked={sakstype === key}
+                    />
+                );
+            })}
+        </RadioGruppe>
         {sakstype === Sakstype.PLEIEPENGER_SYKT_BARN
             ? <Knapp onClick={punch}>{intlHelper(intl, 'fordeling.knapp.punsj')}</Knapp>
-            : <Knapp onClick={() => props.omfordel(props.punchState.journalpost!.journalpostId, sakstype)}>{intlHelper(intl, 'fordeling.knapp.omfordel')}</Knapp>}
+            : (
+                <Knapp onClick={() => props.omfordel(props.punchState.journalpost!.journalpostId, sakstype)}>
+                    {intlHelper(intl, 'fordeling.knapp.omfordel')}
+                </Knapp>
+            )
+        }
     </div>;
 };
 

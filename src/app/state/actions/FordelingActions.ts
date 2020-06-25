@@ -3,7 +3,7 @@ import {FordelingActionKeys, Sakstype} from 'app/models/enums';
 import {IError}                        from 'app/models/types';
 import {convertResponseToError, post}  from 'app/utils';
 
-interface ISetSakstypeAction        {type: FordelingActionKeys.SAKSTYPE_SET, sakstype: Sakstype}
+interface ISetSakstypeAction        {type: FordelingActionKeys.SAKSTYPE_SET, sakstype?: Sakstype}
 
 interface IOmfordelingRequestAction {type: FordelingActionKeys.OMFORDELING_REQUEST}
 interface IOmfordelingSuccessAction {type: FordelingActionKeys.OMFORDELING_SUCCESS}
@@ -14,7 +14,7 @@ export type IFordelingActionTypes = ISetSakstypeAction |
                                     IOmfordelingSuccessAction |
                                     IOmfordelingErrorAction;
 
-export const setSakstypeAction = (sakstype: Sakstype): ISetSakstypeAction => ({type: FordelingActionKeys.SAKSTYPE_SET, sakstype});
+export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({type: FordelingActionKeys.SAKSTYPE_SET, sakstype});
 
 export const omfordelingRequestAction   = ():               IOmfordelingRequestAction   => ({type: FordelingActionKeys.OMFORDELING_REQUEST});
 export const omfordelingSuccessAction   = ():               IOmfordelingSuccessAction   => ({type: FordelingActionKeys.OMFORDELING_SUCCESS});
