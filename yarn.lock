@@ -4850,14 +4850,14 @@ focus-group@^0.3.1:
   resolved "https://registry.yarnpkg.com/focus-group/-/focus-group-0.3.1.tgz#e0f32ed86b0dabdd6ffcebdf898ecb32e47fedce"
   integrity sha1-4PMu2GsNq91v/OvfiY7LMuR/7c4=
 
-focus-trap-react@6.0.0:
+focus-trap-react@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/focus-trap-react/-/focus-trap-react-6.0.0.tgz#3f5a9f68447dd374d22388fb4c50018be83e74a5"
   integrity sha512-mvEYxmP75PMx0vOqoIAmJHO/qUEvdTAdz6gLlEZyxxODnuKQdnKea2RWTYxghAPrV+ibiIq2o/GTSgQycnAjcw==
   dependencies:
     focus-trap "^4.0.2"
 
-focus-trap@4.0.2, focus-trap@^4.0.2:
+focus-trap@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/focus-trap/-/focus-trap-4.0.2.tgz#4ee2b96547c9ea0e4252a2d4b2cca68944194663"
   integrity sha512-HtLjfAK7Hp2qbBtLS6wEznID1mPT+48ZnP2nkHzgjpL4kroYHg0CdqJ5cTXk+UO5znAxF5fRUkhdyfgrhh8Lzw==
@@ -7006,7 +7006,7 @@ lodash.get@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
-lodash.isequal@4.5.0, lodash.isequal@^4.5.0:
+lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
@@ -7036,7 +7036,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash.throttle@4.1.1, lodash.throttle@^4.1.1:
+lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
@@ -7534,15 +7534,12 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-nav-datovelger@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-4.3.0.tgz#8ae3e4c7e5da7fd46893da42954e956e39fb76f3"
-  integrity sha512-53xK5p4//XZEc3d22AdXXve5WzItcPksakWBsoqw/EfircnvGNtz6A+bTw7VbEIyf9vc+ouJRV4mMy2RUBzB4A==
+nav-datovelger@^6.1.9:
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/nav-datovelger/-/nav-datovelger-6.1.9.tgz#ab99dd27c710d6299d9cff0ec4bde98f4f8e90a1"
+  integrity sha512-/85jt7ihtxn7qcVMmvyz00Z/RKCgPBdTTzVoviSTt9vkLy5o/PMircwCloq+BOJ8D0eq6aaNrs5TC689inKD8A==
   dependencies:
-    focus-trap "4.0.2"
-    focus-trap-react "6.0.0"
-    lodash.isequal "4.5.0"
-    lodash.throttle "4.1.1"
+    focus-trap-react "^6.0.0"
 
 nav-frontend-alertstriper-style@^2.0.8:
   version "2.0.16"
