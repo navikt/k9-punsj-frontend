@@ -1,12 +1,12 @@
+import {JaNeiVetikke}                                            from 'app/models/enums';
 import {Arbeidstaker, IArbeidstaker, Tilstedevaerelsesgrad}      from 'app/models/types/Arbeidstaker';
 import {SoknadFelles, SoknadIndividuelt}                         from 'app/models/types/DobbelSoknad';
 import {Frilanser, IFrilanser}                                   from 'app/models/types/Frilanser';
 import {IPeriode, Periode}                                       from 'app/models/types/Periode';
+import {IPeriodeinfoExtension, Periodeinfo}                      from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {IntlShape}                                               from 'react-intl';
-import {JaNeiVetikke}                                            from '../enums';
 import {Locale}                                                  from './Locale';
-import {Periodeinfo, PeriodeinfoExtension}                       from './Periodeinfo';
 
 export interface ISoknad {
     datoMottatt?: string;
@@ -29,8 +29,8 @@ export class Soknad implements Required<ISoknad> {
     beredskap: Tilleggsinformasjon[];
     nattevaak: Tilleggsinformasjon[];
     tilsynsordning: Tilsynsordning;
-    private workPeriods: Periodeinfo<PeriodeinfoExtension>[];
-    private allPeriods: Periodeinfo<PeriodeinfoExtension>[];
+    private workPeriods: Periodeinfo<IPeriodeinfoExtension>[];
+    private allPeriods: Periodeinfo<IPeriodeinfoExtension>[];
 
     constructor(soknad: ISoknad) {
 

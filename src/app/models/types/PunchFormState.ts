@@ -1,5 +1,6 @@
 import {IError}      from 'app/models/types/Error';
 import {IInputError} from 'app/models/types/InputError';
+import {IMappe}      from 'app/models/types/Mappe';
 
 export interface IPunchFormState {
     mappe?: Partial<IMappe>;

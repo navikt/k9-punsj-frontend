@@ -137,7 +137,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 tgStrings2: this.tgStrings(dobbelSoknadFromStore.soker2),
                 isFetched: true
             });
-            this.props.setIdentAction(Object.keys(mappe.personer)[0] || '', Object.keys(mappe.personer)[1] || null);
+            this.props.setIdentAction(Object.keys(mappe.personer!)[0] || '', Object.keys(mappe.personer!)[1] || null);
         }
     }
 
@@ -155,7 +155,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         );
         const {soknad1, soknad2} = soknad;
         const {felles, soker1, soker2} = soknad;
-        const isSoknadComplete = !!this.getManglerFromStore(1) && !this.getManglerFromStore(1).length && !!this.getManglerFromStore(2) && !this.getManglerFromStore(2).length;
+        const isSoknadComplete = !!this.getManglerFromStore(1) && !this.getManglerFromStore(1)!.length && !!this.getManglerFromStore(2) && !this.getManglerFromStore(2)!.length;
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
