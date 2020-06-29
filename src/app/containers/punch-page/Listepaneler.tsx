@@ -1,7 +1,7 @@
 import intlHelper          from 'app/utils/intlUtils';
 import classNames          from 'classnames';
 import {Knapp}             from 'nav-frontend-knapper';
-import {Panel}             from 'nav-frontend-paneler';
+import Panel               from 'nav-frontend-paneler';
 import {SkjemaGruppe}      from 'nav-frontend-skjema';
 import * as React          from 'react';
 import {IntlShape}         from 'react-intl';

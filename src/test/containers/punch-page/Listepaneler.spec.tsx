@@ -144,7 +144,7 @@ describe('Listepaneler', () => {
         const feilkodeprefiks = 'test';
         const getErrorMessage = jest.fn();
         const listepaneler = setupListepaneler({getErrorMessage, feilkodeprefiks});
-        listepaneler.find('Panel').forEach(panel => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}[${panel.prop('key')}]`));
+        listepaneler.find('Panel').forEach(panel => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}[${panel.key()}]`));
     });
 
     it('Kaller onAdd når et listeelement legges til', () => {

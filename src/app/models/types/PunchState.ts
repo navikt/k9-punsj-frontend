@@ -1,6 +1,6 @@
 import {PunchStep}    from 'app/models/enums';
 import {IJournalpost} from 'app/models/types';
-import {IError}       from './Error';
+import {IError}       from 'app/models/types/Error';
 
 export interface IPunchState {
     step:                       PunchStep;

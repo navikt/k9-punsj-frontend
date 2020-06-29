@@ -1,13 +1,13 @@
-import {PeriodInput}                                               from 'app/components/period-input/PeriodInput';
+import {PeriodInput}                                                from 'app/components/period-input/PeriodInput';
 import {
     ListeComponent,
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState
-}                                                                  from 'app/containers/punch-page/Listepaneler';
-import {IPeriode, IPeriodeinfo, Periodeinfo, PeriodeinfoExtension} from 'app/models/types';
-import * as React                                                  from 'react';
-import {IntlShape}                                                 from 'react-intl';
+}                                                                   from 'app/containers/punch-page/Listepaneler';
+import {IPeriode, IPeriodeinfo, IPeriodeinfoExtension, Periodeinfo} from 'app/models/types';
+import * as React                                                   from 'react';
+import {IntlShape}                                                  from 'react-intl';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -24,9 +24,9 @@ export type PeriodeComponent<T> = (info: Periodeinfo<T>,
 export interface IPeriodepanelerProps {
     intl: IntlShape;
     periods: IPeriodeinfo[]; // Liste over periodisert informasjon
-    component?: PeriodeComponent<PeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
+    component?: PeriodeComponent<IPeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
-    initialPeriodeinfo: Periodeinfo<PeriodeinfoExtension>; // Objektet som legges til når man legger til en ny periode i lista
+    initialPeriodeinfo: Periodeinfo<IPeriodeinfoExtension>; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeinfo[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
     editSoknadState: (periodeinfo: IPeriodeinfo[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
     className?: string;

@@ -4,7 +4,7 @@ export type Periodeinfo<T> = {
     periode?: IPeriode;
 } & T;
 
-export interface PeriodeinfoExtension {
+export interface IPeriodeinfoExtension {
     [key: string]: any;
 }
 
