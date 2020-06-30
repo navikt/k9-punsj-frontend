@@ -88,26 +88,27 @@ describe('Fordeling', () => {
 
     it('Viser radioknappgruppe', () => {
         const fordeling = setupFordeling();
-        expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
+        expect(fordeling.find('RadioGruppe')).toHaveLength(1);
     });
 
     it('Viser radioknapp for hver kategori', () => {
         const fordeling = setupFordeling();
-        const optionProps = (sakstype: Sakstype) => ({label: `fordeling.sakstype.${sakstype}`, value: sakstype});
-        const radios = fordeling.find('RadioPanelGruppe').prop('radios');
-        expect(radios).toContainEqual(optionProps(Sakstype.PLEIEPENGER_SYKT_BARN));
-        expect(radios).toContainEqual(optionProps(Sakstype.OMSORGSPENGER));
-        expect(radios).toContainEqual(optionProps(Sakstype.OPPLAERINGSPENGER));
-        expect(radios).toContainEqual(optionProps(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE));
-        expect(radios).toContainEqual(optionProps(Sakstype.ANNET));
+        const radios = fordeling.find('RadioPanel');
+        const radioForSakstype = (sakstype: Sakstype) => radios.findWhere(radio => radio.prop('value') === sakstype);
+
         expect(radios).toHaveLength(5);
+        expect(radioForSakstype(Sakstype.PLEIEPENGER_SYKT_BARN)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.OMSORGSPENGER)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.OPPLAERINGSPENGER)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.ANNET)).toHaveLength(1);
     });
 
     it('Kaller setSakstypeAction', () => {
         const setSakstypeAction = jest.fn();
         const fordeling = setupFordeling(undefined, {setSakstypeAction});
         const newSakstype = Sakstype.ANNET;
-        fordeling.find('RadioPanelGruppe').simulate('change', {target: {value: newSakstype}});
+        fordeling.find('RadioPanel').at(4).simulate('change');
         expect(setSakstypeAction).toHaveBeenCalledTimes(1);
         expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
     });
