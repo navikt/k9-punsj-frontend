@@ -7,8 +7,7 @@ import {
 import {JaNei}                                        from 'app/models/enums';
 import {IJournalpost, IPunchState, ISignaturState}    from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
-import {configure, shallow}                           from 'enzyme';
-import Adapter                                        from 'enzyme-adapter-react-16';
+import {shallow}                                      from 'enzyme';
 import {Input}                                        from 'nav-frontend-skjema';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
@@ -20,8 +19,6 @@ jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
-configure({adapter: new Adapter()});
 
 const journalpostid = '200';
 const fnr = '01015012345';

@@ -1,10 +1,7 @@
 import DeleteButton         from 'app/components/delete-button/DeleteButton';
 import FilledVersionBin1SVG from 'app/components/delete-button/FilledVersionBin1SVG';
-import {configure, shallow} from 'enzyme';
-import Adapter              from 'enzyme-adapter-react-16';
+import {shallow}            from 'enzyme';
 import * as React           from 'react';
-
-configure({adapter: new Adapter()});
 
 describe('DeleteButton', () => {
 

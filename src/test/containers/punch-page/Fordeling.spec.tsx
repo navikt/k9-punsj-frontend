@@ -7,8 +7,7 @@ import {
 import {Sakstype}                                     from 'app/models/enums';
 import {IFordelingState, IJournalpost, IPunchState}   from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
-import {configure, shallow}                           from 'enzyme';
-import Adapter                                        from 'enzyme-adapter-react-16';
+import {shallow}                                      from 'enzyme';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
 import {mocked}                                       from 'ts-jest/utils';
@@ -19,8 +18,6 @@ jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
-configure({adapter: new Adapter()});
 
 const journalpostid = '200';
 const ident1 = '678';

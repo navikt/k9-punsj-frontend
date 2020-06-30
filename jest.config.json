@@ -33,5 +33,6 @@
     "<rootDir>/node_modules/react",
     "<rootDir>/node_modules/react-router",
     "<rootDir>/node_modules/react-router-dom"
-  ]
+  ],
+  "setupFiles": ["<rootDir>/src/test/enzymeConfig.js"]
 }

@@ -6,8 +6,7 @@ import {
 }                                                     from 'app/containers/punch-page/PunchPage';
 import {IError, IJournalpost, IPunchState}            from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
-import {configure, shallow}                           from 'enzyme';
-import Adapter                                        from 'enzyme-adapter-react-16';
+import {shallow}                                      from 'enzyme';
 import {createMemoryHistory}                          from 'history';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
@@ -22,8 +21,6 @@ jest.mock('app/containers/punch-page/Fordeling', () => ({Fordeling: () => <></>}
 jest.mock('app/containers/punch-page/Ident', () => ({Ident: () => <></>}));
 jest.mock('app/containers/punch-page/MapperOgFagsaker', () => ({MapperOgFagsaker: () => <></>}));
 jest.mock('app/containers/punch-page/PunchForm', () => ({PunchForm: () => <></>}));
-
-configure({adapter: new Adapter()});
 
 const setupPunchPage = (
     journalpostinfo: string | IJournalpost,

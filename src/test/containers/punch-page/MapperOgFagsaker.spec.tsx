@@ -6,8 +6,7 @@ import {
 }                                                                  from 'app/containers/punch-page/MapperOgFagsaker';
 import {IJournalpost, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
 import intlHelper                                                  from 'app/utils/intlUtils';
-import {configure, shallow}                                        from 'enzyme';
-import Adapter                                                     from 'enzyme-adapter-react-16';
+import {shallow}                                                   from 'enzyme';
 import * as React                                                  from 'react';
 import {createIntl, IntlShape, WrappedComponentProps}              from 'react-intl';
 import {mocked}                                                    from 'ts-jest/utils';
@@ -20,8 +19,6 @@ jest.mock('app/utils/browserUtils', () => ({getHash: () => '#/hentsoknader/testi
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
-configure({adapter: new Adapter()});
 
 const ident1 = '1234';
 const ident2 = null;
