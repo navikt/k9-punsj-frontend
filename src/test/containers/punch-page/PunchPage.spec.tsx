@@ -11,6 +11,7 @@ import {createMemoryHistory}                          from 'history';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
 import {mocked}                                       from 'ts-jest/utils';
+import PdfVisning                                     from '../../../app/components/pdf/PdfVisning';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -96,10 +97,10 @@ describe('PunchPage', () => {
         const ident1 = '54321098765';
         const journalpost: IJournalpost = {dokumenter: [{dokumentId: dokumentid}], journalpostId: journalpostid, norskIdent: ident1};
         const punchPage = setupPunchPage(journalpost,'#/', {ident1}, undefined, {getJournalpost});
+        const pdfVisning = punchPage.find(PdfVisning);
         expect(getJournalpost).toHaveBeenCalledTimes(1);
         expect(getJournalpost).toHaveBeenCalledWith(journalpostid);
-        expect(punchPage.find('iframe').prop('src')).toContain(journalpostid);
-        expect(punchPage.find('iframe').prop('src')).toContain(dokumentid);
+        expect(pdfVisning.prop('journalpostId')).toContain(journalpostid);
     });
 
     it('Viser feilmelding hvis journalpost ikke finnes', () => {
