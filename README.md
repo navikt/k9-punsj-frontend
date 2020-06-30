@@ -7,8 +7,8 @@ Frontend for manuell "punching" av papirsøknader som kommer inn for ytelser i k
 ## Komme i gang
 For å kjøre opp applikasjonen:
 ````
-npm install
-npm start
+yarn install
+yarn start
 ````
 
 ## Backend-mock
@@ -33,7 +33,7 @@ For å kjøre opp mock i **k9-punsj**, kjør *K9PunsjApplicationWithMocks*.
 ## Enhetstester
 Alle enhetstester er plassert i [src/test](src/test). De kan kjøres med følgende kommando:
 ````
-npm run test
+yarn test
 ````
 Testene kjører automatisk når ny kode dyttes til [master](https://github.com/navikt/k9-punsj-frontend).
 
