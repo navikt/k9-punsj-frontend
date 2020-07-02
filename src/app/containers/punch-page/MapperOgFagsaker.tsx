@@ -1,8 +1,8 @@
 import FagsakReadMode                                                from 'app/containers/punch-page/FagsakReadMode';
 import SoknadReadMode                                                from 'app/containers/punch-page/SoknadReadMode';
-import {PunchStep, TimeFormat}                                       from 'app/models/enums';
-import {IFagsak, IMappe, IMapperOgFagsakerState, IPunchState, Mappe} from 'app/models/types';
-import {IdentRules}                                                  from 'app/rules';
+import {PunchStep, TimeFormat}                                                  from 'app/models/enums';
+import {IFagsak, IMappe, IMapperOgFagsakerState, IPleiepengerPunchState, Mappe} from 'app/models/types';
+import {IdentRules}                                                             from 'app/rules';
 import {
     chooseMappeAction,
     closeFagsakAction,
@@ -30,7 +30,7 @@ import {injectIntl, WrappedComponentProps}                           from 'react
 import {connect}                                                     from 'react-redux';
 
 export interface IMapperOgFagsakerStateProps {
-    punchState: IPunchState;
+    punchState: IPleiepengerPunchState;
     mapperOgFagsakerState: IMapperOgFagsakerState;
 }
 

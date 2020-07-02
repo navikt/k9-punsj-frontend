@@ -1,12 +1,11 @@
 import {
     FordelingComponent,
-    IFordelingComponentProps,
     IFordelingDispatchProps,
     IFordelingStateProps
 }                                                     from 'app/containers/punch-page/Fordeling';
-import {Sakstype}                                     from 'app/models/enums';
-import {IFordelingState, IJournalpost, IPunchState}   from 'app/models/types';
-import intlHelper                                     from 'app/utils/intlUtils';
+import {Sakstype}                                              from 'app/models/enums';
+import {IFordelingState, IJournalpost, IPleiepengerPunchState} from 'app/models/types';
+import intlHelper                                              from 'app/utils/intlUtils';
 import {shallow}                                      from 'enzyme';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
@@ -33,7 +32,6 @@ const setupFordeling = (
     };
 
     const fordelingDispatchProps: IFordelingDispatchProps = {
-        setStepAction: jest.fn(),
         omfordel: jest.fn(),
         setSakstypeAction: jest.fn(),
         ...fordelingDispatchPropsPartial
@@ -45,7 +43,7 @@ const setupFordeling = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1,
         ident2,
@@ -62,18 +60,14 @@ const setupFordeling = (
 
     const fordelingStateProps: IFordelingStateProps = {
         punchState,
-        fordelingState
-    };
-
-    const fordelingComponentProps: IFordelingComponentProps = {
-        getPunchPath: jest.fn()
+        fordelingState,
+        journalpostId: journalpostid
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
 
     return shallow(
         <FordelingComponent
-            {...fordelingComponentProps}
             {...wrappedComponentProps}
             {...fordelingStateProps}
             {...fordelingDispatchProps}
@@ -114,7 +108,7 @@ describe('Fordeling', () => {
         const omfordel = jest.fn();
         const sakstype = Sakstype.ANNET;
         const fordeling = setupFordeling({sakstype}, {omfordel});
-        fordeling.find('Knapp').simulate('click');
+        fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
         expect(omfordel).toHaveBeenCalledWith(journalpostid, sakstype);
     });

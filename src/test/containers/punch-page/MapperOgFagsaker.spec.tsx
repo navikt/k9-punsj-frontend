@@ -3,9 +3,9 @@ import {
     IMapperOgFagsakerDispatchProps,
     IMapperOgFagsakerStateProps,
     MapperOgFagsakerComponent
-}                                                                  from 'app/containers/punch-page/MapperOgFagsaker';
-import {IJournalpost, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
-import intlHelper                                                  from 'app/utils/intlUtils';
+}                                                                             from 'app/containers/punch-page/MapperOgFagsaker';
+import {IJournalpost, IMappe, IMapperOgFagsakerState, IPleiepengerPunchState} from 'app/models/types';
+import intlHelper                                                             from 'app/utils/intlUtils';
 import {shallow}                                                   from 'enzyme';
 import * as React                                                  from 'react';
 import {createIntl, IntlShape, WrappedComponentProps}              from 'react-intl';
@@ -66,7 +66,7 @@ const setupMapperOgFagsaker = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1,
         ident2,

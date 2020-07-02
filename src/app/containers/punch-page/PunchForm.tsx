@@ -12,8 +12,8 @@ import {
     IFrilanser,
     IInputError,
     IPeriode,
+    IPleiepengerPunchState,
     IPunchFormState,
-    IPunchState,
     ISelvstendigNaerinsdrivende,
     ISoknad,
     ISoknadFelles,
@@ -59,7 +59,7 @@ export interface IPunchFormComponentProps {
 
 export interface IPunchFormStateProps {
     punchFormState: IPunchFormState;
-    punchState:     IPunchState;
+    punchState:     IPleiepengerPunchState;
 }
 
 export interface IPunchFormDispatchProps {
@@ -618,7 +618,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private handleStartButtonClick = () => {
         this.props.resetPunchFormAction();
-        setHash(this.props.getPunchPath(PunchStep.FORDELING));
+        // TODO: path til fordeling
+        setHash('/');
     };
 
     private changeAndBlurUpdatesFelles = (change: (event: any) => Partial<ISoknadFelles>) => ({

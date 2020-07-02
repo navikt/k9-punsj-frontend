@@ -1,12 +1,11 @@
 import Page                                                       from 'app/components/page/Page';
-import {Fordeling}                                                from 'app/containers/punch-page/Fordeling';
 import {Ident}                                                    from 'app/containers/punch-page/Ident';
 import {IMapperOgFagsakerComponentProps, MapperOgFagsaker}        from 'app/containers/punch-page/MapperOgFagsaker';
 import {PunchForm}                                                from 'app/containers/punch-page/PunchForm';
 import 'app/containers/punch-page/punchPage.less';
 import useQuery                                                   from 'app/hooks/useQuery';
 import {PunchStep}                                                from 'app/models/enums';
-import {IPath, IPunchState}                                       from 'app/models/types';
+import {IPath, IPleiepengerPunchState}                            from 'app/models/types';
 import {IdentRules}                                               from 'app/rules';
 import {getJournalpost, setIdentAction, setStepAction}            from 'app/state/actions';
 import {RootStateType}                                            from 'app/state/RootState';
@@ -25,7 +24,7 @@ import {RouteComponentProps, withRouter}   from 'react-router';
 import PdfVisning                          from '../../components/pdf/PdfVisning';
 
 export interface IPunchPageStateProps {
-    punchState: IPunchState;
+    punchState: IPleiepengerPunchState;
 }
 
 export interface IPunchPageDispatchProps {
@@ -111,13 +110,15 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
             return <AlertStripeFeil>{intlHelper(intl, 'startPage.feil.ingendokumenter')}</AlertStripeFeil>;
         }
 
-        return <div className="panels-wrapper" id="panels-wrapper">
-            <Panel className="punch_form" border={true}>
-                {punchState.step !== PunchStep.IDENT && this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
-                {this.underFnr()}
-            </Panel>
-            <PdfVisning dokumenter={dokumenter} intl={intl} journalpostId={journalpostid} />
-        </div>;
+        return (
+            <div className="panels-wrapper" id="panels-wrapper">
+                <Panel className="punch_form" border={true}>
+                    {punchState.step !== PunchStep.IDENT && this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
+                    {this.underFnr()}
+                </Panel>
+                <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />
+            </div>
+        );
     }
 
     private getPath = (step: PunchStep, values?: any) => getPath(this.props.paths,step, values, this.props.dok ? {dok: this.props.dok} : undefined);
@@ -129,7 +130,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
         const identer = [punchState.ident1, punchState.ident2];
         const antallIdenter = identer.filter(id => id && id.length).length;
         const journalpostident = punchState.journalpost?.norskIdent || '';
-        return punchState.step > PunchStep.FORDELING ? <div>
+        return <div>
             <Input
                 label={intlHelper(intl, skalViseToFelter ? 'ident.identifikasjon.felt1' : 'ident.identifikasjon.felt')}
                 onChange={this.handleIdent1Change}
@@ -156,13 +157,12 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                 && antallIdenter > 0
                 && identer.every(ident => !ident || (IdentRules.isIdentValid(ident) && ident !== journalpostident))
                 && <AlertStripeAdvarsel>{intlHelper(intl, 'ident.advarsel.samsvarerikke', {antallIdenter: antallIdenter.toString(), journalpostident})}</AlertStripeAdvarsel>}
-        </div> : <></>;
+        </div>;
     };
 
     private underFnr() {
         const commonProps = {journalpostid: this.props.journalpostid, getPunchPath: this.getPath};
         switch (this.props.step) {
-            case PunchStep.FORDELING:       return <Fordeling getPunchPath={this.getPath}/>;
             case PunchStep.IDENT:           return <Ident identInput={this.identInput(this.state)}
                                                           identInputValues={this.state}
                                                           findSoknader={this.findSoknader}

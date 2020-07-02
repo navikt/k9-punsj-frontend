@@ -1,14 +1,15 @@
+import classNames                     from 'classnames';
 import {HoyreChevron, VenstreChevron} from 'nav-frontend-chevron';
 import {Flatknapp}                    from 'nav-frontend-knapper';
 import Panel                          from 'nav-frontend-paneler';
 import {Resizable}                    from 're-resizable';
-import React, {useMemo}               from 'react';
-import { IntlShape }                  from 'react-intl';
+import React, {useMemo, useState}     from 'react';
+import { FormattedMessage }           from 'react-intl';
 import {ApiPath}                      from '../../apiConfig';
 import useQuery                       from '../../hooks/useQuery';
 import {IDokument}                    from '../../models/types';
 import {apiUrl, setQueryInHash}       from '../../utils';
-import intlHelper                     from '../../utils/intlUtils';
+import './pdfVisning.less';
 
 const goToDok = (nr: number) => {
     setQueryInHash({dok: nr.toString()});
@@ -23,21 +24,12 @@ const dokumentnr = (dokumenter: IDokument[] = [], dok: string | null): number =>
     return doknr;
 };
 
-const togglePdf = () => {
-    const panelsWrapper = document.getElementById('panels-wrapper');
-    if (!!panelsWrapper) {
-        panelsWrapper.classList.toggle('pdf_closed');
-    }
-};
-
 interface IPdfVisningProps {
     dokumenter: IDokument[],
-    // TODO: Vurdere å trekke intl ut i en Context
-    intl: IntlShape;
     journalpostId: string;
 }
 
-const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = [], intl, journalpostId }) => {
+const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = [], journalpostId }) => {
     const dok = useQuery().get('dok');
     const dokumentnummer = useMemo<number>(() => dokumentnr(dokumenter, dok), [dokumenter, dok]);
     const dokumentId = dokumenter[dokumentnummer - 1]?.dokumentId;
@@ -45,6 +37,11 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
         journalpostId,
         dokumentId
     }), [journalpostId, dokumentId]);
+    const [showPdf, setShowPdf] = useState<boolean>(true);
+
+    const togglePdf = () => {
+        setShowPdf(currentValue => !currentValue);
+    };
 
     const openPdfWindow = () => {
         window.open(pdfUrl, '_blank', 'toolbar=0,location=0,menubar=0');
@@ -53,7 +50,9 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
 
     return (
         <Resizable
-            className="punch_pdf_wrapper"
+            className={classNames('punch_pdf_wrapper', {
+                'pdf_closed': !showPdf
+            })}
             enable={{top: false, right: false, bottom: false, left: true, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false}}
             defaultSize={{width: '50%', height: '100%'}}
             minWidth={400}
@@ -63,7 +62,10 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
                     <div className="fleredokumenter">
                       <div>
                         <p>
-                          {intlHelper(intl, 'dokument.flere', {doknr: `${dokumentnummer}`, totalnr: dokumenter.length.toString()})}
+                            <FormattedMessage
+                              id="dokument.flere"
+                              values={{doknr: `${dokumentnummer}`, totalnr: dokumenter.length.toString()}}
+                            />
                         </p>
                       </div>
                       {dokumenter.map((_,i) => (
@@ -80,11 +82,11 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
                 <iframe src={pdfUrl}/>
                 <div className="knapperad">
                     <Flatknapp onClick={togglePdf} className="knapp1">
-                        {intlHelper(intl, 'dokument.skjul')}
+                        <FormattedMessage id="dokument.skjul" />
                         <HoyreChevron/>
                     </Flatknapp>
                     <Flatknapp onClick={openPdfWindow} className="knapp2">
-                        {intlHelper(intl, 'dokument.nyttvindu')}
+                        <FormattedMessage id="dokument.nyttvindu" />
                     </Flatknapp>
                 </div>
                 <Flatknapp

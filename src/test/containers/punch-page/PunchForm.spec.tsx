@@ -4,9 +4,9 @@ import {
     IPunchFormStateProps,
     PunchFormComponent
 }                                                           from 'app/containers/punch-page/PunchForm';
-import {JaNeiVetikke}                                       from 'app/models/enums';
-import {IJournalpost, IMappe, IPunchFormState, IPunchState} from 'app/models/types';
-import intlHelper                                           from 'app/utils/intlUtils';
+import {JaNeiVetikke}                                                  from 'app/models/enums';
+import {IJournalpost, IMappe, IPleiepengerPunchState, IPunchFormState} from 'app/models/types';
+import intlHelper                                                      from 'app/utils/intlUtils';
 import {shallow}                                            from 'enzyme';
 import * as React                                           from 'react';
 import {createIntl, IntlShape, WrappedComponentProps}       from 'react-intl';
@@ -51,7 +51,7 @@ const setupPunchForm = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1,
         ident2,

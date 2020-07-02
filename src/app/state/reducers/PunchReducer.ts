@@ -1,19 +1,19 @@
 import {PunchActionKeys, PunchStep}            from 'app/models/enums';
-import {IPunchState}                           from 'app/models/types';
+import {IPleiepengerPunchState}                from 'app/models/types';
 import {IPunchActionTypes}                     from 'app/state/actions';
 import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
-export const initialState: IPunchState = {
-    step: PunchStep.FORDELING,
+export const initialState: IPleiepengerPunchState = {
+    step: PunchStep.IDENT,
     ident1: '',
     ident2: null,
     journalpost: undefined
 };
 
 export function PunchReducer(
-    punchState: IPunchState = initialState,
+    punchState: IPleiepengerPunchState = initialState,
     action: IPunchActionTypes | LocationChangeAction
-): IPunchState {
+): IPleiepengerPunchState {
     switch (action.type) {
 
         case LOCATION_CHANGE:

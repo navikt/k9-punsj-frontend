@@ -4,9 +4,9 @@ import {
     IIdentDispatchProps,
     IIdentStateProps
 }                                                     from 'app/containers/punch-page/Ident';
-import {JaNei}                                        from 'app/models/enums';
-import {IJournalpost, IPunchState, ISignaturState}    from 'app/models/types';
-import intlHelper                                     from 'app/utils/intlUtils';
+import {JaNei}                                                from 'app/models/enums';
+import {IJournalpost, IPleiepengerPunchState, ISignaturState} from 'app/models/types';
+import intlHelper                                             from 'app/utils/intlUtils';
 import {shallow}                                      from 'enzyme';
 import {Input}                                        from 'nav-frontend-skjema';
 import * as React                                     from 'react';
@@ -53,7 +53,7 @@ const setupIdent = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1: fnr,
         ident2: null,

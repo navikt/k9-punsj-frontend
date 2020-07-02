@@ -4,7 +4,7 @@ import {
     IPunchPageStateProps,
     PunchPageComponent
 }                                                     from 'app/containers/punch-page/PunchPage';
-import {IError, IJournalpost, IPunchState}            from 'app/models/types';
+import {IError, IJournalpost, IPleiepengerPunchState} from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
 import {shallow}                                      from 'enzyme';
 import {createMemoryHistory}                          from 'history';
@@ -26,7 +26,7 @@ jest.mock('app/containers/punch-page/PunchForm', () => ({PunchForm: () => <></>}
 const setupPunchPage = (
     journalpostinfo: string | IJournalpost,
     hash: string,
-    punchStatePartial?: Partial<IPunchState>,
+    punchStatePartial?: Partial<IPleiepengerPunchState>,
     mappeid?: string,
     punchPageDispatchPropsPartial?: Partial<IPunchPageDispatchProps>
 ) => {
@@ -56,7 +56,7 @@ const setupPunchPage = (
         norskIdent: '12123400036'
     } : journalpostinfo;
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         isJournalpostLoading: false,
         step: 0,
