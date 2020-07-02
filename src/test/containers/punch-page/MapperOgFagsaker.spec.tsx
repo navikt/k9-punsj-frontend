@@ -70,7 +70,7 @@ const setupMapperOgFagsaker = (
         journalpost,
         ident1,
         ident2,
-        step: 2,
+        step: 1,
         isJournalpostLoading: false
     };
 
@@ -86,7 +86,7 @@ const setupMapperOgFagsaker = (
     };
 
     const mapperOgFagsakerComponentProps: IMapperOgFagsakerComponentProps = {
-        getPunchPath: () => '#/hentsoknader/testident',
+        getPunchPath: () => '#/pleiepenger/hentsoknader/testident',
         journalpostid,
         ident1,
         ident2

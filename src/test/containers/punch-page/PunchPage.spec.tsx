@@ -124,22 +124,16 @@ describe('PunchPage', () => {
         expect(punchPage.find('AlertStripeFeil').children().text()).toEqual('startPage.feil.ingendokumenter');
     });
 
-    it('Laster inn fordelingsskjema', () => {
-        const journalpostid = '200';
-        const punchPage = setupPunchPage(journalpostid,'#/', {step: 0, ident1: ''});
-        expect(punchPage.find('Fordeling')).toHaveLength(1);
-    });
-
     it('Laster inn Ident', () => {
         const journalpostid = '200';
-        const punchPage = setupPunchPage(journalpostid, '#/ident', {step: 1, ident1: ''});
+        const punchPage = setupPunchPage(journalpostid, '#/ident', {step: 0, ident1: ''});
         expect(punchPage.find('Ident')).toHaveLength(1);
     });
 
     it('Laster inn oversikt over ufullstendige søknader', () => {
         const journalpostid = '200';
         const ident1 = '12345678901';
-        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${ident1}`, {step: 2, ident1});
+        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${ident1}`, {step: 1, ident1});
         expect(punchPage.find('MapperOgFagsaker')).toHaveLength(1);
         expect(punchPage.find('MapperOgFagsaker').prop('journalpostid')).toEqual(journalpostid);
     });
@@ -148,7 +142,7 @@ describe('PunchPage', () => {
         const journalpostid = '200';
         const ident1 = '12345678901';
         const mappeid = 'abc';
-        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${mappeid}`, {step: 3, ident1}, mappeid);
+        const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${mappeid}`, {step: 2, ident1}, mappeid);
         expect(punchPage.find('PunchForm')).toHaveLength(1);
         expect(punchPage.find('PunchForm').prop('journalpostid')).toEqual(journalpostid);
         expect(punchPage.find('PunchForm').prop('id')).toEqual(mappeid);
@@ -156,7 +150,7 @@ describe('PunchPage', () => {
 
     it('Viser fullførtmelding', () => {
         const journalpostid = '200';
-        const punchPage = setupPunchPage(journalpostid, `#/fullfort`, {step: 4, ident1: ''});
+        const punchPage = setupPunchPage(journalpostid, `#/fullfort`, {step: 3, ident1: ''});
         expect(punchPage.find('AlertStripeSuksess')).toHaveLength(1);
     });
 });
