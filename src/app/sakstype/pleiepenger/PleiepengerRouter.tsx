@@ -8,8 +8,7 @@ import {IPath}                                from '../../models/types';
 import {getPath}                              from '../../utils';
 
 const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid }) => {
-    // @ts-ignore
-    const pleiepengerRootPath = Pleiepenger.punchConfig.path;
+    const pleiepengerRootPath = Pleiepenger.punchPath;
 
     const paths: IPath[] = [
         {step: PunchStep.IDENT,         path: `${pleiepengerRootPath}/ident`},

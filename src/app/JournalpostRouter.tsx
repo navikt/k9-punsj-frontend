@@ -3,7 +3,7 @@ import {HashRouter, Route, RouteComponentProps} from 'react-router-dom';
 import AppContainer                             from './containers/AppContainer';
 import JournalpostLoader                        from './containers/JournalpostLoader';
 import {Fordeling}                              from './containers/punch-page/Fordeling';
-import {Behandlingsvalg, Sakstyper}             from './models/Sakstype';
+import {Sakstyper}                              from './models/Sakstype';
 
 
 interface IRouterParams {
@@ -27,20 +27,13 @@ const JournalpostRouter: React.FunctionComponent<RouteComponentProps<IRouterPara
                 </AppContainer>
             </Route>
             {
-                Sakstyper
-                    .filter(({ behandlingsvalg }) => behandlingsvalg === Behandlingsvalg.Punch)
-                    .map(({ navn, punchConfig }) => {
-                        if (!punchConfig) {
-                            throw new Error(`punchConfig er ikke oppgitt for ${navn}`);
-                        }
-                        return (
-                            <Route
-                                key={navn}
-                                path={punchConfig.path}
-                                children={punchConfig.getComponent({ journalpostid })}
-                            />
-                        );
-                    })
+                Sakstyper.punchSakstyper.map(({ navn, punchPath, getComponent }) => (
+                    <Route
+                        key={navn}
+                        path={punchPath}
+                        children={getComponent({journalpostid})}
+                    />
+                ))
             }
         </HashRouter>
     );

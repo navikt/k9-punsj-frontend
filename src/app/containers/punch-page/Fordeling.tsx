@@ -1,21 +1,19 @@
-import {Sakstype}                                      from 'app/models/enums';
-import {IFordelingState, IPleiepengerPunchState}       from 'app/models/types';
-import {omfordel as omfordelAction, setSakstypeAction} from 'app/state/actions';
-import {RootStateType}                                 from 'app/state/RootState';
-import intlHelper                              from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess}   from 'nav-frontend-alertstriper';
-import {Knapp}                                 from 'nav-frontend-knapper';
-import Panel                                   from 'nav-frontend-paneler';
-import {Radio, RadioGruppe, RadioPanel}        from 'nav-frontend-skjema';
-import NavFrontendSpinner                      from 'nav-frontend-spinner';
-import React, {useState}                       from 'react';
-import {injectIntl, WrappedComponentProps}     from 'react-intl';
-import {connect}                               from 'react-redux';
-import PdfVisning                              from '../../components/pdf/PdfVisning';
-import {Behandlingsvalg, ISakstype, Sakstyper} from '../../models/Sakstype';
-import {setHash}                               from '../../utils';
-import AppContainer                            from '../AppContainer';
-import JournalpostLoader                       from '../JournalpostLoader';
+import {Sakstype}                                            from 'app/models/enums';
+import {IFordelingState, IPleiepengerPunchState}             from 'app/models/types';
+import {omfordel as omfordelAction, setSakstypeAction}       from 'app/state/actions';
+import {RootStateType}                                       from 'app/state/RootState';
+import intlHelper                                            from 'app/utils/intlUtils';
+import {AlertStripeFeil, AlertStripeSuksess}                 from 'nav-frontend-alertstriper';
+import {Knapp}                                               from 'nav-frontend-knapper';
+import Panel                                                 from 'nav-frontend-paneler';
+import {Radio, RadioGruppe, RadioPanel}                      from 'nav-frontend-skjema';
+import NavFrontendSpinner                                    from 'nav-frontend-spinner';
+import React, {useMemo, useState}                            from 'react';
+import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {connect}                                             from 'react-redux';
+import PdfVisning                                            from '../../components/pdf/PdfVisning';
+import {ISakstypeDefault, ISakstypePunch, Sakstyper}         from '../../models/Sakstype';
+import {setHash}                                             from '../../utils';
 import './fordeling.less';
 
 export interface IFordelingStateProps {
@@ -33,31 +31,40 @@ type IFordelingProps = WrappedComponentProps &
                        IFordelingStateProps &
                        IFordelingDispatchProps;
 
-type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'punchState' | 'intl'> & {
-    sakstypeConfig?: ISakstype
+type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'punchState'> & {
+    sakstypeConfig?: ISakstypeDefault
 }
 
-const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({ sakstypeConfig, omfordel, punchState, intl }) => {
+const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({ sakstypeConfig, omfordel, punchState }) => {
     if (!sakstypeConfig) {
         return null;
     }
 
-    const punch = () => setHash(sakstypeConfig.punchConfig?.path || '/');
+    if ((sakstypeConfig as ISakstypePunch).punchPath) {
+        const punchConfig = sakstypeConfig as ISakstypePunch;
 
-    return sakstypeConfig.behandlingsvalg === Behandlingsvalg.Punch
-        ? <Knapp onClick={punch}>{intlHelper(intl, 'fordeling.knapp.punsj')}</Knapp>
-        : (
-            <Knapp onClick={() => omfordel(punchState.journalpost!.journalpostId, sakstypeConfig.navn)}>
-                {intlHelper(intl, 'fordeling.knapp.omfordel')}
+        return (
+            <Knapp onClick={() => setHash(punchConfig.punchPath)}>
+                <FormattedMessage id="fordeling.knapp.punsj" />
             </Knapp>
         )
+    }
 
+    return (
+        <Knapp onClick={() => omfordel(punchState.journalpost!.journalpostId, sakstypeConfig.navn)}>
+            <FormattedMessage id="fordeling.knapp.omfordel" />
+        </Knapp>
+    );
 };
 
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
     const {intl, fordelingState, omfordel, punchState} = props;
     const {sakstype} = fordelingState;
-    const sakstypeConfig = Sakstyper.find(st => st.navn === sakstype);
+    const sakstyper: ISakstypeDefault[] = useMemo(() =>
+        [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
+        []
+    );
+    const konfigForValgtSakstype = useMemo(() => sakstyper.find(st => st.navn === sakstype), [sakstype]);
 
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
 
@@ -70,7 +77,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }
 
     return (
-        <>
+        <div className="fordeling-container">
             <Panel border={true} className="panel-form">
                 <div className="fordeling-page">
                     {!!fordelingState.omfordelingError &&
@@ -108,7 +115,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                             value={Sakstype[sakstypenavn]}
                                                             onChange={() => props.setSakstypeAction(Sakstype[sakstypenavn])}
                                                             name="sakstype"
-                                                            checked={Sakstype[sakstypenavn] === sakstypeConfig?.navn}
+                                                            checked={Sakstype[sakstypenavn] === konfigForValgtSakstype?.navn}
                                                         />
                                                     ))
                                                 }
@@ -127,21 +134,23 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         props.setSakstypeAction(Sakstype[key]);
                                         setOmsorgspengerValgt(false);
                                     }}
-                                    checked={sakstypeConfig?.navn === key}
+                                    checked={konfigForValgtSakstype?.navn === key}
                                 />
                             );
                         })}
                     </RadioGruppe>
                     <Behandlingsknapp
-                        sakstypeConfig={sakstypeConfig}
+                        sakstypeConfig={konfigForValgtSakstype}
                         omfordel={omfordel}
-                        intl={intl}
                         punchState={punchState}
                     />
                 </div>
             </Panel>
-            <PdfVisning dokumenter={punchState.journalpost!.dokumenter} journalpostId={punchState.journalpost!.journalpostId} />
-        </>
+            <PdfVisning
+                dokumenter={punchState.journalpost!.dokumenter}
+                journalpostId={punchState.journalpost!.journalpostId}
+            />
+        </div>
     );
 };
 
