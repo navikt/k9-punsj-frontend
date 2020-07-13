@@ -36,7 +36,7 @@
     "nav-frontend-lukknapp":        "^1.0.24",
     "nav-frontend-modal":           "^1.0.32",
     "nav-frontend-paneler":         "^2.0.5",
-    "nav-frontend-skjema":          "^3.0.8",
+    "nav-frontend-skjema":          "^3.0.13",
     "nav-frontend-spinner":         "^2.0.2",
     "nav-frontend-typografi":       "^2.0.21",
     "popper.js":                    "^1.16.1",
