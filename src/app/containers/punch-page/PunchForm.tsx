@@ -618,7 +618,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private handleStartButtonClick = () => {
         this.props.resetPunchFormAction();
-        // TODO: path til fordeling
         setHash('/');
     };
 

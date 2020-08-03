@@ -1,11 +1,12 @@
-import * as React                             from 'react';
-import {Route, Switch}                        from 'react-router-dom';
-import {PunchPage}                            from '../../containers/punch-page/PunchPage';
-import useRedirect                            from '../../hooks/useRedirect';
-import {PunchStep}                            from '../../models/enums';
-import {ISakstypeComponentProps, Pleiepenger} from '../../models/Sakstype';
-import {IPath}                                from '../../models/types';
-import {getPath}                              from '../../utils';
+import * as React                from 'react';
+import {Route, Switch}           from 'react-router-dom';
+import {PunchPage}               from '../../containers/punch-page/PunchPage';
+import useRedirect               from '../../hooks/useRedirect';
+import {PunchStep}               from '../../models/enums';
+import {ISakstypeComponentProps} from '../../models/Sakstype';
+import {IPath}                   from '../../models/types';
+import {getPath}                 from '../../utils';
+import {Pleiepenger}             from '../SakstypeImpls';
 
 const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid }) => {
     const pleiepengerRootPath = Pleiepenger.punchPath;

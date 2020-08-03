@@ -3,7 +3,8 @@ import {HashRouter, Route, RouteComponentProps} from 'react-router-dom';
 import AppContainer                             from './containers/AppContainer';
 import JournalpostLoader                        from './containers/JournalpostLoader';
 import {Fordeling}                              from './containers/punch-page/Fordeling';
-import {Sakstyper}                              from './models/Sakstype';
+import {Sakstyper}                              from './sakstype/SakstypeImpls';
+import SakstypeStepRouter                       from './sakstype/SakstypeStepRouter';
 
 
 interface IRouterParams {
@@ -27,11 +28,14 @@ const JournalpostRouter: React.FunctionComponent<RouteComponentProps<IRouterPara
                 </AppContainer>
             </Route>
             {
-                Sakstyper.punchSakstyper.map(({ navn, punchPath, getComponent }) => (
+                Sakstyper.punchSakstyper.map(sakstypeConfig => (
                     <Route
-                        key={navn}
-                        path={punchPath}
-                        children={getComponent({journalpostid})}
+                        key={sakstypeConfig.navn}
+                        path={sakstypeConfig.punchPath}
+                        children={sakstypeConfig.getComponent
+                            ? sakstypeConfig.getComponent({journalpostid})
+                            : <SakstypeStepRouter sakstypeConfig={sakstypeConfig} journalpostid={journalpostid} />
+                        }
                     />
                 ))
             }

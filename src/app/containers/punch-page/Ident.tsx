@@ -81,7 +81,6 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIde
         <h2>{intlHelper(intl, 'ident.identifikasjon.overskrift')}</h2>
         {props.identInput(signert !== JaNei.JA)}
         <div className="knapperad">
-            {/* TODO: Path til punch */}
             <Knapp
                 onClick={() => setHash('/')}
                 className="knapp knapp1"
