@@ -3,7 +3,7 @@ import {
     IPunchPageDispatchProps,
     IPunchPageStateProps,
     PunchPageComponent
-}                                                     from 'app/containers/punch-page/PunchPage';
+}                                                     from 'app/containers/pleiepenger/PunchPage';
 import {IError, IJournalpost, IPleiepengerPunchState} from 'app/models/types';
 import intlHelper                                     from 'app/utils/intlUtils';
 import {shallow}                                      from 'enzyme';
@@ -18,10 +18,10 @@ jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-jest.mock('app/containers/punch-page/Fordeling', () => ({Fordeling: () => <></>}));
-jest.mock('app/containers/punch-page/Ident', () => ({Ident: () => <></>}));
-jest.mock('app/containers/punch-page/MapperOgFagsaker', () => ({MapperOgFagsaker: () => <></>}));
-jest.mock('app/containers/punch-page/PunchForm', () => ({PunchForm: () => <></>}));
+jest.mock('app/containers/pleiepenger/Fordeling', () => ({Fordeling: () => <></>}));
+jest.mock('app/containers/pleiepenger/Ident', () => ({Ident: () => <></>}));
+jest.mock('app/containers/pleiepenger/MapperOgFagsaker', () => ({MapperOgFagsaker: () => <></>}));
+jest.mock('app/containers/pleiepenger/PunchForm', () => ({PunchForm: () => <></>}));
 
 const setupPunchPage = (
     journalpostinfo: string | IJournalpost,

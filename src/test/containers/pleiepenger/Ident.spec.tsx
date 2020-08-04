@@ -3,7 +3,7 @@ import {
     IIdentComponentProps,
     IIdentDispatchProps,
     IIdentStateProps
-}                                                     from 'app/containers/punch-page/Ident';
+}                                                     from 'app/containers/pleiepenger/Ident';
 import {JaNei}                                                from 'app/models/enums';
 import {IJournalpost, IPleiepengerPunchState, ISignaturState} from 'app/models/types';
 import intlHelper                                             from 'app/utils/intlUtils';

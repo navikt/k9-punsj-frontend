@@ -3,7 +3,7 @@ import {
     IPunchFormDispatchProps,
     IPunchFormStateProps,
     PunchFormComponent
-}                                                           from 'app/containers/punch-page/PunchForm';
+}                                                           from 'app/containers/pleiepenger/PunchForm';
 import {JaNeiVetikke}                                                  from 'app/models/enums';
 import {IJournalpost, IMappe, IPleiepengerPunchState, IPunchFormState} from 'app/models/types';
 import intlHelper                                                      from 'app/utils/intlUtils';

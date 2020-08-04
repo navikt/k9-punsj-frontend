@@ -1,4 +1,4 @@
-import {IListepanelerProps, ListeComponent, Listepaneler} from 'app/containers/punch-page/Listepaneler';
+import {IListepanelerProps, ListeComponent, Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import intlHelper                                         from 'app/utils/intlUtils';
 import {shallow}                                          from 'enzyme';
 import {Input}                                            from 'nav-frontend-skjema';

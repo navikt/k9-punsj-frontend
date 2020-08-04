@@ -2,7 +2,7 @@ import {
     FordelingComponent,
     IFordelingDispatchProps,
     IFordelingStateProps
-}                                                     from 'app/containers/punch-page/Fordeling';
+}                                                     from 'app/containers/pleiepenger/Fordeling';
 import {Sakstype}                                              from 'app/models/enums';
 import {IFordelingState, IJournalpost, IPleiepengerPunchState} from 'app/models/types';
 import intlHelper                                              from 'app/utils/intlUtils';

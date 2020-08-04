@@ -1,9 +1,9 @@
 import {PersonBox}                                     from 'app/components/person-box/PersonBox';
-import {Listepaneler}                                  from 'app/containers/punch-page/Listepaneler';
-import {Periodepaneler}                                from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                from 'app/containers/punch-page/pfArbeidstaker';
-import {pfTilleggsinformasjon}                         from 'app/containers/punch-page/pfTilleggsinformasjon';
-import {pfTilsyn}                                      from 'app/containers/punch-page/pfTilsyn';
+import {Listepaneler}                                  from 'app/containers/pleiepenger/Listepaneler';
+import {Periodepaneler}                                from 'app/containers/pleiepenger/Periodepaneler';
+import {pfArbeidstaker}                                from 'app/containers/pleiepenger/pfArbeidstaker';
+import {pfTilleggsinformasjon}                         from 'app/containers/pleiepenger/pfTilleggsinformasjon';
+import {pfTilsyn}                                      from 'app/containers/pleiepenger/pfTilsyn';
 import {JaNeiVetikke, PunchStep}                       from 'app/models/enums';
 import {
     Arbeidstaker,

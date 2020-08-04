@@ -2,9 +2,9 @@ import * as React                               from 'react';
 import {HashRouter, Route, RouteComponentProps} from 'react-router-dom';
 import AppContainer                             from './containers/AppContainer';
 import JournalpostLoader                        from './containers/JournalpostLoader';
-import {Fordeling}                              from './containers/punch-page/Fordeling';
-import {Sakstyper}                              from './sakstype/SakstypeImpls';
-import SakstypeStepRouter                       from './sakstype/SakstypeStepRouter';
+import {Fordeling}        from './containers/pleiepenger/Fordeling';
+import {Sakstyper}        from './containers/SakstypeImpls';
+import SakstypeStepRouter from './containers/SakstypeStepRouter';
 
 
 interface IRouterParams {

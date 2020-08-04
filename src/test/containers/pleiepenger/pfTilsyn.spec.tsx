@@ -2,8 +2,8 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                       from 'app/containers/punch-page/Periodepaneler';
-import {pfTilsyn}                       from 'app/containers/punch-page/pfTilsyn';
+}                                       from 'app/containers/pleiepenger/Periodepaneler';
+import {pfTilsyn}                       from 'app/containers/pleiepenger/pfTilsyn';
 import {IPeriode, ITilsyn, Periodeinfo} from 'app/models/types';
 import intlHelper                       from 'app/utils/intlUtils';
 import {shallow}                        from 'enzyme';

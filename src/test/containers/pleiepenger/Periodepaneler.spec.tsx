@@ -1,4 +1,4 @@
-import {IPeriodepanelerProps, PeriodeComponent, Periodepaneler} from 'app/containers/punch-page/Periodepaneler';
+import {IPeriodepanelerProps, PeriodeComponent, Periodepaneler} from 'app/containers/pleiepenger/Periodepaneler';
 import {Periodeinfo}                                            from 'app/models/types';
 import intlHelper                                               from 'app/utils/intlUtils';
 import {shallow}                                                from 'enzyme';

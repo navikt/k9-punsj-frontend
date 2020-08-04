@@ -1,5 +1,5 @@
-import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/punch-page/Listepaneler';
-import {GetErrorMessage, PeriodeComponent, Periodepaneler}     from 'app/containers/punch-page/Periodepaneler';
+import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
+import {GetErrorMessage, PeriodeComponent, Periodepaneler}     from 'app/containers/pleiepenger/Periodepaneler';
 import {Arbeidstaker, IArbeidstaker, OrgOrPers}                from 'app/models/types';
 import {stringToNumber}                                        from 'app/utils/formatUtils';
 import intlHelper                                              from 'app/utils/intlUtils';

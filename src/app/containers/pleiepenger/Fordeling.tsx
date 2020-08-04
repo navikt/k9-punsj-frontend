@@ -12,9 +12,9 @@ import React, {useMemo, useState}                            from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {connect}                                             from 'react-redux';
 import PdfVisning                                            from '../../components/pdf/PdfVisning';
-import {ISakstypeDefault, ISakstypePunch}                    from '../../models/Sakstype';
-import {Sakstyper}                                           from '../../sakstype/SakstypeImpls';
-import {setHash}                                             from '../../utils';
+import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
+import {Sakstyper}                        from '../SakstypeImpls';
+import {setHash}                          from '../../utils';
 import './fordeling.less';
 
 export interface IFordelingStateProps {

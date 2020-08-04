@@ -2,9 +2,9 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                                                                               from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                                                         from 'app/containers/punch-page/pfArbeidstaker';
-import {IPunchFormComponentState}                                                               from 'app/containers/punch-page/PunchForm';
+}                                                                                               from 'app/containers/pleiepenger/Periodepaneler';
+import {pfArbeidstaker}                                                                         from 'app/containers/pleiepenger/pfArbeidstaker';
+import {IPunchFormComponentState}                                                               from 'app/containers/pleiepenger/PunchForm';
 import {Arbeidstaker, IArbeidstaker, ITilleggsinformasjon, ITilstedevaerelsesgrad, Periodeinfo} from 'app/models/types';
 import intlHelper
                                                                                                 from 'app/utils/intlUtils';

@@ -1,4 +1,4 @@
-import {IPunchPageComponentState}                                        from 'app/containers/punch-page/PunchPage';
+import {IPunchPageComponentState}                                        from 'app/containers/pleiepenger/PunchPage';
 import {JaNei, PunchStep}                       from 'app/models/enums';
 import {IPleiepengerPunchState, ISignaturState} from 'app/models/types';
 import {IdentRules}                             from 'app/rules';

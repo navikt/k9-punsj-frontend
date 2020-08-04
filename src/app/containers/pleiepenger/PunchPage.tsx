@@ -1,8 +1,8 @@
 import Page                                                       from 'app/components/page/Page';
-import {Ident}                                                    from 'app/containers/punch-page/Ident';
-import {IMapperOgFagsakerComponentProps, MapperOgFagsaker}        from 'app/containers/punch-page/MapperOgFagsaker';
-import {PunchForm}                                                from 'app/containers/punch-page/PunchForm';
-import 'app/containers/punch-page/punchPage.less';
+import {Ident}                                                    from 'app/containers/pleiepenger/Ident';
+import {IMapperOgFagsakerComponentProps, MapperOgFagsaker}        from 'app/containers/pleiepenger/MapperOgFagsaker';
+import {PunchForm}                                                from 'app/containers/pleiepenger/PunchForm';
+import 'app/containers/pleiepenger/punchPage.less';
 import useQuery                                                   from 'app/hooks/useQuery';
 import {PunchStep}                                                from 'app/models/enums';
 import {IPath, IPleiepengerPunchState}                            from 'app/models/types';

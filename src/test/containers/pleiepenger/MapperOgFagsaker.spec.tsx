@@ -3,7 +3,7 @@ import {
     IMapperOgFagsakerDispatchProps,
     IMapperOgFagsakerStateProps,
     MapperOgFagsakerComponent
-}                                                                             from 'app/containers/punch-page/MapperOgFagsaker';
+}                                                                             from 'app/containers/pleiepenger/MapperOgFagsaker';
 import {IJournalpost, IMappe, IMapperOgFagsakerState, IPleiepengerPunchState} from 'app/models/types';
 import intlHelper                                                             from 'app/utils/intlUtils';
 import {shallow}                                                   from 'enzyme';
@@ -13,8 +13,8 @@ import {mocked}                                                    from 'ts-jest
 
 jest.mock('react-intl');
 jest.mock('react-router');
-jest.mock('app/containers/punch-page/FagsakReadMode', () => ({FagsakReadMode: () => <></>}));
-jest.mock('app/containers/punch-page/SoknadReadMode', () => ({SoknadReadMode: () => <></>}));
+jest.mock('app/containers/pleiepenger/FagsakReadMode', () => ({FagsakReadMode: () => <></>}));
+jest.mock('app/containers/pleiepenger/SoknadReadMode', () => ({SoknadReadMode: () => <></>}));
 jest.mock('app/utils/browserUtils', () => ({getHash: () => '#/hentsoknader/testident', setHash: jest.fn()}));
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');

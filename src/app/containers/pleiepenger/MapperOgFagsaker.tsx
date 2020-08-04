@@ -1,5 +1,5 @@
-import FagsakReadMode                                                from 'app/containers/punch-page/FagsakReadMode';
-import SoknadReadMode                                                from 'app/containers/punch-page/SoknadReadMode';
+import FagsakReadMode                                                from 'app/containers/pleiepenger/FagsakReadMode';
+import SoknadReadMode                                                from 'app/containers/pleiepenger/SoknadReadMode';
 import {PunchStep, TimeFormat}                                                  from 'app/models/enums';
 import {IFagsak, IMappe, IMapperOgFagsakerState, IPleiepengerPunchState, Mappe} from 'app/models/types';
 import {IdentRules}                                                             from 'app/rules';
