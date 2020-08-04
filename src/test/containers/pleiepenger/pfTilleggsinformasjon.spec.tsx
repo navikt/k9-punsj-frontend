@@ -2,18 +2,15 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                          from 'app/containers/punch-page/Periodepaneler';
-import {pfTilleggsinformasjon}             from 'app/containers/punch-page/pfTilleggsinformasjon';
+}                                          from 'app/containers/pleiepenger/Periodepaneler';
+import {pfTilleggsinformasjon}             from 'app/containers/pleiepenger/pfTilleggsinformasjon';
 import {ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
 import intlHelper                          from 'app/utils/intlUtils';
-import {configure, shallow}                from 'enzyme';
-import Adapter                             from 'enzyme-adapter-react-16';
+import {shallow}                           from 'enzyme';
 import {createIntl, IntlShape}             from 'react-intl';
 import {mocked}                            from 'ts-jest/utils';
 
 jest.mock('app/utils/intlUtils');
-
-configure({adapter: new Adapter()});
 
 const testTekst = 'Lorem ipsum dolor sit amet';
 const testPeriodeinfo: Periodeinfo<ITilleggsinformasjon> = {

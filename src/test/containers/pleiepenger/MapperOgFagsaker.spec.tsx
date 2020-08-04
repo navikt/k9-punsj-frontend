@@ -3,25 +3,22 @@ import {
     IMapperOgFagsakerDispatchProps,
     IMapperOgFagsakerStateProps,
     MapperOgFagsakerComponent
-}                                                                  from 'app/containers/punch-page/MapperOgFagsaker';
-import {IJournalpost, IMappe, IMapperOgFagsakerState, IPunchState} from 'app/models/types';
-import intlHelper                                                  from 'app/utils/intlUtils';
-import {configure, shallow}                                        from 'enzyme';
-import Adapter                                                     from 'enzyme-adapter-react-16';
+}                                                                             from 'app/containers/pleiepenger/MapperOgFagsaker';
+import {IJournalpost, IMappe, IMapperOgFagsakerState, IPleiepengerPunchState} from 'app/models/types';
+import intlHelper                                                             from 'app/utils/intlUtils';
+import {shallow}                                                   from 'enzyme';
 import * as React                                                  from 'react';
 import {createIntl, IntlShape, WrappedComponentProps}              from 'react-intl';
 import {mocked}                                                    from 'ts-jest/utils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
-jest.mock('app/containers/punch-page/FagsakReadMode', () => ({FagsakReadMode: () => <></>}));
-jest.mock('app/containers/punch-page/SoknadReadMode', () => ({SoknadReadMode: () => <></>}));
+jest.mock('app/containers/pleiepenger/FagsakReadMode', () => ({FagsakReadMode: () => <></>}));
+jest.mock('app/containers/pleiepenger/SoknadReadMode', () => ({SoknadReadMode: () => <></>}));
 jest.mock('app/utils/browserUtils', () => ({getHash: () => '#/hentsoknader/testident', setHash: jest.fn()}));
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
-configure({adapter: new Adapter()});
 
 const ident1 = '1234';
 const ident2 = null;
@@ -69,11 +66,11 @@ const setupMapperOgFagsaker = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1,
         ident2,
-        step: 2,
+        step: 1,
         isJournalpostLoading: false
     };
 
@@ -89,7 +86,7 @@ const setupMapperOgFagsaker = (
     };
 
     const mapperOgFagsakerComponentProps: IMapperOgFagsakerComponentProps = {
-        getPunchPath: () => '#/hentsoknader/testident',
+        getPunchPath: () => '#/pleiepenger/hentsoknader/testident',
         journalpostid,
         ident1,
         ident2

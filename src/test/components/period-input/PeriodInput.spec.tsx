@@ -1,12 +1,9 @@
 import {IPeriodInputProps, PeriodInput} from 'app/components/period-input/PeriodInput';
 import intlHelper                       from 'app/utils/intlUtils';
-import {configure, shallow}             from 'enzyme';
-import Adapter                          from 'enzyme-adapter-react-16';
+import {shallow}                        from 'enzyme';
 import * as React                       from 'react';
 import {createIntl, IntlShape}          from 'react-intl';
 import {mocked}                         from 'ts-jest/utils';
-
-configure({adapter: new Adapter()});
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');

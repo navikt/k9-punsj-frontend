@@ -1,9 +1,6 @@
 import {INumberSelectProps, NumberSelect} from 'app/components/number-select/NumberSelect';
-import {configure, shallow}               from 'enzyme';
-import Adapter                            from 'enzyme-adapter-react-16';
+import {shallow}                          from 'enzyme';
 import * as React                         from 'react';
-
-configure({adapter: new Adapter()});
 
 const setupNumberSelect = (numberSelectPropsPartial?: Partial<INumberSelectProps>) => {
 

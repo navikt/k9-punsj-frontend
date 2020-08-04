@@ -3,7 +3,7 @@ import {
     PeriodeComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                          from 'app/containers/punch-page/Periodepaneler';
+}                                          from 'app/containers/pleiepenger/Periodepaneler';
 import {ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
 import intlHelper                          from 'app/utils/intlUtils';
 import {Textarea}                          from 'nav-frontend-skjema';

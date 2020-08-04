@@ -2,15 +2,13 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                                                                               from 'app/containers/punch-page/Periodepaneler';
-import {pfArbeidstaker}                                                                         from 'app/containers/punch-page/pfArbeidstaker';
-import {IPunchFormComponentState}                                                               from 'app/containers/punch-page/PunchForm';
+}                                                                                               from 'app/containers/pleiepenger/Periodepaneler';
+import {pfArbeidstaker}                                                                         from 'app/containers/pleiepenger/pfArbeidstaker';
+import {IPunchFormComponentState}                                                               from 'app/containers/pleiepenger/PunchForm';
 import {Arbeidstaker, IArbeidstaker, ITilleggsinformasjon, ITilstedevaerelsesgrad, Periodeinfo} from 'app/models/types';
 import intlHelper
                                                                                                 from 'app/utils/intlUtils';
-import {configure, shallow}                                                                     from 'enzyme';
-import Adapter
-                                                                                                from 'enzyme-adapter-react-16';
+import {shallow}                                                                                from 'enzyme';
 import {RadioProps}                                                                             from 'nav-frontend-skjema';
 import {createIntl, IntlShape}                                                                  from 'react-intl';
 import {mocked}                                                                                 from 'ts-jest/utils';
@@ -18,7 +16,6 @@ import {mocked}                                                                 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
-configure({adapter: new Adapter()});
 
 const testTilstedevaerelsesgrad: ITilstedevaerelsesgrad = {
     grad: 100.0

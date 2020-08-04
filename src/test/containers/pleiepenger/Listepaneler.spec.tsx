@@ -1,13 +1,10 @@
-import {IListepanelerProps, ListeComponent, Listepaneler} from 'app/containers/punch-page/Listepaneler';
+import {IListepanelerProps, ListeComponent, Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import intlHelper                                         from 'app/utils/intlUtils';
-import {configure, shallow}                               from 'enzyme';
-import Adapter                                            from 'enzyme-adapter-react-16';
+import {shallow}                                          from 'enzyme';
 import {Input}                                            from 'nav-frontend-skjema';
 import * as React                                         from 'react';
 import {createIntl, IntlShape}                            from 'react-intl';
 import {mocked}                                           from 'ts-jest/utils';
-
-configure({adapter: new Adapter()});
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');

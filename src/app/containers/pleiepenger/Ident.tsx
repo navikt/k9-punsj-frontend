@@ -1,7 +1,7 @@
-import {IPunchPageComponentState}                                        from 'app/containers/punch-page/PunchPage';
-import {JaNei, PunchStep}                                                from 'app/models/enums';
-import {IPunchState, ISignaturState}                                     from 'app/models/types';
-import {IdentRules}                                                      from 'app/rules';
+import {IPunchPageComponentState}                                        from 'app/containers/pleiepenger/PunchPage';
+import {JaNei, PunchStep}                       from 'app/models/enums';
+import {IPleiepengerPunchState, ISignaturState} from 'app/models/types';
+import {IdentRules}                             from 'app/rules';
 import {setSignaturAction, setStepAction, usignert, usignertResetAction} from 'app/state/actions';
 import {RootStateType}                                                   from 'app/state/RootState';
 import {setHash}                                                         from 'app/utils';
@@ -16,7 +16,7 @@ import {injectIntl, WrappedComponentProps}                               from 'r
 import {connect}                                                         from 'react-redux';
 
 export interface IIdentStateProps {
-    punchState:     IPunchState,
+    punchState:     IPleiepengerPunchState,
     signaturState:  ISignaturState
 }
 
@@ -82,7 +82,7 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (props: IIde
         {props.identInput(signert !== JaNei.JA)}
         <div className="knapperad">
             <Knapp
-                onClick={() => setHash(props.getPunchPath(PunchStep.FORDELING))}
+                onClick={() => setHash('/')}
                 className="knapp knapp1"
             >{intlHelper(intl, 'ident.knapp.forrigesteg')}</Knapp>
             <Knapp

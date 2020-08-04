@@ -4,7 +4,7 @@ import {
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState
-}                                                                   from 'app/containers/punch-page/Listepaneler';
+}                                                                   from 'app/containers/pleiepenger/Listepaneler';
 import {IPeriode, IPeriodeinfo, IPeriodeinfoExtension, Periodeinfo} from 'app/models/types';
 import * as React                                                   from 'react';
 import {IntlShape}                                                  from 'react-intl';

@@ -3,12 +3,11 @@ import {
     IIdentComponentProps,
     IIdentDispatchProps,
     IIdentStateProps
-}                                                     from 'app/containers/punch-page/Ident';
-import {JaNei}                                        from 'app/models/enums';
-import {IJournalpost, IPunchState, ISignaturState}    from 'app/models/types';
-import intlHelper                                     from 'app/utils/intlUtils';
-import {configure, shallow}                           from 'enzyme';
-import Adapter                                        from 'enzyme-adapter-react-16';
+}                                                     from 'app/containers/pleiepenger/Ident';
+import {JaNei}                                                from 'app/models/enums';
+import {IJournalpost, IPleiepengerPunchState, ISignaturState} from 'app/models/types';
+import intlHelper                                             from 'app/utils/intlUtils';
+import {shallow}                                      from 'enzyme';
 import {Input}                                        from 'nav-frontend-skjema';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
@@ -20,8 +19,6 @@ jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
-configure({adapter: new Adapter()});
 
 const journalpostid = '200';
 const fnr = '01015012345';
@@ -56,7 +53,7 @@ const setupIdent = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1: fnr,
         ident2: null,

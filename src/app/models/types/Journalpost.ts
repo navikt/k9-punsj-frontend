@@ -4,6 +4,6 @@ export interface IJournalpost {
     dokumenter: IDokument[];
 }
 
-interface IDokument {
+export interface IDokument {
     dokumentId: string;
 }

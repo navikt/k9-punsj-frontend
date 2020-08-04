@@ -1,14 +1,12 @@
 import {
     FordelingComponent,
-    IFordelingComponentProps,
     IFordelingDispatchProps,
     IFordelingStateProps
-}                                                     from 'app/containers/punch-page/Fordeling';
-import {Sakstype}                                     from 'app/models/enums';
-import {IFordelingState, IJournalpost, IPunchState}   from 'app/models/types';
-import intlHelper                                     from 'app/utils/intlUtils';
-import {configure, shallow}                           from 'enzyme';
-import Adapter                                        from 'enzyme-adapter-react-16';
+}                                                     from 'app/containers/pleiepenger/Fordeling';
+import {Sakstype}                                              from 'app/models/enums';
+import {IFordelingState, IJournalpost, IPleiepengerPunchState} from 'app/models/types';
+import intlHelper                                              from 'app/utils/intlUtils';
+import {shallow}                                      from 'enzyme';
 import * as React                                     from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
 import {mocked}                                       from 'ts-jest/utils';
@@ -19,8 +17,6 @@ jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
-configure({adapter: new Adapter()});
 
 const journalpostid = '200';
 const ident1 = '678';
@@ -36,7 +32,6 @@ const setupFordeling = (
     };
 
     const fordelingDispatchProps: IFordelingDispatchProps = {
-        setStepAction: jest.fn(),
         omfordel: jest.fn(),
         setSakstypeAction: jest.fn(),
         ...fordelingDispatchPropsPartial
@@ -48,7 +43,7 @@ const setupFordeling = (
         norskIdent: '12345678901'
     };
 
-    const punchState: IPunchState = {
+    const punchState: IPleiepengerPunchState = {
         journalpost,
         ident1,
         ident2,
@@ -65,18 +60,14 @@ const setupFordeling = (
 
     const fordelingStateProps: IFordelingStateProps = {
         punchState,
-        fordelingState
-    };
-
-    const fordelingComponentProps: IFordelingComponentProps = {
-        getPunchPath: jest.fn()
+        fordelingState,
+        journalpostId: journalpostid
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
 
     return shallow(
         <FordelingComponent
-            {...fordelingComponentProps}
             {...wrappedComponentProps}
             {...fordelingStateProps}
             {...fordelingDispatchProps}
@@ -88,26 +79,27 @@ describe('Fordeling', () => {
 
     it('Viser radioknappgruppe', () => {
         const fordeling = setupFordeling();
-        expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
+        expect(fordeling.find('RadioGruppe')).toHaveLength(1);
     });
 
     it('Viser radioknapp for hver kategori', () => {
         const fordeling = setupFordeling();
-        const optionProps = (sakstype: Sakstype) => ({label: `fordeling.sakstype.${sakstype}`, value: sakstype});
-        const radios = fordeling.find('RadioPanelGruppe').prop('radios');
-        expect(radios).toContainEqual(optionProps(Sakstype.PLEIEPENGER_SYKT_BARN));
-        expect(radios).toContainEqual(optionProps(Sakstype.OMSORGSPENGER));
-        expect(radios).toContainEqual(optionProps(Sakstype.OPPLAERINGSPENGER));
-        expect(radios).toContainEqual(optionProps(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE));
-        expect(radios).toContainEqual(optionProps(Sakstype.ANNET));
+        const radios = fordeling.find('RadioPanel');
+        const radioForSakstype = (sakstype: Sakstype) => radios.findWhere(radio => radio.prop('value') === sakstype);
+
         expect(radios).toHaveLength(5);
+        expect(radioForSakstype(Sakstype.PLEIEPENGER_SYKT_BARN)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.OMSORGSPENGER)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.OPPLAERINGSPENGER)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE)).toHaveLength(1);
+        expect(radioForSakstype(Sakstype.ANNET)).toHaveLength(1);
     });
 
     it('Kaller setSakstypeAction', () => {
         const setSakstypeAction = jest.fn();
         const fordeling = setupFordeling(undefined, {setSakstypeAction});
         const newSakstype = Sakstype.ANNET;
-        fordeling.find('RadioPanelGruppe').simulate('change', {target: {value: newSakstype}});
+        fordeling.find('RadioPanel').at(4).simulate('change');
         expect(setSakstypeAction).toHaveBeenCalledTimes(1);
         expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
     });
@@ -116,7 +108,7 @@ describe('Fordeling', () => {
         const omfordel = jest.fn();
         const sakstype = Sakstype.ANNET;
         const fordeling = setupFordeling({sakstype}, {omfordel});
-        fordeling.find('Knapp').simulate('click');
+        fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
         expect(omfordel).toHaveBeenCalledWith(journalpostid, sakstype);
     });

@@ -1,34 +1,30 @@
-import {ApiPath}                                                  from 'app/apiConfig';
 import Page                                                       from 'app/components/page/Page';
-import {Fordeling}                                                from 'app/containers/punch-page/Fordeling';
-import {Ident}                                                    from 'app/containers/punch-page/Ident';
-import {IMapperOgFagsakerComponentProps, MapperOgFagsaker}        from 'app/containers/punch-page/MapperOgFagsaker';
-import {PunchForm}                                                from 'app/containers/punch-page/PunchForm';
-import 'app/containers/punch-page/punchPage.less';
+import {Ident}                                                    from 'app/containers/pleiepenger/Ident';
+import {IMapperOgFagsakerComponentProps, MapperOgFagsaker}        from 'app/containers/pleiepenger/MapperOgFagsaker';
+import {PunchForm}                                                from 'app/containers/pleiepenger/PunchForm';
+import 'app/containers/pleiepenger/punchPage.less';
 import useQuery                                                   from 'app/hooks/useQuery';
 import {PunchStep}                                                from 'app/models/enums';
-import {IPath, IPunchState}                                       from 'app/models/types';
+import {IPath, IPleiepengerPunchState}                            from 'app/models/types';
 import {IdentRules}                                               from 'app/rules';
 import {getJournalpost, setIdentAction, setStepAction}            from 'app/state/actions';
 import {RootStateType}                                            from 'app/state/RootState';
-import {apiUrl, getPath, setHash, setQueryInHash}                 from 'app/utils';
+import {getPath, setHash}                                         from 'app/utils';
 import intlHelper                                                 from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {HoyreChevron, VenstreChevron}                             from 'nav-frontend-chevron';
-import {Flatknapp}                                                from 'nav-frontend-knapper';
-import Panel                                                      from 'nav-frontend-paneler';
-import {Input}                                                    from 'nav-frontend-skjema';
-import NavFrontendSpinner                                         from 'nav-frontend-spinner';
+import Panel                               from 'nav-frontend-paneler';
+import {Input}                             from 'nav-frontend-skjema';
+import NavFrontendSpinner                  from 'nav-frontend-spinner';
 import 'nav-frontend-tabell-style';
-import {Resizable}                                                from 're-resizable';
-import * as React                                                 from 'react';
-import {Col, Container, Row}                                      from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                        from 'react-intl';
-import {connect}                                                  from 'react-redux';
-import {RouteComponentProps, withRouter}                          from 'react-router';
+import * as React                          from 'react';
+import {Col, Container, Row}               from 'react-bootstrap';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {connect}                           from 'react-redux';
+import {RouteComponentProps, withRouter}   from 'react-router';
+import PdfVisning                          from '../../components/pdf/PdfVisning';
 
 export interface IPunchPageStateProps {
-    punchState: IPunchState;
+    punchState: IPleiepengerPunchState;
 }
 
 export interface IPunchPageDispatchProps {
@@ -62,10 +58,6 @@ type IPunchPageProps = WrappedComponentProps &
 
 export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchPageComponentState> {
 
-    private static goToDok(nr: number) {
-        setQueryInHash({dok: nr.toString()});
-    }
-
     state: IPunchPageComponentState = {
         ident1: '',
         ident2: ''
@@ -95,8 +87,8 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
 
     private content() {
 
-        const {intl, punchState} = this.props;
-        const dokumenter = this.props.punchState.journalpost?.dokumenter || [];
+        const {intl, punchState, journalpostid} = this.props;
+        const dokumenter = punchState.journalpost?.dokumenter || [];
 
         if (punchState.isJournalpostLoading) {
             return <Container style={{height: '100%'}}>
@@ -118,72 +110,18 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
             return <AlertStripeFeil>{intlHelper(intl, 'startPage.feil.ingendokumenter')}</AlertStripeFeil>;
         }
 
-        return <div className="panels-wrapper" id="panels-wrapper">
-            <Panel className="punch_form" border={true}>
-                {punchState.step !== PunchStep.IDENT && this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
-                {this.underFnr()}
-            </Panel>
-            <Resizable
-                className="punch_pdf_wrapper"
-                enable={{top: false, right: false, bottom: false, left: true, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false}}
-                defaultSize={{width: '50%', height: '100%'}}
-                minWidth={400}
-            >
-                <Panel className="punch_pdf">
-                    {dokumenter.length > 1 && <div className="fleredokumenter">
-                        <div><p>{intlHelper(intl, 'dokument.flere', {doknr: this.dokumentnr().toString(), totalnr: dokumenter.length.toString()})}</p></div>
-                        {dokumenter.map((d,i) => <Flatknapp
-                            key={i}
-                            onClick={() => PunchPageComponent.goToDok(i + 1)}
-                            className={this.dokumentnr() === i + 1 ? 'aktiv' : undefined}
-                        >{i+1}</Flatknapp>)}
-                    </div>}
-                    <iframe src={this.pdfUrl()}/>
-                    <div className="knapperad">
-                        <Flatknapp onClick={this.togglePdf} className="knapp1">{intlHelper(intl, 'dokument.skjul')} <HoyreChevron/></Flatknapp>
-                        <Flatknapp onClick={this.openPdfWindow} className="knapp2">{intlHelper(intl, 'dokument.nyttvindu')}</Flatknapp>
-                    </div>
-                    <Flatknapp
-                        onClick={this.togglePdf}
-                        className="button_open"
-                    ><VenstreChevron/></Flatknapp>
+        return (
+            <div className="panels-wrapper" id="panels-wrapper">
+                <Panel className="punch_form" border={true}>
+                    {punchState.step !== PunchStep.IDENT && this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
+                    {this.underFnr()}
                 </Panel>
-            </Resizable>
-        </div>;
+                <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />
+            </div>
+        );
     }
 
-    private dokumentnr = () => {
-        let doknr: number;
-        doknr = !!this.props.dok && /^\d+$/.test(this.props.dok) ? Number(this.props.dok) : 1;
-        if (doknr < 1 || doknr > this.props.punchState.journalpost!.dokumenter.length) {
-            doknr = 1;
-        }
-        return doknr;
-    };
-
-    private dokumentid = () => {
-        const dokIndex = this.dokumentnr() - 1;
-        return this.props.punchState.journalpost!.dokumenter[dokIndex].dokumentId;
-    };
-
-    private pdfUrl = () =>  apiUrl(ApiPath.DOKUMENT, {
-        journalpostId: this.props.journalpostid,
-        dokumentId:    this.dokumentid()
-    });
-
     private getPath = (step: PunchStep, values?: any) => getPath(this.props.paths,step, values, this.props.dok ? {dok: this.props.dok} : undefined);
-
-    private togglePdf = () => {
-        const panelsWrapper = document.getElementById('panels-wrapper');
-        if (!!panelsWrapper) {
-            panelsWrapper.classList.toggle('pdf_closed');
-        }
-    };
-
-    private openPdfWindow = () => {
-        window.open(this.pdfUrl(), '_blank', 'toolbar=0,location=0,menubar=0');
-        this.togglePdf();
-    };
 
     private identInput = (state: IPunchPageComponentState) => (disabled: boolean) => {
         const {punchState, intl} = this.props;
@@ -192,7 +130,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
         const identer = [punchState.ident1, punchState.ident2];
         const antallIdenter = identer.filter(id => id && id.length).length;
         const journalpostident = punchState.journalpost?.norskIdent || '';
-        return punchState.step > PunchStep.FORDELING ? <div>
+        return <div>
             <Input
                 label={intlHelper(intl, skalViseToFelter ? 'ident.identifikasjon.felt1' : 'ident.identifikasjon.felt')}
                 onChange={this.handleIdent1Change}
@@ -219,13 +157,12 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                 && antallIdenter > 0
                 && identer.every(ident => !ident || (IdentRules.isIdentValid(ident) && ident !== journalpostident))
                 && <AlertStripeAdvarsel>{intlHelper(intl, 'ident.advarsel.samsvarerikke', {antallIdenter: antallIdenter.toString(), journalpostident})}</AlertStripeAdvarsel>}
-        </div> : <></>;
+        </div>;
     };
 
     private underFnr() {
         const commonProps = {journalpostid: this.props.journalpostid, getPunchPath: this.getPath};
         switch (this.props.step) {
-            case PunchStep.FORDELING:       return <Fordeling getPunchPath={this.getPath}/>;
             case PunchStep.IDENT:           return <Ident identInput={this.identInput(this.state)}
                                                           identInputValues={this.state}
                                                           findSoknader={this.findSoknader}
