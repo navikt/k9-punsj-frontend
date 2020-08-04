@@ -13,8 +13,8 @@ import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {connect}                                             from 'react-redux';
 import PdfVisning                                            from '../../components/pdf/PdfVisning';
 import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
-import {Sakstyper}                        from '../SakstypeImpls';
 import {setHash}                          from '../../utils';
+import {Sakstyper}                        from '../SakstypeImpls';
 import './fordeling.less';
 
 export interface IFordelingStateProps {
