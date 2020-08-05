@@ -1,5 +1,5 @@
 import * as React                               from 'react';
-import {HashRouter, Route, RouteComponentProps} from 'react-router-dom';
+import {BrowserRouter as Router, Route, RouteComponentProps} from 'react-router-dom';
 import AppContainer                             from './containers/AppContainer';
 import JournalpostLoader                        from './containers/JournalpostLoader';
 import {Fordeling}        from './containers/pleiepenger/Fordeling';
@@ -15,20 +15,21 @@ const JournalpostRouter: React.FunctionComponent<RouteComponentProps<IRouterPara
     const { journalpostid } = match.params;
 
     return (
-        <HashRouter>
+        <Router>
             <Route
                 exact={true}
-                path="/"
+                path=""
             >
                 {/* TODO: Kan vurdere å legge AppContainer og Loader rundt alt, og ikke bare Fordeling */}
                 <AppContainer>
                     <JournalpostLoader journalpostId={journalpostid} renderOnLoadComplete={() => (
                         <Fordeling journalpostId={journalpostid} />
+                        
                     )}/>
                 </AppContainer>
             </Route>
             {
-                Sakstyper.punchSakstyper.map(sakstypeConfig => (
+                Sakstyper.punchSakstyper.map(sakstypeConfig =>  (
                     <Route
                         key={sakstypeConfig.navn}
                         path={sakstypeConfig.punchPath}
@@ -37,9 +38,9 @@ const JournalpostRouter: React.FunctionComponent<RouteComponentProps<IRouterPara
                             : <SakstypeStepRouter sakstypeConfig={sakstypeConfig} journalpostid={journalpostid} />
                         }
                     />
-                ))
+                ))   
             }
-        </HashRouter>
+        </Router>
     );
 };
 
