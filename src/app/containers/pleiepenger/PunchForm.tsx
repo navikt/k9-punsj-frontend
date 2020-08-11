@@ -1,491 +1,733 @@
-import {PersonBox}                                     from 'app/components/person-box/PersonBox';
-import {Listepaneler}                                  from 'app/containers/pleiepenger/Listepaneler';
-import {Periodepaneler}                                from 'app/containers/pleiepenger/Periodepaneler';
-import {pfArbeidstaker}                                from 'app/containers/pleiepenger/pfArbeidstaker';
-import {pfTilleggsinformasjon}                         from 'app/containers/pleiepenger/pfTilleggsinformasjon';
-import {pfTilsyn}                                      from 'app/containers/pleiepenger/pfTilsyn';
-import {JaNeiVetikke, PunchStep}                       from 'app/models/enums';
+import { PersonBox } from 'app/components/person-box/PersonBox';
+import { Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
+import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import { pfArbeidstaker } from 'app/containers/pleiepenger/pfArbeidstaker';
+import { pfTilleggsinformasjon } from 'app/containers/pleiepenger/pfTilleggsinformasjon';
+import { pfTilsyn } from 'app/containers/pleiepenger/pfTilsyn';
+import { JaNeiVetikke, PunchStep } from 'app/models/enums';
 import {
-    Arbeidstaker,
-    DobbelSoknad,
-    IDobbelSoknad,
-    IFrilanser,
-    IInputError,
-    IPeriode,
-    IPleiepengerPunchState,
-    IPunchFormState,
-    ISelvstendigNaerinsdrivende,
-    ISoknad,
-    ISoknadFelles,
-    ISoknadIndividuelt,
-    ITilsyn,
-    ITilsynsordning,
-    Mappe,
-    Periodeinfo,
-    SoknadFelles,
-    SoknadIndividuelt,
-    Tilleggsinformasjon,
-    Tilsyn
-}                                                      from 'app/models/types';
+  Arbeidstaker,
+  DobbelSoknad,
+  IDobbelSoknad,
+  IFrilanser,
+  IInputError,
+  IPeriode,
+  IPleiepengerPunchState,
+  IPunchFormState,
+  ISelvstendigNaerinsdrivende,
+  ISoknad,
+  ISoknadFelles,
+  ISoknadIndividuelt,
+  ITilsyn,
+  ITilsynsordning,
+  Mappe,
+  Periodeinfo,
+  SoknadFelles,
+  SoknadIndividuelt,
+  Tilleggsinformasjon,
+  Tilsyn,
+} from 'app/models/types';
 import {
-    getMappe,
-    resetMappeAction,
-    resetPunchFormAction,
-    setIdentAction,
-    setStepAction,
-    submitSoknad,
-    undoChoiceOfMappeAction,
-    updateSoknad,
-    updateSoknader
-}                                                      from 'app/state/actions';
-import {RootStateType}                                 from 'app/state/RootState';
-import {setHash}                                       from 'app/utils';
-import intlHelper                                      from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess}           from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
-import {Knapp}                                         from 'nav-frontend-knapper';
-import {Input, RadioPanelGruppe, Select, SkjemaGruppe} from 'nav-frontend-skjema';
-import NavFrontendSpinner                              from 'nav-frontend-spinner';
-import * as React                                      from 'react';
-import {Col, Container, Row}                           from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}             from 'react-intl';
-import {connect}                                       from 'react-redux';
+  getMappe,
+  resetMappeAction,
+  resetPunchFormAction,
+  setIdentAction,
+  setStepAction,
+  submitSoknad,
+  undoChoiceOfMappeAction,
+  updateSoknad,
+  updateSoknader,
+} from 'app/state/actions';
+import { RootStateType } from 'app/state/RootState';
+import { setHash } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
+import {
+  EtikettAdvarsel,
+  EtikettFokus,
+  EtikettSuksess,
+} from 'nav-frontend-etiketter';
+import { Knapp } from 'nav-frontend-knapper';
+import {
+  Input,
+  RadioPanelGruppe,
+  Select,
+  SkjemaGruppe,
+} from 'nav-frontend-skjema';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import * as React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
 
 export interface IPunchFormComponentProps {
-    getPunchPath:   (step: PunchStep, values?: any) => string;
-    journalpostid:  string;
-    id:             string;
+  getPunchPath: (step: PunchStep, values?: any) => string;
+  journalpostid: string;
+  id: string;
 }
 
 export interface IPunchFormStateProps {
-    punchFormState: IPunchFormState;
-    punchState:     IPleiepengerPunchState;
+  punchFormState: IPunchFormState;
+  punchState: IPleiepengerPunchState;
 }
 
 export interface IPunchFormDispatchProps {
-    getMappe:                   typeof getMappe;
-    resetMappeAction:           typeof resetMappeAction;
-    setIdentAction:             typeof setIdentAction;
-    setStepAction:              typeof setStepAction;
-    undoChoiceOfMappeAction:    typeof undoChoiceOfMappeAction;
-    updateSoknad:               typeof updateSoknad;
-    updateSoknader:             typeof updateSoknader;
-    submitSoknad:               typeof submitSoknad;
-    resetPunchFormAction:       typeof resetPunchFormAction;
+  getMappe: typeof getMappe;
+  resetMappeAction: typeof resetMappeAction;
+  setIdentAction: typeof setIdentAction;
+  setStepAction: typeof setStepAction;
+  undoChoiceOfMappeAction: typeof undoChoiceOfMappeAction;
+  updateSoknad: typeof updateSoknad;
+  updateSoknader: typeof updateSoknader;
+  submitSoknad: typeof submitSoknad;
+  resetPunchFormAction: typeof resetPunchFormAction;
 }
 
 export interface IPunchFormComponentState {
-    dobbelSoknad:       IDobbelSoknad;
-    isFetched:          boolean;
-    showStatus:         boolean;
-    tgStrings1:         string[][];
-    tgStrings2:         string[][];
+  dobbelSoknad: IDobbelSoknad;
+  isFetched: boolean;
+  showStatus: boolean;
+  tgStrings1: string[][];
+  tgStrings2: string[][];
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
-                       WrappedComponentProps &
-                       IPunchFormStateProps &
-                       IPunchFormDispatchProps;
+  WrappedComponentProps &
+  IPunchFormStateProps &
+  IPunchFormDispatchProps;
 
-export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
+export class PunchFormComponent extends React.Component<
+  IPunchFormProps,
+  IPunchFormComponentState
+> {
+  state: IPunchFormComponentState = {
+    dobbelSoknad: {
+      felles: {
+        datoMottatt: '',
+        spraak: 'nb',
+        barn: {},
+        beredskap: [],
+        nattevaak: [],
+        tilsynsordning: {},
+      },
+      soker1: {
+        perioder: [],
+        arbeid: {},
+      },
+      soker2: null,
+    },
+    isFetched: false,
+    showStatus: false,
+    tgStrings1: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
+    tgStrings2: [],
+  };
 
-    state: IPunchFormComponentState = {
-        dobbelSoknad: {
-            felles: {
-                datoMottatt: '',
-                spraak: 'nb',
-                barn: {},
-                beredskap: [],
-                nattevaak: [],
-                tilsynsordning: {}
-            },
-            soker1: {
-                perioder: [],
-                arbeid: {}
-            },
-            soker2: null
+  private initialTilsyn: Periodeinfo<ITilsyn> = {
+    periode: { fraOgMed: '', tilOgMed: '' },
+    mandag: null,
+    tirsdag: null,
+    onsdag: null,
+    torsdag: null,
+    fredag: null,
+  };
+
+  componentDidMount(): void {
+    const { id } = this.props;
+    this.props.getMappe(id);
+    this.props.setStepAction(PunchStep.FILL_FORM);
+    this.setState(this.state);
+  }
+
+  componentDidUpdate(
+    prevProps: Readonly<IPunchFormProps>,
+    prevState: Readonly<IPunchFormComponentState>,
+    snapshot?: any
+  ): void {
+    const { mappe } = this.props.punchFormState;
+    if (!!mappe && !this.state.isFetched) {
+      const dobbelSoknadFromStore = this.getDobbelSoknadFromStore();
+      this.setState({
+        dobbelSoknad: dobbelSoknadFromStore,
+        tgStrings1: this.tgStrings(dobbelSoknadFromStore.soker1),
+        tgStrings2: this.tgStrings(dobbelSoknadFromStore.soker2),
+        isFetched: true,
+      });
+      this.props.setIdentAction(
+        Object.keys(mappe.personer!)[0] || '',
+        Object.keys(mappe.personer!)[1] || null
+      );
+    }
+  }
+
+  componentWillUnmount(): void {
+    this.props.resetPunchFormAction();
+  }
+
+  render() {
+    const { intl, punchFormState, punchState } = this.props;
+    const soknad = new DobbelSoknad(
+      new SoknadFelles(this.state.dobbelSoknad.felles),
+      new SoknadIndividuelt(this.state.dobbelSoknad.soker1),
+      !!this.state.dobbelSoknad.soker2
+        ? new SoknadIndividuelt(this.state.dobbelSoknad.soker2)
+        : undefined
+    );
+    const { soknad1, soknad2 } = soknad;
+    const { felles, soker1, soker2 } = soknad;
+    const isSoknadComplete =
+      !!this.getManglerFromStore(1) &&
+      !this.getManglerFromStore(1)!.length &&
+      !!this.getManglerFromStore(2) &&
+      !this.getManglerFromStore(2)!.length;
+
+    if (punchFormState.isComplete) {
+      setHash(this.props.getPunchPath(PunchStep.COMPLETED));
+      return null;
+    }
+
+    if (punchFormState.isMappeLoading) {
+      return <NavFrontendSpinner />;
+    }
+
+    if (!!punchFormState.error) {
+      return (
+        <>
+          <AlertStripeFeil>
+            {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}
+          </AlertStripeFeil>
+          <p>
+            <Knapp onClick={this.handleStartButtonClick}>
+              {intlHelper(intl, 'skjema.knapp.tilstart')}
+            </Knapp>
+          </p>
+        </>
+      );
+    }
+
+    if (!soknad) {
+      return null;
+    }
+
+    const initialPeriode: IPeriode = { fraOgMed: '', tilOgMed: '' };
+
+    const initialArbeidstaker = new Arbeidstaker({
+      skalJobbeProsent: [
+        {
+          periode: initialPeriode,
+          grad: 100.0,
         },
-        isFetched: false,
-        showStatus: false,
-        tgStrings1: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
-        tgStrings2: []
+      ],
+      organisasjonsnummer: '',
+      norskIdent: null,
+    });
+
+    const initialSelvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende> = {
+      periode: { fraOgMed: '', tilOgMed: '' },
+    };
+    const initialFrilanser: Periodeinfo<IFrilanser> = {
+      periode: { fraOgMed: '', tilOgMed: '' },
     };
 
-    private initialTilsyn: Periodeinfo<ITilsyn> = {
-        periode: {fraOgMed: '', tilOgMed: ''},
-        mandag: null,
-        tirsdag: null,
-        onsdag: null,
-        torsdag: null,
-        fredag: null
+    const initialTilsyn = new Tilsyn({
+      periode: initialPeriode,
+      mandag: null,
+      tirsdag: null,
+      onsdag: null,
+      torsdag: null,
+      fredag: null,
+    });
+
+    const initialBeredskap = new Tilleggsinformasjon({
+      periode: initialPeriode,
+      tilleggsinformasjon: '',
+    });
+
+    const initialNattevaak = new Tilleggsinformasjon({
+      periode: initialPeriode,
+      tilleggsinformasjon: '',
+    });
+
+    const soknadsperioder = (nr: 1 | 2) => (
+      <Periodepaneler
+        intl={intl}
+        periods={(nr === 1 ? soker1 : soker2!).perioder.map((periode) => ({
+          periode,
+        }))}
+        panelid={(i) => `soknadsperiodepanel_${i}`}
+        initialPeriodeinfo={{ periode: initialPeriode }}
+        editSoknad={(perioder) =>
+          this.updateSoknadIndividuelt(
+            { perioder: perioder.map((p) => p.periode as IPeriode) },
+            nr
+          )
+        }
+        editSoknadState={(perioder, showStatus) =>
+          this.updateIndividuellSoknadState(
+            { perioder: perioder.map((p) => p.periode as IPeriode) },
+            nr,
+            showStatus
+          )
+        }
+        getErrorMessage={(code) =>
+          this.getErrorMessage(
+            code.replace(/^perioder\[\d]\.periode/, (prefix) =>
+              prefix.replace(/\.periode$/, '')
+            ),
+            nr
+          )
+        }
+        feilkodeprefiks={'perioder'}
+        minstEn={true}
+      />
+    );
+
+    const arbeidsperioder = (nr: 1 | 2) => {
+      const soker = nr === 1 || !soker2 ? soker1 : soker2;
+      const updateTgStrings = () =>
+        this.setState({
+          tgStrings1: this.tgStrings(soker1),
+          tgStrings2: soker2 ? this.tgStrings(soker2) : [],
+        });
+      const { arbeid } = soker;
+      const errorMessageFunction = (code: string) =>
+        this.getErrorMessage(code, nr);
+
+      const arbeidstakerperioder = (harOverskrift?: boolean) => (
+        <Listepaneler
+          intl={intl}
+          items={arbeid.arbeidstaker}
+          component={pfArbeidstaker(
+            this.state.tgStrings1,
+            (tgStrings1) => this.setState({ tgStrings1 }),
+            () => this.tgStrings(soker),
+            nr
+          )}
+          panelid={(i) => `arbeidstakerpanel_${i}`}
+          initialItem={initialArbeidstaker}
+          editSoknad={(arbeidstaker) =>
+            this.updateSoknadIndividuelt(
+              { arbeid: { ...arbeid, arbeidstaker } },
+              nr
+            )
+          }
+          editSoknadState={(arbeidstaker, showStatus) =>
+            this.updateIndividuellSoknadState(
+              {
+                arbeid: {
+                  ...arbeid,
+                  arbeidstaker,
+                },
+              },
+              nr,
+              showStatus
+            )
+          }
+          textLeggTil={
+            harOverskrift
+              ? 'skjema.arbeid.arbeidstaker.leggtilarbeidsgiver'
+              : 'skjema.arbeid.arbeidstaker.leggtilperiode'
+          }
+          textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
+          panelClassName="arbeidstakerpanel"
+          getErrorMessage={errorMessageFunction}
+          feilkodeprefiks={'arbeid.arbeidstaker'}
+          onAdd={updateTgStrings}
+          onRemove={updateTgStrings}
+        />
+      );
+
+      const selvstendigperioder = (harOverskrift?: boolean) => (
+        <Periodepaneler
+          intl={intl}
+          periods={arbeid.selvstendigNaeringsdrivende}
+          panelid={(i) => `selvstendignaeringsdrivendepanel_${i}`}
+          initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
+          editSoknad={(selvstendigNaeringsdrivende) =>
+            this.updateSoknadIndividuelt(
+              {
+                arbeid: {
+                  ...arbeid,
+                  selvstendigNaeringsdrivende,
+                },
+              },
+              nr
+            )
+          }
+          editSoknadState={(selvstendigNaeringsdrivende, showStatus) =>
+            this.updateIndividuellSoknadState(
+              {
+                arbeid: {
+                  ...arbeid,
+                  selvstendigNaeringsdrivende,
+                },
+              },
+              nr,
+              showStatus
+            )
+          }
+          textLeggTil={
+            harOverskrift
+              ? 'skjema.arbeid.leggtilperiode'
+              : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'
+          }
+          textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
+          panelClassName="selvstendignaeringsdrivendepanel"
+          getErrorMessage={errorMessageFunction}
+          feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
+        />
+      );
+
+      const frilanserperioder = (harOverskrift?: boolean) => (
+        <Periodepaneler
+          intl={intl}
+          periods={arbeid.frilanser}
+          panelid={(i) => `frilanserpanel_${i}`}
+          initialPeriodeinfo={initialFrilanser}
+          editSoknad={(frilanser) =>
+            this.updateSoknadIndividuelt(
+              { arbeid: { ...arbeid, frilanser } },
+              nr
+            )
+          }
+          editSoknadState={(frilanser, showStatus) =>
+            this.updateIndividuellSoknadState(
+              {
+                arbeid: {
+                  ...arbeid,
+                  frilanser,
+                },
+              },
+              nr,
+              showStatus
+            )
+          }
+          textLeggTil={
+            harOverskrift
+              ? 'skjema.arbeid.leggtilperiode'
+              : 'skjema.arbeid.frilanser.leggtilperiode'
+          }
+          textFjern="skjema.arbeid.frilanser.fjernperiode"
+          panelClassName="frilanserpanel"
+          getErrorMessage={errorMessageFunction}
+          feilkodeprefiks={'arbeid.frilanser'}
+        />
+      );
+
+      const antallArbeidsperioder = (nr === 1
+        ? soknad1
+        : soknad2!
+      ).getNumberOfWorkPeriods();
+
+      const visning = () => {
+        if (!antallArbeidsperioder) {
+          return (
+            <Container className="arbeidsknapper">
+              <Row>
+                <Col>{arbeidstakerperioder()}</Col>
+                <Col>{selvstendigperioder()}</Col>
+                <Col>{frilanserperioder()}</Col>
+              </Row>
+            </Container>
+          );
+        } else if (arbeid.arbeidstaker.length === antallArbeidsperioder) {
+          return (
+            <>
+              <h3>
+                {intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}
+              </h3>
+              {arbeidstakerperioder(true)}
+              <h3>
+                {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
+              </h3>
+              <Container className="arbeidsknapper">
+                <Row>
+                  <Col>{selvstendigperioder()}</Col>
+                  <Col>{frilanserperioder()}</Col>
+                </Row>
+              </Container>
+            </>
+          );
+        } else if (
+          arbeid.selvstendigNaeringsdrivende.length === antallArbeidsperioder
+        ) {
+          return (
+            <>
+              <h3>
+                {intlHelper(
+                  intl,
+                  'skjema.arbeid.selvstendignaeringsdrivende.overskrift'
+                )}
+              </h3>
+              {selvstendigperioder(true)}
+              <h3>
+                {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
+              </h3>
+              <Container className="arbeidsknapper">
+                <Row>
+                  <Col>{arbeidstakerperioder()}</Col>
+                  <Col>{frilanserperioder()}</Col>
+                </Row>
+              </Container>
+            </>
+          );
+        } else if (arbeid.frilanser.length === antallArbeidsperioder) {
+          return (
+            <>
+              <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+              {frilanserperioder(true)}
+              <h3>
+                {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
+              </h3>
+              <Container className="arbeidsknapper">
+                <Row>
+                  <Col>{arbeidstakerperioder()}</Col>
+                  <Col>{selvstendigperioder()}</Col>
+                </Row>
+              </Container>
+            </>
+          );
+        } else {
+          return (
+            <>
+              <h3>
+                {intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}
+              </h3>
+              {arbeidstakerperioder(true)}
+              <h3>
+                {intlHelper(
+                  intl,
+                  'skjema.arbeid.selvstendignaeringsdrivende.overskrift'
+                )}
+              </h3>
+              {selvstendigperioder(true)}
+              <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+              {frilanserperioder(true)}
+            </>
+          );
+        }
+      };
+
+      return visning();
     };
 
-    componentDidMount(): void {
-        const {id} = this.props;
-        this.props.getMappe(id);
-        this.props.setStepAction(PunchStep.FILL_FORM);
-        this.setState(this.state);
-    }
-
-    componentDidUpdate(prevProps: Readonly<IPunchFormProps>, prevState: Readonly<IPunchFormComponentState>, snapshot?: any): void {
-        const {mappe} = this.props.punchFormState;
-        if (!!mappe && !this.state.isFetched) {
-            const dobbelSoknadFromStore = this.getDobbelSoknadFromStore();
-            this.setState({
-                dobbelSoknad: dobbelSoknadFromStore,
-                tgStrings1: this.tgStrings(dobbelSoknadFromStore.soker1),
-                tgStrings2: this.tgStrings(dobbelSoknadFromStore.soker2),
-                isFetched: true
-            });
-            this.props.setIdentAction(Object.keys(mappe.personer!)[0] || '', Object.keys(mappe.personer!)[1] || null);
+    const beredskapperioder = (
+      <Periodepaneler
+        intl={intl}
+        periods={felles.beredskap}
+        component={pfTilleggsinformasjon('beredskap')}
+        panelid={(i) => `beredskapspanel_${i}`}
+        initialPeriodeinfo={initialBeredskap}
+        editSoknad={(beredskap) => this.updateSoknadFelles({ beredskap })}
+        editSoknadState={(beredskap, showStatus) =>
+          this.updateFellesSoknadState({ beredskap }, showStatus)
         }
-    }
+        textLeggTil="skjema.beredskap.leggtilperiode"
+        textFjern="skjema.beredskap.fjernperiode"
+        className="beredskapsperioder"
+        panelClassName="beredskapspanel"
+        getErrorMessage={this.getErrorMessage}
+        feilkodeprefiks={'beredskap'}
+      />
+    );
 
-    componentWillUnmount(): void {
-        this.props.resetPunchFormAction();
-    }
-
-    render() {
-
-        const {intl, punchFormState, punchState} = this.props;
-        const soknad = new DobbelSoknad(
-            new SoknadFelles(this.state.dobbelSoknad.felles),
-            new SoknadIndividuelt(this.state.dobbelSoknad.soker1),
-            !!this.state.dobbelSoknad.soker2 ? new SoknadIndividuelt(this.state.dobbelSoknad.soker2) : undefined
-        );
-        const {soknad1, soknad2} = soknad;
-        const {felles, soker1, soker2} = soknad;
-        const isSoknadComplete = !!this.getManglerFromStore(1) && !this.getManglerFromStore(1)!.length && !!this.getManglerFromStore(2) && !this.getManglerFromStore(2)!.length;
-
-        if (punchFormState.isComplete) {
-            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
-            return null;
+    const nattevaakperioder = (
+      <Periodepaneler
+        intl={intl}
+        periods={felles.nattevaak}
+        component={pfTilleggsinformasjon('nattevaak')}
+        panelid={(i) => `nattevaakspanel_${i}`}
+        initialPeriodeinfo={initialNattevaak}
+        editSoknad={(nattevaak) => this.updateSoknadFelles({ nattevaak })}
+        editSoknadState={(nattevaak, showStatus) =>
+          this.updateFellesSoknadState({ nattevaak }, showStatus)
         }
+        textLeggTil="skjema.nattevaak.leggtilperiode"
+        textFjern="skjema.nattevaak.fjernperiode"
+        className="nattevaaksperioder"
+        panelClassName="nattevaakspanel"
+        getErrorMessage={this.getErrorMessage}
+        feilkodeprefiks={'nattevaak'}
+      />
+    );
 
-        if (punchFormState.isMappeLoading) {
-            return <NavFrontendSpinner/>;
+    const dobbel = (component: (nr: 1 | 2) => React.ReactElement) => {
+      return soker2 ? (
+        <div className="dobbel">
+          <div className="dobbel1">
+            <PersonBox
+              ident={punchState.ident1}
+              header={intlHelper(intl, 'soker1')}
+            />
+            {component(1)}
+          </div>
+          <div className="dobbel2">
+            <PersonBox
+              ident={punchState.ident2!}
+              header={intlHelper(intl, 'soker2')}
+            />
+            {component(2)}
+          </div>
+        </div>
+      ) : (
+        component(1)
+      );
+    };
+
+    return (
+      <>
+        {this.statusetikett()}
+        {this.backButton()}
+        {!!punchFormState.updateMappeError && (
+          <AlertStripeFeil>
+            {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+          </AlertStripeFeil>
+        )}
+        {!!punchFormState.submitMappeError && (
+          <AlertStripeFeil>
+            {intlHelper(intl, 'skjema.feil.ikke_sendt')}
+          </AlertStripeFeil>
+        )}
+        {
+          !punchFormState.updateMappeError &&
+            !punchFormState.submitMappeError &&
+            (isSoknadComplete ? (
+              <AlertStripeSuksess>
+                {intlHelper(intl, 'skjema.melding.komplett')}
+              </AlertStripeSuksess>
+            ) : (
+              <></>
+            )) /*<AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>*/
         }
-
-        if (!!punchFormState.error) {
-            return <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', {id: this.props.id})}</AlertStripeFeil>
-                <p><Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp></p>
-            </>;
-        }
-
-        if (!soknad) {
-            return null;
-        }
-
-        const initialPeriode: IPeriode = {fraOgMed: '', tilOgMed: ''};
-
-        const initialArbeidstaker = new Arbeidstaker({
-            skalJobbeProsent: [{
-                periode: initialPeriode,
-                grad: 100.0
-            }],
-            organisasjonsnummer: '',
-            norskIdent: null
-        });
-
-        const initialSelvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende> = {periode: {fraOgMed: '', tilOgMed: ''}};
-        const initialFrilanser: Periodeinfo<IFrilanser> = {periode: {fraOgMed: '', tilOgMed: ''}};
-
-        const initialTilsyn = new Tilsyn({
-            periode: initialPeriode,
-            mandag: null,
-            tirsdag: null,
-            onsdag: null,
-            torsdag: null,
-            fredag: null
-        });
-
-        const initialBeredskap = new Tilleggsinformasjon({
-            periode: initialPeriode,
-            tilleggsinformasjon: ''
-        });
-
-        const initialNattevaak = new Tilleggsinformasjon({
-            periode: initialPeriode,
-            tilleggsinformasjon: ''
-        });
-
-        const soknadsperioder = (nr: 1 | 2) => <Periodepaneler
-            intl={intl}
-            periods={(nr === 1 ? soker1 : soker2!).perioder.map(periode => ({periode}))}
-            panelid={i => `soknadsperiodepanel_${i}`}
-            initialPeriodeinfo={{periode: initialPeriode}}
-            editSoknad={perioder => this.updateSoknadIndividuelt({perioder: perioder.map(p => p.periode as IPeriode)}, nr)}
-            editSoknadState={(perioder, showStatus) => this.updateIndividuellSoknadState({perioder: perioder.map(p => p.periode as IPeriode)}, nr, showStatus)}
-            getErrorMessage={code => this.getErrorMessage(code.replace(/^perioder\[\d]\.periode/, prefix => prefix.replace(/\.periode$/, '')), nr)}
-            feilkodeprefiks={'perioder'}
-            minstEn={true}
-        />;
-
-        const arbeidsperioder = (nr: 1 | 2) => {
-
-            const soker = nr === 1 || !soker2 ? soker1 : soker2;
-            const updateTgStrings = () => this.setState({tgStrings1: this.tgStrings(soker1), tgStrings2: soker2 ? this.tgStrings(soker2) : []});
-            const {arbeid} = soker;
-            const errorMessageFunction = (code: string) => this.getErrorMessage(code, nr);
-
-            const arbeidstakerperioder = (harOverskrift?: boolean) => <Listepaneler
-                intl={intl}
-                items={arbeid.arbeidstaker}
-                component={pfArbeidstaker(this.state.tgStrings1, tgStrings1 => this.setState({tgStrings1}), () => this.tgStrings(soker), nr)}
-                panelid={i => `arbeidstakerpanel_${i}`}
-                initialItem={initialArbeidstaker}
-                editSoknad={arbeidstaker => this.updateSoknadIndividuelt({arbeid: {...arbeid, arbeidstaker}}, nr)}
-                editSoknadState={(arbeidstaker, showStatus) => this.updateIndividuellSoknadState({
-                    arbeid: {
-                        ...arbeid,
-                        arbeidstaker
-                    }
-                }, nr, showStatus)}
-                textLeggTil={harOverskrift ? 'skjema.arbeid.arbeidstaker.leggtilarbeidsgiver' : 'skjema.arbeid.arbeidstaker.leggtilperiode'}
-                textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
-                panelClassName="arbeidstakerpanel"
-                getErrorMessage={errorMessageFunction}
-                feilkodeprefiks={'arbeid.arbeidstaker'}
-                onAdd={updateTgStrings}
-                onRemove={updateTgStrings}
-            />;
-
-            const selvstendigperioder = (harOverskrift?: boolean) => <Periodepaneler
-                intl={intl}
-                periods={arbeid.selvstendigNaeringsdrivende}
-                panelid={i => `selvstendignaeringsdrivendepanel_${i}`}
-                initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-                editSoknad={selvstendigNaeringsdrivende => this.updateSoknadIndividuelt({
-                    arbeid: {
-                        ...arbeid,
-                        selvstendigNaeringsdrivende
-                    }
-                }, nr)}
-                editSoknadState={(selvstendigNaeringsdrivende, showStatus) => this.updateIndividuellSoknadState({
-                    arbeid: {
-                        ...arbeid,
-                        selvstendigNaeringsdrivende
-                    }
-                }, nr, showStatus)}
-                textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'}
-                textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
-                panelClassName="selvstendignaeringsdrivendepanel"
-                getErrorMessage={errorMessageFunction}
-                feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
-            />;
-
-            const frilanserperioder = (harOverskrift?: boolean) => <Periodepaneler
-                intl={intl}
-                periods={arbeid.frilanser}
-                panelid={i => `frilanserpanel_${i}`}
-                initialPeriodeinfo={initialFrilanser}
-                editSoknad={frilanser => this.updateSoknadIndividuelt({arbeid: {...arbeid, frilanser}}, nr)}
-                editSoknadState={(frilanser, showStatus) => this.updateIndividuellSoknadState({
-                    arbeid: {
-                        ...arbeid,
-                        frilanser
-                    }
-                }, nr, showStatus)}
-                textLeggTil={harOverskrift ? 'skjema.arbeid.leggtilperiode' : 'skjema.arbeid.frilanser.leggtilperiode'}
-                textFjern="skjema.arbeid.frilanser.fjernperiode"
-                panelClassName="frilanserpanel"
-                getErrorMessage={errorMessageFunction}
-                feilkodeprefiks={'arbeid.frilanser'}
-            />;
-
-            const antallArbeidsperioder = (nr === 1 ? soknad1 : soknad2!).getNumberOfWorkPeriods();
-
-            const visning = () => {
-                if (!antallArbeidsperioder) {
-                    return <Container className="arbeidsknapper"><Row>
-                        <Col>{arbeidstakerperioder()}</Col>
-                        <Col>{selvstendigperioder()}</Col>
-                        <Col>{frilanserperioder()}</Col>
-                    </Row></Container>;
-                } else if (arbeid.arbeidstaker.length === antallArbeidsperioder) {
-                    return <>
-                        <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
-                        {arbeidstakerperioder(true)}
-                        <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
-                        <Container className="arbeidsknapper"><Row>
-                            <Col>{selvstendigperioder()}</Col>
-                            <Col>{frilanserperioder()}</Col>
-                        </Row></Container>
-                    </>;
-                } else if (arbeid.selvstendigNaeringsdrivende.length === antallArbeidsperioder) {
-                    return <>
-                        <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
-                        {selvstendigperioder(true)}
-                        <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
-                        <Container className="arbeidsknapper"><Row>
-                            <Col>{arbeidstakerperioder()}</Col>
-                            <Col>{frilanserperioder()}</Col>
-                        </Row></Container>
-                    </>;
-                } else if (arbeid.frilanser.length === antallArbeidsperioder) {
-                    return <>
-                        <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-                        {frilanserperioder(true)}
-                        <h3>{intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}</h3>
-                        <Container className="arbeidsknapper"><Row>
-                            <Col>{arbeidstakerperioder()}</Col>
-                            <Col>{selvstendigperioder()}</Col>
-                        </Row></Container>
-                    </>;
-                } else {
-                    return <>
-                        <h3>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}</h3>
-                        {arbeidstakerperioder(true)}
-                        <h3>{intlHelper(intl, 'skjema.arbeid.selvstendignaeringsdrivende.overskrift')}</h3>
-                        {selvstendigperioder(true)}
-                        <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-                        {frilanserperioder(true)}
-                    </>;
+        <SkjemaGruppe feil={this.getErrorMessage('')}>
+          <div className="inputs-soknad">
+            <h2>{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h2>
+            <Input
+              id="soknad-dato"
+              label={intlHelper(intl, 'skjema.mottakelsesdato')}
+              type="date"
+              className="bold-label"
+              value={felles.datoMottatt}
+              {...this.changeAndBlurUpdatesFelles((event) => ({
+                datoMottatt: event.target.value,
+              }))}
+              feil={this.getErrorMessage('datoMottatt')}
+            />
+            <Select
+              id="soknad-sprak"
+              name="sprak"
+              label={intlHelper(intl, 'skjema.spraak')}
+              className="bold-label"
+              value={felles.spraak}
+              {...this.onChangeOnlyUpdateFelles((event) => ({
+                spraak: event.target.value,
+              }))}
+              feil={this.getErrorMessage('spraak')}
+            >
+              <option value="nb">{intlHelper(intl, 'locale.nb')}</option>
+              <option value="nn">{intlHelper(intl, 'locale.nn')}</option>
+            </Select>
+          </div>
+          <SkjemaGruppe
+            feil={this.getErrorMessage('barn')}
+            className="inputs-barn"
+          >
+            <h2>{intlHelper(intl, 'skjema.opplysningerombarn')}</h2>
+            <Input
+              id="barn-ident"
+              label={intlHelper(intl, 'skjema.barn.ident')}
+              className="bold-label"
+              value={felles.barn.norskIdent}
+              {...this.changeAndBlurUpdatesFelles((event) => ({
+                barn: {
+                  ...felles.barn.values(),
+                  norskIdent: event.target.value,
+                },
+              }))}
+              feil={this.getErrorMessage('barn.norskIdent')}
+              maxLength={11}
+            />
+            <Input
+              id="barn-fdato"
+              type="date"
+              label={intlHelper(intl, 'skjema.barn.foedselsdato')}
+              className="bold-label"
+              value={felles.barn.foedselsdato}
+              {...this.changeAndBlurUpdatesFelles((event) => ({
+                barn: {
+                  ...felles.barn.values(),
+                  foedselsdato: event.target.value,
+                },
+              }))}
+              feil={this.getErrorMessage('barn.foedselsdato')}
+            />
+          </SkjemaGruppe>
+          <h2>{intlHelper(intl, 'skjema.periode')}</h2>
+          {dobbel(soknadsperioder)}
+          <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
+          {dobbel(arbeidsperioder)}
+          <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
+          <SkjemaGruppe
+            feil={this.getErrorMessage('tilsynsordning')}
+            className="tilsynsordning"
+          >
+            <SkjemaGruppe
+              feil={this.getErrorMessage('tilsynsordning.iTilsynsordning')}
+              className="janeivetikke"
+            >
+              <RadioPanelGruppe
+                className="horizontalRadios"
+                radios={Object.values(JaNeiVetikke).map((jnv) => ({
+                  label: intlHelper(intl, jnv),
+                  value: jnv,
+                }))}
+                name="tilsynjaneivetikke"
+                legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
+                onChange={(event) =>
+                  this.updateTilsynsordning(
+                    (event.target as HTMLInputElement).value as JaNeiVetikke
+                  )
                 }
-            };
-
-            return visning();
-        };
-
-        const beredskapperioder = <Periodepaneler
-            intl={intl}
-            periods={felles.beredskap}
-            component={pfTilleggsinformasjon('beredskap')}
-            panelid={i => `beredskapspanel_${i}`}
-            initialPeriodeinfo={initialBeredskap}
-            editSoknad={beredskap => this.updateSoknadFelles({beredskap})}
-            editSoknadState={(beredskap, showStatus) => this.updateFellesSoknadState({beredskap}, showStatus)}
-            textLeggTil="skjema.beredskap.leggtilperiode"
-            textFjern="skjema.beredskap.fjernperiode"
-            className="beredskapsperioder"
-            panelClassName="beredskapspanel"
-            getErrorMessage={this.getErrorMessage}
-            feilkodeprefiks={'beredskap'}
-        />;
-
-        const nattevaakperioder = <Periodepaneler
-            intl={intl}
-            periods={felles.nattevaak}
-            component={pfTilleggsinformasjon('nattevaak')}
-            panelid={i => `nattevaakspanel_${i}`}
-            initialPeriodeinfo={initialNattevaak}
-            editSoknad={nattevaak => this.updateSoknadFelles({nattevaak})}
-            editSoknadState={(nattevaak, showStatus) => this.updateFellesSoknadState({nattevaak}, showStatus)}
-            textLeggTil="skjema.nattevaak.leggtilperiode"
-            textFjern="skjema.nattevaak.fjernperiode"
-            className="nattevaaksperioder"
-            panelClassName="nattevaakspanel"
-            getErrorMessage={this.getErrorMessage}
-            feilkodeprefiks={'nattevaak'}
-        />;
-
-        const dobbel = (component: (nr: 1 | 2) => React.ReactElement) => {
-            return soker2 ? <div className="dobbel">
-                <div className="dobbel1">
-                    <PersonBox ident={punchState.ident1} header={intlHelper(intl, 'soker1')}/>
-                    {component(1)}
-                </div>
-                <div className="dobbel2">
-                    <PersonBox ident={punchState.ident2!} header={intlHelper(intl, 'soker2')}/>
-                    {component(2)}
-                </div>
-            </div> : component(1)
-        };
-
-        return (<>
-            {this.statusetikett()}
-            {this.backButton()}
-            {!!punchFormState.updateMappeError && <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>}
-            {!!punchFormState.submitMappeError && <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>}
-            {!punchFormState.updateMappeError && !punchFormState.submitMappeError && (isSoknadComplete
-                ? <AlertStripeSuksess>{intlHelper(intl, 'skjema.melding.komplett')}</AlertStripeSuksess>
-                : <></>/*<AlertStripeInfo>{intlHelper(intl, 'skjema.melding.fyll_ut')}</AlertStripeInfo>*/)}
-            <SkjemaGruppe feil={this.getErrorMessage('')}>
-                <div className="inputs-soknad">
-                    <h2>{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h2>
-                    <Input
-                        id="soknad-dato"
-                        label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                        type="date"
-                        className="bold-label"
-                        value={felles.datoMottatt}
-                        {...this.changeAndBlurUpdatesFelles(event => ({datoMottatt: event.target.value}))}
-                        feil={this.getErrorMessage('datoMottatt')}
-                    />
-                    <Select
-                        id="soknad-sprak"
-                        name="sprak"
-                        label={intlHelper(intl, 'skjema.spraak')}
-                        className="bold-label"
-                        value={felles.spraak}
-                        {...this.onChangeOnlyUpdateFelles(event => ({spraak: event.target.value}))}
-                        feil={this.getErrorMessage('spraak')}
-                    >
-                        <option value='nb'>{intlHelper(intl, 'locale.nb')}</option>
-                        <option value='nn'>{intlHelper(intl, 'locale.nn')}</option>
-                    </Select>
-                </div>
-                <SkjemaGruppe feil={this.getErrorMessage('barn')} className="inputs-barn">
-                    <h2>{intlHelper(intl, 'skjema.opplysningerombarn')}</h2>
-                    <Input
-                        id="barn-ident"
-                        label={intlHelper(intl, 'skjema.barn.ident')}
-                        className="bold-label"
-                        value={felles.barn.norskIdent}
-                        {...this.changeAndBlurUpdatesFelles(event => ({barn: {...felles.barn.values(), norskIdent: event.target.value}}))}
-                        feil={this.getErrorMessage('barn.norskIdent')}
-                        maxLength={11}
-                    />
-                    <Input
-                        id="barn-fdato"
-                        type="date"
-                        label={intlHelper(intl, 'skjema.barn.foedselsdato')}
-                        className="bold-label"
-                        value={felles.barn.foedselsdato}
-                        {...this.changeAndBlurUpdatesFelles(event => ({barn: {...felles.barn.values(), foedselsdato: event.target.value}}))}
-                        feil={this.getErrorMessage('barn.foedselsdato')}
-                    />
-                </SkjemaGruppe>
-                <h2>{intlHelper(intl, 'skjema.periode')}</h2>
-                {dobbel(soknadsperioder)}
-                <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
-                {dobbel(arbeidsperioder)}
-                <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
-                <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning')} className="tilsynsordning">
-                    <SkjemaGruppe feil={this.getErrorMessage('tilsynsordning.iTilsynsordning')} className="janeivetikke">
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={Object.values(JaNeiVetikke).map(jnv => ({label: intlHelper(intl, jnv), value: jnv}))}
-                            name="tilsynjaneivetikke"
-                            legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
-                            onChange={event => this.updateTilsynsordning((event.target as HTMLInputElement).value as JaNeiVetikke)}
-                            checked={felles.tilsynsordning.iTilsynsordning}
-                        />
-                    </SkjemaGruppe>
-                    {felles.tilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && <Periodepaneler
-                        intl={intl}
-                        periods={felles.tilsynsordning.opphold!}
-                        component={pfTilsyn}
-                        panelid={i => `tilsynpanel_${i}`}
-                        initialPeriodeinfo={initialTilsyn}
-                        editSoknad={opphold => this.updateSoknadFelles({tilsynsordning: {...felles.tilsynsordning, opphold}})}
-                        editSoknadState={(opphold, showStatus) => this.updateFellesSoknadState({tilsynsordning: {...felles.tilsynsordning, opphold}}, showStatus)}
-                        textLeggTil="skjema.tilsyn.leggtilperiode"
-                        textFjern="skjema.tilsyn.fjernperiode"
-                        panelClassName="tilsynpanel"
-                        getErrorMessage={this.getErrorMessage}
-                        feilkodeprefiks={'tilsynsordning.opphold'}
-                        minstEn={felles.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA}
-                    />}
-                </SkjemaGruppe>
-                {felles.tilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && <>
-                    <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
-                    {beredskapperioder}
-                    <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
-                    {nattevaakperioder}
-                </>}
-                {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
+                checked={felles.tilsynsordning.iTilsynsordning}
+              />
+            </SkjemaGruppe>
+            {felles.tilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && (
+              <Periodepaneler
+                intl={intl}
+                periods={felles.tilsynsordning.opphold!}
+                component={pfTilsyn}
+                panelid={(i) => `tilsynpanel_${i}`}
+                initialPeriodeinfo={initialTilsyn}
+                editSoknad={(opphold) =>
+                  this.updateSoknadFelles({
+                    tilsynsordning: { ...felles.tilsynsordning, opphold },
+                  })
+                }
+                editSoknadState={(opphold, showStatus) =>
+                  this.updateFellesSoknadState(
+                    { tilsynsordning: { ...felles.tilsynsordning, opphold } },
+                    showStatus
+                  )
+                }
+                textLeggTil="skjema.tilsyn.leggtilperiode"
+                textFjern="skjema.tilsyn.fjernperiode"
+                panelClassName="tilsynpanel"
+                getErrorMessage={this.getErrorMessage}
+                feilkodeprefiks={'tilsynsordning.opphold'}
+                minstEn={
+                  felles.tilsynsordning.iTilsynsordning === JaNeiVetikke.JA
+                }
+              />
+            )}
+          </SkjemaGruppe>
+          {felles.tilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && (
+            <>
+              <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
+              {beredskapperioder}
+              <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
+              {nattevaakperioder}
+            </>
+          )}
+          {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
                 {!!soknad?.medlemskap?.opphold?.length && (
                     <table className="tabell tabell--stripet">
                         <thead>
@@ -540,107 +782,175 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
                     {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
                 />*/}
-                {!!punchFormState.submitMappeError && <AlertStripeFeil className="margin-top-1">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>}
-                <p className="sendknapp-wrapper"><Knapp
-                    onClick={() => this.props.submitSoknad(this.props.id, this.props.punchState.ident1)}
-                    disabled={!isSoknadComplete}
-                >{intlHelper(intl, 'skjema.knapp.send')}</Knapp></p>
-            </SkjemaGruppe>
-        </>);
+          {!!punchFormState.submitMappeError && (
+            <AlertStripeFeil className="margin-top-1">
+              {intlHelper(intl, 'skjema.feil.ikke_sendt')}
+            </AlertStripeFeil>
+          )}
+          <p className="sendknapp-wrapper">
+            <Knapp
+              onClick={() =>
+                this.props.submitSoknad(
+                  this.props.id,
+                  this.props.punchState.ident1
+                )
+              }
+              disabled={!isSoknadComplete}
+            >
+              {intlHelper(intl, 'skjema.knapp.send')}
+            </Knapp>
+          </p>
+        </SkjemaGruppe>
+      </>
+    );
+  }
+
+  private tgStrings = (soknad: SoknadIndividuelt | null) => {
+    // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
+    return soknad ? soknad.arbeid.generateTgStrings(this.props.intl) : [];
+  };
+
+  private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
+    const tilsynsordning: ITilsynsordning = {
+      ...this.state.dobbelSoknad.felles.tilsynsordning,
+      iTilsynsordning: jaNeiVetikke,
+    };
+    if (
+      jaNeiVetikke === JaNeiVetikke.JA &&
+      tilsynsordning.opphold!.length === 0
+    ) {
+      tilsynsordning.opphold!.push(this.initialTilsyn);
     }
+    this.updateFellesSoknadState({ tilsynsordning }, true);
+    this.updateSoknadFelles({ tilsynsordning });
+  }
 
-    private tgStrings = (soknad: SoknadIndividuelt | null) => {
-        // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
-        return soknad ? soknad.arbeid.generateTgStrings(this.props.intl) : [];
-    };
+  private backButton() {
+    return (
+      <p>
+        <Knapp onClick={this.handleBackButtonClick}>
+          {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
+        </Knapp>
+      </p>
+    );
+  }
 
-    private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
-        const tilsynsordning: ITilsynsordning = {...this.state.dobbelSoknad.felles.tilsynsordning, iTilsynsordning: jaNeiVetikke};
-        if (jaNeiVetikke === JaNeiVetikke.JA && tilsynsordning.opphold!.length === 0) {
-            tilsynsordning.opphold!.push(this.initialTilsyn);
-        }
-        this.updateFellesSoknadState({tilsynsordning}, true);
-        this.updateSoknadFelles({tilsynsordning});
-    }
+  private getDobbelSoknadFromStore = () => {
+    const mappe = new Mappe(this.props.punchFormState.mappe || {});
+    return mappe.genererDobbelSoknad();
+  };
 
-    private backButton() {
-        return <p><Knapp onClick={this.handleBackButtonClick}>
-            {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
-        </Knapp></p>;
-    }
+  private getManglerFromStore = (nr?: 1 | 2) => {
+    const { ident1, ident2 } = this.props.punchState;
+    const ident = nr === 2 && ident2 ? ident2 : ident1;
+    const personlig = this.props.punchFormState.mappe?.personer;
+    return personlig?.[ident]?.mangler;
+  };
 
-    private getDobbelSoknadFromStore = () => {
-        const mappe = new Mappe(this.props.punchFormState.mappe || {});
-        return mappe.genererDobbelSoknad();
-    };
+  private getErrorMessage = (attribute: string, nr?: 1 | 2) => {
+    const errorMsg = this.getManglerFromStore(nr)?.filter(
+      (m: IInputError) => m.attributt === attribute
+    )?.[0]?.melding;
+    return !!errorMsg
+      ? intlHelper(
+          this.props.intl,
+          `skjema.feil.${attribute}.${errorMsg}`
+            .replace(/\[\d+]/g, '[]')
+            .replace(
+              /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
+              'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+            )
+            .replace(
+              /^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/,
+              'skjema.feil.fraOgMed.MAA_SETTES'
+            )
+            .replace(
+              /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
+              'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+            )
+            .replace(
+              /^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/,
+              'skjema.feil.tilOgMed.MAA_SETTES'
+            )
+        )
+      : undefined;
+  };
 
-    private getManglerFromStore = (nr?: 1 | 2) => {
-        const {ident1, ident2} = this.props.punchState;
-        const ident = nr === 2 && ident2 ? ident2 : ident1;
-        const personlig = this.props.punchFormState.mappe?.personer;
-        return personlig?.[ident]?.mangler;
-    };
-
-    private getErrorMessage = (attribute: string, nr?: 1 | 2) => {
-        const errorMsg = this.getManglerFromStore(nr)?.filter((m: IInputError) => m.attributt === attribute)?.[0]?.melding;
-        return !!errorMsg ? intlHelper(
-            this.props.intl,
-            `skjema.feil.${attribute}.${errorMsg}`
-                .replace(/\[\d+]/g, '[]')
-                .replace(/^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED')
-                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/, 'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED')
-                .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-        ) : undefined;
-    };
-
-    private updateFellesSoknadState(fellesSoknad: Partial<ISoknadFelles>, showStatus?: boolean) {
-        this.setState({dobbelSoknad: {
-            ...this.state.dobbelSoknad,
-            felles: {...this.state.dobbelSoknad.felles, ...fellesSoknad}
-        }, showStatus: !!showStatus});
-    }
-
-    private updateIndividuellSoknadState(individuellSoknad: Partial<ISoknadIndividuelt>, nr: 1 | 2, showStatus?: boolean) {
-        this.setState({dobbelSoknad: {
-            ...this.state.dobbelSoknad,
-            [`soker${nr}`]: {...this.state.dobbelSoknad[`soker${nr}`], ...individuellSoknad}
-        }, showStatus: !!showStatus});
-    }
-
-    private handleBackButtonClick = () => {
-        const {punchState, getPunchPath} = this.props;
-        const {ident1, ident2} = punchState;
-        this.props.resetMappeAction();
-        this.props.undoChoiceOfMappeAction();
-        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD, {ident: !!ident2 ? `${ident1}&${ident2}` : ident1}));
-    };
-
-    private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
-    };
-
-    private changeAndBlurUpdatesFelles = (change: (event: any) => Partial<ISoknadFelles>) => ({
-        onChange: (event: any) => this.updateFellesSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknadFelles(change(event))
+  private updateFellesSoknadState(
+    fellesSoknad: Partial<ISoknadFelles>,
+    showStatus?: boolean
+  ) {
+    this.setState({
+      dobbelSoknad: {
+        ...this.state.dobbelSoknad,
+        felles: { ...this.state.dobbelSoknad.felles, ...fellesSoknad },
+      },
+      showStatus: !!showStatus,
     });
+  }
 
-    private onChangeOnlyUpdateFelles = (change: (event: any) => Partial<ISoknadFelles>) => ({
-        onChange: (event: any) => {
-            this.updateFellesSoknadState(change(event), true);
-            this.updateSoknadFelles(change(event));
-        }
+  private updateIndividuellSoknadState(
+    individuellSoknad: Partial<ISoknadIndividuelt>,
+    nr: 1 | 2,
+    showStatus?: boolean
+  ) {
+    this.setState({
+      dobbelSoknad: {
+        ...this.state.dobbelSoknad,
+        [`soker${nr}`]: {
+          ...this.state.dobbelSoknad[`soker${nr}`],
+          ...individuellSoknad,
+        },
+      },
+      showStatus: !!showStatus,
     });
+  }
 
-    private onChangeOnlyUpdateIndividuelt = (change: (event: any) => Partial<ISoknadIndividuelt>, nr: 1 |2) => ({
-        onChange: (event: any) => {
-            this.updateIndividuellSoknadState(change(event), nr, true);
-            this.updateSoknadIndividuelt(change(event), nr);
-        }
-    });
+  private handleBackButtonClick = () => {
+    const { punchState, getPunchPath } = this.props;
+    const { ident1, ident2 } = punchState;
+    this.props.resetMappeAction();
+    this.props.undoChoiceOfMappeAction();
+    setHash(
+      getPunchPath(PunchStep.CHOOSE_SOKNAD, {
+        ident: !!ident2 ? `${ident1}&${ident2}` : ident1,
+      })
+    );
+  };
 
-    /*private handleOppholdLandChange = (index: number, land: string) => {
+  private handleStartButtonClick = () => {
+    this.props.resetPunchFormAction();
+    setHash('/');
+  };
+
+  private changeAndBlurUpdatesFelles = (
+    change: (event: any) => Partial<ISoknadFelles>
+  ) => ({
+    onChange: (event: any) =>
+      this.updateFellesSoknadState(change(event), false),
+    onBlur: (event: any) => this.updateSoknadFelles(change(event)),
+  });
+
+  private onChangeOnlyUpdateFelles = (
+    change: (event: any) => Partial<ISoknadFelles>
+  ) => ({
+    onChange: (event: any) => {
+      this.updateFellesSoknadState(change(event), true);
+      this.updateSoknadFelles(change(event));
+    },
+  });
+
+  private onChangeOnlyUpdateIndividuelt = (
+    change: (event: any) => Partial<ISoknadIndividuelt>,
+    nr: 1 | 2
+  ) => ({
+    onChange: (event: any) => {
+      this.updateIndividuellSoknadState(change(event), nr, true);
+      this.updateSoknadIndividuelt(change(event), nr);
+    },
+  });
+
+  /*private handleOppholdLandChange = (index: number, land: string) => {
         this.state.soknad.medlemskap!.opphold[index].land = land;
         this.forceUpdate();
     };
@@ -674,72 +984,94 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});*/
 
-    private updateSoknadIndividuelt = (soknad: Partial<ISoknadIndividuelt>, nr: 1 | 2) => {
-        this.setState({showStatus: true});
-        return this.props.updateSoknad(
-            this.props.id,
-            this.props.punchState[`ident${nr}`],
-            this.props.journalpostid,
-            {...this.getDobbelSoknadFromStore().soknad(nr)!.values(), ...soknad}
-        );
-    };
+  private updateSoknadIndividuelt = (
+    soknad: Partial<ISoknadIndividuelt>,
+    nr: 1 | 2
+  ) => {
+    this.setState({ showStatus: true });
+    return this.props.updateSoknad(
+      this.props.id,
+      this.props.punchState[`ident${nr}`],
+      this.props.journalpostid,
+      { ...this.getDobbelSoknadFromStore().soknad(nr)!.values(), ...soknad }
+    );
+  };
 
-    private updateSoknadFelles = (soknad: Partial<ISoknadFelles>) => {
-        this.setState({showStatus: true});
-        return this.props.updateSoknader(
-            this.props.id,
-            this.props.punchState.ident1,
-            this.props.punchState.ident2,
-            this.props.journalpostid,
-            {...this.getDobbelSoknadFromStore().soknad1.values(), ...soknad},
-            this.props.punchState.ident2 ? {...this.getDobbelSoknadFromStore().soknad2!.values(), ...soknad} : null
-        );
-    };
+  private updateSoknadFelles = (soknad: Partial<ISoknadFelles>) => {
+    this.setState({ showStatus: true });
+    return this.props.updateSoknader(
+      this.props.id,
+      this.props.punchState.ident1,
+      this.props.punchState.ident2,
+      this.props.journalpostid,
+      { ...this.getDobbelSoknadFromStore().soknad1.values(), ...soknad },
+      this.props.punchState.ident2
+        ? { ...this.getDobbelSoknadFromStore().soknad2!.values(), ...soknad }
+        : null
+    );
+  };
 
-    private statusetikett() {
-
-        if (!this.state.showStatus) {
-            return null;
-        }
-
-        const {punchFormState} = this.props;
-        const className = "statusetikett";
-
-        if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{className}}>Lagrer …</EtikettFokus>;
-        }
-        if (!!punchFormState.updateMappeError) {
-            return <EtikettAdvarsel {...{className}}>Lagring feilet</EtikettAdvarsel>;
-        }
-        return <EtikettSuksess {...{className}}>Lagret</EtikettSuksess>;
+  private statusetikett() {
+    if (!this.state.showStatus) {
+      return null;
     }
+
+    const { punchFormState } = this.props;
+    const className = 'statusetikett';
+
+    if (punchFormState.isAwaitingUpdateResponse) {
+      return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
+    }
+    if (!!punchFormState.updateMappeError) {
+      return (
+        <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>
+      );
+    }
+    return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
+  }
 }
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchFormState: state.punchFormState,
-    punchState: state.punchState
+  punchFormState: state.punchFormState,
+  punchState: state.punchState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getMappe:                   (id: string)                        => dispatch(getMappe(id)),
-    resetMappeAction:           ()                                  => dispatch(resetMappeAction()),
-    setIdentAction:             (ident1: string,
-                                 ident2: string | null)             => dispatch(setIdentAction(ident1, ident2)),
-    setStepAction:              (step: PunchStep)                   => dispatch(setStepAction(step)),
-    undoChoiceOfMappeAction:    ()                                  => dispatch(undoChoiceOfMappeAction()),
-    updateSoknad:               (mappeid: string,
-                                 norskIdent: string,
-                                 journalpostid: string,
-                                 soknad: Partial<ISoknad>)          => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
-    updateSoknader:             (mappeid: string,
-                                 norskIdent1: string,
-                                 norskIdent2: string | null,
-                                 journalpostid: string,
-                                 soknad1: Partial<ISoknad>,
-                                 soknad2: Partial<ISoknad> | null)  => dispatch(updateSoknader(mappeid, norskIdent1, norskIdent2, journalpostid, soknad1, soknad2)),
-    submitSoknad:               (mappeid: string,
-                                 ident: string)                     => dispatch(submitSoknad(mappeid, ident)),
-    resetPunchFormAction:       ()                                  => dispatch(resetPunchFormAction())
+  getMappe: (id: string) => dispatch(getMappe(id)),
+  resetMappeAction: () => dispatch(resetMappeAction()),
+  setIdentAction: (ident1: string, ident2: string | null) =>
+    dispatch(setIdentAction(ident1, ident2)),
+  setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
+  undoChoiceOfMappeAction: () => dispatch(undoChoiceOfMappeAction()),
+  updateSoknad: (
+    mappeid: string,
+    norskIdent: string,
+    journalpostid: string,
+    soknad: Partial<ISoknad>
+  ) => dispatch(updateSoknad(mappeid, norskIdent, journalpostid, soknad)),
+  updateSoknader: (
+    mappeid: string,
+    norskIdent1: string,
+    norskIdent2: string | null,
+    journalpostid: string,
+    soknad1: Partial<ISoknad>,
+    soknad2: Partial<ISoknad> | null
+  ) =>
+    dispatch(
+      updateSoknader(
+        mappeid,
+        norskIdent1,
+        norskIdent2,
+        journalpostid,
+        soknad1,
+        soknad2
+      )
+    ),
+  submitSoknad: (mappeid: string, ident: string) =>
+    dispatch(submitSoknad(mappeid, ident)),
+  resetPunchFormAction: () => dispatch(resetPunchFormAction()),
 });
 
-export const PunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
+export const PunchForm = injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)
+);
