@@ -3,7 +3,7 @@ import Modal                                                    from 'nav-fronte
 import * as React                                               from 'react';
 import {render}                                                 from 'react-dom';
 import {Provider}                                               from 'react-redux';
-import {BrowserRouter, Route, Switch}                           from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch}                           from 'react-router-dom';
 import {applyMiddleware, compose, createStore}                  from 'redux';
 
 import ApplicationWrapper                                       from './components/application-wrapper/ApplicationWrapper';
@@ -35,12 +35,12 @@ export const App: React.FunctionComponent = () => {
                     setLocale(activeLocale);
                 }}
             >
-                <BrowserRouter>
+                <Router>
                     <Switch>
                         <Route path="/:journalpostid/" children={JournalpostRouter}/>
                         <Route path="/"><p>Journalpostid er ikke oppgitt.</p></Route>
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </ApplicationWrapper>
         </Provider>
     );
