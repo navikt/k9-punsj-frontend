@@ -9,7 +9,6 @@ import {
   usignertResetAction,
   getJournalpost,
   setIdentAction,
-  setStepAction,
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { setHash } from 'app/utils';
@@ -56,6 +55,13 @@ type IIdentProps = IIdentStateProps &
   IIdentComponentProps &
   WrappedComponentProps;
 
+function redirectToNextStep(ident1: string, ident2: string | null) {
+  if (IdentRules.areIdentsValid(ident1, ident2)) {
+    const ident = ident1 && ident2 ? `${ident1}&${ident2}` : ident1;
+    setHash('');
+  }
+}
+
 export const IdentComponent: React.FunctionComponent<IIdentProps> = (
   props: IIdentProps
 ) => {
@@ -64,7 +70,6 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
     signaturState,
     punchState,
     identInputValues,
-    setIdentAction,
   } = props;
   const { signert } = signaturState;
 
@@ -74,7 +79,6 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
   React.useEffect(() => {
     props.setStepAction(PunchStep.IDENT);
     setIdent1(punchState.ident1);
-    setIdent2(punchState.ident2);
   }, []);
 
   // todo gjør om disse til dynamiske funskjoner. kanskje egne skjemakomponenter
@@ -88,19 +92,13 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
   const handleIdent2Blur = (event: any) =>
     setIdentAction(punchState.ident1, event.target.value);
 
-  const getPath = (step: PunchStep, values?: any) =>
-    getPath(paths, step, values, dok ? { dok: dok } : undefined);
-
-  function redirectToNextStep(ident1: string, ident2: string | null) {
-    if (IdentRules.areIdentsValid(ident1, ident2)) {
-      const ident = ident1 && ident2 ? `${ident1}&${ident2}` : ident1;
-      setHash(getPath(PunchStep.CHOOSE_SOKNAD, { ident }));
-    }
-  }
+  // tslint:disable-next-line:no-console
+  const getPath = (lol: any, hei: any) => lol + hei;
 
   function handleIdentKeyPress(sokernr: 1 | 2) {
     return (event: any) => {
       if (event.key === 'Enter') {
+        // tslint:disable-next-line:no-shadowed-variable
         let { ident1, ident2 } = punchState;
         if (sokernr === 1) {
           handleIdent1Blur(event);

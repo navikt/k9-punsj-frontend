@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
-import JournalpostRouter from './JournalpostRouter';
+import JournalpostRouter from './containers/JournalpostRouter';
 import { Locale } from './models/types';
 import logger from 'redux-logger';
 import { thunk } from './state/middleware';
@@ -18,9 +18,8 @@ import {
   setLocaleInSessionStorage,
 } from './utils';
 
-// tslint:disable-next-line:no-string-literal
-const composeEnhancers =
-  (window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose) || compose;
+const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
+const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 
 const store = createStore(
   rootReducer,

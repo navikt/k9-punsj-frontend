@@ -6,8 +6,7 @@ import {
   ISakstyper,
 } from '../models/Sakstype';
 import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/OmsorgspengerFordelingIdent';
-import OmsorgspengerOverføringIdent from './omsorgspenger/overforing/OmsorgspengerOverforingIdent';
-import OmsorgspengerOverføringHenteSøknader from './omsorgspenger/overforing/OmsorgspengerOverforingIdent';
+import OmsorgspengerOverføringIdentSjekk from './omsorgspenger/overforing/OmsorgspengerOverføringIdentSjekk';
 
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 
@@ -40,14 +39,8 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
     {
       path: '/ident',
       stepName: 'ident',
-      getComponent: () => <OmsorgspengerOverføringIdent />,
+      getComponent: () => <OmsorgspengerOverføringIdentSjekk />,
       stepOrder: 0,
-    },
-    {
-      path: '/hentsoknader',
-      stepName: 'hentsoknader',
-      getComponent: () => <OmsorgspengerOverføringHenteSøknader />,
-      stepOrder: 1,
     },
   ],
 };
