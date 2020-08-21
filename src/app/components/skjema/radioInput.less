@@ -1,0 +1,15 @@
+.radioinput--radios {
+  &.radioinput--horisontal {
+    display: flex;
+    > * {
+      width: 10em;
+      margin-right: 1em;
+    }
+  }
+
+  &.radioinput--vertikal {
+    > :not(:last-child) {
+      margin-bottom: 1em;
+    }
+  }
+}
