@@ -1,30 +1,30 @@
-import React, {ReactNode} from 'react';
-import {Sakstype}         from './enums';
+import React, { ReactNode } from 'react';
+import { Sakstype } from './enums';
 
 export interface ISakstypeDefault {
-    navn: Sakstype;
+  navn: Sakstype;
 }
 
 export interface ISakstypeOmfordeling extends ISakstypeDefault {}
 
 export interface ISakstypeComponentProps {
-    journalpostid: string;
+  journalpostid: string;
 }
 
 export interface ISakstypeStep {
-    path: string;
-    stepName: string;
-    stepOrder: number;
-    getComponent: (props: any) => ReactNode
+  path: string;
+  stepName: string;
+  stepOrder: number;
+  getComponent: (gåTilNesteSteg: () => void) => ReactNode;
 }
 
 export interface ISakstypePunch extends ISakstypeDefault {
-    punchPath: string;
-    getComponent?: (props: ISakstypeComponentProps) => ReactNode;
-    steps: ISakstypeStep[];
+  punchPath: string;
+  getComponent?: (props: ISakstypeComponentProps) => ReactNode;
+  steps: ISakstypeStep[];
 }
 
 export interface ISakstyper {
-    punchSakstyper: ISakstypePunch[];
-    omfordelingssakstyper: ISakstypeOmfordeling[];
+  punchSakstyper: ISakstypePunch[];
+  omfordelingssakstyper: ISakstypeOmfordeling[];
 }

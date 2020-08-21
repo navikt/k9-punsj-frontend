@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import useRedirect from '../hooks/useRedirect';
 import { ISakstypePunch, ISakstypeStep } from '../models/Sakstype';
@@ -10,6 +10,7 @@ import { RootStateType } from '../state/RootState';
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { IDokument } from '../models/types';
+import { setHash } from '../utils';
 
 interface ISakstypePunchProps {
   sakstypeConfig: ISakstypePunch;
@@ -44,14 +45,25 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
       <div className="panels-wrapper" id="panels-wrapper">
         <Panel className="punch_form" border={true}>
           <Switch>
-            {steps.map(({ path, getComponent, stepName }) => (
-              <Route
-                exact={true}
-                key={`${navn}-${stepName}`}
-                path={`${punchPath}${path}`}
-                children={getComponent(journalpostid)}
-              />
-            ))}
+            {steps.map(({ path, getComponent, stepName, stepOrder }) => {
+              const gåTilNesteSteg = useCallback(() => {
+                const nesteStegPath = steps.find(
+                  (steg) => steg.stepOrder === stepOrder + 1
+                )?.path;
+                if (nesteStegPath) {
+                  setHash(`${punchPath}${nesteStegPath}`);
+                }
+              }, [steps]);
+
+              return (
+                <Route
+                  exact={true}
+                  key={`${navn}-${stepName}`}
+                  path={`${punchPath}${path}`}
+                  children={getComponent(gåTilNesteSteg)}
+                />
+              );
+            })}
           </Switch>
         </Panel>
 
