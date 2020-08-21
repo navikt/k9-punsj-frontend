@@ -191,5 +191,13 @@
   "skjema.feil.nattevaak[].periode.OVERLAPP":                                                     "Denne nattevåksperioden overlapper en annen.",
   "skjema.feil.tilsynsordning.MAA_SETTES":                                                        "Tilsynsordning må være satt.",
   "skjema.feil.tilsynsordning.opphold[].periode.DUPLIKAT":                                        "Denne tilsynsperioden er helt lik en annen.",
-  "skjema.feil.tilsynsordning.opphold[].periode.OVERLAPP":                                        "Denne tilsynsperioden overlapper en annen."
+  "skjema.feil.tilsynsordning.opphold[].periode.OVERLAPP":                                        "Denne tilsynsperioden overlapper en annen.",
+
+  "skjema.felt.signert.label": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
+  "skjema.felt.signert.ja": "Ja",
+  "skjema.felt.signert.nei": "Nei",
+  "skjema.felt.fødselsnummer.label": "Fødselsnummer",
+  "skjema.validering.påkrevd": "Påkrevd felt",
+  "omsorgsdager.overføring.punch.overskrift": "Melding om overføring av omsorgsdager",
+  "omsorgsdager.overføring.punch.omsøkeren": "Om søkeren:"
 }
