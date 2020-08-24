@@ -1,6 +1,6 @@
 import React from 'react';
 import { useField } from 'formik';
-import { RadioPanel, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Radio, RadioPanel, SkjemaGruppe } from 'nav-frontend-skjema';
 import intlHelper from '../../utils/intlUtils';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
@@ -11,15 +11,19 @@ interface IRadioInputProps {
   feltnavn: string;
   optionValues: any[];
   retning?: 'vertikal' | 'horisontal';
+  styling?: 'medPanel' | 'utenPanel';
 }
 
 const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
   feltnavn,
   optionValues,
   retning = 'horisontal',
+  styling = 'utenPanel',
 }) => {
   const [{ name, value, onBlur, onChange }, { error }] = useField(feltnavn);
   const intl = useIntl();
+
+  const RadioComponent = styling === 'utenPanel' ? Radio : RadioPanel;
 
   return (
     <SkjemaGruppe
@@ -33,7 +37,7 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
         })}
       >
         {optionValues.map((optionValue) => (
-          <RadioPanel
+          <RadioComponent
             label={intlHelper(intl, `skjema.felt.${feltnavn}.${optionValue}`)}
             key={optionValue}
             name={name}

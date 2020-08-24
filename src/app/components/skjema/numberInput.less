@@ -1,0 +1,29 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.numberInput {
+  display: flex;
+  & > *:not(:last-child) {
+    margin-right: 1em;
+  }
+
+  .numberInput__button {
+    background: transparent;
+    border: none;
+    &:hover {
+      cursor: pointer;
+    }
+    &:focus {
+      outline: 3px solid #0067C5;
+    }
+  }
+}
