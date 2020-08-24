@@ -103,7 +103,7 @@ export class PunchPageComponent extends React.Component<
 
     return (
       <div className="panels-wrapper" id="panels-wrapper">
-        <Panel className="punch_form" border={true}>
+        <Panel className="pleiepenger_punch_form" border={true}>
           {punchState.step !== PunchStep.IDENT &&
             this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
           {this.underFnr()}
