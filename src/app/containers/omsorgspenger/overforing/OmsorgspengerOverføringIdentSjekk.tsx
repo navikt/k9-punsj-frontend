@@ -18,12 +18,13 @@ const OmsorgspengerOverføringIdentSjekk: React.FunctionComponent = () => {
         feltnavn="signert"
         optionValues={Object.values(JaNei)}
         retning="horisontal"
+        styling="medPanel"
       />
       <h2>
         <FormattedMessage id="ident.identifikasjon.overskrift" />
       </h2>
       {/* TODO: Sjekk fnr opp mot norskIdent */}
-      <TextInput feltnavn="fødselsnummer" />
+      <TextInput feltnavn="fødselsnummer" bredde="M" />
       <Knapper>
         <Knapp htmlType="button" onClick={() => setHash('/')}>
           <FormattedMessage id="ident.knapp.forrigesteg" />

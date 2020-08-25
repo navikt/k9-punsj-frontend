@@ -6,9 +6,10 @@ import {
   ISakstyper,
 } from '../models/Sakstype';
 import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/OmsorgspengerFordelingIdent';
-import OmsorgspengerOverføringIdentSjekk from './omsorgspenger/overforing/OmsorgspengerOverføringIdentSjekk';
 
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
+import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
+import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -39,7 +40,12 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
     {
       path: '/ident',
       stepName: 'ident',
-      getComponent: () => <OmsorgspengerOverføringIdentSjekk />,
+      getComponent: (gåTilNesteSteg) => (
+        <SignaturSkjemaContainer
+          initialValues={{ fødselsnummer: '', signert: null }}
+          onSubmitCallback={gåTilNesteSteg}
+        />
+      ),
       stepOrder: 0,
     },
   ],

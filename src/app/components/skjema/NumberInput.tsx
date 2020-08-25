@@ -18,9 +18,11 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
   label,
   feltnavn,
 }) => {
-  const [{ name, value, onBlur, onChange }, { error }, { setValue }] = useField(
-    feltnavn
-  );
+  const [
+    { name, value, onBlur, onChange },
+    { error, touched },
+    { setValue },
+  ] = useField(feltnavn);
 
   const inputId = useMemo(() => uuidv4(), []);
 
@@ -57,7 +59,7 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
         <Input
           type="number"
           id={inputId}
-          feil={error}
+          feil={touched && error}
           name={name}
           value={zeroIfNullOrUndefined}
           onBlur={onBlur}

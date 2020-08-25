@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Input } from 'nav-frontend-skjema';
+import { Input, InputProps } from 'nav-frontend-skjema';
 
 import { useField } from 'formik';
 import { FormattedMessage } from 'react-intl';
@@ -9,16 +9,20 @@ interface ITextInputProps {
   feltnavn: string;
 }
 
-const TextInput: React.FunctionComponent<ITextInputProps> = ({
+const TextInput: React.FunctionComponent<ITextInputProps & InputProps> = ({
   label,
   feltnavn,
+  ...inputProps
 }) => {
-  const [{ name, value, onBlur, onChange }, { error }] = useField(feltnavn);
+  const [{ name, value, onBlur, onChange }, { error, touched }] = useField(
+    feltnavn
+  );
 
   return (
     <Input
+      {...inputProps}
       label={label || <FormattedMessage id={`skjema.felt.${feltnavn}.label`} />}
-      feil={error}
+      feil={touched && error}
       name={name}
       value={value || ''}
       onBlur={onBlur}

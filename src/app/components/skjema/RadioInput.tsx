@@ -20,7 +20,9 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
   retning = 'horisontal',
   styling = 'utenPanel',
 }) => {
-  const [{ name, value, onBlur, onChange }, { error }] = useField(feltnavn);
+  const [{ name, value, onBlur, onChange }, { error, touched }] = useField(
+    feltnavn
+  );
   const intl = useIntl();
 
   const RadioComponent = styling === 'utenPanel' ? Radio : RadioPanel;
@@ -28,7 +30,7 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
   return (
     <SkjemaGruppe
       legend={intlHelper(intl, `skjema.felt.${feltnavn}.label`)}
-      feil={error}
+      feil={touched && error}
     >
       <div
         className={classNames('radioinput--radios', {

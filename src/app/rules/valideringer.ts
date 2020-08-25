@@ -10,5 +10,5 @@ export function påkrevd<VerdiType>(verdi: VerdiType) {
 }
 
 export function fødselsnummervalidator(verdi: string) {
-  return IdentRules.hasIdent11Digits(verdi) ? undefined : 'Validator.11Siffer';
+  return IdentRules.hasIdent11Digits(verdi) ? undefined : 'skjema.validering.11siffer';
 }
