@@ -48,6 +48,33 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
       ),
       stepOrder: 0,
     },
+    {
+      path: '/punch',
+      stepName: 'punch',
+      stepOrder: 1,
+      getComponent: (gåTilNesteSteg) => (
+        <OverføringPunchContainer
+          initialValues={{
+            arbeidssituasjon: {
+              erArbeidstaker: false,
+              erFrilanser: false,
+              erSelvstendigNæringsdrivende: false,
+              metaHarFeil: null,
+            },
+            omsorgenDelesMed: {
+              fødselsnummer: '',
+              antallOverførteDager: 0,
+              mottaker: null,
+            },
+            aleneOmOmsorgen: null,
+            fosterbarn: {
+              harFosterbarn: null,
+            },
+          }}
+          onSubmitCallback={gåTilNesteSteg}
+        />
+      ),
+    },
   ],
 };
 
