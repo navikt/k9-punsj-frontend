@@ -1,14 +1,10 @@
 import React from 'react';
-import { Formik, useFormikContext } from 'formik';
-import { useIntl } from 'react-intl';
 import OmsorgspengerOverføringIdentSjekk from './OmsorgspengerOverføringIdentSjekk';
 import {
   ISignaturSkjema,
   validerSignaturSkjema,
 } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
-
-export const useSignaturSkjemaContext = () =>
-  useFormikContext<ISignaturSkjema>();
+import SkjemaContext from '../../../components/skjema/SkjemaContext';
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
@@ -19,18 +15,14 @@ const SignaturSkjemaContainer: React.FunctionComponent<ISignaturSkjemaContextPro
   initialValues,
   onSubmitCallback,
 }) => {
-  const intl = useIntl();
-
   return (
-    <Formik
-      onSubmit={onSubmitCallback}
+    <SkjemaContext
+      onSubmitCallback={onSubmitCallback}
       initialValues={initialValues}
-      validateOnChange={true}
-      validateOnBlur={true}
-      validate={validerSignaturSkjema(intl)}
+      validerSkjema={validerSignaturSkjema}
     >
       <OmsorgspengerOverføringIdentSjekk />
-    </Formik>
+    </SkjemaContext>
   );
 };
 

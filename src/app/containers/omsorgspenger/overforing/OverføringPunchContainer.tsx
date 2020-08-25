@@ -1,11 +1,11 @@
 import React from 'react';
-import { Formik, useFormikContext } from 'formik';
-import { useIntl } from 'react-intl';
+import { useFormikContext } from 'formik';
 import OverføringPunchSkjema from './OverføringPunchSkjema';
 import {
   IOverføringPunchSkjema,
   validatePunch,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
+import SkjemaContext from '../../../components/skjema/SkjemaContext';
 
 export const useOverføringPunchSkjemaContext = () =>
   useFormikContext<IOverføringPunchSkjema>();
@@ -19,18 +19,14 @@ const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContai
   initialValues,
   onSubmitCallback,
 }) => {
-  const intl = useIntl();
-
   return (
-    <Formik
-      onSubmit={onSubmitCallback}
+    <SkjemaContext
+      onSubmitCallback={onSubmitCallback}
       initialValues={initialValues}
-      validateOnChange={true}
-      validateOnBlur={true}
-      validate={validatePunch(intl)}
+      validerSkjema={validatePunch}
     >
       <OverføringPunchSkjema />
-    </Formik>
+    </SkjemaContext>
   );
 };
 

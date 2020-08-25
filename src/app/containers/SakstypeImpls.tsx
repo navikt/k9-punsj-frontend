@@ -8,8 +8,8 @@ import {
 import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/OmsorgspengerFordelingIdent';
 
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
-import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
+import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
