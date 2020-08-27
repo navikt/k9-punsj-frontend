@@ -13,6 +13,7 @@ import { Mottaker } from '../../../models/forms/omsorgspenger/overføring/PunchS
 import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe';
 import { useOverføringPunchSkjemaContext } from './OverføringPunchContainer';
 import FlexRow from '../../../components/flexgrid/FlexRow';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 
 const OverføringPunchSkjema: React.FunctionComponent = () => {
   const { values } = useOverføringPunchSkjemaContext();
@@ -22,6 +23,7 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
         <h1>
           <FormattedMessage id="omsorgsdager.overføring.punch.overskrift" />
         </h1>
+        <VerticalSpacer hr={true} thirtyTwoPx={true} />
         <h2>
           <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
         </h2>
@@ -51,6 +53,7 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
             <TextInput feltnavn="fosterbarn.fødselsnummer" bredde="M" />
           )}
         </FlexRow>
+        <VerticalSpacer dashed={true} thirtyTwoPx={true} />
         <SkjemaGruppe
           legend={
             <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
