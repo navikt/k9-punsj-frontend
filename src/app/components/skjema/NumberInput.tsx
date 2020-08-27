@@ -53,7 +53,7 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
     <article>
       {label || <Label htmlFor={inputId}>{feltVisningsnavn}</Label>}
       <div className="numberInput">
-        <button onClick={minusEn} className="numberInput__button">
+        <button onClick={minusEn} type="button" className="numberInput__button">
           <MinusSVG alt={minkMedEnTekst} />
         </button>
         <Input
@@ -66,7 +66,7 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
           onChange={onChange}
           bredde="XXS"
         />
-        <button onClick={plussEn} className="numberInput__button">
+        <button onClick={plussEn} type="button" className="numberInput__button">
           <PlussSVG alt={økMedEnTekst} />
         </button>
       </div>

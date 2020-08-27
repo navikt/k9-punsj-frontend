@@ -1,22 +1,25 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { TestSkjema } from './testskjema';
 import NumberInput from '../../../app/components/skjema/NumberInput';
+import userEvent from '@testing-library/user-event';
 
 describe('<NumberInput>', () => {
   const initAlder = 4;
-  const { getByLabelText, getAllByRole } = render(
-    <TestSkjema
-      initialValues={{
-        fødselsnummer: '',
-        alder: initAlder,
-      }}
-    >
-      <NumberInput feltnavn="alder" />
-    </TestSkjema>
-  );
+  const renderInputFelt = () =>
+    render(
+      <TestSkjema
+        initialValues={{
+          fødselsnummer: '',
+          alder: initAlder,
+        }}
+      >
+        <NumberInput feltnavn="alder" />
+      </TestSkjema>
+    );
 
   test('plussknapp øker verdi med 1', () => {
+    const { getByLabelText, getAllByRole } = renderInputFelt();
     const inputfelt = getByLabelText(/alder/i);
     expect(inputfelt.getAttribute('value')).toEqual(`${initAlder}`);
 
@@ -26,12 +29,13 @@ describe('<NumberInput>', () => {
     expect(plussknapp).toBeDefined();
 
     // @ts-ignore
-    fireEvent.click(plussknapp);
+    userEvent.click(plussknapp);
 
     expect(inputfelt.getAttribute('value')).toEqual(`${initAlder + 1}`);
   });
 
   test('minusknapp minsker verdi med 1', () => {
+    const { getByLabelText, getAllByRole } = renderInputFelt();
     const inputfelt = getByLabelText(/alder/i);
     expect(inputfelt.getAttribute('value')).toEqual(`${initAlder}`);
 
@@ -41,7 +45,7 @@ describe('<NumberInput>', () => {
     expect(minusknapp).toBeDefined();
 
     // @ts-ignore
-    fireEvent.click(minusknapp);
+    userEvent.click(minusknapp);
 
     expect(inputfelt.getAttribute('value')).toEqual(`${initAlder - 1}`);
   });

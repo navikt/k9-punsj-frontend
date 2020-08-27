@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import TextInput from '../../../app/components/skjema/TextInput';
 import { TestSkjema } from './testskjema';
 
@@ -21,7 +22,7 @@ describe('TextInput', () => {
     expect(inputfelt.getAttribute('value')).toEqual('');
 
     const fnrValue = '12312312312';
-    fireEvent.change(inputfelt, { target: { value: fnrValue } });
+    userEvent.type(inputfelt, fnrValue);
     expect(inputfelt.getAttribute('value')).toEqual(fnrValue);
   });
 });
