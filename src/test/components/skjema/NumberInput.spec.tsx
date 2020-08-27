@@ -10,7 +10,6 @@ describe('<NumberInput>', () => {
     render(
       <TestSkjema
         initialValues={{
-          fødselsnummer: '',
           alder: initAlder,
         }}
       >

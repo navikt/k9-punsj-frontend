@@ -10,7 +10,6 @@ describe('TextInput', () => {
       <TestSkjema
         initialValues={{
           fødselsnummer: '',
-          alder: 23,
         }}
       >
         <TextInput feltnavn="fødselsnummer" />
