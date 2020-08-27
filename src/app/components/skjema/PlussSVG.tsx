@@ -12,6 +12,7 @@ const PlussSVG: React.FunctionComponent<IPlussSVGProps> = ({ alt }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
+    <title>{alt}</title>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
