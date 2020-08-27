@@ -69,6 +69,7 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
             aleneOmOmsorgen: null,
             fosterbarn: {
               harFosterbarn: null,
+              fødselsnummer: null,
             },
           }}
           onSubmitCallback={gåTilNesteSteg}

@@ -22,6 +22,7 @@ describe('PunchSkjema', () => {
       aleneOmOmsorgen: null,
       fosterbarn: {
         harFosterbarn: null,
+        fødselsnummer: null,
       },
     };
 
@@ -32,11 +33,15 @@ describe('PunchSkjema', () => {
       fosterbarn,
     } = validerSkjemaFn(tomtSkjema);
 
-    expect(arbeidssituasjon?.metaHarFeil).toEqual('');
-    expect(omsorgenDelesMed?.fødselsnummer).toEqual('');
-    expect(omsorgenDelesMed?.mottaker).toEqual('');
-    expect(omsorgenDelesMed?.antallOverførteDager).toEqual('');
-    expect(aleneOmOmsorgen).toEqual('');
-    expect(fosterbarn?.harFosterbarn).toEqual('');
+    expect(arbeidssituasjon?.metaHarFeil).toEqual('skjema.validering.minstEn');
+    expect(omsorgenDelesMed?.fødselsnummer).toEqual(
+      'skjema.validering.påkrevd'
+    );
+    expect(omsorgenDelesMed?.mottaker).toEqual('skjema.validering.påkrevd');
+    expect(omsorgenDelesMed?.antallOverførteDager).toEqual(
+      'skjema.validering.positivtheltall'
+    );
+    expect(aleneOmOmsorgen).toEqual('skjema.validering.påkrevd');
+    expect(fosterbarn?.harFosterbarn).toEqual('skjema.validering.påkrevd');
   });
 });

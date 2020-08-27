@@ -4,6 +4,7 @@ import {
   fødselsnummervalidator,
   IFeltValidator,
   minstEn,
+  positivtHeltall,
   påkrevd,
   validerSkjema,
 } from '../../../../rules/valideringer';
@@ -23,7 +24,7 @@ export interface IOverføringPunchSkjema {
   aleneOmOmsorgen: JaNei | null;
   fosterbarn: {
     harFosterbarn: JaNei | null;
-    fødselsnummer?: string;
+    fødselsnummer: string | null;
   };
   omsorgenDelesMed: {
     fødselsnummer: string;
@@ -58,6 +59,31 @@ const harFosterbarnValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
   validatorer: [påkrevd],
 };
 
+const fosterBarnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
+  feltPath: 'fosterbarn.fødselsnummer',
+  validatorer: [
+    (verdi, skjema) => {
+      if (skjema.fosterbarn.harFosterbarn === JaNei.JA) {
+        return påkrevd(verdi);
+      }
+      return undefined;
+    },
+  ],
+};
+
+const mottakerValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
+  feltPath: 'omsorgenDelesMed.mottaker',
+  validatorer: [påkrevd],
+};
+
+const antallDelteDagerValidator: IFeltValidator<
+  number,
+  IOverføringPunchSkjema
+> = {
+  feltPath: 'omsorgenDelesMed.antallOverførteDager',
+  validatorer: [positivtHeltall],
+};
+
 export const validatePunch = (intl: IntlShape) =>
   validerSkjema<IOverføringPunchSkjema>(
     [
@@ -65,6 +91,9 @@ export const validatePunch = (intl: IntlShape) =>
       arbeidssituasjonValidator,
       aleneomOmsorgenValidator,
       harFosterbarnValidator,
+      fosterBarnFnr,
+      mottakerValidator,
+      antallDelteDagerValidator,
     ],
     intl
   );
