@@ -36,12 +36,14 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
           ]}
           metaHarFeilFeltnavn="metaHarFeil"
         />
+        <VerticalSpacer sixteenPx={true} />
         <RadioInput
           feltnavn="aleneOmOmsorgen"
           optionValues={Object.values(JaNei)}
           retning="vertikal"
           styling="utenPanel"
         />
+        <VerticalSpacer sixteenPx={true} />
         <FlexRow childrenMargin="big">
           <RadioInput
             feltnavn="fosterbarn.harFosterbarn"
@@ -54,19 +56,18 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
           )}
         </FlexRow>
         <VerticalSpacer dashed={true} thirtyTwoPx={true} />
-        <SkjemaGruppe
-          legend={
-            <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
-          }
-        >
-          <TextInput feltnavn="omsorgenDelesMed.fødselsnummer" bredde="M" />
-          <RadioInput
-            feltnavn="omsorgenDelesMed.mottaker"
-            optionValues={Object.values(Mottaker)}
-            retning="vertikal"
-            styling="utenPanel"
-          />
-        </SkjemaGruppe>
+        <h2>
+          <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
+        </h2>
+        <TextInput feltnavn="omsorgenDelesMed.fødselsnummer" bredde="M" />
+        <VerticalSpacer thirtyTwoPx={true} />
+        <RadioInput
+          feltnavn="omsorgenDelesMed.mottaker"
+          optionValues={Object.values(Mottaker)}
+          retning="vertikal"
+          styling="utenPanel"
+        />
+        <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
           <Knapp htmlType="button" onClick={() => setHash('/')}>

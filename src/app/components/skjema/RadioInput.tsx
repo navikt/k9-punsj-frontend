@@ -29,7 +29,11 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
 
   return (
     <SkjemaGruppe
-      legend={intlHelper(intl, `skjema.felt.${feltnavn}.label`)}
+      legend={
+        <div className="radio-legend">
+          {intlHelper(intl, `skjema.felt.${feltnavn}.label`)}
+        </div>
+      }
       feil={touched && error}
     >
       <div
