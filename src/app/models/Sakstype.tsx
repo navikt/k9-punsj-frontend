@@ -15,7 +15,7 @@ export interface ISakstypeStep {
   path: string;
   stepName: string;
   stepOrder: number;
-  getComponent: (gåTilNesteSteg: () => void) => ReactNode;
+  getComponent: (gåTilNesteSteg: (stegParams?: any) => void) => ReactNode;
 }
 
 export interface ISakstypePunch extends ISakstypeDefault {

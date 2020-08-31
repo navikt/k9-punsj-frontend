@@ -14,16 +14,26 @@ import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe'
 import { useOverføringPunchSkjemaContext } from './OverføringPunchContainer';
 import FlexRow from '../../../components/flexgrid/FlexRow';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import { useRouteMatch } from 'react-router';
+import LabelValue from '../../../components/skjema/LabelValue';
 
 const OverføringPunchSkjema: React.FunctionComponent = () => {
   const { values } = useOverføringPunchSkjemaContext();
+  const { params } = useRouteMatch<{ ident?: string }>();
+  const ident = params?.ident;
+
   return (
     <Form>
       <section>
         <h1>
           <FormattedMessage id="omsorgsdager.overføring.punch.overskrift" />
         </h1>
-        <VerticalSpacer hr={true} thirtyTwoPx={true} />
+        <VerticalSpacer hr={true} sixteenPx={true} />
+        <LabelValue
+          labelTextId="omsorgsdager.overføring.fødselsnummer"
+          value={ident}
+        />
+        <VerticalSpacer hr={true} sixteenPx={true} />
         <h2>
           <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
         </h2>

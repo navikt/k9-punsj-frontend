@@ -10,7 +10,7 @@ import { RootStateType } from '../state/RootState';
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { IDokument } from '../models/types';
-import { setHash } from '../utils';
+import { getPathForValues, setHash } from '../utils';
 import './sakstypeStepRouter.less';
 
 interface ISakstypePunchProps {
@@ -47,20 +47,24 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
         <Panel className="sakstype_punch_form" border={true}>
           <Switch>
             {steps.map(({ path, getComponent, stepName, stepOrder }) => {
-              const gåTilNesteSteg = useCallback(() => {
+              const gåTilNesteSteg = (stegParams?: any) => {
                 const nesteStegPath = steps.find(
                   (steg) => steg.stepOrder === stepOrder + 1
                 )?.path;
                 if (nesteStegPath) {
-                  setHash(`${punchPath}${nesteStegPath}`);
+                  const nextPath = `${punchPath}${getPathForValues(
+                    nesteStegPath,
+                    stegParams
+                  )}`;
+                  setHash(nextPath);
                 }
-              }, [steps]);
+              };
 
               return (
                 <Route
                   exact={true}
                   key={`${navn}-${stepName}`}
-                  path={`${punchPath}${path}`}
+                  path={`${punchPath}${getPathForValues(path)}`}
                   children={getComponent(gåTilNesteSteg)}
                 />
               );

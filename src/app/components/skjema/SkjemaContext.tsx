@@ -4,7 +4,7 @@ import React from 'react';
 
 export interface ISkjemaContext {
   initialValues: any;
-  onSubmitCallback: () => void;
+  onSubmitCallback: (values: any) => void;
   validerSkjema: (intl: IntlShape) => (skjema: any) => FormikErrors<any>;
 }
 

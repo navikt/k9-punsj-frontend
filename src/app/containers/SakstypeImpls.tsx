@@ -49,7 +49,7 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
       stepOrder: 0,
     },
     {
-      path: '/punch',
+      path: '/punch/{ident}',
       stepName: 'punch',
       stepOrder: 1,
       getComponent: (gåTilNesteSteg) => (

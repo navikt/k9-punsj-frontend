@@ -8,7 +8,7 @@ import SkjemaContext from '../../../components/skjema/SkjemaContext';
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
-  onSubmitCallback: () => void;
+  onSubmitCallback: (skjemaParams: { ident: string }) => void;
 }
 
 const SignaturSkjemaContainer: React.FunctionComponent<ISignaturSkjemaContextProps> = ({
@@ -17,7 +17,9 @@ const SignaturSkjemaContainer: React.FunctionComponent<ISignaturSkjemaContextPro
 }) => {
   return (
     <SkjemaContext
-      onSubmitCallback={onSubmitCallback}
+      onSubmitCallback={(values) =>
+        onSubmitCallback({ ident: values.fødselsnummer })
+      }
       initialValues={initialValues}
       validerSkjema={validerSignaturSkjema}
     >

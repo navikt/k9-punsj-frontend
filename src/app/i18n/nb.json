@@ -222,6 +222,7 @@
   "skjema.validering.minstEn": "Må velge minst én",
   "skjema.validering.positivtheltall": "Må være et heltall større enn null",
   "omsorgsdager.overføring.punch.overskrift": "Melding om overføring av omsorgsdager",
+  "omsorgsdager.overføring.fødselsnummer": "Fødselsnummer",
   "omsorgsdager.overføring.punch.omsøkeren": "Om søkeren:",
   "omsorgsdager.overføring.punch.omsorgendelesmed": "Omsorgen deles med",
 
