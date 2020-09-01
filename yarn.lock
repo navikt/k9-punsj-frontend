@@ -5163,14 +5163,16 @@ fetch-headers@^2.0.0:
   resolved "https://registry.yarnpkg.com/fetch-headers/-/fetch-headers-2.0.0.tgz#bab7531c39b3d72d21ac189f179756f08541cf55"
   integrity sha1-urdTHDmz1y0hrBifF5dW8IVBz1U=
 
-fetch-mock@^8.3.2:
-  version "8.3.2"
-  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-8.3.2.tgz#ca07cd0bbf8e9dd299733af364713766b43ab2a0"
-  integrity sha512-RUdLbhIBTvECX20I8htNhmLRrCplCiOP62srst8UQsSV0m8taJe31PBsQybL7OIq5fEf6tnqVGvQ62ZnZ4IFfQ==
+fetch-mock@^9.10.7:
+  version "9.10.7"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-9.10.7.tgz#9673717af181e1ecb791cf32315c13580d4571ea"
+  integrity sha512-YkiMHSL8CQ0vlWYpqGvlaZjViFk0Kar9jonPjSvaWoztkeHH6DENqUzBIsffzjVKhwchPI74SZRLRpIsEyNcZQ==
   dependencies:
     babel-runtime "^6.26.0"
     core-js "^3.0.0"
+    debug "^4.1.1"
     glob-to-regexp "^0.4.0"
+    is-subset "^0.1.1"
     lodash.isequal "^4.5.0"
     path-to-regexp "^2.2.1"
     querystring "^0.2.0"
@@ -10864,10 +10866,10 @@ snyk-try-require@1.3.1, snyk-try-require@^1.1.1, snyk-try-require@^1.3.1:
     lru-cache "^4.0.0"
     then-fs "^2.0.0"
 
-snyk@^1.372.0:
-  version "1.377.2"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.377.2.tgz#8d62c3af1ba6bbe70069bdf3ac65dd99a0bf53cf"
-  integrity sha512-Yi2bYcaDQFgSCRtDjciMKW5kDuv5/pkGA3nhWws8ZqD2jdt+yXqu2ZBwtCFhJthiTvr/xcEGCKnKLaIrDzF8UQ==
+snyk@^1.377.1:
+  version "1.377.1"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.377.1.tgz#d4702471a09b2b27cb61864dff2d7214c306f776"
+  integrity sha512-3ltsjEde4rOdr65h+qEJncWX50HIByk+Lgx1As9RTUlkrASHwLjQuQBjYylWlExHFKuMJCfvp8qW4ErF/vOOmQ==
   dependencies:
     "@snyk/cli-interface" "2.8.1"
     "@snyk/dep-graph" "1.18.3"
