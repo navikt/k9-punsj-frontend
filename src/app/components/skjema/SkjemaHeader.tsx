@@ -1,0 +1,30 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import FlexRow from '../flexgrid/FlexRow';
+import './skjemaHeader.less';
+import VerticalSpacer from '../VerticalSpacer';
+
+interface ISkjemaHeaderProps {
+  headerTextId: string;
+}
+
+const SkjemaHeader: React.FunctionComponent<ISkjemaHeaderProps> = ({
+  headerTextId,
+}) => {
+  return (
+    <>
+      <FlexRow spaceBetween={true}>
+        <h1 className="skjemaheader__overskrift">
+          <FormattedMessage id={headerTextId} />
+        </h1>
+        <Link to="/" className="skjemaheader__avbryt">
+          <FormattedMessage id="skjemaheader.avbryt" />
+        </Link>
+      </FlexRow>
+      <VerticalSpacer sixteenPx={true} hr={true} />
+    </>
+  );
+};
+
+export default SkjemaHeader;

@@ -10,6 +10,7 @@ import { RootStateType } from '../state/RootState';
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { IDokument } from '../models/types';
+import SkjemaHeader from '../components/skjema/SkjemaHeader';
 import { getPathForValues, setHash } from '../utils';
 import './sakstypeStepRouter.less';
 
@@ -45,6 +46,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
     <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
       <div className="panels-wrapper" id="panels-wrapper">
         <Panel className="sakstype_punch_form" border={true}>
+          <SkjemaHeader headerTextId={`${navn}.header`} />
           <Switch>
             {steps.map(({ path, getComponent, stepName, stepOrder }) => {
               const gåTilNesteSteg = (stegParams?: any) => {

@@ -16,6 +16,7 @@ import FlexRow from '../../../components/flexgrid/FlexRow';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { useRouteMatch } from 'react-router';
 import LabelValue from '../../../components/skjema/LabelValue';
+import { Undertittel } from 'nav-frontend-typografi';
 
 const OverføringPunchSkjema: React.FunctionComponent = () => {
   const { values } = useOverføringPunchSkjemaContext();
@@ -25,18 +26,15 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
   return (
     <Form>
       <section>
-        <h1>
-          <FormattedMessage id="omsorgsdager.overføring.punch.overskrift" />
-        </h1>
-        <VerticalSpacer hr={true} sixteenPx={true} />
         <LabelValue
           labelTextId="omsorgsdager.overføring.fødselsnummer"
           value={ident}
         />
         <VerticalSpacer hr={true} sixteenPx={true} />
-        <h2>
+        <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
-        </h2>
+        </Undertittel>
+        <VerticalSpacer sixteenPx={true} />
         <CheckboxInputGruppe
           feltnavn="arbeidssituasjon"
           checkboxFeltnavn={[
@@ -66,9 +64,10 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
           )}
         </FlexRow>
         <VerticalSpacer dashed={true} thirtyTwoPx={true} />
-        <h2>
+        <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
-        </h2>
+        </Undertittel>
+        <VerticalSpacer sixteenPx={true} />
         <TextInput feltnavn="omsorgenDelesMed.fødselsnummer" bredde="M" />
         <VerticalSpacer thirtyTwoPx={true} />
         <RadioInput

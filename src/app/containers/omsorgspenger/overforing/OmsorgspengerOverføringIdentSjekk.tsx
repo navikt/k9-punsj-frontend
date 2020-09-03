@@ -7,24 +7,24 @@ import { Knapp } from 'nav-frontend-knapper';
 import Knapper from '../../../components/knapp/Knapper';
 import { Form } from 'formik';
 import RadioInput from '../../../components/skjema/RadioInput';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 
 const OmsorgspengerOverføringIdentSjekk: React.FunctionComponent = () => {
   return (
     <Form>
-      <h2>
-        <FormattedMessage id="ident.signatur.overskrift" />
-      </h2>
       <RadioInput
         feltnavn="signert"
         optionValues={Object.values(JaNei)}
         retning="horisontal"
         styling="medPanel"
       />
-      <h2>
-        <FormattedMessage id="ident.identifikasjon.overskrift" />
-      </h2>
+      <VerticalSpacer thirtyTwoPx={true} />
       {/* TODO: Sjekk fnr opp mot norskIdent */}
-      <TextInput feltnavn="fødselsnummer" bredde="M" />
+      <TextInput
+        feltnavn="fødselsnummer"
+        bredde="M"
+        label={<FormattedMessage id="skjema.felt.ident.fødselsnummer.label" />}
+      />
       <Knapper>
         <Knapp htmlType="button" onClick={() => setHash('/')}>
           <FormattedMessage id="ident.knapp.forrigesteg" />
