@@ -1,7 +1,7 @@
 import React, { ReactNode, useMemo } from 'react';
 import { Input, Label } from 'nav-frontend-skjema';
 
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import { useIntl } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
 import PlussSVG from './PlussSVG';
@@ -23,6 +23,7 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
     { error, touched },
     { setValue },
   ] = useField(feltnavn);
+  const { isSubmitting } = useFormikContext();
 
   const inputId = useMemo(() => uuidv4(), []);
 
@@ -57,6 +58,7 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
           onClick={minusEn}
           type="button"
           className="numberInput__button numberInput__minus"
+          disabled={isSubmitting}
         >
           <MinusSVG alt={minkMedEnTekst} />
         </button>
@@ -69,12 +71,14 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
           onBlur={onBlur}
           onChange={onChange}
           bredde="XXS"
+          disabled={isSubmitting}
           className="numberInput__input"
         />
         <button
           onClick={plussEn}
           type="button"
           className="numberInput__button numberInput__pluss"
+          disabled={isSubmitting}
         >
           <PlussSVG alt={økMedEnTekst} />
         </button>

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Checkbox } from 'nav-frontend-skjema';
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 
 interface ICheckboxInputProps {
@@ -13,6 +13,7 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
   feltnavn,
 }) => {
   const [{ name, value, onBlur, onChange }, { error }] = useField(feltnavn);
+  const { isSubmitting } = useFormikContext();
 
   return (
     <Checkbox
@@ -22,6 +23,7 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
       value={value}
       onBlur={onBlur}
       onChange={onChange}
+      disabled={isSubmitting}
     />
   );
 };

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Input, InputProps } from 'nav-frontend-skjema';
 
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 
 interface ITextInputProps {
@@ -17,6 +17,7 @@ const TextInput: React.FunctionComponent<ITextInputProps & InputProps> = ({
   const [{ name, value, onBlur, onChange }, { error, touched }] = useField(
     feltnavn
   );
+  const { isSubmitting } = useFormikContext();
 
   return (
     <Input
@@ -27,6 +28,7 @@ const TextInput: React.FunctionComponent<ITextInputProps & InputProps> = ({
       value={value || ''}
       onBlur={onBlur}
       onChange={onChange}
+      disabled={isSubmitting}
     />
   );
 };

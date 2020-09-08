@@ -1,10 +1,11 @@
 import { IntlShape, useIntl } from 'react-intl';
 import { Formik, FormikErrors } from 'formik';
 import React from 'react';
+import { FormikHelpers } from 'formik/dist/types';
 
 export interface ISkjemaContext {
   initialValues: any;
-  onSubmitCallback: (values: any) => void;
+  onSubmitCallback: (values: any, formikHelpers: FormikHelpers<any>) => void;
   validerSkjema: (intl: IntlShape) => (skjema: any) => FormikErrors<any>;
 }
 
