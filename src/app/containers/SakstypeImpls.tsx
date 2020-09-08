@@ -10,6 +10,8 @@ import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/Omsorgspenger
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
+import { ApiPath } from '../apiConfig';
+import overføringSignaturReducer from '../state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -47,6 +49,7 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
         />
       ),
       stepOrder: 0,
+      reducer: overføringSignaturReducer,
     },
     {
       path: '/punch/{ident}',
