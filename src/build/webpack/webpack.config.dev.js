@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const webpackConfig = require('./webpack.config.global.js');
 
 require('dotenv').config();
@@ -19,6 +20,13 @@ webpackConfig.plugins.push(
     new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, '../../../dist/dev')
     })
+);
+
+webpackConfig.plugins.push(
+  new CircularDependencyPlugin({
+    exclude: /node_modules/,
+    failOnError: false,
+  })
 );
 
 webpackConfig.module.rules.push({
