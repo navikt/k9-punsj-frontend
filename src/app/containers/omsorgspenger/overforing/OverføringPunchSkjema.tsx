@@ -1,25 +1,31 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { Knapp } from 'nav-frontend-knapper';
 import { Form } from 'formik';
-import { setHash } from '../../../utils';
 import Knapper from '../../../components/knapp/Knapper';
 import RadioInput from '../../../components/skjema/RadioInput';
 import { JaNei } from '../../../models/enums';
 import TextInput from '../../../components/skjema/TextInput';
 import NumberInput from '../../../components/skjema/NumberInput';
-import { Mottaker } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
+import {
+  Mottaker,
+  useOverføringPunchSkjemaContext,
+} from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe';
-import { useOverføringPunchSkjemaContext } from './OverføringPunchContainer';
 import FlexRow from '../../../components/flexgrid/FlexRow';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { useRouteMatch } from 'react-router';
 import LabelValue from '../../../components/skjema/LabelValue';
 import { Undertittel } from 'nav-frontend-typografi';
 
-const OverføringPunchSkjema: React.FunctionComponent = () => {
-  const { values } = useOverføringPunchSkjemaContext();
+interface IOverføringPunchSkjema {
+  gåTilForrigeSteg: () => void;
+}
+
+const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> = ({
+  gåTilForrigeSteg,
+}) => {
+  const { values, isSubmitting } = useOverføringPunchSkjemaContext();
   const { params } = useRouteMatch<{ ident?: string }>();
   const ident = params?.ident;
 
@@ -79,10 +85,14 @@ const OverføringPunchSkjema: React.FunctionComponent = () => {
         <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
-          <Knapp htmlType="button" onClick={() => setHash('/')}>
+          <Knapp
+            htmlType="button"
+            onClick={gåTilForrigeSteg}
+            disabled={isSubmitting}
+          >
             <FormattedMessage id="ident.knapp.forrigesteg" />
           </Knapp>
-          <Knapp htmlType="submit" type="hoved">
+          <Knapp htmlType="submit" type="hoved" disabled={isSubmitting}>
             <FormattedMessage id="ident.knapp.nestesteg" />
           </Knapp>
         </Knapper>

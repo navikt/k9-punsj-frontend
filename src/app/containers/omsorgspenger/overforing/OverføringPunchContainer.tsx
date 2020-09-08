@@ -1,5 +1,4 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
 import OverføringPunchSkjema from './OverføringPunchSkjema';
 import {
   IOverføringPunchSkjema,
@@ -7,25 +6,29 @@ import {
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import SkjemaContext from '../../../components/skjema/SkjemaContext';
 
-export const useOverføringPunchSkjemaContext = () =>
-  useFormikContext<IOverføringPunchSkjema>();
-
 interface IOverføringPunchContainer {
   initialValues: IOverføringPunchSkjema;
-  onSubmitCallback: () => void;
+  sendInn: (skjema: IOverføringPunchSkjema) => void;
+  gåTilForrigeSteg: () => void;
 }
 
 const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContainer> = ({
   initialValues,
-  onSubmitCallback,
+  sendInn,
+  gåTilForrigeSteg,
 }) => {
   return (
     <SkjemaContext
-      onSubmitCallback={onSubmitCallback}
+      onSubmitCallback={(skjema, formikHelpers) => {
+        sendInn(skjema);
+        // TODO
+        // console.log('kaller set submit false');
+        // formikHelpers.setSubmitting(false);
+      }}
       initialValues={initialValues}
       validerSkjema={validatePunch}
     >
-      <OverføringPunchSkjema />
+      <OverføringPunchSkjema gåTilForrigeSteg={gåTilForrigeSteg} />
     </SkjemaContext>
   );
 };

@@ -40,12 +40,12 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
   punchPath: '/overfør-omsorgsdager',
   steps: [
     {
-      path: '/ident',
-      stepName: 'ident',
-      getComponent: (gåTilNesteSteg) => (
+      path: '/signatur',
+      stepName: 'signatur',
+      getComponent: ({ gåTilNesteSteg, initialValues }) => (
         <SignaturSkjemaContainer
-          initialValues={{ fødselsnummer: '', signert: null }}
-          onSubmitCallback={gåTilNesteSteg}
+          initialValues={initialValues}
+          gåTilNesteSteg={gåTilNesteSteg}
         />
       ),
       stepOrder: 0,
@@ -55,7 +55,7 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
       path: '/punch/{ident}',
       stepName: 'punch',
       stepOrder: 1,
-      getComponent: (gåTilNesteSteg) => (
+      getComponent: ({ sendInn, gåTilForrigeSteg }) => (
         <OverføringPunchContainer
           initialValues={{
             arbeidssituasjon: {
@@ -75,7 +75,8 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
               fødselsnummer: null,
             },
           }}
-          onSubmitCallback={gåTilNesteSteg}
+          sendInn={sendInn}
+          gåTilForrigeSteg={gåTilForrigeSteg}
         />
       ),
     },

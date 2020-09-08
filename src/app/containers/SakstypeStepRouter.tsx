@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import useRedirect from '../hooks/useRedirect';
 import { ISakstypePunch, ISakstypeStep } from '../models/Sakstype';
@@ -11,8 +11,8 @@ import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { IDokument } from '../models/types';
 import SkjemaHeader from '../components/skjema/SkjemaHeader';
-import { getPathForValues, setHash } from '../utils';
 import './sakstypeStepRouter.less';
+import { getPathForValues, setHash } from '../utils';
 
 interface ISakstypePunchProps {
   sakstypeConfig: ISakstypePunch;
@@ -21,6 +21,7 @@ interface ISakstypePunchProps {
 
 export interface IDokumenterProps {
   dokumenter: IDokument[];
+  sakstypeState?: any;
 }
 
 type IStepRouterProps = ISakstypePunchProps & IDokumenterProps;
@@ -29,6 +30,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
   sakstypeConfig,
   journalpostid,
   dokumenter,
+  sakstypeState = {},
 }) => {
   const { steps, punchPath, navn } = sakstypeConfig;
   const intl = useIntl();
@@ -62,12 +64,36 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                 }
               };
 
+              const gåTilForrigeSteg = (stegParams?: any) => {
+                const forrigeStegPath = steps.find(
+                  (steg) => steg.stepOrder === stepOrder - 1
+                )?.path;
+                if (forrigeStegPath) {
+                  const nextPath = `${punchPath}${getPathForValues(
+                    forrigeStegPath,
+                    stegParams
+                  )}`;
+                  setHash(nextPath);
+                }
+              };
+
+              const sendInn = (values: any) => {
+                return values; // TODO
+              };
+
+              const initialValues = sakstypeState[stepName]?.skjema;
+
               return (
                 <Route
                   exact={true}
                   key={`${navn}-${stepName}`}
                   path={`${punchPath}${getPathForValues(path)}`}
-                  children={getComponent(gåTilNesteSteg)}
+                  children={getComponent({
+                    gåTilNesteSteg,
+                    gåTilForrigeSteg,
+                    sendInn,
+                    initialValues,
+                  })}
                 />
               );
             })}
@@ -80,8 +106,17 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
   );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
+const mapStateToProps = (state: RootStateType, ownProps: IStepRouterProps) => ({
   dokumenter: state.punchState?.journalpost?.dokumenter,
+  sakstypeState: state[ownProps.sakstypeConfig.navn],
 });
 
-export default connect(mapStateToProps)(SakstypeStepRouterImpl);
+const mapDispatchToProps = (dispatch: any) => ({
+  // TODO
+});
+
+const SakstypeStepRouter: React.FunctionComponent<ISakstypePunchProps> = connect(
+  mapStateToProps
+)(SakstypeStepRouterImpl);
+
+export default SakstypeStepRouter;

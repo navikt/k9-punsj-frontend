@@ -1,5 +1,6 @@
-import { JaNei } from '../../../enums';
 import { IntlShape } from 'react-intl';
+import { useFormikContext } from 'formik';
+import { JaNei } from '../../../enums';
 import {
   fødselsnummervalidator,
   IFeltValidator,
@@ -97,3 +98,6 @@ export const validatePunch = (intl: IntlShape) =>
     ],
     intl
   );
+
+export const useOverføringPunchSkjemaContext = () =>
+  useFormikContext<IOverføringPunchSkjema>();
