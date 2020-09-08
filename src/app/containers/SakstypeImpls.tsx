@@ -16,8 +16,8 @@ import overføringSignaturReducer from '../state/reducers/omsorgspengeroverførd
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
   punchPath: '/pleiepenger',
-  getComponent: ({ journalpostid }) => (
-    <PleiepengerRouter journalpostid={journalpostid} />
+  getComponent: ({ journalpostid, punchPath }) => (
+    <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath} />
   ),
   steps: [], // TODO: implementert annerledes - konverter hvis nødvendig
 };

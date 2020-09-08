@@ -28,7 +28,10 @@ const JournalpostRouter: React.FunctionComponent<RouteComponentProps<
               path={sakstypeConfig.punchPath}
               children={
                 sakstypeConfig.getComponent ? (
-                  sakstypeConfig.getComponent({ journalpostid })
+                  sakstypeConfig.getComponent({
+                    journalpostid,
+                    punchPath: sakstypeConfig.punchPath,
+                  })
                 ) : (
                   <SakstypeStepRouter
                     sakstypeConfig={sakstypeConfig}
