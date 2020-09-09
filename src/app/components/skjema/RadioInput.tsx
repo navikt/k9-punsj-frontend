@@ -1,5 +1,5 @@
 import React from 'react';
-import { useField, useFormikContext } from 'formik';
+import { useField } from 'formik';
 import { Radio, RadioPanel, SkjemaGruppe } from 'nav-frontend-skjema';
 import intlHelper from '../../utils/intlUtils';
 import { useIntl } from 'react-intl';
@@ -12,6 +12,7 @@ interface IRadioInputProps {
   optionValues: any[];
   retning?: 'vertikal' | 'horisontal';
   styling?: 'medPanel' | 'utenPanel';
+  disabled?: boolean;
 }
 
 const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
@@ -19,11 +20,11 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
   optionValues,
   retning = 'horisontal',
   styling = 'utenPanel',
+  disabled = false,
 }) => {
   const [{ name, value, onBlur, onChange }, { error, touched }] = useField(
     feltnavn
   );
-  const { isSubmitting } = useFormikContext();
   const intl = useIntl();
 
   const RadioComponent = styling === 'utenPanel' ? Radio : RadioPanel;
@@ -52,7 +53,7 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
             checked={optionValue === value}
             onBlur={onBlur}
             onChange={onChange}
-            disabled={isSubmitting}
+            disabled={disabled}
           />
         ))}
       </div>

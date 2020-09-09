@@ -7,6 +7,7 @@ interface IOwnProps {
   children: ReactNode | ReactNode[];
   spaceBetween?: boolean;
   alignItemsToBaseline?: boolean;
+  alignItemsToCenter?: boolean;
   alignItemsToFlexEnd?: boolean;
   wrap?: boolean;
   className?: string;
@@ -19,6 +20,7 @@ const FlexRow: FunctionComponent<IOwnProps> = ({
   children,
   spaceBetween = false,
   alignItemsToBaseline = false,
+  alignItemsToCenter = false,
   alignItemsToFlexEnd = false,
   wrap = false,
   className,
@@ -31,6 +33,7 @@ const FlexRow: FunctionComponent<IOwnProps> = ({
       'flexRow',
       { spaceBetween },
       { alignItemsToBaseline },
+      { alignItemsToCenter },
       { alignItemsToFlexEnd },
       { wrap },
       { justifyCenter },

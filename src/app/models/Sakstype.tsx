@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Sakstype } from './enums';
+import { ApiPath } from '../apiConfig';
 
 export interface ISakstypeDefault {
   navn: Sakstype;
@@ -29,6 +30,7 @@ export interface ISakstypeStep {
 
 export interface ISakstypePunch extends ISakstypeDefault {
   punchPath: string;
+  apiUrl?: ApiPath;
   getComponent?: (props: ISakstypeComponentProps) => ReactNode;
   steps: ISakstypeStep[];
 }

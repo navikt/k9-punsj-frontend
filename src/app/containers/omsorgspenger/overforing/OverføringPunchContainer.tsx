@@ -5,6 +5,10 @@ import {
   validatePunch,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import SkjemaContext from '../../../components/skjema/SkjemaContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendInnSkjema } from '../../../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import { RootStateType } from '../../../state/RootState';
+import { OmsorgspengerOverføring } from '../../SakstypeImpls';
 
 interface IOverføringPunchContainer {
   initialValues: IOverføringPunchSkjema;
@@ -14,21 +18,32 @@ interface IOverføringPunchContainer {
 
 const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContainer> = ({
   initialValues,
-  sendInn,
   gåTilForrigeSteg,
 }) => {
+  const dispatch = useDispatch();
+  const { innsendingsstatus, innsendingsfeil } = useSelector(
+    (state: RootStateType) => {
+      const punchState = state[OmsorgspengerOverføring.navn].punch;
+      return {
+        innsendingsstatus: punchState.innsendingsstatus,
+        innsendingsfeil: punchState.innsendingsfeil,
+      };
+    }
+  );
+
   return (
     <SkjemaContext
-      onSubmitCallback={(skjema, formikHelpers) => {
-        sendInn(skjema);
-        // TODO
-        // console.log('kaller set submit false');
-        // formikHelpers.setSubmitting(false);
+      onSubmitCallback={(skjema) => {
+        dispatch(sendInnSkjema(skjema));
       }}
       initialValues={initialValues}
       validerSkjema={validatePunch}
     >
-      <OverføringPunchSkjema gåTilForrigeSteg={gåTilForrigeSteg} />
+      <OverføringPunchSkjema
+        gåTilForrigeSteg={gåTilForrigeSteg}
+        innsendingsstatus={innsendingsstatus}
+        innsendingsfeil={innsendingsfeil}
+      />
     </SkjemaContext>
   );
 };

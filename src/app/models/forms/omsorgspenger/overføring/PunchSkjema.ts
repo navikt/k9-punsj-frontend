@@ -9,7 +9,12 @@ import {
   påkrevd,
   validerSkjema,
 } from '../../../../rules/valideringer';
-
+export enum Innsendingsstatus {
+  IkkeSendtInn = 'IkkeSendtInn',
+  SenderInn = 'SenderInn',
+  SendtInn = 'SendtInn',
+  Innsendingsfeil = 'Innsendingsfeil',
+}
 export enum Mottaker {
   Ektefelle = 'Ektefelle',
   Samboer = 'Samboer',

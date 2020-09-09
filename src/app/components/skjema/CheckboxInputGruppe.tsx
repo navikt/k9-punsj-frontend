@@ -9,6 +9,7 @@ interface ICheckboxInputGruppeProps {
   feltnavn: string;
   checkboxFeltnavn: string[];
   metaHarFeilFeltnavn: string;
+  disabled?: boolean;
 }
 
 const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = ({
@@ -16,6 +17,7 @@ const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = 
   feltnavn,
   checkboxFeltnavn,
   metaHarFeilFeltnavn,
+  disabled = false,
 }) => {
   const { error = {}, touched } = useField<{}>(feltnavn)[1];
 
@@ -32,6 +34,7 @@ const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = 
         <CheckboxInput
           feltnavn={`${feltnavn}.${checkboxnavn}`}
           key={checkboxnavn}
+          disabled={disabled}
         />
       ))}
     </CheckboxGruppe>

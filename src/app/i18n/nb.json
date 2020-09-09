@@ -227,7 +227,14 @@
   "omsorgsdager.overføring.fødselsnummer": "Fødselsnummer",
   "omsorgsdager.overføring.punch.omsøkeren": "Om søkeren",
   "omsorgsdager.overføring.punch.omsorgendelesmed": "Omsorgen deles med",
+  "omsorgsdager.overføring.punch.modal.senderInn": "Sender inn skjemaet...",
+  "omsorgsdager.overføring.punch.modal.beskrivelse": "Viser status på innsendingen",
+  "omsorgsdager.overføring.punch.modal.tittel": "Innsending",
+  "omsorgsdager.overføring.punch.modal.sendtInn": "Skjemaet er sendt inn",
+  "omsorgsdager.overføring.punch.modal.success.gåTilLos": "Gå tilbake til Los",
+  "omsorgsdager.overføring.punch.modal.feil": "Det skjedde en feil under innsending",
 
   "numberinput.øk": "Øk {felt} med 1",
-  "numberinput.mink": "Mink {felt} med 1"
+  "numberinput.mink": "Mink {felt} med 1",
+  "check.svg.title": "Suksess"
 }

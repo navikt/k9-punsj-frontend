@@ -1,12 +1,12 @@
 import { ISignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
 
 interface IOverføringSignaturState {
-  skjema: ISignaturSkjema | null;
+  skjema: ISignaturSkjema;
 }
 
 enum ActionTypes {
-  SET_SKJEMA = 'SKJEMASTEG/SET_SKJEMA',
-  SLETT_SKJEMA = 'SKJEMASTEG/SLETT_SKJEMA',
+  SET_SKJEMA = 'OVERFØRING/SIGNATUR/SET_SKJEMA',
+  SLETT_SKJEMA = 'OVERFØRING/SIGNATUR/SLETT_SKJEMA',
 }
 
 interface ISetSkjemaAction {
@@ -34,7 +34,7 @@ const initialState: IOverføringSignaturState = {
 export default function overføringSignaturReducer(
   state: IOverføringSignaturState = initialState,
   action: ISetSkjemaAction | ISlettSkjemaAction
-) {
+): IOverføringSignaturState {
   switch (action.type) {
     case ActionTypes.SET_SKJEMA:
       return {

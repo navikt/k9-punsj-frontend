@@ -12,6 +12,7 @@ import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPun
 import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
 import { ApiPath } from '../apiConfig';
 import overføringSignaturReducer from '../state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
+import overføringPunchReducer from '../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -38,6 +39,7 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
 export const OmsorgspengerOverføring: ISakstypePunch = {
   navn: Sakstype.OMSORGSPENGER_OVERFØRING,
   punchPath: '/overfør-omsorgsdager',
+  apiUrl: ApiPath.OMS_OVERFØR_DAGER,
   steps: [
     {
       path: '/signatur',
@@ -55,26 +57,10 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
       path: '/punch/{ident}',
       stepName: 'punch',
       stepOrder: 1,
-      getComponent: ({ sendInn, gåTilForrigeSteg }) => (
+      reducer: overføringPunchReducer,
+      getComponent: ({ sendInn, gåTilForrigeSteg, initialValues }) => (
         <OverføringPunchContainer
-          initialValues={{
-            arbeidssituasjon: {
-              erArbeidstaker: false,
-              erFrilanser: false,
-              erSelvstendigNæringsdrivende: false,
-              metaHarFeil: null,
-            },
-            omsorgenDelesMed: {
-              fødselsnummer: '',
-              antallOverførteDager: 0,
-              mottaker: null,
-            },
-            aleneOmOmsorgen: null,
-            fosterbarn: {
-              harFosterbarn: null,
-              fødselsnummer: null,
-            },
-          }}
+          initialValues={initialValues}
           sendInn={sendInn}
           gåTilForrigeSteg={gåTilForrigeSteg}
         />

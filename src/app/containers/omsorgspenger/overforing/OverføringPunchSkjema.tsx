@@ -1,5 +1,5 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import React, { useMemo, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Knapp } from 'nav-frontend-knapper';
 import { Form } from 'formik';
 import Knapper from '../../../components/knapp/Knapper';
@@ -8,6 +8,7 @@ import { JaNei } from '../../../models/enums';
 import TextInput from '../../../components/skjema/TextInput';
 import NumberInput from '../../../components/skjema/NumberInput';
 import {
+  Innsendingsstatus,
   Mottaker,
   useOverføringPunchSkjemaContext,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
@@ -17,17 +18,55 @@ import VerticalSpacer from '../../../components/VerticalSpacer';
 import { useRouteMatch } from 'react-router';
 import LabelValue from '../../../components/skjema/LabelValue';
 import { Undertittel } from 'nav-frontend-typografi';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import ModalWrapper from 'nav-frontend-modal';
+import './overføringPunchSkjema.less';
+import intlHelper from '../../../utils/intlUtils';
+import { NavLink } from 'react-router-dom';
+import CheckSvg from '../../../assets/SVG/CheckSVG';
+import { IError } from '../../../models/types';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
+  innsendingsstatus: Innsendingsstatus;
+  innsendingsfeil?: IError;
 }
 
 const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> = ({
   gåTilForrigeSteg,
+  innsendingsstatus,
+  innsendingsfeil,
 }) => {
-  const { values, isSubmitting } = useOverføringPunchSkjemaContext();
+  const { values } = useOverføringPunchSkjemaContext();
   const { params } = useRouteMatch<{ ident?: string }>();
   const ident = params?.ident;
+  const disabled = useMemo(() => {
+    switch (innsendingsstatus) {
+      case Innsendingsstatus.IkkeSendtInn:
+      case Innsendingsstatus.Innsendingsfeil:
+        return false;
+      case Innsendingsstatus.SenderInn:
+      case Innsendingsstatus.SendtInn:
+        return true;
+    }
+  }, [innsendingsstatus]);
+
+  const [visModalVedFeil, setVisModalVedFeil] = useState<boolean>(true);
+
+  const visModal = useMemo(() => {
+    switch (innsendingsstatus) {
+      case Innsendingsstatus.SenderInn:
+      case Innsendingsstatus.SendtInn:
+        return true;
+      case Innsendingsstatus.Innsendingsfeil:
+        return visModalVedFeil;
+      case Innsendingsstatus.IkkeSendtInn:
+      default:
+        return false;
+    }
+  }, [innsendingsstatus, visModalVedFeil]);
+
+  const intl = useIntl();
 
   return (
     <Form>
@@ -49,6 +88,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             'erSelvstendigNæringsdrivende',
           ]}
           metaHarFeilFeltnavn="metaHarFeil"
+          disabled={disabled}
         />
         <VerticalSpacer sixteenPx={true} />
         <RadioInput
@@ -56,6 +96,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           optionValues={Object.values(JaNei)}
           retning="vertikal"
           styling="utenPanel"
+          disabled={disabled}
         />
         <VerticalSpacer sixteenPx={true} />
         <FlexRow childrenMargin="big">
@@ -64,9 +105,14 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             optionValues={Object.values(JaNei)}
             retning="vertikal"
             styling="utenPanel"
+            disabled={disabled}
           />
           {values.fosterbarn.harFosterbarn === JaNei.JA && (
-            <TextInput feltnavn="fosterbarn.fødselsnummer" bredde="M" />
+            <TextInput
+              feltnavn="fosterbarn.fødselsnummer"
+              bredde="M"
+              disabled={disabled}
+            />
           )}
         </FlexRow>
         <VerticalSpacer dashed={true} thirtyTwoPx={true} />
@@ -74,13 +120,18 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
-        <TextInput feltnavn="omsorgenDelesMed.fødselsnummer" bredde="M" />
+        <TextInput
+          feltnavn="omsorgenDelesMed.fødselsnummer"
+          bredde="M"
+          disabled={disabled}
+        />
         <VerticalSpacer thirtyTwoPx={true} />
         <RadioInput
           feltnavn="omsorgenDelesMed.mottaker"
           optionValues={Object.values(Mottaker)}
           retning="vertikal"
           styling="utenPanel"
+          disabled={disabled}
         />
         <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
@@ -88,14 +139,66 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           <Knapp
             htmlType="button"
             onClick={gåTilForrigeSteg}
-            disabled={isSubmitting}
+            disabled={disabled}
           >
             <FormattedMessage id="ident.knapp.forrigesteg" />
           </Knapp>
-          <Knapp htmlType="submit" type="hoved" disabled={isSubmitting}>
+          <Knapp
+            htmlType="submit"
+            type="hoved"
+            disabled={disabled}
+            onClick={() => setVisModalVedFeil(true)}
+          >
             <FormattedMessage id="ident.knapp.nestesteg" />
           </Knapp>
         </Knapper>
+        <ModalWrapper
+          onRequestClose={() => setVisModalVedFeil(false)}
+          contentLabel={intlHelper(
+            intl,
+            'omsorgsdager.overføring.punch.modal.beskrivelse'
+          )}
+          isOpen={visModal}
+          className="innsendingsmodal"
+          closeButton={innsendingsstatus === Innsendingsstatus.Innsendingsfeil}
+          shouldCloseOnOverlayClick={true}
+        >
+          <>
+            <Undertittel tag="h2">
+              <FormattedMessage id="omsorgsdager.overføring.punch.modal.tittel" />
+            </Undertittel>
+            <VerticalSpacer sixteenPx={true} />
+            {innsendingsstatus === Innsendingsstatus.SenderInn && (
+              <FlexRow childrenMargin="small" alignItemsToCenter={true}>
+                <NavFrontendSpinner />
+                <span>
+                  <FormattedMessage id="omsorgsdager.overføring.punch.modal.senderInn" />
+                </span>
+              </FlexRow>
+            )}
+            {innsendingsstatus === Innsendingsstatus.SendtInn && (
+              <>
+                <FlexRow childrenMargin="small" alignItemsToCenter={true}>
+                  <CheckSvg title={<FormattedMessage id="check.svg.title" />} />
+                  <span>
+                    <FormattedMessage id="omsorgsdager.overføring.punch.modal.sendtInn" />
+                  </span>
+                </FlexRow>
+                <VerticalSpacer sixteenPx={true} />
+                <NavLink to={'#'}>
+                  <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
+                </NavLink>
+              </>
+            )}
+            {innsendingsstatus === Innsendingsstatus.Innsendingsfeil && (
+              <>
+                <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil" />
+                <VerticalSpacer sixteenPx={true} />
+                {JSON.stringify(innsendingsfeil)}
+              </>
+            )}
+          </>
+        </ModalWrapper>
       </section>
     </Form>
   );

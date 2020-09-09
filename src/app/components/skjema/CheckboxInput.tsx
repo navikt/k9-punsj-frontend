@@ -1,19 +1,20 @@
 import React, { ReactNode } from 'react';
 import { Checkbox } from 'nav-frontend-skjema';
-import { useField, useFormikContext } from 'formik';
+import { useField } from 'formik';
 import { FormattedMessage } from 'react-intl';
 
 interface ICheckboxInputProps {
   label?: ReactNode;
   feltnavn: string;
+  disabled?: boolean;
 }
 
 const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
   label,
   feltnavn,
+  disabled = false,
 }) => {
   const [{ name, value, onBlur, onChange }, { error }] = useField(feltnavn);
-  const { isSubmitting } = useFormikContext();
 
   return (
     <Checkbox
@@ -23,7 +24,7 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
       value={value}
       onBlur={onBlur}
       onChange={onChange}
-      disabled={isSubmitting}
+      disabled={disabled}
     />
   );
 };
