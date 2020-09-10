@@ -58,10 +58,9 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
       stepName: 'punch',
       stepOrder: 1,
       reducer: overføringPunchReducer,
-      getComponent: ({ sendInn, gåTilForrigeSteg, initialValues }) => (
+      getComponent: ({ gåTilForrigeSteg, initialValues }) => (
         <OverføringPunchContainer
           initialValues={initialValues}
-          sendInn={sendInn}
           gåTilForrigeSteg={gåTilForrigeSteg}
         />
       ),

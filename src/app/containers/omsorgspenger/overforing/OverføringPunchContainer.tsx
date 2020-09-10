@@ -12,7 +12,6 @@ import { Sakstype } from '../../../models/enums';
 
 interface IOverføringPunchContainer {
   initialValues: IOverføringPunchSkjema;
-  sendInn: (skjema: IOverføringPunchSkjema) => void;
   gåTilForrigeSteg: () => void;
 }
 

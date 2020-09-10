@@ -16,7 +16,6 @@ export interface ISakstypeComponentProps {
 interface IStepComponentProps {
   gåTilNesteSteg: (stegParams?: any) => void;
   gåTilForrigeSteg: (stegParams?: any) => void;
-  sendInn: (values: any) => void;
   initialValues: any;
 }
 

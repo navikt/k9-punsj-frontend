@@ -77,10 +77,6 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                 }
               };
 
-              const sendInn = (values: any) => {
-                return values; // TODO
-              };
-
               const initialValues = sakstypeState[stepName]?.skjema;
 
               return (
@@ -91,7 +87,6 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                   children={getComponent({
                     gåTilNesteSteg,
                     gåTilForrigeSteg,
-                    sendInn,
                     initialValues,
                   })}
                 />
@@ -109,10 +104,6 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
 const mapStateToProps = (state: RootStateType, ownProps: IStepRouterProps) => ({
   dokumenter: state.punchState?.journalpost?.dokumenter,
   sakstypeState: state[ownProps.sakstypeConfig.navn],
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-  // TODO
 });
 
 const SakstypeStepRouter: React.FunctionComponent<ISakstypePunchProps> = connect(
