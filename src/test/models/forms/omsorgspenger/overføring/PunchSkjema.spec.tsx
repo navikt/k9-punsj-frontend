@@ -10,6 +10,7 @@ describe('PunchSkjema', () => {
   const validerSkjemaFn = validatePunch(testIntl);
   test('gir feil ved påkrevde verdier', () => {
     const tomtSkjema: IOverføringPunchSkjema = {
+      mottaksdato: null,
       arbeidssituasjon: {
         erArbeidstaker: false,
         erFrilanser: false,
@@ -20,6 +21,7 @@ describe('PunchSkjema', () => {
         fødselsnummer: '',
         antallOverførteDager: 0,
         mottaker: null,
+        samboerSiden: null,
       },
       aleneOmOmsorgen: null,
       barn: [
@@ -29,9 +31,12 @@ describe('PunchSkjema', () => {
       ],
     };
 
-    const { omsorgenDelesMed, aleneOmOmsorgen, barn } = validerSkjemaFn(
-      tomtSkjema
-    );
+    const {
+      omsorgenDelesMed,
+      aleneOmOmsorgen,
+      barn,
+      mottaksdato,
+    } = validerSkjemaFn(tomtSkjema);
 
     expect(omsorgenDelesMed?.fødselsnummer).toEqual(
       'skjema.validering.påkrevd'
@@ -43,5 +48,7 @@ describe('PunchSkjema', () => {
     expect(aleneOmOmsorgen).toEqual('skjema.validering.påkrevd');
     // @ts-ignore
     expect(barn[0].fødselsnummer).toEqual('skjema.validering.påkrevd');
+
+    expect(mottaksdato).toEqual('skjema.validering.påkrevd');
   });
 });

@@ -3,12 +3,13 @@ import { useFormikContext } from 'formik';
 import { JaNei } from '../../../enums';
 import {
   fødselsnummervalidator,
+  gyldigDato,
   IFeltValidator,
-  minstEn,
   positivtHeltall,
   påkrevd,
   validerSkjema,
 } from '../../../../rules/valideringer';
+
 export enum Innsendingsstatus {
   IkkeSendtInn = 'IkkeSendtInn',
   SenderInn = 'SenderInn',
@@ -19,6 +20,8 @@ export enum Mottaker {
   Ektefelle = 'Ektefelle',
   Samboer = 'Samboer',
 }
+
+type Dato = string;
 
 export interface IOverføringPunchSkjema {
   arbeidssituasjon: {
@@ -35,7 +38,9 @@ export interface IOverføringPunchSkjema {
     fødselsnummer: string;
     mottaker: Mottaker | null;
     antallOverførteDager: number;
+    samboerSiden: Dato | null;
   };
+  mottaksdato: Dato | null;
 }
 
 const fnrDelesMedValidator: IFeltValidator<string, IOverføringPunchSkjema> = {
@@ -62,12 +67,31 @@ const mottakerValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
   validatorer: [påkrevd],
 };
 
+const samboerSidenValidator: IFeltValidator<Dato, IOverføringPunchSkjema> = {
+  feltPath: 'omsorgenDelesMed.samboerSiden',
+  validatorer: [
+    (verdi, skjema) =>
+      skjema.omsorgenDelesMed?.mottaker === Mottaker.Samboer
+        ? påkrevd(verdi)
+        : undefined,
+    (verdi, skjema) =>
+      skjema.omsorgenDelesMed?.mottaker === Mottaker.Samboer
+        ? gyldigDato(verdi)
+        : undefined,
+  ],
+};
+
 const antallDelteDagerValidator: IFeltValidator<
   number,
   IOverføringPunchSkjema
 > = {
   feltPath: 'omsorgenDelesMed.antallOverførteDager',
   validatorer: [positivtHeltall],
+};
+
+const mottaksdatoValidator: IFeltValidator<Dato, IOverføringPunchSkjema> = {
+  feltPath: 'mottaksdato',
+  validatorer: [påkrevd, gyldigDato],
 };
 
 export const validatePunch = (intl: IntlShape) =>
@@ -78,6 +102,8 @@ export const validatePunch = (intl: IntlShape) =>
       mottakerValidator,
       antallDelteDagerValidator,
       barnFnr,
+      mottaksdatoValidator,
+      samboerSidenValidator,
     ],
     intl
   );

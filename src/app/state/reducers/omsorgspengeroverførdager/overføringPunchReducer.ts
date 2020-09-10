@@ -110,6 +110,7 @@ const initialState: IOverføringPunchState = {
       fødselsnummer: '',
       antallOverførteDager: 0,
       mottaker: null,
+      samboerSiden: null,
     },
     aleneOmOmsorgen: null,
     barn: [
@@ -117,6 +118,7 @@ const initialState: IOverføringPunchState = {
         fødselsnummer: null,
       },
     ],
+    mottaksdato: null,
   },
   innsendingsstatus: Innsendingsstatus.IkkeSendtInn,
 };

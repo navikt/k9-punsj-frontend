@@ -27,6 +27,7 @@ import CheckSvg from '../../../assets/SVG/CheckSVG';
 import { IError } from '../../../models/types';
 import { Xknapp } from 'nav-frontend-ikonknapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
+import DateInput from '../../../components/skjema/DateInput';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
@@ -73,14 +74,17 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
   return (
     <Form>
       <section>
+        <VerticalSpacer sixteenPx={true} />
+        <DateInput feltnavn="mottaksdato" bredde="M" />
+        <VerticalSpacer sixteenPx={true} />
+        <Undertittel tag="h2">
+          <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
+        </Undertittel>
+        <VerticalSpacer sixteenPx={true} />
         <LabelValue
           labelTextId="omsorgsdager.overføring.fødselsnummer"
           value={ident}
         />
-        <VerticalSpacer hr={true} sixteenPx={true} />
-        <Undertittel tag="h2">
-          <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
-        </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <CheckboxInputGruppe
           feltnavn="arbeidssituasjon"
@@ -100,11 +104,15 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           styling="utenPanel"
           disabled={disabled}
         />
+        <VerticalSpacer dashed={true} thirtyTwoPx={true} />
+        <Undertittel tag="h2">
+          <FormattedMessage id="skjema.felt.barn" />
+        </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <FieldArray
           name="barn"
           render={({ push, remove }) => (
-            <SkjemaGruppe legend={<FormattedMessage id="skjema.felt.barn" />}>
+            <SkjemaGruppe>
               {values.barn.map((b, index) => (
                 <FlexRow key={index} childrenMargin="small">
                   <TextInput
@@ -142,13 +150,18 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           disabled={disabled}
         />
         <VerticalSpacer thirtyTwoPx={true} />
-        <RadioInput
-          feltnavn="omsorgenDelesMed.mottaker"
-          optionValues={Object.values(Mottaker)}
-          retning="vertikal"
-          styling="utenPanel"
-          disabled={disabled}
-        />
+        <FlexRow childrenMargin="medium">
+          <RadioInput
+            feltnavn="omsorgenDelesMed.mottaker"
+            optionValues={Object.values(Mottaker)}
+            retning="vertikal"
+            styling="utenPanel"
+            disabled={disabled}
+          />
+          {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
+            <DateInput feltnavn="omsorgenDelesMed.samboerSiden" bredde="M" />
+          )}
+        </FlexRow>
         <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
