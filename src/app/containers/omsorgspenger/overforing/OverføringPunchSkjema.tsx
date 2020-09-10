@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Knapp } from 'nav-frontend-knapper';
-import { Form } from 'formik';
+import { FieldArray, Form } from 'formik';
 import Knapper from '../../../components/knapp/Knapper';
 import RadioInput from '../../../components/skjema/RadioInput';
 import { JaNei } from '../../../models/enums';
@@ -25,6 +25,8 @@ import intlHelper from '../../../utils/intlUtils';
 import { NavLink } from 'react-router-dom';
 import CheckSvg from '../../../assets/SVG/CheckSVG';
 import { IError } from '../../../models/types';
+import { Xknapp } from 'nav-frontend-ikonknapper';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
@@ -99,22 +101,36 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           disabled={disabled}
         />
         <VerticalSpacer sixteenPx={true} />
-        <FlexRow childrenMargin="big">
-          <RadioInput
-            feltnavn="fosterbarn.harFosterbarn"
-            optionValues={Object.values(JaNei)}
-            retning="vertikal"
-            styling="utenPanel"
-            disabled={disabled}
-          />
-          {values.fosterbarn.harFosterbarn === JaNei.JA && (
-            <TextInput
-              feltnavn="fosterbarn.fødselsnummer"
-              bredde="M"
-              disabled={disabled}
-            />
+        <FieldArray
+          name="barn"
+          render={({ push, remove }) => (
+            <SkjemaGruppe legend={<FormattedMessage id="skjema.felt.barn" />}>
+              {values.barn.map((b, index) => (
+                <FlexRow key={index} childrenMargin="small">
+                  <TextInput
+                    feltnavn={`barn[${index}].fødselsnummer`}
+                    bredde="M"
+                  />
+                  {values.barn.length > 1 && (
+                    <Xknapp
+                      htmlType="button"
+                      onClick={() => remove(index)}
+                      className="alignMedInputFelt"
+                    />
+                  )}
+                </FlexRow>
+              ))}
+              <Knapp
+                onClick={() => push({ fødselsnummer: '' })}
+                htmlType="button"
+                type="flat"
+                mini={true}
+              >
+                <FormattedMessage id="omsorgsdager.overføring.barn.leggTil" />
+              </Knapp>
+            </SkjemaGruppe>
           )}
-        </FlexRow>
+        />
         <VerticalSpacer dashed={true} thirtyTwoPx={true} />
         <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />

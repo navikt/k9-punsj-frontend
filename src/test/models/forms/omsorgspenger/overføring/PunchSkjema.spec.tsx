@@ -4,6 +4,8 @@ import {
 } from '../../../../../app/models/forms/omsorgspenger/overføring/PunchSkjema';
 import { testIntl } from '../../../../testUtils';
 
+jest.mock('app/utils/envUtils');
+
 describe('PunchSkjema', () => {
   const validerSkjemaFn = validatePunch(testIntl);
   test('gir feil ved påkrevde verdier', () => {
@@ -20,20 +22,17 @@ describe('PunchSkjema', () => {
         mottaker: null,
       },
       aleneOmOmsorgen: null,
-      fosterbarn: {
-        harFosterbarn: null,
-        fødselsnummer: null,
-      },
+      barn: [
+        {
+          fødselsnummer: null,
+        },
+      ],
     };
 
-    const {
-      arbeidssituasjon,
-      omsorgenDelesMed,
-      aleneOmOmsorgen,
-      fosterbarn,
-    } = validerSkjemaFn(tomtSkjema);
+    const { omsorgenDelesMed, aleneOmOmsorgen, barn } = validerSkjemaFn(
+      tomtSkjema
+    );
 
-    expect(arbeidssituasjon?.metaHarFeil).toEqual('skjema.validering.minstEn');
     expect(omsorgenDelesMed?.fødselsnummer).toEqual(
       'skjema.validering.påkrevd'
     );
@@ -42,6 +41,7 @@ describe('PunchSkjema', () => {
       'skjema.validering.positivtheltall'
     );
     expect(aleneOmOmsorgen).toEqual('skjema.validering.påkrevd');
-    expect(fosterbarn?.harFosterbarn).toEqual('skjema.validering.påkrevd');
+    // @ts-ignore
+    expect(barn[0].fødselsnummer).toEqual('skjema.validering.påkrevd');
   });
 });

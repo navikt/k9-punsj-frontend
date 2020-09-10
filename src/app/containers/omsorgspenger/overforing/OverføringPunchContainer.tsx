@@ -8,7 +8,7 @@ import SkjemaContext from '../../../components/skjema/SkjemaContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendInnSkjema } from '../../../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
 import { RootStateType } from '../../../state/RootState';
-import { OmsorgspengerOverføring } from '../../SakstypeImpls';
+import { Sakstype } from '../../../models/enums';
 
 interface IOverføringPunchContainer {
   initialValues: IOverføringPunchSkjema;
@@ -23,7 +23,7 @@ const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContai
   const dispatch = useDispatch();
   const { innsendingsstatus, innsendingsfeil } = useSelector(
     (state: RootStateType) => {
-      const punchState = state[OmsorgspengerOverføring.navn].punch;
+      const punchState = state[Sakstype.OMSORGSPENGER_OVERFØRING].punch;
       return {
         innsendingsstatus: punchState.innsendingsstatus,
         innsendingsfeil: punchState.innsendingsfeil,

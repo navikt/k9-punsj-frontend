@@ -1,7 +1,6 @@
 import { IdentRules } from './IdentRules';
 import { IntlShape } from 'react-intl';
-import { FormikErrors } from 'formik';
-import _ from 'lodash';
+import { FormikErrors, getIn, setIn } from 'formik';
 import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (
@@ -12,6 +11,7 @@ export type Validator<VerdiType, Skjema> = (
 export interface IFeltValidator<FeltType, SkjemaType> {
   feltPath: string;
   validatorer: Validator<FeltType, SkjemaType>[];
+  arrayInPath?: boolean;
 }
 
 export function validerSkjema<SkjemaType>(
@@ -19,15 +19,37 @@ export function validerSkjema<SkjemaType>(
   intl: IntlShape
 ) {
   return (skjema: SkjemaType): FormikErrors<SkjemaType> =>
-    feltvalidatorer.reduce((tempErrors, { feltPath, validatorer }) => {
-      const feltError = validatorer
-        .map((validator) => validator(_.get(skjema, feltPath), skjema))
-        .find((error) => error);
-      if (feltError) {
-        return _.set(tempErrors, feltPath, intlHelper(intl, feltError));
-      }
-      return tempErrors;
-    }, {});
+    feltvalidatorer.reduce(
+      (tempErrors, { feltPath, validatorer, arrayInPath }) => {
+        if (arrayInPath) {
+          const [pathBefore, pathAfter] = feltPath.split('[].');
+          const arrayField = getIn(skjema, pathBefore) as any[];
+
+          return arrayField.reduce((tmp, field, index) => {
+            const feltError = validatorer
+              .map((validator) => validator(getIn(field, pathAfter), skjema))
+              .find((error) => error);
+            if (feltError) {
+              return setIn(
+                tmp,
+                [pathBefore, pathAfter].join(`[${index}].`),
+                intlHelper(intl, feltError)
+              );
+            }
+            return tmp;
+          }, tempErrors);
+        } else {
+          const feltError = validatorer
+            .map((validator) => validator(getIn(skjema, feltPath), skjema))
+            .find((error) => error);
+          if (feltError) {
+            return setIn(tempErrors, feltPath, intlHelper(intl, feltError));
+          }
+          return tempErrors;
+        }
+      },
+      {}
+    );
 }
 
 export function påkrevd<VerdiType>(verdi: VerdiType) {

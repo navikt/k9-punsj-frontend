@@ -112,10 +112,11 @@ const initialState: IOverføringPunchState = {
       mottaker: null,
     },
     aleneOmOmsorgen: null,
-    fosterbarn: {
-      harFosterbarn: null,
-      fødselsnummer: null,
-    },
+    barn: [
+      {
+        fødselsnummer: null,
+      },
+    ],
   },
   innsendingsstatus: Innsendingsstatus.IkkeSendtInn,
 };

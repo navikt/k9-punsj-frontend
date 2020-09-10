@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Checkbox } from 'nav-frontend-skjema';
 import { useField } from 'formik';
 import { FormattedMessage } from 'react-intl';
+import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ICheckboxInputProps {
   label?: ReactNode;
@@ -18,7 +19,13 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
 
   return (
     <Checkbox
-      label={label || <FormattedMessage id={`skjema.felt.${feltnavn}.label`} />}
+      label={
+        label || (
+          <FormattedMessage
+            id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`}
+          />
+        )
+      }
       name={name}
       feil={error}
       value={value}

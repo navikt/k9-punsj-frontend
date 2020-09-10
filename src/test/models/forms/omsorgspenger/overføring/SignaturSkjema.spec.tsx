@@ -5,6 +5,8 @@ import {
 import { testIntl } from '../../../../testUtils';
 import { JaNei } from '../../../../../app/models/enums';
 
+jest.mock('app/utils/envUtils');
+
 describe('Signaturskjema', () => {
   const validerSkjemaFn = validerSignaturSkjema(testIntl);
   test('gir feil ved påkrevde verdier', () => {

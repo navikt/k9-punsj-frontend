@@ -5,6 +5,7 @@ import intlHelper from '../../utils/intlUtils';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import './radioInput.less';
+import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface IRadioInputProps {
   label?: React.ReactNode;
@@ -33,7 +34,10 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
     <SkjemaGruppe
       legend={
         <div className="radio-legend">
-          {intlHelper(intl, `skjema.felt.${feltnavn}.label`)}
+          {intlHelper(
+            intl,
+            `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`
+          )}
         </div>
       }
       feil={touched && error}

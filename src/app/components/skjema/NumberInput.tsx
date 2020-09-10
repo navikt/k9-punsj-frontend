@@ -8,6 +8,7 @@ import PlussSVG from './PlussSVG';
 import MinusSVG from './MinusSVG';
 import './numberInput.less';
 import intlHelper from '../../utils/intlUtils';
+import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ITextInputProps {
   label?: ReactNode;
@@ -39,7 +40,10 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
   };
 
   const intl = useIntl();
-  const feltVisningsnavn = intlHelper(intl, `skjema.felt.${feltnavn}.label`);
+  const feltVisningsnavn = intlHelper(
+    intl,
+    `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`
+  );
 
   const minkMedEnTekst = intlHelper(intl, 'numberinput.mink', {
     felt: feltVisningsnavn,

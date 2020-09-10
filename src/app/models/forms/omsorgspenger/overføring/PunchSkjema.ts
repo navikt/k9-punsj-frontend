@@ -28,10 +28,9 @@ export interface IOverføringPunchSkjema {
     metaHarFeil: null;
   };
   aleneOmOmsorgen: JaNei | null;
-  fosterbarn: {
-    harFosterbarn: JaNei | null;
+  barn: {
     fødselsnummer: string | null;
-  };
+  }[];
   omsorgenDelesMed: {
     fødselsnummer: string;
     mottaker: Mottaker | null;
@@ -44,14 +43,6 @@ const fnrDelesMedValidator: IFeltValidator<string, IOverføringPunchSkjema> = {
   validatorer: [påkrevd, fødselsnummervalidator],
 };
 
-const arbeidssituasjonValidator: IFeltValidator<
-  boolean,
-  IOverføringPunchSkjema
-> = {
-  feltPath: 'arbeidssituasjon.metaHarFeil',
-  validatorer: [(verdi, { arbeidssituasjon }) => minstEn(arbeidssituasjon)],
-};
-
 const aleneomOmsorgenValidator: IFeltValidator<
   JaNei,
   IOverføringPunchSkjema
@@ -60,21 +51,10 @@ const aleneomOmsorgenValidator: IFeltValidator<
   validatorer: [påkrevd],
 };
 
-const harFosterbarnValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
-  feltPath: 'fosterbarn.harFosterbarn',
-  validatorer: [påkrevd],
-};
-
-const fosterBarnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
-  feltPath: 'fosterbarn.fødselsnummer',
-  validatorer: [
-    (verdi, skjema) => {
-      if (skjema.fosterbarn.harFosterbarn === JaNei.JA) {
-        return påkrevd(verdi);
-      }
-      return undefined;
-    },
-  ],
+const barnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
+  feltPath: 'barn[].fødselsnummer',
+  validatorer: [påkrevd, fødselsnummervalidator],
+  arrayInPath: true,
 };
 
 const mottakerValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
@@ -94,12 +74,10 @@ export const validatePunch = (intl: IntlShape) =>
   validerSkjema<IOverføringPunchSkjema>(
     [
       fnrDelesMedValidator,
-      arbeidssituasjonValidator,
       aleneomOmsorgenValidator,
-      harFosterbarnValidator,
-      fosterBarnFnr,
       mottakerValidator,
       antallDelteDagerValidator,
+      barnFnr,
     ],
     intl
   );

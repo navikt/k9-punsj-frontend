@@ -3,6 +3,7 @@ import { Input, InputProps } from 'nav-frontend-skjema';
 
 import { useField } from 'formik';
 import { FormattedMessage } from 'react-intl';
+import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ITextInputProps {
   label?: ReactNode;
@@ -23,7 +24,13 @@ const TextInput: React.FunctionComponent<ITextInputProps & InputProps> = ({
   return (
     <Input
       {...inputProps}
-      label={label || <FormattedMessage id={`skjema.felt.${feltnavn}.label`} />}
+      label={
+        label || (
+          <FormattedMessage
+            id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`}
+          />
+        )
+      }
       feil={touched && error}
       name={name}
       value={value || ''}
