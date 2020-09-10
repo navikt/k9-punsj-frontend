@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Knapp } from 'nav-frontend-knapper';
 import { FieldArray, Form } from 'formik';
@@ -40,7 +40,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
   innsendingsstatus,
   innsendingsfeil,
 }) => {
-  const { values } = useOverføringPunchSkjemaContext();
+  const { values, setFieldValue } = useOverføringPunchSkjemaContext();
   const { params } = useRouteMatch<{ ident?: string }>();
   const ident = params?.ident;
   const disabled = useMemo(() => {
@@ -53,6 +53,13 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         return true;
     }
   }, [innsendingsstatus]);
+
+  const avsendersFnr = values.avsender.fødselsnummer;
+  useEffect(() => {
+    if (!avsendersFnr) {
+      setFieldValue('avsender.fødselsnummer', ident);
+    }
+  }, [ident]);
 
   const [visModalVedFeil, setVisModalVedFeil] = useState<boolean>(true);
 
@@ -76,7 +83,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
       <section>
         <VerticalSpacer sixteenPx={true} />
         <DateInput feltnavn="mottaksdato" bredde="M" />
-        <VerticalSpacer sixteenPx={true} />
+        <VerticalSpacer thirtyTwoPx={true} dashed={true} />
         <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
         </Undertittel>

@@ -67,7 +67,7 @@ export const innsendingsfeil = (error: IError): IInnsendingsfeilAction => ({
 });
 
 interface IOverførDagerDTO {
-  skjema: IOverføringPunchSkjema;
+  søknad: IOverføringPunchSkjema;
   journalpostId: string;
 }
 
@@ -79,7 +79,7 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
 
   const postBody = {
     journalpostId: state().punchState.journalpost!.journalpostId,
-    skjema,
+    søknad: skjema,
   };
   post<IOverførDagerDTO>(
     ApiPath.OMS_OVERFØR_DAGER,
@@ -100,6 +100,9 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
 
 const initialState: IOverføringPunchState = {
   skjema: {
+    avsender: {
+      fødselsnummer: null,
+    },
     arbeidssituasjon: {
       erArbeidstaker: false,
       erFrilanser: false,

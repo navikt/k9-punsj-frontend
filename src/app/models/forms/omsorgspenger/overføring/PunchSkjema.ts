@@ -24,6 +24,9 @@ export enum Mottaker {
 type Dato = string;
 
 export interface IOverføringPunchSkjema {
+  avsender: {
+    fødselsnummer: string | null;
+  };
   arbeidssituasjon: {
     erArbeidstaker: boolean;
     erFrilanser: boolean;

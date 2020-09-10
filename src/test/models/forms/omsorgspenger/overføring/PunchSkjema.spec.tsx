@@ -11,6 +11,9 @@ describe('PunchSkjema', () => {
   test('gir feil ved påkrevde verdier', () => {
     const tomtSkjema: IOverføringPunchSkjema = {
       mottaksdato: null,
+      avsender: {
+        fødselsnummer: null,
+      },
       arbeidssituasjon: {
         erArbeidstaker: false,
         erFrilanser: false,
