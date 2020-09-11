@@ -21,9 +21,11 @@ const OmsorgspengerOverføringIdentSjekk: React.FunctionComponent = () => {
       <VerticalSpacer thirtyTwoPx={true} />
       {/* TODO: Sjekk fnr opp mot norskIdent */}
       <TextInput
-        feltnavn="fødselsnummer"
+        feltnavn="identitetsnummer"
         bredde="M"
-        label={<FormattedMessage id="skjema.felt.ident.fødselsnummer.label" />}
+        label={
+          <FormattedMessage id="skjema.felt.ident.identitetsnummer.label" />
+        }
       />
       <Knapper>
         <Knapp htmlType="button" onClick={() => setHash('/')}>

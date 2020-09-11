@@ -11,9 +11,7 @@ describe('PunchSkjema', () => {
   test('gir feil ved påkrevde verdier', () => {
     const tomtSkjema: IOverføringPunchSkjema = {
       mottaksdato: null,
-      avsender: {
-        fødselsnummer: null,
-      },
+      identitetsnummer: null,
       arbeidssituasjon: {
         erArbeidstaker: false,
         erFrilanser: false,
@@ -21,7 +19,7 @@ describe('PunchSkjema', () => {
         metaHarFeil: null,
       },
       omsorgenDelesMed: {
-        fødselsnummer: '',
+        identitetsnummer: '',
         antallOverførteDager: 0,
         mottaker: null,
         samboerSiden: null,
@@ -29,7 +27,7 @@ describe('PunchSkjema', () => {
       aleneOmOmsorgen: null,
       barn: [
         {
-          fødselsnummer: null,
+          identitetsnummer: null,
         },
       ],
     };
@@ -41,7 +39,7 @@ describe('PunchSkjema', () => {
       mottaksdato,
     } = validerSkjemaFn(tomtSkjema);
 
-    expect(omsorgenDelesMed?.fødselsnummer).toEqual(
+    expect(omsorgenDelesMed?.identitetsnummer).toEqual(
       'skjema.validering.påkrevd'
     );
     expect(omsorgenDelesMed?.mottaker).toEqual('skjema.validering.påkrevd');
@@ -50,7 +48,7 @@ describe('PunchSkjema', () => {
     );
     expect(aleneOmOmsorgen).toEqual('skjema.validering.påkrevd');
     // @ts-ignore
-    expect(barn[0].fødselsnummer).toEqual('skjema.validering.påkrevd');
+    expect(barn[0].identitetsnummer).toEqual('skjema.validering.påkrevd');
 
     expect(mottaksdato).toEqual('skjema.validering.påkrevd');
   });

@@ -54,10 +54,10 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     }
   }, [innsendingsstatus]);
 
-  const avsendersFnr = values.avsender.fødselsnummer;
+  const avsendersFnr = values.identitetsnummer;
   useEffect(() => {
     if (!avsendersFnr) {
-      setFieldValue('avsender.fødselsnummer', ident);
+      setFieldValue('identitetsnummer', ident);
     }
   }, [ident]);
 
@@ -89,7 +89,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <LabelValue
-          labelTextId="omsorgsdager.overføring.fødselsnummer"
+          labelTextId="omsorgsdager.overføring.identitetsnummer"
           value={ident}
         />
         <VerticalSpacer sixteenPx={true} />
@@ -123,7 +123,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
               {values.barn.map((b, index) => (
                 <FlexRow key={index} childrenMargin="small">
                   <TextInput
-                    feltnavn={`barn[${index}].fødselsnummer`}
+                    feltnavn={`barn[${index}].identitetsnummer`}
                     bredde="M"
                   />
                   {values.barn.length > 1 && (
@@ -136,7 +136,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 </FlexRow>
               ))}
               <Knapp
-                onClick={() => push({ fødselsnummer: '' })}
+                onClick={() => push({ identitetsnummer: '' })}
                 htmlType="button"
                 type="flat"
                 mini={true}
@@ -152,7 +152,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <TextInput
-          feltnavn="omsorgenDelesMed.fødselsnummer"
+          feltnavn="omsorgenDelesMed.identitetsnummer"
           bredde="M"
           disabled={disabled}
         />

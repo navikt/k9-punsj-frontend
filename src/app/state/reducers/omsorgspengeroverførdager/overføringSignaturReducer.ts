@@ -28,7 +28,7 @@ export const slettSkjema = () => ({
 });
 
 const initialState: IOverføringSignaturState = {
-  skjema: { fødselsnummer: '', signert: null },
+  skjema: { identitetsnummer: '', signert: null },
 };
 
 export default function overføringSignaturReducer(

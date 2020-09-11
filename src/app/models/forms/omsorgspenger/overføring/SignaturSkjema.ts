@@ -8,12 +8,12 @@ import {
 import { IntlShape } from 'react-intl';
 
 export interface ISignaturSkjema {
-  fødselsnummer: string;
+  identitetsnummer: string;
   signert: JaNei | null;
 }
 
 const fnrFeltValidator: IFeltValidator<string, ISignaturSkjema> = {
-  feltPath: 'fødselsnummer',
+  feltPath: 'identitetsnummer',
   validatorer: [påkrevd, fødselsnummervalidator],
 };
 

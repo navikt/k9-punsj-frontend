@@ -24,9 +24,7 @@ export enum Mottaker {
 type Dato = string;
 
 export interface IOverføringPunchSkjema {
-  avsender: {
-    fødselsnummer: string | null;
-  };
+  identitetsnummer: string | null;
   arbeidssituasjon: {
     erArbeidstaker: boolean;
     erFrilanser: boolean;
@@ -35,10 +33,10 @@ export interface IOverføringPunchSkjema {
   };
   aleneOmOmsorgen: JaNei | null;
   barn: {
-    fødselsnummer: string | null;
+    identitetsnummer: string | null;
   }[];
   omsorgenDelesMed: {
-    fødselsnummer: string;
+    identitetsnummer: string;
     mottaker: Mottaker | null;
     antallOverførteDager: number;
     samboerSiden: Dato | null;
@@ -47,7 +45,7 @@ export interface IOverføringPunchSkjema {
 }
 
 const fnrDelesMedValidator: IFeltValidator<string, IOverføringPunchSkjema> = {
-  feltPath: 'omsorgenDelesMed.fødselsnummer',
+  feltPath: 'omsorgenDelesMed.identitetsnummer',
   validatorer: [påkrevd, fødselsnummervalidator],
 };
 
@@ -60,7 +58,7 @@ const aleneomOmsorgenValidator: IFeltValidator<
 };
 
 const barnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
-  feltPath: 'barn[].fødselsnummer',
+  feltPath: 'barn[].identitetsnummer',
   validatorer: [påkrevd, fødselsnummervalidator],
   arrayInPath: true,
 };

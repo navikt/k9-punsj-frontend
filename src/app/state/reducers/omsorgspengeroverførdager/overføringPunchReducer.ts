@@ -100,9 +100,7 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
 
 const initialState: IOverføringPunchState = {
   skjema: {
-    avsender: {
-      fødselsnummer: null,
-    },
+    identitetsnummer: null,
     arbeidssituasjon: {
       erArbeidstaker: false,
       erFrilanser: false,
@@ -110,7 +108,7 @@ const initialState: IOverføringPunchState = {
       metaHarFeil: null,
     },
     omsorgenDelesMed: {
-      fødselsnummer: '',
+      identitetsnummer: '',
       antallOverførteDager: 0,
       mottaker: null,
       samboerSiden: null,
@@ -118,7 +116,7 @@ const initialState: IOverføringPunchState = {
     aleneOmOmsorgen: null,
     barn: [
       {
-        fødselsnummer: null,
+        identitetsnummer: null,
       },
     ],
     mottaksdato: null,
