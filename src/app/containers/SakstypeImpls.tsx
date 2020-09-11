@@ -10,12 +10,15 @@ import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/Omsorgspenger
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
+import { ApiPath } from '../apiConfig';
+import overføringSignaturReducer from '../state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
+import overføringPunchReducer from '../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
   punchPath: '/pleiepenger',
-  getComponent: ({ journalpostid }) => (
-    <PleiepengerRouter journalpostid={journalpostid} />
+  getComponent: ({ journalpostid, punchPath }) => (
+    <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath} />
   ),
   steps: [], // TODO: implementert annerledes - konverter hvis nødvendig
 };
@@ -36,43 +39,29 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
 export const OmsorgspengerOverføring: ISakstypePunch = {
   navn: Sakstype.OMSORGSPENGER_OVERFØRING,
   punchPath: '/overfør-omsorgsdager',
+  apiUrl: ApiPath.OMS_OVERFØR_DAGER,
   steps: [
     {
-      path: '/ident',
-      stepName: 'ident',
-      getComponent: (gåTilNesteSteg) => (
+      path: '/signatur',
+      stepName: 'signatur',
+      getComponent: ({ gåTilNesteSteg, initialValues }) => (
         <SignaturSkjemaContainer
-          initialValues={{ fødselsnummer: '', signert: null }}
-          onSubmitCallback={gåTilNesteSteg}
+          initialValues={initialValues}
+          gåTilNesteSteg={gåTilNesteSteg}
         />
       ),
       stepOrder: 0,
+      reducer: overføringSignaturReducer,
     },
     {
       path: '/punch/{ident}',
       stepName: 'punch',
       stepOrder: 1,
-      getComponent: (gåTilNesteSteg) => (
+      reducer: overføringPunchReducer,
+      getComponent: ({ gåTilForrigeSteg, initialValues }) => (
         <OverføringPunchContainer
-          initialValues={{
-            arbeidssituasjon: {
-              erArbeidstaker: false,
-              erFrilanser: false,
-              erSelvstendigNæringsdrivende: false,
-              metaHarFeil: null,
-            },
-            omsorgenDelesMed: {
-              fødselsnummer: '',
-              antallOverførteDager: 0,
-              mottaker: null,
-            },
-            aleneOmOmsorgen: null,
-            fosterbarn: {
-              harFosterbarn: null,
-              fødselsnummer: null,
-            },
-          }}
-          onSubmitCallback={gåTilNesteSteg}
+          initialValues={initialValues}
+          gåTilForrigeSteg={gåTilForrigeSteg}
         />
       ),
     },

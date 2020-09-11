@@ -5,6 +5,7 @@ import intlHelper from '../../utils/intlUtils';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import './radioInput.less';
+import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface IRadioInputProps {
   label?: React.ReactNode;
@@ -12,6 +13,7 @@ interface IRadioInputProps {
   optionValues: any[];
   retning?: 'vertikal' | 'horisontal';
   styling?: 'medPanel' | 'utenPanel';
+  disabled?: boolean;
 }
 
 const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
@@ -19,6 +21,7 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
   optionValues,
   retning = 'horisontal',
   styling = 'utenPanel',
+  disabled = false,
 }) => {
   const [{ name, value, onBlur, onChange }, { error, touched }] = useField(
     feltnavn
@@ -31,7 +34,10 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
     <SkjemaGruppe
       legend={
         <div className="radio-legend">
-          {intlHelper(intl, `skjema.felt.${feltnavn}.label`)}
+          {intlHelper(
+            intl,
+            `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`
+          )}
         </div>
       }
       feil={touched && error}
@@ -51,6 +57,7 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
             checked={optionValue === value}
             onBlur={onBlur}
             onChange={onChange}
+            disabled={disabled}
           />
         ))}
       </div>

@@ -5,21 +5,26 @@ import {
   validerSignaturSkjema,
 } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
 import SkjemaContext from '../../../components/skjema/SkjemaContext';
+import { useDispatch } from 'react-redux';
+import { setSkjema } from '../../../state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
-  onSubmitCallback: (skjemaParams: { ident: string }) => void;
+  gåTilNesteSteg: (skjemaParams: { ident: string }) => void;
 }
 
 const SignaturSkjemaContainer: React.FunctionComponent<ISignaturSkjemaContextProps> = ({
   initialValues,
-  onSubmitCallback,
+  gåTilNesteSteg,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <SkjemaContext
-      onSubmitCallback={(values) =>
-        onSubmitCallback({ ident: values.fødselsnummer })
-      }
+      onSubmitCallback={(values) => {
+        dispatch(setSkjema(values));
+        gåTilNesteSteg({ ident: values.fødselsnummer });
+      }}
       initialValues={initialValues}
       validerSkjema={validerSignaturSkjema}
     >

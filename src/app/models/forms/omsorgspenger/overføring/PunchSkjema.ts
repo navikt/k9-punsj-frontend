@@ -1,20 +1,32 @@
-import { JaNei } from '../../../enums';
 import { IntlShape } from 'react-intl';
+import { useFormikContext } from 'formik';
+import { JaNei } from '../../../enums';
 import {
   fødselsnummervalidator,
+  gyldigDato,
   IFeltValidator,
-  minstEn,
   positivtHeltall,
   påkrevd,
   validerSkjema,
 } from '../../../../rules/valideringer';
 
+export enum Innsendingsstatus {
+  IkkeSendtInn = 'IkkeSendtInn',
+  SenderInn = 'SenderInn',
+  SendtInn = 'SendtInn',
+  Innsendingsfeil = 'Innsendingsfeil',
+}
 export enum Mottaker {
   Ektefelle = 'Ektefelle',
   Samboer = 'Samboer',
 }
 
+type Dato = string;
+
 export interface IOverføringPunchSkjema {
+  avsender: {
+    fødselsnummer: string | null;
+  };
   arbeidssituasjon: {
     erArbeidstaker: boolean;
     erFrilanser: boolean;
@@ -22,28 +34,21 @@ export interface IOverføringPunchSkjema {
     metaHarFeil: null;
   };
   aleneOmOmsorgen: JaNei | null;
-  fosterbarn: {
-    harFosterbarn: JaNei | null;
+  barn: {
     fødselsnummer: string | null;
-  };
+  }[];
   omsorgenDelesMed: {
     fødselsnummer: string;
     mottaker: Mottaker | null;
     antallOverførteDager: number;
+    samboerSiden: Dato | null;
   };
+  mottaksdato: Dato | null;
 }
 
 const fnrDelesMedValidator: IFeltValidator<string, IOverføringPunchSkjema> = {
   feltPath: 'omsorgenDelesMed.fødselsnummer',
   validatorer: [påkrevd, fødselsnummervalidator],
-};
-
-const arbeidssituasjonValidator: IFeltValidator<
-  boolean,
-  IOverføringPunchSkjema
-> = {
-  feltPath: 'arbeidssituasjon.metaHarFeil',
-  validatorer: [(verdi, { arbeidssituasjon }) => minstEn(arbeidssituasjon)],
 };
 
 const aleneomOmsorgenValidator: IFeltValidator<
@@ -54,26 +59,29 @@ const aleneomOmsorgenValidator: IFeltValidator<
   validatorer: [påkrevd],
 };
 
-const harFosterbarnValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
-  feltPath: 'fosterbarn.harFosterbarn',
-  validatorer: [påkrevd],
-};
-
-const fosterBarnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
-  feltPath: 'fosterbarn.fødselsnummer',
-  validatorer: [
-    (verdi, skjema) => {
-      if (skjema.fosterbarn.harFosterbarn === JaNei.JA) {
-        return påkrevd(verdi);
-      }
-      return undefined;
-    },
-  ],
+const barnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
+  feltPath: 'barn[].fødselsnummer',
+  validatorer: [påkrevd, fødselsnummervalidator],
+  arrayInPath: true,
 };
 
 const mottakerValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
   feltPath: 'omsorgenDelesMed.mottaker',
   validatorer: [påkrevd],
+};
+
+const samboerSidenValidator: IFeltValidator<Dato, IOverføringPunchSkjema> = {
+  feltPath: 'omsorgenDelesMed.samboerSiden',
+  validatorer: [
+    (verdi, skjema) =>
+      skjema.omsorgenDelesMed?.mottaker === Mottaker.Samboer
+        ? påkrevd(verdi)
+        : undefined,
+    (verdi, skjema) =>
+      skjema.omsorgenDelesMed?.mottaker === Mottaker.Samboer
+        ? gyldigDato(verdi)
+        : undefined,
+  ],
 };
 
 const antallDelteDagerValidator: IFeltValidator<
@@ -84,16 +92,24 @@ const antallDelteDagerValidator: IFeltValidator<
   validatorer: [positivtHeltall],
 };
 
+const mottaksdatoValidator: IFeltValidator<Dato, IOverføringPunchSkjema> = {
+  feltPath: 'mottaksdato',
+  validatorer: [påkrevd, gyldigDato],
+};
+
 export const validatePunch = (intl: IntlShape) =>
   validerSkjema<IOverføringPunchSkjema>(
     [
       fnrDelesMedValidator,
-      arbeidssituasjonValidator,
       aleneomOmsorgenValidator,
-      harFosterbarnValidator,
-      fosterBarnFnr,
       mottakerValidator,
       antallDelteDagerValidator,
+      barnFnr,
+      mottaksdatoValidator,
+      samboerSidenValidator,
     ],
     intl
   );
+
+export const useOverføringPunchSkjemaContext = () =>
+  useFormikContext<IOverføringPunchSkjema>();

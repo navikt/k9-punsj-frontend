@@ -4,14 +4,14 @@ import useRedirect from '../../hooks/useRedirect';
 import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
 import { IPath } from '../../models/types';
-import { Pleiepenger } from '../SakstypeImpls';
 import { getPath } from '../../utils';
 import { PunchPage } from './PunchPage';
 
 const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({
   journalpostid,
+  punchPath,
 }) => {
-  const pleiepengerRootPath = Pleiepenger.punchPath;
+  const pleiepengerRootPath = punchPath;
 
   const paths: IPath[] = [
     { step: PunchStep.IDENT, path: `${pleiepengerRootPath}/ident` },

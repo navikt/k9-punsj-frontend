@@ -1,24 +1,29 @@
 import React, { ReactNode } from 'react';
-import { Checkbox } from 'nav-frontend-skjema';
+import { Input, InputProps } from 'nav-frontend-skjema';
+
 import { useField } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { fjernIndexFraLabel } from './skjemaUtils';
-
-interface ICheckboxInputProps {
+interface IDateInputProps {
   label?: ReactNode;
   feltnavn: string;
   disabled?: boolean;
 }
 
-const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
+const DateInput: React.FunctionComponent<IDateInputProps & InputProps> = ({
   label,
   feltnavn,
   disabled = false,
+  ...inputProps
 }) => {
-  const [{ name, value, onBlur, onChange }, { error }] = useField(feltnavn);
+  const [{ name, value, onBlur, onChange }, { error, touched }] = useField(
+    feltnavn
+  );
 
   return (
-    <Checkbox
+    <Input
+      {...inputProps}
+      type="date"
       label={
         label || (
           <FormattedMessage
@@ -26,9 +31,9 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
           />
         )
       }
+      feil={touched && error}
       name={name}
-      feil={error}
-      value={value}
+      value={value || ''}
       onBlur={onBlur}
       onChange={onChange}
       disabled={disabled}
@@ -36,4 +41,4 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
   );
 };
 
-export default CheckboxInput;
+export default DateInput;

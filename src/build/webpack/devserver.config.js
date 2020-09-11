@@ -14,6 +14,7 @@ const configureDevServer = (decoratorFragments) => ({
             res.render('index.html', Object.assign(decoratorFragments));
         });
     },
+    contentBase: ['app'],
     watchContentBase: true,
     quiet: false,
     noInfo: false,

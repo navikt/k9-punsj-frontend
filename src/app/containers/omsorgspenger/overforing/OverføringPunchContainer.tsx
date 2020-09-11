@@ -1,31 +1,48 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
 import OverføringPunchSkjema from './OverføringPunchSkjema';
 import {
   IOverføringPunchSkjema,
   validatePunch,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import SkjemaContext from '../../../components/skjema/SkjemaContext';
-
-export const useOverføringPunchSkjemaContext = () =>
-  useFormikContext<IOverføringPunchSkjema>();
+import { useDispatch, useSelector } from 'react-redux';
+import { sendInnSkjema } from '../../../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import { RootStateType } from '../../../state/RootState';
+import { Sakstype } from '../../../models/enums';
 
 interface IOverføringPunchContainer {
   initialValues: IOverføringPunchSkjema;
-  onSubmitCallback: () => void;
+  gåTilForrigeSteg: () => void;
 }
 
 const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContainer> = ({
   initialValues,
-  onSubmitCallback,
+  gåTilForrigeSteg,
 }) => {
+  const dispatch = useDispatch();
+  const { innsendingsstatus, innsendingsfeil } = useSelector(
+    (state: RootStateType) => {
+      const punchState = state[Sakstype.OMSORGSPENGER_OVERFØRING].punch;
+      return {
+        innsendingsstatus: punchState.innsendingsstatus,
+        innsendingsfeil: punchState.innsendingsfeil,
+      };
+    }
+  );
+
   return (
     <SkjemaContext
-      onSubmitCallback={onSubmitCallback}
+      onSubmitCallback={(skjema) => {
+        dispatch(sendInnSkjema(skjema));
+      }}
       initialValues={initialValues}
       validerSkjema={validatePunch}
     >
-      <OverføringPunchSkjema />
+      <OverføringPunchSkjema
+        gåTilForrigeSteg={gåTilForrigeSteg}
+        innsendingsstatus={innsendingsstatus}
+        innsendingsfeil={innsendingsfeil}
+      />
     </SkjemaContext>
   );
 };

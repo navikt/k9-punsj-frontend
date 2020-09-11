@@ -5,6 +5,8 @@ import {
 } from '../../app/rules/valideringer';
 import { testIntl } from '../testUtils';
 
+jest.mock('app/utils/envUtils');
+
 describe('valideringer', () => {
   it('returnerer alle feil i et skjema', () => {
     interface ITestSkjema {
@@ -44,5 +46,54 @@ describe('valideringer', () => {
       'skjema.validering.påkrevd'
     );
     expect(skjemaErrors?.felt4?.felt5).toBeUndefined();
+  });
+
+  it('validerer felter som ligger i arrays', () => {
+    interface ITestSkjema {
+      testArr: {
+        påkrevdFelt?: string;
+      }[];
+    }
+
+    const feltValidator: IFeltValidator<string, ITestSkjema> = {
+      feltPath: 'testArr[].påkrevdFelt',
+      validatorer: [påkrevd],
+      arrayInPath: true,
+    };
+
+    const skjemaMedManglendeVerdi: ITestSkjema = {
+      testArr: [
+        {
+          påkrevdFelt: 'verdi',
+        },
+        {},
+        {
+          påkrevdFelt: 'verdi',
+        },
+        {
+          påkrevdFelt: '',
+        },
+      ],
+    };
+
+    const validerTestskjemaFn = validerSkjema<ITestSkjema>(
+      [feltValidator],
+      testIntl
+    );
+
+    const skjemaErrors = validerTestskjemaFn(skjemaMedManglendeVerdi);
+
+    // @ts-ignore
+    expect(skjemaErrors.testArr[0]?.påkrevdFelt).toBeUndefined();
+    // @ts-ignore
+    expect(skjemaErrors.testArr[1].påkrevdFelt).toEqual(
+      'skjema.validering.påkrevd'
+    );
+    // @ts-ignore
+    expect(skjemaErrors.testArr[2]?.påkrevdFelt).toBeUndefined();
+    // @ts-ignore
+    expect(skjemaErrors.testArr[3].påkrevdFelt).toEqual(
+      'skjema.validering.påkrevd'
+    );
   });
 });

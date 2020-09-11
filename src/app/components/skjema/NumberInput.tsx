@@ -8,15 +8,18 @@ import PlussSVG from './PlussSVG';
 import MinusSVG from './MinusSVG';
 import './numberInput.less';
 import intlHelper from '../../utils/intlUtils';
+import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ITextInputProps {
   label?: ReactNode;
   feltnavn: string;
+  disabled?: boolean;
 }
 
 const NumberInput: React.FunctionComponent<ITextInputProps> = ({
   label,
   feltnavn,
+  disabled = false,
 }) => {
   const [
     { name, value, onBlur, onChange },
@@ -37,7 +40,10 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
   };
 
   const intl = useIntl();
-  const feltVisningsnavn = intlHelper(intl, `skjema.felt.${feltnavn}.label`);
+  const feltVisningsnavn = intlHelper(
+    intl,
+    `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`
+  );
 
   const minkMedEnTekst = intlHelper(intl, 'numberinput.mink', {
     felt: feltVisningsnavn,
@@ -57,6 +63,7 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
           onClick={minusEn}
           type="button"
           className="numberInput__button numberInput__minus"
+          disabled={disabled}
         >
           <MinusSVG alt={minkMedEnTekst} />
         </button>
@@ -69,12 +76,14 @@ const NumberInput: React.FunctionComponent<ITextInputProps> = ({
           onBlur={onBlur}
           onChange={onChange}
           bredde="XXS"
+          disabled={disabled}
           className="numberInput__input"
         />
         <button
           onClick={plussEn}
           type="button"
           className="numberInput__button numberInput__pluss"
+          disabled={disabled}
         >
           <PlussSVG alt={økMedEnTekst} />
         </button>

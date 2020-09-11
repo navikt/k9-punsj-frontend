@@ -4,10 +4,16 @@ import {
 } from '../../../../../app/models/forms/omsorgspenger/overføring/PunchSkjema';
 import { testIntl } from '../../../../testUtils';
 
+jest.mock('app/utils/envUtils');
+
 describe('PunchSkjema', () => {
   const validerSkjemaFn = validatePunch(testIntl);
   test('gir feil ved påkrevde verdier', () => {
     const tomtSkjema: IOverføringPunchSkjema = {
+      mottaksdato: null,
+      avsender: {
+        fødselsnummer: null,
+      },
       arbeidssituasjon: {
         erArbeidstaker: false,
         erFrilanser: false,
@@ -18,22 +24,23 @@ describe('PunchSkjema', () => {
         fødselsnummer: '',
         antallOverførteDager: 0,
         mottaker: null,
+        samboerSiden: null,
       },
       aleneOmOmsorgen: null,
-      fosterbarn: {
-        harFosterbarn: null,
-        fødselsnummer: null,
-      },
+      barn: [
+        {
+          fødselsnummer: null,
+        },
+      ],
     };
 
     const {
-      arbeidssituasjon,
       omsorgenDelesMed,
       aleneOmOmsorgen,
-      fosterbarn,
+      barn,
+      mottaksdato,
     } = validerSkjemaFn(tomtSkjema);
 
-    expect(arbeidssituasjon?.metaHarFeil).toEqual('skjema.validering.minstEn');
     expect(omsorgenDelesMed?.fødselsnummer).toEqual(
       'skjema.validering.påkrevd'
     );
@@ -42,6 +49,9 @@ describe('PunchSkjema', () => {
       'skjema.validering.positivtheltall'
     );
     expect(aleneOmOmsorgen).toEqual('skjema.validering.påkrevd');
-    expect(fosterbarn?.harFosterbarn).toEqual('skjema.validering.påkrevd');
+    // @ts-ignore
+    expect(barn[0].fødselsnummer).toEqual('skjema.validering.påkrevd');
+
+    expect(mottaksdato).toEqual('skjema.validering.påkrevd');
   });
 });
