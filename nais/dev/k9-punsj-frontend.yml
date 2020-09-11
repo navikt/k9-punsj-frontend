@@ -6,7 +6,7 @@ metadata:
     labels:
         team: k9saksbehandling
 spec:
-    image: {{ image }}:{{ tag }}
+    image: {{ image }}
     port: 8080
     liveness:
         path: health/isAlive
