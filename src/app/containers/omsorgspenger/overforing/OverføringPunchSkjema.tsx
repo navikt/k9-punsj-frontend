@@ -87,21 +87,30 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           value={ident}
         />
         <VerticalSpacer sixteenPx={true} />
-        <CheckboxInputGruppe
-          feltnavn="arbeidssituasjon"
-          checkboxFeltnavn={[
-            'erArbeidstaker',
-            'erFrilanser',
-            'erSelvstendigNæringsdrivende',
-          ]}
-          metaHarFeilFeltnavn="metaHarFeil"
-          disabled={disabled}
-        />
+        <FlexRow childrenMargin="medium">
+          <CheckboxInputGruppe
+            feltnavn="arbeidssituasjon"
+            checkboxFeltnavn={[
+              'erArbeidstaker',
+              'erFrilanser',
+              'erSelvstendigNæringsdrivende',
+            ]}
+            metaHarFeilFeltnavn="metaHarFeil"
+            disabled={disabled}
+          />
+          <RadioInput
+            feltnavn="borINorge"
+            optionValues={Object.values(JaNei)}
+            retning="vertikal"
+            styling="utenPanel"
+            disabled={disabled}
+          />
+        </FlexRow>
         <VerticalSpacer sixteenPx={true} />
         <RadioInput
           feltnavn="aleneOmOmsorgen"
           optionValues={Object.values(JaNei)}
-          retning="vertikal"
+          retning="horisontal"
           styling="utenPanel"
           disabled={disabled}
         />
@@ -155,7 +164,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           <RadioInput
             feltnavn="omsorgenDelesMed.mottaker"
             optionValues={Object.values(Mottaker)}
-            retning="vertikal"
+            retning="horisontal"
             styling="utenPanel"
             disabled={disabled}
           />
@@ -179,7 +188,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             disabled={disabled}
             onClick={() => setVisModalVedFeil(true)}
           >
-            <FormattedMessage id="ident.knapp.nestesteg" />
+            <FormattedMessage id="omsorgsdager.overføring.punch.sendinn" />
           </Knapp>
         </Knapper>
         <InnsendingModal

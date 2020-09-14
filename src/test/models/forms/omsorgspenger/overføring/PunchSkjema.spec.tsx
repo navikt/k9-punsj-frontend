@@ -18,6 +18,7 @@ describe('PunchSkjema', () => {
         erSelvstendigNæringsdrivende: false,
         metaHarFeil: null,
       },
+      borINorge: null,
       omsorgenDelesMed: {
         identitetsnummer: '',
         antallOverførteDager: 0,
@@ -37,6 +38,7 @@ describe('PunchSkjema', () => {
       aleneOmOmsorgen,
       barn,
       mottaksdato,
+      borINorge,
     } = validerSkjemaFn(tomtSkjema);
 
     expect(omsorgenDelesMed?.identitetsnummer).toEqual(
@@ -51,5 +53,7 @@ describe('PunchSkjema', () => {
     expect(barn[0].identitetsnummer).toEqual('skjema.validering.påkrevd');
 
     expect(mottaksdato).toEqual('skjema.validering.påkrevd');
+
+    expect(borINorge).toEqual('skjema.validering.påkrevd');
   });
 });

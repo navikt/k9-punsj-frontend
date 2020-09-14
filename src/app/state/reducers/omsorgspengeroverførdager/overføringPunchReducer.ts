@@ -107,6 +107,7 @@ const initialState: IOverføringPunchState = {
       erSelvstendigNæringsdrivende: false,
       metaHarFeil: null,
     },
+    borINorge: null,
     omsorgenDelesMed: {
       identitetsnummer: '',
       antallOverførteDager: 0,

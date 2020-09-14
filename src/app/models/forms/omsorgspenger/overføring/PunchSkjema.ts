@@ -31,6 +31,7 @@ export interface IOverføringPunchSkjema {
     erSelvstendigNæringsdrivende: boolean;
     metaHarFeil: null;
   };
+  borINorge: JaNei | null;
   aleneOmOmsorgen: JaNei | null;
   barn: {
     identitetsnummer: string | null;
@@ -54,6 +55,11 @@ const aleneomOmsorgenValidator: IFeltValidator<
   IOverføringPunchSkjema
 > = {
   feltPath: 'aleneOmOmsorgen',
+  validatorer: [påkrevd],
+};
+
+const borINorgeValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
+  feltPath: 'borINorge',
   validatorer: [påkrevd],
 };
 
@@ -105,6 +111,7 @@ export const validatePunch = (intl: IntlShape) =>
       barnFnr,
       mottaksdatoValidator,
       samboerSidenValidator,
+      borINorgeValidator,
     ],
     intl
   );
