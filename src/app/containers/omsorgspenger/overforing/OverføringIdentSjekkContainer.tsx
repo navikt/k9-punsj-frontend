@@ -1,5 +1,5 @@
 import React from 'react';
-import OmsorgspengerOverføringIdentSjekk from './OmsorgspengerOverføringIdentSjekk';
+import OverføringIdentSjekk from './OverføringIdentSjekk';
 import {
   ISignaturSkjema,
   validerSignaturSkjema,
@@ -13,7 +13,7 @@ interface ISignaturSkjemaContextProps {
   gåTilNesteSteg: (skjemaParams: { ident: string }) => void;
 }
 
-const SignaturSkjemaContainer: React.FunctionComponent<ISignaturSkjemaContextProps> = ({
+const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaContextProps> = ({
   initialValues,
   gåTilNesteSteg,
 }) => {
@@ -28,9 +28,9 @@ const SignaturSkjemaContainer: React.FunctionComponent<ISignaturSkjemaContextPro
       initialValues={initialValues}
       validerSkjema={validerSignaturSkjema}
     >
-      <OmsorgspengerOverføringIdentSjekk />
+      <OverføringIdentSjekk />
     </SkjemaContext>
   );
 };
 
-export default SignaturSkjemaContainer;
+export default OverføringIdentSjekkContainer;

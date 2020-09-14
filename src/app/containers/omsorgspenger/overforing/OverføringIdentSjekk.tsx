@@ -9,7 +9,9 @@ import { Form } from 'formik';
 import RadioInput from '../../../components/skjema/RadioInput';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 
-const OmsorgspengerOverføringIdentSjekk: React.FunctionComponent = () => {
+
+
+const OverføringIdentSjekk: React.FunctionComponent = () => {
   return (
     <Form>
       <RadioInput
@@ -39,4 +41,4 @@ const OmsorgspengerOverføringIdentSjekk: React.FunctionComponent = () => {
   );
 };
 
-export default OmsorgspengerOverføringIdentSjekk;
+export default OverføringIdentSjekk;
