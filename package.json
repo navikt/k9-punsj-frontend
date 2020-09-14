@@ -113,7 +113,7 @@
     "copy-webpack-plugin": "^6.0.3",
     "css-loader": "^3.4.2",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-adapter-react-16": "^1.15.4",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fetch-headers": "^2.0.0",
     "fetch-mock": "^9.10.7",
