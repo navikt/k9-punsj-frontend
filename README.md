@@ -11,7 +11,14 @@ yarn install
 yarn start
 ````
 
-## Backend-mock
+## Starte backend med Docker compose
+
+```
+docker-compose pull
+docker-compose up
+```
+
+## Alternativt: Backend-mock
 Applikasjonen er avhengig av [oidc-auth-proxy](https://github.com/navikt/oidc-auth-proxy) og [k9-punsj](https://github.com/navikt/k9-punsj). Disse har innebygget mocking.
 
 ###For å kjøre opp mock i **oidc-auth-proxy**:
