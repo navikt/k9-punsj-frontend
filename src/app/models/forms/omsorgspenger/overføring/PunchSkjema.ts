@@ -35,6 +35,7 @@ export interface IOverføringPunchSkjema {
   aleneOmOmsorgen: JaNei | null;
   barn: {
     identitetsnummer: string | null;
+    fødselsdato: Dato | null;
   }[];
   omsorgenDelesMed: {
     identitetsnummer: string;
@@ -44,6 +45,31 @@ export interface IOverføringPunchSkjema {
   };
   mottaksdato: Dato | null;
 }
+
+export const tomtSkjema: IOverføringPunchSkjema = {
+  identitetsnummer: null,
+  arbeidssituasjon: {
+    erArbeidstaker: false,
+    erFrilanser: false,
+    erSelvstendigNæringsdrivende: false,
+    metaHarFeil: null,
+  },
+  borINorge: null,
+  omsorgenDelesMed: {
+    identitetsnummer: '',
+    antallOverførteDager: 0,
+    mottaker: null,
+    samboerSiden: null,
+  },
+  aleneOmOmsorgen: null,
+  barn: [
+    {
+      identitetsnummer: null,
+      fødselsdato: null
+    },
+  ],
+  mottaksdato: null,
+};
 
 const fnrDelesMedValidator: IFeltValidator<string, IOverføringPunchSkjema> = {
   feltPath: 'omsorgenDelesMed.identitetsnummer',
@@ -66,6 +92,12 @@ const borINorgeValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
 const barnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
   feltPath: 'barn[].identitetsnummer',
   validatorer: [påkrevd, fødselsnummervalidator],
+  arrayInPath: true,
+};
+
+const barnFødselsdato: IFeltValidator<string, IOverføringPunchSkjema> = {
+  feltPath: 'barn[].fødselsdato',
+  validatorer: [påkrevd, gyldigDato],
   arrayInPath: true,
 };
 
@@ -109,6 +141,7 @@ export const validatePunch = (intl: IntlShape) =>
       mottakerValidator,
       antallDelteDagerValidator,
       barnFnr,
+      barnFødselsdato,
       mottaksdatoValidator,
       samboerSidenValidator,
       borINorgeValidator,

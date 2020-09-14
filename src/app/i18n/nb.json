@@ -215,6 +215,7 @@
   "skjema.felt.aleneOmOmsorgen.nei": "Nei",
   "skjema.felt.barn": "Alle søkerens barn, inkludert eventuelle fosterbarn",
   "skjema.felt.barn[].identitetsnummer.label": "Fødsels- / D-nummer",
+  "skjema.felt.barn[].fødselsdato.label": "Fødselsdato",
   "skjema.felt.omsorgenDelesMed.identitetsnummer.label": "Fødsels- / D-nummer",
   "skjema.felt.omsorgenDelesMed.mottaker.label": "Mottakeren",
   "skjema.felt.omsorgenDelesMed.mottaker.Ektefelle": "Nåværende ektefelle",

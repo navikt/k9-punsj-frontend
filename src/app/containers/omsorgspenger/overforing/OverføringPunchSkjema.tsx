@@ -129,6 +129,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                     feltnavn={`barn[${index}].identitetsnummer`}
                     bredde="M"
                   />
+                  <DateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
                   {values.barn.length > 1 && (
                     <Xknapp
                       htmlType="button"
@@ -160,18 +161,19 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           disabled={disabled}
         />
         <VerticalSpacer thirtyTwoPx={true} />
-        <FlexRow childrenMargin="medium">
-          <RadioInput
-            feltnavn="omsorgenDelesMed.mottaker"
-            optionValues={Object.values(Mottaker)}
-            retning="horisontal"
-            styling="utenPanel"
-            disabled={disabled}
-          />
-          {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
+        <RadioInput
+          feltnavn="omsorgenDelesMed.mottaker"
+          optionValues={Object.values(Mottaker)}
+          retning="horisontal"
+          styling="utenPanel"
+          disabled={disabled}
+        />
+        {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
+          <>
             <DateInput feltnavn="omsorgenDelesMed.samboerSiden" bredde="M" />
-          )}
-        </FlexRow>
+            <VerticalSpacer thirtyTwoPx={true} />
+          </>
+        )}
         <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
