@@ -12,7 +12,8 @@ server.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
-            frameSrc: ['self', process.env.OIDC_AUTH_PROXY]
+            frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
+            fontSrc: ["'self'", 'data:']
         },
     }
 }));
