@@ -5,8 +5,9 @@ import {
   validerSignaturSkjema,
 } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
 import SkjemaContext from '../../../components/skjema/SkjemaContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setSkjema } from 'app/state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
+import { RootStateType } from '../../../state/RootState';
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
@@ -18,6 +19,9 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
   gåTilNesteSteg,
 }) => {
   const dispatch = useDispatch();
+  const journalpostensRegistrertePersonident = useSelector(
+    (state: RootStateType) => state.punchState.journalpost?.norskIdent
+  );
 
   return (
     <SkjemaContext
@@ -28,7 +32,11 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
       initialValues={initialValues}
       validerSkjema={validerSignaturSkjema}
     >
-      <OverføringIdentSjekk />
+      <OverføringIdentSjekk
+        journalpostensRegistrertePersonident={
+          journalpostensRegistrertePersonident
+        }
+      />
     </SkjemaContext>
   );
 };

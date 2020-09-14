@@ -10,11 +10,20 @@ import { IntlShape } from 'react-intl';
 export interface ISignaturSkjema {
   identitetsnummer: string;
   signert: JaNei | null;
+  sammeIdentSomRegistrert: JaNei | null;
 }
 
 const fnrFeltValidator: IFeltValidator<string, ISignaturSkjema> = {
   feltPath: 'identitetsnummer',
   validatorer: [påkrevd, fødselsnummervalidator],
+};
+
+const sammeIdentSomRegistrertValidator: IFeltValidator<
+  JaNei,
+  ISignaturSkjema
+> = {
+  feltPath: 'sammeIdentSomRegistrert',
+  validatorer: [påkrevd],
 };
 
 const signaturFeltValidator: IFeltValidator<JaNei, ISignaturSkjema> = {
@@ -24,6 +33,6 @@ const signaturFeltValidator: IFeltValidator<JaNei, ISignaturSkjema> = {
 
 export const validerSignaturSkjema = (intl: IntlShape) =>
   validerSkjema<ISignaturSkjema>(
-    [fnrFeltValidator, signaturFeltValidator],
+    [fnrFeltValidator, sammeIdentSomRegistrertValidator, signaturFeltValidator],
     intl
   );
