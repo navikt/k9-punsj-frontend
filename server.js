@@ -7,29 +7,41 @@ const helmet = require('helmet');
 const createEnvSettingsFile = require('./src/build/scripts/envSettings');
 
 const server = express();
-server.use(helmet());
+server.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
+            frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
+            fontSrc: ["'self'", 'data:']
+        },
+    }
+}));
+
+const rootPath = __dirname;
+
 server.use(compression());
-server.set('views', `${__dirname}/dist`);
+server.set('views', `${rootPath}/dist`);
 server.set('view engine', 'mustache');
 server.engine('html', mustacheExpress());
 
-createEnvSettingsFile(path.resolve(`${__dirname}/dist/js/settings.js`));
+createEnvSettingsFile(path.resolve(`${rootPath}/dist/js/settings.js`));
 
 const renderApp = () =>
-    new Promise((resolve, reject) => {
-        server.render('index.html', {}, (err, html) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(html);
-            }
-        });
-    });
+  new Promise((resolve, reject) => {
+      server.render('index.html', {}, (err, html) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(html);
+          }
+      });
+  });
 
 const startServer = (html) => {
-    server.use('/dist/js', express.static(path.resolve(__dirname, 'dist/js')));
-    server.use('/dist/css', express.static(path.resolve(__dirname, 'dist/css')));
-    server.use('/dist/favicon.png', express.static(path.resolve(__dirname, 'dist/favicon.png')));
+    server.use('/dist/js', express.static(path.resolve(rootPath, 'dist/js')));
+    server.use('/dist/css', express.static(path.resolve(rootPath, 'dist/css')));
+    server.use('/dist/favicon.png', express.static(path.resolve(rootPath, 'dist/favicon.png')));
 
     server.get('/health/isAlive', (req, res) => res.sendStatus(200));
     server.get('/health/isReady', (req, res) => res.sendStatus(200));
