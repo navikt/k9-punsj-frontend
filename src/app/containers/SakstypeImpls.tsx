@@ -9,7 +9,7 @@ import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/Omsorgspenger
 
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
-import SignaturSkjemaContainer from './omsorgspenger/overforing/SignaturSkjemaContainer';
+import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import { ApiPath } from '../apiConfig';
 import overføringSignaturReducer from '../state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from '../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
@@ -45,7 +45,7 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
       path: '/signatur',
       stepName: 'signatur',
       getComponent: ({ gåTilNesteSteg, initialValues }) => (
-        <SignaturSkjemaContainer
+        <OverføringIdentSjekkContainer
           initialValues={initialValues}
           gåTilNesteSteg={gåTilNesteSteg}
         />

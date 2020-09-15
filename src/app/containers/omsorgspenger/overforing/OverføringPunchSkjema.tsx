@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Knapp } from 'nav-frontend-knapper';
 import { FieldArray, Form } from 'formik';
 import Knapper from '../../../components/knapp/Knapper';
@@ -18,16 +18,12 @@ import VerticalSpacer from '../../../components/VerticalSpacer';
 import { useRouteMatch } from 'react-router';
 import LabelValue from '../../../components/skjema/LabelValue';
 import { Undertittel } from 'nav-frontend-typografi';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import ModalWrapper from 'nav-frontend-modal';
 import './overføringPunchSkjema.less';
-import intlHelper from '../../../utils/intlUtils';
-import { NavLink } from 'react-router-dom';
-import CheckSvg from '../../../assets/SVG/CheckSVG';
 import { IError } from '../../../models/types';
 import { Xknapp } from 'nav-frontend-ikonknapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import DateInput from '../../../components/skjema/DateInput';
+import InnsendingModal from './InnsendingModal';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
@@ -54,10 +50,10 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     }
   }, [innsendingsstatus]);
 
-  const avsendersFnr = values.avsender.fødselsnummer;
+  const avsendersFnr = values.identitetsnummer;
   useEffect(() => {
     if (!avsendersFnr) {
-      setFieldValue('avsender.fødselsnummer', ident);
+      setFieldValue('identitetsnummer', ident);
     }
   }, [ident]);
 
@@ -76,8 +72,6 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     }
   }, [innsendingsstatus, visModalVedFeil]);
 
-  const intl = useIntl();
-
   return (
     <Form>
       <section>
@@ -89,25 +83,34 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <LabelValue
-          labelTextId="omsorgsdager.overføring.fødselsnummer"
+          labelTextId="omsorgsdager.overføring.identitetsnummer"
           value={ident}
         />
         <VerticalSpacer sixteenPx={true} />
-        <CheckboxInputGruppe
-          feltnavn="arbeidssituasjon"
-          checkboxFeltnavn={[
-            'erArbeidstaker',
-            'erFrilanser',
-            'erSelvstendigNæringsdrivende',
-          ]}
-          metaHarFeilFeltnavn="metaHarFeil"
-          disabled={disabled}
-        />
+        <FlexRow childrenMargin="medium">
+          <CheckboxInputGruppe
+            feltnavn="arbeidssituasjon"
+            checkboxFeltnavn={[
+              'erArbeidstaker',
+              'erFrilanser',
+              'erSelvstendigNæringsdrivende',
+            ]}
+            metaHarFeilFeltnavn="metaHarFeil"
+            disabled={disabled}
+          />
+          <RadioInput
+            feltnavn="borINorge"
+            optionValues={Object.values(JaNei)}
+            retning="vertikal"
+            styling="utenPanel"
+            disabled={disabled}
+          />
+        </FlexRow>
         <VerticalSpacer sixteenPx={true} />
         <RadioInput
           feltnavn="aleneOmOmsorgen"
           optionValues={Object.values(JaNei)}
-          retning="vertikal"
+          retning="horisontal"
           styling="utenPanel"
           disabled={disabled}
         />
@@ -123,9 +126,10 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
               {values.barn.map((b, index) => (
                 <FlexRow key={index} childrenMargin="small">
                   <TextInput
-                    feltnavn={`barn[${index}].fødselsnummer`}
+                    feltnavn={`barn[${index}].identitetsnummer`}
                     bredde="M"
                   />
+                  <DateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
                   {values.barn.length > 1 && (
                     <Xknapp
                       htmlType="button"
@@ -136,7 +140,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 </FlexRow>
               ))}
               <Knapp
-                onClick={() => push({ fødselsnummer: '' })}
+                onClick={() => push({ identitetsnummer: '' })}
                 htmlType="button"
                 type="flat"
                 mini={true}
@@ -152,23 +156,24 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <TextInput
-          feltnavn="omsorgenDelesMed.fødselsnummer"
+          feltnavn="omsorgenDelesMed.identitetsnummer"
           bredde="M"
           disabled={disabled}
         />
         <VerticalSpacer thirtyTwoPx={true} />
-        <FlexRow childrenMargin="medium">
-          <RadioInput
-            feltnavn="omsorgenDelesMed.mottaker"
-            optionValues={Object.values(Mottaker)}
-            retning="vertikal"
-            styling="utenPanel"
-            disabled={disabled}
-          />
-          {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
+        <RadioInput
+          feltnavn="omsorgenDelesMed.mottaker"
+          optionValues={Object.values(Mottaker)}
+          retning="horisontal"
+          styling="utenPanel"
+          disabled={disabled}
+        />
+        {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
+          <>
             <DateInput feltnavn="omsorgenDelesMed.samboerSiden" bredde="M" />
-          )}
-        </FlexRow>
+            <VerticalSpacer thirtyTwoPx={true} />
+          </>
+        )}
         <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
@@ -185,56 +190,15 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             disabled={disabled}
             onClick={() => setVisModalVedFeil(true)}
           >
-            <FormattedMessage id="ident.knapp.nestesteg" />
+            <FormattedMessage id="omsorgsdager.overføring.punch.sendinn" />
           </Knapp>
         </Knapper>
-        <ModalWrapper
+        <InnsendingModal
+          innsendingsstatus={innsendingsstatus}
+          vis={visModal}
           onRequestClose={() => setVisModalVedFeil(false)}
-          contentLabel={intlHelper(
-            intl,
-            'omsorgsdager.overføring.punch.modal.beskrivelse'
-          )}
-          isOpen={visModal}
-          className="innsendingsmodal"
-          closeButton={innsendingsstatus === Innsendingsstatus.Innsendingsfeil}
-          shouldCloseOnOverlayClick={true}
-        >
-          <>
-            <Undertittel tag="h2">
-              <FormattedMessage id="omsorgsdager.overføring.punch.modal.tittel" />
-            </Undertittel>
-            <VerticalSpacer sixteenPx={true} />
-            {innsendingsstatus === Innsendingsstatus.SenderInn && (
-              <FlexRow childrenMargin="small" alignItemsToCenter={true}>
-                <NavFrontendSpinner />
-                <span>
-                  <FormattedMessage id="omsorgsdager.overføring.punch.modal.senderInn" />
-                </span>
-              </FlexRow>
-            )}
-            {innsendingsstatus === Innsendingsstatus.SendtInn && (
-              <>
-                <FlexRow childrenMargin="small" alignItemsToCenter={true}>
-                  <CheckSvg title={<FormattedMessage id="check.svg.title" />} />
-                  <span>
-                    <FormattedMessage id="omsorgsdager.overføring.punch.modal.sendtInn" />
-                  </span>
-                </FlexRow>
-                <VerticalSpacer sixteenPx={true} />
-                <NavLink to={'#'}>
-                  <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
-                </NavLink>
-              </>
-            )}
-            {innsendingsstatus === Innsendingsstatus.Innsendingsfeil && (
-              <>
-                <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil" />
-                <VerticalSpacer sixteenPx={true} />
-                {JSON.stringify(innsendingsfeil)}
-              </>
-            )}
-          </>
-        </ModalWrapper>
+          innsendingsfeil={innsendingsfeil}
+        />
       </section>
     </Form>
   );

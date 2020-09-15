@@ -17,6 +17,7 @@ interface IRadioInputProps {
 }
 
 const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
+  label,
   feltnavn,
   optionValues,
   retning = 'horisontal',
@@ -34,10 +35,11 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
     <SkjemaGruppe
       legend={
         <div className="radio-legend">
-          {intlHelper(
-            intl,
-            `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`
-          )}
+          {label ||
+            intlHelper(
+              intl,
+              `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`
+            )}
         </div>
       }
       feil={touched && error}

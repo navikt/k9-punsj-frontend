@@ -1,6 +1,6 @@
 import {
   Innsendingsstatus,
-  IOverføringPunchSkjema,
+  IOverføringPunchSkjema, tomtSkjema,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import { convertResponseToError, post } from '../../../utils';
 import { ApiPath } from '../../../apiConfig';
@@ -99,30 +99,7 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
 };
 
 const initialState: IOverføringPunchState = {
-  skjema: {
-    avsender: {
-      fødselsnummer: null,
-    },
-    arbeidssituasjon: {
-      erArbeidstaker: false,
-      erFrilanser: false,
-      erSelvstendigNæringsdrivende: false,
-      metaHarFeil: null,
-    },
-    omsorgenDelesMed: {
-      fødselsnummer: '',
-      antallOverførteDager: 0,
-      mottaker: null,
-      samboerSiden: null,
-    },
-    aleneOmOmsorgen: null,
-    barn: [
-      {
-        fødselsnummer: null,
-      },
-    ],
-    mottaksdato: null,
-  },
+  skjema: tomtSkjema,
   innsendingsstatus: Innsendingsstatus.IkkeSendtInn,
 };
 

@@ -12,19 +12,24 @@ describe('Signaturskjema', () => {
   test('gir feil ved påkrevde verdier', () => {
     const tomtSkjema: ISignaturSkjema = {
       signert: null,
-      fødselsnummer: '',
+      identitetsnummer: '',
+      sammeIdentSomRegistrert: null,
     };
 
     const errors = validerSkjemaFn(tomtSkjema);
 
     expect(errors?.signert).toEqual('skjema.validering.påkrevd');
-    expect(errors?.fødselsnummer).toEqual('skjema.validering.påkrevd');
+    expect(errors?.identitetsnummer).toEqual('skjema.validering.påkrevd');
+    expect(errors?.sammeIdentSomRegistrert).toEqual(
+      'skjema.validering.påkrevd'
+    );
   });
 
   test('gir ingen feil ved utfylte verdier', () => {
     const utfyltSkjema: ISignaturSkjema = {
       signert: JaNei.JA,
-      fødselsnummer: '28108602963',
+      identitetsnummer: '28108602963',
+      sammeIdentSomRegistrert: JaNei.NEI,
     };
 
     const errors = validerSkjemaFn(utfyltSkjema);
