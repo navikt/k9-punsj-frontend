@@ -44,7 +44,7 @@
     "popper.js": "^1.16.1",
     "promise": "^8.0.3",
     "prop-types": "^15.7.2",
-    "re-resizable": "^6.5.4",
+    "re-resizable": "^6.5.5",
     "react": "^16.13.1",
     "react-aria-menubutton": "^7.0.0",
     "react-bootstrap": "^1.0.1",
