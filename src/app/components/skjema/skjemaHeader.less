@@ -7,5 +7,11 @@
 
 .skjemaheader__avbryt {
   color: @navBla;
+  display: flex;
+  flex-wrap: nowrap;
   white-space: nowrap;
+
+  & > :not(:last-child) {
+    margin-right: 0.5em;
+  }
 }

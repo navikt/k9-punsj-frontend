@@ -9,6 +9,7 @@ import { Form, useFormikContext } from 'formik';
 import RadioInput from '../../../components/skjema/RadioInput';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { ISignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
+import { Nesteknapp, Tilbakeknapp } from 'nav-frontend-ikonknapper';
 
 interface IOverføringIdentSjekk {
   journalpostensRegistrertePersonident?: string;
@@ -75,13 +76,13 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
         </>
       )}
       <Knapper>
-        <Knapp htmlType="button" onClick={() => setHash('/')}>
+        <Tilbakeknapp htmlType="button" onClick={() => setHash('/')}>
           <FormattedMessage id="ident.knapp.forrigesteg" />
-        </Knapp>
+        </Tilbakeknapp>
         {erSignert && (
-          <Knapp htmlType="submit" type="hoved">
+          <Nesteknapp htmlType="submit" type="hoved">
             <FormattedMessage id="ident.knapp.nestesteg" />
-          </Knapp>
+          </Nesteknapp>
         )}
         {signert === JaNei.NEI && (
           <Knapp htmlType="button" type="hoved" onClick={() => undefined}>

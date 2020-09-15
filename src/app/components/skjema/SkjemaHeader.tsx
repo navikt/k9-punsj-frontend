@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import FlexRow from '../flexgrid/FlexRow';
 import './skjemaHeader.less';
 import VerticalSpacer from '../VerticalSpacer';
+import KryssSVG from '../../assets/SVG/KryssSVG';
 
 interface ISkjemaHeaderProps {
   headerTextId: string;
@@ -19,7 +20,10 @@ const SkjemaHeader: React.FunctionComponent<ISkjemaHeaderProps> = ({
           <FormattedMessage id={headerTextId} />
         </h1>
         <Link to="/" className="skjemaheader__avbryt">
-          <FormattedMessage id="skjemaheader.avbryt" />
+          <span>
+            <FormattedMessage id="skjemaheader.avbryt" />
+          </span>
+          <KryssSVG />
         </Link>
       </FlexRow>
       <VerticalSpacer sixteenPx={true} hr={true} />

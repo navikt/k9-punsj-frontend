@@ -20,7 +20,7 @@ import LabelValue from '../../../components/skjema/LabelValue';
 import { Undertittel } from 'nav-frontend-typografi';
 import './overføringPunchSkjema.less';
 import { IError } from '../../../models/types';
-import { Xknapp } from 'nav-frontend-ikonknapper';
+import { Tilbakeknapp, Xknapp } from 'nav-frontend-ikonknapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import DateInput from '../../../components/skjema/DateInput';
 import InnsendingModal from './InnsendingModal';
@@ -129,7 +129,10 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                     feltnavn={`barn[${index}].identitetsnummer`}
                     bredde="M"
                   />
-                  <DateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
+                  <DateInput
+                    feltnavn={`barn[${index}].fødselsdato`}
+                    bredde="M"
+                  />
                   {values.barn.length > 1 && (
                     <Xknapp
                       htmlType="button"
@@ -177,13 +180,13 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
-          <Knapp
+          <Tilbakeknapp
             htmlType="button"
             onClick={gåTilForrigeSteg}
             disabled={disabled}
           >
             <FormattedMessage id="ident.knapp.forrigesteg" />
-          </Knapp>
+          </Tilbakeknapp>
           <Knapp
             htmlType="submit"
             type="hoved"
