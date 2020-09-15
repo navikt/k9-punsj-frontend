@@ -20,9 +20,6 @@ describe('Signaturskjema', () => {
 
     expect(errors?.signert).toEqual('skjema.validering.påkrevd');
     expect(errors?.identitetsnummer).toEqual('skjema.validering.påkrevd');
-    expect(errors?.sammeIdentSomRegistrert).toEqual(
-      'skjema.validering.påkrevd'
-    );
   });
 
   test('gir ingen feil ved utfylte verdier', () => {
@@ -30,6 +27,18 @@ describe('Signaturskjema', () => {
       signert: JaNei.JA,
       identitetsnummer: '28108602963',
       sammeIdentSomRegistrert: JaNei.NEI,
+    };
+
+    const errors = validerSkjemaFn(utfyltSkjema);
+
+    expect(errors).toEqual({});
+  });
+
+  test('skal ikke gi feil dersom ident er utfylt og sammeIdentSomRegistrert er null', () => {
+    const utfyltSkjema: ISignaturSkjema = {
+      signert: JaNei.JA,
+      identitetsnummer: '28108602963',
+      sammeIdentSomRegistrert: null
     };
 
     const errors = validerSkjemaFn(utfyltSkjema);

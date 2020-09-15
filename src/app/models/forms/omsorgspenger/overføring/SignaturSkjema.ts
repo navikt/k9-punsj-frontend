@@ -18,14 +18,6 @@ const fnrFeltValidator: IFeltValidator<string, ISignaturSkjema> = {
   validatorer: [påkrevd, fødselsnummervalidator],
 };
 
-const sammeIdentSomRegistrertValidator: IFeltValidator<
-  JaNei,
-  ISignaturSkjema
-> = {
-  feltPath: 'sammeIdentSomRegistrert',
-  validatorer: [påkrevd],
-};
-
 const signaturFeltValidator: IFeltValidator<JaNei, ISignaturSkjema> = {
   feltPath: 'signert',
   validatorer: [påkrevd],
@@ -33,6 +25,6 @@ const signaturFeltValidator: IFeltValidator<JaNei, ISignaturSkjema> = {
 
 export const validerSignaturSkjema = (intl: IntlShape) =>
   validerSkjema<ISignaturSkjema>(
-    [fnrFeltValidator, sammeIdentSomRegistrertValidator, signaturFeltValidator],
+    [fnrFeltValidator, signaturFeltValidator],
     intl
   );
