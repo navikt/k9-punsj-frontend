@@ -9,6 +9,7 @@ import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
 import { apiUrl, setQueryInHash } from '../../utils';
+import { ToggleGruppe } from 'nav-frontend-toggle';
 import './pdfVisning.less';
 
 const goToDok = (nr: number) => {
@@ -81,28 +82,13 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({
     >
       <Panel className="punch_pdf">
         {dokumenter.length > 1 && (
-          <div className="fleredokumenter">
-            <div>
-              <p>
-                <FormattedMessage
-                  id="dokument.flere"
-                  values={{
-                    doknr: `${dokumentnummer}`,
-                    totalnr: dokumenter.length.toString(),
-                  }}
-                />
-              </p>
+            <div className="fleredokumenter">
+              <ToggleGruppe defaultToggles={ dokumenter.map((_, i) => ({
+                children: `Dokument ${i + 1}/${dokumenter.length}`,
+                pressed: dokumentnummer === i + 1,
+                onClick: () => goToDok(i + 1)
+              }) )}/>
             </div>
-            {dokumenter.map((_, i) => (
-              <Flatknapp
-                key={i}
-                onClick={() => goToDok(i + 1)}
-                className={dokumentnummer === i + 1 ? 'aktiv' : undefined}
-              >
-                {i + 1}
-              </Flatknapp>
-            ))}
-          </div>
         )}
         <iframe src={pdfUrl} />
         <div className="knapperad">
