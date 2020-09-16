@@ -1,12 +1,14 @@
 import {
   Innsendingsstatus,
-  IOverføringPunchSkjema, tomtSkjema,
+  IOverføringPunchSkjema,
+  tomtSkjema,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import { convertResponseToError, post } from '../../../utils';
 import { ApiPath } from '../../../apiConfig';
 import { RootStateType } from '../../RootState';
 import { Dispatch } from 'redux';
 import { IError } from '../../../models/types';
+import { resetDedupKey } from '../FellesReducer';
 
 export interface IOverføringPunchState {
   skjema: IOverføringPunchSkjema;
@@ -69,17 +71,20 @@ export const innsendingsfeil = (error: IError): IInnsendingsfeilAction => ({
 interface IOverførDagerDTO {
   søknad: IOverføringPunchSkjema;
   journalpostId: string;
+  dedupKey: string;
 }
 
 export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
   dispatch: Dispatch,
-  state: () => RootStateType
+  getState: () => RootStateType
 ) => {
   dispatch(senderInnSkjema());
 
-  const postBody = {
-    journalpostId: state().punchState.journalpost!.journalpostId,
+  const { punchState, felles } = getState();
+  const postBody: IOverførDagerDTO = {
+    journalpostId: punchState.journalpost!.journalpostId,
     søknad: skjema,
+    dedupKey: felles.dedupKey,
   };
   post<IOverførDagerDTO>(
     ApiPath.OMS_OVERFØR_DAGER,
@@ -90,7 +95,8 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
     (response) => {
       switch (response.status) {
         case 202:
-          return dispatch(skjemaErSendtInn());
+          dispatch(skjemaErSendtInn());
+          return dispatch(resetDedupKey());
         default:
           return dispatch(innsendingsfeil(convertResponseToError(response)));
       }
