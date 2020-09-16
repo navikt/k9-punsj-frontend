@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface IPlussSVGProps {
-  alt: string;
+  alt?: string;
 }
 
 const PlussSVG: React.FunctionComponent<IPlussSVGProps> = ({ alt }) => (

@@ -24,6 +24,7 @@ import { Tilbakeknapp, Xknapp } from 'nav-frontend-ikonknapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import DateInput from '../../../components/skjema/DateInput';
 import InnsendingModal from './InnsendingModal';
+import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
@@ -142,14 +143,12 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                   )}
                 </FlexRow>
               ))}
-              <Knapp
-                onClick={() => push({ identitetsnummer: '' })}
-                htmlType="button"
-                type="flat"
-                mini={true}
-              >
-                <FormattedMessage id="omsorgsdager.overføring.barn.leggTil" />
-              </Knapp>
+              <LeggTilKnapp
+                onClick={() =>
+                  push({ identitetsnummer: null, fødselsdato: null })
+                }
+                tekstId="omsorgsdager.overføring.barn.leggTil"
+              />
             </SkjemaGruppe>
           )}
         />
