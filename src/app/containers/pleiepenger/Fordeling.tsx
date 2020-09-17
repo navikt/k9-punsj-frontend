@@ -8,7 +8,6 @@ import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
 import { Radio, RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo, useState } from 'react';
@@ -25,6 +24,7 @@ import { Sakstyper } from '../SakstypeImpls';
 import './fordeling.less';
 import LabelValue from '../../components/skjema/LabelValue';
 import VerticalSpacer from '../../components/VerticalSpacer';
+import FormPanel from '../../components/FormPanel';
 
 export interface IFordelingStateProps {
   punchState: IPleiepengerPunchState;
@@ -108,7 +108,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
   return (
     <div className="fordeling-container">
-      <Panel border={true} className="panel-form">
+      <FormPanel>
         <div className="fordeling-page">
           {!!fordelingState.omfordelingError && (
             <AlertStripeFeil>
@@ -207,7 +207,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             punchState={punchState}
           />
         </div>
-      </Panel>
+      </FormPanel>
       <PdfVisning
         dokumenter={punchState.journalpost!.dokumenter}
         journalpostId={punchState.journalpost!.journalpostId}

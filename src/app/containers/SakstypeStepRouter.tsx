@@ -4,15 +4,14 @@ import useRedirect from '../hooks/useRedirect';
 import { ISakstypePunch, ISakstypeStep } from '../models/Sakstype';
 import Page from '../components/page/Page';
 import intlHelper from '../utils/intlUtils';
-import Panel from 'nav-frontend-paneler';
 import PdfVisning from '../components/pdf/PdfVisning';
 import { RootStateType } from '../state/RootState';
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { IDokument } from '../models/types';
 import SkjemaHeader from '../components/skjema/SkjemaHeader';
-import './sakstypeStepRouter.less';
 import { getPathForValues, setHash } from '../utils';
+import FormPanel from '../components/FormPanel';
 
 interface ISakstypePunchProps {
   sakstypeConfig: ISakstypePunch;
@@ -47,7 +46,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
   return (
     <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
       <div className="panels-wrapper" id="panels-wrapper">
-        <Panel className="sakstype_punch_form" border={true}>
+        <FormPanel>
           <SkjemaHeader headerTextId={`${navn}.header`} />
           <Switch>
             {steps.map(({ path, getComponent, stepName, stepOrder }) => {
@@ -93,7 +92,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
               );
             })}
           </Switch>
-        </Panel>
+        </FormPanel>
 
         <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />
       </div>
