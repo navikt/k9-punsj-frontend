@@ -27,6 +27,7 @@ const SkjemaHeader: React.FunctionComponent<ISkjemaHeaderProps> = ({
         </Link>
       </FlexRow>
       <VerticalSpacer sixteenPx={true} hr={true} />
+      <VerticalSpacer thirtyTwoPx={true} />
     </>
   );
 };

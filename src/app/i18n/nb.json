@@ -21,7 +21,7 @@
   "Ukedag.4":                                                                                     "Fredag",
   "Ukedag.5":                                                                                     "Lørdag",
   "Ukedag.6":                                                                                     "Søndag",
-  "dokument.flere":                                                                               "Viser dokument {doknr} av {totalnr}.",
+  "dokument.flere":                                                                               "Dokument {doknr}/{totalnr}.",
   "dokument.skjul":                                                                               "Skjul",
   "dokument.nyttvindu":                                                                           "Åpne i nytt vindu",
   "soker1":                                                                                       "Søker 1",

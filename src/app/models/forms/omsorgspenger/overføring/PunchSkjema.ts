@@ -23,6 +23,11 @@ export enum Mottaker {
 
 type Dato = string;
 
+interface IBarn {
+  identitetsnummer: string | null;
+  fødselsdato: Dato | null;
+}
+
 export interface IOverføringPunchSkjema {
   identitetsnummer: string | null;
   arbeidssituasjon: {
@@ -33,10 +38,7 @@ export interface IOverføringPunchSkjema {
   };
   borINorge: JaNei | null;
   aleneOmOmsorgen: JaNei | null;
-  barn: {
-    identitetsnummer: string | null;
-    fødselsdato: Dato | null;
-  }[];
+  barn: IBarn[];
   omsorgenDelesMed: {
     identitetsnummer: string;
     mottaker: Mottaker | null;
@@ -65,7 +67,7 @@ export const tomtSkjema: IOverføringPunchSkjema = {
   barn: [
     {
       identitetsnummer: null,
-      fødselsdato: null
+      fødselsdato: null,
     },
   ],
   mottaksdato: null,

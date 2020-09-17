@@ -9,6 +9,7 @@ import {
 } from './reducers';
 import { ISakstypePunch } from '../models/Sakstype';
 import { OmsorgspengerOverføring } from '../containers/SakstypeImpls';
+import FellesReducer from './reducers/FellesReducer';
 
 const defaultReducers = {
   authState: AuthReducer,
@@ -17,6 +18,7 @@ const defaultReducers = {
   punchFormState: PunchFormReducer,
   punchState: PunchReducer,
   signaturState: SignaturReducer,
+  felles: FellesReducer,
 };
 
 const lagReducerForSakstype = (sakstype: ISakstypePunch) => {

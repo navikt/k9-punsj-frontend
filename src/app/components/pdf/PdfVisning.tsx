@@ -82,13 +82,23 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({
     >
       <Panel className="punch_pdf">
         {dokumenter.length > 1 && (
-            <div className="fleredokumenter">
-              <ToggleGruppe defaultToggles={ dokumenter.map((_, i) => ({
-                children: `Dokument ${i + 1}/${dokumenter.length}`,
+          <div className="fleredokumenter">
+            <ToggleGruppe
+              defaultToggles={dokumenter.map((_, i) => ({
+                children: (
+                  <FormattedMessage
+                    id="dokument.flere"
+                    values={{
+                      doknr: `${dokumentnummer}`,
+                      totalnr: dokumenter.length.toString(),
+                    }}
+                  />
+                ),
                 pressed: dokumentnummer === i + 1,
-                onClick: () => goToDok(i + 1)
-              }) )}/>
-            </div>
+                onClick: () => goToDok(i + 1),
+              }))}
+            />
+          </div>
         )}
         <iframe src={pdfUrl} />
         <div className="knapperad">
