@@ -1,8 +1,10 @@
 import React, { ReactNode } from 'react';
 import { CheckboxGruppe } from 'nav-frontend-skjema';
 import { useField } from 'formik';
+import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import CheckboxInput from './CheckboxInput';
+import './checkboxInputGruppe.less';
 
 interface ICheckboxInputGruppeProps {
   label?: ReactNode;
@@ -10,6 +12,7 @@ interface ICheckboxInputGruppeProps {
   checkboxFeltnavn: string[];
   metaHarFeilFeltnavn: string;
   disabled?: boolean;
+  styling?: 'medPanel' | 'utenPanel';
 }
 
 const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = ({
@@ -18,6 +21,7 @@ const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = 
   checkboxFeltnavn,
   metaHarFeilFeltnavn,
   disabled = false,
+  styling = 'utenPanel',
 }) => {
   const { error = {}, touched } = useField<{}>(feltnavn)[1];
 
@@ -29,12 +33,14 @@ const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = 
         label || <FormattedMessage id={`skjema.felt.${feltnavn}.label`} />
       }
       feil={touched && feil}
+      className={classNames({ checkboxpaneler: styling === 'medPanel' })}
     >
       {checkboxFeltnavn.map((checkboxnavn) => (
         <CheckboxInput
           feltnavn={`${feltnavn}.${checkboxnavn}`}
           key={checkboxnavn}
           disabled={disabled}
+          styling={styling}
         />
       ))}
     </CheckboxGruppe>

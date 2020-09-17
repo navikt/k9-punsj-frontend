@@ -7,7 +7,7 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Radio, RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
@@ -61,20 +61,20 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     const punchConfig = sakstypeConfig as ISakstypePunch;
 
     return (
-      <Knapp onClick={() => setHash(punchConfig.punchPath)}>
+      <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
         <FormattedMessage id="fordeling.knapp.punsj" />
-      </Knapp>
+      </Hovedknapp>
     );
   }
 
   return (
-    <Knapp
+    <Hovedknapp
       onClick={() =>
         omfordel(punchState.journalpost!.journalpostId, sakstypeConfig.navn)
       }
     >
       <FormattedMessage id="fordeling.knapp.omfordel" />
-    </Knapp>
+    </Hovedknapp>
   );
 };
 
@@ -122,6 +122,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           />
 
           <VerticalSpacer sixteenPx={true} hr={true} />
+          <VerticalSpacer twentyPx={true} />
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
             className="fordeling-page__options"
@@ -199,6 +200,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                 );
               })}
           </RadioGruppe>
+          <VerticalSpacer sixteenPx={true} />
           <Behandlingsknapp
             sakstypeConfig={konfigForValgtSakstype}
             omfordel={omfordel}

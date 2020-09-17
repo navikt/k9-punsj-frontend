@@ -48,7 +48,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
         retning="horisontal"
         styling="medPanel"
       />
-      <VerticalSpacer thirtyTwoPx={true} />
+      <VerticalSpacer twentyPx={true} />
       {skalViseSammeSomRegistrertRadios && (
         <RadioInput
           feltnavn="sammeIdentSomRegistrert"
@@ -65,7 +65,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
       )}
       {skalViseIdentInput && (
         <>
-          <VerticalSpacer thirtyTwoPx={true} />
+          <VerticalSpacer twentyPx={true} />
           <TextInput
             feltnavn="identitetsnummer"
             bredde="M"
@@ -75,6 +75,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
           />
         </>
       )}
+      <VerticalSpacer thirtyTwoPx={true} />
       <Knapper>
         <Tilbakeknapp htmlType="button" onClick={() => setHash('/')}>
           <FormattedMessage id="ident.knapp.forrigesteg" />

@@ -78,7 +78,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
       <section>
         <VerticalSpacer sixteenPx={true} />
         <DateInput feltnavn="mottaksdato" bredde="M" />
-        <VerticalSpacer thirtyTwoPx={true} dashed={true} />
+        <VerticalSpacer twentyPx={true} dashed={true} />
         <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
         </Undertittel>
@@ -88,34 +88,34 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           value={ident}
         />
         <VerticalSpacer sixteenPx={true} />
-        <FlexRow childrenMargin="medium">
-          <CheckboxInputGruppe
-            feltnavn="arbeidssituasjon"
-            checkboxFeltnavn={[
-              'erArbeidstaker',
-              'erFrilanser',
-              'erSelvstendigNæringsdrivende',
-            ]}
-            metaHarFeilFeltnavn="metaHarFeil"
-            disabled={disabled}
-          />
-          <RadioInput
-            feltnavn="borINorge"
-            optionValues={Object.values(JaNei)}
-            retning="vertikal"
-            styling="utenPanel"
-            disabled={disabled}
-          />
-        </FlexRow>
+        <CheckboxInputGruppe
+          feltnavn="arbeidssituasjon"
+          checkboxFeltnavn={[
+            'erArbeidstaker',
+            'erFrilanser',
+            'erSelvstendigNæringsdrivende',
+          ]}
+          metaHarFeilFeltnavn="metaHarFeil"
+          disabled={disabled}
+          styling="medPanel"
+        />
+        <VerticalSpacer sixteenPx={true} />
+        <RadioInput
+          feltnavn="borINorge"
+          optionValues={Object.values(JaNei)}
+          retning="horisontal"
+          styling="medPanel"
+          disabled={disabled}
+        />
         <VerticalSpacer sixteenPx={true} />
         <RadioInput
           feltnavn="aleneOmOmsorgen"
           optionValues={Object.values(JaNei)}
           retning="horisontal"
-          styling="utenPanel"
+          styling="medPanel"
           disabled={disabled}
         />
-        <VerticalSpacer dashed={true} thirtyTwoPx={true} />
+        <VerticalSpacer dashed={true} twentyPx={true} />
         <Undertittel tag="h2">
           <FormattedMessage id="skjema.felt.barn" />
         </Undertittel>
@@ -152,7 +152,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             </SkjemaGruppe>
           )}
         />
-        <VerticalSpacer dashed={true} thirtyTwoPx={true} />
+        <VerticalSpacer dashed={true} twentyPx={true} />
         <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
         </Undertittel>
@@ -162,21 +162,21 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
           bredde="M"
           disabled={disabled}
         />
-        <VerticalSpacer thirtyTwoPx={true} />
+        <VerticalSpacer sixteenPx={true} />
         <RadioInput
           feltnavn="omsorgenDelesMed.mottaker"
           optionValues={Object.values(Mottaker)}
           retning="horisontal"
-          styling="utenPanel"
+          styling="medPanel"
           disabled={disabled}
         />
+        <VerticalSpacer sixteenPx={true} />
         {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
           <>
             <DateInput feltnavn="omsorgenDelesMed.samboerSiden" bredde="M" />
-            <VerticalSpacer thirtyTwoPx={true} />
+            <VerticalSpacer sixteenPx={true} />
           </>
         )}
-        <VerticalSpacer sixteenPx={true} />
         <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
         <Knapper>
           <Tilbakeknapp
