@@ -1,30 +1,23 @@
-import { Sakstype } from 'app/models/enums';
-import { IFordelingState, IPleiepengerPunchState } from 'app/models/types';
-import {
-  omfordel as omfordelAction,
-  setSakstypeAction,
-} from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
+import {Sakstype} from 'app/models/enums';
+import {IFordelingState, IPleiepengerPunchState} from 'app/models/types';
+import {omfordel as omfordelAction, setSakstypeAction,} from 'app/state/actions';
+import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Radio, RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+import {AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {Hovedknapp} from 'nav-frontend-knapper';
+import {Radio, RadioGruppe, RadioPanel} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, { useMemo, useState } from 'react';
-import {
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
-import { connect } from 'react-redux';
+import React, {useMemo, useState} from 'react';
+import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
+import {connect} from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { ISakstypeDefault, ISakstypePunch } from '../../models/Sakstype';
-import { setHash } from '../../utils';
-import { Sakstyper } from '../SakstypeImpls';
+import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
+import {setHash} from '../../utils';
+import {Sakstyper} from '../SakstypeImpls';
 import './fordeling.less';
-import LabelValue from '../../components/skjema/LabelValue';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
+import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
 
 export interface IFordelingStateProps {
   punchState: IPleiepengerPunchState;
@@ -115,14 +108,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
               {intlHelper(intl, 'fordeling.omfordeling.feil')}
             </AlertStripeFeil>
           )}
-          <LabelValue
-            labelTextId="journalpost.id"
-            value={punchState.journalpost!.journalpostId}
-            retning="horisontal"
-          />
 
-          <VerticalSpacer sixteenPx={true} hr={true} />
-          <VerticalSpacer twentyPx={true} />
+          <JournalpostPanel journalpost={punchState.journalpost!}/>
+
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
             className="fordeling-page__options"

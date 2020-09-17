@@ -8,6 +8,7 @@ import SkjemaContext from '../../../components/skjema/SkjemaContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSkjema } from 'app/state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import { RootStateType } from '../../../state/RootState';
+import {JournalpostPanel} from "../../../components/journalpost-panel/JournalpostPanel";
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
@@ -19,26 +20,31 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
   gåTilNesteSteg,
 }) => {
   const dispatch = useDispatch();
-  const journalpostensRegistrertePersonident = useSelector(
-    (state: RootStateType) => state.punchState.journalpost?.norskIdent
-  );
 
-  return (
-    <SkjemaContext
-      onSubmitCallback={(values: ISignaturSkjema) => {
-        dispatch(setSkjema(values));
-        gåTilNesteSteg({ ident: values.identitetsnummer });
-      }}
-      initialValues={initialValues}
-      validerSkjema={validerSignaturSkjema}
-    >
-      <OverføringIdentSjekk
-        journalpostensRegistrertePersonident={
-          journalpostensRegistrertePersonident
-        }
-      />
-    </SkjemaContext>
-  );
+  const journalpost = useSelector(
+      (state: RootStateType) => state.punchState.journalpost!
+  )
+
+    return (
+        <SkjemaContext
+            onSubmitCallback={(values: ISignaturSkjema) => {
+                dispatch(setSkjema(values));
+                gåTilNesteSteg({ident: values.identitetsnummer});
+            }}
+            initialValues={initialValues}
+            validerSkjema={validerSignaturSkjema}
+        >
+            <div>
+                <JournalpostPanel journalpost={journalpost}/>
+                <OverføringIdentSjekk
+                    journalpostensRegistrertePersonident={
+                        journalpost.norskIdent
+                    }
+                />
+            </div>
+
+        </SkjemaContext>
+    );
 };
 
 export default OverføringIdentSjekkContainer;
