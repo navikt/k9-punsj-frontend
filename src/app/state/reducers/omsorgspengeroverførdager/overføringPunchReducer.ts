@@ -80,9 +80,9 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
 ) => {
   dispatch(senderInnSkjema());
 
-  const { punchState, felles } = getState();
+  const { felles } = getState();
   const postBody: IOverførDagerDTO = {
-    journalpostIder: [punchState.journalpost!.journalpostId],
+    journalpostIder: [felles.journalpost!.journalpostId],
     søknad: skjema,
     dedupKey: felles.dedupKey,
   };

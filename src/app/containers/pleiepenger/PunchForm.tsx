@@ -1031,9 +1031,9 @@ export class PunchFormComponent extends React.Component<
   }
 }
 
-const mapStateToProps = (state: RootStateType) => ({
-  punchFormState: state.punchFormState,
-  punchState: state.punchState,
+const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
+  punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
+  punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

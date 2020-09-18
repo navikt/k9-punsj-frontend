@@ -101,7 +101,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
 };
 
 const mapStateToProps = (state: RootStateType, ownProps: IStepRouterProps) => ({
-  dokumenter: state.punchState?.journalpost?.dokumenter,
+  dokumenter: state.felles.journalpost?.dokumenter,
   sakstypeState: state[ownProps.sakstypeConfig.navn],
 });
 

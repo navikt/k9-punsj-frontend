@@ -10,14 +10,17 @@ import {
 import { ISakstypePunch } from '../models/Sakstype';
 import { OmsorgspengerOverføring } from '../containers/SakstypeImpls';
 import FellesReducer from './reducers/FellesReducer';
+import { Sakstype } from '../models/enums';
 
 const defaultReducers = {
-  authState: AuthReducer,
+  [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
+    mapperOgFagsakerState: MapperOgFagsakerReducer,
+    punchFormState: PunchFormReducer,
+    punchState: PunchReducer,
+    signaturState: SignaturReducer,
+  }),
   fordelingState: FordelingReducer,
-  mapperOgFagsakerState: MapperOgFagsakerReducer,
-  punchFormState: PunchFormReducer,
-  punchState: PunchReducer,
-  signaturState: SignaturReducer,
+  authState: AuthReducer,
   felles: FellesReducer,
 };
 

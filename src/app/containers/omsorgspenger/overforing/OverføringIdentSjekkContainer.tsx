@@ -22,7 +22,7 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
   const dispatch = useDispatch();
 
   const journalpost = useSelector(
-    (state: RootStateType) => state.punchState.journalpost!
+    (state: RootStateType) => state.felles.journalpost!
   );
 
   return (

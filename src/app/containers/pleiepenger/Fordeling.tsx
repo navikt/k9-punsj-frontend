@@ -1,26 +1,30 @@
 import {Sakstype} from 'app/models/enums';
-import {IFordelingState, IPleiepengerPunchState} from 'app/models/types';
+import {IFordelingState, IJournalpost} from 'app/models/types';
 import {omfordel as omfordelAction, setSakstypeAction,} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
-import {Hovedknapp} from 'nav-frontend-knapper';
-import {Radio, RadioGruppe, RadioPanel} from 'nav-frontend-skjema';
+import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
+import { Hovedknapp } from 'nav-frontend-knapper';
+import { Radio, RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, {useMemo, useState} from 'react';
-import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
-import {connect} from 'react-redux';
+import React, { useMemo, useState } from 'react';
+import {
+  FormattedMessage,
+  injectIntl,
+  WrappedComponentProps,
+} from 'react-intl';
+import { connect } from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
-import {setHash} from '../../utils';
-import {Sakstyper} from '../SakstypeImpls';
+import { ISakstypeDefault, ISakstypePunch } from '../../models/Sakstype';
+import { setHash } from '../../utils';
+import { Sakstyper } from '../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
 
 export interface IFordelingStateProps {
-  punchState: IPleiepengerPunchState;
+  journalpost?: IJournalpost;
   fordelingState: IFordelingState;
   journalpostId: string;
 }
@@ -36,7 +40,7 @@ type IFordelingProps = WrappedComponentProps &
 
 type BehandlingsknappProps = Pick<
   IFordelingProps,
-  'omfordel' | 'punchState'
+  'omfordel' | 'journalpost'
 > & {
   sakstypeConfig?: ISakstypeDefault;
 };
@@ -44,7 +48,7 @@ type BehandlingsknappProps = Pick<
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
   sakstypeConfig,
   omfordel,
-  punchState,
+  journalpost,
 }) => {
   if (!sakstypeConfig) {
     return null;
@@ -62,9 +66,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
   return (
     <Hovedknapp
-      onClick={() =>
-        omfordel(punchState.journalpost!.journalpostId, sakstypeConfig.navn)
-      }
+      onClick={() => omfordel(journalpost!.journalpostId, sakstypeConfig.navn)}
     >
       <FormattedMessage id="fordeling.knapp.omfordel" />
     </Hovedknapp>
@@ -74,7 +76,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
   props: IFordelingProps
 ) => {
-  const { intl, fordelingState, omfordel, punchState } = props;
+  const { intl, fordelingState, omfordel, journalpost } = props;
   const { sakstype } = fordelingState;
   const sakstyper: ISakstypeDefault[] = useMemo(
     () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -109,7 +111,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             </AlertStripeFeil>
           )}
 
-          <JournalpostPanel journalpost={punchState.journalpost!}/>
+          <JournalpostPanel journalpost={journalpost!}/>
 
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
@@ -192,20 +194,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           <Behandlingsknapp
             sakstypeConfig={konfigForValgtSakstype}
             omfordel={omfordel}
-            punchState={punchState}
+            journalpost={journalpost}
           />
         </div>
       </FormPanel>
       <PdfVisning
-        dokumenter={punchState.journalpost!.dokumenter}
-        journalpostId={punchState.journalpost!.journalpostId}
+        dokumenter={journalpost!.dokumenter}
+        journalpostId={journalpost!.journalpostId}
       />
     </div>
   );
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-  punchState: state.punchState,
+  journalpost: state.felles.journalpost,
   fordelingState: state.fordelingState,
 });
 

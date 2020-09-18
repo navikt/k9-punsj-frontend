@@ -66,8 +66,6 @@ const setupPunchPage = (
       : journalpostinfo;
 
   const punchState: IPleiepengerPunchState = {
-    journalpost,
-    isJournalpostLoading: false,
     step: 0,
     ident1: '',
     ident2: null,
@@ -76,6 +74,7 @@ const setupPunchPage = (
 
   const punchPageStateProps: IPunchPageStateProps = {
     punchState,
+    journalpost,
   };
 
   const punchPageComponentProps: IPunchPageComponentProps = {

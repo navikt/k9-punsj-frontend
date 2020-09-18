@@ -1,25 +1,31 @@
-import { JournalpostLoaderImpl } from '../../app/containers/JournalpostLoader';
+import {
+  JournalpostLoaderImpl,
+  JournapostLoaderProps,
+} from '../../app/containers/JournalpostLoader';
 import { render, RenderResult } from '@testing-library/react';
 import React from 'react';
-import { IPleiepengerPunchState } from '../../app/models/types';
+import { IJournalpost } from '../../app/models/types';
 import { shallow } from 'enzyme';
 
 jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
 
-const setupLoader = (
-  punchState: IPleiepengerPunchState,
-  renderedOnLoad: () => React.ReactNode
-): RenderResult => {
-  const getJournalpost = jest.fn();
-  const journalpostId = '200';
-
+const setupLoader = ({
+  journalpost,
+  renderOnLoadComplete = () => '',
+  getJournalpost = jest.fn(),
+  journalpostId = '200',
+  journalpostRequestError,
+  isJournalpostLoading,
+}: Partial<JournapostLoaderProps>): RenderResult => {
   const loader = render(
     <JournalpostLoaderImpl
       journalpostId={journalpostId}
-      renderOnLoadComplete={renderedOnLoad}
+      renderOnLoadComplete={renderOnLoadComplete}
       getJournalpost={getJournalpost}
-      punchState={punchState}
+      journalpost={journalpost}
+      journalpostRequestError={journalpostRequestError}
+      isJournalpostLoading={isJournalpostLoading}
     />
   );
 
@@ -35,24 +41,19 @@ describe('JournalpostLoader', () => {
     const testId = 'test-id';
     const renderedOnLoad = () => <div data-testid={testId} />;
 
-    const punchStateMedDokumenter: IPleiepengerPunchState = {
-      step: 0,
-      ident1: '',
-      ident2: null,
-      journalpost: {
-        dokumenter: [
-          {
-            dokumentId: '123',
-          },
-        ],
-        journalpostId,
-      },
+    const journalpost = {
+      dokumenter: [
+        {
+          dokumentId: '123',
+        },
+      ],
+      journalpostId,
     };
 
-    const { getByTestId } = setupLoader(
-      punchStateMedDokumenter,
-      renderedOnLoad
-    );
+    const { getByTestId } = setupLoader({
+      journalpost,
+      renderOnLoadComplete: renderedOnLoad,
+    });
 
     expect(getByTestId(testId)).toBeDefined();
   });
@@ -61,13 +62,10 @@ describe('JournalpostLoader', () => {
     const testId = 'test-id';
     const renderedOnLoad = () => <div data-testid={testId} />;
 
-    const punchStateMedError: IPleiepengerPunchState = {
-      step: 0,
-      ident1: '',
-      ident2: null,
+    const { queryByTestId } = setupLoader({
       journalpostRequestError: { status: 404 },
-    };
-    const { queryByTestId } = setupLoader(punchStateMedError, renderedOnLoad);
+      renderOnLoadComplete: renderedOnLoad,
+    });
 
     expect(queryByTestId(testId)).toBeNull();
   });
@@ -76,20 +74,10 @@ describe('JournalpostLoader', () => {
     const journalpostId = '200';
     const testId = 'test-id';
     const renderedOnLoad = () => <div data-testid={testId} />;
-    const punchStateLoading: IPleiepengerPunchState = {
-      step: 0,
-      ident1: '',
-      ident2: null,
-      isJournalpostLoading: true,
-      journalpost: {
-        dokumenter: [],
-        journalpostId,
-      },
-    };
 
     const journalpost = shallow(
       <JournalpostLoaderImpl
-        punchState={punchStateLoading}
+        isJournalpostLoading={true}
         renderOnLoadComplete={renderedOnLoad}
         journalpostId={journalpostId}
         getJournalpost={jest.fn()}
@@ -104,19 +92,14 @@ describe('JournalpostLoader', () => {
     const testId = 'test-id';
     const renderedOnLoad = () => <div data-testid={testId} />;
 
-    const punchStateIngenDokumenter: IPleiepengerPunchState = {
-      step: 0,
-      ident1: '',
-      ident2: null,
-      journalpost: {
-        dokumenter: [],
-        journalpostId,
-      },
+    const journalpostIngenDokumenter: IJournalpost = {
+      dokumenter: [],
+      journalpostId,
     };
 
     const journalpost = shallow(
       <JournalpostLoaderImpl
-        punchState={punchStateIngenDokumenter}
+        journalpost={journalpostIngenDokumenter}
         renderOnLoadComplete={renderedOnLoad}
         journalpostId={journalpostId}
         getJournalpost={jest.fn()}

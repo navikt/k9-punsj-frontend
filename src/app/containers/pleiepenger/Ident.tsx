@@ -1,6 +1,6 @@
 import { IPunchPageComponentState } from 'app/containers/pleiepenger/PunchPage';
 import { JaNei, PunchStep } from 'app/models/enums';
-import { IPleiepengerPunchState, ISignaturState } from 'app/models/types';
+import { IJournalpost, ISignaturState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import {
   setSignaturAction,
@@ -21,7 +21,7 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
 export interface IIdentStateProps {
-  punchState: IPleiepengerPunchState;
+  journalpost?: IJournalpost;
   signaturState: ISignaturState;
 }
 
@@ -47,7 +47,7 @@ type IIdentProps = IIdentStateProps &
 export const IdentComponent: React.FunctionComponent<IIdentProps> = (
   props: IIdentProps
 ) => {
-  const { intl, signaturState, punchState, identInputValues } = props;
+  const { intl, signaturState, identInputValues, journalpost } = props;
   const { signert } = signaturState;
 
   React.useEffect(() => {
@@ -113,7 +113,7 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
       {signert === JaNei.NEI && (
         <Knapp
           className="knapp-usignert"
-          onClick={() => props.usignert(punchState.journalpost!.journalpostId)}
+          onClick={() => props.usignert(journalpost!.journalpostId)}
         >
           {intlHelper(intl, 'ident.knapp.usignert')}
         </Knapp>
@@ -142,9 +142,9 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
   );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-  punchState: state.punchState,
-  signaturState: state.signaturState,
+const mapStateToProps = (state: RootStateType): IIdentStateProps => ({
+  journalpost: state.felles.journalpost,
+  signaturState: state.PLEIEPENGER_SYKT_BARN.signaturState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
