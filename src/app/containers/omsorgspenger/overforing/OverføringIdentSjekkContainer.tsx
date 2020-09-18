@@ -20,7 +20,7 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
 }) => {
   const dispatch = useDispatch();
   const journalpostensRegistrertePersonident = useSelector(
-    (state: RootStateType) => state.punchState.journalpost?.norskIdent
+    (state: RootStateType) => state.felles.journalpost?.norskIdent
   );
 
   return (

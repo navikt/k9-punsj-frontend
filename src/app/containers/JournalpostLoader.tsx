@@ -4,12 +4,17 @@ import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { IPleiepengerPunchState } from '../models/types';
-import { getJournalpost as getJournalpostAction } from '../state/actions';
+import { IError, IJournalpost } from '../models/types';
+import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
 import { RootStateType } from '../state/RootState';
 
-interface IJournalPostProps {
-  punchState: IPleiepengerPunchState;
+interface IJournaPostStateProps {
+  journalpost?: IJournalpost;
+  isJournalpostLoading?: boolean;
+  journalpostRequestError?: IError;
+}
+
+interface IJournalpostProps {
   renderOnLoadComplete: () => React.ReactNode;
   journalpostId: string;
 }
@@ -18,14 +23,23 @@ interface IDispatchProps {
   getJournalpost: typeof getJournalpostAction;
 }
 
-export const JournalpostLoaderImpl: React.FunctionComponent<
-  IJournalPostProps & IDispatchProps
-> = ({ renderOnLoadComplete, punchState, getJournalpost, journalpostId }) => {
+export type JournapostLoaderProps = IJournaPostStateProps &
+  IJournalpostProps &
+  IDispatchProps;
+
+export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProps> = ({
+  renderOnLoadComplete,
+  isJournalpostLoading,
+  getJournalpost,
+  journalpostId,
+  journalpost,
+  journalpostRequestError,
+}) => {
   useEffect(() => {
     getJournalpost(journalpostId);
   }, [journalpostId]);
 
-  if (punchState.isJournalpostLoading) {
+  if (isJournalpostLoading) {
     return (
       <Container style={{ height: '100%' }}>
         <Row
@@ -40,7 +54,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<
     );
   }
 
-  if (!!punchState.journalpostRequestError) {
+  if (!!journalpostRequestError) {
     return (
       <AlertStripeFeil>
         <FormattedMessage id="startPage.feil.journalpost" />
@@ -48,11 +62,11 @@ export const JournalpostLoaderImpl: React.FunctionComponent<
     );
   }
 
-  if (!punchState.journalpost) {
+  if (!journalpost) {
     return null;
   }
 
-  if (!punchState.journalpost.dokumenter.length) {
+  if (!journalpost.dokumenter.length) {
     return (
       <AlertStripeFeil>
         <FormattedMessage id="startPage.feil.ingendokumenter" />
@@ -63,8 +77,10 @@ export const JournalpostLoaderImpl: React.FunctionComponent<
   return <>{renderOnLoadComplete()}</>;
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-  punchState: state.punchState,
+const mapStateToProps = ({ felles }: RootStateType): IJournaPostStateProps => ({
+  journalpost: felles.journalpost,
+  journalpostRequestError: felles.journalpostRequestError,
+  isJournalpostLoading: felles.isJournalpostLoading,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

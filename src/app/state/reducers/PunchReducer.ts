@@ -7,7 +7,6 @@ export const initialState: IPleiepengerPunchState = {
     step: PunchStep.IDENT,
     ident1: '',
     ident2: null,
-    journalpost: undefined
 };
 
 export function PunchReducer(
@@ -45,30 +44,6 @@ export function PunchReducer(
                 step: PunchStep.IDENT,
                 ident1: '',
                 ident2: null
-            };
-
-        case PunchActionKeys.JOURNALPOST_SET:
-            return {
-                ...punchState,
-                journalpost: action.journalpost,
-                isJournalpostLoading: false,
-                journalpostRequestError: undefined
-            };
-
-        case PunchActionKeys.JOURNALPOST_LOAD:
-            return {
-                ...punchState,
-                journalpost: undefined,
-                isJournalpostLoading: true,
-                journalpostRequestError: undefined
-            };
-
-        case PunchActionKeys.JOURNALPOST_REQUEST_ERROR:
-            return {
-                ...punchState,
-                journalpost: undefined,
-                isJournalpostLoading: false,
-                journalpostRequestError: undefined
             };
 
         default:

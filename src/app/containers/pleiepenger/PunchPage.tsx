@@ -8,7 +8,7 @@ import { PunchForm } from 'app/containers/pleiepenger/PunchForm';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
-import { IPath, IPleiepengerPunchState } from 'app/models/types';
+import { IJournalpost, IPath, IPleiepengerPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
@@ -29,6 +29,7 @@ import PdfVisning from '../../components/pdf/PdfVisning';
 
 export interface IPunchPageStateProps {
   punchState: IPleiepengerPunchState;
+  journalpost?: IJournalpost;
 }
 
 export interface IPunchPageDispatchProps {
@@ -98,8 +99,8 @@ export class PunchPageComponent extends React.Component<
   }
 
   private content() {
-    const { punchState, journalpostid } = this.props;
-    const dokumenter = punchState.journalpost?.dokumenter || [];
+    const { punchState, journalpostid, journalpost } = this.props;
+    const dokumenter = journalpost?.dokumenter || [];
 
     return (
       <div className="panels-wrapper" id="panels-wrapper">
@@ -124,14 +125,14 @@ export class PunchPageComponent extends React.Component<
   private identInput = (state: IPunchPageComponentState) => (
     disabled: boolean
   ) => {
-    const { punchState, intl } = this.props;
+    const { punchState, intl, journalpost } = this.props;
     const skalViseToFelter =
       punchState.step === PunchStep.IDENT || punchState.ident2;
     const skalViseFeilmelding = (ident: string | null) =>
       ident && ident.length && !disabled && !IdentRules.isIdentValid(ident);
     const identer = [punchState.ident1, punchState.ident2];
     const antallIdenter = identer.filter((id) => id && id.length).length;
-    const journalpostident = punchState.journalpost?.norskIdent || '';
+    const journalpostident = journalpost?.norskIdent || '';
     return (
       <div>
         <Input
@@ -269,7 +270,8 @@ export class PunchPageComponent extends React.Component<
 }
 
 const mapStateToProps = (state: RootStateType) => ({
-  punchState: state.punchState,
+  punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
+  journalpost: state.felles.journalpost,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

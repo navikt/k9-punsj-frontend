@@ -1,5 +1,5 @@
 import { Sakstype } from 'app/models/enums';
-import { IFordelingState, IPleiepengerPunchState } from 'app/models/types';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
   omfordel as omfordelAction,
   setSakstypeAction,
@@ -27,7 +27,7 @@ import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 
 export interface IFordelingStateProps {
-  punchState: IPleiepengerPunchState;
+  journalpost?: IJournalpost;
   fordelingState: IFordelingState;
   journalpostId: string;
 }
@@ -43,7 +43,7 @@ type IFordelingProps = WrappedComponentProps &
 
 type BehandlingsknappProps = Pick<
   IFordelingProps,
-  'omfordel' | 'punchState'
+  'omfordel' | 'journalpost'
 > & {
   sakstypeConfig?: ISakstypeDefault;
 };
@@ -51,7 +51,7 @@ type BehandlingsknappProps = Pick<
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
   sakstypeConfig,
   omfordel,
-  punchState,
+  journalpost,
 }) => {
   if (!sakstypeConfig) {
     return null;
@@ -69,9 +69,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
   return (
     <Hovedknapp
-      onClick={() =>
-        omfordel(punchState.journalpost!.journalpostId, sakstypeConfig.navn)
-      }
+      onClick={() => omfordel(journalpost!.journalpostId, sakstypeConfig.navn)}
     >
       <FormattedMessage id="fordeling.knapp.omfordel" />
     </Hovedknapp>
@@ -81,7 +79,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
   props: IFordelingProps
 ) => {
-  const { intl, fordelingState, omfordel, punchState } = props;
+  const { intl, fordelingState, omfordel, journalpost } = props;
   const { sakstype } = fordelingState;
   const sakstyper: ISakstypeDefault[] = useMemo(
     () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -117,7 +115,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           )}
           <LabelValue
             labelTextId="journalpost.id"
-            value={punchState.journalpost!.journalpostId}
+            value={journalpost!.journalpostId}
             retning="horisontal"
           />
 
@@ -204,20 +202,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           <Behandlingsknapp
             sakstypeConfig={konfigForValgtSakstype}
             omfordel={omfordel}
-            punchState={punchState}
+            journalpost={journalpost}
           />
         </div>
       </FormPanel>
       <PdfVisning
-        dokumenter={punchState.journalpost!.dokumenter}
-        journalpostId={punchState.journalpost!.journalpostId}
+        dokumenter={journalpost!.dokumenter}
+        journalpostId={journalpost!.journalpostId}
       />
     </div>
   );
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-  punchState: state.punchState,
+  journalpost: state.felles.journalpost,
   fordelingState: state.fordelingState,
 });
 
