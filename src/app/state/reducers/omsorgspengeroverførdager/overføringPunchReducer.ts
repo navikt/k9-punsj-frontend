@@ -70,7 +70,7 @@ export const innsendingsfeil = (error: IError): IInnsendingsfeilAction => ({
 
 interface IOverførDagerDTO {
   søknad: IOverføringPunchSkjema;
-  journalpostId: string;
+  journalpostIder: string[];
   dedupKey: string;
 }
 
@@ -82,7 +82,7 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
 
   const { punchState, felles } = getState();
   const postBody: IOverførDagerDTO = {
-    journalpostId: punchState.journalpost!.journalpostId,
+    journalpostIder: [punchState.journalpost!.journalpostId],
     søknad: skjema,
     dedupKey: felles.dedupKey,
   };
