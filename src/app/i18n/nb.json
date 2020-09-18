@@ -194,7 +194,7 @@
   "skjema.feil.tilsynsordning.opphold[].periode.OVERLAPP":                                        "Denne tilsynsperioden overlapper en annen.",
 
   "journalpost.id": "Journalpostnummer:",
-  "journalpost.norskIdent": "Fødselsnummer:",
+  "journalpost.norskIdent": "Fødsels- / D-nummer:",
   "skjemaheader.avbryt": "Avbryt journalposten",
   "skjema.felt.signert.label": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
   "skjema.felt.signert.ja": "Ja",

@@ -34,14 +34,14 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
             initialValues={initialValues}
             validerSkjema={validerSignaturSkjema}
         >
-            <div>
+            <>
                 <JournalpostPanel journalpost={journalpost}/>
                 <OverføringIdentSjekk
                     journalpostensRegistrertePersonident={
                         journalpost.norskIdent
                     }
                 />
-            </div>
+            </>
 
         </SkjemaContext>
     );

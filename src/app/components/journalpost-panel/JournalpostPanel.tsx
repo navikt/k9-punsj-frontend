@@ -10,7 +10,7 @@ export interface IJournalpostPanelProps {
 }
 
 const JournalpostPanel: React.FunctionComponent<IJournalpostPanelProps> = (
-    props: IJournalpostPanelProps
+    { journalpost }
 ) => {
     return (
         <Panel border={true} className={"journalpostpanel"}>
@@ -30,4 +30,4 @@ const JournalpostPanel: React.FunctionComponent<IJournalpostPanelProps> = (
     )
 }
 
-export { JournalpostPanel }
+export default JournalpostPanel;
