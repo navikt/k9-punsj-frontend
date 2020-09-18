@@ -1,10 +1,7 @@
-import { Sakstype } from 'app/models/enums';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import {
-  omfordel as omfordelAction,
-  setSakstypeAction,
-} from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
+import {Sakstype} from 'app/models/enums';
+import {IFordelingState, IJournalpost} from 'app/models/types';
+import {omfordel as omfordelAction, setSakstypeAction,} from 'app/state/actions';
+import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
@@ -22,9 +19,9 @@ import { ISakstypeDefault, ISakstypePunch } from '../../models/Sakstype';
 import { setHash } from '../../utils';
 import { Sakstyper } from '../SakstypeImpls';
 import './fordeling.less';
-import LabelValue from '../../components/skjema/LabelValue';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
+import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
@@ -113,14 +110,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
               {intlHelper(intl, 'fordeling.omfordeling.feil')}
             </AlertStripeFeil>
           )}
-          <LabelValue
-            labelTextId="journalpost.id"
-            value={journalpost!.journalpostId}
-            retning="horisontal"
-          />
 
-          <VerticalSpacer sixteenPx={true} hr={true} />
-          <VerticalSpacer twentyPx={true} />
+          <JournalpostPanel journalpost={journalpost!}/>
+
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
             className="fordeling-page__options"
