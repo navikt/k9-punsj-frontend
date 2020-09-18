@@ -8,7 +8,7 @@ import SkjemaContext from '../../../components/skjema/SkjemaContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSkjema } from 'app/state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import { RootStateType } from '../../../state/RootState';
-import {JournalpostPanel} from "../../../components/journalpost-panel/JournalpostPanel";
+import JournalpostPanel from '../../../components/journalpost-panel/JournalpostPanel';
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
@@ -22,29 +22,26 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
   const dispatch = useDispatch();
 
   const journalpost = useSelector(
-      (state: RootStateType) => state.punchState.journalpost!
-  )
+    (state: RootStateType) => state.punchState.journalpost!
+  );
 
-    return (
-        <SkjemaContext
-            onSubmitCallback={(values: ISignaturSkjema) => {
-                dispatch(setSkjema(values));
-                gåTilNesteSteg({ident: values.identitetsnummer});
-            }}
-            initialValues={initialValues}
-            validerSkjema={validerSignaturSkjema}
-        >
-            <>
-                <JournalpostPanel journalpost={journalpost}/>
-                <OverføringIdentSjekk
-                    journalpostensRegistrertePersonident={
-                        journalpost.norskIdent
-                    }
-                />
-            </>
-
-        </SkjemaContext>
-    );
+  return (
+    <SkjemaContext
+      onSubmitCallback={(values: ISignaturSkjema) => {
+        dispatch(setSkjema(values));
+        gåTilNesteSteg({ ident: values.identitetsnummer });
+      }}
+      initialValues={initialValues}
+      validerSkjema={validerSignaturSkjema}
+    >
+      <>
+        <JournalpostPanel journalpost={journalpost} />
+        <OverføringIdentSjekk
+          journalpostensRegistrertePersonident={journalpost.norskIdent}
+        />
+      </>
+    </SkjemaContext>
+  );
 };
 
 export default OverføringIdentSjekkContainer;

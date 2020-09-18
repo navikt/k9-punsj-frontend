@@ -17,7 +17,7 @@ import {Sakstyper} from '../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
-import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
+import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
 
 export interface IFordelingStateProps {
   punchState: IPleiepengerPunchState;
