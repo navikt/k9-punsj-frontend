@@ -123,25 +123,33 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         <FieldArray
           name="barn"
           render={({ push, remove }) => (
-            <SkjemaGruppe>
+            <>
               {values.barn.map((b, index) => (
-                <FlexRow key={index} childrenMargin="small">
-                  <TextInput
-                    feltnavn={`barn[${index}].identitetsnummer`}
-                    bredde="M"
-                  />
-                  <DateInput
-                    feltnavn={`barn[${index}].fødselsdato`}
-                    bredde="M"
-                  />
-                  {values.barn.length > 1 && (
-                    <Xknapp
-                      htmlType="button"
-                      onClick={() => remove(index)}
-                      className="alignMedInputFelt"
+                <SkjemaGruppe key={index}>
+                  <legend className="sr-only">
+                    <FormattedMessage
+                      id="omsorgsdager.overføring.barn.nummer"
+                      values={{ nummer: index + 1 }}
                     />
-                  )}
-                </FlexRow>
+                  </legend>
+                  <FlexRow childrenMargin="small">
+                    <TextInput
+                      feltnavn={`barn[${index}].identitetsnummer`}
+                      bredde="M"
+                    />
+                    <DateInput
+                      feltnavn={`barn[${index}].fødselsdato`}
+                      bredde="M"
+                    />
+                    {values.barn.length > 1 && (
+                      <Xknapp
+                        htmlType="button"
+                        onClick={() => remove(index)}
+                        className="alignMedInputFelt"
+                      />
+                    )}
+                  </FlexRow>
+                </SkjemaGruppe>
               ))}
               <LeggTilKnapp
                 onClick={() =>
@@ -149,7 +157,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 }
                 tekstId="omsorgsdager.overføring.barn.leggTil"
               />
-            </SkjemaGruppe>
+            </>
           )}
         />
         <VerticalSpacer dashed={true} twentyPx={true} />

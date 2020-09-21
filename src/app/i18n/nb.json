@@ -235,6 +235,7 @@
   "OMSORGSPENGER_OVERFØRING.header": "Melding om overføring av omsorgsdager",
   "omsorgsdager.overføring.identitetsnummer": "Fødsels- / D-nummer",
   "omsorgsdager.overføring.punch.omsøkeren": "Om søkeren",
+  "omsorgsdager.overføring.barn.nummer": "Barn nummer {nummer}",
   "omsorgsdager.overføring.barn.leggTil": "Legg til flere barn",
   "omsorgsdager.overføring.punch.omsorgendelesmed": "Omsorgen deles med",
   "omsorgsdager.overføring.punch.sendinn": "Send inn",
