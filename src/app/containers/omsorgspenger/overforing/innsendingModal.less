@@ -1,0 +1,28 @@
+@import (reference) 'node_modules/nav-frontend-core/less/_variabler';
+
+.innsendingsmodal {
+  text-align: center;
+  width: 500px;
+  max-width: 60vw;
+
+  &.innsendingsmodal--success {
+    border: 3px solid @navGronn;
+  }
+
+  &.innsendingsmodal--sender {
+    border: 3px solid @navBlaLighten60;
+  }
+
+  &.innsendingsmodal--feil {
+    border: 3px solid @redError;
+  }
+
+  a {
+    color: @navBla;
+  }
+
+  .innsendingsmodal_ikon {
+    width: 35px;
+    height: 35px;
+  }
+}

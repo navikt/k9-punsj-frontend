@@ -2,10 +2,20 @@ import React from 'react';
 
 interface ICheckSVGProps {
   title: React.ReactNode;
+  className?: string;
 }
 
-const CheckSvg: React.FunctionComponent<ICheckSVGProps> = ({ title }) => (
-  <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1">
+const CheckSvg: React.FunctionComponent<ICheckSVGProps> = ({
+  title,
+  className,
+}) => (
+  <svg
+    width="28px"
+    height="28px"
+    viewBox="0 0 28 28"
+    className={className}
+    version="1.1"
+  >
     <title>{title}</title>
     <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g fill="#06893A">

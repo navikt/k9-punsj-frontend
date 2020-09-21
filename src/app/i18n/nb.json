@@ -241,9 +241,11 @@
   "omsorgsdager.overføring.punch.modal.senderInn": "Sender inn skjemaet...",
   "omsorgsdager.overføring.punch.modal.beskrivelse": "Viser status på innsendingen",
   "omsorgsdager.overføring.punch.modal.tittel": "Innsending",
-  "omsorgsdager.overføring.punch.modal.sendtInn": "Skjemaet er sendt inn",
+  "omsorgsdager.overføring.punch.modal.sendtInn": "Skjemaet er sendt til behandling!",
   "omsorgsdager.overføring.punch.modal.success.gåTilLos": "Gå tilbake til Los",
-  "omsorgsdager.overføring.punch.modal.feil": "Det skjedde en feil under innsending",
+  "omsorgsdager.overføring.punch.modal.feil.overskrift": "Det skjedde en feil under innsending",
+  "omsorgsdager.overføring.punch.modal.feil.prøvigjen": "Prøv igjen senere.",
+  "omsorgsdager.overføring.punch.modal.feil.detaljer": "Oppgi følgende id ved kontakt med teknisk support:",
 
   "numberinput.øk": "Øk {felt} med 1",
   "numberinput.mink": "Mink {felt} med 1",
