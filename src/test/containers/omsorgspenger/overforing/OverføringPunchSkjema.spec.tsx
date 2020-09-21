@@ -5,16 +5,20 @@ import { renderWithRouterAndIntl } from '../../../testUtils';
 import SkjemaContext from '../../../../app/components/skjema/SkjemaContext';
 import {
   Innsendingsstatus,
+  IOverføringPunchSkjema,
+  Mottaker,
   tomtSkjema,
   validatePunch,
 } from '../../../../app/models/forms/omsorgspenger/overføring/PunchSkjema';
 import OverføringPunchSkjema from '../../../../app/containers/omsorgspenger/overforing/OverføringPunchSkjema';
+import { JaNei } from '../../../../app/models/enums';
 
 jest.mock('app/utils/envUtils');
 
 describe('<OverføringPunchSkjema>', () => {
   test('Viser alle feltfeil hvis man sender inn skjema med feil', async () => {
-    const onSubmitCallback = jest.fn;
+    let numberOfTimesSubmitted = 0;
+    const onSubmitCallback = () => numberOfTimesSubmitted++;
     const gåTilForrigeSteg = jest.fn;
 
     renderWithRouterAndIntl(
@@ -43,6 +47,60 @@ describe('<OverføringPunchSkjema>', () => {
     );
 
     expect(antallDagerFeil).toBeInTheDocument();
+
+    expect(numberOfTimesSubmitted).toEqual(0);
+  });
+
+  test('Kan sende inn når alle påkrevde felter er OK', async () => {
+    let numberOfTimesSubmitted = 0;
+    const onSubmitCallback = () => numberOfTimesSubmitted++;
+    const gåTilForrigeSteg = jest.fn;
+
+    const skjema: IOverføringPunchSkjema = {
+      borINorge: JaNei.JA,
+      identitetsnummer: '01010101010',
+      mottaksdato: '2020-01-01',
+      arbeidssituasjon: {
+        erSelvstendigNæringsdrivende: true,
+        erFrilanser: false,
+        erArbeidstaker: false,
+        metaHarFeil: null,
+      },
+      aleneOmOmsorgen: JaNei.JA,
+      omsorgenDelesMed: {
+        samboerSiden: '2018-02-02',
+        mottaker: Mottaker.Samboer,
+        antallOverførteDager: 4,
+        identitetsnummer: '02020202020',
+      },
+      barn: [
+        {
+          fødselsdato: '2017-03-03',
+          identitetsnummer: '03031702022',
+        },
+      ],
+    };
+
+    renderWithRouterAndIntl(
+      <SkjemaContext
+        initialValues={skjema}
+        onSubmitCallback={onSubmitCallback}
+        validerSkjema={validatePunch}
+      >
+        <OverføringPunchSkjema
+          gåTilForrigeSteg={gåTilForrigeSteg}
+          innsendingsstatus={Innsendingsstatus.IkkeSendtInn}
+        />
+      </SkjemaContext>
+    );
+
+    const sendInnKnapp = screen.getByRole('button', { name: /send inn/i });
+
+    userEvent.click(sendInnKnapp);
+
+    await screen.findAllByRole('button'); // wait for hook callbacks
+
+    expect(numberOfTimesSubmitted).toEqual(1);
   });
 
   test('"Legg til barn"-knapp legger til et barn', async () => {
