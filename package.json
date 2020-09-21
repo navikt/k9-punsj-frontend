@@ -114,7 +114,7 @@
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "circular-dependency-plugin": "^5.2.0",
     "copy-webpack-plugin": "^6.1.0",
-    "css-loader": "^3.4.2",
+    "css-loader": "^4.3.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.4",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
