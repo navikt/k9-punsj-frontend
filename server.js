@@ -13,7 +13,8 @@ server.use(helmet({
             defaultSrc: ["'self'"],
             connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
             frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
-            fontSrc: ["'self'", 'data:']
+            fontSrc: ["'self'", 'data:'],
+            imgSrc: ["'self'", 'data:']
         },
     }
 }));
