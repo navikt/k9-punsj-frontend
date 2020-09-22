@@ -25,17 +25,20 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import DateInput from '../../../components/skjema/DateInput';
 import InnsendingModal from './InnsendingModal';
 import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
+import JournalpostPanel from '../../../components/journalpost-panel/JournalpostPanel';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
   innsendingsstatus: Innsendingsstatus;
   innsendingsfeil?: IError;
+  journalpostId: string;
 }
 
 const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> = ({
   gåTilForrigeSteg,
   innsendingsstatus,
   innsendingsfeil,
+  journalpostId,
 }) => {
   const { values, setFieldValue } = useOverføringPunchSkjemaContext();
   const { params } = useRouteMatch<{ ident?: string }>();
@@ -77,16 +80,15 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     <Form>
       <section>
         <VerticalSpacer sixteenPx={true} />
+        <JournalpostPanel
+          journalpostId={journalpostId}
+          identitetsnummer={ident}
+        />
         <DateInput feltnavn="mottaksdato" bredde="M" />
         <VerticalSpacer twentyPx={true} dashed={true} />
         <Undertittel tag="h2">
           <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
         </Undertittel>
-        <VerticalSpacer sixteenPx={true} />
-        <LabelValue
-          labelTextId="omsorgsdager.overføring.identitetsnummer"
-          value={ident}
-        />
         <VerticalSpacer sixteenPx={true} />
         <CheckboxInputGruppe
           feltnavn="arbeidssituasjon"

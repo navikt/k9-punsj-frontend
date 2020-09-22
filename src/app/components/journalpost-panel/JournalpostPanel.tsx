@@ -1,28 +1,35 @@
-import { IJournalpost } from '../../models/types';
 import Panel from 'nav-frontend-paneler';
 import FlexRow from '../flexgrid/FlexRow';
 import LabelValue from '../skjema/LabelValue';
 import React from 'react';
 import './journalpostPanel.less';
+import intlHelper from '../../utils/intlUtils';
+import { useIntl } from 'react-intl';
 
 export interface IJournalpostPanelProps {
-  journalpost: IJournalpost;
+  journalpostId: string;
+  identitetsnummer?: string;
 }
 
 const JournalpostPanel: React.FunctionComponent<IJournalpostPanelProps> = ({
-  journalpost,
+  journalpostId,
+  identitetsnummer,
 }) => {
+  const intl = useIntl();
   return (
     <Panel border={true} className={'journalpostpanel'}>
       <FlexRow childrenMargin={'medium'}>
         <LabelValue
           labelTextId="journalpost.id"
-          value={journalpost.journalpostId}
+          value={journalpostId}
           retning="horisontal"
         />
         <LabelValue
           labelTextId="journalpost.norskIdent"
-          value={journalpost.norskIdent}
+          value={
+            identitetsnummer ||
+            intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
+          }
           retning="horisontal"
         />
       </FlexRow>

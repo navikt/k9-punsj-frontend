@@ -1,7 +1,10 @@
-import {Sakstype} from 'app/models/enums';
-import {IFordelingState, IJournalpost} from 'app/models/types';
-import {omfordel as omfordelAction, setSakstypeAction,} from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
+import { Sakstype } from 'app/models/enums';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import {
+  omfordel as omfordelAction,
+  setSakstypeAction,
+} from 'app/state/actions';
+import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
@@ -21,7 +24,7 @@ import { Sakstyper } from '../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
-import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
+import JournalpostPanel from '../../components/journalpost-panel/JournalpostPanel';
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
@@ -111,7 +114,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             </AlertStripeFeil>
           )}
 
-          <JournalpostPanel journalpost={journalpost!}/>
+          <JournalpostPanel
+            journalpostId={journalpost!.journalpostId}
+            identitetsnummer={journalpost?.norskIdent}
+          />
 
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}

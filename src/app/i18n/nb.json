@@ -195,6 +195,7 @@
 
   "journalpost.id": "Journalpostnummer:",
   "journalpost.norskIdent": "Fødsels- / D-nummer:",
+  "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
   "skjemaheader.avbryt": "Avbryt journalposten",
   "skjema.felt.signert.label": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
   "skjema.felt.signert.ja": "Ja",

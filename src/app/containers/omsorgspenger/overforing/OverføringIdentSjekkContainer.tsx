@@ -35,7 +35,10 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
       validerSkjema={validerSignaturSkjema}
     >
       <>
-        <JournalpostPanel journalpost={journalpost} />
+        <JournalpostPanel
+          journalpostId={journalpost!.journalpostId}
+          identitetsnummer={journalpost?.norskIdent}
+        />
         <OverføringIdentSjekk
           journalpostensRegistrertePersonident={journalpost.norskIdent}
         />

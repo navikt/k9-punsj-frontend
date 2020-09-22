@@ -30,6 +30,7 @@ describe('<OverføringPunchSkjema>', () => {
         <OverføringPunchSkjema
           gåTilForrigeSteg={gåTilForrigeSteg}
           innsendingsstatus={Innsendingsstatus.IkkeSendtInn}
+          journalpostId="2"
         />
       </SkjemaContext>
     );
@@ -90,6 +91,7 @@ describe('<OverføringPunchSkjema>', () => {
         <OverføringPunchSkjema
           gåTilForrigeSteg={gåTilForrigeSteg}
           innsendingsstatus={Innsendingsstatus.IkkeSendtInn}
+          journalpostId="2"
         />
       </SkjemaContext>
     );
@@ -116,6 +118,7 @@ describe('<OverføringPunchSkjema>', () => {
         <OverføringPunchSkjema
           gåTilForrigeSteg={gåTilForrigeSteg}
           innsendingsstatus={Innsendingsstatus.IkkeSendtInn}
+          journalpostId="2"
         />
       </SkjemaContext>
     );
