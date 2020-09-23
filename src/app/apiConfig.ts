@@ -19,7 +19,7 @@ export enum ApiPath {
   JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
   JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
   DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
-  OMS_OVERFØR_DAGER = 'omsorgspenger-overfoer-dager-soknad',
+  OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
 }
 
 export const URL_AUTH_CHECK = URL_BACKEND + '/me';

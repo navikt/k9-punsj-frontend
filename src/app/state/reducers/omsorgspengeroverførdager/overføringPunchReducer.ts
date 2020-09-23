@@ -92,13 +92,18 @@ export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
     undefined,
     postBody,
     // @ts-ignore
-    (response) => {
+    (response, responseData) => {
       switch (response.status) {
         case 202:
           dispatch(skjemaErSendtInn());
           return dispatch(resetDedupKey());
         default:
-          return dispatch(innsendingsfeil(convertResponseToError(response)));
+          const error: IError = {
+            ...convertResponseToError(response),
+            exceptionId: responseData?.exceptionId,
+            message: responseData?.message,
+          };
+          return dispatch(innsendingsfeil(error));
       }
     }
   );

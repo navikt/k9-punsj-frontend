@@ -2,6 +2,7 @@ import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 import { String } from 'typescript-string-operations';
+import ResponseError from '../models/types/ResponseError';
 
 const Headers = require('fetch-headers');
 
@@ -31,7 +32,10 @@ export async function post<BodyType>(
   parameters?: any,
   headers?: HeadersInit,
   body?: BodyType,
-  callbackIfAuth?: (response: Response) => Promise<Response>,
+  callbackIfAuth?: (
+    response: Response,
+    responseData?: ResponseError
+  ) => Promise<Response>,
   callbackIfError?: (error: any) => any
 ): Promise<Response> {
   try {
@@ -41,10 +45,13 @@ export async function post<BodyType>(
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json', ...headers },
     });
+
+    const data = await response.json();
+
     if (response.status === 401) {
       login();
     } else if (!!callbackIfAuth) {
-      await callbackIfAuth(response);
+      await callbackIfAuth(response, data);
     }
     return response;
   } catch (error) {

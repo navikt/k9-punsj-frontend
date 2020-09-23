@@ -100,7 +100,9 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
             <Element>
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.detaljer" />
             </Element>
-            <Element>{JSON.stringify(innsendingsfeil)}</Element>
+            <Element>
+              {innsendingsfeil?.exceptionId || JSON.stringify(innsendingsfeil)}
+            </Element>
           </>
         )}
       </>
