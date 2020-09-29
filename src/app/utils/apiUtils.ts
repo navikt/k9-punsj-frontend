@@ -46,12 +46,13 @@ export async function post<BodyType>(
       headers: { 'Content-Type': 'application/json', ...headers },
     });
 
-    const data = await response.json();
-
     if (response.status === 401) {
       login();
     } else if (!!callbackIfAuth) {
-      await callbackIfAuth(response, data);
+      const data = await response.text();
+      const jsonData = data ? JSON.parse(data) : undefined;
+
+      await callbackIfAuth(response, jsonData);
     }
     return response;
   } catch (error) {
