@@ -22,7 +22,6 @@ interface IStepComponentProps {
 export interface ISakstypeStep {
   path: string;
   stepName: string;
-  reducer?: (state: any, action: any) => any;
   stepOrder: number;
   getComponent: (stepProps: IStepComponentProps) => ReactNode;
 }

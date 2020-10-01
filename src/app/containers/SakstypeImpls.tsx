@@ -11,8 +11,6 @@ import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import { ApiPath } from '../apiConfig';
-import overføringSignaturReducer from '../state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
-import overføringPunchReducer from '../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -51,13 +49,11 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
         />
       ),
       stepOrder: 0,
-      reducer: overføringSignaturReducer,
     },
     {
       path: '/punch/{ident}',
       stepName: 'punch',
       stepOrder: 1,
-      reducer: overføringPunchReducer,
       getComponent: ({ gåTilForrigeSteg, initialValues }) => (
         <OverføringPunchContainer
           initialValues={initialValues}

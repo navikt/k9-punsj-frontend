@@ -7,42 +7,25 @@ import {
   PunchReducer,
   SignaturReducer,
 } from './reducers';
-import { ISakstypePunch } from '../models/Sakstype';
-import { OmsorgspengerOverføring } from '../containers/SakstypeImpls';
 import FellesReducer from './reducers/FellesReducer';
 import { Sakstype } from '../models/enums';
+import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
+import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
 
-const defaultReducers = {
+export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
     mapperOgFagsakerState: MapperOgFagsakerReducer,
     punchFormState: PunchFormReducer,
     punchState: PunchReducer,
     signaturState: SignaturReducer,
   }),
+  [Sakstype.OMSORGSPENGER_OVERFØRING]: combineReducers({
+    signatur: overføringSignaturReducer,
+    punch: overføringPunchReducer,
+  }),
   fordelingState: FordelingReducer,
   authState: AuthReducer,
   felles: FellesReducer,
-};
-
-const lagReducerForSakstype = (sakstype: ISakstypePunch) => {
-  return sakstype.steps.reduce((temp, step) => {
-    if (step.reducer) {
-      temp[step.stepName] = step.reducer;
-    }
-    return temp;
-  }, {});
-};
-
-export const leggTilSakstypeReducers = (sakstyper: ISakstypePunch[]) =>
-  sakstyper.reduce((tempReducer, sakstype) => {
-    tempReducer[sakstype.navn] = combineReducers(
-      lagReducerForSakstype(sakstype)
-    );
-    return tempReducer;
-  }, defaultReducers);
-
-export const rootReducer = combineReducers(
-  leggTilSakstypeReducers([OmsorgspengerOverføring])
-);
+});
 
 export type RootStateType = ReturnType<typeof rootReducer>;
