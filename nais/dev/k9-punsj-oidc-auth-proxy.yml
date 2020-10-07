@@ -26,7 +26,7 @@ spec:
             cpu: 50m
             memory: 128Mi
     ingresses:
-        - https://k9-punsj-oidc-auth-proxy.nais.preprod.local
+        - https://k9-punsj-oidc-auth-proxy.dev.adeo.no
     replicas:
         min: 1
         max: 1
@@ -50,15 +50,15 @@ spec:
         - name: LOGIN_SCOPES
           value: 'openid profile 304cf945-d49f-43e7-b6a4-5ad6a08e0589/.default'
         - name: OIDC_AUTH_PROXY_BASE_URL
-          value: https://k9-punsj-oidc-auth-proxy.nais.preprod.local
+          value: https://k9-punsj-oidc-auth-proxy.dev.adeo.no
         - name: APPLICATION_BASE_URL
-          value: https://k9-punsj-frontend.nais.preprod.local
+          value: https://k9-punsj-frontend.dev.adeo.no
         - name: ALLOW_PROXY_TO_SELF_SIGNED_CERTIFICATES
           value: 'true'
         - name: SESSION_ID_COOKIE_NAME
           value: k9-punsj-frontend
         - name: PROXY_CONFIG
-          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.nais.preprod.local/api","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
+          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.dev.adeo.no/api","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
         - name: REDIS_HOST
           value: k9-punsj-oidc-auth-proxy-redis.default.svc.nais.local
         - name: REDIS_PORT
