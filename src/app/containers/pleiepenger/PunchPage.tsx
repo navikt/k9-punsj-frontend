@@ -132,7 +132,7 @@ export class PunchPageComponent extends React.Component<
       ident && ident.length && !disabled && !IdentRules.isIdentValid(ident);
     const identer = [punchState.ident1, punchState.ident2];
     const antallIdenter = identer.filter((id) => id && id.length).length;
-    const journalpostident = journalpost?.norskIdent || '';
+    const journalpostident = journalpost?.norskIdent;
     return (
       <div>
         <Input
@@ -174,6 +174,7 @@ export class PunchPageComponent extends React.Component<
         )}
         {punchState.step === PunchStep.IDENT &&
           antallIdenter > 0 &&
+          journalpostident &&
           identer.every(
             (ident) =>
               !ident ||
