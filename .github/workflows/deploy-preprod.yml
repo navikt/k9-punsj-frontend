@@ -1,0 +1,46 @@
+name: Deploy til preprod
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy-dev:
+    name: Deploye til DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hente kode
+        uses: actions/checkout@v2
+      - name: Sette opp Node
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: 12.x
+      - name: Installere moduler
+        run: npm install
+      - name: Sjekke opp mot Lint-regler
+        run: npm run lint
+      - name: Kjøre tester
+        run: npm run test
+      - name: Bygge kode
+        run: npm run build
+      - name: Sette Docker-navn og -tag
+        env:
+          DOCKER_IMAGE: docker.pkg.github.com/${{ github.repository }}/k9-punsj-frontend
+        run: |
+          echo $DOCKER_IMAGE > .docker_image
+          echo "$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" > .docker_tag
+          echo "::set-env name=IMAGE::$(cat .docker_image):$(cat .docker_tag)"
+      - name: Bygge Docker image
+        run: docker build . --pull -t $(cat .docker_image):$(cat .docker_tag)
+      - name: Laste opp Docker image
+        run: |
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker push $(cat .docker_image):$(cat .docker_tag)
+          docker tag $(cat .docker_image):$(cat .docker_tag) $(cat .docker_image):latest
+          docker push $(cat .docker_image):latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploye til dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-fss
+          RESOURCE: nais/dev/k9-punsj-frontend.yml
