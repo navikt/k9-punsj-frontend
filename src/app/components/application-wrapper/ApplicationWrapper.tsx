@@ -13,6 +13,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
+import {getEnvironmentVariable} from "../../utils";
 
 interface IApplicationWrapperComponentProps {
   locale: Locale;
@@ -25,6 +26,13 @@ interface IApplicationWrapperStateProps {
 interface IApplicationWrapperDispatchProps {
   checkAuth: typeof checkAuth;
 }
+
+const K9_LOS_URL = getEnvironmentVariable('K9_LOS_URL');
+const K9_LOS_URL_SET: boolean =
+    !!K9_LOS_URL && K9_LOS_URL !== 'undefined';
+const REDIRECT_URL_LOS = K9_LOS_URL_SET
+    ? K9_LOS_URL
+    : 'http://localhost:8030';
 
 type IApplicationWrapperProps = React.PropsWithChildren<
   IApplicationWrapperComponentProps
@@ -71,7 +79,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (
   return (
     <IntlProvider {...{ locale }}>
       <Normaltekst tag="div" className="fit-window-height">
-        <Header title="K9-punsj">
+        <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
           <UserPanel name={props.authState.userName!} />
         </Header>
         <LanguageToggle {...{ locale }} toggle={props.onChangeLocale} />
