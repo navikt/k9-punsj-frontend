@@ -138,7 +138,7 @@
     "nav-frontend-skjema-style": "^2.0.12",
     "nav-frontend-spinner-style": "^0.2.5",
     "nav-frontend-tabell-style": "^0.2.23",
-    "nav-frontend-typografi-style": "^1.0.22",
+    "nav-frontend-typografi-style": "^1.0.25",
     "node-fetch": "^2.6.1",
     "postcss-input-range": "^4.0.0",
     "postcss-loader": "^3.0.0",
