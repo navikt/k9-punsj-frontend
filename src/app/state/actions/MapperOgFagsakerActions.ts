@@ -116,7 +116,7 @@ export function createMappe(journalpostid: string, ident1: string, ident2: strin
     return post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, response => {
         if (response.status === 201) {
             return response.json()
-                           .then(mappe => dispatch(createMappeSuccessAction(mappe.mappeId)));
+                           .then(mappe => dispatch(createMappeSuccessAction(mappe.mappeId))).then(findMapper(ident1, ident2));
         }
         return dispatch(createMappeErrorAction(convertResponseToError(response)));
     });
