@@ -234,6 +234,7 @@
   "skjema.validering.positivtheltall": "Må være et heltall større enn null",
   "skjema.validering.ugyldigdato": "Ugyldig datoformat",
   "OMSORGSPENGER_OVERFØRING.header": "Melding om overføring av omsorgsdager",
+  "OMSORGSPENGER_FORDELING.header": "Melding om fordeling av omsorgsdager",
   "omsorgsdager.overføring.identitetsnummer": "Fødsels- / D-nummer",
   "omsorgsdager.overføring.punch.omsøkeren": "Om søkeren",
   "omsorgsdager.overføring.barn.nummer": "Barn nummer {nummer}",
@@ -248,6 +249,8 @@
   "omsorgsdager.overføring.punch.modal.feil.overskrift": "Det skjedde en feil under innsending",
   "omsorgsdager.overføring.punch.modal.feil.prøvigjen": "Prøv igjen senere.",
   "omsorgsdager.overføring.punch.modal.feil.detaljer": "Oppgi følgende id ved kontakt med teknisk support:",
+
+  "opprettGosysOppgave": "Opprett oppgave i Gosys",
 
   "numberinput.øk": "Øk {felt} med 1",
   "numberinput.mink": "Mink {felt} med 1",

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import {
   AuthReducer,
-  FordelingReducer,
+  FordelingReducer, GosysOppgaveReducer,
   MapperOgFagsakerReducer,
   PunchFormReducer,
   PunchReducer,
@@ -23,6 +23,10 @@ export const rootReducer = combineReducers({
     signatur: overføringSignaturReducer,
     punch: overføringPunchReducer,
   }),
+  [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
+    opprettIGosys: GosysOppgaveReducer,
+  }),
+
   fordelingState: FordelingReducer,
   authState: AuthReducer,
   felles: FellesReducer,
