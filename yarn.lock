@@ -8664,12 +8664,12 @@ nav-frontend-toggle@^0.0.43:
   resolved "https://registry.yarnpkg.com/nav-frontend-toggle/-/nav-frontend-toggle-0.0.43.tgz#c5f7a65100ae93a0e1bfc08dd9c73163d22c29e3"
   integrity sha512-+QmJyZUbC8KjY9I5dbfH2OmzPOyi1ft4u51cCICLivSFJl9gF6dn5jjKnsfhXkq8qH333oyter3SJvmadcvadw==
 
-nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.22:
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.22.tgz#f1f4f2eb271f4ea4bd7d6fe850499dff3b0a4804"
-  integrity sha512-MZ7AdSQjQuZz7e/zkfihJFBMSzyolpcmdYSAmHGQTQmtFdvxAAx1WAef8D6BwxKS8aEj2/86CX7cRMS5dXMAnw==
+nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.26:
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.26.tgz#b1ef8d34556953ad95ff5d9e34da2fe5a615f7e3"
+  integrity sha512-WW/b5nRiAJqsZ4BVkvp0jLcGXABYXFmvI8T/sxUGQkUGtdQ+lJN58XJ0Ni42dsLz8AXCkYBVy44YDYBgokigEw==
   dependencies:
-    nav-frontend-core "^5.0.1"
+    nav-frontend-core "^5.0.5"
 
 nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.25:
   version "2.0.26"
