@@ -123,7 +123,7 @@
     "html-webpack-harddisk-plugin": "^1.0.2",
     "intl": "^1.2.5",
     "jest": "^26.5.3",
-    "jest-cli": "^26.4.2",
+    "jest-cli": "^26.6.0",
     "jest-css-modules": "^2.1.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.2",
