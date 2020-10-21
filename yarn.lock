@@ -432,8 +432,8 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.10.4"
     "@babel/plugin-syntax-optional-catch-binding" "^7.8.0"
-    
-"@babel/plugin-proposal-optional-chaining@^7.12.1", "@babel/plugin-proposal-optional-chaining@^7.8.3":
+
+"@babel/plugin-proposal-optional-chaining@^7.12.1":
   version "7.12.1"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-chaining/-/plugin-proposal-optional-chaining-7.12.1.tgz#cce122203fc8a32794296fc377c6dedaf4363797"
   integrity sha512-c2uRpY6WzaVDzynVY9liyykS+kVU+WRZPMPYpkelXH8KBt1oXoI89kPbZKKG/jDT5UK92FTW2fZkZaJhdiBabw==
@@ -8602,10 +8602,10 @@ nav-frontend-spinner@^2.0.5:
   resolved "https://registry.yarnpkg.com/nav-frontend-spinner/-/nav-frontend-spinner-2.0.5.tgz#39568893f8843e4d2012c26207dbbd079c0f964e"
   integrity sha512-sIIZ1UapN78egxio1JIFboxWq9Cv2mJl9VP6MIPEIVsEn8buANNhm2l2rCwYPwNK6/Pl0+vEq73SmDTLoO3R9g==
 
-nav-frontend-tabell-style@^0.2.23:
-  version "0.2.23"
-  resolved "https://registry.yarnpkg.com/nav-frontend-tabell-style/-/nav-frontend-tabell-style-0.2.23.tgz#f03aa396dd90a321dad1db303d133107c37c4105"
-  integrity sha512-yHVDtl44f6iXbv5jjDjv0xfnxqfLeMqekkCnhGe0gnatkjkKKTA6gelknG4+WU1NDD28nlRcmIi1e5qCBUYvrg==
+nav-frontend-tabell-style@^0.2.27:
+  version "0.2.27"
+  resolved "https://registry.yarnpkg.com/nav-frontend-tabell-style/-/nav-frontend-tabell-style-0.2.27.tgz#944c8474752b97596bf8a21494d60658a99012c7"
+  integrity sha512-CdeFV4ikyGsf4VTzt7hcB06x3a8eFFjoK12JqGscZckNLe0qWPGHIJ9fqYjXbAmPW4EP49cxjy6dSGbVQ4dTww==
 
 nav-frontend-toggle-style@^0.0.35:
   version "0.0.35"
