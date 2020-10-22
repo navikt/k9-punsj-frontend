@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'nais/dev/k9-punsj-oidc-auth-proxy.yml'
+      - 'nais/prod/k9-punsj-oidc-auth-proxy.yml'
     branches:
       - master
 jobs:
