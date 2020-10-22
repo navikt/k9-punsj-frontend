@@ -20,3 +20,18 @@ jobs:
           cluster: dev-fss
           team: k9saksbehandling
           rawresources: nais/dev/k9-punsj-oidc-auth-proxy.yml
+  deploy-prod:
+    name: Deploye til PROD
+    if: startsWith(github.ref, 'refs/heads/master')   # If the branch is master
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hente kode
+        uses: actions/checkout@v2
+      - name: Deploye til prod
+        uses: navikt/deployment-cli/action@0.4.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          cluster: prod-fss
+          team: k9saksbehandling
+          rawresources: nais/prod/k9-punsj-oidc-auth-proxy.yml
