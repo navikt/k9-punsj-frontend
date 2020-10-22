@@ -34,7 +34,7 @@ export async function post<BodyType>(
   body?: BodyType,
   callbackIfAuth?: (
     response: Response,
-    responseData?: ResponseError
+    responseData?: any
   ) => Promise<Response>,
   callbackIfError?: (error: any) => any
 ): Promise<Response> {

@@ -1,8 +1,10 @@
 import {ApiPath}                                  from 'app/apiConfig';
 import {JaNeiVetikke, MapperOgFagsakerActionKeys} from 'app/models/enums';
-import {IError, IFagsak, IMappe, IPersonlig}      from 'app/models/types';
+import {IError, IFagsak, IMappe, IPersonlig, Mappe} from 'app/models/types';
 import {MappeRules}                               from 'app/rules';
 import {convertResponseToError, get, post}        from 'app/utils';
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
@@ -113,11 +115,12 @@ export function createMappe(journalpostid: string, ident1: string, ident2: strin
         ? {personer: {[ident1]: initialInfo, [ident2]: initialInfo}}
         : {personer: {[ident1]: initialInfo}};
 
-    return post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, response => {
+
+    post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, (response, mappe) => {
         if (response.status === 201) {
-            return response.json()
-                           .then(mappe => dispatch(createMappeSuccessAction(mappe.mappeId)));
+            return dispatch(createMappeSuccessAction(mappe.mappeId));
         }
+
         return dispatch(createMappeErrorAction(convertResponseToError(response)));
     });
 }}

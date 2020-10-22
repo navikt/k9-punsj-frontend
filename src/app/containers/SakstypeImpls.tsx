@@ -5,12 +5,12 @@ import {
   ISakstypePunch,
   ISakstyper,
 } from '../models/Sakstype';
-import OmsorgspengerFordelingIdent from './omsorgspenger/fordeling/OmsorgspengerFordelingIdent';
 
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import { ApiPath } from '../apiConfig';
+import  {OpprettGosysOppgave} from "./omsorgspenger/OpprettGosysOppgaveContainer";
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -26,9 +26,9 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
   punchPath: '/fordeling-omsorgsdager',
   steps: [
     {
-      path: '/ident',
-      stepName: 'ident',
-      getComponent: () => <OmsorgspengerFordelingIdent />,
+      path: '/opprett-i-gosys',
+      stepName: 'opprettIGosys',
+      getComponent: () => <OpprettGosysOppgave />,
       stepOrder: 0,
     },
   ],
