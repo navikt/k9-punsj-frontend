@@ -44,15 +44,15 @@ spec:
     webproxy: true
     env:
         - name: CLIENT_ID
-          value: 304cf945-d49f-43e7-b6a4-5ad6a08e0589
+          value: d68f9518-93fa-4df3-b40c-3c3886d38cc5
         - name: DISCOVERY_URL
           value: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/v2.0/.well-known/openid-configuration
         - name: LOGIN_SCOPES
-          value: 'openid profile 304cf945-d49f-43e7-b6a4-5ad6a08e0589/.default'
+          value: 'openid profile d68f9518-93fa-4df3-b40c-3c3886d38cc5/.default'
         - name: OIDC_AUTH_PROXY_BASE_URL
-          value: https://k9-punsj-oidc-auth-proxy.dev.adeo.no
+          value: https://k9-punsj-oidc-auth-proxy.nais.adeo.no
         - name: APPLICATION_BASE_URL
-          value: https://k9-punsj-frontend.dev.adeo.no
+          value: https://k9-punsj-frontend.nais.adeo.no
         - name: ALLOW_PROXY_TO_SELF_SIGNED_CERTIFICATES
           value: 'true'
         - name: SESSION_ID_COOKIE_NAME
