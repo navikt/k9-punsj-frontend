@@ -26,7 +26,7 @@ spec:
             cpu: 50m
             memory: 128Mi
     ingresses:
-        - https://k9-punsj-oidc-auth-proxy.dev.adeo.no
+        - https://k9-punsj-oidc-auth-proxy.nais.adeo.no
     replicas:
         min: 1
         max: 1
@@ -38,27 +38,27 @@ spec:
       enabled: true
       paths:
         - mountPath: /var/run/secrets/nais.io/vault
-          kvPath: /kv/preprod/fss/k9-punsj-oidc-auth-proxy/default
+          kvPath: /kv/prod/fss/k9-punsj-oidc-auth-proxy/default
         - mountPath: /var/run/secrets/nais.io/azuread
-          kvPath: /azuread/data/dev/creds/k9-punsj-oidc-auth-proxy
+          kvPath: /azuread/data/prod/creds/k9-punsj-oidc-auth-proxy
     webproxy: true
     env:
         - name: CLIENT_ID
-          value: 304cf945-d49f-43e7-b6a4-5ad6a08e0589
+          value: d68f9518-93fa-4df3-b40c-3c3886d38cc5
         - name: DISCOVERY_URL
-          value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
+          value: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/v2.0/.well-known/openid-configuration
         - name: LOGIN_SCOPES
-          value: 'openid profile 304cf945-d49f-43e7-b6a4-5ad6a08e0589/.default'
+          value: 'openid profile d68f9518-93fa-4df3-b40c-3c3886d38cc5/.default'
         - name: OIDC_AUTH_PROXY_BASE_URL
-          value: https://k9-punsj-oidc-auth-proxy.dev.adeo.no
+          value: https://k9-punsj-oidc-auth-proxy.nais.adeo.no
         - name: APPLICATION_BASE_URL
-          value: https://k9-punsj-frontend.dev.adeo.no
+          value: https://k9-punsj-frontend.nais.adeo.no
         - name: ALLOW_PROXY_TO_SELF_SIGNED_CERTIFICATES
           value: 'true'
         - name: SESSION_ID_COOKIE_NAME
           value: k9-punsj-frontend
         - name: PROXY_CONFIG
-          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.dev.adeo.no/api","scopes":"3ccdda02-eaf5-4c75-af01-ea0ee7d01819/.default"}]}'
+          value: '{"apis":[{"path":"k9-punsj","url":"https://k9-punsj.nais.adeo.no/api","scopes":"48dbb366-75c2-46de-b9c3-f425b6a1f6e9/.default"}]}'
         - name: REDIS_HOST
           value: k9-punsj-oidc-auth-proxy-redis.default.svc.nais.local
         - name: REDIS_PORT
