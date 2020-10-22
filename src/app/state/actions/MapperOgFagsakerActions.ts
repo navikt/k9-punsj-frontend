@@ -4,15 +4,14 @@ import {IError, IFagsak, IMappe, IPersonlig, Mappe} from 'app/models/types';
 import {MappeRules}                               from 'app/rules';
 import {convertResponseToError, get, post}        from 'app/utils';
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
-interface IFindMapperErrorAction            {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, e: IError}
+interface IFindMapperErrorAction            {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, error: IError}
 
 interface ISetFagsakerAction                {type: MapperOgFagsakerActionKeys.FAGSAKER_SET, fagsaker: IFagsak[]}
 interface IFindFagsakerLoadAction           {type: MapperOgFagsakerActionKeys.FAGSAKER_LOAD, isLoading: boolean}
-interface IFindFagsakerErrorAction          {type: MapperOgFagsakerActionKeys.FAGSAKER_REQUEST_ERROR, e: IError}
+interface IFindFagsakerErrorAction          {type: MapperOgFagsakerActionKeys.FAGSAKER_REQUEST_ERROR, error: IError}
 
 interface IOpenMappeAction                  {type: MapperOgFagsakerActionKeys.MAPPE_OPEN, mappe: IMappe}
 interface ICloseMappeAction                 {type: MapperOgFagsakerActionKeys.MAPPE_CLOSE}
@@ -24,7 +23,7 @@ interface ICloseFagsakAction                {type: MapperOgFagsakerActionKeys.FA
 
 interface ICreateMappeRequestAction         {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_REQUEST}
 interface ICreateMappeSuccessAction         {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_SUCCESS, id: string}
-interface ICreateMappeErrorAction           {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_ERROR, e: IError}
+interface ICreateMappeErrorAction           {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_ERROR, error: IError}
 
 interface IResetMappeidAction               {type: MapperOgFagsakerActionKeys.MAPPEID_RESET}
 
@@ -43,7 +42,7 @@ export type IMapperOgFagsakerActionTypes = IMapperActionTypes |
 
 export function setMapperAction(mapper: IMappe[]):              ISetMapperAction                {return {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper}}
 export function findMapperLoadingAction(isLoading: boolean):    IFindMapperLoadingAction        {return {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading}}
-export function findMapperErrorAction(e: IError):               IFindMapperErrorAction          {return {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, e}}
+export function findMapperErrorAction(error: IError):           IFindMapperErrorAction          {return {type: MapperOgFagsakerActionKeys.MAPPER_REQUEST_ERROR, error}}
 
 export function findMapper(ident1: string, ident2: string | null) {return (dispatch: any) => {
     dispatch(findMapperLoadingAction(true));
@@ -62,7 +61,7 @@ export function findMapper(ident1: string, ident2: string | null) {return (dispa
 
 export function setFagsakerAction(fagsaker: IFagsak[]):         ISetFagsakerAction              {return {type: MapperOgFagsakerActionKeys.FAGSAKER_SET, fagsaker}}
 export function findFagsakerLoadAction(isLoading: boolean):     IFindFagsakerLoadAction         {return {type: MapperOgFagsakerActionKeys.FAGSAKER_LOAD, isLoading}}
-export function findFagsakerErrorAction(e: IError):             IFindFagsakerErrorAction        {return {type: MapperOgFagsakerActionKeys.FAGSAKER_REQUEST_ERROR, e}}
+export function findFagsakerErrorAction(error: IError):         IFindFagsakerErrorAction        {return {type: MapperOgFagsakerActionKeys.FAGSAKER_REQUEST_ERROR, error}}
 
 export function findFagsaker(ident: string) {return (dispatch: any) => {
     dispatch(findFagsakerLoadAction(true));
@@ -85,7 +84,7 @@ export function closeFagsakAction():                            ICloseFagsakActi
 
 export function createMappeRequestAction():                     ICreateMappeRequestAction       {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_REQUEST}}
 export function createMappeSuccessAction(id: string):           ICreateMappeSuccessAction       {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_SUCCESS, id}}
-export function createMappeErrorAction(e: IError):          ICreateMappeErrorAction         {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_ERROR, e}}
+export function createMappeErrorAction(error: IError):          ICreateMappeErrorAction         {return {type: MapperOgFagsakerActionKeys.MAPPE_CREATE_ERROR, error}}
 export function resetMappeidAction():                           IResetMappeidAction             {return {type: MapperOgFagsakerActionKeys.MAPPEID_RESET}}
 export function createMappe(journalpostid: string, ident1: string, ident2: string | null) {return (dispatch: any) => {
 

@@ -41,7 +41,7 @@ export function MapperOgFagsakerReducer(
             return {
                 ...mapperOgFagsakerState,
                 isMapperLoading: false,
-                mapperRequestError: action.e,
+                mapperRequestError: action.error,
                 isMappeCreated: false
             };
 
@@ -66,7 +66,7 @@ export function MapperOgFagsakerReducer(
                 ...mapperOgFagsakerState,
                 fagsaker: [],
                 isFagsakerLoading: false,
-                fagsakerRequestError: action.e
+                fagsakerRequestError: action.error
             };
 
         case MapperOgFagsakerActionKeys.MAPPE_OPEN:
@@ -132,7 +132,7 @@ export function MapperOgFagsakerReducer(
                 ...mapperOgFagsakerState,
                 mappeid: undefined,
                 isAwaitingMappeCreation: false,
-                createMappeRequestError: action.e,
+                createMappeRequestError: action.error,
                 isMappeCreated: false
             };
 
