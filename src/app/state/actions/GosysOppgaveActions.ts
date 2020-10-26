@@ -10,22 +10,22 @@ interface IOpprettGosysOppgaveErrorAction      {type: GosysOppgaveActionKeys.OPP
 
 export type IOpprettGosysOppgaveActionTypes = IOpprettGosysOppgaveRequestAction | IOpprettGosysOppgaveSuccessAction | IOpprettGosysOppgaveErrorAction;
 
-
-
-
 const           opprettOppgaveRequestAction   = ():                       IOpprettGosysOppgaveRequestAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST});
 const           opprettOppgaveSuccessAction   = ():                       IOpprettGosysOppgaveSuccessAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_SUCCESS});
 const           opprettOppgaveErrorAction     = (error: IError):          IOpprettGosysOppgaveErrorAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error});
 
-export const opprettGosysOppgave = (journalpostid: string) => {return (dispatch: any) => {
+export const opprettGosysOppgave = (journalpostid: string, norskident?: string) => {return (dispatch: any) => {
 
     dispatch(opprettOppgaveRequestAction());
 
     post(
         ApiPath.OPPRETT_GOSYS_OPPGAVE,
-        {journalpostId: journalpostid},
+        {
+        },
         undefined,
-        {ytelse: 'PleiepegerSyktBarn'},
+        {
+            journalpostId: journalpostid,
+            norskIdent: norskident},
         response => {
             if (response.status === 204) {return dispatch(opprettOppgaveSuccessAction())}
             return dispatch(opprettOppgaveErrorAction(convertResponseToError(response)));

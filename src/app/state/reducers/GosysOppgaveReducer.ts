@@ -37,7 +37,6 @@ export function GosysOppgaveReducer(
                 gosysOppgaveRequestError: action.error
             };
 
-
         default:
             return gosysOppgaveState;
     }

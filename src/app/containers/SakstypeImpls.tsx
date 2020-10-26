@@ -10,7 +10,7 @@ import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import { ApiPath } from '../apiConfig';
-import  {OpprettGosysOppgave} from "./omsorgspenger/OpprettGosysOppgaveContainer";
+import  {OpprettGosysOppgavePanel} from "./omsorgspenger/OpprettGosysOppgave";
 
 export const Pleiepenger: ISakstypePunch = {
   navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -28,7 +28,7 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
     {
       path: '/opprett-i-gosys',
       stepName: 'opprettIGosys',
-      getComponent: () => <OpprettGosysOppgave />,
+      getComponent: () => <OpprettGosysOppgavePanel />,
       stepOrder: 0,
     },
   ],
