@@ -27,7 +27,7 @@ export const opprettGosysOppgave = (journalpostid: string, norskident?: string) 
             journalpostId: journalpostid,
             norskIdent: norskident},
         response => {
-            if (response.status === 204) {return dispatch(opprettOppgaveSuccessAction())}
+            if (response.status === 200) {return dispatch(opprettOppgaveSuccessAction())}
             return dispatch(opprettOppgaveErrorAction(convertResponseToError(response)));
         }
     );
