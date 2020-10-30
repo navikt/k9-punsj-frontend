@@ -50,6 +50,8 @@
   "fordeling.knapp.omfordel":                                                                     "Omfordel",
   "fordeling.omfordeling.utfort":                                                                 "Journalposten er omfordelt.",
   "fordeling.omfordeling.feil":                                                                   "Det oppsto en feil. Prøv igjen senere.",
+  "gosysOppgave.opprettet":                                                                       "Journalføringsoppgave oprettet i Gosys",
+  "gosysOppgave.feilet":                                                                          "Oppretting av journalføringsoppgave i Gosys feilet",
   "ident.signatur.overskrift":                                                                    "Signatur",
   "ident.signatur.etikett":                                                                       "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
   "ident.identifikasjon.overskrift":                                                              "Identifikasjon",
