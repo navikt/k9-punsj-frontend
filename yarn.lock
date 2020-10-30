@@ -8095,10 +8095,10 @@ nav-frontend-lukknapp-style@^0.2.28:
   resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp-style/-/nav-frontend-lukknapp-style-0.2.28.tgz#e6742c50050fe48c6f760729ebeed10827bba11a"
   integrity sha512-3Z5vxOUBsHJ8IaWEfna6t5jrjMjb2J5hMjWZge5mo9Ob8x5SCxl6fFnVTHymUQFtyOrq27jk/Y2dg7w6yPK6DA==
 
-nav-frontend-lukknapp@^1.0.31:
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp/-/nav-frontend-lukknapp-1.0.31.tgz#e6823f8960a4c4c618a2687485618d10ffa09969"
-  integrity sha512-SXCkmGeNb80tbloDwCCOuTgjPY9qSWlkOJRK3LD4bSCqOOtJ7Ee7qtp8xqPwI85DYQAmhE9/SxOBLFEwR+MkYQ==
+nav-frontend-lukknapp@^1.0.37:
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lukknapp/-/nav-frontend-lukknapp-1.0.37.tgz#1dd2c95d124eef02140acb1a38ac3cf5df521e04"
+  integrity sha512-DdvY1fNUZ51Ghraq4NL2L5JoTPV+3eyynDchcIkx0VafBJXim1w8slSNRIVopn6gS7Cxw3JVBpHQ4HKVTDlxDg==
 
 nav-frontend-modal-style@^0.3.35:
   version "0.3.35"
