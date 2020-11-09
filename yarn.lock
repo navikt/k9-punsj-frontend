@@ -8053,10 +8053,10 @@ nav-frontend-skjema@^3.0.16:
   resolved "https://registry.yarnpkg.com/nav-frontend-skjema/-/nav-frontend-skjema-3.0.18.tgz#77544d5e9a50d194053a0c0b11d1ff566acb78f6"
   integrity sha512-zP7X5fFWmUiHqqw8/PLDX8IbSBoeTwrC7phpg2FsUN7FbFlvs3kXMC4szfKz0HagGqqdOF66ginixMFrWGsP9Q==
 
-nav-frontend-spinner-style@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/nav-frontend-spinner-style/-/nav-frontend-spinner-style-0.2.5.tgz#c782c63589776e768a45d6049047b1a60b6805be"
-  integrity sha512-PWSfscmNMbrnXRcXQUgBquU5479bNmO/sw3IwML6s6K/qyEYggRvJdGCbBEYyxXmoeDDjXGd2tkIVy5gja387A==
+nav-frontend-spinner-style@^0.2.8:
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/nav-frontend-spinner-style/-/nav-frontend-spinner-style-0.2.8.tgz#0e5d96561bed3a9a58d911d6767b550ea4d7f5dd"
+  integrity sha512-5cYxBgDMoS39TnXOYXP0t7+ChNfbtCVp5wr5vOcLNIQfrQY9tCY/SWR/ZASLVWMhKR5qqnI5rvUHPCyz4LtP4Q==
 
 nav-frontend-spinner@^2.0.5:
   version "2.0.5"
