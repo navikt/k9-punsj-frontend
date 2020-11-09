@@ -9482,10 +9482,10 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-re-resizable@^6.5.5:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.6.1.tgz#654a0edc1977e5d025c777a97f5555ef4bccea7f"
-  integrity sha512-ttWVasZ9X7c0ir0+4YK47tkmm9EAFssW07YLkeLzG5HCOuFgFAlSVzMlzAH0h3i6hDShQCHHJecVx5rk+snoFA==
+re-resizable@^6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.8.0.tgz#8a99d98a37032276aea62c1c344612f7e8ddc506"
+  integrity sha512-MffuegFHq5juSvLTe/lecTikc2DqIsLjrTAAZ44goPcNavjYgiCqwJa5RydGPsDOZ+OUZAZk1DP9S4AEu0Q1fQ==
   dependencies:
     fast-memoize "^2.5.1"
 
