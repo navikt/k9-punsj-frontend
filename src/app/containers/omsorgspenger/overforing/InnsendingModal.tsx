@@ -12,6 +12,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import { IError } from '../../../models/types';
 import './innsendingModal.less';
 import KryssSVG from '../../../assets/SVG/KryssSVG';
+import {getEnvironmentVariable} from "../../../utils";
 
 interface IInnsendingModalProps {
   innsendingsstatus: Innsendingsstatus;
@@ -71,7 +72,7 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.sendtInn" />
             </Undertittel>
             <VerticalSpacer sixteenPx={true} />
-            <NavLink to={'#'}>
+            <NavLink to={getEnvironmentVariable('K9_LOS_URL')}>
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
             </NavLink>
           </>
@@ -93,7 +94,7 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.prøvigjen" />
             </div>
             <VerticalSpacer sixteenPx={true} />
-            <NavLink to={'#'}>
+            <NavLink to={getEnvironmentVariable('K9_LOS_URL')}>
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
             </NavLink>
             <VerticalSpacer twentyPx={true} />
