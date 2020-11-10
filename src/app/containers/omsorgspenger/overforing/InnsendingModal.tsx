@@ -7,7 +7,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import CheckSvg from '../../../assets/SVG/CheckSVG';
-import { NavLink } from 'react-router-dom';
+import Lenke from 'nav-frontend-lenker';
 import ModalWrapper from 'nav-frontend-modal';
 import { IError } from '../../../models/types';
 import './innsendingModal.less';
@@ -72,9 +72,9 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.sendtInn" />
             </Undertittel>
             <VerticalSpacer sixteenPx={true} />
-            <NavLink to={getEnvironmentVariable('K9_LOS_URL')}>
+            <Lenke href={getEnvironmentVariable('K9_LOS_URL')}>
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
-            </NavLink>
+            </Lenke>
           </>
         )}
         {innsendingsstatus === Innsendingsstatus.Innsendingsfeil && (
@@ -94,9 +94,9 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.prøvigjen" />
             </div>
             <VerticalSpacer sixteenPx={true} />
-            <NavLink to={getEnvironmentVariable('K9_LOS_URL')}>
+            <Lenke href={getEnvironmentVariable('K9_LOS_URL')}>
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
-            </NavLink>
+            </Lenke>
             <VerticalSpacer twentyPx={true} />
             <Element>
               <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.detaljer" />
