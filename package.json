@@ -63,7 +63,7 @@
     "redux-logger": "^3.0.6",
     "snyk": "^1.424.4",
     "source-map-loader": "^1.1.1",
-    "terser-webpack-plugin": "^4.2.2",
+    "terser-webpack-plugin": "^4.2.3",
     "typescript-string-operations": "^1.4.0",
     "ulid": "^2.3.0",
     "uuid": "^8.3.1"
