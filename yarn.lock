@@ -8551,10 +8551,10 @@ nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.26:
   dependencies:
     nav-frontend-core "^5.0.5"
 
-nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.25:
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.26.tgz#a7701af21ddbdc6bdc0259549e398b36afb46835"
-  integrity sha512-GZ4WcQ0H4HBw7GHcVJtuDihSyrzPQ+df5dls4h60oOV3zNiedarMMGy43xFPxvPZnI0LTYlOX7rDGVxLBR9NBg==
+nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.34:
+  version "2.0.34"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi/-/nav-frontend-typografi-2.0.34.tgz#74a7b474ddae944bff20b22bd3bc553ac59bcb72"
+  integrity sha512-UXFBJCUfQu+OQmBD1CH6uQg9PRIc5Qrmv5Nk2UYXTBqGXoUfSR3QAcZEv772ii5m/st2/dNqYgG3YJrPzBVFng==
 
 nconf@^0.10.0:
   version "0.10.0"
