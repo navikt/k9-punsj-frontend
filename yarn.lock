@@ -8429,10 +8429,10 @@ nav-frontend-core@^4.0.11:
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-4.0.13.tgz#0f1917d914279c9f6555ccd1f7709c67b0316233"
   integrity sha512-36PyQkYceP6ZInQpeYfNA307qEODRjGfSxOIeiPdxilyxRB6v2PaLEePRZSS/adJ5i9PegSCDsm/rUKBaJKaIA==
 
-nav-frontend-core@^5.0.5:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.5.tgz#790c0e53d9417831bce353696c1b3b183e3174e7"
-  integrity sha512-thBvplvmNjMirKgsYzu+7YdcKzEJkHA2rb9N1oTkNJuelH1UcV6+V3GRnK7qIWl6MyhJ3nr2wOvcFIMgqo1Xag==
+nav-frontend-core@^5.0.5, nav-frontend-core@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.8.tgz#ee735886dce11f6ba2f56f0147881eed5b18af47"
+  integrity sha512-2NsEnm+vnMVhXO8Jo4RsGLGJUHpfOziTaUtCWJqaQt0gCscRSTkPkFSBQGlR0bxs9QFkO4TEW514EVBOBsmR1g==
 
 nav-frontend-etiketter-style@^1.0.8:
   version "1.0.8"
@@ -8544,12 +8544,12 @@ nav-frontend-toggle@^0.0.43:
   resolved "https://registry.yarnpkg.com/nav-frontend-toggle/-/nav-frontend-toggle-0.0.43.tgz#c5f7a65100ae93a0e1bfc08dd9c73163d22c29e3"
   integrity sha512-+QmJyZUbC8KjY9I5dbfH2OmzPOyi1ft4u51cCICLivSFJl9gF6dn5jjKnsfhXkq8qH333oyter3SJvmadcvadw==
 
-nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.26:
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.26.tgz#b1ef8d34556953ad95ff5d9e34da2fe5a615f7e3"
-  integrity sha512-WW/b5nRiAJqsZ4BVkvp0jLcGXABYXFmvI8T/sxUGQkUGtdQ+lJN58XJ0Ni42dsLz8AXCkYBVy44YDYBgokigEw==
+nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.29:
+  version "1.0.29"
+  resolved "https://registry.yarnpkg.com/nav-frontend-typografi-style/-/nav-frontend-typografi-style-1.0.29.tgz#049d8f1a98432f79f3c33d62bd6ddf57994b1f8a"
+  integrity sha512-jgw4jjHSapdtHxk7WTZ4UJ1g4R7jmfwj4NYeFXrA+xRyx98w7YDGWYLxb0BVJVmypW8+OytQ4XnrxSUcfe3Crg==
   dependencies:
-    nav-frontend-core "^5.0.5"
+    nav-frontend-core "^5.0.8"
 
 nav-frontend-typografi@^2.0.16, nav-frontend-typografi@^2.0.25:
   version "2.0.26"
