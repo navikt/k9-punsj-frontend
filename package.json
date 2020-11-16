@@ -47,7 +47,7 @@
     "promise": "^8.0.3",
     "prop-types": "^15.7.2",
     "re-resizable": "^6.7.0",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-aria-menubutton": "^7.0.0",
     "react-bootstrap": "^1.0.1",
     "react-day-picker": "^7.3.2",
