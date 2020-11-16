@@ -36,7 +36,7 @@ jobs:
         run: |
           echo $DOCKER_IMAGE > .docker_image
           echo "$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" > .docker_tag
-          echo "::set-env name=IMAGE::$(cat .docker_image):$(cat .docker_tag)"
+          echo "IMAGE=${IMAGE}$(cat .docker_image):$(cat .docker_tag)" >> $GITHUB_ENV
       - name: Bygge Docker image
         run: docker build . --pull -t $(cat .docker_image):$(cat .docker_tag)
       - name: Laste opp Docker image
