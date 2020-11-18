@@ -235,6 +235,7 @@
   "skjema.validering.minstEn": "Må velge minst én",
   "skjema.validering.positivtheltall": "Må være et heltall større enn null",
   "skjema.validering.ugyldigdato": "Ugyldig datoformat",
+  "skjema.validering.ugyldigfødselsdato": "Fødselsdato kan ikke være frem i tid",
   "OMSORGSPENGER_OVERFØRING.header": "Melding om overføring av omsorgsdager",
   "OMSORGSPENGER_FORDELING.header": "Melding om fordeling av omsorgsdager",
   "omsorgsdager.overføring.identitetsnummer": "Fødsels- / D-nummer",

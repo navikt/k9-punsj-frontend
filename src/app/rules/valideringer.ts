@@ -80,3 +80,8 @@ export function gyldigDato(verdi: string) {
 
   return datoRegex.test(verdi) ? undefined : 'skjema.validering.ugyldigdato';
 }
+
+export function gyldigFødselsdato(verdi: string) {
+  const dagsDato = new Date();
+  return new Date(verdi) < dagsDato ? undefined : 'skjema.validering.ugyldigfødselsdato';
+}
