@@ -17,7 +17,7 @@ const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({
     { step: PunchStep.IDENT, path: `${pleiepengerRootPath}/ident` },
     {
       step: PunchStep.CHOOSE_SOKNAD,
-      path: `${pleiepengerRootPath}/hentsoknader/{ident}`,
+      path: `${pleiepengerRootPath}/hentsoknader`,
     },
     { step: PunchStep.FILL_FORM, path: `${pleiepengerRootPath}/skjema/{id}` },
     { step: PunchStep.COMPLETED, path: `${pleiepengerRootPath}/fullfort` },

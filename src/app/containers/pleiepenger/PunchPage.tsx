@@ -212,7 +212,7 @@ export class PunchPageComponent extends React.Component<
         return <PunchForm {...commonProps} id={this.props.match.params.id} />;
       case PunchStep.COMPLETED:
         return (
-          <AlertStripeSuksess className="fullfortmelding">
+          <AlertStripeSuksess className="fullfortmelding">i9oklm
             Søknaden er sendt til behandling.
           </AlertStripeSuksess>
         );
@@ -223,7 +223,7 @@ export class PunchPageComponent extends React.Component<
     IMapperOgFagsakerComponentProps,
     'ident1' | 'ident2'
   > {
-    const { ident } = this.props.match.params;
+    const ident = this.props.punchState.ident1;
     return /^\d+&\d+$/.test(ident)
       ? { ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0] }
       : { ident1: ident, ident2: null };
@@ -231,8 +231,7 @@ export class PunchPageComponent extends React.Component<
 
   private redirectToNextStep(ident1: string, ident2: string | null) {
     if (IdentRules.areIdentsValid(ident1, ident2)) {
-      const ident = ident1 && ident2 ? `${ident1}&${ident2}` : ident1;
-      setHash(this.getPath(PunchStep.CHOOSE_SOKNAD, { ident }));
+      setHash(this.getPath(PunchStep.CHOOSE_SOKNAD));
     }
   }
 

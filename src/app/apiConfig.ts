@@ -14,7 +14,7 @@ export enum ApiPath {
   MAPPE_CREATE = '/pleiepenger-sykt-barn-soknad',
   MAPPE_UPDATE = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
   MAPPE_SUBMIT = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
-  FAGSAKER_FIND = '/fagsak/{ident}?ytelse=pleiepenger-sykt-barn',
+  FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
   JOURNALPOST_GET = '/journalpost/{journalpostId}',
   JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
   JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
