@@ -212,7 +212,7 @@ export class PunchPageComponent extends React.Component<
         return <PunchForm {...commonProps} id={this.props.match.params.id} />;
       case PunchStep.COMPLETED:
         return (
-          <AlertStripeSuksess className="fullfortmelding">i9oklm
+          <AlertStripeSuksess className="fullfortmelding">
             Søknaden er sendt til behandling.
           </AlertStripeSuksess>
         );
