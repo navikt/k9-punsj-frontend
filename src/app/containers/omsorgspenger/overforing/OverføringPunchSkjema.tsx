@@ -32,6 +32,7 @@ interface IOverføringPunchSkjema {
   innsendingsstatus: Innsendingsstatus;
   innsendingsfeil?: IError;
   journalpostId: string;
+  ident?: string;
 }
 
 const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> = ({
@@ -39,10 +40,9 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
   innsendingsstatus,
   innsendingsfeil,
   journalpostId,
+  ident,
 }) => {
   const { values, setFieldValue } = useOverføringPunchSkjemaContext();
-  const { params } = useRouteMatch<{ ident?: string }>();
-  const ident = params?.ident;
   const disabled = useMemo(() => {
     switch (innsendingsstatus) {
       case Innsendingsstatus.IkkeSendtInn:
