@@ -20,13 +20,14 @@ const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContai
   gåTilForrigeSteg,
 }) => {
   const dispatch = useDispatch();
-  const { innsendingsstatus, innsendingsfeil, journalpostId } = useSelector(
+  const { innsendingsstatus, innsendingsfeil, journalpostId, ident } = useSelector(
     (state: RootStateType) => {
       const punchState = state[Sakstype.OMSORGSPENGER_OVERFØRING].punch;
       return {
         innsendingsstatus: punchState.innsendingsstatus,
         innsendingsfeil: punchState.innsendingsfeil,
         journalpostId: state.felles.journalpost!.journalpostId,
+        ident: state.felles.journalpost!.norskIdent,
       };
     }
   );
@@ -44,6 +45,7 @@ const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContai
         innsendingsstatus={innsendingsstatus}
         innsendingsfeil={innsendingsfeil}
         journalpostId={journalpostId}
+        ident={ident}
       />
     </SkjemaContext>
   );

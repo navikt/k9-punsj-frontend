@@ -907,14 +907,11 @@ export class PunchFormComponent extends React.Component<
   }
 
   private handleBackButtonClick = () => {
-    const { punchState, getPunchPath } = this.props;
-    const { ident1, ident2 } = punchState;
+    const { getPunchPath } = this.props;
     this.props.resetMappeAction();
     this.props.undoChoiceOfMappeAction();
     setHash(
-      getPunchPath(PunchStep.CHOOSE_SOKNAD, {
-        ident: !!ident2 ? `${ident1}&${ident2}` : ident1,
-      })
+      getPunchPath(PunchStep.CHOOSE_SOKNAD)
     );
   };
 

@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import { JaNei } from '../../../enums';
 import {
   fødselsnummervalidator,
-  gyldigDato,
+  gyldigDato, gyldigFødselsdato,
   IFeltValidator,
   positivtHeltall,
   påkrevd,
@@ -99,7 +99,7 @@ const barnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
 
 const barnFødselsdato: IFeltValidator<string, IOverføringPunchSkjema> = {
   feltPath: 'barn[].fødselsdato',
-  validatorer: [påkrevd, gyldigDato],
+  validatorer: [påkrevd, gyldigDato, gyldigFødselsdato],
   arrayInPath: true,
 };
 
