@@ -19,18 +19,25 @@ const OverføringPunchContainer: React.FunctionComponent<IOverføringPunchContai
   initialValues,
   gåTilForrigeSteg,
 }) => {
-  const dispatch = useDispatch();
-  const { innsendingsstatus, innsendingsfeil, journalpostId, ident } = useSelector(
-    (state: RootStateType) => {
-      const punchState = state[Sakstype.OMSORGSPENGER_OVERFØRING].punch;
-      return {
-        innsendingsstatus: punchState.innsendingsstatus,
-        innsendingsfeil: punchState.innsendingsfeil,
-        journalpostId: state.felles.journalpost!.journalpostId,
-        ident: state.felles.journalpost!.norskIdent,
-      };
+    const dispatch = useDispatch();
+    const { innsendingsstatus, innsendingsfeil, journalpostId, ident } = useSelector(
+        (state: RootStateType) => {
+            const overføringState = state[Sakstype.OMSORGSPENGER_OVERFØRING];
+            const punchState = overføringState.punch;
+            return {
+                innsendingsstatus: punchState.innsendingsstatus,
+                innsendingsfeil: punchState.innsendingsfeil,
+                journalpostId: state.felles.journalpost!.journalpostId,
+                ident: overføringState.signatur.skjema.identitetsnummer
+            };
+        }
+    );
+
+    if (!ident) {
+        // Skjer hvis man går direkte til url'en
+        gåTilForrigeSteg();
+        return null;
     }
-  );
 
   return (
     <SkjemaContext
