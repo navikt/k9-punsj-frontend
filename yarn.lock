@@ -8036,10 +8036,10 @@ nav-frontend-lenker-style@^0.2.29:
   resolved "https://registry.yarnpkg.com/nav-frontend-lenker-style/-/nav-frontend-lenker-style-0.2.39.tgz#13748798f4b92c114308bf4fb5e1e629f7702fc0"
   integrity sha512-8yLnFCcEXk8Zl172auHooG6f8KAUFDwEJ40qW0tVHPd0ATMAQ1bRJ48uPQ7oMvkw5ywtGLhIv7LEfpCKKx58AQ==
 
-nav-frontend-lenker@^1.0.41:
-  version "1.0.41"
-  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.41.tgz#5379eaa05d3223b55e1d5bd7a0e7ca2ecd6dbe20"
-  integrity sha512-8aiewhtREIFwfYaprd1xKKfr5EXzUx+lJ2nco7MOsQgvGtdZL2p7XOUosC0K4xMSnEgzT3aSNvVYdvdDrDqXqw==
+nav-frontend-lenker@^1.0.53:
+  version "1.0.53"
+  resolved "https://registry.yarnpkg.com/nav-frontend-lenker/-/nav-frontend-lenker-1.0.53.tgz#b1d4e5659bc2f7f12cad83312ce5d4c5f7e2a076"
+  integrity sha512-S3xlFOr9Jv9MPjw2U7y31IBwex8OtfZjpOiNumZA7kfSHdW19R0OlNkJfGVr5e9GMucsSqganfusgIgJQUfanA==
 
 nav-frontend-lukknapp-style@^0.2.29:
   version "0.2.34"
