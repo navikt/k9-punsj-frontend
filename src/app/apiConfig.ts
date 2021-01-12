@@ -5,7 +5,7 @@ const IS_OICD_AUTH_PROXY_SET: boolean =
   !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
 const URL_BACKEND = IS_OICD_AUTH_PROXY_SET
   ? OICD_AUTH_PROXY
-  : 'http://localhost:8081';
+  : 'http://localhost:8101';
 export const URL_API = URL_BACKEND + '/api/k9-punsj';
 
 export enum ApiPath {
