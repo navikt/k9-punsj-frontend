@@ -27,7 +27,7 @@ export const rootReducer = combineReducers({
   [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
     opprettIGosys: GosysOppgaveReducer,
   }),
-  [Sakstype.SØK]: combineReducers({
+  ['SØK']: combineReducers({
     mapperSokState: MapperSokReducer,
     visningState: VisningReducer
   }),
