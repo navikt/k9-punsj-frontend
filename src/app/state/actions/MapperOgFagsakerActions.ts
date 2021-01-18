@@ -59,6 +59,21 @@ export function findMapper(ident1: string, ident2: string | null) {return (dispa
     });
 }}
 
+export function sokMapper(ident1: string, ident2: string | null) {return (dispatch: any) => {
+    dispatch(findMapperLoadingAction(true));
+    const idents = ident2 ? `${ident1},${ident2}` : ident1;
+    return get(ApiPath.MAPPE_SOK, undefined, {'X-Nav-NorskIdent': idents}, response => {
+        if (response.ok) {
+            return response.json()
+                .then(r => {
+                    const {mapper} = r;
+                    dispatch(setMapperAction(MappeRules.isMapperResponseValid(mapper) ? mapper : []));
+                });
+        }
+        return dispatch(findMapperErrorAction(convertResponseToError(response)));
+    });
+}}
+
 export function setFagsakerAction(fagsaker: IFagsak[]):         ISetFagsakerAction              {return {type: MapperOgFagsakerActionKeys.FAGSAKER_SET, fagsaker}}
 export function findFagsakerLoadAction(isLoading: boolean):     IFindFagsakerLoadAction         {return {type: MapperOgFagsakerActionKeys.FAGSAKER_LOAD, isLoading}}
 export function findFagsakerErrorAction(error: IError):         IFindFagsakerErrorAction        {return {type: MapperOgFagsakerActionKeys.FAGSAKER_REQUEST_ERROR, error}}

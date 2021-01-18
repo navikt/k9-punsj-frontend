@@ -17,6 +17,7 @@ import {
   getLocaleFromSessionStorage,
   setLocaleInSessionStorage,
 } from './utils';
+import FnrSokIndex from "./containers/sok/FnrSokIndex";
 
 const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
@@ -44,9 +45,7 @@ export const App: React.FunctionComponent = () => {
         <BrowserRouter>
           <Switch>
             <Route path="/:journalpostid/" children={JournalpostRouter} />
-            <Route path="/">
-              <p>Journalpostid er ikke oppgitt.</p>
-            </Route>
+            <Route path="/" children={FnrSokIndex} />
           </Switch>
         </BrowserRouter>
       </ApplicationWrapper>

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import {
   AuthReducer,
   FordelingReducer, GosysOppgaveReducer,
-  MapperOgFagsakerReducer,
+  MapperOgFagsakerReducer, MapperSokReducer,
   PunchFormReducer,
   PunchReducer,
   SignaturReducer,
@@ -11,6 +11,7 @@ import FellesReducer from './reducers/FellesReducer';
 import { Sakstype } from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import {VisningReducer} from "./reducers/VisningReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -26,7 +27,10 @@ export const rootReducer = combineReducers({
   [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
     opprettIGosys: GosysOppgaveReducer,
   }),
-
+  [Sakstype.SØK]: combineReducers({
+    mapperSokState: MapperSokReducer,
+    visningState: VisningReducer
+  }),
   fordelingState: FordelingReducer,
   authState: AuthReducer,
   felles: FellesReducer,
