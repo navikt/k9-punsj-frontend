@@ -56,6 +56,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
   }
 
 
+
   // @ts-ignore
   if (!!journalpostRequestError && journalpostRequestError.status === 403) {
     return  <IkkeTilgangPanel/>
