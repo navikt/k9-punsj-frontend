@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { IError, IJournalpost } from '../models/types';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
 import { RootStateType } from '../state/RootState';
+import IkkeTilgangPanel from "../components/IkkeTilgangPanel";
 
 interface IJournaPostStateProps {
   journalpost?: IJournalpost;
@@ -60,6 +61,12 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         <FormattedMessage id="startPage.feil.journalpost" />
       </AlertStripeFeil>
     );
+  }
+
+
+  // @ts-ignore
+  if (!!journalpostRequestError && journalpostRequestError.status === 403) {
+    return  <IkkeTilgangPanel/>
   }
 
   if (!journalpost) {
