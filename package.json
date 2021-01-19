@@ -64,7 +64,7 @@
     "snyk": "^1.421.1",
     "source-map-loader": "^1.1.1",
     "terser-webpack-plugin": "^4.2.2",
-    "typescript-string-operations": "^1.4.0",
+    "typescript-string-operations": "^1.4.1",
     "ulid": "^2.3.0",
     "uuid": "^8.3.1"
   },
