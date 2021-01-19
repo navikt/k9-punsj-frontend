@@ -55,14 +55,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     );
   }
 
-  if (!!journalpostRequestError) {
-    return (
-      <AlertStripeFeil>
-        <FormattedMessage id="startPage.feil.journalpost" />
-      </AlertStripeFeil>
-    );
-  }
-
 
   // @ts-ignore
   if (!!journalpostRequestError && journalpostRequestError.status === 403) {
