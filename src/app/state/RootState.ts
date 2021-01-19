@@ -11,7 +11,7 @@ import FellesReducer from './reducers/FellesReducer';
 import { Sakstype } from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
-import {VisningReducer} from "./reducers/VisningReducer";
+import {MappeVisningReducer} from "./reducers/MappeVisningReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -29,7 +29,7 @@ export const rootReducer = combineReducers({
   }),
   ['SØK']: combineReducers({
     mapperSokState: MapperSokReducer,
-    visningState: VisningReducer
+    visningState: MappeVisningReducer
   }),
   fordelingState: FordelingReducer,
   authState: AuthReducer,
