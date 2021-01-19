@@ -9,7 +9,7 @@ export const initialState: IMapperVisningState = {
     ident: ''
 };
 
-export function VisningReducer(
+export function MappeVisningReducer(
     visningState: IMapperVisningState = initialState,
     action: IMappeSokActionTypes | LocationChangeAction
 ): IMapperVisningState {
