@@ -2,7 +2,7 @@ import SoknadReadMode from 'app/containers/pleiepenger/SoknadReadMode';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import {
     IMappe,
-    IMapperSokState,
+    IMapperSokState, IPath,
     Mappe,
 } from 'app/models/types';
 import {
@@ -18,7 +18,7 @@ import {
     undoSearchForMapperAction,
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { datetime, setHash } from 'app/utils';
+import { datetime, setHash, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -30,6 +30,7 @@ import { connect } from 'react-redux';
 import {IMapperVisningState} from "../../models/types/MapperVisningState";
 import {MapperVisningStep} from "../../models/enums/MapperVisningStep";
 import {setIdentSokAction, setStepSokAction} from "../../state/actions/MapperSokActions";
+import {PunchForm} from "../pleiepenger/PunchForm";
 
 export interface IMapperSokStateProps {
     visningState: IMapperVisningState;
@@ -70,6 +71,25 @@ export const MapperVisningComponent: React.FunctionComponent<IMapperSokProps> = 
         ident,
     } = props;
     const {mapper} = mapperSokState;
+
+    const paths: IPath[] = [
+        { step: PunchStep.IDENT, path: `/pleiepenger/ident` },
+        {
+            step: PunchStep.CHOOSE_SOKNAD,
+            path: `/pleiepenger/hentsoknader`,
+        },
+        { step: PunchStep.FILL_FORM, path: `/pleiepenger/skjema/{id}` },
+        { step: PunchStep.COMPLETED, path: `$/pleiepenger/fullfort` },
+    ];
+
+const getPunchPath = (step: PunchStep, values?: any) => {
+        return getPath(
+            paths,
+            step,
+            values,
+           undefined
+        );
+};
 
     React.useEffect(() => {
         props.setIdentAction(ident);
@@ -125,6 +145,7 @@ export const MapperVisningComponent: React.FunctionComponent<IMapperSokProps> = 
         ) : null;
 
     const chooseMappe = (mappe: IMappe) => {
+        setHash(getPunchPath(PunchStep.FILL_FORM, { id: mappe.mappeId }));
         props.chooseMappeAction(mappe);
     };
 
@@ -216,7 +237,7 @@ export const MapperVisningComponent: React.FunctionComponent<IMapperSokProps> = 
             <>
                 {technicalError}
                 <AlertStripeInfo>
-                    {intlHelper(intl, 'mapper.infoboks', {
+                    {intlHelper(intl, 'mapper.visning.infoboks', {
                         antallSokere: '1',
                     })}
                 </AlertStripeInfo>
