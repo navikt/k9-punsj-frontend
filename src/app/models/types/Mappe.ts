@@ -8,6 +8,7 @@ import {ISoknad, Soknad} from 'app/models/types/Soknad';
 
 export interface IMappe {
     mappeId?: string;
+    søknadType?: string;
     innsendinger?: string[];
     personer?: {[key: string]: IPersonlig};
     [key: string]: any;
@@ -16,6 +17,7 @@ export interface IMappe {
 export class Mappe implements IMappe {
 
     mappeId: string;
+    søknadType: string;
     personer: {[key: string]: Personlig};
     idents: string[];
 
@@ -23,6 +25,7 @@ export class Mappe implements IMappe {
         this.mappeId = mappe.mappeId || '';
         this.personer = {};
         this.idents = [];
+        this.søknadType = mappe.søknadType || ''
         Object.keys(mappe.personer || [])
               .forEach(k => {
                   this.personer[k] = new Personlig(mappe.personer![k] || {});

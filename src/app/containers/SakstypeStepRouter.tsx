@@ -93,8 +93,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
             })}
           </Switch>
         </FormPanel>
-
-        <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />
+        {journalpostid !== 'rediger' && <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
       </div>
     </Page>
   );

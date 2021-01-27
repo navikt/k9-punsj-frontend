@@ -204,10 +204,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           />
         </div>
       </FormPanel>
+      {journalpost!.journalpostId !== 'rediger' &&
       <PdfVisning
         dokumenter={journalpost!.dokumenter}
         journalpostId={journalpost!.journalpostId}
-      />
+      />}
     </div>
   );
 };

@@ -19,11 +19,12 @@ const JournalpostPanel: React.FunctionComponent<IJournalpostPanelProps> = ({
   return (
     <Panel border={true} className={'journalpostpanel'}>
       <FlexRow childrenMargin={'medium'}>
+          {journalpostId !== 'rediger' &&
         <LabelValue
           labelTextId="journalpost.id"
           value={journalpostId}
           retning="horisontal"
-        />
+        />}
         <LabelValue
           labelTextId="journalpost.norskIdent"
           value={

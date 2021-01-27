@@ -26,6 +26,7 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import PdfVisning from '../../components/pdf/PdfVisning';
+import {peiepengerPaths} from "./PeiepengerRoutes";
 
 export interface IPunchPageStateProps {
   punchState: IPleiepengerPunchState;
@@ -109,14 +110,15 @@ export class PunchPageComponent extends React.Component<
             this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
           {this.underFnr()}
         </Panel>
-        <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />
+        {journalpostid !== 'rediger' &&
+        <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
       </div>
     );
   }
 
   private getPath = (step: PunchStep, values?: any) =>
     getPath(
-      this.props.paths,
+      peiepengerPaths,
       step,
       values,
       this.props.dok ? { dok: this.props.dok } : undefined
@@ -193,7 +195,7 @@ export class PunchPageComponent extends React.Component<
 
   private underFnr() {
     const commonProps = {
-      journalpostid: this.props.journalpostid,
+      journalpostid: this.props.journalpostid || '',
       getPunchPath: this.getPath,
     };
     switch (this.props.step) {

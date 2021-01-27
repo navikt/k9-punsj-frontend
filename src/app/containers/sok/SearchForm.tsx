@@ -10,6 +10,7 @@ import SokKnapp from "../../components/knapp/SokKnapp";
 import './sok.less';
 import {SkjemaGruppe} from "nav-frontend-skjema";
 import {MapperVisning} from "./MapperVisning";
+import {setHash} from "../../utils";
 
 export const SearchForm: React.FunctionComponent = () => {
     const {values, setFieldValue} = useFormikContext<ISokeSkjema>();
@@ -23,6 +24,10 @@ export const SearchForm: React.FunctionComponent = () => {
         }
     }, [identitetsnummer]);
 
+    const onClick = () => {
+        setVisMapper(true);
+    }
+
     return (
         <div className="container">
             <Form>
@@ -34,7 +39,7 @@ export const SearchForm: React.FunctionComponent = () => {
                             <FormattedMessage id="søk.label"/>
                         }/>
                     <SokKnapp
-                        onClick={() => setVisMapper(true)}
+                        onClick={() => onClick()}
                         tekstId="søk.knapp.label"
                         disabled={!identitetsnummer}/>
                 </SkjemaGruppe>

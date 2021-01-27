@@ -26,11 +26,12 @@ import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {IMapperVisningState} from "../../models/types/MapperVisningState";
 import {MapperVisningStep} from "../../models/enums/MapperVisningStep";
 import {setIdentSokAction, setStepSokAction} from "../../state/actions/MapperSokActions";
 import {PunchForm} from "../pleiepenger/PunchForm";
+import {SoknadType} from "../../models/enums/SoknadType";
 
 export interface IMapperSokStateProps {
     visningState: IMapperVisningState;
@@ -145,8 +146,9 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         ) : null;
 
     const chooseMappe = (mappe: IMappe) => {
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: mappe.mappeId }));
+        window.history.pushState("","", "/rediger");
         props.chooseMappeAction(mappe);
+        setHash(getPunchPath(PunchStep.FILL_FORM, { id: mappe.mappeId }));
     };
 
     function showMapper() {
@@ -165,6 +167,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 !!felles.datoMottatt
                     ? datetime(intl, TimeFormat.DATE_SHORT, felles.datoMottatt)
                     : '',
+                SoknadType[mappe.søknadType],
                 (!!felles.barn.norskIdent
                     ? felles.barn.norskIdent
                     : felles.barn.foedselsdato &&
@@ -215,7 +218,8 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                     <thead>
                     <tr>
                         <th>{intlHelper(intl, 'mapper.tabell.mottakelsesdato')}</th>
-                        <th>{intlHelper(intl, 'mapper.tabell.barnetsfnrellerfdato')}</th>
+                        <th>{intlHelper(intl, 'mapper.tabell.søknadtype')}</th>
+                        <th>{intlHelper(intl, 'mapper.tabell.fnrellerdato')}</th>
                         <th>{intlHelper(intl, 'mapper.tabell.fraogmed')}</th>
                         <th>{intlHelper(intl, 'mapper.tabell.tilogmed')}</th>
                     </tr>
