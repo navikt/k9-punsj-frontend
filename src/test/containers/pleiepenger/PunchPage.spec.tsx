@@ -80,6 +80,7 @@ const setupPunchPage = (
   const punchPageComponentProps: IPunchPageComponentProps = {
     step: punchState.step,
     journalpostid,
+    paths: [],
   };
 
   mocked(intlHelper).mockImplementation(
