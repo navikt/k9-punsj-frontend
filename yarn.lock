@@ -8057,10 +8057,10 @@ nav-frontend-core@^5.0.5:
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.5.tgz#790c0e53d9417831bce353696c1b3b183e3174e7"
   integrity sha512-thBvplvmNjMirKgsYzu+7YdcKzEJkHA2rb9N1oTkNJuelH1UcV6+V3GRnK7qIWl6MyhJ3nr2wOvcFIMgqo1Xag==
 
-nav-frontend-etiketter-style@^1.0.8:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter-style/-/nav-frontend-etiketter-style-1.0.14.tgz#1c0f0648974a7897b077cebe050b68433062d55c"
-  integrity sha512-Wty6A7Spca3942EsVg7kxmSWWBoRxDW+iVHM+ekAKco2ksJPq25fZ23aYBiHbzyGerTOnSrIZnf9V2RveI/ioQ==
+nav-frontend-etiketter-style@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/nav-frontend-etiketter-style/-/nav-frontend-etiketter-style-1.0.18.tgz#3c66e2dac7700a604d44214957110969edeb24f9"
+  integrity sha512-Gxjt93SvPLjtZxSlAWIkfUTxpenWOafAcSrQ+2Lr4Qrvx+kOCxvbC8bhsTRn19M01SQ24dVjZ0VBtlr5Jad6xQ==
 
 nav-frontend-etiketter@^2.0.7:
   version "2.0.8"
