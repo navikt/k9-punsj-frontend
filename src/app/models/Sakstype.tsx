@@ -9,7 +9,7 @@ export interface ISakstypeDefault {
 export interface ISakstypeOmfordeling extends ISakstypeDefault {}
 
 export interface ISakstypeComponentProps {
-  journalpostid: string;
+  journalpostid?: string;
   punchPath: string;
 }
 

@@ -37,7 +37,9 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
   journalpostRequestError,
 }) => {
   useEffect(() => {
+    if (journalpostId) {
       getJournalpost(journalpostId);
+    }
   }, [journalpostId]);
 
   if (isJournalpostLoading) {

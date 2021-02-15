@@ -45,7 +45,7 @@ export interface IPunchPageQueryProps {
 export interface IPunchPageComponentProps {
   match?: any;
   step: PunchStep;
-  journalpostid: string;
+  journalpostid?: string;
   paths: IPath[];
 }
 
@@ -110,7 +110,7 @@ export class PunchPageComponent extends React.Component<
             this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
           {this.underFnr()}
         </Panel>
-        {journalpostid !== 'rediger' &&
+        {journalpostid && journalpostid !== 'rediger' &&
         <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
       </div>
     );
