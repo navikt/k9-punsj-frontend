@@ -11,6 +11,7 @@ import {SkjemaGruppe} from "nav-frontend-skjema";
 import {MapperVisning} from "./MapperVisning";
 import DateInput from "../../components/skjema/DateInput";
 import {IPeriode, Periode} from "../../models/types";
+import {ISoknadPeriode} from "../../models/types/HentSoknad";
 
 export const SearchForm: React.FunctionComponent = () => {
     const {values} = useFormikContext<ISokeSkjema>();
@@ -21,10 +22,10 @@ export const SearchForm: React.FunctionComponent = () => {
         setVisMapper(true);
     }
 
-    const periode = (fra: string, til: string): IPeriode => {
+    const periode = (fra: string, til: string): ISoknadPeriode => {
         return {
-            fraOgMed: fra,
-            tilOgMed: til
+            fom: fra,
+            tom: til
         }
     }
     return (
@@ -52,7 +53,10 @@ export const SearchForm: React.FunctionComponent = () => {
             {visMapper &&
             <MapperVisning
                 ident={identitetsnummer}
-                periode={periode(fraOgMed, tilOgMed)}
+                periode={{
+                    fom: fraOgMed,
+                    tom: tilOgMed
+                }}
             />}
 
         </div>

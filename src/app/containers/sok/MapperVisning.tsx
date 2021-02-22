@@ -41,7 +41,7 @@ export interface IMapperSokStateProps {
 export interface IMapperSokDispatchProps {
     setIdentAction: typeof setIdentSokAction;
     setStepAction: typeof setStepSokAction;
-    findMapper: typeof sokMapper;
+    findMapper: typeof sokPsbMapper;
     undoSearchForMapperAction: typeof undoSearchForMapperAction;
     openMappeAction: typeof openMappeAction;
     closeMappeAction: typeof closeMappeAction;
@@ -54,7 +54,7 @@ export interface IMapperSokDispatchProps {
 
 export interface IMapperVisningComponentProps {
     ident: string;
-    periode: IPeriode;
+    periode: ISoknadPeriode;
 
 }
 
@@ -71,6 +71,7 @@ export const MapperVisningComponent: React.FunctionComponent<IMapperSokProps> = 
         mapperSokState,
         visningState,
         ident,
+        periode,
     } = props;
     const {mapper} = mapperSokState;
 
@@ -95,7 +96,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     React.useEffect(() => {
         props.setIdentAction(ident);
-        props.findMapper(ident, null);
+        props.findMapper(ident, null, periode);
         props.setStepAction(MapperVisningStep.CHOOSE_SOKNAD);
     }, [ident]);
 
