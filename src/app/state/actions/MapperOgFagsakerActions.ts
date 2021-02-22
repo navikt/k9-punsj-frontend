@@ -4,6 +4,7 @@ import {IError, IFagsak, IMappe, IPersonlig, Mappe, Periode} from 'app/models/ty
 import {MappeRules}                               from 'app/rules';
 import {convertResponseToError, get, post}        from 'app/utils';
 import {Simulate} from "react-dom/test-utils";
+import {IHentSoknad, ISoknadPeriode} from "../../models/types/HentSoknad";
 
 interface ISetMapperAction                  {type: MapperOgFagsakerActionKeys.MAPPER_SET, mapper: IMappe[]}
 interface IFindMapperLoadingAction          {type: MapperOgFagsakerActionKeys.MAPPER_LOAD, isLoading: boolean}
@@ -74,11 +75,16 @@ export function sokMapper(ident1: string, ident2: string | null) {return (dispat
     });
 }}
 
-export function sokPsbMapper(ident1: string, ident2: string | null, periode: Periode) {return (dispatch: any) => {
+export function sokPsbMapper(ident1: string, ident2: string | null, periode: ISoknadPeriode) {return (dispatch: any) => {
+    const requestBody: IHentSoknad =
+        {
+            norskIdent: ident1,
+            periode
+        }
 
     dispatch(findMapperLoadingAction(true));
     const idents = ident2 ? `${ident1},${ident2}` : ident1;
-    return get(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': idents}, response => {
+    return post(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': idents}, requestBody, response => {
         if (response.ok) {
             return response.json()
                 .then(r => {
