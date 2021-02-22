@@ -17,7 +17,7 @@ import {
   getLocaleFromSessionStorage,
   setLocaleInSessionStorage,
 } from './utils';
-import FnrSokIndex from "./containers/sok/FnrSokIndex";
+import SokIndex from "./containers/sok/SokIndex";
 import RedigeringRouter from "./containers/redigering/RedigeringRouter";
 
 const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
@@ -47,7 +47,7 @@ export const App: React.FunctionComponent = () => {
           <Switch>
             <Route path="/rediger/" children={RedigeringRouter} />
             <Route path="/journalpost/:journalpostid/" children={JournalpostRouter} />
-            <Route path="/" children={FnrSokIndex} />
+            <Route path="/" children={SokIndex} />
           </Switch>
         </BrowserRouter>
       </ApplicationWrapper>

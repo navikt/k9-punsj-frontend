@@ -3,14 +3,14 @@ import SearchForm from "./SearchForm";
 import SkjemaContext from "../../components/skjema/SkjemaContext";
 import {validerSokeSkjema} from "../../models/forms/sok/SokeSkjema";
 
-export const FnrSokIndex: React.FunctionComponent = () => {
+export const SokIndex: React.FunctionComponent = () => {
 
 
     return (
         <SkjemaContext initialValues={{}} onSubmitCallback={() => undefined} validerSkjema={validerSokeSkjema}>
-            <SearchForm
-            /></SkjemaContext>
+            <SearchForm/>
+        </SkjemaContext>
     )
 };
 
-export default FnrSokIndex;
+export default SokIndex;

@@ -2,8 +2,8 @@ import SoknadReadMode from 'app/containers/pleiepenger/SoknadReadMode';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import {
     IMappe,
-    IMapperSokState, IPath,
-    Mappe,
+    IMapperSokState, IPath, IPeriode,
+    Mappe, Periode,
 } from 'app/models/types';
 import {
     chooseMappeAction,
@@ -15,7 +15,7 @@ import {
     resetMappeidAction,
     resetPunchAction,
     setIdentAction,
-    undoSearchForMapperAction,
+    undoSearchForMapperAction, sokPsbMapper,
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash, getPath } from 'app/utils';
@@ -26,11 +26,10 @@ import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import {connect, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
 import {IMapperVisningState} from "../../models/types/MapperVisningState";
 import {MapperVisningStep} from "../../models/enums/MapperVisningStep";
 import {setIdentSokAction, setStepSokAction} from "../../state/actions/MapperSokActions";
-import {PunchForm} from "../pleiepenger/PunchForm";
 import {SoknadType} from "../../models/enums/SoknadType";
 
 export interface IMapperSokStateProps {
@@ -54,6 +53,7 @@ export interface IMapperSokDispatchProps {
 
 export interface IMapperVisningComponentProps {
     ident: string;
+    periode: IPeriode;
 
 }
 
@@ -274,8 +274,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) =>
         dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: MapperVisningStep) => dispatch(setStepSokAction(step)),
-    findMapper: (ident1: string, ident2: string | null) =>
-        dispatch(sokMapper(ident1, ident2)),
+    findMapper: (ident1: string, ident2: string | null, periode: Periode) =>
+        dispatch(sokPsbMapper(ident1, ident2, periode)),
     undoSearchForMapperAction: () => dispatch(undoSearchForMapperAction()),
     openMappeAction: (mappe: IMappe) => dispatch(openMappeAction(mappe)),
     closeMappeAction: () => dispatch(closeMappeAction()),

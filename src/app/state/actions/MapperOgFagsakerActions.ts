@@ -1,6 +1,6 @@
 import {ApiPath}                                  from 'app/apiConfig';
 import {JaNeiVetikke, MapperOgFagsakerActionKeys} from 'app/models/enums';
-import {IError, IFagsak, IMappe, IPersonlig, Mappe} from 'app/models/types';
+import {IError, IFagsak, IMappe, IPersonlig, Mappe, Periode} from 'app/models/types';
 import {MappeRules}                               from 'app/rules';
 import {convertResponseToError, get, post}        from 'app/utils';
 import {Simulate} from "react-dom/test-utils";
@@ -73,6 +73,23 @@ export function sokMapper(ident1: string, ident2: string | null) {return (dispat
         return dispatch(findMapperErrorAction(convertResponseToError(response)));
     });
 }}
+
+export function sokPsbMapper(ident1: string, ident2: string | null, periode: Periode) {return (dispatch: any) => {
+
+    dispatch(findMapperLoadingAction(true));
+    const idents = ident2 ? `${ident1},${ident2}` : ident1;
+    return get(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': idents}, response => {
+        if (response.ok) {
+            return response.json()
+                .then(r => {
+                    const {mapper} = r;
+                    dispatch(setMapperAction(MappeRules.isMapperResponseValid(mapper) ? mapper : []));
+                });
+        }
+        return dispatch(findMapperErrorAction(convertResponseToError(response)));
+    });
+}}
+
 
 export function setFagsakerAction(fagsaker: IFagsak[]):         ISetFagsakerAction              {return {type: MapperOgFagsakerActionKeys.FAGSAKER_SET, fagsaker}}
 export function findFagsakerLoadAction(isLoading: boolean):     IFindFagsakerLoadAction         {return {type: MapperOgFagsakerActionKeys.FAGSAKER_LOAD, isLoading}}

@@ -235,6 +235,8 @@
   "skjema.felt.omsorgenDelesMed.samboerSiden.label": "Samboer siden",
   "skjema.felt.omsorgenDelesMed.antallOverførteDager.label": "Antall dager som overføres",
   "skjema.felt.mottaksdato.label": "Mottaksdato",
+  "skjema.felt.fraOgMed.label": "Fra: ",
+  "skjema.felt.tilOgMed.label": "Til: ",
   "skjema.validering.påkrevd": "Påkrevd felt",
   "skjema.validering.11siffer": "Fødsels- / D-nummer består av 11 siffer",
   "skjema.validering.minstEn": "Må velge minst én",
@@ -260,6 +262,7 @@
 
   "søk.label": "Søk med fødselsnummer eller D-nummer",
   "søk.knapp.label": "Søk",
+  "søk.info.perioder": "Velg perioden for søknaden:",
 
   "opprettGosysOppgave": "Opprett oppgave i Gosys",
 

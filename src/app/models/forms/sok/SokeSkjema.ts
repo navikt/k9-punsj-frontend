@@ -3,6 +3,8 @@ import {IntlShape} from "react-intl";
 
 export interface ISokeSkjema {
     identitetsnummer: string;
+    fraOgMed: string;
+    tilOgMed: string;
 }
 
 const fnrFeltValidator: IFeltValidator<string, ISokeSkjema> = {

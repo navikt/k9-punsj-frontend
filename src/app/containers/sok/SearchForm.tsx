@@ -1,33 +1,32 @@
 import VerticalSpacer from "../../components/VerticalSpacer";
 import TextInput from "../../components/skjema/TextInput";
 import {FormattedMessage} from "react-intl";
-import {Knapp} from "nav-frontend-knapper";
 import React, {useEffect, useState} from "react";
-import {ISokeSkjema, validerSokeSkjema} from "../../models/forms/sok/SokeSkjema";
+import {ISokeSkjema} from "../../models/forms/sok/SokeSkjema";
 
 import {Form, useFormikContext} from "formik";
 import SokKnapp from "../../components/knapp/SokKnapp";
 import './sok.less';
 import {SkjemaGruppe} from "nav-frontend-skjema";
 import {MapperVisning} from "./MapperVisning";
-import {setHash} from "../../utils";
+import DateInput from "../../components/skjema/DateInput";
+import {IPeriode, Periode} from "../../models/types";
 
 export const SearchForm: React.FunctionComponent = () => {
-    const {values, setFieldValue} = useFormikContext<ISokeSkjema>();
-    const { identitetsnummer } = values;
-    const [ ident, setIdent ] = useState<string| undefined>(undefined);
+    const {values} = useFormikContext<ISokeSkjema>();
+    const { identitetsnummer, fraOgMed, tilOgMed } = values;
     const [ visMapper, setVisMapper ] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (identitetsnummer) {
-            setIdent(identitetsnummer);
-        }
-    }, [identitetsnummer]);
 
     const onClick = () => {
         setVisMapper(true);
     }
 
+    const periode = (fra: string, til: string): IPeriode => {
+        return {
+            fraOgMed: fra,
+            tilOgMed: til
+        }
+    }
     return (
         <div className="container">
             <Form>
@@ -38,6 +37,11 @@ export const SearchForm: React.FunctionComponent = () => {
                         label={
                             <FormattedMessage id="søk.label"/>
                         }/>
+                    <div className={"container"}>
+                        <strong><FormattedMessage id={"søk.info.perioder"}/></strong>
+                        <DateInput feltnavn={"fraOgMed"} bredde="M"/>
+                        <DateInput feltnavn={"tilOgMed"} bredde="M"/>
+                    </div>
                     <SokKnapp
                         onClick={() => onClick()}
                         tekstId="søk.knapp.label"
@@ -48,6 +52,7 @@ export const SearchForm: React.FunctionComponent = () => {
             {visMapper &&
             <MapperVisning
                 ident={identitetsnummer}
+                periode={periode(fraOgMed, tilOgMed)}
             />}
 
         </div>
