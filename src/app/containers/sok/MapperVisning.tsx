@@ -31,6 +31,7 @@ import {IMapperVisningState} from "../../models/types/MapperVisningState";
 import {MapperVisningStep} from "../../models/enums/MapperVisningStep";
 import {setIdentSokAction, setStepSokAction} from "../../state/actions/MapperSokActions";
 import {SoknadType} from "../../models/enums/SoknadType";
+import {ISoknadPeriode} from "../../models/types/HentSoknad";
 
 export interface IMapperSokStateProps {
     visningState: IMapperVisningState;
@@ -274,7 +275,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) =>
         dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: MapperVisningStep) => dispatch(setStepSokAction(step)),
-    findMapper: (ident1: string, ident2: string | null, periode: Periode) =>
+    findMapper: (ident1: string, ident2: string | null, periode: ISoknadPeriode) =>
         dispatch(sokPsbMapper(ident1, ident2, periode)),
     undoSearchForMapperAction: () => dispatch(undoSearchForMapperAction()),
     openMappeAction: (mappe: IMappe) => dispatch(openMappeAction(mappe)),
