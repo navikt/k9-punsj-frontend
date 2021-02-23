@@ -75,28 +75,6 @@ export function sokMapper(ident1: string, ident2: string | null) {return (dispat
     });
 }}
 
-export function sokPsbMapper(ident1: string, ident2: string | null, periode: ISoknadPeriode) {return (dispatch: any) => {
-    const requestBody: IHentSoknad =
-        {
-            norskIdent: ident1,
-            periode
-        }
-
-    dispatch(findMapperLoadingAction(true));
-    const idents = ident2 ? `${ident1},${ident2}` : ident1;
-    return post(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': idents}, requestBody, response => {
-        if (response.ok) {
-            return response.json()
-                .then(r => {
-                    const {mapper} = r;
-                    dispatch(setMapperAction(MappeRules.isMapperResponseValid(mapper) ? mapper : []));
-                });
-        }
-        return dispatch(findMapperErrorAction(convertResponseToError(response)));
-    });
-}}
-
-
 export function setFagsakerAction(fagsaker: IFagsak[]):         ISetFagsakerAction              {return {type: MapperOgFagsakerActionKeys.FAGSAKER_SET, fagsaker}}
 export function findFagsakerLoadAction(isLoading: boolean):     IFindFagsakerLoadAction         {return {type: MapperOgFagsakerActionKeys.FAGSAKER_LOAD, isLoading}}
 export function findFagsakerErrorAction(error: IError):         IFindFagsakerErrorAction        {return {type: MapperOgFagsakerActionKeys.FAGSAKER_REQUEST_ERROR, error}}
@@ -131,6 +109,7 @@ export function createMappe(journalpostid: string, ident1: string, ident2: strin
     const initialInfo: IPersonlig = {
         journalpostId: journalpostid,
         soeknad: {
+            søknadId: '',
             perioder: [{}],
             arbeid: {
                 arbeidstaker: [],

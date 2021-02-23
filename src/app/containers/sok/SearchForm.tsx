@@ -8,9 +8,8 @@ import {Form, useFormikContext} from "formik";
 import SokKnapp from "../../components/knapp/SokKnapp";
 import './sok.less';
 import {SkjemaGruppe} from "nav-frontend-skjema";
-import {MapperVisning} from "./MapperVisning";
+import {SoknaderVisning} from "./SoknaderVisning";
 import DateInput from "../../components/skjema/DateInput";
-import {IPeriode, Periode} from "../../models/types";
 import {ISoknadPeriode} from "../../models/types/HentSoknad";
 
 export const SearchForm: React.FunctionComponent = () => {
@@ -51,12 +50,9 @@ export const SearchForm: React.FunctionComponent = () => {
             </Form>
             <VerticalSpacer twentyPx={true} />
             {visMapper &&
-            <MapperVisning
+            <SoknaderVisning
                 ident={identitetsnummer}
-                periode={{
-                    fom: fraOgMed,
-                    tom: tilOgMed
-                }}
+                periode={periode(fraOgMed, tilOgMed)}
             />}
 
         </div>

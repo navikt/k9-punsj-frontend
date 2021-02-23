@@ -10,7 +10,7 @@ export * from 'app/models/types/Journalpost';
 export * from 'app/models/types/Locale';
 export * from 'app/models/types/Mappe';
 export * from 'app/models/types/MapperOgFagsakerState';
-export * from 'app/models/types/MapperSokState';
+export * from 'app/models/types/SoknaderSokState';
 export * from 'app/models/types/Path';
 export * from 'app/models/types/Periode';
 export * from 'app/models/types/Periodeinfo';

@@ -1,6 +1,6 @@
 import {PersonBox}                                                   from 'app/components/person-box/PersonBox';
 import {JaNeiVetikke, TimeFormat}                                    from 'app/models/enums';
-import {Arbeid, Mappe, Periode, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types';
+import {Arbeid, Mappe, Periode, Soknad, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types';
 import {datetime}                                                    from 'app/utils';
 import intlHelper                                                    from 'app/utils/intlUtils';
 import classNames                                                    from 'classnames';
@@ -9,14 +9,14 @@ import {Col, Container, Row}                                         from 'react
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
 
 interface ISoknadReadModeProps {
-    mappe: Mappe;
+    soknad: Soknad;
 }
 
 class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadReadModeProps> {
 
     render() {
-        const {intl, mappe} = this.props;
-        const dobbelSoknad = mappe.genererDobbelSoknad();
+        const {intl, soknad} = this.props;
+ /*       const dobbelSoknad = mappe.genererDobbelSoknad();
         const {soknad1, soknad2} = dobbelSoknad;
         const {harToSokere} = dobbelSoknad;
         return (
@@ -65,6 +65,42 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col>{intlHelper(intl, 'mappe.lesemodus.nattevaak')}</Col>
                     {this.tilleggsinfo(soknad1.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
                     {harToSokere && this.tilleggsinfo(soknad2!.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
+                </Row>
+            </Container>
+        ); */
+        return (
+            <Container className={classNames('read-modal soknad-read-mode', 'enkel')}>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.mottakelsesdato')}</Col>
+                    {this.mottakelsesdato(soknad.datoMottatt)}
+                </Row>
+                <Row>
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
+                    {this.soknadsperioder(soknad.perioder)}
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.spraak')}</Col>
+                    <Col>{intlHelper(intl, `locale.${soknad.spraak}`)}</Col>
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>
+                    <Col>{soknad.getFnrOrFdato()}</Col>
+                </Row>
+                <Row>
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.arbeid')}</Col>
+                    {this.arbeid(soknad.arbeid)}
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
+                    {this.tilsynsordning(soknad.tilsynsordning)}
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.beredskap')}</Col>
+                    {this.tilleggsinfo(soknad.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
+                </Row>
+                <Row className="felles">
+                    <Col>{intlHelper(intl, 'mappe.lesemodus.nattevaak')}</Col>
+                    {this.tilleggsinfo(soknad.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
                 </Row>
             </Container>
         );

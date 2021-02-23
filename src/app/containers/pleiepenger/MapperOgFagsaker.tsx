@@ -215,7 +215,7 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
         >
           <div className="modal_content">
             {chosenMappe?.personer?.[ident1!]?.soeknad && (
-              <SoknadReadMode mappe={new Mappe(chosenMappe)} />
+              <SoknadReadMode soknad={new Mappe(chosenMappe).genererDobbelSoknad().soknad1} />
             )}
             <div className="punch_mappemodal_knapperad">
               <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>

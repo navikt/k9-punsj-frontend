@@ -74,7 +74,7 @@ export class Personlig implements Required<IPersonlig> {
     constructor(personlig: IPersonlig) {
         this.innsendinger = personlig.innsendinger || [];
         this.journalpostId = personlig.journalpostId || '';
-        this.soeknad = new Soknad(personlig.soeknad || {});
+        this.soeknad = new Soknad(personlig.soeknad || {søknadId: '123'});
         this.mangler = (personlig.mangler || []).filter(m => !!m.attributt);
     }
 

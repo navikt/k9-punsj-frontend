@@ -61,6 +61,7 @@ describe('Soknad', () => {
     };
 
     const soknadMedFlerePerioder = new Soknad({
+        søknadId: '123',
         arbeid: {
             arbeidstaker: [arbeidstaker0, arbeidstaker1],
             frilanser: [frilanser0]
@@ -80,6 +81,7 @@ describe('Soknad', () => {
     const soknadMedOverordnedePerioder = new Soknad({...soknadMedFlerePerioder.values(), perioder: overordnedePerioder});
 
     const soknadMedPeriodeUtenTilstedevaerelsesgrad = new Soknad({
+        søknadId: '123',
         arbeid: {
             arbeidstaker: [
                 arbeidstaker0,
@@ -90,6 +92,7 @@ describe('Soknad', () => {
     });
 
     const soknadUtenPerioder = new Soknad({
+        søknadId: '123',
         arbeid: {
             arbeidstaker: [arbeidstakerUtenPeriode],
         },
@@ -99,7 +102,7 @@ describe('Soknad', () => {
         }
     });
 
-    const tomSoknad = new Soknad({});
+    const tomSoknad = new Soknad({søknadId: '123'});
 
     describe('Soknad.getFom', () => {
 

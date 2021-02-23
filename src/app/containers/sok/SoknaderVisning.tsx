@@ -1,22 +1,8 @@
 import SoknadReadMode from 'app/containers/pleiepenger/SoknadReadMode';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import {
-    IMappe,
-    IMapperSokState, IPath, IPeriode,
-    Mappe, Periode,
+    ISoknaderSokState, IPath, ISoknad,
 } from 'app/models/types';
-import {
-    chooseMappeAction,
-    closeFagsakAction,
-    closeMappeAction,
-    createMappe,
-    sokMapper,
-    openMappeAction,
-    resetMappeidAction,
-    resetPunchAction,
-    setIdentAction,
-    undoSearchForMapperAction, sokPsbMapper,
-} from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -27,53 +13,66 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import {connect} from 'react-redux';
-import {IMapperVisningState} from "../../models/types/MapperVisningState";
-import {MapperVisningStep} from "../../models/enums/MapperVisningStep";
-import {setIdentSokAction, setStepSokAction} from "../../state/actions/MapperSokActions";
-import {SoknadType} from "../../models/enums/SoknadType";
+import {ISoknaderVisningState} from "../../models/types/SoknaderVisningState";
+import {setIdentSokAction, setStepSokAction} from "../../state/actions/SoknaderSokActions";
 import {ISoknadPeriode} from "../../models/types/HentSoknad";
+import {SoknaderVisningStep} from "../../models/enums/SoknaderVisningStep";
+import {
+    chooseSoknadAction,
+    closeSoknadAction,
+    openSoknadAction,
+    resetSoknadidAction,
 
-export interface IMapperSokStateProps {
-    visningState: IMapperVisningState;
-    mapperSokState: IMapperSokState;
+    sokPsbSoknader
+} from "../../state/actions/SoknaderVisningActions";
+import {
+    closeFagsakAction,
+    resetPunchAction,
+    setIdentAction,
+    undoSearchForSoknaderAction
+} from "../../state/actions";
+import {SoknadType} from "../../models/enums/SoknadType";
+import {ISoknadInfo} from "../../models/types/SoknadSvar";
+
+export interface ISoknaderSokStateProps {
+    visningState: ISoknaderVisningState;
+    soknaderSokState: ISoknaderSokState;
 }
 
-export interface IMapperSokDispatchProps {
+export interface ISoknaderSokDispatchProps {
     setIdentAction: typeof setIdentSokAction;
     setStepAction: typeof setStepSokAction;
-    findMapper: typeof sokPsbMapper;
-    undoSearchForMapperAction: typeof undoSearchForMapperAction;
-    openMappeAction: typeof openMappeAction;
-    closeMappeAction: typeof closeMappeAction;
-    closeFagsakAction: typeof closeFagsakAction;
-    chooseMappeAction: typeof chooseMappeAction;
-    createMappe: typeof createMappe;
-    resetMappeidAction: typeof resetMappeidAction;
+    findSoknader: typeof sokPsbSoknader;
+    undoSearchForSoknaderAction: typeof undoSearchForSoknaderAction;
+    openSoknadAction: typeof openSoknadAction;
+    closeSoknadAction: typeof closeSoknadAction;
+    chooseSoknadAction: typeof chooseSoknadAction;
+    resetSoknadidAction: typeof resetSoknadidAction;
     resetPunchAction: typeof resetPunchAction;
 }
 
-export interface IMapperVisningComponentProps {
+export interface ISoknaderVisningComponentProps {
     ident: string;
     periode: ISoknadPeriode;
 
 }
 
-type IMapperSokProps = WrappedComponentProps &
-    IMapperVisningComponentProps &
-    IMapperSokStateProps &
-    IMapperSokDispatchProps;
+type ISoknaderSokProps = WrappedComponentProps &
+    ISoknaderVisningComponentProps &
+    ISoknaderSokStateProps &
+    ISoknaderSokDispatchProps;
 
-export const MapperVisningComponent: React.FunctionComponent<IMapperSokProps> = (
-    props: IMapperSokProps
+export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps> = (
+    props: ISoknaderSokProps
 ) => {
     const {
         intl,
-        mapperSokState,
+        soknaderSokState,
         visningState,
         ident,
         periode,
     } = props;
-    const {mapper} = mapperSokState;
+    const soknader = soknaderSokState.soknadSvar.søknader;
 
     const paths: IPath[] = [
         { step: PunchStep.IDENT, path: `/pleiepenger/ident` },
@@ -96,18 +95,18 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     React.useEffect(() => {
         props.setIdentAction(ident);
-        props.findMapper(ident, null, periode);
-        props.setStepAction(MapperVisningStep.CHOOSE_SOKNAD);
+        props.findSoknader(ident, periode);
+        props.setStepAction(SoknaderVisningStep.CHOOSE_SOKNAD);
     }, [ident]);
 
     React.useEffect(() => {
         if (
-            !!mapperSokState.mappeid &&
-            mapperSokState.isMappeCreated
+            !!soknaderSokState.soknadid &&
+            soknaderSokState.isMappeCreated
         ) {
-            props.resetMappeidAction();
+            props.resetSoknadidAction();
         }
-    }, [mapperSokState.mappeid]);
+    }, [soknaderSokState.soknadid]);
 
     if (!ident) {
         return null;
@@ -115,11 +114,11 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     const backButton = (
         <p>
-            <Knapp onClick={undoSearchForMapperAndFagsaker}>Tilbake</Knapp>
+            <Knapp onClick={undoSearchForSoknader}>Tilbake</Knapp>
         </p>
     );
 
-    if (mapperSokState.mapperRequestError) {
+    if (soknaderSokState.soknaderRequestError) {
         return (
             <>
                 <AlertStripeFeil>
@@ -131,9 +130,9 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     }
 
     if (
-        visningState.step !== MapperVisningStep.CHOOSE_SOKNAD ||
-        mapperSokState.isMapperLoading ||
-        mapperSokState.isAwaitingMappeCreation
+        visningState.step !== SoknaderVisningStep.CHOOSE_SOKNAD ||
+        soknaderSokState.isSoknaderLoading ||
+        soknaderSokState.isAwaitingMappeCreation
     ) {
         return (
             <div>
@@ -143,45 +142,42 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     }
 
     const technicalError =
-        mapperSokState.isMappeCreated && !mapperSokState.mappeid ? (
+        soknaderSokState.isMappeCreated && !soknaderSokState.soknadid ? (
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
-    const chooseMappe = (mappe: IMappe) => {
+    const chooseSoknad = (soknad: ISoknadInfo) => {
         window.history.pushState("","", "/rediger");
-        props.chooseMappeAction(mappe);
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: mappe.mappeId }));
+        props.chooseSoknadAction(soknad);
+        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.søknadId }));
     };
 
-    function showMapper() {
+    function showSoknader() {
         const modaler = [];
         const rows = [];
 
-        for (const iMappe of mapper) {
-            const mappe = new Mappe(iMappe);
-            const mappeid = mappe.mappeId as string;
-            const {chosenMappe} = props.mapperSokState;
-            const dobbelSoknad = mappe.genererDobbelSoknad();
-            const {felles} = dobbelSoknad;
-            const fom = dobbelSoknad.getFom();
-            const tom = dobbelSoknad.getTom();
+        for (const soknadInfo of soknader) {
+            const soknadId = soknadInfo.søknadId as string;
+            const {chosenSoknad} = props.soknaderSokState;
+            const fom = soknadInfo.søknad.getFom();
+            const tom = soknadInfo.søknad.getTom();
             const rowContent = [
-                !!felles.datoMottatt
-                    ? datetime(intl, TimeFormat.DATE_SHORT, felles.datoMottatt)
+                !!soknadInfo.søknad.datoMottatt
+                    ? datetime(intl, TimeFormat.DATE_SHORT, soknadInfo.søknad.datoMottatt)
                     : '',
-                SoknadType[mappe.søknadType],
-                (!!felles.barn.norskIdent
-                    ? felles.barn.norskIdent
-                    : felles.barn.foedselsdato &&
-                    datetime(intl, TimeFormat.DATE_SHORT, felles.barn.foedselsdato)) ||
+                SoknadType[props.soknaderSokState.soknadSvar.fagsakKode],
+                (!!soknadInfo.søknad.barn.norskIdent
+                    ? soknadInfo.søknad.barn.norskIdent
+                    : soknadInfo.søknad.barn.foedselsdato &&
+                    datetime(intl, TimeFormat.DATE_SHORT, soknadInfo.søknad.barn.foedselsdato)) ||
                 '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
             ];
             rows.push(
-                <tr key={mappeid} onClick={() => props.openMappeAction(mappe)}>
+                <tr key={soknadId} onClick={() => props.openSoknadAction(soknadInfo)}>
                     {rowContent.filter((v) => !!v).length ? (
-                        rowContent.map((v, i) => <td key={`${mappeid}_${i}`}>{v}</td>)
+                        rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
                     ) : (
                         <td colSpan={4} className="punch_mappetabell_tom_soknad">
                             Tom søknad
@@ -191,20 +187,20 @@ const getPunchPath = (step: PunchStep, values?: any) => {
             );
             modaler.push(
                 <ModalWrapper
-                    key={mappeid}
-                    onRequestClose={props.closeMappeAction}
-                    contentLabel={mappeid}
-                    isOpen={!!chosenMappe && mappeid === chosenMappe.mappeId}
+                    key={soknadId}
+                    onRequestClose={props.closeSoknadAction}
+                    contentLabel={soknadId}
+                    isOpen={!!chosenSoknad && soknadId === chosenSoknad.søknadId}
                 >
                     <div className="modal_content">
-                        {chosenMappe?.personer?.[ident!]?.soeknad && (
-                            <SoknadReadMode mappe={new Mappe(chosenMappe)}/>
+                        {chosenSoknad?.søknad && (
+                            <SoknadReadMode soknad={chosenSoknad.søknad}/>
                         )}
                         <div className="punch_mappemodal_knapperad">
-                            <Knapp className="knapp1" onClick={() => chooseMappe(mappe)}>
+                            <Knapp className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>
                                 {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                             </Knapp>
-                            <Knapp className="knapp2" onClick={props.closeMappeAction}>
+                            <Knapp className="knapp2" onClick={props.closeSoknadAction}>
                                 {intlHelper(intl, 'mappe.lesemodus.knapp.lukk')}
                             </Knapp>
                         </div>
@@ -234,11 +230,11 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     }
 
 
-    function undoSearchForMapperAndFagsaker() {
-        props.undoSearchForMapperAction();
+    function undoSearchForSoknader() {
+        props.undoSearchForSoknaderAction();
     }
 
-    if (mapper.length) {
+    if (soknader.length) {
         return (
             <>
                 {technicalError}
@@ -247,7 +243,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                         antallSokere: '1',
                     })}
                 </AlertStripeInfo>
-                {showMapper()}
+                {showSoknader()}
             </>
         );
     }
@@ -267,28 +263,26 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
 const mapStateToProps = (
     state: RootStateType
-): IMapperSokStateProps => ({
+): ISoknaderSokStateProps => ({
     visningState: state.SØK.visningState,
-    mapperSokState: state.SØK.mapperSokState,
+    soknaderSokState: state.SØK.soknaderSokState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) =>
         dispatch(setIdentAction(ident1, ident2)),
-    setStepAction: (step: MapperVisningStep) => dispatch(setStepSokAction(step)),
-    findMapper: (ident1: string, ident2: string | null, periode: ISoknadPeriode) =>
-        dispatch(sokPsbMapper(ident1, ident2, periode)),
-    undoSearchForMapperAction: () => dispatch(undoSearchForMapperAction()),
-    openMappeAction: (mappe: IMappe) => dispatch(openMappeAction(mappe)),
-    closeMappeAction: () => dispatch(closeMappeAction()),
+    setStepAction: (step: SoknaderVisningStep) => dispatch(setStepSokAction(step)),
+    findSoknader: (ident1: string, periode: ISoknadPeriode) =>
+        dispatch(sokPsbSoknader(ident1, periode)),
+    undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
+    openSoknadAction: (soknad: ISoknadInfo) => dispatch(openSoknadAction(soknad)),
+    closeSoknadAction: () => dispatch(closeSoknadAction()),
     closeFagsakAction: () => dispatch(closeFagsakAction()),
-    chooseMappeAction: (mappe: IMappe) => dispatch(chooseMappeAction(mappe)),
-    createMappe: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createMappe(journalpostid, ident1, ident2)),
-    resetMappeidAction: () => dispatch(resetMappeidAction()),
+    chooseSoknadAction: (soknad: ISoknadInfo) => dispatch(chooseSoknadAction(soknad)),
+    resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });
 
-export const MapperVisning = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(MapperVisningComponent)
+export const SoknaderVisning = injectIntl(
+    connect(mapStateToProps, mapDispatchToProps)(SoknaderVisningComponent)
 );

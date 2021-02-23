@@ -38,7 +38,9 @@ const mappe: IMappe = {
   mappeId: '567',
   personer: {
     [ident1]: {
-      soeknad: {},
+      soeknad: {
+        søknadId: '123',
+      },
       innsendinger: [],
       mangler: [],
     },
