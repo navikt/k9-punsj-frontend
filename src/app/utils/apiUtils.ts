@@ -27,6 +27,7 @@ export async function get(
   return response;
 }
 
+/*
 export async function post<BodyType>(
   path: ApiPath,
   parameters?: any,
@@ -61,6 +62,29 @@ export async function post<BodyType>(
     }
     return error;
   }
+}
+*/
+
+
+export async function post<BodyType>(
+    path: ApiPath,
+    parameters?: any,
+    headers?: HeadersInit,
+    body?: BodyType,
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response>
+): Promise<Response> {
+  const response = await fetch(apiUrl(path, parameters), {
+    method: 'post',
+    credentials: 'include',
+    body: JSON.stringify(body),
+    headers: { 'Content-Type': 'application/json', ...headers },
+  });
+  if (response.status === 401) {
+    login();
+  } else if (!!callbackIfAuth) {
+    await callbackIfAuth(response);
+  }
+  return response;
 }
 
 export async function put(

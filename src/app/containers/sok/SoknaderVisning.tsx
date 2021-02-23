@@ -22,17 +22,11 @@ import {
     closeSoknadAction,
     openSoknadAction,
     resetSoknadidAction,
-
     sokPsbSoknader
 } from "../../state/actions/SoknaderVisningActions";
-import {
-    closeFagsakAction,
-    resetPunchAction,
-    setIdentAction,
-    undoSearchForSoknaderAction
-} from "../../state/actions";
 import {SoknadType} from "../../models/enums/SoknadType";
 import {ISoknadInfo} from "../../models/types/SoknadSvar";
+import {closeFagsakAction, resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
 
 export interface ISoknaderSokStateProps {
     visningState: ISoknaderVisningState;
