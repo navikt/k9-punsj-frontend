@@ -36,7 +36,6 @@ export function SoknaderSokReducer(
                 ...soknaderVisningState,
                 isSoknaderLoading: action.isLoading,
                 soknaderRequestError: undefined,
-                isMappeCreated: false
             };
 
         case SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR:
@@ -44,7 +43,6 @@ export function SoknaderSokReducer(
                 ...soknaderVisningState,
                 isSoknaderLoading: false,
                 soknaderRequestError: action.error,
-                isMappeCreated: false
             };
 
         case SoknaderVisningActionKeys.SOKNAD_OPEN:
@@ -75,7 +73,6 @@ export function SoknaderSokReducer(
             return {
                 ...soknaderVisningState,
                 soknadid: undefined,
-                isMappeCreated: false
             };
 
         default: return soknaderVisningState;
