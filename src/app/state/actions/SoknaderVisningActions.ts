@@ -45,8 +45,8 @@ export function sokPsbSoknader(ident: string, periode: ISoknadPeriode) {return (
         if (response.ok) {
             return response.json()
                 .then(r => {
-                    const {mapper} = r;
-                    dispatch(setSoknaderAction(mapper));
+                    const {soknadSvar} = r;
+                    dispatch(setSoknaderAction(soknadSvar));
                 });
         }
         return dispatch(findSoknaderErrorAction(convertResponseToError(response)));

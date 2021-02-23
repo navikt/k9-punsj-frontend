@@ -99,15 +99,6 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         props.setStepAction(SoknaderVisningStep.CHOOSE_SOKNAD);
     }, [ident]);
 
-    React.useEffect(() => {
-        if (
-            !!soknaderSokState.soknadid &&
-            soknaderSokState.isMappeCreated
-        ) {
-            props.resetSoknadidAction();
-        }
-    }, [soknaderSokState.soknadid]);
-
     if (!ident) {
         return null;
     }
@@ -131,8 +122,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     if (
         visningState.step !== SoknaderVisningStep.CHOOSE_SOKNAD ||
-        soknaderSokState.isSoknaderLoading ||
-        soknaderSokState.isAwaitingMappeCreation
+        soknaderSokState.isSoknaderLoading
     ) {
         return (
             <div>
@@ -142,7 +132,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     }
 
     const technicalError =
-        soknaderSokState.isMappeCreated && !soknaderSokState.soknadid ? (
+        soknaderSokState.soknaderRequestError ? (
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 

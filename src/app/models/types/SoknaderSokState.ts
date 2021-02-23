@@ -5,9 +5,6 @@ export interface ISoknaderSokState {
     soknadSvar:                ISoknadSvar;
     isSoknaderLoading?:         boolean;
     soknaderRequestError?:      IError;
-    chosenSoknad?:              ISoknadInfo;
-    isAwaitingMappeCreation?:   boolean;
-    createMappeRequestError?:   IError;
     soknadid?:                  string;
-    isMappeCreated?:            boolean;
+    chosenSoknad?:              ISoknadInfo;
 }
