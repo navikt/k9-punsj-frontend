@@ -82,7 +82,9 @@ export async function post<BodyType>(
   if (response.status === 401) {
     login();
   } else if (!!callbackIfAuth) {
-    await callbackIfAuth(response);
+    const data = await response.text();
+    const jsonData = data ? JSON.parse(data) : undefined;
+    await callbackIfAuth(response, jsonData);
   }
   return response;
 }

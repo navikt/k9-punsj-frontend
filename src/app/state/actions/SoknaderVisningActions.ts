@@ -4,6 +4,7 @@ import {IHentSoknad, ISoknadPeriode} from "../../models/types/HentSoknad";
 import {convertResponseToError, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
 import {ISoknadInfo, ISoknadSvar} from "../../models/types/SoknadSvar";
+import {createMappeErrorAction, createMappeSuccessAction} from "./MapperOgFagsakerActions";
 
 
 interface ISetSoknaderAction                  {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar: ISoknadSvar}
@@ -41,14 +42,14 @@ export function sokPsbSoknader(ident: string, periode: ISoknadPeriode) {return (
             periode
         }
     dispatch(findSoknaderLoadingAction(true));
-    return post(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': ident}, requestBody, response => {
+    return post(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': ident}, requestBody, (response, soknadSvar) => {
         if (response.ok) {
-            return response.json()
-                .then(r => {
-                    const {soknadSvar} = r;
-                    dispatch(setSoknaderAction(soknadSvar));
-                });
+            return dispatch(setSoknaderAction(soknadSvar));
         }
+
         return dispatch(findSoknaderErrorAction(convertResponseToError(response)));
     });
 }}
+
+
+
