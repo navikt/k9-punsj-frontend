@@ -1,7 +1,7 @@
 import SoknadReadMode from 'app/containers/pleiepenger/SoknadReadMode';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import {
-    ISoknaderSokState, IPath, ISoknad,
+    ISoknaderSokState, IPath, ISoknad, Soknad,
 } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash, getPath } from 'app/utils';
@@ -141,19 +141,20 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         const rows = [];
 
         for (const soknadInfo of soknader) {
+            const søknad = new Soknad(soknadInfo.søknad)
             const soknadId = soknadInfo.søknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
-            const fom = soknadInfo.søknad.getFom();
-            const tom = soknadInfo.søknad.getTom();
+            const fom = søknad.getFom();
+            const tom = søknad.getTom();
             const rowContent = [
-                !!soknadInfo.søknad.datoMottatt
-                    ? datetime(intl, TimeFormat.DATE_SHORT, soknadInfo.søknad.datoMottatt)
+                !!søknad.datoMottatt
+                    ? datetime(intl, TimeFormat.DATE_SHORT, søknad.datoMottatt)
                     : '',
                 SoknadType[props.soknaderSokState.soknadSvar.fagsakKode],
-                (!!soknadInfo.søknad.barn.norskIdent
-                    ? soknadInfo.søknad.barn.norskIdent
-                    : soknadInfo.søknad.barn.foedselsdato &&
-                    datetime(intl, TimeFormat.DATE_SHORT, soknadInfo.søknad.barn.foedselsdato)) ||
+                (!!søknad.barn.norskIdent
+                    ? søknad.barn.norskIdent
+                    : søknad.barn.foedselsdato &&
+                    datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                 '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
