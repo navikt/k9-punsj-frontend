@@ -7,7 +7,7 @@ const initialState: ISoknaderSokState = {
     soknadSvar: {
         søknader: [],
         søker: '',
-        fagsakKode: '',
+        fagsakTypeKode: '',
 
     },
     isSoknaderLoading: false,

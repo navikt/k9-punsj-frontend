@@ -1,21 +1,21 @@
 
-import {Soknad} from 'app/models/types/Soknad';
+import {SoknadV2} from "./Soknadv2";
 
 export interface ISoknadSvar {
     søker: string;
-    fagsakKode: string;
+    fagsakTypeKode: string;
     søknader: ISoknadInfo[];
 }
 
 export class SoknadSvar implements ISoknadSvar {
 
     søker: string;
-    fagsakKode: string;
+    fagsakTypeKode: string;
     søknader: ISoknadInfo[];
 
     constructor(svar: ISoknadSvar) {
         this.søker = svar.søker;
-        this.fagsakKode = svar.fagsakKode;
+        this.fagsakTypeKode = svar.fagsakTypeKode;
         this.søknader = svar.søknader;
     }
 }
@@ -25,6 +25,6 @@ export class SoknadSvar implements ISoknadSvar {
 export interface ISoknadInfo {
    søknadId: string;
    erFraK9: boolean;
-   søknad: Soknad
+   søknad: SoknadV2;
 }
 

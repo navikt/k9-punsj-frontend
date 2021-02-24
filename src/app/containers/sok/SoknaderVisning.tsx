@@ -27,6 +27,8 @@ import {
 import {SoknadType} from "../../models/enums/SoknadType";
 import {ISoknadInfo} from "../../models/types/SoknadSvar";
 import {closeFagsakAction, resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
+import {SoknadV2} from "../../models/types/Soknadv2";
+import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
 export interface ISoknaderSokStateProps {
     visningState: ISoknaderVisningState;
@@ -141,20 +143,20 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         const rows = [];
 
         for (const soknadInfo of soknader) {
-            const søknad = new Soknad(soknadInfo.søknad)
+            const søknad = new SoknadV2(soknadInfo.søknad)
             const soknadId = soknadInfo.søknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
-            const fom = søknad.getFom();
-            const tom = søknad.getTom();
+            const fom = søknad.ytelse.søknadsPeriode.fom;
+            const tom = søknad.ytelse.søknadsPeriode.tom;
             const rowContent = [
                 !!søknad.datoMottatt
                     ? datetime(intl, TimeFormat.DATE_SHORT, søknad.datoMottatt)
                     : '',
-                SoknadType[props.soknaderSokState.soknadSvar.fagsakKode],
-                (!!søknad.barn.norskIdent
-                    ? søknad.barn.norskIdent
-                    : søknad.barn.foedselsdato &&
-                    datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
+                SoknadType[props.soknaderSokState.soknadSvar.fagsakTypeKode],
+                (!!søknad.ytelse.barn.norskIdentitetsnummer
+                    ? søknad.ytelse.barn.norskIdentitetsnummer
+                    : søknad.ytelse.barn.foedselsdato &&
+                    datetime(intl, TimeFormat.DATE_SHORT, søknad.ytelse.barn.foedselsdato)) ||
                 '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
@@ -179,7 +181,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 >
                     <div className="modal_content">
                         {chosenSoknad?.søknad && (
-                            <SoknadReadMode soknad={chosenSoknad.søknad}/>
+                            <SoknadReadModeV2 soknad={chosenSoknad.søknad}/>
                         )}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>

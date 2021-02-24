@@ -4,8 +4,6 @@ import {IHentSoknad, ISoknadPeriode} from "../../models/types/HentSoknad";
 import {convertResponseToError, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
 import {ISoknadInfo, ISoknadSvar} from "../../models/types/SoknadSvar";
-import {createMappeErrorAction, createMappeSuccessAction} from "./MapperOgFagsakerActions";
-
 
 interface ISetSoknaderAction                  {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar: ISoknadSvar}
 interface IFindSoknaderLoadingAction          {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading: boolean}
