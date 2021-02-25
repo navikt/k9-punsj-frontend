@@ -189,7 +189,7 @@ export class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
 }
 
 export interface IYtelse {
-    søknadsPeriode?: ISoknadPeriode;
+    søknadsperiode?: ISoknadPeriode;
     barn?: IBarn;
     arbeidAktivitet?: IArbeidV2;
   //  beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
@@ -200,7 +200,7 @@ export interface IYtelse {
 }
 
 export class Ytelse implements Required<IYtelse> {
-    søknadsPeriode: SoknadPeriode;
+    søknadsperiode: SoknadPeriode;
     barn: Barn;
     arbeidAktivitet: ArbeidV2;
  //   beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
@@ -213,7 +213,7 @@ export class Ytelse implements Required<IYtelse> {
 
 
     constructor(ytelse: IYtelse) {
-        this.søknadsPeriode = new SoknadPeriode(ytelse.søknadsPeriode || {});
+        this.søknadsperiode = new SoknadPeriode(ytelse.søknadsperiode || {});
         this.barn = new Barn(ytelse.barn || {});
         this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
    //     this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
@@ -239,7 +239,7 @@ export class Ytelse implements Required<IYtelse> {
             arbeidAktivitet: this.arbeidAktivitet.values(),
  //           beredskap: this.beredskap.map(b => b.values()),
  //           nattevaak: this.nattevaak.map(n => n.values()),
-            søknadsPeriode: this.søknadsPeriode,
+            søknadsperiode: this.søknadsperiode,
             tilsynsordning: this.tilsynsordning.values()
         };
     }
