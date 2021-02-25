@@ -1,11 +1,11 @@
 import {JaNeiVetikke}                                            from 'app/models/enums';
 import {Arbeidstaker, IArbeidstaker, Tilstedevaerelsesgrad}      from 'app/models/types/Arbeidstaker';
-import {Frilanser, IFrilanser}                                   from 'app/models/types/Frilanser';
-import {IPeriode, Periode}                                       from 'app/models/types/Periode';
+import {Periode}                                       from 'app/models/types/Periode';
 import {IPeriodeinfoExtension, Periodeinfo}                      from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {IntlShape}                                               from 'react-intl';
 import {ISoknadPeriode, SoknadPeriode} from "./HentSoknad";
+import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
 
 export interface ISoknadV2 {
     søknadId?: string;
@@ -47,34 +47,34 @@ export class SoknadV2 implements Required<ISoknadV2> {
     }
 }
 
-export interface IArbeid {
+export interface IArbeidV2 {
     arbeidstaker?: IArbeidstaker[];
     selvstendigNaeringsdrivende?: Periodeinfo<ISelvstendigNaerinsdrivende>[];
-    frilanser?: Periodeinfo<IFrilanser>[];
+    frilanser?: IFrilanserV2;
 }
 
-export class Arbeid implements Required<IArbeid> {
+export class ArbeidV2 implements Required<IArbeidV2> {
 
     arbeidstaker: Arbeidstaker[];
     selvstendigNaeringsdrivende: SelvstendigNaerinsdrivende[];
-    frilanser: Frilanser[];
+    frilanser: FrilanserV2;
 
-    constructor(arbeid: IArbeid) {
+    constructor(arbeid: IArbeidV2) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(a => new Arbeidstaker(a));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
-        this.frilanser = (arbeid.frilanser || []).map(f => new Frilanser(f));
+        this.frilanser = new FrilanserV2(arbeid.frilanser || {});
     }
 
-    values(): Required<IArbeid> {
+    values(): Required<IArbeidV2> {
         return {
             arbeidstaker: this.arbeidstaker.map(a => a.values()),
             selvstendigNaeringsdrivende: this.selvstendigNaeringsdrivende.map(s => s.values()),
-            frilanser: this.frilanser.map(f => f.values())
+            frilanser: this.frilanser
         };
     }
 
     numberOfWorkPeriods(): number {
-        return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + this.frilanser.length;
+        return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
     }
 
     generateTgStrings = (intl: IntlShape): string[][] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgStrings(intl));
@@ -189,7 +189,7 @@ export class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
 export interface IYtelse {
     søknadsPeriode?: ISoknadPeriode;
     barn?: IBarn;
-    arbeidAktivitet?: IArbeid;
+    arbeidAktivitet?: IArbeidV2;
     beredskap?: Periodeinfo<ITilleggsinformasjon>[];
     nattevaak?: Periodeinfo<ITilleggsinformasjon>[];
     tilsynsordning?: ITilsynsordning;
@@ -200,7 +200,7 @@ export interface IYtelse {
 export class Ytelse implements Required<IYtelse> {
     søknadsPeriode: SoknadPeriode;
     barn: Barn;
-    arbeidAktivitet: Arbeid;
+    arbeidAktivitet: ArbeidV2;
     beredskap: Periodeinfo<Tilleggsinformasjon>[];
     nattevaak: Periodeinfo<Tilleggsinformasjon>[];
     tilsynsordning: Tilsynsordning;
@@ -213,7 +213,7 @@ export class Ytelse implements Required<IYtelse> {
     constructor(ytelse: IYtelse) {
         this.søknadsPeriode = new SoknadPeriode(ytelse.søknadsPeriode || {});
         this.barn = new Barn(ytelse.barn || {});
-        this.arbeidAktivitet = new Arbeid(ytelse.arbeidAktivitet || {})
+        this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
         this.beredskap = (ytelse.beredskap || []).map(b => new Tilleggsinformasjon(b));
         this.nattevaak = (ytelse.nattevaak || []).map(n => new Tilleggsinformasjon(n));
         this.tilsynsordning = new Tilsynsordning(ytelse.tilsynsordning || {});
@@ -222,7 +222,7 @@ export class Ytelse implements Required<IYtelse> {
         this.workPeriods = [];
         this.workPeriods.push(...this.arbeidAktivitet.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.skalJobbeProsent), []));
         this.workPeriods.push(...this.arbeidAktivitet.selvstendigNaeringsdrivende);
-        this.workPeriods.push(...this.arbeidAktivitet.frilanser);
+      //  this.workPeriods.push(...this.arbeidAktivitet.frilanser);
 
         this.allPeriods = [];
         this.allPeriods.push(...this.workPeriods);

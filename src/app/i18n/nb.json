@@ -90,7 +90,7 @@
   "mappe.lesemodus.arbeid.arbeidstaker.ingenarbeidsgiver.beskrivelse":                            "Ingen oppgitt arbeidsgiver",
   "mappe.lesemodus.arbeid.arbeidstaker.tilstedevaerelsesgrad":                                    "{tg} % {ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",
   "mappe.lesemodus.arbeid.selvstendigNaeringsdrivende.beskrivelse":                               "Selvstendig næringsdrivende{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",
-  "mappe.lesemodus.arbeid.frilanser.beskrivelse":                                                 "Frilanser{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",
+  "mappe.lesemodus.arbeid.frilanser.beskrivelse":                                                 "Frilanser, startdato: {startdato}",
   "mappe.lesemodus.beredskap":                                                                    "Beredskap:",
   "mappe.lesemodus.beredskap.beskrivelse":                                                        "Beredskap{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",
   "mappe.lesemodus.nattevaak":                                                                    "Nattevåk:",

@@ -7,7 +7,7 @@ import classNames                                                    from 'class
 import * as React                                                    from 'react';
 import {Col, Container, Row}                                         from 'react-bootstrap';
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
-import {SoknadV2} from "../../models/types/Soknadv2";
+import {ArbeidV2, SoknadV2} from "../../models/types/Soknadv2";
 import {SoknadPeriode} from "../../models/types/HentSoknad";
 
 interface ISoknadReadModeProps {
@@ -108,7 +108,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
 
     private soknadsperioder = (sokandsperioder: SoknadPeriode[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
 
-    private arbeid = (arbeid: Arbeid) => {
+    private arbeid = (arbeid: ArbeidV2) => {
         const {intl} = this.props;
         return <Col>{!!arbeid.numberOfWorkPeriods() && <ul>
             {arbeid.arbeidstaker.map((a,i) => <li key={i}>
@@ -116,7 +116,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 {a.skalJobbeProsent.length && <ul>{a.skalJobbeProsent.map((tg,j) => <li key={j}>{tg.description(intl)}</li>)}</ul>}
             </li>)}
             {arbeid.selvstendigNaeringsdrivende.map((a, i) => <li key={i}>{a.description(intl)}</li>)}
-            {arbeid.frilanser.map((a,i) => <li key={i}>{a.description(intl)}</li>)}
+            {<li key={"frilanser"}>{arbeid.frilanser.description(intl)}</li>}
         </ul>}</Col>
     };
 

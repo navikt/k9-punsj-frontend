@@ -49,7 +49,7 @@ export class Soknad implements Required<ISoknad> {
         this.workPeriods = [];
         this.workPeriods.push(...this.arbeid.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.skalJobbeProsent), []));
         this.workPeriods.push(...this.arbeid.selvstendigNaeringsdrivende);
-        this.workPeriods.push(...this.arbeid.frilanser);
+       // this.workPeriods.push(...this.arbeid.frilanser);
 
         this.allPeriods = [];
         this.allPeriods.push(...this.workPeriods);
