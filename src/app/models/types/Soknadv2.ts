@@ -6,6 +6,8 @@ import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/model
 import {IntlShape}                                               from 'react-intl';
 import {ISoknadPeriode, SoknadPeriode} from "./HentSoknad";
 import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
+import {PeriodeinfoV2} from "./PeriodeInfoV2";
+import {PeriodeV2} from "./PeriodeV2";
 
 export interface ISoknadV2 {
     søknadId?: string;
@@ -128,21 +130,21 @@ export class Barn implements Required<IBarn> {
     }
 }
 
-export interface ITilleggsinformasjon {
+export interface ITilleggsinformasjonV2 {
     tilleggsinformasjon?: string;
 }
 
-export class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>> {
+export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsinformasjonV2>> {
 
-    periode: Periode;
+    periode: PeriodeV2;
     tilleggsinformasjon: string;
 
-    constructor(periodeinfo: Periodeinfo<ITilleggsinformasjon>) {
-        this.periode = new Periode(periodeinfo.periode || {});
+    constructor(periodeinfo: PeriodeinfoV2<ITilleggsinformasjonV2>) {
+        this.periode = new PeriodeV2(periodeinfo.periode || {});
         this.tilleggsinformasjon = periodeinfo.tilleggsinformasjon || '';
     }
 
-    values(): Required<Periodeinfo<ITilleggsinformasjon>> {
+    values(): Required<PeriodeinfoV2<ITilleggsinformasjonV2>> {
         return {
             periode: this.periode.values(),
             tilleggsinformasjon: this.tilleggsinformasjon
@@ -190,8 +192,8 @@ export interface IYtelse {
     søknadsPeriode?: ISoknadPeriode;
     barn?: IBarn;
     arbeidAktivitet?: IArbeidV2;
-    beredskap?: Periodeinfo<ITilleggsinformasjon>[];
-    nattevaak?: Periodeinfo<ITilleggsinformasjon>[];
+    beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
+    nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
     tilsynsordning?: ITilsynsordning;
 
 
@@ -201,12 +203,12 @@ export class Ytelse implements Required<IYtelse> {
     søknadsPeriode: SoknadPeriode;
     barn: Barn;
     arbeidAktivitet: ArbeidV2;
-    beredskap: Periodeinfo<Tilleggsinformasjon>[];
-    nattevaak: Periodeinfo<Tilleggsinformasjon>[];
+    beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
+    nattevaak: PeriodeinfoV2<TilleggsinformasjonV2>[];
     tilsynsordning: Tilsynsordning;
 
-    private workPeriods: Periodeinfo<IPeriodeinfoExtension>[];
-    private allPeriods: Periodeinfo<IPeriodeinfoExtension>[];
+    private workPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
+    private allPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
 
 
 
@@ -214,8 +216,8 @@ export class Ytelse implements Required<IYtelse> {
         this.søknadsPeriode = new SoknadPeriode(ytelse.søknadsPeriode || {});
         this.barn = new Barn(ytelse.barn || {});
         this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
-        this.beredskap = (ytelse.beredskap || []).map(b => new Tilleggsinformasjon(b));
-        this.nattevaak = (ytelse.nattevaak || []).map(n => new Tilleggsinformasjon(n));
+        this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
+        this.nattevaak = (ytelse.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
         this.tilsynsordning = new Tilsynsordning(ytelse.tilsynsordning || {});
 
 

@@ -7,7 +7,7 @@ import classNames                                                    from 'class
 import * as React                                                    from 'react';
 import {Col, Container, Row}                                         from 'react-bootstrap';
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
-import {ArbeidV2, SoknadV2} from "../../models/types/Soknadv2";
+import {ArbeidV2, SoknadV2, TilleggsinformasjonV2} from "../../models/types/Soknadv2";
 import {SoknadPeriode} from "../../models/types/HentSoknad";
 
 interface ISoknadReadModeProps {
@@ -120,7 +120,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
         </ul>}</Col>
     };
 
-    private tilleggsinfo = (tilleggsinformasjon: Tilleggsinformasjon[], intlCode: string) => {
+    private tilleggsinfo = (tilleggsinformasjon: TilleggsinformasjonV2[], intlCode: string) => {
         const {intl} = this.props;
         return <Col>{!!tilleggsinformasjon.length && <ul>
             {tilleggsinformasjon.map((t,i) => <li key={i}>{intlHelper(
