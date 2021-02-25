@@ -1,6 +1,4 @@
-import {JaNeiVetikke}                                            from 'app/models/enums';
 import {Arbeidstaker, IArbeidstaker, Tilstedevaerelsesgrad}      from 'app/models/types/Arbeidstaker';
-import {Periode}                                       from 'app/models/types/Periode';
 import {IPeriodeinfoExtension, Periodeinfo}                      from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {IntlShape}                                               from 'react-intl';
@@ -82,26 +80,18 @@ export class ArbeidV2 implements Required<IArbeidV2> {
     generateTgStrings = (intl: IntlShape): string[][] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgStrings(intl));
 }
 
-export interface ITilsynsordning {
-    iTilsynsordning?: JaNeiVetikke;
-    opphold?: Periodeinfo<ITilsyn>[];
+export interface ITilsynsordningV2 {
+    periode?: PeriodeV2;
+    etablertTilsynTimerPerDag?: string;
 }
 
-export class Tilsynsordning implements Required<ITilsynsordning> {
+export class TilsynsordningV2 implements Required<ITilsynsordningV2> {
 
-    iTilsynsordning: JaNeiVetikke;
-    opphold: Tilsyn[];
-
-    constructor(tilsynsordning: ITilsynsordning) {
-        this.iTilsynsordning = tilsynsordning.iTilsynsordning || JaNeiVetikke.NEI;
-        this.opphold = (tilsynsordning.opphold || []).map(o => new Tilsyn(o || {}));
-    }
-
-    values(): Required<ITilsynsordning> {
-        return {
-            iTilsynsordning: this.iTilsynsordning,
-            opphold: this.opphold.map(t => t.values())
-        }
+    periode: PeriodeV2;
+    etablertTilsynTimerPerDag: string;
+    constructor(tilsynsordning: ITilsynsordningV2) {
+        this.periode = new PeriodeV2(tilsynsordning.periode || {});
+        this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
     }
 }
 
@@ -152,49 +142,13 @@ export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsin
     }
 }
 
-export interface ITilsyn {
-    mandag?:    string | null;
-    tirsdag?:   string | null;
-    onsdag?:    string | null;
-    torsdag?:   string | null;
-    fredag?:    string | null;
-}
-
-export class Tilsyn implements Required<Periodeinfo<ITilsyn>> {
-
-    periode: Periode;
-    mandag: string | null;
-    tirsdag: string | null;
-    onsdag: string | null;
-    torsdag: string | null;
-    fredag: string | null;
-
-    constructor(periodeinfo: Periodeinfo<ITilsyn>) {
-        this.periode = new Periode(periodeinfo.periode || {});
-        this.mandag = periodeinfo.mandag || null;
-        this.tirsdag = periodeinfo.tirsdag || null;
-        this.onsdag = periodeinfo.onsdag || null;
-        this.torsdag = periodeinfo.torsdag || null;
-        this.fredag = periodeinfo.fredag || null;
-    }
-
-    description(intl: IntlShape): string {
-        return this.periode.description(intl);
-    }
-
-    values(): Required<Periodeinfo<ITilsyn>> {
-        const {periode, mandag, tirsdag, onsdag, torsdag, fredag} = this; // tslint:disable-line:no-this-assignment
-        return {periode: periode.values(), mandag, tirsdag, onsdag, torsdag, fredag};
-    }
-}
-
 export interface IYtelse {
     søknadsperiode?: ISoknadPeriode;
     barn?: IBarn;
     arbeidAktivitet?: IArbeidV2;
   //  beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
   //  nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
-    tilsynsordning?: ITilsynsordning;
+    tilsynsordning?: ITilsynsordningV2[];
 
 
 }
@@ -205,7 +159,7 @@ export class Ytelse implements Required<IYtelse> {
     arbeidAktivitet: ArbeidV2;
  //   beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
  //   nattevaak: PeriodeinfoV2<TilleggsinformasjonV2>[];
-    tilsynsordning: Tilsynsordning;
+    tilsynsordning: TilsynsordningV2[];
 
     private workPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
     private allPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
@@ -218,7 +172,7 @@ export class Ytelse implements Required<IYtelse> {
         this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
    //     this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
    //     this.nattevaak = (ytelse.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
-        this.tilsynsordning = new Tilsynsordning(ytelse.tilsynsordning || {});
+        this.tilsynsordning = (ytelse.tilsynsordning || []).map(t => new TilsynsordningV2(t));
 
 
         this.workPeriods = [];
@@ -230,7 +184,7 @@ export class Ytelse implements Required<IYtelse> {
         this.allPeriods.push(...this.workPeriods);
  //       this.allPeriods.push(...this.beredskap);
  //       this.allPeriods.push(...this.nattevaak);
-        this.allPeriods.push(...this.tilsynsordning.opphold);
+        this.allPeriods.push(...this.tilsynsordning);
     }
 
     values(): Required<IYtelse> {
@@ -240,7 +194,7 @@ export class Ytelse implements Required<IYtelse> {
  //           beredskap: this.beredskap.map(b => b.values()),
  //           nattevaak: this.nattevaak.map(n => n.values()),
             søknadsperiode: this.søknadsperiode,
-            tilsynsordning: this.tilsynsordning.values()
+            tilsynsordning: this.tilsynsordning
         };
     }
 

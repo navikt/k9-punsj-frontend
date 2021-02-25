@@ -7,7 +7,7 @@ import classNames                                                    from 'class
 import * as React                                                    from 'react';
 import {Col, Container, Row}                                         from 'react-bootstrap';
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
-import {ArbeidV2, SoknadV2, TilleggsinformasjonV2} from "../../models/types/Soknadv2";
+import {ArbeidV2, SoknadV2, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/Soknadv2";
 import {SoknadPeriode} from "../../models/types/HentSoknad";
 
 interface ISoknadReadModeProps {
@@ -18,6 +18,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
 
     render() {
         const {intl, soknad} = this.props;
+
         return (
             <Container className={classNames('read-modal soknad-read-mode', 'enkel')}>
                 <Row className="felles">
@@ -50,8 +51,9 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
     private soknadsperioder = (sokandsperioder: SoknadPeriode[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
 
     private arbeid = (arbeid: ArbeidV2) => {
-        const {intl} = this.props;
-        return <Col>{!!arbeid.numberOfWorkPeriods() && <ul>
+        const {intl, soknad} = this.props;
+        const numberOfWorkPeriods = arbeid.arbeidstaker.length + arbeid.selvstendigNaeringsdrivende.length + (arbeid.frilanser ? 1 : 0);
+        return <Col>{!!numberOfWorkPeriods && <ul>
             {arbeid.arbeidstaker.map((a,i) => <li key={i}>
                 <p>{a.description(intl)}</p>
                 {a.skalJobbeProsent.length && <ul>{a.skalJobbeProsent.map((tg,j) => <li key={j}>{tg.description(intl)}</li>)}</ul>}
@@ -72,11 +74,11 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
         </ul>}</Col>;
     };
 
-    private tilsynsordning = (tilsynsordning: Tilsynsordning) => {
+    private tilsynsordning = (tilsynsordning: TilsynsordningV2[]) => {
         const {intl} = this.props;
-        return <Col>{tilsynsordning.iTilsynsordning === JaNeiVetikke.JA
-            ? <ul>{tilsynsordning.opphold.map((t,i) => <li key={i}>{t.description(intl)}</li>)}</ul>
-            : intlHelper(intl, tilsynsordning.iTilsynsordning)}</Col>;
+        return <Col>{tilsynsordning.length > 0
+            ? <ul>{tilsynsordning.map((t,i) => <li key={i}>{t.periode.description(intl)}</li>)}</ul>
+            : intlHelper(intl, tilsynsordning.length > 0 ? "ja" : "nei")}</Col>;
     }
 }
 
