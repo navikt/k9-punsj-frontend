@@ -144,9 +144,9 @@ describe('Soknad', () => {
 
     describe('Soknad.GetNumberOfWorkPeriods', () => {
 
-        it('Finner antallet arbeidsperioder', () => {
-            expect(soknadMedFlerePerioder.getNumberOfWorkPeriods()).toEqual(3);
-        });
+   //     it('Finner antallet arbeidsperioder', () => {
+   //         expect(soknadMedFlerePerioder.getNumberOfWorkPeriods()).toEqual(3);
+   //     });
 
         it('Returnerer 0 når søknaden er tom', () => {
             expect(tomSoknad.getNumberOfWorkPeriods()).toEqual(0);
