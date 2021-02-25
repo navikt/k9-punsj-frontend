@@ -192,8 +192,8 @@ export interface IYtelse {
     søknadsPeriode?: ISoknadPeriode;
     barn?: IBarn;
     arbeidAktivitet?: IArbeidV2;
-    beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
-    nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
+  //  beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
+  //  nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
     tilsynsordning?: ITilsynsordning;
 
 
@@ -203,8 +203,8 @@ export class Ytelse implements Required<IYtelse> {
     søknadsPeriode: SoknadPeriode;
     barn: Barn;
     arbeidAktivitet: ArbeidV2;
-    beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
-    nattevaak: PeriodeinfoV2<TilleggsinformasjonV2>[];
+ //   beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
+ //   nattevaak: PeriodeinfoV2<TilleggsinformasjonV2>[];
     tilsynsordning: Tilsynsordning;
 
     private workPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
@@ -216,8 +216,8 @@ export class Ytelse implements Required<IYtelse> {
         this.søknadsPeriode = new SoknadPeriode(ytelse.søknadsPeriode || {});
         this.barn = new Barn(ytelse.barn || {});
         this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
-        this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
-        this.nattevaak = (ytelse.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
+   //     this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
+   //     this.nattevaak = (ytelse.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
         this.tilsynsordning = new Tilsynsordning(ytelse.tilsynsordning || {});
 
 
@@ -228,8 +228,8 @@ export class Ytelse implements Required<IYtelse> {
 
         this.allPeriods = [];
         this.allPeriods.push(...this.workPeriods);
-        this.allPeriods.push(...this.beredskap);
-        this.allPeriods.push(...this.nattevaak);
+ //       this.allPeriods.push(...this.beredskap);
+ //       this.allPeriods.push(...this.nattevaak);
         this.allPeriods.push(...this.tilsynsordning.opphold);
     }
 
@@ -237,8 +237,8 @@ export class Ytelse implements Required<IYtelse> {
         return {
             barn: this.barn.values(),
             arbeidAktivitet: this.arbeidAktivitet.values(),
-            beredskap: this.beredskap.map(b => b.values()),
-            nattevaak: this.nattevaak.map(n => n.values()),
+ //           beredskap: this.beredskap.map(b => b.values()),
+ //           nattevaak: this.nattevaak.map(n => n.values()),
             søknadsPeriode: this.søknadsPeriode,
             tilsynsordning: this.tilsynsordning.values()
         };
