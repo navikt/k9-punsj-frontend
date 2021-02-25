@@ -146,8 +146,8 @@ const getPunchPath = (step: PunchStep, values?: any) => {
             const søknad = new SoknadV2(soknadInfo.søknad)
             const soknadId = soknadInfo.søknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
-            const fom = søknad.ytelse.søknadsPeriode.fom;
-            const tom = søknad.ytelse.søknadsPeriode.tom;
+            const fom = søknad.ytelse.søknadsperiode.fom;
+            const tom = søknad.ytelse.søknadsperiode.tom;
             const rowContent = [
                 !!søknad.datoMottatt
                     ? datetime(intl, TimeFormat.DATE_SHORT, søknad.datoMottatt)

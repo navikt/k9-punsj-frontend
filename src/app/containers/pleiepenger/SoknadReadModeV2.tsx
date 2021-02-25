@@ -78,7 +78,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
-                    {this.soknadsperioder([soknad.ytelse.søknadsPeriode])}
+                    {this.soknadsperioder([soknad.ytelse.søknadsperiode])}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>
