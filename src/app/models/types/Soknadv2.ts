@@ -4,7 +4,7 @@ import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/model
 import {IntlShape}                                               from 'react-intl';
 import {ISoknadPeriode, SoknadPeriode} from "./HentSoknad";
 import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
-import {PeriodeinfoV2} from "./PeriodeInfoV2";
+import {IPeriodeinfoExtensionV2, PeriodeinfoV2} from "./PeriodeInfoV2";
 import {PeriodeV2} from "./PeriodeV2";
 
 export interface ISoknadV2 {
@@ -146,8 +146,8 @@ export interface IYtelse {
     søknadsperiode?: ISoknadPeriode;
     barn?: IBarn;
     arbeidAktivitet?: IArbeidV2;
-  //  beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
-  //  nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
+    beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
+    nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
     tilsynsordning?: ITilsynsordningV2[];
 
 
@@ -157,12 +157,12 @@ export class Ytelse implements Required<IYtelse> {
     søknadsperiode: SoknadPeriode;
     barn: Barn;
     arbeidAktivitet: ArbeidV2;
- //   beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
- //   nattevaak: PeriodeinfoV2<TilleggsinformasjonV2>[];
+    beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
+    nattevaak: PeriodeinfoV2<TilleggsinformasjonV2>[];
     tilsynsordning: TilsynsordningV2[];
 
-    private workPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
-    private allPeriods: PeriodeinfoV2<IPeriodeinfoExtension>[];
+    private workPeriods: PeriodeinfoV2<IPeriodeinfoExtensionV2>[];
+    private allPeriods: PeriodeinfoV2<IPeriodeinfoExtensionV2>[];
 
 
 
@@ -170,29 +170,29 @@ export class Ytelse implements Required<IYtelse> {
         this.søknadsperiode = new SoknadPeriode(ytelse.søknadsperiode || {});
         this.barn = new Barn(ytelse.barn || {});
         this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
-   //     this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
-   //     this.nattevaak = (ytelse.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
+        this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));
+        this.nattevaak = (ytelse.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
         this.tilsynsordning = (ytelse.tilsynsordning || []).map(t => new TilsynsordningV2(t));
 
 
         this.workPeriods = [];
         this.workPeriods.push(...this.arbeidAktivitet.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.skalJobbeProsent), []));
         this.workPeriods.push(...this.arbeidAktivitet.selvstendigNaeringsdrivende);
-      //  this.workPeriods.push(...this.arbeidAktivitet.frilanser);
+     //   this.workPeriods.push(...this.arbeidAktivitet.frilanser);
 
         this.allPeriods = [];
         this.allPeriods.push(...this.workPeriods);
- //       this.allPeriods.push(...this.beredskap);
- //       this.allPeriods.push(...this.nattevaak);
-        this.allPeriods.push(...this.tilsynsordning);
+        this.allPeriods.push(...this.beredskap);
+        this.allPeriods.push(...this.nattevaak);
+     //   this.allPeriods.push(...this.tilsynsordning);
     }
 
     values(): Required<IYtelse> {
         return {
             barn: this.barn.values(),
             arbeidAktivitet: this.arbeidAktivitet.values(),
- //           beredskap: this.beredskap.map(b => b.values()),
- //           nattevaak: this.nattevaak.map(n => n.values()),
+            beredskap: this.beredskap.map(b => b.values()),
+            nattevaak: this.nattevaak.map(n => n.values()),
             søknadsperiode: this.søknadsperiode,
             tilsynsordning: this.tilsynsordning
         };
