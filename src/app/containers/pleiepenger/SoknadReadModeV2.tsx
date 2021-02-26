@@ -60,9 +60,9 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
 
     private arbeid = (arbeid: ArbeidV2) => {
         const {intl, soknad} = this.props;
-            const numberOfWorkPeriods = arbeid.arbeidstaker.length + arbeid.selvstendigNaeringsdrivende.length + (arbeid.frilanser ? 1 : 0);
+            const numberOfWorkPeriods = arbeid.arbeidstakerList.length + arbeid.selvstendigNaeringsdrivende.length + (arbeid.frilanser ? 1 : 0);
         return <Col>{!!numberOfWorkPeriods && <ul>
-            {arbeid.arbeidstaker.map((a,i) => <li key={i}>
+            {arbeid.arbeidstakerList.map((a,i) => <li key={i}>
                 <p>{a.description(intl)}</p>
                 {a.arbeidstidInfo.perioder.length && <ul>{a.arbeidstidInfo.perioder.map((tg,j) => <li key={j}>{tg.faktiskArbeidTimerPerDag}</li>)}</ul>}
             </li>)}

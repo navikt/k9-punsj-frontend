@@ -49,36 +49,36 @@ export class SoknadV2 implements Required<ISoknadV2> {
 }
 
 export interface IArbeidV2 {
-    arbeidstaker?: IArbeidstaker[];
+    arbeidstakerList?: IArbeidstaker[];
     selvstendigNaeringsdrivende?: Periodeinfo<ISelvstendigNaerinsdrivende>[];
     frilanser?: IFrilanserV2;
 }
 
 export class ArbeidV2 implements Required<IArbeidV2> {
 
-    arbeidstaker: ArbeidstakerV2[];
+    arbeidstakerList: ArbeidstakerV2[];
     selvstendigNaeringsdrivende: SelvstendigNaerinsdrivende[];
     frilanser: FrilanserV2;
 
     constructor(arbeid: IArbeidV2) {
-        this.arbeidstaker = (arbeid.arbeidstaker || []).map(a => new ArbeidstakerV2(a));
+        this.arbeidstakerList = (arbeid.arbeidstakerList || []).map(a => new ArbeidstakerV2(a));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
         this.frilanser = new FrilanserV2(arbeid.frilanser || {});
     }
 
     values(): Required<IArbeidV2> {
         return {
-            arbeidstaker: this.arbeidstaker.map(a => a.values()),
+            arbeidstakerList: this.arbeidstakerList.map(a => a.values()),
             selvstendigNaeringsdrivende: this.selvstendigNaeringsdrivende.map(s => s.values()),
             frilanser: this.frilanser
         };
     }
 
     numberOfWorkPeriods(): number {
-        return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
+        return this.arbeidstakerList.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
     }
 
-    generateTgStrings = (intl: IntlShape): (string | undefined)[][] => this.arbeidstaker.map((a: ArbeidstakerV2) => a.generateTgStrings());
+    generateTgStrings = (intl: IntlShape): (string | undefined)[][] => this.arbeidstakerList.map((a: ArbeidstakerV2) => a.generateTgStrings());
 }
 
 export interface ITilsynsordningV2 {
