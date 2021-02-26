@@ -6,11 +6,12 @@ import {ISoknadPeriode, SoknadPeriode} from "./HentSoknad";
 import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
 import {IPeriodeinfoExtensionV2, PeriodeinfoV2} from "./PeriodeInfoV2";
 import {PeriodeV2} from "./PeriodeV2";
+import {ArbeidstakerV2} from "./ArbeidstakerV2";
 
 export interface ISoknadV2 {
     søknadId?: string;
     journalposter?: string[];
-    datoMottatt?: string;
+    mottattDato?: string;
     sendtInn?: boolean;
     erFraK9?: boolean;
     ytelse?: IYtelse;
@@ -19,7 +20,7 @@ export interface ISoknadV2 {
 export class SoknadV2 implements Required<ISoknadV2> {
 
     søknadId: string;
-    datoMottatt: string;
+    mottattDato: string;
     journalposter: string[];
     sendtInn: boolean;
     erFraK9: boolean;
@@ -28,7 +29,7 @@ export class SoknadV2 implements Required<ISoknadV2> {
     constructor(soknad: ISoknadV2) {
 
         this.søknadId = soknad.søknadId || '';
-        this.datoMottatt = soknad.datoMottatt || '';
+        this.mottattDato = soknad.mottattDato || '';
         this.ytelse = new Ytelse(soknad.ytelse || {});
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
@@ -38,7 +39,7 @@ export class SoknadV2 implements Required<ISoknadV2> {
     values(): Required<ISoknadV2> {
         return {
             søknadId: this.søknadId,
-            datoMottatt: this.datoMottatt,
+            mottattDato: this.mottattDato,
             erFraK9: this.erFraK9,
             journalposter: this.journalposter,
             ytelse: this.ytelse,
@@ -55,12 +56,12 @@ export interface IArbeidV2 {
 
 export class ArbeidV2 implements Required<IArbeidV2> {
 
-    arbeidstaker: Arbeidstaker[];
+    arbeidstaker: ArbeidstakerV2[];
     selvstendigNaeringsdrivende: SelvstendigNaerinsdrivende[];
     frilanser: FrilanserV2;
 
     constructor(arbeid: IArbeidV2) {
-        this.arbeidstaker = (arbeid.arbeidstaker || []).map(a => new Arbeidstaker(a));
+        this.arbeidstaker = (arbeid.arbeidstaker || []).map(a => new ArbeidstakerV2(a));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
         this.frilanser = new FrilanserV2(arbeid.frilanser || {});
     }
@@ -77,7 +78,7 @@ export class ArbeidV2 implements Required<IArbeidV2> {
         return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
     }
 
-    generateTgStrings = (intl: IntlShape): string[][] => this.arbeidstaker.map((a: Arbeidstaker) => a.generateTgStrings(intl));
+    generateTgStrings = (intl: IntlShape): (string | undefined)[][] => this.arbeidstaker.map((a: ArbeidstakerV2) => a.generateTgStrings());
 }
 
 export interface ITilsynsordningV2 {
@@ -176,7 +177,7 @@ export class Ytelse implements Required<IYtelse> {
 
 
         this.workPeriods = [];
-        this.workPeriods.push(...this.arbeidAktivitet.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.skalJobbeProsent), []));
+ //       this.workPeriods.push(...this.arbeidAktivitet.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.arbeidstidInfo.perioder), []));
         this.workPeriods.push(...this.arbeidAktivitet.selvstendigNaeringsdrivende);
      //   this.workPeriods.push(...this.arbeidAktivitet.frilanser);
 
@@ -229,9 +230,7 @@ export class Ytelse implements Required<IYtelse> {
         return this.workPeriods.length;
     }
 
-    generateTgStrings(intl: IntlShape): string[][] {
-        return this.arbeidAktivitet.generateTgStrings(intl);
-    }
+
 
     getFnrOrFdato(): string {
         return this.barn.getFnrOrFdato();

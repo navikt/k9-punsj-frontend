@@ -149,8 +149,8 @@ const getPunchPath = (step: PunchStep, values?: any) => {
             const fom = søknad.ytelse.søknadsperiode.fom;
             const tom = søknad.ytelse.søknadsperiode.tom;
             const rowContent = [
-                !!søknad.datoMottatt
-                    ? datetime(intl, TimeFormat.DATE_SHORT, søknad.datoMottatt)
+                !!søknad.mottattDato
+                    ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato)
                     : '',
                 SoknadType[props.soknaderSokState.soknadSvar.fagsakTypeKode],
                 (!!søknad.ytelse.barn.norskIdentitetsnummer
