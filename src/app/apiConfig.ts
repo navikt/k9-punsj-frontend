@@ -9,8 +9,8 @@ const URL_BACKEND = IS_OICD_AUTH_PROXY_SET
 export const URL_API = URL_BACKEND + '/api/k9-punsj';
 
 export enum ApiPath {
-  MAPPE_SOK = '/mappe',
-  MAPPER_FIND = '/pleiepenger-sykt-barn-soknad/mapper',
+  MAPPE_SOK = '/mapper',
+  MAPPER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',
   MAPPE_GET = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
   MAPPE_CREATE = '/pleiepenger-sykt-barn-soknad',
   MAPPE_UPDATE = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
