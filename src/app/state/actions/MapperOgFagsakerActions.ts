@@ -53,7 +53,7 @@ export function findMapper(ident1: string, ident2: string | null) {return (dispa
             return response.json()
                            .then(r => {
                                const {mapper} = r;
-                               dispatch(setMapperAction(MappeRules.isMapperResponseValid(mapper) ? mapper : []));
+                               dispatch(setMapperAction(mapper));
                            });
         }
         return dispatch(findMapperErrorAction(convertResponseToError(response)));

@@ -134,7 +134,6 @@ export const MapperOgFagsakerComponent: React.FunctionComponent<IMapperOgFagsake
   if (
     punchState.step !== PunchStep.CHOOSE_SOKNAD ||
     mapperOgFagsakerState.isMapperLoading ||
-    mapperOgFagsakerState.isFagsakerLoading ||
     mapperOgFagsakerState.isAwaitingMappeCreation
   ) {
     return (
