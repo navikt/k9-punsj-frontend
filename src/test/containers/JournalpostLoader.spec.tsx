@@ -58,18 +58,6 @@ describe('JournalpostLoader', () => {
     expect(getByTestId(testId)).toBeDefined();
   });
 
-  it('Viser feilmelding hvis journalpost ikke finnes', () => {
-    const testId = 'test-id';
-    const renderedOnLoad = () => <div data-testid={testId} />;
-
-    const { queryByTestId } = setupLoader({
-      journalpostRequestError: { status: 404 },
-      renderOnLoadComplete: renderedOnLoad,
-    });
-
-    expect(queryByTestId(testId)).toBeNull();
-  });
-
   it('Viser spinner mens journalpost lastes inn', () => {
     const journalpostId = '200';
     const testId = 'test-id';
@@ -87,7 +75,20 @@ describe('JournalpostLoader', () => {
     expect(journalpost.find('NavFrontendSpinner')).toHaveLength(1);
   });
 
- /* it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
+ /*
+   it('Viser feilmelding hvis journalpost ikke finnes', () => {
+    const testId = 'test-id';
+    const renderedOnLoad = () => <div data-testid={testId} />;
+
+    const { queryByTestId } = setupLoader({
+      journalpostRequestError: { status: 404 },
+      renderOnLoadComplete: renderedOnLoad,
+    });
+
+    expect(queryByTestId(testId)).toBeNull();
+  });
+
+ it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
     const journalpostId = '200';
     const testId = 'test-id';
     const renderedOnLoad = () => <div data-testid={testId} />;
