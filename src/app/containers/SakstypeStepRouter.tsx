@@ -15,7 +15,7 @@ import FormPanel from '../components/FormPanel';
 
 interface ISakstypePunchProps {
   sakstypeConfig: ISakstypePunch;
-  journalpostid: string;
+  journalpostid?: string;
 }
 
 export interface IDokumenterProps {
@@ -93,8 +93,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
             })}
           </Switch>
         </FormPanel>
-
-        <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />
+        {journalpostid && <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
       </div>
     </Page>
   );

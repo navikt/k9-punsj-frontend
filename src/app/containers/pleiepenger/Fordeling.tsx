@@ -113,11 +113,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
               {intlHelper(intl, 'fordeling.omfordeling.feil')}
             </AlertStripeFeil>
           )}
-
+          {journalpost!.journalpostId !== 'rediger' &&
           <JournalpostPanel
             journalpostId={journalpost!.journalpostId}
             identitetsnummer={journalpost?.norskIdent}
-          />
+          />}
 
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
@@ -204,10 +204,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           />
         </div>
       </FormPanel>
+      {journalpost!.journalpostId !== 'rediger' &&
       <PdfVisning
         dokumenter={journalpost!.dokumenter}
         journalpostId={journalpost!.journalpostId}
-      />
+      />}
     </div>
   );
 };

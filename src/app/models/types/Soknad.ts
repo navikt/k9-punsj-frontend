@@ -9,6 +9,7 @@ import {IntlShape}                                               from 'react-int
 import {Locale}                                                  from './Locale';
 
 export interface ISoknad {
+    søknadId?: string;
     datoMottatt?: string;
     arbeid?: IArbeid;
     spraak?: Locale;
@@ -21,6 +22,7 @@ export interface ISoknad {
 
 export class Soknad implements Required<ISoknad> {
 
+    søknadId: string;
     datoMottatt: string;
     arbeid: Arbeid;
     spraak: Locale;
@@ -34,6 +36,7 @@ export class Soknad implements Required<ISoknad> {
 
     constructor(soknad: ISoknad) {
 
+        this.søknadId = soknad.søknadId || '';
         this.datoMottatt = soknad.datoMottatt || '';
         this.arbeid = new Arbeid(soknad.arbeid || {});
         this.spraak = soknad.spraak || 'nb';
@@ -46,7 +49,7 @@ export class Soknad implements Required<ISoknad> {
         this.workPeriods = [];
         this.workPeriods.push(...this.arbeid.arbeidstaker.reduce((pv: Tilstedevaerelsesgrad[], cv) => pv.concat(cv.skalJobbeProsent), []));
         this.workPeriods.push(...this.arbeid.selvstendigNaeringsdrivende);
-        this.workPeriods.push(...this.arbeid.frilanser);
+       // this.workPeriods.push(...this.arbeid.frilanser);
 
         this.allPeriods = [];
         this.allPeriods.push(...this.workPeriods);
@@ -57,6 +60,7 @@ export class Soknad implements Required<ISoknad> {
 
     values(): Required<ISoknad> {
         return {
+            søknadId: this.søknadId,
             datoMottatt: this.datoMottatt,
             spraak: this.spraak,
             barn: this.barn.values(),

@@ -114,7 +114,7 @@ export default function FellesReducer(
         ...state,
         journalpost: undefined,
         isJournalpostLoading: false,
-        journalpostRequestError: undefined,
+        journalpostRequestError: action.error,
       };
 
     default:
