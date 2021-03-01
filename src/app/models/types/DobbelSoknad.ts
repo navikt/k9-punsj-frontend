@@ -29,8 +29,8 @@ export class DobbelSoknad implements IDobbelSoknad {
         this.soker1 = soker1;
         this.soker2 = soker2 || null;
         this.harToSokere = !!soker2;
-        this.soknad1 = new Soknad({...this.felles, ...this.soker1});
-        this.soknad2 = this.harToSokere ? new Soknad({...this.felles, ...this.soker2}) : null;
+        this.soknad1 = new Soknad({søknadId: "", ...this.felles, ...this.soker1});
+        this.soknad2 = this.harToSokere ? new Soknad({søknadId: "", ...this.felles, ...this.soker2}) : null;
     }
 
     soknad(nr: 1 | 2): Soknad | null {

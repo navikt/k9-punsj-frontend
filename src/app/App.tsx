@@ -17,6 +17,8 @@ import {
   getLocaleFromSessionStorage,
   setLocaleInSessionStorage,
 } from './utils';
+import SokIndex from "./containers/sok/SokIndex";
+import RedigeringRouter from "./containers/redigering/RedigeringRouter";
 
 const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
@@ -43,10 +45,9 @@ export const App: React.FunctionComponent = () => {
       >
         <BrowserRouter>
           <Switch>
-            <Route path="/:journalpostid/" children={JournalpostRouter} />
-            <Route path="/">
-              <p>Journalpostid er ikke oppgitt.</p>
-            </Route>
+            <Route path="/rediger/" children={RedigeringRouter} />
+            <Route path="/journalpost/:journalpostid/" children={JournalpostRouter} />
+            <Route path="/" children={SokIndex} />
           </Switch>
         </BrowserRouter>
       </ApplicationWrapper>

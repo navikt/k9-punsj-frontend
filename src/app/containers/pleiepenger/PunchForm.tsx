@@ -377,10 +377,10 @@ export class PunchFormComponent extends React.Component<
         />
       );
 
-      const frilanserperioder = (harOverskrift?: boolean) => (
+   /*   const frilanserperioder = (harOverskrift?: boolean) => (
         <Periodepaneler
           intl={intl}
-          periods={arbeid.frilanser}
+          periods={arbeid.frilanser.description(intl)}
           panelid={(i) => `frilanserpanel_${i}`}
           initialPeriodeinfo={initialFrilanser}
           editSoknad={(frilanser) =>
@@ -411,7 +411,7 @@ export class PunchFormComponent extends React.Component<
           getErrorMessage={errorMessageFunction}
           feilkodeprefiks={'arbeid.frilanser'}
         />
-      );
+      ); */
 
       const antallArbeidsperioder = (nr === 1
         ? soknad1
@@ -425,7 +425,6 @@ export class PunchFormComponent extends React.Component<
               <Row>
                 <Col>{arbeidstakerperioder()}</Col>
                 <Col>{selvstendigperioder()}</Col>
-                <Col>{frilanserperioder()}</Col>
               </Row>
             </Container>
           );
@@ -442,7 +441,6 @@ export class PunchFormComponent extends React.Component<
               <Container className="arbeidsknapper">
                 <Row>
                   <Col>{selvstendigperioder()}</Col>
-                  <Col>{frilanserperioder()}</Col>
                 </Row>
               </Container>
             </>
@@ -465,16 +463,14 @@ export class PunchFormComponent extends React.Component<
               <Container className="arbeidsknapper">
                 <Row>
                   <Col>{arbeidstakerperioder()}</Col>
-                  <Col>{frilanserperioder()}</Col>
                 </Row>
               </Container>
             </>
           );
-        } else if (arbeid.frilanser.length === antallArbeidsperioder) {
+        } else if (arbeid.frilanser) {
           return (
             <>
               <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-              {frilanserperioder(true)}
               <h3>
                 {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
               </h3>
@@ -501,7 +497,6 @@ export class PunchFormComponent extends React.Component<
               </h3>
               {selvstendigperioder(true)}
               <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-              {frilanserperioder(true)}
             </>
           );
         }

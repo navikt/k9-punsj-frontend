@@ -4,7 +4,9 @@ import {MappeRules}      from 'app/rules';
 describe('MappeRules.isSoknadResponseValid', () => {
 
     it ('Skal være sann når søknadresponsen er gyldig', () => {
-        const soknad: ISoknad = {};
+        const soknad: ISoknad = {
+            søknadId: ''
+        };
         expect(MappeRules.isSoknadResponseValid(soknad)).toBeTruthy();
     });
 
@@ -20,7 +22,9 @@ describe('MappeRules.isMappeResponseValid', () => {
             mappeId: '123',
             personer: {
                 '123': {
-                    soeknad: {}
+                    soeknad: {
+                        søknadId: ''
+                    }
                 }
             }
         };
@@ -39,7 +43,9 @@ describe('MappeRules.isMappeResponseValid', () => {
         const mappe: IMappe = {
             personer: {
                 '123': {
-                    soeknad: {}
+                    soeknad: {
+                        søknadId: ''
+                    }
                 }
             }
         };
@@ -59,7 +65,9 @@ describe('MappeRules.isMapperResponseValid', () => {
             mappeId: '123',
             personer: {
                 '123': {
-                    soeknad: {}
+                    soeknad: {
+                        søknadId: ''
+                    }
                 }
             }
         }];

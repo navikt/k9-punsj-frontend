@@ -34,6 +34,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import {SoknadV2} from "../../models/types/Soknadv2";
 
 export interface IMapperOgFagsakerStateProps {
   punchState: IPleiepengerPunchState;

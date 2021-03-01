@@ -45,6 +45,9 @@ export function setStepAction(step: PunchStep): ISetStepAction {
 export function undoSearchForMapperAction(): IBackFromMapperOgFagsakerAction {
   return { type: PunchActionKeys.BACK_FROM_MAPPER };
 }
+export function undoSearchForSoknaderAction(): IBackFromMapperOgFagsakerAction {
+  return { type: PunchActionKeys.BACK_FROM_MAPPER };
+}
 
 export function resetPunchAction(): IResetAction {
   return { type: PunchActionKeys.RESET };

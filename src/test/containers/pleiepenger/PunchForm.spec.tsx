@@ -232,6 +232,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.JA,
               opphold: [{ periode: {} }],
@@ -252,6 +253,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.NEI,
               opphold: [{ periode: {} }],
@@ -272,6 +274,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.VET_IKKE,
               opphold: [{ periode: {} }],
@@ -292,6 +295,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.JA,
               opphold: [{ periode: {} }],
@@ -310,6 +314,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.NEI,
               opphold: [{ periode: {} }],
@@ -328,6 +333,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.VET_IKKE,
               opphold: [{ periode: {} }],
@@ -347,6 +353,7 @@ describe('PunchForm', () => {
       personer: {
         '0101501234': {
           soeknad: {
+            søknadId: '123',
             tilsynsordning: {
               iTilsynsordning: JaNeiVetikke.NEI,
               opphold: [],
