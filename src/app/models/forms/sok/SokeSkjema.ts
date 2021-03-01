@@ -1,5 +1,6 @@
-import {fødselsnummervalidator, IFeltValidator, påkrevd, validerSkjema} from "../../../rules/valideringer";
+import {fødselsnummervalidator, gyldigDato, IFeltValidator, påkrevd, validerSkjema} from "../../../rules/valideringer";
 import {IntlShape} from "react-intl";
+import {IOverføringPunchSkjema} from "../omsorgspenger/overføring/PunchSkjema";
 
 export interface ISokeSkjema {
     identitetsnummer: string;
@@ -12,8 +13,20 @@ const fnrFeltValidator: IFeltValidator<string, ISokeSkjema> = {
     validatorer: [fødselsnummervalidator],
 };
 
+const periodeFraValidator: IFeltValidator<string, ISokeSkjema> = {
+    feltPath: 'fraOgMed',
+    validatorer: [påkrevd, gyldigDato],
+};
+
+const periodeTilValidator: IFeltValidator<string, ISokeSkjema> = {
+    feltPath: 'tilOgMed',
+    validatorer: [påkrevd, gyldigDato],
+};
+
 export const validerSokeSkjema = (intl: IntlShape) =>
     validerSkjema<ISokeSkjema>(
-        [fnrFeltValidator],
+        [fnrFeltValidator,
+            periodeFraValidator,
+            periodeTilValidator],
         intl
     );

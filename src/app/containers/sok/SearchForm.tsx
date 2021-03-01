@@ -2,7 +2,7 @@ import VerticalSpacer from "../../components/VerticalSpacer";
 import TextInput from "../../components/skjema/TextInput";
 import {FormattedMessage} from "react-intl";
 import React, {useEffect, useState} from "react";
-import {ISokeSkjema} from "../../models/forms/sok/SokeSkjema";
+import {ISokeSkjema, validerSokeSkjema} from "../../models/forms/sok/SokeSkjema";
 
 import {Form, useFormikContext} from "formik";
 import SokKnapp from "../../components/knapp/SokKnapp";
@@ -17,6 +17,8 @@ export const SearchForm: React.FunctionComponent = () => {
     const { identitetsnummer, fraOgMed, tilOgMed } = values;
     const [ visMapper, setVisMapper ] = useState<boolean>(false);
 
+    const disabled = !identitetsnummer || !fraOgMed || !tilOgMed;
+
     const onClick = () => {
         setVisMapper(true);
     }
@@ -27,6 +29,7 @@ export const SearchForm: React.FunctionComponent = () => {
             tom: til
         }
     }
+
     return (
         <div className="container">
             <Form>
@@ -45,7 +48,7 @@ export const SearchForm: React.FunctionComponent = () => {
                     <SokKnapp
                         onClick={() => onClick()}
                         tekstId="søk.knapp.label"
-                        disabled={!identitetsnummer}/>
+                        disabled={disabled}/>
                 </SkjemaGruppe>
             </Form>
             <VerticalSpacer twentyPx={true} />
