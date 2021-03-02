@@ -38,6 +38,7 @@ import {ISoknadV2, SoknadV2} from "../../models/types/Soknadv2";
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from "nav-frontend-etiketter";
 import {RootStateType} from "../../state/RootState";
 import {connect} from "react-redux";
+import {IPeriodeV2} from "../../models/types/PeriodeV2";
 
 
 export interface IPunchFormComponentProps {
@@ -206,22 +207,20 @@ export class PunchFormComponent extends React.Component<
     const soknadsperioder = () => (
       <Periodepaneler
         intl={intl}
-        periods={[]}
+        periods={[soknad.ytelse.søknadsperiode]}
         panelid={(i) => `soknadsperiodepanel_${i}`}
         initialPeriodeinfo={{ periode: initialPeriode }}
-        editSoknad={() => undefined}
-        editSoknadState={() => undefined}
-        /*editSoknad={(perioder) =>
+        editSoknad={(perioder) =>
 
           this.updateSoknadInformasjon(
-            { perioder: perioder.map((p) => p.periode as IPeriode) })
+            { ytelse: {søknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] }})
         }
         editSoknadState={(perioder, showStatus) =>
           this.updateSoknadState(
-            { perioder: perioder.map((p) => p.periode as IPeriode) },
+              { ytelse: {søknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] }},
             showStatus
           )
-        }*/
+        }
         getErrorMessage={() => undefined}
         feilkodeprefiks={'perioder'}
         minstEn={true}
