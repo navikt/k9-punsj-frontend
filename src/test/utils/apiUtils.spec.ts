@@ -58,7 +58,6 @@ describe('get', () => {
     await get(path, { id }, {}, callback);
 
     expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith(expect.objectContaining(response));
   });
 });
 
@@ -91,7 +90,7 @@ describe('post', () => {
     await post(path, undefined, undefined, undefined, callback);
 
     expect(redirect).toHaveBeenCalledTimes(1);
-    expect(callback).not.toHaveBeenCalled();
+    expect(callback).not.toHaveBeenCalled()
   });
 
   it('Behandler respons fra post-spørring', async () => {
