@@ -58,11 +58,9 @@ export function getJournalpost(journalpostid: string) {
       ApiPath.JOURNALPOST_GET,
       { journalpostId: journalpostid },
       undefined,
-      (response) => {
+      (response, journalpost) => {
         if (response.ok) {
-          return response
-            .json()
-            .then((journalpost) => dispatch(setJournalpostAction(journalpost)));
+          return dispatch(setJournalpostAction(journalpost));
         }
         return dispatch(
           getJournalpostErrorAction(convertResponseToError(response))
