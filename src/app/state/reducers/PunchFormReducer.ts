@@ -4,7 +4,7 @@ import {IPunchFormActionTypes}                 from 'app/state/actions/PunchForm
 import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 const initialState: IPunchFormState = {
-    isMappeLoading: false,
+    isSoknadLoading: false,
     isComplete: false
 };
 
@@ -19,38 +19,38 @@ export function PunchFormReducer(
         case PunchFormActionKeys.RESET:
             return initialState;
 
-        case PunchFormActionKeys.MAPPE_LOAD:
+        case PunchFormActionKeys.SOKNAD_LOAD:
             return {
                 ...punchFormState,
-                isMappeLoading: true
+                isSoknadLoading: true
             };
 
-        case PunchFormActionKeys.MAPPE_REQUEST_ERROR:
+        case PunchFormActionKeys.SOKNAD_REQUEST_ERROR:
             return {
                 ...punchFormState,
-                isMappeLoading: false,
+                isSoknadLoading: false,
                 error: action.error
             };
 
-        case PunchFormActionKeys.MAPPE_SET:
+        case PunchFormActionKeys.SOKNAD_SET:
             return {
                 ...punchFormState,
-                isMappeLoading: false,
-                mappe: action.mappe
+                isSoknadLoading: false,
+                soknadInfo: action.soknad
             };
 
-        case PunchFormActionKeys.MAPPE_RESET:
+        case PunchFormActionKeys.SOKNAD_RESET:
             return {
                 ...punchFormState,
-                isMappeLoading: false,
-                mappe: undefined
+                isSoknadLoading: false,
+                soknadInfo: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_REQUEST:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: true,
-                updateMappeError: undefined
+                updateSoknadError: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS:
@@ -59,28 +59,28 @@ export function PunchFormReducer(
                 isAwaitingUpdateResponse: false,
                 inputErrors1: action.errors1,
                 inputErrors2: action.errors2,
-                updateMappeError: undefined
+                updateSoknadError: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_ERROR:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                updateMappeError: action.error
+                updateSoknadError: action.error
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: true,
-                submitMappeError: undefined
+                submitSoknadError: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitMappeError: undefined,
+                submitSoknadError: undefined,
                 inputErrors1: undefined,
                 inputErrors2: undefined,
                 isComplete: true
@@ -90,7 +90,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitMappeError: undefined,
+                submitSoknadError: undefined,
                 inputErrors1: action.errors1,
                 inputErrors2: action.errors2
             };
@@ -99,7 +99,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitMappeError: action.error
+                submitSoknadError: action.error
             };
 
         default: return punchFormState;

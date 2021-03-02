@@ -142,7 +142,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         const rows = [];
 
         for (const soknadInfo of soknader) {
-            const søknad = new SoknadV2(soknadInfo.søknad)
+            const søknad = new SoknadV2(soknadInfo)
             const soknadId = soknadInfo.søknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
             const fom = søknad.ytelse.søknadsperiode.fom;
@@ -180,7 +180,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 >
                     <div className="modal_content">
                         {chosenSoknad?.søknad && (
-                            <SoknadReadModeV2 soknad={chosenSoknad.søknad}/>
+                            <SoknadReadModeV2 soknad={new SoknadV2(chosenSoknad.søknad)}/>
                         )}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>

@@ -1,11 +1,10 @@
-import {Arbeidstaker, IArbeidstaker, Tilstedevaerelsesgrad}      from 'app/models/types/Arbeidstaker';
-import {IPeriodeinfoExtension, Periodeinfo}                      from 'app/models/types/Periodeinfo';
+import {Arbeidstaker, IArbeidstaker} from 'app/models/types/Arbeidstaker';
+import { Periodeinfo}                      from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {IntlShape}                                               from 'react-intl';
-import {ISoknadPeriode, SoknadPeriode} from "./HentSoknad";
 import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
 import {IPeriodeinfoExtensionV2, PeriodeinfoV2} from "./PeriodeInfoV2";
-import {PeriodeV2} from "./PeriodeV2";
+import {IPeriodeV2, PeriodeV2} from "./PeriodeV2";
 import {ArbeidstakerV2} from "./ArbeidstakerV2";
 
 export interface ISoknadV2 {
@@ -78,7 +77,8 @@ export class ArbeidV2 implements Required<IArbeidV2> {
         return this.arbeidstakerList.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
     }
 
-    generateTgStrings = (intl: IntlShape): (string | undefined)[][] => this.arbeidstakerList.map((a: ArbeidstakerV2) => a.generateTgStrings());
+    generateTgStrings = (intl: IntlShape): string[][] => this.arbeidstakerList.map((a: ArbeidstakerV2) => a.generateTgStrings());
+
 }
 
 export interface ITilsynsordningV2 {
@@ -136,7 +136,7 @@ export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsin
 }
 
 export interface IYtelse {
-    søknadsperiode?: ISoknadPeriode;
+    søknadsperiode?: IPeriodeV2;
     barn?: IBarn;
     arbeidAktivitet?: IArbeidV2;
     beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
@@ -147,7 +147,7 @@ export interface IYtelse {
 }
 
 export class Ytelse implements Required<IYtelse> {
-    søknadsperiode: SoknadPeriode;
+    søknadsperiode: PeriodeV2;
     barn: Barn;
     arbeidAktivitet: ArbeidV2;
     beredskap: PeriodeinfoV2<TilleggsinformasjonV2>[];
@@ -160,7 +160,7 @@ export class Ytelse implements Required<IYtelse> {
 
 
     constructor(ytelse: IYtelse) {
-        this.søknadsperiode = new SoknadPeriode(ytelse.søknadsperiode || {});
+        this.søknadsperiode = new PeriodeV2(ytelse.søknadsperiode || {});
         this.barn = new Barn(ytelse.barn || {});
         this.arbeidAktivitet = new ArbeidV2(ytelse.arbeidAktivitet || {})
         this.beredskap = (ytelse.beredskap || []).map(b => new TilleggsinformasjonV2(b));

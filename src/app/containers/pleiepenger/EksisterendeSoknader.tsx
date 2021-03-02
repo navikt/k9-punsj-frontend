@@ -203,7 +203,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
           >
             <div className="modal_content">
               {chosenSoknad?.søknad && (
-                  <SoknadReadModeV2 soknad={chosenSoknad.søknad}/>
+                  <SoknadReadModeV2 soknad={new SoknadV2(chosenSoknad.søknad)}/>
               )}
               <div className="punch_mappemodal_knapperad">
                 <Knapp className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>

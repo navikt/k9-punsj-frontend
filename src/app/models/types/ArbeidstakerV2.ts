@@ -27,7 +27,7 @@ export class ArbeidstidInfoV2 {
 }
 
 export interface ITilstedevaerelsesgradV2 {
-    faktiskArbeidTimerPerDag?: string;
+    faktiskArbeidTimerPerDag: string;
 }
 
 export class TilstedevaerelsesgradV2 implements Required<Periodeinfo<ITilstedevaerelsesgradV2>> {
@@ -75,7 +75,7 @@ export class ArbeidstakerV2 implements Required<IArbeidstakerV2> {
         return {arbeidstidInfo, organisasjonsnummer, norskIdentitetsnummer};
     }
 
-    generateTgStrings = (): (string | undefined)[] => this.arbeidstidInfo.perioder.map(tg => tg.faktiskArbeidTimerPerDag);
+    generateTgStrings = (): string[] => this.arbeidstidInfo.perioder.map(tg => tg.faktiskArbeidTimerPerDag);
 
     orgOrPers(): OrgOrPers {
         return this.organisasjonsnummer === null ? 'p' : 'o';

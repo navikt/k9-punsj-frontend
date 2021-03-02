@@ -9,6 +9,7 @@ import {Col, Container, Row}                                         from 'react
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
 import {ArbeidV2, SoknadV2, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/Soknadv2";
 import {SoknadPeriode} from "../../models/types/HentSoknad";
+import {IPeriodeV2} from "../../models/types/PeriodeV2";
 
 interface ISoknadReadModeProps {
     soknad: SoknadV2;
@@ -56,7 +57,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
 
     private mottakelsesdato = (dato: string) => <Col>{datetime(this.props.intl, TimeFormat.DATE_WITH_MONTH_NAME, dato)}</Col>;
 
-    private soknadsperioder = (sokandsperioder: SoknadPeriode[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
+    private soknadsperioder = (sokandsperioder: IPeriodeV2[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
 
     private arbeid = (arbeid: ArbeidV2) => {
         const {intl, soknad} = this.props;
