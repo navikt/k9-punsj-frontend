@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import {
   AuthReducer,
   FordelingReducer, GosysOppgaveReducer,
-  MapperOgFagsakerReducer, SoknaderSokReducer,
+  EksisterendeSoknaderReducer, SoknaderSokReducer,
   PunchFormReducer,
   PunchReducer,
   SignaturReducer,
@@ -15,7 +15,7 @@ import {SoknaderVisningReducer} from "./reducers/SoknaderVisningReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
-    mapperOgFagsakerState: MapperOgFagsakerReducer,
+    eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     punchFormState: PunchFormReducer,
     punchState: PunchReducer,
     signaturState: SignaturReducer,

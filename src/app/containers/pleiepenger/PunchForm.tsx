@@ -34,7 +34,7 @@ import {
   setIdentAction,
   setStepAction,
   submitSoknad,
-  undoChoiceOfMappeAction,
+  undoChoiceOfEksisterendeSoknadAction,
   updateSoknad,
   updateSoknader,
 } from 'app/state/actions';
@@ -76,7 +76,7 @@ export interface IPunchFormDispatchProps {
   resetMappeAction: typeof resetMappeAction;
   setIdentAction: typeof setIdentAction;
   setStepAction: typeof setStepAction;
-  undoChoiceOfMappeAction: typeof undoChoiceOfMappeAction;
+  undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeSoknadAction;
   updateSoknad: typeof updateSoknad;
   updateSoknader: typeof updateSoknader;
   submitSoknad: typeof submitSoknad;
@@ -904,7 +904,7 @@ export class PunchFormComponent extends React.Component<
   private handleBackButtonClick = () => {
     const { getPunchPath } = this.props;
     this.props.resetMappeAction();
-    this.props.undoChoiceOfMappeAction();
+    this.props.undoChoiceOfEksisterendeSoknadAction();
     setHash(
       getPunchPath(PunchStep.CHOOSE_SOKNAD)
     );
@@ -1034,7 +1034,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   setIdentAction: (ident1: string, ident2: string | null) =>
     dispatch(setIdentAction(ident1, ident2)),
   setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-  undoChoiceOfMappeAction: () => dispatch(undoChoiceOfMappeAction()),
+  undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
   updateSoknad: (
     mappeid: string,
     norskIdent: string,

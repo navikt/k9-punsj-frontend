@@ -42,7 +42,7 @@ const setupPunchForm = (
     getMappe: jest.fn(),
     resetPunchFormAction: jest.fn(),
     submitSoknad: jest.fn(),
-    undoChoiceOfMappeAction: jest.fn(),
+    undoChoiceOfEksisterendeSoknadAction: jest.fn(),
     updateSoknad: jest.fn(),
     updateSoknader: jest.fn(),
     ...punchFormDispatchPropsSetup,

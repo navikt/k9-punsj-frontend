@@ -111,14 +111,6 @@ export class Barn implements Required<IBarn> {
         this.foedselsdato = barn.foedselsdato || '';
     }
 
-    values(): Required<IBarn> {
-        const {norskIdentitetsnummer, foedselsdato} = this; // tslint:disable-line:no-this-assignment
-        return {norskIdentitetsnummer, foedselsdato};
-    }
-
-    getFnrOrFdato(): string {
-        return this.norskIdentitetsnummer || this.foedselsdato;
-    }
 }
 
 export interface ITilleggsinformasjonV2 {
@@ -190,7 +182,7 @@ export class Ytelse implements Required<IYtelse> {
 
     values(): Required<IYtelse> {
         return {
-            barn: this.barn.values(),
+            barn: this.barn,
             arbeidAktivitet: this.arbeidAktivitet.values(),
             beredskap: this.beredskap.map(b => b.values()),
             nattevaak: this.nattevaak.map(n => n.values()),
@@ -230,9 +222,4 @@ export class Ytelse implements Required<IYtelse> {
         return this.workPeriods.length;
     }
 
-
-
-    getFnrOrFdato(): string {
-        return this.barn.getFnrOrFdato();
-    }
 }

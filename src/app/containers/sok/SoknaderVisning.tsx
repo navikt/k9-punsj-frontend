@@ -1,7 +1,6 @@
-import SoknadReadMode from 'app/containers/pleiepenger/SoknadReadMode';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import {
-    ISoknaderSokState, IPath, ISoknad, Soknad,
+    ISoknaderSokState, IPath,
 } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash, getPath } from 'app/utils';
@@ -26,7 +25,7 @@ import {
 } from "../../state/actions/SoknaderVisningActions";
 import {SoknadType} from "../../models/enums/SoknadType";
 import {ISoknadInfo} from "../../models/types/SoknadSvar";
-import {closeFagsakAction, resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
+import {resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
 import {SoknadV2} from "../../models/types/Soknadv2";
 import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
@@ -264,7 +263,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
     openSoknadAction: (soknad: ISoknadInfo) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),
-    closeFagsakAction: () => dispatch(closeFagsakAction()),
     chooseSoknadAction: (soknad: ISoknadInfo) => dispatch(chooseSoknadAction(soknad)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),

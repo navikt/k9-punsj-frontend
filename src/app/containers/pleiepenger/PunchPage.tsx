@@ -1,9 +1,8 @@
 import Page from 'app/components/page/Page';
 import { Ident } from 'app/containers/pleiepenger/Ident';
 import {
-  IMapperOgFagsakerComponentProps,
-  MapperOgFagsaker,
-} from 'app/containers/pleiepenger/MapperOgFagsaker';
+  EksisterendeSoknader, IEksisterendeSoknaderComponentProps,
+} from 'app/containers/pleiepenger/EksisterendeSoknader';
 import { PunchForm } from 'app/containers/pleiepenger/PunchForm';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
@@ -209,7 +208,7 @@ export class PunchPageComponent extends React.Component<
           />
         );
       case PunchStep.CHOOSE_SOKNAD:
-        return <MapperOgFagsaker {...commonProps} {...this.extractIdents()} />;
+        return <EksisterendeSoknader {...commonProps} {...this.extractIdents()} />;
       case PunchStep.FILL_FORM:
         return <PunchForm {...commonProps} id={this.props.match.params.id} />;
       case PunchStep.COMPLETED:
@@ -222,7 +221,7 @@ export class PunchPageComponent extends React.Component<
   }
 
   private extractIdents(): Pick<
-    IMapperOgFagsakerComponentProps,
+    IEksisterendeSoknaderComponentProps,
     'ident1' | 'ident2'
   > {
     const ident = this.props.punchState.ident1;

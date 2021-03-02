@@ -9,7 +9,7 @@ export * from 'app/models/types/InputError';
 export * from 'app/models/types/Journalpost';
 export * from 'app/models/types/Locale';
 export * from 'app/models/types/Mappe';
-export * from 'app/models/types/MapperOgFagsakerState';
+export * from 'app/models/types/EksisterendeSoknaderState';
 export * from 'app/models/types/SoknaderSokState';
 export * from 'app/models/types/Path';
 export * from 'app/models/types/Periode';
