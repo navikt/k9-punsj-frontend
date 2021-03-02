@@ -39,7 +39,7 @@ const setupPunchForm = (
     setStepAction: jest.fn(),
     setIdentAction: jest.fn(),
     resetMappeAction: jest.fn(),
-    getMappe: jest.fn(),
+    getSoknad: jest.fn(),
     resetPunchFormAction: jest.fn(),
     submitSoknad: jest.fn(),
     undoChoiceOfEksisterendeSoknadAction: jest.fn(),
@@ -91,10 +91,10 @@ describe('PunchForm', () => {
   });
 
   it('Henter mappeinformasjon', () => {
-    const getMappe = jest.fn();
-    setupPunchForm({}, { getMappe });
-    expect(getMappe).toHaveBeenCalledTimes(1);
-    expect(getMappe).toHaveBeenCalledWith(mappeid);
+    const getSoknad = jest.fn();
+    setupPunchForm({}, { getSoknad });
+    expect(getSoknad).toHaveBeenCalledTimes(1);
+    expect(getSoknad).toHaveBeenCalledWith(mappeid);
   });
 
   it('Viser spinner når mappen lastes inn', () => {

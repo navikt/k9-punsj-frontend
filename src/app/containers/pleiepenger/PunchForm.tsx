@@ -28,7 +28,7 @@ import {
   Tilsyn,
 } from 'app/models/types';
 import {
-  getMappe,
+  getSoknad,
   resetMappeAction,
   resetPunchFormAction,
   setIdentAction,
@@ -72,7 +72,7 @@ export interface IPunchFormStateProps {
 }
 
 export interface IPunchFormDispatchProps {
-  getMappe: typeof getMappe;
+  getSoknad: typeof getSoknad;
   resetMappeAction: typeof resetMappeAction;
   setIdentAction: typeof setIdentAction;
   setStepAction: typeof setStepAction;
@@ -133,7 +133,7 @@ export class PunchFormComponent extends React.Component<
 
   componentDidMount(): void {
     const { id } = this.props;
-    this.props.getMappe(id);
+    this.props.getSoknad(id);
     this.props.setStepAction(PunchStep.FILL_FORM);
     this.setState(this.state);
   }
@@ -1029,7 +1029,7 @@ const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  getMappe: (id: string) => dispatch(getMappe(id)),
+  getSoknad: (id: string) => dispatch(getSoknad(id)),
   resetMappeAction: () => dispatch(resetMappeAction()),
   setIdentAction: (ident1: string, ident2: string | null) =>
     dispatch(setIdentAction(ident1, ident2)),

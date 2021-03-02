@@ -98,7 +98,7 @@ export function createSoknad(journalpostid: string, ident1: string, ident2: stri
     }
 
 
-    post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, (response, soknad) => {
+    post(ApiPath.SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
         if (response.status === 201) {
             return dispatch(createSoknadSuccessAction(soknad.søknadId));
         }

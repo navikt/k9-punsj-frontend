@@ -3,6 +3,7 @@ import {PunchFormActionKeys}                    from 'app/models/enums';
 import {IError, IMappe, ISoknad}                from 'app/models/types';
 import {IInputError}                            from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
+import {ISoknadV2} from "../../models/types/Soknadv2";
 
 interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
 
@@ -29,50 +30,42 @@ export const resetPunchFormAction           = ():                               
 
 export const getMappeLoadingAction          = ():                                                   IGetMappeLoadingAction      => ({type: PunchFormActionKeys.MAPPE_LOAD});
 export const getMappeErrorAction            = (error: IError):                                      IGetMappeErrorAction        => ({type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error});
-export const setMappeAction                 = (mappe: Partial<IMappe>):                             ISetMappeAction             => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
+export const setMappeAction                 = (mappe: Partial<ISoknadV2>):                             ISetMappeAction             => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
 export const resetMappeAction               = ():                                                   IResetMappeAction           => ({type: PunchFormActionKeys.MAPPE_RESET});
 
 export const updateSoknadRequestAction      = ():                                                   IUpdateSoknadRequestAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
 export const updateSoknadSuccessAction      = (errors1?: IInputError[], errors2?: IInputError[]):   IUpdateSoknadSuccessAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors1, errors2});
 export const updateSoknadErrorAction        = (error: IError):                                      IUpdateSoknadErrorAction    => ({type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error});
 
-export function getMappe(id: string) {return (dispatch: any) => {
+export function getSoknad(id: string) {return (dispatch: any) => {
     dispatch(getMappeLoadingAction());
-    return get(ApiPath.MAPPE_GET, {id}, undefined,response => {
+    return get(ApiPath.SOKNAD_GET, {id}, undefined,(response, soknad) => {
         if (response.ok || response.status === 400) {
-            return response.json()
-                           .then(mappe => dispatch(setMappeAction(mappe)));
+            return dispatch(setMappeAction(soknad));
         }
         return dispatch(getMappeErrorAction(convertResponseToError(response)));
     });
 }}
 
-export function updateSoknad(mappeid: string,
+export function updateSoknad(soknadId: string,
                              norskIdent: string,
                              journalpostid: string,
-                             soknad: Partial<ISoknad>) {return (dispatch: any) => {
+                             soknad: Partial<ISoknadV2>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     const request = {
-        personer: {
-            [norskIdent]: {
-                journalpostId: journalpostid,
-                soeknad: soknad
-            }
-        }
+        søknadId: soknadId,
+        norskIdent,
+        journalpostId: journalpostid,
+        soeknad: soknad
+
     };
-    return put(ApiPath.MAPPE_UPDATE, {id: mappeid}, request, response => {
+    return put(ApiPath.SOKNAD_UPDATE, {id: soknadId}, request, response => {
         switch (response.status) {
             case 200:
                 return response.json()
                                .then(mappe => {
                                    dispatch(setMappeAction(mappe));
                                    dispatch(updateSoknadSuccessAction());
-                               });
-            case 400:
-                return response.json()
-                               .then(mappe => {
-                                   dispatch(setMappeAction(mappe));
-                                   dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent]?.mangler));
                                });
             default:
                 return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
@@ -104,7 +97,7 @@ export function updateSoknader(mappeid: string,
             }
         }
     };
-    return put(ApiPath.MAPPE_UPDATE, {id: mappeid}, request, response => {
+    return put(ApiPath.SOKNAD_UPDATE, {id: mappeid}, request, response => {
         switch (response.status) {
             case 200:
                 return response.json()
@@ -131,7 +124,7 @@ export const submitSoknadErrorAction        = (error: IError):                  
 
 export function submitSoknad(mappeid: string, ident: string) {return (dispatch: any) => {
     dispatch(submitSoknadRequestAction());
-    post(ApiPath.MAPPE_SUBMIT, {id: mappeid}, {'X-Nav-NorskIdent': ident}, undefined, response => {
+    post(ApiPath.SOKNAD_SUBMIT, {id: mappeid}, {'X-Nav-NorskIdent': ident}, undefined, response => {
         switch (response.status) {
             case 202: return dispatch(submitSoknadSuccessAction());
             case 400: return response.json().then(mappe => dispatch(submitSoknadUncompleteAction(mappe.mangler)));
