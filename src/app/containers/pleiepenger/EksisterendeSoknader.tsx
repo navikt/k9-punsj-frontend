@@ -70,6 +70,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     ident1,
     ident2,
   } = props;
+
   const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
   React.useEffect(() => {
@@ -102,7 +103,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
   const backButton = (
     <p>
-      <Knapp onClick={undoSearchForMapperAndFagsaker}>Tilbake</Knapp>
+      <Knapp onClick={undoSearchForEksisterendeSoknaderAction}>Tilbake</Knapp>
     </p>
   );
 
@@ -236,7 +237,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     );
   }
 
-  function undoSearchForMapperAndFagsaker() {
+  function undoSearchForEksisterendeSoknader() {
     setHash(getPunchPath(PunchStep.IDENT));
     props.undoSearchForEksisterendeSoknaderAction();
   }

@@ -36,13 +36,9 @@ export function findEksisterendeSoknaderErrorAction(error: IError):           IF
 export function findEksisterendeSoknader(ident1: string, ident2: string | null) {return (dispatch: any) => {
     dispatch(findEksisterendeSoknaderLoadingAction(true));
     const idents = ident2 ? `${ident1},${ident2}` : ident1;
-    return get(ApiPath.EKSISTERENDE_SOKNADER_FIND, undefined, {'X-Nav-NorskIdent': idents}, response => {
+    return get(ApiPath.EKSISTERENDE_SOKNADER_FIND, undefined, {'X-Nav-NorskIdent': idents}, (response, soknader) => {
         if (response.ok) {
-            return response.json()
-                           .then(r => {
-                               const {soknader} = r;
-                               dispatch(setEksisterendeSoknaderAction(soknader));
-                           });
+            return dispatch(setEksisterendeSoknaderAction(soknader));
         }
         return dispatch(findEksisterendeSoknaderErrorAction(convertResponseToError(response)));
     });

@@ -13,7 +13,7 @@ export async function get(
   path: ApiPath,
   parameters?: any,
   headers?: HeadersInit,
-  callbackIfAuth?: (response: Response) => Promise<Response>
+  callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response>
 ): Promise<Response> {
   const response = await fetch(apiUrl(path, parameters), {
     credentials: 'include',
@@ -22,7 +22,9 @@ export async function get(
   if (response.status === 401) {
     login();
   } else if (!!callbackIfAuth) {
-    await callbackIfAuth(response);
+    const data = await response.text();
+    const jsonData = data ? JSON.parse(data) : undefined;
+    await callbackIfAuth(response, jsonData);
   }
   return response;
 }
