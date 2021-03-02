@@ -92,9 +92,10 @@ export function createSoknad(journalpostid: string, ident1: string, ident2: stri
         }
     };
 
-    const requestBody: Partial<IMappe> = !!ident2
-        ? {personer: {[ident1]: initialInfo, [ident2]: initialInfo}}
-        : {personer: {[ident1]: initialInfo}};
+    const requestBody = {
+        journalpostId: journalpostid,
+        norskIdent: ident1
+    }
 
 
     post(ApiPath.MAPPE_CREATE, undefined, undefined, requestBody, (response, mappe) => {
