@@ -54,7 +54,7 @@ export function updateSoknad(soknadId: string,
                              soknad: Partial<ISoknadV2>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     const request = {
-        søknadId: soknadId,
+        soeknadId: soknadId,
         norskIdent,
         journalpostId: journalpostid,
         soeknad: soknad

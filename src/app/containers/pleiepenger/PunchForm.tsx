@@ -505,7 +505,7 @@ export class PunchFormComponent extends React.Component<
             {intlHelper(intl, 'skjema.feil.ikke_sendt')}
           </AlertStripeFeil>
         )}
-        {
+        {/*
           !punchFormState.updateSoknadError &&
             !punchFormState.submitSoknadError &&
             (isSoknadComplete ? (
