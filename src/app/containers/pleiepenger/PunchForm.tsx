@@ -555,12 +555,12 @@ export class PunchFormComponent extends React.Component<
               type="date"
               label={intlHelper(intl, 'skjema.barn.foedselsdato')}
               className="bold-label"
-              value={soknad.ytelse.barn.foedselsdato}
+              value={soknad.ytelse.barn.fødselsdato}
               {...this.changeAndBlurUpdatesSoknad((event) => ({
                 ytelse: {
                   barn: {
                     ...soknad.ytelse.barn,
-                    norskIdentitetsnummer: event.target.value,
+                    fødselsdato: event.target.value,
                   }},
               }))}
     //          feil={this.getErrorMessage('barn.foedselsdato')}

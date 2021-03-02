@@ -98,17 +98,17 @@ export class TilsynsordningV2 implements Required<ITilsynsordningV2> {
 
 export interface IBarn {
     norskIdentitetsnummer?: string;
-    foedselsdato?: string;
+    fødselsdato?: string;
 }
 
 export class Barn implements Required<IBarn> {
 
     norskIdentitetsnummer: string;
-    foedselsdato: string;
+    fødselsdato: string;
 
     constructor(barn: IBarn) {
         this.norskIdentitetsnummer = barn.norskIdentitetsnummer || '';
-        this.foedselsdato = barn.foedselsdato || '';
+        this.fødselsdato = barn.fødselsdato || '';
     }
 
 }
