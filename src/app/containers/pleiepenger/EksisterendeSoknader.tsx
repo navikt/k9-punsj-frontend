@@ -165,8 +165,8 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     const rows = [];
 
     for (const soknadInfo of soknader) {
-      const søknad = new SoknadV2(soknadInfo.søknad)
-      const soknadId = soknadInfo.søknadId as string;
+      const søknad = new SoknadV2(soknadInfo)
+      const soknadId = søknad.søknadId;
       const {chosenSoknad} = props.eksisterendeSoknaderState;
       const fom = søknad.ytelse.søknadsperiode.fom;
       const tom = søknad.ytelse.søknadsperiode.tom;
