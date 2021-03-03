@@ -4,12 +4,7 @@ import {SoknaderVisningActionKeys} from "../../models/enums/SoknaderVisningActio
 import {ISoknaderVisningActionTypes} from "../actions/SoknaderVisningActions";
 
 const initialState: ISoknaderSokState = {
-    soknadSvar: {
-        søknader: [],
-        søker: '',
-        fagsakTypeKode: '',
-
-    },
+    soknadSvar: [],
     isSoknaderLoading: false,
     soknaderRequestError: undefined
 };

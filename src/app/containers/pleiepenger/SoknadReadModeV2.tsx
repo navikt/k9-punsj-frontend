@@ -1,6 +1,4 @@
-import {PersonBox}                                                   from 'app/components/person-box/PersonBox';
 import {JaNeiVetikke, TimeFormat}                                    from 'app/models/enums';
-import {Arbeid, Periode, Soknad, Tilleggsinformasjon, Tilsynsordning} from 'app/models/types';
 import {datetime}                                                    from 'app/utils';
 import intlHelper                                                    from 'app/utils/intlUtils';
 import classNames                                                    from 'classnames';
@@ -8,7 +6,6 @@ import * as React                                                    from 'react
 import {Col, Container, Row}                                         from 'react-bootstrap';
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
 import {ArbeidV2, SoknadV2, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/Soknadv2";
-import {SoknadPeriode} from "../../models/types/HentSoknad";
 import {IPeriodeV2} from "../../models/types/PeriodeV2";
 
 interface ISoknadReadModeProps {
@@ -28,27 +25,27 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
-                    {this.soknadsperioder([soknad.ytelse.søknadsperiode])}
+                    {this.soknadsperioder([soknad.soeknadsperiode])}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>
-                    <Col>{soknad.ytelse.barn.norskIdentitetsnummer ? soknad.ytelse.barn.norskIdentitetsnummer : soknad.ytelse.barn.foedselsdato}</Col>
+                    <Col>{soknad.barn.norskIdent ? soknad.barn.norskIdent : soknad.barn.foedselsdato}</Col>
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.arbeid')}</Col>
-                    {this.arbeid(soknad.ytelse.arbeidAktivitet)}
+                    {this.arbeid(soknad.arbeidAktivitet)}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
-                    {this.tilsynsordning(soknad.ytelse.tilsynsordning)}
+                    {this.tilsynsordning(soknad.tilsynsordning)}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.beredskap')}</Col>
-                    {this.tilleggsinfo(soknad.ytelse.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
+                    {this.tilleggsinfo(soknad.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.nattevaak')}</Col>
-                    {this.tilleggsinfo(soknad.ytelse.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
+                    {this.tilleggsinfo(soknad.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
                 </Row>
 
             </Container>

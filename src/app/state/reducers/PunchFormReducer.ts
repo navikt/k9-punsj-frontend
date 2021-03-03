@@ -36,14 +36,14 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isSoknadLoading: false,
-                soknadInfo: action.soknad
+                soknad: action.soknad
             };
 
         case PunchFormActionKeys.SOKNAD_RESET:
             return {
                 ...punchFormState,
                 isSoknadLoading: false,
-                soknadInfo: undefined
+                soknad: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_REQUEST:

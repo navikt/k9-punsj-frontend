@@ -1,4 +1,3 @@
-import {IPeriode}            from 'app/models/types';
 import intlHelper            from 'app/utils/intlUtils';
 import classNames            from 'classnames';
 import {Input, SkjemaGruppe} from 'nav-frontend-skjema';
@@ -6,12 +5,13 @@ import * as React            from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {IntlShape}           from 'react-intl';
 import './periodInput.less';
+import {IPeriodeV2} from "../../models/types/PeriodeV2";
 
 export interface IPeriodInputProps {
-    periode: IPeriode;
+    periode: IPeriodeV2;
     intl: IntlShape;
-    onChange: (periode: IPeriode) => void;
-    onBlur: (periode: IPeriode) => void;
+    onChange: (periode: IPeriodeV2) => void;
+    onBlur: (periode: IPeriodeV2) => void;
     onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;
@@ -35,9 +35,9 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         className="bold-label"
-                        value={periode?.fraOgMed || ''}
-                        onChange={event => onChange({fraOgMed: event.target.value, tilOgMed: periode.tilOgMed})}
-                        onBlur={event => onBlur({fraOgMed: event.target.value, tilOgMed: periode.tilOgMed})}
+                        value={periode?.fom || ''}
+                        onChange={event => onChange({fom: event.target.value, tom: periode.tom})}
+                        onBlur={event => onBlur({fom: event.target.value, tom: periode.tom})}
                         onFocus={onFocus}
                         feil={props.errorMessageFom}
                         disabled={disabled || props.disabledFom}
@@ -49,9 +49,9 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.tom')}
                         className="bold-label"
-                        value={periode?.tilOgMed || ''}
-                        onChange={event => onChange({fraOgMed: periode.fraOgMed, tilOgMed: event.target.value})}
-                        onBlur={event => onBlur({fraOgMed: periode.fraOgMed, tilOgMed: event.target.value})}
+                        value={periode?.tom || ''}
+                        onChange={event => onChange({fom: periode.fom, tom: event.target.value})}
+                        onBlur={event => onBlur({fom: periode.fom, tom: event.target.value})}
                         onFocus={onFocus}
                         feil={props.errorMessageTom}
                         disabled={disabled || props.disabledTom}

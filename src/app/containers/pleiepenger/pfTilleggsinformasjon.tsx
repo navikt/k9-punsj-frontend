@@ -4,19 +4,20 @@ import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
 }                                          from 'app/containers/pleiepenger/Periodepaneler';
-import {ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
 import intlHelper                          from 'app/utils/intlUtils';
 import {Textarea}                          from 'nav-frontend-skjema';
 import * as React                          from 'react';
 import {IntlShape}                         from 'react-intl';
+import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
+import {ITilleggsinformasjonV2} from "../../models/types/Soknadv2";
 
-export function pfTilleggsinformasjon(path: string): PeriodeComponent<ITilleggsinformasjon> {
+export function pfTilleggsinformasjon(path: string): PeriodeComponent<ITilleggsinformasjonV2> {
 
     return (
-        periodeinfo: Periodeinfo<ITilleggsinformasjon>,
+        periodeinfo: PeriodeinfoV2<ITilleggsinformasjonV2>,
         periodeindex: number,
-        updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
-        updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,
+        updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjonV2>,
+        updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjonV2>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape

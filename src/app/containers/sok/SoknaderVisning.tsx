@@ -24,9 +24,8 @@ import {
     sokPsbSoknader
 } from "../../state/actions/SoknaderVisningActions";
 import {SoknadType} from "../../models/enums/SoknadType";
-import {ISoknadInfo} from "../../models/types/SoknadSvar";
 import {resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
-import {SoknadV2} from "../../models/types/Soknadv2";
+import {ISoknadV2, SoknadV2} from "../../models/types/Soknadv2";
 import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
 export interface ISoknaderSokStateProps {
@@ -67,7 +66,7 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
         ident,
         periode,
     } = props;
-    const soknader = soknaderSokState.soknadSvar.søknader;
+    const soknader = soknaderSokState.soknadSvar;
 
     const paths: IPath[] = [
         { step: PunchStep.IDENT, path: `/pleiepenger/ident` },
@@ -131,37 +130,37 @@ const getPunchPath = (step: PunchStep, values?: any) => {
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
-    const chooseSoknad = (soknad: ISoknadInfo) => {
+    const chooseSoknad = (soknad: ISoknadV2) => {
         window.history.pushState("","", "/rediger");
         props.chooseSoknadAction(soknad);
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.søknadId }));
+        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
     };
 
     function showSoknader() {
         const modaler = [];
         const rows = [];
 
-        for (const soknadInfo of soknader) {
-            const søknad = new SoknadV2(soknadInfo)
-            const soknadId = soknadInfo.søknadId as string;
+        for (const s of soknader) {
+            const søknad = new SoknadV2(s)
+            const soknadId = s.soeknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
-            const fom = søknad.ytelse.søknadsperiode.fom;
-            const tom = søknad.ytelse.søknadsperiode.tom;
+            const fom = søknad.soeknadsperiode.fom;
+            const tom = søknad.soeknadsperiode.tom;
             const rowContent = [
                 !!søknad.mottattDato
                     ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato)
                     : '',
-                SoknadType[props.soknaderSokState.soknadSvar.fagsakTypeKode],
-                (!!søknad.ytelse.barn.norskIdentitetsnummer
-                    ? søknad.ytelse.barn.norskIdentitetsnummer
-                    : søknad.ytelse.barn.foedselsdato &&
-                    datetime(intl, TimeFormat.DATE_SHORT, søknad.ytelse.barn.foedselsdato)) ||
+                SoknadType.PSB,
+                (!!søknad.barn.norskIdent
+                    ? søknad.barn.norskIdent
+                    : søknad.barn.foedselsdato &&
+                    datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                 '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
             ];
             rows.push(
-                <tr key={soknadId} onClick={() => props.openSoknadAction(soknadInfo)}>
+                <tr key={soknadId} onClick={() => props.openSoknadAction(s)}>
                     {rowContent.filter((v) => !!v).length ? (
                         rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
                     ) : (
@@ -176,14 +175,14 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                     key={soknadId}
                     onRequestClose={props.closeSoknadAction}
                     contentLabel={soknadId}
-                    isOpen={!!chosenSoknad && soknadId === chosenSoknad.søknadId}
+                    isOpen={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                 >
                     <div className="modal_content">
-                        {chosenSoknad?.søknad && (
-                            <SoknadReadModeV2 soknad={new SoknadV2(chosenSoknad.søknad)}/>
+                        {chosenSoknad && (
+                            <SoknadReadModeV2 soknad={new SoknadV2(chosenSoknad)}/>
                         )}
                         <div className="punch_mappemodal_knapperad">
-                            <Knapp className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>
+                            <Knapp className="knapp1" onClick={() => chooseSoknad(s)}>
                                 {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                             </Knapp>
                             <Knapp className="knapp2" onClick={props.closeSoknadAction}>
@@ -261,9 +260,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     findSoknader: (ident1: string, periode: ISoknadPeriode) =>
         dispatch(sokPsbSoknader(ident1, periode)),
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
-    openSoknadAction: (soknad: ISoknadInfo) => dispatch(openSoknadAction(soknad)),
+    openSoknadAction: (soknad: ISoknadV2) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),
-    chooseSoknadAction: (soknad: ISoknadInfo) => dispatch(chooseSoknadAction(soknad)),
+    chooseSoknadAction: (soknad: ISoknadV2) => dispatch(chooseSoknadAction(soknad)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });

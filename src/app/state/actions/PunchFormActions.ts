@@ -4,13 +4,12 @@ import {IError}                from 'app/models/types';
 import {IInputError}                            from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
 import {ISoknadV2} from "../../models/types/Soknadv2";
-import {ISoknadInfo} from "../../models/types/SoknadSvar";
 
 interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
 
 interface IGetSoknadLoadingAction        {type: PunchFormActionKeys.SOKNAD_LOAD}
 interface IGetSoknadErrorAction          {type: PunchFormActionKeys.SOKNAD_REQUEST_ERROR, error: IError}
-interface ISetSoknadAction               {type: PunchFormActionKeys.SOKNAD_SET, soknad: Partial<ISoknadInfo>}
+interface ISetSoknadAction               {type: PunchFormActionKeys.SOKNAD_SET, soknad: Partial<ISoknadV2>}
 interface IResetSoknadAction             {type: PunchFormActionKeys.SOKNAD_RESET}
 
 interface IUpdateSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST}

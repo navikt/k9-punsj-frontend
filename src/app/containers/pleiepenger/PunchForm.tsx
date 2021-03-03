@@ -8,7 +8,7 @@ import {
   IPeriode,
   IPleiepengerPunchState,
   IPunchFormState,
-  ISelvstendigNaerinsdrivende,
+  ISelvstendigNaerinsdrivende, ISoknadFelles,
   ITilsyn,
   Periodeinfo,
   Tilleggsinformasjon,
@@ -32,13 +32,14 @@ import {Input, RadioPanelGruppe, SkjemaGruppe,} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
-import {ISoknadInfo} from "../../models/types/SoknadSvar";
 import {ArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
-import {ISoknadV2, SoknadV2} from "../../models/types/Soknadv2";
+import {ISoknadV2, SoknadV2, TilleggsinformasjonV2} from "../../models/types/Soknadv2";
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from "nav-frontend-etiketter";
 import {RootStateType} from "../../state/RootState";
 import {connect} from "react-redux";
 import {IPeriodeV2} from "../../models/types/PeriodeV2";
+import {ISelvstendigNaeringsdrivendeV2} from "../../models/types/SelvstendigNæringsdrivendeV2";
+import {IFrilanserV2} from "../../models/types/FrilanserV2";
 
 
 export interface IPunchFormComponentProps {
@@ -64,10 +65,10 @@ export interface IPunchFormDispatchProps {
 }
 
 export interface IPunchFormComponentState {
-  soknadInfo: ISoknadInfo;
+  soknad: ISoknadV2;
   isFetched: boolean;
   showStatus: boolean;
-  tgStrings1: string[][];
+  faktiskeTimer: string[][];
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -80,22 +81,28 @@ export class PunchFormComponent extends React.Component<
   IPunchFormComponentState
 > {
   state: IPunchFormComponentState = {
-    soknadInfo: {
-      søknadId: '',
-      søkerId: '',
+    soknad: {
+      soeknadId: '',
+      soekerId: '',
       erFraK9: false,
-      søknad: {
-        søknadId: '',
-        mottattDato: '',
-        journalposter: [],
-        sendtInn: false,
-        erFraK9: false,
-        ytelse: {}
+      mottattDato: '',
+      journalposter: [],
+      sendtInn: false,
+      barn: {
+        norskIdent: '',
+        foedselsdato: '',
+      },
+      arbeidAktivitet: {},
+      arbeidstid: {},
+      omsorg: {
+        samtykketOmsorgForBarnet: false,
+        beskrivelseAvOmsorgsrollen: '',
+        relasjonTilBarnet: ''
       }
     },
     isFetched: false,
     showStatus: false,
-    tgStrings1: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet
+    faktiskeTimer: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet}
   };
 
   private initialTilsyn: Periodeinfo<ITilsyn> = {
@@ -115,21 +122,19 @@ export class PunchFormComponent extends React.Component<
   }
 
   componentDidUpdate(
-    prevProps: Readonly<IPunchFormProps>,
-    prevState: Readonly<IPunchFormComponentState>,
-    snapshot?: any
+      prevProps: Readonly<IPunchFormProps>,
+      prevState: Readonly<IPunchFormComponentState>,
+      snapshot?: any
   ): void {
-    const { soknadInfo } = this.props.punchFormState;
-    if (!!soknadInfo && !this.state.isFetched) {
-      const soknadFromStore = this.getSoknadFromStore();
+    const { soknad } = this.props.punchFormState;
+    if (!!soknad && !this.state.isFetched) {
       this.setState({
-        soknadInfo: {
-          ...this.state.soknadInfo,
-          søknad : soknadFromStore} ,
-       // tgStrings1: this.tgStrings(soknadFromStore),
+        soknad: new SoknadV2(this.props.punchFormState.soknad as ISoknadV2),
         isFetched: true,
       });
-      this.props.setIdentAction(soknadInfo.søkerId || '');
+      this.props.setIdentAction(
+          soknad.soekerId || '',
+      );
     }
   }
 
@@ -139,8 +144,12 @@ export class PunchFormComponent extends React.Component<
 
   render() {
     const { intl, punchFormState, punchState } = this.props;
-    const soknad = this.getSoknadFromStore()
-    const isSoknadComplete = true
+    const soknad = new SoknadV2(this.state.soknad)
+ //   const isSoknadComplete =
+//   !!this.getManglerFromStore(1) &&
+//             !this.getManglerFromStore(1)!.length &&
+//             !!this.getManglerFromStore(2) &&
+//             !this.getManglerFromStore(2)!.length;
 
     if (punchFormState.isComplete) {
       setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -170,36 +179,37 @@ export class PunchFormComponent extends React.Component<
       return null;
     }
 
-    const initialPeriode: IPeriode = { fraOgMed: '', tilOgMed: '' };
+    const initialPeriode: IPeriodeV2 = { fom: '', tom: '' };
 
     const initialArbeidstaker = new ArbeidstakerV2({
       arbeidstidInfo: undefined,
       organisasjonsnummer: '',
-      norskIdentitetsnummer: null,
+      norskIdent: null,
     });
 
-    const initialSelvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende> = {
-      periode: { fraOgMed: '', tilOgMed: '' },
+    const initialSelvstendigNaeringsdrivende: ISelvstendigNaeringsdrivendeV2 = {
+      perioder: [],
     };
-    const initialFrilanser: Periodeinfo<IFrilanser> = {
-      periode: { fraOgMed: '', tilOgMed: '' },
+    const initialFrilanser: IFrilanserV2 = {
+      startDato: '',
+      jobberFortsattSomFrilans: false,
     };
 
-    const initialTilsyn = new Tilsyn({
+   /* const initialTilsyn = new TilsynV2({
       periode: initialPeriode,
       mandag: null,
       tirsdag: null,
       onsdag: null,
       torsdag: null,
       fredag: null,
-    });
+    }); */
 
-    const initialBeredskap = new Tilleggsinformasjon({
+    const initialBeredskap = new TilleggsinformasjonV2({
       periode: initialPeriode,
       tilleggsinformasjon: '',
     });
 
-    const initialNattevaak = new Tilleggsinformasjon({
+    const initialNattevaak = new TilleggsinformasjonV2({
       periode: initialPeriode,
       tilleggsinformasjon: '',
     });
@@ -207,17 +217,16 @@ export class PunchFormComponent extends React.Component<
     const soknadsperioder = () => (
       <Periodepaneler
         intl={intl}
-        periods={[soknad.ytelse.søknadsperiode]}
+        periods={[soknad.soeknadsperiode]}
         panelid={(i) => `soknadsperiodepanel_${i}`}
         initialPeriodeinfo={{ periode: initialPeriode }}
         editSoknad={(perioder) =>
-
           this.updateSoknadInformasjon(
-            { ytelse: {søknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] }})
+            { soeknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] })
         }
         editSoknadState={(perioder, showStatus) =>
           this.updateSoknadState(
-              { ytelse: {søknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] }},
+              { soeknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] },
             showStatus
           )
         }
@@ -230,9 +239,9 @@ export class PunchFormComponent extends React.Component<
     const arbeidsperioder = () => {
       const updateTgStrings = () =>
         this.setState({
-          tgStrings1: this.tgStrings(soknad),
+          faktiskeTimer: this.faktiskTimer(soknad),
         });
-      const  arbeid = soknad.ytelse.arbeidAktivitet;
+      const  arbeid = soknad.arbeidstid;
       const errorMessageFunction = (code: string) =>
           () => undefined;
 
@@ -241,25 +250,28 @@ export class PunchFormComponent extends React.Component<
           intl={intl}
           items={arbeid.arbeidstakerList}
           component={pfArbeidstaker(
-            this.state.tgStrings1,
-            (tgStrings1) => this.setState({ tgStrings1 }),
-            () => this.tgStrings(soknad)
+            this.state.faktiskeTimer,
+            (faktiskeTimer) => this.setState({ faktiskeTimer }),
+            () => this.faktiskTimer(soknad)
           )}
           panelid={(i) => `arbeidstakerpanel_${i}`}
           initialItem={initialArbeidstaker}
-          editSoknad={(arbeidstaker) =>
+          editSoknad={(arbeidstakerList) =>
             this.updateSoknad(
-              { ytelse: {arbeidAktivitet: { ...arbeid, arbeidstakerList: arbeidstaker }} }
+              {
+                arbeidstid: {
+                    arbeidstakerList
+                  }
+              }
             )
           }
-          editSoknadState={(arbeidstaker, showStatus) =>
+          editSoknadState={(arbeidstakerList, showStatus) =>
             this.updateSoknadState(
-              {ytelse: {
-                arbeidAktivitet: {
-                  ...arbeid,
-                  arbeidstakerList: arbeidstaker,
-                }},
-              },
+                {
+                  arbeidstid: {
+                    arbeidstakerList
+                  }
+                },
               showStatus
             )
           }
@@ -280,28 +292,31 @@ export class PunchFormComponent extends React.Component<
       const selvstendigperioder = (harOverskrift?: boolean) => (
         <Periodepaneler
           intl={intl}
-          periods={[arbeid.selvstendigNaeringsdrivende]}
+          periods={[arbeid.selvstendigNæringsdrivendeArbeidstidInfo]}
           panelid={(i) => `selvstendignaeringsdrivendepanel_${i}`}
           initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-          editSoknad={(selvstendigNaeringsdrivende) =>
+          editSoknad={(perioder) =>
             this.updateSoknadInformasjon(
-              {ytelse: {
-                arbeidAktivitet: {
-                  ...arbeid,
-                  selvstendigNaeringsdrivende,
-                }},
-              }
+                {
+                  arbeidstid: {
+                    selvstendigNæringsdrivendeArbeidstidInfo: {
+                      ...arbeid.selvstendigNæringsdrivendeArbeidstidInfo,
+                      perioder
+                    }
+                  }
+                }
             )
           }
-          editSoknadState={(selvstendigNaeringsdrivende, showStatus) =>
+          editSoknadState={(perioder, showStatus) =>
             this.updateSoknadState(
-              {
-                ytelse: {
-                arbeidAktivitet: {
-                  ...arbeid,
-                  selvstendigNaeringsdrivende,
-                }},
-              },
+                {
+                  arbeidstid: {
+                    selvstendigNæringsdrivendeArbeidstidInfo: {
+                      ...arbeid.selvstendigNæringsdrivendeArbeidstidInfo,
+                      perioder
+                    }
+                  }
+                },
               showStatus
             )
           }
@@ -353,7 +368,7 @@ export class PunchFormComponent extends React.Component<
         />
       ); */
 
-      const antallArbeidsperioder = soknad.ytelse.getNumberOfWorkPeriods();
+      const antallArbeidsperioder = soknad.arbeidAktivitet.numberOfWorkPeriods();
 
       const visning = () => {
         if (!antallArbeidsperioder) {
@@ -383,7 +398,7 @@ export class PunchFormComponent extends React.Component<
             </>
           );
         } else if (
-          arbeid.selvstendigNaeringsdrivende.length === antallArbeidsperioder
+          arbeid.selvstendigNæringsdrivendeArbeidstidInfo.perioder.length === antallArbeidsperioder
         ) {
           return (
             <>
@@ -404,7 +419,7 @@ export class PunchFormComponent extends React.Component<
               </Container>
             </>
           );
-        } else if (arbeid.frilanser) {
+        } else if (arbeid.frilanserArbeidstidInfo) {
           return (
             <>
               <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
@@ -441,6 +456,7 @@ export class PunchFormComponent extends React.Component<
 
       return visning();
     };
+
 
 
   /*  const beredskapperioder = (
@@ -539,13 +555,12 @@ export class PunchFormComponent extends React.Component<
               id="barn-ident"
               label={intlHelper(intl, 'skjema.barn.ident')}
               className="bold-label"
-              value={soknad.ytelse.barn.norskIdentitetsnummer}
+              value={soknad.barn.norskIdent}
               {...this.changeAndBlurUpdatesSoknad((event) => ({
-                ytelse: {
                 barn: {
-                  ...soknad.ytelse.barn,
-                  norskIdentitetsnummer: event.target.value,
-                }},
+                  ...soknad.barn,
+                  norskIdent: event.target.value,
+                },
               }))}
    //           feil={this.getErrorMessage('barn.norskIdent')}
               maxLength={11}
@@ -555,13 +570,12 @@ export class PunchFormComponent extends React.Component<
               type="date"
               label={intlHelper(intl, 'skjema.barn.foedselsdato')}
               className="bold-label"
-              value={soknad.ytelse.barn.fødselsdato}
+              value={soknad.barn.foedselsdato}
               {...this.changeAndBlurUpdatesSoknad((event) => ({
-                ytelse: {
                   barn: {
-                    ...soknad.ytelse.barn,
-                    fødselsdato: event.target.value,
-                  }},
+                    ...soknad.barn,
+                    foedselsdato: event.target.value,
+                  },
               }))}
     //          feil={this.getErrorMessage('barn.foedselsdato')}
             />
@@ -593,7 +607,7 @@ export class PunchFormComponent extends React.Component<
                     (event.target as HTMLInputElement).value as JaNeiVetikke
                   )
                 }*/
-                checked={soknad.ytelse.tilsynsordning !== null ? JaNeiVetikke.JA : JaNeiVetikke.NEI}
+                checked={soknad.tilsynsordning !== null ? JaNeiVetikke.JA : JaNeiVetikke.NEI}
               />
             </SkjemaGruppe>
             {/*soknad.ytelse.tilsynsordning !== null && (
@@ -702,7 +716,8 @@ export class PunchFormComponent extends React.Component<
                   this.props.punchState.ident1
                 )
               }
-              disabled={!isSoknadComplete}
+           //   disabled={!isSoknadComplete}
+                disabled={false}
             >
               {intlHelper(intl, 'skjema.knapp.send')}
             </Knapp>
@@ -712,9 +727,10 @@ export class PunchFormComponent extends React.Component<
     );
   }
 
-  private tgStrings = (soknad: SoknadV2 | null) => {
+
+  private faktiskTimer = (soknad: SoknadV2) => {
     // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
-    return soknad ? soknad.ytelse.arbeidAktivitet.generateTgStrings(this.props.intl) : [];
+    return soknad ? soknad.arbeidstid.faktiskeTimer() : [];
   };
 
  /* private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
@@ -744,7 +760,7 @@ export class PunchFormComponent extends React.Component<
   }
 
   private getSoknadFromStore = () => {
-    return new SoknadV2(this.props.punchFormState.soknadInfo?.søknad || {});
+    return new SoknadV2(this.props.punchFormState.soknad as ISoknadV2)
   };
 
  /*private getManglerFromStore = (nr?: 1 | 2) => {
@@ -785,19 +801,16 @@ export class PunchFormComponent extends React.Component<
 
   */
 
+
   private updateSoknadState(
       soknad: Partial<ISoknadV2>,
       showStatus?: boolean
   ) {
     this.setState({
-      soknadInfo: {
-        ...this.state.soknadInfo,
-        søknad: { ...this.state.soknadInfo.søknad, ...soknad },
-      },
+      soknad: { ...this.state.soknad, ...soknad },
       showStatus: !!showStatus,
     });
   }
-
 
 private updateSoknadInformasjon = (
     soknad: Partial<ISoknadV2>

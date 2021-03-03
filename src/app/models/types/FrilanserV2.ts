@@ -13,6 +13,7 @@ export class FrilanserV2 implements Required<IFrilanserV2> {
 
     constructor(frilanser: IFrilanserV2) {
         this.startDato = frilanser.startDato || '';
+        this.jobberFortsattSomFrilans = frilanser.jobberFortsattSomFrilans || false;
     }
 
     values(): Required<IFrilanserV2> {

@@ -3,20 +3,20 @@ import {SoknaderVisningActionKeys} from "../../models/enums/SoknaderVisningActio
 import {IHentSoknad, ISoknadPeriode} from "../../models/types/HentSoknad";
 import {convertResponseToError, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
-import {ISoknadInfo, ISoknadSvar} from "../../models/types/SoknadSvar";
+import {ISoknadV2} from "../../models/types/Soknadv2";
 
-interface ISetSoknaderAction                  {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar: ISoknadSvar}
+interface ISetSoknaderAction                  {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar: ISoknadV2[]}
 interface IFindSoknaderLoadingAction          {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading: boolean}
 interface IFindSoknaderErrorAction            {type: SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR, error: IError}
 
-interface IOpenSoknadAction                  {type: SoknaderVisningActionKeys.SOKNAD_OPEN, soknad: ISoknadInfo}
+interface IOpenSoknadAction                  {type: SoknaderVisningActionKeys.SOKNAD_OPEN, soknad: ISoknadV2}
 interface ICloseSoknadAction                 {type: SoknaderVisningActionKeys.SOKNAD_CLOSE}
-interface IChooseSoknadAction                {type: SoknaderVisningActionKeys.SOKNAD_CHOOSE, soknad: ISoknadInfo}
+interface IChooseSoknadAction                {type: SoknaderVisningActionKeys.SOKNAD_CHOOSE, soknad: ISoknadV2}
 interface IUndoChoiceOfSoknadAction          {type: SoknaderVisningActionKeys.SOKNAD_UNDO_CHOICE}
 
-export function openSoknadAction(soknad: ISoknadInfo):                 IOpenSoknadAction                {return {type: SoknaderVisningActionKeys.SOKNAD_OPEN, soknad}}
+export function openSoknadAction(soknad: ISoknadV2):                 IOpenSoknadAction                {return {type: SoknaderVisningActionKeys.SOKNAD_OPEN, soknad}}
 export function closeSoknadAction():                             ICloseSoknadAction               {return {type: SoknaderVisningActionKeys.SOKNAD_CLOSE}}
-export function chooseSoknadAction(soknad: ISoknadInfo):               IChooseSoknadAction              {return {type: SoknaderVisningActionKeys.SOKNAD_CHOOSE, soknad}}
+export function chooseSoknadAction(soknad: ISoknadV2):               IChooseSoknadAction              {return {type: SoknaderVisningActionKeys.SOKNAD_CHOOSE, soknad}}
 export function undoChoiceOfSoknadAction():                      IUndoChoiceOfSoknadAction        {return {type: SoknaderVisningActionKeys.SOKNAD_UNDO_CHOICE}}
 
 export function resetSoknadidAction():                           IResetSoknadidAction             {return {type: SoknaderVisningActionKeys.SOKNADID_RESET}}
@@ -26,7 +26,7 @@ type        ISoknadinfoActionTypes   = IOpenSoknadAction | ICloseSoknadAction | 
 
 export type ISoknaderVisningActionTypes = ISoknaderActionTypes | ISoknadinfoActionTypes | IResetSoknadidAction;
 
-export function setSoknaderAction(soknadSvar: ISoknadSvar):              ISetSoknaderAction                {return {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar}}
+export function setSoknaderAction(soknadSvar: ISoknadV2[]):              ISetSoknaderAction                {return {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar}}
 export function findSoknaderLoadingAction(isLoading: boolean):    IFindSoknaderLoadingAction        {return {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading}}
 export function findSoknaderErrorAction(error: IError):           IFindSoknaderErrorAction          {return {type: SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR, error}}
 

@@ -8,7 +8,7 @@ import {
 import {Ukedag}       from 'app/models/enums';
 import {
     ITilsyn,
-    Periodeinfo,
+
     UkedagNumber
 }                     from 'app/models/types';
 import {
@@ -27,9 +27,10 @@ import {
     Row
 }                     from 'react-bootstrap';
 import {IntlShape}    from 'react-intl';
+import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 
 export const pfTilsyn: PeriodeComponent<ITilsyn> = (
-    tilsyn: Periodeinfo<ITilsyn>,
+    tilsyn: PeriodeinfoV2<ITilsyn>,
     periodeindex: number,
     updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilsyn>,
     updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilsyn>,

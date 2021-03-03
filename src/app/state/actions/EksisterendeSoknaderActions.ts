@@ -1,17 +1,17 @@
 import {ApiPath}                                  from 'app/apiConfig';
 import {JaNeiVetikke, EksisterendeSoknaderActionKeys} from 'app/models/enums';
-import {IError, IMappe, IPersonlig} from 'app/models/types';
+import {IError, IPersonlig} from 'app/models/types';
 import {MappeRules}                               from 'app/rules';
-import {convertResponseToError, get, post}        from 'app/utils';
-import {ISoknadInfo, ISoknadSvar} from "../../models/types/SoknadSvar";
+import {convertResponseToError, get, post}        from 'app/utils';;
+import {ISoknadV2} from "../../models/types/Soknadv2";
 
-interface ISetEksisterendeSoknaderAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar: ISoknadSvar}
+interface ISetEksisterendeSoknaderAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar: ISoknadV2[]}
 interface IFindEksisterendeSoknaderLoadingAction          {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_LOAD, isLoading: boolean}
 interface IFindEksisterendeSoknaderErrorAction            {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_REQUEST_ERROR, error: IError}
 
-interface IEksisterendeSoknadAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_OPEN, soknadInfo: ISoknadInfo}
+interface IOpenEksisterendeSoknadAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_OPEN, soknadInfo: ISoknadV2}
 interface ICloseEksisterendeSoknadAction                 {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CLOSE}
-interface IChooseSoknadAction                {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CHOOSE, soknadInfo: ISoknadInfo}
+interface IChooseSoknadAction                {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CHOOSE, soknadInfo: ISoknadV2}
 interface IUndoChoiceOfSoknadAction          {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_UNDO_CHOICE}
 
 interface ICreateSoknadRequestAction         {type: EksisterendeSoknaderActionKeys.SOKNAD_CREATE_REQUEST}
@@ -21,7 +21,7 @@ interface ICreateSoknadErrorAction           {type: EksisterendeSoknaderActionKe
 interface IResetSoknadidAction               {type: EksisterendeSoknaderActionKeys.SOKNADID_RESET}
 
 type        IMapperActionTypes      = ISetEksisterendeSoknaderAction | IFindEksisterendeSoknaderErrorAction | IFindEksisterendeSoknaderLoadingAction;
-type        ISoknadinfoActionTypes   = IEksisterendeSoknadAction | ICloseEksisterendeSoknadAction | IChooseSoknadAction | IUndoChoiceOfSoknadAction;
+type        ISoknadinfoActionTypes   = IOpenEksisterendeSoknadAction | ICloseEksisterendeSoknadAction | IChooseSoknadAction | IUndoChoiceOfSoknadAction;
 type        ICreateSoknadActions     = ICreateSoknadRequestAction | ICreateSoknadErrorAction | ICreateSoknadSuccessAction;
 
 export type IEksisterendeSoknaderActionTypes = IMapperActionTypes |
@@ -29,7 +29,7 @@ export type IEksisterendeSoknaderActionTypes = IMapperActionTypes |
                                            ICreateSoknadActions |
                                            IResetSoknadidAction;
 
-export function setEksisterendeSoknaderAction(eksisterendeSoknaderSvar: ISoknadSvar):              ISetEksisterendeSoknaderAction                {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar}}
+export function setEksisterendeSoknaderAction(eksisterendeSoknaderSvar: ISoknadV2[]):              ISetEksisterendeSoknaderAction                {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar}}
 export function findEksisterendeSoknaderLoadingAction(isLoading: boolean):    IFindEksisterendeSoknaderLoadingAction        {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_LOAD, isLoading}}
 export function findEksisterendeSoknaderErrorAction(error: IError):           IFindEksisterendeSoknaderErrorAction          {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_REQUEST_ERROR, error}}
 
@@ -59,9 +59,9 @@ export function sokEksisterendeSoknader(ident1: string, ident2: string | null) {
     });
 }}
 
-export function openEksisterendeSoknadAction(soknadInfo: ISoknadInfo):                 IEksisterendeSoknadAction                {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_OPEN, soknadInfo}}
+export function openEksisterendeSoknadAction(soknadInfo: ISoknadV2):                 IOpenEksisterendeSoknadAction                {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_OPEN, soknadInfo}}
 export function closeEksisterendeSoknadAction():                             ICloseEksisterendeSoknadAction               {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CLOSE}}
-export function chooseEksisterendeSoknadAction(soknadInfo: ISoknadInfo):               IChooseSoknadAction              {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CHOOSE, soknadInfo}}
+export function chooseEksisterendeSoknadAction(soknadInfo: ISoknadV2):               IChooseSoknadAction              {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CHOOSE, soknadInfo}}
 export function undoChoiceOfEksisterendeSoknadAction():                      IUndoChoiceOfSoknadAction        {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_UNDO_CHOICE}}
 export function createSoknadRequestAction():                     ICreateSoknadRequestAction       {return {type: EksisterendeSoknaderActionKeys.SOKNAD_CREATE_REQUEST}}
 export function createSoknadSuccessAction(id: string):           ICreateSoknadSuccessAction       {return {type: EksisterendeSoknaderActionKeys.SOKNAD_CREATE_SUCCESS, id}}
@@ -100,7 +100,7 @@ export function createSoknad(journalpostid: string, ident1: string, ident2: stri
 
     post(ApiPath.SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
         if (response.status === 201) {
-            return dispatch(createSoknadSuccessAction(soknad.søknadId));
+            return dispatch(createSoknadSuccessAction(soknad.soeknadId));
         }
         return dispatch(createSoknadErrorAction(convertResponseToError(response)));
     });

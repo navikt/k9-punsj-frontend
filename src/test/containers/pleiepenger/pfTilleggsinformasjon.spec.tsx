@@ -4,17 +4,18 @@ import {
     UpdatePeriodeinfoInSoknadState
 }                                          from 'app/containers/pleiepenger/Periodepaneler';
 import {pfTilleggsinformasjon}             from 'app/containers/pleiepenger/pfTilleggsinformasjon';
-import {ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
 import intlHelper                          from 'app/utils/intlUtils';
 import {shallow}                           from 'enzyme';
 import {createIntl, IntlShape}             from 'react-intl';
 import {mocked}                            from 'ts-jest/utils';
+import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
+import {ITilleggsinformasjonV2} from "../../../app/models/types/Soknadv2";
 
 jest.mock('app/utils/intlUtils');
 
 const testTekst = 'Lorem ipsum dolor sit amet';
-const testPeriodeinfo: Periodeinfo<ITilleggsinformasjon> = {
-    periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-12-31'},
+const testPeriodeinfo: PeriodeinfoV2<ITilleggsinformasjonV2> = {
+    periode: {fom: '2020-01-01', tom: '2020-12-31'},
     tilleggsinformasjon: testTekst
 };
 const testPeriodeindex = 0;
@@ -26,10 +27,10 @@ const testIntl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 const testKodeord = 'kodeord';
 
 const setupPfTilleggsinformasjon = (
-    optionalPeriodeinfo?: Periodeinfo<ITilleggsinformasjon>,
+    optionalPeriodeinfo?: PeriodeinfoV2<ITilleggsinformasjonV2>,
     optionalPeriodeindex?: number,
-    optionalUpdatePeriodeinfoInSoknad?: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
-    optionalUpdatePeriodeinfoInSoknadState?: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,
+    optionalUpdatePeriodeinfoInSoknad?: UpdatePeriodeinfoInSoknad<ITilleggsinformasjonV2>,
+    optionalUpdatePeriodeinfoInSoknadState?: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjonV2>,
     optionalFeilprefiks?: string,
     optionalGetErrorMessage?: GetErrorMessage,
     optionalIntl?: IntlShape,

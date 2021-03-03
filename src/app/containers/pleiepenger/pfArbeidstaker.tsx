@@ -1,13 +1,12 @@
 import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
 import {GetErrorMessage, PeriodeComponent, Periodepaneler}     from 'app/containers/pleiepenger/Periodepaneler';
-import {Arbeidstaker, IArbeidstaker, OrgOrPers}                from 'app/models/types';
 import {stringToNumber}                                        from 'app/utils/formatUtils';
 import intlHelper                                              from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe}                 from 'nav-frontend-skjema';
 import * as React                                              from 'react';
 import {Col, Container, Row}                                   from 'react-bootstrap';
 import {IntlShape}                                             from 'react-intl';
-import {ArbeidstakerV2, IArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
+import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
 
 export function pfArbeidstaker(tgStrings: string[][],
                                setTgStringsInParentState: (tgStrings: string[][]) => any,
@@ -25,16 +24,16 @@ export function pfArbeidstaker(tgStrings: string[][],
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
-            let norskIdentitetsnummer: string | null;
+            let norskIdent: string | null;
             if (orgOrPers === 'o') {
                 organisasjonsnummer = '';
-                norskIdentitetsnummer = null;
+                norskIdent = null;
             } else {
                 organisasjonsnummer = null;
-                norskIdentitetsnummer = '';
+                norskIdent = '';
             }
-            updateListeinfoInSoknadState({organisasjonsnummer, norskIdentitetsnummer});
-            updateListeinfoInSoknad({organisasjonsnummer, norskIdentitetsnummer});
+            updateListeinfoInSoknadState({organisasjonsnummer, norskIdent});
+            updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
 
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
@@ -69,10 +68,10 @@ export function pfArbeidstaker(tgStrings: string[][],
                     <Col>
                         {selectedType === 'p'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
-                                      value={arbeidstaker.norskIdentitetsnummer || ''}
+                                      value={arbeidstaker.norskIdent || ''}
                                       className="arbeidstaker-norskIdent"
-                                      onChange={event => updateListeinfoInSoknadState({norskIdentitetsnummer: event.target.value})}
-                                      onBlur={event => updateListeinfoInSoknad({norskIdentitetsnummer: event.target.value})}
+                                      onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}
+                                      onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value})}
                                       feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}/>}
                     </Col>
                 </Row>
@@ -82,10 +81,8 @@ export function pfArbeidstaker(tgStrings: string[][],
                 periods={arbeidstaker.arbeidstidInfo.perioder}
                 panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}
                 initialPeriodeinfo={{grad: 0, periode: {fraOgMed: '', tilOgMed: ''}}}
-  //              editSoknad={arbeidstidInfo => updateListeinfoInSoknad({arbeidstidInfo : {perioder: arbeidstidInfo}})}
-  //              editSoknadState={arbeidstidInfo => updateListeinfoInSoknadState({arbeidstidInfo : {perioder: arbeidstidInfo}})}
-                editSoknad={() => undefined}
-                editSoknadState={() => undefined}
+                editSoknad={arbeidstidInfo => updateListeinfoInSoknad({arbeidstidInfo : {perioder: arbeidstidInfo}})}
+                editSoknadState={arbeidstidInfo => updateListeinfoInSoknadState({arbeidstidInfo : {perioder: arbeidstidInfo}})}
                 component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) => <Input
                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
                     value={tgStrings[listeelementindex][periodeindex]}

@@ -14,6 +14,21 @@ interface IPeriodeStringsForDescriptionV2 {
     tom: string;
 }
 
+export interface IPeriodeMedFaktiskeTimer {
+    periode?: IPeriodeV2;
+    faktiskArbeidTimerPerDag?: string;
+}
+
+export class PeriodeMedFaktiskeTimer implements Required<IPeriodeMedFaktiskeTimer> {
+    periode: PeriodeV2;
+    faktiskArbeidTimerPerDag: string;
+
+    constructor(pmf: IPeriodeMedFaktiskeTimer) {
+        this.periode = new PeriodeV2(pmf.periode || {})
+        this.faktiskArbeidTimerPerDag = this.faktiskArbeidTimerPerDag || '0';
+    }
+}
+
 export class PeriodeV2 implements Required<IPeriodeV2> {
 
     fom: string | null;

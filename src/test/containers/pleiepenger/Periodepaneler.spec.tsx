@@ -1,11 +1,11 @@
 import {IPeriodepanelerProps, PeriodeComponent, Periodepaneler} from 'app/containers/pleiepenger/Periodepaneler';
-import {Periodeinfo}                                            from 'app/models/types';
 import intlHelper                                               from 'app/utils/intlUtils';
 import {shallow}                                                from 'enzyme';
 import {Input}                                                  from 'nav-frontend-skjema';
 import * as React                                               from 'react';
 import {createIntl, IntlShape}                                  from 'react-intl';
 import {mocked}                                                 from 'ts-jest/utils';
+import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -14,11 +14,11 @@ interface ITestperiodeinfo {
     test: string;
 }
 
-type Testperiodeinfo = Periodeinfo<ITestperiodeinfo>;
+type Testperiodeinfo = PeriodeinfoV2<ITestperiodeinfo>;
 
-const testperiode0: Testperiodeinfo = {periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-01-31'}, test: 'abc'};
-const testperiode1: Testperiodeinfo = {periode: {fraOgMed: '2020-02-01', tilOgMed: '2020-02-29'}, test: 'bca'};
-const testperiode2: Testperiodeinfo = {periode: {fraOgMed: '2020-03-01', tilOgMed: '2020-03-31'}, test: 'cab'};
+const testperiode0: Testperiodeinfo = {periode: {fom: '2020-01-01', tom: '2020-01-31'}, test: 'abc'};
+const testperiode1: Testperiodeinfo = {periode: {fom: '2020-02-01', tom: '2020-02-29'}, test: 'bca'};
+const testperiode2: Testperiodeinfo = {periode: {fom: '2020-03-01', tom: '2020-03-31'}, test: 'cab'};
 
 const testperioder: Testperiodeinfo[] = [
     testperiode0,
@@ -44,7 +44,7 @@ const testkomponent: PeriodeComponent<ITestperiodeinfo> = (info: Testperiodeinfo
     />;
 };
 
-const initialperiodetest: Testperiodeinfo = {periode: {fraOgMed: '2020-04-01', tilOgMed: '2020-04-30'}, test: 'cba'};
+const initialperiodetest: Testperiodeinfo = {periode: {fom: '2020-04-01', tom: '2020-04-30'}, test: 'cba'};
 
 const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodepanelerProps>) => {
 
