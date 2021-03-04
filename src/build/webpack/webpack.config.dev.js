@@ -36,5 +36,5 @@ webpackConfig.module.rules.push({
 });
 
 module.exports = Object.assign(webpackConfig, {
-    devtool: 'inline-source-map'
+    devtool: 'cheap-module-eval-source-map',
 });
