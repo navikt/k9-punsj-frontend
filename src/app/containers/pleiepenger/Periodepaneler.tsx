@@ -70,8 +70,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
             onChange={(periode) => {editSoknadState(editPeriode(periodeindeks, periode))}}
             onBlur={(periode) => {editSoknad(editPeriode(periodeindeks, periode))}}
             errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-            errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fraOgMed`)}
-            errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tilOgMed`)}
+            errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
+            errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
         />
         {!!component && component(
             periodeinfo,

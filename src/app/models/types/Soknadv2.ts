@@ -4,8 +4,6 @@ import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
 import {PeriodeinfoV2} from "./PeriodeInfoV2";
 import {IPeriodeMedFaktiskeTimer, IPeriodeV2, PeriodeMedFaktiskeTimer, PeriodeV2} from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
-import {IntlShape} from "react-intl";
-import {Arbeidstaker} from "./Arbeidstaker";
 
 export interface ISoknadV2 {
     soeknadId?: string;
@@ -18,9 +16,9 @@ export interface ISoknadV2 {
     soeknadsperiode?: IPeriodeV2;
     arbeidAktivitet: IArbeidV2;
     arbeidstid?: IArbeidstid;
-    beredskap?: ITilleggsinformasjonV2[];
-    nattevaak?: ITilleggsinformasjonV2[];
-    tilsynsordning?: ITilsynsordningV2[];
+    beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
+    nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[]
+    tilsynsordning?: PeriodeinfoV2<ITilsynsordningV2>[];
     omsorg: IOmsorg;
 }
 
@@ -37,7 +35,7 @@ export class SoknadV2 implements ISoknadV2 {
     arbeidAktivitet: ArbeidV2;
     arbeidstid: Arbeidstid;
     beredskap: TilleggsinformasjonV2[];
-    nattevaak: TilleggsinformasjonV2[];
+    nattevaak: TilleggsinformasjonV2[]
     tilsynsordning: TilsynsordningV2[];
     omsorg: Omsorg;
 
@@ -103,12 +101,12 @@ export class Arbeidstid implements Required<IArbeidstid>{
 
 export interface IArbeidstidInfo {
     jobberNormaltTimerPerDag?: string;
-    perioder?: IPeriodeMedFaktiskeTimer[];
+    perioder?: PeriodeinfoV2<IPeriodeMedFaktiskeTimer>[];
 }
 
 export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
     jobberNormaltTimerPerDag: string;
-    perioder: PeriodeMedFaktiskeTimer[];
+    perioder: PeriodeinfoV2<PeriodeMedFaktiskeTimer>[];
 
     constructor(ai: IArbeidstidInfo) {
         this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '0';
@@ -137,15 +135,15 @@ export class Omsorg implements Required<IOmsorg>{
 }
 
 export interface ITilsynsordningV2 {
-    periode?: PeriodeV2;
+    periode?: IPeriodeV2;
     etablertTilsynTimerPerDag?: string;
 }
 
-export class TilsynsordningV2 implements Required<ITilsynsordningV2> {
-
+export class TilsynsordningV2 implements Required<PeriodeinfoV2<ITilsynsordningV2>> {
     periode: PeriodeV2;
     etablertTilsynTimerPerDag: string;
-    constructor(tilsynsordning: ITilsynsordningV2) {
+
+    constructor(tilsynsordning: PeriodeinfoV2<ITilsynsordningV2>) {
         this.periode = new PeriodeV2(tilsynsordning.periode || {});
         this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
     }
@@ -167,11 +165,11 @@ export class Barn implements Required<IBarn> {
 }
 
 export interface ITilleggsinformasjonV2 {
-    periode: IPeriodeV2;
+    periode?: IPeriodeV2;
     tilleggsinformasjon?: string;
 }
 
-export class TilleggsinformasjonV2 implements Required<ITilleggsinformasjonV2> {
+export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsinformasjonV2>> {
     periode: PeriodeV2;
     tilleggsinformasjon: string;
 
@@ -187,3 +185,4 @@ export class TilleggsinformasjonV2 implements Required<ITilleggsinformasjonV2> {
         };
     }
 }
+

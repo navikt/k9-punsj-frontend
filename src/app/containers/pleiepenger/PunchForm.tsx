@@ -33,13 +33,15 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {ArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
-import {ISoknadV2, SoknadV2, TilleggsinformasjonV2} from "../../models/types/Soknadv2";
+import {ISoknadV2, SoknadV2, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/Soknadv2";
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from "nav-frontend-etiketter";
 import {RootStateType} from "../../state/RootState";
 import {connect} from "react-redux";
 import {IPeriodeV2} from "../../models/types/PeriodeV2";
 import {ISelvstendigNaeringsdrivendeV2} from "../../models/types/SelvstendigNæringsdrivendeV2";
 import {IFrilanserV2} from "../../models/types/FrilanserV2";
+import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
+import {pfTilsyn} from "./pfTilsyn";
 
 
 export interface IPunchFormComponentProps {
@@ -94,6 +96,7 @@ export class PunchFormComponent extends React.Component<
       },
       arbeidAktivitet: {},
       arbeidstid: {},
+
       omsorg: {
         samtykketOmsorgForBarnet: false,
         beskrivelseAvOmsorgsrollen: '',
@@ -195,14 +198,23 @@ export class PunchFormComponent extends React.Component<
       jobberFortsattSomFrilans: false,
     };
 
-   /* const initialTilsyn = new TilsynV2({
+ /*
+   const initialTilsyn = new TilsynV2({
       periode: initialPeriode,
       mandag: null,
       tirsdag: null,
       onsdag: null,
       torsdag: null,
       fredag: null,
-    }); */
+    });
+
+  */
+
+  const initialTilsyn = new TilsynsordningV2({
+      periode: initialPeriode,
+      etablertTilsynTimerPerDag: '',
+  });
+
 
     const initialBeredskap = new TilleggsinformasjonV2({
       periode: initialPeriode,
@@ -332,29 +344,36 @@ export class PunchFormComponent extends React.Component<
         />
       );
 
-   /*   const frilanserperioder = (harOverskrift?: boolean) => (
+      const frilanserperioder = (harOverskrift?: boolean) => (
         <Periodepaneler
           intl={intl}
-          periods={arbeid.frilanser.description(intl)}
+          periods={arbeid.frilanserArbeidstidInfo.perioder}
           panelid={(i) => `frilanserpanel_${i}`}
           initialPeriodeinfo={initialFrilanser}
-          editSoknad={(frilanser) =>
-            this.updateSoknadIndividuelt(
-              { arbeid: { ...arbeid, frilanser } },
-              nr
+          editSoknad={(perioder) =>
+            this.updateSoknadInformasjon(
+                {
+                  arbeidstid: {
+                    frilanserArbeidstidInfo: {
+                      ...arbeid.frilanserArbeidstidInfo,
+                      perioder
+                    }
+                  }
+                },
             )
           }
-          editSoknadState={(frilanser, showStatus) =>
-            this.updateIndividuellSoknadState(
-              {
-                arbeid: {
-                  ...arbeid,
-                  frilanser,
-                },
-              },
-              nr,
-              showStatus
-            )
+          editSoknadState={(perioder, showStatus) =>
+              this.updateSoknadState(
+                  {
+                    arbeidstid: {
+                      frilanserArbeidstidInfo: {
+                        ...arbeid.frilanserArbeidstidInfo,
+                        perioder
+                      }
+                    }
+                  },
+                  showStatus
+              )
           }
           textLeggTil={
             harOverskrift
@@ -366,7 +385,7 @@ export class PunchFormComponent extends React.Component<
           getErrorMessage={errorMessageFunction}
           feilkodeprefiks={'arbeid.frilanser'}
         />
-      ); */
+      );
 
       const antallArbeidsperioder = soknad.arbeidAktivitet.numberOfWorkPeriods();
 
@@ -423,6 +442,7 @@ export class PunchFormComponent extends React.Component<
           return (
             <>
               <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
+                {frilanserperioder(true)}
               <h3>
                 {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
               </h3>
@@ -459,16 +479,16 @@ export class PunchFormComponent extends React.Component<
 
 
 
-  /*  const beredskapperioder = (
+    const beredskapperioder = (
       <Periodepaneler
         intl={intl}
-        periods={sok.beredskap}
+        periods={soknad.beredskap}
         component={pfTilleggsinformasjon('beredskap')}
         panelid={(i) => `beredskapspanel_${i}`}
         initialPeriodeinfo={initialBeredskap}
-        editSoknad={(beredskap) => this.updateSoknadFelles({ beredskap })}
+        editSoknad={(beredskap) => this.updateSoknad( { beredskap })}
         editSoknadState={(beredskap, showStatus) =>
-          this.updateFellesSoknadState({ beredskap }, showStatus)
+          this.updateSoknadState({ beredskap }, showStatus)
         }
         textLeggTil="skjema.beredskap.leggtilperiode"
         textFjern="skjema.beredskap.fjernperiode"
@@ -482,15 +502,13 @@ export class PunchFormComponent extends React.Component<
     const nattevaakperioder = (
       <Periodepaneler
         intl={intl}
-        periods={soknad.ytelse.nattevaak}
+        periods={soknad.nattevaak}
         component={pfTilleggsinformasjon('nattevaak')}
         panelid={(i) => `nattevaakspanel_${i}`}
         initialPeriodeinfo={initialNattevaak}
-        editSoknadState={() => undefined}
-        editSoknad={() => undefined}
-    /*    editSoknad={(nattevaak) => this.updateSoknadInformasjon({ ytelse: { nattevaak } })}
+        editSoknad={(nattevaak) => this.updateSoknadInformasjon({ nattevaak } )}
         editSoknadState={(nattevaak, showStatus) =>
-          this.updateSoknadState({ ytelse: {nattevaak} }, showStatus)
+          this.updateSoknadState({nattevaak} , showStatus)
         }
         textLeggTil="skjema.nattevaak.leggtilperiode"
         textFjern="skjema.nattevaak.fjernperiode"
@@ -499,7 +517,7 @@ export class PunchFormComponent extends React.Component<
         getErrorMessage={() => undefined}
         feilkodeprefiks={'nattevaak'}
       />
-    );*/
+    );
 
     const dobbel = (component: (nr: 1 | 2) => React.ReactElement) => {
       return
@@ -610,21 +628,20 @@ export class PunchFormComponent extends React.Component<
                 checked={soknad.tilsynsordning !== null ? JaNeiVetikke.JA : JaNeiVetikke.NEI}
               />
             </SkjemaGruppe>
-            {/*soknad.ytelse.tilsynsordning !== null && (
+            {soknad.tilsynsordning !== null && (
               <Periodepaneler
                 intl={intl}
-                periods={soknad.ytelse.tilsynsordning[0].periode}
+                periods={soknad.tilsynsordning}
                 component={pfTilsyn}
                 panelid={(i) => `tilsynpanel_${i}`}
                 initialPeriodeinfo={initialTilsyn}
-                editSoknad={(opphold) =>
-                  this.updateSoknadInformasjon({
-                    tilsynsordning: { ...soknad.ytelse.tilsynsordning, opphold },
-                  })
+                editSoknad={(tilsynsordning) =>
+                  this.updateSoknadInformasjon({ tilsynsordning }
+                  )
                 }
-                editSoknadState={(opphold, showStatus) =>
+                editSoknadState={(tilsynsordning, showStatus) =>
                   this.updateSoknadState(
-                    { tilsynsordning: { ...soknad.ytelse.tilsynsordning, opphold } },
+                    { tilsynsordning },
                     showStatus
                   )
                 }
@@ -634,19 +651,19 @@ export class PunchFormComponent extends React.Component<
       //          getErrorMessage={this.getErrorMessage}
                 feilkodeprefiks={'tilsynsordning.opphold'}
                 minstEn={
-                  soknad.ytelse.tilsynsordning !== null
+                  soknad.tilsynsordning !== null
                 }
               />
             )}
 
-          {soknad.artilsynsordning.iTilsynsordning !== JaNeiVetikke.NEI && (
+          {soknad.tilsynsordning.length > 0 && (
             <>
               <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
               {beredskapperioder}
               <h2>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h2>
               {nattevaakperioder}
             </>
-          )*/}
+          )}
           {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
                 {!!soknad?.medlemskap?.opphold?.length && (
                     <table className="tabell tabell--stripet">
