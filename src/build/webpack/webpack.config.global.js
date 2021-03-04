@@ -9,6 +9,7 @@ const webpackConfig = {
     entry: {
         bundle: ['babel-polyfill', `${__dirname}/../../app/App.tsx`]
     },
+    devtool: 'cheap-module-eval-source-map',
     output: {
         path: path.resolve(__dirname, './../../../dist'),
         filename: 'js/[name].js',
