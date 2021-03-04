@@ -19,7 +19,7 @@ export interface ISoknadV2 {
     beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
     nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[]
     tilsynsordning?: PeriodeinfoV2<ITilsynsordningV2>[];
-    omsorg: IOmsorg;
+    omsorg?: IOmsorg;
 }
 
 export class SoknadV2 implements ISoknadV2 {
