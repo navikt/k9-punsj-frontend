@@ -20,6 +20,7 @@ export interface ISoknadV2 {
     nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[]
     tilsynsordning?: PeriodeinfoV2<ITilsynsordningV2>[];
     omsorg?: IOmsorg;
+    uttak?: PeriodeinfoV2<IUttak>[];
 }
 
 export class SoknadV2 implements ISoknadV2 {
@@ -35,9 +36,10 @@ export class SoknadV2 implements ISoknadV2 {
     arbeidAktivitet: ArbeidV2;
     arbeidstid: Arbeidstid;
     beredskap: TilleggsinformasjonV2[];
-    nattevaak: TilleggsinformasjonV2[]
+    nattevaak: TilleggsinformasjonV2[];
     tilsynsordning: TilsynsordningV2[];
     omsorg: Omsorg;
+    uttak: Uttak[];
 
     constructor(soknad: ISoknadV2) {
         this.soeknadId = soknad.soeknadId || '';
@@ -54,6 +56,7 @@ export class SoknadV2 implements ISoknadV2 {
         this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
         this.tilsynsordning = (soknad.tilsynsordning || []).map(t => new TilsynsordningV2(t));
         this.omsorg = new Omsorg(soknad.omsorg || {})
+        this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
     }
 }
 
@@ -101,12 +104,12 @@ export class Arbeidstid implements Required<IArbeidstid>{
 
 export interface IArbeidstidInfo {
     jobberNormaltTimerPerDag?: string;
-    perioder?: PeriodeinfoV2<IPeriodeMedFaktiskeTimer>[];
+    perioder?: IPeriodeMedFaktiskeTimer[];
 }
 
 export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
     jobberNormaltTimerPerDag: string;
-    perioder: PeriodeinfoV2<PeriodeMedFaktiskeTimer>[];
+    perioder: PeriodeMedFaktiskeTimer[];
 
     constructor(ai: IArbeidstidInfo) {
         this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '0';
@@ -118,7 +121,7 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
 
 export interface IOmsorg {
     relasjonTilBarnet?: string;
-    samtykketOmsorgForBarnet: boolean,
+    samtykketOmsorgForBarnet?: boolean,
     beskrivelseAvOmsorgsrollen?: string;
 }
 
@@ -129,7 +132,7 @@ export class Omsorg implements Required<IOmsorg>{
 
     constructor(omsorg: IOmsorg) {
         this.beskrivelseAvOmsorgsrollen = omsorg.beskrivelseAvOmsorgsrollen || '';
-        this.samtykketOmsorgForBarnet = omsorg.samtykketOmsorgForBarnet;
+        this.samtykketOmsorgForBarnet = omsorg.samtykketOmsorgForBarnet || false;
         this.beskrivelseAvOmsorgsrollen = omsorg.beskrivelseAvOmsorgsrollen || '';
     }
 }
@@ -144,6 +147,21 @@ export class TilsynsordningV2 implements Required<PeriodeinfoV2<ITilsynsordningV
     etablertTilsynTimerPerDag: string;
 
     constructor(tilsynsordning: PeriodeinfoV2<ITilsynsordningV2>) {
+        this.periode = new PeriodeV2(tilsynsordning.periode || {});
+        this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
+    }
+}
+
+export interface IUttak {
+    periode?: PeriodeV2;
+    etablertTilsynTimerPerDag?: string;
+}
+
+export class Uttak implements Required<PeriodeinfoV2<IUttak>> {
+
+    periode: PeriodeV2;
+    etablertTilsynTimerPerDag: string;
+    constructor(tilsynsordning: PeriodeinfoV2<IUttak>) {
         this.periode = new PeriodeV2(tilsynsordning.periode || {});
         this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
     }
@@ -185,4 +203,3 @@ export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsin
         };
     }
 }
-
