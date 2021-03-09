@@ -49,8 +49,7 @@ export function getSoknad(id: string) {return (dispatch: any) => {
 
 export function updateSoknad(soknad: Partial<ISoknadV2>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
-    const request = { soknad };
-    return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, request, response => {
+    return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, response => {
         switch (response.status) {
             case 200:
                 return response.json()
