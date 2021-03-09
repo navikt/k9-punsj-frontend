@@ -599,9 +599,9 @@ export class PunchFormComponent extends React.Component<
             />
           </SkjemaGruppe>
           <h2>{intlHelper(intl, 'skjema.periode')}</h2>
-          {dobbel(soknadsperioder)}
+          {soknadsperioder}
           <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
-          {dobbel(arbeidsperioder)}
+          {arbeidsperioder}
           <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
           <SkjemaGruppe
   //          feil={this.getErrorMessage('tilsynsordning')}
