@@ -234,11 +234,11 @@ export class PunchFormComponent extends React.Component<
         initialPeriodeinfo={{ periode: initialPeriode }}
         editSoknad={(perioder) =>
           this.updateSoknadInformasjon(
-            { soeknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] })
+            { soeknadsperiode: perioder[0] as IPeriodeV2 })
         }
         editSoknadState={(perioder, showStatus) =>
           this.updateSoknadState(
-              { soeknadsperiode: perioder.map((p) => p.periode as IPeriodeV2)[0] },
+              { soeknadsperiode: perioder[0] as IPeriodeV2 },
             showStatus
           )
         }
@@ -304,7 +304,7 @@ export class PunchFormComponent extends React.Component<
       const selvstendigperioder = (harOverskrift?: boolean) => (
         <Periodepaneler
           intl={intl}
-          periods={[arbeid.selvstendigNæringsdrivendeArbeidstidInfo]}
+          periods={arbeid.selvstendigNæringsdrivendeArbeidstidInfo.perioder}
           panelid={(i) => `selvstendignaeringsdrivendepanel_${i}`}
           initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
           editSoknad={(perioder) =>
