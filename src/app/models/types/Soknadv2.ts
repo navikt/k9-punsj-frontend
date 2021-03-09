@@ -43,10 +43,10 @@ export class SoknadV2 implements ISoknadV2 {
 
     constructor(soknad: ISoknadV2) {
         this.soeknadId = soknad.soeknadId || '';
-        this.soekerId = soknad.soekerId;
+        this.soekerId = soknad.soekerId || '';
         this.journalposter = soknad.journalposter || [];
         this.mottattDato = soknad.mottattDato || '';
-        this.barn = new Barn(soknad.barn);
+        this.barn = new Barn(soknad.barn || {});
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
         this.soeknadsperiode = new PeriodeV2(soknad.soeknadsperiode || {})
