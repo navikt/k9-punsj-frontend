@@ -834,9 +834,6 @@ private updateSoknadInformasjon = (
 ) => {
   this.setState({ showStatus: true });
   return this.props.updateSoknad(
-      this.props.id,
-      this.props.punchState.ident1,
-      this.props.journalpostid,
       { ...this.getSoknadFromStore(), ...soknad }
   );
 };
@@ -911,9 +908,6 @@ private updateSoknadInformasjon = (
   private updateSoknad = (soknad: Partial<ISoknadV2>) => {
     this.setState({ showStatus: true });
     return this.props.updateSoknad(
-      this.props.id,
-      this.props.punchState.ident1,
-      this.props.journalpostid,
       { ...this.getSoknadFromStore(), ...soknad },
     );
   };
@@ -951,11 +945,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
   undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
   updateSoknad: (
-    soknadid: string,
-    norskIdent: string,
-    journalpostid: string,
     soknad: Partial<ISoknadV2>
-  ) => dispatch(updateSoknad(soknadid, norskIdent, journalpostid, soknad)),
+  ) => dispatch(updateSoknad(soknad)),
   submitSoknad: (soknadid: string, ident: string) =>
     dispatch(submitSoknad(soknadid, ident)),
   resetPunchFormAction: () => dispatch(resetPunchFormAction()),
