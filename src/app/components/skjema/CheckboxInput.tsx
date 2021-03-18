@@ -31,7 +31,7 @@ const CheckboxInput: React.FunctionComponent<ICheckboxInputProps> = ({
         )
       }
       name={name}
-      feil={error}
+      feil={error !== ''}
       value={value}
       onBlur={onBlur}
       onChange={onChange}
