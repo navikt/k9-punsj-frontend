@@ -2,7 +2,7 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                       from 'app/containers/pleiepenger/Periodepaneler';
+}                                       from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {pfTilsyn}                       from 'app/containers/pleiepenger/pfTilsyn';
 import {ITilsyn} from 'app/models/types';
 import intlHelper                       from 'app/utils/intlUtils';

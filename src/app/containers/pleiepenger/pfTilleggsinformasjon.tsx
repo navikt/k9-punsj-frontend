@@ -3,7 +3,7 @@ import {
     PeriodeComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                          from 'app/containers/pleiepenger/Periodepaneler';
+}                                          from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper                          from 'app/utils/intlUtils';
 import {Textarea}                          from 'nav-frontend-skjema';
 import * as React                          from 'react';

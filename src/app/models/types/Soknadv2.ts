@@ -1,9 +1,10 @@
-import { Periodeinfo}  from 'app/models/types/Periodeinfo';
+import {Periodeinfo} from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
-import {PeriodeinfoV2} from "./PeriodeInfoV2";
+import {IPeriodeinfoV2, PeriodeinfoV2} from "./PeriodeInfoV2";
 import {IPeriodeMedFaktiskeTimer, IPeriodeV2, PeriodeMedFaktiskeTimer, PeriodeV2} from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
+import {JaNeiVetikke} from "../enums";
 
 export interface ISoknadV2 {
     soeknadId?: string;
@@ -140,15 +141,18 @@ export class Omsorg implements Required<IOmsorg>{
 export interface ITilsynsordningV2 {
     periode?: IPeriodeV2;
     etablertTilsynTimerPerDag?: string;
+    iTilsynsordning?: JaNeiVetikke;
 }
 
 export class TilsynsordningV2 implements Required<PeriodeinfoV2<ITilsynsordningV2>> {
     periode: PeriodeV2;
     etablertTilsynTimerPerDag: string;
+    iTilsynsordning: JaNeiVetikke;
 
     constructor(tilsynsordning: PeriodeinfoV2<ITilsynsordningV2>) {
         this.periode = new PeriodeV2(tilsynsordning.periode || {});
         this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
+        this.iTilsynsordning = tilsynsordning.iTilsynsordning || JaNeiVetikke.NEI
     }
 }
 

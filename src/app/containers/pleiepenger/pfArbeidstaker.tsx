@@ -1,5 +1,5 @@
 import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
-import {GetErrorMessage, PeriodeComponent, Periodepaneler}     from 'app/containers/pleiepenger/Periodepaneler';
+import {GetErrorMessage, PeriodeComponent, PeriodeinfoPaneler}     from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {stringToNumber}                                        from 'app/utils/formatUtils';
 import intlHelper                                              from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe}                 from 'nav-frontend-skjema';
@@ -76,7 +76,7 @@ export function pfArbeidstaker(tgStrings: string[][],
                     </Col>
                 </Row>
             </Container>
-            <Periodepaneler
+            <PeriodeinfoPaneler
                 intl={intl}
                 periods={arbeidstaker.arbeidstidInfo.perioder}
                 panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}

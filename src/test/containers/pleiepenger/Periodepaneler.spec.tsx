@@ -1,4 +1,4 @@
-import {IPeriodepanelerProps, PeriodeComponent, Periodepaneler} from 'app/containers/pleiepenger/Periodepaneler';
+import {IPeriodepanelerProps, PeriodeComponent, PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper                                               from 'app/utils/intlUtils';
 import {shallow}                                                from 'enzyme';
 import {Input}                                                  from 'nav-frontend-skjema';
@@ -6,6 +6,7 @@ import * as React                                               from 'react';
 import {createIntl, IntlShape}                                  from 'react-intl';
 import {mocked}                                                 from 'ts-jest/utils';
 import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
+import {IPeriodeV2, PeriodeV2} from "../../../app/models/types/PeriodeV2";
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -16,11 +17,11 @@ interface ITestperiodeinfo {
 
 type Testperiodeinfo = PeriodeinfoV2<ITestperiodeinfo>;
 
-const testperiode0: Testperiodeinfo = {periode: {fom: '2020-01-01', tom: '2020-01-31'}, test: 'abc'};
-const testperiode1: Testperiodeinfo = {periode: {fom: '2020-02-01', tom: '2020-02-29'}, test: 'bca'};
-const testperiode2: Testperiodeinfo = {periode: {fom: '2020-03-01', tom: '2020-03-31'}, test: 'cab'};
+const testperiode0 =  {fom: '2020-01-01', tom: '2020-01-31'};
+const testperiode1 = {fom: '2020-02-01', tom: '2020-02-29'};
+const testperiode2 = {fom: '2020-03-01', tom: '2020-03-31'};
 
-const testperioder: Testperiodeinfo[] = [
+const testperioder: IPeriodeV2[] = [
     testperiode0,
     testperiode1,
     testperiode2
@@ -61,7 +62,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodepanele
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);
 
-    return shallow(<Periodepaneler {...periodepanelerProps}/>);
+    return shallow(<PeriodeinfoPaneler {...periodepanelerProps}/>);
 };
 
 describe('Periodepaneler', () => {

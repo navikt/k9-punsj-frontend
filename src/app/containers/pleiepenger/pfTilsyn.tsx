@@ -4,7 +4,7 @@ import {
     PeriodeComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                     from 'app/containers/pleiepenger/Periodepaneler';
+}                     from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {Ukedag}       from 'app/models/enums';
 import {
     ITilsyn,

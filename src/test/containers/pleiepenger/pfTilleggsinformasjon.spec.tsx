@@ -2,7 +2,7 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                          from 'app/containers/pleiepenger/Periodepaneler';
+}                                          from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {pfTilleggsinformasjon}             from 'app/containers/pleiepenger/pfTilleggsinformasjon';
 import intlHelper                          from 'app/utils/intlUtils';
 import {shallow}                           from 'enzyme';

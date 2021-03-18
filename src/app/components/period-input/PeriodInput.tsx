@@ -1,3 +1,4 @@
+import {IPeriode}            from 'app/models/types';
 import intlHelper            from 'app/utils/intlUtils';
 import classNames            from 'classnames';
 import {Input, SkjemaGruppe} from 'nav-frontend-skjema';

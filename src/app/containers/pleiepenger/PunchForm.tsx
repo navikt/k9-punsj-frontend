@@ -1,5 +1,5 @@
 import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
-import {Periodepaneler} from 'app/containers/pleiepenger/Periodepaneler';
+import {PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {JaNeiVetikke, PunchStep} from 'app/models/enums';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
@@ -42,6 +42,8 @@ import {ISelvstendigNaeringsdrivendeV2} from "../../models/types/SelvstendigNær
 import {IFrilanserV2} from "../../models/types/FrilanserV2";
 import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 import {pfTilsyn} from "./pfTilsyn";
+import {PeriodInput} from "../../components/period-input/PeriodInput";
+import {Periodepaneler} from "./Periodepaneler";
 
 
 export interface IPunchFormComponentProps {
@@ -231,14 +233,18 @@ export class PunchFormComponent extends React.Component<
         intl={intl}
         periods={[soknad.soeknadsperiode]}
         panelid={(i) => `soknadsperiodepanel_${i}`}
-        initialPeriodeinfo={{ periode: initialPeriode }}
+        initialPeriodeinfo={ initialPeriode }
         editSoknad={(perioder) =>
           this.updateSoknadInformasjon(
-            { soeknadsperiode: perioder[0] as IPeriodeV2 })
+            { soeknadsperiode: {
+                fom: perioder.length > 0 && perioder[0] ? perioder[0].fom : '',
+                tom: perioder.length > 0 && perioder[0] ? perioder[0].tom : ''} })
         }
         editSoknadState={(perioder, showStatus) =>
           this.updateSoknadState(
-              { soeknadsperiode: perioder[0] as IPeriodeV2 },
+              { soeknadsperiode: {
+                      fom: perioder.length > 0 && perioder[0] ? perioder[0].fom : '',
+                      tom: perioder.length > 0 && perioder[0] ? perioder[0].tom : ''}},
             showStatus
           )
         }
@@ -247,6 +253,19 @@ export class PunchFormComponent extends React.Component<
         minstEn={true}
       />
     );
+
+      const soknadsperioder2 = () => (
+          <PeriodInput
+              intl={intl}
+              periode={soknad.soeknadsperiode}
+              onChange={(periode) =>
+                  this.updateSoknadInformasjon(
+                      {soeknadsperiode: periode})
+              }
+              onBlur={(periode) => this.updateSoknadState({soeknadsperiode: periode}, true)}
+
+          />
+      );
 
     const arbeidsperioder = () => {
       const updateTgStrings = () =>
@@ -302,7 +321,7 @@ export class PunchFormComponent extends React.Component<
       );
 
       const selvstendigperioder = (harOverskrift?: boolean) => (
-        <Periodepaneler
+        <PeriodeinfoPaneler
           intl={intl}
           periods={arbeid.selvstendigNæringsdrivendeArbeidstidInfo.perioder}
           panelid={(i) => `selvstendignaeringsdrivendepanel_${i}`}
@@ -345,7 +364,7 @@ export class PunchFormComponent extends React.Component<
       );
 
       const frilanserperioder = (harOverskrift?: boolean) => (
-        <Periodepaneler
+        <PeriodeinfoPaneler
           intl={intl}
           periods={arbeid.frilanserArbeidstidInfo.perioder}
           panelid={(i) => `frilanserpanel_${i}`}
@@ -480,7 +499,7 @@ export class PunchFormComponent extends React.Component<
 
 
     const beredskapperioder = (
-      <Periodepaneler
+      <PeriodeinfoPaneler
         intl={intl}
         periods={soknad.beredskap}
         component={pfTilleggsinformasjon('beredskap')}
@@ -500,7 +519,7 @@ export class PunchFormComponent extends React.Component<
     );
 
     const nattevaakperioder = (
-      <Periodepaneler
+      <PeriodeinfoPaneler
         intl={intl}
         periods={soknad.nattevaak}
         component={pfTilleggsinformasjon('nattevaak')}
@@ -625,11 +644,11 @@ export class PunchFormComponent extends React.Component<
                     (event.target as HTMLInputElement).value as JaNeiVetikke
                   )
                 }*/
-                checked={soknad.tilsynsordning !== null ? JaNeiVetikke.JA : JaNeiVetikke.NEI}
+                checked={soknad.tilsynsordning.length > 0 ? JaNeiVetikke.JA : JaNeiVetikke.NEI}
               />
             </SkjemaGruppe>
-            {soknad.tilsynsordning !== null && (
-              <Periodepaneler
+            {soknad.tilsynsordning.length > 0 && (
+              <PeriodeinfoPaneler
                 intl={intl}
                 periods={soknad.tilsynsordning}
                 component={pfTilsyn}
@@ -775,6 +794,7 @@ export class PunchFormComponent extends React.Component<
       </p>
     );
   }
+
 
   private getSoknadFromStore = () => {
     return new SoknadV2(this.props.punchFormState.soknad as ISoknadV2)
