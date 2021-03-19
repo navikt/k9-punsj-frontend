@@ -112,12 +112,18 @@ export const submitSoknadSuccessAction      = ():                               
 export const submitSoknadUncompleteAction   = (errors1: IInputError[], errors2?: IInputError[]):    ISubmitSoknadUncompleteAction   => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors1, errors2});
 export const submitSoknadErrorAction        = (error: IError):                                      ISubmitSoknadErrorAction        => ({type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error});
 
-export function submitSoknad(mappeid: string, ident: string) {return (dispatch: any) => {
+export function submitSoknad(norskIdent: string, soeknadId: string) {return (dispatch: any) => {
+    const requestBody = {
+        norskIdent,
+        soeknadId
+    }
+
+
     dispatch(submitSoknadRequestAction());
-    post(ApiPath.SOKNAD_SUBMIT, {id: mappeid}, {'X-Nav-NorskIdent': ident}, undefined, response => {
+    post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, response => {
         switch (response.status) {
             case 202: return dispatch(submitSoknadSuccessAction());
-            case 400: return response.json().then(mappe => dispatch(submitSoknadUncompleteAction(mappe.mangler)));
+            case 400: return response.json().then(soknad => dispatch(submitSoknadUncompleteAction(soknad.mangler)));
             default:
                 return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
         }

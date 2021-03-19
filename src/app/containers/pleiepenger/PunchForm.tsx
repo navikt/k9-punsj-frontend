@@ -496,8 +496,6 @@ export class PunchFormComponent extends React.Component<
       return visning();
     };
 
-
-
     const beredskapperioder = (
       <PeriodeinfoPaneler
         intl={intl}
