@@ -1,6 +1,6 @@
 import {
     GetErrorMessage,
-    PeriodeComponent,
+    PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
 }                                          from 'app/containers/pleiepenger/PeriodeinfoPaneler';
@@ -11,7 +11,7 @@ import {IntlShape}                         from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 import {ITilleggsinformasjonV2} from "../../models/types/Soknadv2";
 
-export function pfTilleggsinformasjon(path: string): PeriodeComponent<ITilleggsinformasjonV2> {
+export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjonV2> {
 
     return (
         periodeinfo: PeriodeinfoV2<ITilleggsinformasjonV2>,

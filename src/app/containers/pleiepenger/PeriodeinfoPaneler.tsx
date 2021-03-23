@@ -14,7 +14,7 @@ export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<PeriodeinfoV2<T>>) => 
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<PeriodeinfoV2<T>>, showStatus?: boolean) => any;
 export type GetErrorMessage = (kode: string) => (React.ReactNode | boolean | undefined);
 
-export type PeriodeComponent<T> = (info: PeriodeinfoV2<T>,
+export type PeriodeinfoComponent<T> = (info: PeriodeinfoV2<T>,
                                    periodeindex: number,
                                    updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<T>,
                                    updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
@@ -22,10 +22,10 @@ export type PeriodeComponent<T> = (info: PeriodeinfoV2<T>,
                                    getErrorMessage?: GetErrorMessage,
                                    intl?: IntlShape) => React.ReactElement;
 
-export interface IPeriodepanelerProps {
+export interface IPeriodeinfopanelerProps {
     intl: IntlShape;
     periods: IPeriodeinfoV2[]; // Liste over periodisert informasjon
-    component?: PeriodeComponent<IPeriodeinfoExtensionV2>; // Skal returnere et React-element for en gitt periode i lista
+    component?: PeriodeinfoComponent<IPeriodeinfoExtensionV2>; // Skal returnere et React-element for en gitt periode i lista
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialPeriodeinfo: PeriodeinfoV2<IPeriodeinfoExtensionV2>; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeinfoV2[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
@@ -39,12 +39,13 @@ export interface IPeriodepanelerProps {
     minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
+    kanHaFlere: boolean;
 }
 
-export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
+export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (props: IPeriodeinfopanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, component, editSoknad, editSoknadState} = props;
+    const {intl, component, editSoknad, editSoknadState, kanHaFlere} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfoV2>) => IPeriodeinfoV2[] = (index: number, periodeinfo: Partial<IPeriodeinfoV2>) => {
         const newInfo: IPeriodeinfoV2 = {...props.periods[index], ...periodeinfo};
@@ -62,7 +63,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodepanelerProps> =
         updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfoV2>,
         feilkodeprefiksMedIndeks: string,
         getErrorMessage: GetErrorMessage,
-        intlShape: IntlShape
+        intlShape: IntlShape,
     ) => <>
         <PeriodInput
             periode={periodeinfo.periode || {}}
@@ -101,5 +102,6 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodepanelerProps> =
         panelClassName={props.panelClassName}
         textFjern={props.textFjern || 'skjema.perioder.fjern'}
         textLeggTil={props.textLeggTil || 'skjema.perioder.legg_til'}
+        kanHaFlere={kanHaFlere}
     />;
 };

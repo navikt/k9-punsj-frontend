@@ -1,7 +1,7 @@
 import {NumberSelect} from 'app/components/number-select/NumberSelect';
 import {
     GetErrorMessage,
-    PeriodeComponent,
+    PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
 }                     from 'app/containers/pleiepenger/PeriodeinfoPaneler';
@@ -28,12 +28,13 @@ import {
 }                     from 'react-bootstrap';
 import {IntlShape}    from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
+import {ITilsynsordningV2} from "../../models/types/Soknadv2";
 
-export const pfTilsyn: PeriodeComponent<ITilsyn> = (
-    tilsyn: PeriodeinfoV2<ITilsyn>,
+export const pfTilsyn: PeriodeinfoComponent<ITilsynsordningV2> = (
+    tilsyn: PeriodeinfoV2<ITilsynsordningV2>,
     periodeindex: number,
-    updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilsyn>,
-    updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilsyn>,
+    updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilsynsordningV2>,
+    updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilsynsordningV2>,
     feilprefiks: string,
     getErrorMessage: GetErrorMessage,
     intl: IntlShape

@@ -1,5 +1,5 @@
 import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
-import {GetErrorMessage, PeriodeComponent, PeriodeinfoPaneler}     from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import {GetErrorMessage, PeriodeinfoComponent, PeriodeinfoPaneler}     from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {stringToNumber}                                        from 'app/utils/formatUtils';
 import intlHelper                                              from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe}                 from 'nav-frontend-skjema';
@@ -10,7 +10,7 @@ import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/Arb
 
 export function pfArbeidstaker(tgStrings: string[][],
                                setTgStringsInParentState: (tgStrings: string[][]) => any,
-                               generateTgStrings: () => string[][]): PeriodeComponent<IArbeidstakerV2> {
+                               generateTgStrings: () => string[][]): PeriodeinfoComponent<IArbeidstakerV2> {
 
     return (
         arbeidstaker: ArbeidstakerV2,
@@ -80,20 +80,20 @@ export function pfArbeidstaker(tgStrings: string[][],
                 intl={intl}
                 periods={arbeidstaker.arbeidstidInfo.perioder}
                 panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}
-                initialPeriodeinfo={{grad: 0, periode: {fraOgMed: '', tilOgMed: ''}}}
+                initialPeriodeinfo={{jobberNormaltTimerPerDag: 0, periode: {fom: '', tom: ''}}}
                 editSoknad={arbeidstidInfo => updateListeinfoInSoknad({arbeidstidInfo : {perioder: arbeidstidInfo}})}
                 editSoknadState={arbeidstidInfo => updateListeinfoInSoknadState({arbeidstidInfo : {perioder: arbeidstidInfo}})}
                 component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) => <Input
-                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
+                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timer')}
                     value={tgStrings[listeelementindex][periodeindex]}
                     className="arbeidstaker-tilstedevaerelse"
                     onChange={event => {
-                        updatePeriodeinfoInSoknadState({grad: stringToNumber(event.target.value)});
+                        updatePeriodeinfoInSoknadState({jobberNormaltTimerPerDag: stringToNumber(event.target.value)});
                         tgStrings[listeelementindex][periodeindex] = event.target.value;
                         setTgStringsInParentState(tgStrings);
                     }}
                     onBlur={event => {
-                        updatePeriodeinfoInSoknad({grad: stringToNumber(event.target.value)});
+                        updatePeriodeinfoInSoknad({jobberNormaltTimerPerDag: stringToNumber(event.target.value)});
                         setTgStringsInParentState(generateTgStrings());
                     }}
                     onFocus={event => event.target.selectionStart = 0}
@@ -103,6 +103,7 @@ export function pfArbeidstaker(tgStrings: string[][],
                 textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                 getErrorMessage={getErrorMessage}
                 feilkodeprefiks={`[${listeelementindex}].skalJobbeProsent`}
+                kanHaFlere={true}
             />
         </SkjemaGruppe>;
     };

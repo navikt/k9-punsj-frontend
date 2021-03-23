@@ -1,4 +1,4 @@
-import {IPeriodepanelerProps, PeriodeComponent, PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import {IPeriodeinfopanelerProps, PeriodeinfoComponent, PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper                                               from 'app/utils/intlUtils';
 import {shallow}                                                from 'enzyme';
 import {Input}                                                  from 'nav-frontend-skjema';
@@ -6,7 +6,6 @@ import * as React                                               from 'react';
 import {createIntl, IntlShape}                                  from 'react-intl';
 import {mocked}                                                 from 'ts-jest/utils';
 import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
-import {IPeriodeV2, PeriodeV2} from "../../../app/models/types/PeriodeV2";
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -17,11 +16,11 @@ interface ITestperiodeinfo {
 
 type Testperiodeinfo = PeriodeinfoV2<ITestperiodeinfo>;
 
-const testperiode0 =  {fom: '2020-01-01', tom: '2020-01-31'};
-const testperiode1 = {fom: '2020-02-01', tom: '2020-02-29'};
-const testperiode2 = {fom: '2020-03-01', tom: '2020-03-31'};
+const testperiode0: Testperiodeinfo = {periode: {fom: '2020-01-01', tom: '2020-01-31'}, test: 'abc'};
+const testperiode1: Testperiodeinfo = {periode: {fom: '2020-02-01', tom: '2020-02-29'}, test: 'bca'};
+const testperiode2: Testperiodeinfo = {periode: {fom: '2020-03-01', tom: '2020-03-31'}, test: 'cab'};
 
-const testperioder: IPeriodeV2[] = [
+const testperioder: Testperiodeinfo[] = [
     testperiode0,
     testperiode1,
     testperiode2
@@ -29,7 +28,7 @@ const testperioder: IPeriodeV2[] = [
 
 const testinputid = (periodeindex: number) => `testperiode_${periodeindex}_testinput`;
 
-const testkomponent: PeriodeComponent<ITestperiodeinfo> = (info: Testperiodeinfo,
+const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (info: Testperiodeinfo,
                                                            periodeindex: number,
                                                            updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
                                                            updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
@@ -47,9 +46,9 @@ const testkomponent: PeriodeComponent<ITestperiodeinfo> = (info: Testperiodeinfo
 
 const initialperiodetest: Testperiodeinfo = {periode: {fom: '2020-04-01', tom: '2020-04-30'}, test: 'cba'};
 
-const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodepanelerProps>) => {
+const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopanelerProps>) => {
 
-    const periodepanelerProps: IPeriodepanelerProps = {
+    const periodepanelerProps: IPeriodeinfopanelerProps = {
         periods: testperioder,
         intl: createIntl({locale: 'nb', defaultLocale: 'nb'}),
         initialPeriodeinfo: initialperiodetest,
@@ -57,6 +56,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodepanele
         component: testkomponent,
         editSoknad: jest.fn(),
         editSoknadState: jest.fn(),
+        kanHaFlere: true,
         ...periodepanelerPropsPartial
     };
 

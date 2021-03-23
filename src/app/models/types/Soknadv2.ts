@@ -22,6 +22,8 @@ export interface ISoknadV2 {
     tilsynsordning?: PeriodeinfoV2<ITilsynsordningV2>[];
     omsorg?: IOmsorg;
     uttak?: PeriodeinfoV2<IUttak>[];
+    utenlandsopphold?: PeriodeinfoV2<IUtenlandsOpphold>[];
+    lovbestemtFerie?: IPeriodeV2[];
 }
 
 export class SoknadV2 implements ISoknadV2 {
@@ -41,6 +43,8 @@ export class SoknadV2 implements ISoknadV2 {
     tilsynsordning: TilsynsordningV2[];
     omsorg: Omsorg;
     uttak: Uttak[];
+    utenlandsopphold: UtenlandsOpphold[];
+    lovbestemtFerie: PeriodeV2[];
 
     constructor(soknad: ISoknadV2) {
         this.soeknadId = soknad.soeknadId || '';
@@ -58,6 +62,8 @@ export class SoknadV2 implements ISoknadV2 {
         this.tilsynsordning = (soknad.tilsynsordning || []).map(t => new TilsynsordningV2(t));
         this.omsorg = new Omsorg(soknad.omsorg || {})
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
+        this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
+        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new PeriodeV2(p));
     }
 }
 
@@ -138,21 +144,28 @@ export class Omsorg implements Required<IOmsorg>{
     }
 }
 
+export interface ITilsynV2 {
+    iTilsynsordning?: JaNeiVetikke;
+    opphold?: PeriodeinfoV2<ITilsynsordningV2>[];
+}
+
+export class TilsynV2 {
+    iTilsynsordning: JaNeiVetikke;
+    opphold: PeriodeinfoV2<ITilsynsordningV2>[];
+}
+
 export interface ITilsynsordningV2 {
     periode?: IPeriodeV2;
     etablertTilsynTimerPerDag?: string;
-    iTilsynsordning?: JaNeiVetikke;
 }
 
 export class TilsynsordningV2 implements Required<PeriodeinfoV2<ITilsynsordningV2>> {
     periode: PeriodeV2;
     etablertTilsynTimerPerDag: string;
-    iTilsynsordning: JaNeiVetikke;
 
     constructor(tilsynsordning: PeriodeinfoV2<ITilsynsordningV2>) {
         this.periode = new PeriodeV2(tilsynsordning.periode || {});
         this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
-        this.iTilsynsordning = tilsynsordning.iTilsynsordning || JaNeiVetikke.NEI
     }
 }
 
@@ -205,5 +218,24 @@ export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsin
             periode: this.periode,
             tilleggsinformasjon: this.tilleggsinformasjon
         };
+    }
+}
+
+export interface IUtenlandsOpphold {
+    periode?: IPeriodeV2;
+    land?: string;
+    årsak?: string;
+
+}
+
+export class UtenlandsOpphold implements Required<PeriodeinfoV2<IUtenlandsOpphold>> {
+    periode: PeriodeV2;
+    land: string;
+    årsak: string;
+
+    constructor(periodeinfo: PeriodeinfoV2<IUtenlandsOpphold>) {
+        this.periode = new PeriodeV2(periodeinfo.periode || {});
+        this.land = periodeinfo.land || '';
+        this.årsak = periodeinfo.årsak || '';
     }
 }

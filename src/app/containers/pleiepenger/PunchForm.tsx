@@ -2,31 +2,21 @@ import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {JaNeiVetikke, PunchStep} from 'app/models/enums';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {IPleiepengerPunchState, IPunchFormState, ITilsyn,} from 'app/models/types';
 import {
-  IFrilanser, IInputError,
-  IPeriode,
-  IPleiepengerPunchState,
-  IPunchFormState,
-  ISelvstendigNaerinsdrivende, ISoknadFelles,
-  ITilsyn,
-  Periodeinfo,
-  Tilleggsinformasjon,
-  Tilsyn,
-} from 'app/models/types';
-import {
-  getSoknad,
-  resetPunchFormAction,
-  resetSoknadAction,
-  setIdentAction,
-  setStepAction,
-  submitSoknad,
-  undoChoiceOfEksisterendeSoknadAction,
-  updateSoknad,
+    getSoknad,
+    resetPunchFormAction,
+    resetSoknadAction,
+    setIdentAction,
+    setStepAction,
+    submitSoknad,
+    undoChoiceOfEksisterendeSoknadAction,
+    updateSoknad,
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {AlertStripeFeil} from 'nav-frontend-alertstriper';
 import {Knapp} from 'nav-frontend-knapper';
 import {Input, RadioPanelGruppe, SkjemaGruppe,} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
@@ -42,8 +32,11 @@ import {ISelvstendigNaeringsdrivendeV2} from "../../models/types/SelvstendigNær
 import {IFrilanserV2} from "../../models/types/FrilanserV2";
 import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 import {pfTilsyn} from "./pfTilsyn";
-import {PeriodInput} from "../../components/period-input/PeriodInput";
 import {Periodepaneler} from "./Periodepaneler";
+import {CountrySelect} from 'app/components/country-select/CountrySelect';
+import Lukknapp from "nav-frontend-lukknapp";
+import _ from 'lodash';
+import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 
 
 export interface IPunchFormComponentProps {
@@ -73,6 +66,7 @@ export interface IPunchFormComponentState {
   isFetched: boolean;
   showStatus: boolean;
   faktiskeTimer: string[][];
+  iTilsynsordning: JaNeiVetikke;
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -108,10 +102,11 @@ export class PunchFormComponent extends React.Component<
     isFetched: false,
     showStatus: false,
     faktiskeTimer: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet}
+    iTilsynsordning: JaNeiVetikke.NEI
   };
 
-  private initialTilsyn: Periodeinfo<ITilsyn> = {
-    periode: { fraOgMed: '', tilOgMed: '' },
+  private initialTilsyn: PeriodeinfoV2<ITilsyn> = {
+    periode: { fom: '', tom: '' },
     mandag: null,
     tirsdag: null,
     onsdag: null,
@@ -251,19 +246,30 @@ export class PunchFormComponent extends React.Component<
         getErrorMessage={() => undefined}
         feilkodeprefiks={'perioder'}
         minstEn={true}
+        kanHaFlere={false}
       />
     );
 
-      const soknadsperioder2 = () => (
-          <PeriodInput
+      const ferieperioder = () => (
+          <Periodepaneler
               intl={intl}
-              periode={soknad.soeknadsperiode}
-              onChange={(periode) =>
+              periods={soknad.lovbestemtFerie}
+              panelid={(i) => `ferieperiodepanel_${i}`}
+              initialPeriodeinfo={ initialPeriode }
+              editSoknad={(perioder) =>
                   this.updateSoknadInformasjon(
-                      {soeknadsperiode: periode})
+                      { lovbestemtFerie:  perioder })
               }
-              onBlur={(periode) => this.updateSoknadState({soeknadsperiode: periode}, true)}
-
+              editSoknadState={(perioder, showStatus) =>
+                  this.updateSoknadState(
+                      { lovbestemtFerie:  perioder },
+                      showStatus
+                  )
+              }
+              getErrorMessage={() => undefined}
+              feilkodeprefiks={'perioder'}
+              minstEn={false}
+              kanHaFlere={true}
           />
       );
 
@@ -317,6 +323,7 @@ export class PunchFormComponent extends React.Component<
           feilkodeprefiks={'arbeid.arbeidstaker'}
           onAdd={updateTgStrings}
           onRemove={updateTgStrings}
+          kanHaFlere={true}
         />
       );
 
@@ -360,6 +367,7 @@ export class PunchFormComponent extends React.Component<
           panelClassName="selvstendignaeringsdrivendepanel"
           getErrorMessage={errorMessageFunction}
           feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
+          kanHaFlere={true}
         />
       );
 
@@ -403,6 +411,7 @@ export class PunchFormComponent extends React.Component<
           panelClassName="frilanserpanel"
           getErrorMessage={errorMessageFunction}
           feilkodeprefiks={'arbeid.frilanser'}
+          kanHaFlere={true}
         />
       );
 
@@ -513,6 +522,7 @@ export class PunchFormComponent extends React.Component<
         panelClassName="beredskapspanel"
         getErrorMessage={() => undefined}
         feilkodeprefiks={'beredskap'}
+        kanHaFlere={true}
       />
     );
 
@@ -533,6 +543,7 @@ export class PunchFormComponent extends React.Component<
         panelClassName="nattevaakspanel"
         getErrorMessage={() => undefined}
         feilkodeprefiks={'nattevaak'}
+        kanHaFlere={true}
       />
     );
 
@@ -619,6 +630,55 @@ export class PunchFormComponent extends React.Component<
           {soknadsperioder()}
           <h2>{intlHelper(intl, 'skjema.arbeid.overskrift')}</h2>
           {arbeidsperioder()}
+            {<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>}
+            {!!soknad.utenlandsopphold.length && (
+                <table className="tabell tabell--stripet">
+                    <thead>
+                    <tr>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
+                        <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {Object.keys(soknad.utenlandsopphold).map((key) => (
+                        <tr key={key}>
+                            <td><CountrySelect
+                                name={`opphold_land_${key}`}
+                                onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
+                                onBlur={() => this.setOpphold()}
+                                selectedcountry={_.get(soknad.utenlandsopphold[key], 'land', '')}
+                                unselectedoption={'Velg …'}
+                                label=""
+                            /></td>
+                            <td><Input
+                                name={`opphold_fom_${key}`}
+                                onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
+                                onBlur={() => this.setOpphold()}
+                                type="date"
+                                value={_.get(soknad.utenlandsopphold[key], 'periode.fom', '')}
+                                label=""
+                            /></td>
+                            <td><Input
+                                name={`opphold_tom_${key}`}
+                                onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
+                                onBlur={() => this.setOpphold()}
+                                type="date"
+                                value={_.get(soknad.utenlandsopphold[key], 'periode.tom', '')}
+                                label=""
+                            /></td>
+                            <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
+            <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
+
+            <h2>{intlHelper(intl, 'skjema.ferie.overskrift')}</h2>
+            {ferieperioder()}
+
           <h2>{intlHelper(intl, 'skjema.tilsyn.overskrift')}</h2>
           <SkjemaGruppe
   //          feil={this.getErrorMessage('tilsynsordning')}
@@ -636,16 +696,15 @@ export class PunchFormComponent extends React.Component<
                 }))}
                 name="tilsynjaneivetikke"
                 legend={intlHelper(intl, 'skjema.tilsyn.janeivetikke')}
-                onChange={() => undefined}
-              /*  onChange={(event) =>
+                onChange={(event) =>
                   this.updateTilsynsordning(
                     (event.target as HTMLInputElement).value as JaNeiVetikke
                   )
-                }*/
-                checked={soknad.tilsynsordning.length > 0 ? JaNeiVetikke.JA : JaNeiVetikke.NEI}
+                }
+                checked={this.state.iTilsynsordning}
               />
             </SkjemaGruppe>
-            {soknad.tilsynsordning.length > 0 && (
+            {this.state.iTilsynsordning === JaNeiVetikke.JA && (
               <PeriodeinfoPaneler
                 intl={intl}
                 periods={soknad.tilsynsordning}
@@ -668,12 +727,13 @@ export class PunchFormComponent extends React.Component<
       //          getErrorMessage={this.getErrorMessage}
                 feilkodeprefiks={'tilsynsordning.opphold'}
                 minstEn={
-                  soknad.tilsynsordning !== null
+                  this.state.iTilsynsordning === JaNeiVetikke.JA
                 }
+                kanHaFlere={true}
               />
             )}
 
-          {soknad.tilsynsordning.length > 0 && (
+          {this.state.iTilsynsordning !== JaNeiVetikke.NEI && (
             <>
               <h2>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h2>
               {beredskapperioder}
@@ -681,61 +741,6 @@ export class PunchFormComponent extends React.Component<
               {nattevaakperioder}
             </>
           )}
-          {/*<h2>{intlHelper(intl, 'skjema.utenlandsopphold.opplysninger')}</h2>
-                {!!soknad?.medlemskap?.opphold?.length && (
-                    <table className="tabell tabell--stripet">
-                        <thead>
-                            <tr>
-                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.land')}</th>
-                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.fom')}</th>
-                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.tom')}</th>
-                                <th>{intlHelper(intl, 'skjema.utenlandsopphold.fjern')}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Object.keys(soknad.medlemskap.opphold).map((key) => (
-                                <tr key={key}>
-                                    <td><CountrySelect
-                                        name={`opphold_land_${key}`}
-                                        onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
-                                        onBlur={() => this.setOpphold()}
-                                        selectedcountry={_.get(soknad.medlemskap!.opphold[key], 'land', '')}
-                                        unselectedoption={'Velg …'}
-                                        label=""
-                                    /></td>
-                                    <td><Input
-                                        name={`opphold_fom_${key}`}
-                                        onChange={event => this.handleOppholdFomChange(+key, event.target.value)}
-                                        onBlur={() => this.setOpphold()}
-                                        type="date"
-                                        value={_.get(soknad.medlemskap!.opphold[key], 'periode.fra_og_med', '')}
-                                        label=""
-                                    /></td>
-                                    <td><Input
-                                        name={`opphold_tom_${key}`}
-                                        onChange={event => this.handleOppholdTomChange(+key, event.target.value)}
-                                        onBlur={() => this.setOpphold()}
-                                        type="date"
-                                        value={_.get(soknad.medlemskap!.opphold[key], 'periode.til_og_med', '')}
-                                        label=""
-                                    /></td>
-                                    <td><Lukknapp bla={true} onClick={() => this.removeOpphold(+key)}/></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-                <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
-                <Checkbox
-                    label="Har bodd i utlandet i løpet av de siste 12 månedene"
-                    checked={_.get(soknad, 'medlemskap.har_bodd_i_utlandet_siste_12_mnd', false)}
-                    {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, har_bodd_i_utlandet_siste_12_mnd: event.target.checked}}))}
-                />
-                <Checkbox
-                    label="Skal bo i utlandet i løpet av de neste 12 månedene"
-                    checked={_.get(soknad, 'medlemskap.skal_bo_i_utlandet_neste_12_mnd', false)}
-                    {...this.onChangeOnlyUpdate(event => ({medlemskap: {...soknad.medlemskap!, skal_bo_i_utlandet_neste_12_mnd: event.target.checked}}))}
-                />*/}
           </SkjemaGruppe>
           {!!punchFormState.submitSoknadError && (
             <AlertStripeFeil className="margin-top-1">
@@ -746,8 +751,8 @@ export class PunchFormComponent extends React.Component<
             <Knapp
               onClick={() =>
                 this.props.submitSoknad(
-                  this.props.id,
-                  this.props.punchState.ident1
+                  this.props.punchState.ident1,
+                    this.props.id
                 )
               }
            //   disabled={!isSoknadComplete}
@@ -761,27 +766,25 @@ export class PunchFormComponent extends React.Component<
     );
   }
 
-
   private faktiskTimer = (soknad: SoknadV2) => {
     // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
     return soknad ? soknad.arbeidstid.faktiskeTimer() : [];
   };
 
- /* private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
+  private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
+      this.setState({
+          iTilsynsordning: jaNeiVetikke,
+      });
 
-    const tilsynsordning: ITilsynsordningV2 = {
-      ...this.state.soknadInfo.søknad?.ytelse.tilsynsordning,
-      iTilsynsordning: jaNeiVetikke,
-    };
     if (
       jaNeiVetikke === JaNeiVetikke.JA &&
-      tilsynsordning.opphold!.length === 0
+      this.state.soknad.tilsynsordning!.length === 0
     ) {
-      tilsynsordning.opphold!.push(this.initialTilsyn);
+        this.state.soknad.tilsynsordning!.push(this.initialTilsyn);
     }
-    this.updateSoknadState({ tilsynsordning }, true);
-    this.updateSoknadInformasjon({ tilsynsordning });
-  } */
+//    this.updateSoknadState({ tilsynsordning }, true);
+//    this.updateSoknadInformasjon({ tilsynsordning });
+  }
 
   private backButton() {
     return (
@@ -878,7 +881,7 @@ private updateSoknadInformasjon = (
     onBlur: (event: any) => this.updateSoknadInformasjon(change(event)),
   });
 
-  private onChangeOnlyUpdateFelles = (
+  private onChangeOnlyUpdate = (
     change: (event: any) => Partial<ISoknadV2>
   ) => ({
     onChange: (event: any) => {
@@ -888,39 +891,39 @@ private updateSoknadInformasjon = (
   });
 
 
-  /*private handleOppholdLandChange = (index: number, land: string) => {
-        this.state.soknad.medlemskap!.opphold[index].land = land;
+  private handleOppholdLandChange = (index: number, land: string) => {
+        this.state.soknad.utenlandsopphold![index].land = land;
         this.forceUpdate();
     };
 
     private handleOppholdFomChange = (index: number, fom: string) => {
-        this.state.soknad.medlemskap!.opphold[index].periode = {...this.state.soknad.medlemskap!.opphold[index].periode, fra_og_med: fom};
+        this.state.soknad.utenlandsopphold![index].periode = {...this.state.soknad.utenlandsopphold![index].periode, fom};
         this.forceUpdate();
     };
 
     private handleOppholdTomChange = (index: number, tom: string) => {
-        this.state.soknad.medlemskap!.opphold[index].periode = {...this.state.soknad.medlemskap!.opphold[index].periode, til_og_med: tom};
+        this.state.soknad.utenlandsopphold![index].periode = {...this.state.soknad.utenlandsopphold![index].periode, tom};
         this.forceUpdate();
     };
 
     private addOpphold = () => {
-        if (!this.state.soknad.medlemskap) {
-            this.state.soknad = {...this.state.soknad, medlemskap: {opphold: []}};
-        } else if (!this.state.soknad.medlemskap.opphold) {
-            this.state.soknad.medlemskap = {...this.state.soknad.medlemskap, opphold: []};
+        if (!this.state.soknad.utenlandsopphold) {
+            this.state.soknad = {...this.state.soknad, utenlandsopphold: [{}]};
+        } else if (!this.state.soknad.utenlandsopphold) {
+            this.state.soknad.utenlandsopphold = [{}];
         }
-        this.state.soknad.medlemskap!.opphold.push({land: '', periode: {}});
+        this.state.soknad.utenlandsopphold!.push({land: '', periode: {}});
         this.forceUpdate();
         this.setOpphold();
     };
 
     private removeOpphold = (index: number) => {
-        this.state.soknad.medlemskap!.opphold.splice(index, 1);
+        this.state.soknad.utenlandsopphold!.splice(index, 1);
         this.forceUpdate();
         this.setOpphold();
     };
 
-    private setOpphold = () => this.updateSoknad({medlemskap: {...this.props.punchFormState.mappe.innhold.medlemskap, opphold: this.state.soknad.medlemskap!.opphold}});*/
+    private setOpphold = () => this.updateSoknad({utenlandsopphold: this.state.soknad.utenlandsopphold});
 
 
   private updateSoknad = (soknad: Partial<ISoknadV2>) => {
@@ -965,8 +968,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   updateSoknad: (
     soknad: Partial<ISoknadV2>
   ) => dispatch(updateSoknad(soknad)),
-  submitSoknad: (soknadid: string, ident: string) =>
-    dispatch(submitSoknad(soknadid, ident)),
+  submitSoknad: (ident: string, soeknadid: string) =>
+    dispatch(submitSoknad(ident, soeknadid)),
   resetPunchFormAction: () => dispatch(resetPunchFormAction()),
 });
 

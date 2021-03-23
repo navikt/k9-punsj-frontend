@@ -35,6 +35,7 @@ export interface IListepanelerProps<T> {
     minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
+    kanHaFlere: boolean;
 }
 
 type ItemInfo = any;
@@ -42,7 +43,7 @@ type ItemInfo = any;
 export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (props: IListepanelerProps<ItemInfo>) => {
 
     const items = !!props.items ? props.items : [];
-    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks} = props;
+    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere} = props;
     const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (index: number, iteminfo: Partial<ItemInfo>) => {
@@ -87,6 +88,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         getErrorMessage,
                         intl
                     )}
+                    {kanHaFlere &&
                     <div className="listepanelbunn">
                         <Knapp
                             onClick={() => {
@@ -100,10 +102,11 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         >
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                         </Knapp>
-                    </div>
+                    </div>}
                 </SkjemaGruppe>
             </Panel>
         })}
+        { kanHaFlere &&
         <Knapp
             onClick={() => {
                 const newArray: ItemInfo[] = addItem();
@@ -114,6 +117,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             className="leggtillisteelementknapp"
         >
             {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
-        </Knapp>
+        </Knapp>}
     </SkjemaGruppe>;
 };

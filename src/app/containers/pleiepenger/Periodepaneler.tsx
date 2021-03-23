@@ -39,12 +39,13 @@ export interface IPeriodepanelerProps {
     minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
+    kanHaFlere: boolean;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, component, editSoknad, editSoknadState} = props;
+    const {intl, component, editSoknad, editSoknadState, kanHaFlere} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeV2>) => IPeriodeV2[] = (index: number, periodeinfo: Partial<IPeriodeV2>) => {
         const newInfo: IPeriodeV2 = {...props.periods[index], ...periodeinfo};
@@ -101,5 +102,6 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         panelClassName={props.panelClassName}
         textFjern={props.textFjern || 'skjema.perioder.fjern'}
         textLeggTil={props.textLeggTil || 'skjema.perioder.legg_til'}
+        kanHaFlere={kanHaFlere}
     />;
 };
