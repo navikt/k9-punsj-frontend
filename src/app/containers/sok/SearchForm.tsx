@@ -12,12 +12,13 @@ import {SoknaderVisning} from "./SoknaderVisning";
 import DateInput from "../../components/skjema/DateInput";
 import {ISoknadPeriode} from "../../models/types/HentSoknad";
 
+
 export const SearchForm: React.FunctionComponent = () => {
     const {values} = useFormikContext<ISokeSkjema>();
-    const { identitetsnummer, fraOgMed, tilOgMed } = values;
+    const { identitetsnummer } = values;
     const [ visMapper, setVisMapper ] = useState<boolean>(false);
 
-    const disabled = !identitetsnummer || !fraOgMed || !tilOgMed;
+    const disabled = !identitetsnummer
 
     const onClick = () => {
         setVisMapper(true);
@@ -40,11 +41,6 @@ export const SearchForm: React.FunctionComponent = () => {
                         label={
                             <FormattedMessage id="søk.label"/>
                         }/>
-                    <div className={"container"}>
-                        <strong><FormattedMessage id={"søk.info.perioder"}/></strong>
-                        <DateInput feltnavn={"fraOgMed"} bredde="M"/>
-                        <DateInput feltnavn={"tilOgMed"} bredde="M"/>
-                    </div>
                     <SokKnapp
                         onClick={() => onClick()}
                         tekstId="søk.knapp.label"
@@ -55,7 +51,6 @@ export const SearchForm: React.FunctionComponent = () => {
             {visMapper &&
             <SoknaderVisning
                 ident={identitetsnummer}
-                periode={periode(fraOgMed, tilOgMed)}
             />}
 
         </div>

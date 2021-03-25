@@ -8,6 +8,7 @@ import {ISoknadV2} from "../../models/types/Soknadv2";
 interface ISetSoknaderAction                  {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar: ISoknadV2[]}
 interface IFindSoknaderLoadingAction          {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading: boolean}
 interface IFindSoknaderErrorAction            {type: SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR, error: IError}
+interface IFindSoknaderForbiddenErrorAction   {type: SoknaderVisningActionKeys.SOKNADER_FORBIDDEN_ERROR, isForbidden: boolean}
 
 interface IOpenSoknadAction                  {type: SoknaderVisningActionKeys.SOKNAD_OPEN, soknad: ISoknadV2}
 interface ICloseSoknadAction                 {type: SoknaderVisningActionKeys.SOKNAD_CLOSE}
@@ -21,30 +22,31 @@ export function undoChoiceOfSoknadAction():                      IUndoChoiceOfSo
 
 export function resetSoknadidAction():                           IResetSoknadidAction             {return {type: SoknaderVisningActionKeys.SOKNADID_RESET}}
 
-type        ISoknaderActionTypes      = ISetSoknaderAction | IFindSoknaderErrorAction | IFindSoknaderLoadingAction;
+type        ISoknaderActionTypes      = ISetSoknaderAction | IFindSoknaderErrorAction | IFindSoknaderLoadingAction | IFindSoknaderForbiddenErrorAction;
 type        ISoknadinfoActionTypes   = IOpenSoknadAction | ICloseSoknadAction | IChooseSoknadAction | IUndoChoiceOfSoknadAction;
 
 export type ISoknaderVisningActionTypes = ISoknaderActionTypes | ISoknadinfoActionTypes | IResetSoknadidAction;
 
-export function setSoknaderAction(soknadSvar: ISoknadV2[]):              ISetSoknaderAction                {return {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar}}
-export function findSoknaderLoadingAction(isLoading: boolean):    IFindSoknaderLoadingAction        {return {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading}}
-export function findSoknaderErrorAction(error: IError):           IFindSoknaderErrorAction          {return {type: SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR, error}}
+export function setSoknaderAction(soknadSvar: ISoknadV2[]):              ISetSoknaderAction                 {return {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar}}
+export function findSoknaderLoadingAction(isLoading: boolean):    IFindSoknaderLoadingAction                {return {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading}}
+export function findSoknaderErrorAction(error: IError):           IFindSoknaderErrorAction                  {return {type: SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR, error}}
+export function findSoknaderForbiddenErrorAction(isForbidden: boolean):           IFindSoknaderForbiddenErrorAction             {return {type: SoknaderVisningActionKeys.SOKNADER_FORBIDDEN_ERROR, isForbidden}}
 
 interface IResetSoknadidAction               {type: SoknaderVisningActionKeys.SOKNADID_RESET}
 
 
-export function sokPsbSoknader(ident: string, periode: ISoknadPeriode) {return (dispatch: any) => {
+export function sokPsbSoknader(ident: string) {return (dispatch: any) => {
     const requestBody: IHentSoknad =
         {
             norskIdent: ident,
-            periode
         }
     dispatch(findSoknaderLoadingAction(true));
     return post(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': ident}, requestBody, (response, soknadSvar) => {
         if (response.ok) {
             return dispatch(setSoknaderAction(soknadSvar));
+        } else if (response.status === 403) {
+            return dispatch(findSoknaderForbiddenErrorAction(true))
         }
-
         return dispatch(findSoknaderErrorAction(convertResponseToError(response)));
     });
 }}

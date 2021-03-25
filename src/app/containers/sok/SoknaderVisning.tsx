@@ -47,8 +47,6 @@ export interface ISoknaderSokDispatchProps {
 
 export interface ISoknaderVisningComponentProps {
     ident: string;
-    periode: ISoknadPeriode;
-
 }
 
 type ISoknaderSokProps = WrappedComponentProps &
@@ -64,7 +62,6 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
         soknaderSokState,
         visningState,
         ident,
-        periode,
     } = props;
     const soknader = soknaderSokState.soknadSvar;
 
@@ -89,7 +86,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     React.useEffect(() => {
         props.setIdentAction(ident);
-        props.findSoknader(ident, periode);
+        props.findSoknader(ident);
         props.setStepAction(SoknaderVisningStep.CHOOSE_SOKNAD);
     }, [ident]);
 
@@ -109,7 +106,17 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 <AlertStripeFeil>
                     Det oppsto en feil i henting av mapper.
                 </AlertStripeFeil>
-                {backButton}
+            </>
+        );
+    }
+
+
+    if (soknaderSokState.isForbidden) {
+        return (
+            <>
+                <AlertStripeFeil>
+                    Du har ikke tilgang til å slå opp denne personen.
+                </AlertStripeFeil>
             </>
         );
     }
@@ -257,8 +264,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) =>
         dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: SoknaderVisningStep) => dispatch(setStepSokAction(step)),
-    findSoknader: (ident1: string, periode: ISoknadPeriode) =>
-        dispatch(sokPsbSoknader(ident1, periode)),
+    findSoknader: (ident1: string) =>
+        dispatch(sokPsbSoknader(ident1)),
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
     openSoknadAction: (soknad: ISoknadV2) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),
