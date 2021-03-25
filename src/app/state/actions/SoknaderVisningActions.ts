@@ -1,6 +1,6 @@
 import {IError} from "../../models/types";
 import {SoknaderVisningActionKeys} from "../../models/enums/SoknaderVisningActionKeys";
-import {IHentSoknad, ISoknadPeriode} from "../../models/types/HentSoknad";
+import {IHentSoknad} from "../../models/types/HentSoknad";
 import {convertResponseToError, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
 import {ISoknadV2} from "../../models/types/Soknadv2";
@@ -30,7 +30,6 @@ export type ISoknaderVisningActionTypes = ISoknaderActionTypes | ISoknadinfoActi
 export function setSoknaderAction(soknadSvar: ISoknadV2[]):              ISetSoknaderAction                 {return {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar}}
 export function findSoknaderLoadingAction(isLoading: boolean):    IFindSoknaderLoadingAction                {return {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading}}
 export function findSoknaderErrorAction(error: IError):           IFindSoknaderErrorAction                  {return {type: SoknaderVisningActionKeys.SOKNADER_REQUEST_ERROR, error}}
-export function findSoknaderForbiddenErrorAction(isForbidden: boolean):           IFindSoknaderForbiddenErrorAction             {return {type: SoknaderVisningActionKeys.SOKNADER_FORBIDDEN_ERROR, isForbidden}}
 
 interface IResetSoknadidAction               {type: SoknaderVisningActionKeys.SOKNADID_RESET}
 
@@ -44,8 +43,6 @@ export function sokPsbSoknader(ident: string) {return (dispatch: any) => {
     return post(ApiPath.PSB_MAPPE_SOK, undefined, {'X-Nav-NorskIdent': ident}, requestBody, (response, soknadSvar) => {
         if (response.ok) {
             return dispatch(setSoknaderAction(soknadSvar));
-        } else if (response.status === 403) {
-            return dispatch(findSoknaderForbiddenErrorAction(true))
         }
         return dispatch(findSoknaderErrorAction(convertResponseToError(response)));
     });

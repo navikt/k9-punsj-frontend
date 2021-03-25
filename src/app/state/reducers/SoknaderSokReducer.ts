@@ -7,7 +7,6 @@ const initialState: ISoknaderSokState = {
     soknadSvar: [],
     isSoknaderLoading: false,
     soknaderRequestError: undefined,
-    isForbidden: false,
 };
 
 export function SoknaderSokReducer(
@@ -40,13 +39,6 @@ export function SoknaderSokReducer(
                 isSoknaderLoading: false,
                 soknaderRequestError: action.error,
             };
-
-    case SoknaderVisningActionKeys.SOKNADER_FORBIDDEN_ERROR:
-        return {
-            ...soknaderVisningState,
-            isSoknaderLoading: false,
-            isForbidden: action.isForbidden
-        };
 
         case SoknaderVisningActionKeys.SOKNAD_OPEN:
             return {

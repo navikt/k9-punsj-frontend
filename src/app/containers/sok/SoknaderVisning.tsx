@@ -100,22 +100,21 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         </p>
     );
 
-    if (soknaderSokState.soknaderRequestError) {
+    if (soknaderSokState.soknaderRequestError && soknaderSokState.soknaderRequestError!!.status === 403) {
         return (
             <>
                 <AlertStripeFeil>
-                    Det oppsto en feil i henting av mapper.
+                    Du har ikke tilgang til å slå opp denne personen.
                 </AlertStripeFeil>
             </>
         );
     }
 
-
-    if (soknaderSokState.isForbidden) {
+    if (soknaderSokState.soknaderRequestError) {
         return (
             <>
                 <AlertStripeFeil>
-                    Du har ikke tilgang til å slå opp denne personen.
+                    Det oppsto en feil i henting av mapper.
                 </AlertStripeFeil>
             </>
         );
