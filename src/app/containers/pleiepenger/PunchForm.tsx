@@ -674,7 +674,9 @@ export class PunchFormComponent extends React.Component<
                     </tbody>
                 </table>
             )}
-            <p><Knapp onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
+            <p><Knapp
+                className="leggtillisteelementknapp"
+                onClick={this.addOpphold}>{intlHelper(intl, 'skjema.utenlandsopphold.legg_til')}</Knapp></p>
 
             <h2>{intlHelper(intl, 'skjema.ferie.overskrift')}</h2>
             {ferieperioder()}

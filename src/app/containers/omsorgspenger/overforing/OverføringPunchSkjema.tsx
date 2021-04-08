@@ -54,10 +54,10 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     }
   }, [innsendingsstatus]);
 
-  const avsendersFnr = values.identitetsnummer;
+  const avsendersFnr = values.norskIdent;
   useEffect(() => {
     if (!avsendersFnr) {
-      setFieldValue('identitetsnummer', ident);
+      setFieldValue('norskIdent', ident);
     }
   }, [ident]);
 
@@ -136,7 +136,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                   </legend>
                   <FlexRow childrenMargin="small">
                     <TextInput
-                      feltnavn={`barn[${index}].identitetsnummer`}
+                      feltnavn={`barn[${index}].norskIdent`}
                       bredde="M"
                     />
                     <DateInput
@@ -155,7 +155,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
               ))}
               <LeggTilKnapp
                 onClick={() =>
-                  push({ identitetsnummer: null, fødselsdato: null })
+                  push({ norskIdent: null, fødselsdato: null })
                 }
                 tekstId="omsorgsdager.overføring.barn.leggTil"
               />
@@ -168,7 +168,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <TextInput
-          feltnavn="omsorgenDelesMed.identitetsnummer"
+          feltnavn="omsorgenDelesMed.norskIdent"
           bredde="M"
           disabled={disabled}
         />

@@ -17,7 +17,7 @@ describe('PunchSkjema', () => {
       borINorge,
     } = validerSkjemaFn(tomtSkjema);
 
-    expect(omsorgenDelesMed?.identitetsnummer).toEqual(
+    expect(omsorgenDelesMed?.norskIdent).toEqual(
       'skjema.validering.påkrevd'
     );
     expect(omsorgenDelesMed?.mottaker).toEqual('skjema.validering.påkrevd');
@@ -26,7 +26,7 @@ describe('PunchSkjema', () => {
     );
     expect(aleneOmOmsorgen).toEqual('skjema.validering.påkrevd');
     // @ts-ignore
-    expect(barn[0].identitetsnummer).toEqual('skjema.validering.påkrevd');
+    expect(barn[0].norskIdent).toEqual('skjema.validering.påkrevd');
     // @ts-ignore
     expect(barn[0].fødselsdato).toEqual('skjema.validering.påkrevd');
 
