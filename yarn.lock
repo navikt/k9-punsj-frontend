@@ -2216,6 +2216,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-collapse@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-collapse/-/react-collapse-5.0.0.tgz#ffe6173db457b4b147319e1bd522b5b9d3d68fac"
+  integrity sha512-iM5QPtS0JVbL5TWm8vilaG4iYiQIFSSqXDHcRUA50qBLSgC0GURk7VZYmgo6u4YF0LnpvKBQYRhPv1ut9DukIg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-document-title@^2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@types/react-document-title/-/react-document-title-2.0.4.tgz#8e7b74b195dd10ccf105fceb1345dead3665df5f"
@@ -8650,6 +8657,16 @@ nav-frontend-core@^5.0.5:
   resolved "https://registry.yarnpkg.com/nav-frontend-core/-/nav-frontend-core-5.0.5.tgz#790c0e53d9417831bce353696c1b3b183e3174e7"
   integrity sha512-thBvplvmNjMirKgsYzu+7YdcKzEJkHA2rb9N1oTkNJuelH1UcV6+V3GRnK7qIWl6MyhJ3nr2wOvcFIMgqo1Xag==
 
+nav-frontend-ekspanderbartpanel-style@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel-style/-/nav-frontend-ekspanderbartpanel-style-1.1.1.tgz#05d922c7f2792dffc7d9f6ae82f25c035f871e5b"
+  integrity sha512-JJh1UwdM7VuJvmt43UEP/krVCKKmJ1F2dLg30AJ5SBUnOUJqoJvFZQy8uAmr4RlWstO1n6suBW/I/INjqtk57A==
+
+nav-frontend-ekspanderbartpanel@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/nav-frontend-ekspanderbartpanel/-/nav-frontend-ekspanderbartpanel-3.1.1.tgz#2acc3ae20b3e0e7c66595f1c519f3a6636c5e2a6"
+  integrity sha512-rG+UURPQuqTVNybTlduayG9JsZLuH9HCAbhSPiRIXd1bWGTFas6mCw4Abn0BRp1LhIpUb+J9/W67nzoQKHjWNg==
+
 nav-frontend-etiketter-style@^1.0.8:
   version "1.0.14"
   resolved "https://registry.yarnpkg.com/nav-frontend-etiketter-style/-/nav-frontend-etiketter-style-1.0.14.tgz#1c0f0648974a7897b077cebe050b68433062d55c"
@@ -10145,6 +10162,11 @@ react-bootstrap@^1.4.0:
     react-transition-group "^4.4.1"
     uncontrollable "^7.0.0"
     warning "^4.0.3"
+
+react-collapse@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-5.1.0.tgz#36f69ecb0fe797f976aaf5e4f2b2c248d2760140"
+  integrity sha512-5v0ywsn9HjiR/odNzbRDs0RZfrnbdSippJebWOBCFFDA12Vx8DddrbI4qWVf1P2wTiVagrpcSy07AU0b6+gM9Q==
 
 react-day-picker@^7.3.2:
   version "7.4.8"

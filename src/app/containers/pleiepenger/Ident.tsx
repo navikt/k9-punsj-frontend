@@ -37,6 +37,7 @@ export interface IIdentComponentProps {
   identInputValues: Pick<IPunchPageComponentState, 'ident1' | 'ident2'>;
   findSoknader: () => void;
   getPunchPath: (step: PunchStep) => string;
+  barnetHarIkkeFnr: boolean;
 }
 
 type IIdentProps = IIdentStateProps &
@@ -47,7 +48,7 @@ type IIdentProps = IIdentStateProps &
 export const IdentComponent: React.FunctionComponent<IIdentProps> = (
   props: IIdentProps
 ) => {
-  const { intl, signaturState, identInputValues, journalpost } = props;
+  const { intl, signaturState, identInputValues, barnetHarIkkeFnr } = props;
   const { signert } = signaturState;
 
   React.useEffect(() => {
@@ -94,31 +95,6 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
 
   return (
     <div className="ident-page">
-      <h2>{intlHelper(intl, 'ident.signatur.overskrift')}</h2>
-      <RadioPanelGruppe
-        className="horizontalRadios"
-        radios={Object.values(JaNei).map((jn) => ({
-          label: intlHelper(intl, jn),
-          value: jn,
-        }))}
-        name="signatur"
-        legend={intlHelper(intl, 'ident.signatur.etikett')}
-        checked={signert || undefined}
-        onChange={(event) =>
-          props.setSignaturAction(
-            ((event.target as HTMLInputElement).value as JaNei) || null
-          )
-        }
-      />
-      {signert === JaNei.NEI && (
-        <Knapp
-          className="knapp-usignert"
-          onClick={() => props.usignert(journalpost!.journalpostId)}
-        >
-          {intlHelper(intl, 'ident.knapp.usignert')}
-        </Knapp>
-      )}
-      <h2>{intlHelper(intl, 'ident.identifikasjon.overskrift')}</h2>
       {props.identInput(signert !== JaNei.JA)}
       <div className="knapperad">
         <Knapp onClick={() => setHash('/')} className="knapp knapp1">
@@ -128,7 +104,7 @@ export const IdentComponent: React.FunctionComponent<IIdentProps> = (
           onClick={props.findSoknader}
           className="knapp knapp2"
           disabled={
-            signert !== JaNei.JA ||
+            (!barnetHarIkkeFnr && !identInputValues.ident2)||
             !IdentRules.areIdentsValid(
               identInputValues.ident1,
               identInputValues.ident2

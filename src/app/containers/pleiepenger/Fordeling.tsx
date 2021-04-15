@@ -1,7 +1,6 @@
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
-  omfordel as omfordelAction,
   setSakstypeAction,
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
@@ -18,13 +17,13 @@ import {
 } from 'react-intl';
 import { connect } from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { ISakstypeDefault, ISakstypePunch } from '../../models/Sakstype';
-import { setHash } from '../../utils';
+import { ISakstypeDefault } from '../../models/Sakstype';
 import { Sakstyper } from '../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 import JournalpostPanel from '../../components/journalpost-panel/JournalpostPanel';
+import {opprettGosysOppgave as omfordelAction} from "../../state/actions/GosysOppgaveActions";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
@@ -45,31 +44,17 @@ type BehandlingsknappProps = Pick<
   IFordelingProps,
   'omfordel' | 'journalpost'
 > & {
-  sakstypeConfig?: ISakstypeDefault;
+  norskIdent?: string;
 };
 
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
-  sakstypeConfig,
+  norskIdent,
   omfordel,
   journalpost,
 }) => {
-  if (!sakstypeConfig) {
-    return null;
-  }
-
-  if ((sakstypeConfig as ISakstypePunch).punchPath) {
-    const punchConfig = sakstypeConfig as ISakstypePunch;
-
-    return (
-      <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
-        <FormattedMessage id="fordeling.knapp.punsj" />
-      </Hovedknapp>
-    );
-  }
-
   return (
     <Hovedknapp
-      onClick={() => omfordel(journalpost!.journalpostId, sakstypeConfig.navn)}
+      onClick={() => omfordel(journalpost!.journalpostId, norskIdent)}
     >
       <FormattedMessage id="fordeling.knapp.omfordel" />
     </Hovedknapp>
@@ -113,12 +98,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
               {intlHelper(intl, 'fordeling.omfordeling.feil')}
             </AlertStripeFeil>
           )}
-          {journalpost!.journalpostId !== 'rediger' &&
           <JournalpostPanel
             journalpostId={journalpost!.journalpostId}
             identitetsnummer={journalpost?.norskIdent}
-          />}
-
+          />
           <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
             className="fordeling-page__options"
@@ -198,17 +181,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
           </RadioGruppe>
           <VerticalSpacer sixteenPx={true} />
           <Behandlingsknapp
-            sakstypeConfig={konfigForValgtSakstype}
+            norskIdent={journalpost?.norskIdent}
             omfordel={omfordel}
             journalpost={journalpost}
           />
         </div>
       </FormPanel>
-      {journalpost!.journalpostId !== 'rediger' &&
       <PdfVisning
         dokumenter={journalpost!.dokumenter}
         journalpostId={journalpost!.journalpostId}
-      />}
+      />
     </div>
   );
 };
@@ -221,8 +203,8 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
   setSakstypeAction: (sakstype: Sakstype) =>
     dispatch(setSakstypeAction(sakstype)),
-  omfordel: (journalpostid: string, sakstype: Sakstype) =>
-    dispatch(omfordelAction(journalpostid, sakstype)),
+  omfordel: (journalpostid: string, norskIdent: string) =>
+    dispatch(omfordelAction(journalpostid, norskIdent)),
 });
 
 const Fordeling = injectIntl(

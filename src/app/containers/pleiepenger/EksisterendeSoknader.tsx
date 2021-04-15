@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import {ISoknadV2, SoknadV2} from "../../models/types/Soknadv2";
 import {SoknadType} from "../../models/enums/SoknadType";
 import SoknadReadModeV2 from "./SoknadReadModeV2";
+import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
 
 
 export interface IEksisterendeSoknaderStateProps {
@@ -100,11 +101,11 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     return null;
   }
 
-  const backButton = (
-    <p>
-      <Knapp onClick={undoSearchForEksisterendeSoknaderAction}>Tilbake</Knapp>
-    </p>
-  );
+//  const backButton = (
+//    <p>
+//      <Knapp onClick={undoSearchForEksisterendeSoknaderAction}>Tilbake</Knapp>
+//    </p>
+//  );
 
   if (
     eksisterendeSoknaderState.eksisterendeSoknaderRequestError
@@ -114,7 +115,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         <AlertStripeFeil>
           Det oppsto en feil i henting av mapper.
         </AlertStripeFeil>
-        {backButton}
       </>
     );
   }
@@ -137,7 +137,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         <AlertStripeFeil>
           Det oppsto en feil under opprettelse av søknad.
         </AlertStripeFeil>
-        {backButton}
       </>
     );
   }
@@ -250,7 +249,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
   if (soknader.length) {
     return (
       <>
-        {backButton}
         {technicalError}
         <AlertStripeInfo>
           {intlHelper(intl, 'mapper.infoboks', {
@@ -265,7 +263,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
   return (
     <>
-      {backButton}
       {technicalError}
       <AlertStripeInfo>
         {intlHelper(intl, 'mapper.infoboks.ingensoknader', {

@@ -10,13 +10,13 @@ interface IOpprettGosysOppgaveErrorAction      {type: GosysOppgaveActionKeys.OPP
 
 export type IOpprettGosysOppgaveActionTypes = IOpprettGosysOppgaveRequestAction | IOpprettGosysOppgaveSuccessAction | IOpprettGosysOppgaveErrorAction;
 
-const           opprettOppgaveRequestAction   = ():                       IOpprettGosysOppgaveRequestAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST});
-const           opprettOppgaveSuccessAction   = ():                       IOpprettGosysOppgaveSuccessAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_SUCCESS});
-const           opprettOppgaveErrorAction     = (error: IError):          IOpprettGosysOppgaveErrorAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error});
+const           opprettGosysOppgaveRequestAction   = ():                       IOpprettGosysOppgaveRequestAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST});
+const           opprettGosysOppgaveSuccessAction   = ():                       IOpprettGosysOppgaveSuccessAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_SUCCESS});
+const           opprettGosysOppgaveErrorAction     = (error: IError):          IOpprettGosysOppgaveErrorAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error});
 
 export const opprettGosysOppgave = (journalpostid: string, norskident?: string) => {return (dispatch: any) => {
 
-    dispatch(opprettOppgaveRequestAction());
+    dispatch(opprettGosysOppgaveRequestAction());
 
     post(
         ApiPath.OPPRETT_GOSYS_OPPGAVE,
@@ -27,8 +27,8 @@ export const opprettGosysOppgave = (journalpostid: string, norskident?: string) 
             journalpostId: journalpostid,
             norskIdent: norskident},
         response => {
-            if (response.status === 200) {return dispatch(opprettOppgaveSuccessAction())}
-            return dispatch(opprettOppgaveErrorAction(convertResponseToError(response)));
+            if (response.status === 200) {return dispatch(opprettGosysOppgaveSuccessAction())}
+            return dispatch(opprettGosysOppgaveErrorAction(convertResponseToError(response)));
         }
     );
 }};

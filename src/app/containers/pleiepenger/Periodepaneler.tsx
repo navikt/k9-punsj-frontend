@@ -29,7 +29,7 @@ export interface IPeriodepanelerProps {
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialPeriodeinfo: IPeriodeV2; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriodeV2[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (periodeinfo: IPeriodeV2[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
+    editSoknadState: (periodeinfo: IPeriodeV2[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     className?: string;
     textLeggTil?: string;
     textFjern?: string;

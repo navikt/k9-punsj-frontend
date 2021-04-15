@@ -25,7 +25,7 @@ export interface IListepanelerProps<T> {
     panelid: (itemIndex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialItem: T; // Objektet som legges til når man legger til et nytt element i lista
     editSoknad: (itemInfo: T[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (itemInfo: T[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
+    editSoknadState: (itemInfo: T[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     className?: string;
     textLeggTil?: string;
     textFjern?: string;

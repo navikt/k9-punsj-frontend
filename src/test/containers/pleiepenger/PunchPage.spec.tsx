@@ -24,6 +24,9 @@ jest.mock('app/containers/pleiepenger/Ident', () => ({ Ident: () => <></> }));
 jest.mock('app/containers/pleiepenger/EksisterendeSoknader', () => ({
   EksisterendeSoknader: () => <></>,
 }));
+jest.mock('app/containers/pleiepenger/RegistreringsValg', () => ({
+  RegistreringsValg: () => <></>,
+}));
 jest.mock('app/containers/pleiepenger/PunchForm', () => ({
   PunchForm: () => <></>,
 }));
@@ -115,8 +118,8 @@ describe('PunchPage', () => {
       step: 1,
       ident1,
     });
-    expect(punchPage.find('EksisterendeSoknader')).toHaveLength(1);
-    expect(punchPage.find('EksisterendeSoknader').prop('journalpostid')).toEqual(
+    expect(punchPage.find('RegistreringsValg')).toHaveLength(1);
+    expect(punchPage.find('RegistreringsValg').prop('journalpostid')).toEqual(
       journalpostid
     );
   });

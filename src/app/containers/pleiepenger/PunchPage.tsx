@@ -1,9 +1,10 @@
+import React, {ChangeEvent} from 'react';
 import Page from 'app/components/page/Page';
 import { Ident } from 'app/containers/pleiepenger/Ident';
 import {
   EksisterendeSoknader, IEksisterendeSoknaderComponentProps,
 } from 'app/containers/pleiepenger/EksisterendeSoknader';
-import { PunchForm } from 'app/containers/pleiepenger/PunchForm';
+import { PunchFormOld } from 'app/containers/pleiepenger/PunchFormOld';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
@@ -18,14 +19,16 @@ import {
   AlertStripeSuksess,
 } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
-import { Input } from 'nav-frontend-skjema';
+import { Checkbox, Input } from 'nav-frontend-skjema';
 import 'nav-frontend-tabell-style';
-import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import {peiepengerPaths} from "./PeiepengerRoutes";
+import VerticalSpacer from "../../components/VerticalSpacer";
+import {RegistreringsValg} from "./RegistreringsValg";
+import {PunchForm} from "./PunchForm";
 
 export interface IPunchPageStateProps {
   punchState: IPleiepengerPunchState;
@@ -51,7 +54,8 @@ export interface IPunchPageComponentProps {
 export interface IPunchPageComponentState {
   ident1: string;
   ident2: string;
-}
+  barnetHarIkkeFnr: boolean;
+  }
 
 type IPunchPageProps = WrappedComponentProps &
   RouteComponentProps &
@@ -67,12 +71,14 @@ export class PunchPageComponent extends React.Component<
   state: IPunchPageComponentState = {
     ident1: '',
     ident2: '',
+    barnetHarIkkeFnr: false,
   };
 
   componentDidMount(): void {
     this.setState({
       ident1: this.props.punchState.ident1,
       ident2: this.props.punchState.ident2 || '',
+      barnetHarIkkeFnr: false,
     });
   }
 
@@ -106,10 +112,10 @@ export class PunchPageComponent extends React.Component<
       <div className="panels-wrapper" id="panels-wrapper">
         <Panel className="pleiepenger_punch_form" border={true}>
           {punchState.step !== PunchStep.IDENT &&
-            this.identInput(this.state)(punchState.step > PunchStep.IDENT)}
+            this.identInput2(this.state)}
           {this.underFnr()}
         </Panel>
-        {journalpostid && journalpostid !== 'rediger' &&
+        {journalpostid &&
         <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
       </div>
     );
@@ -123,72 +129,76 @@ export class PunchPageComponent extends React.Component<
       this.props.dok ? { dok: this.props.dok } : undefined
     );
 
-  private identInput = (state: IPunchPageComponentState) => (
-    disabled: boolean
-  ) => {
+  private handleClick = (e: ChangeEvent<HTMLInputElement>) => {
+    this.setState({barnetHarIkkeFnr: e.target.checked})
+    if (e.target.checked) {
+      this.setState({ ident2: ""})
+    }
+  }
+
+  private identInput2 = (state: IPunchPageComponentState) => () => {
     const { punchState, intl, journalpost } = this.props;
-    const skalViseToFelter =
-      punchState.step === PunchStep.IDENT || punchState.ident2;
     const skalViseFeilmelding = (ident: string | null) =>
-      ident && ident.length && !disabled && !IdentRules.isIdentValid(ident);
+        ident && ident.length && !IdentRules.isIdentValid(ident);
     const identer = [punchState.ident1, punchState.ident2];
     const antallIdenter = identer.filter((id) => id && id.length).length;
     const journalpostident = journalpost?.norskIdent;
     return (
-      <div>
-        <Input
-          label={intlHelper(
-            intl,
-            skalViseToFelter
-              ? 'ident.identifikasjon.felt1'
-              : 'ident.identifikasjon.felt'
-          )}
-          onChange={this.handleIdent1Change}
-          onBlur={this.handleIdent1Blur}
-          onKeyPress={this.handleIdentKeyPress(1)}
-          value={state.ident1}
-          {...{ disabled }}
-          className="bold-label ident-soker-1"
-          maxLength={11}
-          feil={
-            skalViseFeilmelding(punchState.ident1)
-              ? intlHelper(intl, 'ident.feil.ugyldigident')
-              : undefined
-          }
-        />
-        {skalViseToFelter && (
+        <div>
           <Input
-            label={intlHelper(intl, 'ident.identifikasjon.felt2')}
-            onChange={this.handleIdent2Change}
-            onBlur={this.handleIdent2Blur}
-            onKeyPress={this.handleIdentKeyPress(2)}
-            value={state.ident2}
-            {...{ disabled }}
-            className="bold-label ident-soker-2"
-            maxLength={11}
-            feil={
-              skalViseFeilmelding(punchState.ident2)
-                ? intlHelper(intl, 'ident.feil.ugyldigident')
-                : undefined
-            }
+              label={intlHelper(
+                  intl, 'ident.identifikasjon.felt'
+              )}
+              onChange={this.handleIdent1Change}
+              onBlur={this.handleIdent1Blur}
+              onKeyPress={this.handleIdentKeyPress(1)}
+              value={state.ident1}
+              className="bold-label ident-soker-1"
+              maxLength={11}
+              feil={
+                skalViseFeilmelding(punchState.ident1)
+                    ? intlHelper(intl, 'ident.feil.ugyldigident')
+                    : undefined
+              }
+              bredde={"M"}
           />
-        )}
-        {punchState.step === PunchStep.IDENT &&
+          <Input
+              label={intlHelper(intl, 'ident.identifikasjon.barn')}
+              onChange={this.handleIdent2Change}
+              onBlur={this.handleIdent2Blur}
+              onKeyPress={this.handleIdentKeyPress(2)}
+              value={state.ident2}
+              className="bold-label ident-soker-2"
+              disabled={this.state.barnetHarIkkeFnr}
+              maxLength={11}
+              feil={
+                skalViseFeilmelding(punchState.ident2)
+                    ? intlHelper(intl, 'ident.feil.ugyldigident')
+                    : undefined
+              }
+              bredde={"M"}
+          />
+          <VerticalSpacer sixteenPx={true} />
+          <Checkbox
+              label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
+              onChange={(e) => this.handleClick(e)}
+          />
+          {punchState.step === PunchStep.IDENT &&
           antallIdenter > 0 &&
           journalpostident &&
           identer.every(
-            (ident) =>
-              !ident ||
-              (IdentRules.isIdentValid(ident) && ident !== journalpostident)
+              (ident) =>
+                  !ident ||
+                  (IdentRules.isIdentValid(ident) && ident !== journalpostident)
           ) && (
-            <AlertStripeAdvarsel>
-              {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
-                antallIdenter: antallIdenter.toString(),
-                journalpostident,
-              })}
-            </AlertStripeAdvarsel>
+              <AlertStripeAdvarsel>
+                {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
+                  antallIdenter: antallIdenter.toString(),
+                  journalpostident,
+                })}
+              </AlertStripeAdvarsel>
           )}
-      </div>
+        </div>
     );
   };
 
@@ -201,14 +211,15 @@ export class PunchPageComponent extends React.Component<
       case PunchStep.IDENT:
         return (
           <Ident
-            identInput={this.identInput(this.state)}
+            identInput={this.identInput2(this.state)}
             identInputValues={this.state}
             findSoknader={this.findSoknader}
             getPunchPath={this.getPath}
+            barnetHarIkkeFnr={this.state.barnetHarIkkeFnr}
           />
         );
       case PunchStep.CHOOSE_SOKNAD:
-        return <EksisterendeSoknader {...commonProps} {...this.extractIdents()} />;
+        return <RegistreringsValg {...commonProps} {...this.extractIdents()} harTidligereSoknader={false} />;
       case PunchStep.FILL_FORM:
         return <PunchForm {...commonProps} id={this.props.match.params.id} />;
       case PunchStep.COMPLETED:
@@ -276,8 +287,8 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setIdentAction: (ident1: string, ident2: string | null) =>
-    dispatch(setIdentAction(ident1, ident2)),
+  setIdentAction: (sokersIdent: string, barnetsIdent: string | null) =>
+    dispatch(setIdentAction(sokersIdent, barnetsIdent)),
   setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
