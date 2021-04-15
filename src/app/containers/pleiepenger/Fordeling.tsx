@@ -17,13 +17,14 @@ import {
 } from 'react-intl';
 import { connect } from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { ISakstypeDefault } from '../../models/Sakstype';
+import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
 import { Sakstyper } from '../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 import JournalpostPanel from '../../components/journalpost-panel/JournalpostPanel';
 import {opprettGosysOppgave as omfordelAction} from "../../state/actions/GosysOppgaveActions";
+import {setHash} from "../../utils";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
@@ -45,13 +46,30 @@ type BehandlingsknappProps = Pick<
   'omfordel' | 'journalpost'
 > & {
   norskIdent?: string;
+  sakstypeConfig?: ISakstypeDefault;
+
 };
 
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
   norskIdent,
   omfordel,
   journalpost,
-}) => {
+    sakstypeConfig
+                                                                          }) => {
+  if (!sakstypeConfig) {
+    return null;
+  }
+
+  if ((sakstypeConfig as ISakstypePunch).punchPath) {
+    const punchConfig = sakstypeConfig as ISakstypePunch;
+
+    return (
+        <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
+          <FormattedMessage id="fordeling.knapp.punsj" />
+        </Hovedknapp>
+    );
+  }
+
   return (
     <Hovedknapp
       onClick={() => omfordel(journalpost!.journalpostId, norskIdent)}
@@ -184,6 +202,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             norskIdent={journalpost?.norskIdent}
             omfordel={omfordel}
             journalpost={journalpost}
+            sakstypeConfig={konfigForValgtSakstype}
           />
         </div>
       </FormPanel>
