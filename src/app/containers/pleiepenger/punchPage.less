@@ -12,6 +12,15 @@
 
   h1 {width: 100%}
 
+  .input-row {
+    display: inline-flex;
+    width: 100%;
+
+    .right {
+      margin-left: 30px;
+    }
+  }
+
   .panels-wrapper {
 
     flex-basis:     100%;
@@ -63,18 +72,6 @@
 
       .ident-soker-2, .inputs-barn .skjemaelement, .inputs-soknad .skjemaelement {margin-top: 1rem}
 
-      .dobbel {
-
-        display: flex;
-
-        > div {
-          flex-grow:  1;
-          flex-basis: 50%;
-          &.dobbel1 {padding-right: 1rem}
-          &.dobbel2 {padding-left: 1rem; border-left: 1px solid @navGra20}
-        }
-      }
-
       .soknadsperiode {
         .container {padding: 0}
         .col {
@@ -100,38 +97,64 @@
         .listepanel {margin-bottom: 0}
       }
 
+      .frilanserpanel {
+        background-color: #EAEAEA;
+        margin-top: 20px;
+
+        .frilanser-startdato {margin-bottom: 20px;}
+        .container {padding-top: 0;}
+        .frilanser-info {margin-top: 20px; font-weight: bold; margin-bottom: auto}
+      }
+
+      .utenlandsoppholdpanel {
+        background-color: #EAEAEA;
+        margin-top: 20px;
+
+        .countryselect {
+          padding: 20px;
+        }
+      }
+
       .listepanel {
 
-        background-color: tint(@navLysGra, 75%);
+        background-color: #EAEAEA;
         margin-bottom:    1rem;
         padding:          .5rem 0;
+        border-radius: 5px;
+
+        .fjernlisteelementknapp {
+          margin-top: auto;
+          margin-left: 20px;
+        }
 
         .listepanelbunn {
 
           display:         flex;
           justify-content: flex-end;
-
-          .fjernlisteelementknapp {margin: .5rem 1rem}
         }
 
         &.arbeidstakerpanel {
+          .container {text-align: left;}
 
           .infoContainer {
+            background: #EAEAEA;
             padding: .5rem;
             .col {padding: 0 .5rem}
             label {font-weight: bold}
             .skjemaelement {margin-top: 1rem}
+            .o-p-container {margin-left: 15px;}
+
+            .org-person {
+              display: inline-flex;
+              .timer-normalt {margin-left: .3rem;}
+            }
           }
 
           .listepaneler {
 
             margin: .5rem 1rem;
             .leggtillisteelementknapp:not(:hover) {background-color: @navBlaLighten80}
-
-            .listepanel {
-              background-color: @white;
-              .arbeidstaker-tilstedevaerelse {margin: .5rem 1rem}
-            }
+            .listepanel {background-color: #EAEAEA;}
           }
         }
 
@@ -178,14 +201,16 @@
           }
         }
 
-        &:hover {border-color: @navBla}
       }
 
       .leggtillisteelementknapp {
-        width:         100%;
-        border-width:  0;
-        border-radius: 4px;
-        &:not(:hover) {background-color: tint(@navBla, 90%)}
+        width:         30%;
+        float: left;
+        border: 2px solid #0067C5;
+        box-sizing: border-box;
+        border-radius: 2px;
+
+        &:not(:hover) {background-color: @white}
       }
 
       .sendknapp-wrapper {margin-bottom: 0}
@@ -260,22 +285,6 @@
     margin: 0 .5rem;
   }
 
-  &.dobbel .row:first-child .col {
-    padding: 0;
-  }
-
-  &.dobbel .row:not(:first-child) .col, &.enkel .col {
-    padding: 1rem;
-  }
-
-  &.dobbel .row:not(:first-child) .col:not(:first-child) {
-    background-color: @navLysBlaLighten80;
-  }
-
-  &.dobbel .felles .col:last-child {
-    color: #669DB4;
-  }
-
   .col:first-child {
     padding-left: 0;
     margin:       0;
@@ -290,11 +299,6 @@
     .col:first-child {flex-grow: 1}
     .col:last-child {flex-grow: 2}
   }
-
-  &.dobbel {
-    .col {flex-grow: 1}
-  }
-
   .periodeliste {
     padding-left: 1rem;
     margin:       0;

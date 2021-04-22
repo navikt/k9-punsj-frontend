@@ -287,8 +287,8 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setIdentAction: (sokersIdent: string, barnetsIdent: string | null) =>
-    dispatch(setIdentAction(sokersIdent, barnetsIdent)),
+  setIdentAction: (ident1: string, ident2: string | null) =>
+    dispatch(setIdentAction(ident1, ident2)),
   setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 

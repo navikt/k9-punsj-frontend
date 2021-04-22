@@ -1,4 +1,5 @@
 export enum Arbeidsforhold {
     ARBEIDSTAKER    = "arbeidstaker",
-    ANNET           = "annet"
+    FRILANSER       = "frilanser",
+    SELVSTENDIG     = "selvstendig"
 }

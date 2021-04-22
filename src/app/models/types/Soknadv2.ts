@@ -2,7 +2,13 @@ import {Periodeinfo} from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
 import {IPeriodeinfoV2, PeriodeinfoV2} from "./PeriodeInfoV2";
-import {IPeriodeMedFaktiskeTimer, IPeriodeV2, PeriodeMedFaktiskeTimer, PeriodeV2} from "./PeriodeV2";
+import {
+    IPeriodeMedFaktiskeTimer,
+    IPeriodeMedTimerMinutter,
+    IPeriodeV2,
+    PeriodeMedFaktiskeTimer, PeriodeMedTimerMinutter,
+    PeriodeV2
+} from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
 import {JaNeiVetikke} from "../enums";
 
@@ -127,20 +133,14 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
 }
 
 export interface IOmsorg {
-    relasjonTilBarnet?: string;
-    samtykketOmsorgForBarnet?: boolean,
-    beskrivelseAvOmsorgsrollen?: string;
+    periode?: IPeriodeMedTimerMinutter;
 }
 
 export class Omsorg implements Required<IOmsorg>{
-    relasjonTilBarnet: string;
-    samtykketOmsorgForBarnet: boolean;
-    beskrivelseAvOmsorgsrollen: string;
+    periode: PeriodeMedTimerMinutter;
 
     constructor(omsorg: IOmsorg) {
-        this.beskrivelseAvOmsorgsrollen = omsorg.beskrivelseAvOmsorgsrollen || '';
-        this.samtykketOmsorgForBarnet = omsorg.samtykketOmsorgForBarnet || false;
-        this.beskrivelseAvOmsorgsrollen = omsorg.beskrivelseAvOmsorgsrollen || '';
+        this.periode = new PeriodeMedTimerMinutter(omsorg.periode || {});
     }
 }
 

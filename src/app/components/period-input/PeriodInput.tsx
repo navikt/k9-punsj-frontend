@@ -29,10 +29,10 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     const {periode, intl, onChange, onBlur, onFocus, disabled} = props;
     return <SkjemaGruppe feil={props.errorMessage} className={classNames('period-input', props.className)}>
         <Container>
-            <Row>
-                <Col>
+            <Row noGutters={true}>
                     <Input
                         id={props.inputIdFom}
+                        bredde={"M"}
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         className="bold-label"
@@ -43,13 +43,13 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         feil={props.errorMessageFom}
                         disabled={disabled || props.disabledFom}
                     />
-                </Col>
-                <Col>
+
                     <Input
                         id={props.inputIdTom}
+                        bredde={"M"}
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.tom')}
-                        className="bold-label"
+                        className="right"
                         value={periode?.tom || ''}
                         onChange={event => onChange({fom: periode.fom, tom: event.target.value})}
                         onBlur={event => onBlur({fom: periode.fom, tom: event.target.value})}
@@ -57,7 +57,6 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         feil={props.errorMessageTom}
                         disabled={disabled || props.disabledTom}
                     />
-                </Col>
             </Row>
         </Container>
     </SkjemaGruppe>;

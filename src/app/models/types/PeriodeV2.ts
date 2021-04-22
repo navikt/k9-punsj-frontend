@@ -1,5 +1,5 @@
 import {TimeFormat} from 'app/models/enums';
-import {datetime}   from 'app/utils';
+import {datetime, numberToString} from 'app/utils';
 import intlHelper   from 'app/utils/intlUtils';
 import {IntlShape}  from 'react-intl';
 
@@ -26,6 +26,26 @@ export class PeriodeMedFaktiskeTimer implements Required<IPeriodeMedFaktiskeTime
     constructor(pmf: IPeriodeMedFaktiskeTimer) {
         this.periode = new PeriodeV2(pmf.periode || {})
         this.faktiskArbeidTimerPerDag = this.faktiskArbeidTimerPerDag || '0';
+    }
+
+    genererTimer = (): string => this.faktiskArbeidTimerPerDag;
+}
+
+export interface IPeriodeMedTimerMinutter {
+    periode?: IPeriodeV2;
+    timer?: string;
+    minutter?: string;
+}
+
+export class PeriodeMedTimerMinutter implements Required<IPeriodeMedTimerMinutter> {
+    periode: PeriodeV2;
+    timer: string;
+    minutter: string;
+
+    constructor(pmf: IPeriodeMedTimerMinutter) {
+        this.periode = new PeriodeV2(pmf.periode || {})
+        this.timer = this.timer || '0';
+        this.minutter = this.minutter || '0';
     }
 }
 

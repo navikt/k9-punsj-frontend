@@ -9,6 +9,8 @@ import * as React                                                   from 'react'
 import {IntlShape}                                                  from 'react-intl';
 import {IPeriodeinfoExtensionV2, IPeriodeinfoV2, PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 import {IPeriodeV2} from "../../models/types/PeriodeV2";
+import intlHelper from "../../utils/intlUtils";
+import {Input} from "nav-frontend-skjema";
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<PeriodeinfoV2<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<PeriodeinfoV2<T>>, showStatus?: boolean) => any;

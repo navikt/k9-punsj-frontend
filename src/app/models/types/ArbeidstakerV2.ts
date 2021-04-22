@@ -28,7 +28,7 @@ export class ArbeidstakerV2 implements Required<IArbeidstakerV2> {
         }
     }
 
-    generateFaktiskeTimer = (): string[] => this.arbeidstidInfo.perioder.map(p => p.faktiskArbeidTimerPerDag);
+    generateFaktiskeTimer = (): string[] => this.arbeidstidInfo.perioder.map(p => p.genererTimer());
 
     values(): Required<IArbeidstakerV2> {
         const {arbeidstidInfo, organisasjonsnummer, norskIdent} = this; // tslint:disable-line:no-this-assignment
