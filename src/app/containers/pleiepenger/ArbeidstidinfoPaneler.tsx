@@ -30,13 +30,12 @@ export interface IArbeidstidinfopanelerProps {
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
-    fjernKnapp?:  (itemIndex: number) => React.ReactElement,
 }
 
 export const ArbeidstidinfoPaneler: React.FunctionComponent<IArbeidstidinfopanelerProps> = (props: IArbeidstidinfopanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, editSoknad, editSoknadState, kanHaFlere, fjernKnapp} = props;
+    const {intl, editSoknad, editSoknadState, kanHaFlere} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeMedFaktiskeTimer>) => IPeriodeMedFaktiskeTimer[] = (index: number, periodeinfo: Partial<IPeriodeMedFaktiskeTimer>) => {
         const newInfo: IPeriodeMedFaktiskeTimer = {...props.periods[index], ...periodeinfo};
@@ -57,7 +56,6 @@ export const ArbeidstidinfoPaneler: React.FunctionComponent<IArbeidstidinfopanel
         intlShape: IntlShape,
     ) =>
         <ArbeidstidInput
-            periodeindeks={periodeindeks}
             periodeMedTimer={periodeinfo}
             intl={intlShape}
             onChange={(periode) => {editSoknadState(editPeriode(periodeindeks, periode))}}
@@ -66,7 +64,6 @@ export const ArbeidstidinfoPaneler: React.FunctionComponent<IArbeidstidinfopanel
             errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
             errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
             errorMessageTimer={getErrorMessage(`[${periodeindeks}].periode.timer`)}
-            fjernKnapp={fjernKnapp}
         />;
 
     return <Listepaneler

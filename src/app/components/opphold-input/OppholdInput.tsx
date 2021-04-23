@@ -24,11 +24,10 @@ export interface IOppholdInputProps {
     inputIdFom?: string;
     inputIdTom?: string;
     className?: string;
-    fjernKnapp?:  (itemIndex: number) => React.ReactElement,
 }
 
 export const OppholdInput: React.FunctionComponent<IOppholdInputProps> = (props: IOppholdInputProps) => {
-    const {periodeMedTimerMinutter, intl, onChange, onBlur, onFocus, disabled, fjernKnapp} = props;
+    const {periodeMedTimerMinutter, intl, onChange, onBlur, onFocus, disabled} = props;
     return <SkjemaGruppe feil={props.errorMessage} className={classNames('opphold-input', props.className)}>
         <Container className={"opphold"}>
             <Row noGutters={true}>

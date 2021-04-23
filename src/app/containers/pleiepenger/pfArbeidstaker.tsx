@@ -1,6 +1,5 @@
 import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
-import {GetErrorMessage, PeriodeinfoComponent, PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import {stringToNumber} from 'app/utils/formatUtils';
+import {GetErrorMessage} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
 import * as React from 'react';
@@ -11,7 +10,7 @@ import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 
 export function pfArbeidstaker(tgStrings: string[][],
                                setTgStringsInParentState: (tgStrings: string[][]) => any,
-                               generateTgStrings: () => string[][]): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape, fjernKnapp: (itemIndex: number) => React.ReactElement) => JSX.Element {
+                               generateTgStrings: () => string[][]): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
 
     return (
         arbeidstaker: ArbeidstakerV2,
@@ -21,7 +20,6 @@ export function pfArbeidstaker(tgStrings: string[][],
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,
-        fjernKnapp:  (itemIndex: number) => React.ReactElement,
     ) => {
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
@@ -118,11 +116,10 @@ export function pfArbeidstaker(tgStrings: string[][],
                             feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.grad`)}
                         />} */
                     minstEn={true}
-                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                    textFjern="skjema.perioder.fjern"
                     getErrorMessage={getErrorMessage}
-                    feilkodeprefiks={`[${listeelementindex}].skalJobbeProsent`}
+                    feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
                     kanHaFlere={true}
-                    fjernKnapp={fjernKnapp}
                 />
             </Container>
         </SkjemaGruppe>;

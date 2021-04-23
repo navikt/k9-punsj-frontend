@@ -8,7 +8,6 @@ import './arbeidstidInput.less';
 import {IPeriodeMedFaktiskeTimer} from "../../models/types/PeriodeV2";
 
 export interface IArbeidstidInputProps {
-    periodeindeks: number;
     periodeMedTimer: IPeriodeMedFaktiskeTimer;
     intl: IntlShape;
     onChange: (periode: IPeriodeMedFaktiskeTimer) => void;
@@ -24,11 +23,10 @@ export interface IArbeidstidInputProps {
     inputIdFom?: string;
     inputIdTom?: string;
     className?: string;
-    fjernKnapp?:  (itemIndex: number) => React.ReactElement,
 }
 
 export const ArbeidstidInput: React.FunctionComponent<IArbeidstidInputProps> = (props: IArbeidstidInputProps) => {
-    const {periodeMedTimer, intl, onChange, onBlur, onFocus, disabled, fjernKnapp, periodeindeks} = props;
+    const {periodeMedTimer, intl, onChange, onBlur, onFocus, disabled} = props;
     return <SkjemaGruppe feil={props.errorMessage} className={classNames('arbeidstid-input', props.className)}>
         <Container>
             <Row>
@@ -77,7 +75,6 @@ export const ArbeidstidInput: React.FunctionComponent<IArbeidstidInputProps> = (
                         feil={props.errorMessageTom}
                         disabled={disabled || props.disabledTom}
                     />
-                    {fjernKnapp ? fjernKnapp(periodeindeks) : ""}
                 </div>
 
             </Row>

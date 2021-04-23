@@ -1,5 +1,4 @@
 import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
-import {PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {Arbeidsforhold, JaNei, JaNeiVetikke, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
@@ -22,9 +21,14 @@ import {Knapp} from 'nav-frontend-knapper';
 import {CheckboksPanelGruppe, Checkbox, Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
 import {ArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
-import {ISoknadV2, SoknadV2, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/Soknadv2";
+import {
+    ISoknadV2,
+    IUtenlandsOpphold,
+    SoknadV2,
+    TilleggsinformasjonV2,
+    TilsynsordningV2
+} from "../../models/types/Soknadv2";
 import {IPeriodeV2, PeriodeMedFaktiskeTimer} from "../../models/types/PeriodeV2";
 import {ISelvstendigNaeringsdrivendeV2} from "../../models/types/SelvstendigNæringsdrivendeV2";
 import {IFrilanserV2} from "../../models/types/FrilanserV2";
@@ -40,11 +44,12 @@ import Panel from "nav-frontend-paneler";
 import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 import {OppholdInput} from "../../components/opphold-input/OppholdInput";
 import {PeriodInput} from "../../components/period-input/PeriodInput";
+import {BeredskapNattevaak} from "../../models/enums/BeredskapNattevaak";
+import {PeriodeinfoPaneler} from "./PeriodeinfoPaneler";
+import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 import {RootStateType} from "../../state/RootState";
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from "nav-frontend-etiketter";
 import {connect} from "react-redux";
-import {BeredskapNattevaak} from "../../models/enums/BeredskapNattevaak";
-import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 
 
 export interface IPunchFormComponentProps {
@@ -89,6 +94,10 @@ export interface IPunchFormComponentState {
     innleggelseUtlandet: IPeriodeV2[];
     beredskap: boolean;
     nattevaak: boolean;
+    harBoddIUtlandet: JaNei;
+    skalBoIUtlandet: JaNei;
+    medlemskap: IUtenlandsOpphold[];
+
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -126,7 +135,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         expandAll: false,
         frilanserStartdato: '',
         jobberFortsattSomFrilaser: JaNei.NEI,
-        innleggelseUtlandet: []
+        innleggelseUtlandet: [],
+        barnetSkalLeggesInn: JaNei.NEI,
+        beredskap: false,
+        nattevaak: false,
+        harBoddIUtlandet: JaNei.NEI,
+        skalBoIUtlandet: JaNei.NEI,
+        medlemskap: [],
+        iUtlandet: JaNeiIkkeOpplyst.NEI,
+        skalHaFerie: JaNeiIkkeOpplyst.NEI
     };
 
     private initialTilsyn: PeriodeinfoV2<ITilsyn> = {
@@ -252,8 +269,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     faktiskeTimer: this.faktiskTimer(soknad),
                 });
             const arbeid = soknad.arbeidstid;
-            const errorMessageFunction = (code: string) =>
-                () => undefined;
 
             if (!arbeid.arbeidstakerList.length) {
                 arbeid.arbeidstakerList.push(initialArbeidstaker)
@@ -291,7 +306,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
                 textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
                 panelClassName="arbeidstakerpanel"
-                getErrorMessage={errorMessageFunction}
                 feilkodeprefiks={'arbeid.arbeidstaker'}
                 onAdd={updateTgStrings}
                 onRemove={updateTgStrings}
@@ -315,11 +329,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         bredde={"M"}
                         label={intlHelper(intl, 'skjema.frilanserdato')}
                         type="date"
-                        value={this.state.frilanserStartdato}
+                        value={this.state.soknad.arbeidAktivitet.frilanser?.startDato || ''}
                         className={"frilanser-startdato"}
                         onChange={(e) => {
-                            this.setState({frilanserStartdato: e.target.value})
+                            this.updateSoknadState({arbeidAktivitet: {frilanser: {startDato: e.target.value}}})
                         }}
+                        onBlur={(e) => {
+                            this.updateSoknadInformasjon({arbeidAktivitet: {frilanser: {startDato: e.target.value}}})}}
                     />
                     <RadioPanelGruppe
                         className="horizontalRadios"
@@ -329,10 +345,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             value: jn,
                         }))}
                         legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
-                        checked={this.state.jobberFortsattSomFrilaser || undefined}
-                        onChange={(event) =>
-                            this.setState({jobberFortsattSomFrilaser: (event.target as HTMLInputElement).value as JaNei})
-                        }/>
+                        checked={this.state.soknad.arbeidAktivitet.frilanser?.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI}
+                        onChange={(event) => {
+                            this.setState({
+                                jobberFortsattSomFrilaser: (event.target as HTMLInputElement).value as JaNei});
+                            this.updateSoknadState({
+                                arbeidAktivitet: {
+                                    frilanser: {
+                                        jobberFortsattSomFrilans:
+                                            this.state.jobberFortsattSomFrilaser === JaNei.JA ? true : false  }}})
+                        }}/>
                     {this.state.jobberFortsattSomFrilaser === JaNei.JA &&
                     (<>
                         <p className={"frilanser-info"}>{intlHelper(intl, 'skjema.frilanser.periode')}</p>
@@ -379,152 +401,56 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         /></>)}</>);
         };
 
-        const arbeidsperioder = () => {
-            const updateTgStrings = () =>
-                this.setState({
-                    faktiskeTimer: this.faktiskTimer(soknad),
-                });
-            const arbeid = soknad.arbeidstid;
-            const errorMessageFunction = (code: string) =>
-                () => undefined;
-
-            const selvstendigperioder = (harOverskrift?: boolean) => (
-                <PeriodeinfoPaneler
-                    intl={intl}
-                    periods={arbeid.selvstendigNæringsdrivendeArbeidstidInfo.perioder}
-                    panelid={(i) => `selvstendignaeringsdrivendepanel_${i}`}
-                    initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
-                    editSoknad={(perioder) =>
-                        this.updateSoknadInformasjon(
-                            {
-                                arbeidstid: {
-                                    selvstendigNæringsdrivendeArbeidstidInfo: {
-                                        ...arbeid.selvstendigNæringsdrivendeArbeidstidInfo,
-                                        perioder
-                                    }
+        const selvstendigperioder = (harOverskrift?: boolean) => {
+        const arbeid = soknad.arbeidstid;
+            return (<PeriodeinfoPaneler
+                intl={intl}
+                periods={arbeid.selvstendigNæringsdrivendeArbeidstidInfo.perioder}
+                panelid={(i) => `selvstendignaeringsdrivendepanel_${i}`}
+                initialPeriodeinfo={initialSelvstendigNaeringsdrivende}
+                editSoknad={(perioder) =>
+                    this.updateSoknadInformasjon(
+                        {
+                            arbeidstid: {
+                                selvstendigNæringsdrivendeArbeidstidInfo: {
+                                    ...arbeid.selvstendigNæringsdrivendeArbeidstidInfo,
+                                    perioder
                                 }
                             }
-                        )
-                    }
-                    editSoknadState={(perioder, showStatus) =>
-                        this.updateSoknadState(
-                            {
-                                arbeidstid: {
-                                    selvstendigNæringsdrivendeArbeidstidInfo: {
-                                        ...arbeid.selvstendigNæringsdrivendeArbeidstidInfo,
-                                        perioder
-                                    }
+                        }
+                    )
+                }
+                editSoknadState={(perioder, showStatus) =>
+                    this.updateSoknadState(
+                        {
+                            arbeidstid: {
+                                selvstendigNæringsdrivendeArbeidstidInfo: {
+                                    ...arbeid.selvstendigNæringsdrivendeArbeidstidInfo,
+                                    perioder
                                 }
-                            },
-                            showStatus
-                        )
-                    }
-                    textLeggTil={
-                        harOverskrift
-                            ? 'skjema.arbeid.leggtilperiode'
-                            : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'
-                    }
-                    textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
-                    panelClassName="selvstendignaeringsdrivendepanel"
-                    getErrorMessage={errorMessageFunction}
-                    feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
-                    kanHaFlere={true}
-                />
-            );
-
-            const antallArbeidsperioder = soknad.arbeidAktivitet.numberOfWorkPeriods();
-
-            const visning = () => {
-                if (this.state.arbeidstaker) {
-                    return arbeidstakerperioder()
+                            }
+                        },
+                        showStatus
+                    )
                 }
-                if (!antallArbeidsperioder) {
-                    return (
-                        <Container className="arbeidsknapper">
-                            <Row>
-                                <Col>{arbeidstakerperioder()}</Col>
-                                <Col>{selvstendigperioder()}</Col>
-                            </Row>
-                        </Container>
-                    );
-                } else if (arbeid.arbeidstakerList.length === antallArbeidsperioder) {
-                    return (
-                        <>
-                            <h3>
-                                {intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}
-                            </h3>
-                            {arbeidstakerperioder()}
-                            <h3>
-                                {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
-                            </h3>
-                            <Container className="arbeidsknapper">
-                                <Row>
-                                    <Col>{selvstendigperioder()}</Col>
-                                </Row>
-                            </Container>
-                        </>
-                    );
-                } else if (
-                    arbeid.selvstendigNæringsdrivendeArbeidstidInfo.perioder.length === antallArbeidsperioder
-                ) {
-                    return (
-                        <>
-                            <h3>
-                                {intlHelper(
-                                    intl,
-                                    'skjema.arbeid.selvstendignaeringsdrivende.overskrift'
-                                )}
-                            </h3>
-                            {selvstendigperioder(true)}
-                            <h3>
-                                {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
-                            </h3>
-                            <Container className="arbeidsknapper">
-                                <Row>
-                                    <Col>{arbeidstakerperioder()}</Col>
-                                </Row>
-                            </Container>
-                        </>
-                    );
-                } else if (arbeid.frilanserArbeidstidInfo) {
-                    return (
-                        <>
-                            <h3>
-                                {intlHelper(intl, 'skjema.arbeid.andrearbeidstyper.overskrift')}
-                            </h3>
-                            <Container className="arbeidsknapper">
-                                <Row>
-                                    <Col>{arbeidstakerperioder()}</Col>
-                                    <Col>{selvstendigperioder()}</Col>
-                                </Row>
-                            </Container>
-                        </>
-                    );
-                } else {
-                    return (
-                        <>
-                            <h3>
-                                {intlHelper(intl, 'skjema.arbeid.arbeidstaker.overskrift')}
-                            </h3>
-                            {arbeidstakerperioder()}
-                            <h3>
-                                {intlHelper(
-                                    intl,
-                                    'skjema.arbeid.selvstendignaeringsdrivende.overskrift'
-                                )}
-                            </h3>
-                            {selvstendigperioder(true)}
-                            <h3>{intlHelper(intl, 'skjema.arbeid.frilanser.overskrift')}</h3>
-                        </>
-                    );
+                textLeggTil={
+                    harOverskrift
+                        ? 'skjema.arbeid.leggtilperiode'
+                        : 'skjema.arbeid.selvstendignaeringsdrivende.leggtilperiode'
                 }
-            };
+                textFjern="skjema.arbeid.selvstendignaeringsdrivende.fjernperiode"
+                panelClassName="selvstendignaeringsdrivendepanel"
+              //  getErrorMessage={errorMessageFunction}
+                feilkodeprefiks={'arbeid.selvstendigNaeringsdrivende'}
+                kanHaFlere={true}
+            />
+        )};
 
-            return visning();
-        };
-
-        const beredskapperioder = (
-            <PeriodeinfoPaneler
+        const beredskapperioder = () => {
+            if (!this.state.soknad.beredskap?.length) {
+                this.updateSoknadState({beredskap: [initialBeredskap]})
+            }
+            return (<PeriodeinfoPaneler
                 intl={intl}
                 periods={soknad.beredskap}
                 component={pfTilleggsinformasjon('beredskap')}
@@ -542,7 +468,31 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 feilkodeprefiks={'beredskap'}
                 kanHaFlere={true}
             />
-        );
+        )};
+
+        const nattevaakperioder = () => {
+            if (!this.state.soknad.nattevaak?.length) {
+                this.updateSoknadState({nattevaak: [initialNattevaak]})
+            }
+            return (<PeriodeinfoPaneler
+                intl={intl}
+                periods={soknad.nattevaak}
+                component={pfTilleggsinformasjon('nattevaak')}
+                panelid={(i) => `nattevaakspanel_${i}`}
+                initialPeriodeinfo={initialNattevaak}
+                editSoknad={(nattevaak) => this.updateSoknadInformasjon({ nattevaak } )}
+                editSoknadState={(nattevaak, showStatus) =>
+                    this.updateSoknadState({nattevaak} , showStatus)
+                }
+                textLeggTil="skjema.nattevaak.leggtilperiode"
+                textFjern="skjema.nattevaak.fjernperiode"
+                className="nattevaaksperioder"
+                panelClassName="nattevaakspanel"
+                getErrorMessage={() => undefined}
+                feilkodeprefiks={'nattevaak'}
+                kanHaFlere={true}
+            />
+        )};
 
 
         return (
@@ -816,8 +766,56 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         }))}
                         onChange={() => undefined}/>
                     {this.state.beredskap && (
+                        <>{beredskapperioder()}</>
 
                     )}
+                    {this.state.nattevaak && (
+                        <>{nattevaakperioder()}</>
+
+                    )}
+                </EkspanderbartpanelBase>
+                <EkspanderbartpanelBase
+                    apen={this.state.expandAll}
+                    className={"punchform__paneler"}
+                    tittel={intlHelper(intl, "skjema.medlemskap.overskrift")}>
+                    <RadioPanelGruppe
+                        className="horizontalRadios"
+                        radios={Object.values(JaNei).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                        name="medlemskapjanei"
+                        legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
+                        onChange={(event) =>
+                            this.handleMedlemskapHarBoddChange((event.target as HTMLInputElement).value as JaNei)
+                        }
+                        checked={this.state.harBoddIUtlandet}
+                    />
+                    {this.state.harBoddIUtlandet === JaNei.JA && (
+                        <Panel className={"medlemskappanel"}>
+                            {Object.keys(this.state.medlemskap).map((key) => (
+                                <>
+                                    <PeriodInput
+                                        periode={_.get(this.state.medlemskap[key], 'periode', '')}
+                                        intl={intl}
+                                        onChange={(periode) => this.handleMedlemskapPeriodeChange(+key, periode)}
+                                        onBlur={() => undefined}
+                                    />
+                                    <CountrySelect
+                                        className={"countryselect"}
+                                        bredde={"l"}
+                                        name={`opphold_land_medlemskap_${key}`}
+                                        onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
+                                        onBlur={() => this.setOpphold()}
+                                        selectedcountry={_.get(this.state.medlemskap[key], 'land', '')}
+                                        unselectedoption={'Velg …'}
+                                        label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
+                                    />
+                                </>
+                            ))}
+                        </Panel>
+                    )}
+
                 </EkspanderbartpanelBase>
             </>);
     }
@@ -922,6 +920,30 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         if (jaNei !== JaNei.JA) {
             this.setState({innleggelseUtlandet: []})
         }
+    }
+
+    private handleMedlemskapHarBoddChange(jaNei: JaNei) {
+        this.setState({
+            harBoddIUtlandet: jaNei,
+        });
+
+        if (jaNei === JaNei.JA &&
+            this.state.innleggelseUtlandet!.length === 0) {
+            this.state.innleggelseUtlandet!.push({ fom: '', tom: ''});
+            this.forceUpdate();
+        };
+    }
+
+    private handleMedlemskapSkalBoChange(jaNei: JaNei) {
+        this.setState({
+            skalBoIUtlandet: jaNei,
+        });
+
+        if (jaNei === JaNei.JA &&
+            this.state.medlemskap!.length === 0) {
+            this.state.medlemskap!.push({ periode: { fom: '', tom: ''}, land: ''});
+            this.forceUpdate();
+        };
     }
 
 
@@ -1093,6 +1115,21 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private setOpphold = () => this.updateSoknad({utenlandsopphold: this.state.soknad.utenlandsopphold});
+
+    private handleMedlemskapPeriodeChange = (index: number, periode: IPeriodeV2) => {
+        this.state.medlemskap![index].periode = periode;
+        this.forceUpdate();
+    };
+
+    private addOppholdMedlemskap = () => {
+        this.state.medlemskap!.push({land: '', periode: {}});
+        this.forceUpdate();
+    };
+
+    private removeOppholdMedlemskap = (index: number) => {
+        this.state.medlemskap!.splice(index, 1);
+        this.forceUpdate();
+    };
 
     private addFerie = () => {
         if (!this.state.soknad.lovbestemtFerie) {

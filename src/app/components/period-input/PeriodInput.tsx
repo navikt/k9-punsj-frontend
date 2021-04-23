@@ -1,10 +1,9 @@
-import {IPeriode}            from 'app/models/types';
-import intlHelper            from 'app/utils/intlUtils';
-import classNames            from 'classnames';
+import intlHelper from 'app/utils/intlUtils';
+import classNames from 'classnames';
 import {Input, SkjemaGruppe} from 'nav-frontend-skjema';
-import * as React            from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
-import {IntlShape}           from 'react-intl';
+import * as React from 'react';
+import {Container, Row} from 'react-bootstrap';
+import {IntlShape} from 'react-intl';
 import './periodInput.less';
 import {IPeriodeV2} from "../../models/types/PeriodeV2";
 
@@ -30,33 +29,33 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     return <SkjemaGruppe feil={props.errorMessage} className={classNames('period-input', props.className)}>
         <Container>
             <Row noGutters={true}>
-                    <Input
-                        id={props.inputIdFom}
-                        bredde={"M"}
-                        type="date"
-                        label={intlHelper(intl, 'skjema.perioder.fom')}
-                        className="bold-label"
-                        value={periode?.fom || ''}
-                        onChange={event => onChange({fom: event.target.value, tom: periode.tom})}
-                        onBlur={event => onBlur({fom: event.target.value, tom: periode.tom})}
-                        onFocus={onFocus}
-                        feil={props.errorMessageFom}
-                        disabled={disabled || props.disabledFom}
-                    />
+                <Input
+                    id={props.inputIdFom}
+                    bredde={"M"}
+                    type="date"
+                    label={intlHelper(intl, 'skjema.perioder.fom')}
+                    className="bold-label"
+                    value={periode?.fom || ''}
+                    onChange={event => onChange({fom: event.target.value, tom: periode.tom})}
+                    onBlur={event => onBlur({fom: event.target.value, tom: periode.tom})}
+                    onFocus={onFocus}
+                    feil={props.errorMessageFom}
+                    disabled={disabled || props.disabledFom}
+                />
 
-                    <Input
-                        id={props.inputIdTom}
-                        bredde={"M"}
-                        type="date"
-                        label={intlHelper(intl, 'skjema.perioder.tom')}
-                        className="right"
-                        value={periode?.tom || ''}
-                        onChange={event => onChange({fom: periode.fom, tom: event.target.value})}
-                        onBlur={event => onBlur({fom: periode.fom, tom: event.target.value})}
-                        onFocus={onFocus}
-                        feil={props.errorMessageTom}
-                        disabled={disabled || props.disabledTom}
-                    />
+                <Input
+                    id={props.inputIdTom}
+                    bredde={"M"}
+                    type="date"
+                    label={intlHelper(intl, 'skjema.perioder.tom')}
+                    className="right"
+                    value={periode?.tom || ''}
+                    onChange={event => onChange({fom: periode.fom, tom: event.target.value})}
+                    onBlur={event => onBlur({fom: periode.fom, tom: event.target.value})}
+                    onFocus={onFocus}
+                    feil={props.errorMessageTom}
+                    disabled={disabled || props.disabledTom}
+                />
             </Row>
         </Container>
     </SkjemaGruppe>;

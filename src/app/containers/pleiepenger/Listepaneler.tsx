@@ -18,8 +18,7 @@ export type ListeComponent<T> = (itemInfo: T,
                                  updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<T>,
                                  feilkodeprefiksMedIndeks?: string,
                                  getErrorMessage?: GetErrorMessage,
-                                 intl?: IntlShape,
-                                 fjernKnapp?: (itemIndex: number) => React.ReactElement) => React.ReactElement;
+                                 intl?: IntlShape) => React.ReactElement;
 
 export interface IListepanelerProps<T> {
     intl: IntlShape;
@@ -68,20 +67,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         return newArray;
     };
 
-    const fjernKnapp = (itemIndex: number) => {
-        return (<div
-            onClick={() => {
-                const newArray: ItemInfo[] = removeItem(itemIndex);
-                editSoknadState(newArray);
-                editSoknad(newArray);
-                !!props.onRemove && props.onRemove();
-            }}
-            className="fjernlisteelementknapp"
-            >
-            <BinSvg title={"fjern"} />
-        </div>)
-    }
-
     return <SkjemaGruppe
         feil={getErrorMessage('')}
         className={classNames('listepaneler', props.className)}
@@ -104,8 +89,24 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         `${feilkodeprefiks}[${itemIndex}]`,
                         getErrorMessage,
                         intl,
-                        kanHaFlere ? fjernKnapp : undefined,
                     )}
+                    <div className={"listepanelbunn"}>
+                        <BinSvg title={"fjern"}/>
+                        <div
+                            id="slett"
+                            className={"fjernlisteelementknapp"}
+                            role="button"
+                            onClick={() => {
+                                const newArray: ItemInfo[] = removeItem(itemIndex);
+                                editSoknadState(newArray);
+                                editSoknad(newArray);
+                                !!props.onRemove && props.onRemove();
+                            }}
+                            tabIndex={0}
+                        >
+                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
+                        </div>
+                    </div>
                 </SkjemaGruppe>
             </Panel>
         })}
@@ -122,5 +123,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         >
             {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
         </Knapp>}
+
     </SkjemaGruppe>;
 };

@@ -129,15 +129,24 @@
 
         .listepanelbunn {
 
-          display:         flex;
-          justify-content: flex-end;
+          display: inline-flex;
+          float: right;
+          padding: 5px;
+
+          .fjernlisteelementknapp {
+            color: #c30000;
+            font-size: 16px;
+            line-height: 22px;
+            padding-left: 5px;
+            text-decoration-line: underline;
+            cursor: pointer;
+          }
         }
 
         &.arbeidstakerpanel {
-          .container {text-align: left;}
+          .container {text-align: left; padding-top: 0;}
 
           .infoContainer {
-            background: #EAEAEA;
             padding: .5rem;
             .col {padding: 0 .5rem}
             label {font-weight: bold}

@@ -10,6 +10,7 @@ import * as React                          from 'react';
 import {IntlShape}                         from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 import {ITilleggsinformasjonV2} from "../../models/types/Soknadv2";
+import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjonV2> {
 
@@ -20,7 +21,7 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjonV2>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
-        intl: IntlShape
+        intl: IntlShape,
     ) => {
 
         return <div className="tilleggsinfo">

@@ -94,9 +94,6 @@ export class PunchFormOldComponent extends React.Component<
       arbeidstid: {},
 
       omsorg: {
-        samtykketOmsorgForBarnet: false,
-        beskrivelseAvOmsorgsrollen: '',
-        relasjonTilBarnet: ''
       }
     },
     isFetched: false,
