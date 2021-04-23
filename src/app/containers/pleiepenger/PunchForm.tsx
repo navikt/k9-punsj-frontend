@@ -712,8 +712,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <EkspanderbartpanelBase
                     apen={this.state.expandAll}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.opplysningerombarnet")}>
-                </EkspanderbartpanelBase>
+                    tittel={intlHelper(intl, "skjema.opplysningerombarnet")}/>
                 <EkspanderbartpanelBase
                     apen={this.state.expandAll}
                     className={"punchform__paneler"}
