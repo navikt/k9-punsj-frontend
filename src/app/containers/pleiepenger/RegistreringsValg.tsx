@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
 import {FormattedMessage} from "react-intl";
 import {EksisterendeSoknader} from "./EksisterendeSoknader";
@@ -7,10 +7,15 @@ import './registreringsValg.less';
 import {Knapp} from "nav-frontend-knapper";
 import {createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction} from "../../state/actions";
 import {connect} from "react-redux";
-import {setHash} from "../../utils";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
-import {IEksisterendeSoknaderState, IPleiepengerPunchState} from "../../models/types";
+import {apiUrl, setHash} from "../../utils";
+import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
+import {IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState} from "../../models/types";
 import {RootStateType} from "../../state/RootState";
+
+import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
+import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from "../../state/actions/JournalposterPerIdentActions";
+import intlHelper from "../../utils/intlUtils";
+import {ApiPath} from "../../apiConfig";
 
 
 export interface IRegistreringsValgComponentProps {
@@ -25,11 +30,13 @@ export interface IRegistreringsValgDispatchProps {
     undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     createSoknad: typeof createSoknad;
     resetSoknadidAction: typeof resetSoknadidAction;
+    getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
 export interface IEksisterendeSoknaderStateProps {
     punchState: IPleiepengerPunchState;
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 
@@ -38,7 +45,15 @@ type IRegistreringsValgProps = IRegistreringsValgComponentProps & IEksisterendeS
 
 export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (props: IRegistreringsValgProps) => {
 
-    const {harTidligereSoknader, journalpostid, ident1, ident2, getPunchPath, eksisterendeSoknaderState} = props;
+    const {
+        harTidligereSoknader,
+        journalpostid,
+        ident1,
+        ident2,
+        getPunchPath,
+        eksisterendeSoknaderState,
+        journalposterState
+    } = props;
     const [valgtOption, setValgtOption] = useState<string>("nysoknad");
 
     React.useEffect(() => {
@@ -47,15 +62,19 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             eksisterendeSoknaderState.isSoknadCreated
         ) {
             setHash(
-                getPunchPath(PunchStep.FILL_FORM, { id: eksisterendeSoknaderState.soknadid })
+                getPunchPath(PunchStep.FILL_FORM, {id: eksisterendeSoknaderState.soknadid})
             );
             props.resetSoknadidAction();
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
+    React.useEffect(() => {
+        props.getAlleJournalposter(ident1);
+    }, [ident1]);
+
     const redirectToPreviousStep = () => {
-            setHash(getPunchPath(PunchStep.IDENT));
-            props.undoSearchForEksisterendeSoknaderAction()
+        setHash(getPunchPath(PunchStep.IDENT));
+        props.undoSearchForEksisterendeSoknaderAction()
     }
 
     const redirectToNextStep = () => {
@@ -73,6 +92,12 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         );
     }
 
+    if (journalposterState.journalposter.length) {
+        return <AlertStripeInfo>
+            Det finnes flere journalposter på søkeren
+        </AlertStripeInfo>
+    }
+
     const newSoknad = () =>
         props.createSoknad(
             journalpostid,
@@ -86,8 +111,32 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         ) : null;
 
 
+    const pdfUrl = (journalpost: IJournalpost) => {
+        return apiUrl(ApiPath.DOKUMENT, {
+            journalpostId: journalpost.journalpostId,
+            dokumentId: journalpost.dokumenter[0].dokumentId
+
+        })
+    }
+
+
     return (
         <div className={"registrering-page"}>
+            {journalposterState.journalposter.length && (
+                <div className={"registrering-journalpostinfo"}>
+                    <p>
+                        Andre journalposter registrert på bruker:
+                    </p>
+                    {journalposterState.journalposter.map((jp, index) => (
+                        <a
+                            key={jp.journalpostId}
+                            href={pdfUrl(jp)}
+                            target="_blank">
+                            Journalpost {index}
+                        </a>
+                    ))
+                    }
+                </div>)}
             <RadioGruppe
                 legend={<FormattedMessage id={"registrering.overskrift"}/>}
                 className="registrering-page__options"
@@ -134,6 +183,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(createSoknad(journalpostid, ident1, ident2)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
+    getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 
 const mapStateToProps = (
@@ -141,6 +191,7 @@ const mapStateToProps = (
 ): IEksisterendeSoknaderStateProps => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     eksisterendeSoknaderState: state.PLEIEPENGER_SYKT_BARN.eksisterendeSoknaderState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 

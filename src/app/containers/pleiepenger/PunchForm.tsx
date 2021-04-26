@@ -50,6 +50,7 @@ import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 import {RootStateType} from "../../state/RootState";
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from "nav-frontend-etiketter";
 import {connect} from "react-redux";
+import {PunchFormPaneler} from "../../models/enums/PunchFormPaneler";
 
 
 export interface IPunchFormComponentProps {
@@ -97,6 +98,7 @@ export interface IPunchFormComponentState {
     harBoddIUtlandet: JaNei;
     skalBoIUtlandet: JaNei;
     medlemskap: IUtenlandsOpphold[];
+    aapnePaneler: PunchFormPaneler[]
 
 }
 
@@ -143,7 +145,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         skalBoIUtlandet: JaNei.NEI,
         medlemskap: [],
         iUtlandet: JaNeiIkkeOpplyst.NEI,
-        skalHaFerie: JaNeiIkkeOpplyst.NEI
+        skalHaFerie: JaNeiIkkeOpplyst.NEI,
+        aapnePaneler: [],
     };
 
     private initialTilsyn: PeriodeinfoV2<ITilsyn> = {
@@ -512,14 +515,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <Checkbox
                     label={intlHelper(intl, "skjema.ekspander")}
                     onChange={(e) => {
-                        this.setState({expandAll: e.target.checked})
+                        this.setState({expandAll: e.target.checked});
+                        this.forceUpdate();
                     }}
                 />
                 <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.opplysningeromsoknad")}
+                    tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
                 >
                     <SkjemaGruppe>
                         <div className={"input-row"}>
@@ -590,7 +595,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         /></SkjemaGruppe>
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.UTENLANDSOPPHOLD)}
                     className={"punchform__paneler"}
                     tittel={intlHelper(intl, "skjema.utenlandsopphold.opplysninger")}>
                     <RadioPanelGruppe
@@ -706,17 +711,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     }
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.opplysningeromsoker")}/>
+                    tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}/>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.OPPLYSINGER_OM_BARNET)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.opplysningerombarnet")}/>
+                    tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_BARNET)}/>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.ARBEID)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.opplysningeromarbeid")}>
+                    tittel={intlHelper(intl, PunchFormPaneler.ARBEID)}>
                     <CheckboksPanelGruppe
                         checkboxes={Object.values(Arbeidsforhold).map((af) => ({
                             label: intlHelper(intl, af),
@@ -735,9 +740,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     )}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.OMSORGSTILBUD)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.omsorgstilbud.overskrift")}>
+                    tittel={intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}>
                     <h4>
                         {intlHelper(intl, "skjema.omsorgstilbud.info")}
                     </h4>
@@ -753,9 +758,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     />
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.beredskapognattevaak.overskrift")}>
+                    tittel={intlHelper(intl, PunchFormPaneler.BEREDSKAPNATTEVAAK)}>
                     <CheckboksPanelGruppe
                         checkboxes={Object.values(BeredskapNattevaak).map((bn) => ({
                             label: intlHelper(intl, bn),
@@ -774,9 +779,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     )}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
-                    apen={this.state.expandAll}
+                    apen={this.skalVæreAapen(PunchFormPaneler.MEDLEMSKAP)}
                     className={"punchform__paneler"}
-                    tittel={intlHelper(intl, "skjema.medlemskap.overskrift")}>
+                    tittel={intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}>
                     <RadioPanelGruppe
                         className="horizontalRadios"
                         radios={Object.values(JaNei).map((jn) => ({
@@ -817,6 +822,34 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
                 </EkspanderbartpanelBase>
             </>);
+    }
+
+    private handlePanelClick = (p: PunchFormPaneler) => {
+        const { aapnePaneler } = this.state;
+        if (aapnePaneler.some((panel) => panel === p)) {
+            aapnePaneler.splice(aapnePaneler.indexOf(p), 1);
+        } else {
+            aapnePaneler.push(p);
+        }
+        this.forceUpdate();
+    }
+
+    private skalVæreAapen = (p: PunchFormPaneler): boolean => {
+        const { aapnePaneler, expandAll } = this.state;
+        if (expandAll && aapnePaneler.some((panel) => panel === p)) {
+            return false;
+        }
+        else if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
+            return true;
+        }
+
+        else if (!expandAll && aapnePaneler.some((panel) => panel === p)) {
+            return true;
+        }
+        else if (!expandAll && !aapnePaneler.some((panel) => panel === p)) {
+            return false;
+        }
+        return false;
     }
 
     private handleArbeidsforholdChange = (af: Arbeidsforhold, checked: boolean) => {

@@ -12,6 +12,7 @@ import { Sakstype } from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
 import {SoknaderVisningReducer} from "./reducers/SoknaderVisningReducer";
+import {JournalposterPerIdentReducer} from "./reducers/JournalposterPerIdentReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -34,6 +35,7 @@ export const rootReducer = combineReducers({
   fordelingState: FordelingReducer,
   authState: AuthReducer,
   felles: FellesReducer,
+  journalposterPerIdentState: JournalposterPerIdentReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

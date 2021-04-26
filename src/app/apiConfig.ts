@@ -16,6 +16,7 @@ export enum ApiPath {
   SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
   SOKNAD_SUBMIT = '/pleiepenger-sykt-barn-soknad/send',
   FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
+  JOURNALPOST_HENT = '/journalpost/hent',
   JOURNALPOST_GET = '/journalpost/{journalpostId}',
   JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
   JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
