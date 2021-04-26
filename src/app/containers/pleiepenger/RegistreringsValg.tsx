@@ -119,6 +119,10 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         })
     }
 
+    const infoText = (journalpost: IJournalpost, index: number) => {
+        const dato = journalpost.dato ? ", dato: " + journalpost.dato : ""
+        return `Journalpost ${index}${dato}`
+    }
 
     return (
         <div className={"registrering-page"}>
@@ -132,7 +136,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                             key={jp.journalpostId}
                             href={pdfUrl(jp)}
                             target="_blank">
-                            Journalpost {index}
+                            {infoText(jp, index)}
                         </a>
                     ))
                     }
