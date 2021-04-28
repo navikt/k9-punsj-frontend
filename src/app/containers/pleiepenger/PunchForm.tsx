@@ -575,28 +575,24 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         checked={this.state.iUtlandet}
                     />
                     {!!soknad.utenlandsopphold.length && (
-                        <Panel className={"utenlandsoppholdpanel"}>
-                            {Object.keys(soknad.utenlandsopphold).map((key) => (
-                                <>
-                                    <PeriodInput
-                                        periode={_.get(soknad.utenlandsopphold[key], 'periode', '')}
-                                        intl={intl}
-                                        onChange={(periode) => this.handleOppholdPeriodeChange(+key, periode)}
-                                        onBlur={() => this.setOpphold()}
-                                    />
-                                    <CountrySelect
-                                        className={"countryselect"}
-                                        bredde={"l"}
-                                        name={`opphold_land_${key}`}
-                                        onChange={event => this.handleOppholdLandChange(+key, event.target.value)}
-                                        onBlur={() => this.setOpphold()}
-                                        selectedcountry={_.get(soknad.utenlandsopphold[key], 'land', '')}
-                                        unselectedoption={'Velg …'}
-                                        label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
-                                    />
-                                </>
-                            ))}
-                        </Panel>
+                        <PeriodeinfoPaneler
+                            intl={intl}
+                            periods={soknad.utenlandsopphold}
+                            component={pfLand()}
+                            panelid={(i) => `utenlandsoppholdpanel_${i}`}
+                            initialPeriodeinfo={initialUtenlandsopphold}
+                            editSoknad={(perioder) => this.updateSoknadInformasjon({ utenlandsopphold: perioder } )}
+                            editSoknadState={(perioder, showStatus) =>
+                                this.updateSoknadState({utenlandsopphold: perioder} , showStatus)
+                            }
+                            textLeggTil="skjema.perioder.legg_til"
+                            textFjern="skjema.perioder.fjern"
+                            className="utenlandsopphold"
+                            panelClassName="utenlandsoppholdpanel"
+                            getErrorMessage={() => undefined}
+                            feilkodeprefiks={'utenlandsopphold'}
+                            kanHaFlere={true}
+                        />
                     )}
                     <RadioPanelGruppe
                         className="horizontalRadios"
@@ -729,7 +725,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <PeriodeinfoPaneler
                         intl={intl}
                         periods={soknad.tilsynsordning.perioder}
-                        component={pfLand('tilsynsordning')}
+                        component={pfLand()}
                         panelid={(i) => `tilsynsordningpanel_${i}`}
                         initialPeriodeinfo={initialUtenlandsopphold}
                         editSoknad={(perioder) => this.updateSoknadInformasjon({ tilsynsordning: {perioder} } )}
@@ -789,7 +785,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <PeriodeinfoPaneler
                             intl={intl}
                             periods={soknad.nattevaak}
-                            component={pfLand('bosteder')}
+                            component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
                             editSoknad={(bosteder) => this.updateSoknadInformasjon({ bosteder } )}

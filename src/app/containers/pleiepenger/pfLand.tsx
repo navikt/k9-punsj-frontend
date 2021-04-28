@@ -12,7 +12,7 @@ import {IOppholdsLand} from "../../models/types/PSBSoknad";
 import {CountrySelect} from "../../components/country-select/CountrySelect";
 
 
-export function pfLand(path: string): PeriodeinfoComponent<IOppholdsLand> {
+export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
 
     return (
         periodeinfo: PeriodeinfoV2<IOppholdsLand>,
@@ -26,7 +26,7 @@ export function pfLand(path: string): PeriodeinfoComponent<IOppholdsLand> {
 
         return <div className="countryselect">
             <CountrySelect
-                label={intlHelper(intl, `skjema.${path}.land`)}
+                label={intlHelper(intl, "skjema.utenlandsopphold.land")}
                 value={periodeinfo.land || ''}
                 onChange={event => updatePeriodeinfoInSoknadState({land: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({land: event.target.value})}
