@@ -13,7 +13,6 @@ import { setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';

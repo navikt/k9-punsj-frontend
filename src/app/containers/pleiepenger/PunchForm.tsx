@@ -38,7 +38,6 @@ import {JaNeiIkkeOpplyst} from "../../models/enums/JaNeiIkkeOpplyst";
 import VerticalSpacer from "../../components/VerticalSpacer";
 import {Periodepaneler} from "./Periodepaneler";
 import Panel from "nav-frontend-paneler";
-import {PeriodInput} from "../../components/period-input/PeriodInput";
 import {BeredskapNattevaak} from "../../models/enums/BeredskapNattevaak";
 import {PeriodeinfoPaneler} from "./PeriodeinfoPaneler";
 import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
@@ -48,6 +47,7 @@ import {connect} from "react-redux";
 import {PunchFormPaneler} from "../../models/enums/PunchFormPaneler";
 import {ArbeidstidInput} from "../../components/arbeidstid-input/ArbeidstidInput";
 import {pfLand} from "./pfLand";
+import {pfTimerMinutter} from "./pfTimerMinutter";
 
 
 export interface IPunchFormComponentProps {
@@ -171,9 +171,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
             });
-            this.props.setIdentAction(
-                soknad.soekerId || '',
-            );
         }
     }
 
@@ -725,7 +722,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <PeriodeinfoPaneler
                         intl={intl}
                         periods={soknad.tilsynsordning.perioder}
-                        component={pfLand()}
+                        component={pfTimerMinutter()}
                         panelid={(i) => `tilsynsordningpanel_${i}`}
                         initialPeriodeinfo={initialUtenlandsopphold}
                         editSoknad={(perioder) => this.updateSoknadInformasjon({ tilsynsordning: {perioder} } )}

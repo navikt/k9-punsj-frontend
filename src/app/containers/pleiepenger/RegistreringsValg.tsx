@@ -14,9 +14,7 @@ import {RootStateType} from "../../state/RootState";
 
 import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
 import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from "../../state/actions/JournalposterPerIdentActions";
-import intlHelper from "../../utils/intlUtils";
 import {ApiPath} from "../../apiConfig";
-
 
 export interface IRegistreringsValgComponentProps {
     harTidligereSoknader: boolean;
@@ -79,7 +77,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     const redirectToNextStep = () => {
         props.createSoknad(journalpostid, ident1, ident2);
-        setHash(getPunchPath(PunchStep.FILL_FORM));
+        setHash(getPunchPath(PunchStep.FILL_FORM, {id: eksisterendeSoknaderState.soknadid}));
     }
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {

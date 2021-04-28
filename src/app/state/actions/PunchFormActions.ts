@@ -4,6 +4,7 @@ import {IError}                from 'app/models/types';
 import {IInputError}                            from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
+import {ISendSoknad} from "../../models/types/SendSoknad";
 
 interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
 
@@ -113,7 +114,7 @@ export const submitSoknadUncompleteAction   = (errors1: IInputError[], errors2?:
 export const submitSoknadErrorAction        = (error: IError):                                      ISubmitSoknadErrorAction        => ({type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error});
 
 export function submitSoknad(norskIdent: string, soeknadId: string) {return (dispatch: any) => {
-    const requestBody = {
+    const requestBody: ISendSoknad = {
         norskIdent,
         soeknadId
     }
