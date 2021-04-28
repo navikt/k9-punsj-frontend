@@ -2,9 +2,8 @@ import React, {ChangeEvent} from 'react';
 import Page from 'app/components/page/Page';
 import { Ident } from 'app/containers/pleiepenger/Ident';
 import {
-  EksisterendeSoknader, IEksisterendeSoknaderComponentProps,
+   IEksisterendeSoknaderComponentProps,
 } from 'app/containers/pleiepenger/EksisterendeSoknader';
-import { PunchFormOld } from 'app/containers/pleiepenger/PunchFormOld';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';

@@ -25,7 +25,7 @@ import {
 } from "../../state/actions/SoknaderVisningActions";
 import {SoknadType} from "../../models/enums/SoknadType";
 import {resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
-import {ISoknadV2, SoknadV2} from "../../models/types/Soknadv2";
+import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
 import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
 export interface ISoknaderSokStateProps {
@@ -136,7 +136,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
-    const chooseSoknad = (soknad: ISoknadV2) => {
+    const chooseSoknad = (soknad: IPSBSoknad) => {
         window.history.pushState("","", "/rediger");
         props.chooseSoknadAction(soknad);
         setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
@@ -147,7 +147,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         const rows = [];
 
         for (const s of soknader) {
-            const søknad = new SoknadV2(s)
+            const søknad = new PSBSoknad(s)
             const soknadId = s.soeknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
             const fom = søknad.soeknadsperiode.fom;
@@ -185,7 +185,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 >
                     <div className="modal_content">
                         {chosenSoknad && (
-                            <SoknadReadModeV2 soknad={new SoknadV2(chosenSoknad)}/>
+                            <SoknadReadModeV2 soknad={new PSBSoknad(chosenSoknad)}/>
                         )}
                         <div className="punch_mappemodal_knapperad">
                             <Knapp className="knapp1" onClick={() => chooseSoknad(s)}>
@@ -266,9 +266,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     findSoknader: (ident1: string) =>
         dispatch(sokPsbSoknader(ident1)),
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
-    openSoknadAction: (soknad: ISoknadV2) => dispatch(openSoknadAction(soknad)),
+    openSoknadAction: (soknad: IPSBSoknad) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),
-    chooseSoknadAction: (soknad: ISoknadV2) => dispatch(chooseSoknadAction(soknad)),
+    chooseSoknadAction: (soknad: IPSBSoknad) => dispatch(chooseSoknadAction(soknad)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });

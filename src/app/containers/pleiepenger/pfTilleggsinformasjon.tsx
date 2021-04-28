@@ -9,16 +9,16 @@ import {Textarea}                          from 'nav-frontend-skjema';
 import * as React                          from 'react';
 import {IntlShape}                         from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
-import {ITilleggsinformasjonV2} from "../../models/types/Soknadv2";
+import {ITilleggsinformasjon} from "../../models/types/PSBSoknad";
 import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 
-export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjonV2> {
+export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
 
     return (
-        periodeinfo: PeriodeinfoV2<ITilleggsinformasjonV2>,
+        periodeinfo: PeriodeinfoV2<ITilleggsinformasjon>,
         periodeindex: number,
-        updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjonV2>,
-        updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjonV2>,
+        updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
+        updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,

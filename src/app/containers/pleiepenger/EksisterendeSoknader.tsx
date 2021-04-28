@@ -23,7 +23,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import {ISoknadV2, SoknadV2} from "../../models/types/Soknadv2";
+import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
 import {SoknadType} from "../../models/enums/SoknadType";
 import SoknadReadModeV2 from "./SoknadReadModeV2";
 import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
@@ -153,7 +153,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
       <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
     ) : null;
 
-  const chooseSoknad = (soknad: ISoknadV2) => {
+  const chooseSoknad = (soknad: IPSBSoknad) => {
     props.chooseEksisterendeSoknadAction(soknad);
     setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
   };
@@ -163,7 +163,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     const rows = [];
 
     for (const soknadInfo of soknader) {
-      const søknad = new SoknadV2(soknadInfo)
+      const søknad = new PSBSoknad(soknadInfo)
       const soknadId = søknad.soeknadId;
       const {chosenSoknad} = props.eksisterendeSoknaderState;
       const fom = søknad.soeknadsperiode.fom;
@@ -201,7 +201,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
           >
             <div className="modal_content">
               {chosenSoknad && (
-                  <SoknadReadModeV2 soknad={new SoknadV2(chosenSoknad)}/>
+                  <SoknadReadModeV2 soknad={new PSBSoknad(chosenSoknad)}/>
               )}
               <div className="punch_mappemodal_knapperad">
                 <Knapp className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>
@@ -288,9 +288,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
     dispatch(findEksisterendeSoknader(ident1, ident2)),
   undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
-  openEksisterendeSoknadAction: (info: ISoknadV2) => dispatch(openEksisterendeSoknadAction(info)),
+  openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
   closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
-  chooseEksisterendeSoknadAction: (info: ISoknadV2) => dispatch(chooseEksisterendeSoknadAction(info)),
+  chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
   createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
     dispatch(createSoknad(journalpostid, ident1, ident2)),
   resetSoknadidAction: () => dispatch(resetSoknadidAction()),

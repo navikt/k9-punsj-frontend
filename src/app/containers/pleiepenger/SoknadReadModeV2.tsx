@@ -1,15 +1,20 @@
-import {JaNeiVetikke, TimeFormat}                                    from 'app/models/enums';
+import {TimeFormat}                                    from 'app/models/enums';
 import {datetime}                                                    from 'app/utils';
 import intlHelper                                                    from 'app/utils/intlUtils';
 import classNames                                                    from 'classnames';
 import * as React                                                    from 'react';
 import {Col, Container, Row}                                         from 'react-bootstrap';
 import {injectIntl, WrappedComponentProps}                           from 'react-intl';
-import {ArbeidV2, SoknadV2, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/Soknadv2";
+import {
+    OpptjeningAktivitet,
+    PSBSoknad,
+    TilleggsinformasjonV2,
+    TilsynsordningV2
+} from "../../models/types/PSBSoknad";
 import {IPeriodeV2} from "../../models/types/PeriodeV2";
 
 interface ISoknadReadModeProps {
-    soknad: SoknadV2;
+    soknad: PSBSoknad;
 }
 
 class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadReadModeProps> {
@@ -33,7 +38,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.arbeid')}</Col>
-                    {this.arbeid(soknad.arbeidAktivitet)}
+                    {this.arbeid(soknad.opptjeningAktivitet)}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
@@ -56,15 +61,15 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
 
     private soknadsperioder = (sokandsperioder: IPeriodeV2[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
 
-    private arbeid = (arbeid: ArbeidV2) => {
+    private arbeid = (arbeid: OpptjeningAktivitet) => {
         const {intl, soknad} = this.props;
-            const numberOfWorkPeriods = arbeid.arbeidstakerList.length + arbeid.selvstendigNaeringsdrivende.length + (arbeid.frilanser ? 1 : 0);
+            const numberOfWorkPeriods = arbeid.arbeidstaker.length + arbeid.selvstendigNaeringsdrivende.length + (arbeid.frilanser ? 1 : 0);
         return <Col>{!!numberOfWorkPeriods && <ul>
-            {arbeid.arbeidstakerList.map((a,i) => <li key={i}>
+            {arbeid.arbeidstaker.map((a,i) => <li key={i}>
                 <p>{a.description(intl)}</p>
                 {a.arbeidstidInfo.perioder.length && <ul>{a.arbeidstidInfo.perioder.map((tg,j) => <li key={j}>{tg.faktiskArbeidTimerPerDag}</li>)}</ul>}
             </li>)}
-            {arbeid.selvstendigNaeringsdrivende.map((a, i) => <li key={i}>{a.description(intl)}</li>)}
+            {arbeid.selvstendigNaeringsdrivende.map((a, i) => <li key={i}>{a.perioder.map(p => p.description(intl))}</li>)}
             {<li key={"frilanser"}>{arbeid.frilanser.description(intl)}</li>}
         </ul>}</Col>
     };
@@ -80,11 +85,11 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
         </ul>}</Col>;
     };
 
-    private tilsynsordning = (tilsynsordning: TilsynsordningV2[]) => {
+    private tilsynsordning = (tilsynsordning: TilsynsordningV2) => {
         const {intl} = this.props;
-        return <Col>{tilsynsordning.length > 0
-            ? <ul>{tilsynsordning.map((t,i) => <li key={i}>{t.periode.description(intl)}</li>)}</ul>
-            : intlHelper(intl, tilsynsordning.length > 0 ? "ja" : "nei")}</Col>;
+        return <Col>{tilsynsordning.perioder.length > 0
+            ? <ul>{tilsynsordning.perioder.map((t,i) => <li key={i}>{t.description(intl)}</li>)}</ul>
+            : intlHelper(intl, tilsynsordning.perioder.length > 0 ? "ja" : "nei")}</Col>;
     }
 }
 

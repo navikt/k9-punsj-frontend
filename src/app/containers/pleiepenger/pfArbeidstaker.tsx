@@ -8,9 +8,7 @@ import {IntlShape} from 'react-intl';
 import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
 import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 
-export function pfArbeidstaker(tgStrings: string[][],
-                               setTgStringsInParentState: (tgStrings: string[][]) => any,
-                               generateTgStrings: () => string[][]): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
+export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
 
     return (
         arbeidstaker: ArbeidstakerV2,
@@ -96,8 +94,8 @@ export function pfArbeidstaker(tgStrings: string[][],
                     periods={arbeidstaker.arbeidstidInfo.perioder}
                     panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}
                     initialPeriodeinfo={{periode: {fom: '', tom: ''}, faktiskArbeidTimerPerDag: ''}}
-                    editSoknad={arbeidstidInfo => updateListeinfoInSoknad({arbeidstidInfo: {perioder: arbeidstidInfo}})}
-                    editSoknadState={arbeidstidInfo => updateListeinfoInSoknadState({arbeidstidInfo: {perioder: arbeidstidInfo}})}
+                    editSoknad={arbeidstidInfo => updateListeinfoInSoknad({arbeidstidInfo: {perioder: arbeidstidInfo, jobberNormaltTimerPerDag: arbeidstaker.arbeidstidInfo.jobberNormaltTimerPerDag}})}
+                    editSoknadState={arbeidstidInfo => updateListeinfoInSoknadState({arbeidstidInfo: {perioder: arbeidstidInfo, jobberNormaltTimerPerDag: arbeidstaker.arbeidstidInfo.jobberNormaltTimerPerDag}})}
                     /*component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) =>
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}

@@ -1,6 +1,6 @@
 import {Periodeinfo} from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
-import {FrilanserV2, IFrilanserV2} from "./FrilanserV2";
+import {FrilanserOpptjening, IFrilanserOpptjening} from "./FrilanserOpptjening";
 import {IPeriodeinfoV2, PeriodeinfoV2} from "./PeriodeInfoV2";
 import {
     IPeriodeMedFaktiskeTimer,
@@ -10,9 +10,8 @@ import {
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
-import {JaNeiVetikke} from "../enums";
 
-export interface ISoknadV2 {
+export interface IPSBSoknad {
     soeknadId?: string;
     soekerId: string;
     journalposter?: string[];
@@ -21,18 +20,19 @@ export interface ISoknadV2 {
     sendtInn?: boolean;
     erFraK9?: boolean;
     soeknadsperiode?: IPeriodeV2;
-    arbeidAktivitet: IArbeidV2;
+    opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
-    beredskap?: PeriodeinfoV2<ITilleggsinformasjonV2>[];
-    nattevaak?: PeriodeinfoV2<ITilleggsinformasjonV2>[]
-    tilsynsordning?: PeriodeinfoV2<ITilsynsordningV2>[];
-    omsorg?: IOmsorg;
+    beredskap?: PeriodeinfoV2<ITilleggsinformasjon>[];
+    nattevaak?: PeriodeinfoV2<ITilleggsinformasjon>[]
+    tilsynsordning?: ITilsynsordningV2;
     uttak?: PeriodeinfoV2<IUttak>[];
     utenlandsopphold?: PeriodeinfoV2<IUtenlandsOpphold>[];
     lovbestemtFerie?: IPeriodeV2[];
+    omsorg?: IOmsorg;
+    bosteder?: PeriodeinfoV2<IUtenlandsOpphold>[];
 }
 
-export class SoknadV2 implements ISoknadV2 {
+export class PSBSoknad implements IPSBSoknad {
 
     soeknadId: string;
     soekerId: string;
@@ -42,17 +42,18 @@ export class SoknadV2 implements ISoknadV2 {
     sendtInn: boolean;
     erFraK9: boolean;
     soeknadsperiode: PeriodeV2;
-    arbeidAktivitet: ArbeidV2;
+    opptjeningAktivitet: OpptjeningAktivitet;
     arbeidstid: Arbeidstid;
     beredskap: TilleggsinformasjonV2[];
     nattevaak: TilleggsinformasjonV2[];
-    tilsynsordning: TilsynsordningV2[];
-    omsorg: Omsorg;
+    tilsynsordning: TilsynsordningV2;
     uttak: Uttak[];
     utenlandsopphold: UtenlandsOpphold[];
     lovbestemtFerie: PeriodeV2[];
+    omsorg: Omsorg;
+    bosteder: UtenlandsOpphold[];
 
-    constructor(soknad: ISoknadV2) {
+    constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
         this.journalposter = soknad.journalposter || [];
@@ -61,54 +62,55 @@ export class SoknadV2 implements ISoknadV2 {
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
         this.soeknadsperiode = new PeriodeV2(soknad.soeknadsperiode || {})
-        this.arbeidAktivitet = new ArbeidV2(soknad.arbeidAktivitet || {})
+        this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {})
         this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
         this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
-        this.tilsynsordning = (soknad.tilsynsordning || []).map(t => new TilsynsordningV2(t));
-        this.omsorg = new Omsorg(soknad.omsorg || {})
+        this.tilsynsordning = new TilsynsordningV2(soknad.tilsynsordning || {});
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new PeriodeV2(p));
+        this.omsorg = new Omsorg(soknad.omsorg || {});
+        this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
     }
 }
 
-export interface IArbeidV2 {
-    selvstendigNaeringsdrivende?: Periodeinfo<ISelvstendigNaerinsdrivende>[];
-    frilanser?: IFrilanserV2;
-    arbeidstakerList?: IArbeidstakerV2[];
+export interface IOpptjeningAktivitet {
+    selvstendigNaeringsdrivende?: ISelvstendigNaeringsdrivendeOpptjening[];
+    frilanser?: IFrilanserOpptjening;
+    arbeidstaker?: IArbeidstakerV2[];
 }
 
-export class ArbeidV2 implements Required<IArbeidV2> {
-    selvstendigNaeringsdrivende: SelvstendigNaerinsdrivende[];
-    frilanser: FrilanserV2;
-    arbeidstakerList: ArbeidstakerV2[];
+export class OpptjeningAktivitet implements Required<IOpptjeningAktivitet> {
+    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening[];
+    frilanser: FrilanserOpptjening;
+    arbeidstaker: ArbeidstakerV2[];
 
-    constructor(arbeid: IArbeidV2) {
-        this.arbeidstakerList = (arbeid.arbeidstakerList || []).map(at => new ArbeidstakerV2(at));
-        this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaerinsdrivende(s));
-        this.frilanser = new FrilanserV2(arbeid.frilanser || {});
+    constructor(arbeid: IOpptjeningAktivitet) {
+        this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
+        this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaeringsdrivendeOpptjening(s));
+        this.frilanser = new FrilanserOpptjening(arbeid.frilanser || {});
     }
 
     numberOfWorkPeriods(): number {
-        return this.arbeidstakerList.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
+        return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
     }
 }
 
 export interface IArbeidstid {
     arbeidstakerList?: IArbeidstakerV2[];
-    frilanserArbeidstidInfo?: IArbeidstidInfo;
+    frilanserArbeidstidInfo?: IPeriodeMedFaktiskeTimer;
     selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo;
 }
 
 export class Arbeidstid implements Required<IArbeidstid>{
     arbeidstakerList: ArbeidstakerV2[];
-    frilanserArbeidstidInfo: ArbeidstidInfo;
+    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo;
 
     constructor(a: IArbeidstid) {
         this.arbeidstakerList = (a.arbeidstakerList || []).map(at => new ArbeidstakerV2(at));
-        this.frilanserArbeidstidInfo = new ArbeidstidInfo(a.frilanserArbeidstidInfo || {});
+        this.frilanserArbeidstidInfo = new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo || {});
         this.selvstendigNæringsdrivendeArbeidstidInfo = new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo || {});
     }
 
@@ -132,40 +134,49 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
     faktiskTimer = (): string[] => this.perioder.map(p => p.faktiskArbeidTimerPerDag);
 }
 
-export interface IOmsorg {
-    periode?: IPeriodeMedTimerMinutter;
+export interface ISelvstendigNaeringsdrivendeOpptjening {
+    virksomhetNavn?: string | null;
+    organisasjonsnummer?: string | null;
+    perioder: PeriodeinfoV2<ISelvstendigNaerinsdrivende>[];
 }
 
-export class Omsorg implements Required<IOmsorg>{
-    periode: PeriodeMedTimerMinutter;
+export class SelvstendigNaeringsdrivendeOpptjening implements Required<ISelvstendigNaeringsdrivendeOpptjening>{
+    virksomhetNavn: string;
+    organisasjonsnummer: string;
+    perioder: SelvstendigNaerinsdrivende[];
 
-    constructor(omsorg: IOmsorg) {
-        this.periode = new PeriodeMedTimerMinutter(omsorg.periode || {});
+    constructor(s: ISelvstendigNaeringsdrivendeOpptjening) {
+
+        this.virksomhetNavn = s.virksomhetNavn || "";
+        this.organisasjonsnummer = s.organisasjonsnummer || "";
+        this.perioder = s.perioder.map(p => new SelvstendigNaerinsdrivende(p))
     }
 }
 
-export interface ITilsynV2 {
-    iTilsynsordning?: JaNeiVetikke;
-    opphold?: PeriodeinfoV2<ITilsynsordningV2>[];
-}
-
-export class TilsynV2 {
-    iTilsynsordning: JaNeiVetikke;
-    opphold: PeriodeinfoV2<ITilsynsordningV2>[];
-}
-
 export interface ITilsynsordningV2 {
-    periode?: IPeriodeV2;
-    etablertTilsynTimerPerDag?: string;
+    perioder?: IPeriodeMedTimerMinutter[];
 }
 
-export class TilsynsordningV2 implements Required<PeriodeinfoV2<ITilsynsordningV2>> {
-    periode: PeriodeV2;
-    etablertTilsynTimerPerDag: string;
+export class TilsynsordningV2 implements Required<ITilsynsordningV2>{
+    perioder: PeriodeMedTimerMinutter[];
 
-    constructor(tilsynsordning: PeriodeinfoV2<ITilsynsordningV2>) {
-        this.periode = new PeriodeV2(tilsynsordning.periode || {});
-        this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
+    constructor(t: ITilsynsordningV2) {
+        this.perioder = (t.perioder || []).map(p => new PeriodeMedTimerMinutter(p));
+    }
+}
+
+export interface IOmsorg {
+    relasjonTilBarnet?: string;
+    beskrivelseAvOmsorgsrollen?: string;
+}
+
+export class Omsorg implements Required<IOmsorg>{
+    relasjonTilBarnet: string;
+    beskrivelseAvOmsorgsrollen: string;
+
+    constructor(omsorg: IOmsorg) {
+        this.relasjonTilBarnet = omsorg.relasjonTilBarnet || '';
+        this.beskrivelseAvOmsorgsrollen = omsorg.beskrivelseAvOmsorgsrollen || '';
     }
 }
 
@@ -199,27 +210,44 @@ export class Barn implements Required<IBarn> {
     }
 }
 
-export interface ITilleggsinformasjonV2 {
+export interface ITilleggsinformasjon {
     periode?: IPeriodeV2;
     tilleggsinformasjon?: string;
 }
 
-export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsinformasjonV2>> {
+export class TilleggsinformasjonV2 implements Required<PeriodeinfoV2<ITilleggsinformasjon>> {
     periode: PeriodeV2;
     tilleggsinformasjon: string;
 
-    constructor(periodeinfo: PeriodeinfoV2<ITilleggsinformasjonV2>) {
+    constructor(periodeinfo: PeriodeinfoV2<ITilleggsinformasjon>) {
         this.periode = new PeriodeV2(periodeinfo.periode || {});
         this.tilleggsinformasjon = periodeinfo.tilleggsinformasjon || '';
     }
 
-    values(): Required<PeriodeinfoV2<ITilleggsinformasjonV2>> {
+    values(): Required<PeriodeinfoV2<ITilleggsinformasjon>> {
         return {
             periode: this.periode,
             tilleggsinformasjon: this.tilleggsinformasjon
         };
     }
 }
+
+export interface IOppholdsLand {
+    periode?: IPeriodeV2;
+    land?: string;
+}
+
+export class OppholdsLand implements Required<PeriodeinfoV2<IOppholdsLand>> {
+    periode: PeriodeV2;
+    land: string;
+
+    constructor(periodeinfo: PeriodeinfoV2<IOppholdsLand>) {
+        this.periode = new PeriodeV2(periodeinfo.periode || {});
+        this.land = periodeinfo.land || '';
+    }
+}
+
+
 
 export interface IUtenlandsOpphold {
     periode?: IPeriodeV2;

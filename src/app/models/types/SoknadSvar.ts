@@ -1,22 +1,22 @@
 
-import {ISoknadV2, SoknadV2} from "./Soknadv2";
+import {IPSBSoknad, PSBSoknad} from "./PSBSoknad";
 
 export interface ISoknadSvar {
     søker: string;
     fagsakTypeKode: string;
-    søknader: ISoknadV2[];
+    søknader: IPSBSoknad[];
 }
 
 export class SoknadSvar implements ISoknadSvar {
 
     søker: string;
     fagsakTypeKode: string;
-    søknader: SoknadV2[];
+    søknader: PSBSoknad[];
 
     constructor(svar: ISoknadSvar) {
         this.søker = svar.søker;
         this.fagsakTypeKode = svar.fagsakTypeKode;
-        this.søknader = (svar.søknader || []).map(s => new SoknadV2(s));
+        this.søknader = (svar.søknader || []).map(s => new PSBSoknad(s));
     }
 }
 

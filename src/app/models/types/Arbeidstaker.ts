@@ -3,7 +3,7 @@ import {Periodeinfo}    from 'app/models/types/Periodeinfo';
 import {numberToString} from 'app/utils';
 import intlHelper       from 'app/utils/intlUtils';
 import {IntlShape}      from 'react-intl';
-import {IArbeidstidInfo} from "./Soknadv2";
+import {IArbeidstidInfo} from "./PSBSoknad";
 
 export interface IArbeidstaker {
     skalJobbeProsent?: Periodeinfo<ITilstedevaerelsesgrad>[];

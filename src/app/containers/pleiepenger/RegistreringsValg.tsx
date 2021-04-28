@@ -126,7 +126,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     return (
         <div className={"registrering-page"}>
-            {journalposterState.journalposter.length && (
+            {journalposterState.journalposter.length > 0 && (
                 <div className={"registrering-journalpostinfo"}>
                     <p>
                         Andre journalposter registrert på bruker:

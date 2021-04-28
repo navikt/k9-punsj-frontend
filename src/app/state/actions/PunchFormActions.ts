@@ -3,13 +3,13 @@ import {PunchFormActionKeys}                    from 'app/models/enums';
 import {IError}                from 'app/models/types';
 import {IInputError}                            from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
-import {ISoknadV2} from "../../models/types/Soknadv2";
+import {IPSBSoknad} from "../../models/types/PSBSoknad";
 
 interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
 
 interface IGetSoknadLoadingAction        {type: PunchFormActionKeys.SOKNAD_LOAD}
 interface IGetSoknadErrorAction          {type: PunchFormActionKeys.SOKNAD_REQUEST_ERROR, error: IError}
-interface ISetSoknadAction               {type: PunchFormActionKeys.SOKNAD_SET, soknad: Partial<ISoknadV2>}
+interface ISetSoknadAction               {type: PunchFormActionKeys.SOKNAD_SET, soknad: Partial<IPSBSoknad>}
 interface IResetSoknadAction             {type: PunchFormActionKeys.SOKNAD_RESET}
 
 interface IUpdateSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST}
@@ -30,7 +30,7 @@ export const resetPunchFormAction           = ():                               
 
 export const getSoknadLoadingAction          = ():                                                   IGetSoknadLoadingAction      => ({type: PunchFormActionKeys.SOKNAD_LOAD});
 export const getSoknadErrorAction            = (error: IError):                                      IGetSoknadErrorAction        => ({type: PunchFormActionKeys.SOKNAD_REQUEST_ERROR, error});
-export const setSoknadAction                 = (soknad: Partial<ISoknadV2>):                             ISetSoknadAction             => ({type: PunchFormActionKeys.SOKNAD_SET, soknad});
+export const setSoknadAction                 = (soknad: Partial<IPSBSoknad>):                             ISetSoknadAction             => ({type: PunchFormActionKeys.SOKNAD_SET, soknad});
 export const resetSoknadAction               = ():                                                   IResetSoknadAction           => ({type: PunchFormActionKeys.SOKNAD_RESET});
 
 export const updateSoknadRequestAction      = ():                                                   IUpdateSoknadRequestAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
@@ -47,7 +47,7 @@ export function getSoknad(id: string) {return (dispatch: any) => {
     });
 }}
 
-export function updateSoknad(soknad: Partial<ISoknadV2>) {return (dispatch: any) => {
+export function updateSoknad(soknad: Partial<IPSBSoknad>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, response => {
         switch (response.status) {
@@ -67,8 +67,8 @@ export function updateSoknader(mappeid: string,
                                norskIdent1: string,
                                norskIdent2: string | null,
                                journalpostid: string,
-                               soknad1: Partial<ISoknadV2>,
-                               soknad2: Partial<ISoknadV2> | null) {return (dispatch: any) => {
+                               soknad1: Partial<IPSBSoknad>,
+                               soknad2: Partial<IPSBSoknad> | null) {return (dispatch: any) => {
 
     if (!norskIdent2 || !soknad2) {
         return dispatch(updateSoknad(soknad1));

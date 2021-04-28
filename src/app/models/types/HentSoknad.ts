@@ -1,7 +1,3 @@
-import {Periode} from "./Periode";
-import {Tilstedevaerelsesgrad} from "./Arbeidstaker";
-import {Arbeid, Barn, ISoknad, Tilleggsinformasjon, Tilsynsordning} from "./Soknad";
-
 export interface IHentSoknad {
     norskIdent: string;
     periode?: ISoknadPeriode

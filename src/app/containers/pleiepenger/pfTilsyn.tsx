@@ -28,7 +28,7 @@ import {
 }                     from 'react-bootstrap';
 import {IntlShape}    from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
-import {ITilsynsordningV2} from "../../models/types/Soknadv2";
+import {ITilsynsordningV2} from "../../models/types/PSBSoknad";
 
 export const pfTilsyn: PeriodeinfoComponent<ITilsynsordningV2> = (
     tilsyn: PeriodeinfoV2<ITilsynsordningV2>,

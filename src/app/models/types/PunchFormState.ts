@@ -1,9 +1,9 @@
 import {IError}      from 'app/models/types/Error';
 import {IInputError} from 'app/models/types/InputError';
-import {ISoknadV2} from "./Soknadv2";
+import {IPSBSoknad} from "./PSBSoknad";
 
 export interface IPunchFormState {
-    soknad?: Partial<ISoknadV2>;
+    soknad?: Partial<IPSBSoknad>;
     isSoknadLoading: boolean;
     error?: IError;
     isAwaitingUpdateResponse?: boolean;
