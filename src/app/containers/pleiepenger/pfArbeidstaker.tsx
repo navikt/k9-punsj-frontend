@@ -30,8 +30,8 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                 organisasjonsnummer = null;
                 norskIdent = '';
             }
-            updateListeinfoInSoknadState({organisasjonsnummer, norskIdent: norskIdent});
-            updateListeinfoInSoknad({organisasjonsnummer, norskIdent: norskIdent});
+            updateListeinfoInSoknadState({organisasjonsnummer, norskIdent});
+            updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
 
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
