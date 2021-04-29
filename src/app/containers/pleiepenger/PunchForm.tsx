@@ -23,17 +23,21 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {ArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
 import {
-    IPSBSoknad, ISelvstendigNaeringsdrivendeOpptjening,
+    IPSBSoknad,
+    ISelvstendigNaeringsdrivendeOpptjening,
     IUtenlandsOpphold,
     PSBSoknad,
     TilleggsinformasjonV2,
 } from "../../models/types/PSBSoknad";
-import {IPeriodeV2, PeriodeMedFaktiskeTimer, PeriodeMedTimerMinutter} from "../../models/types/PeriodeV2";
+import {
+    IPeriodeMedTimerMinutter,
+    IPeriodeV2,
+    PeriodeMedFaktiskeTimer,
+    PeriodeMedTimerMinutter
+} from "../../models/types/PeriodeV2";
 import {IFrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import {EkspanderbartpanelBase} from "nav-frontend-ekspanderbartpanel";
 import './punchForm.less'
-import {CountrySelect} from "../../components/country-select/CountrySelect";
-import _ from "lodash";
 import {JaNeiIkkeOpplyst} from "../../models/enums/JaNeiIkkeOpplyst";
 import VerticalSpacer from "../../components/VerticalSpacer";
 import {Periodepaneler} from "./Periodepaneler";
@@ -87,7 +91,7 @@ export interface IPunchFormComponentState {
     selvstendigNæringsdrivende: boolean;
     expandAll: boolean;
     frilanserStartdato: string;
-    jobberFortsattSomFrilaser: JaNei;
+    jobberFortsattSomFrilanser: JaNei;
     barnetSkalLeggesInn: JaNei;
     innleggelseUtlandet: IPeriodeV2[];
     beredskap: boolean;
@@ -134,7 +138,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         selvstendigNæringsdrivende: false,
         expandAll: false,
         frilanserStartdato: '',
-        jobberFortsattSomFrilaser: JaNei.NEI,
+        jobberFortsattSomFrilanser: JaNei.NEI,
         innleggelseUtlandet: [],
         barnetSkalLeggesInn: JaNei.NEI,
         beredskap: false,
@@ -142,8 +146,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         harBoddIUtlandet: JaNei.NEI,
         skalBoIUtlandet: JaNei.NEI,
         medlemskap: [],
-        iUtlandet: JaNeiIkkeOpplyst.NEI,
-        skalHaFerie: JaNeiIkkeOpplyst.NEI,
+        iUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
+        skalHaFerie: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         aapnePaneler: [],
     };
 
@@ -152,6 +156,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         timer: '',
         minutter: ''
     });
+
+    private initialPeriodeMedTimer = new PeriodeMedFaktiskeTimer({
+        periode: {fom: '', tom: ''},
+        faktiskArbeidTimerPerDag: ''
+    });
+
 
     componentDidMount(): void {
         const {id} = this.props;
@@ -212,12 +222,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         }
 
         const initialPeriode: IPeriodeV2 = {fom: '', tom: ''};
-
-        const initialPeriodeMedTimer = new PeriodeMedFaktiskeTimer({
-            periode: {fom: '', tom: ''},
-            faktiskArbeidTimerPerDag: ''
-        });
-
         const initialArbeidstaker = new ArbeidstakerV2({
             arbeidstidInfo: {
                 jobberNormaltTimerPerDag: '',
@@ -235,6 +239,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         });
 
         const initialUtenlandsopphold: IUtenlandsOpphold = {periode: {fom: '', tom: ''}, land: ''};
+
+        const initialTimerMinutter: IPeriodeMedTimerMinutter = { periode: {fom: '', tom: ''}, timer: '', minutter: ''}
 
         const initialSelvstendigNaeringsdrivende: ISelvstendigNaeringsdrivendeOpptjening = {
             perioder: [],
@@ -262,9 +268,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 });
             const arbeid = soknad.arbeidstid;
 
-            if (!arbeid.arbeidstakerList.length) {
-                arbeid.arbeidstakerList.push(initialArbeidstaker)
-            }
             return (<Listepaneler
                 intl={intl}
                 items={arbeid.arbeidstakerList}
@@ -303,13 +306,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         const frilanserperioder = (harOverskrift?: boolean) => {
             const arbeid = soknad.arbeidstid;
-            const errorMessageFunction = (code: string) =>
-                () => undefined;
-
-            if (!arbeid.frilanserArbeidstidInfo) {
-                arbeid.frilanserArbeidstidInfo = initialPeriodeMedTimer;
-            }
-
+            const opptjening = soknad.opptjeningAktivitet;
             return (
                 <>
                     <Input
@@ -320,10 +317,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         value={this.state.soknad.opptjeningAktivitet.frilanser?.startDato || ''}
                         className={"frilanser-startdato"}
                         onChange={(e) => {
-                            this.updateSoknadState({opptjeningAktivitet: {frilanser: {startDato: e.target.value}}})
+                            this.updateSoknadState({opptjeningAktivitet: {frilanser: {...soknad.opptjeningAktivitet.frilanser, startDato: e.target.value}}})
                         }}
-                        onBlur={(e) => {
-                            this.updateSoknadInformasjon({opptjeningAktivitet: {frilanser: {startDato: e.target.value}}})}}
                     />
                     <RadioPanelGruppe
                         className="horizontalRadios"
@@ -333,33 +328,25 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             value: jn,
                         }))}
                         legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
-                        checked={this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI}
+                        checked={opptjening.frilanser.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI}
                         onChange={(event) => {
-                            this.setState({
-                                jobberFortsattSomFrilaser: (event.target as HTMLInputElement).value as JaNei});
-                            this.updateSoknadState({
-                                opptjeningAktivitet: {
-                                    frilanser: {
-                                        jobberFortsattSomFrilans:
-                                            this.state.jobberFortsattSomFrilaser === JaNei.JA ? true : false  }}})
-                        }}/>
-                    {this.state.jobberFortsattSomFrilaser === JaNei.JA &&
+                            this.handleFrilanserChange((event.target as HTMLInputElement).value as JaNei)}}/>
+                    {this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
                     (<>
                         <p className={"frilanser-info"}>{intlHelper(intl, 'skjema.frilanser.periode')}</p>
                         <ArbeidstidInput
                             intl={intl}
                             periodeMedTimer={arbeid.frilanserArbeidstidInfo}
-
-                            {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            onChange={(periode => {this.updateSoknadState({
                                 arbeidstid: {
-                                    frilanserArbeidstidInfo: {
-                                        ...arbeid.frilanserArbeidstidInfo,
-                                        event
-                                    }
-                                },
-                            }))}
+                                    frilanserArbeidstidInfo: periode}})})}
+                            onBlur={(periode => {this.updateSoknadInformasjon({
+                                arbeidstid: {
+                                    frilanserArbeidstidInfo: periode}})})}
+
                         /></>)}</>);
         };
+
 
         const selvstendigperioder = (harOverskrift?: boolean) => {
         const arbeid = soknad.arbeidstid;
@@ -457,8 +444,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         return (
             <>
-                {this.statusetikett()}
                 {this.backButton()}
+                {this.statusetikett()}
                 {!!punchFormState.updateSoknadError && (
                     <AlertStripeFeil>
                         {intlHelper(intl, 'skjema.feil.ikke_lagret')}
@@ -724,7 +711,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         periods={soknad.tilsynsordning.perioder}
                         component={pfTimerMinutter()}
                         panelid={(i) => `tilsynsordningpanel_${i}`}
-                        initialPeriodeinfo={initialUtenlandsopphold}
+                        initialPeriodeinfo={initialTimerMinutter}
                         editSoknad={(perioder) => this.updateSoknadInformasjon({ tilsynsordning: {perioder} } )}
                         editSoknadState={(perioder, showStatus) =>
                             this.updateSoknadState({tilsynsordning: {perioder}} , showStatus)
@@ -781,7 +768,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     {this.state.harBoddIUtlandet === JaNei.JA && (
                         <PeriodeinfoPaneler
                             intl={intl}
-                            periods={soknad.nattevaak}
+                            periods={soknad.bosteder}
                             component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
@@ -792,7 +779,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
                             className="bosteder"
-                            panelClassName="bostederpanel"
+                            panelClassName="utenlandsoppholdpanel"
                             getErrorMessage={() => undefined}
                             feilkodeprefiks={'bosteder'}
                             kanHaFlere={true}
@@ -813,6 +800,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     </Knapp>
                 </p>
             </>);
+    }
+
+    private submitSoknad = () => {
+        const oppdatertSoknad = this.getSoknadFromStore()
     }
 
     private handlePanelClick = (p: PunchFormPaneler) => {
@@ -952,6 +943,57 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         if (jaNei === JaNei.JA &&
             this.state.soknad.bosteder!.length === 0) {
             this.state.soknad.bosteder!.push({periode: { fom: '', tom: ''}, land: ''});
+            this.forceUpdate();
+        };
+    }
+
+    private handleFrilanserChange(jaNei: JaNei) {
+
+        if (jaNei === JaNei.JA) {
+            this.updateSoknadState({
+                arbeidstid: {
+                    frilanserArbeidstidInfo: this.initialPeriodeMedTimer
+                }, opptjeningAktivitet: {
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: true
+                    }
+                }
+            })
+            this.updateSoknadInformasjon({
+                arbeidstid: {
+                    frilanserArbeidstidInfo: {}
+                }, opptjeningAktivitet: {
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: false
+                    }
+                }
+            })
+            this.forceUpdate();
+        };
+
+        if (jaNei !== JaNei.JA) {
+            this.updateSoknadState({
+                arbeidstid: {
+                    frilanserArbeidstidInfo: {}
+                }, opptjeningAktivitet: {
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: false
+                    }
+                }
+            })
+            this.updateSoknadInformasjon({
+                arbeidstid: {
+                    frilanserArbeidstidInfo: {}
+                }, opptjeningAktivitet: {
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: false
+                    }
+                }
+            })
             this.forceUpdate();
         };
     }

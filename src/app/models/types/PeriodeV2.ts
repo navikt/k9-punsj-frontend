@@ -25,7 +25,7 @@ export class PeriodeMedFaktiskeTimer implements Required<IPeriodeMedFaktiskeTime
 
     constructor(pmf: IPeriodeMedFaktiskeTimer) {
         this.periode = new PeriodeV2(pmf.periode || {})
-        this.faktiskArbeidTimerPerDag = this.faktiskArbeidTimerPerDag || '0';
+        this.faktiskArbeidTimerPerDag = this.faktiskArbeidTimerPerDag || '';
     }
 
     genererTimer = (): string => this.faktiskArbeidTimerPerDag;
@@ -107,12 +107,12 @@ export class PeriodeMedTimerMinutter implements Required<IPeriodeMedTimerMinutte
 
 export class PeriodeV2 implements Required<IPeriodeV2> {
 
-    fom: string | null;
-    tom: string | null;
+    fom: string;
+    tom: string;
 
     constructor(periode: IPeriodeV2) {
-        this.fom = periode.fom || null;
-        this.tom = periode.tom || null;
+        this.fom = periode.fom || '';
+        this.tom = periode.tom || '';
     }
 
     values(): Required<IPeriodeV2> {

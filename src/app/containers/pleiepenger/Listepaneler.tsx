@@ -44,7 +44,7 @@ type ItemInfo = any;
 
 export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (props: IListepanelerProps<ItemInfo>) => {
 
-    const items = !!props.items ? props.items : [];
+    const items = !!props.items ? props.items : [props.initialItem];
     const {intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere} = props;
     const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
