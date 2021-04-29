@@ -5,6 +5,7 @@ import {IInputError}                            from 'app/models/types/InputErro
 import {convertResponseToError, get, post, put} from 'app/utils';
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
 import {ISendSoknad} from "../../models/types/SendSoknad";
+import {IPSBSoknadUt} from "../../models/types/PSBSoknadUt";
 
 interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
 
@@ -48,7 +49,7 @@ export function getSoknad(id: string) {return (dispatch: any) => {
     });
 }}
 
-export function updateSoknad(soknad: Partial<IPSBSoknad>) {return (dispatch: any) => {
+export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {return (dispatch: any) => {
     dispatch(updateSoknadRequestAction());
     return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, response => {
         switch (response.status) {

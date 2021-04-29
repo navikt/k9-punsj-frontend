@@ -16,6 +16,7 @@ export class ArbeidstakerV2 implements Required<IArbeidstakerV2> {
     organisasjonsnummer: string | null;
     norskIdent: string | null;
 
+
     constructor(arbeidstaker: IArbeidstakerV2) {
 
         this.arbeidstidInfo = new ArbeidstidInfo(arbeidstaker.arbeidstidInfo || {});

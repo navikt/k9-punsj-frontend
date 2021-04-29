@@ -1,4 +1,3 @@
-import {Periodeinfo} from 'app/models/types/Periodeinfo';
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {FrilanserOpptjening, IFrilanserOpptjening} from "./FrilanserOpptjening";
 import {IPeriodeinfoV2, PeriodeinfoV2} from "./PeriodeInfoV2";

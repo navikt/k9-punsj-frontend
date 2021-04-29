@@ -52,6 +52,7 @@ import {PunchFormPaneler} from "../../models/enums/PunchFormPaneler";
 import {ArbeidstidInput} from "../../components/arbeidstid-input/ArbeidstidInput";
 import {pfLand} from "./pfLand";
 import {pfTimerMinutter} from "./pfTimerMinutter";
+import {IPSBSoknadUt, PSBSoknadUt} from "../../models/types/PSBSoknadUt";
 
 
 export interface IPunchFormComponentProps {
@@ -151,6 +152,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         aapnePaneler: [],
     };
 
+    private initialPeriode: IPeriodeV2 = {fom: '', tom: ''};
+
     private initialPeriodeTimerMinutter = new PeriodeMedTimerMinutter({
         periode: {fom: '', tom: ''},
         timer: '',
@@ -160,6 +163,32 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private initialPeriodeMedTimer = new PeriodeMedFaktiskeTimer({
         periode: {fom: '', tom: ''},
         faktiskArbeidTimerPerDag: ''
+    });
+
+    private initialBeredskap = new TilleggsinformasjonV2({
+        periode: this.initialPeriode,
+        tilleggsinformasjon: '',
+    });
+
+    private  initialNattevaak = new TilleggsinformasjonV2({
+        periode: this.initialPeriode,
+        tilleggsinformasjon: '',
+    });
+
+    private initialArbeidstaker = new ArbeidstakerV2({
+        arbeidstidInfo: {
+            jobberNormaltTimerPerDag: '',
+            perioder: [{
+                periode: {
+                    fom: '',
+                    tom: '',
+                },
+                faktiskArbeidTimerPerDag: ''
+            }],
+
+        },
+        organisasjonsnummer: '',
+        norskIdent: null,
     });
 
 
@@ -221,23 +250,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             return null;
         }
 
-        const initialPeriode: IPeriodeV2 = {fom: '', tom: ''};
-        const initialArbeidstaker = new ArbeidstakerV2({
-            arbeidstidInfo: {
-                jobberNormaltTimerPerDag: '',
-                perioder: [{
-                    periode: {
-                        fom: '',
-                        tom: '',
-                    },
-                    faktiskArbeidTimerPerDag: ''
-                }],
-
-            },
-            organisasjonsnummer: '',
-            norskIdent: null,
-        });
-
         const initialUtenlandsopphold: IUtenlandsOpphold = {periode: {fom: '', tom: ''}, land: ''};
 
         const initialTimerMinutter: IPeriodeMedTimerMinutter = { periode: {fom: '', tom: ''}, timer: '', minutter: ''}
@@ -249,17 +261,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             startDato: '',
             jobberFortsattSomFrilans: false,
         };
-
-
-        const initialBeredskap = new TilleggsinformasjonV2({
-            periode: initialPeriode,
-            tilleggsinformasjon: '',
-        });
-
-        const initialNattevaak = new TilleggsinformasjonV2({
-            periode: initialPeriode,
-            tilleggsinformasjon: '',
-        });
 
         const arbeidstakerperioder = () => {
             const updateTgStrings = () =>
@@ -273,7 +274,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 items={arbeid.arbeidstakerList}
                 component={pfArbeidstaker()}
                 panelid={(i) => `arbeidstakerpanel_${i}`}
-                initialItem={initialArbeidstaker}
+                initialItem={this.initialArbeidstaker}
                 editSoknad={(arbeidstakerList) =>
                     this.updateSoknad(
                         {
@@ -394,15 +395,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         )};
 
         const beredskapperioder = () => {
-            if (!this.state.soknad.beredskap?.length) {
-                this.updateSoknadState({beredskap: [initialBeredskap]})
-            }
             return (<PeriodeinfoPaneler
                 intl={intl}
                 periods={soknad.beredskap}
                 component={pfTilleggsinformasjon('beredskap')}
                 panelid={(i) => `beredskapspanel_${i}`}
-                initialPeriodeinfo={initialBeredskap}
+                initialPeriodeinfo={this.initialBeredskap}
                 editSoknad={(beredskap) => this.updateSoknad( { beredskap })}
                 editSoknadState={(beredskap, showStatus) =>
                     this.updateSoknadState({ beredskap }, showStatus)
@@ -418,15 +416,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         )};
 
         const nattevaakperioder = () => {
-            if (!this.state.soknad.nattevaak?.length) {
-                this.updateSoknadState({nattevaak: [initialNattevaak]})
-            }
             return (<PeriodeinfoPaneler
                 intl={intl}
                 periods={soknad.nattevaak}
                 component={pfTilleggsinformasjon('nattevaak')}
                 panelid={(i) => `nattevaakspanel_${i}`}
-                initialPeriodeinfo={initialNattevaak}
+                initialPeriodeinfo={this.initialNattevaak}
                 editSoknad={(nattevaak) => this.updateSoknadInformasjon({ nattevaak } )}
                 editSoknadState={(nattevaak, showStatus) =>
                     this.updateSoknadState({nattevaak} , showStatus)
@@ -596,7 +591,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             intl={intl}
                             periods={this.state.innleggelseUtlandet}
                             panelid={(i) => `innleggelseperiodepanel_${i}`}
-                            initialPeriodeinfo={initialPeriode}
+                            initialPeriodeinfo={this.initialPeriode}
                             editSoknad={(perioder) =>
                                 this.setState(
                                     {innleggelseUtlandet: perioder})
@@ -633,7 +628,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             intl={intl}
                             periods={soknad.lovbestemtFerie}
                             panelid={(i) => `ferieperiodepanel_${i}`}
-                            initialPeriodeinfo={initialPeriode}
+                            initialPeriodeinfo={this.initialPeriode}
                             editSoknad={(perioder) =>
                                 this.updateSoknadInformasjon(
                                     {lovbestemtFerie: perioder})
@@ -837,6 +832,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         switch (af) {
             case Arbeidsforhold.ARBEIDSTAKER:
                 this.setState({arbeidstaker: checked})
+                if (checked) {
+                    if (!this.state.soknad.arbeidstid?.arbeidstakerList!.length) {
+                        this.updateSoknadState({arbeidstid: { arbeidstakerList: [this.initialArbeidstaker]}})
+                    }
+                } else {
+                    this.updateSoknadState({arbeidstid: { arbeidstakerList: []}})
+                }
                 break;
             case Arbeidsforhold.FRILANSER:
                 this.setState({frilanser: checked})
@@ -864,9 +866,23 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         switch (bn) {
             case BeredskapNattevaak.BEREDSKAP:
                 this.setState({beredskap: checked})
+                if(checked) {
+                    if (!this.state.soknad.beredskap?.length) {
+                        this.updateSoknadState({beredskap: [this.initialBeredskap]})
+                    }
+                } else {
+                    this.updateSoknadState({beredskap: []})
+                }
                 break;
             case BeredskapNattevaak.NATTEVAAK:
                 this.setState({nattevaak: checked})
+                if(checked) {
+                    if (!this.state.soknad.nattevaak?.length) {
+                        this.updateSoknadState({nattevaak: [this.initialBeredskap]})
+                    }
+                } else {
+                    this.updateSoknadState({nattevaak: []})
+                }
                 break;
 
         }
@@ -1025,7 +1041,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private getSoknadFromStore = () => {
-        return new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad)
+        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
     };
 
     /*private getManglerFromStore = (nr?: 1 | 2) => {
