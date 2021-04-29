@@ -58,11 +58,11 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
   }
 
   if (!!journalpostRequestError && journalpostRequestError.status === 404) {
-    return  <FeilmeldingPanel messageId={"startPage.feil.journalpost"}/>
+    return  (<FeilmeldingPanel messageId={"startPage.feil.journalpost"}/>);
   }
 
   if (!!journalpostRequestError && journalpostRequestError.status === 403) {
-    return  <FeilmeldingPanel messageId={"startPage.feil.ikketilgang"}/>
+    return  (<FeilmeldingPanel messageId={"startPage.feil.ikketilgang"}/>);
   }
 
   if (!journalpost) {
