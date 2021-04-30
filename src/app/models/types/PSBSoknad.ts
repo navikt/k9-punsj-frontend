@@ -9,6 +9,7 @@ import {
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
+import {IntlShape} from "react-intl";
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -22,7 +23,7 @@ export interface IPSBSoknad {
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
     beredskap?: PeriodeinfoV2<ITilleggsinformasjon>[];
-    nattevaak?: PeriodeinfoV2<ITilleggsinformasjon>[]
+    nattevaak?: PeriodeinfoV2<ITilleggsinformasjon>[];
     tilsynsordning?: ITilsynsordningV2;
     uttak?: PeriodeinfoV2<IUttak>[];
     utenlandsopphold?: PeriodeinfoV2<IUtenlandsOpphold>[];
@@ -118,7 +119,7 @@ export class Arbeidstid implements Required<IArbeidstid>{
 
 export interface IArbeidstidInfo {
     jobberNormaltTimerPerDag?: string;
-    perioder?: IPeriodeMedFaktiskeTimer[];
+    perioder?: PeriodeinfoV2<IPeriodeMedFaktiskeTimer>[];
 }
 
 export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
@@ -126,7 +127,7 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
     perioder: PeriodeMedFaktiskeTimer[];
 
     constructor(ai: IArbeidstidInfo) {
-        this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '0';
+        this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '';
         this.perioder = (ai.perioder || []).map(p => new PeriodeMedFaktiskeTimer(p));
     }
 

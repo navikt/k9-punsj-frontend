@@ -1,14 +1,15 @@
 import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
-import {GetErrorMessage} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import {GetErrorMessage, PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
 import * as React from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {IntlShape} from 'react-intl';
 import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
-import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 
-export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
+export function pfArbeidstaker(tfStrings: string[][],
+                               setTfStringsInParentState: (tfStrings: string[][]) => any,
+                               generateTfStrings: () => string[][],): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
 
     return (
         arbeidstaker: ArbeidstakerV2,
@@ -33,6 +34,8 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
             updateListeinfoInSoknadState({organisasjonsnummer, norskIdent});
             updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
+
+
 
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
 
@@ -89,36 +92,37 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                     </div>
                 </Row>
                 </div>
-                <ArbeidstidinfoPaneler
+                <PeriodeinfoPaneler
                     intl={intl}
                     periods={arbeidstaker.arbeidstidInfo.perioder}
                     panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}
-                    initialPeriodeinfo={{periode: {fom: '', tom: ''}, faktiskArbeidTimerPerDag: ''}}
-                    editSoknad={arbeidstidInfo => updateListeinfoInSoknad({arbeidstidInfo: {perioder: arbeidstidInfo, jobberNormaltTimerPerDag: arbeidstaker.arbeidstidInfo.jobberNormaltTimerPerDag}})}
-                    editSoknadState={arbeidstidInfo => updateListeinfoInSoknadState({arbeidstidInfo: {perioder: arbeidstidInfo, jobberNormaltTimerPerDag: arbeidstaker.arbeidstidInfo.jobberNormaltTimerPerDag}})}
-                    /*component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) =>
-                        <Input
-                            label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
-                            value={tgStrings[listeelementindex][periodeindex]}
-                            className="arbeidstaker-tilstedevaerelse"
-                            onChange={event => {
-                                updatePeriodeinfoInSoknadState({faktiskArbeidTimerPerDag: event.target.value});
-                                tgStrings[listeelementindex][periodeindex] = event.target.value;
-                                setTgStringsInParentState(tgStrings);
-                            }}
-                            onBlur={event => {
-                                updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: event.target.value});
-                                setTgStringsInParentState(generateTgStrings());
-                            }}
-                            onFocus={event => event.target.selectionStart = 0}
-                            feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.grad`)}
-                        />} */
+                    initialPeriodeinfo={{faktiskArbeidTimerPerDag: '', periode: {fom: '', tom: ''}}}
+                    editSoknad={(arbeidstidInfo) => updateListeinfoInSoknad({arbeidstidInfo: {...arbeidstaker.arbeidstidInfo, perioder: arbeidstidInfo}})}
+                    editSoknadState={(arbeidstidInfo) => updateListeinfoInSoknadState({arbeidstidInfo: {...arbeidstaker.arbeidstidInfo, perioder: arbeidstidInfo}})}
+                    component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) => <Input
+                        label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
+                        value={tfStrings[listeelementindex][periodeindex]}
+                        className="arbeidstaker-tilstedevaerelse"
+                        onChange={event => {
+                            // updatePeriodeinfoInSoknadState({faktiskArbeidTimerPerDag: event.target.value});
+                            updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: event.target.value});
+                            tfStrings[listeelementindex][periodeindex] = event.target.value;
+                            setTfStringsInParentState(tfStrings);
+                        }}
+                        onBlur={event => {
+                   //         updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: event.target.value});
+                      //      setTfStringsInParentState(generateTfStrings());
+                        }}
+                        onFocus={event => event.target.selectionStart = 0}
+                        feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.grad`)}
+                    />}
                     minstEn={true}
-                    textFjern="skjema.perioder.fjern"
+                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     getErrorMessage={getErrorMessage}
                     feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
                     kanHaFlere={true}
-                />
+            />
+
             </Container>
         </SkjemaGruppe>;
     };

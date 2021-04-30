@@ -10,7 +10,6 @@ import * as React                          from 'react';
 import {IntlShape}                         from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 import {ITilleggsinformasjon} from "../../models/types/PSBSoknad";
-import {ArbeidstidinfoPaneler} from "./ArbeidstidinfoPaneler";
 
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
 
@@ -31,7 +30,6 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                 onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={getErrorMessage(`${feilprefiks}.tilleggsinformasjon`)}
-                maxLength={0}
             />
         </div>;
     };

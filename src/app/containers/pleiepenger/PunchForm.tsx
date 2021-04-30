@@ -209,6 +209,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
+                faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad))
             });
         }
     }
@@ -272,7 +273,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             return (<Listepaneler
                 intl={intl}
                 items={arbeid.arbeidstakerList}
-                component={pfArbeidstaker()}
+                component={pfArbeidstaker(this.state.faktiskeTimer,
+                    (faktiskeTimer) => this.setState({ faktiskeTimer }),
+                    () => this.faktiskTimer(soknad))}
                 panelid={(i) => `arbeidstakerpanel_${i}`}
                 initialItem={this.initialArbeidstaker}
                 editSoknad={(arbeidstakerList) =>
@@ -835,10 +838,19 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 if (checked) {
                     if (!this.state.soknad.arbeidstid?.arbeidstakerList!.length) {
                         this.updateSoknadState({arbeidstid: { arbeidstakerList: [this.initialArbeidstaker]}})
+                        this.setState({
+                            faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad)),
+                        });
                     }
                 } else {
                     this.updateSoknadState({arbeidstid: { arbeidstakerList: []}})
+                    this.setState({
+                        faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad)),
+                    });
                 }
+                this.setState({
+                    faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad)),
+                });
                 break;
             case Arbeidsforhold.FRILANSER:
                 this.setState({frilanser: checked})
@@ -1217,6 +1229,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.updateSoknad(
             {...this.getSoknadFromStore(), ...soknad},
         );
+        this.forceUpdate();
     };
 
     private statusetikett() {
