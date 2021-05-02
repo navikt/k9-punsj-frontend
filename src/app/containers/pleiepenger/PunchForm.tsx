@@ -848,7 +848,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             case Arbeidsforhold.ARBEIDSTAKER:
                 this.setState({arbeidstaker: checked})
                 if (checked) {
-                    if (!this.state.soknad.arbeidstid?.arbeidstakerList!.length) {
+                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.arbeidstakerList?.length) {
                         this.updateSoknadState({arbeidstid: { arbeidstakerList: [this.initialArbeidstaker]}})
                     }
                 } else {
@@ -1056,7 +1056,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private getSoknadFromStore = () => {
-        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
+        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt, this.state.frilanser)
     };
 
     /*private getManglerFromStore = (nr?: 1 | 2) => {

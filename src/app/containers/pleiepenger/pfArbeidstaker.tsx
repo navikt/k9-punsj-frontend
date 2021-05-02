@@ -91,10 +91,10 @@ export function pfArbeidstaker(tfStrings: string[][],
                             bredde={"XS"}
                             value={arbeidstaker.arbeidstidInfo.jobberNormaltTimerPerDag}
                             onChange={event => {
-                                updateListeinfoInSoknadState({arbeidstidInfo: {jobberNormaltTimerPerDag: event.target.value}});
+                                updateListeinfoInSoknadState({arbeidstidInfo: {...arbeidstaker.arbeidstidInfo, jobberNormaltTimerPerDag: event.target.value}});
                             }}
                             onBlur={event => {
-                                updateListeinfoInSoknad({arbeidstidInfo: {jobberNormaltTimerPerDag: event.target.value}});
+                                updateListeinfoInSoknad({arbeidstidInfo: {...arbeidstaker.arbeidstidInfo, jobberNormaltTimerPerDag: event.target.value}});
                             }}
                             onFocus={event => event.target.selectionStart = 0}
                         />

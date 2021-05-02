@@ -71,7 +71,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
 
-    constructor(soknad: IPSBSoknadUt) {
+    constructor(soknad: IPSBSoknadUt, frilanser: boolean) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
         this.journalposter = soknad.journalposter || [];
@@ -80,7 +80,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
         this.soeknadsperiode = soknad.soeknadsperiode ? new PeriodeV2(soknad.soeknadsperiode) : {}
-        this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
+        this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {}, frilanser)
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
         this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
         this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
@@ -98,10 +98,10 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
     frilanser: FrilanserOpptjening | {};
     arbeidstaker: ArbeidstakerV2[];
 
-    constructor(arbeid: IOpptjeningAktivitet) {
+    constructor(arbeid: IOpptjeningAktivitet, frilanser: boolean) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaeringsdrivendeOpptjening(s));
-        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : {};
+        this.frilanser = frilanser === true  ? new FrilanserOpptjening(arbeid.frilanser || {}) : {};
     }
 }
 
