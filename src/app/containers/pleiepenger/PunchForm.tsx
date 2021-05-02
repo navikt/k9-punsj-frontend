@@ -211,6 +211,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 isFetched: true,
                 faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad))
             });
+            this.setState({soknad: {...this.state.soknad, barn: {norskIdent: this.props.punchState.ident2 || ''}}})
+
         }
     }
 
@@ -220,8 +222,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     render() {
         const {intl, punchFormState, punchState, signaturState} = this.props;
+
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
+
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -657,7 +661,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}>
                     <Input
                         id="relasjontilbarnet"
-                        bredde={"M"}
+                        bredde={"S"}
                         label={intlHelper(intl, 'skjema.relasjontilbarnet')}
                         className="relasjontilbarnet"
                         value={soknad.omsorg.relasjonTilBarnet || ''}
@@ -669,7 +673,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_BARNET)}
                     className={"punchform__paneler"}
                     tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_BARNET)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_BARNET)}/>
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_BARNET)}>
+                    <Input
+                        label={intlHelper(intl, 'ident.identifikasjon.barn')}
+                        value={soknad.barn.norskIdent}
+                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            barn: {...soknad.barn, norskIdent: event.target.value}
+                        }))}/>
+                </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.ARBEID)}
                     className={"punchform__paneler"}
