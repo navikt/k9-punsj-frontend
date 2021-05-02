@@ -28,7 +28,9 @@ export class PeriodeMedFaktiskeTimer implements Required<IPeriodeMedFaktiskeTime
         this.faktiskArbeidTimerPerDag = this.faktiskArbeidTimerPerDag || '';
     }
 
-    genererTimer = (): string => this.faktiskArbeidTimerPerDag;
+    genererTimer = (): string => {
+        return this.faktiskArbeidTimerPerDag;
+    }
 
     fomTekstKort(intl: IntlShape) {
         return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';

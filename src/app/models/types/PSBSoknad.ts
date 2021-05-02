@@ -109,7 +109,7 @@ export class Arbeidstid implements Required<IArbeidstid>{
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo;
 
     constructor(a: IArbeidstid) {
-        this.arbeidstakerList = (a.arbeidstakerList || []).map(at => new ArbeidstakerV2(at));
+        this.arbeidstakerList = a.arbeidstakerList ? a.arbeidstakerList.map(ab => new ArbeidstakerV2(ab)) : [];
         this.frilanserArbeidstidInfo = new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo || {});
         this.selvstendigNæringsdrivendeArbeidstidInfo = new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo || {});
     }
@@ -127,7 +127,7 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
     perioder: PeriodeMedFaktiskeTimer[];
 
     constructor(ai: IArbeidstidInfo) {
-        this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '';
+        this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '0';
         this.perioder = (ai.perioder || []).map(p => new PeriodeMedFaktiskeTimer(p));
     }
 

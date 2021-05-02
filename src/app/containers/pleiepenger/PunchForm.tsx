@@ -296,6 +296,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         },
                         showStatus
                     )
+
                 }
                 textLeggTil={'skjema.arbeid.arbeidstaker.leggtilperiode'
                 }
@@ -838,19 +839,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 if (checked) {
                     if (!this.state.soknad.arbeidstid?.arbeidstakerList!.length) {
                         this.updateSoknadState({arbeidstid: { arbeidstakerList: [this.initialArbeidstaker]}})
-                        this.setState({
-                            faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad)),
-                        });
                     }
                 } else {
                     this.updateSoknadState({arbeidstid: { arbeidstakerList: []}})
-                    this.setState({
-                        faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad)),
-                    });
                 }
-                this.setState({
-                    faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad)),
-                });
                 break;
             case Arbeidsforhold.FRILANSER:
                 this.setState({frilanser: checked})

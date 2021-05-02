@@ -21,6 +21,7 @@ export function pfArbeidstaker(tfStrings: string[][],
         intl: IntlShape,
     ) => {
 
+
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
             let norskIdent: string | null;
@@ -35,6 +36,14 @@ export function pfArbeidstaker(tfStrings: string[][],
             updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
 
+
+        if(!tfStrings.length) {
+            tfStrings.push(arbeidstaker.generateFaktiskeTimer())
+        }
+
+        const getValue = (listeelement: number, periodeindex: number) => {
+            return tfStrings[listeelement][periodeindex];
+        }
 
 
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
@@ -101,20 +110,20 @@ export function pfArbeidstaker(tfStrings: string[][],
                     editSoknadState={(arbeidstidInfo) => updateListeinfoInSoknadState({arbeidstidInfo: {...arbeidstaker.arbeidstidInfo, perioder: arbeidstidInfo}})}
                     component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) => <Input
                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
-                        value={tfStrings[listeelementindex][periodeindex]}
+                        value={getValue(listeelementindex,periodeindex)}
                         className="arbeidstaker-tilstedevaerelse"
                         onChange={event => {
-                            // updatePeriodeinfoInSoknadState({faktiskArbeidTimerPerDag: event.target.value});
-                            updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: event.target.value});
+                            updatePeriodeinfoInSoknadState({faktiskArbeidTimerPerDag: event.target.value});
                             tfStrings[listeelementindex][periodeindex] = event.target.value;
                             setTfStringsInParentState(tfStrings);
                         }}
                         onBlur={event => {
-                   //         updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: event.target.value});
-                      //      setTfStringsInParentState(generateTfStrings());
+                            updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag:(event.target.value)});
+                           // setTfStringsInParentState(generateTfStrings());
                         }}
                         onFocus={event => event.target.selectionStart = 0}
-                        feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.grad`)}
+                        feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.timerfaktisk`)}
+                        bredde={"S"}
                     />}
                     minstEn={true}
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
