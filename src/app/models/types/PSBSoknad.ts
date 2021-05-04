@@ -30,6 +30,7 @@ export interface IPSBSoknad {
     lovbestemtFerie?: IPeriodeV2[];
     omsorg?: IOmsorg;
     bosteder?: PeriodeinfoV2<IUtenlandsOpphold>[];
+
 }
 
 export class PSBSoknad implements IPSBSoknad {

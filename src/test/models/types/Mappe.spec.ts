@@ -49,23 +49,23 @@ describe('Mappe', () => {
 describe('Personlig', () => {
 
     const fellesMangler: IInputError[] = [
-        {attributt: 'datoMottatt'},
-        {attributt: 'spraak'},
-        {attributt: 'barn'},
-        {attributt: 'barn.norskIdent'},
-        {attributt: 'beredskap[2]'},
-        {attributt: 'beredskap[2]test'},
-        {attributt: 'nattevaak'},
-        {attributt: 'tilsynsordning'}
+        {felt: 'datoMottatt'},
+        {felt: 'spraak'},
+        {felt: 'barn'},
+        {felt: 'barn.norskIdent'},
+        {felt: 'beredskap[2]'},
+        {felt: 'beredskap[2]test'},
+        {felt: 'nattevaak'},
+        {felt: 'tilsynsordning'}
     ];
 
     const individuelleMangler: IInputError[] = [
-        {attributt: 'perioder'},
-        {attributt: 'perioder[1]'},
-        {attributt: 'perioder[1].fraOgMed'},
-        {attributt: 'arbeid'},
-        {attributt: 'arbeid.arbeidstaker[0]'},
-        {attributt: 'arbeid.arbeidstaker[0].periode'}
+        {felt: 'perioder'},
+        {felt: 'perioder[1]'},
+        {felt: 'perioder[1].fraOgMed'},
+        {felt: 'arbeid'},
+        {felt: 'arbeid.arbeidstaker[0]'},
+        {felt: 'arbeid.arbeidstaker[0].periode'}
     ];
 
     const mangler: IInputError[] = fellesMangler.concat(individuelleMangler);

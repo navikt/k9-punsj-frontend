@@ -18,3 +18,8 @@ export class SoknadPeriode implements Required<ISoknadPeriode> {
         this.tom = periode.tom || '';
     }
 }
+
+export interface IHentPerioder {
+    brukerIdent: string;
+    barnIdent: string;
+}
