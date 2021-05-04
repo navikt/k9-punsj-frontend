@@ -6,7 +6,7 @@ export interface IFrilanserOpptjening {
     jobberFortsattSomFrilans?: boolean;
 }
 
-export class FrilanserOpptjening implements Required<IFrilanserOpptjening> {
+export class FrilanserOpptjening implements IFrilanserOpptjening {
 
     startDato: string;
     jobberFortsattSomFrilans: boolean;

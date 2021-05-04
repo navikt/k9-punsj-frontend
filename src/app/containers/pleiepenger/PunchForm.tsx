@@ -211,7 +211,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 isFetched: true,
                 faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad))
             });
-            this.setState({soknad: {...this.state.soknad, barn: {norskIdent: this.props.punchState.ident2 || ''}}})
 
         }
     }
@@ -337,7 +336,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             value: jn,
                         }))}
                         legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
-                        checked={opptjening.frilanser.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI}
+                        checked={opptjening.frilanser ? (opptjening.frilanser.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI) : JaNei.NEI}
                         onChange={(event) => {
                             this.handleFrilanserChange((event.target as HTMLInputElement).value as JaNei)}}/>
                     {this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
@@ -486,16 +485,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 }))}
                                 //       feil={this.getErrorMessage('datoMottatt')}
 
-                            />
-                            <Input
-                                id={"grad"}
-                                className={"right"}
-                                bredde={"XS"}
-                                label={intlHelper(intl, 'skjema.grad')}
-                                value={""}
-                                {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                    // mottattDato: event.target.value,
-                                }))}
                             /></div>
                         <div className={"datocontainer"}>
                             <Input
@@ -670,18 +659,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         }))}/>
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_BARNET)}
-                    className={"punchform__paneler"}
-                    tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_BARNET)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_BARNET)}>
-                    <Input
-                        label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                        value={soknad.barn.norskIdent}
-                        {...this.changeAndBlurUpdatesSoknad((event) => ({
-                            barn: {...soknad.barn, norskIdent: event.target.value}
-                        }))}/>
-                </EkspanderbartpanelBase>
-                <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.ARBEID)}
                     className={"punchform__paneler"}
                     tittel={intlHelper(intl, PunchFormPaneler.ARBEID)}
@@ -798,12 +775,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 </EkspanderbartpanelBase>
                 <p className="sendknapp-wrapper">
                     <Knapp
-                        onClick={() =>
+                        onClick={() => {
+                            this.updateSoknadInformasjon({barn: {norskIdent: punchState.ident2 || ''}});
                             this.props.submitSoknad(
                                 this.props.punchState.ident1,
                                 this.props.id
                             )
-                        }
+                        }}
                         disabled={false}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}

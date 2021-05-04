@@ -1,6 +1,5 @@
 export enum PunchFormPaneler {
     OPPLYSINGER_OM_SOKER = "skjema.opplysningeromsoker",
-    OPPLYSINGER_OM_BARNET = "skjema.opplysningerombarnet",
     OPPLYSINGER_OM_SOKNAD = "skjema.opplysningeromsoknad",
     ARBEID = "skjema.opplysningeromarbeid",
     UTENLANDSOPPHOLD = "skjema.utenlandsopphold.opplysninger",

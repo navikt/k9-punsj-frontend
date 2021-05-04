@@ -70,7 +70,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 {a.arbeidstidInfo.perioder.length && <ul>{a.arbeidstidInfo.perioder.map((tg,j) => <li key={j}>{tg.faktiskArbeidTimerPerDag}</li>)}</ul>}
             </li>)}
             {arbeid.selvstendigNaeringsdrivende.map((a, i) => <li key={i}>{a.perioder.map(p => p.description(intl))}</li>)}
-            {<li key={"frilanser"}>{arbeid.frilanser.description(intl)}</li>}
+            {<li key={"frilanser"}>{arbeid.frilanser?.description(intl)}</li>}
         </ul>}</Col>
     };
 

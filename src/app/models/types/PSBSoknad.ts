@@ -77,19 +77,19 @@ export class PSBSoknad implements IPSBSoknad {
 
 export interface IOpptjeningAktivitet {
     selvstendigNaeringsdrivende?: ISelvstendigNaeringsdrivendeOpptjening[];
-    frilanser?: IFrilanserOpptjening;
+    frilanser?: IFrilanserOpptjening | null;
     arbeidstaker?: IArbeidstakerV2[];
 }
 
-export class OpptjeningAktivitet implements Required<IOpptjeningAktivitet> {
+export class OpptjeningAktivitet implements IOpptjeningAktivitet {
     selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening[];
-    frilanser: FrilanserOpptjening;
+    frilanser: FrilanserOpptjening | null;
     arbeidstaker: ArbeidstakerV2[];
 
     constructor(arbeid: IOpptjeningAktivitet) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaeringsdrivendeOpptjening(s));
-        this.frilanser = new FrilanserOpptjening(arbeid.frilanser || {});
+        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
     }
 
     numberOfWorkPeriods(): number {

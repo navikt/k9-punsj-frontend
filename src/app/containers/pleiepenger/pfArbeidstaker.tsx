@@ -119,7 +119,7 @@ export function pfArbeidstaker(tfStrings: string[][],
                         }}
                         onBlur={event => {
                             updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag:(event.target.value)});
-                           // setTfStringsInParentState(generateTfStrings());
+               //             setTfStringsInParentState(generateTfStrings());
                         }}
                         onFocus={event => event.target.selectionStart = 0}
                         feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.timerfaktisk`)}

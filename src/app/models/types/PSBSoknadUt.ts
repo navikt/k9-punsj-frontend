@@ -95,13 +95,13 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
 
 export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
     selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening[];
-    frilanser: FrilanserOpptjening | {};
+    frilanser: FrilanserOpptjening | null;
     arbeidstaker: ArbeidstakerV2[];
 
     constructor(arbeid: IOpptjeningAktivitet, frilanser: boolean) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaeringsdrivendeOpptjening(s));
-        this.frilanser = frilanser === true  ? new FrilanserOpptjening(arbeid.frilanser || {}) : {};
+        this.frilanser = arbeid.frilanser  ? new FrilanserOpptjening(arbeid.frilanser) : null;
     }
 }
 
