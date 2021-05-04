@@ -99,18 +99,18 @@ export class OpptjeningAktivitet implements IOpptjeningAktivitet {
 
 export interface IArbeidstid {
     arbeidstakerList?: IArbeidstakerV2[];
-    frilanserArbeidstidInfo?: IPeriodeMedFaktiskeTimer;
+    frilanserArbeidstidInfo?: IPeriodeMedFaktiskeTimer | null;
     selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo;
 }
 
 export class Arbeidstid implements Required<IArbeidstid>{
     arbeidstakerList: ArbeidstakerV2[];
-    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer;
+    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer | null;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo;
 
     constructor(a: IArbeidstid) {
         this.arbeidstakerList = a.arbeidstakerList ? a.arbeidstakerList.map(ab => new ArbeidstakerV2(ab)) : [];
-        this.frilanserArbeidstidInfo = new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo || {});
+        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo) : null;
         this.selvstendigNæringsdrivendeArbeidstidInfo = new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo || {});
     }
 

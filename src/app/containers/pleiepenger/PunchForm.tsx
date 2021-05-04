@@ -344,7 +344,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <p className={"frilanser-info"}>{intlHelper(intl, 'skjema.frilanser.periode')}</p>
                         <ArbeidstidInput
                             intl={intl}
-                            periodeMedTimer={arbeid.frilanserArbeidstidInfo}
+                            periodeMedTimer={arbeid.frilanserArbeidstidInfo || {}}
                             onChange={(periode => {this.updateSoknadState({
                                 arbeidstid: {
                                     frilanserArbeidstidInfo: periode}})})}
@@ -1034,7 +1034,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private getSoknadFromStore = () => {
-        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt, this.state.frilanser)
+        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
     };
 
     /*private getManglerFromStore = (nr?: 1 | 2) => {

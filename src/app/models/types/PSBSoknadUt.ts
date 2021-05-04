@@ -71,7 +71,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
 
-    constructor(soknad: IPSBSoknadUt, frilanser: boolean) {
+    constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
         this.journalposter = soknad.journalposter || [];
@@ -80,7 +80,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
         this.soeknadsperiode = soknad.soeknadsperiode ? new PeriodeV2(soknad.soeknadsperiode) : {}
-        this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {}, frilanser)
+        this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
         this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
         this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
@@ -98,7 +98,7 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
     frilanser: FrilanserOpptjening | null;
     arbeidstaker: ArbeidstakerV2[];
 
-    constructor(arbeid: IOpptjeningAktivitet, frilanser: boolean) {
+    constructor(arbeid: IOpptjeningAktivitet) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
         this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaeringsdrivendeOpptjening(s));
         this.frilanser = arbeid.frilanser  ? new FrilanserOpptjening(arbeid.frilanser) : null;
@@ -107,12 +107,12 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
 
 export class ArbeidstidUt implements Required<IArbeidstid>{
     arbeidstakerList: ArbeidstakerV2[];
-    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer | {};
+    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer | null;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | {};
 
     constructor(a: IArbeidstid) {
         this.arbeidstakerList = (a.arbeidstakerList || []).map(at => new ArbeidstakerV2(at));
-        this.frilanserArbeidstidInfo = (a.frilanserArbeidstidInfo?.periode?.fom &&a.frilanserArbeidstidInfo?.periode?.tom)? new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo) : {};
+        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo) : null;
         this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo) : {};
     }
 
