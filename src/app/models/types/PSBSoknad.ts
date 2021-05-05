@@ -2,10 +2,10 @@ import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/model
 import {FrilanserOpptjening, IFrilanserOpptjening} from "./FrilanserOpptjening";
 import {IPeriodeinfoV2, PeriodeinfoV2} from "./PeriodeInfoV2";
 import {
-    IPeriodeMedFaktiskeTimer,
+    IArbeidstidPeriodeMedTimer,
     IPeriodeMedTimerMinutter,
     IPeriodeV2,
-    PeriodeMedFaktiskeTimer, PeriodeMedTimerMinutter,
+    ArbeidstidPeriodeMedTimer, PeriodeMedTimerMinutter,
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
@@ -128,18 +128,18 @@ export class OpptjeningAktivitet implements IOpptjeningAktivitet {
 
 export interface IArbeidstid {
     arbeidstakerList?: IArbeidstakerV2[];
-    frilanserArbeidstidInfo?: IPeriodeMedFaktiskeTimer | null;
+    frilanserArbeidstidInfo?: IArbeidstidPeriodeMedTimer | null;
     selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo;
 }
 
 export class Arbeidstid implements Required<IArbeidstid>{
     arbeidstakerList: ArbeidstakerV2[];
-    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer | null;
+    frilanserArbeidstidInfo: ArbeidstidPeriodeMedTimer | null;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo;
 
     constructor(a: IArbeidstid) {
         this.arbeidstakerList = a.arbeidstakerList ? a.arbeidstakerList.map(ab => new ArbeidstakerV2(ab)) : [];
-        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo) : null;
+        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidPeriodeMedTimer(a.frilanserArbeidstidInfo) : null;
         this.selvstendigNæringsdrivendeArbeidstidInfo = new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo || {});
     }
 
@@ -147,17 +147,14 @@ export class Arbeidstid implements Required<IArbeidstid>{
 }
 
 export interface IArbeidstidInfo {
-    jobberNormaltTimerPerDag?: string;
-    perioder?: PeriodeinfoV2<IPeriodeMedFaktiskeTimer>[];
+    perioder?: PeriodeinfoV2<IArbeidstidPeriodeMedTimer>[];
 }
 
 export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
-    jobberNormaltTimerPerDag: string;
-    perioder: PeriodeMedFaktiskeTimer[];
+    perioder: ArbeidstidPeriodeMedTimer[];
 
     constructor(ai: IArbeidstidInfo) {
-        this.jobberNormaltTimerPerDag = ai.jobberNormaltTimerPerDag || '0';
-        this.perioder = (ai.perioder || []).map(p => new PeriodeMedFaktiskeTimer(p));
+        this.perioder = (ai.perioder || []).map(p => new ArbeidstidPeriodeMedTimer(p));
     }
 
     faktiskTimer = (): string[] => this.perioder.map(p => p.faktiskArbeidTimerPerDag);
@@ -297,8 +294,6 @@ export class OppholdsLand implements Required<PeriodeinfoV2<IOppholdsLand>> {
         this.land = periodeinfo.land || '';
     }
 }
-
-
 
 export interface IUtenlandsOpphold {
     land?: string;

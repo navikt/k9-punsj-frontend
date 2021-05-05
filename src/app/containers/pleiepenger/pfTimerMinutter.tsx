@@ -25,7 +25,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,
     ) => {
-        
+
         return <div className="timerminutter">
             <Row noGutters={true}>
                 <p>{intlHelper(intl, "skjema.omsorgstilbud.gjennomsnittlig")}</p>

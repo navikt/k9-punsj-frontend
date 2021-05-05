@@ -2,7 +2,7 @@ import {FrilanserOpptjening} from "./FrilanserOpptjening";
 import { PeriodeinfoV2} from "./PeriodeInfoV2";
 import {
     IPeriodeV2,
-    PeriodeMedFaktiskeTimer,
+    ArbeidstidPeriodeMedTimer,
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2} from "./ArbeidstakerV2";
@@ -134,12 +134,12 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
 
 export class ArbeidstidUt implements Required<IArbeidstid>{
     arbeidstakerList: ArbeidstakerV2[];
-    frilanserArbeidstidInfo: PeriodeMedFaktiskeTimer | null;
+    frilanserArbeidstidInfo: ArbeidstidPeriodeMedTimer | null;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | {};
 
     constructor(a: IArbeidstid) {
         this.arbeidstakerList = (a.arbeidstakerList || []).map(at => new ArbeidstakerV2(at));
-        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new PeriodeMedFaktiskeTimer(a.frilanserArbeidstidInfo) : null;
+        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidPeriodeMedTimer(a.frilanserArbeidstidInfo) : null;
         this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo) : {};
     }
 

@@ -33,7 +33,7 @@ import {
 import {
     IPeriodeMedTimerMinutter,
     IPeriodeV2,
-    PeriodeMedFaktiskeTimer,
+    ArbeidstidPeriodeMedTimer,
     PeriodeMedTimerMinutter
 } from "../../models/types/PeriodeV2";
 import {IFrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
@@ -169,7 +169,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         minutter: 0
     });
 
-    private initialPeriodeMedTimer = new PeriodeMedFaktiskeTimer({
+    private initialPeriodeMedTimer = new ArbeidstidPeriodeMedTimer({
         periode: {fom: '', tom: ''},
         faktiskArbeidTimerPerDag: ''
     });
@@ -186,13 +186,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private initialArbeidstaker = new ArbeidstakerV2({
         arbeidstidInfo: {
-            jobberNormaltTimerPerDag: '',
             perioder: [{
                 periode: {
                     fom: '',
                     tom: '',
                 },
-                faktiskArbeidTimerPerDag: ''
+                faktiskArbeidTimerPerDag: '',
+                jobberNormaltTimerPerDag: '',
             }],
 
         },
@@ -288,7 +288,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             return (<Listepaneler
                 intl={intl}
                 items={arbeid.arbeidstakerList}
-                component={pfArbeidstaker(this.state.faktiskeTimer, faktiskeTimer => this.setState({faktiskeTimer}), () => this.faktiskTimer(soknad))}
+                component={pfArbeidstaker()}
                 panelid={(i) => `arbeidstakerpanel_${i}`}
                 initialItem={this.initialArbeidstaker}
                 editSoknad={(arbeidstakerList) =>
@@ -505,7 +505,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <VerticalSpacer sixteenPx={true}/>
                 <Panel className={"eksiterendesoknaderpanel"}>
                     <h3>{intlHelper(intl, 'skjema.eksisterende')}</h3>
-                    {!eksisterendePerioder?.length && <p>{intlHelper(intl, 'skjema.eksisterende.ingen')}</p>}
+                    {!eksisterendePerioder?.length && !punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.ingen')}</p>}
                     {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
                     {eksisterendePerioder?.length && <>
                         {eksisterendePerioder.map((p, i) => <div key={i} className={"datocontainer"}><CalendarSvg
@@ -606,36 +606,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 )
                             }
                         />
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={Object.values(JaNei).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            name="harMedsoker"
-                            legend={intlHelper(intl, 'skjema.medsoker')}
-                            checked={soknad.soknadsinfo.harMedsøker ? JaNei.JA : JaNei.NEI}
-                            onChange={(event) =>
-                                this.handleHarMedsokerChange(
-                                    ((event.target as HTMLInputElement).value as JaNei)
-                                )
-                            }
-                        />
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={Object.values(JaNei).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            name="beggehjemme"
-                            legend={intlHelper(intl, 'skjema.beggehjemme')}
-                            checked={soknad.soknadsinfo.samtidigHjemme ? JaNei.JA : JaNei.NEI}
-                            onChange={(event) =>
-                                this.handleSamtidigHjemmeChange(
-                                    ((event.target as HTMLInputElement).value as JaNei)
-                                )
-                            }
-                        /></SkjemaGruppe>
+                    </SkjemaGruppe>
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
@@ -823,50 +794,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         feilkodeprefiks={'tilsynsordning'}
                         kanHaFlere={true}
                     />
-                    {soknad.tilsynsordning.perioder.map((p, i) =>
-                    <div className="timerminutter" key={i}>
-                        <Row noGutters={true}>
-                            <p>{intlHelper(intl, "skjema.omsorgstilbud.gjennomsnittlig")}</p>
-                            <div className={"input-row"}>
-                               <Input
-                                    label={intlHelper(intl, 'skjema.perioder.timer')}
-                                    value={p.timer}
-                                    bredde={"XS"}
-                                    className="timer"
-
-                                />
-                                <Input
-                                    label={intlHelper(intl, 'skjema.perioder.minutter')}
-                                    value={p.minutter}
-                                    bredde={"XS"}
-                                    className="right"
-                                    type={"number"}
-
-                                />
-                            </div>
-                        </Row>
-                    </div>)}
-                    {this.state.harBoddIUtlandet === JaNei.JA && (
-                        <PeriodeinfoPaneler
-                            intl={intl}
-                            periods={soknad.bosteder}
-                            component={pfLand()}
-                            panelid={(i) => `bostederpanel_${i}`}
-                            initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(bosteder) => this.updateSoknad
-                            ({bosteder})}
-                            editSoknadState={(bosteder, showStatus) =>
-                                this.updateSoknadState({bosteder}, showStatus)
-                            }
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            className="bosteder"
-                            panelClassName="utenlandsoppholdpanel"
-                            getErrorMessage={() => undefined}
-                            feilkodeprefiks={'bosteder'}
-                            kanHaFlere={true}
-                        />
-                    )}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
@@ -946,10 +873,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     </Knapp>
                 </p>
             </>);
-    }
-
-    private submitSoknad = () => {
-        const oppdatertSoknad = this.getSoknadFromStore()
     }
 
     private handlePanelClick = (p: PunchFormPaneler) => {

@@ -5,13 +5,13 @@ import * as React from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {IntlShape} from 'react-intl';
 import './arbeidstidInput.less';
-import {IPeriodeMedFaktiskeTimer} from "../../models/types/PeriodeV2";
+import {IArbeidstidPeriodeMedTimer} from "../../models/types/PeriodeV2";
 
 export interface IArbeidstidInputProps {
-    periodeMedTimer: IPeriodeMedFaktiskeTimer;
+    periodeMedTimer: IArbeidstidPeriodeMedTimer;
     intl: IntlShape;
-    onChange: (periode: IPeriodeMedFaktiskeTimer) => void;
-    onBlur: (periode: IPeriodeMedFaktiskeTimer) => void;
+    onChange: (periode: IArbeidstidPeriodeMedTimer) => void;
+    onBlur: (periode: IArbeidstidPeriodeMedTimer) => void;
     onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;

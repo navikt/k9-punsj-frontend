@@ -1,7 +1,7 @@
 import {TimeFormat} from 'app/models/enums';
 import {datetime} from 'app/utils';
-import intlHelper   from 'app/utils/intlUtils';
-import {IntlShape}  from 'react-intl';
+import intlHelper from 'app/utils/intlUtils';
+import {IntlShape} from 'react-intl';
 import {PeriodeinfoV2} from "./PeriodeInfoV2";
 
 export interface IPeriodeV2 {
@@ -77,18 +77,21 @@ interface IPeriodeStringsForDescription {
     tom: string;
 }
 
-export interface IPeriodeMedFaktiskeTimer {
+export interface IArbeidstidPeriodeMedTimer {
     periode?: IPeriodeV2;
     faktiskArbeidTimerPerDag?: string;
+    jobberNormaltTimerPerDag?: string;
 }
 
-export class PeriodeMedFaktiskeTimer implements Required<PeriodeinfoV2<IPeriodeMedFaktiskeTimer>> {
+export class ArbeidstidPeriodeMedTimer implements Required<PeriodeinfoV2<IArbeidstidPeriodeMedTimer>> {
     periode: PeriodeV2;
     faktiskArbeidTimerPerDag: string;
+    jobberNormaltTimerPerDag: string;
 
-    constructor(pmf: PeriodeinfoV2<IPeriodeMedFaktiskeTimer>) {
+    constructor(pmf: PeriodeinfoV2<IArbeidstidPeriodeMedTimer>) {
         this.periode = new PeriodeV2(pmf.periode || {})
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
+        this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
     }
 
     genererTimer = (): string => {
