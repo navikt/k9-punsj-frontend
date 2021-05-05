@@ -15,14 +15,14 @@ import {
     IOmsorg,
     IOpptjeningAktivitet,
     IPSBSoknad,
-    ISelvstendigNaeringsdrivendeOpptjening,
+    ISelvstendigNaeringsdrivendeOpptjening, ISoknadsInfo,
     ITilleggsinformasjon,
     ITilsynsordningV2,
     IUtenlandsOpphold,
     IUttak,
     Omsorg,
     OpptjeningAktivitet,
-    SelvstendigNaeringsdrivendeOpptjening,
+    SelvstendigNaeringsdrivendeOpptjening, SoknadsInfo,
     TilleggsinformasjonV2,
     TilsynsordningV2,
     UtenlandsOpphold,
@@ -48,6 +48,7 @@ export interface IPSBSoknadUt {
     lovbestemtFerie?: IPeriodeV2[];
     omsorg?: IOmsorg;
     bosteder?: PeriodeinfoV2<IUtenlandsOpphold>[];
+    soknadsinfo?: ISoknadsInfo;
 }
 
 export class PSBSoknadUt implements Required<IPSBSoknadUt> {
@@ -70,6 +71,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     lovbestemtFerie: PeriodeV2[];
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
+    soknadsinfo: SoknadsInfo;
 
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
@@ -79,7 +81,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
-        this.soeknadsperiode = soknad.soeknadsperiode ? new PeriodeV2(soknad.soeknadsperiode) : {}
+        this.soeknadsperiode = new PeriodeV2(soknad.soeknadsperiode|| {})
         this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
         this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
@@ -90,6 +92,31 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new PeriodeV2(p));
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
+        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {})
+    }
+
+    values(): Required<IPSBSoknad> {
+        return {
+            soeknadId: this.soeknadId,
+            soekerId: this.soekerId,
+            journalposter: this.journalposter,
+            mottattDato: this.mottattDato,
+            barn: this.barn,
+            sendtInn: this.sendtInn,
+            erFraK9: this.erFraK9,
+            soeknadsperiode: this.soeknadsperiode,
+            opptjeningAktivitet: this.opptjeningAktivitet,
+            arbeidstid: this.arbeidstid,
+            beredskap: this.beredskap.map(b => b.values()),
+            nattevaak: this.nattevaak.map(b => b.values()),
+            tilsynsordning: this.tilsynsordning,
+            uttak: this.uttak,
+            utenlandsopphold: this.utenlandsopphold.map(u => u.values()),
+            lovbestemtFerie: this.lovbestemtFerie.map(f => f.values()),
+            omsorg: this.omsorg,
+            bosteder: this.bosteder.map(b => b.values()),
+            soknadsinfo: this.soknadsinfo
+        };
     }
 }
 

@@ -18,7 +18,7 @@ export type ListeComponent<T> = (itemInfo: T,
                                  updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<T>,
                                  feilkodeprefiksMedIndeks?: string,
                                  getErrorMessage?: GetErrorMessage,
-                                 intl?: IntlShape) => React.ReactElement;
+                                 intl?: IntlShape,) => React.ReactElement;
 
 export interface IListepanelerProps<T> {
     intl: IntlShape;

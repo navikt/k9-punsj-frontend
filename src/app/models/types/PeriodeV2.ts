@@ -1,110 +1,12 @@
 import {TimeFormat} from 'app/models/enums';
-import {datetime, numberToString} from 'app/utils';
+import {datetime} from 'app/utils';
 import intlHelper   from 'app/utils/intlUtils';
 import {IntlShape}  from 'react-intl';
+import {PeriodeinfoV2} from "./PeriodeInfoV2";
 
 export interface IPeriodeV2 {
     fom?: string | null;
     tom?: string | null;
-}
-
-interface IPeriodeStringsForDescription {
-    ft: string;
-    fom: string;
-    tom: string;
-}
-
-export interface IPeriodeMedFaktiskeTimer {
-    periode?: IPeriodeV2;
-    faktiskArbeidTimerPerDag?: string;
-}
-
-export class PeriodeMedFaktiskeTimer implements Required<IPeriodeMedFaktiskeTimer> {
-    periode: PeriodeV2;
-    faktiskArbeidTimerPerDag: string;
-
-    constructor(pmf: IPeriodeMedFaktiskeTimer) {
-        this.periode = new PeriodeV2(pmf.periode || {})
-        this.faktiskArbeidTimerPerDag = this.faktiskArbeidTimerPerDag || '';
-    }
-
-    genererTimer = (): string => {
-        return this.faktiskArbeidTimerPerDag;
-    }
-
-    fomTekstKort(intl: IntlShape) {
-        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
-    }
-
-    tilOgmedTekstKort(intl: IntlShape) {
-        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
-    }
-
-    description(intl: IntlShape): string {
-
-        let key: string;
-
-        if (!!this.periode.fom && !!this.periode.tom) {
-            key = 'periode.fratil';
-        } else if (!!this.periode.fom) {
-            key = 'periode.fra';
-        } else if (!!this.periode.tom) {
-            key = 'periode.til';
-        } else {
-            key = 'periode.udefinert';
-        }
-
-        const fom = this.fomTekstKort(intl);
-        const tom = this.tilOgmedTekstKort(intl);
-
-        return intlHelper(intl, key, {fom, tom});
-    }
-}
-
-export interface IPeriodeMedTimerMinutter {
-    periode?: IPeriodeV2;
-    timer?: string;
-    minutter?: string;
-}
-
-export class PeriodeMedTimerMinutter implements Required<IPeriodeMedTimerMinutter> {
-    periode: PeriodeV2;
-    timer: string;
-    minutter: string;
-
-    constructor(pmf: IPeriodeMedTimerMinutter) {
-        this.periode = new PeriodeV2(pmf.periode || {})
-        this.timer = this.timer || '0';
-        this.minutter = this.minutter || '0';
-    }
-
-    fomTekstKort(intl: IntlShape) {
-        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
-    }
-
-    tilOgmedTekstKort(intl: IntlShape) {
-        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
-    }
-
-    description(intl: IntlShape): string {
-
-        let key: string;
-
-        if (!!this.periode.fom && !!this.periode.tom) {
-            key = 'periode.fratil';
-        } else if (!!this.periode.fom) {
-            key = 'periode.fra';
-        } else if (!!this.periode.tom) {
-            key = 'periode.til';
-        } else {
-            key = 'periode.udefinert';
-        }
-
-        const fom = this.fomTekstKort(intl);
-        const tom = this.tilOgmedTekstKort(intl);
-
-        return intlHelper(intl, key, {fom, tom});
-    }
 }
 
 export class PeriodeV2 implements Required<IPeriodeV2> {
@@ -157,6 +59,108 @@ export class PeriodeV2 implements Required<IPeriodeV2> {
         } else if (!!this.fom) {
             key = 'periode.fra';
         } else if (!!this.tom) {
+            key = 'periode.til';
+        } else {
+            key = 'periode.udefinert';
+        }
+
+        const fom = this.fomTekstKort(intl);
+        const tom = this.tilOgmedTekstKort(intl);
+
+        return intlHelper(intl, key, {fom, tom});
+    }
+}
+
+interface IPeriodeStringsForDescription {
+    ft: string;
+    fom: string;
+    tom: string;
+}
+
+export interface IPeriodeMedFaktiskeTimer {
+    periode?: IPeriodeV2;
+    faktiskArbeidTimerPerDag?: string;
+}
+
+export class PeriodeMedFaktiskeTimer implements Required<PeriodeinfoV2<IPeriodeMedFaktiskeTimer>> {
+    periode: PeriodeV2;
+    faktiskArbeidTimerPerDag: string;
+
+    constructor(pmf: PeriodeinfoV2<IPeriodeMedFaktiskeTimer>) {
+        this.periode = new PeriodeV2(pmf.periode || {})
+        this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
+    }
+
+    genererTimer = (): string => {
+        return this.faktiskArbeidTimerPerDag;
+    }
+
+    fomTekstKort(intl: IntlShape) {
+        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
+    }
+
+    tilOgmedTekstKort(intl: IntlShape) {
+        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
+    }
+
+    description(intl: IntlShape): string {
+
+        let key: string;
+
+        if (!!this.periode.fom && !!this.periode.tom) {
+            key = 'periode.fratil';
+        } else if (!!this.periode.fom) {
+            key = 'periode.fra';
+        } else if (!!this.periode.tom) {
+            key = 'periode.til';
+        } else {
+            key = 'periode.udefinert';
+        }
+
+        const fom = this.fomTekstKort(intl);
+        const tom = this.tilOgmedTekstKort(intl);
+
+        return intlHelper(intl, key, {fom, tom});
+    }
+}
+
+export interface IPeriodeMedTimerMinutter {
+    timer?: number;
+    minutter?: number;
+}
+
+export class PeriodeMedTimerMinutter implements Required<PeriodeinfoV2<IPeriodeMedTimerMinutter>> {
+    periode: PeriodeV2;
+    timer: number;
+    minutter: number;
+
+    constructor(pmf: PeriodeinfoV2<IPeriodeMedTimerMinutter>) {
+        this.periode = new PeriodeV2(pmf.periode || {})
+        this.timer = pmf.timer || 0;
+        this.minutter = pmf.minutter || 0;
+    }
+
+    values(): Required<PeriodeinfoV2<IPeriodeMedTimerMinutter>> {
+        return {periode: this.periode.values(), timer: this.timer, minutter: this.minutter};
+    }
+
+    fomTekstKort(intl: IntlShape) {
+        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
+    }
+
+    tilOgmedTekstKort(intl: IntlShape) {
+        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
+    }
+
+    description(intl: IntlShape): string {
+
+        let key: string;
+
+        if (!!this.periode.fom && !!this.periode.tom) {
+            key = 'periode.fratil';
+        } else if (!!this.periode.fom) {
+            key = 'periode.fra';
+        } else if (!!this.periode.tom) {
             key = 'periode.til';
         } else {
             key = 'periode.udefinert';

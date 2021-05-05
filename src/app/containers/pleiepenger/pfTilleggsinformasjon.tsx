@@ -27,7 +27,7 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
             <Textarea
                 label={intlHelper(intl, `skjema.${path}.tilleggsinfo`)}
                 value={periodeinfo.tilleggsinformasjon || ''}
-                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
+                onChange={(event) => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={getErrorMessage(`${feilprefiks}.tilleggsinformasjon`)}
             />

@@ -7,6 +7,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 import {IntlShape} from 'react-intl';
 import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
 
+
 export function pfArbeidstaker(tfStrings: string[][],
                                setTfStringsInParentState: (tfStrings: string[][]) => any,
                                generateTfStrings: () => string[][],): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
@@ -20,7 +21,6 @@ export function pfArbeidstaker(tfStrings: string[][],
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,
     ) => {
-
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
@@ -38,7 +38,7 @@ export function pfArbeidstaker(tfStrings: string[][],
 
 
         if(!tfStrings.length) {
-            tfStrings.push(arbeidstaker.generateFaktiskeTimer())
+            tfStrings.push([])
         }
 
         const getValue = (listeelement: number, periodeindex: number) => {

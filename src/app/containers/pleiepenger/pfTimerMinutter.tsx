@@ -11,6 +11,7 @@ import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 import {IPeriodeMedTimerMinutter} from "../../models/types/PeriodeV2";
 import {Input} from "nav-frontend-skjema";
 import {Row} from "react-bootstrap";
+import {stringToNumber} from "../../utils";
 
 
 export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter> {
@@ -24,7 +25,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,
     ) => {
-
+        
         return <div className="timerminutter">
             <Row noGutters={true}>
                 <p>{intlHelper(intl, "skjema.omsorgstilbud.gjennomsnittlig")}</p>
@@ -35,39 +36,29 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                         bredde={"XS"}
                         className="timer"
                         onChange={event => updatePeriodeinfoInSoknadState({
-                            periode: {
-                                fom: periodeinfo.periode?.fom,
-                                tom: periodeinfo.periode?.tom
-                            }, timer: event.target.value,
+                            timer: stringToNumber(event.target.value),
                             minutter: periodeinfo.minutter
                         })}
                         onBlur={event => updatePeriodeinfoInSoknad({
-                            periode: {
-                                fom: periodeinfo.periode?.fom,
-                                tom: periodeinfo.periode?.tom
-                            }, timer: event.target.value,
+                            timer: stringToNumber(event.target.value),
                             minutter: periodeinfo.minutter
                         })}
                         feil={getErrorMessage(`${feilprefiks}.timer`)}
                     />
                     <Input
                         label={intlHelper(intl, 'skjema.perioder.minutter')}
-                        value={periodeinfo.timer}
+                        value={periodeinfo.minutter}
                         bredde={"XS"}
                         className="right"
-                        onChange={event => updatePeriodeinfoInSoknadState({
-                            periode: {
-                                fom: periodeinfo.periode?.fom,
-                                tom: periodeinfo.periode?.tom
-                            }, timer: periodeinfo.timer,
-                            minutter: event.target.value
+                        type={"number"}
+                        onChange={(event) => updatePeriodeinfoInSoknadState({
+                            ...periodeinfo,
+                            timer: periodeinfo.timer,
+                            minutter: stringToNumber(event.target.value)
                         })}
-                        onBlur={event => updatePeriodeinfoInSoknad({
-                            periode: {
-                                fom: periodeinfo.periode?.fom,
-                                tom: periodeinfo.periode?.tom
-                            }, timer: periodeinfo.timer,
-                            minutter: event.target.value
+                        onBlur={event => updatePeriodeinfoInSoknad({...periodeinfo,
+                            timer: periodeinfo.timer,
+                            minutter: stringToNumber(event.target.value)
                         })}
                         feil={getErrorMessage(`${feilprefiks}.minutter`)}
                     />
