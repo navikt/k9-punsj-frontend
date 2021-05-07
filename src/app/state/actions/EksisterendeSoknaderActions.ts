@@ -3,8 +3,9 @@ import {JaNeiVetikke, EksisterendeSoknaderActionKeys} from 'app/models/enums';
 import {IError, IPersonlig} from 'app/models/types';
 import {convertResponseToError, get, post}        from 'app/utils';;
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
+import {ISoknadSvar} from "../../models/types/SoknadSvar";
 
-interface ISetEksisterendeSoknaderAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar: IPSBSoknad[]}
+interface ISetEksisterendeSoknaderAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar: ISoknadSvar}
 interface IFindEksisterendeSoknaderLoadingAction          {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_LOAD, isLoading: boolean}
 interface IFindEksisterendeSoknaderErrorAction            {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_REQUEST_ERROR, error: IError}
 
@@ -28,7 +29,7 @@ export type IEksisterendeSoknaderActionTypes = IMapperActionTypes |
                                            ICreateSoknadActions |
                                            IResetSoknadidAction;
 
-export function setEksisterendeSoknaderAction(eksisterendeSoknaderSvar: IPSBSoknad[]):              ISetEksisterendeSoknaderAction                {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar}}
+export function setEksisterendeSoknaderAction(eksisterendeSoknaderSvar: ISoknadSvar):              ISetEksisterendeSoknaderAction                {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar}}
 export function findEksisterendeSoknaderLoadingAction(isLoading: boolean):    IFindEksisterendeSoknaderLoadingAction        {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_LOAD, isLoading}}
 export function findEksisterendeSoknaderErrorAction(error: IError):           IFindEksisterendeSoknaderErrorAction          {return {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_REQUEST_ERROR, error}}
 

@@ -123,6 +123,5 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         >
             {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
         </Knapp>}
-
     </SkjemaGruppe>;
 };

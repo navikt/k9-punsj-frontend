@@ -27,6 +27,7 @@ import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
 import {SoknadType} from "../../models/enums/SoknadType";
 import SoknadReadModeV2 from "./SoknadReadModeV2";
 import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
+import {generateDateString} from "../../components/skjema/skjemaUtils";
 
 
 export interface IEksisterendeSoknaderStateProps {
@@ -71,7 +72,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     ident2,
   } = props;
 
-  const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar;
+  const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
   React.useEffect(() => {
     if (IdentRules.areIdentsValid(ident1, ident2)) {
@@ -162,7 +163,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     const modaler = [];
     const rows = [];
 
-    for (const soknadInfo of soknader) {
+    for (const soknadInfo of soknader!) {
       const søknad = new PSBSoknad(soknadInfo)
       const soknadId = søknad.soeknadId;
       const {chosenSoknad} = props.eksisterendeSoknaderState;
@@ -172,14 +173,12 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         !!søknad.mottattDato
             ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato)
             : '',
-        SoknadType.PSB,
         (!!søknad.barn.norskIdent
             ? søknad.barn.norskIdent
             : søknad.barn.foedselsdato &&
             datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
         '',
-        !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
-        !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
+        generateDateString(søknad.soeknadsperiode)
       ];
       rows.push(
           <tr key={soknadId} onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
@@ -224,8 +223,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             <tr>
               <th>{intlHelper(intl, 'mapper.tabell.mottakelsesdato')}</th>
               <th>{intlHelper(intl, 'mapper.tabell.barnetsfnrellerfdato')}</th>
-              <th>{intlHelper(intl, 'mapper.tabell.fraogmed')}</th>
-              <th>{intlHelper(intl, 'mapper.tabell.tilogmed')}</th>
+              <th>{intlHelper(intl, 'skjema.periode')}</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -246,7 +244,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     </p>
   );
 
-  if (soknader.length) {
+  if (soknader && soknader.length) {
     return (
       <>
         {technicalError}
@@ -256,7 +254,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
           })}
         </AlertStripeInfo>
         {showSoknader()}
-        {newSoknadButton}
       </>
     );
   }
@@ -269,7 +266,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
           antallSokere: ident2 ? '2' : '1',
         })}
       </AlertStripeInfo>
-      {newSoknadButton}
     </>
   );
 };

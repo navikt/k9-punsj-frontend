@@ -218,7 +218,7 @@ export class PunchPageComponent extends React.Component<
           />
         );
       case PunchStep.CHOOSE_SOKNAD:
-        return <RegistreringsValg {...commonProps} {...this.extractIdents()} harTidligereSoknader={false} />;
+        return <RegistreringsValg {...commonProps} {...this.extractIdents()} />;
       case PunchStep.FILL_FORM:
         return <PunchForm {...commonProps} id={this.props.match.params.id} />;
       case PunchStep.COMPLETED:

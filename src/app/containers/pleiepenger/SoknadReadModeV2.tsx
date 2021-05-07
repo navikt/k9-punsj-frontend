@@ -44,14 +44,6 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
                     {this.tilsynsordning(soknad.tilsynsordning)}
                 </Row>
-                <Row className="felles">
-                    <Col>{intlHelper(intl, 'mappe.lesemodus.beredskap')}</Col>
-                    {this.tilleggsinfo(soknad.beredskap, 'mappe.lesemodus.beredskap.beskrivelse')}
-                </Row>
-                <Row className="felles">
-                    <Col>{intlHelper(intl, 'mappe.lesemodus.nattevaak')}</Col>
-                    {this.tilleggsinfo(soknad.nattevaak, 'mappe.lesemodus.nattevaak.beskrivelse')}
-                </Row>
 
             </Container>
         );

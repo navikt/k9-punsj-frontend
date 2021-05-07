@@ -40,8 +40,8 @@ export interface IPSBSoknadUt {
     soeknadsperiode?: IPeriodeV2;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
-    beredskap?: PeriodeinfoV2<ITilleggsinformasjon>[];
-    nattevaak?: PeriodeinfoV2<ITilleggsinformasjon>[]
+    beredskap?: IPeriodeV2[];
+    nattevaak?: IPeriodeV2[];
     tilsynsordning?: ITilsynsordningV2;
     uttak?: PeriodeinfoV2<IUttak>[];
     utenlandsopphold?: PeriodeinfoV2<IUtenlandsOpphold>[];
@@ -49,6 +49,7 @@ export interface IPSBSoknadUt {
     omsorg?: IOmsorg;
     bosteder?: PeriodeinfoV2<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
+    harInfoSomIkkeKanPunsjes?: boolean;
 }
 
 export class PSBSoknadUt implements Required<IPSBSoknadUt> {
@@ -63,8 +64,8 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     soeknadsperiode: PeriodeV2 | {};
     opptjeningAktivitet: OpptjeningAktivitetUt;
     arbeidstid: ArbeidstidUt;
-    beredskap: TilleggsinformasjonV2[];
-    nattevaak: TilleggsinformasjonV2[];
+    beredskap: PeriodeV2[];
+    nattevaak: PeriodeV2[];
     tilsynsordning: TilsynsordningV2;
     uttak: Uttak[];
     utenlandsopphold: UtenlandsOpphold[];
@@ -72,6 +73,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;
+    harInfoSomIkkeKanPunsjes: boolean;
 
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
@@ -84,15 +86,16 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.soeknadsperiode = new PeriodeV2(soknad.soeknadsperiode|| {})
         this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
-        this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
-        this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
+        this.beredskap = (soknad.beredskap || []).map(b => new PeriodeV2(b));
+        this.nattevaak = (soknad.nattevaak || []).map(n => new PeriodeV2(n));
         this.tilsynsordning = new TilsynsordningV2(soknad.tilsynsordning || {});
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new PeriodeV2(p));
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
-        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {})
+        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
+        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
     }
 
     values(): Required<IPSBSoknad> {
@@ -115,7 +118,8 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
             lovbestemtFerie: this.lovbestemtFerie.map(f => f.values()),
             omsorg: this.omsorg,
             bosteder: this.bosteder.map(b => b.values()),
-            soknadsinfo: this.soknadsinfo
+            soknadsinfo: this.soknadsinfo,
+            harInfoSomIkkeKanPunsjes: this.harInfoSomIkkeKanPunsjes
         };
     }
 }

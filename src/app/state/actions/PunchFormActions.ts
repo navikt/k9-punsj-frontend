@@ -164,8 +164,8 @@ export function updateSoknader(mappeid: string,
                                norskIdent1: string,
                                norskIdent2: string | null,
                                journalpostid: string,
-                               soknad1: Partial<IPSBSoknad>,
-                               soknad2: Partial<IPSBSoknad> | null) {
+                               soknad1: Partial<IPSBSoknadUt>,
+                               soknad2: Partial<IPSBSoknadUt> | null) {
     return (dispatch: any) => {
 
         if (!norskIdent2 || !soknad2) {

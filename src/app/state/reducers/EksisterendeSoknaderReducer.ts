@@ -4,7 +4,7 @@ import {IEksisterendeSoknaderActionTypes}          from 'app/state/actions';
 import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 const initialState: IEksisterendeSoknaderState = {
-    eksisterendeSoknaderSvar: [],
+    eksisterendeSoknaderSvar: {},
     isEksisterendeSoknaderLoading: false,
     eksisterendeSoknaderRequestError: undefined,
     isSoknadCreated: false,
@@ -84,7 +84,7 @@ export function EksisterendeSoknaderReducer(
                 isSoknadCreated: true,
                 isAwaitingSoknadCreation: false,
                 createSoknadRequestError: undefined,
-                eksisterendeSoknaderSvar: [],
+                eksisterendeSoknaderSvar: {},
             };
 
         case EksisterendeSoknaderActionKeys.SOKNAD_CREATE_ERROR:

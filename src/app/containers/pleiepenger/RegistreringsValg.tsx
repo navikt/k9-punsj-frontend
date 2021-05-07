@@ -17,7 +17,6 @@ import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} fr
 import {ApiPath} from "../../apiConfig";
 
 export interface IRegistreringsValgComponentProps {
-    harTidligereSoknader: boolean;
     journalpostid: string;
     ident1: string;
     ident2: string | null;
@@ -44,7 +43,6 @@ type IRegistreringsValgProps = IRegistreringsValgComponentProps & IEksisterendeS
 export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (props: IRegistreringsValgProps) => {
 
     const {
-        harTidligereSoknader,
         journalpostid,
         ident1,
         ident2,
@@ -139,32 +137,17 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                     ))
                     }
                 </div>)}
-            <RadioGruppe
-                legend={<FormattedMessage id={"registrering.overskrift"}/>}
-                className="registrering-page__options"
-            >
-                <RadioPanel
-                    label={<FormattedMessage id={"registrering.nysoknad"}/>}
-                    onChange={() => setValgtOption("nysoknad")}
-                    checked={valgtOption === "nysoknad"}
-                />
-                <RadioPanel
-                    label={<FormattedMessage id={"registrering.etterrapportering"}/>}
-                    onChange={() => setValgtOption("etterrapportering")}
-                    checked={valgtOption === "etterrapportering"}
-                />
-            </RadioGruppe>
 
-            {harTidligereSoknader &&
 
-            (<EksisterendeSoknader
+            <EksisterendeSoknader
                 {...props}
-            />)
-            }
+            />
+
             <div className="knapperad">
                 <Knapp
                     className="knapp knapp1"
                     onClick={redirectToPreviousStep}
+                    mini={true}
                 >
                     Tilbake
                 </Knapp>
@@ -172,8 +155,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                     onClick={newSoknad}
                     className="knapp knapp2"
                     disabled={valgtOption === ""}
+                    mini={true}
                 >
-                    {<FormattedMessage id={'ident.knapp.nestesteg'}/>}
+                    {<FormattedMessage id={'ident.knapp.nyregistrering'}/>}
                 </Knapp>
             </div>
         </div>
