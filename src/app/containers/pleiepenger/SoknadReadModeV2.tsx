@@ -66,17 +66,6 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
         </ul>}</Col>
     };
 
-    private tilleggsinfo = (tilleggsinformasjon: TilleggsinformasjonV2[], intlCode: string) => {
-        const {intl} = this.props;
-        return <Col>{!!tilleggsinformasjon.length && <ul>
-            {tilleggsinformasjon.map((t,i) => <li key={i}>{intlHelper(
-                intl,
-                intlCode,
-                {...t.periode.generateStringsForDescription(intl)}
-            )}</li>)}
-        </ul>}</Col>;
-    };
-
     private tilsynsordning = (tilsynsordning: TilsynsordningV2) => {
         const {intl} = this.props;
         return <Col>{tilsynsordning.perioder.length > 0

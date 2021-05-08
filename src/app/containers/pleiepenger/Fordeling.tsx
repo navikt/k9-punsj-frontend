@@ -1,35 +1,32 @@
-import { Sakstype } from 'app/models/enums';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import {
-  setSakstypeAction,
-} from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
+import {JaNei, PunchStep, Sakstype} from 'app/models/enums';
+import {IFordelingState, IJournalpost} from 'app/models/types';
+import {setSakstypeAction,} from 'app/state/actions';
+import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Radio, RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {Hovedknapp} from 'nav-frontend-knapper';
+import Checkbox, {Input, Radio, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, { useMemo, useState } from 'react';
-import {
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
-import { connect } from 'react-redux';
+import React, {useMemo, useState} from 'react';
+import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
+import {connect} from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
-import { Sakstyper } from '../SakstypeImpls';
+import {Sakstyper} from '../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 import JournalpostPanel from '../../components/journalpost-panel/JournalpostPanel';
 import {opprettGosysOppgave as omfordelAction} from "../../state/actions/GosysOppgaveActions";
 import {setHash} from "../../utils";
+import {IdentRules} from "../../rules";
+import {IIdentState} from "../../models/types/IdentState";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
   fordelingState: IFordelingState;
   journalpostId: string;
+  identState: IIdentState;
 }
 
 export interface IFordelingDispatchProps {
@@ -94,6 +91,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
   );
 
   const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
+  const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
+  const [ riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>(JaNei.NEI);
+
+  const skalViseFeilmelding = (ident: string | null) =>
+      ident && ident.length && !IdentRules.isIdentValid(ident);
 
   if (fordelingState.isAwaitingOmfordelingResponse) {
     return <NavFrontendSpinner />;
@@ -120,7 +122,79 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             journalpostId={journalpost!.journalpostId}
             identitetsnummer={journalpost?.norskIdent}
           />
-          <RadioGruppe
+          <div>
+            <RadioPanelGruppe
+                className="horizontalRadios"
+                name={"identsjekk"}
+                radios={Object.values(JaNei).map((jn) => ({
+                  label: intlHelper(intl, jn),
+                  value: jn,
+                  size: 1,
+                }))}
+                legend={<FormattedMessage
+                    id="ident.identifikasjon.sjekkident"
+                    values={{ident: journalpost?.norskIdent}}
+                />}
+                checked={riktigIdentIJournalposten}
+                onChange={(event) => this.handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
+            />
+            {riktigIdentIJournalposten === JaNei.NEI&& <Input
+                label={intlHelper(
+                    intl, 'ident.identifikasjon.felt'
+                )}
+                onChange={this.handleIdent1Change}
+                onBlur={this.handleIdent1Blur}
+                onKeyPress={this.handleIdentKeyPress(1)}
+                value={state.ident1}
+                className="bold-label ident-soker-1"
+                maxLength={11}
+                feil={
+                  skalViseFeilmelding(punchState.ident1)
+                      ? intlHelper(intl, 'ident.feil.ugyldigident')
+                      : undefined
+                }
+                bredde={"M"}
+            />}
+            <Input
+                label={intlHelper(intl, 'ident.identifikasjon.barn')}
+                onChange={this.handleIdent2Change}
+                onBlur={this.handleIdent2Blur}
+                onKeyPress={this.handleIdentKeyPress(2)}
+                value={state.ident2}
+                className="bold-label ident-soker-2"
+                maxLength={11}
+                feil={
+                  skalViseFeilmelding(punchState.ident2)
+                      ? intlHelper(intl, 'ident.feil.ugyldigident')
+                      : undefined
+                }
+                bredde={"M"}
+            />
+            <VerticalSpacer sixteenPx={true}/>
+            <Checkbox
+                label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
+                onChange={(e) => this.handleClick(e)}
+            />
+            {punchState.step === PunchStep.IDENT &&
+            antallIdenter > 0 &&
+            journalpostident &&
+            identer.every(
+                (ident) =>
+                    !ident ||
+                    (IdentRules.isIdentValid(ident) && ident !== journalpostident)
+            ) && (
+                <AlertStripeAdvarsel>
+                  {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
+                    antallIdenter: antallIdenter.toString(),
+                    journalpostident,
+                  })}
+                </AlertStripeAdvarsel>
+            )}
+          </div>
+
+
+
+            <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
             className="fordeling-page__options"
           >
@@ -217,6 +291,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 const mapStateToProps = (state: RootStateType) => ({
   journalpost: state.felles.journalpost,
   fordelingState: state.fordelingState,
+  identState: state.identState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
