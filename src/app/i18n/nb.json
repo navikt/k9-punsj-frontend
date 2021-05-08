@@ -115,6 +115,7 @@
   "skjema.knapp.tilstart":                                                                        "Tilbake til start",
   "skjema.knapp.send":                                                                            "Send inn",
   "skjema.knapp.settpaavent":                                                                     "Sett på vent",
+  "skjema.knapp.avbryt":                                                                          "Avbryt",
   "skjema.opplysningeromsoknad":                                                                  "Opplysninger om søknaden",
   "skjema.opplysningeromsoker":                                                                   "Opplysninger om søker",
   "skjema.opplysningerombarnet":                                                                  "Opplysninger om barnet",
@@ -122,6 +123,7 @@
   "skjema.soknasperiodefra":                                                                      "Søknadsperiode fra og med",
   "skjema.soknasperiodetil":                                                                      "Søknadsperiode til og med",
   "skjema.spraak":                                                                                "Språk:",
+  "skjema.settpaavent.periode":                                                                   "Saken vil bli satt på vent i 3 uker",
   "skjema.opplysningerombarn":                                                                    "Opplysninger om barnet",
   "skjema.opplysningerikkepunsjet":                                                               "Søknaden inneholder opplysninger som ikke er blitt registrert",
   "skjema.barn.ident":                                                                            "Barnets fødselsnummer/D-nummer:",
@@ -257,7 +259,6 @@
   "registrering.overskrift": "Hva ønsker du å registrere?",
   "registrering.journalpostinfo": "Det finnes flere journalposter på søkeren",
 
-  "skjemaheader.avbryt": "Avbryt journalposten",
   "skjema.felt.signert.label": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
   "skjema.felt.signert.ja": "Ja",
   "skjema.felt.signert.nei": "Nei",

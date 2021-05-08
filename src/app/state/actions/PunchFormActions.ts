@@ -91,6 +91,31 @@ export const hentPerioderErrorAction = (error: IError): IHentPerioderErrorAction
     error
 });
 
+interface ISettJournalpostPaaVentAction {
+    type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT;
+}
+interface ISettJournalpostPaaVentSuccessAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS;
+}
+interface ISettJournalpostPaaVentErrorAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR;
+    error: IError;
+}
+
+export function setJournalpostPaaVentAction(
+): ISettJournalpostPaaVentAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT };
+}
+export function setJournalpostPaaVentSuccessAction(): ISettJournalpostPaaVentSuccessAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS };
+}
+export function setJournalpostPaaVentErrorAction(
+    error: IError
+): ISettJournalpostPaaVentErrorAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR, error };
+}
+
+
 type ISoknadActionTypes = IGetSoknadLoadingAction | IGetSoknadErrorAction | ISetSoknadAction | IResetSoknadAction;
 type ISoknadUpdateActionTypes = IUpdateSoknadRequestAction | IUpdateSoknadSuccessAction | IUpdateSoknadErrorAction;
 type ISoknadSubmitActionTypes =
@@ -99,12 +124,17 @@ type ISoknadSubmitActionTypes =
     | ISubmitSoknadUncompleteAction
     | ISubmitSoknadErrorAction;
 type IPerioderActionTypes = IHentPerioderErrorAction | IHentPerioderLoadingAction | IHentPerioderSuccessAction;
+type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction;
+
+
+
 export type IPunchFormActionTypes =
     IResetPunchFormAction
     | ISoknadActionTypes
     | ISoknadUpdateActionTypes
     | ISoknadSubmitActionTypes
-    | IPerioderActionTypes;
+    | IPerioderActionTypes
+    | ISettPaaVentActionTypes;
 
 export const resetPunchFormAction = (): IResetPunchFormAction => ({type: PunchFormActionKeys.RESET});
 
@@ -239,7 +269,6 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
     }
 }
 
-
 export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
     return (dispatch: any) => {
         const requestBody: IHentPerioder = {
@@ -257,4 +286,26 @@ export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
             );
         });
     }
+}
+
+
+
+export function settJournalpostPaaVent(journalpostid: string) {
+    return (dispatch: any) => {
+        dispatch(setJournalpostPaaVentAction());
+        return post(
+            ApiPath.JOURNALPOST_SETT_PAA_VENT,
+            { journalpostId: journalpostid },
+            undefined,
+            {},
+            response => {
+                if (response.ok) {
+                    return dispatch(setJournalpostPaaVentSuccessAction());
+                }
+                return dispatch(
+                    setJournalpostPaaVentErrorAction(convertResponseToError(response))
+                );
+            }
+        );
+    };
 }

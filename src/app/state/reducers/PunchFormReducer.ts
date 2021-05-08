@@ -5,7 +5,10 @@ import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IPunchFormState = {
     isSoknadLoading: false,
-    isComplete: false
+    isComplete: false,
+    awaitingSettPaaVentResponse: false,
+    settPaaVentError: undefined,
+    settPaaVentSuccess: undefined
 };
 
 export function PunchFormReducer(
@@ -125,6 +128,28 @@ export function PunchFormReducer(
                 hentPerioderError: undefined,
                 perioder: action.perioder
 
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: true,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: false,
+                settPaaVentError: action.error,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: true,
+                settPaaVentError: undefined,
             };
 
 

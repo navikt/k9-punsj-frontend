@@ -14,6 +14,7 @@ import {
     submitSoknad,
     undoChoiceOfEksisterendeSoknadAction,
     updateSoknad,
+    settJournalpostPaaVent,
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -59,6 +60,9 @@ import BinSvg from "../../assets/SVG/BinSVG";
 import AddCircleSvg from "../../assets/SVG/AddCircleSVG";
 import {generateDateString} from "../../components/skjema/skjemaUtils";
 import {RelasjonTilBarnet} from "../../models/enums/RelasjonTilBarnet";
+import ModalWrapper from "nav-frontend-modal";
+import SoknadReadModeV2 from "./SoknadReadModeV2";
+import SettPaaVentModal from "./SettPaaVentModal";
 
 
 export interface IPunchFormComponentProps {
@@ -84,6 +88,7 @@ export interface IPunchFormDispatchProps {
     submitSoknad: typeof submitSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
     setSignaturAction: typeof setSignaturAction;
+    settJournalpostPaaVent: typeof settJournalpostPaaVent;
 }
 
 export interface IPunchFormComponentState {
@@ -110,6 +115,7 @@ export interface IPunchFormComponentState {
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     nySoknad: boolean;
+    showModal: boolean;
 
 }
 
@@ -161,6 +167,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         skalHaFerie: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         aapnePaneler: [],
         nySoknad: false,
+        showModal: false,
     };
 
     private initialPeriode: IPeriodeV2 = {fom: '', tom: ''};
@@ -223,7 +230,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
-                faktiskeTimer: this.faktiskTimer(new PSBSoknad(this.state.soknad))
             });
 
         }
@@ -239,6 +245,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
         const eksisterendePerioder = punchFormState.perioder;
+
 
 
         if (punchFormState.isComplete) {
@@ -276,10 +283,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         };
 
         const arbeidstakerperioder = () => {
-            const updateTgStrings = () =>
-                this.setState({
-                    faktiskeTimer: this.faktiskTimer(soknad) || [],
-                });
             const arbeid = soknad.arbeidstid;
 
             return (<Listepaneler
@@ -308,15 +311,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         },
                         showStatus
                     )
-
                 }
                 textLeggTil={'skjema.arbeid.arbeidstaker.leggtilperiode'
                 }
                 textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
                 panelClassName="arbeidstakerpanel"
                 feilkodeprefiks={'arbeid.arbeidstaker'}
-                onAdd={updateTgStrings}
-                onRemove={updateTgStrings}
                 kanHaFlere={true}
             />)
         };
@@ -901,15 +901,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
                     <Knapp
                         className={"vent"}
-                        onClick={() => undefined}
+                        onClick={() => this.setState({showModal: true})}
                         disabled={false}
                     >
                         {intlHelper(intl, 'skjema.knapp.settpaavent')}
                     </Knapp>
                 </p>
                 </div>
+                {this.state.showModal && (
+                        <ModalWrapper
+                            key={"settpaaventmodal"}
+                            onRequestClose={() => this.setState({showModal: false})}
+                            contentLabel={"settpaaventmodal"}
+                            isOpen={this.state.showModal}
+                            closeButton={false}
+                        >
+                            <div className="modal_content">
+                                {this.state.showModal && (
+                                    <SettPaaVentModal
+                                        submit={() => this.handleSettPaaVent()}
+                                        avbryt={() => this.setState({showModal: false})}
+                                    />
+                                )}
+                            </div>
+                        </ModalWrapper>
+                )}
             </>);
     }
+
+    private handleSettPaaVent = () => {
+        this.props.settJournalpostPaaVent(this.props.journalpostid);
+        this.setState({ showModal: false});
+    }
+
 
     private handlePanelClick = (p: PunchFormPaneler) => {
         const {aapnePaneler} = this.state;
@@ -1002,28 +1026,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             case BeredskapNattevaak.NATTEVAAK:
                 return this.state.nattevaak
         }
-    }
-
-
-    private faktiskTimer = (soknad: PSBSoknad) => {
-        // Genererer liste med tilsteværelsesgrader i stringformat fra arbeidstakerforhold
-        return soknad ? soknad.arbeidstid.faktiskeTimer() : [];
-    };
-
-    private updateTilsynsordning(jaNeiVetikke: JaNeiVetikke) {
-        this.setState({
-            iTilsynsordning: jaNeiVetikke,
-        });
-
-        if (
-            jaNeiVetikke === JaNeiVetikke.JA &&
-            this.state.soknad.tilsynsordning!.perioder!.length === 0
-        ) {
-            this.state.soknad.tilsynsordning!.perioder!.push(this.initialPeriodeTimerMinutter);
-        }
-//    this.updateSoknadState({ tilsynsordning }, true);
-//    this.updateSoknad
-//    ({ tilsynsordning });
     }
 
     private updateUtenlandsopphold(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
@@ -1240,33 +1242,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         },
     });
 
-
-    private handleOppholdLandChange = (index: number, land: string) => {
-        this.state.soknad.utenlandsopphold![index].land = land;
-        this.forceUpdate();
-    };
-
-    private handleOppholdFomChange = (index: number, fom: string) => {
-        this.state.soknad.utenlandsopphold![index].periode = {
-            ...this.state.soknad.utenlandsopphold![index].periode,
-            fom
-        };
-        this.forceUpdate();
-    };
-
-    private handleOppholdTomChange = (index: number, tom: string) => {
-        this.state.soknad.utenlandsopphold![index].periode = {
-            ...this.state.soknad.utenlandsopphold![index].periode,
-            tom
-        };
-        this.forceUpdate();
-    };
-
-    private handleOppholdPeriodeChange = (index: number, periode: IPeriodeV2) => {
-        this.state.soknad.utenlandsopphold![index].periode = periode;
-        this.forceUpdate();
-    };
-
     private addOpphold = () => {
         if (!this.state.soknad.utenlandsopphold) {
             this.state.soknad = {...this.state.soknad, utenlandsopphold: [{}]};
@@ -1339,6 +1314,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetPunchFormAction: () => dispatch(resetPunchFormAction()),
     setSignaturAction: (signert: JaNei | null) =>
         dispatch(setSignaturAction(signert)),
+    settJournalpostPaaVent: (journalpostid: string) => dispatch(settJournalpostPaaVent(journalpostid)),
 });
 
 export const PunchForm = injectIntl(
