@@ -106,15 +106,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
-
-    const pdfUrl = (journalpost: IJournalpost) => {
-        return apiUrl(ApiPath.DOKUMENT, {
-            journalpostId: journalpost.journalpostId,
-            dokumentId: journalpost.dokumenter[0].dokumentId
-
-        })
-    }
-
     const infoText = (journalpost: IJournalpost, index: number) => {
         const dato = journalpost.dato ? ", dato: " + journalpost.dato : ""
         return `Journalpost ${index}${dato}`
@@ -122,23 +113,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     return (
         <div className={"registrering-page"}>
-            {journalposterState.journalposter.length > 0 && (
-                <div className={"registrering-journalpostinfo"}>
-                    <p>
-                        Andre journalposter registrert på bruker:
-                    </p>
-                    {journalposterState.journalposter.map((jp, index) => (
-                        <a
-                            key={jp.journalpostId}
-                            href={pdfUrl(jp)}
-                            target="_blank">
-                            {infoText(jp, index)}
-                        </a>
-                    ))
-                    }
-                </div>)}
-
-
             <EksisterendeSoknader
                 {...props}
             />

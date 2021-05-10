@@ -7,29 +7,65 @@ import intlHelper from "../../utils/intlUtils";
 
 import {Knapp} from "nav-frontend-knapper";
 import './settPaaVentModal.less'
+import {IJournalpost, IJournalpostInfo} from "../../models/types";
+import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {apiUrl} from "../../utils";
+import {ApiPath} from "../../apiConfig";
 
 interface ISettPaaVentModalProps {
     submit: () => void;
-    avbryt: () => void
+    avbryt: () => void;
+    journalposter: IJournalpostInfo[];
+}
+
+const pdfUrl = (journalpost: IJournalpost) => {
+    return apiUrl(ApiPath.DOKUMENT, {
+        journalpostId: journalpost.journalpostId,
+        dokumentId: journalpost.dokumenter[0].dokumentId
+
+    })
 }
 
 class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaVentModalProps> {
 
     render() {
-        const {intl, submit, avbryt} = this.props;
+        const {intl, submit, avbryt, journalposter} = this.props;
 
         return (
-            <Container className={classNames('read-modal sett-paa-vent', 'enkel')}>
+            <div className={"sett-paa-vent"}>
                 <h2>{intlHelper(intl, 'skjema.knapp.settpaavent')}</h2>
                 <p>{intlHelper(intl, 'skjema.settpaavent.periode')}</p>
                 <div className="knapper">
                     <Knapp
-                    onClick={() => submit()}
+                        onClick={() => submit()}
+                        mini={true}
                     >{intlHelper(intl, 'skjema.knapp.settpaavent')}</Knapp>
-                    <Knapp onClick={() => avbryt()}>{intlHelper(intl, 'skjema.knapp.avbryt')}</Knapp>
+                    <Knapp onClick={() => avbryt()} mini={true}>{intlHelper(intl, 'skjema.knapp.avbryt')}</Knapp>
                 </div>
+                <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
+                <AlertStripeInfo>
+                    {intlHelper(intl, 'modal.settpaavent.info')}
+                </AlertStripeInfo>
 
-            </Container>
+                <table className="tabell tabell--stripet punch_mappetabell">
+                    <thead>
+                    <tr>
+                        <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
+                        <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {journalposter.map((j, i) => (
+                            <tr key={i}>
+                                <td>{j.journalpostid}</td>
+                                <td>{j.datoMottatt}</td>
+                            </tr>
+                        )
+                    )}
+                    </tbody>
+                </table>
+
+            </div>
         );
     }
 

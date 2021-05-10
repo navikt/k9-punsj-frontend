@@ -1,8 +1,8 @@
 import {IError}  from 'app/models/types/Error';
-import {IJournalpost} from "./Journalpost";
+import {IJournalpost, IJournalpostInfo} from "./Journalpost";
 
 export interface IJournalposterPerIdentState {
-    journalposter:                      IJournalpost[];
+    journalposter:                      IJournalpostInfo[];
     isJournalposterLoading?:            boolean;
     journalposterRequestError?:         IError;
 }

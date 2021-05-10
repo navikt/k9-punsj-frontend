@@ -8,3 +8,8 @@ export interface IJournalpost {
 export interface IDokument {
     dokumentId: string;
 }
+
+export interface IJournalpostInfo {
+    journalpostid: string;
+    datoMottatt: string;
+}

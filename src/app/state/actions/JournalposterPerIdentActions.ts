@@ -1,13 +1,12 @@
-import {IError, IJournalpost} from "../../models/types";
+import {IError, IJournalpostInfo} from "../../models/types";
 import {JournalposterPerIdentActionKeys} from "../../models/enums/JournalposterPerIdentActionKeys";
 import {convertResponseToError, get, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
 import {IHentSoknad} from "../../models/types/HentSoknad";
-import {findSoknaderErrorAction, findSoknaderLoadingAction, setSoknaderAction} from "./SoknaderVisningActions";
 
 interface ISetJournalposterPerIdentAction {
     type: JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_SET;
-    journalposter: IJournalpost[];
+    journalposter: IJournalpostInfo[];
 }
 
 interface IGetJournalposterPerIdentLoadAction {
@@ -26,7 +25,7 @@ export type IJournalposterPerIdentActions =
     | IGetJournalposterPerIdentErrorAction;
 
 export function setJournalposterPerIdentAction(
-    journalposter: IJournalpost[]
+    journalposter: IJournalpostInfo[]
 ): ISetJournalposterPerIdentAction {
     return {type: JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_SET, journalposter};
 }

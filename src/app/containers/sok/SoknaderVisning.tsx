@@ -206,11 +206,11 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 <table className="tabell tabell--stripet punch_mappetabell">
                     <thead>
                     <tr>
-                        <th>{intlHelper(intl, 'mapper.tabell.mottakelsesdato')}</th>
-                        <th>{intlHelper(intl, 'mapper.tabell.søknadtype')}</th>
-                        <th>{intlHelper(intl, 'mapper.tabell.fnrellerdato')}</th>
-                        <th>{intlHelper(intl, 'mapper.tabell.fraogmed')}</th>
-                        <th>{intlHelper(intl, 'mapper.tabell.tilogmed')}</th>
+                        <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                        <th>{intlHelper(intl, 'tabell.søknadtype')}</th>
+                        <th>{intlHelper(intl, 'tabell.fnrellerdato')}</th>
+                        <th>{intlHelper(intl, 'tabell.fraogmed')}</th>
+                        <th>{intlHelper(intl, 'tabell.tilogmed')}</th>
                     </tr>
                     </thead>
                     <tbody>{rows}</tbody>

@@ -221,8 +221,8 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         <table className="tabell tabell--stripet punch_mappetabell">
           <thead>
             <tr>
-              <th>{intlHelper(intl, 'mapper.tabell.mottakelsesdato')}</th>
-              <th>{intlHelper(intl, 'mapper.tabell.barnetsfnrellerfdato')}</th>
+              <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+              <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
               <th>{intlHelper(intl, 'skjema.periode')}</th>
             </tr>
           </thead>

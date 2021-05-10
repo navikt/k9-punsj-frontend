@@ -61,8 +61,8 @@ import AddCircleSvg from "../../assets/SVG/AddCircleSVG";
 import {generateDateString} from "../../components/skjema/skjemaUtils";
 import {RelasjonTilBarnet} from "../../models/enums/RelasjonTilBarnet";
 import ModalWrapper from "nav-frontend-modal";
-import SoknadReadModeV2 from "./SoknadReadModeV2";
 import SettPaaVentModal from "./SettPaaVentModal";
+import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
 
 
 export interface IPunchFormComponentProps {
@@ -75,6 +75,7 @@ export interface IPunchFormStateProps {
     punchFormState: IPunchFormState;
     punchState: IPleiepengerPunchState;
     signaturState: ISignaturState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 export interface IPunchFormDispatchProps {
@@ -916,9 +917,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             isOpen={this.state.showModal}
                             closeButton={false}
                         >
-                            <div className="modal_content">
+                            <div className="">
                                 {this.state.showModal && (
                                     <SettPaaVentModal
+                                        journalposter={this.props.journalposterState.journalposter}
                                         submit={() => this.handleSettPaaVent()}
                                         avbryt={() => this.setState({showModal: false})}
                                     />
@@ -1296,6 +1298,7 @@ const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     signaturState: state.PLEIEPENGER_SYKT_BARN.signaturState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
