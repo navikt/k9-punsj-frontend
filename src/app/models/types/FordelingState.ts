@@ -6,6 +6,4 @@ export interface IFordelingState {
     omfordelingDone: boolean;
     isAwaitingOmfordelingResponse: boolean;
     omfordelingError?: IError;
-    ident1: string;
-    ident2: string | null;
 }

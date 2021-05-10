@@ -2,7 +2,7 @@ import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {Arbeidsforhold, JaNei, JaNeiVetikke, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import {IInputError, IPleiepengerPunchState, IPunchFormState, ISignaturState} from 'app/models/types';
+import {IInputError, IPunchFormState, ISignaturState} from 'app/models/types';
 import {
     getSoknad,
     hentPerioderFraK9Sak,
@@ -59,6 +59,7 @@ import BinSvg from "../../assets/SVG/BinSVG";
 import AddCircleSvg from "../../assets/SVG/AddCircleSVG";
 import {generateDateString} from "../../components/skjema/skjemaUtils";
 import {RelasjonTilBarnet} from "../../models/enums/RelasjonTilBarnet";
+import {IIdentState} from "../../models/types/IdentState";
 
 
 export interface IPunchFormComponentProps {
@@ -69,8 +70,8 @@ export interface IPunchFormComponentProps {
 
 export interface IPunchFormStateProps {
     punchFormState: IPunchFormState;
-    punchState: IPleiepengerPunchState;
     signaturState: ISignaturState;
+    identState: IIdentState;
 }
 
 export interface IPunchFormDispatchProps {
@@ -207,7 +208,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
-        const {ident1, ident2} = this.props.punchState;
+        const {ident1, ident2} = this.props.identState;
         if (ident1 && ident2) {
             this.props.hentPerioder(ident1, ident2)
         }
@@ -234,7 +235,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     render() {
-        const {intl, punchFormState, punchState, signaturState} = this.props;
+        const {intl, punchFormState, signaturState, identState} = this.props;
 
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
@@ -888,9 +889,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <Knapp
                         onClick={() => {
                             this.updateSoknad
-                            ({barn: {norskIdent: punchState.ident2 || ''}});
+                            ({barn: {norskIdent: identState.ident2 || ''}});
                             this.props.submitSoknad(
-                                this.props.punchState.ident1,
+                                this.props.identState.ident1,
                                 this.props.id
                             )
                         }}
@@ -1319,8 +1320,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
 const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     signaturState: state.PLEIEPENGER_SYKT_BARN.signaturState,
+    identState: state.identState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

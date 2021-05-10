@@ -1,11 +1,11 @@
-import {JaNei, PunchStep, Sakstype} from 'app/models/enums';
+import {JaNei, Sakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
 import {setSakstypeAction,} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {Hovedknapp} from 'nav-frontend-knapper';
-import {Checkbox ,Input, Radio, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
+import {Checkbox, Input, Radio, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, {useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
@@ -100,18 +100,36 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
   const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
   const [ riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>(JaNei.NEI);
 
+  const [sokersIdent, setSokersIdent] = useState<string>('');
+  const [barnetsIdent, setBarnetsIdent] = useState<string>('');
+
   const skalViseFeilmelding = (ident: string | null) =>
       ident && ident.length && !IdentRules.isIdentValid(ident);
 
 const handleIdent1Change = (event: any) =>
-      props.setIdentAction(event.target.value.replace(/\D+/, ''), identState.ident2)
+      setSokersIdent(event.target.value.replace(/\D+/, ''))
 const handleIdent2Change = (event: any) =>
-      props.setIdentAction(identState.ident1, event.target.value.replace(/\D+/, ''));
+      setBarnetsIdent(event.target.value.replace(/\D+/, ''));
 
 const handleIdent1Blur = (event: any) =>
       props.setIdentAction(event.target.value, identState.ident2);
 const handleIdent2Blur = (event: any) =>
       props.setIdentAction(identState.ident1, event.target.value);
+
+const handleRadioChange = (jn: JaNei) => {
+    setRiktigIdentIJournalposten(jn);
+    if (jn === JaNei.JA) {
+      props.setIdentAction(journalpostident || '', identState.ident2)
+    }
+  }
+
+  const handleCheckboxChange = (checked: boolean) => {
+    setBarnetHarIkkeFnr(checked);
+    if (checked) {
+      setBarnetsIdent('');
+      props.setIdentAction(identState.ident1, null);
+    }
+  }
 
   if (fordelingState.isAwaitingOmfordelingResponse) {
     return <NavFrontendSpinner />;
@@ -145,14 +163,13 @@ const handleIdent2Blur = (event: any) =>
                 radios={Object.values(JaNei).map((jn) => ({
                   label: intlHelper(intl, jn),
                   value: jn,
-                  size: 1,
                 }))}
                 legend={<FormattedMessage
                     id="ident.identifikasjon.sjekkident"
                     values={{ident: journalpost?.norskIdent}}
                 />}
                 checked={riktigIdentIJournalposten}
-                onChange={(event) => setRiktigIdentIJournalposten((event.target as HTMLInputElement).value as JaNei)}
+                onChange={(event) => handleRadioChange((event.target as HTMLInputElement).value as JaNei)}
             />
             {riktigIdentIJournalposten === JaNei.NEI && <Input
                 label={intlHelper(
@@ -160,7 +177,7 @@ const handleIdent2Blur = (event: any) =>
                 )}
                 onChange={handleIdent1Change}
                 onBlur={handleIdent1Blur}
-                value={identState.ident1}
+                value={sokersIdent}
                 className="bold-label ident-soker-1"
                 maxLength={11}
                 feil={
@@ -174,7 +191,7 @@ const handleIdent2Blur = (event: any) =>
                 label={intlHelper(intl, 'ident.identifikasjon.barn')}
                 onChange={handleIdent2Change}
                 onBlur={handleIdent2Blur}
-                value={identState.ident2 || ''}
+                value={barnetsIdent}
                 className="bold-label ident-soker-2"
                 maxLength={11}
                 feil={
@@ -183,12 +200,14 @@ const handleIdent2Blur = (event: any) =>
                       : undefined
                 }
                 bredde={"M"}
+                disabled={barnetHarIkkeFnr}
             />
             <VerticalSpacer sixteenPx={true}/>
             <Checkbox
                 label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
-                onChange={(e) => setBarnetHarIkkeFnr(e.target.checked)}
+                onChange={(e) => handleCheckboxChange(e.target.checked)}
             />
+            <VerticalSpacer sixteenPx={true}/>
             {
             antallIdenter > 0 &&
             journalpostident &&
@@ -206,8 +225,6 @@ const handleIdent2Blur = (event: any) =>
                 </AlertStripeAdvarsel>
             )}
           </div>
-
-
 
             <RadioGruppe
             legend={intlHelper(intl, 'fordeling.overskrift')}
@@ -314,6 +331,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(setSakstypeAction(sakstype)),
   omfordel: (journalpostid: string, norskIdent: string) =>
     dispatch(omfordelAction(journalpostid, norskIdent)),
+  setIdentAction: (ident1: string, ident2: string | null) =>
+      dispatch(setIdentFellesAction(ident1, ident2))
 });
 
 const Fordeling = injectIntl(

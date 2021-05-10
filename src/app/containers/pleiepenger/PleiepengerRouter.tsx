@@ -14,7 +14,6 @@ const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({
   const pleiepengerRootPath = punchPath;
 
   const paths: IPath[] = [
-    { step: PunchStep.IDENT, path: `${pleiepengerRootPath}/ident` },
     {
       step: PunchStep.CHOOSE_SOKNAD,
       path: `${pleiepengerRootPath}/hentsoknader`,
@@ -22,9 +21,9 @@ const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({
     { step: PunchStep.FILL_FORM, path: `${pleiepengerRootPath}/skjema/{id}` },
     { step: PunchStep.COMPLETED, path: `${pleiepengerRootPath}/fullfort` },
   ];
-  const identPath = getPath(paths, PunchStep.IDENT);
+  const chooseSoknadPath = getPath(paths, PunchStep.CHOOSE_SOKNAD);
 
-  useRedirect(pleiepengerRootPath, identPath);
+  useRedirect(pleiepengerRootPath, chooseSoknadPath);
 
   return (
     <Switch>
