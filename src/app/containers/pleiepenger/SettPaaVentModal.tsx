@@ -11,6 +11,7 @@ import {IJournalpost, IJournalpostInfo} from "../../models/types";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {apiUrl} from "../../utils";
 import {ApiPath} from "../../apiConfig";
+import VisSvg from "../../assets/SVG/VisSVG";
 
 interface ISettPaaVentModalProps {
     submit: () => void;
@@ -18,10 +19,10 @@ interface ISettPaaVentModalProps {
     journalposter: IJournalpostInfo[];
 }
 
-const pdfUrl = (journalpost: IJournalpost) => {
+const pdfUrl = (journalpost: IJournalpostInfo) => {
     return apiUrl(ApiPath.DOKUMENT, {
         journalpostId: journalpost.journalpostId,
-        dokumentId: journalpost.dokumenter[0].dokumentId
+        dokumentId: journalpost.dokumenter[0].dokument_id
 
     })
 }
@@ -52,13 +53,27 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                     <tr>
                         <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
                         <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                        <th/>
+                        <th/>
                     </tr>
+                    <tr/>
                     </thead>
                     <tbody>
                     {journalposter.length && journalposter.map((j, i) => (
                             <tr key={i}>
-                                <td>{j.journalpostid}</td>
-                                <td>{j.datoMottatt}</td>
+                                <td>{j.journalpostId}</td>
+                                <td>{j.dato}</td>
+                                <td>
+                                    <a
+                                        className={"visjp"}
+                                        href={pdfUrl(j)}
+                                        target="_blank"
+                                    >
+                                        <VisSvg title={"vis"}/>
+                                        <div className="vistext">{intlHelper(intl, 'modal.settpaavent.visjournalpost')}</div>
+                                    </a>
+                                </td>
+                                <td><Knapp mini={true}>{intlHelper(intl, 'modal.settpaavent.registrer')}</Knapp></td>
                             </tr>
                         )
                     )}

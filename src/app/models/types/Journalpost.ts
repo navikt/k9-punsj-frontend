@@ -9,7 +9,12 @@ export interface IDokument {
     dokumentId: string;
 }
 
+export interface IDokumentInfo {
+    dokument_id: string;
+}
+
 export interface IJournalpostInfo {
-    journalpostid: string;
-    datoMottatt: string;
+    journalpostId: string;
+    dato: string;
+    dokumenter: IDokumentInfo[];
 }

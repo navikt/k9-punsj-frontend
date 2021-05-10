@@ -27,6 +27,7 @@ import {RegistreringsValg} from "./RegistreringsValg";
 import {PunchForm} from "./PunchForm";
 import {IIdentState} from "../../models/types/IdentState";
 
+
 export interface IPunchPageStateProps {
   punchState: IPleiepengerPunchState;
   journalpost?: IJournalpost;

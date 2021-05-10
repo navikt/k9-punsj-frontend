@@ -20,8 +20,8 @@ import JournalpostPanel from '../../components/journalpost-panel/JournalpostPane
 import {opprettGosysOppgave as omfordelAction} from "../../state/actions/GosysOppgaveActions";
 import {setHash} from "../../utils";
 import {IdentRules} from "../../rules";
-import {IIdentState} from "../../models/types/IdentState";
 import {setIdentFellesAction} from "../../state/actions/IdentActions";
+import {IIdentState} from "../../models/types/IdentState";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
@@ -98,7 +98,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
   const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
   const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
-  const [ riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>(JaNei.NEI);
+  const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>(JaNei.JA);
 
   const [sokersIdent, setSokersIdent] = useState<string>('');
   const [barnetsIdent, setBarnetsIdent] = useState<string>('');

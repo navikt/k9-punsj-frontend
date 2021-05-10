@@ -46,9 +46,9 @@ export function hentAlleJournalposterForIdent(norskIdent: string) {
         dispatch(getJournalposterPerIdentLoadAction(true));
         return post(
             ApiPath.JOURNALPOST_HENT,
-            undefined, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, journalposter) => {
+            undefined, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, svar) => {
                 if (response.ok) {
-                    return dispatch(setJournalposterPerIdentAction(journalposter));
+                    return dispatch(setJournalposterPerIdentAction(svar.poster));
                 }
                 return dispatch(
                     getJournalposterPerIdentErrorAction(convertResponseToError(response))

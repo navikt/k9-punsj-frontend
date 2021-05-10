@@ -88,12 +88,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         );
     }
 
-    if (journalposterState.journalposter.length) {
-        return <AlertStripeInfo>
-            Det finnes flere journalposter på søkeren
-        </AlertStripeInfo>
-    }
-
     const newSoknad = () =>
         props.createSoknad(
             journalpostid,

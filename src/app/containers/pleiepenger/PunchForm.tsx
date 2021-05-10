@@ -11,24 +11,16 @@ import {
     setIdentAction,
     setSignaturAction,
     setStepAction,
+    settJournalpostPaaVent,
     submitSoknad,
     undoChoiceOfEksisterendeSoknadAction,
     updateSoknad,
-    settJournalpostPaaVent,
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Knapp} from 'nav-frontend-knapper';
-import {
-    CheckboksPanel,
-    CheckboksPanelGruppe,
-    Checkbox,
-    Input,
-    RadioPanelGruppe,
-    Select,
-    SkjemaGruppe
-} from 'nav-frontend-skjema';
+import {CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {ArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
@@ -323,7 +315,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             />)
         };
 
-        const frilanserperioder = (harOverskrift?: boolean) => {
+        const frilanserperioder = () => {
             const arbeid = soknad.arbeidstid;
             const opptjening = soknad.opptjeningAktivitet;
             return (
@@ -506,7 +498,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             <div className={"periode"}>{generateDateString(p)}</div>
                         </div>)}
                     </>}
-                    {this.state.nySoknad && <div className={"soknadsperiodecontainer"}>
+                    {this.state.nySoknad || this.state.soknad.soeknadsperiode && <div className={"soknadsperiodecontainer"}>
                         <Input
                             id="soknadsperiode-fra"
                             bredde={"M"}
@@ -619,7 +611,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst
                             )
                         }
-                        checked={this.state.iUtlandet}
+                        checked={this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet}
                     />
                     {!!soknad.utenlandsopphold.length && (
                         <PeriodeinfoPaneler
@@ -695,7 +687,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst
                             )
                         }
-                        checked={this.state.skalHaFerie}
+                        checked={this.state.soknad.lovbestemtFerie?.length ? JaNeiIkkeOpplyst.JA : this.state.skalHaFerie}
                     />
                     {!!soknad.lovbestemtFerie.length && (
                         <Periodepaneler
@@ -988,9 +980,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private getCheckedValueArbeid = (af: Arbeidsforhold): boolean => {
         switch (af) {
             case Arbeidsforhold.ARBEIDSTAKER:
-                return this.state.arbeidstaker
+                if (this.state.soknad.arbeidstid?.arbeidstakerList?.length) {
+                    return true;
+                } else {
+                    return this.state.arbeidstaker
+                }
+
             case Arbeidsforhold.FRILANSER:
-                return this.state.frilanser
+                if (this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans) {
+                    return true;
+                } else {
+                    return this.state.frilanser
+                }
             case Arbeidsforhold.SELVSTENDIG:
                 return this.state.selvstendigNæringsdrivende
         }
