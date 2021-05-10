@@ -5,7 +5,7 @@ import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {Hovedknapp} from 'nav-frontend-knapper';
-import Checkbox, {Input, Radio, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
+import {Checkbox ,Input, Radio, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, {useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
@@ -21,6 +21,7 @@ import {opprettGosysOppgave as omfordelAction} from "../../state/actions/GosysOp
 import {setHash} from "../../utils";
 import {IdentRules} from "../../rules";
 import {IIdentState} from "../../models/types/IdentState";
+import {setIdentFellesAction} from "../../state/actions/IdentActions";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
@@ -32,6 +33,7 @@ export interface IFordelingStateProps {
 export interface IFordelingDispatchProps {
   setSakstypeAction: typeof setSakstypeAction;
   omfordel: typeof omfordelAction;
+  setIdentAction: typeof setIdentFellesAction;
 }
 
 type IFordelingProps = WrappedComponentProps &
@@ -79,7 +81,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
   props: IFordelingProps
 ) => {
-  const { intl, fordelingState, omfordel, journalpost } = props;
+  const { intl, fordelingState, omfordel, journalpost, identState } = props;
   const { sakstype } = fordelingState;
   const sakstyper: ISakstypeDefault[] = useMemo(
     () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -90,12 +92,26 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     [sakstype]
   );
 
+  const identer = [identState.ident1, identState.ident2];
+  const antallIdenter = identer.filter((id) => id && id.length).length;
+  const journalpostident = journalpost?.norskIdent;
+
   const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
   const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
   const [ riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>(JaNei.NEI);
 
   const skalViseFeilmelding = (ident: string | null) =>
       ident && ident.length && !IdentRules.isIdentValid(ident);
+
+const handleIdent1Change = (event: any) =>
+      props.setIdentAction(event.target.value.replace(/\D+/, ''), identState.ident2)
+const handleIdent2Change = (event: any) =>
+      props.setIdentAction(identState.ident1, event.target.value.replace(/\D+/, ''));
+
+const handleIdent1Blur = (event: any) =>
+      props.setIdentAction(event.target.value, identState.ident2);
+const handleIdent2Blur = (event: any) =>
+      props.setIdentAction(identState.ident1, event.target.value);
 
   if (fordelingState.isAwaitingOmfordelingResponse) {
     return <NavFrontendSpinner />;
@@ -136,20 +152,19 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     values={{ident: journalpost?.norskIdent}}
                 />}
                 checked={riktigIdentIJournalposten}
-                onChange={(event) => this.handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
+                onChange={(event) => setRiktigIdentIJournalposten((event.target as HTMLInputElement).value as JaNei)}
             />
-            {riktigIdentIJournalposten === JaNei.NEI&& <Input
+            {riktigIdentIJournalposten === JaNei.NEI && <Input
                 label={intlHelper(
                     intl, 'ident.identifikasjon.felt'
                 )}
-                onChange={this.handleIdent1Change}
-                onBlur={this.handleIdent1Blur}
-                onKeyPress={this.handleIdentKeyPress(1)}
-                value={state.ident1}
+                onChange={handleIdent1Change}
+                onBlur={handleIdent1Blur}
+                value={identState.ident1}
                 className="bold-label ident-soker-1"
                 maxLength={11}
                 feil={
-                  skalViseFeilmelding(punchState.ident1)
+                  skalViseFeilmelding(identState.ident1)
                       ? intlHelper(intl, 'ident.feil.ugyldigident')
                       : undefined
                 }
@@ -157,14 +172,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             />}
             <Input
                 label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                onChange={this.handleIdent2Change}
-                onBlur={this.handleIdent2Blur}
-                onKeyPress={this.handleIdentKeyPress(2)}
-                value={state.ident2}
+                onChange={handleIdent2Change}
+                onBlur={handleIdent2Blur}
+                value={identState.ident2 || ''}
                 className="bold-label ident-soker-2"
                 maxLength={11}
                 feil={
-                  skalViseFeilmelding(punchState.ident2)
+                  skalViseFeilmelding(identState.ident2)
                       ? intlHelper(intl, 'ident.feil.ugyldigident')
                       : undefined
                 }
@@ -173,11 +187,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             <VerticalSpacer sixteenPx={true}/>
             <Checkbox
                 label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
-                onChange={(e) => this.handleClick(e)}
+                onChange={(e) => setBarnetHarIkkeFnr(e.target.checked)}
             />
-            {punchState.step === PunchStep.IDENT &&
+            {
             antallIdenter > 0 &&
             journalpostident &&
+            props &&
             identer.every(
                 (ident) =>
                     !ident ||
