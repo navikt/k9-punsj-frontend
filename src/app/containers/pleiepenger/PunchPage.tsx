@@ -237,7 +237,7 @@ export class PunchPageComponent extends React.Component<
     const ident = this.props.punchState.ident1;
     return /^\d+&\d+$/.test(ident)
       ? { ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0] }
-      : { ident1: ident, ident2: null };
+      : { ident1: ident, ident2: 45 };
   }
 
   private redirectToNextStep(ident1: string, ident2: string | null) {

@@ -217,7 +217,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
     return (
       <>
-        <h2>{intlHelper(intl, 'mapper.tabell.overskrift')}</h2>
+        <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
         <table className="tabell tabell--stripet punch_mappetabell">
           <thead>
             <tr>

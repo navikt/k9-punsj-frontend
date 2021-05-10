@@ -55,7 +55,7 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                     </tr>
                     </thead>
                     <tbody>
-                    {journalposter.map((j, i) => (
+                    {journalposter.length && journalposter.map((j, i) => (
                             <tr key={i}>
                                 <td>{j.journalpostid}</td>
                                 <td>{j.datoMottatt}</td>
