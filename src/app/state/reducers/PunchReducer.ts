@@ -4,7 +4,7 @@ import {IPunchActionTypes}                     from 'app/state/actions';
 import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 export const initialState: IPleiepengerPunchState = {
-    step: PunchStep.IDENT,
+    step: PunchStep.CHOOSE_SOKNAD,
     ident1: '',
     ident2: null,
 };
@@ -36,14 +36,6 @@ export function PunchReducer(
             return {
                 ...punchState,
                 step: PunchStep.CHOOSE_SOKNAD
-            };
-
-        case PunchActionKeys.BACK_FROM_MAPPER:
-            return {
-                ...punchState,
-                step: PunchStep.IDENT,
-                ident1: '',
-                ident2: null
             };
 
         default:

@@ -11,6 +11,7 @@ import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
+import {IIdentState} from "../../../app/models/types/IdentState";
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -20,7 +21,6 @@ jest.mock('app/utils/pathUtils');
 jest.mock('app/containers/pleiepenger/Fordeling', () => ({
   Fordeling: () => <></>,
 }));
-jest.mock('app/containers/pleiepenger/Ident', () => ({ Ident: () => <></> }));
 jest.mock('app/containers/pleiepenger/EksisterendeSoknader', () => ({
   EksisterendeSoknader: () => <></>,
 }));
@@ -75,9 +75,15 @@ const setupPunchPage = (
     ...punchStatePartial,
   };
 
+  const identState: IIdentState = {
+    ident1: '',
+    ident2: null,
+  };
+
   const punchPageStateProps: IPunchPageStateProps = {
     punchState,
     journalpost,
+    identState
   };
 
   const punchPageComponentProps: IPunchPageComponentProps = {
@@ -102,20 +108,12 @@ const setupPunchPage = (
 };
 
 describe('PunchPage', () => {
-  it('Laster inn Ident', () => {
-    const journalpostid = '200';
-    const punchPage = setupPunchPage(journalpostid, '#/ident', {
-      step: 0,
-      ident1: '',
-    });
-    expect(punchPage.find('Ident')).toHaveLength(1);
-  });
 
   it('Laster inn oversikt over ufullstendige søknader', () => {
     const journalpostid = '200';
     const ident1 = '12345678901';
     const punchPage = setupPunchPage(journalpostid, `#/hentsoknad/${ident1}`, {
-      step: 1,
+      step: 0,
       ident1,
     });
     expect(punchPage.find('RegistreringsValg')).toHaveLength(1);
@@ -131,7 +129,7 @@ describe('PunchPage', () => {
     const punchPage = setupPunchPage(
       journalpostid,
       `#/hentsoknad/${mappeid}`,
-      { step: 2, ident1 },
+      { step: 1, ident1 },
       mappeid
     );
     expect(punchPage.find('PunchForm')).toHaveLength(1);
@@ -144,7 +142,7 @@ describe('PunchPage', () => {
   it('Viser fullførtmelding', () => {
     const journalpostid = '200';
     const punchPage = setupPunchPage(journalpostid, `#/fullfort`, {
-      step: 3,
+      step: 2,
       ident1: '',
     });
     expect(punchPage.find('AlertStripeSuksess')).toHaveLength(1);

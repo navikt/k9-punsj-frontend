@@ -69,7 +69,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     }, [ident1]);
 
     const redirectToPreviousStep = () => {
-        setHash(getPunchPath(PunchStep.IDENT));
+   //     setHash(getPunchPath(PunchStep.IDENT));
         props.undoSearchForEksisterendeSoknaderAction()
     }
 

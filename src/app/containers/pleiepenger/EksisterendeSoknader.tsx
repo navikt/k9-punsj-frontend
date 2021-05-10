@@ -80,9 +80,9 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
       props.findEksisterendeSoknader(ident1, ident2);
       props.setStepAction(PunchStep.CHOOSE_SOKNAD);
     } else {
-      props.setStepAction(PunchStep.IDENT);
+ //     props.setStepAction(PunchStep.IDENT);
       props.resetPunchAction();
-      setHash(getPunchPath(PunchStep.IDENT));
+//      setHash(getPunchPath(PunchStep.IDENT));
     }
   }, [ident1, ident2]);
 
@@ -233,10 +233,10 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     );
   }
 
-  function undoSearchForEksisterendeSoknader() {
-    setHash(getPunchPath(PunchStep.IDENT));
-    props.undoSearchForEksisterendeSoknaderAction();
-  }
+//  function undoSearchForEksisterendeSoknader() {
+//    setHash(getPunchPath(PunchStep.IDENT));
+//    props.undoSearchForEksisterendeSoknaderAction();
+//  }
 
   const newSoknadButton = (
     <p>

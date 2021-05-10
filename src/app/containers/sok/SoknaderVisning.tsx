@@ -66,7 +66,6 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
     const soknader = soknaderSokState.soknadSvar;
 
     const paths: IPath[] = [
-        { step: PunchStep.IDENT, path: `/pleiepenger/ident` },
         {
             step: PunchStep.CHOOSE_SOKNAD,
             path: `/pleiepenger/hentsoknader`,

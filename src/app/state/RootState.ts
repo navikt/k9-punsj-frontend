@@ -13,6 +13,7 @@ import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/ov
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
 import {SoknaderVisningReducer} from "./reducers/SoknaderVisningReducer";
 import {JournalposterPerIdentReducer} from "./reducers/JournalposterPerIdentReducer";
+import {IdentReducer} from "./reducers/IdentReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -36,6 +37,7 @@ export const rootReducer = combineReducers({
   authState: AuthReducer,
   felles: FellesReducer,
   journalposterPerIdentState: JournalposterPerIdentReducer,
+  identState: IdentReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;
