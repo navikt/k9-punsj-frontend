@@ -114,7 +114,7 @@ const handleIdent2Change = (event: any) =>
 const handleIdent1Blur = (event: any) =>
       props.setIdentAction(event.target.value, identState.ident2);
 const handleIdent2Blur = (event: any) =>
-      props.setIdentAction(identState.ident1, event.target.value);
+      props.setIdentAction(riktigIdentIJournalposten ? (journalpostident || '') : sokersIdent, event.target.value);
 
 const handleRadioChange = (jn: JaNei) => {
     setRiktigIdentIJournalposten(jn);
@@ -127,7 +127,7 @@ const handleRadioChange = (jn: JaNei) => {
     setBarnetHarIkkeFnr(checked);
     if (checked) {
       setBarnetsIdent('');
-      props.setIdentAction(identState.ident1, null);
+      props.setIdentAction(riktigIdentIJournalposten ? (journalpostident || '') : sokersIdent, null);
     }
   }
 

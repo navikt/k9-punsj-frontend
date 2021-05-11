@@ -105,7 +105,7 @@
   "mappe.lesemodus.nattevaak":                                                                    "Nattevåk:",
   "mappe.lesemodus.nattevaak.beskrivelse":                                                        "Nattevåk{ft, select, f { fra {fom}} t { til {tom}} ft { fra {fom} til {tom}} other {}}",
   "mappe.lesemodus.tilsyn":                                                                       "Tilsyn:",
-  "mappe.lesemodus.knapp.velg":                                                                   "Velg denne",
+  "mappe.lesemodus.knapp.velg":                                                                   "Fortsett",
   "mappe.lesemodus.knapp.lukk":                                                                   "Lukk",
   "skjema.ekspander":                                                                             "Ekspander alle paneler",
   "skjema.eksisterende":                                                                          "Eksisterende søknadsperioder:",
@@ -320,6 +320,8 @@
   "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
   "modal.settpaavent.visjournalpost": "Vis journalpost",
   "modal.settpaavent.registrer": "Registrer informasjon",
+  "modal.erdusikker.info": "Er du sikker på at du vil fortsette på denne søknaden?",
+
 
   "søk.label": "Søk med fødselsnummer eller D-nummer",
   "søk.knapp.label": "Søk",

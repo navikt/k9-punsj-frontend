@@ -4,7 +4,7 @@ import {IFordelingActionTypes}                 from 'app/state/actions';
 import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
 
 const initialState: IFordelingState = {
-    sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
+    sakstype: undefined,
     omfordelingDone: false,
     isAwaitingOmfordelingResponse: false,
 };
