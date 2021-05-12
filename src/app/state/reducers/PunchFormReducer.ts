@@ -8,7 +8,8 @@ const initialState: IPunchFormState = {
     isComplete: false,
     awaitingSettPaaVentResponse: false,
     settPaaVentError: undefined,
-    settPaaVentSuccess: undefined
+    settPaaVentSuccess: undefined,
+    inputErrors: undefined,
 };
 
 export function PunchFormReducer(
@@ -60,8 +61,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                inputErrors1: action.errors1,
-                inputErrors2: action.errors2,
+                inputErrors: action.errors,
                 updateSoknadError: undefined
             };
 
@@ -84,8 +84,7 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: undefined,
-                inputErrors1: undefined,
-                inputErrors2: undefined,
+                inputErrors: undefined,
                 isComplete: true
             };
 
@@ -94,8 +93,7 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: undefined,
-                inputErrors1: action.errors1,
-                inputErrors2: action.errors2
+                inputErrors: action.errors,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_ERROR:

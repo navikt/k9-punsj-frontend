@@ -3,3 +3,8 @@ export interface IInputError {
     feilkode?: any;
     feilmelding?: string;
 }
+
+export interface IInputErrorResponse {
+    feil: IInputError[];
+    søknadIdDto: string;
+}

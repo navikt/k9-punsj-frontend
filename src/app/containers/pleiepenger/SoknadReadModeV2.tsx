@@ -36,10 +36,6 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>
                     <Col>{soknad.barn.norskIdent ? soknad.barn.norskIdent : soknad.barn.foedselsdato}</Col>
                 </Row>
-                <Row>
-                    <Col>{intlHelper(intl, 'mappe.lesemodus.arbeid')}</Col>
-                    {this.arbeid(soknad.opptjeningAktivitet)}
-                </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
                     {this.tilsynsordning(soknad.tilsynsordning)}
@@ -53,18 +49,6 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
 
     private soknadsperioder = (sokandsperioder: IPeriodeV2[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
 
-    private arbeid = (arbeid: OpptjeningAktivitet) => {
-        const {intl, soknad} = this.props;
-            const numberOfWorkPeriods = arbeid.arbeidstaker.length + arbeid.selvstendigNaeringsdrivende.length + (arbeid.frilanser ? 1 : 0);
-        return <Col>{!!numberOfWorkPeriods && <ul>
-            {arbeid.arbeidstaker.map((a,i) => <li key={i}>
-                <p>{a.description(intl)}</p>
-                {a.arbeidstidInfo.perioder.length && <ul>{a.arbeidstidInfo.perioder.map((tg,j) => <li key={j}>{tg.faktiskArbeidTimerPerDag}</li>)}</ul>}
-            </li>)}
-            {arbeid.selvstendigNaeringsdrivende.map((a, i) => <li key={i}>{a.perioder.map(p => p.description(intl))}</li>)}
-            {<li key={"frilanser"}>{arbeid.frilanser?.description(intl)}</li>}
-        </ul>}</Col>
-    };
 
     private tilsynsordning = (tilsynsordning: TilsynsordningV2) => {
         const {intl} = this.props;

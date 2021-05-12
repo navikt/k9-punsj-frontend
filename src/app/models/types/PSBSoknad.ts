@@ -9,6 +9,7 @@ import {
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
+import {Tilleggsinformasjon} from "./Soknad";
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -21,8 +22,8 @@ export interface IPSBSoknad {
     soeknadsperiode?: IPeriodeV2;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
-    beredskap?: IPeriodeV2[];
-    nattevaak?: IPeriodeV2[];
+    beredskap?: PeriodeinfoV2<ITilleggsinformasjon>[];
+    nattevaak?: PeriodeinfoV2<ITilleggsinformasjon>[];
     tilsynsordning?: ITilsynsordningV2;
     uttak?: PeriodeinfoV2<IUttak>[];
     utenlandsopphold?: PeriodeinfoV2<IUtenlandsOpphold>[];
@@ -46,8 +47,8 @@ export class PSBSoknad implements IPSBSoknad {
     soeknadsperiode: PeriodeV2;
     opptjeningAktivitet: OpptjeningAktivitet;
     arbeidstid: Arbeidstid;
-    beredskap: PeriodeV2[];
-    nattevaak: PeriodeV2[];
+    beredskap: TilleggsinformasjonV2[];
+    nattevaak: TilleggsinformasjonV2[];
     tilsynsordning: TilsynsordningV2;
     uttak: Uttak[];
     utenlandsopphold: UtenlandsOpphold[];
@@ -68,8 +69,8 @@ export class PSBSoknad implements IPSBSoknad {
         this.soeknadsperiode = new PeriodeV2(soknad.soeknadsperiode || {})
         this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {})
-        this.beredskap = (soknad.beredskap || []).map(b => new PeriodeV2(b));
-        this.nattevaak = (soknad.nattevaak || []).map(n => new PeriodeV2(n));
+        this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
+        this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
         this.tilsynsordning = new TilsynsordningV2(soknad.tilsynsordning || {});
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
@@ -107,45 +108,40 @@ export class PSBSoknad implements IPSBSoknad {
 }
 
 export interface IOpptjeningAktivitet {
-    selvstendigNaeringsdrivende?: ISelvstendigNaeringsdrivendeOpptjening[];
+    selvstendigNaeringsdrivende?: ISelvstendigNaeringsdrivendeOpptjening | null;
     frilanser?: IFrilanserOpptjening | null;
     arbeidstaker?: IArbeidstakerV2[];
 }
 
 export class OpptjeningAktivitet implements IOpptjeningAktivitet {
-    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening[];
+    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
     frilanser: FrilanserOpptjening | null;
     arbeidstaker: ArbeidstakerV2[];
 
     constructor(arbeid: IOpptjeningAktivitet) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
-        this.selvstendigNaeringsdrivende = (arbeid.selvstendigNaeringsdrivende || []).map(s => new SelvstendigNaeringsdrivendeOpptjening(s));
+        this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende ?  new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende) : null;
         this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
     }
 
-    numberOfWorkPeriods(): number {
-        return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + (this.frilanser ? 1 : 0);
-    }
 }
 
 export interface IArbeidstid {
     arbeidstakerList?: IArbeidstakerV2[];
-    frilanserArbeidstidInfo?: IArbeidstidPeriodeMedTimer | null;
-    selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo;
+    frilanserArbeidstidInfo?: IArbeidstidInfo | null;
+    selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo | null;
 }
 
 export class Arbeidstid implements Required<IArbeidstid>{
     arbeidstakerList: ArbeidstakerV2[];
-    frilanserArbeidstidInfo: ArbeidstidPeriodeMedTimer | null;
-    selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo;
+    frilanserArbeidstidInfo: ArbeidstidInfo | null;
+    selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | null;
 
     constructor(a: IArbeidstid) {
         this.arbeidstakerList = a.arbeidstakerList ? a.arbeidstakerList.map(ab => new ArbeidstakerV2(ab)) : [];
-        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidPeriodeMedTimer(a.frilanserArbeidstidInfo) : null;
-        this.selvstendigNæringsdrivendeArbeidstidInfo = new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo || {});
+        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidInfo(a.frilanserArbeidstidInfo) : null;
+        this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo) : null;
     }
-
-    faktiskeTimer = (): string[][] => this.arbeidstakerList.map((a: ArbeidstakerV2) => a.generateFaktiskeTimer());
 }
 
 export interface IArbeidstidInfo {
@@ -158,14 +154,12 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
     constructor(ai: IArbeidstidInfo) {
         this.perioder = (ai.perioder || []).map(p => new ArbeidstidPeriodeMedTimer(p));
     }
-
-    faktiskTimer = (): string[] => this.perioder.map(p => p.faktiskArbeidTimerPerDag);
 }
 
 export interface ISelvstendigNaeringsdrivendeOpptjening {
     virksomhetNavn?: string | null;
     organisasjonsnummer?: string | null;
-    perioder: PeriodeinfoV2<ISelvstendigNaerinsdrivende>[];
+    perioder?: PeriodeinfoV2<ISelvstendigNaerinsdrivende>[];
 }
 
 export class SelvstendigNaeringsdrivendeOpptjening implements Required<ISelvstendigNaeringsdrivendeOpptjening>{
@@ -177,7 +171,7 @@ export class SelvstendigNaeringsdrivendeOpptjening implements Required<ISelvsten
 
         this.virksomhetNavn = s.virksomhetNavn || "";
         this.organisasjonsnummer = s.organisasjonsnummer || "";
-        this.perioder = s.perioder.map(p => new SelvstendigNaerinsdrivende(p))
+        this.perioder = (s.perioder || []).map(p => new SelvstendigNaerinsdrivende(p))
     }
 }
 

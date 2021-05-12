@@ -38,8 +38,7 @@ interface IUpdateSoknadRequestAction {
 
 interface IUpdateSoknadSuccessAction {
     type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS,
-    errors1?: IInputError[],
-    errors2?: IInputError[]
+    errors?: IInputError[],
 }
 
 interface IUpdateSoknadErrorAction {
@@ -57,8 +56,7 @@ interface ISubmitSoknadSuccessAction {
 
 interface ISubmitSoknadUncompleteAction {
     type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
-    errors1: IInputError[],
-    errors2?: IInputError[]
+    errors: IInputError[],
 }
 
 interface ISubmitSoknadErrorAction {
@@ -150,10 +148,9 @@ export const setSoknadAction = (soknad: Partial<IPSBSoknad>): ISetSoknadAction =
 export const resetSoknadAction = (): IResetSoknadAction => ({type: PunchFormActionKeys.SOKNAD_RESET});
 
 export const updateSoknadRequestAction = (): IUpdateSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
-export const updateSoknadSuccessAction = (errors1?: IInputError[], errors2?: IInputError[]): IUpdateSoknadSuccessAction => ({
+export const updateSoknadSuccessAction = (errors?: IInputError[]): IUpdateSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS,
-    errors1,
-    errors2
+    errors,
 });
 export const updateSoknadErrorAction = (error: IError): IUpdateSoknadErrorAction => ({
     type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR,
@@ -227,7 +224,7 @@ export function updateSoknader(mappeid: string,
                     return response.json()
                         .then(mappe => {
                             dispatch(setSoknadAction(mappe));
-                            dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler, mappe.personer?.[norskIdent2]?.mangler));
+                            dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
                         });
                 default:
                     return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
@@ -236,12 +233,12 @@ export function updateSoknader(mappeid: string,
     }
 }
 
+
 export const submitSoknadRequestAction = (): ISubmitSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
 export const submitSoknadSuccessAction = (): ISubmitSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS});
-export const submitSoknadUncompleteAction = (errors1: IInputError[], errors2?: IInputError[]): ISubmitSoknadUncompleteAction => ({
+export const submitSoknadUncompleteAction = (errors: IInputError[]): ISubmitSoknadUncompleteAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
-    errors1,
-    errors2
+    errors,
 });
 export const submitSoknadErrorAction = (error: IError): ISubmitSoknadErrorAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_ERROR,
@@ -256,12 +253,12 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
         }
 
         dispatch(submitSoknadRequestAction());
-        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, response => {
+        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
             switch (response.status) {
                 case 202:
                     return dispatch(submitSoknadSuccessAction());
                 case 400:
-                    return response.json().then(soknad => dispatch(submitSoknadUncompleteAction(soknad.mangler)));
+                    return  dispatch(submitSoknadUncompleteAction(errors.feil));
                 default:
                     return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
             }

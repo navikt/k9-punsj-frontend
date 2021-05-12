@@ -6,6 +6,8 @@ import * as React from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {IntlShape} from 'react-intl';
 import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
+import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 
 
 export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
@@ -82,6 +84,7 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                                       feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}/>}
                         </div>
                     </Row>
+                    {arbeidstidInformasjon(intl)}
                 </div>
                 <PeriodeinfoPaneler
                     intl={intl}
@@ -126,7 +129,7 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                                 }}
                                 onFocus={event => event.target.selectionStart = 0}
                                 feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.timerfaktisk`)}
-                                bredde={"S"}
+                                bredde={"XS"}
                             />
                         </div>}
                     minstEn={true}
