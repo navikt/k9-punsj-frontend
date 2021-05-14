@@ -22,12 +22,14 @@ import {setHash} from "../../utils";
 import {IdentRules} from "../../rules";
 import {setIdentFellesAction} from "../../state/actions/IdentActions";
 import {IIdentState} from "../../models/types/IdentState";
+import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
 
 export interface IFordelingStateProps {
   journalpost?: IJournalpost;
   fordelingState: IFordelingState;
   journalpostId: string;
   identState: IIdentState;
+  opprettIGosysState: IGosysOppgaveState;
 }
 
 export interface IFordelingDispatchProps {
@@ -91,7 +93,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
   props: IFordelingProps
 ) => {
-  const { intl, fordelingState, omfordel, journalpost, identState } = props;
+  const { intl, fordelingState, omfordel, journalpost, identState, opprettIGosysState } = props;
   const { sakstype } = fordelingState;
   const sakstyper: ISakstypeDefault[] = useMemo(
     () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -141,14 +143,14 @@ const handleRadioChange = (jn: JaNei) => {
     }
   }
 
-  if (fordelingState.isAwaitingOmfordelingResponse) {
+  if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
     return <NavFrontendSpinner />;
   }
 
-  if (fordelingState.omfordelingDone) {
+  if (opprettIGosysState.gosysOppgaveRequestSuccess) {
     return (
       <AlertStripeSuksess>
-        {intlHelper(intl, 'fordeling.omfordeling.utfort')}
+        {intlHelper(intl, 'fordeling.opprettigosys.utfort')}
       </AlertStripeSuksess>
     );
   }
@@ -157,7 +159,7 @@ const handleRadioChange = (jn: JaNei) => {
     <div className="fordeling-container">
       <FormPanel>
         <div className="fordeling-page">
-          {!!fordelingState.omfordelingError && (
+          {!!opprettIGosysState.gosysOppgaveRequestError && (
             <AlertStripeFeil>
               {intlHelper(intl, 'fordeling.omfordeling.feil')}
             </AlertStripeFeil>
@@ -334,6 +336,7 @@ const mapStateToProps = (state: RootStateType) => ({
   journalpost: state.felles.journalpost,
   fordelingState: state.fordelingState,
   identState: state.identState,
+  opprettIGosysState: state.OMSORGSPENGER_FORDELING.opprettIGosys,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

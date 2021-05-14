@@ -8,7 +8,7 @@ import {
     hentPerioderFraK9Sak,
     resetPunchFormAction,
     resetSoknadAction,
-    setIdentAction,
+    setIdentAction, setJournalpostPaaVentResetAction,
     setSignaturAction,
     setStepAction,
     settJournalpostPaaVent,
@@ -70,6 +70,8 @@ import {pfArbeidstider} from "./pfArbeidstider";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 import {CountrySelect} from "../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
+import SettPaaVentOkModal from "./SettPaaVentOkModal";
+import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
 
 
 export interface IPunchFormComponentProps {
@@ -97,6 +99,7 @@ export interface IPunchFormDispatchProps {
     resetPunchFormAction: typeof resetPunchFormAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
+    settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
 }
 
 export interface IPunchFormComponentState {
@@ -121,7 +124,8 @@ export interface IPunchFormComponentState {
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     nySoknad: boolean;
-    showModal: boolean;
+    showSettPaaVentModal: boolean;
+    showSettPaaVentOkModal: boolean;
     errors: IInputError[];
     harRegnskapsfører: boolean;
 
@@ -173,7 +177,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         skalHaFerie: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         aapnePaneler: [],
         nySoknad: false,
-        showModal: false,
+        showSettPaaVentModal: false,
+        showSettPaaVentOkModal: false,
         errors: [],
         harRegnskapsfører: false,
     };
@@ -482,8 +487,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
                             checked={!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet ? JaNei.JA : JaNei.NEI}
                             onChange={event => {
-                                updateSoknad({ opptjeningAktivitet: {
-                                    ...opptjening,
+                                updateSoknad({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
                                         selvstendigNaeringsdrivende: {
                                             ...opptjening.selvstendigNaeringsdrivende,
                                             info: {
@@ -500,14 +506,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             value={opptjening.selvstendigNaeringsdrivende.info.landkode}
                             label={intlHelper(intl, 'skjema.sn.registrertLand')}
                             onChange={event => {
-                                updateSoknad({ opptjeningAktivitet: {
+                                updateSoknad({
+                                    opptjeningAktivitet: {
                                         ...opptjening,
                                         selvstendigNaeringsdrivende: {
                                             ...opptjening.selvstendigNaeringsdrivende,
                                             info: {
                                                 ...opptjening.selvstendigNaeringsdrivende?.info,
                                                 landkode:
-                                                    event.target.value
+                                                event.target.value
                                             }
                                         }
                                     }
@@ -553,11 +560,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 value: jn,
                             }))}
                             legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
-                            checked={!!this.state.harRegnskapsfører? JaNei.JA : JaNei.NEI}
+                            checked={!!this.state.harRegnskapsfører ? JaNei.JA : JaNei.NEI}
                             onChange={event => {
                                 this.handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei)
                             }}/>
-                            <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+                        <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
                         <div className={"sn-startdatocontainer"}>
                             <Input
                                 bredde={"M"}
@@ -670,7 +677,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             </Row>
                         </div>}
 
-                            <VerticalSpacer eightPx={true}/>
+                        <VerticalSpacer eightPx={true}/>
                         {arbeidstidInformasjon(intl)}
                         <PeriodeinfoPaneler
                             intl={intl}
@@ -1149,7 +1156,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
                     onChange={(event) => this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked})}
                 />
-                <VerticalSpacer eightPx={   true}/>
+                <VerticalSpacer eightPx={true}/>
                 <CheckboksPanel
                     label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                     checked={this.state.soknad.harMedisinskeOpplysninger}
@@ -1167,30 +1174,50 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
                         <Knapp
                             className={"vent"}
-                            onClick={() => this.setState({showModal: true})}
+                            onClick={() => this.setState({showSettPaaVentModal: true})}
                             disabled={false}
                         >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
                         </Knapp>
                     </p>
                 </div>
-                {this.state.showModal && (
+                {this.state.showSettPaaVentModal && (
                     <ModalWrapper
                         key={"settpaaventmodal"}
-                        onRequestClose={() => this.setState({showModal: false})}
+                        onRequestClose={() => this.setState({showSettPaaVentModal: false})}
                         contentLabel={"settpaaventmodal"}
-                        isOpen={this.state.showModal}
+                        isOpen={this.state.showSettPaaVentModal}
                         closeButton={false}
                     >
                         <div className="">
-                            {this.state.showModal && (
-                                <SettPaaVentModal
-                                    journalposter={this.props.journalposterState.journalposter.filter(jp => jp.journalpostId !== this.props.journalpostid)}
-                                    submit={() => this.handleSettPaaVent()}
-                                    avbryt={() => this.setState({showModal: false})}
-                                />
-                            )}
+                            <SettPaaVentModal
+                                journalposter={this.props.journalposterState.journalposter.filter(jp => jp.journalpostId !== this.props.journalpostid)}
+                                submit={() => this.handleSettPaaVent()}
+                                avbryt={() => this.setState({showSettPaaVentModal: false})}
+                            />
                         </div>
+                    </ModalWrapper>
+                )}
+                {punchFormState.settPaaVentSuccess && (
+                    <ModalWrapper
+                        key={"settpaaventokmodal"}
+                        onRequestClose={() => this.props.settPaaventResetAction()}
+                        contentLabel={"settpaaventokmodal"}
+                        closeButton={false}
+                        isOpen={punchFormState.settPaaVentSuccess}
+                    >
+                        <SettPaaVentOkModal/>
+                    </ModalWrapper>
+                )}
+                {!!punchFormState.settPaaVentError && (
+                    <ModalWrapper
+                        key={"settpaaventerrormodal"}
+                        onRequestClose={() => this.props.settPaaventResetAction()}
+                        contentLabel={"settpaaventokmodal"}
+                        closeButton={false}
+                        isOpen={!!punchFormState.settPaaVentError}
+                    >
+                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()}/>
                     </ModalWrapper>
                 )}
             </>);
@@ -1206,7 +1233,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private handleSettPaaVent = () => {
         this.props.settJournalpostPaaVent(this.props.journalpostid);
-        this.setState({showModal: false});
+        this.setState({showSettPaaVentModal: false});
     }
 
 
@@ -1254,18 +1281,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.setState({harRegnskapsfører: true})
         } else {
             this.setState({harRegnskapsfører: false});
-            this.updateSoknad({opptjeningAktivitet: {
-            ...this.state.soknad.opptjeningAktivitet,
-                    selvstendigNaeringsdrivende: {
-                ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
-                        info: {
-                    ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
-                            regnskapsførerNavn: '',
-                            regnskapsførerTlf: ''
-                    }
-                }
-            }});
-            this.updateSoknadState({opptjeningAktivitet: {
+            this.updateSoknad({
+                opptjeningAktivitet: {
                     ...this.state.soknad.opptjeningAktivitet,
                     selvstendigNaeringsdrivende: {
                         ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
@@ -1275,10 +1292,24 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             regnskapsførerTlf: ''
                         }
                     }
-                }});
+                }
+            });
+            this.updateSoknadState({
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: ''
+                        }
+                    }
+                }
+            });
         }
 
-}
+    }
 
     private handleArbeidsforholdChange = (af: Arbeidsforhold, checked: boolean) => {
         switch (af) {
@@ -1539,7 +1570,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             (m: IInputError) => m.felt === attribute)?.[0]?.feilmelding;
 
         if (errorMsg) {
-            if(errorMsg.startsWith('Mangler søknadsperiode')) {return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode')}
+            if (errorMsg.startsWith('Mangler søknadsperiode')) {
+                return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode')
+            }
             if (attribute === 'nattevåk' || attribute === 'beredskap') {
                 return errorMsg
             }
@@ -1549,39 +1582,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
 
 
-        intlHelper(
-            this.props.intl,
-            `skjema.feil.${attribute}.${errorMsg}`
-                .replace(/\[\d+]/g, '[]')
-                .replace(
-                    /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                    'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
-                )
-                .replace(
-                    /^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/,
-                    'skjema.feil.fraOgMed.MAA_SETTES'
-                )
-                .replace(
-                    /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                    'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
-                )
-                .replace(
-                    /^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/,
-                    'skjema.feil.tilOgMed.MAA_SETTES'
-                )
-                .replace(
-                    /^skjema.feil.mottattDato.must not be null$/,
-                    'skjema.feil.datoMottatt.MAA_SETTES'
-                )
-
-        )
-        : undefined;
+            intlHelper(
+                this.props.intl,
+                `skjema.feil.${attribute}.${errorMsg}`
+                    .replace(/\[\d+]/g, '[]')
+                    .replace(
+                        /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
+                        'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+                    )
+                    .replace(
+                        /^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/,
+                        'skjema.feil.fraOgMed.MAA_SETTES'
+                    )
+                    .replace(
+                        /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
+                        'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+                    )
+                    .replace(
+                        /^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/,
+                        'skjema.feil.tilOgMed.MAA_SETTES'
+                    )
+                    .replace(
+                        /^skjema.feil.mottattDato.must not be null$/,
+                        'skjema.feil.datoMottatt.MAA_SETTES'
+                    )
+            )
+            : undefined;
     };
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus ?: boolean) {
         if (!this.state.soknad.barn.norskIdent) {
             this.updateSoknad
-        ({barn: {norskIdent: this.props.identState.ident2 || ''}});}
+            ({barn: {norskIdent: this.props.identState.ident2 || ''}});
+        }
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
             showStatus: !!showStatus,
@@ -1695,6 +1728,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     setSignaturAction: (signert: JaNei | null) =>
         dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string) => dispatch(settJournalpostPaaVent(journalpostid)),
+    settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
 });
 
 export const PunchForm = injectIntl(

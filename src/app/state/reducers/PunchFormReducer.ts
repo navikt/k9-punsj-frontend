@@ -149,6 +149,14 @@ export function PunchFormReducer(
                 settPaaVentError: undefined,
             };
 
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: false,
+                settPaaVentError: undefined,
+            };
+
 
         default: return punchFormState;
     }

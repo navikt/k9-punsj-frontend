@@ -99,6 +99,9 @@ interface ISettJournalpostPaaVentErrorAction {
     type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR;
     error: IError;
 }
+interface ISettJournalpostPaaVentResetAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET;
+}
 
 export function setJournalpostPaaVentAction(
 ): ISettJournalpostPaaVentAction {
@@ -113,6 +116,11 @@ export function setJournalpostPaaVentErrorAction(
     return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR, error };
 }
 
+export function setJournalpostPaaVentResetAction(
+): ISettJournalpostPaaVentResetAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET };
+}
+
 
 type ISoknadActionTypes = IGetSoknadLoadingAction | IGetSoknadErrorAction | ISetSoknadAction | IResetSoknadAction;
 type ISoknadUpdateActionTypes = IUpdateSoknadRequestAction | IUpdateSoknadSuccessAction | IUpdateSoknadErrorAction;
@@ -122,7 +130,7 @@ type ISoknadSubmitActionTypes =
     | ISubmitSoknadUncompleteAction
     | ISubmitSoknadErrorAction;
 type IPerioderActionTypes = IHentPerioderErrorAction | IHentPerioderLoadingAction | IHentPerioderSuccessAction;
-type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction;
+type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction | ISettJournalpostPaaVentResetAction;
 
 
 

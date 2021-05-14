@@ -81,12 +81,10 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                             </tbody>
                         </table>
 
-                    </>)};
+                    </>)}
             </div>
         );
     }
-
-
 }
 
 
