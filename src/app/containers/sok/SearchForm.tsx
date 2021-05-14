@@ -12,10 +12,13 @@ import {getJournalpost} from "../../state/reducers/FellesReducer";
 import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
+import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import intlHelper from "../../utils/intlUtils";
 
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
+    notFound: boolean;
 }
 
 export interface ISearchFormDispatchProps {
@@ -29,7 +32,11 @@ export interface ISearchFormComponentState {
     sokMedFnr?: boolean;
 }
 
-type ISearchFormProps = WrappedComponentProps & ISearchFormStateProps & ISearchFormDispatchProps & ISearchFormComponentState;
+type ISearchFormProps =
+    WrappedComponentProps
+    & ISearchFormStateProps
+    & ISearchFormDispatchProps
+    & ISearchFormComponentState;
 
 export class SearchFormComponent extends React.Component<ISearchFormProps> {
     state: ISearchFormComponentState = {
@@ -51,7 +58,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
     render() {
 
 
-        const { identitetsnummer, journalpostid, sokMedFnr, visMapper } = this.state;
+        const {identitetsnummer, journalpostid, sokMedFnr, visMapper} = this.state;
 
         const disabled = sokMedFnr ? !identitetsnummer : !journalpostid;
 
@@ -59,52 +66,60 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
             if (sokMedFnr) {
                 this.setState({visMapper: true});
             } else {
-                if (journalpostid) {this.props.getJournalpost(journalpostid);}
+                if (journalpostid) {
+                    this.props.getJournalpost(journalpostid);
+                }
             }
         }
 
-        if (this.props.journalpost?.journalpostId) {window.location.assign('journalpost/' + journalpostid)}
+        if (this.props.journalpost?.journalpostId) {
+            window.location.assign('journalpost/' + journalpostid)
+        }
 
         return (
             <div className="container">
-                    <SkjemaGruppe>
-                        <ToggleKnapp
-                            // @ts-ignore
-                            className={sokMedFnr ? "venstreKnappAktiv" : "venstreKnapp"}
-                            onClick={() => this.setState({sokMedFnr: true})}
-                        >
-                            Søk med fødselsnummer
-                        </ToggleKnapp>
-                        <ToggleKnapp
-                            // @ts-ignore
-                            className={sokMedFnr ? "hoyreKnapp" : "hoyreKnappAktiv"}
-                            onClick={() => this.setState({sokMedFnr: false})}
-                        >
-                            Søk med journalpost-ID
-                        </ToggleKnapp>
-                        <VerticalSpacer eightPx={true}/>
-                        {sokMedFnr &&
-                        <Input
-                            value={identitetsnummer}
-                            bredde="L"
-                            label={
-                                <FormattedMessage id="søk.label.fnr"/>
-                            }
-                            onChange={(e) => this.setState({identitetsnummer: e.target.value})}/>}
-                        {!sokMedFnr &&
-                        <Input
-                            value={journalpostid}
-                            bredde="L"
-                            onChange={(e) => this.setState({journalpostid: e.target.value})}
-                            label={
-                                <FormattedMessage id="søk.label.jpid"/>
-                            }/>}
-                        <SokKnapp
-                            onClick={onClick}
-                            tekstId="søk.knapp.label"
-                            disabled={disabled}/>
+                <SkjemaGruppe>
+                    <ToggleKnapp
+                        // @ts-ignore
+                        className={sokMedFnr ? "venstreKnappAktiv" : "venstreKnapp"}
+                        onClick={() => this.setState({sokMedFnr: true})}
+                    >
+                        Søk med fødselsnummer
+                    </ToggleKnapp>
+                    <ToggleKnapp
+                        // @ts-ignore
+                        className={sokMedFnr ? "hoyreKnapp" : "hoyreKnappAktiv"}
+                        onClick={() => this.setState({sokMedFnr: false})}
+                    >
+                        Søk med journalpost-ID
+                    </ToggleKnapp>
+                    <VerticalSpacer eightPx={true}/>
+                    {sokMedFnr &&
+                    <Input
+                        value={identitetsnummer}
+                        bredde="L"
+                        label={
+                            <FormattedMessage id="søk.label.fnr"/>
+                        }
+                        onChange={(e) => this.setState({identitetsnummer: e.target.value})}/>}
+                    {!sokMedFnr &&
+                    <Input
+                        value={journalpostid}
+                        bredde="L"
+                        onChange={(e) => this.setState({journalpostid: e.target.value})}
+                        label={
+                            <FormattedMessage id="søk.label.jpid"/>
+                        }/>}
+                    <SokKnapp
+                        onClick={onClick}
+                        tekstId="søk.knapp.label"
+                        disabled={disabled}/>
+                    {this.props.notFound &&
+                    <AlertStripeInfo>
+                        <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>
+                    </AlertStripeInfo>}
 
-                    </SkjemaGruppe>
+                </SkjemaGruppe>
                 <VerticalSpacer twentyPx={true}/>
                 {visMapper && identitetsnummer &&
                 <SoknaderVisning
@@ -118,6 +133,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 
 const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
+    notFound: state.felles.journalpostNotFound
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

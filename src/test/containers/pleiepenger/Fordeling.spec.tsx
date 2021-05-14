@@ -86,7 +86,7 @@ describe('Fordeling', () => {
         const radioForSakstype = (sakstype: Sakstype) =>
             radios.findWhere((radio) => radio.prop('value') === sakstype);
 
-        expect(radios).toHaveLength(5);
+        expect(radios).toHaveLength(6);
         expect(radioForSakstype(Sakstype.PLEIEPENGER_SYKT_BARN)).toHaveLength(1);
         expect(radioForSakstype(Sakstype.OMSORGSPENGER)).toHaveLength(1);
         expect(radioForSakstype(Sakstype.OPPLAERINGSPENGER)).toHaveLength(1);

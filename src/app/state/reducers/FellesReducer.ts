@@ -7,6 +7,7 @@ export interface IFellesState {
   dedupKey: string;
   journalpost?: IJournalpost;
   isJournalpostLoading?: boolean;
+  journalpostNotFound?: boolean;
   journalpostRequestError?: IError;
 }
 
@@ -15,6 +16,7 @@ enum Actiontypes {
   JOURNALPOST_SET = 'FELLES/PUNCH_JOURNALPOST_SET',
   JOURNALPOST_LOAD = 'FELLES/PUNCH_JOURNALPOST_LOAD',
   JOURNALPOST_REQUEST_ERROR = 'FELLES/PUNCH_JOURNALPOST_REQUEST_ERROR',
+  JOURNALPOST_NOT_FOUND = 'FELLES/PUNCH_JOURNALPOST_NOT_FOUND',
 }
 
 interface IResetDedupKeyAction {
@@ -28,9 +30,14 @@ interface ISetJournalpostAction {
 interface IGetJournalpostLoadAction {
   type: Actiontypes.JOURNALPOST_LOAD;
 }
+
 interface IGetJournalpostErrorAction {
   type: Actiontypes.JOURNALPOST_REQUEST_ERROR;
   error: IError;
+}
+
+interface IGetJournalpostNotFoundAction {
+  type: Actiontypes.JOURNALPOST_NOT_FOUND;
 }
 
 export const resetDedupKey = (): IResetDedupKeyAction => ({
@@ -51,6 +58,11 @@ export function getJournalpostErrorAction(
   return { type: Actiontypes.JOURNALPOST_REQUEST_ERROR, error };
 }
 
+export function getJournalpostNotFoundAction(
+    ): IGetJournalpostNotFoundAction {
+  return { type: Actiontypes.JOURNALPOST_NOT_FOUND };
+}
+
 export function getJournalpost(journalpostid: string) {
   return (dispatch: any) => {
     dispatch(getJournalpostLoadAction());
@@ -61,6 +73,9 @@ export function getJournalpost(journalpostid: string) {
       (response, journalpost) => {
         if (response.ok) {
           return dispatch(setJournalpostAction(journalpost));
+        }
+        if (response.status === 404) {
+          return dispatch(getJournalpostNotFoundAction());
         }
         return dispatch(
           getJournalpostErrorAction(convertResponseToError(response))
@@ -73,7 +88,8 @@ export function getJournalpost(journalpostid: string) {
 type IJournalpostActionTypes =
   | ISetJournalpostAction
   | IGetJournalpostLoadAction
-  | IGetJournalpostErrorAction;
+  | IGetJournalpostErrorAction
+  | IGetJournalpostNotFoundAction;
 
 const initialState: IFellesState = {
   dedupKey: ulid(),
@@ -113,6 +129,14 @@ export default function FellesReducer(
         journalpost: undefined,
         isJournalpostLoading: false,
         journalpostRequestError: action.error,
+      };
+
+    case Actiontypes.JOURNALPOST_NOT_FOUND:
+      return {
+        ...state,
+        journalpost: undefined,
+        isJournalpostLoading: false,
+        journalpostNotFound: true
       };
 
     default:

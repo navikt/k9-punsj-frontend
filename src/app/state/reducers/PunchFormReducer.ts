@@ -61,7 +61,6 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                inputErrors: action.errors,
                 updateSoknadError: undefined
             };
 

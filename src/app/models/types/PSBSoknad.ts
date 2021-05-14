@@ -1,6 +1,6 @@
 import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
 import {FrilanserOpptjening, IFrilanserOpptjening} from "./FrilanserOpptjening";
-import {IPeriodeinfoV2, PeriodeinfoV2} from "./PeriodeInfoV2";
+import {PeriodeinfoV2} from "./PeriodeInfoV2";
 import {
     IArbeidstidPeriodeMedTimer,
     IPeriodeMedTimerMinutter,
@@ -9,7 +9,6 @@ import {
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
-import {Tilleggsinformasjon} from "./Soknad";
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -32,6 +31,7 @@ export interface IPSBSoknad {
     bosteder?: PeriodeinfoV2<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
     harInfoSomIkkeKanPunsjes?: boolean;
+    harMedisinskeOpplysninger?: boolean;
 
 }
 
@@ -57,6 +57,7 @@ export class PSBSoknad implements IPSBSoknad {
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;
     harInfoSomIkkeKanPunsjes: boolean;
+    harMedisinskeOpplysninger: boolean;
 
     constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
@@ -79,6 +80,7 @@ export class PSBSoknad implements IPSBSoknad {
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
+        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || false;
     }
 
     values(): Required<IPSBSoknad> {
@@ -102,7 +104,8 @@ export class PSBSoknad implements IPSBSoknad {
             omsorg: this.omsorg,
             bosteder: this.bosteder.map(b => b.values()),
             soknadsinfo: this.soknadsinfo,
-            harInfoSomIkkeKanPunsjes: this.harInfoSomIkkeKanPunsjes
+            harInfoSomIkkeKanPunsjes: this.harInfoSomIkkeKanPunsjes,
+            harMedisinskeOpplysninger: this.harMedisinskeOpplysninger
         };
     }
 }
@@ -159,19 +162,19 @@ export class ArbeidstidInfo implements Required<IArbeidstidInfo>{
 export interface ISelvstendigNaeringsdrivendeOpptjening {
     virksomhetNavn?: string | null;
     organisasjonsnummer?: string | null;
-    perioder?: PeriodeinfoV2<ISelvstendigNaerinsdrivende>[];
+    info?: ISelvstendigNaerinsdrivende | null;
 }
 
 export class SelvstendigNaeringsdrivendeOpptjening implements Required<ISelvstendigNaeringsdrivendeOpptjening>{
     virksomhetNavn: string;
     organisasjonsnummer: string;
-    perioder: SelvstendigNaerinsdrivende[];
+    info: SelvstendigNaerinsdrivende | null;
 
     constructor(s: ISelvstendigNaeringsdrivendeOpptjening) {
 
         this.virksomhetNavn = s.virksomhetNavn || "";
         this.organisasjonsnummer = s.organisasjonsnummer || "";
-        this.perioder = (s.perioder || []).map(p => new SelvstendigNaerinsdrivende(p))
+        this.info = s.info ? new SelvstendigNaerinsdrivende(s.info) : null;
     }
 }
 

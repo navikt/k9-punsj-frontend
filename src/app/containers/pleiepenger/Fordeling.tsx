@@ -53,7 +53,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
   norskIdent,
   omfordel,
   journalpost,
-    sakstypeConfig
+  sakstypeConfig
                                                                           }) => {
   if (!sakstypeConfig) {
     return null;
@@ -65,6 +65,16 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     return (
         <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
           <FormattedMessage id="fordeling.knapp.punsj" />
+        </Hovedknapp>
+    );
+  }
+
+  if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
+
+
+    return (
+        <Hovedknapp onClick={() => undefined}>
+          <FormattedMessage id="fordeling.knapp.lukk" />
         </Hovedknapp>
     );
   }

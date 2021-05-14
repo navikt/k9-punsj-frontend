@@ -1,7 +1,7 @@
 import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {Arbeidsforhold, JaNei, JaNeiVetikke, PunchStep} from 'app/models/enums';
-import {injectIntl, IntlShape, WrappedComponentProps} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {IInputError, IPunchFormState, ISignaturState, SelvstendigNaerinsdrivende} from 'app/models/types';
 import {
     getSoknad,
@@ -20,16 +20,24 @@ import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Knapp} from 'nav-frontend-knapper';
-import {CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe} from 'nav-frontend-skjema';
+import {
+    CheckboksPanel,
+    CheckboksPanelGruppe,
+    Checkbox,
+    Input,
+    RadioPanelGruppe,
+    Select,
+    SkjemaGruppe
+} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {ArbeidstakerV2} from "../../models/types/ArbeidstakerV2";
 import {
     ArbeidstidInfo,
     IPSBSoknad,
-    ISelvstendigNaeringsdrivendeOpptjening,
     IUtenlandsOpphold,
-    PSBSoknad, SelvstendigNaeringsdrivendeOpptjening,
+    PSBSoknad,
+    SelvstendigNaeringsdrivendeOpptjening,
     TilleggsinformasjonV2,
 } from "../../models/types/PSBSoknad";
 import {ArbeidstidPeriodeMedTimer, IPeriodeV2, PeriodeMedTimerMinutter} from "../../models/types/PeriodeV2";
@@ -60,6 +68,8 @@ import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 import {Container, Row} from "react-bootstrap";
 import {pfArbeidstider} from "./pfArbeidstider";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
+import {CountrySelect} from "../../components/country-select/CountrySelect";
+import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
 
 
 export interface IPunchFormComponentProps {
@@ -113,6 +123,7 @@ export interface IPunchFormComponentState {
     nySoknad: boolean;
     showModal: boolean;
     errors: IInputError[];
+    harRegnskapsfører: boolean;
 
 }
 
@@ -164,6 +175,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         nySoknad: false,
         showModal: false,
         errors: [],
+        harRegnskapsfører: false,
     };
 
     private initialPeriode: IPeriodeV2 = {fom: '', tom: ''};
@@ -220,7 +232,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private initialSelvstendigNæringsdrivendeOpptjening = new SelvstendigNaeringsdrivendeOpptjening({
         virksomhetNavn: '',
         organisasjonsnummer: '',
-        perioder: [this.initialSelvstedigNæringsdrivende]
+        info: this.initialSelvstedigNæringsdrivende
     });
 
 
@@ -400,8 +412,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             const arbeid = soknad.arbeidstid;
             return (<>
                     <Container className="infoContainer">
+                        <CheckboksPanelGruppe
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                            checkboxes={Object.values(Virksomhetstyper).map((v) => ({
+                                label: v,
+                                value: v,
+                                onChange: (e) => this.updateVirksomhetstyper(v, e.target.checked),
+                                checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper.some(vt => vt === v)
+                            }))}
+                            onChange={() => undefined}/>
                         <div className={"generelleopplysiniger"}>
-                            <Row>
+                            <Row noGutters={true}>
                                 <Input label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
                                        bredde={"M"}
                                        value={opptjening.selvstendigNaeringsdrivende?.virksomhetNavn || ''}
@@ -426,7 +447,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                        })}/>
 
                             </Row>
-                            <Row>
+                            <Row noGutters={true}>
                                 <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                                        bredde={"M"}
                                        value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
@@ -451,7 +472,205 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                        })}/>
                             </Row>
                         </div>
-                        <VerticalSpacer eightPx={true}/>
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            name={"virksomhetRegistrertINorge"}
+                            radios={Object.values(JaNei).map((jn) => ({
+                                label: intlHelper(intl, jn),
+                                value: jn,
+                            }))}
+                            legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
+                            checked={!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet ? JaNei.JA : JaNei.NEI}
+                            onChange={event => {
+                                updateSoknad({ opptjeningAktivitet: {
+                                    ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                registrertIUtlandet:
+                                                    ((event.target as HTMLInputElement).value as JaNei) === JaNei.NEI ? true : false
+                                            }
+                                        }
+                                    }
+                                });
+                            }}/>
+                        {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet &&
+                        <CountrySelect
+                            value={opptjening.selvstendigNaeringsdrivende.info.landkode}
+                            label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                            onChange={event => {
+                                updateSoknad({ opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                landkode:
+                                                    event.target.value
+                                            }
+                                        }
+                                    }
+                                });
+                            }}
+                        />
+                        }
+                        <Input
+                            label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                            bredde={"M"}
+                            value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt}
+                            onChange={event => this.updateSoknad({
+                                opptjeningAktivitet: {
+                                    ...opptjening,
+                                    selvstendigNaeringsdrivende: {
+                                        ...opptjening.selvstendigNaeringsdrivende,
+                                        info: {
+                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                            bruttoInntekt: event.target.value
+                                        }
+                                    }
+                                }
+                            })}
+                            onBlur={event => this.updateSoknadState({
+                                opptjeningAktivitet: {
+                                    ...opptjening,
+                                    selvstendigNaeringsdrivende: {
+                                        ...opptjening.selvstendigNaeringsdrivende,
+                                        info: {
+                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                            bruttoInntekt: event.target.value
+                                        }
+                                    }
+                                }
+                            })}
+                            onFocus={event => event.target.selectionStart = 0}
+                        />
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            name={"harRegnskapsfører"}
+                            radios={Object.values(JaNei).map((jn) => ({
+                                label: intlHelper(intl, jn),
+                                value: jn,
+                            }))}
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
+                            checked={!!this.state.harRegnskapsfører? JaNei.JA : JaNei.NEI}
+                            onChange={event => {
+                                this.handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei)
+                            }}/>
+                            <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+                        <div className={"sn-startdatocontainer"}>
+                            <Input
+                                bredde={"M"}
+                                label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                                type="date"
+                                className="fom"
+                                value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
+                                {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                periode: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
+                                                    fom: event.target.value
+                                                }
+                                            }
+                                        }
+                                    },
+                                }))}
+
+                            />
+                            <Input
+                                bredde={"M"}
+                                label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                                type="date"
+                                className="tom"
+                                value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
+                                {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                periode: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
+                                                    tom: event.target.value
+                                                }
+                                            }
+                                        }
+                                    },
+                                }))}
+                            />
+                        </div>
+                        {this.state.harRegnskapsfører &&
+                        <div className={"generelleopplysiniger"}>
+                            <Row noGutters={true}>
+                                <Input label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
+                                       bredde={"M"}
+                                       value={opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || ''}
+                                       className="regnskapsførerNavn"
+                                       onChange={event => this.updateSoknad({
+                                           opptjeningAktivitet: {
+                                               ...opptjening,
+                                               selvstendigNaeringsdrivende: {
+                                                   ...opptjening.selvstendigNaeringsdrivende,
+                                                   info: {
+                                                       ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                       regnskapsførerNavn: event.target.value
+                                                   }
+                                               }
+                                           }
+                                       })}
+                                       onBlur={event => this.updateSoknadState({
+                                           opptjeningAktivitet: {
+                                               ...opptjening,
+                                               selvstendigNaeringsdrivende: {
+                                                   ...opptjening.selvstendigNaeringsdrivende,
+                                                   info: {
+                                                       ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                       regnskapsførerNavn: event.target.value
+                                                   }
+                                               }
+                                           }
+                                       })}/>
+
+                            </Row>
+                            <Row noGutters={true}>
+                                <Input label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
+                                       bredde={"M"}
+                                       value={opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerTlf || ''}
+                                       className="sn-regskasførertlf"
+                                       onChange={event => this.updateSoknad({
+                                           opptjeningAktivitet: {
+                                               ...opptjening,
+                                               selvstendigNaeringsdrivende: {
+                                                   ...opptjening.selvstendigNaeringsdrivende,
+                                                   info: {
+                                                       ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                       regnskapsførerTlf: event.target.value
+                                                   }
+                                               }
+                                           }
+                                       })}
+                                       onBlur={event => this.updateSoknadState({
+                                           opptjeningAktivitet: {
+                                               ...opptjening,
+                                               selvstendigNaeringsdrivende: {
+                                                   ...opptjening.selvstendigNaeringsdrivende,
+                                                   info: {
+                                                       ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                       regnskapsførerTlf: event.target.value
+                                                   }
+                                               }
+                                           }
+                                       })}/>
+                            </Row>
+                        </div>}
+
+                            <VerticalSpacer eightPx={true}/>
                         {arbeidstidInformasjon(intl)}
                         <PeriodeinfoPaneler
                             intl={intl}
@@ -930,13 +1149,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
                     onChange={(event) => this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked})}
                 />
+                <VerticalSpacer eightPx={   true}/>
+                <CheckboksPanel
+                    label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
+                    checked={this.state.soknad.harMedisinskeOpplysninger}
+                    onChange={(event) => this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked})}
+                />
                 <VerticalSpacer twentyPx={true}/>
 
                 <div className={"submit-knapper"}>
                     <p className="sendknapp-wrapper">
                         <Knapp
                             onClick={() => this.handleSubmit()}
-                            disabled={!!this.props.punchFormState.inputErrors}
                         >
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Knapp>
@@ -974,16 +1198,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
 
     private handleSubmit = () => {
-        //     this.validate();
         this.props.submitSoknad(
             this.props.identState.ident1,
             this.props.id
         )
-
-    }
-
-    private validate = () => {
-        const {soknad} = this.state;
     }
 
     private handleSettPaaVent = () => {
@@ -1018,6 +1236,49 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         }
         return false;
     }
+
+    private updateVirksomhetstyper = (v: Virksomhetstyper, checked: boolean) => {
+        const sn = this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende;
+
+        if (checked && !sn?.info?.virksomhetstyper?.some((vtype) => vtype === v)) {
+            sn?.info?.virksomhetstyper?.push(v);
+        } else {
+            if (sn?.info?.virksomhetstyper?.some((vtype) => vtype === v)) {
+                sn?.info?.virksomhetstyper?.splice(sn?.info?.virksomhetstyper?.indexOf(v), 1);
+            }
+        }
+    }
+
+    private handleRegnskapsførerChange = (jn: JaNei) => {
+        if (jn === JaNei.JA) {
+            this.setState({harRegnskapsfører: true})
+        } else {
+            this.setState({harRegnskapsfører: false});
+            this.updateSoknad({opptjeningAktivitet: {
+            ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                    ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: ''
+                    }
+                }
+            }});
+            this.updateSoknadState({opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: ''
+                        }
+                    }
+                }});
+        }
+
+}
 
     private handleArbeidsforholdChange = (af: Arbeidsforhold, checked: boolean) => {
         switch (af) {
