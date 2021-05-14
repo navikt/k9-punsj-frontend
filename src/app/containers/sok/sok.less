@@ -3,4 +3,48 @@
 .container {
   padding-top: 20px;
   text-align: center;
+
+  .venstreKnapp {
+    background-color: @white;
+    border: 1px solid @navBla;
+    border-radius: 4px 0 0 4px;
+    box-shadow: none;
+    color: @navMorkGra;
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 40px;
+    text-transform: none;
+
+    &:focus {
+      background-color: #cce1f3;
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: #cce1f3;
+      outline: none;
+    }
+  }
+
+  .venstreKnappAktiv {
+    .venstreKnapp();
+
+    background-color: #cce1f3;
+  }
+
+  .hoyreKnapp {
+    .venstreKnapp();
+
+    border-radius: 0 4px 4px 0;
+  }
+
+  .hoyreKnappAktiv {
+    .hoyreKnapp();
+
+    background-color: #cce1f3;
+  }
+
+
+
 }

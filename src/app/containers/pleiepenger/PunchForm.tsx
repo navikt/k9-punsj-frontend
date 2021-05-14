@@ -44,7 +44,6 @@ import {RootStateType} from "../../state/RootState";
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from "nav-frontend-etiketter";
 import {connect} from "react-redux";
 import {PunchFormPaneler} from "../../models/enums/PunchFormPaneler";
-import {ArbeidstidInput} from "../../components/arbeidstid-input/ArbeidstidInput";
 import {pfLand} from "./pfLand";
 import {pfTimerMinutter} from "./pfTimerMinutter";
 import {IPSBSoknadUt, PSBSoknadUt} from "../../models/types/PSBSoknadUt";
@@ -58,7 +57,6 @@ import ModalWrapper from "nav-frontend-modal";
 import SettPaaVentModal from "./SettPaaVentModal";
 import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
 import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
-import {pfSelvstendigNæringsdrivende} from "./pfSelvstendigNæringsdrivende";
 import {Container, Row} from "react-bootstrap";
 import {pfArbeidstider} from "./pfArbeidstider";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
@@ -108,15 +106,13 @@ export interface IPunchFormComponentState {
     jobberFortsattSomFrilanser: JaNei;
     barnetSkalLeggesInn: JaNei;
     innleggelseUtlandet: IPeriodeV2[];
-    beredskap: boolean;
-    nattevaak: boolean;
     harBoddIUtlandet: JaNeiIkkeOpplyst;
     skalBoIUtlandet: JaNeiIkkeOpplyst;
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     nySoknad: boolean;
     showModal: boolean;
-    errors: [];
+    errors: IInputError[];
 
 }
 
@@ -159,8 +155,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         jobberFortsattSomFrilanser: JaNei.NEI,
         innleggelseUtlandet: [],
         barnetSkalLeggesInn: JaNei.NEI,
-        beredskap: false,
-        nattevaak: false,
         harBoddIUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         skalBoIUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         medlemskap: [],
@@ -499,7 +493,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     textFjern="skjema.beredskap.fjernperiode"
                     className="beredskapsperioder"
                     panelClassName="beredskapspanel"
-                    getErrorMessage={() => undefined}
+                    getErrorMessage={this.getErrorMessage}
                     feilkodeprefiks={'beredskap'}
                     kanHaFlere={true}
                 />
@@ -522,8 +516,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     textFjern="skjema.nattevaak.fjernperiode"
                     className="nattevaaksperioder"
                     panelClassName="nattevaakspanel"
-                    getErrorMessage={() => undefined}
-                    feilkodeprefiks={'nattevaak'}
+                    getErrorMessage={this.getErrorMessage}
+                    feilkodeprefiks={'nattevåk'}
                     kanHaFlere={true}
                 />
             )
@@ -547,10 +541,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <VerticalSpacer sixteenPx={true}/>
                 <Panel className={"eksiterendesoknaderpanel"}>
                     <h3>{intlHelper(intl, 'skjema.eksisterende')}</h3>
-                    {!eksisterendePerioder?.length && !punchFormState.hentPerioderError &&
+                    {eksisterendePerioder?.length === 0 && !punchFormState.hentPerioderError &&
                     <p>{intlHelper(intl, 'skjema.eksisterende.ingen')}</p>}
                     {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
-                    {!punchFormState.hentPerioderError && eksisterendePerioder?.length && <>
+                    {!punchFormState.hentPerioderError && !!eksisterendePerioder?.length && <>
                         {eksisterendePerioder.map((p, i) => <div key={i} className={"datocontainer"}><CalendarSvg
                             title={"calendar"}/>
                             <div className={"periode"}>{generateDateString(p)}</div>
@@ -568,7 +562,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             {...this.changeAndBlurUpdatesSoknad((event) => ({
                                 soeknadsperiode: {...soknad.soeknadsperiode, fom: event.target.value}
                             }))}
-                            feil={this.getErrorMessage(intl, 'søknadsperiode/endringsperiode')}
+                            feil={this.getErrorMessage('søknadsperiode/endringsperiode')}
 
                         />
                         <Input
@@ -633,6 +627,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 {...this.changeAndBlurUpdatesSoknad((event) => ({
                                     mottattDato: event.target.value,
                                 }))}
+                                feil={this.getErrorMessage('mottattDato')}
 
 
                             /></div>
@@ -871,9 +866,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         label={intlHelper(intl, BeredskapNattevaak.BEREDSKAP)}
                         value={BeredskapNattevaak.BEREDSKAP}
                         onChange={(e) => this.handleBeredskapNattevaakChange(BeredskapNattevaak.BEREDSKAP, e.target.checked)}
-                        checked={this.getCheckedValueBeredskapNattevaak(BeredskapNattevaak.BEREDSKAP)}
+                        checked={!!soknad.beredskap.length}
                     />
-                    {this.state.beredskap && (
+                    {!!soknad.beredskap.length && (
                         <>{beredskapperioder()}</>
 
                     )}
@@ -882,9 +877,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         label={intlHelper(intl, BeredskapNattevaak.NATTEVAAK)}
                         value={BeredskapNattevaak.NATTEVAAK}
                         onChange={(e) => this.handleBeredskapNattevaakChange(BeredskapNattevaak.NATTEVAAK, e.target.checked)}
-                        checked={this.getCheckedValueBeredskapNattevaak(BeredskapNattevaak.NATTEVAAK)}
+                        checked={!!soknad.nattevaak.length}
                     />
-                    {this.state.nattevaak && (
+                    {!!soknad.nattevaak.length && (
                         <>{nattevaakperioder()}</>
 
                     )}
@@ -941,7 +936,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <p className="sendknapp-wrapper">
                         <Knapp
                             onClick={() => this.handleSubmit()}
-                            disabled={this.state.errors.length > 0}
+                            disabled={!!this.props.punchFormState.inputErrors}
                         >
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Knapp>
@@ -979,9 +974,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
 
     private handleSubmit = () => {
-
-        this.updateSoknad
-        ({barn: {norskIdent: this.props.identState.ident2 || ''}});
         //     this.validate();
         this.props.submitSoknad(
             this.props.identState.ident1,
@@ -1012,6 +1004,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private checkOpenState = (p: PunchFormPaneler): boolean => {
         const {aapnePaneler, expandAll} = this.state;
+        if (!!this.props.punchFormState.inputErrors?.length) {
+            return true;
+        }
         if (expandAll && aapnePaneler.some((panel) => panel === p)) {
             return false;
         } else if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
@@ -1112,7 +1107,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private handleBeredskapNattevaakChange = (bn: BeredskapNattevaak, checked: boolean) => {
         switch (bn) {
             case BeredskapNattevaak.BEREDSKAP:
-                this.setState({beredskap: checked})
                 if (checked) {
                     if (!this.state.soknad.beredskap?.length) {
                         this.updateSoknadState({beredskap: [this.initialTillegsinfo]})
@@ -1122,7 +1116,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
                 break;
             case BeredskapNattevaak.NATTEVAAK:
-                this.setState({nattevaak: checked})
                 if (checked) {
                     if (!this.state.soknad.nattevaak?.length) {
                         this.updateSoknadState({nattevaak: [this.initialTillegsinfo]})
@@ -1132,15 +1125,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
                 break;
 
-        }
-    }
-
-    private getCheckedValueBeredskapNattevaak = (bn: BeredskapNattevaak): boolean => {
-        switch (bn) {
-            case BeredskapNattevaak.BEREDSKAP:
-                return this.state.beredskap
-            case BeredskapNattevaak.NATTEVAAK:
-                return this.state.nattevaak
         }
     }
 
@@ -1289,14 +1273,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.punchFormState.inputErrors;
     };
 
-    private getErrorMessage = (intl: IntlShape, attribute: string) => {
+    private getErrorMessage = (attribute: string) => {
         const errorMsg = this.getManglerFromStore()?.filter(
             (m: IInputError) => m.felt === attribute)?.[0]?.feilmelding;
+
+        if (errorMsg) {
+            if(errorMsg.startsWith('Mangler søknadsperiode')) {return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode')}
+            if (attribute === 'nattevåk' || attribute === 'beredskap') {
+                return errorMsg
+            }
+        }
+
         return !!errorMsg
-            ? intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
+            ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
 
 
-        /*intlHelper(
+        intlHelper(
             this.props.intl,
             `skjema.feil.${attribute}.${errorMsg}`
                 .replace(/\[\d+]/g, '[]')
@@ -1316,11 +1308,19 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     /^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/,
                     'skjema.feil.tilOgMed.MAA_SETTES'
                 )
+                .replace(
+                    /^skjema.feil.mottattDato.must not be null$/,
+                    'skjema.feil.datoMottatt.MAA_SETTES'
+                )
+
         )
-        : undefined;*/
+        : undefined;
     };
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus ?: boolean) {
+        if (!this.state.soknad.barn.norskIdent) {
+            this.updateSoknad
+        ({barn: {norskIdent: this.props.identState.ident2 || ''}});}
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
             showStatus: !!showStatus,

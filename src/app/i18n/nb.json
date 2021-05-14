@@ -220,8 +220,8 @@
   "skjema.feil.ikke_lagret":                                                                      "Det oppsto en feil under lagring av endringer.",
   "skjema.feil.ikke_sendt":                                                                       "Det oppsto en feil under innsending av søknad. Prøv igjen senere.",
   "skjema.feil.søknadsperiode/endringsperiode":                                                   "Mangler søknadsperiode eller endringsperiode",
-  "skjema.feil.datoMottatt.MAA_SETTES":                                                           "Mottakelsesdato må være satt.",
-  "skjema.feil.datoMottatt.MAA_VAERE_I_FORTIDEN":                                                 "Mottakelsesdato kan ikke være fremtidig.",
+  "skjema.feil.datoMottatt.MAA_SETTES":                                                           "Mottakelsesdato må være satt",
+  "skjema.feil.mottattDato.MAA_VAERE_I_FORTIDEN":                                                 "Mottakelsesdato kan ikke være fremtidig.",
   "skjema.feil.spraak.MAA_SETTES":                                                                "Språk må være satt.",
   "skjema.feil.barn.MAA_SETTES":                                                                  "Informasjon om barn må oppgis.",
   "skjema.feil.barn.NORSK_IDENT_ELLER_FOEDSELSDATO_MAA_SETTES":                                   "Barnets norske identifikasjonsnummer eller fødselsdato må være satt.",
@@ -332,6 +332,8 @@
 
 
   "søk.label": "Søk med fødselsnummer eller D-nummer",
+  "søk.label.fnr": "Fødselsnummer",
+  "søk.label.jpid": "JournalpostID",
   "søk.knapp.label": "Søk",
   "søk.info.perioder": "Velg perioden for søknaden:",
 

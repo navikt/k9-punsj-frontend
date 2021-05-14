@@ -4,8 +4,7 @@ import {IOverføringPunchSkjema} from "../omsorgspenger/overføring/PunchSkjema"
 
 export interface ISokeSkjema {
     identitetsnummer: string;
-    fraOgMed: string;
-    tilOgMed: string;
+    journalpostid: string;
 }
 
 const fnrFeltValidator: IFeltValidator<string, ISokeSkjema> = {

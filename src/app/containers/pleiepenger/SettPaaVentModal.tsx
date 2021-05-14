@@ -1,8 +1,5 @@
-import {OpptjeningAktivitet, PSBSoknad, TilleggsinformasjonV2, TilsynsordningV2} from "../../models/types/PSBSoknad";
 import * as React from "react";
 import {injectIntl, WrappedComponentProps} from "react-intl";
-import {Col, Container, Row} from "react-bootstrap";
-import classNames from "classnames";
 import intlHelper from "../../utils/intlUtils";
 
 import {Knapp} from "nav-frontend-knapper";
@@ -43,43 +40,48 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                     >{intlHelper(intl, 'skjema.knapp.settpaavent')}</Knapp>
                     <Knapp onClick={() => avbryt()} mini={true}>{intlHelper(intl, 'skjema.knapp.avbryt')}</Knapp>
                 </div>
-                <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
-                <AlertStripeInfo>
-                    {intlHelper(intl, 'modal.settpaavent.info')}
-                </AlertStripeInfo>
+                {!!journalposter.length && (
+                    <>
+                        <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
+                        <AlertStripeInfo>
+                            {intlHelper(intl, 'modal.settpaavent.info')}
+                        </AlertStripeInfo>
 
-                <table className="tabell tabell--stripet punch_mappetabell">
-                    <thead>
-                    <tr>
-                        <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
-                        <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                        <th/>
-                        <th/>
-                    </tr>
-                    <tr/>
-                    </thead>
-                    <tbody>
-                    {journalposter.length && journalposter.map((j, i) => (
-                            <tr key={i}>
-                                <td>{j.journalpostId}</td>
-                                <td>{j.dato}</td>
-                                <td>
-                                    <a
-                                        className={"visjp"}
-                                        href={pdfUrl(j)}
-                                        target="_blank"
-                                    >
-                                        <VisSvg title={"vis"}/>
-                                        <div className="vistext">{intlHelper(intl, 'modal.settpaavent.visjournalpost')}</div>
-                                    </a>
-                                </td>
-                                <td><Knapp mini={true}>{intlHelper(intl, 'modal.settpaavent.registrer')}</Knapp></td>
+                        <table className="tabell tabell--stripet punch_mappetabell">
+                            <thead>
+                            <tr>
+                                <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
+                                <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                                <th/>
+                                <th/>
                             </tr>
-                        )
-                    )}
-                    </tbody>
-                </table>
+                            <tr/>
+                            </thead>
+                            <tbody>
+                            {journalposter.map((j, i) => (
+                                    <tr key={i}>
+                                        <td>{j.journalpostId}</td>
+                                        <td>{j.dato}</td>
+                                        <td>
+                                            <a
+                                                className={"visjp"}
+                                                href={pdfUrl(j)}
+                                                target="_blank"
+                                            >
+                                                <VisSvg title={"vis"}/>
+                                                <div
+                                                    className="vistext">{intlHelper(intl, 'modal.settpaavent.visjournalpost')}</div>
+                                            </a>
+                                        </td>
+                                        <td><Knapp mini={true}>{intlHelper(intl, 'modal.settpaavent.registrer')}</Knapp>
+                                        </td>
+                                    </tr>
+                                )
+                            )}
+                            </tbody>
+                        </table>
 
+                    </>)};
             </div>
         );
     }
