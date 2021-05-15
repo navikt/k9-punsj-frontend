@@ -149,8 +149,8 @@ const getPunchPath = (step: PunchStep, values?: any) => {
             const søknad = new PSBSoknad(s)
             const soknadId = s.soeknadId as string;
             const {chosenSoknad} = props.soknaderSokState;
-            const fom = søknad.soeknadsperiode.fom;
-            const tom = søknad.soeknadsperiode.tom;
+            const fom = søknad.soeknadsperiode?.fom || '';
+            const tom = søknad.soeknadsperiode?.tom || '';
             const rowContent = [
                 !!søknad.mottattDato
                     ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato)

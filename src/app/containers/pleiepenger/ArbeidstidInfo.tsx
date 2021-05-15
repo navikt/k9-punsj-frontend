@@ -5,7 +5,7 @@ import {AlertStripeInfo} from "nav-frontend-alertstriper";
 
 export function arbeidstidInformasjon(intl: IntlShape) {
     return (
-        <div>
+        <div className={"arbeidstidInfo"}>
             <hr/>
             <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
             <AlertStripeInfo>{intlHelper(intl, 'skjema.arbeidstid.info')}</AlertStripeInfo>

@@ -37,7 +37,7 @@ export interface IPSBSoknadUt {
     barn: IBarn;
     sendtInn?: boolean;
     erFraK9?: boolean;
-    soeknadsperiode?: IPeriodeV2;
+    soeknadsperiode?: IPeriodeV2 | null;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
     beredskap?: PeriodeinfoV2<ITilleggsinformasjon>[];
@@ -62,7 +62,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     barn: Barn | {};
     sendtInn: boolean;
     erFraK9: boolean;
-    soeknadsperiode: PeriodeV2 | {};
+    soeknadsperiode: PeriodeV2 | null;
     opptjeningAktivitet: OpptjeningAktivitetUt;
     arbeidstid: ArbeidstidUt;
     beredskap: TilleggsinformasjonV2[];
@@ -85,7 +85,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
-        this.soeknadsperiode = new PeriodeV2(soknad.soeknadsperiode|| {})
+        this.soeknadsperiode = soknad.soeknadsperiode ? new PeriodeV2(soknad.soeknadsperiode) : null;
         this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
         this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
@@ -99,32 +99,6 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || false;
-    }
-
-    values(): Required<IPSBSoknad> {
-        return {
-            soeknadId: this.soeknadId,
-            soekerId: this.soekerId,
-            journalposter: this.journalposter,
-            mottattDato: this.mottattDato,
-            barn: this.barn,
-            sendtInn: this.sendtInn,
-            erFraK9: this.erFraK9,
-            soeknadsperiode: this.soeknadsperiode,
-            opptjeningAktivitet: this.opptjeningAktivitet,
-            arbeidstid: this.arbeidstid,
-            beredskap: this.beredskap.map(b => b.values()),
-            nattevaak: this.nattevaak.map(b => b.values()),
-            tilsynsordning: this.tilsynsordning,
-            uttak: this.uttak,
-            utenlandsopphold: this.utenlandsopphold.map(u => u.values()),
-            lovbestemtFerie: this.lovbestemtFerie.map(f => f.values()),
-            omsorg: this.omsorg,
-            bosteder: this.bosteder.map(b => b.values()),
-            soknadsinfo: this.soknadsinfo,
-            harInfoSomIkkeKanPunsjes: this.harInfoSomIkkeKanPunsjes,
-            harMedisinskeOpplysninger: this.harMedisinskeOpplysninger
-        };
     }
 }
 

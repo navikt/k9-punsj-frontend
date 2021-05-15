@@ -30,7 +30,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
-                    {this.soknadsperioder([soknad.soeknadsperiode])}
+                    {this.soknadsperioder([soknad.soeknadsperiode ? soknad.soeknadsperiode : { fom: '', tom: ''}])}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>

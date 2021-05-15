@@ -24,9 +24,6 @@ import * as React from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {connect} from 'react-redux';
 import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
-import {SoknadType} from "../../models/enums/SoknadType";
-import SoknadReadModeV2 from "./SoknadReadModeV2";
-import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
 import {generateDateString} from "../../components/skjema/skjemaUtils";
 
 
@@ -80,9 +77,8 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             props.findEksisterendeSoknader(ident1, ident2);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            //     props.setStepAction(PunchStep.IDENT);
             props.resetPunchAction();
-//      setHash(getPunchPath(PunchStep.IDENT));
+            setHash('/');
         }
     }, [ident1, ident2]);
 

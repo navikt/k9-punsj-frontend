@@ -123,7 +123,6 @@ export interface IPunchFormComponentState {
     skalBoIUtlandet: JaNeiIkkeOpplyst;
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
-    nySoknad: boolean;
     showSettPaaVentModal: boolean;
     showSettPaaVentOkModal: boolean;
     errors: IInputError[];
@@ -146,7 +145,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             mottattDato: '',
             journalposter: [],
             sendtInn: false,
-            barn: {
+            barn:
+                {
                 norskIdent: '',
                 foedselsdato: '',
             },
@@ -176,7 +176,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         iUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         skalHaFerie: JaNeiIkkeOpplyst.IKKE_OPPLYST,
         aapnePaneler: [],
-        nySoknad: false,
         showSettPaaVentModal: false,
         showSettPaaVentOkModal: false,
         errors: [],
@@ -417,6 +416,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             const arbeid = soknad.arbeidstid;
             return (<>
                     <Container className="infoContainer">
+                        <VerticalSpacer eightPx={true} />
                         <CheckboksPanelGruppe
                             legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                             checkboxes={Object.values(Virksomhetstyper).map((v) => ({
@@ -751,7 +751,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         return (
             <>
-
                 {this.statusetikett()}
                 {!!punchFormState.updateSoknadError && (
                     <AlertStripeFeil>
@@ -776,7 +775,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             <div className={"periode"}>{generateDateString(p)}</div>
                         </div>)}
                     </>}
-                    {this.state.nySoknad || this.state.soknad.soeknadsperiode &&
+                    {!!soknad.soeknadsperiode &&
                     <div className={"soknadsperiodecontainer"}>
                         <Input
                             id="soknadsperiode-fra"
@@ -809,18 +808,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             role="button"
                             onClick={() => {
                                 this.updateSoknadState({soeknadsperiode: undefined});
-                                this.setState({nySoknad: false})
                             }}
                             tabIndex={0}>
                             <BinSvg title={"fjern"}/></div>
                     </div>}
-                    {!this.state.nySoknad && <div className={"knappecontainer"}>
+                    {!soknad.soeknadsperiode && <div className={"knappecontainer"}>
                         <AddCircleSvg title={"leggtil"}/>
                         <div
                             id="leggtil"
                             className={"leggtil"}
                             role="button"
-                            onClick={() => this.setState({nySoknad: true})}
+                            onClick={() => this.updateSoknadState({soeknadsperiode: this.initialPeriode})}
                             tabIndex={0}
                         >
                             {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
@@ -1192,6 +1190,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <div className="">
                             <SettPaaVentModal
                                 journalposter={this.props.journalposterState.journalposter.filter(jp => jp.journalpostId !== this.props.journalpostid)}
+                                soknadId={soknad.soeknadId}
                                 submit={() => this.handleSettPaaVent()}
                                 avbryt={() => this.setState({showSettPaaVentModal: false})}
                             />
@@ -1558,7 +1557,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private getSoknadFromStore = () => {
-        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt).values()
+        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
     };
 
     private getManglerFromStore = () => {

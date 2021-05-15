@@ -14,6 +14,7 @@ interface ISettPaaVentModalProps {
     submit: () => void;
     avbryt: () => void;
     journalposter: IJournalpostInfo[];
+    soknadId: string;
 }
 
 const pdfUrl = (journalpost: IJournalpostInfo) => {
@@ -24,10 +25,14 @@ const pdfUrl = (journalpost: IJournalpostInfo) => {
     })
 }
 
+const urlTilNyJournalpost = (id: string, jpid: string) => {
+    return `${jpid}/pleiepenger/skjema/${id}`
+}
+
 class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaVentModalProps> {
 
     render() {
-        const {intl, submit, avbryt, journalposter} = this.props;
+        const {intl, submit, avbryt, journalposter, soknadId} = this.props;
 
         return (
             <div className={"sett-paa-vent"}>
@@ -73,7 +78,7 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                                                     className="vistext">{intlHelper(intl, 'modal.settpaavent.visjournalpost')}</div>
                                             </a>
                                         </td>
-                                        <td><Knapp mini={true}>{intlHelper(intl, 'modal.settpaavent.registrer')}</Knapp>
+                                        <td><Knapp mini={true} onClick={() => window.location.href = urlTilNyJournalpost(soknadId, j.journalpostId)} >{intlHelper(intl, 'modal.settpaavent.registrer')}</Knapp>
                                         </td>
                                     </tr>
                                 )
