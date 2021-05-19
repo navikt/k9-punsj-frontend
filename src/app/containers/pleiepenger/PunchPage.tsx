@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import Page from 'app/components/page/Page';
 import {
    IEksisterendeSoknaderComponentProps,
@@ -7,13 +7,11 @@ import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
 import { IJournalpost, IPath, IPleiepengerPunchState } from 'app/models/types';
-import { IdentRules } from 'app/rules';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { getPath, setHash } from 'app/utils';
+import { getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {
-  AlertStripeAdvarsel,
   AlertStripeSuksess,
 } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
@@ -26,7 +24,7 @@ import {peiepengerPaths} from "./PeiepengerRoutes";
 import {RegistreringsValg} from "./RegistreringsValg";
 import {PunchForm} from "./PunchForm";
 import {IIdentState} from "../../models/types/IdentState";
-import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
+import { JournalpostPanel } from "../../components/journalpost-panel/JournalpostPanel";
 
 
 export interface IPunchPageStateProps {

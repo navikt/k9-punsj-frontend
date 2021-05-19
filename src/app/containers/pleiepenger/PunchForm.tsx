@@ -72,9 +72,6 @@ import {CountrySelect} from "../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
 import SettPaaVentOkModal from "./SettPaaVentOkModal";
 import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
-import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
-import {Normaltekst} from "nav-frontend-typografi";
-
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;

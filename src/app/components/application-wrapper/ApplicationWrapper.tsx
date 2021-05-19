@@ -1,7 +1,6 @@
 import Header from '@navikt/nap-header';
 import UserPanel from '@navikt/nap-user-panel';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
-import LanguageToggle from 'app/components/language-toggle/LanguageToggle';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
 import { checkAuth } from 'app/state/actions';
@@ -14,8 +13,6 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
 import {getEnvironmentVariable} from "../../utils";
-import JournalpostPanel from "../journalpost-panel/JournalpostPanel";
-import JournalpostLoader from "../../containers/JournalpostLoader";
 
 interface IApplicationWrapperComponentProps {
   locale: Locale;
