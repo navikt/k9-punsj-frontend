@@ -15,8 +15,6 @@ import {
 import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe';
 import FlexRow from '../../../components/flexgrid/FlexRow';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { useRouteMatch } from 'react-router';
-import LabelValue from '../../../components/skjema/LabelValue';
 import { Undertittel } from 'nav-frontend-typografi';
 import './overføringPunchSkjema.less';
 import { IError } from '../../../models/types';
@@ -25,7 +23,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import DateInput from '../../../components/skjema/DateInput';
 import InnsendingModal from './InnsendingModal';
 import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
-import JournalpostPanel from '../../../components/journalpost-panel/JournalpostPanel';
+import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
@@ -80,10 +78,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     <Form>
       <section>
         <VerticalSpacer sixteenPx={true} />
-        <JournalpostPanel
-          journalpostId={journalpostId}
-          identitetsnummer={ident}
-        />
+        <JournalpostPanel/>
         <DateInput feltnavn="mottaksdato" bredde="M" />
         <VerticalSpacer twentyPx={true} dashed={true} />
         <Undertittel tag="h2">

@@ -26,6 +26,7 @@ import {peiepengerPaths} from "./PeiepengerRoutes";
 import {RegistreringsValg} from "./RegistreringsValg";
 import {PunchForm} from "./PunchForm";
 import {IIdentState} from "../../models/types/IdentState";
+import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
 
 
 export interface IPunchPageStateProps {
@@ -110,7 +111,7 @@ export class PunchPageComponent extends React.Component<
     return (
       <div className="panels-wrapper" id="panels-wrapper">
         <Panel className="pleiepenger_punch_form" border={true}>
-
+          <JournalpostPanel />
           {this.underFnr()}
         </Panel>
         {journalpostid &&

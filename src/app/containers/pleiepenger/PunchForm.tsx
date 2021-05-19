@@ -72,6 +72,8 @@ import {CountrySelect} from "../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
 import SettPaaVentOkModal from "./SettPaaVentOkModal";
 import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
+import JournalpostPanel from "../../components/journalpost-panel/JournalpostPanel";
+import {Normaltekst} from "nav-frontend-typografi";
 
 
 export interface IPunchFormComponentProps {
@@ -1004,6 +1006,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         {Object.values(RelasjonTilBarnet).map(rel =>
                             <option key={rel} value={rel}>{rel}</option>)}
                     </Select>
+                    {soknad.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET &&
+                    <Input
+                        bredde={"M"}
+                        label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
+                        className="beskrivelseAvOmsorgsrollen"
+                        value={soknad.omsorg.beskrivelseAvOmsorgsrollen}
+                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            omsorg: {...soknad.omsorg, beskrivelseAvOmsorgsrollen: event.target.value},
+                        }))}
+                    />}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.ARBEID)}
@@ -1273,6 +1285,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 sn?.info?.virksomhetstyper?.splice(sn?.info?.virksomhetstyper?.indexOf(v), 1);
             }
         }
+        this.forceUpdate();
     }
 
     private handleRegnskapsførerChange = (jn: JaNei) => {

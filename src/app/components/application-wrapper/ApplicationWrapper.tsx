@@ -14,6 +14,8 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
 import {getEnvironmentVariable} from "../../utils";
+import JournalpostPanel from "../journalpost-panel/JournalpostPanel";
+import JournalpostLoader from "../../containers/JournalpostLoader";
 
 interface IApplicationWrapperComponentProps {
   locale: Locale;
@@ -82,7 +84,6 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (
         <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
           <UserPanel name={props.authState.userName!} />
         </Header>
-        <LanguageToggle {...{ locale }} toggle={props.onChangeLocale} />
         <AppContainer>
           <Router>{props.children}</Router>
         </AppContainer>

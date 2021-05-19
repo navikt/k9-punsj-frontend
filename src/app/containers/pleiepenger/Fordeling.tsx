@@ -158,16 +158,13 @@ const handleRadioChange = (jn: JaNei) => {
   return (
     <div className="fordeling-container">
       <FormPanel>
+        <JournalpostPanel/>
         <div className="fordeling-page">
           {!!opprettIGosysState.gosysOppgaveRequestError && (
             <AlertStripeFeil>
               {intlHelper(intl, 'fordeling.omfordeling.feil')}
             </AlertStripeFeil>
           )}
-          <JournalpostPanel
-            journalpostId={journalpost!.journalpostId}
-            identitetsnummer={journalpost?.norskIdent}
-          />
           <div>
             <RadioPanelGruppe
                 className="horizontalRadios"
@@ -199,6 +196,7 @@ const handleRadioChange = (jn: JaNei) => {
                 }
                 bredde={"M"}
             />}
+            <VerticalSpacer eightPx={true} />
             <Input
                 label={intlHelper(intl, 'ident.identifikasjon.barn')}
                 onChange={handleIdent2Change}

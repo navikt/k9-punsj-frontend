@@ -14,6 +14,9 @@ import OverføringPunchSkjema from '../../../../app/containers/omsorgspenger/ove
 import { JaNei } from '../../../../app/models/enums';
 
 jest.mock('app/utils/envUtils');
+jest.mock('app/components/journalpost-panel/JournalpostPanel', () => ({
+  JournalpostPanel: () => <></>,
+}));
 
 describe('<OverføringPunchSkjema>', () => {
   test('Viser alle feltfeil hvis man sender inn skjema med feil', async () => {
