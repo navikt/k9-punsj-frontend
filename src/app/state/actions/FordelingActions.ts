@@ -1,9 +1,8 @@
 import {ApiPath}                       from 'app/apiConfig';
-import {FordelingActionKeys, PunchFormActionKeys, Sakstype} from 'app/models/enums';
+import {FordelingActionKeys, Sakstype} from 'app/models/enums';
 import {IError}                        from 'app/models/types';
 import {convertResponseToError, post}  from 'app/utils';
 import {ISkalTilK9} from "../../models/types/RequestBodies";
-import {submitSoknadErrorAction} from "./PunchFormActions";
 
 interface ISetSakstypeAction        {type: FordelingActionKeys.SAKSTYPE_SET, sakstype?: Sakstype}
 
