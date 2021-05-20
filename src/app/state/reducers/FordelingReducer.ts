@@ -8,6 +8,8 @@ const initialState: IFordelingState = {
     omfordelingDone: false,
     isAwaitingOmfordelingResponse: false,
     isAwaitingSjekkTilK9Response: false,
+    isAwaitingLukkOppgaveResponse: false,
+    lukkOppgaveDone: false,
     skalTilK9: undefined,
 };
 
@@ -71,6 +73,29 @@ export function FordelingReducer(
                 isAwaitingSjekkTilK9Response: false,
                 sjekkTilK9Error: undefined,
                 skalTilK9: action.k9sak
+            };
+        case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: false,
+                isAwaitingLukkOppgaveResponse: true,
+                lukkOppgaveError: undefined
+            };
+
+        case FordelingActionKeys.LUKK_OPPGAVE_SUCCESS:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: true,
+                isAwaitingLukkOppgaveResponse: false,
+                lukkOppgaveError: undefined
+            };
+
+        case FordelingActionKeys.LUKK_OPPGAVE_ERROR:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: false,
+                isAwaitingLukkOppgaveResponse: false,
+                lukkOppgaveError: action.error
             };
 
         default:

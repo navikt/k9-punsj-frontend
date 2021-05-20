@@ -1,6 +1,6 @@
 import {JaNei, Sakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
-import {setSakstypeAction, sjekkOmSkalTilK9Sak,} from 'app/state/actions';
+import {lukkJournalpostOppgave as lukkJournalpostOppgaveAction, setSakstypeAction, sjekkOmSkalTilK9Sak,} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
@@ -37,6 +37,7 @@ export interface IFordelingDispatchProps {
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
+    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
 }
 
 type IFordelingProps = WrappedComponentProps &
@@ -44,7 +45,7 @@ type IFordelingProps = WrappedComponentProps &
     IFordelingDispatchProps;
 
 type BehandlingsknappProps = Pick<IFordelingProps,
-    'omfordel' | 'journalpost'> & {
+    'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent?: string;
     sakstypeConfig?: ISakstypeDefault;
 
@@ -53,6 +54,7 @@ type BehandlingsknappProps = Pick<IFordelingProps,
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
                                                                               norskIdent,
                                                                               omfordel,
+                                                                              lukkJournalpostOppgave,
                                                                               journalpost,
                                                                               sakstypeConfig
                                                                           }) => {
@@ -71,10 +73,8 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     }
 
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
-
-
         return (
-            <Hovedknapp onClick={() => undefined}>
+            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost!.journalpostId)}>
                 <FormattedMessage id="fordeling.knapp.bekreft"/>
             </Hovedknapp>
         );
@@ -92,7 +92,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     props: IFordelingProps
 ) => {
-    const {intl, fordelingState, omfordel, journalpost, identState, opprettIGosysState, sjekkOmSkalTilK9} = props;
+    const {intl, fordelingState, omfordel, journalpost, identState, opprettIGosysState, sjekkOmSkalTilK9, lukkJournalpostOppgave} = props;
     const {sakstype} = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -159,6 +159,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     }
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess) {
+        return (
+            <AlertStripeSuksess>
+                {intlHelper(intl, 'fordeling.opprettigosys.utfort')}
+            </AlertStripeSuksess>
+        );
+    }
+
+    if (!!fordelingState.isAwaitingLukkOppgaveResponse) {
+        return <NavFrontendSpinner/>;
+    }
+
+    if (!!fordelingState.lukkOppgaveDone) {
         return (
             <AlertStripeSuksess>
                 {intlHelper(intl, 'fordeling.opprettigosys.utfort')}
@@ -333,6 +345,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <Behandlingsknapp
                             norskIdent={identState.ident1}
                             omfordel={omfordel}
+                            lukkJournalpostOppgave={lukkJournalpostOppgave}
                             journalpost={journalpost}
                             sakstypeConfig={konfigForValgtSakstype}
                         />
@@ -374,7 +387,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid))
+        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
+    lukkJournalpostOppgave: (jpid: string) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid))
 });
 
 const Fordeling = injectIntl(

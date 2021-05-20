@@ -22,6 +22,14 @@ interface ISjekkOmSkalTilK9LoadingAction {type: FordelingActionKeys.SJEKK_SKAL_T
 interface ISjekkOmSkalTilK9ErrorAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR, error: IError}
 interface ISjekkOmSkalTilK9SuccessAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS, k9sak: boolean}
 
+interface ILukkOggpgaveRequestAction {type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST}
+interface ILukkOggpgaveSuccessAction {type: FordelingActionKeys.LUKK_OPPGAVE_SUCCESS}
+interface ILukkOggpgaveErrorAction   {type: FordelingActionKeys.LUKK_OPPGAVE_ERROR, error: IError}
+
+export const lukkOppgaveRequestAction   = ():               ILukkOggpgaveRequestAction   => ({type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST});
+export const lukkOppgaveSuccessAction   = ():               ILukkOggpgaveSuccessAction   => ({type: FordelingActionKeys.LUKK_OPPGAVE_SUCCESS});
+export const lukkOppgaveErrorAction     = (error: IError):  ILukkOggpgaveErrorAction     => ({type: FordelingActionKeys.LUKK_OPPGAVE_ERROR, error});
+
 export type IFordelingActionTypes =
     ISetSakstypeAction |
     IOmfordelingRequestAction |
@@ -29,7 +37,10 @@ export type IFordelingActionTypes =
     IOmfordelingErrorAction   |
     ISjekkOmSkalTilK9LoadingAction |
     ISjekkOmSkalTilK9ErrorAction   |
-    ISjekkOmSkalTilK9SuccessAction;
+    ISjekkOmSkalTilK9SuccessAction |
+    ILukkOggpgaveRequestAction |
+    ILukkOggpgaveErrorAction   |
+    ILukkOggpgaveSuccessAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST});
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
@@ -62,6 +73,21 @@ export const omfordel = (journalpostid: string, sakstype: Sakstype) => {return (
         response => {
             if (response.status === 204) {return dispatch(omfordelingSuccessAction())}
             return dispatch(omfordelingErrorAction(convertResponseToError(response)));
+        }
+    );
+}};
+
+export const lukkJournalpostOppgave = (journalpostid: string) => {return (dispatch: any) => {
+
+    dispatch(lukkOppgaveRequestAction());
+    post(
+        ApiPath.JOURNALPOST_LUKK_OPPGAVE,
+        {journalpostId: journalpostid},
+        undefined,
+        undefined,
+        response => {
+            if (response.status === 204) {return dispatch(lukkOppgaveSuccessAction())}
+            return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
         }
     );
 }};
