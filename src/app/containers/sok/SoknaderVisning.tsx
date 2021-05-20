@@ -14,7 +14,6 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import {connect} from 'react-redux';
 import {ISoknaderVisningState} from "../../models/types/SoknaderVisningState";
 import {setIdentSokAction, setStepSokAction} from "../../state/actions/SoknaderSokActions";
-import {ISoknadPeriode} from "../../models/types/HentSoknad";
 import {SoknaderVisningStep} from "../../models/enums/SoknaderVisningStep";
 import {
     chooseSoknadAction,

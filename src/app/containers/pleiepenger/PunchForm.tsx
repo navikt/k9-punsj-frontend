@@ -8,7 +8,8 @@ import {
     hentPerioderFraK9Sak,
     resetPunchFormAction,
     resetSoknadAction,
-    setIdentAction, setJournalpostPaaVentResetAction,
+    setIdentAction,
+    setJournalpostPaaVentResetAction,
     setSignaturAction,
     setStepAction,
     settJournalpostPaaVent,
@@ -72,6 +73,9 @@ import {CountrySelect} from "../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
 import SettPaaVentOkModal from "./SettPaaVentOkModal";
 import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
+import Hjelpetekst from "nav-frontend-hjelpetekst";
+import {PopoverOrientering} from "nav-frontend-popover";
+import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -146,9 +150,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             sendtInn: false,
             barn:
                 {
-                norskIdent: '',
-                foedselsdato: '',
-            },
+                    norskIdent: '',
+                    foedselsdato: '',
+                },
             opptjeningAktivitet: {},
             arbeidstid: {},
 
@@ -415,7 +419,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             const arbeid = soknad.arbeidstid;
             return (<>
                     <Container className="infoContainer">
-                        <VerticalSpacer eightPx={true} />
+                        <VerticalSpacer eightPx={true}/>
                         <CheckboksPanelGruppe
                             legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                             checkboxes={Object.values(Virksomhetstyper).map((v) => ({
@@ -856,7 +860,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             /></div>
                         <RadioPanelGruppe
                             className="horizontalRadios"
-                            radios={Object.values(JaNei).map((jn) => ({
+                            radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
                                 label: intlHelper(intl, jn),
                                 value: jn,
                             }))}
@@ -865,7 +869,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             checked={signert || undefined}
                             onChange={(event) =>
                                 this.props.setSignaturAction(
-                                    ((event.target as HTMLInputElement).value as JaNei) || null
+                                    ((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null
                                 )
                             }
                         />
@@ -1158,17 +1162,27 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     )}
                 </EkspanderbartpanelBase>
                 <VerticalSpacer thirtyTwoPx={true}/>
-                <CheckboksPanel
-                    label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                    checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
-                    onChange={(event) => this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked})}
-                />
+                <div className={"flex-container"}>
+                    <CheckboksPanel
+                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                        checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
+                        onChange={(event) => this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked})}
+                    /><Hjelpetekst
+                    className={"hjelpetext"}
+                    type={PopoverOrientering.OverHoyre}
+                >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
                 <VerticalSpacer eightPx={true}/>
-                <CheckboksPanel
-                    label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                    checked={this.state.soknad.harMedisinskeOpplysninger}
-                    onChange={(event) => this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked})}
-                />
+                <div className={"flex-container"}>
+                    <CheckboksPanel
+                        label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
+                        checked={this.state.soknad.harMedisinskeOpplysninger}
+                        onChange={(event) => this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked})}
+                    />
+                    <Hjelpetekst
+                        className={"hjelpetext"}
+                        type={PopoverOrientering.OverHoyre}
+                    >{intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}</Hjelpetekst>
+                </div>
                 <VerticalSpacer twentyPx={true}/>
 
                 <div className={"submit-knapper"}>
@@ -1734,7 +1748,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     submitSoknad: (ident: string, soeknadid: string) =>
         dispatch(submitSoknad(ident, soeknadid)),
     resetPunchFormAction: () => dispatch(resetPunchFormAction()),
-    setSignaturAction: (signert: JaNei | null) =>
+    setSignaturAction: (signert: JaNeiIkkeRelevant | null) =>
         dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string) => dispatch(settJournalpostPaaVent(journalpostid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),

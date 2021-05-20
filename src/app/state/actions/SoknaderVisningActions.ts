@@ -1,9 +1,9 @@
 import {IError} from "../../models/types";
 import {SoknaderVisningActionKeys} from "../../models/enums/SoknaderVisningActionKeys";
-import {IHentSoknad} from "../../models/types/HentSoknad";
 import {convertResponseToError, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
+import {IHentSoknad} from "../../models/types/RequestBodies";
 
 interface ISetSoknaderAction                  {type: SoknaderVisningActionKeys.SOKNADER_SET, soknadSvar: IPSBSoknad[]}
 interface IFindSoknaderLoadingAction          {type: SoknaderVisningActionKeys.SOKNADER_LOAD, isLoading: boolean}

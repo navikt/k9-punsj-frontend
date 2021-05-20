@@ -6,9 +6,9 @@ import {convertResponseToError, get, post, put} from 'app/utils';
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
 import {ISendSoknad} from "../../models/types/SendSoknad";
 import {IPSBSoknadUt} from "../../models/types/PSBSoknadUt";
-import {IHentPerioder} from "../../models/types/HentSoknad";
+
 import {PeriodeV2} from "../../models/types/PeriodeV2";
-import {getJournalposterPerIdentErrorAction, setJournalposterPerIdentAction} from "./JournalposterPerIdentActions";
+import {IHentPerioder} from "../../models/types/RequestBodies";
 
 interface IResetPunchFormAction {
     type: PunchFormActionKeys.RESET
@@ -292,8 +292,6 @@ export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
         });
     }
 }
-
-
 
 export function settJournalpostPaaVent(journalpostid: string) {
     return (dispatch: any) => {

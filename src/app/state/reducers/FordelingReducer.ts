@@ -1,12 +1,14 @@
-import {FordelingActionKeys, Sakstype}         from 'app/models/enums';
-import {IFordelingState}                       from 'app/models/types';
-import {IFordelingActionTypes}                 from 'app/state/actions';
-import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
+import {FordelingActionKeys} from 'app/models/enums';
+import {IFordelingState} from 'app/models/types';
+import {IFordelingActionTypes} from 'app/state/actions';
+import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IFordelingState = {
     sakstype: undefined,
     omfordelingDone: false,
     isAwaitingOmfordelingResponse: false,
+    isAwaitingSjekkTilK9Response: false,
+    skalTilK9: undefined,
 };
 
 export function FordelingReducer(
@@ -47,6 +49,28 @@ export function FordelingReducer(
                 omfordelingDone: false,
                 isAwaitingOmfordelingResponse: false,
                 omfordelingError: action.error
+            };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: true,
+                sjekkTilK9Error: undefined
+            };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                sjekkTilK9Error: action.error
+            };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                sjekkTilK9Error: undefined,
+                skalTilK9: action.k9sak
             };
 
         default:
