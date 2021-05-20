@@ -86,7 +86,7 @@ export const lukkJournalpostOppgave = (journalpostid: string) => {return (dispat
         undefined,
         undefined,
         response => {
-            if (response.status === 204) {return dispatch(lukkOppgaveSuccessAction())}
+            if (response.status === 200) {return dispatch(lukkOppgaveSuccessAction())}
             return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
         }
     );
