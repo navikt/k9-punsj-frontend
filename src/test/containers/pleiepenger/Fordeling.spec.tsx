@@ -128,7 +128,7 @@ describe('Fordeling', () => {
         expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901");
     });
 
-    
+
    */
 
     it('Viser spinner mens svar avventes', () => {

@@ -251,7 +251,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>
                     </div>
                         <VerticalSpacer sixteenPx={true} />
-                    {!!fordelingState.skalTilK9 || visSakstypeValg && <>
+                    {fordelingState.skalTilK9 === true || visSakstypeValg && <>
                         <RadioGruppe
                             legend={intlHelper(intl, 'fordeling.overskrift')}
                             className="fordeling-page__options"
