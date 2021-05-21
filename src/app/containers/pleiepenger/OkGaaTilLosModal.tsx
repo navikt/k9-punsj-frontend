@@ -4,7 +4,7 @@ import intlHelper from "../../utils/intlUtils";
 
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {getEnvironmentVariable} from "../../utils";
-import './settPaaVentModal.less'
+import './okGaaTilLosModal.less.less'
 import CheckCircleSvg from "../../assets/SVG/CheckCircleSVG";
 import {Row} from "react-bootstrap";
 import moment from 'moment';
