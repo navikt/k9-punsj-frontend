@@ -76,6 +76,7 @@ import Hjelpetekst from "nav-frontend-hjelpetekst";
 import {PopoverOrientering} from "nav-frontend-popover";
 import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
+import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -111,19 +112,19 @@ export interface IPunchFormComponentState {
     isFetched: boolean;
     showStatus: boolean;
     faktiskeTimer: string[][];
-    iTilsynsordning: JaNeiVetikke;
-    iUtlandet: JaNeiIkkeOpplyst;
-    skalHaFerie: JaNeiIkkeOpplyst;
+    iTilsynsordning: JaNeiVetikke | undefined;
+    iUtlandet: JaNeiIkkeOpplyst | undefined;
+    skalHaFerie: JaNeiIkkeOpplyst | undefined;
     arbeidstaker: boolean,
     frilanser: boolean,
     selvstendigNæringsdrivende: boolean;
     expandAll: boolean;
     frilanserStartdato: string;
-    jobberFortsattSomFrilanser: JaNei;
-    barnetSkalLeggesInn: JaNei;
+    jobberFortsattSomFrilanser: JaNei | undefined;
+    barnetSkalLeggesInn: JaNei | undefined;
     innleggelseUtlandet: IPeriodeV2[];
-    harBoddIUtlandet: JaNeiIkkeOpplyst;
-    skalBoIUtlandet: JaNeiIkkeOpplyst;
+    harBoddIUtlandet: JaNeiIkkeOpplyst | undefined;
+    skalBoIUtlandet: JaNeiIkkeOpplyst | undefined;
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     showSettPaaVentModal: boolean;
@@ -170,14 +171,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         selvstendigNæringsdrivende: false,
         expandAll: false,
         frilanserStartdato: '',
-        jobberFortsattSomFrilanser: JaNei.NEI,
+        jobberFortsattSomFrilanser: undefined,
         innleggelseUtlandet: [],
-        barnetSkalLeggesInn: JaNei.NEI,
-        harBoddIUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
-        skalBoIUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
+        barnetSkalLeggesInn: undefined,
+        harBoddIUtlandet: undefined,
+        skalBoIUtlandet: undefined,
         medlemskap: [],
-        iUtlandet: JaNeiIkkeOpplyst.IKKE_OPPLYST,
-        skalHaFerie: JaNeiIkkeOpplyst.IKKE_OPPLYST,
+        iUtlandet: undefined,
+        skalHaFerie: undefined,
         aapnePaneler: [],
         showSettPaaVentModal: false,
         showSettPaaVentOkModal: false,
@@ -228,6 +229,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             jobberNormaltTimerPerDag: '',
         }]
     });
+
+    private initialFrilanser = new FrilanserOpptjening(
+        {
+            jobberFortsattSomFrilans: undefined,
+            startDato: undefined
+        }
+    )
 
     private initialSelvstedigNæringsdrivende = new SelvstendigNaerinsdrivende({
         periode: this.initialPeriode,
@@ -419,8 +427,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             const arbeid = soknad.arbeidstid;
             return (<>
                     <Container className="infoContainer">
-                        <VerticalSpacer eightPx={true}/>
                         <CheckboksPanelGruppe
+                            className={"virksomhetstypercheckbox"}
                             legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                             checkboxes={Object.values(Virksomhetstyper).map((v) => ({
                                 label: v,
@@ -755,16 +763,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return (
             <>
                 {this.statusetikett()}
-                {!!punchFormState.updateSoknadError && (
-                    <AlertStripeFeil>
-                        {intlHelper(intl, 'skjema.feil.ikke_lagret')}
-                    </AlertStripeFeil>
-                )}
-                {!!punchFormState.submitSoknadError && (
-                    <AlertStripeFeil>
-                        {intlHelper(intl, 'skjema.feil.ikke_sendt')}
-                    </AlertStripeFeil>
-                )}
                 <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
                 <VerticalSpacer sixteenPx={true}/>
                 <Panel className={"eksiterendesoknaderpanel"}>
@@ -816,14 +814,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             <BinSvg title={"fjern"}/></div>
                     </div>}
                     {!soknad.soeknadsperiode && <div className={"knappecontainer"}>
-                        <AddCircleSvg title={"leggtil"}/>
                         <div
                             id="leggtil"
                             className={"leggtil"}
                             role="button"
                             onClick={() => this.updateSoknadState({soeknadsperiode: this.initialPeriode})}
                             tabIndex={0}
-                        >
+                        > <div className={"leggtilcircle"}><AddCircleSvg title={"leggtilcircle"}/></div>
                             {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
                         </div>
                     </div>}
@@ -855,8 +852,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                     mottattDato: event.target.value,
                                 }))}
                                 feil={this.getErrorMessage('mottattDato')}
-
-
                             /></div>
                         <RadioPanelGruppe
                             className="horizontalRadios"
@@ -1030,7 +1025,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         checked={this.getCheckedValueArbeid(Arbeidsforhold.ARBEIDSTAKER)}
                     />
                     <VerticalSpacer eightPx={true}/>
-                    {!!this.state.arbeidstaker && (
+                    {!!soknad.arbeidstid.arbeidstakerList.length && (
                         <>{arbeidstakerperioder()}</>
                     )}
                     <CheckboksPanel
@@ -1067,7 +1062,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     </h4>
                     <PeriodeinfoPaneler
                         intl={intl}
-                        periods={soknad.tilsynsordning.perioder}
+                        periods={soknad.tilsynsordning.perioder.length ? soknad.tilsynsordning.perioder : [this.initialPeriodeTimerMinutter]}
                         component={pfTimerMinutter()}
                         panelid={(i) => `tilsynsordningpanel_${i}`}
                         initialPeriodeinfo={this.initialPeriodeTimerMinutter}
@@ -1162,6 +1157,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     )}
                 </EkspanderbartpanelBase>
                 <VerticalSpacer thirtyTwoPx={true}/>
+                <p className={"ikkeregistrert"}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
@@ -1202,6 +1198,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         </Knapp>
                     </p>
                 </div>
+                {!!punchFormState.updateSoknadError && (
+                    <AlertStripeFeil>
+                        {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                    </AlertStripeFeil>
+                )}
+                {!!punchFormState.submitSoknadError && (
+                    <AlertStripeFeil>
+                        {intlHelper(intl, 'skjema.feil.ikke_sendt')}
+                    </AlertStripeFeil>
+                )}
                 {this.state.showSettPaaVentModal && (
                     <ModalWrapper
                         key={"settpaaventmodal"}
@@ -1253,7 +1259,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSettPaaVent = () => {
-        this.props.settJournalpostPaaVent(this.props.journalpostid);
+        this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
         this.setState({showSettPaaVentModal: false});
     }
 
@@ -1353,11 +1359,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             case Arbeidsforhold.FRILANSER:
                 this.setState({frilanser: checked})
                 if (checked) {
-                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.frilanserArbeidstidInfo?.perioder?.length) {
+                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.frilanserArbeidstidInfo) {
                         this.updateSoknadState({
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
                                 frilanserArbeidstidInfo: this.initialArbeidstidInfo
+                            },
+                            opptjeningAktivitet: {
+                                ...this.state.soknad.opptjeningAktivitet,
+                                frilanser: this.initialFrilanser
                             }
                         })
                     }
@@ -1366,6 +1376,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         arbeidstid: {
                             ...this.state.soknad.arbeidstid,
                             frilanserArbeidstidInfo: null
+                        },
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            frilanser: null
                         }
                     })
                 }
@@ -1385,7 +1399,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     this.updateSoknadState({
                         opptjeningAktivitet: {
                             ...this.state.soknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: {}
+                            selvstendigNaeringsdrivende: null
                         }
                     })
                 }
@@ -1400,20 +1414,20 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 if (this.state.soknad.arbeidstid?.arbeidstakerList?.length) {
                     return true;
                 } else {
-                    return this.state.arbeidstaker
+                    return false
                 }
 
             case Arbeidsforhold.FRILANSER:
-                if (this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans) {
+                if (this.state.soknad.opptjeningAktivitet.frilanser || this.state.soknad.arbeidstid?.frilanserArbeidstidInfo) {
                     return true;
                 } else {
-                    return this.state.frilanser
+                    return false
                 }
             case Arbeidsforhold.SELVSTENDIG:
                 if (this.state.soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende) {
                     return true;
                 } else {
-                    return this.state.selvstendigNæringsdrivende
+                    return false
                 }
         }
     }
@@ -1749,7 +1763,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetPunchFormAction: () => dispatch(resetPunchFormAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) =>
         dispatch(setSignaturAction(signert)),
-    settJournalpostPaaVent: (journalpostid: string) => dispatch(settJournalpostPaaVent(journalpostid)),
+    settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
 });
 

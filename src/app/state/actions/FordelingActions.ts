@@ -12,12 +12,6 @@ interface IOmfordelingErrorAction   {type: FordelingActionKeys.OMFORDELING_ERROR
 
 export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({type: FordelingActionKeys.SAKSTYPE_SET, sakstype});
 
-export const omfordelingRequestAction   = ():               IOmfordelingRequestAction   => ({type: FordelingActionKeys.OMFORDELING_REQUEST});
-export const omfordelingSuccessAction   = ():               IOmfordelingSuccessAction   => ({type: FordelingActionKeys.OMFORDELING_SUCCESS});
-export const omfordelingErrorAction     = (error: IError):  IOmfordelingErrorAction     => ({type: FordelingActionKeys.OMFORDELING_ERROR, error});
-
-
-
 interface ISjekkOmSkalTilK9LoadingAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST}
 interface ISjekkOmSkalTilK9ErrorAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR, error: IError}
 interface ISjekkOmSkalTilK9SuccessAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS, k9sak: boolean}
@@ -54,31 +48,6 @@ export const sjekkSkalTilK9ErrorAction = (error: IError): ISjekkOmSkalTilK9Error
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR,
     error
 });
-
-export const omfordel = (journalpostid: string, sakstype: Sakstype) => {return (dispatch: any) => {
-
-    if (sakstype === Sakstype.PLEIEPENGER_SYKT_BARN) {return}
-
-    dispatch(omfordelingRequestAction());
-
-    let ytelse: string;
-    switch (sakstype) {
-        case Sakstype.OMSORGSPENGER:                    ytelse = 'Omsorgspenger';           break;
-        case Sakstype.OPPLAERINGSPENGER:                ytelse = 'Opplæringspenger';        break;
-        case Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE:   ytelse = 'PleiepengerNærstående';   break;
-        default:                                        ytelse = 'Annet';
-    }
-    post(
-        ApiPath.JOURNALPOST_OMFORDEL,
-        {journalpostId: journalpostid},
-        undefined,
-        {ytelse},
-        response => {
-            if (response.status === 204) {return dispatch(omfordelingSuccessAction())}
-            return dispatch(omfordelingErrorAction(convertResponseToError(response)));
-        }
-    );
-}};
 
 export const lukkJournalpostOppgave = (journalpostid: string) => {return (dispatch: any) => {
 

@@ -98,12 +98,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         return null;
     }
 
-//  const backButton = (
-//    <p>
-//      <Knapp onClick={undoSearchForEksisterendeSoknaderAction}>Tilbake</Knapp>
-//    </p>
-//  );
-
     if (
         eksisterendeSoknaderState.eksisterendeSoknaderRequestError
     ) {
@@ -137,13 +131,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             </>
         );
     }
-
-    const newSoknad = () =>
-        props.createSoknad(
-            props.journalpostid,
-            punchState.ident1,
-            punchState.ident2
-        );
 
     const technicalError =
         eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
@@ -234,17 +221,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             </>
         );
     }
-
-//  function undoSearchForEksisterendeSoknader() {
-//    setHash(getPunchPath(PunchStep.IDENT));
-//    props.undoSearchForEksisterendeSoknaderAction();
-//  }
-
-    const newSoknadButton = (
-        <p>
-            <Knapp onClick={newSoknad}>Opprett ny søknad</Knapp>
-        </p>
-    );
 
     if (soknader && soknader.length) {
         return (

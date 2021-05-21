@@ -38,6 +38,7 @@ export const rootReducer = combineReducers({
   felles: FellesReducer,
   journalposterPerIdentState: JournalposterPerIdentReducer,
   identState: IdentReducer,
+  opprettIGosys: GosysOppgaveReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

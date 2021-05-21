@@ -293,14 +293,14 @@ export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
     }
 }
 
-export function settJournalpostPaaVent(journalpostid: string) {
+export function settJournalpostPaaVent(journalpostid: string, soeknadId: string) {
     return (dispatch: any) => {
         dispatch(setJournalpostPaaVentAction());
         return post(
             ApiPath.JOURNALPOST_SETT_PAA_VENT,
             { journalpostId: journalpostid },
             undefined,
-            {},
+            {soeknadId},
             response => {
                 if (response.ok) {
                     return dispatch(setJournalpostPaaVentSuccessAction());

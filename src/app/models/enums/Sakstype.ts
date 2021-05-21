@@ -13,3 +13,9 @@ export enum Sakstype {
   ANNET = 'ANNET',
   SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES'
 }
+
+export enum TilgjengeligSakstype {
+  PLEIEPENGER_SYKT_BARN = 'PLEIEPENGER_SYKT_BARN',
+  ANNET = 'ANNET',
+  SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES'
+}

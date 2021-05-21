@@ -4,7 +4,7 @@ import {FormattedMessage} from "react-intl";
 import {EksisterendeSoknader} from "./EksisterendeSoknader";
 import {PunchStep} from "../../models/enums";
 import './registreringsValg.less';
-import {Knapp} from "nav-frontend-knapper";
+import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction} from "../../state/actions";
 import {connect} from "react-redux";
 import {apiUrl, setHash} from "../../utils";
@@ -69,7 +69,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     }, [ident1]);
 
     const redirectToPreviousStep = () => {
-   //     setHash(getPunchPath(PunchStep.IDENT));
+        setHash('/');
         props.undoSearchForEksisterendeSoknaderAction()
     }
 
@@ -119,14 +119,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                 >
                     Tilbake
                 </Knapp>
-                <Knapp
+                <Hovedknapp
                     onClick={newSoknad}
                     className="knapp knapp2"
                     disabled={valgtOption === ""}
                     mini={true}
                 >
                     {<FormattedMessage id={'ident.knapp.nyregistrering'}/>}
-                </Knapp>
+                </Hovedknapp>
             </div>
         </div>
 

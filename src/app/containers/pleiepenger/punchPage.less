@@ -17,7 +17,7 @@
   .input-row {
     display: inline-flex;
     width: 100%;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0 1rem 0;
 
     .right {
       margin-left: 30px;
@@ -144,9 +144,10 @@
         }
 
         .leggtil {
-          margin-left: 0.5rem;
+          display: inline-flex;
           text-decoration-line: underline;
           color: #0067C5;
+          .leggtilcircle { margin-right: 0.5rem;}
         }
 
         .soknadsperiodecontainer {
@@ -162,6 +163,13 @@
           margin: 2.3rem 0 0.3rem 0.5rem;
           cursor: pointer;
         }
+      }
+
+      .ikkeregistrert {
+        ont-family: "Source Sans Pro", Arial, sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.375rem;
+        font-weight: 600;
       }
 
       .arbeidsknapper {
@@ -212,7 +220,7 @@
         }
 
         .infoContainer {
-          padding-left: 0
+          padding: 1rem 0 0 0
         }
 
         background-color: #EAEAEA;
@@ -455,9 +463,8 @@
 .flex-container {
   display: inline-flex;
   width: 100%;
-  .hjelpetext {
-    margin: 1rem;
-  }
+  .hjelpetext { margin: 1rem }
+  .inputPanel { width: 100% }
 }
 
 .punch_mappemodal_knapperad {
