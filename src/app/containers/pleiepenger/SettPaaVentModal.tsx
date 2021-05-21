@@ -3,7 +3,7 @@ import {injectIntl, WrappedComponentProps} from "react-intl";
 import intlHelper from "../../utils/intlUtils";
 
 import {Knapp} from "nav-frontend-knapper";
-import './settPaaVentModal.less'
+import './okGaaTilLosModal.less'
 import {IJournalpost, IJournalpostInfo} from "../../models/types";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {apiUrl} from "../../utils";

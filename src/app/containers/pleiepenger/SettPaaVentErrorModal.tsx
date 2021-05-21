@@ -3,7 +3,7 @@ import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
 import intlHelper from "../../utils/intlUtils";
 
 import {Knapp} from "nav-frontend-knapper";
-import './settPaaVentModal.less'
+import './okGaaTilLosModal.less'
 import FeilCircleSvg from "../../assets/SVG/FeilCircleSVG";
 
 export interface ISettPaaVentErrorModalProps {
