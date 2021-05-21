@@ -2,7 +2,7 @@ import * as React from "react";
 import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
 import intlHelper from "../../utils/intlUtils";
 
-import {Knapp} from "nav-frontend-knapper";
+import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {getEnvironmentVariable} from "../../utils";
 import './settPaaVentModal.less'
 import CheckCircleSvg from "../../assets/SVG/CheckCircleSVG";
@@ -39,7 +39,7 @@ class OkGaaTilLosModal extends React.Component<WrappedComponentProps & IOkGaaTil
                     <Row>{utledMelding(melding)}</Row>
                     <Row><FormattedMessage id={'modal.okgaatillos.tillos'}/></Row>
                 </div>
-                <Knapp mini={true} onClick={() => window.location.href = getEnvironmentVariable('K9_LOS_URL')}>{intlHelper(intl, 'modal.okgaatillos.ok')}</Knapp>
+                <Hovedknapp className={"okknapp"} mini={true} onClick={() => window.location.href = getEnvironmentVariable('K9_LOS_URL')}>{intlHelper(intl, 'modal.okgaatillos.ok')}</Hovedknapp>
             </div>
         );
     }
