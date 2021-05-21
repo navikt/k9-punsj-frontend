@@ -40,7 +40,7 @@ class JournalpostPanelComponent extends React.Component<WrappedComponentProps & 
                     <LabelValue
                         labelTextId="journalpost.ident2"
                         value={
-                            ident1 ||
+                            ident2 ||
                             intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                         }
                         retning="horisontal"
