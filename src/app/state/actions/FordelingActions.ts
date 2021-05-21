@@ -25,10 +25,12 @@ interface ISjekkOmSkalTilK9SuccessAction {type: FordelingActionKeys.SJEKK_SKAL_T
 interface ILukkOggpgaveRequestAction {type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST}
 interface ILukkOggpgaveSuccessAction {type: FordelingActionKeys.LUKK_OPPGAVE_SUCCESS}
 interface ILukkOggpgaveErrorAction   {type: FordelingActionKeys.LUKK_OPPGAVE_ERROR, error: IError}
+interface ILukkOggpgaveResetAction   {type: FordelingActionKeys.LUKK_OPPGAVE_RESET}
 
 export const lukkOppgaveRequestAction   = ():               ILukkOggpgaveRequestAction   => ({type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST});
 export const lukkOppgaveSuccessAction   = ():               ILukkOggpgaveSuccessAction   => ({type: FordelingActionKeys.LUKK_OPPGAVE_SUCCESS});
 export const lukkOppgaveErrorAction     = (error: IError):  ILukkOggpgaveErrorAction     => ({type: FordelingActionKeys.LUKK_OPPGAVE_ERROR, error});
+export const lukkOppgaveResetAction     = ():               ILukkOggpgaveResetAction     => ({type: FordelingActionKeys.LUKK_OPPGAVE_RESET});
 
 export type IFordelingActionTypes =
     ISetSakstypeAction |
@@ -40,7 +42,8 @@ export type IFordelingActionTypes =
     ISjekkOmSkalTilK9SuccessAction |
     ILukkOggpgaveRequestAction |
     ILukkOggpgaveErrorAction   |
-    ILukkOggpgaveSuccessAction;
+    ILukkOggpgaveSuccessAction |
+    ILukkOggpgaveResetAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST});
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({

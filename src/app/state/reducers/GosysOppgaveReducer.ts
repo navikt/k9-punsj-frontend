@@ -37,6 +37,14 @@ export function GosysOppgaveReducer(
                 gosysOppgaveRequestError: action.error
             };
 
+        case GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET:
+            return {
+                ...gosysOppgaveState,
+                isAwaitingGosysOppgaveRequestResponse: false,
+                gosysOppgaveRequestSuccess: false,
+                gosysOppgaveRequestError: undefined
+            };
+
         default:
             return gosysOppgaveState;
     }

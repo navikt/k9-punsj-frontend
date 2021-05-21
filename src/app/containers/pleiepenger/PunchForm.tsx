@@ -71,11 +71,11 @@ import {pfArbeidstider} from "./pfArbeidstider";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 import {CountrySelect} from "../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
-import SettPaaVentOkModal from "./SettPaaVentOkModal";
 import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
 import Hjelpetekst from "nav-frontend-hjelpetekst";
 import {PopoverOrientering} from "nav-frontend-popover";
 import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
+import OkGaaTilLosModal from "./OkGaaTilLosModal";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -1228,7 +1228,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         closeButton={false}
                         isOpen={punchFormState.settPaaVentSuccess}
                     >
-                        <SettPaaVentOkModal/>
+                        <OkGaaTilLosModal melding={'modal.settpaavent.til'}/>
                     </ModalWrapper>
                 )}
                 {!!punchFormState.settPaaVentError && (
@@ -1244,7 +1244,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 )}
             </>);
     }
-
 
     private handleSubmit = () => {
         this.props.submitSoknad(

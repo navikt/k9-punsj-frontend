@@ -6,13 +6,15 @@ import {GosysOppgaveActionKeys} from "../../models/enums/GosysOppgaveActionKeys"
 interface IOpprettGosysOppgaveRequestAction    {type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST}
 interface IOpprettGosysOppgaveSuccessAction    {type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_SUCCESS}
 interface IOpprettGosysOppgaveErrorAction      {type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error: IError}
+interface IOpprettGosysOppgaveResetAction      {type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET}
 
 
-export type IOpprettGosysOppgaveActionTypes = IOpprettGosysOppgaveRequestAction | IOpprettGosysOppgaveSuccessAction | IOpprettGosysOppgaveErrorAction;
+export type IOpprettGosysOppgaveActionTypes = IOpprettGosysOppgaveRequestAction | IOpprettGosysOppgaveSuccessAction | IOpprettGosysOppgaveErrorAction | IOpprettGosysOppgaveResetAction;
 
 const           opprettGosysOppgaveRequestAction   = ():                       IOpprettGosysOppgaveRequestAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST});
 const           opprettGosysOppgaveSuccessAction   = ():                       IOpprettGosysOppgaveSuccessAction  => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_SUCCESS});
 const           opprettGosysOppgaveErrorAction     = (error: IError):          IOpprettGosysOppgaveErrorAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error});
+export const    opprettGosysOppgaveResetAction     = ():                       IOpprettGosysOppgaveResetAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET});
 
 export const opprettGosysOppgave = (journalpostid: string, norskident?: string) => {return (dispatch: any) => {
 

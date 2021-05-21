@@ -98,6 +98,14 @@ export function FordelingReducer(
                 lukkOppgaveError: action.error
             };
 
+        case FordelingActionKeys.LUKK_OPPGAVE_RESET:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: false,
+                isAwaitingLukkOppgaveResponse: false,
+                lukkOppgaveError: undefined
+            };
+
         default:
             return {...fordelingState};
     }

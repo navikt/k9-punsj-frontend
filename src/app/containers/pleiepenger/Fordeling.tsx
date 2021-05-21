@@ -1,6 +1,10 @@
 import {JaNei, Sakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
-import {lukkJournalpostOppgave as lukkJournalpostOppgaveAction, setSakstypeAction, sjekkOmSkalTilK9Sak,} from 'app/state/actions';
+import {
+    lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction,
+    setSakstypeAction,
+    sjekkOmSkalTilK9Sak,
+} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
@@ -17,12 +21,17 @@ import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
-import {opprettGosysOppgave as omfordelAction} from "../../state/actions/GosysOppgaveActions";
+import {
+    opprettGosysOppgave as omfordelAction,
+    opprettGosysOppgaveResetAction
+} from "../../state/actions/GosysOppgaveActions";
 import {setHash} from "../../utils";
 import {IdentRules} from "../../rules";
 import {setIdentFellesAction} from "../../state/actions/IdentActions";
 import {IIdentState} from "../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
+import OkGaaTilLosModal from "./OkGaaTilLosModal";
+import ModalWrapper from "nav-frontend-modal";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -38,6 +47,8 @@ export interface IFordelingDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
+    resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
+    lukkOppgaveReset: typeof lukkOppgaveResetAction;
 }
 
 type IFordelingProps = WrappedComponentProps &
@@ -92,7 +103,18 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     props: IFordelingProps
 ) => {
-    const {intl, fordelingState, omfordel, journalpost, identState, opprettIGosysState, sjekkOmSkalTilK9, lukkJournalpostOppgave} = props;
+    const {
+        intl,
+        fordelingState,
+        omfordel,
+        journalpost,
+        identState,
+        opprettIGosysState,
+        sjekkOmSkalTilK9,
+        lukkJournalpostOppgave,
+        resetOmfordelAction,
+        lukkOppgaveReset
+    } = props;
     const {sakstype} = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -160,9 +182,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess) {
         return (
-            <AlertStripeSuksess>
-                {intlHelper(intl, 'fordeling.opprettigosys.utfort')}
-            </AlertStripeSuksess>
+            <ModalWrapper
+                key={"opprettigosysokmodal"}
+                onRequestClose={() => resetOmfordelAction()}
+                contentLabel={"settpaaventokmodal"}
+                closeButton={false}
+                isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
+            >
+                <OkGaaTilLosModal melding={'fordeling.opprettigosys.utfort'}/>
+            </ModalWrapper>
         );
     }
 
@@ -172,9 +200,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     if (!!fordelingState.lukkOppgaveDone) {
         return (
-            <AlertStripeSuksess>
-                {intlHelper(intl, 'fordeling.opprettigosys.utfort')}
-            </AlertStripeSuksess>
+            <ModalWrapper
+                key={"lukkoppgaveokmodal"}
+                onRequestClose={() => lukkOppgaveReset()}
+                contentLabel={"settpaaventokmodal"}
+                closeButton={false}
+                isOpen={!!fordelingState.lukkOppgaveDone}
+            >
+                <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
+            </ModalWrapper>
         );
     }
 
@@ -262,7 +296,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             onClick={() => handleVidereClick()}>
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>
                     </div>
-                        <VerticalSpacer sixteenPx={true} />
+                    <VerticalSpacer sixteenPx={true}/>
                     {(!!fordelingState.skalTilK9 || visSakstypeValg) && <>
                         <RadioGruppe
                             legend={intlHelper(intl, 'fordeling.overskrift')}
@@ -352,7 +386,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     </>}
                     {fordelingState.skalTilK9 === false &&
                     <>
-                        <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
+                        <AlertStripeInfo
+                            className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
                         <Hovedknapp
                             mini={true}
                             onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}
@@ -360,7 +395,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>
                     </>}
-                    {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
+                    {!!fordelingState.sjekkTilK9Error &&
+                    <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                 </div>
             </FormPanel>
@@ -389,7 +425,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     lukkJournalpostOppgave: (jpid: string) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid))
+        dispatch(lukkJournalpostOppgaveAction(jpid)),
+    resetOmfordelAction: () =>
+        dispatch(opprettGosysOppgaveResetAction()),
+    lukkOppgaveReset: () =>
+        dispatch(lukkOppgaveResetAction())
 });
 
 const Fordeling = injectIntl(

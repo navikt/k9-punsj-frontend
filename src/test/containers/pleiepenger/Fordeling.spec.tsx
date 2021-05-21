@@ -37,6 +37,8 @@ const setupFordeling = (
         setIdentAction: jest.fn(),
         sjekkOmSkalTilK9: jest.fn(),
         lukkJournalpostOppgave: jest.fn(),
+        resetOmfordelAction: jest.fn(),
+        lukkOppgaveReset: jest.fn(),
         ...fordelingDispatchPropsPartial,
     };
 
@@ -142,10 +144,8 @@ describe('Fordeling', () => {
 
     it('Viser suksessmelding når omfordeling er utført', () => {
         const fordeling = setupFordeling(undefined, undefined, {gosysOppgaveRequestSuccess: true});
-        expect(fordeling.find('AlertStripeSuksess')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeSuksess').children().text()).toEqual(
-            'fordeling.opprettigosys.utfort'
-        );
+        const wrapper = fordeling.find("ModalWrapper")
+        expect(wrapper.children().prop('melding')).toEqual('fordeling.opprettigosys.utfort');
     });
 
     it('Viser feilmelding for omfordeling', () => {

@@ -61,7 +61,7 @@
   "fordeling.infotrygd":                                                                          "Det finnes et vedtak tilknyttet søker og/eller barn i Infotrygd, dokumentet må derfor behandles videre der.",
   "fordeling.infortygd.error":                                                                    "Kunne ikke sjekke opplysninger mot Infotrygd",
   "fordeling.opprettigosys.utfort":                                                               "Journalføringsoppgave i Gosys opprettet",
-  "fordeling.opprettigosys.utfort":                                                               "Oppgaven er lukket",
+  "fordeling.lukkoppgave.utfort":                                                               "Oppgaven er lukket",
   "fordeling.omfordeling.feil":                                                                   "Det oppsto en feil. Prøv igjen senere.",
   "gosysOppgave.opprettet":                                                                       "Journalføringsoppgave oprettet i Gosys",
   "gosysOppgave.feilet":                                                                          "Oppretting av journalføringsoppgave i Gosys feilet",
@@ -348,9 +348,9 @@
   "modal.settpaavent.visjournalpost": "Vis journalpost",
   "modal.settpaavent.registrer": "Registrer informasjon",
   "modal.erdusikker.info": "Er du sikker på at du vil fortsette på denne søknaden?",
-  "modal.settpaavent.ok": "OK",
+  "modal.okgaatillos.ok": "OK",
   "modal.settpaavent.til": "Saken er satt på vent til {dato}.",
-  "modal.settpaavent.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
+  "modal.okgaatillos.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
   "modal.settpaavent.feil": "Det oppstod en feil. Prøv igjen senere.",
 
 
