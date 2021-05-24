@@ -1,7 +1,7 @@
 import {JaNei, Sakstype, TilgjengeligSakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
 import {
-    lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction,
+    lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction, setIdentAction,
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
@@ -143,8 +143,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
-    const handleIdent2Change = (event: any) =>
+    const handleIdent2Change = (event: any) => {
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
+        setIdentAction(identState.ident1, event.target.value)
+    }
 
     const handleIdent1Blur = (event: any) =>
         props.setIdentAction(event.target.value, identState.ident2);
@@ -294,7 +296,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
-                            disabled={!identState.ident2 && !barnetHarIkkeFnr}>
+                            disabled={!barnetsIdent && !barnetHarIkkeFnr}>
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>
                     </div>
                     <VerticalSpacer sixteenPx={true}/>
