@@ -1683,6 +1683,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.updateSoknad
             ({barn: {norskIdent: this.props.identState.ident2 || ''}});
         }
+        if (!this.state.soknad.journalposter?.some(jp => jp === this.props.journalpostid)) {
+            this.state.soknad.journalposter?.push(this.props.journalpostid)
+        }
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
             showStatus: !!showStatus,
