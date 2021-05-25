@@ -40,13 +40,12 @@ export interface IPeriodeinfopanelerProps {
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
-    utenPeriode?: boolean
 }
 
 export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (props: IPeriodeinfopanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, component, editSoknad, editSoknadState, kanHaFlere, utenPeriode} = props;
+    const {intl, component, editSoknad, editSoknadState, kanHaFlere} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfoV2>) => IPeriodeinfoV2[] = (index: number, periodeinfo: Partial<IPeriodeinfoV2>) => {
         const newInfo: IPeriodeinfoV2 = {...props.periods[index], ...periodeinfo};
@@ -66,7 +65,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         getErrorMessage: GetErrorMessage,
         intlShape: IntlShape,
     ) => <>
-        {utenPeriode !== true && <PeriodInput
+        {<PeriodInput
             periode={periodeinfo.periode || {}}
             intl={intlShape}
             onChange={(periode) => {editSoknadState(editPeriode(periodeindeks, periode))}}

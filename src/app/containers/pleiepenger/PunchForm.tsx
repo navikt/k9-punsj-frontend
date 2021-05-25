@@ -15,7 +15,7 @@ import {
     settJournalpostPaaVent,
     submitSoknad,
     undoChoiceOfEksisterendeSoknadAction,
-    updateSoknad,
+    updateSoknad, validerSoknad,
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -77,6 +77,7 @@ import {PopoverOrientering} from "nav-frontend-popover";
 import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
+import ErDuSikkerModal from "./ErDuSikkerModal";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -104,6 +105,7 @@ export interface IPunchFormDispatchProps {
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
+    validateSoknad: typeof validerSoknad;
 }
 
 export interface IPunchFormComponentState {
@@ -128,7 +130,7 @@ export interface IPunchFormComponentState {
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     showSettPaaVentModal: boolean;
-    showSettPaaVentOkModal: boolean;
+    showErDuSikkerModal: boolean;
     errors: IInputError[];
     harRegnskapsfører: boolean;
 
@@ -181,7 +183,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         skalHaFerie: undefined,
         aapnePaneler: [],
         showSettPaaVentModal: false,
-        showSettPaaVentOkModal: false,
+        showErDuSikkerModal: false,
         errors: [],
         harRegnskapsfører: false,
     };
@@ -820,7 +822,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             role="button"
                             onClick={() => this.updateSoknadState({soeknadsperiode: this.initialPeriode})}
                             tabIndex={0}
-                        > <div className={"leggtilcircle"}><AddCircleSvg title={"leggtilcircle"}/></div>
+                        >
+                            <div className={"leggtilcircle"}><AddCircleSvg title={"leggtilcircle"}/></div>
                             {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
                         </div>
                     </div>}
@@ -1186,7 +1189,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <Knapp
                             onClick={() => this.handleSubmit()}
                         >
-                            {intlHelper(intl, 'skjema.knapp.send')}
+                            {intlHelper(intl, punchFormState.isComplete ? 'skjema.knapp.send' : 'skjema.knapp.valider')}
                         </Knapp>
 
                         <Knapp
@@ -1248,14 +1251,34 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()}/>
                     </ModalWrapper>
                 )}
+                {!!this.state.showErDuSikkerModal && (
+                    <ModalWrapper
+                        key={"erdusikkermodal"}
+                        onRequestClose={() => this.setState({showErDuSikkerModal: false})}
+                        contentLabel={"erdusikkermodal"}
+                        closeButton={false}
+                        isOpen={!!this.state.showErDuSikkerModal}
+                    >
+                        <ErDuSikkerModal
+                            melding={'modal.erdusikker.sendinn'}
+                            extraInfo={'modal.erdusikker.sendinn.extrainfo'}
+                            onSubmit={() => this.props.submitSoknad(this.props.identState.ident1, this.props.id)}
+                            submitKnappText={'skjema.knapp.send'}
+                            onClose={() => this.setState({showErDuSikkerModal: false})}/>
+                    </ModalWrapper>
+                )}
             </>);
     }
 
     private handleSubmit = () => {
-        this.props.submitSoknad(
-            this.props.identState.ident1,
-            this.props.id
-        )
+        if (this.props.punchFormState.isComplete) {
+            this.setState({showErDuSikkerModal: true})
+        } else {
+            this.props.validateSoknad(
+                this.props.identState.ident1,
+                this.props.id
+            )
+        }
     }
 
     private handleSettPaaVent = () => {
@@ -1765,6 +1788,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
+    validateSoknad: (ident: string, soeknadid: string) =>
+        dispatch(validerSoknad(ident, soeknadid)),
 });
 
 export const PunchForm = injectIntl(

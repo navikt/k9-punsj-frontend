@@ -25,6 +25,7 @@ import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {connect} from 'react-redux';
 import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
 import {generateDateString} from "../../components/skjema/skjemaUtils";
+import ErDuSikkerModal from "./ErDuSikkerModal";
 
 
 export interface IEksisterendeSoknaderStateProps {
@@ -159,6 +160,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     : søknad.barn.foedselsdato &&
                     datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                 '',
+                søknad.journalposter.toString(),
                 generateDateString(søknad.soeknadsperiode),
                 <Knapp
                     key={soknadId}
@@ -186,19 +188,12 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     isOpen={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                     closeButton={false}
                 >
-                    <div className="modal_content">
-                        {chosenSoknad && (
-                            <p>{intlHelper(intl, 'modal.erdusikker.info')}</p>
-                        )}
-                        <div className="punch_mappemodal_knapperad">
-                            <Knapp mini={true} className="knapp1" onClick={() => chooseSoknad(soknadInfo)}>
-                                {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                            </Knapp>
-                            <Knapp mini={true} className="knapp2" onClick={props.closeEksisterendeSoknadAction}>
-                                {intlHelper(intl, 'mappe.lesemodus.knapp.lukk')}
-                            </Knapp>
-                        </div>
-                    </div>
+                    <ErDuSikkerModal
+                        melding={'modal.erdusikker.info'}
+                        onSubmit={() => chooseSoknad(soknadInfo)}
+                        onClose={() => props.closeEksisterendeSoknadAction()}
+                        submitKnappText={'mappe.lesemodus.knapp.velg'}
+                    />
                 </ModalWrapper>
             );
         }
@@ -211,6 +206,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     <tr>
                         <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
                         <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
+                        <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
                         <th>{intlHelper(intl, 'skjema.periode')}</th>
                         <th/>
                     </tr>

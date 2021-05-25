@@ -64,6 +64,23 @@ interface ISubmitSoknadErrorAction {
     error: IError
 }
 
+interface IValiderSoknadRequestAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST
+}
+
+interface IValiderSoknadSuccessAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS
+}
+
+interface IValiderSoknadErrorAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
+    error: IError
+}
+
+interface IValiderSoknadUncompleteAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE,
+    errors: IInputError[],
+}
 
 interface IHentPerioderLoadingAction {
     type: PunchFormActionKeys.HENT_PERIODER_REQUEST
@@ -131,7 +148,7 @@ type ISoknadSubmitActionTypes =
     | ISubmitSoknadErrorAction;
 type IPerioderActionTypes = IHentPerioderErrorAction | IHentPerioderLoadingAction | IHentPerioderSuccessAction;
 type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction | ISettJournalpostPaaVentResetAction;
-
+type IValiderSoknadActionTypes = IValiderSoknadErrorAction | IValiderSoknadRequestAction | IValiderSoknadSuccessAction | IValiderSoknadUncompleteAction;
 
 
 export type IPunchFormActionTypes =
@@ -140,7 +157,8 @@ export type IPunchFormActionTypes =
     | ISoknadUpdateActionTypes
     | ISoknadSubmitActionTypes
     | IPerioderActionTypes
-    | ISettPaaVentActionTypes;
+    | ISettPaaVentActionTypes
+    | IValiderSoknadActionTypes;
 
 export const resetPunchFormAction = (): IResetPunchFormAction => ({type: PunchFormActionKeys.RESET});
 
@@ -253,6 +271,17 @@ export const submitSoknadErrorAction = (error: IError): ISubmitSoknadErrorAction
     error
 });
 
+export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST});
+export const validerSoknadSuccessAction = (): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS});
+export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorAction => ({
+    type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
+    error
+});
+export const validerSoknadUncompleteAction = (errors: IInputError[]): IValiderSoknadUncompleteAction => ({
+    type: PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE,
+    errors,
+});
+
 export function submitSoknad(norskIdent: string, soeknadId: string) {
     return (dispatch: any) => {
         const requestBody: ISendSoknad = {
@@ -269,6 +298,27 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
                     return  dispatch(submitSoknadUncompleteAction(errors.feil));
                 default:
                     return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
+            }
+        });
+    }
+}
+
+export function validerSoknad(norskIdent: string, soeknadId: string) {
+    return (dispatch: any) => {
+        const requestBody: ISendSoknad = {
+            norskIdent,
+            soeknadId
+        }
+
+        dispatch(validerSoknadRequestAction());
+        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
+            switch (response.status) {
+                case 202:
+                    return dispatch(validerSoknadSuccessAction());
+                case 400:
+                    return  dispatch(validerSoknadUncompleteAction(errors.feil));
+                default:
+                    return dispatch(validerSoknadErrorAction(convertResponseToError(response)));
             }
         });
     }

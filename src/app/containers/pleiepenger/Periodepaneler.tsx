@@ -122,6 +122,5 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 </Knapp></Row>}
 
         </Panel>);
-
 }
 ;

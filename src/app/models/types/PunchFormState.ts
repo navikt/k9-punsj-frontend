@@ -12,8 +12,10 @@ export interface IPunchFormState {
     error?: IError;
     isAwaitingUpdateResponse?: boolean;
     isAwaitingSubmitResponse?: boolean;
+    isAwaitingValidateResponse?: boolean;
     updateSoknadError?: IError;
     submitSoknadError?: IError;
+    validateSoknadError?: IError;
     inputErrors?: IInputError[];
     isComplete?: boolean;
     awaitingSettPaaVentResponse?: boolean;

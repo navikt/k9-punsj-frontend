@@ -14,6 +14,7 @@ export enum ApiPath {
   SOKNAD_GET = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
   SOKNAD_CREATE = '/pleiepenger-sykt-barn-soknad',
   SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
+  SOKNAD_VALIDER= '/pleiepenger-sykt-barn-soknad/valider',
   SOKNAD_SUBMIT = '/pleiepenger-sykt-barn-soknad/send',
   FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
   SJEKK_OM_SKAL_TIL_K9SAK = '/journalpost/skaltilk9sak',

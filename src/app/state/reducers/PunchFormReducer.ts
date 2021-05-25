@@ -156,6 +156,36 @@ export function PunchFormReducer(
                 settPaaVentSuccess: false,
                 settPaaVentError: undefined,
             };
+        case PunchFormActionKeys.SOKNAD_VALIDER_REQUEST:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: true,
+                validateSoknadError: undefined
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: undefined,
+                inputErrors: undefined,
+                isComplete: true
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: undefined,
+                inputErrors: action.errors,
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_ERROR:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: action.error
+            };
 
 
         default: return punchFormState;
