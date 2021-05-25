@@ -6,6 +6,7 @@ import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 const initialState: IPunchFormState = {
     isSoknadLoading: false,
     isComplete: false,
+    isValid: false,
     awaitingSettPaaVentResponse: false,
     settPaaVentError: undefined,
     settPaaVentSuccess: undefined,
@@ -169,7 +170,7 @@ export function PunchFormReducer(
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
                 inputErrors: undefined,
-                isComplete: true
+                isValid: true
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE:
@@ -178,6 +179,7 @@ export function PunchFormReducer(
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
                 inputErrors: action.errors,
+                isValid: false,
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_ERROR:
@@ -187,6 +189,13 @@ export function PunchFormReducer(
                 validateSoknadError: action.error
             };
 
+        case PunchFormActionKeys.SOKNAD_VALIDER_RESET:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: undefined,
+                isValid: undefined
+            };
 
         default: return punchFormState;
     }

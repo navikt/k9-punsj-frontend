@@ -82,6 +82,10 @@ interface IValiderSoknadUncompleteAction {
     errors: IInputError[],
 }
 
+interface IValiderSoknadResetAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_RESET
+}
+
 interface IHentPerioderLoadingAction {
     type: PunchFormActionKeys.HENT_PERIODER_REQUEST
 }
@@ -148,7 +152,7 @@ type ISoknadSubmitActionTypes =
     | ISubmitSoknadErrorAction;
 type IPerioderActionTypes = IHentPerioderErrorAction | IHentPerioderLoadingAction | IHentPerioderSuccessAction;
 type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction | ISettJournalpostPaaVentResetAction;
-type IValiderSoknadActionTypes = IValiderSoknadErrorAction | IValiderSoknadRequestAction | IValiderSoknadSuccessAction | IValiderSoknadUncompleteAction;
+type IValiderSoknadActionTypes = IValiderSoknadErrorAction | IValiderSoknadRequestAction | IValiderSoknadSuccessAction | IValiderSoknadUncompleteAction | IValiderSoknadResetAction;
 
 
 export type IPunchFormActionTypes =
@@ -277,6 +281,11 @@ export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorActi
     type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
     error
 });
+
+export const validerSoknadResetAction = (): IValiderSoknadResetAction => ({
+    type: PunchFormActionKeys.SOKNAD_VALIDER_RESET,
+});
+
 export const validerSoknadUncompleteAction = (errors: IInputError[]): IValiderSoknadUncompleteAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE,
     errors,

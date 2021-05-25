@@ -15,7 +15,7 @@ import {
     settJournalpostPaaVent,
     submitSoknad,
     undoChoiceOfEksisterendeSoknadAction,
-    updateSoknad, validerSoknad,
+    updateSoknad, validerSoknad, validerSoknadResetAction,
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -106,6 +106,7 @@ export interface IPunchFormDispatchProps {
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
     validateSoknad: typeof validerSoknad;
+    validerSoknadReset: typeof validerSoknadResetAction;
 }
 
 export interface IPunchFormComponentState {
@@ -1260,34 +1261,30 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()}/>
                     </ModalWrapper>
                 )}
-                {!!this.state.showErDuSikkerModal && (
+                {!!this.props.punchFormState.isValid && (
                     <ModalWrapper
                         key={"erdusikkermodal"}
-                        onRequestClose={() => this.setState({showErDuSikkerModal: false})}
+                        onRequestClose={() => this.props.validerSoknadReset()}
                         contentLabel={"erdusikkermodal"}
                         closeButton={false}
-                        isOpen={!!this.state.showErDuSikkerModal}
+                        isOpen={!!this.props.punchFormState.isValid}
                     >
                         <ErDuSikkerModal
                             melding={'modal.erdusikker.sendinn'}
                             extraInfo={'modal.erdusikker.sendinn.extrainfo'}
                             onSubmit={() => this.props.submitSoknad(this.props.identState.ident1, this.props.id)}
                             submitKnappText={'skjema.knapp.send'}
-                            onClose={() => this.setState({showErDuSikkerModal: false})}/>
+                            onClose={() => this.props.validerSoknadReset()}/>
                     </ModalWrapper>
                 )}
             </>);
     }
 
     private handleSubmit = () => {
-        if (this.props.punchFormState.isComplete) {
-            this.setState({showErDuSikkerModal: true})
-        } else {
-            this.props.validateSoknad(
-                this.props.identState.ident1,
-                this.props.id
-            )
-        }
+        this.props.validateSoknad(
+            this.props.identState.ident1,
+            this.props.id
+        )
     }
 
     private handleSettPaaVent = () => {
@@ -1802,6 +1799,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
     validateSoknad: (ident: string, soeknadid: string) =>
         dispatch(validerSoknad(ident, soeknadid)),
+    validerSoknadReset: () =>
+        dispatch(validerSoknadResetAction())
 });
 
 export const PunchForm = injectIntl(
