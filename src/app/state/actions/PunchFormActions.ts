@@ -311,7 +311,7 @@ export function validerSoknad(norskIdent: string, soeknadId: string) {
         }
 
         dispatch(validerSoknadRequestAction());
-        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
+        post(ApiPath.SOKNAD_VALIDER, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
             switch (response.status) {
                 case 202:
                     return dispatch(validerSoknadSuccessAction());

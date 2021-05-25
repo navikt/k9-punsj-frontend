@@ -25,7 +25,10 @@ class ErDuSikkerModal extends React.Component<WrappedComponentProps & IErDuSikke
                 <VerticalSpacer sixteenPx={true}/>
                 {extraInfo && <div>{intlHelper(intl, extraInfo)}</div>}
                 <div className="punch_mappemodal_knapperad">
-                    <Hovedknapp mini={true} className="knapp1" onClick={() => onSubmit()}>
+                    <Hovedknapp mini={true} className="knapp1" onClick={() => {
+                        onSubmit();
+                        onClose();
+                    }}>
                         {intlHelper(intl, submitKnappText)}
                     </Hovedknapp>
                     <Knapp mini={true} className="knapp2" onClick={() => onClose()}>
