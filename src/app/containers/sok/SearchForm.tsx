@@ -114,6 +114,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         onClick={onClick}
                         tekstId="søk.knapp.label"
                         disabled={disabled}/>
+                        <VerticalSpacer sixteenPx={true} />
                     {this.props.notFound &&
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>

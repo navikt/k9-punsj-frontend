@@ -983,8 +983,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                     showStatus
                                 )
                             }
-                            getErrorMessage={() => undefined}
-                            feilkodeprefiks={'perioder'}
+                            getErrorMessage={this.getErrorMessage}
+                            feilkodeprefiks={'lovbestemtFerie'}
                             minstEn={false}
                             kanHaFlere={true}
                         />)}
@@ -1609,7 +1609,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             if (errorMsg.startsWith('Mangler søknadsperiode')) {
                 return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode')
             }
-            if (attribute === 'nattevåk' || attribute === 'beredskap') {
+            if (attribute === 'nattevåk' || attribute === 'beredskap' || 'lovbestemtFerie') {
                 return errorMsg
             }
         }

@@ -398,6 +398,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>
                     </>}
+                    <VerticalSpacer sixteenPx={true} />
                     {!!fordelingState.sjekkTilK9Error &&
                     <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}

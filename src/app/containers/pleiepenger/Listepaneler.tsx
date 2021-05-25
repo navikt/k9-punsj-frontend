@@ -91,7 +91,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         intl,
                     )}
                     <div className={"listepanelbunn"}>
-                        <BinSvg title={"fjern"}/>
                         <div
                             id="slett"
                             className={"fjernlisteelementknapp"}
@@ -103,7 +102,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                 !!props.onRemove && props.onRemove();
                             }}
                             tabIndex={0}
-                        >
+                        ><div className={"slettIcon"}><BinSvg title={"fjern"}/></div>
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                         </div>
                     </div>

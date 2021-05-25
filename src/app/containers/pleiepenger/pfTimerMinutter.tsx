@@ -36,10 +36,12 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                         bredde={"XS"}
                         className="timer"
                         onChange={event => updatePeriodeinfoInSoknadState({
+                            ...periodeinfo,
                             timer: stringToNumber(event.target.value),
                             minutter: periodeinfo.minutter
                         })}
                         onBlur={event => updatePeriodeinfoInSoknad({
+                            ...periodeinfo,
                             timer: stringToNumber(event.target.value),
                             minutter: periodeinfo.minutter
                         })}
@@ -50,7 +52,6 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                         value={periodeinfo.minutter}
                         bredde={"XS"}
                         className="right"
-                        type={"number"}
                         onChange={(event) => updatePeriodeinfoInSoknadState({
                             ...periodeinfo,
                             timer: periodeinfo.timer,
