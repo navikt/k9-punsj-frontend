@@ -3,7 +3,6 @@ export enum RelasjonTilBarnet {
     MOR         = "Mor",
     FAR         = "Far",
     MEDMOR      = "Medmor",
-    MEDFAR      = "Medfar",
     FOSTERFORELDER = "Fosterforelder",
     ANNET       = "Annet",
 
