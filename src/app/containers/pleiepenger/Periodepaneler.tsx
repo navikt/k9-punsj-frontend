@@ -17,7 +17,7 @@ import {Row} from "react-bootstrap";
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<PeriodeinfoV2<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<PeriodeinfoV2<T>>, showStatus?: boolean) => any;
-export type GetErrorMessage = (kode: string) => (React.ReactNode | boolean | undefined);
+export type GetErrorMessage = (kode: string, indeks?: number) => (React.ReactNode | boolean | undefined);
 
 export type PeriodeComponent<T> = (info: PeriodeinfoV2<T>,
                                    periodeindex: number,
@@ -49,7 +49,7 @@ export interface IPeriodepanelerProps {
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage} = props;
+    const {intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeV2>) => IPeriodeV2[] = (index: number, periodeinfo: Partial<IPeriodeV2>) => {
         const newInfo: IPeriodeV2 = {...props.periods[index], ...periodeinfo};
@@ -87,14 +87,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             onBlur={(periode) => {
                                 editSoknad(editPeriode(i, periode))
                             }}
-                            errorMessage={getErrorMessage!(`[${i}].periode`)}
+                            errorMessage={feilkodeprefiks ? getErrorMessage!(feilkodeprefiks, i) : getErrorMessage!(`[${i}].periode`)}
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
-
                         <div
                             id="slett"
-                            className={"fjern"}
+                            className={!!getErrorMessage!(feilkodeprefiks!, i) ? "fjern-feil" : "fjern"}
                             role="button"
                             onClick={() => {
                                 const newArray: IPeriodeV2[] = removeItem(i);

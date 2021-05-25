@@ -237,6 +237,7 @@
   "skjema.melding.fyll_ut":                                                                       "Fyll ut informasjon.",
   "skjema.melding.komplett":                                                                      "Søknaden er fullstendig og kan sendes inn.",
   "skjema.feil.ikke_funnet":                                                                      "Kunne ikke finne mappe med id {id}.",
+  "skjema.feil.validering":                                                                       "Skjemaet inneholder valideringsfeil. Vennligst rett opp i feilene før du sender inn.",
   "skjema.feil.ikke_lagret":                                                                      "Det oppsto en feil under lagring av endringer.",
   "skjema.feil.ikke_sendt":                                                                       "Det oppsto en feil under innsending av søknad. Prøv igjen senere.",
   "skjema.feil.søknadsperiode/endringsperiode":                                                   "Mangler søknadsperiode eller endringsperiode",

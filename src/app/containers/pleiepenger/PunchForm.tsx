@@ -356,7 +356,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
                 textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
                 panelClassName="arbeidstakerpanel"
-                feilkodeprefiks={'arbeid.arbeidstaker'}
+                feilkodeprefiks={'arbeidstid.arbeidstaker'}
+                getErrorMessage={this.getErrorMessage}
                 kanHaFlere={true}
             />)
         };
@@ -420,6 +421,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             minstEn={true}
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere={true}
+                            getErrorMessage={this.getErrorMessage}
+                            feilkodeprefiks={'arbeidstid.frilanser'}
                         />
                     </>)}</>);
         };
@@ -1087,7 +1090,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         textFjern="skjema.perioder.fjern"
                         className="bosteder"
                         panelClassName="tilsynsordningpanel"
-                        getErrorMessage={() => undefined}
+                        getErrorMessage={this.getErrorMessage}
                         feilkodeprefiks={'tilsynsordning'}
                         kanHaFlere={true}
                     />
@@ -1201,9 +1204,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         </Knapp>
                     </p>
                 </div>
+                <VerticalSpacer sixteenPx={true} />
                 {!!punchFormState.updateSoknadError && (
                     <AlertStripeFeil>
                         {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                    </AlertStripeFeil>
+                )}
+                {!!punchFormState.inputErrors?.length && (
+                    <AlertStripeFeil>
+                        {intlHelper(intl, 'skjema.feil.validering')}
                     </AlertStripeFeil>
                 )}
                 {!!punchFormState.submitSoknadError && (
@@ -1624,9 +1633,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.punchFormState.inputErrors;
     };
 
-    private getErrorMessage = (attribute: string) => {
+    private getErrorMessage = (attribute: string, indeks?: number ) => {
         const errorMsg = this.getManglerFromStore()?.filter(
-            (m: IInputError) => m.felt === attribute)?.[0]?.feilmelding;
+            (m: IInputError) => m.felt === attribute)?.[indeks || 0]?.feilmelding;
 
         if (errorMsg) {
             if (errorMsg.startsWith('Mangler søknadsperiode')) {

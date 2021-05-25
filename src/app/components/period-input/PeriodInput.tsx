@@ -42,7 +42,6 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     feil={props.errorMessageFom}
                     disabled={disabled || props.disabledFom}
                 />
-
                 <Input
                     id={props.inputIdTom}
                     bredde={"M"}
