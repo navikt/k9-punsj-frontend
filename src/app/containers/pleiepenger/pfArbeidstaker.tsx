@@ -48,8 +48,7 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
 
         return <SkjemaGruppe className={"arbeidstaker-panel"}
                              feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
-            <Container className="infoContainer">
-                <div className={"o-p-container"}>
+            <Container>
                     <Row noGutters={true}>
                         <RadioPanelGruppe
                             className="horizontalRadios"
@@ -85,7 +84,6 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                         </div>
                     </Row>
                     {arbeidstidInformasjon(intl)}
-                </div>
                 <PeriodeinfoPaneler
                     intl={intl}
                     periods={arbeidstaker.arbeidstidInfo.perioder}

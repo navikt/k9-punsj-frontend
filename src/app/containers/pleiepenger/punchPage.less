@@ -48,6 +48,9 @@
 
       .container {
         text-align: left;
+        padding-top: 0;
+        padding-left: 0;
+        margin-left: 0
       }
 
       .skjemaelement__feilmelding {
@@ -124,6 +127,10 @@
         margin-top: 1rem;
       }
 
+      .countryselect {
+        padding-top: 1rem;
+      }
+
       .eksiterendesoknaderpanel {
         border: 1px solid #5690A2;
         box-sizing: border-box;
@@ -193,14 +200,13 @@
         background-color: #EAEAEA;
         margin: 1rem 0 1rem 0;
 
+        .listepanel {
+          margin: 0.5rem 0 0 -1rem;
+        }
+
         .frilanser-startdato {
           margin-bottom: 20px
         }
-
-        .container {
-          padding-top: 0;
-        }
-
         .frilanser-info {
           margin-top: 20px;
           font-weight: bold;
@@ -213,12 +219,6 @@
       }
 
       .selvstendigpanel {
-        .container {
-          text-align: left;
-          padding-top: 0;
-          padding-left: 0;
-          margin-left: 0
-        }
 
         .infoContainer {
           padding: 1rem 0 0 0
@@ -244,6 +244,10 @@
           margin: 1rem 0 0 0;
         }
 
+        .listepanel {
+          margin: 0.5rem 0 0 -1rem;
+        }
+
         .sn-startdatocontainer {
           display: flex;
           margin: 20px 0 10px 0;
@@ -257,24 +261,6 @@
       .utenlandsoppholdpanel {
         background-color: #EAEAEA;
         margin-top: 20px;
-
-        .period-input {
-          padding-left: 1rem;
-        }
-
-        .countryselect {
-          padding: 20px;
-        }
-      }
-
-      .timerminutter {
-        padding-left: 15px;
-      }
-
-      .tilsynsordningpanel {
-        .period-input {
-          padding-left: 1rem;
-        }
       }
 
       .listepaneler {
@@ -313,7 +299,7 @@
 
         background-color: #EAEAEA;
         margin-bottom: 1rem;
-        padding: .5rem 0;
+        padding: 1rem;
         border-radius: 5px;
 
         .fjernlisteelementknapp {
@@ -349,23 +335,11 @@
           }
 
           .infoContainer {
-            padding: .5rem;
+            .col { padding: 0 .5rem }
 
-            .col {
-              padding: 0 .5rem
-            }
+            label { font-weight: bold }
 
-            label {
-              font-weight: bold
-            }
-
-            .skjemaelement {
-              margin-top: 1rem
-            }
-
-            .o-p-container {
-              margin-left: 15px;
-            }
+            .skjemaelement { margin-top: 1rem }
 
             .org-person {
               display: inline-flex;
@@ -378,27 +352,17 @@
 
           .listepaneler {
             background-color: #EAEAEA;
-            margin: .5rem 1rem;
+            margin: 0.5rem 0 0 -1rem;
 
             .leggtillisteelementknapp:not(:hover) {
               background-color: @navBlaLighten80
             }
 
-            .listepanel {
-              background-color: #EAEAEA;
-
-            }
           }
         }
 
         &.beredskapspanel, &.nattevaakspanel {
-          .tilleggsinfo {
-            margin: 1rem 1rem
-          }
-
-          .period-input {
-            padding-left: 1rem;
-          }
+          .tilleggsinfo { margin: 1rem 1rem 0 0 }
         }
       }
 

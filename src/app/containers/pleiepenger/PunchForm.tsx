@@ -131,7 +131,6 @@ export interface IPunchFormComponentState {
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     showSettPaaVentModal: boolean;
-    showErDuSikkerModal: boolean;
     errors: IInputError[];
     harRegnskapsfører: boolean;
 
@@ -184,7 +183,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         skalHaFerie: undefined,
         aapnePaneler: [],
         showSettPaaVentModal: false,
-        showErDuSikkerModal: false,
         errors: [],
         harRegnskapsfører: false,
     };
@@ -395,7 +393,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             value: jn,
                         }))}
                         legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
-                        checked={opptjening.frilanser ? (opptjening.frilanser.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI) : JaNei.NEI}
+                        checked={opptjening.frilanser ? (opptjening.frilanser.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI) : JaNei.NEI }
                         onChange={(event) => {
                             this.handleFrilanserChange((event.target as HTMLInputElement).value as JaNei)
                         }}/>
@@ -1089,7 +1087,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         }
                         textLeggTil="skjema.perioder.legg_til"
                         textFjern="skjema.perioder.fjern"
-                        className="bosteder"
                         panelClassName="tilsynsordningpanel"
                         getErrorMessage={this.getErrorMessage}
                         feilkodeprefiks={'tilsynsordning'}
@@ -1139,9 +1136,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         onChange={(event) =>
                             this.handleMedlemskapChange((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
                         }
-                        checked={this.state.harBoddIUtlandet}
+                        checked={!!soknad.bosteder.length ? JaNeiIkkeOpplyst.JA : this.state.harBoddIUtlandet}
                     />
-                    {this.state.harBoddIUtlandet === JaNeiIkkeOpplyst.JA && (
+                    {!!soknad.bosteder.length && (
                         <PeriodeinfoPaneler
                             intl={intl}
                             periods={soknad.bosteder}
@@ -1156,7 +1153,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
                             className="bosteder"
-                            panelClassName="utenlandsoppholdpanel"
+                            panelClassName="bostederpanel"
                             getErrorMessage={() => undefined}
                             feilkodeprefiks={'bosteder'}
                             kanHaFlere={true}
@@ -1447,7 +1444,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
 
             case Arbeidsforhold.FRILANSER:
-                if (this.state.soknad.opptjeningAktivitet.frilanser || this.state.soknad.arbeidstid?.frilanserArbeidstidInfo) {
+                if (this.state.soknad.opptjeningAktivitet.frilanser) {
                     return true;
                 } else {
                     return false
