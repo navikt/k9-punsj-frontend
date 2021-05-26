@@ -893,7 +893,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst
                             )
                         }
-                        checked={this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet}
+                        checked={!!this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet}
                     />
                     {!!soknad.utenlandsopphold.length && (
                         <PeriodeinfoPaneler
@@ -1508,8 +1508,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.innleggelseUtlandet!.length === 0) {
             this.state.innleggelseUtlandet!.push({fom: '', tom: ''});
             this.forceUpdate();
-        }
-        ;
+        };
 
         if (jaNei !== JaNei.JA) {
             this.setState({innleggelseUtlandet: []})
@@ -1525,8 +1524,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.soknad.bosteder!.length === 0) {
             this.state.soknad.bosteder!.push({periode: {fom: '', tom: ''}, land: ''});
             this.forceUpdate();
-        }
-        ;
+        };
     }
 
     private handleFrilanserChange(jaNei: JaNei) {
@@ -1677,8 +1675,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.updateSoknad
             ({barn: {norskIdent: this.props.identState.ident2 || ''}});
         }
-        if (!this.state.soknad.journalposter?.some(jp => jp === this.props.journalpostid)) {
-            this.state.soknad.journalposter?.push(this.props.journalpostid)
+        if (!soknad.journalposter?.some(jp => jp === this.props.journalpostid)) {
+            this.state.soknad.journalposter!.push(this.props.journalpostid)
         }
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
@@ -1690,7 +1688,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.setState({showStatus: true});
         return this.props.updateSoknad(
             {...this.getSoknadFromStore(), ...soknad},
-            //   {...this.getDobbelSoknadFromStore().soknad(nr)!.values(), ...soknad}
         );
         this.forceUpdate();
     };
