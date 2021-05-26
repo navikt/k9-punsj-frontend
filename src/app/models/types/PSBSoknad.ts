@@ -13,7 +13,7 @@ import {ArbeidstakerV2, IArbeidstakerV2} from "./ArbeidstakerV2";
 export interface IPSBSoknad {
     soeknadId?: string;
     soekerId: string;
-    journalposter?: string[];
+    journalposter?: Set<string>;
     mottattDato?: string;
     barn: IBarn;
     sendtInn?: boolean;
@@ -39,7 +39,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     soeknadId: string;
     soekerId: string;
-    journalposter: string[];
+    journalposter: Set<string>;
     mottattDato: string;
     barn: Barn;
     sendtInn: boolean;
@@ -62,7 +62,7 @@ export class PSBSoknad implements IPSBSoknad {
     constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
-        this.journalposter = soknad.journalposter || [];
+        this.journalposter = new Set(soknad.journalposter || []);
         this.mottattDato = soknad.mottattDato || '';
         this.barn = new Barn(soknad.barn || {});
         this.sendtInn = soknad.sendtInn || false;

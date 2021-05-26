@@ -32,7 +32,7 @@ import {
 export interface IPSBSoknadUt {
     soeknadId?: string;
     soekerId: string;
-    journalposter?: string[];
+    journalposter?: Set<string>;
     mottattDato?: string;
     barn: IBarn;
     sendtInn?: boolean;
@@ -57,7 +57,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
 
     soeknadId: string;
     soekerId: string;
-    journalposter: string[];
+    journalposter: Set<string>;
     mottattDato: string;
     barn: Barn | {};
     sendtInn: boolean;
@@ -80,7 +80,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
-        this.journalposter = soknad.journalposter || [];
+        this.journalposter = new Set(soknad.journalposter || []);
         this.mottattDato = soknad.mottattDato || '';
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
         this.sendtInn = soknad.sendtInn || false;

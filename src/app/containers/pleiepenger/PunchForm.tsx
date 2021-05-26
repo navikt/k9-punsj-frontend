@@ -149,7 +149,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             soekerId: '',
             erFraK9: false,
             mottattDato: '',
-            journalposter: [],
+            journalposter: new Set([]),
             sendtInn: false,
             barn:
                 {
@@ -780,6 +780,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             <div className={"periode"}>{generateDateString(p)}</div>
                         </div>)}
                     </>}
+                    <SkjemaGruppe feil={this.getErrorMessage('søknadsperiode/endringsperiode')}>
                     {!!soknad.soeknadsperiode &&
                     <div className={"soknadsperiodecontainer"}>
                         <Input
@@ -792,7 +793,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             {...this.changeAndBlurUpdatesSoknad((event) => ({
                                 soeknadsperiode: {...soknad.soeknadsperiode, fom: event.target.value}
                             }))}
-                            feil={this.getErrorMessage('søknadsperiode/endringsperiode')}
 
                         />
                         <Input
@@ -811,12 +811,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             id="fjern"
                             className={"fjern"}
                             role="button"
-                            onClick={() => {
-                                this.updateSoknadState({soeknadsperiode: undefined});
-                            }}
+                            onClick={() => this.deleteSoknadsperiode()}
                             tabIndex={0}>
                             <BinSvg title={"fjern"}/></div>
-                    </div>}
+                    </div>}</SkjemaGruppe>
                     {!soknad.soeknadsperiode && <div className={"knappecontainer"}>
                         <div
                             id="leggtil"
@@ -1289,6 +1287,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.setState({showSettPaaVentModal: false});
     }
 
+    private deleteSoknadsperiode = () => {
+        this.updateSoknadState({...this.state.soknad, soeknadsperiode: null});
+        this.updateSoknad({...this.state.soknad, soeknadsperiode: null})
+    }
 
     private handlePanelClick = (p: PunchFormPaneler) => {
         const {aapnePaneler} = this.state;
@@ -1675,9 +1677,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.updateSoknad
             ({barn: {norskIdent: this.props.identState.ident2 || ''}});
         }
-        if (!soknad.journalposter?.some(jp => jp === this.props.journalpostid)) {
-            this.state.soknad.journalposter!.push(this.props.journalpostid)
-        }
+        this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
             showStatus: !!showStatus,

@@ -76,7 +76,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     return (
         <Panel className={"periodepanel"}>
             {periods.map((p, i) =>
-                <Row key={i}>
+                <Row noGutters={true} key={i}>
                     <div className={"periodepanel-input"}>
                         <PeriodInput
                             periode={p || {}}
