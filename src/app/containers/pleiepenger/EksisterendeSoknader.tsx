@@ -160,7 +160,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     : søknad.barn.foedselsdato &&
                     datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                 '',
-                søknad.journalposter.toString(),
+                Array.from(søknad.journalposter).join(", "),
                 generateDateString(søknad.soeknadsperiode),
                 <Knapp
                     key={soknadId}

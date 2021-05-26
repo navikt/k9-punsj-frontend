@@ -1267,7 +1267,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <ErDuSikkerModal
                             melding={'modal.erdusikker.sendinn'}
                             extraInfo={'modal.erdusikker.sendinn.extrainfo'}
-                            onSubmit={() => this.props.submitSoknad(this.props.identState.ident1, this.props.id)}
+                            onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
                             submitKnappText={'skjema.knapp.send'}
                             onClose={() => this.props.validerSoknadReset()}/>
                     </ModalWrapper>
@@ -1277,7 +1277,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private handleSubmit = () => {
         this.props.validateSoknad(
-            this.props.identState.ident1,
+            this.state.soknad.soekerId,
             this.props.id
         )
     }
@@ -1527,6 +1527,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.soknad.bosteder!.push({periode: {fom: '', tom: ''}, land: ''});
             this.forceUpdate();
         };
+
+        if (jaNei !== JaNeiIkkeOpplyst.JA) {
+            this.updateSoknadState({bosteder: []}, true);
+            this.updateSoknad
+            ({bosteder: []})
+        }
     }
 
     private handleFrilanserChange(jaNei: JaNei) {
@@ -1604,8 +1610,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
             this.updateSoknadState({lovbestemtFerie: []}, true);
-            this.updateSoknad
-            ({lovbestemtFerie: []})
+            this.updateSoknad({lovbestemtFerie: []})
         }
     }
 
@@ -1672,7 +1677,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             : undefined;
     };
 
-    private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus ?: boolean) {
+    private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
         if (!this.state.soknad.barn.norskIdent) {
             this.updateSoknad
             ({barn: {norskIdent: this.props.identState.ident2 || ''}});

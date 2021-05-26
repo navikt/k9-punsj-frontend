@@ -1,31 +1,14 @@
 import {PeriodInput} from 'app/components/period-input/PeriodInput';
-import {
-    ListeComponent,
-    Listepaneler,
-    UpdateListeinfoInSoknad,
-    UpdateListeinfoInSoknadState
-} from 'app/containers/pleiepenger/Listepaneler';
 import * as React from 'react';
 import {IntlShape} from 'react-intl';
-import {IPeriodeinfoExtensionV2, PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
-import {IPeriodeV2, PeriodeV2} from "../../models/types/PeriodeV2";
+import {IPeriodeV2} from "../../models/types/PeriodeV2";
 import BinSvg from "../../assets/SVG/BinSVG";
 import intlHelper from "../../utils/intlUtils";
 import {Knapp} from "nav-frontend-knapper";
 import Panel from "nav-frontend-paneler";
 import {Row} from "react-bootstrap";
 
-export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<PeriodeinfoV2<T>>) => any;
-export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<PeriodeinfoV2<T>>, showStatus?: boolean) => any;
 export type GetErrorMessage = (kode: string, indeks?: number) => (React.ReactNode | boolean | undefined);
-
-export type PeriodeComponent<T> = (info: PeriodeinfoV2<T>,
-                                   periodeindex: number,
-                                   updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<T>,
-                                   updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
-                                   feilkodeprefiksMedIndeks?: string,
-                                   getErrorMessage?: GetErrorMessage,
-                                   intl?: IntlShape) => React.ReactElement;
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -71,7 +54,6 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         newArray.splice(index, 1);
         return newArray;
     };
-
 
     return (
         <Panel className={"periodepanel"}>
@@ -121,5 +103,4 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 </Knapp></Row>}
 
         </Panel>);
-}
-;
+};
