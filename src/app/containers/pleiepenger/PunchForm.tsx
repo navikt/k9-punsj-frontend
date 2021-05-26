@@ -1164,7 +1164,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                         checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
-                        onChange={(event) => this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked})}
+                        onChange={(event) => {
+                            this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked}, true);
+                            this.updateSoknad({harInfoSomIkkeKanPunsjes: event.target.checked});
+                        }}
                     /><Hjelpetekst
                     className={"hjelpetext"}
                     type={PopoverOrientering.OverHoyre}
@@ -1174,7 +1177,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                         checked={this.state.soknad.harMedisinskeOpplysninger}
-                        onChange={(event) => this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked})}
+                        onChange={(event) => {
+                            this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked}, true);
+                            this.updateSoknad({harMedisinskeOpplysninger: event.target.checked});
+                        }}
                     />
                     <Hjelpetekst
                         className={"hjelpetext"}

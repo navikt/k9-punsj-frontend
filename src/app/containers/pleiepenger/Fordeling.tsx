@@ -296,11 +296,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
-                            disabled={!barnetsIdent && !barnetHarIkkeFnr}>
+                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>
                     </div>
                     <VerticalSpacer sixteenPx={true}/>
-                    {(!!fordelingState.skalTilK9 || visSakstypeValg || !!fordelingState.sjekkTilK9Error) && <>
+                    {(!!fordelingState.skalTilK9 || visSakstypeValg) && <>
                         <RadioGruppe
                             legend={intlHelper(intl, 'fordeling.overskrift')}
                             className="fordeling-page__options"

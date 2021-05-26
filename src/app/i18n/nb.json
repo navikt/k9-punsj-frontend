@@ -59,7 +59,7 @@
   "fordeling.knapp.omfordel":                                                                     "Omfordel",
   "fordeling.knapp.bekreft":                                                                      "Bekreft",
   "fordeling.infotrygd":                                                                          "Det finnes et vedtak tilknyttet søker og/eller barn i Infotrygd, dokumentet må derfor behandles videre der.",
-  "fordeling.infortygd.error":                                                                    "Kunne ikke sjekke opplysninger mot Infotrygd",
+  "fordeling.infortygd.error":                                                                    "Kunne ikke sjekke opplysninger mot Infotrygd. Prøv igjen senere.",
   "fordeling.opprettigosys.utfort":                                                               "Journalføringsoppgave i Gosys opprettet",
   "fordeling.lukkoppgave.utfort":                                                               "Oppgaven er lukket",
   "fordeling.omfordeling.feil":                                                                   "Det oppsto en feil. Prøv igjen senere.",

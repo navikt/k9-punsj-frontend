@@ -1,8 +1,7 @@
 import {FrilanserOpptjening} from "./FrilanserOpptjening";
-import { PeriodeinfoV2} from "./PeriodeInfoV2";
+import {PeriodeinfoV2} from "./PeriodeInfoV2";
 import {
     IPeriodeV2,
-    ArbeidstidPeriodeMedTimer,
     PeriodeV2
 } from "./PeriodeV2";
 import {ArbeidstakerV2} from "./ArbeidstakerV2";
@@ -10,18 +9,15 @@ import {
     ArbeidstidInfo,
     Barn,
     IArbeidstid,
-    IArbeidstidInfo,
     IBarn,
     IOmsorg,
     IOpptjeningAktivitet,
-    IPSBSoknad,
-    ISelvstendigNaeringsdrivendeOpptjening, ISoknadsInfo,
+    ISoknadsInfo,
     ITilleggsinformasjon,
     ITilsynsordningV2,
     IUtenlandsOpphold,
     IUttak,
     Omsorg,
-    OpptjeningAktivitet,
     SelvstendigNaeringsdrivendeOpptjening, SoknadsInfo,
     TilleggsinformasjonV2,
     TilsynsordningV2,
@@ -110,11 +106,11 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
     constructor(arbeid: IOpptjeningAktivitet) {
         this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
         this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende ? new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende) : null;
-        this.frilanser = arbeid.frilanser  ? new FrilanserOpptjening(arbeid.frilanser) : null;
+        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
     }
 }
 
-export class ArbeidstidUt implements Required<IArbeidstid>{
+export class ArbeidstidUt implements Required<IArbeidstid> {
     arbeidstakerList: ArbeidstakerV2[];
     frilanserArbeidstidInfo: ArbeidstidInfo | null;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | {};
