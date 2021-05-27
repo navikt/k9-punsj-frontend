@@ -19,6 +19,7 @@ import intlHelper from "../../utils/intlUtils";
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
     notFound: boolean;
+    forbidden: boolean;
 }
 
 export interface ISearchFormDispatchProps {
@@ -119,6 +120,10 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>
                     </AlertStripeInfo>}
+                    {this.props.forbidden &&
+                    <AlertStripeInfo>
+                        <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
+                    </AlertStripeInfo>}
 
                 </SkjemaGruppe>
                 <VerticalSpacer twentyPx={true}/>
@@ -134,7 +139,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 
 const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
-    notFound: state.felles.journalpostNotFound
+    notFound: state.felles.journalpostNotFound,
+    forbidden: state.felles.journalpostForbidden
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

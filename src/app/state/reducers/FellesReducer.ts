@@ -8,6 +8,7 @@ export interface IFellesState {
   journalpost?: IJournalpost;
   isJournalpostLoading?: boolean;
   journalpostNotFound?: boolean;
+  journalpostForbidden?: boolean;
   journalpostRequestError?: IError;
 }
 
@@ -17,6 +18,7 @@ enum Actiontypes {
   JOURNALPOST_LOAD = 'FELLES/PUNCH_JOURNALPOST_LOAD',
   JOURNALPOST_REQUEST_ERROR = 'FELLES/PUNCH_JOURNALPOST_REQUEST_ERROR',
   JOURNALPOST_NOT_FOUND = 'FELLES/PUNCH_JOURNALPOST_NOT_FOUND',
+  JOURNALPOST_FORBIDDEN = 'FELLES/PUNCH_JOURNALPOST_FORBIDDEN',
 }
 
 interface IResetDedupKeyAction {
@@ -38,6 +40,10 @@ interface IGetJournalpostErrorAction {
 
 interface IGetJournalpostNotFoundAction {
   type: Actiontypes.JOURNALPOST_NOT_FOUND;
+}
+
+interface IGetJournalpostForbiddenAction {
+  type: Actiontypes.JOURNALPOST_FORBIDDEN;
 }
 
 export const resetDedupKey = (): IResetDedupKeyAction => ({
@@ -63,6 +69,11 @@ export function getJournalpostNotFoundAction(
   return { type: Actiontypes.JOURNALPOST_NOT_FOUND };
 }
 
+export function getJournalpostForbiddenAction(
+): IGetJournalpostForbiddenAction {
+  return { type: Actiontypes.JOURNALPOST_FORBIDDEN };
+}
+
 export function getJournalpost(journalpostid: string) {
   return (dispatch: any) => {
     dispatch(getJournalpostLoadAction());
@@ -77,6 +88,9 @@ export function getJournalpost(journalpostid: string) {
         if (response.status === 404) {
           return dispatch(getJournalpostNotFoundAction());
         }
+        if (response.status === 403) {
+          return dispatch(getJournalpostForbiddenAction());
+        }
         return dispatch(
           getJournalpostErrorAction(convertResponseToError(response))
         );
@@ -89,7 +103,8 @@ type IJournalpostActionTypes =
   | ISetJournalpostAction
   | IGetJournalpostLoadAction
   | IGetJournalpostErrorAction
-  | IGetJournalpostNotFoundAction;
+  | IGetJournalpostNotFoundAction
+  | IGetJournalpostForbiddenAction;
 
 const initialState: IFellesState = {
   dedupKey: ulid(),
@@ -137,6 +152,14 @@ export default function FellesReducer(
         journalpost: undefined,
         isJournalpostLoading: false,
         journalpostNotFound: true
+      };
+
+    case Actiontypes.JOURNALPOST_FORBIDDEN:
+      return {
+        ...state,
+        journalpost: undefined,
+        isJournalpostLoading: false,
+        journalpostForbidden: true
       };
 
     default:

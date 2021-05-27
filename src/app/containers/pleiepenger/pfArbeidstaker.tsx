@@ -8,6 +8,7 @@ import {IntlShape} from 'react-intl';
 import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
+import {pfArbeidstider} from "./pfArbeidstider";
 
 
 export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
@@ -101,35 +102,7 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                             perioder: arbeidstidInfo
                         }
                     })}
-                    component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) =>
-                        <div className={"input-row"}>
-                            <Input
-                                label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}
-                                bredde={"XS"}
-                                value={getNormaleTimerValue(periodeindex)}
-                                onChange={event => {
-                                    updatePeriodeinfoInSoknadState({jobberNormaltTimerPerDag: event.target.value});
-                                }}
-                                onBlur={event => {
-                                    updatePeriodeinfoInSoknad({jobberNormaltTimerPerDag: event.target.value});
-                                }}
-                                onFocus={event => event.target.selectionStart = 0}
-                            />
-                            <Input
-                                label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
-                                value={getFaktiskeTimerValue(periodeindex)}
-                                className="right"
-                                onChange={event => {
-                                    updatePeriodeinfoInSoknadState({faktiskArbeidTimerPerDag: event.target.value});
-                                }}
-                                onBlur={event => {
-                                    updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: (event.target.value)});
-                                }}
-                                onFocus={event => event.target.selectionStart = 0}
-                                feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.timerfaktisk`)}
-                                bredde={"XS"}
-                            />
-                        </div>}
+                    component={pfArbeidstider()}
                     minstEn={true}
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     getErrorMessage={getErrorMessage}

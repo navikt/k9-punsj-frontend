@@ -3,14 +3,16 @@ import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                          from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper                          from 'app/utils/intlUtils';
-import * as React                          from 'react';
-import {IntlShape}                         from 'react-intl';
+} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import intlHelper from 'app/utils/intlUtils';
+import * as React from 'react';
+import {IntlShape} from 'react-intl';
 import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
 import {IArbeidstidPeriodeMedTimer} from "../../models/types/PeriodeV2";
 import {Input} from "nav-frontend-skjema";
 import {Row} from "react-bootstrap";
+import {PopoverOrientering} from "nav-frontend-popover";
+import Hjelpetekst from "nav-frontend-hjelpetekst";
 
 
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
@@ -40,6 +42,11 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                         }}
                         onFocus={event => event.target.selectionStart = 0}
                     />
+                    <Hjelpetekst
+                        className={"arbeidstid-hjelpetext"}
+                        type={PopoverOrientering.Hoyre}
+                    >{intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
+                    </Hjelpetekst>
                     <Input
                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
                         value={periodeinfo.faktiskArbeidTimerPerDag}
@@ -54,6 +61,11 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                         feil={getErrorMessage(`${feilprefiks}.timerfaktisk`)}
                         bredde={"XS"}
                     />
+                    <Hjelpetekst
+                        className={"arbeidstid-hjelpetext"}
+                        type={PopoverOrientering.Hoyre}
+                    >{intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}
+                    </Hjelpetekst>
                 </div>
             </Row>
         </div>;
