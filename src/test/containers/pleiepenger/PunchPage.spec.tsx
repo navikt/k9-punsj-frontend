@@ -28,7 +28,7 @@ jest.mock('app/containers/pleiepenger/RegistreringsValg', () => ({
   RegistreringsValg: () => <></>,
 }));
 jest.mock('app/containers/pleiepenger/PSBPunchForm', () => ({
-  PunchForm: () => <></>,
+  PSBPunchForm: () => <></>,
 }));
 
 const setupPunchPage = (
@@ -132,11 +132,11 @@ describe('PunchPage', () => {
       { step: 1, ident1 },
       mappeid
     );
-    expect(punchPage.find('PunchForm')).toHaveLength(1);
-    expect(punchPage.find('PunchForm').prop('journalpostid')).toEqual(
+    expect(punchPage.find('PSBPunchForm')).toHaveLength(1);
+    expect(punchPage.find('PSBPunchForm').prop('journalpostid')).toEqual(
       journalpostid
     );
-    expect(punchPage.find('PunchForm').prop('id')).toEqual(mappeid);
+    expect(punchPage.find('PSBPunchForm').prop('id')).toEqual(mappeid);
   });
 
   it('Viser fullførtmelding', () => {
