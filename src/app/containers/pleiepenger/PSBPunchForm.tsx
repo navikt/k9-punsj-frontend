@@ -1946,6 +1946,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(validerSoknadResetAction())
 });
 
-export const PunchForm = injectIntl(
+export const PSBPunchForm = injectIntl(
     connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)
 );

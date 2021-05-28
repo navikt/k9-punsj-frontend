@@ -27,7 +27,7 @@ jest.mock('app/containers/pleiepenger/EksisterendeSoknader', () => ({
 jest.mock('app/containers/pleiepenger/RegistreringsValg', () => ({
   RegistreringsValg: () => <></>,
 }));
-jest.mock('app/containers/pleiepenger/PunchForm', () => ({
+jest.mock('app/containers/pleiepenger/PSBPunchForm', () => ({
   PunchForm: () => <></>,
 }));
 
