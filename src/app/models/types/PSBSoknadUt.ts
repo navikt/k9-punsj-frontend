@@ -30,6 +30,7 @@ export interface IPSBSoknadUt {
     soekerId: string;
     journalposter?: Set<string>;
     mottattDato?: string;
+    klokkeslett?: string;
     barn: IBarn;
     sendtInn?: boolean;
     erFraK9?: boolean;
@@ -55,6 +56,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     soekerId: string;
     journalposter: Set<string>;
     mottattDato: string;
+    klokkeslett: string;
     barn: Barn | {};
     sendtInn: boolean;
     erFraK9: boolean;
@@ -78,6 +80,7 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.soekerId = soknad.soekerId || '';
         this.journalposter = new Set(soknad.journalposter || []);
         this.mottattDato = soknad.mottattDato || '';
+        this.klokkeslett = soknad.klokkeslett || '';
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;

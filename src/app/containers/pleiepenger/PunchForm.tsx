@@ -21,6 +21,7 @@ import {
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import TimePicker from 'react-time-picker';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Knapp} from 'nav-frontend-knapper';
 import {
@@ -80,6 +81,7 @@ import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import ErDuSikkerModal from "./ErDuSikkerModal";
+import {Datepicker} from "nav-datovelger";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -751,25 +753,25 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 }))}
                             /></Row>
                             <Row noGutters={true}>
-                            <Input
-                                bredde={"M"}
-                                label={intlHelper(intl, 'skjema.sn.endringinntekt')}
-                                type="number"
-                                className={"endringinntekt"}
-                                value={opptjening.selvstendigNaeringsdrivende?.info?.endringInntekt || ''}
-                                {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                    opptjeningAktivitet: {
-                                        ...opptjening,
-                                        selvstendigNaeringsdrivende: {
-                                            ...opptjening.selvstendigNaeringsdrivende,
-                                            info: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                endringInntekt: event.target.value
+                                <Input
+                                    bredde={"M"}
+                                    label={intlHelper(intl, 'skjema.sn.endringinntekt')}
+                                    type="number"
+                                    className={"endringinntekt"}
+                                    value={opptjening.selvstendigNaeringsdrivende?.info?.endringInntekt || ''}
+                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    endringInntekt: event.target.value
+                                                }
                                             }
-                                        }
-                                    },
-                                }))}
-                            /></Row></>}
+                                        },
+                                    }))}
+                                /></Row></>}
                         <VerticalSpacer eightPx={true}/>
                         {arbeidstidInformasjon(intl)}
                         <PeriodeinfoPaneler
@@ -933,7 +935,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                     mottattDato: event.target.value,
                                 }))}
                                 feil={this.getErrorMessage('mottattDato')}
-                            /></div>
+                            />
+                            <Input
+                                value={soknad.klokkeslett || ''}
+                                type={"time"}
+                                className={"klokkeslett"}
+                                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                    klokkeslett: event.target.value,
+                                }))}
+                                feil={this.getErrorMessage('klokkeslett')}
+                            />
+                        </div>
                         <RadioPanelGruppe
                             className="horizontalRadios"
                             radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
@@ -949,7 +962,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 )
                             }
                         />
-                        {signert === JaNeiIkkeRelevant.NEI && <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>}
+                        {signert === JaNeiIkkeRelevant.NEI &&
+                        <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>}
                     </SkjemaGruppe>
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
@@ -988,7 +1002,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             textFjern="skjema.perioder.fjern"
                             className="utenlandsopphold"
                             panelClassName="utenlandsoppholdpanel"
-                            getErrorMessage={() => undefined}
+                            getErrorMessage={this.getErrorMessage}
                             feilkodeprefiks={'utenlandsopphold'}
                             kanHaFlere={true}
                         />
@@ -1731,7 +1745,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.punchFormState.inputErrors;
     };
 
+    private erFremITid(dato: string, klokkeslett: boolean) {
+            const naa = new Date();
+            if (!!klokkeslett) {return naa.toTimeString() < dato}
+            return naa < new Date(dato)
+    }
+
+
     private getErrorMessage = (attribute: string, indeks?: number) => {
+        const { mottattDato, klokkeslett} = this.state.soknad;
+
+        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
+            if (klokkeslett === null || klokkeslett === "" || mottattDato === null || mottattDato === "") {
+                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+            }
+        }
+
         const errorMsg = this.getManglerFromStore()?.filter(
             (m: IInputError) => m.felt === attribute)?.[indeks || 0]?.feilmelding;
 

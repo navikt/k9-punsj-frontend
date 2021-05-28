@@ -56,12 +56,14 @@ const webpackConfig = {
                             }
                         }
                     ]
-                })
+                }),
+
             },
             {
                 test: /\.svg$/,
                 use: 'svg-sprite-loader'
-            }
+            },
+            { test: /\.css$/, use: ["style-loader", "css-loader"] },
         ]
     },
     plugins: [
