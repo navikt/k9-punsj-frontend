@@ -54,8 +54,8 @@ jobs:
           CLUSTER: dev-fss
           RESOURCE: nais/dev/k9-punsj-frontend.yml
       - name: Deploye til prod
-          uses: nais/deploy/actions/deploy@v1
-          env:
-            APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-            CLUSTER: prod-fss
-            RESOURCE: nais/prod/k9-punsj-frontend.yml
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-fss
+          RESOURCE: nais/prod/k9-punsj-frontend.yml
