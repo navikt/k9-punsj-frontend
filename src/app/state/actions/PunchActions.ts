@@ -42,7 +42,7 @@ export function setIdentAction(
 export function setStepAction(step: PunchStep): ISetStepAction {
   return { type: PunchActionKeys.STEP_SET, step };
 }
-export function undoSearchForMapperAction(): IBackFromMapperOgFagsakerAction {
+export function undoSearchForEksisterendeSoknaderAction(): IBackFromMapperOgFagsakerAction {
   return { type: PunchActionKeys.BACK_FROM_MAPPER };
 }
 export function undoSearchForSoknaderAction(): IBackFromMapperOgFagsakerAction {

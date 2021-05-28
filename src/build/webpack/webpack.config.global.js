@@ -31,7 +31,7 @@ const webpackConfig = {
             {
                 test: /\.(ts|tsx)$/,
                 include: [path.resolve(__dirname, './../../app')],
-                loader: require.resolve('awesome-typescript-loader')
+                loader: require.resolve('ts-loader')
             },
             {
                 test: /\.less$/,
@@ -56,12 +56,14 @@ const webpackConfig = {
                             }
                         }
                     ]
-                })
+                }),
+
             },
             {
                 test: /\.svg$/,
                 use: 'svg-sprite-loader'
-            }
+            },
+            { test: /\.css$/, use: ["style-loader", "css-loader"] },
         ]
     },
     plugins: [

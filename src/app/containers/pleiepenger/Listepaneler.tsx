@@ -5,6 +5,8 @@ import Panel               from 'nav-frontend-paneler';
 import {SkjemaGruppe}      from 'nav-frontend-skjema';
 import * as React          from 'react';
 import {IntlShape}         from 'react-intl';
+import BinSvg from "../../assets/SVG/BinSVG";
+
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
@@ -16,7 +18,7 @@ export type ListeComponent<T> = (itemInfo: T,
                                  updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<T>,
                                  feilkodeprefiksMedIndeks?: string,
                                  getErrorMessage?: GetErrorMessage,
-                                 intl?: IntlShape) => React.ReactElement;
+                                 intl?: IntlShape,) => React.ReactElement;
 
 export interface IListepanelerProps<T> {
     intl: IntlShape;
@@ -25,7 +27,7 @@ export interface IListepanelerProps<T> {
     panelid: (itemIndex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialItem: T; // Objektet som legges til når man legger til et nytt element i lista
     editSoknad: (itemInfo: T[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (itemInfo: T[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchForm (må brukes på onChange)
+    editSoknadState: (itemInfo: T[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     className?: string;
     textLeggTil?: string;
     textFjern?: string;
@@ -35,14 +37,15 @@ export interface IListepanelerProps<T> {
     minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
+    kanHaFlere: boolean;
 }
 
 type ItemInfo = any;
 
 export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (props: IListepanelerProps<ItemInfo>) => {
 
-    const items = !!props.items ? props.items : [];
-    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks} = props;
+    const items = props.items.length > 0 ? props.items : [props.initialItem];
+    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere} = props;
     const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (index: number, iteminfo: Partial<ItemInfo>) => {
@@ -73,7 +76,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             const panelid = props.panelid(itemIndex);
             return <Panel
                 className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
-                border={true}
+                border={false}
                 id={panelid}
                 key={itemIndex}
             >
@@ -85,25 +88,28 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         (info, showStatus) => editSoknadState(editItem(itemIndex, info), showStatus),
                         `${feilkodeprefiks}[${itemIndex}]`,
                         getErrorMessage,
-                        intl
+                        intl,
                     )}
-                    <div className="listepanelbunn">
-                        <Knapp
+                    <div className={"listepanelbunn"}>
+                        <div
+                            id="slett"
+                            className={"fjernlisteelementknapp"}
+                            role="button"
                             onClick={() => {
                                 const newArray: ItemInfo[] = removeItem(itemIndex);
                                 editSoknadState(newArray);
                                 editSoknad(newArray);
                                 !!props.onRemove && props.onRemove();
                             }}
-                            className="fjernlisteelementknapp"
-                            disabled={props.minstEn && props.items.length < 2}
-                        >
+                            tabIndex={0}
+                        ><div className={"slettIcon"}><BinSvg title={"fjern"}/></div>
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
-                        </Knapp>
+                        </div>
                     </div>
                 </SkjemaGruppe>
             </Panel>
         })}
+        {kanHaFlere &&
         <Knapp
             onClick={() => {
                 const newArray: ItemInfo[] = addItem();
@@ -112,8 +118,9 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                 !!props.onAdd && props.onAdd();
             }}
             className="leggtillisteelementknapp"
+            mini={true}
         >
             {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
-        </Knapp>
+        </Knapp>}
     </SkjemaGruppe>;
 };

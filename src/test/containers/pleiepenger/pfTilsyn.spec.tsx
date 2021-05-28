@@ -2,13 +2,15 @@ import {
     GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                       from 'app/containers/pleiepenger/Periodepaneler';
+}                                       from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {pfTilsyn}                       from 'app/containers/pleiepenger/pfTilsyn';
-import {IPeriode, ITilsyn, Periodeinfo} from 'app/models/types';
+import {ITilsyn} from 'app/models/types';
 import intlHelper                       from 'app/utils/intlUtils';
 import {shallow}                        from 'enzyme';
 import {createIntl, IntlShape}          from 'react-intl';
 import {mocked}                         from 'ts-jest/utils';
+import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
+import {IPeriodeV2} from "../../../app/models/types/PeriodeV2";
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
@@ -16,8 +18,8 @@ jest.mock('app/utils/intlUtils');
 const testTimer = 8;
 const testMinutter = 15;
 const testVarighet = `PT${testTimer}H${testMinutter}M`;
-const testPeriodeinfo: Periodeinfo<ITilsyn> = {
-    periode: {fraOgMed: '2020-01-01', tilOgMed: '2020-12-31'},
+const testPeriodeinfo: PeriodeinfoV2<ITilsyn> = {
+    periode: {fom: '2020-01-01', tom: '2020-12-31'},
     mandag: testVarighet,
     tirsdag: testVarighet,
     onsdag: testVarighet,
@@ -32,7 +34,7 @@ const testGetErrorMessage = jest.fn();
 const testIntl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 
 const setupPfTilsyn = (
-    optionalPeriodeinfo?: Periodeinfo<ITilsyn>,
+    optionalPeriodeinfo?: PeriodeinfoV2<ITilsyn>,
     optionalPeriodeindex?: number,
     optionalUpdatePeriodeinfoInSoknad?: UpdatePeriodeinfoInSoknad<ITilsyn>,
     optionalUpdatePeriodeinfoInSoknadState?: UpdatePeriodeinfoInSoknadState<ITilsyn>,
@@ -106,7 +108,7 @@ describe('pfTilsyn', () => {
     });
 
     it('Deaktiverer minutter når timer er satt til 24', () => {
-        const periodeinfo: Periodeinfo<ITilsyn> = {
+        const periodeinfo: PeriodeinfoV2<ITilsyn> = {
             ...testPeriodeinfo,
             mandag: 'PT24H'
         };
@@ -115,8 +117,8 @@ describe('pfTilsyn', () => {
     });
 
     it('Deaktiverer ukedager som ikke inngår i perioden', () => {
-        const fraTirsdagTilTorsdag: IPeriode = {fraOgMed: '2020-01-14', tilOgMed: '2020-01-16'};
-        const periodeinfo: Periodeinfo<ITilsyn> = {
+        const fraTirsdagTilTorsdag: IPeriodeV2 = {fom: '2020-01-14', tom: '2020-01-16'};
+        const periodeinfo: PeriodeinfoV2<ITilsyn> = {
             ...testPeriodeinfo,
             periode: fraTirsdagTilTorsdag
         };

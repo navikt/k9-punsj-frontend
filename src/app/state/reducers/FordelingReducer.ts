@@ -1,12 +1,16 @@
-import {FordelingActionKeys, Sakstype}         from 'app/models/enums';
-import {IFordelingState}                       from 'app/models/types';
-import {IFordelingActionTypes}                 from 'app/state/actions';
-import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
+import {FordelingActionKeys} from 'app/models/enums';
+import {IFordelingState} from 'app/models/types';
+import {IFordelingActionTypes} from 'app/state/actions';
+import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IFordelingState = {
-    sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
+    sakstype: undefined,
     omfordelingDone: false,
-    isAwaitingOmfordelingResponse: false
+    isAwaitingOmfordelingResponse: false,
+    isAwaitingSjekkTilK9Response: false,
+    isAwaitingLukkOppgaveResponse: false,
+    lukkOppgaveDone: false,
+    skalTilK9: undefined,
 };
 
 export function FordelingReducer(
@@ -47,6 +51,59 @@ export function FordelingReducer(
                 omfordelingDone: false,
                 isAwaitingOmfordelingResponse: false,
                 omfordelingError: action.error
+            };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: true,
+                sjekkTilK9Error: undefined
+            };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                sjekkTilK9Error: action.error
+            };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                sjekkTilK9Error: undefined,
+                skalTilK9: action.k9sak
+            };
+        case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: false,
+                isAwaitingLukkOppgaveResponse: true,
+                lukkOppgaveError: undefined
+            };
+
+        case FordelingActionKeys.LUKK_OPPGAVE_SUCCESS:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: true,
+                isAwaitingLukkOppgaveResponse: false,
+                lukkOppgaveError: undefined
+            };
+
+        case FordelingActionKeys.LUKK_OPPGAVE_ERROR:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: false,
+                isAwaitingLukkOppgaveResponse: false,
+                lukkOppgaveError: action.error
+            };
+
+        case FordelingActionKeys.LUKK_OPPGAVE_RESET:
+            return {
+                ...fordelingState,
+                lukkOppgaveDone: false,
+                isAwaitingLukkOppgaveResponse: false,
+                lukkOppgaveError: undefined
             };
 
         default:

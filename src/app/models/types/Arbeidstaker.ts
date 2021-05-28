@@ -3,6 +3,7 @@ import {Periodeinfo}    from 'app/models/types/Periodeinfo';
 import {numberToString} from 'app/utils';
 import intlHelper       from 'app/utils/intlUtils';
 import {IntlShape}      from 'react-intl';
+import {IArbeidstidInfo} from "./PSBSoknad";
 
 export interface IArbeidstaker {
     skalJobbeProsent?: Periodeinfo<ITilstedevaerelsesgrad>[];
@@ -37,7 +38,7 @@ export class Tilstedevaerelsesgrad implements Required<Periodeinfo<ITilstedevaer
     }
 }
 
-export type OrgOrPers = 'o' | 'p';
+export type OrgOrPsders = 'o' | 'p';
 
 export class Arbeidstaker implements Required<IArbeidstaker> {
 
@@ -64,7 +65,7 @@ export class Arbeidstaker implements Required<IArbeidstaker> {
 
     generateTgStrings = (intl: IntlShape): string[] => this.skalJobbeProsent.map(tg => tg.generateTgString(intl));
 
-    orgOrPers(): OrgOrPers {
+    orgOrPers(): OrgOrPsders {
         return this.organisasjonsnummer === null ? 'p' : 'o';
     }
 

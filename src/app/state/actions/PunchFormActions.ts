@@ -1,142 +1,373 @@
-import {ApiPath}                                from 'app/apiConfig';
-import {PunchFormActionKeys}                    from 'app/models/enums';
-import {IError, IMappe, ISoknad}                from 'app/models/types';
-import {IInputError}                            from 'app/models/types/InputError';
+import {ApiPath} from 'app/apiConfig';
+import {PunchFormActionKeys} from 'app/models/enums';
+import {IError} from 'app/models/types';
+import {IInputError} from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
+import {IPSBSoknad} from "../../models/types/PSBSoknad";
+import {ISendSoknad} from "../../models/types/SendSoknad";
+import {IPSBSoknadUt} from "../../models/types/PSBSoknadUt";
 
-interface IResetPunchFormAction         {type: PunchFormActionKeys.RESET}
+import {PeriodeV2} from "../../models/types/PeriodeV2";
+import {IHentPerioder} from "../../models/types/RequestBodies";
 
-interface IGetMappeLoadingAction        {type: PunchFormActionKeys.MAPPE_LOAD}
-interface IGetMappeErrorAction          {type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error: IError}
-interface ISetMappeAction               {type: PunchFormActionKeys.MAPPE_SET, mappe: Partial<IMappe>}
-interface IResetMappeAction             {type: PunchFormActionKeys.MAPPE_RESET}
+interface IResetPunchFormAction {
+    type: PunchFormActionKeys.RESET
+}
 
-interface IUpdateSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST}
-interface IUpdateSoknadSuccessAction    {type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors1?: IInputError[], errors2?: IInputError[]}
-interface IUpdateSoknadErrorAction      {type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error: IError}
+interface IGetSoknadLoadingAction {
+    type: PunchFormActionKeys.SOKNAD_LOAD
+}
 
-interface ISubmitSoknadRequestAction    {type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST}
-interface ISubmitSoknadSuccessAction    {type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS}
-interface ISubmitSoknadUncompleteAction {type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors1: IInputError[], errors2?: IInputError[]}
-interface ISubmitSoknadErrorAction      {type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error: IError}
+interface IGetSoknadErrorAction {
+    type: PunchFormActionKeys.SOKNAD_REQUEST_ERROR,
+    error: IError
+}
 
-type IMappeActionTypes = IGetMappeLoadingAction | IGetMappeErrorAction | ISetMappeAction | IResetMappeAction;
+interface ISetSoknadAction {
+    type: PunchFormActionKeys.SOKNAD_SET,
+    soknad: Partial<IPSBSoknad>
+}
+
+interface IResetSoknadAction {
+    type: PunchFormActionKeys.SOKNAD_RESET
+}
+
+interface IUpdateSoknadRequestAction {
+    type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST
+}
+
+interface IUpdateSoknadSuccessAction {
+    type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS,
+    errors?: IInputError[],
+}
+
+interface IUpdateSoknadErrorAction {
+    type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR,
+    error: IError
+}
+
+interface ISubmitSoknadRequestAction {
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST
+}
+
+interface ISubmitSoknadSuccessAction {
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS
+}
+
+interface ISubmitSoknadUncompleteAction {
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
+    errors: IInputError[],
+}
+
+interface ISubmitSoknadErrorAction {
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_ERROR,
+    error: IError
+}
+
+interface IValiderSoknadRequestAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST
+}
+
+interface IValiderSoknadSuccessAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS
+}
+
+interface IValiderSoknadErrorAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
+    error: IError
+}
+
+interface IValiderSoknadUncompleteAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE,
+    errors: IInputError[],
+}
+
+interface IValiderSoknadResetAction {
+    type: PunchFormActionKeys.SOKNAD_VALIDER_RESET
+}
+
+interface IHentPerioderLoadingAction {
+    type: PunchFormActionKeys.HENT_PERIODER_REQUEST
+}
+
+interface IHentPerioderErrorAction {
+    type: PunchFormActionKeys.HENT_PERIODER_ERROR,
+    error: IError
+}
+
+interface IHentPerioderSuccessAction {
+    type: PunchFormActionKeys.HENT_PERIODER_SUCCESS,
+    perioder: PeriodeV2[]
+}
+
+export const hentPerioderRequestAction = (): IHentPerioderLoadingAction => ({type: PunchFormActionKeys.HENT_PERIODER_REQUEST});
+export const hentPerioderSuccessAction = (perioder: PeriodeV2[]): IHentPerioderSuccessAction => ({
+    type: PunchFormActionKeys.HENT_PERIODER_SUCCESS,
+    perioder
+});
+export const hentPerioderErrorAction = (error: IError): IHentPerioderErrorAction => ({
+    type: PunchFormActionKeys.HENT_PERIODER_ERROR,
+    error
+});
+
+interface ISettJournalpostPaaVentAction {
+    type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT;
+}
+interface ISettJournalpostPaaVentSuccessAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS;
+}
+interface ISettJournalpostPaaVentErrorAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR;
+    error: IError;
+}
+interface ISettJournalpostPaaVentResetAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET;
+}
+
+export function setJournalpostPaaVentAction(
+): ISettJournalpostPaaVentAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT };
+}
+export function setJournalpostPaaVentSuccessAction(): ISettJournalpostPaaVentSuccessAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS };
+}
+export function setJournalpostPaaVentErrorAction(
+    error: IError
+): ISettJournalpostPaaVentErrorAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR, error };
+}
+
+export function setJournalpostPaaVentResetAction(
+): ISettJournalpostPaaVentResetAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET };
+}
+
+
+type ISoknadActionTypes = IGetSoknadLoadingAction | IGetSoknadErrorAction | ISetSoknadAction | IResetSoknadAction;
 type ISoknadUpdateActionTypes = IUpdateSoknadRequestAction | IUpdateSoknadSuccessAction | IUpdateSoknadErrorAction;
-type ISoknadSubmitActionTypes = ISubmitSoknadRequestAction | ISubmitSoknadSuccessAction | ISubmitSoknadUncompleteAction | ISubmitSoknadErrorAction;
-export type IPunchFormActionTypes = IResetPunchFormAction | IMappeActionTypes | ISoknadUpdateActionTypes | ISoknadSubmitActionTypes;
+type ISoknadSubmitActionTypes =
+    ISubmitSoknadRequestAction
+    | ISubmitSoknadSuccessAction
+    | ISubmitSoknadUncompleteAction
+    | ISubmitSoknadErrorAction;
+type IPerioderActionTypes = IHentPerioderErrorAction | IHentPerioderLoadingAction | IHentPerioderSuccessAction;
+type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction | ISettJournalpostPaaVentResetAction;
+type IValiderSoknadActionTypes = IValiderSoknadErrorAction | IValiderSoknadRequestAction | IValiderSoknadSuccessAction | IValiderSoknadUncompleteAction | IValiderSoknadResetAction;
 
-export const resetPunchFormAction           = ():                                                   IResetPunchFormAction       => ({type: PunchFormActionKeys.RESET});
 
-export const getMappeLoadingAction          = ():                                                   IGetMappeLoadingAction      => ({type: PunchFormActionKeys.MAPPE_LOAD});
-export const getMappeErrorAction            = (error: IError):                                      IGetMappeErrorAction        => ({type: PunchFormActionKeys.MAPPE_REQUEST_ERROR, error});
-export const setMappeAction                 = (mappe: Partial<IMappe>):                             ISetMappeAction             => ({type: PunchFormActionKeys.MAPPE_SET, mappe});
-export const resetMappeAction               = ():                                                   IResetMappeAction           => ({type: PunchFormActionKeys.MAPPE_RESET});
+export type IPunchFormActionTypes =
+    IResetPunchFormAction
+    | ISoknadActionTypes
+    | ISoknadUpdateActionTypes
+    | ISoknadSubmitActionTypes
+    | IPerioderActionTypes
+    | ISettPaaVentActionTypes
+    | IValiderSoknadActionTypes;
 
-export const updateSoknadRequestAction      = ():                                                   IUpdateSoknadRequestAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
-export const updateSoknadSuccessAction      = (errors1?: IInputError[], errors2?: IInputError[]):   IUpdateSoknadSuccessAction  => ({type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS, errors1, errors2});
-export const updateSoknadErrorAction        = (error: IError):                                      IUpdateSoknadErrorAction    => ({type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR, error});
+export const resetPunchFormAction = (): IResetPunchFormAction => ({type: PunchFormActionKeys.RESET});
 
-export function getMappe(id: string) {return (dispatch: any) => {
-    dispatch(getMappeLoadingAction());
-    return get(ApiPath.MAPPE_GET, {id}, undefined,response => {
-        if (response.ok || response.status === 400) {
-            return response.json()
-                           .then(mappe => dispatch(setMappeAction(mappe)));
-        }
-        return dispatch(getMappeErrorAction(convertResponseToError(response)));
-    });
-}}
+export const getSoknadLoadingAction = (): IGetSoknadLoadingAction => ({type: PunchFormActionKeys.SOKNAD_LOAD});
+export const getSoknadErrorAction = (error: IError): IGetSoknadErrorAction => ({
+    type: PunchFormActionKeys.SOKNAD_REQUEST_ERROR,
+    error
+});
+export const setSoknadAction = (soknad: Partial<IPSBSoknad>): ISetSoknadAction => ({
+    type: PunchFormActionKeys.SOKNAD_SET,
+    soknad
+});
+export const resetSoknadAction = (): IResetSoknadAction => ({type: PunchFormActionKeys.SOKNAD_RESET});
 
-export function updateSoknad(mappeid: string,
-                             norskIdent: string,
-                             journalpostid: string,
-                             soknad: Partial<ISoknad>) {return (dispatch: any) => {
-    dispatch(updateSoknadRequestAction());
-    const request = {
-        personer: {
-            [norskIdent]: {
-                journalpostId: journalpostid,
-                soeknad: soknad
+export const updateSoknadRequestAction = (): IUpdateSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_UPDATE_REQUEST});
+export const updateSoknadSuccessAction = (errors?: IInputError[]): IUpdateSoknadSuccessAction => ({
+    type: PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS,
+    errors,
+});
+export const updateSoknadErrorAction = (error: IError): IUpdateSoknadErrorAction => ({
+    type: PunchFormActionKeys.SOKNAD_UPDATE_ERROR,
+    error
+});
+
+export function getSoknad(id: string) {
+    return (dispatch: any) => {
+        dispatch(getSoknadLoadingAction());
+        return get(ApiPath.SOKNAD_GET, {id}, undefined, (response, soknad) => {
+            if (response.ok || response.status === 400) {
+                return dispatch(setSoknadAction(soknad));
             }
-        }
-    };
-    return put(ApiPath.MAPPE_UPDATE, {id: mappeid}, request, response => {
-        switch (response.status) {
-            case 200:
-                return response.json()
-                               .then(mappe => {
-                                   dispatch(setMappeAction(mappe));
-                                   dispatch(updateSoknadSuccessAction());
-                               });
-            case 400:
-                return response.json()
-                               .then(mappe => {
-                                   dispatch(setMappeAction(mappe));
-                                   dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent]?.mangler));
-                               });
-            default:
-                return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
-        }
-    });
-}}
+            return dispatch(getSoknadErrorAction(convertResponseToError(response)));
+        });
+    }
+}
+
+export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {
+    return (dispatch: any) => {
+        dispatch(updateSoknadRequestAction());
+        return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, response => {
+            switch (response.status) {
+                case 200:
+                    return response.json()
+                        .then(mappe => {
+                            dispatch(setSoknadAction(mappe));
+                            dispatch(updateSoknadSuccessAction());
+                        });
+                default:
+                    return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
+            }
+        });
+    }
+}
 
 export function updateSoknader(mappeid: string,
                                norskIdent1: string,
                                norskIdent2: string | null,
                                journalpostid: string,
-                               soknad1: Partial<ISoknad>,
-                               soknad2: Partial<ISoknad> | null) {return (dispatch: any) => {
+                               soknad1: Partial<IPSBSoknadUt>,
+                               soknad2: Partial<IPSBSoknadUt> | null) {
+    return (dispatch: any) => {
 
-    if (!norskIdent2 || !soknad2) {
-        return dispatch(updateSoknad(mappeid, norskIdent1, journalpostid, soknad1));
-    }
+        if (!norskIdent2 || !soknad2) {
+            return dispatch(updateSoknad(soknad1));
+        }
 
-    dispatch(updateSoknadRequestAction());
-    const request = {
-        personer: {
-            [norskIdent1]: {
-                journalpostId: journalpostid,
-                soeknad: soknad1
-            },
-            [norskIdent2]: {
-                journalpostId: journalpostid,
-                soeknad: soknad2
+        dispatch(updateSoknadRequestAction());
+        const request = {
+            personer: {
+                [norskIdent1]: {
+                    journalpostId: journalpostid,
+                    soeknad: soknad1
+                },
+                [norskIdent2]: {
+                    journalpostId: journalpostid,
+                    soeknad: soknad2
+                }
             }
+        };
+        return put(ApiPath.SOKNAD_UPDATE, {id: mappeid}, request, response => {
+            switch (response.status) {
+                case 200:
+                    return response.json()
+                        .then(mappe => {
+                            dispatch(setSoknadAction(mappe));
+                            dispatch(updateSoknadSuccessAction());
+                        });
+                case 400:
+                    return response.json()
+                        .then(mappe => {
+                            dispatch(setSoknadAction(mappe));
+                            dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        });
+                default:
+                    return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
+            }
+        });
+    }
+}
+
+
+export const submitSoknadRequestAction = (): ISubmitSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
+export const submitSoknadSuccessAction = (): ISubmitSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS});
+export const submitSoknadUncompleteAction = (errors: IInputError[]): ISubmitSoknadUncompleteAction => ({
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
+    errors,
+});
+export const submitSoknadErrorAction = (error: IError): ISubmitSoknadErrorAction => ({
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_ERROR,
+    error
+});
+
+export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST});
+export const validerSoknadSuccessAction = (): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS});
+export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorAction => ({
+    type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
+    error
+});
+
+export const validerSoknadResetAction = (): IValiderSoknadResetAction => ({
+    type: PunchFormActionKeys.SOKNAD_VALIDER_RESET,
+});
+
+export const validerSoknadUncompleteAction = (errors: IInputError[]): IValiderSoknadUncompleteAction => ({
+    type: PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE,
+    errors,
+});
+
+export function submitSoknad(norskIdent: string, soeknadId: string) {
+    return (dispatch: any) => {
+        const requestBody: ISendSoknad = {
+            norskIdent,
+            soeknadId
         }
+
+        dispatch(submitSoknadRequestAction());
+        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
+            switch (response.status) {
+                case 202:
+                    return dispatch(submitSoknadSuccessAction());
+                case 400:
+                    return  dispatch(submitSoknadUncompleteAction(errors.feil));
+                default:
+                    return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
+            }
+        });
+    }
+}
+
+export function validerSoknad(norskIdent: string, soeknadId: string) {
+    return (dispatch: any) => {
+        const requestBody: ISendSoknad = {
+            norskIdent,
+            soeknadId
+        }
+
+        dispatch(validerSoknadRequestAction());
+        post(ApiPath.SOKNAD_VALIDER, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
+            switch (response.status) {
+                case 202:
+                    return dispatch(validerSoknadSuccessAction());
+                case 400:
+                    return  dispatch(validerSoknadUncompleteAction(errors.feil));
+                default:
+                    return dispatch(validerSoknadErrorAction(convertResponseToError(response)));
+            }
+        });
+    }
+}
+
+export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
+    return (dispatch: any) => {
+        const requestBody: IHentPerioder = {
+            brukerIdent: norskIdent,
+            barnIdent
+        }
+
+        dispatch(hentPerioderRequestAction());
+        post(ApiPath.K9SAK_PERIODER, {}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, perioder) => {
+            if (response.ok) {
+                return dispatch(hentPerioderSuccessAction(perioder));
+            }
+            return dispatch(
+                hentPerioderErrorAction(response)
+            );
+        });
+    }
+}
+
+export function settJournalpostPaaVent(journalpostid: string, soeknadId: string) {
+    return (dispatch: any) => {
+        dispatch(setJournalpostPaaVentAction());
+        return post(
+            ApiPath.JOURNALPOST_SETT_PAA_VENT,
+            { journalpostId: journalpostid },
+            undefined,
+            {soeknadId},
+            response => {
+                if (response.ok) {
+                    return dispatch(setJournalpostPaaVentSuccessAction());
+                }
+                return dispatch(
+                    setJournalpostPaaVentErrorAction(convertResponseToError(response))
+                );
+            }
+        );
     };
-    return put(ApiPath.MAPPE_UPDATE, {id: mappeid}, request, response => {
-        switch (response.status) {
-            case 200:
-                return response.json()
-                               .then(mappe => {
-                                   dispatch(setMappeAction(mappe));
-                                   dispatch(updateSoknadSuccessAction());
-                               });
-            case 400:
-                return response.json()
-                               .then(mappe => {
-                                   dispatch(setMappeAction(mappe));
-                                   dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler, mappe.personer?.[norskIdent2]?.mangler));
-                               });
-            default:
-                return dispatch(updateSoknadErrorAction(convertResponseToError(response)));
-        }
-    });
-}}
-
-export const submitSoknadRequestAction      = ():                                                   ISubmitSoknadRequestAction      => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
-export const submitSoknadSuccessAction      = ():                                                   ISubmitSoknadSuccessAction      => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS});
-export const submitSoknadUncompleteAction   = (errors1: IInputError[], errors2?: IInputError[]):    ISubmitSoknadUncompleteAction   => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE, errors1, errors2});
-export const submitSoknadErrorAction        = (error: IError):                                      ISubmitSoknadErrorAction        => ({type: PunchFormActionKeys.SOKAND_SUBMIT_ERROR, error});
-
-export function submitSoknad(mappeid: string, ident: string) {return (dispatch: any) => {
-    dispatch(submitSoknadRequestAction());
-    post(ApiPath.MAPPE_SUBMIT, {id: mappeid}, {'X-Nav-NorskIdent': ident}, undefined, response => {
-        switch (response.status) {
-            case 202: return dispatch(submitSoknadSuccessAction());
-            case 400: return response.json().then(mappe => dispatch(submitSoknadUncompleteAction(mappe.mangler)));
-            default:
-                return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
-        }
-    });
-}}
+}

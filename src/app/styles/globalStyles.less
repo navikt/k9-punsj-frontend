@@ -20,16 +20,26 @@ body {
   width: 100%;
 }
 
-.horizontalRadios .inputPanelGruppe__inner {
+.horizontalRadios {
+  margin: 0.5rem 0 0.5rem 0;
 
-  display: flex;
+  .inputPanelGruppe__inner {
 
-  .inputPanel {
-    flex-grow:     1;
-    flex-basis:    0;
-    margin-bottom: 0;
-    &:not(:first-child) {margin-left: .5rem}
-    &:not(:last-child) {margin-right: .5rem}
+    display: flex;
+
+    .inputPanel {
+      flex-grow: 1;
+      flex-basis: 0;
+      margin-bottom: 0;
+
+      &:not(:first-child) {
+        margin-left: .5rem
+      }
+
+      &:not(:last-child) {
+        margin-right: .5rem
+      }
+    }
   }
 }
 

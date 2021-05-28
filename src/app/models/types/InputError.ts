@@ -1,5 +1,10 @@
 export interface IInputError {
-    attributt?: string;
-    ugyldig_verdi?: any;
-    melding?: string;
+    felt?: string;
+    feilkode?: any;
+    feilmelding?: string;
+}
+
+export interface IInputErrorResponse {
+    feil: IInputError[];
+    søknadIdDto: string;
 }

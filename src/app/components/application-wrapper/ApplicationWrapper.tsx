@@ -1,7 +1,6 @@
 import Header from '@navikt/nap-header';
 import UserPanel from '@navikt/nap-user-panel';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
-import LanguageToggle from 'app/components/language-toggle/LanguageToggle';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
 import { checkAuth } from 'app/state/actions';
@@ -82,7 +81,6 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (
         <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
           <UserPanel name={props.authState.userName!} />
         </Header>
-        <LanguageToggle {...{ locale }} toggle={props.onChangeLocale} />
         <AppContainer>
           <Router>{props.children}</Router>
         </AppContainer>

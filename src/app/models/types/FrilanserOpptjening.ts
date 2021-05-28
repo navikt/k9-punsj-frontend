@@ -1,23 +1,28 @@
 import intlHelper    from 'app/utils/intlUtils';
 import {IntlShape}   from 'react-intl';
 
-export interface IFrilanserV2 {
+export interface IFrilanserOpptjening {
     startDato?: string;
+    sluttdato?: string;
     jobberFortsattSomFrilans?: boolean;
 }
 
-export class FrilanserV2 implements Required<IFrilanserV2> {
+export class FrilanserOpptjening implements IFrilanserOpptjening {
 
     startDato: string;
+    sluttdato: string;
     jobberFortsattSomFrilans: boolean;
 
-    constructor(frilanser: IFrilanserV2) {
+    constructor(frilanser: IFrilanserOpptjening) {
         this.startDato = frilanser.startDato || '';
+        this.sluttdato = frilanser.sluttdato || '';
+        this.jobberFortsattSomFrilans = frilanser.jobberFortsattSomFrilans || false;
     }
 
-    values(): Required<IFrilanserV2> {
+    values(): Required<IFrilanserOpptjening> {
         return {
             startDato: this.startDato,
+            sluttdato: this.sluttdato,
             jobberFortsattSomFrilans: this.jobberFortsattSomFrilans
         };
     }

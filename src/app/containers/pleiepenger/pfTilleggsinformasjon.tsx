@@ -1,35 +1,35 @@
 import {
     GetErrorMessage,
-    PeriodeComponent,
+    PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                                          from 'app/containers/pleiepenger/Periodepaneler';
-import {ITilleggsinformasjon, Periodeinfo} from 'app/models/types';
+}                                          from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper                          from 'app/utils/intlUtils';
 import {Textarea}                          from 'nav-frontend-skjema';
 import * as React                          from 'react';
 import {IntlShape}                         from 'react-intl';
+import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
+import {ITilleggsinformasjon} from "../../models/types/PSBSoknad";
 
-export function pfTilleggsinformasjon(path: string): PeriodeComponent<ITilleggsinformasjon> {
+export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
 
     return (
-        periodeinfo: Periodeinfo<ITilleggsinformasjon>,
+        periodeinfo: PeriodeinfoV2<ITilleggsinformasjon>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
-        intl: IntlShape
+        intl: IntlShape,
     ) => {
 
         return <div className="tilleggsinfo">
             <Textarea
                 label={intlHelper(intl, `skjema.${path}.tilleggsinfo`)}
                 value={periodeinfo.tilleggsinformasjon || ''}
-                onChange={event => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
+                onChange={(event) => updatePeriodeinfoInSoknadState({tilleggsinformasjon: event.target.value}, false)}
                 onBlur={event => updatePeriodeinfoInSoknad({tilleggsinformasjon: event.target.value})}
                 feil={getErrorMessage(`${feilprefiks}.tilleggsinformasjon`)}
-                maxLength={0}
             />
         </div>;
     };

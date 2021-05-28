@@ -27,7 +27,7 @@
       "./src/@types"
     ]
   },
-  "awesomeTypescriptLoaderOptions": {
+  "tsLoaderOptions": {
     "useCache": false
   },
   "exclude":                        [

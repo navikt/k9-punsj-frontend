@@ -15,8 +15,6 @@ import {
 import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe';
 import FlexRow from '../../../components/flexgrid/FlexRow';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { useRouteMatch } from 'react-router';
-import LabelValue from '../../../components/skjema/LabelValue';
 import { Undertittel } from 'nav-frontend-typografi';
 import './overføringPunchSkjema.less';
 import { IError } from '../../../models/types';
@@ -25,7 +23,7 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import DateInput from '../../../components/skjema/DateInput';
 import InnsendingModal from './InnsendingModal';
 import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
-import JournalpostPanel from '../../../components/journalpost-panel/JournalpostPanel';
+import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 
 interface IOverføringPunchSkjema {
   gåTilForrigeSteg: () => void;
@@ -54,10 +52,10 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     }
   }, [innsendingsstatus]);
 
-  const avsendersFnr = values.identitetsnummer;
+  const avsendersFnr = values.norskIdent;
   useEffect(() => {
     if (!avsendersFnr) {
-      setFieldValue('identitetsnummer', ident);
+      setFieldValue('norskIdent', ident);
     }
   }, [ident]);
 
@@ -80,10 +78,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
     <Form>
       <section>
         <VerticalSpacer sixteenPx={true} />
-        <JournalpostPanel
-          journalpostId={journalpostId}
-          identitetsnummer={ident}
-        />
+        <JournalpostPanel/>
         <DateInput feltnavn="mottaksdato" bredde="M" />
         <VerticalSpacer twentyPx={true} dashed={true} />
         <Undertittel tag="h2">
@@ -136,7 +131,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                   </legend>
                   <FlexRow childrenMargin="small">
                     <TextInput
-                      feltnavn={`barn[${index}].identitetsnummer`}
+                      feltnavn={`barn[${index}].norskIdent`}
                       bredde="M"
                     />
                     <DateInput
@@ -155,7 +150,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
               ))}
               <LeggTilKnapp
                 onClick={() =>
-                  push({ identitetsnummer: null, fødselsdato: null })
+                  push({ norskIdent: null, fødselsdato: null })
                 }
                 tekstId="omsorgsdager.overføring.barn.leggTil"
               />
@@ -168,7 +163,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
         </Undertittel>
         <VerticalSpacer sixteenPx={true} />
         <TextInput
-          feltnavn="omsorgenDelesMed.identitetsnummer"
+          feltnavn="omsorgenDelesMed.norskIdent"
           bredde="M"
           disabled={disabled}
         />

@@ -7,6 +7,8 @@ export interface IFellesState {
   dedupKey: string;
   journalpost?: IJournalpost;
   isJournalpostLoading?: boolean;
+  journalpostNotFound?: boolean;
+  journalpostForbidden?: boolean;
   journalpostRequestError?: IError;
 }
 
@@ -15,6 +17,8 @@ enum Actiontypes {
   JOURNALPOST_SET = 'FELLES/PUNCH_JOURNALPOST_SET',
   JOURNALPOST_LOAD = 'FELLES/PUNCH_JOURNALPOST_LOAD',
   JOURNALPOST_REQUEST_ERROR = 'FELLES/PUNCH_JOURNALPOST_REQUEST_ERROR',
+  JOURNALPOST_NOT_FOUND = 'FELLES/PUNCH_JOURNALPOST_NOT_FOUND',
+  JOURNALPOST_FORBIDDEN = 'FELLES/PUNCH_JOURNALPOST_FORBIDDEN',
 }
 
 interface IResetDedupKeyAction {
@@ -28,9 +32,18 @@ interface ISetJournalpostAction {
 interface IGetJournalpostLoadAction {
   type: Actiontypes.JOURNALPOST_LOAD;
 }
+
 interface IGetJournalpostErrorAction {
   type: Actiontypes.JOURNALPOST_REQUEST_ERROR;
   error: IError;
+}
+
+interface IGetJournalpostNotFoundAction {
+  type: Actiontypes.JOURNALPOST_NOT_FOUND;
+}
+
+interface IGetJournalpostForbiddenAction {
+  type: Actiontypes.JOURNALPOST_FORBIDDEN;
 }
 
 export const resetDedupKey = (): IResetDedupKeyAction => ({
@@ -51,6 +64,16 @@ export function getJournalpostErrorAction(
   return { type: Actiontypes.JOURNALPOST_REQUEST_ERROR, error };
 }
 
+export function getJournalpostNotFoundAction(
+    ): IGetJournalpostNotFoundAction {
+  return { type: Actiontypes.JOURNALPOST_NOT_FOUND };
+}
+
+export function getJournalpostForbiddenAction(
+): IGetJournalpostForbiddenAction {
+  return { type: Actiontypes.JOURNALPOST_FORBIDDEN };
+}
+
 export function getJournalpost(journalpostid: string) {
   return (dispatch: any) => {
     dispatch(getJournalpostLoadAction());
@@ -58,11 +81,15 @@ export function getJournalpost(journalpostid: string) {
       ApiPath.JOURNALPOST_GET,
       { journalpostId: journalpostid },
       undefined,
-      (response) => {
+      (response, journalpost) => {
         if (response.ok) {
-          return response
-            .json()
-            .then((journalpost) => dispatch(setJournalpostAction(journalpost)));
+          return dispatch(setJournalpostAction(journalpost));
+        }
+        if (response.status === 404) {
+          return dispatch(getJournalpostNotFoundAction());
+        }
+        if (response.status === 403) {
+          return dispatch(getJournalpostForbiddenAction());
         }
         return dispatch(
           getJournalpostErrorAction(convertResponseToError(response))
@@ -75,7 +102,9 @@ export function getJournalpost(journalpostid: string) {
 type IJournalpostActionTypes =
   | ISetJournalpostAction
   | IGetJournalpostLoadAction
-  | IGetJournalpostErrorAction;
+  | IGetJournalpostErrorAction
+  | IGetJournalpostNotFoundAction
+  | IGetJournalpostForbiddenAction;
 
 const initialState: IFellesState = {
   dedupKey: ulid(),
@@ -115,6 +144,22 @@ export default function FellesReducer(
         journalpost: undefined,
         isJournalpostLoading: false,
         journalpostRequestError: action.error,
+      };
+
+    case Actiontypes.JOURNALPOST_NOT_FOUND:
+      return {
+        ...state,
+        journalpost: undefined,
+        isJournalpostLoading: false,
+        journalpostNotFound: true
+      };
+
+    case Actiontypes.JOURNALPOST_FORBIDDEN:
+      return {
+        ...state,
+        journalpost: undefined,
+        isJournalpostLoading: false,
+        journalpostForbidden: true
       };
 
     default:

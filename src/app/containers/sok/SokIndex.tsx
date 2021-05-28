@@ -1,15 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import SearchForm from "./SearchForm";
-import SkjemaContext from "../../components/skjema/SkjemaContext";
-import {validerSokeSkjema} from "../../models/forms/sok/SokeSkjema";
+import {SearchForm} from "./SearchForm";
 
 export const SokIndex: React.FunctionComponent = () => {
 
 
     return (
-        <SkjemaContext initialValues={{}} onSubmitCallback={() => undefined} validerSkjema={validerSokeSkjema}>
-            <SearchForm/>
-        </SkjemaContext>
+        <SearchForm/>
     )
 };
 

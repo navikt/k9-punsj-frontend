@@ -24,12 +24,12 @@ export enum Mottaker {
 type Dato = string;
 
 interface IBarn {
-  identitetsnummer: string | null;
+  norskIdent: string | null;
   fødselsdato: Dato | null;
 }
 
 export interface IOverføringPunchSkjema {
-  identitetsnummer: string | null;
+  norskIdent: string | null;
   arbeidssituasjon: {
     erArbeidstaker: boolean;
     erFrilanser: boolean;
@@ -40,7 +40,7 @@ export interface IOverføringPunchSkjema {
   aleneOmOmsorgen: JaNei | null;
   barn: IBarn[];
   omsorgenDelesMed: {
-    identitetsnummer: string;
+    norskIdent: string;
     mottaker: Mottaker | null;
     antallOverførteDager: number;
     samboerSiden: Dato | null;
@@ -49,7 +49,7 @@ export interface IOverføringPunchSkjema {
 }
 
 export const tomtSkjema: IOverføringPunchSkjema = {
-  identitetsnummer: null,
+  norskIdent: null,
   arbeidssituasjon: {
     erArbeidstaker: false,
     erFrilanser: false,
@@ -58,7 +58,7 @@ export const tomtSkjema: IOverføringPunchSkjema = {
   },
   borINorge: null,
   omsorgenDelesMed: {
-    identitetsnummer: '',
+    norskIdent: '',
     antallOverførteDager: 0,
     mottaker: null,
     samboerSiden: null,
@@ -66,7 +66,7 @@ export const tomtSkjema: IOverføringPunchSkjema = {
   aleneOmOmsorgen: null,
   barn: [
     {
-      identitetsnummer: null,
+      norskIdent: null,
       fødselsdato: null,
     },
   ],
@@ -74,7 +74,7 @@ export const tomtSkjema: IOverføringPunchSkjema = {
 };
 
 const fnrDelesMedValidator: IFeltValidator<string, IOverføringPunchSkjema> = {
-  feltPath: 'omsorgenDelesMed.identitetsnummer',
+  feltPath: 'omsorgenDelesMed.norskIdent',
   validatorer: [påkrevd, fødselsnummervalidator],
 };
 
@@ -92,7 +92,7 @@ const borINorgeValidator: IFeltValidator<JaNei, IOverføringPunchSkjema> = {
 };
 
 const barnFnr: IFeltValidator<string, IOverføringPunchSkjema> = {
-  feltPath: 'barn[].identitetsnummer',
+  feltPath: 'barn[].norskIdent',
   validatorer: [påkrevd, fødselsnummervalidator],
   arrayInPath: true,
 };

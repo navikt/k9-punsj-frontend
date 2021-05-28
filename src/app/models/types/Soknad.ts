@@ -65,7 +65,7 @@ export class Soknad implements Required<ISoknad> {
             spraak: this.spraak,
             barn: this.barn.values(),
             perioder: this.perioder.map(p => p.values()),
-            arbeid: this.arbeid.values(),
+            arbeid: this.arbeid,
             beredskap: this.beredskap.map(b => b.values()),
             nattevaak: this.nattevaak.map(n => n.values()),
             tilsynsordning: this.tilsynsordning.values()
@@ -139,13 +139,6 @@ export class Arbeid implements Required<IArbeid> {
         this.frilanser = (arbeid.frilanser || []).map(f => new Frilanser(f));
     }
 
-    values(): Required<IArbeid> {
-        return {
-            arbeidstaker: this.arbeidstaker.map(a => a.values()),
-            selvstendigNaeringsdrivende: this.selvstendigNaeringsdrivende.map(s => s.values()),
-            frilanser: this.frilanser.map(f => f.values())
-        };
-    }
 
     numberOfWorkPeriods(): number {
         return this.arbeidstaker.length + this.selvstendigNaeringsdrivende.length + this.frilanser.length;

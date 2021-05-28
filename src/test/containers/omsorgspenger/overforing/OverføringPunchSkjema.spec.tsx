@@ -14,6 +14,9 @@ import OverføringPunchSkjema from '../../../../app/containers/omsorgspenger/ove
 import { JaNei } from '../../../../app/models/enums';
 
 jest.mock('app/utils/envUtils');
+jest.mock('app/components/journalpost-panel/JournalpostPanel', () => ({
+  JournalpostPanel: () => <></>,
+}));
 
 describe('<OverføringPunchSkjema>', () => {
   test('Viser alle feltfeil hvis man sender inn skjema med feil', async () => {
@@ -59,7 +62,7 @@ describe('<OverføringPunchSkjema>', () => {
 
     const skjema: IOverføringPunchSkjema = {
       borINorge: JaNei.JA,
-      identitetsnummer: '01010101010',
+      norskIdent: '01010101010',
       mottaksdato: '2020-01-01',
       arbeidssituasjon: {
         erSelvstendigNæringsdrivende: true,
@@ -72,12 +75,12 @@ describe('<OverføringPunchSkjema>', () => {
         samboerSiden: '2018-02-02',
         mottaker: Mottaker.Samboer,
         antallOverførteDager: 4,
-        identitetsnummer: '02020202020',
+        norskIdent: '02020202020',
       },
       barn: [
         {
           fødselsdato: '2017-03-03',
-          identitetsnummer: '03031702022',
+          norskIdent: '03031702022',
         },
       ],
     };

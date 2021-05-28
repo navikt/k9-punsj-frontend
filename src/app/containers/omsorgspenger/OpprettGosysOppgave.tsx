@@ -43,7 +43,7 @@ const OpprettGosysOppgaveComponent: React.FunctionComponent<IOpprettOppgaveProps
     const {intl, opprettGosysOppgave, journalpost} = props;
     const { gosysOppgaveOprettet, gosysOppgaveFeil, gosysOppgaveAwaiting } = useSelector(
         (state: RootStateType) => {
-            const opprettOppgaveState = state[Sakstype.OMSORGSPENGER_FORDELING].opprettIGosys;
+            const opprettOppgaveState = state.opprettIGosys
             return {
                 gosysOppgaveOprettet: opprettOppgaveState.gosysOppgaveRequestSuccess,
                 gosysOppgaveFeil: opprettOppgaveState.gosysOppgaveRequestError,

@@ -1,26 +1,26 @@
 import {UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState} from 'app/containers/pleiepenger/Listepaneler';
-import {GetErrorMessage, PeriodeComponent, Periodepaneler}     from 'app/containers/pleiepenger/Periodepaneler';
-import {Arbeidstaker, IArbeidstaker, OrgOrPers}                from 'app/models/types';
-import {stringToNumber}                                        from 'app/utils/formatUtils';
-import intlHelper                                              from 'app/utils/intlUtils';
-import {Input, RadioPanelGruppe, SkjemaGruppe}                 from 'nav-frontend-skjema';
-import * as React                                              from 'react';
-import {Col, Container, Row}                                   from 'react-bootstrap';
-import {IntlShape}                                             from 'react-intl';
+import {GetErrorMessage, PeriodeinfoPaneler} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import intlHelper from 'app/utils/intlUtils';
+import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
+import * as React from 'react';
+import {Col, Container, Row} from 'react-bootstrap';
+import {IntlShape} from 'react-intl';
+import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
+import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {arbeidstidInformasjon} from "./ArbeidstidInfo";
+import {pfArbeidstider} from "./pfArbeidstider";
 
-export function pfArbeidstaker(tgStrings: string[][],
-                               setTgStringsInParentState: (tgStrings: string[][]) => any,
-                               generateTgStrings: () => string[][],
-                               sokernr: 1 | 2): PeriodeComponent<IArbeidstaker> {
+
+export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
 
     return (
-        arbeidstaker: Arbeidstaker,
+        arbeidstaker: ArbeidstakerV2,
         listeelementindex: number,
-        updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstaker>,
-        updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>,
+        updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>,
+        updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
-        intl: IntlShape
+        intl: IntlShape,
     ) => {
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
@@ -37,74 +37,80 @@ export function pfArbeidstaker(tgStrings: string[][],
             updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
 
+        const getFaktiskeTimerValue = (periodeindex: number) => {
+            return arbeidstaker.arbeidstidInfo.perioder[periodeindex].faktiskArbeidTimerPerDag;
+        }
+
+        const getNormaleTimerValue = (periodeindex: number) => {
+            return arbeidstaker.arbeidstidInfo.perioder[periodeindex].jobberNormaltTimerPerDag;
+        }
+
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
 
-        return <SkjemaGruppe feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
-            <Container className="infoContainer">
-                <Row noGutters={true}>
-                    <Col>
+        return <SkjemaGruppe className={"arbeidstaker-panel"}
+                             feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
+            <Container>
+                    <Row noGutters={true}>
                         <RadioPanelGruppe
                             className="horizontalRadios"
                             radios={[
                                 {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'), value: 'o'},
                                 {label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'), value: 'p'}
                             ]}
-                            name={`arbeidsgivertype_${sokernr}_${listeelementindex}`}
+                            name={`arbeidsgivertype_${1}_${listeelementindex}`}
                             legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
                             onChange={event => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
                             checked={selectedType}
                         />
-                    </Col>
-                </Row>
-                <Row noGutters={true}>
-                    <Col>
-                        {selectedType === 'o'
+
+                    </Row>
+                    <Row noGutters={true}>
+                        <div className={"input-row"}>
+                            {selectedType === 'o'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
+                                      bredde={"M"}
                                       value={arbeidstaker.organisasjonsnummer || ''}
                                       className="arbeidstaker-organisasjonsnummer"
                                       onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value})}
                                       onBlur={event => updateListeinfoInSoknad({organisasjonsnummer: event.target.value})}
                                       feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}/>}
-                    </Col>
-                    <Col>
-                        {selectedType === 'p'
+                            {selectedType === 'p'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                                       value={arbeidstaker.norskIdent || ''}
+                                      bredde={"M"}
                                       className="arbeidstaker-norskIdent"
                                       onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}
                                       onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value})}
                                       feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}/>}
-                    </Col>
-                </Row>
+                        </div>
+                    </Row>
+                    {arbeidstidInformasjon(intl)}
+                <PeriodeinfoPaneler
+                    intl={intl}
+                    periods={arbeidstaker.arbeidstidInfo.perioder}
+                    panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}
+                    initialPeriodeinfo={{faktiskArbeidTimerPerDag: '', periode: {fom: '', tom: ''}}}
+                    editSoknad={(arbeidstidInfo) => updateListeinfoInSoknad({
+                        arbeidstidInfo: {
+                            ...arbeidstaker.arbeidstidInfo,
+                            perioder: arbeidstidInfo
+                        }
+                    })}
+                    editSoknadState={(arbeidstidInfo) => updateListeinfoInSoknadState({
+                        arbeidstidInfo: {
+                            ...arbeidstaker.arbeidstidInfo,
+                            perioder: arbeidstidInfo
+                        }
+                    })}
+                    component={pfArbeidstider()}
+                    minstEn={true}
+                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                    getErrorMessage={getErrorMessage}
+                    feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
+                    kanHaFlere={true}
+                />
+
             </Container>
-            <Periodepaneler
-                intl={intl}
-                periods={arbeidstaker.skalJobbeProsent}
-                panelid={i => `arbeidstakerpanel_${listeelementindex}_${i}`}
-                initialPeriodeinfo={{grad: 0, periode: {fraOgMed: '', tilOgMed: ''}}}
-                editSoknad={skalJobbeProsent => updateListeinfoInSoknad({skalJobbeProsent})}
-                editSoknadState={skalJobbeProsent => updateListeinfoInSoknadState({skalJobbeProsent})}
-                component={(info, periodeindex, updatePeriodeinfoInSoknad, updatePeriodeinfoInSoknadState, feilkodeprefiksMedIndeks) => <Input
-                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.grad')}
-                    value={tgStrings[listeelementindex][periodeindex]}
-                    className="arbeidstaker-tilstedevaerelse"
-                    onChange={event => {
-                        updatePeriodeinfoInSoknadState({grad: stringToNumber(event.target.value)});
-                        tgStrings[listeelementindex][periodeindex] = event.target.value;
-                        setTgStringsInParentState(tgStrings);
-                    }}
-                    onBlur={event => {
-                        updatePeriodeinfoInSoknad({grad: stringToNumber(event.target.value)});
-                        setTgStringsInParentState(generateTgStrings());
-                    }}
-                    onFocus={event => event.target.selectionStart = 0}
-                    feil={getErrorMessage(`${feilkodeprefiksMedIndeks}.grad`)}
-                />}
-                minstEn={true}
-                textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-                getErrorMessage={getErrorMessage}
-                feilkodeprefiks={`[${listeelementindex}].skalJobbeProsent`}
-            />
         </SkjemaGruppe>;
     };
 }

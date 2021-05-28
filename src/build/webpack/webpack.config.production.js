@@ -20,4 +20,6 @@ webpackConfig.optimization = {
     ]
 };
 
-module.exports = webpackConfig;
+module.exports = Object.assign(webpackConfig, {
+    devtool: 'source-map',
+});

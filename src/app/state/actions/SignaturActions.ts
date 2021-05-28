@@ -2,8 +2,9 @@ import {ApiPath}                      from 'app/apiConfig';
 import {JaNei, SignaturActionKeys}    from 'app/models/enums';
 import {IError}                       from 'app/models/types';
 import {convertResponseToError, post} from 'app/utils';
+import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
 
-interface ISetSignaturAction {type: SignaturActionKeys.SET, signert: JaNei | null}
+interface ISetSignaturAction {type: SignaturActionKeys.SET, signert: JaNeiIkkeRelevant | null}
 
 interface IUsignertRequestAction    {type: SignaturActionKeys.USIGNERT_REQUEST}
 interface IUsignertSuccessAction    {type: SignaturActionKeys.USIGNERT_SUCCESS}
@@ -14,7 +15,7 @@ type UsignertActionTypes = IUsignertRequestAction | IUsignertSuccessAction | IUs
 
 export type SignaturActionTypes = ISetSignaturAction | UsignertActionTypes;
 
-export const    setSignaturAction       = (signert: JaNei | null):  ISetSignaturAction      => ({type: SignaturActionKeys.SET, signert});
+export const    setSignaturAction       = (signert: JaNeiIkkeRelevant | null):  ISetSignaturAction      => ({type: SignaturActionKeys.SET, signert});
 
 const           usignertRequestAction   = ():                       IUsignertRequestAction  => ({type: SignaturActionKeys.USIGNERT_REQUEST});
 const           usignertSuccessAction   = ():                       IUsignertSuccessAction  => ({type: SignaturActionKeys.USIGNERT_SUCCESS});

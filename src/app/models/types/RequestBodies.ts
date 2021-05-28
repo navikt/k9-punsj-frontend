@@ -1,7 +1,3 @@
-import {Periode} from "./Periode";
-import {Tilstedevaerelsesgrad} from "./Arbeidstaker";
-import {Arbeid, Barn, ISoknad, Tilleggsinformasjon, Tilsynsordning} from "./Soknad";
-
 export interface IHentSoknad {
     norskIdent: string;
     periode?: ISoknadPeriode
@@ -21,4 +17,15 @@ export class SoknadPeriode implements Required<ISoknadPeriode> {
         this.fom = periode.fom || '';
         this.tom = periode.tom || '';
     }
+}
+
+export interface IHentPerioder {
+    brukerIdent: string;
+    barnIdent: string;
+}
+
+export interface ISkalTilK9 {
+    brukerIdent: string;
+    barnIdent: string;
+    journalpostId: string;
 }

@@ -1,27 +1,22 @@
 import {TimeFormat} from 'app/models/enums';
-import {datetime}   from 'app/utils';
-import intlHelper   from 'app/utils/intlUtils';
-import {IntlShape}  from 'react-intl';
+import {datetime} from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import {IntlShape} from 'react-intl';
+import {PeriodeinfoV2} from "./PeriodeInfoV2";
 
 export interface IPeriodeV2 {
     fom?: string | null;
     tom?: string | null;
 }
 
-interface IPeriodeStringsForDescriptionV2 {
-    ft: string;
-    fom: string;
-    tom: string;
-}
-
 export class PeriodeV2 implements Required<IPeriodeV2> {
 
-    fom: string | null;
-    tom: string | null;
+    fom: string;
+    tom: string;
 
     constructor(periode: IPeriodeV2) {
-        this.fom = periode.fom || null;
-        this.tom = periode.tom || null;
+        this.fom = periode.fom || '';
+        this.tom = periode.tom || '';
     }
 
     values(): Required<IPeriodeV2> {
@@ -37,9 +32,9 @@ export class PeriodeV2 implements Required<IPeriodeV2> {
         return !!this.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.tom) : '';
     }
 
-    generateStringsForDescription(intl: IntlShape): IPeriodeStringsForDescriptionV2 {
+    generateStringsForDescription(intl: IntlShape): IPeriodeStringsForDescription {
 
-        let ft: string = ''; // 'ft' hvis både fom og tom er gitt, 'f' hvis kun fom er gitt og 't' hvis kun tom er gitt
+        let ft: string = ''; // 'ft' hvis både fraOgMed og tilOgMed er gitt, 'f' hvis kun fraOgMed er gitt og 't' hvis kun tilOgMed er gitt
 
         if (!!this.fom && !!this.tom) {
             ft = 'ft';
@@ -75,3 +70,109 @@ export class PeriodeV2 implements Required<IPeriodeV2> {
         return intlHelper(intl, key, {fom, tom});
     }
 }
+
+interface IPeriodeStringsForDescription {
+    ft: string;
+    fom: string;
+    tom: string;
+}
+
+export interface IArbeidstidPeriodeMedTimer {
+    periode?: IPeriodeV2;
+    faktiskArbeidTimerPerDag?: string;
+    jobberNormaltTimerPerDag?: string;
+}
+
+export class ArbeidstidPeriodeMedTimer implements Required<PeriodeinfoV2<IArbeidstidPeriodeMedTimer>> {
+    periode: PeriodeV2;
+    faktiskArbeidTimerPerDag: string;
+    jobberNormaltTimerPerDag: string;
+
+    constructor(pmf: PeriodeinfoV2<IArbeidstidPeriodeMedTimer>) {
+        this.periode = new PeriodeV2(pmf.periode || {})
+        this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
+        this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
+    }
+
+    genererTimer = (): string => {
+        return this.faktiskArbeidTimerPerDag;
+    }
+
+    fomTekstKort(intl: IntlShape) {
+        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
+    }
+
+    tilOgmedTekstKort(intl: IntlShape) {
+        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
+    }
+
+    description(intl: IntlShape): string {
+
+        let key: string;
+
+        if (!!this.periode.fom && !!this.periode.tom) {
+            key = 'periode.fratil';
+        } else if (!!this.periode.fom) {
+            key = 'periode.fra';
+        } else if (!!this.periode.tom) {
+            key = 'periode.til';
+        } else {
+            key = 'periode.udefinert';
+        }
+
+        const fom = this.fomTekstKort(intl);
+        const tom = this.tilOgmedTekstKort(intl);
+
+        return intlHelper(intl, key, {fom, tom});
+    }
+}
+
+export interface IPeriodeMedTimerMinutter {
+    timer?: number;
+    minutter?: number;
+}
+
+export class PeriodeMedTimerMinutter implements Required<PeriodeinfoV2<IPeriodeMedTimerMinutter>> {
+    periode: PeriodeV2;
+    timer: number;
+    minutter: number;
+
+    constructor(pmf: PeriodeinfoV2<IPeriodeMedTimerMinutter>) {
+        this.periode = new PeriodeV2(pmf.periode || {})
+        this.timer = pmf.timer || 0;
+        this.minutter = pmf.minutter || 0;
+    }
+
+    values(): Required<PeriodeinfoV2<IPeriodeMedTimerMinutter>> {
+        return {periode: this.periode.values(), timer: this.timer, minutter: this.minutter};
+    }
+
+    fomTekstKort(intl: IntlShape) {
+        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
+    }
+
+    tilOgmedTekstKort(intl: IntlShape) {
+        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
+    }
+
+    description(intl: IntlShape): string {
+
+        let key: string;
+
+        if (!!this.periode.fom && !!this.periode.tom) {
+            key = 'periode.fratil';
+        } else if (!!this.periode.fom) {
+            key = 'periode.fra';
+        } else if (!!this.periode.tom) {
+            key = 'periode.til';
+        } else {
+            key = 'periode.udefinert';
+        }
+
+        const fom = this.fomTekstKort(intl);
+        const tom = this.tilOgmedTekstKort(intl);
+
+        return intlHelper(intl, key, {fom, tom});
+    }
+}
+

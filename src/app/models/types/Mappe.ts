@@ -75,19 +75,19 @@ export class Personlig implements Required<IPersonlig> {
         this.innsendinger = personlig.innsendinger || [];
         this.journalpostId = personlig.journalpostId || '';
         this.soeknad = new Soknad(personlig.soeknad || {søknadId: '123'});
-        this.mangler = (personlig.mangler || []).filter(m => !!m.attributt);
+        this.mangler = (personlig.mangler || []).filter(m => !!m.felt);
     }
 
     extractFellesMangler(): IInputError[] {
         const propertyRegexp = Object.getOwnPropertyNames(this.soeknad.extractFelles()).join('|');
         const regexp = new RegExp(`^(${propertyRegexp})(\\..+|\\[\\d].*|)\$`);
-        return this.mangler.filter(m => regexp.test(m.attributt!));
+        return this.mangler.filter(m => regexp.test(m.felt!));
     }
 
     extractIndividuelleMangler(): IInputError[] {
         const propertyRegexp = Object.getOwnPropertyNames(this.soeknad.extractIndividuelt()).join('|');
         const regexp = new RegExp(`^(${propertyRegexp})(\\..+|\\[\\d].*|)\$`);
-        return this.mangler.filter(m => regexp.test(m.attributt!));
+        return this.mangler.filter(m => regexp.test(m.felt!));
     }
 
     extractFelles(): SoknadFelles {

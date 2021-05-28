@@ -53,6 +53,7 @@ const setupListepaneler = (listepanelerPropsPartial?: Partial<IListepanelerProps
         component: testkomponent,
         editSoknad: jest.fn(),
         editSoknadState: jest.fn(),
+        kanHaFlere: true,
         ...listepanelerPropsPartial
     };
 

@@ -1,8 +1,9 @@
 import {TimeFormat}                     from 'app/models/enums';
-import {IPeriode, Ukedag, UkedagNumber} from 'app/models/types';
+import { Ukedag, UkedagNumber} from 'app/models/types';
 import moment                           from 'moment';
 import {IntlShape}                      from 'react-intl';
 import intlHelper                       from './intlUtils';
+import {IPeriodeV2} from "../models/types/PeriodeV2";
 
 export const datetime = (
     intl: IntlShape,
@@ -35,12 +36,12 @@ export function convertNumberToUkedag(num: UkedagNumber): Ukedag {
     }
 }
 
-export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) {
+export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriodeV2) {
 
-    if (!period || !period.fraOgMed || period.fraOgMed === '' || !period.tilOgMed || period.tilOgMed === '') {return true}
+    if (!period || !period.fom || period.fom === '' || !period.tom || period.tom === '') {return true}
 
-    const start = moment(period.fraOgMed);
-    const end = moment(period.tilOgMed);
+    const start = moment(period.fom);
+    const end = moment(period.tom);
 
     if (end.isBefore(start)) {return false}
     if (end.diff(start, 'days') >= 6) {return true;}

@@ -8,7 +8,7 @@ import SkjemaContext from '../../../components/skjema/SkjemaContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSkjema } from 'app/state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import { RootStateType } from '../../../state/RootState';
-import JournalpostPanel from '../../../components/journalpost-panel/JournalpostPanel';
+import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 
 interface ISignaturSkjemaContextProps {
   initialValues: ISignaturSkjema;
@@ -35,10 +35,7 @@ const OverføringIdentSjekkContainer: React.FunctionComponent<ISignaturSkjemaCon
       validerSkjema={validerSignaturSkjema}
     >
       <>
-        <JournalpostPanel
-          journalpostId={journalpost!.journalpostId}
-          identitetsnummer={journalpost?.norskIdent}
-        />
+        <JournalpostPanel/>
         <OverføringIdentSjekk
           journalpostensRegistrertePersonident={journalpost.norskIdent}
         />

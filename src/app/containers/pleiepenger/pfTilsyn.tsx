@@ -1,14 +1,14 @@
 import {NumberSelect} from 'app/components/number-select/NumberSelect';
 import {
     GetErrorMessage,
-    PeriodeComponent,
+    PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState
-}                     from 'app/containers/pleiepenger/Periodepaneler';
+}                     from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import {Ukedag}       from 'app/models/enums';
 import {
     ITilsyn,
-    Periodeinfo,
+
     UkedagNumber
 }                     from 'app/models/types';
 import {
@@ -27,12 +27,14 @@ import {
     Row
 }                     from 'react-bootstrap';
 import {IntlShape}    from 'react-intl';
+import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
+import {ITilsynsordningV2} from "../../models/types/PSBSoknad";
 
-export const pfTilsyn: PeriodeComponent<ITilsyn> = (
-    tilsyn: Periodeinfo<ITilsyn>,
+export const pfTilsyn: PeriodeinfoComponent<ITilsynsordningV2> = (
+    tilsyn: PeriodeinfoV2<ITilsynsordningV2>,
     periodeindex: number,
-    updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilsyn>,
-    updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilsyn>,
+    updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilsynsordningV2>,
+    updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilsynsordningV2>,
     feilprefiks: string,
     getErrorMessage: GetErrorMessage,
     intl: IntlShape

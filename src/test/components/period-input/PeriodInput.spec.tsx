@@ -38,11 +38,11 @@ describe('PerodInput', () => {
     });
 
     it('Skal vise riktig verdi i inputfelter', () => {
-        const fraOgMed = '2020-01-01';
-        const tilOgMed = '2020-02-01';
-        const periodInput = setupPeriodInput({periode: {fraOgMed, tilOgMed}});
-        expect(periodInput.find(`#${inputIdFom}`).prop('value')).toEqual(fraOgMed);
-        expect(periodInput.find(`#${inputIdTom}`).prop('value')).toEqual(tilOgMed);
+        const fom = '2020-01-01';
+        const tom = '2020-02-01';
+        const periodInput = setupPeriodInput({periode: {fom, tom}});
+        expect(periodInput.find(`#${inputIdFom}`).prop('value')).toEqual(fom);
+        expect(periodInput.find(`#${inputIdTom}`).prop('value')).toEqual(tom);
     });
 
     it('Skal vise feilmelding', () => {
@@ -64,47 +64,47 @@ describe('PerodInput', () => {
     });
 
     it('Skal kalle onChange med ny fom-dato', () => {
-        const fraOgMed = '2020-01-01';
-        const tilOgMed = '2020-02-01';
+        const fom = '2020-01-01';
+        const tom = '2020-02-01';
         const newFraOgMed = '2020-01-03';
         const onChange = jest.fn();
-        const periodInput = setupPeriodInput({periode: {fraOgMed, tilOgMed}, onChange});
+        const periodInput = setupPeriodInput({periode: {fom, tom}, onChange});
         periodInput.find(`#${inputIdFom}`).simulate('change', {target: {value: newFraOgMed}});
         expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith({fraOgMed: newFraOgMed, tilOgMed});
+        expect(onChange).toHaveBeenCalledWith({fom: newFraOgMed, tom});
     });
 
     it('Skal kalle onBlur med ny fom-dato', () => {
-        const fraOgMed = '2020-01-01';
-        const tilOgMed = '2020-02-01';
+        const fom = '2020-01-01';
+        const tom = '2020-02-01';
         const newFraOgMed = '2020-01-03';
         const onBlur = jest.fn();
-        const periodInput = setupPeriodInput({periode: {fraOgMed, tilOgMed}, onBlur});
+        const periodInput = setupPeriodInput({periode: {fom, tom}, onBlur});
         periodInput.find(`#${inputIdFom}`).simulate('blur', {target: {value: newFraOgMed}});
         expect(onBlur).toHaveBeenCalledTimes(1);
-        expect(onBlur).toHaveBeenCalledWith({fraOgMed: newFraOgMed, tilOgMed});
+        expect(onBlur).toHaveBeenCalledWith({fom: newFraOgMed, tom});
     });
 
     it('Skal kalle onChange med ny tom-dato', () => {
-        const fraOgMed = '2020-01-01';
-        const tilOgMed = '2020-02-01';
+        const fom = '2020-01-01';
+        const tom = '2020-02-01';
         const newTilOgMed = '2020-02-03';
         const onChange = jest.fn();
-        const periodInput = setupPeriodInput({periode: {fraOgMed, tilOgMed}, onChange});
+        const periodInput = setupPeriodInput({periode: {fom, tom}, onChange});
         periodInput.find(`#${inputIdTom}`).simulate('change', {target: {value: newTilOgMed}});
         expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith({fraOgMed, tilOgMed: newTilOgMed});
+        expect(onChange).toHaveBeenCalledWith({fom, tom: newTilOgMed});
     });
 
     it('Skal kalle onBlur med ny tom-dato', () => {
-        const fraOgMed = '2020-01-01';
-        const tilOgMed = '2020-02-01';
+        const fom = '2020-01-01';
+        const tom = '2020-02-01';
         const newTilOgMed = '2020-02-03';
         const onBlur = jest.fn();
-        const periodInput = setupPeriodInput({periode: {fraOgMed, tilOgMed}, onBlur});
+        const periodInput = setupPeriodInput({periode: {fom, tom}, onBlur});
         periodInput.find(`#${inputIdTom}`).simulate('blur', {target: {value: newTilOgMed}});
         expect(onBlur).toHaveBeenCalledTimes(1);
-        expect(onBlur).toHaveBeenCalledWith({fraOgMed, tilOgMed: newTilOgMed});
+        expect(onBlur).toHaveBeenCalledWith({fom, tom: newTilOgMed});
     });
 
     it('Skal ha egendefinert klassenavn', () => {

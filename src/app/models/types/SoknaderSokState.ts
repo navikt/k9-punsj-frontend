@@ -1,10 +1,10 @@
 import {IError}  from 'app/models/types/Error';
-import {ISoknadInfo, ISoknadSvar} from "./SoknadSvar";
+import {IPSBSoknad} from "./PSBSoknad";
 
 export interface ISoknaderSokState {
-    soknadSvar:                ISoknadSvar;
+    soknadSvar:                IPSBSoknad[];
     isSoknaderLoading?:         boolean;
     soknaderRequestError?:      IError;
     soknadid?:                  string;
-    chosenSoknad?:              ISoknadInfo;
+    chosenSoknad?:              IPSBSoknad;
 }

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import {
   AuthReducer,
   FordelingReducer, GosysOppgaveReducer,
-  MapperOgFagsakerReducer, SoknaderSokReducer,
+  EksisterendeSoknaderReducer, SoknaderSokReducer,
   PunchFormReducer,
   PunchReducer,
   SignaturReducer,
@@ -12,10 +12,12 @@ import { Sakstype } from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
 import {SoknaderVisningReducer} from "./reducers/SoknaderVisningReducer";
+import {JournalposterPerIdentReducer} from "./reducers/JournalposterPerIdentReducer";
+import {IdentReducer} from "./reducers/IdentReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
-    mapperOgFagsakerState: MapperOgFagsakerReducer,
+    eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     punchFormState: PunchFormReducer,
     punchState: PunchReducer,
     signaturState: SignaturReducer,
@@ -34,6 +36,9 @@ export const rootReducer = combineReducers({
   fordelingState: FordelingReducer,
   authState: AuthReducer,
   felles: FellesReducer,
+  journalposterPerIdentState: JournalposterPerIdentReducer,
+  identState: IdentReducer,
+  opprettIGosys: GosysOppgaveReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

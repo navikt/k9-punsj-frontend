@@ -1,11 +1,16 @@
-import {PunchFormActionKeys}                   from 'app/models/enums';
-import {IPunchFormState}                       from 'app/models/types';
-import {IPunchFormActionTypes}                 from 'app/state/actions/PunchFormActions';
-import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
+import {PunchFormActionKeys} from 'app/models/enums';
+import {IPunchFormState} from 'app/models/types';
+import {IPunchFormActionTypes} from 'app/state/actions/PunchFormActions';
+import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
 
 const initialState: IPunchFormState = {
-    isMappeLoading: false,
-    isComplete: false
+    isSoknadLoading: false,
+    isComplete: false,
+    isValid: false,
+    awaitingSettPaaVentResponse: false,
+    settPaaVentError: undefined,
+    settPaaVentSuccess: undefined,
+    inputErrors: undefined,
 };
 
 export function PunchFormReducer(
@@ -19,70 +24,67 @@ export function PunchFormReducer(
         case PunchFormActionKeys.RESET:
             return initialState;
 
-        case PunchFormActionKeys.MAPPE_LOAD:
+        case PunchFormActionKeys.SOKNAD_LOAD:
             return {
                 ...punchFormState,
-                isMappeLoading: true
+                isSoknadLoading: true
             };
 
-        case PunchFormActionKeys.MAPPE_REQUEST_ERROR:
+        case PunchFormActionKeys.SOKNAD_REQUEST_ERROR:
             return {
                 ...punchFormState,
-                isMappeLoading: false,
+                isSoknadLoading: false,
                 error: action.error
             };
 
-        case PunchFormActionKeys.MAPPE_SET:
+        case PunchFormActionKeys.SOKNAD_SET:
             return {
                 ...punchFormState,
-                isMappeLoading: false,
-                mappe: action.mappe
+                isSoknadLoading: false,
+                soknad: action.soknad
             };
 
-        case PunchFormActionKeys.MAPPE_RESET:
+        case PunchFormActionKeys.SOKNAD_RESET:
             return {
                 ...punchFormState,
-                isMappeLoading: false,
-                mappe: undefined
+                isSoknadLoading: false,
+                soknad: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_REQUEST:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: true,
-                updateMappeError: undefined
+                updateSoknadError: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                inputErrors1: action.errors1,
-                inputErrors2: action.errors2,
-                updateMappeError: undefined
+                updateSoknadError: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_ERROR:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                updateMappeError: action.error
+                updateSoknadError: action.error
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: true,
-                submitMappeError: undefined
+                submitSoknadError: undefined
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitMappeError: undefined,
-                inputErrors1: undefined,
-                inputErrors2: undefined,
+                submitSoknadError: undefined,
+                inputErrors: undefined,
                 isComplete: true
             };
 
@@ -90,16 +92,109 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitMappeError: undefined,
-                inputErrors1: action.errors1,
-                inputErrors2: action.errors2
+                submitSoknadError: undefined,
+                inputErrors: action.errors,
             };
 
-        case PunchFormActionKeys.SOKAND_SUBMIT_ERROR:
+        case PunchFormActionKeys.SOKNAD_SUBMIT_ERROR:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitMappeError: action.error
+                submitSoknadError: action.error
+            };
+
+        case PunchFormActionKeys.HENT_PERIODER_REQUEST:
+            return {
+                ...punchFormState,
+                isPerioderLoading: true,
+                hentPerioderError: undefined,
+
+            };
+
+        case PunchFormActionKeys.HENT_PERIODER_ERROR:
+            return {
+                ...punchFormState,
+                isPerioderLoading: false,
+                hentPerioderError: action.error,
+
+            };
+
+        case PunchFormActionKeys.HENT_PERIODER_SUCCESS:
+            return {
+                ...punchFormState,
+                isPerioderLoading: false,
+                hentPerioderError: undefined,
+                perioder: action.perioder
+
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: true,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: false,
+                settPaaVentError: action.error,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: true,
+                settPaaVentError: undefined,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: false,
+                settPaaVentError: undefined,
+            };
+        case PunchFormActionKeys.SOKNAD_VALIDER_REQUEST:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: true,
+                validateSoknadError: undefined
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: undefined,
+                inputErrors: undefined,
+                isValid: true
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: undefined,
+                inputErrors: action.errors,
+                isValid: false,
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_ERROR:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: action.error
+            };
+
+        case PunchFormActionKeys.SOKNAD_VALIDER_RESET:
+            return {
+                ...punchFormState,
+                isAwaitingValidateResponse: false,
+                validateSoknadError: undefined,
+                isValid: undefined
             };
 
         default: return punchFormState;
