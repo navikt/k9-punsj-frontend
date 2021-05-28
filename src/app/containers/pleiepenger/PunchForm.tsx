@@ -82,6 +82,7 @@ import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import ErDuSikkerModal from "./ErDuSikkerModal";
 import {Datepicker} from "nav-datovelger";
+import moment from "moment";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -1745,12 +1746,19 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.punchFormState.inputErrors;
     };
 
-    private erFremITid(dato: string, klokkeslett: boolean) {
+    private erFremITid(dato: string) {
             const naa = new Date();
-            if (!!klokkeslett) {return naa.toTimeString() < dato}
             return naa < new Date(dato)
     }
 
+    private erFremITidKlokkeslett(dato: string) {
+        const { mottattDato } = this.state.soknad;
+        const naa = new Date();
+        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
+            return true;
+        }
+        return false;
+    }
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
         const { mottattDato, klokkeslett} = this.state.soknad;
@@ -1759,6 +1767,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             if (klokkeslett === null || klokkeslett === "" || mottattDato === null || mottattDato === "") {
                 return intlHelper(this.props.intl, 'skjema.feil.ikketom');
             }
+        }
+
+        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato!)) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
+        }
+
+        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
         const errorMsg = this.getManglerFromStore()?.filter(
