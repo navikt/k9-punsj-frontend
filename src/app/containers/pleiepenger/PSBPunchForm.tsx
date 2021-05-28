@@ -1838,7 +1838,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.updateSoknad(
             {...this.getSoknadFromStore(), ...soknad},
         );
-        this.forceUpdate();
     };
 
     private handleBackButtonClick = () => {
@@ -1868,8 +1867,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private addOpphold = () => {
         if (!this.state.soknad.utenlandsopphold) {
             this.state.soknad = {...this.state.soknad, utenlandsopphold: [{}]};
-        } else if (!this.state.soknad.utenlandsopphold) {
-            this.state.soknad.utenlandsopphold = [{}];
         }
         this.state.soknad.utenlandsopphold!.push({land: '', periode: {}});
         this.forceUpdate();
@@ -1887,8 +1884,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private addFerie = () => {
         if (!this.state.soknad.lovbestemtFerie) {
             this.state.soknad = {...this.state.soknad, lovbestemtFerie: [{}]};
-        } else if (!this.state.soknad.lovbestemtFerie) {
-            this.state.soknad.lovbestemtFerie = [{}];
         }
         this.state.soknad.lovbestemtFerie!.push({fom: '', tom: ''});
         this.forceUpdate();
@@ -1946,6 +1941,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(validerSoknadResetAction())
 });
 
-export const PunchForm = injectIntl(
+export const PSBPunchForm = injectIntl(
     connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)
 );

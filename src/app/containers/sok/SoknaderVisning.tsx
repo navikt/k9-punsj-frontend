@@ -20,10 +20,14 @@ import {
     closeSoknadAction,
     openSoknadAction,
     resetSoknadidAction,
-    sokPsbSoknader
 } from "../../state/actions/SoknaderVisningActions";
 import {SoknadType} from "../../models/enums/SoknadType";
-import {resetPunchAction, setIdentAction, undoSearchForSoknaderAction} from "../../state/actions";
+import {
+    findEksisterendeSoknader,
+    resetPunchAction,
+    setIdentAction,
+    undoSearchForSoknaderAction
+} from "../../state/actions";
 import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
 import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
@@ -35,7 +39,7 @@ export interface ISoknaderSokStateProps {
 export interface ISoknaderSokDispatchProps {
     setIdentAction: typeof setIdentSokAction;
     setStepAction: typeof setStepSokAction;
-    findSoknader: typeof sokPsbSoknader;
+    findSoknader: typeof findEksisterendeSoknader;
     undoSearchForSoknaderAction: typeof undoSearchForSoknaderAction;
     openSoknadAction: typeof openSoknadAction;
     closeSoknadAction: typeof closeSoknadAction;
@@ -84,7 +88,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     React.useEffect(() => {
         props.setIdentAction(ident);
-        props.findSoknader(ident);
+        props.findSoknader(ident, null);
         props.setStepAction(SoknaderVisningStep.CHOOSE_SOKNAD);
     }, [ident]);
 
@@ -262,7 +266,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: SoknaderVisningStep) => dispatch(setStepSokAction(step)),
     findSoknader: (ident1: string) =>
-        dispatch(sokPsbSoknader(ident1)),
+        dispatch(findEksisterendeSoknader(ident1, null)),
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
     openSoknadAction: (soknad: IPSBSoknad) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),

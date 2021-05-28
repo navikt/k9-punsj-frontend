@@ -22,9 +22,9 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import {peiepengerPaths} from "./PeiepengerRoutes";
 import {RegistreringsValg} from "./RegistreringsValg";
-import {PunchForm} from "./PunchForm";
 import {IIdentState} from "../../models/types/IdentState";
 import { JournalpostPanel } from "../../components/journalpost-panel/JournalpostPanel";
+import { PSBPunchForm } from './PSBPunchForm';
 
 
 export interface IPunchPageStateProps {
@@ -136,7 +136,7 @@ export class PunchPageComponent extends React.Component<
       case PunchStep.CHOOSE_SOKNAD:
         return <RegistreringsValg {...commonProps} {...this.extractIdents()} />;
       case PunchStep.FILL_FORM:
-        return <PunchForm {...commonProps} id={this.props.match.params.id} />;
+        return <PSBPunchForm {...commonProps} id={this.props.match.params.id} />;
       case PunchStep.COMPLETED:
         return (
           <AlertStripeSuksess className="fullfortmelding">
