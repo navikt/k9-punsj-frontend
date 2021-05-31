@@ -136,9 +136,9 @@
   "skjema.settpaavent.periode":                                                                   "Saken vil bli satt på vent i 3 uker",
   "skjema.opplysningerombarn":                                                                    "Opplysninger om barnet",
   "skjema.ikkeregistrert":                                                                        "Opplysninger som ikke er blitt registrert",
-  "skjema.opplysningerikkepunsjet":                                                               "Søknaden inneholder opplysninger som ikke er blitt registrert",
+  "skjema.opplysningerikkepunsjet":                                                               "Dokumentet inneholder andre opplysninger som ikke er registrert i skjemaet",
   "skjema.opplysningerikkepunsjet.hjelpetekst":                                                   "Huk av hvis det finnes opplysninger i dokumentet som ikke er registrert i skjemaet. Dette kan for eksempel være fritekstfelter som det ikke finnes noe felt for. Saksbehandler vil da få beskjed om at det finnes uregistrerte opplysninger i behandlingen.",
-  "skjema.medisinskeopplysninger":                                                                "Søknaden inneholder medisinske opplysninger",
+  "skjema.medisinskeopplysninger":                                                                "Dokumentet inneholder medisinske opplysninger",
   "skjema.medisinskeopplysninger.hjelpetekst":                                                    "Medisinske opplysninger er opplysninger som kan påvirke den medisinske vurderingen etter § 9-10, eller dokumentasjonskravene i § 9-16",
   "skjema.barn.ident":                                                                            "Barnets fødselsnummer/D-nummer:",
   "skjema.barn.foedselsdato":                                                                     "Barnets fødselsdato:",
@@ -153,7 +153,7 @@
   "skjema.omsorgstilbud.overskrift":                                                              "Omsorgstilbud",
   "skjema.omsorgstilbud.gjennomsnittlig":                                                          "Gjennomsnittlig antall timer/minutter per dag denne perioden",
   "skjema.omsorgstilbud.info":                                                                    "Dersom barnet skal være i omsorgstilbud i søknadsperioden, oppgi periode og gjennomsnittlig antall timer per dag",
-  "skjema.opplysningeromarbeid":                                                                  "Arbeidsforhold",
+  "skjema.opplysningeromarbeid":                                                                  "Arbeidsforhold og arbeidstid i søknadsperioden",
   "skjema.arbeid.leggtilperiode":                                                                 "Legg til periode",
   "skjema.arbeidstid.info.overskrift":                                                            "Informasjon om arbeidstid",
   "skjema.arbeidstid.hjelpetekst.faktisketimer":                                                  "Timer søkeren skal jobbe i perioden med pleiepenger",
@@ -382,5 +382,6 @@
 
   "numberinput.øk": "Øk {felt} med 1",
   "numberinput.mink": "Mink {felt} med 1",
-  "check.svg.title": "Suksess"
+  "check.svg.title": "Suksess",
+  "knapp.loggut": "Logg ut"
 }
