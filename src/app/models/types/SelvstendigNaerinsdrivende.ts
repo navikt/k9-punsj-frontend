@@ -15,6 +15,7 @@ export interface ISelvstendigNaerinsdrivende {
     erVarigEndring?: boolean;
     endringDato?: string;
     endringInntekt?: string;
+    endringBegrunnelse?: string;
 }
 
 export class SelvstendigNaerinsdrivende implements Required<PeriodeinfoV2<ISelvstendigNaerinsdrivende>> {
@@ -29,19 +30,21 @@ export class SelvstendigNaerinsdrivende implements Required<PeriodeinfoV2<ISelvs
     erVarigEndring: boolean;
     endringDato: string;
     endringInntekt: string;
+    endringBegrunnelse: string;
 
     constructor(selvstendigNaeringsdrivende: PeriodeinfoV2<ISelvstendigNaerinsdrivende>) {
         this.periode = new PeriodeV2(selvstendigNaeringsdrivende.periode || {});
         this.virksomhetstyper = selvstendigNaeringsdrivende.virksomhetstyper || [];
         this.landkode = selvstendigNaeringsdrivende.landkode || "";
-        this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || "";
-        this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || "";
+        this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || '';
+        this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || '';
         this.registrertIUtlandet = selvstendigNaeringsdrivende.registrertIUtlandet || false;
-        this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || "";
+        this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || '';
         this.erNyoppstartet = selvstendigNaeringsdrivende.erNyoppstartet || false;
         this.erVarigEndring = selvstendigNaeringsdrivende.erVarigEndring || false;
         this.endringDato = selvstendigNaeringsdrivende.endringDato || '';
-        this.endringInntekt = selvstendigNaeringsdrivende.endringInntekt|| '';
+        this.endringInntekt = selvstendigNaeringsdrivende.endringInntekt || '';
+        this.endringBegrunnelse = selvstendigNaeringsdrivende.endringBegrunnelse || '';
     }
 
     description(intl: IntlShape): string {

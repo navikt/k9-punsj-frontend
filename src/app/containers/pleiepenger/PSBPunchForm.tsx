@@ -31,7 +31,7 @@ import {
     Input,
     RadioPanelGruppe,
     Select,
-    SkjemaGruppe
+    SkjemaGruppe, Textarea
 } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
@@ -73,7 +73,7 @@ import {Container, Row} from "react-bootstrap";
 import {pfArbeidstider} from "./pfArbeidstider";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 import {CountrySelect} from "../../components/country-select/CountrySelect";
-import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
+import {Virksomhetstyper, VirksomhetstyperKoder} from "../../models/enums/Virksomhetstyper";
 import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
 import Hjelpetekst from "nav-frontend-hjelpetekst";
 import {PopoverOrientering} from "nav-frontend-popover";
@@ -601,7 +601,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 value: jn,
                             }))}
                             legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
-                            checked={!!this.state.harRegnskapsfører ? JaNei.JA : JaNei.NEI}
+                            checked={(!!this.state.harRegnskapsfører || opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn) ? JaNei.JA : JaNei.NEI}
                             onChange={event => {
                                 this.handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei)
                             }}/>
@@ -772,7 +772,25 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                             }
                                         },
                                     }))}
-                                /></Row></>}
+                                /></Row>
+
+                                <Textarea
+                                    label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
+                                    className={"endringbegrunnelse"}
+                                    value={opptjening.selvstendigNaeringsdrivende?.info?.endringBegrunnelse || ''}
+                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    endringBegrunnelse: event.target.value
+                                                }
+                                            }
+                                        },
+                                    }))}
+                                /></>}
                         <VerticalSpacer eightPx={true}/>
                         {arbeidstidInformasjon(intl)}
                         <PeriodeinfoPaneler
@@ -1268,6 +1286,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     /><Hjelpetekst
                     className={"hjelpetext"}
                     type={PopoverOrientering.OverHoyre}
+                    tabIndex={-1}
                 >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
                 <VerticalSpacer eightPx={true}/>
                 <div className={"flex-container"}>
@@ -1282,6 +1301,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <Hjelpetekst
                         className={"hjelpetext"}
                         type={PopoverOrientering.OverHoyre}
+                        tabIndex={-1}
                     >{intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}</Hjelpetekst>
                 </div>
                 <VerticalSpacer twentyPx={true}/>

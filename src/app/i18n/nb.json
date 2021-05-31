@@ -177,6 +177,7 @@
   "skjema.sn.registrertLand":                                                                     "I hvilket land er virksomheten registrert?",
   "skjema.sn.bruttoinntekt":                                                                      "Næringsresultat før skatt de siste 12 månedene",
   "skjema.sn.endringinntekt":                                                                     "Årsinntekt etter endring",
+  "skjema.sn.endringbegrunnelse":                                                                 "Begrunnelse for endring",
   "skjema.sn.varigendring":                                                                       "Har søker hatt en varig endring i noen av arbeidsforholdene, virksomhetene eller arbeidssituasjonen de siste fire årene?",
   "skjema.sn.varigendringdato":                                                                   "Dato for endringen",
   "skjema.arbeid.sn.fjernvirksomhet":                                                             "Fjern virksomhet",

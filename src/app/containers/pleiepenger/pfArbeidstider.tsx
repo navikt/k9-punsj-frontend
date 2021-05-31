@@ -45,6 +45,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                     <Hjelpetekst
                         className={"arbeidstid-hjelpetext"}
                         type={PopoverOrientering.Hoyre}
+                        tabIndex={-1}
                     >{intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
                     </Hjelpetekst>
                     <Input
@@ -64,6 +65,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                     <Hjelpetekst
                         className={"arbeidstid-hjelpetext"}
                         type={PopoverOrientering.Hoyre}
+                        tabIndex={-1}
                     >{intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}
                     </Hjelpetekst>
                 </div>
