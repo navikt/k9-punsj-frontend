@@ -1,6 +1,6 @@
 export enum Virksomhetstyper {
-    FISKER       = "Fisker",
-    JORDBRUKER   = "Jordbruker",
-    DAGMAMMA     = "Dagmamma eller familiebarnehage i eget hjem",
-    ANNEN        = "Annen"
+    FISKE       = "Fiske",
+    JORDBRUK   = "Jordbruk",
+    DAGMAMMA     = "Dagmamma i eget hjem/familiebarnehage",
+    ANNEN        = "Annen næringsvirksomhet"
 }
