@@ -21,7 +21,6 @@ import {
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import TimePicker from 'react-time-picker';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Knapp} from 'nav-frontend-knapper';
 import {
@@ -73,7 +72,7 @@ import {Container, Row} from "react-bootstrap";
 import {pfArbeidstider} from "./pfArbeidstider";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 import {CountrySelect} from "../../components/country-select/CountrySelect";
-import {Virksomhetstyper, VirksomhetstyperKoder} from "../../models/enums/Virksomhetstyper";
+import {Virksomhetstyper} from "../../models/enums/Virksomhetstyper";
 import SettPaaVentErrorModal from "./SettPaaVentErrorModal";
 import Hjelpetekst from "nav-frontend-hjelpetekst";
 import {PopoverOrientering} from "nav-frontend-popover";
@@ -81,7 +80,6 @@ import {JaNeiIkkeRelevant} from "../../models/enums/JaNeiIkkeRelevant";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import ErDuSikkerModal from "./ErDuSikkerModal";
-import {Datepicker} from "nav-datovelger";
 import moment from "moment";
 
 export interface IPunchFormComponentProps {
@@ -259,6 +257,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const fireAarSiden = new Date();
         fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
         return new Date(dato) < fireAarSiden;
+    }
+
+    private erYngreEnn4år = (dato: string) => {
+        const fireAarSiden = new Date();
+        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+        return new Date(dato) > fireAarSiden;
     }
 
 
@@ -574,25 +578,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             }}
                         />
                         }
-                        <Input
-                            label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
-                            bredde={"M"}
-                            className={"bruttoinntekt"}
-                            value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt}
-                            {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    selvstendigNaeringsdrivende: {
-                                        ...opptjening.selvstendigNaeringsdrivende,
-                                        info: {
-                                            ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            bruttoInntekt: event.target.value
-                                        }
-                                    }
-                                },
-                            }))}
-                            onFocus={event => event.target.selectionStart = 0}
-                        />
                         <RadioPanelGruppe
                             className="horizontalRadios"
                             name={"harRegnskapsfører"}
@@ -695,6 +680,27 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             />
                         </div>
                         {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
+                        this.erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom!) &&
+                        <Input
+                            label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                            bredde={"M"}
+                            className={"bruttoinntekt"}
+                            value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt}
+                            {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                opptjeningAktivitet: {
+                                    ...opptjening,
+                                    selvstendigNaeringsdrivende: {
+                                        ...opptjening.selvstendigNaeringsdrivende,
+                                        info: {
+                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                            bruttoInntekt: event.target.value
+                                        }
+                                    }
+                                },
+                            }))}
+                            onFocus={event => event.target.selectionStart = 0}
+                        />}
+                        {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                         this.erEldreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom!) && <>
                             <RadioPanelGruppe
                                 className="horizontalRadios"
@@ -774,23 +780,23 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                     }))}
                                 /></Row>
 
-                                <Textarea
-                                    label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
-                                    className={"endringbegrunnelse"}
-                                    value={opptjening.selvstendigNaeringsdrivende?.info?.endringBegrunnelse || ''}
-                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                        opptjeningAktivitet: {
-                                            ...opptjening,
-                                            selvstendigNaeringsdrivende: {
-                                                ...opptjening.selvstendigNaeringsdrivende,
-                                                info: {
-                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                    endringBegrunnelse: event.target.value
-                                                }
+                            <Textarea
+                                label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
+                                className={"endringbegrunnelse"}
+                                value={opptjening.selvstendigNaeringsdrivende?.info?.endringBegrunnelse || ''}
+                                {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                endringBegrunnelse: event.target.value
                                             }
-                                        },
-                                    }))}
-                                /></>}
+                                        }
+                                    },
+                                }))}
+                            /></>}
                         <VerticalSpacer eightPx={true}/>
                         {arbeidstidInformasjon(intl)}
                         <PeriodeinfoPaneler
@@ -1767,12 +1773,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private erFremITid(dato: string) {
-            const naa = new Date();
-            return naa < new Date(dato)
+        const naa = new Date();
+        return naa < new Date(dato)
     }
 
     private erFremITidKlokkeslett(dato: string) {
-        const { mottattDato } = this.state.soknad;
+        const {mottattDato} = this.state.soknad;
         const naa = new Date();
         if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
             return true;
@@ -1781,7 +1787,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
-        const { mottattDato, klokkeslett} = this.state.soknad;
+        const {mottattDato, klokkeslett} = this.state.soknad;
 
         if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
             if (klokkeslett === null || klokkeslett === "" || mottattDato === null || mottattDato === "") {
