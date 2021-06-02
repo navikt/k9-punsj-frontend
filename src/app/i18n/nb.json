@@ -373,7 +373,7 @@
 
   "søk.label": "Søk med fødselsnummer eller D-nummer",
   "søk.label.fnr": "Fødselsnummer",
-  "søk.label.jpid": "JournalpostID",
+  "søk.label.jpid": "Søk med journalpost-ID",
   "søk.knapp.label": "Søk",
   "søk.info.perioder": "Velg perioden for søknaden:",
   "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
