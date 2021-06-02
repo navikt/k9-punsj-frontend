@@ -13,7 +13,6 @@ import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
-import intlHelper from "../../utils/intlUtils";
 
 
 export interface ISearchFormStateProps {

@@ -1,6 +1,5 @@
 import { PunchStep, TimeFormat } from 'app/models/enums';
-import {
-    ISoknaderSokState, IPath,
+import {IPath, IEksisterendeSoknaderState,
 } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash, getPath } from 'app/utils';
@@ -33,7 +32,7 @@ import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
 export interface ISoknaderSokStateProps {
     visningState: ISoknaderVisningState;
-    soknaderSokState: ISoknaderSokState;
+    eksisterendeSoknaderState: IEksisterendeSoknaderState;
 }
 
 export interface ISoknaderSokDispatchProps {
@@ -62,11 +61,11 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
 ) => {
     const {
         intl,
-        soknaderSokState,
+        eksisterendeSoknaderState,
         visningState,
         ident,
     } = props;
-    const soknader = soknaderSokState.soknadSvar;
+    const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     const paths: IPath[] = [
         {
@@ -102,7 +101,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         </p>
     );
 
-    if (soknaderSokState.soknaderRequestError && soknaderSokState.soknaderRequestError!!.status === 403) {
+    if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError && eksisterendeSoknaderState.eksisterendeSoknaderRequestError!!.status === 403) {
         return (
             <>
                 <AlertStripeFeil>
@@ -112,11 +111,11 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         );
     }
 
-    if (soknaderSokState.soknaderRequestError) {
+    if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <>
                 <AlertStripeFeil>
-                    Det oppsto en feil i henting av mapper.
+                    Det oppsto en feil i henting av søknader.
                 </AlertStripeFeil>
             </>
         );
@@ -124,7 +123,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     if (
         visningState.step !== SoknaderVisningStep.CHOOSE_SOKNAD ||
-        soknaderSokState.isSoknaderLoading
+        eksisterendeSoknaderState.isEksisterendeSoknaderLoading
     ) {
         return (
             <div>
@@ -134,7 +133,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     }
 
     const technicalError =
-        soknaderSokState.soknaderRequestError ? (
+        eksisterendeSoknaderState.eksisterendeSoknaderRequestError ? (
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
@@ -148,10 +147,10 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         const modaler = [];
         const rows = [];
 
-        for (const s of soknader) {
+        for (const s of soknader!!) {
             const søknad = new PSBSoknad(s)
             const soknadId = s.soeknadId as string;
-            const {chosenSoknad} = props.soknaderSokState;
+            const {chosenSoknad} = props.eksisterendeSoknaderState;
             const fom = søknad.soeknadsperiode?.fom || '';
             const tom = søknad.soeknadsperiode?.tom || '';
             const rowContent = [
@@ -227,7 +226,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         props.undoSearchForSoknaderAction();
     }
 
-    if (soknader.length) {
+    if (soknader?.length) {
         return (
             <>
                 {technicalError}
@@ -258,7 +257,7 @@ const mapStateToProps = (
     state: RootStateType
 ): ISoknaderSokStateProps => ({
     visningState: state.SØK.visningState,
-    soknaderSokState: state.SØK.soknaderSokState,
+    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
