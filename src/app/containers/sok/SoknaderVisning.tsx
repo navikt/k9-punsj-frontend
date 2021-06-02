@@ -27,8 +27,10 @@ import {
     setIdentAction,
     undoSearchForSoknaderAction
 } from "../../state/actions";
+import {
+    openEksisterendeSoknadAction,
+} from 'app/state/actions';
 import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
-import SoknadReadModeV2 from "../pleiepenger/SoknadReadModeV2";
 
 export interface ISoknaderSokStateProps {
     visningState: ISoknaderVisningState;
@@ -45,6 +47,7 @@ export interface ISoknaderSokDispatchProps {
     chooseSoknadAction: typeof chooseSoknadAction;
     resetSoknadidAction: typeof resetSoknadidAction;
     resetPunchAction: typeof resetPunchAction;
+    openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
 }
 
 export interface ISoknaderVisningComponentProps {
@@ -95,12 +98,6 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         return null;
     }
 
-    const backButton = (
-        <p>
-            <Knapp onClick={undoSearchForSoknader}>Tilbake</Knapp>
-        </p>
-    );
-
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError && eksisterendeSoknaderState.eksisterendeSoknaderRequestError!!.status === 403) {
         return (
             <>
@@ -144,7 +141,6 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     };
 
     function showSoknader() {
-        const modaler = [];
         const rows = [];
 
         for (const s of soknader!!) {
@@ -165,6 +161,12 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
+                <Knapp
+                    key={soknadId}
+                    mini={true}
+                    onClick={() => props.openEksisterendeSoknadAction(s)}
+                >{intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                </Knapp>
             ];
             rows.push(
                 <tr key={soknadId} onClick={() => props.openSoknadAction(s)}>
@@ -176,28 +178,6 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                         </td>
                     )}
                 </tr>
-            );
-            modaler.push(
-                <ModalWrapper
-                    key={soknadId}
-                    onRequestClose={props.closeSoknadAction}
-                    contentLabel={soknadId}
-                    isOpen={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
-                >
-                    <div className="modal_content">
-                        {chosenSoknad && (
-                            <SoknadReadModeV2 soknad={new PSBSoknad(chosenSoknad)}/>
-                        )}
-                        <div className="punch_mappemodal_knapperad">
-                            <Knapp className="knapp1" onClick={() => chooseSoknad(s)}>
-                                {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                            </Knapp>
-                            <Knapp className="knapp2" onClick={props.closeSoknadAction}>
-                                {intlHelper(intl, 'mappe.lesemodus.knapp.lukk')}
-                            </Knapp>
-                        </div>
-                    </div>
-                </ModalWrapper>
             );
         }
 
@@ -216,7 +196,6 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>
-                {modaler}
             </>
         );
     }
@@ -272,6 +251,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     chooseSoknadAction: (soknad: IPSBSoknad) => dispatch(chooseSoknadAction(soknad)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
+    openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
 });
 
 export const SoknaderVisning = injectIntl(
