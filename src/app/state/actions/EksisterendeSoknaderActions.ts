@@ -1,6 +1,6 @@
 import {ApiPath}                                  from 'app/apiConfig';
 import {JaNeiVetikke, EksisterendeSoknaderActionKeys} from 'app/models/enums';
-import {IError, IPersonlig} from 'app/models/types';
+import {IError} from 'app/models/types';
 import {convertResponseToError, get, post}        from 'app/utils';;
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
 import {ISoknadSvar} from "../../models/types/SoknadSvar";
@@ -71,26 +71,6 @@ export function createSoknad(journalpostid: string, ident1: string, ident2: stri
 
     dispatch(createSoknadRequestAction());
 
-    const initialInfo: IPersonlig = {
-        journalpostId: journalpostid,
-        soeknad: {
-            søknadId: '',
-            perioder: [{}],
-            arbeid: {
-                arbeidstaker: [],
-                selvstendigNaeringsdrivende: [],
-                frilanser: []
-            },
-            beredskap: [],
-            nattevaak: [],
-            spraak: 'nb',
-            barn: {},
-            tilsynsordning: {
-                iTilsynsordning: JaNeiVetikke.NEI,
-                opphold: []
-            }
-        }
-    };
 
     const requestBody = {
         journalpostId: journalpostid,
