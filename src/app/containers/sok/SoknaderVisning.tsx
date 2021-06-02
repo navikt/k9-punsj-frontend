@@ -15,7 +15,6 @@ import {ISoknaderVisningState} from "../../models/types/SoknaderVisningState";
 import {setIdentSokAction, setStepSokAction} from "../../state/actions/SoknaderSokActions";
 import {SoknaderVisningStep} from "../../models/enums/SoknaderVisningStep";
 import {
-    chooseSoknadAction,
     closeSoknadAction,
     openSoknadAction,
     resetSoknadidAction,
@@ -29,6 +28,7 @@ import {
 } from "../../state/actions";
 import {
     openEksisterendeSoknadAction,
+    chooseEksisterendeSoknadAction,
 } from 'app/state/actions';
 import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
 
@@ -44,10 +44,10 @@ export interface ISoknaderSokDispatchProps {
     undoSearchForSoknaderAction: typeof undoSearchForSoknaderAction;
     openSoknadAction: typeof openSoknadAction;
     closeSoknadAction: typeof closeSoknadAction;
-    chooseSoknadAction: typeof chooseSoknadAction;
     resetSoknadidAction: typeof resetSoknadidAction;
     resetPunchAction: typeof resetPunchAction;
     openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
+    chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
 }
 
 export interface ISoknaderVisningComponentProps {
@@ -136,7 +136,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
 
     const chooseSoknad = (soknad: IPSBSoknad) => {
         window.history.pushState("","", "/rediger");
-        props.chooseSoknadAction(soknad);
+        props.chooseEksisterendeSoknadAction(soknad);
         setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
     };
 
@@ -164,7 +164,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 <Knapp
                     key={soknadId}
                     mini={true}
-                    onClick={() => props.openEksisterendeSoknadAction(s)}
+                    onClick={() => chooseSoknad(s)}
                 >{intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Knapp>
             ];
@@ -192,6 +192,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                         <th>{intlHelper(intl, 'tabell.fnrellerdato')}</th>
                         <th>{intlHelper(intl, 'tabell.fraogmed')}</th>
                         <th>{intlHelper(intl, 'tabell.tilogmed')}</th>
+                        <th/>
                     </tr>
                     </thead>
                     <tbody>{rows}</tbody>
@@ -248,9 +249,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
     openSoknadAction: (soknad: IPSBSoknad) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),
-    chooseSoknadAction: (soknad: IPSBSoknad) => dispatch(chooseSoknadAction(soknad)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
+    chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
 });
 

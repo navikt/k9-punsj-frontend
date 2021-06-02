@@ -1510,7 +1510,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         })
                     }
                 } else {
-                    this.updateSoknadState({arbeidstid: {...this.state.soknad.arbeidstid, arbeidstakerList: []}})
+                    this.updateSoknadState({arbeidstid: {...this.state.soknad.arbeidstid, arbeidstakerList: []}});
+                    this.updateSoknad({arbeidstid: {...this.state.soknad.arbeidstid, arbeidstakerList: []}})
                 }
                 break;
             case Arbeidsforhold.FRILANSER:
@@ -1530,6 +1531,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     }
                 } else {
                     this.updateSoknadState({
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            frilanserArbeidstidInfo: null
+                        },
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            frilanser: null
+                        }
+                    });
+                    this.updateSoknad({
                         arbeidstid: {
                             ...this.state.soknad.arbeidstid,
                             frilanserArbeidstidInfo: null
@@ -1558,6 +1569,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     }
                 } else {
                     this.updateSoknadState({
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: null
+                        },
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            selvstendigNæringsdrivendeArbeidstidInfo: null
+                        },
+                    });
+                    this.updateSoknad({
                         opptjeningAktivitet: {
                             ...this.state.soknad.opptjeningAktivitet,
                             selvstendigNaeringsdrivende: null

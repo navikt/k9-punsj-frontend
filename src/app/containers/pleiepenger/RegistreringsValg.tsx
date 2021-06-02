@@ -1,5 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
-import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
+import React, { useState} from "react";
 import {FormattedMessage} from "react-intl";
 import {EksisterendeSoknader} from "./EksisterendeSoknader";
 import {PunchStep} from "../../models/enums";
