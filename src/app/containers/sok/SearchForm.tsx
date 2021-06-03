@@ -9,6 +9,7 @@ import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {Hovedknapp} from "nav-frontend-knapper";
 
 
 export interface ISearchFormStateProps {
@@ -66,7 +67,9 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 
         return (
             <div className="container">
+                <h1><FormattedMessage id="søk.overskrift"/></h1>
                 <SkjemaGruppe>
+                    <div className={"input-rad"}>
                     <Input
                         value={journalpostid}
                         bredde="L"
@@ -74,11 +77,13 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         label={
                             <FormattedMessage id="søk.label.jpid"/>
                         }/>
-                    <SokKnapp
-                        onClick={onClick}
-                        tekstId="søk.knapp.label"
-                        disabled={disabled}/>
+                        <SokKnapp
+                            onClick={onClick}
+                            tekstId={"søk.knapp.label"}
+                            disabled={disabled}
+                        />
                         <VerticalSpacer sixteenPx={true} />
+                    </div>
                     {this.props.notFound &&
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>

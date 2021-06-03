@@ -372,10 +372,10 @@
   "modal.okgaatillos.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
   "modal.settpaavent.feil": "Det oppstod en feil. Prøv igjen senere.",
 
-
+  "søk.overskrift": "Søk på journalpost-ID",
   "søk.label": "Søk med fødselsnummer eller D-nummer",
   "søk.label.fnr": "Fødselsnummer",
-  "søk.label.jpid": "Søk med journalpost-ID",
+  "søk.label.jpid": "Journalpost-ID",
   "søk.knapp.label": "Søk",
   "søk.info.perioder": "Velg perioden for søknaden:",
   "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
