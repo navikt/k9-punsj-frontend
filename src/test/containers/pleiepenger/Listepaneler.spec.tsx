@@ -54,7 +54,8 @@ const setupListepaneler = (listepanelerPropsPartial?: Partial<IListepanelerProps
         editSoknad: jest.fn(),
         editSoknadState: jest.fn(),
         kanHaFlere: true,
-        ...listepanelerPropsPartial
+        medSlettKnapp: true,
+        ...listepanelerPropsPartial,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: {[key: string]: string}) => id);

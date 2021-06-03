@@ -286,11 +286,18 @@
           display: flex;
 
           .fjern {
+            display: inline-flex;
+            color: #c30000;
+            font-size: 16px;
+            line-height: 22px;
+            text-decoration-line: underline;
             margin: auto 0 0.3rem auto;
             cursor: pointer;
+            .slettIcon {margin-right: 0.5rem;}
           }
+
           .fjern-feil {
-            cursor: pointer;
+            .fjern();
             margin: auto 0 2.2rem -1.6rem;
           }
         }
@@ -331,6 +338,11 @@
           }
         }
 
+        .listepanelbunn_perioder {
+          .listepanelbunn();
+          margin-top: 2rem;
+        }
+
         &.arbeidstakerpanel {
           .container {
             text-align: left;
@@ -362,7 +374,6 @@
             .leggtillisteelementknapp:not(:hover) {
               background-color: @navBlaLighten80
             }
-
           }
         }
 

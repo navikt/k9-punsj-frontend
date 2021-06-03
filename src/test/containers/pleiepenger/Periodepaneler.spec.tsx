@@ -57,6 +57,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
         editSoknad: jest.fn(),
         editSoknadState: jest.fn(),
         kanHaFlere: true,
+        medSlettKnapp: true,
         ...periodepanelerPropsPartial
     };
 

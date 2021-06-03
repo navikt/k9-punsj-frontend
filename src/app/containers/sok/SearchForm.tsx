@@ -4,7 +4,6 @@ import React from "react";
 import SokKnapp from "../../components/knapp/SokKnapp";
 import './sok.less';
 import {Input, SkjemaGruppe} from "nav-frontend-skjema";
-import {SoknaderVisning} from "./SoknaderVisning";
 import {getJournalpost} from "../../state/reducers/FellesReducer";
 import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
