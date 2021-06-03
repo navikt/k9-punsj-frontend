@@ -69,6 +69,7 @@ const setupFordeling = (
     const identState: IIdentState = {
         ident1: '',
         ident2: '',
+        annenSokerIdent: ''
     };
 
     const fordelingStateProps: IFordelingStateProps = {

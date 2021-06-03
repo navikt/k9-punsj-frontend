@@ -137,9 +137,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
+    const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
-    const skalViseFeilmelding = (ident: string | null) =>
-        ident && ident.length && !IdentRules.isIdentValid(ident);
+    const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
+
+    const skalViseFeilmelding = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
+
 
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
@@ -151,7 +154,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const handleIdent1Blur = (event: any) =>
         props.setIdentAction(event.target.value, identState.ident2);
     const handleIdent2Blur = (event: any) =>
-        props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value);
+        props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
+    const handleIdentAnnenSokerBlur = (event: any) =>
+        props.setIdentAction(identState.ident1, identState.ident2, event.target.value);
 
     const handleRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
@@ -255,6 +260,33 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             }
                             bredde={"M"}
                         />}
+                        {riktigIdentIJournalposten === JaNei.JA && journalpost?.punsjInnsendingType?.erScanning && <>
+                          <VerticalSpacer sixteenPx={true}/>
+                          <Checkbox
+                            label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
+                            onChange={(e) => {setToSokereIJournalpost(e.target.checked)}}
+                          />
+                          <VerticalSpacer sixteenPx={true}/>
+                            {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
+                              <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}</AlertStripeInfo>
+                              <Input
+                                label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
+                                onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
+                                onBlur={handleIdentAnnenSokerBlur}
+                                value={annenSokerIdent}
+                                className="bold-label"
+                                maxLength={11}
+                                feil={
+                                    skalViseFeilmelding(identState.annenSokerIdent)
+                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                        : undefined
+                                }
+                                bredde={"M"}
+                              />
+                              <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
+                            </div>
+                            }
+                        </>}
                         <VerticalSpacer eightPx={true}/>
                         <Input
                             label={intlHelper(intl, 'ident.identifikasjon.barn')}
@@ -424,8 +456,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setSakstypeAction(sakstype)),
     omfordel: (journalpostid: string, norskIdent: string) =>
         dispatch(omfordelAction(journalpostid, norskIdent)),
-    setIdentAction: (ident1: string, ident2: string | null) =>
-        dispatch(setIdentFellesAction(ident1, ident2)),
+    setIdentAction: (ident1: string, ident2: string, annenSokerIdent: string) =>
+        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     lukkJournalpostOppgave: (jpid: string) =>

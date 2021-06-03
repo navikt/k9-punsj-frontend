@@ -3,6 +3,11 @@ export interface IJournalpost {
     norskIdent?: string,
     dokumenter: IDokument[];
     dato?: string;
+    punsjInnsendingType? : {
+        kode: string;
+        navn: string;
+        erScanning: boolean;
+    }
 }
 
 export interface IDokument {
