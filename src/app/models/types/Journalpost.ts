@@ -17,4 +17,12 @@ export interface IJournalpostInfo {
     journalpostId: string;
     dato: string;
     dokumenter: IDokumentInfo[];
+    klokkeslett?: string;
+    punsjInnsendingType: IInnsendingType;
+}
+
+export interface IInnsendingType {
+    kode: string;
+    navn: string;
+    erScanning: boolean
 }

@@ -1,5 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
-import {RadioGruppe, RadioPanel} from "nav-frontend-skjema";
+import React, { useState} from "react";
 import {FormattedMessage} from "react-intl";
 import {EksisterendeSoknader} from "./EksisterendeSoknader";
 import {PunchStep} from "../../models/enums";
@@ -7,14 +6,13 @@ import './registreringsValg.less';
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction} from "../../state/actions";
 import {connect} from "react-redux";
-import {apiUrl, setHash} from "../../utils";
-import {AlertStripeFeil, AlertStripeInfo} from "nav-frontend-alertstriper";
+import { setHash} from "../../utils";
+import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState} from "../../models/types";
 import {RootStateType} from "../../state/RootState";
 
 import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
 import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from "../../state/actions/JournalposterPerIdentActions";
-import {ApiPath} from "../../apiConfig";
 
 export interface IRegistreringsValgComponentProps {
     journalpostid: string;
@@ -48,7 +46,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         ident2,
         getPunchPath,
         eksisterendeSoknaderState,
-        journalposterState
     } = props;
     const [valgtOption, setValgtOption] = useState<string>("nysoknad");
 
@@ -144,7 +141,7 @@ const mapStateToProps = (
     state: RootStateType
 ): IEksisterendeSoknaderStateProps => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
-    eksisterendeSoknaderState: state.PLEIEPENGER_SYKT_BARN.eksisterendeSoknaderState,
+    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
 });
 

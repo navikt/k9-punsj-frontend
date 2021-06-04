@@ -84,7 +84,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 !!props.onRemove && props.onRemove();
                             }}
                             tabIndex={0}
-                        ><BinSvg title={"fjern"}/></div>
+                        ><div className={"slettIcon"}><BinSvg title={"fjern"}/></div>
+                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}</div>
                     </div>
                 </Row>)}
             {kanHaFlere &&

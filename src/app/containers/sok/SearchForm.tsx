@@ -1,19 +1,15 @@
 import VerticalSpacer from "../../components/VerticalSpacer";
 import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
 import React from "react";
-
-import {Form} from "formik";
 import SokKnapp from "../../components/knapp/SokKnapp";
 import './sok.less';
 import {Input, SkjemaGruppe} from "nav-frontend-skjema";
-import {SoknaderVisning} from "./SoknaderVisning";
-import {ToggleKnapp} from "nav-frontend-toggle";
 import {getJournalpost} from "../../state/reducers/FellesReducer";
 import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
-import intlHelper from "../../utils/intlUtils";
+import {Hovedknapp} from "nav-frontend-knapper";
 
 
 export interface ISearchFormStateProps {
@@ -29,8 +25,6 @@ export interface ISearchFormDispatchProps {
 export interface ISearchFormComponentState {
     identitetsnummer?: string,
     journalpostid?: string;
-    visMapper?: boolean;
-    sokMedFnr?: boolean;
 }
 
 type ISearchFormProps =
@@ -43,8 +37,6 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
     state: ISearchFormComponentState = {
         identitetsnummer: '',
         journalpostid: '',
-        visMapper: false,
-        sokMedFnr: false
     };
 
     componentDidMount(): void {
@@ -59,17 +51,13 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
     render() {
 
 
-        const {identitetsnummer, journalpostid, sokMedFnr, visMapper} = this.state;
+        const {journalpostid} = this.state;
 
-        const disabled = sokMedFnr ? !identitetsnummer : !journalpostid;
+        const disabled = !journalpostid;
 
         const onClick = () => {
-            if (sokMedFnr) {
-                this.setState({visMapper: true});
-            } else {
-                if (journalpostid) {
-                    this.props.getJournalpost(journalpostid);
-                }
+            if (journalpostid) {
+                this.props.getJournalpost(journalpostid);
             }
         }
 
@@ -79,43 +67,23 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 
         return (
             <div className="container">
+                <h1><FormattedMessage id="søk.overskrift"/></h1>
                 <SkjemaGruppe>
-                    <ToggleKnapp
-                        // @ts-ignore
-                        className={sokMedFnr ? "venstreKnappAktiv" : "venstreKnapp"}
-                        onClick={() => this.setState({sokMedFnr: true})}
-                    >
-                        Søk med fødselsnummer
-                    </ToggleKnapp>
-                    <ToggleKnapp
-                        // @ts-ignore
-                        className={sokMedFnr ? "hoyreKnapp" : "hoyreKnappAktiv"}
-                        onClick={() => this.setState({sokMedFnr: false})}
-                    >
-                        Søk med journalpost-ID
-                    </ToggleKnapp>
-                    <VerticalSpacer eightPx={true}/>
-                    {sokMedFnr &&
-                    <Input
-                        value={identitetsnummer}
-                        bredde="L"
-                        label={
-                            <FormattedMessage id="søk.label.fnr"/>
-                        }
-                        onChange={(e) => this.setState({identitetsnummer: e.target.value})}/>}
-                    {!sokMedFnr &&
+                    <div className={"input-rad"}>
                     <Input
                         value={journalpostid}
                         bredde="L"
                         onChange={(e) => this.setState({journalpostid: e.target.value})}
                         label={
                             <FormattedMessage id="søk.label.jpid"/>
-                        }/>}
-                    <SokKnapp
-                        onClick={onClick}
-                        tekstId="søk.knapp.label"
-                        disabled={disabled}/>
+                        }/>
+                        <SokKnapp
+                            onClick={onClick}
+                            tekstId={"søk.knapp.label"}
+                            disabled={disabled}
+                        />
                         <VerticalSpacer sixteenPx={true} />
+                    </div>
                     {this.props.notFound &&
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>
@@ -124,14 +92,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
                     </AlertStripeInfo>}
-
                 </SkjemaGruppe>
-                <VerticalSpacer twentyPx={true}/>
-                {visMapper && identitetsnummer &&
-                <SoknaderVisning
-                    ident={identitetsnummer}
-                />}
-
             </div>
         );
     }

@@ -236,7 +236,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private initialFrilanser = new FrilanserOpptjening(
         {
             jobberFortsattSomFrilans: undefined,
-            startDato: undefined
+            startdato: undefined
         }
     )
 
@@ -372,6 +372,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 feilkodeprefiks={'arbeidstid.arbeidstaker'}
                 getErrorMessage={this.getErrorMessage}
                 kanHaFlere={true}
+                medSlettKnapp={true}
             />)
         };
 
@@ -385,19 +386,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         bredde={"M"}
                         label={intlHelper(intl, 'skjema.frilanserdato')}
                         type="date"
-                        value={this.state.soknad.opptjeningAktivitet.frilanser?.startDato || ''}
+                        value={this.state.soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                         className={"frilanser-startdato"}
-                        onChange={(e) => {
-                            this.updateSoknadState({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    frilanser: {
-                                        ...soknad.opptjeningAktivitet.frilanser,
-                                        startDato: e.target.value
-                                    }
+                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            opptjeningAktivitet: {
+                                ...opptjening,
+                                frilanser: {
+                                    ...soknad.opptjeningAktivitet.frilanser,
+                                    startdato: event.target.value
                                 }
-                            })
-                        }}
+                            }
+                        }))}
                     />
                     <RadioPanelGruppe
                         className="horizontalRadios"
@@ -420,17 +419,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         type="date"
                         value={this.state.soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className={"frilanser-sluttdato"}
-                        onChange={(e) => {
-                            this.updateSoknadState({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    frilanser: {
-                                        ...soknad.opptjeningAktivitet.frilanser,
-                                        sluttdato: e.target.value
-                                    }
+                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            opptjeningAktivitet: {
+                                ...opptjening,
+                                frilanser: {
+                                    ...soknad.opptjeningAktivitet.frilanser,
+                                    sluttdato: event.target.value
                                 }
-                            })
-                        }}
+                            }
+                        }))}
                     />}
                     {this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
                     (<>
@@ -456,6 +453,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             kanHaFlere={true}
                             getErrorMessage={this.getErrorMessage}
                             feilkodeprefiks={'arbeidstid.frilanser'}
+                            medSlettKnapp={false}
                         />
                     </>)}</>);
         };
@@ -818,6 +816,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             minstEn={true}
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere={true}
+                            medSlettKnapp={false}
                         />
                     </Container>
                 </>
@@ -842,6 +841,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     getErrorMessage={this.getErrorMessage}
                     feilkodeprefiks={'beredskap'}
                     kanHaFlere={true}
+                    medSlettKnapp={false}
                 />
             )
         };
@@ -865,6 +865,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     getErrorMessage={this.getErrorMessage}
                     feilkodeprefiks={'nattevåk'}
                     kanHaFlere={true}
+                    medSlettKnapp={false}
                 />
             )
         };
@@ -1030,6 +1031,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             getErrorMessage={this.getErrorMessage}
                             feilkodeprefiks={'utenlandsopphold'}
                             kanHaFlere={true}
+                            medSlettKnapp={false}
                         />
                     )}
                     {this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
@@ -1210,6 +1212,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         getErrorMessage={this.getErrorMessage}
                         feilkodeprefiks={'tilsynsordning'}
                         kanHaFlere={true}
+                        medSlettKnapp={false}
                     />
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
@@ -1276,6 +1279,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             getErrorMessage={() => undefined}
                             feilkodeprefiks={'bosteder'}
                             kanHaFlere={true}
+                            medSlettKnapp={false}
                         />
                     )}
                 </EkspanderbartpanelBase>
@@ -1510,7 +1514,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         })
                     }
                 } else {
-                    this.updateSoknadState({arbeidstid: {...this.state.soknad.arbeidstid, arbeidstakerList: []}})
+                    this.updateSoknadState({arbeidstid: {...this.state.soknad.arbeidstid, arbeidstakerList: []}});
+                    this.updateSoknad({arbeidstid: {...this.state.soknad.arbeidstid, arbeidstakerList: []}})
                 }
                 break;
             case Arbeidsforhold.FRILANSER:
@@ -1530,6 +1535,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     }
                 } else {
                     this.updateSoknadState({
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            frilanserArbeidstidInfo: null
+                        },
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            frilanser: null
+                        }
+                    });
+                    this.updateSoknad({
                         arbeidstid: {
                             ...this.state.soknad.arbeidstid,
                             frilanserArbeidstidInfo: null
@@ -1558,6 +1573,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     }
                 } else {
                     this.updateSoknadState({
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: null
+                        },
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            selvstendigNæringsdrivendeArbeidstidInfo: null
+                        },
+                    });
+                    this.updateSoknad({
                         opptjeningAktivitet: {
                             ...this.state.soknad.opptjeningAktivitet,
                             selvstendigNaeringsdrivende: null
