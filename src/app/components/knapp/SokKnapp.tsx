@@ -1,6 +1,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Knapp} from 'nav-frontend-knapper';
+import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import './knapper.less';
 
 interface ISokKnappProps {
@@ -14,16 +14,14 @@ onClick,
 tekstId,
 disabled,
                                                                }) => (
-    <Knapp
-        onClick={onClick}
-        htmlType="button"
+    <Hovedknapp
+        onClick={() => onClick()}
+        mini={true}
         className="sokknapp"
         disabled={disabled}
     >
-        <span>
       <FormattedMessage id={tekstId}/>
-    </span>
-    </Knapp>
+    </Hovedknapp>
 );
 
 export default SokKnapp;

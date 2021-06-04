@@ -248,7 +248,7 @@ const mapStateToProps = (
     state: RootStateType
 ): IEksisterendeSoknaderStateProps => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
-    eksisterendeSoknaderState: state.PLEIEPENGER_SYKT_BARN.eksisterendeSoknaderState,
+    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

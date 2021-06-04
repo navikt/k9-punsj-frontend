@@ -4,7 +4,7 @@ import {Knapp}             from 'nav-frontend-knapper';
 import Panel               from 'nav-frontend-paneler';
 import {SkjemaGruppe}      from 'nav-frontend-skjema';
 import * as React          from 'react';
-import {IntlShape}         from 'react-intl';
+import {FormattedMessage, IntlShape} from 'react-intl';
 import BinSvg from "../../assets/SVG/BinSVG";
 
 
@@ -38,6 +38,7 @@ export interface IListepanelerProps<T> {
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
+    medSlettKnapp: boolean
 }
 
 type ItemInfo = any;
@@ -45,7 +46,7 @@ type ItemInfo = any;
 export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (props: IListepanelerProps<ItemInfo>) => {
 
     const items = props.items.length > 0 ? props.items : [props.initialItem];
-    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere} = props;
+    const {intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere, medSlettKnapp} = props;
     const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (index: number, iteminfo: Partial<ItemInfo>) => {
@@ -81,16 +82,8 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                 key={itemIndex}
             >
                 <SkjemaGruppe feil={panelErrorMessage}>
-                    {!!component && component(
-                        itemInfo,
-                        itemIndex,
-                        info => editSoknad(editItem(itemIndex, info)),
-                        (info, showStatus) => editSoknadState(editItem(itemIndex, info), showStatus),
-                        `${feilkodeprefiks}[${itemIndex}]`,
-                        getErrorMessage,
-                        intl,
-                    )}
-                    <div className={"listepanelbunn"}>
+                    {feilkodeprefiks === 'arbeidstid.arbeidstaker' && items.length > 1 && (<h2><FormattedMessage id={'skjema.arbeidsforhold.teller'} values={{indeks: itemIndex+1}}/></h2>)}
+                    {!!medSlettKnapp && items.length > 1  && <div className={"listepanelbunn"}>
                         <div
                             id="slett"
                             className={"fjernlisteelementknapp"}
@@ -105,7 +98,16 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         ><div className={"slettIcon"}><BinSvg title={"fjern"}/></div>
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                         </div>
-                    </div>
+                    </div>}
+                    {!!component && component(
+                        itemInfo,
+                        itemIndex,
+                        info => editSoknad(editItem(itemIndex, info)),
+                        (info, showStatus) => editSoknadState(editItem(itemIndex, info), showStatus),
+                        `${feilkodeprefiks}[${itemIndex}]`,
+                        getErrorMessage,
+                        intl,
+                    )}
                 </SkjemaGruppe>
             </Panel>
         })}

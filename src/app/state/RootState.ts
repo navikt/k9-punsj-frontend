@@ -17,7 +17,6 @@ import {IdentReducer} from "./reducers/IdentReducer";
 
 export const rootReducer = combineReducers({
   [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
-    eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     punchFormState: PunchFormReducer,
     punchState: PunchReducer,
     signaturState: SignaturReducer,
@@ -39,6 +38,7 @@ export const rootReducer = combineReducers({
   journalposterPerIdentState: JournalposterPerIdentReducer,
   identState: IdentReducer,
   opprettIGosys: GosysOppgaveReducer,
+  eksisterendeSoknaderState: EksisterendeSoknaderReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

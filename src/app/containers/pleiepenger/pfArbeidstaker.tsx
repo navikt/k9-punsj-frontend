@@ -3,10 +3,9 @@ import {GetErrorMessage, PeriodeinfoPaneler} from 'app/containers/pleiepenger/Pe
 import intlHelper from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
 import * as React from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
-import {IntlShape} from 'react-intl';
+import { Container, Row} from 'react-bootstrap';
+import {FormattedMessage, IntlShape} from 'react-intl';
 import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 import {pfArbeidstider} from "./pfArbeidstider";
 
@@ -36,14 +35,6 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
             updateListeinfoInSoknadState({organisasjonsnummer, norskIdent});
             updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
-
-        const getFaktiskeTimerValue = (periodeindex: number) => {
-            return arbeidstaker.arbeidstidInfo.perioder[periodeindex].faktiskArbeidTimerPerDag;
-        }
-
-        const getNormaleTimerValue = (periodeindex: number) => {
-            return arbeidstaker.arbeidstidInfo.perioder[periodeindex].jobberNormaltTimerPerDag;
-        }
 
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
 
@@ -108,6 +99,7 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                     getErrorMessage={getErrorMessage}
                     feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
                     kanHaFlere={true}
+                    medSlettKnapp={false}
                 />
 
             </Container>

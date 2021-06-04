@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
 import {getEnvironmentVariable} from "../../utils";
+import intlHelper from "../../utils/intlUtils";
 
 interface IApplicationWrapperComponentProps {
   locale: Locale;
