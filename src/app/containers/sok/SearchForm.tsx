@@ -8,7 +8,7 @@ import {getJournalpost} from "../../state/reducers/FellesReducer";
 import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import {AlertStripeAdvarsel, AlertStripeInfo} from "nav-frontend-alertstriper";
 import {Hovedknapp} from "nav-frontend-knapper";
 
 
@@ -89,9 +89,9 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>
                     </AlertStripeInfo>}
                     {this.props.forbidden &&
-                    <AlertStripeInfo>
+                    <AlertStripeAdvarsel>
                         <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
-                    </AlertStripeInfo>}
+                    </AlertStripeAdvarsel>}
                 </SkjemaGruppe>
             </div>
         );
