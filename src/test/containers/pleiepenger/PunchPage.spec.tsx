@@ -83,7 +83,8 @@ const setupPunchPage = (
   const punchPageStateProps: IPunchPageStateProps = {
     punchState,
     journalpost,
-    identState
+    identState,
+    forbidden: false,
   };
 
   const punchPageComponentProps: IPunchPageComponentProps = {
