@@ -8,13 +8,13 @@ import intlHelper                          from 'app/utils/intlUtils';
 import {shallow}                           from 'enzyme';
 import {createIntl, IntlShape}             from 'react-intl';
 import {mocked}                            from 'ts-jest/utils';
-import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
+import {Periodeinfo} from "../../../app/models/types/Periodeinfo";
 import {ITilleggsinformasjon} from "../../../app/models/types/PSBSoknad";
 
 jest.mock('app/utils/intlUtils');
 
 const testTekst = 'Lorem ipsum dolor sit amet';
-const testPeriodeinfo: PeriodeinfoV2<ITilleggsinformasjon> = {
+const testPeriodeinfo: Periodeinfo<ITilleggsinformasjon> = {
     periode: {fom: '2020-01-01', tom: '2020-12-31'},
     tilleggsinformasjon: testTekst
 };
@@ -27,7 +27,7 @@ const testIntl = createIntl({locale: 'nb', defaultLocale: 'nb'});
 const testKodeord = 'kodeord';
 
 const setupPfTilleggsinformasjon = (
-    optionalPeriodeinfo?: PeriodeinfoV2<ITilleggsinformasjon>,
+    optionalPeriodeinfo?: Periodeinfo<ITilleggsinformasjon>,
     optionalPeriodeindex?: number,
     optionalUpdatePeriodeinfoInSoknad?: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
     optionalUpdatePeriodeinfoInSoknadState?: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,

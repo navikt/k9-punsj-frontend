@@ -1,4 +1,4 @@
-import {IPeriode} from 'app/models/types/Periode';
+import {IPeriode} from "./Periode";
 
 export type Periodeinfo<T> = {
     periode?: IPeriode;

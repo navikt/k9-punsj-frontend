@@ -8,13 +8,13 @@ import intlHelper                          from 'app/utils/intlUtils';
 import {Textarea}                          from 'nav-frontend-skjema';
 import * as React                          from 'react';
 import {IntlShape}                         from 'react-intl';
-import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
+import {Periodeinfo} from "../../models/types/Periodeinfo";
 import {ITilleggsinformasjon} from "../../models/types/PSBSoknad";
 
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
 
     return (
-        periodeinfo: PeriodeinfoV2<ITilleggsinformasjon>,
+        periodeinfo: Periodeinfo<ITilleggsinformasjon>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,
