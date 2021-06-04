@@ -84,11 +84,11 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         />
                         <VerticalSpacer sixteenPx={true} />
                     </div>
-                    {this.props.notFound &&
+                    {!!this.props.notFound &&
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>
                     </AlertStripeInfo>}
-                    {this.props.forbidden &&
+                    {!!this.props.forbidden &&
                     <AlertStripeAdvarsel>
                         <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
                     </AlertStripeAdvarsel>}
