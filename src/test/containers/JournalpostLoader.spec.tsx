@@ -26,6 +26,8 @@ const setupLoader = ({
       journalpost={journalpost}
       journalpostRequestError={journalpostRequestError}
       isJournalpostLoading={isJournalpostLoading}
+      forbidden={false}
+      notFound={false}
     />
   );
 
@@ -69,6 +71,8 @@ describe('JournalpostLoader', () => {
         renderOnLoadComplete={renderedOnLoad}
         journalpostId={journalpostId}
         getJournalpost={jest.fn()}
+        forbidden={false}
+        notFound={false}
       />
     );
 
