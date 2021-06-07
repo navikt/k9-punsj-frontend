@@ -17,6 +17,8 @@ const setupLoader = ({
   journalpostId = '200',
   journalpostRequestError,
   isJournalpostLoading,
+    forbidden,
+    notFound
 }: Partial<JournapostLoaderProps>): RenderResult => {
   const loader = render(
     <JournalpostLoaderImpl
@@ -26,8 +28,8 @@ const setupLoader = ({
       journalpost={journalpost}
       journalpostRequestError={journalpostRequestError}
       isJournalpostLoading={isJournalpostLoading}
-      forbidden={false}
-      notFound={false}
+      forbidden={forbidden}
+      notFound={notFound}
     />
   );
 
@@ -79,7 +81,7 @@ describe('JournalpostLoader', () => {
     expect(journalpost.find('NavFrontendSpinner')).toHaveLength(1);
   });
 
- /*
+
    it('Viser feilmelding hvis journalpost ikke finnes', () => {
     const testId = 'test-id';
     const renderedOnLoad = () => <div data-testid={testId} />;
@@ -87,6 +89,7 @@ describe('JournalpostLoader', () => {
     const { queryByTestId } = setupLoader({
       journalpostRequestError: { status: 404 },
       renderOnLoadComplete: renderedOnLoad,
+      notFound: true
     });
 
     expect(queryByTestId(testId)).toBeNull();
@@ -108,6 +111,8 @@ describe('JournalpostLoader', () => {
         renderOnLoadComplete={renderedOnLoad}
         journalpostId={journalpostId}
         getJournalpost={jest.fn()}
+        forbidden={false}
+        notFound={false}
       />
     );
 
@@ -115,5 +120,5 @@ describe('JournalpostLoader', () => {
     expect(journalpost.find('FormattedMessage').prop('id')).toEqual(
       'startPage.feil.ingendokumenter'
     );
-  }); */
+  });
 });

@@ -36,7 +36,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
                                                                                           getJournalpost,
                                                                                           journalpostId,
                                                                                           journalpost,
-                                                                                          journalpostRequestError,
                                                                                           forbidden, notFound
                                                                                       }) => {
     useEffect(() => {
