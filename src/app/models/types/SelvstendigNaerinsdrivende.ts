@@ -1,10 +1,10 @@
 import intlHelper from "../../utils/intlUtils";
 import {IntlShape} from "react-intl";
-import {IPeriodeV2, PeriodeV2} from "./PeriodeV2";
-import {PeriodeinfoV2} from "./PeriodeInfoV2";
+import {IPeriode, Periode} from "./Periode";
+import {Periodeinfo} from "./Periodeinfo";
 
 export interface ISelvstendigNaerinsdrivende {
-    periode?: IPeriodeV2;
+    periode?: IPeriode;
     virksomhetstyper?: string[];
     registrertIUtlandet?: boolean;
     landkode?: string;
@@ -18,8 +18,8 @@ export interface ISelvstendigNaerinsdrivende {
     endringBegrunnelse?: string;
 }
 
-export class SelvstendigNaerinsdrivende implements Required<PeriodeinfoV2<ISelvstendigNaerinsdrivende>> {
-    periode: PeriodeV2;
+export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvstendigNaerinsdrivende>> {
+    periode: Periode;
     virksomhetstyper: string[];
     registrertIUtlandet: boolean;
     landkode: string;
@@ -32,8 +32,8 @@ export class SelvstendigNaerinsdrivende implements Required<PeriodeinfoV2<ISelvs
     endringInntekt: string;
     endringBegrunnelse: string;
 
-    constructor(selvstendigNaeringsdrivende: PeriodeinfoV2<ISelvstendigNaerinsdrivende>) {
-        this.periode = new PeriodeV2(selvstendigNaeringsdrivende.periode || {});
+    constructor(selvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende>) {
+        this.periode = new Periode(selvstendigNaeringsdrivende.periode || {});
         this.virksomhetstyper = selvstendigNaeringsdrivende.virksomhetstyper || [];
         this.landkode = selvstendigNaeringsdrivende.landkode || "";
         this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || '';

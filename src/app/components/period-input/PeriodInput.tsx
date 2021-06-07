@@ -5,13 +5,13 @@ import * as React from 'react';
 import {Container, Row} from 'react-bootstrap';
 import {IntlShape} from 'react-intl';
 import './periodInput.less';
-import {IPeriodeV2} from "../../models/types/PeriodeV2";
+import {IPeriode} from "../../models/types/Periode";
 
 export interface IPeriodInputProps {
-    periode: IPeriodeV2;
+    periode: IPeriode;
     intl: IntlShape;
-    onChange: (periode: IPeriodeV2) => void;
-    onBlur: (periode: IPeriodeV2) => void;
+    onChange: (periode: IPeriode) => void;
+    onBlur: (periode: IPeriode) => void;
     onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;

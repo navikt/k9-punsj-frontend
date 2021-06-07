@@ -1,10 +1,10 @@
 import {FrilanserOpptjening} from "./FrilanserOpptjening";
-import {PeriodeinfoV2} from "./PeriodeInfoV2";
+import {Periodeinfo} from "./Periodeinfo";
 import {
-    IPeriodeV2,
-    PeriodeV2
-} from "./PeriodeV2";
-import {ArbeidstakerV2} from "./ArbeidstakerV2";
+    IPeriode,
+    Periode
+} from "./Periode";
+import {Arbeidstaker} from "./Arbeidstaker";
 import {
     ArbeidstidInfo,
     Barn,
@@ -14,13 +14,13 @@ import {
     IOpptjeningAktivitet,
     ISoknadsInfo,
     ITilleggsinformasjon,
-    ITilsynsordningV2,
+    ITilsynsordning,
     IUtenlandsOpphold,
     IUttak,
     Omsorg,
     SelvstendigNaeringsdrivendeOpptjening, SoknadsInfo,
-    TilleggsinformasjonV2,
-    TilsynsordningV2,
+    Tilleggsinformasjon,
+    Tilsynsordning,
     UtenlandsOpphold,
     Uttak
 } from "./PSBSoknad";
@@ -34,17 +34,17 @@ export interface IPSBSoknadUt {
     barn: IBarn;
     sendtInn?: boolean;
     erFraK9?: boolean;
-    soeknadsperiode?: IPeriodeV2 | null;
+    soeknadsperiode?: IPeriode | null;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
-    beredskap?: PeriodeinfoV2<ITilleggsinformasjon>[];
-    nattevaak?: PeriodeinfoV2<ITilleggsinformasjon>[];
-    tilsynsordning?: ITilsynsordningV2;
-    uttak?: PeriodeinfoV2<IUttak>[];
-    utenlandsopphold?: PeriodeinfoV2<IUtenlandsOpphold>[];
-    lovbestemtFerie?: IPeriodeV2[];
+    beredskap?: Periodeinfo<ITilleggsinformasjon>[];
+    nattevaak?: Periodeinfo<ITilleggsinformasjon>[];
+    tilsynsordning?: ITilsynsordning;
+    uttak?: Periodeinfo<IUttak>[];
+    utenlandsopphold?: Periodeinfo<IUtenlandsOpphold>[];
+    lovbestemtFerie?: IPeriode[];
     omsorg?: IOmsorg;
-    bosteder?: PeriodeinfoV2<IUtenlandsOpphold>[];
+    bosteder?: Periodeinfo<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
@@ -60,15 +60,15 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     barn: Barn | {};
     sendtInn: boolean;
     erFraK9: boolean;
-    soeknadsperiode: PeriodeV2 | null;
+    soeknadsperiode: Periode | null;
     opptjeningAktivitet: OpptjeningAktivitetUt;
     arbeidstid: ArbeidstidUt;
-    beredskap: TilleggsinformasjonV2[];
-    nattevaak: TilleggsinformasjonV2[];
-    tilsynsordning: TilsynsordningV2;
+    beredskap: Tilleggsinformasjon[];
+    nattevaak: Tilleggsinformasjon[];
+    tilsynsordning: Tilsynsordning;
     uttak: Uttak[];
     utenlandsopphold: UtenlandsOpphold[];
-    lovbestemtFerie: PeriodeV2[];
+    lovbestemtFerie: Periode[];
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;
@@ -84,15 +84,15 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
         this.sendtInn = soknad.sendtInn || false;
         this.erFraK9 = soknad.erFraK9 || false;
-        this.soeknadsperiode = soknad.soeknadsperiode ? new PeriodeV2(soknad.soeknadsperiode) : null;
+        this.soeknadsperiode = soknad.soeknadsperiode ? new Periode(soknad.soeknadsperiode) : null;
         this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
-        this.beredskap = (soknad.beredskap || []).map(b => new TilleggsinformasjonV2(b));
-        this.nattevaak = (soknad.nattevaak || []).map(n => new TilleggsinformasjonV2(n));
-        this.tilsynsordning = new TilsynsordningV2(soknad.tilsynsordning || {});
+        this.beredskap = (soknad.beredskap || []).map(b => new Tilleggsinformasjon(b));
+        this.nattevaak = (soknad.nattevaak || []).map(n => new Tilleggsinformasjon(n));
+        this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
-        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new PeriodeV2(p));
+        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new Periode(p));
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
@@ -104,22 +104,22 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
 export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
     selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
     frilanser: FrilanserOpptjening | null;
-    arbeidstaker: ArbeidstakerV2[];
+    arbeidstaker: Arbeidstaker[];
 
     constructor(arbeid: IOpptjeningAktivitet) {
-        this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new ArbeidstakerV2(at));
+        this.arbeidstaker = (arbeid.arbeidstaker || []).map(at => new Arbeidstaker(at));
         this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende ? new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende) : null;
         this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
     }
 }
 
 export class ArbeidstidUt implements Required<IArbeidstid> {
-    arbeidstakerList: ArbeidstakerV2[];
+    arbeidstakerList: Arbeidstaker[];
     frilanserArbeidstidInfo: ArbeidstidInfo | null;
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | {};
 
     constructor(a: IArbeidstid) {
-        this.arbeidstakerList = (a.arbeidstakerList || []).map(at => new ArbeidstakerV2(at));
+        this.arbeidstakerList = (a.arbeidstakerList || []).map(at => new Arbeidstaker(at));
         this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidInfo(a.frilanserArbeidstidInfo) : null;
         this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo) : {};
     }
