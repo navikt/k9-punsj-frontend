@@ -78,8 +78,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     if (!journalpost.dokumenter.length) {
         return (
             <AlertStripeFeil>
-                <FormattedMessage id="startPage.feil.ingendokumenter"/>
-            </AlertStripeFeil>
+                <FormattedMessage id="startPage.feil.ingendokumenter"/></AlertStripeFeil>
         );
     }
 

@@ -81,20 +81,6 @@ describe('JournalpostLoader', () => {
     expect(journalpost.find('NavFrontendSpinner')).toHaveLength(1);
   });
 
-
-   it('Viser feilmelding hvis journalpost ikke finnes', () => {
-    const testId = 'test-id';
-    const renderedOnLoad = () => <div data-testid={testId} />;
-
-    const { queryByTestId } = setupLoader({
-      journalpostRequestError: { status: 404 },
-      renderOnLoadComplete: renderedOnLoad,
-      notFound: true
-    });
-
-    expect(queryByTestId(testId)).toBeNull();
-  });
-
  it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
     const journalpostId = '200';
     const testId = 'test-id';
@@ -116,8 +102,9 @@ describe('JournalpostLoader', () => {
       />
     );
 
-    expect(journalpost.find('AlertStripeFeil')).toHaveLength(1);
-    expect(journalpost.find('FormattedMessage').prop('id')).toEqual(
+    const alert = journalpost.find('AlertStripeFeil');
+    expect(alert).toHaveLength(1);
+    expect(alert.childAt(0).prop('id')).toEqual(
       'startPage.feil.ingendokumenter'
     );
   });
