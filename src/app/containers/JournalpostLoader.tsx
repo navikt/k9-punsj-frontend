@@ -60,11 +60,15 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     }
 
     if (!!notFound) {
-        return (<FeilmeldingPanel messageId={"startPage.feil.journalpost"}/>);
+        return (
+            <FeilmeldingPanel messageId={"startPage.feil.journalpost"}/>
+        );
     }
 
     if (!!forbidden) {
-        return (<FeilmeldingPanel messageId={"startPage.feil.ikketilgang"}/>);
+        return (
+            <FeilmeldingPanel messageId={"startPage.feil.ikketilgang"}/>
+        );
     }
 
     if (!journalpost) {
