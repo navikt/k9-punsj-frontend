@@ -81,6 +81,7 @@ import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import ErDuSikkerModal from "./ErDuSikkerModal";
 import moment from "moment";
+import classNames from "classnames";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -923,8 +924,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         </div>}</SkjemaGruppe>
                     {!soknad.soeknadsperiode && <div className={"knappecontainer"}>
                         <div
-                            id="leggtil"
-                            className={"leggtil"}
+                            id="leggtilsoknadsperiode"
+                            className={"leggtilsoknadsperiode"}
                             role="button"
                             onClick={() => this.updateSoknadState({soeknadsperiode: this.initialPeriode})}
                             tabIndex={0}
@@ -1180,7 +1181,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
-                    className={"punchform__paneler"}
+                    className={classNames('punchform__paneler', 'tilsynsordning')}
                     tittel={intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}>
                     <RadioPanelGruppe
@@ -1336,13 +1337,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"submit-knapper"}>
                     <p className="sendknapp-wrapper">
                         <Knapp
+                            className={"send-knapp"}
                             onClick={() => this.handleSubmit()}
                         >
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Knapp>
 
                         <Knapp
-                            className={"vent"}
+                            className={"vent-knapp"}
                             onClick={() => this.setState({showSettPaaVentModal: true})}
                             disabled={false}
                         >

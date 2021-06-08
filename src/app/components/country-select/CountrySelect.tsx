@@ -19,7 +19,7 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
 
     const countryList: ICountry[] = [];
-    Object.keys(countries.getAlpha3Codes()).map(code => countryList.push({code, name: countries.getName(code, locale)}));
+    Object.keys(countries.getAlpha3Codes()).forEach(code => countryList.push({code, name: countries.getName(code, locale)}));
     countryList.sort((a,b) => (a.name > b.name) ? 1 : -1);
     if (!!props.unselectedoption) {countryList.unshift({code: '', name: props.unselectedoption})}
 
