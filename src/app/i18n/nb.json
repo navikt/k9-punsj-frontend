@@ -78,7 +78,7 @@
   "ident.identifikasjon.kopiAvJournalpostEksisterer":                                             "Det finnes allerede en kopi av denne journalposten, og det vil ikke bli opprettet en ny journalpost for denne søkeren.",
   "ident.identifikasjon.kopiAvJournalpostOpprettet":                                              "Kopi av journalpost opprettet.",
   "ident.identifikasjon.kopiAvJournalManglerRettigheter":                                          "Mangler rettigheter for opprettelse av kopi av journalpost.",
-  "ident.identifikasjon.kopiAvJournalFeil":                                                        "Noe gikk galt.",
+  "ident.identifikasjon.kopiAvJournalFeil":                                                        "Noe gikk galt. Prøv igjen senere.",
   "ident.identifikasjon.annenSoker":                                                               "Fødselsnummer annen søker",
   "ident.knapp.usignert":                                                                         "Send til instans for behandling av usignerte søknader",
   "ident.knapp.nestesteg":                                                                        "Videre",
