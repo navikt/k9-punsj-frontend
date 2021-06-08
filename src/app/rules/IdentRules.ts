@@ -28,7 +28,7 @@ export class IdentRules {
                 return this.isIdentValid(ident1) && this.isIdentValid(ident2);
             } else if (!ident2) {
                 return this.isIdentValid(ident1);
-            }else if (annenSokerIdent !== '') {
+            }else if (typeof annenSokerIdent === 'string' && annenSokerIdent !== '') {
                 return this.isIdentValid(annenSokerIdent);
             }
             return false;
