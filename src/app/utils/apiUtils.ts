@@ -3,6 +3,7 @@ import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 import { String } from 'typescript-string-operations';
 import ResponseError from '../models/types/ResponseError';
+import {canStringBeParsedToJSON} from "./formatUtils";
 
 const Headers = require('fetch-headers');
 
@@ -87,7 +88,7 @@ export async function post<BodyType>(
       login();
     } else if (!!callbackIfAuth) {
       const data = await response.text();
-      const jsonData = data ? JSON.parse(data) : undefined;
+      const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
       await callbackIfAuth(response, jsonData);
     }
     return response;

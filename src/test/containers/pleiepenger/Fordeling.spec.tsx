@@ -36,6 +36,7 @@ const setupFordeling = (
         setSakstypeAction: jest.fn(),
         setIdentAction: jest.fn(),
         sjekkOmSkalTilK9: jest.fn(),
+        kopierJournalpost: jest.fn(),
         lukkJournalpostOppgave: jest.fn(),
         resetOmfordelAction: jest.fn(),
         lukkOppgaveReset: jest.fn(),
@@ -69,6 +70,7 @@ const setupFordeling = (
     const identState: IIdentState = {
         ident1: '',
         ident2: '',
+        annenSokerIdent: ''
     };
 
     const fordelingStateProps: IFordelingStateProps = {
@@ -76,7 +78,12 @@ const setupFordeling = (
         fordelingState,
         journalpostId: journalpostid,
         identState,
-        opprettIGosysState: opprettIGosys
+        opprettIGosysState: opprettIGosys,
+        dedupkey: '',
+        fellesState: {
+            dedupKey: '',
+            kopierJournalpostSuccess: true
+        }
     };
 
     mocked(intlHelper).mockImplementation(

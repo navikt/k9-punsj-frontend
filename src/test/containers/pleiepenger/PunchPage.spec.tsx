@@ -78,6 +78,7 @@ const setupPunchPage = (
   const identState: IIdentState = {
     ident1: '',
     ident2: null,
+    annenSokerIdent: null
   };
 
   const punchPageStateProps: IPunchPageStateProps = {
