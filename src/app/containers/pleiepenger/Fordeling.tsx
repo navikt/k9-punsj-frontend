@@ -486,7 +486,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
-        dispatch(kopierJournalpost(ident1, ident2, annenIdent, journalpostId, dedupkey)),
+        dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) =>
         dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () =>
