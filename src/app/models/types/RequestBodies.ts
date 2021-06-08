@@ -29,3 +29,10 @@ export interface ISkalTilK9 {
     barnIdent: string;
     journalpostId: string;
 }
+
+export interface IKopierJournalpost {
+    dedupKey: string;
+    fra: string;
+    til: string;
+    barn: string;
+}

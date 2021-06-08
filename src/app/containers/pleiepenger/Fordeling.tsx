@@ -32,6 +32,7 @@ import {IIdentState} from "../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import ModalWrapper from "nav-frontend-modal";
+import {IFellesState, kopierJournalpost} from "../../state/reducers/FellesReducer";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -39,6 +40,8 @@ export interface IFordelingStateProps {
     journalpostId: string;
     identState: IIdentState;
     opprettIGosysState: IGosysOppgaveState;
+    fellesState: IFellesState;
+    dedupkey: string;
 }
 
 export interface IFordelingDispatchProps {
@@ -46,6 +49,7 @@ export interface IFordelingDispatchProps {
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
+    kopierJournalpost: typeof kopierJournalpost;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
@@ -168,9 +172,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     }
 
     const handleVidereClick = () => {
+        if(identState.ident1 && identState.ident2 && identState.annenSokerIdent && journalpost?.journalpostId && journalpost?.punsjInnsendingType?.erScanning){
+            props.kopierJournalpost(identState.ident1, identState.ident2, identState.annenSokerIdent, props.dedupkey, journalpost.journalpostId);
+        }
+
         if (!identState.ident2 || !journalpost?.journalpostId) {
             setVisSakstypeValg(true);
-        } else {
+        }
+        else {
             props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId)
         }
     }
@@ -283,7 +292,21 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 }
                                 bredde={"M"}
                               />
-                              <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
+                                {!!props.fellesState.kopierJournalpostConflict &&
+                                    <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
+                                }
+
+                                {!!props.fellesState.kopierJournalpostSuccess &&
+                                    <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
+                                }
+
+                                {!!props.fellesState.kopierJournalpostForbidden &&
+                                    <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
+                                }
+
+                                {!!props.fellesState.kopierJournalpostError &&
+                                    <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
+                                }
                             </div>
                             }
                         </>}
@@ -448,7 +471,9 @@ const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     fordelingState: state.fordelingState,
     identState: state.identState,
-    opprettIGosysState: state.opprettIGosys
+    opprettIGosysState: state.opprettIGosys,
+    fellesState: state.felles,
+    dedupkey: state.felles.dedupKey
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -460,6 +485,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
+    kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
+        dispatch(kopierJournalpost(ident1, ident2, annenIdent, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) =>
         dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () =>

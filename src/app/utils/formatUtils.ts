@@ -20,3 +20,12 @@ function cleanNumberString(formattedNumber: string) {
     // Fjerner alle tegn som ikke er sifre
     return formattedNumber.replace(/\D/gm, '');
 }
+
+export const canStringBeParsedToJSON = (stringToBeParsed: string) => {
+    try {
+        JSON.parse(stringToBeParsed);
+    } catch (error) {
+        return false;
+    }
+    return true;
+}
