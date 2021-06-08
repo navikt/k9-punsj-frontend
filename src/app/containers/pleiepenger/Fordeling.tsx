@@ -481,7 +481,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setSakstypeAction(sakstype)),
     omfordel: (journalpostid: string, norskIdent: string) =>
         dispatch(omfordelAction(journalpostid, norskIdent)),
-    setIdentAction: (ident1: string, ident2: string, annenSokerIdent: string) =>
+    setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
