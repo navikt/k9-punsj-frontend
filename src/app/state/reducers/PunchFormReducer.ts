@@ -103,6 +103,13 @@ export function PunchFormReducer(
                 submitSoknadError: action.error
             };
 
+        case PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT:
+            return {
+                ...punchFormState,
+                isAwaitingSubmitResponse: false,
+                submitSoknadConflict: true
+            };
+
         case PunchFormActionKeys.HENT_PERIODER_REQUEST:
             return {
                 ...punchFormState,

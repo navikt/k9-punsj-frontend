@@ -1368,6 +1368,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         {intlHelper(intl, 'skjema.feil.ikke_sendt')}
                     </AlertStripeFeil>
                 )}
+                {!!punchFormState.submitSoknadConflict && (
+                    <AlertStripeFeil>
+                        {intlHelper(intl, 'skjema.feil.konflikt')}
+                    </AlertStripeFeil>
+                )}
                 {this.state.showSettPaaVentModal && (
                     <ModalWrapper
                         key={"settpaaventmodal"}
