@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
 import {getEnvironmentVariable} from "../../utils";
-import intlHelper from "../../utils/intlUtils";
+import './applicationWrapper.less';
 
 interface IApplicationWrapperComponentProps {
   locale: Locale;
@@ -26,6 +26,8 @@ interface IApplicationWrapperStateProps {
 interface IApplicationWrapperDispatchProps {
   checkAuth: typeof checkAuth;
 }
+
+const isDev = window.location.hostname.includes('dev.adeo.no');
 
 const K9_LOS_URL = getEnvironmentVariable('K9_LOS_URL');
 const K9_LOS_URL_SET: boolean =
@@ -79,9 +81,10 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (
   return (
     <IntlProvider {...{ locale }}>
       <Normaltekst tag="div" className="fit-window-height">
+        <div className={isDev ? "headercontainer": ""}>
         <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
           <UserPanel name={props.authState.userName!} />
-        </Header>
+        </Header></div>
         <AppContainer>
           <Router>{props.children}</Router>
         </AppContainer>

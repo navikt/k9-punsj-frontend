@@ -72,7 +72,7 @@
   "ident.identifikasjon.felt1":                                                                   "Første søkers fødselsnummer eller D-nummer:",
   "ident.identifikasjon.barn":                                                                    "Barnets fødselsnummer",
   "ident.identifikasjon.barnHarIkkeFnr":                                                          "Barnet har ikke fødselsnummer",
-  "ident.identifikasjon.sjekkident":                                                              "Stemmer det at journalposten gjelder {ident}?",
+  "ident.identifikasjon.sjekkident":                                                              "Stemmer det at søkers fødselsnummer er {ident}?",
   "ident.knapp.usignert":                                                                         "Send til instans for behandling av usignerte søknader",
   "ident.knapp.nestesteg":                                                                        "Videre",
   "ident.knapp.forrigesteg":                                                                      "Tilbake",
