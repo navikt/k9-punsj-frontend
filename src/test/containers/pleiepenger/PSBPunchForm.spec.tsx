@@ -101,7 +101,8 @@ const setupPunchForm = (
 
     const identState: IIdentState = {
         ident1: '122345',
-        ident2: '678908'
+        ident2: '678908',
+        annenSokerIdent: null,
     };
 
     const signaturState: ISignaturState = {
