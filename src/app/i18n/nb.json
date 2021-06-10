@@ -72,7 +72,7 @@
   "ident.identifikasjon.felt1":                                                                   "Første søkers fødselsnummer eller D-nummer:",
   "ident.identifikasjon.barn":                                                                    "Barnets fødselsnummer",
   "ident.identifikasjon.barnHarIkkeFnr":                                                          "Barnet har ikke fødselsnummer",
-  "ident.identifikasjon.sjekkident":                                                              "Stemmer det at journalposten gjelder {ident}?",
+  "ident.identifikasjon.sjekkident":                                                              "Stemmer det at søkers fødselsnummer er {ident}?",
   "ident.identifikasjon.tosokere":                                                                "Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)",
   "ident.identifikasjon.infoOmRegisteringAvToSokere":                                             "Du skal registrere informasjon for en søker av gangen i Punsj. Når du registrerer fødselsnummeret på den andre søkeren i feltet under vil det bli opprettet en ny oppgave i LOS. Informasjon for denne søkeren vil håndteres videre via den nye oppgaven.",
   "ident.identifikasjon.kopiAvJournalpostEksisterer":                                             "Det finnes allerede en kopi av denne journalposten, og det vil ikke bli opprettet en ny journalpost for denne søkeren.",

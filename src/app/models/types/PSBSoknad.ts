@@ -261,16 +261,6 @@ export interface IOppholdsLand {
     land?: string;
 }
 
-export class OppholdsLand implements Required<Periodeinfo<IOppholdsLand>> {
-    periode: Periode;
-    land: string;
-
-    constructor(periodeinfo: Periodeinfo<IOppholdsLand>) {
-        this.periode = new Periode(periodeinfo.periode || {});
-        this.land = periodeinfo.land || '';
-    }
-}
-
 export interface IUtenlandsOpphold {
     land?: string;
     årsak?: string;

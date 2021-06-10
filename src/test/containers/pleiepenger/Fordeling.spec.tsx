@@ -68,7 +68,7 @@ const setupFordeling = (
     };
 
     const identState: IIdentState = {
-        ident1: '',
+        ident1: '12345678901',
         ident2: '',
         annenSokerIdent: ''
     };
@@ -122,11 +122,13 @@ describe('Fordeling', () => {
         expect(radioForSakstype(Sakstype.ANNET)).toHaveLength(1);
     });
 
+   */
+
     it('Kaller setSakstypeAction', () => {
         const setSakstypeAction = jest.fn();
         const fordeling = setupFordeling({skalTilK9: true}, {setSakstypeAction}, {isAwaitingGosysOppgaveRequestResponse: false, gosysOppgaveRequestError: undefined});
         const newSakstype = Sakstype.ANNET;
-        fordeling.find('RadioPanel').at(4).simulate('change');
+        fordeling.find('RadioPanel').at(1).simulate('change');
         expect(setSakstypeAction).toHaveBeenCalledTimes(1);
         expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
     });
@@ -140,8 +142,6 @@ describe('Fordeling', () => {
         expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901");
     });
 
-
-   */
 
     it('Viser spinner mens svar avventes', () => {
         const omfordel = jest.fn();
