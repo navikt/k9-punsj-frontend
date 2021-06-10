@@ -4,6 +4,7 @@ import {IdentActionKeys, IIdentActions} from "../actions/IdentActions";
 export const initialState: IIdentState = {
     ident1: '',
     ident2: null,
+    annenSokerIdent: null
 };
 
 export function IdentReducer(
@@ -16,7 +17,8 @@ export function IdentReducer(
             return {
                 ...identState,
                 ident1: action.ident1,
-                ident2: action.ident2
+                ident2: action.ident2,
+                annenSokerIdent: action.annenSokerIdent
             };
 
         default:

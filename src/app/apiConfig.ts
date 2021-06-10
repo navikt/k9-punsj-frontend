@@ -24,11 +24,12 @@ export enum ApiPath {
   JOURNALPOST_LUKK_OPPGAVE = '/journalpost/lukk/{journalpostId}',
   JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
   JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
+  JOURNALPOST_KOPIERE = '/journalpost/kopier/{journalpostId}',
   DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
   OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
   OPPRETT_GOSYS_OPPGAVE = '/gosys/opprettJournalforingsoppgave/',
   PSB_MAPPE_SOK = '/k9-sak/pleiepenger-sykt-barn-soknad',
-  K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info'
+  K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
 }
 
 
