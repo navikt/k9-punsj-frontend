@@ -47,6 +47,7 @@ const setupFordeling = (
         dokumenter: [{dokumentId: '123'}],
         journalpostId: journalpostid,
         norskIdent: '12345678901',
+        kanSendeInn: true,
     };
 
     const opprettIGosys: IGosysOppgaveState = {

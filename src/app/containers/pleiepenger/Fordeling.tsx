@@ -228,6 +228,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         );
     }
 
+    if (!journalpost?.kanSendeInn) {
+        return <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
+    }
+
     return (
         <div className="fordeling-container">
             <FormPanel>

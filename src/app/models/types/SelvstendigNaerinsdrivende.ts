@@ -7,44 +7,44 @@ export interface ISelvstendigNaerinsdrivende {
     periode?: IPeriode;
     virksomhetstyper?: string[];
     registrertIUtlandet?: boolean;
-    landkode?: string;
-    regnskapsførerNavn?: string;
-    regnskapsførerTlf?: string;
-    bruttoInntekt?: string;
+    landkode?: string | null;
+    regnskapsførerNavn?: string | null;
+    regnskapsførerTlf?: string | null;
+    bruttoInntekt?: string | null;
     erNyoppstartet?: boolean;
     erVarigEndring?: boolean;
-    endringDato?: string;
-    endringInntekt?: string;
-    endringBegrunnelse?: string;
+    endringDato?: string | null;
+    endringInntekt?: string | null;
+    endringBegrunnelse?: string | null;
 }
 
 export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvstendigNaerinsdrivende>> {
     periode: Periode;
     virksomhetstyper: string[];
     registrertIUtlandet: boolean;
-    landkode: string;
-    regnskapsførerNavn: string;
-    regnskapsførerTlf: string;
-    bruttoInntekt: string;
+    landkode: string | null;
+    regnskapsførerNavn: string | null;
+    regnskapsførerTlf: string | null;
+    bruttoInntekt: string | null;
     erNyoppstartet: boolean
     erVarigEndring: boolean;
-    endringDato: string;
-    endringInntekt: string;
-    endringBegrunnelse: string;
+    endringDato: string | null;
+    endringInntekt: string | null;
+    endringBegrunnelse: string | null;
 
     constructor(selvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende>) {
         this.periode = new Periode(selvstendigNaeringsdrivende.periode || {});
         this.virksomhetstyper = selvstendigNaeringsdrivende.virksomhetstyper || [];
-        this.landkode = selvstendigNaeringsdrivende.landkode || "";
-        this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || '';
-        this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || '';
+        this.landkode = selvstendigNaeringsdrivende.landkode || null;
+        this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || null;
+        this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || null;
         this.registrertIUtlandet = selvstendigNaeringsdrivende.registrertIUtlandet || false;
-        this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || '';
+        this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || null;
         this.erNyoppstartet = selvstendigNaeringsdrivende.erNyoppstartet || false;
         this.erVarigEndring = selvstendigNaeringsdrivende.erVarigEndring || false;
-        this.endringDato = selvstendigNaeringsdrivende.endringDato || '';
-        this.endringInntekt = selvstendigNaeringsdrivende.endringInntekt || '';
-        this.endringBegrunnelse = selvstendigNaeringsdrivende.endringBegrunnelse || '';
+        this.endringDato = selvstendigNaeringsdrivende.endringDato || null;
+        this.endringInntekt = selvstendigNaeringsdrivende.endringInntekt || null;
+        this.endringBegrunnelse = selvstendigNaeringsdrivende.endringBegrunnelse || null;
     }
 
     description(intl: IntlShape): string {
