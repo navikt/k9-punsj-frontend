@@ -228,13 +228,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         );
     }
 
-    if (!journalpost?.kanSendeInn) {
-        return <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
-    }
-
     return (
         <div className="fordeling-container">
-            <FormPanel>
+            {!!journalpost?.kanSendeInn && <FormPanel>
                 <JournalpostPanel/>
                 <div className="fordeling-page">
                     {!!opprettIGosysState.gosysOppgaveRequestError && (
@@ -462,7 +458,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                 </div>
-            </FormPanel>
+            </FormPanel>}
+            {!journalpost?.kanSendeInn && <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>}
             <PdfVisning
                 dokumenter={journalpost!.dokumenter}
                 journalpostId={journalpost!.journalpostId}
