@@ -266,14 +266,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return new Date(dato) > fireAarSiden;
     }
 
-    private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
-        if (!eksisterendePerioder.length) {
-            return false;
-        }
-        return eksisterendePerioder.some(ep => (ep.fom! <= nyPeriode.tom! && nyPeriode.fom! <= ep.tom!))
-    }
-
-
     componentDidMount(): void {
         const {id} = this.props;
         this.props.getSoknad(id);
