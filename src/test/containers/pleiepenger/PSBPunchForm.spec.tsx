@@ -266,12 +266,9 @@ describe('PunchForm', () => {
         expect(punchForm.find('#soknadsperiode-til').prop('value')).toEqual(newDato);
     });
 
-    it('Viser radioknapper for tilsyn', () => {
+    it('Viser checkboks for tilsyn', () => {
         const punchForm = setupPunchForm();
-        expect(punchForm.find('.tilsynsordning .horizontalRadios')).toHaveLength(1);
-        expect(
-            punchForm.find('.tilsynsordning .horizontalRadios').prop('radios')
-        ).toHaveLength(3);
+        expect(punchForm.find('.tilsynsordning CheckboksPanel')).toHaveLength(1);
     });
 
     it('Viser perioder når tilsyn er registrert', () => {
@@ -290,16 +287,16 @@ describe('PunchForm', () => {
 
         const punchForm = setupPunchForm({soknad});
         expect(
-            punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')
-        ).toEqual(JaNeiIkkeOpplyst.JA);
+            punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')
+        ).toBeTruthy();
         expect(punchForm.find('.tilsynsordning PeriodeinfoPaneler')).toHaveLength(1);
     });
 
     it('Viser ikke perioder når tilsyn er undefined', () => {
         const punchForm = setupPunchForm({soknad: initialSoknad});
         expect(
-            punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')
-        ).toEqual(undefined);
+            punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')
+        ).toEqual(false);
         expect(punchForm.find('.tilsynsordning PeriodeinfoPaneler')).toHaveLength(0);
     });
 
@@ -337,8 +334,8 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
         const punchForm = setupPunchForm({soknad: initialSoknad}, {updateSoknad});
         punchForm
-            .find('.tilsynsordning .horizontalRadios')
-            .simulate('change', {target: {value: JaNeiIkkeOpplyst.JA}});
+            .find('.tilsynsordning CheckboksPanel')
+            .simulate('change', {target: {checked: true}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             tilsynsordning: expect.objectContaining({
@@ -355,8 +352,8 @@ describe('PunchForm', () => {
             expectedUpdatedSoknad
         );
         expect(
-            punchForm.find('.tilsynsordning .horizontalRadios').prop('checked')
-        ).toEqual(JaNeiIkkeOpplyst.JA);
+            punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')
+        ).toBeTruthy();
     });
 
     it('Validerer søknad når saksbehandler trykker på "Send inn"', () => {
