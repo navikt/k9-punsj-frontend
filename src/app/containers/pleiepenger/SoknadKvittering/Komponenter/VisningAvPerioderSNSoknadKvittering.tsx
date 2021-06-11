@@ -18,11 +18,15 @@ interface IOwnProps {
 
 const formaterTypeVirksomhet = (virksomheter: string[]) => {
     return virksomheter.map(type => {
-        switch(type){
-            case 'FISKE': return Virksomhetstyper.FISKE;
-            case 'JORDBRUK_SKOGBRUK': return Virksomhetstyper.JORDBRUK;
-            case 'DAGMAMMA': return Virksomhetstyper.DAGMAMMA;
-            default: return Virksomhetstyper.ANNEN
+        switch (type) {
+            case 'FISKE':
+                return Virksomhetstyper.FISKE;
+            case 'JORDBRUK_SKOGBRUK':
+                return Virksomhetstyper.JORDBRUK;
+            case 'DAGMAMMA':
+                return Virksomhetstyper.DAGMAMMA;
+            default:
+                return Virksomhetstyper.ANNEN
         }
     });
 };
@@ -34,14 +38,16 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                 return Object.keys(SN.perioder).map(periode => {
                     return <div key={uuidv4()}>
                         <p>
-                          <b>{intlHelper(intl, 'skjema.arbeid.sn.når') + ' '}</b>{periodToFormattedString(periode)}
+                            <b>{intlHelper(intl, 'skjema.arbeid.sn.når') + ' '}</b>{periodToFormattedString(periode)}
                         </p>
 
                         {sjekkPropertyEksistererOgIkkeErNull('virksomhetstyper', SN.perioder[periode])
                         && SN.perioder[periode].virksomhetstyper.length > 0
-                        &&  <p>
+                        && <p>
                           <b>{intlHelper(intl, 'skjema.arbeid.sn.type') + ': '}</b>
-                            {formaterTypeVirksomhet(SN.perioder[periode].virksomhetstyper).map((virksomhetstype, index) => <span key={uuidv4()}>{ index !== SN.perioder[periode].virksomhetstyper.length -1 ? `${virksomhetstype}, ` : `${virksomhetstype}`}</span>)}
+                            {formaterTypeVirksomhet(SN.perioder[periode].virksomhetstyper).map((virksomhetstype, index) =>
+                                <span
+                                    key={uuidv4()}>{index !== SN.perioder[periode].virksomhetstyper.length - 1 ? `${virksomhetstype}, ` : `${virksomhetstype}`}</span>)}
                         </p>}
 
                         {sjekkPropertyEksistererOgIkkeErNull('virksomhetNavn', SN.perioder) &&

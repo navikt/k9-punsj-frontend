@@ -132,7 +132,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   />
                 </div>}
 
-
                 {visOpplysningerOmSoker && <div>
                   <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}</h3>
                   <hr className={classNames('linje')}/>
@@ -189,7 +188,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                       />
                     </div>}
 
-
                     {visSelvstendigNæringsdrivendeInfo && <div>
                       <h3>{intlHelper(intl, 'selvstendig')}</h3>
 
@@ -206,7 +204,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                           properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
                         />}
                     </div>}
-
                 </div>}
 
                 {visOmsorgstilbud && <div>
@@ -219,7 +216,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                     properties={['etablertTilsynTimerPerDag']}
                     lessClassForAdjustment={'visningAvPerioderOmsorgstilbud'}
                   />
-
                 </div>}
 
                 {(visNattevak || visBeredskap) && <div>
@@ -259,7 +255,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   />
                 </div>}
 
-
                 {'infoFraPunsj' in ytelse && <div>
                   <h3>{intlHelper(intl, 'skjema.ikkeregistrert')}</h3>
                   <hr className={classNames('linje')}/>
@@ -273,7 +268,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   </p>
                 </div>
                 }
-
             </div>);
     }
 ;
