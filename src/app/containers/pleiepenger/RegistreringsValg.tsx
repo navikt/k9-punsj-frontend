@@ -103,7 +103,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     }
 
     const kanStarteNyRegistrering = () => {
-        return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some(es => es.journalposter?.has(journalpostid));
+        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+        if (!!soknader?.length) {
+            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some(es => es.journalposter?.has(journalpostid));
+        }
+        return true;
     }
 
     return (

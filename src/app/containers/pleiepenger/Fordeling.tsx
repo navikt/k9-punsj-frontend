@@ -459,7 +459,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                 </div>
             </FormPanel>}
-            {!journalpost?.kanSendeInn && <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>}
+            {!journalpost?.kanSendeInn && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel></div>}
             <PdfVisning
                 dokumenter={journalpost!.dokumenter}
                 journalpostId={journalpost!.journalpostId}
