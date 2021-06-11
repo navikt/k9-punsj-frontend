@@ -105,7 +105,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (!!soknader?.length) {
-            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some(es => es.journalposter?.has(journalpostid));
+            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some(es => Array.from(es.journalposter!).some(jp => jp === journalpostid));
         }
         return true;
     }
@@ -124,7 +124,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                 >
                     Tilbake
                 </Knapp>
-                {
+                {kanStarteNyRegistrering() &&
                 <Hovedknapp
                     onClick={newSoknad}
                     className="knapp knapp2"
