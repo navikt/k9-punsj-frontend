@@ -119,7 +119,7 @@ export interface IPunchFormComponentState {
     isFetched: boolean;
     showStatus: boolean;
     faktiskeTimer: string[][];
-    iTilsynsordning: JaNeiIkkeOpplyst | undefined;
+    iTilsynsordning: boolean | undefined;
     iUtlandet: JaNeiIkkeOpplyst | undefined;
     skalHaFerie: JaNeiIkkeOpplyst | undefined;
     arbeidstaker: boolean,
@@ -264,6 +264,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const fireAarSiden = new Date();
         fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
         return new Date(dato) > fireAarSiden;
+    }
+
+    private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
+        if (!eksisterendePerioder.length) {
+            return false;
+        }
+        return eksisterendePerioder.some(ep => (ep.fom! <= nyPeriode.tom! && nyPeriode.fom! <= ep.tom!))
     }
 
 
@@ -1184,26 +1191,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     className={classNames('punchform__paneler', 'tilsynsordning')}
                     tittel={intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}>
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                            label: intlHelper(intl, jnv),
-                            value: jnv,
-                        }))}
-                        name="omsorstilbudjanei"
-                        legend={intlHelper(intl, 'skjema.omsorgstilbud.label')}
-                        onChange={(event) =>
-                            this.updateOmsorgstilbud(
-                                (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst
-                            )
-                        }
-                        checked={this.state.soknad.tilsynsordning?.perioder?.length ? JaNeiIkkeOpplyst.JA : this.state.iTilsynsordning}
+                    <CheckboksPanel
+                        label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
+                        value={BeredskapNattevaak.NATTEVAAK}
+                        onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
+                        checked={!!soknad.tilsynsordning.perioder.length}
                     />
                     {!!soknad.tilsynsordning.perioder.length && (
-                        <>
-                        <h4>
-                        {intlHelper(intl, "skjema.omsorgstilbud.info")}
-                    </h4>
                     <PeriodeinfoPaneler
                         intl={intl}
                         periods={soknad.tilsynsordning.perioder.length ? soknad.tilsynsordning.perioder : [this.initialPeriodeTimerMinutter]}
@@ -1231,7 +1225,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         feilkodeprefiks={'tilsynsordning'}
                         kanHaFlere={true}
                         medSlettKnapp={false}
-                    /></>)}
+                    />)}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
@@ -1804,18 +1798,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         }
     }
 
-    private updateOmsorgstilbud(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
+    private updateOmsorgstilbud(checked: boolean) {
 
         this.setState({
-            iTilsynsordning: jaNeiIkkeOpplyst,
+            iTilsynsordning: checked,
         });
 
-        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA &&
+        if (!!checked &&
             this.state.soknad.tilsynsordning?.perioder?.length === 0) {
             this.addOmsorgstilbud()
         }
 
-        if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
+        if (!checked) {
             this.updateSoknadState({tilsynsordning: { perioder: []}}, true);
             this.updateSoknad({tilsynsordning: { perioder: []}});
         }
