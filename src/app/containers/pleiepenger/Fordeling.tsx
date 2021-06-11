@@ -230,7 +230,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     return (
         <div className="fordeling-container">
-            <FormPanel>
+            {!!journalpost?.kanSendeInn && <FormPanel>
                 <JournalpostPanel/>
                 <div className="fordeling-page">
                     {!!opprettIGosysState.gosysOppgaveRequestError && (
@@ -458,7 +458,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                 </div>
-            </FormPanel>
+            </FormPanel>}
+            {!journalpost?.kanSendeInn && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel></div>}
             <PdfVisning
                 dokumenter={journalpost!.dokumenter}
                 journalpostId={journalpost!.journalpostId}

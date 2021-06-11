@@ -684,7 +684,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
                             bredde={"M"}
                             className={"bruttoinntekt"}
-                            value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt}
+                            value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
                             {...this.changeAndBlurUpdatesSoknad((event) => ({
                                 opptjeningAktivitet: {
                                     ...opptjening,
@@ -1035,7 +1035,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             medSlettKnapp={false}
                         />
                     )}
-                    {this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
+                 {/*this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
                     (<RadioPanelGruppe
                         className="horizontalRadios"
                         radios={Object.values(JaNei).map((jn) => ({
@@ -1068,11 +1068,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             feilkodeprefiks={'perioder'}
                             minstEn={false}
                             kanHaFlere={true}
-                        />)}
+                        />)*/}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.FERIE)}
-                    className={"punchform__paneler"}
+                    className={classNames('punchform__paneler', 'feriepanel')}
                     tittel={intlHelper(intl, PunchFormPaneler.FERIE)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.FERIE)}>
                     <RadioPanelGruppe
@@ -1294,7 +1294,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             textFjern="skjema.perioder.fjern"
                             className="bosteder"
                             panelClassName="bostederpanel"
-                            getErrorMessage={() => undefined}
+                            getErrorMessage={this.getErrorMessage}
                             feilkodeprefiks={'bosteder'}
                             kanHaFlere={true}
                             medSlettKnapp={false}
@@ -1359,7 +1359,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     </AlertStripeFeil>
                 )}
                 {!!punchFormState.inputErrors?.length && (
-                    <AlertStripeFeil>
+                    <AlertStripeFeil className={"valideringstripefeil"}>
                         {intlHelper(intl, 'skjema.feil.validering')}
                     </AlertStripeFeil>
                 )}
@@ -1368,9 +1368,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         {intlHelper(intl, 'skjema.feil.ikke_sendt')}
                     </AlertStripeFeil>
                 )}
+                {!!punchFormState.submitSoknadConflict && (
+                    <AlertStripeFeil>
+                        {intlHelper(intl, 'skjema.feil.konflikt')}
+                    </AlertStripeFeil>
+                )}
                 {this.state.showSettPaaVentModal && (
                     <ModalWrapper
                         key={"settpaaventmodal"}
+                        className={"settpaaventmodal"}
                         onRequestClose={() => this.setState({showSettPaaVentModal: false})}
                         contentLabel={"settpaaventmodal"}
                         isOpen={this.state.showSettPaaVentModal}
@@ -1411,6 +1417,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 {!!this.props.punchFormState.isValid && (
                     <ModalWrapper
                         key={"erdusikkermodal"}
+                        className={"erdusikkermodal"}
                         onRequestClose={() => this.props.validerSoknadReset()}
                         contentLabel={"erdusikkermodal"}
                         closeButton={false}

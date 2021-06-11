@@ -54,6 +54,10 @@ interface ISubmitSoknadSuccessAction {
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS
 }
 
+interface ISubmitSoknadConflictAction {
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT
+}
+
 interface ISubmitSoknadUncompleteAction {
     type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
     errors: IInputError[],
@@ -149,7 +153,9 @@ type ISoknadSubmitActionTypes =
     ISubmitSoknadRequestAction
     | ISubmitSoknadSuccessAction
     | ISubmitSoknadUncompleteAction
-    | ISubmitSoknadErrorAction;
+    | ISubmitSoknadErrorAction
+    | ISubmitSoknadConflictAction;
+
 type IPerioderActionTypes = IHentPerioderErrorAction | IHentPerioderLoadingAction | IHentPerioderSuccessAction;
 type ISettPaaVentActionTypes = ISettJournalpostPaaVentAction | ISettJournalpostPaaVentSuccessAction | ISettJournalpostPaaVentErrorAction | ISettJournalpostPaaVentResetAction;
 type IValiderSoknadActionTypes = IValiderSoknadErrorAction | IValiderSoknadRequestAction | IValiderSoknadSuccessAction | IValiderSoknadUncompleteAction | IValiderSoknadResetAction;
@@ -275,6 +281,10 @@ export const submitSoknadErrorAction = (error: IError): ISubmitSoknadErrorAction
     error
 });
 
+export const submitSoknadConflictAction = (): ISubmitSoknadConflictAction  => ({
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT,
+});
+
 export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST});
 export const validerSoknadSuccessAction = (): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS});
 export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorAction => ({
@@ -305,6 +315,8 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
                     return dispatch(submitSoknadSuccessAction());
                 case 400:
                     return  dispatch(submitSoknadUncompleteAction(errors.feil));
+                case 409:
+                    return  dispatch(submitSoknadConflictAction());
                 default:
                     return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
             }

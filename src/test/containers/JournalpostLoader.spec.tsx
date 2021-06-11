@@ -52,6 +52,7 @@ describe('JournalpostLoader', () => {
         },
       ],
       journalpostId,
+      kanSendeInn: true
     };
 
     const { getByTestId } = setupLoader({
@@ -89,6 +90,7 @@ describe('JournalpostLoader', () => {
     const journalpostIngenDokumenter: IJournalpost = {
       dokumenter: [],
       journalpostId,
+      kanSendeInn: true,
     };
 
     const journalpost = shallow(
