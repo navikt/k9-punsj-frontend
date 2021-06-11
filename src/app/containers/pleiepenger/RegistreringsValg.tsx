@@ -124,7 +124,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                 >
                     Tilbake
                 </Knapp>
-                {kanStarteNyRegistrering() &&
+                {
                 <Hovedknapp
                     onClick={newSoknad}
                     className="knapp knapp2"

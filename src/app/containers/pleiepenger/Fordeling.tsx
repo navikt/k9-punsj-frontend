@@ -468,6 +468,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     );
 };
 
+
 const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     fordelingState: state.fordelingState,
