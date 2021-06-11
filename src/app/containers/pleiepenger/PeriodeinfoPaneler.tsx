@@ -1,35 +1,38 @@
-import {PeriodInput}                                                from 'app/components/period-input/PeriodInput';
+import {PeriodInput} from 'app/components/period-input/PeriodInput';
 import {
     ListeComponent,
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState
-}                                                                   from 'app/containers/pleiepenger/Listepaneler';
-import * as React                                                   from 'react';
-import {IntlShape}                                                  from 'react-intl';
-import {IPeriodeinfoExtensionV2, IPeriodeinfoV2, PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
-import {IPeriodeV2} from "../../models/types/PeriodeV2";
+} from 'app/containers/pleiepenger/Listepaneler';
+import * as React from 'react';
+import {IntlShape} from 'react-intl';
+import {IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo} from "../../models/types/Periodeinfo";
+import {IPeriode} from "../../models/types/Periode";
+import BinSvg from "../../assets/SVG/BinSVG";
+import intlHelper from "../../utils/intlUtils";
+import './periodeinfoPaneler.less';
 
-export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<PeriodeinfoV2<T>>) => any;
-export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<PeriodeinfoV2<T>>, showStatus?: boolean) => any;
+export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
+export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
 export type GetErrorMessage = (kode: string) => (React.ReactNode | boolean | undefined);
 
-export type PeriodeinfoComponent<T> = (info: PeriodeinfoV2<T>,
-                                   periodeindex: number,
-                                   updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<T>,
-                                   updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
-                                   feilkodeprefiksMedIndeks?: string,
-                                   getErrorMessage?: GetErrorMessage,
-                                   intl?: IntlShape) => React.ReactElement;
+export type PeriodeinfoComponent<T> = (info: Periodeinfo<T>,
+                                       periodeindex: number,
+                                       updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<T>,
+                                       updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
+                                       feilkodeprefiksMedIndeks?: string,
+                                       getErrorMessage?: GetErrorMessage,
+                                       intl?: IntlShape) => React.ReactElement;
 
 export interface IPeriodeinfopanelerProps {
     intl: IntlShape;
-    periods: IPeriodeinfoV2[]; // Liste over periodisert informasjon
-    component?: PeriodeinfoComponent<IPeriodeinfoExtensionV2>; // Skal returnere et React-element for en gitt periode i lista
+    periods: IPeriodeinfo[]; // Liste over periodisert informasjon
+    component?: PeriodeinfoComponent<IPeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
-    initialPeriodeinfo: PeriodeinfoV2<IPeriodeinfoExtensionV2>; // Objektet som legges til når man legger til en ny periode i lista
-    editSoknad: (periodeinfo: IPeriodeinfoV2[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (periodeinfo: IPeriodeinfoV2[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
+    initialPeriodeinfo: Periodeinfo<IPeriodeinfoExtension>; // Objektet som legges til når man legger til en ny periode i lista
+    editSoknad: (periodeinfo: IPeriodeinfo[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
+    editSoknadState: (periodeinfo: IPeriodeinfo[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     className?: string;
     textLeggTil?: string;
     textFjern?: string;
@@ -40,6 +43,7 @@ export interface IPeriodeinfopanelerProps {
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
+    medSlettKnapp: boolean;
 }
 
 export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (props: IPeriodeinfopanelerProps) => {
@@ -47,33 +51,61 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
     const periods = !!props.periods ? props.periods : [];
     const {intl, component, editSoknad, editSoknadState, kanHaFlere} = props;
 
-    const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfoV2>) => IPeriodeinfoV2[] = (index: number, periodeinfo: Partial<IPeriodeinfoV2>) => {
-        const newInfo: IPeriodeinfoV2 = {...props.periods[index], ...periodeinfo};
+    const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
+        const newInfo: IPeriodeinfo = {...props.periods[index], ...periodeinfo};
         const newArray = periods;
         newArray[index] = newInfo;
         return newArray;
     };
 
-    const editPeriode = (index: number, periode: IPeriodeV2) => editInfo(index, {periode});
+    const removeItem = (index: number) => {
+        const newArray = periods;
+        newArray.splice(index, 1);
+        return newArray;
+    };
 
-    const periodComponent: ListeComponent<IPeriodeinfoV2> = (
-        periodeinfo: IPeriodeinfoV2,
+    const editPeriode = (index: number, periode: IPeriode) => editInfo(index, {periode});
+
+    const periodComponent: ListeComponent<IPeriodeinfo> = (
+        periodeinfo: IPeriodeinfo,
         periodeindeks: number,
-        updatePeriodeinfoInSoknad: UpdateListeinfoInSoknad<IPeriodeinfoV2>,
-        updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfoV2>,
+        updatePeriodeinfoInSoknad: UpdateListeinfoInSoknad<IPeriodeinfo>,
+        updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfo>,
         feilkodeprefiksMedIndeks: string,
         getErrorMessage: GetErrorMessage,
         intlShape: IntlShape,
     ) => <>
-        {<PeriodInput
-            periode={periodeinfo.periode || {}}
-            intl={intlShape}
-            onChange={(periode) => {editSoknadState(editPeriode(periodeindeks, periode))}}
-            onBlur={(periode) => {editSoknad(editPeriode(periodeindeks, periode))}}
-            errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-            errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
-            errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
-        />}
+        <div className={"periodeinfopanel_container"}>
+            <PeriodInput
+                periode={periodeinfo.periode || {}}
+                intl={intlShape}
+                onChange={(periode) => {
+                    editSoknadState(editPeriode(periodeindeks, periode))
+                }}
+                onBlur={(periode) => {
+                    editSoknad(editPeriode(periodeindeks, periode))
+                }}
+                errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
+                errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
+                errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
+            />
+            <div
+                id="slett"
+                className={"removePeriodeKnapp"}
+                role="button"
+                onClick={() => {
+                    const newArray: IPeriodeinfo[] = removeItem(periodeindeks);
+                    editSoknadState(newArray);
+                    editSoknad(newArray);
+                    !!props.onRemove && props.onRemove();
+                }}
+                tabIndex={0}
+            >
+                <div className={"slettIkon"}><BinSvg title={"fjern"}/></div>
+                {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
+            </div>
+
+        </div>
         {!!component && component(
             periodeinfo,
             periodeindeks,
@@ -103,5 +135,6 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         textFjern={props.textFjern || 'skjema.perioder.fjern'}
         textLeggTil={props.textLeggTil || 'skjema.perioder.legg_til'}
         kanHaFlere={kanHaFlere}
+        medSlettKnapp={props.medSlettKnapp}
     />;
 };

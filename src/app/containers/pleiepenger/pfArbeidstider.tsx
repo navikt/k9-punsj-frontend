@@ -7,8 +7,8 @@ import {
 import intlHelper from 'app/utils/intlUtils';
 import * as React from 'react';
 import {IntlShape} from 'react-intl';
-import {PeriodeinfoV2} from "../../models/types/PeriodeInfoV2";
-import {IArbeidstidPeriodeMedTimer} from "../../models/types/PeriodeV2";
+import {Periodeinfo} from "../../models/types/Periodeinfo";
+import {IArbeidstidPeriodeMedTimer} from "../../models/types/Periode";
 import {Input} from "nav-frontend-skjema";
 import {Row} from "react-bootstrap";
 import {PopoverOrientering} from "nav-frontend-popover";
@@ -18,7 +18,7 @@ import Hjelpetekst from "nav-frontend-hjelpetekst";
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
 
     return (
-        periodeinfo: PeriodeinfoV2<IArbeidstidPeriodeMedTimer>,
+        periodeinfo: Periodeinfo<IArbeidstidPeriodeMedTimer>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstidPeriodeMedTimer>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IArbeidstidPeriodeMedTimer>,
@@ -45,6 +45,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                     <Hjelpetekst
                         className={"arbeidstid-hjelpetext"}
                         type={PopoverOrientering.Hoyre}
+                        tabIndex={-1}
                     >{intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
                     </Hjelpetekst>
                     <Input
@@ -64,6 +65,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                     <Hjelpetekst
                         className={"arbeidstid-hjelpetext"}
                         type={PopoverOrientering.Hoyre}
+                        tabIndex={-1}
                     >{intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}
                     </Hjelpetekst>
                 </div>

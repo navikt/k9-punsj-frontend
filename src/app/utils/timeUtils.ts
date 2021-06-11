@@ -3,7 +3,7 @@ import { Ukedag, UkedagNumber} from 'app/models/types';
 import moment                           from 'moment';
 import {IntlShape}                      from 'react-intl';
 import intlHelper                       from './intlUtils';
-import {IPeriodeV2} from "../models/types/PeriodeV2";
+import {IPeriode} from "../models/types/Periode";
 
 export const datetime = (
     intl: IntlShape,
@@ -36,7 +36,7 @@ export function convertNumberToUkedag(num: UkedagNumber): Ukedag {
     }
 }
 
-export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriodeV2) {
+export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) {
 
     if (!period || !period.fom || period.fom === '' || !period.tom || period.tom === '') {return true}
 

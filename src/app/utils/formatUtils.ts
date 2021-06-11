@@ -27,3 +27,12 @@ export function periodToFormattedString(periode: string) {
    formateradPeriode = formateradPeriode.split('/').join(' - ');
    return formateradPeriode;
 }
+
+export const canStringBeParsedToJSON = (stringToBeParsed: string) => {
+    try {
+        JSON.parse(stringToBeParsed);
+    } catch (error) {
+        return false;
+    }
+    return true;
+}

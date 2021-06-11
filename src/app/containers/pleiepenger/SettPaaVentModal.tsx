@@ -57,6 +57,7 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                             <tr>
                                 <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
                                 <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                                <th>{intlHelper(intl, 'tabell.typeinnsdending')}</th>
                                 <th/>
                                 <th/>
                             </tr>
@@ -67,6 +68,7 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
                                     <tr key={i}>
                                         <td>{j.journalpostId}</td>
                                         <td>{j.dato}</td>
+                                        <td>{j.punsjInnsendingType.navn}</td>
                                         <td>
                                             <a
                                                 className={"visjp"}
@@ -91,6 +93,5 @@ class SettPaaVentModal extends React.Component<WrappedComponentProps & ISettPaaV
         );
     }
 }
-
 
 export default injectIntl(SettPaaVentModal);

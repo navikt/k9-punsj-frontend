@@ -1,7 +1,7 @@
 import {PeriodInput} from 'app/components/period-input/PeriodInput';
 import * as React from 'react';
 import {IntlShape} from 'react-intl';
-import {IPeriodeV2} from "../../models/types/PeriodeV2";
+import {IPeriode} from "../../models/types/Periode";
 import BinSvg from "../../assets/SVG/BinSVG";
 import intlHelper from "../../utils/intlUtils";
 import {Knapp} from "nav-frontend-knapper";
@@ -12,11 +12,11 @@ export type GetErrorMessage = (kode: string, indeks?: number) => (React.ReactNod
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
-    periods: IPeriodeV2[]; // Liste over periodisert informasjon
+    periods: IPeriode[]; // Liste over periodisert informasjon
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
-    initialPeriode: IPeriodeV2; // Objektet som legges til når man legger til en ny periode i lista
-    editSoknad: (periodeinfo: IPeriodeV2[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (periodeinfo: IPeriodeV2[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
+    initialPeriode: IPeriode; // Objektet som legges til når man legger til en ny periode i lista
+    editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
+    editSoknadState: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     className?: string;
     textLeggTil?: string;
     textFjern?: string;
@@ -34,14 +34,14 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     const periods = !!props.periods ? props.periods : [];
     const {intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks} = props;
 
-    const editInfo: (index: number, periodeinfo: Partial<IPeriodeV2>) => IPeriodeV2[] = (index: number, periodeinfo: Partial<IPeriodeV2>) => {
-        const newInfo: IPeriodeV2 = {...props.periods[index], ...periodeinfo};
+    const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (index: number, periodeinfo: Partial<IPeriode>) => {
+        const newInfo: IPeriode = {...props.periods[index], ...periodeinfo};
         const newArray = periods;
         newArray[index] = newInfo;
         return newArray;
     };
 
-    const editPeriode = (index: number, periode: IPeriodeV2) => editInfo(index, periode);
+    const editPeriode = (index: number, periode: IPeriode) => editInfo(index, periode);
 
     const addItem = () => {
         const newArray = periods;
@@ -78,20 +78,21 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             className={!!getErrorMessage!(feilkodeprefiks!, i) ? "fjern-feil" : "fjern"}
                             role="button"
                             onClick={() => {
-                                const newArray: IPeriodeV2[] = removeItem(i);
+                                const newArray: IPeriode[] = removeItem(i);
                                 editSoknadState(newArray);
                                 editSoknad(newArray);
                                 !!props.onRemove && props.onRemove();
                             }}
                             tabIndex={0}
-                        ><BinSvg title={"fjern"}/></div>
+                        ><div className={"slettIcon"}><BinSvg title={"fjern"}/></div>
+                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}</div>
                     </div>
                 </Row>)}
             {kanHaFlere &&
             <Row noGutters={true}>
                 <Knapp
                     onClick={() => {
-                        const newArray: IPeriodeV2[] = addItem();
+                        const newArray: IPeriode[] = addItem();
                         editSoknadState(newArray);
                         editSoknad(newArray);
                         !!props.onAdd && props.onAdd();

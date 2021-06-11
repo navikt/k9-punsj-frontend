@@ -3,21 +3,20 @@ import {GetErrorMessage, PeriodeinfoPaneler} from 'app/containers/pleiepenger/Pe
 import intlHelper from 'app/utils/intlUtils';
 import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
 import * as React from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
-import {IntlShape} from 'react-intl';
-import {ArbeidstakerV2, IArbeidstakerV2, OrgOrPers} from "../../models/types/ArbeidstakerV2";
-import {AlertStripeInfo} from "nav-frontend-alertstriper";
+import { Container, Row} from 'react-bootstrap';
+import { IntlShape} from 'react-intl';
+import {Arbeidstaker, IArbeidstaker, OrgOrPers} from "../../models/types/Arbeidstaker";
 import {arbeidstidInformasjon} from "./ArbeidstidInfo";
 import {pfArbeidstider} from "./pfArbeidstider";
 
 
-export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
+export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex: number, updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstaker>, updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>, feilprefiks: string, getErrorMessage: GetErrorMessage, intl: IntlShape) => JSX.Element {
 
     return (
-        arbeidstaker: ArbeidstakerV2,
+        arbeidstaker: Arbeidstaker,
         listeelementindex: number,
-        updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstakerV2>,
-        updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstakerV2>,
+        updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstaker>,
+        updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,
@@ -36,14 +35,6 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
             updateListeinfoInSoknadState({organisasjonsnummer, norskIdent});
             updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
-
-        const getFaktiskeTimerValue = (periodeindex: number) => {
-            return arbeidstaker.arbeidstidInfo.perioder[periodeindex].faktiskArbeidTimerPerDag;
-        }
-
-        const getNormaleTimerValue = (periodeindex: number) => {
-            return arbeidstaker.arbeidstidInfo.perioder[periodeindex].jobberNormaltTimerPerDag;
-        }
 
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
 
@@ -108,6 +99,7 @@ export function pfArbeidstaker(): (arbeidstaker: ArbeidstakerV2, listeelementind
                     getErrorMessage={getErrorMessage}
                     feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
                     kanHaFlere={true}
+                    medSlettKnapp={false}
                 />
 
             </Container>

@@ -78,6 +78,7 @@ const setupPunchPage = (
   const identState: IIdentState = {
     ident1: '',
     ident2: null,
+    annenSokerIdent: null
   };
 
   const punchFormState: IPunchFormState = {
@@ -87,7 +88,8 @@ const setupPunchPage = (
     punchState,
     journalpost,
     identState,
-    punchFormState
+    punchFormState,
+    forbidden: false
   };
 
   const punchPageComponentProps: IPunchPageComponentProps = {

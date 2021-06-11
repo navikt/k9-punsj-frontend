@@ -5,7 +5,7 @@ import {Input}                                                  from 'nav-fronte
 import * as React                                               from 'react';
 import {createIntl, IntlShape}                                  from 'react-intl';
 import {mocked}                                                 from 'ts-jest/utils';
-import {PeriodeinfoV2} from "../../../app/models/types/PeriodeInfoV2";
+import {Periodeinfo} from "../../../app/models/types/Periodeinfo";
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -14,7 +14,7 @@ interface ITestperiodeinfo {
     test: string;
 }
 
-type Testperiodeinfo = PeriodeinfoV2<ITestperiodeinfo>;
+type Testperiodeinfo = Periodeinfo<ITestperiodeinfo>;
 
 const testperiode0: Testperiodeinfo = {periode: {fom: '2020-01-01', tom: '2020-01-31'}, test: 'abc'};
 const testperiode1: Testperiodeinfo = {periode: {fom: '2020-02-01', tom: '2020-02-29'}, test: 'bca'};
@@ -57,6 +57,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
         editSoknad: jest.fn(),
         editSoknadState: jest.fn(),
         kanHaFlere: true,
+        medSlettKnapp: true,
         ...periodepanelerPropsPartial
     };
 

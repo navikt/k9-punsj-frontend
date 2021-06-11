@@ -1,10 +1,10 @@
 import intlHelper from "../../utils/intlUtils";
 import {IntlShape} from "react-intl";
-import {IPeriodeV2, PeriodeV2} from "./PeriodeV2";
-import {PeriodeinfoV2} from "./PeriodeInfoV2";
+import {IPeriode, Periode} from "./Periode";
+import {Periodeinfo} from "./Periodeinfo";
 
 export interface ISelvstendigNaerinsdrivende {
-    periode?: IPeriodeV2;
+    periode?: IPeriode;
     virksomhetstyper?: string[];
     registrertIUtlandet?: boolean;
     landkode?: string;
@@ -15,10 +15,11 @@ export interface ISelvstendigNaerinsdrivende {
     erVarigEndring?: boolean;
     endringDato?: string;
     endringInntekt?: string;
+    endringBegrunnelse?: string;
 }
 
-export class SelvstendigNaerinsdrivende implements Required<PeriodeinfoV2<ISelvstendigNaerinsdrivende>> {
-    periode: PeriodeV2;
+export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvstendigNaerinsdrivende>> {
+    periode: Periode;
     virksomhetstyper: string[];
     registrertIUtlandet: boolean;
     landkode: string;
@@ -29,19 +30,21 @@ export class SelvstendigNaerinsdrivende implements Required<PeriodeinfoV2<ISelvs
     erVarigEndring: boolean;
     endringDato: string;
     endringInntekt: string;
+    endringBegrunnelse: string;
 
-    constructor(selvstendigNaeringsdrivende: PeriodeinfoV2<ISelvstendigNaerinsdrivende>) {
-        this.periode = new PeriodeV2(selvstendigNaeringsdrivende.periode || {});
+    constructor(selvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende>) {
+        this.periode = new Periode(selvstendigNaeringsdrivende.periode || {});
         this.virksomhetstyper = selvstendigNaeringsdrivende.virksomhetstyper || [];
         this.landkode = selvstendigNaeringsdrivende.landkode || "";
-        this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || "";
-        this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || "";
+        this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || '';
+        this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || '';
         this.registrertIUtlandet = selvstendigNaeringsdrivende.registrertIUtlandet || false;
-        this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || "";
+        this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || '';
         this.erNyoppstartet = selvstendigNaeringsdrivende.erNyoppstartet || false;
         this.erVarigEndring = selvstendigNaeringsdrivende.erVarigEndring || false;
         this.endringDato = selvstendigNaeringsdrivende.endringDato || '';
-        this.endringInntekt = selvstendigNaeringsdrivende.endringInntekt|| '';
+        this.endringInntekt = selvstendigNaeringsdrivende.endringInntekt || '';
+        this.endringBegrunnelse = selvstendigNaeringsdrivende.endringBegrunnelse || '';
     }
 
     description(intl: IntlShape): string {

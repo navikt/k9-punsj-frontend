@@ -7,7 +7,7 @@ import {IPSBSoknad} from "../../models/types/PSBSoknad";
 import {ISendSoknad} from "../../models/types/SendSoknad";
 import {IPSBSoknadUt} from "../../models/types/PSBSoknadUt";
 
-import {PeriodeV2} from "../../models/types/PeriodeV2";
+import {Periode} from "../../models/types/Periode";
 import {IHentPerioder} from "../../models/types/RequestBodies";
 import {IPSBSoknadKvittering} from "../../models/types/PSBSoknadKvittering";
 
@@ -99,11 +99,11 @@ interface IHentPerioderErrorAction {
 
 interface IHentPerioderSuccessAction {
     type: PunchFormActionKeys.HENT_PERIODER_SUCCESS,
-    perioder: PeriodeV2[]
+    perioder: Periode[]
 }
 
 export const hentPerioderRequestAction = (): IHentPerioderLoadingAction => ({type: PunchFormActionKeys.HENT_PERIODER_REQUEST});
-export const hentPerioderSuccessAction = (perioder: PeriodeV2[]): IHentPerioderSuccessAction => ({
+export const hentPerioderSuccessAction = (perioder: Periode[]): IHentPerioderSuccessAction => ({
     type: PunchFormActionKeys.HENT_PERIODER_SUCCESS,
     perioder
 });
