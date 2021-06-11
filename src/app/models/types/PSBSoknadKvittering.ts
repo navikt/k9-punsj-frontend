@@ -101,4 +101,4 @@ export interface IPSBSoknadKvittering {
             frilanser?: IPSBSoknadKvitteringFrilanser;
         },
     }
-};
+}
