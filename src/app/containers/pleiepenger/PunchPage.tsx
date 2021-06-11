@@ -26,6 +26,7 @@ import {RegistreringsValg} from "./RegistreringsValg";
 import {IIdentState} from "../../models/types/IdentState";
 import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
 import {PSBPunchForm} from './PSBPunchForm';
+import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 
 
 export interface IPunchPageStateProps {
@@ -145,11 +146,15 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
             case PunchStep.FILL_FORM:
                 return <PSBPunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:
-                return (
-                    <AlertStripeSuksess className="fullfortmelding">
-                        Søknaden er sendt til behandling.
-                    </AlertStripeSuksess>
-                );
+                return (<>
+                        <AlertStripeSuksess className="fullfortmelding">
+                            Søknaden er sendt til behandling.
+                        </AlertStripeSuksess>
+
+                        {typeof this.props.punchFormState.innsentSoknad !== "undefined" &&
+                        <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
+                                          intl={this.props.intl}/>}
+                    </>);
         }
     }
 

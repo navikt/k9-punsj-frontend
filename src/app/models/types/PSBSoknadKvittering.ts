@@ -48,7 +48,7 @@ export interface IPSBSoknadKvitteringArbeidstid {
 
 }
 
-export interface IPSBSoknadKvitteringSelvstendigNæringsdrivendePeriode {
+export interface IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode {
     perioder: {
         [key: string]: {
             virksomhetstyper: string[];
@@ -97,7 +97,7 @@ export interface IPSBSoknadKvittering {
         uttak: { perioder: IPSBSoknadKvitteringUttak; }
         omsorg: IPSBSoknadKvitteringOmsorg;
         opptjeningAktivitet: {
-            selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNæringsdrivendePeriode[],
+            selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[],
             frilanser?: IPSBSoknadKvitteringFrilanser;
         },
     }

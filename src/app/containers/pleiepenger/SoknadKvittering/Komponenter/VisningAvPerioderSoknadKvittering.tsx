@@ -16,7 +16,7 @@ interface IOwnProps {
     tittel: string[],
     properties?: string[],
     lessClassForAdjustment?: string;
-};
+}
 
 const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, tittel, properties, perioder, lessClassForAdjustment}) => {
     return (

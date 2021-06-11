@@ -19,7 +19,7 @@ import VisningAvPerioderSNSoknadKvittering from "./Komponenter/VisningAvPerioder
 interface IOwnProps {
     intl: any;
     response: IPSBSoknadKvittering;
-};
+}
 
 export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
     if (property in object && object[property] !== null) {
@@ -89,7 +89,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
         countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
 
         const countryList: ICountry[] = [];
-        Object.keys(countries.getAlpha3Codes()).map(code => countryList.push({
+        Object.keys(countries.getAlpha3Codes()).forEach(code => countryList.push({
             code,
             name: countries.getName(code, locale)
         }));
