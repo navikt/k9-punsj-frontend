@@ -66,5 +66,6 @@ export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
     const timerTekst = timer > 1 ? `${timer} timer` : `${timer} time`;
     if(minutter === 0 && timer > 0) return timerTekst;
     if(minutter > 0 && timer === 0) return minutterTekst;
+    if(minutter === 0 && timer === 0) return '0';
     return `${timerTekst} og ${minutterTekst}`
 };

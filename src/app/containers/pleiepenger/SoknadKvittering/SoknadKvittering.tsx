@@ -98,7 +98,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
             <div className={classNames('SoknadKvitteringContainer')}>
                 <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
                 {visSoknadsperiode && <div>
-                  <h3>{intlHelper(intl, 'skjema.eksisterende')}</h3>
+                  <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
                   <hr className={classNames('linje')}/>
                   <p>{periodToFormattedString(ytelse.søknadsperiode[0])}</p>
                 </div>}
@@ -137,7 +137,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   <hr className={classNames('linje')}/>
                   <p>
                     <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
-                      {`${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
+                      { ytelse.omsorg.beskrivelseAvOmsorgsrollen === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
                   </p>
                 </div>}
 
@@ -172,7 +172,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                         && <p>
                           <b>{intlHelper(intl, 'skjema.frilanserdato') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato!)}
                         </p>}
-
 
                         {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans
                         && sjekkPropertyEksistererOgIkkeErNull('sluttdato', ytelse.opptjeningAktivitet.frilanser)
@@ -256,7 +255,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                 </div>}
 
                 {'infoFraPunsj' in ytelse && <div>
-                  <h3>{intlHelper(intl, 'skjema.ikkeregistrert')}</h3>
+                  <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
                   <hr className={classNames('linje')}/>
                   <p>
                     <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>

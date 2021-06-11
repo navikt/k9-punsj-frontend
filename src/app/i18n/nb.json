@@ -303,7 +303,8 @@
   "skjema.feil.tilsynsordning.MAA_SETTES":                                                        "Tilsynsordning må være satt.",
   "skjema.feil.tilsynsordning.opphold[].periode.DUPLIKAT":                                        "Denne tilsynsperioden er helt lik en annen.",
   "skjema.feil.tilsynsordning.opphold[].periode.OVERLAPP":                                        "Denne tilsynsperioden overlapper en annen.",
-
+  "skjema.soknadskvittering.tilleggsopplysninger":                                                 "Tilleggsopplysninger",
+  "skjema.soknadskvittering.soknadsperiode":                                                       "Søknadsperioder",
   "journalpost.id": "Journalpostnummer:",
   "journalpost.norskIdent": "Søkers fødselsnummer:",
   "journalpost.ident2": "Barnets fødselsnummer:",

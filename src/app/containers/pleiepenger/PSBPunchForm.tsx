@@ -1031,7 +1031,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             medSlettKnapp={false}
                         />
                     )}
-                    {this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
+                    {/*this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
                     (<RadioPanelGruppe
                         className="horizontalRadios"
                         radios={Object.values(JaNei).map((jn) => ({
@@ -1064,7 +1064,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             feilkodeprefiks={'perioder'}
                             minstEn={false}
                             kanHaFlere={true}
-                        />)}
+                        />)*/}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.FERIE)}
