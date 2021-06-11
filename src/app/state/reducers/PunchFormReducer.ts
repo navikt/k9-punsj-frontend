@@ -82,6 +82,7 @@ export function PunchFormReducer(
         case PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS:
             return {
                 ...punchFormState,
+                innsentSoknad: action.innsentSoknad,
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: undefined,
                 inputErrors: undefined,

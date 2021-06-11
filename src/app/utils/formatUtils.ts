@@ -20,3 +20,10 @@ function cleanNumberString(formattedNumber: string) {
     // Fjerner alle tegn som ikke er sifre
     return formattedNumber.replace(/\D/gm, '');
 }
+
+export function periodToFormattedString(periode: string) {
+    let formateradPeriode= periode.replace('..','');
+   formateradPeriode =  formateradPeriode.split('-').join('.');
+   formateradPeriode = formateradPeriode.split('/').join(' - ');
+   return formateradPeriode;
+}

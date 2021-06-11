@@ -289,7 +289,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     componentWillUnmount(): void {
-        this.props.resetPunchFormAction();
+        // this.props.resetPunchFormAction();
     }
 
     render() {
