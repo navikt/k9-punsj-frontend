@@ -70,19 +70,19 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                 <h1><FormattedMessage id="søk.overskrift"/></h1>
                 <SkjemaGruppe>
                     <div className={"input-rad"}>
-                    <Input
-                        value={journalpostid}
-                        bredde="L"
-                        onChange={(e) => this.setState({journalpostid: e.target.value})}
-                        label={
-                            <FormattedMessage id="søk.label.jpid"/>
-                        }/>
+                        <Input
+                            value={journalpostid}
+                            bredde="L"
+                            onChange={(e) => this.setState({journalpostid: e.target.value})}
+                            label={
+                                <FormattedMessage id="søk.label.jpid"/>
+                            }/>
                         <SokKnapp
                             onClick={onClick}
                             tekstId={"søk.knapp.label"}
                             disabled={disabled}
                         />
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx={true}/>
                     </div>
                     {!!this.props.notFound &&
                     <AlertStripeInfo>
@@ -92,23 +92,32 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                     <AlertStripeAdvarsel>
                         <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
                     </AlertStripeAdvarsel>}
+                    {!this.props.journalpost?.kanSendeInn &&
+                    <AlertStripeAdvarsel><FormattedMessage id={'fordeling.kanikkesendeinn'}/></AlertStripeAdvarsel>}
                 </SkjemaGruppe>
             </div>
         );
     }
+
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    notFound: state.felles.journalpostNotFound,
+const mapStateToProps = (state: RootStateType) => ( {
+    journalpost: state.felles.journalpost
+,
+    notFound: state.felles.journalpostNotFound
+,
     forbidden: state.felles.journalpostForbidden
-});
+}
 
-const mapDispatchToProps = (dispatch: any) => ({
+);
+
+const mapDispatchToProps = (dispatch: any) => (
+{
     getJournalpost: (journalpostid: string) =>
         dispatch(getJournalpost(journalpostid)),
-});
+}
+);
 
 export const SearchForm = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent)
+connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent)
 );

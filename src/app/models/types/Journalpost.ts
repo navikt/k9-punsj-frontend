@@ -7,7 +7,8 @@ export interface IJournalpost {
         kode: string;
         navn: string;
         erScanning: boolean;
-    }
+    },
+    kanSendeInn: boolean;
 }
 
 export interface IDokument {

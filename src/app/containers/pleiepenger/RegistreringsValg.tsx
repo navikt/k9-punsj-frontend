@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
 import {FormattedMessage} from "react-intl";
 import {EksisterendeSoknader} from "./EksisterendeSoknader";
 import {PunchStep} from "../../models/enums";
@@ -6,7 +6,7 @@ import './registreringsValg.less';
 import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 import {createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction} from "../../state/actions";
 import {connect} from "react-redux";
-import { setHash} from "../../utils";
+import {setHash} from "../../utils";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState} from "../../models/types";
 import {RootStateType} from "../../state/RootState";
@@ -102,6 +102,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         return `Journalpost ${index}${dato}`
     }
 
+    const kanStarteNyRegistrering = () => {
+        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+        if (!!soknader?.length) {
+            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some(es => Array.from(es.journalposter!).some(jp => jp === journalpostid));
+        }
+        return true;
+    }
+
     return (
         <div className={"registrering-page"}>
             <EksisterendeSoknader
@@ -116,6 +124,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                 >
                     Tilbake
                 </Knapp>
+                {kanStarteNyRegistrering() &&
                 <Hovedknapp
                     onClick={newSoknad}
                     className="knapp knapp2"
@@ -123,7 +132,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                     mini={true}
                 >
                     {<FormattedMessage id={'ident.knapp.nyregistrering'}/>}
-                </Hovedknapp>
+                </Hovedknapp>}
             </div>
         </div>
 
