@@ -66,7 +66,7 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
     for (let i = dato.length - 1; i >= 0; i--) {
-        formatertDato.push( i > 0 ? `${dato[i]}.` : `${dato[i]}`)
+        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`)
     }
     return formatertDato.join('');
 };
@@ -138,7 +138,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   <hr className={classNames('linje')}/>
                   <p>
                     <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
-                      { ytelse.omsorg.relasjonTilBarnet === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
+                      {ytelse.omsorg.relasjonTilBarnet === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
                   </p>
                 </div>}
 
@@ -177,8 +177,10 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                         {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans
                         && sjekkPropertyEksistererOgIkkeErNull('sluttdato', ytelse.opptjeningAktivitet.frilanser)
                         && ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length! > 0
-                        &&
-                        <h4>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' ' + formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}</h4>}
+                        && <p>
+                          <b>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}
+                        </p>
+                        }
 
                         {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && <VisningAvPerioderSoknadKvittering
                           intl={intl}
