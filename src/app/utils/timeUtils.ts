@@ -58,3 +58,14 @@ export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) 
         return isoWeekday === isoWeekdayStart;
     }
 }
+
+export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
+    const timer = hoursFromString(tekst);
+    const minutter = minutesFromString(tekst);
+    const minutterTekst = minutter > 1 ? `${minutter} minutter` : `${minutter} minutt`;
+    const timerTekst = timer > 1 ? `${timer} timer` : `${timer} time`;
+    if(minutter === 0 && timer > 0) return timerTekst;
+    if(minutter > 0 && timer === 0) return minutterTekst;
+    if(minutter === 0 && timer === 0) return '0';
+    return `${timerTekst} og ${minutterTekst}`
+};

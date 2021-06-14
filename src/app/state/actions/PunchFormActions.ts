@@ -9,6 +9,7 @@ import {IPSBSoknadUt} from "../../models/types/PSBSoknadUt";
 
 import {Periode} from "../../models/types/Periode";
 import {IHentPerioder} from "../../models/types/RequestBodies";
+import {IPSBSoknadKvittering} from "../../models/types/PSBSoknadKvittering";
 
 interface IResetPunchFormAction {
     type: PunchFormActionKeys.RESET
@@ -51,7 +52,8 @@ interface ISubmitSoknadRequestAction {
 }
 
 interface ISubmitSoknadSuccessAction {
-    type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS
+    type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
+    innsentSoknad?: IPSBSoknadKvittering
 }
 
 interface ISubmitSoknadConflictAction {
@@ -271,7 +273,7 @@ export function updateSoknader(mappeid: string,
 
 
 export const submitSoknadRequestAction = (): ISubmitSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
-export const submitSoknadSuccessAction = (): ISubmitSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS});
+export const submitSoknadSuccessAction = (innsentSoknad: IPSBSoknadKvittering): ISubmitSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS, innsentSoknad});
 export const submitSoknadUncompleteAction = (errors: IInputError[]): ISubmitSoknadUncompleteAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
     errors,
@@ -309,12 +311,12 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
         }
 
         dispatch(submitSoknadRequestAction());
-        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
+        post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, responseData) => {
             switch (response.status) {
                 case 202:
-                    return dispatch(submitSoknadSuccessAction());
+                    return dispatch(submitSoknadSuccessAction(responseData));
                 case 400:
-                    return  dispatch(submitSoknadUncompleteAction(errors.feil));
+                    return  dispatch(submitSoknadUncompleteAction(responseData.feil));
                 case 409:
                     return  dispatch(submitSoknadConflictAction());
                 default:

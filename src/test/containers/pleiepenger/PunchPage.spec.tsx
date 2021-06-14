@@ -4,7 +4,7 @@ import {
   IPunchPageStateProps,
   PunchPageComponent,
 } from 'app/containers/pleiepenger/PunchPage';
-import { IJournalpost, IPleiepengerPunchState } from 'app/models/types';
+import {IJournalpost, IPleiepengerPunchState, IPunchFormState} from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
@@ -82,11 +82,15 @@ const setupPunchPage = (
     annenSokerIdent: null
   };
 
+  const punchFormState: IPunchFormState = {
+    isSoknadLoading: false
+  };
   const punchPageStateProps: IPunchPageStateProps = {
     punchState,
     journalpost,
     identState,
-    forbidden: false,
+    punchFormState,
+    forbidden: false
   };
 
   const punchPageComponentProps: IPunchPageComponentProps = {

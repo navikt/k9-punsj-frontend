@@ -292,10 +292,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         }
     }
 
-    componentWillUnmount(): void {
-        this.props.resetPunchFormAction();
-    }
-
     render() {
         const {intl, punchFormState, signaturState, identState} = this.props;
 
@@ -1034,7 +1030,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             medSlettKnapp={false}
                         />
                     )}
-                 {/*this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
+                    {/*this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
                     (<RadioPanelGruppe
                         className="horizontalRadios"
                         radios={Object.values(JaNei).map((jn) => ({

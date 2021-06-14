@@ -8,7 +8,7 @@ interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     unselectedoption?: string;
 }
 
-interface ICountry {
+export interface ICountry {
     code: string;
     name: string;
 }

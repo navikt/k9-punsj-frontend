@@ -6,7 +6,7 @@ import {
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import {PunchStep} from 'app/models/enums';
-import {IJournalpost, IPath, IPleiepengerPunchState} from 'app/models/types';
+import {IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState} from 'app/models/types';
 import {setIdentAction, setStepAction} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import {getPath} from 'app/utils';
@@ -26,6 +26,7 @@ import {RegistreringsValg} from "./RegistreringsValg";
 import {IIdentState} from "../../models/types/IdentState";
 import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
 import {PSBPunchForm} from './PSBPunchForm';
+import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 
 
 export interface IPunchPageStateProps {
@@ -33,6 +34,7 @@ export interface IPunchPageStateProps {
     journalpost?: IJournalpost;
     identState: IIdentState;
     forbidden: boolean | undefined;
+    punchFormState: IPunchFormState;
 }
 
 export interface IPunchPageDispatchProps {
@@ -144,11 +146,15 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
             case PunchStep.FILL_FORM:
                 return <PSBPunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:
-                return (
-                    <AlertStripeSuksess className="fullfortmelding">
-                        Søknaden er sendt til behandling.
-                    </AlertStripeSuksess>
-                );
+                return (<>
+                        <AlertStripeSuksess className="fullfortmelding">
+                            Søknaden er sendt til behandling.
+                        </AlertStripeSuksess>
+
+                        {typeof this.props.punchFormState.innsentSoknad !== "undefined" &&
+                        <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
+                                          intl={this.props.intl}/>}
+                    </>);
         }
     }
 
@@ -166,7 +172,8 @@ const mapStateToProps = (state: RootStateType) => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
-    forbidden: state.felles.journalpostForbidden
+    forbidden: state.felles.journalpostForbidden,
+    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
