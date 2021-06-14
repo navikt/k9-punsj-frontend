@@ -64,9 +64,10 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
 };
 
 export const formattereDatoIArray = (dato: number[]) => {
-    const formatertDato = dato.map((num, i) => {
-        return i !== dato.length - 1 ? `${num}.` : `${num}`;
-    });
+    const formatertDato: string[] = [];
+    for (let i = dato.length - 1; i >= 0; i--) {
+        formatertDato.push( i > 0 ? `${dato[i]}.` : `${dato[i]}`)
+    }
     return formatertDato.join('');
 };
 
@@ -79,7 +80,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
         const visOpplysningerOmSoker = ytelse.omsorg?.relasjonTilBarnet !== null;
         const visArbeidsforhold = sjekkPropertyEksistererOgIkkeErNull('arbeidstakerList', ytelse.arbeidstid) && ytelse.arbeidstid?.arbeidstakerList.length > 0;
         const visSelvstendigNæringsdrivendeInfo = ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null || sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet);
-        const visFrilanserArbeidstidInfo = ytelse.arbeidstid.frilanserArbeidstidInfo !== null;
+        const visFrilanserArbeidstidInfo = ytelse.arbeidstid.frilanserArbeidstidInfo !== null || sjekkPropertyEksistererOgIkkeErNull('frilanser', ytelse.opptjeningAktivitet);
         const visOmsorgstilbud = sjekkHvisPerioderEksisterer('tilsynsordning', ytelse);
         const visNattevak = sjekkHvisPerioderEksisterer('nattevåk', ytelse);
         const visBeredskap = sjekkHvisPerioderEksisterer('beredskap', ytelse);
@@ -137,7 +138,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   <hr className={classNames('linje')}/>
                   <p>
                     <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
-                      { ytelse.omsorg.beskrivelseAvOmsorgsrollen === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
+                      { ytelse.omsorg.relasjonTilBarnet === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
                   </p>
                 </div>}
 
@@ -177,14 +178,14 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                         && sjekkPropertyEksistererOgIkkeErNull('sluttdato', ytelse.opptjeningAktivitet.frilanser)
                         && ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length! > 0
                         &&
-                        <h4>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ': ' + formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}</h4>}
+                        <h4>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' ' + formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}</h4>}
 
-                      <VisningAvPerioderSoknadKvittering
-                        intl={intl}
-                        perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder!)}
-                        tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
-                        properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
-                      />
+                        {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && <VisningAvPerioderSoknadKvittering
+                          intl={intl}
+                          perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder!)}
+                          tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
+                          properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                        />}
                     </div>}
 
                     {visSelvstendigNæringsdrivendeInfo && <div>
