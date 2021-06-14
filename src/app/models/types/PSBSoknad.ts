@@ -33,7 +33,6 @@ export interface IPSBSoknad {
     soknadsinfo?: ISoknadsInfo;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
-
 }
 
 export class PSBSoknad implements IPSBSoknad {

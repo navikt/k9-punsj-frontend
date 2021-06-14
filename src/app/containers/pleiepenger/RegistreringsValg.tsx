@@ -116,7 +116,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                 {...props}
             />
 
-            <div className="knapperad">x
+            <div className="knapperad">
                 <Knapp
                     className="knapp knapp1"
                     onClick={redirectToPreviousStep}
