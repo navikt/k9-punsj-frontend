@@ -9,8 +9,6 @@ import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
 import {AlertStripeAdvarsel, AlertStripeInfo} from "nav-frontend-alertstriper";
-import {Hovedknapp} from "nav-frontend-knapper";
-
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
@@ -92,7 +90,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                     <AlertStripeAdvarsel>
                         <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
                     </AlertStripeAdvarsel>}
-                    {!this.props.journalpost?.kanSendeInn &&
+                    {!!this.props.journalpost  && !this.props.journalpost?.kanSendeInn &&
                     <AlertStripeAdvarsel><FormattedMessage id={'fordeling.kanikkesendeinn'}/></AlertStripeAdvarsel>}
                 </SkjemaGruppe>
             </div>
@@ -102,10 +100,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 };
 
 const mapStateToProps = (state: RootStateType) => ( {
-    journalpost: state.felles.journalpost
-,
-    notFound: state.felles.journalpostNotFound
-,
+    journalpost: state.felles.journalpost,
+    notFound: state.felles.journalpostNotFound,
     forbidden: state.felles.journalpostForbidden
 }
 

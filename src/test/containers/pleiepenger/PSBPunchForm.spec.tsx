@@ -388,5 +388,19 @@ describe('PunchForm', () => {
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.vent-knapp').simulate('click');
         expect(punchForm.find('.settpaaventmodal')).toHaveLength(1);
     });
+
+    it('Viser avdvarsel om overlappende periode', () => {
+        const soknad = {...initialSoknad, soeknadsperiode: {fom: '2021-02-23', tom: '2021-08-23'}}
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+        expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(1);
+        expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel').childAt(0).text()).toEqual('skjema.soknadsperiode.overlapper');
+    });
+
+    it('Viser ikke avdvarsel om overlappende periode når periodene ikke overlapper', () => {
+        const soknad = {...initialSoknad, soeknadsperiode: {fom: '2020-02-23', tom: '2020-08-23'}}
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+        expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(0);
+    });
+
 });
 

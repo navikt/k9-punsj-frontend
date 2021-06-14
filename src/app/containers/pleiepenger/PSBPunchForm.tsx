@@ -266,6 +266,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return new Date(dato) > fireAarSiden;
     }
 
+    private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
+        if (!eksisterendePerioder.length) {
+            return false;
+        }
+        return eksisterendePerioder.some(ep => (moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) && moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))))
+    }
+
+
     componentDidMount(): void {
         const {id} = this.props;
         this.props.getSoknad(id);
@@ -293,7 +301,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     render() {
-        const {intl, punchFormState, signaturState, identState} = this.props;
+        const {intl, punchFormState, signaturState} = this.props;
 
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
@@ -929,6 +937,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
                         </div>
                     </div>}
+                    {!!soknad.soeknadsperiode?.fom && !!soknad.soeknadsperiode.tom && !!eksisterendePerioder?.length && this.overlappendeSoknadsperiode(eksisterendePerioder, soknad.soeknadsperiode) &&
+                    <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>}
                 </Panel>
                 <VerticalSpacer sixteenPx={true}/>
                 <Checkbox
@@ -1181,7 +1191,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     onClick={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
-                        value={BeredskapNattevaak.NATTEVAAK}
+                        value={'skjema.omsorgstilbud.checkboks'}
                         onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
                         checked={!!soknad.tilsynsordning.perioder.length}
                     />
@@ -1792,14 +1802,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             iTilsynsordning: checked,
         });
 
-        if (!!checked &&
-            this.state.soknad.tilsynsordning?.perioder?.length === 0) {
+        if (!!checked && (!this.state.soknad.tilsynsordning ||
+            this.state.soknad.tilsynsordning?.perioder?.length === 0)) {
             this.addOmsorgstilbud()
         }
 
         if (!checked) {
-            this.updateSoknadState({tilsynsordning: { perioder: []}}, true);
-            this.updateSoknad({tilsynsordning: { perioder: []}});
+            this.updateSoknadState({tilsynsordning: undefined}, true);
+            this.updateSoknad({tilsynsordning: undefined});
         }
     }
 
