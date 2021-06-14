@@ -269,7 +269,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             }
                             bredde={"M"}
                         />}
-                        {riktigIdentIJournalposten === JaNei.JA && journalpost?.punsjInnsendingType?.erScanning && <>
+                        {riktigIdentIJournalposten === JaNei.JA && journalpost?.punsjInnsendingType?.erScanning && journalpost?.punsjInnsendingType?.kode !== 'KOPI' && <>
                           <VerticalSpacer sixteenPx={true}/>
                           <Checkbox
                             label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
