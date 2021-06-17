@@ -48,6 +48,7 @@ const setupFordeling = (
         journalpostId: journalpostid,
         norskIdent: '12345678901',
         kanSendeInn: true,
+        erSaksbehandler: true
     };
 
     const opprettIGosys: IGosysOppgaveState = {
