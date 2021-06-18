@@ -4,6 +4,7 @@ import {IError} from 'app/models/types';
 import {convertResponseToError, get, post}        from 'app/utils';;
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
 import {ISoknadSvar} from "../../models/types/SoknadSvar";
+import {IOpprettSoknad, ISkalTilK9} from "../../models/types/RequestBodies";
 
 interface ISetEksisterendeSoknaderAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar: ISoknadSvar}
 interface IFindEksisterendeSoknaderLoadingAction          {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_LOAD, isLoading: boolean}
@@ -67,14 +68,15 @@ export function createSoknadRequestAction():                     ICreateSoknadRe
 export function createSoknadSuccessAction(id: string):           ICreateSoknadSuccessAction       {return {type: EksisterendeSoknaderActionKeys.SOKNAD_CREATE_SUCCESS, id}}
 export function createSoknadErrorAction(error: IError):          ICreateSoknadErrorAction         {return {type: EksisterendeSoknaderActionKeys.SOKNAD_CREATE_ERROR, error}}
 export function resetSoknadidAction():                           IResetSoknadidAction             {return {type: EksisterendeSoknaderActionKeys.SOKNADID_RESET}}
-export function createSoknad(journalpostid: string, ident1: string, ident2: string | null) {return (dispatch: any) => {
+export function createSoknad(journalpostid: string, ident1: string, barnIdent: string | null) {return (dispatch: any) => {
 
     dispatch(createSoknadRequestAction());
 
 
-    const requestBody = {
+    const requestBody: IOpprettSoknad =  {
         journalpostId: journalpostid,
-        norskIdent: ident1
+        norskIdent: ident1,
+        barnIdent
     }
 
 

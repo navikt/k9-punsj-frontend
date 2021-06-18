@@ -29,7 +29,10 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
                 label={intlHelper(intl, "skjema.utenlandsopphold.land")}
                 unselectedoption={"Velg land"}
                 selectedcountry={periodeinfo.land || ''}
-                onChange={(event) => updatePeriodeinfoInSoknadState({land: event.target.value}, false)}
+                onChange={(event) => {
+                    updatePeriodeinfoInSoknadState({land: event.target.value}, false);
+                    updatePeriodeinfoInSoknad({land: event.target.value});
+                }}
                 onBlur={event => updatePeriodeinfoInSoknad({land: event.target.value})}
                 feil={getErrorMessage(`${feilprefiks}.land`)}
 

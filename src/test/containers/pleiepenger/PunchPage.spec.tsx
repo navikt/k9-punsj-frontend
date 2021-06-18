@@ -66,6 +66,7 @@ const setupPunchPage = (
           journalpostId: journalpostid,
           norskIdent: '12123400036',
           kanSendeInn: true,
+          erSaksbehandler: true
         }
       : journalpostinfo;
 

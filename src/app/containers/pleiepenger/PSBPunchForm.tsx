@@ -165,6 +165,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             tilsynsordning: {},
             utenlandsopphold: [],
             omsorg: {},
+            harInfoSomIkkeKanPunsjes: false,
+            harMedisinskeOpplysninger: false,
         },
         perioder: undefined,
         isFetched: false,
@@ -1298,10 +1300,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
+                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => {
-                            this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked}, true);
-                            this.updateSoknad({harInfoSomIkkeKanPunsjes: event.target.checked});
+                            this.updateSoknadState({...soknad, harInfoSomIkkeKanPunsjes: !!event.target.checked}, true);
+                            this.updateSoknad({...soknad, harInfoSomIkkeKanPunsjes: !!event.target.checked});
                         }}
                     /><Hjelpetekst
                     className={"hjelpetext"}
@@ -1312,10 +1314,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                        checked={this.state.soknad.harMedisinskeOpplysninger}
+                        checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => {
-                            this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked}, true);
-                            this.updateSoknad({harMedisinskeOpplysninger: event.target.checked});
+                            this.updateSoknadState({...soknad, harMedisinskeOpplysninger: !!event.target.checked}, true);
+                            this.updateSoknad({...soknad, harMedisinskeOpplysninger: !!event.target.checked});
                         }}
                     />
                     <Hjelpetekst
