@@ -99,55 +99,55 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
             <div className={classNames('SoknadKvitteringContainer')}>
                 <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
                 {visSoknadsperiode && <div>
-                  <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
-                  <hr className={classNames('linje')}/>
-                  <p>{periodToFormattedString(ytelse.søknadsperiode[0])}</p>
+                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
+                    <hr className={classNames('linje')}/>
+                    <p>{periodToFormattedString(ytelse.søknadsperiode[0])}</p>
                 </div>}
 
                 {visOpplysningerOmSoknad && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                  <hr className={classNames('linje')}/>
-                  <p><b>{intlHelper(intl, 'skjema.mottakelsesdato') + ': '}</b>
-                      {`${periodToFormattedString(response.mottattDato.substr(0, 10))}  ${response.mottattDato.substr(11, 5)}`}
-                  </p>
+                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
+                    <hr className={classNames('linje')}/>
+                    <p><b>{intlHelper(intl, 'skjema.mottakelsesdato') + ': '}</b>
+                        {`${periodToFormattedString(response.mottattDato.substr(0, 10))}  ${response.mottattDato.substr(11, 5)}`}
+                    </p>
                 </div>}
 
                 {visUtenlandsopphold && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
-                  <hr className={classNames('linje')}/>
-                  <VisningAvPerioderSoknadKvittering
-                    intl={intl}
-                    perioder={formattereLandTilNavnIObjekt(ytelse.utenlandsopphold?.perioder, countryList)}
-                    tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
-                    properties={['land']}
-                  />
+                    <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
+                    <hr className={classNames('linje')}/>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={formattereLandTilNavnIObjekt(ytelse.utenlandsopphold?.perioder, countryList)}
+                        tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
+                        properties={['land']}
+                    />
                 </div>}
 
                 {visFerie && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
-                  <hr className={classNames('linje')}/>
-                  <VisningAvPerioderSoknadKvittering
-                    intl={intl}
-                    perioder={ytelse.lovbestemtFerie?.perioder}
-                    tittel={['skjema.periode.overskrift']}
-                  />
+                    <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
+                    <hr className={classNames('linje')}/>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={ytelse.lovbestemtFerie?.perioder}
+                        tittel={['skjema.periode.overskrift']}
+                    />
                 </div>}
 
                 {visOpplysningerOmSoker && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}</h3>
-                  <hr className={classNames('linje')}/>
-                  <p>
-                    <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
-                      {ytelse.omsorg.relasjonTilBarnet === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
-                  </p>
+                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}</h3>
+                    <hr className={classNames('linje')}/>
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
+                        {ytelse.omsorg.relasjonTilBarnet === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
+                    </p>
                 </div>}
 
                 {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
-                  <hr className={classNames('linje')}/>
+                    <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
+                    <hr className={classNames('linje')}/>
 
                     {visArbeidsforhold && <div>
-                      <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
+                        <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
                         {ytelse.arbeidstid?.arbeidstakerList.map(arbeidstakerperiode => {
                             const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                             return <>
@@ -167,31 +167,31 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                     </div>}
 
                     {visFrilanserArbeidstidInfo && <div>
-                      <h3>{intlHelper(intl, 'frilanser')}</h3>
+                        <h3>{intlHelper(intl, 'frilanser')}</h3>
                         {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser)
                         && ytelse.opptjeningAktivitet.frilanser?.startdato?.length! > 0
                         && <p>
-                          <b>{intlHelper(intl, 'skjema.frilanserdato') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato!)}
+                            <b>{intlHelper(intl, 'skjema.frilanserdato') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato!)}
                         </p>}
 
                         {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans
                         && sjekkPropertyEksistererOgIkkeErNull('sluttdato', ytelse.opptjeningAktivitet.frilanser)
                         && ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length! > 0
                         && <p>
-                          <b>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}
+                            <b>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}
                         </p>
                         }
 
                         {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && <VisningAvPerioderSoknadKvittering
-                          intl={intl}
-                          perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder!)}
-                          tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
-                          properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                            intl={intl}
+                            perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder!)}
+                            tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
+                            properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
                         />}
                     </div>}
 
                     {visSelvstendigNæringsdrivendeInfo && <div>
-                      <h3>{intlHelper(intl, 'selvstendig')}</h3>
+                        <h3>{intlHelper(intl, 'selvstendig')}</h3>
 
                         {sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet) &&
                         <VisningAvPerioderSNSoknadKvittering intl={intl}
@@ -200,74 +200,74 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
 
                         {ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null &&
                         <VisningAvPerioderSoknadKvittering
-                          intl={intl}
-                          perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder!)}
-                          tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
-                          properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                            intl={intl}
+                            perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder!)}
+                            tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
+                            properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
                         />}
                     </div>}
                 </div>}
 
                 {visOmsorgstilbud && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}</h3>
-                  <hr className={classNames('linje')}/>
-                  <VisningAvPerioderSoknadKvittering
-                    intl={intl}
-                    perioder={formattereTimerOgMinutterForOmsorgstilbudPerioder(ytelse.tilsynsordning.perioder)}
-                    tittel={['skjema.periode.overskrift', 'skjema.omsorgstilbud.gjennomsnittlig']}
-                    properties={['etablertTilsynTimerPerDag']}
-                    lessClassForAdjustment={'visningAvPerioderOmsorgstilbud'}
-                  />
+                    <h3>{intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}</h3>
+                    <hr className={classNames('linje')}/>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={formattereTimerOgMinutterForOmsorgstilbudPerioder(ytelse.tilsynsordning.perioder)}
+                        tittel={['skjema.periode.overskrift', 'skjema.omsorgstilbud.gjennomsnittlig']}
+                        properties={['etablertTilsynTimerPerDag']}
+                        lessClassForAdjustment={'visningAvPerioderOmsorgstilbud'}
+                    />
                 </div>}
 
                 {(visNattevak || visBeredskap) && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.BEREDSKAPNATTEVAAK)}</h3>
-                  <hr className={classNames('linje')}/>
+                    <h3>{intlHelper(intl, PunchFormPaneler.BEREDSKAPNATTEVAAK)}</h3>
+                    <hr className={classNames('linje')}/>
                     {visBeredskap && <>
-                      <h4 className={'soknadKvitteringUnderTittel'}>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h4>
-                      <VisningAvPerioderSoknadKvittering
-                        intl={intl}
-                        perioder={ytelse.beredskap.perioder}
-                        tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
-                        properties={['tilleggsinformasjon']}
-                        lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
-                      />
+                        <h4 className={'soknadKvitteringUnderTittel'}>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h4>
+                        <VisningAvPerioderSoknadKvittering
+                            intl={intl}
+                            perioder={ytelse.beredskap.perioder}
+                            tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
+                            properties={['tilleggsinformasjon']}
+                            lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
+                        />
                     </>}
 
                     {visNattevak && <div>
-                      <h4 className={'soknadKvitteringUnderTittel'}>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h4>
-                      <VisningAvPerioderSoknadKvittering
-                        intl={intl}
-                        perioder={ytelse.nattevåk.perioder}
-                        tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
-                        properties={['tilleggsinformasjon']}
-                        lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
-                      />
+                        <h4 className={'soknadKvitteringUnderTittel'}>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h4>
+                        <VisningAvPerioderSoknadKvittering
+                            intl={intl}
+                            perioder={ytelse.nattevåk.perioder}
+                            tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
+                            properties={['tilleggsinformasjon']}
+                            lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
+                        />
                     </div>}
                 </div>}
 
                 {visMedlemskap && <div>
-                  <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
-                  <hr className={classNames('linje')}/>
-                  <VisningAvPerioderSoknadKvittering
-                    intl={intl}
-                    perioder={formattereLandTilNavnIObjekt(ytelse.bosteder?.perioder, countryList)}
-                    tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
-                    properties={['land']}
-                  />
+                    <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
+                    <hr className={classNames('linje')}/>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={formattereLandTilNavnIObjekt(ytelse.bosteder?.perioder, countryList)}
+                        tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
+                        properties={['land']}
+                    />
                 </div>}
 
                 {'infoFraPunsj' in ytelse && <div>
-                  <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                  <hr className={classNames('linje')}/>
-                  <p>
-                    <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
-                      {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
-                  </p>
-                  <p>
-                    <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
-                      {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
-                  </p>
+                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
+                    <hr className={classNames('linje')}/>
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
+                        {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                    </p>
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
+                        {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
+                    </p>
                 </div>
                 }
             </div>);
