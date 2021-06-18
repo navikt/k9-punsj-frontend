@@ -1298,7 +1298,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
+                        checked={soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => {
                             this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked}, true);
                             this.updateSoknad({harInfoSomIkkeKanPunsjes: event.target.checked});
@@ -1312,7 +1312,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                        checked={this.state.soknad.harMedisinskeOpplysninger}
+                        checked={soknad.harMedisinskeOpplysninger}
                         onChange={(event) => {
                             this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked}, true);
                             this.updateSoknad({harMedisinskeOpplysninger: event.target.checked});
