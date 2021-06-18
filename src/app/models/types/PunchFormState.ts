@@ -7,6 +7,7 @@ import {IPeriode} from "./Periode";
 export interface IPunchFormState {
     soknad?: Partial<IPSBSoknad>;
     innsentSoknad?: IPSBSoknadKvittering;
+    validertSoknad?: IPSBSoknadKvittering;
     perioder?: IPeriode[],
     isPerioderLoading?: boolean,
     hentPerioderError?: IError,
