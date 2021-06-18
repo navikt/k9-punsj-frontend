@@ -952,7 +952,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 />
                 <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
+                    apen={true}
                     className={"punchform__paneler"}
                     tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
