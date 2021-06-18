@@ -266,8 +266,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <Hovedknapp mini={true} onClick={() => omfordel(journalpost!.journalpostId, journalpost?.norskIdent)}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>}
-                        {gjelderPP === JaNei.JA &&
-                        <RadioPanelGruppe
+                        {gjelderPP === JaNei.JA && <>
+                          <VerticalSpacer sixteenPx={true} />
+                          <RadioPanelGruppe
                             className="horizontalRadios"
                             name={"identsjekk"}
                             radios={Object.values(JaNei).map((jn) => ({
@@ -280,7 +281,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             />}
                             checked={riktigIdentIJournalposten}
                             onChange={(event) => handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
-                        />}
+                        />
+                          <VerticalSpacer sixteenPx={true} />
+                        </>}
                         {riktigIdentIJournalposten === JaNei.NEI && <Input
                             label={intlHelper(
                                 intl, 'ident.identifikasjon.felt'
