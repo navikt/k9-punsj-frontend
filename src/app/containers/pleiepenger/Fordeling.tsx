@@ -242,7 +242,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     return (
         <div className="fordeling-container">
-            {!!journalpost?.kanSendeInn && <FormPanel>
+            {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <FormPanel>
                 <JournalpostPanel/>
                 <div className="fordeling-page">
                     {!!opprettIGosysState.gosysOppgaveRequestError && (

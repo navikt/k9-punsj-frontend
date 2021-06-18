@@ -1,6 +1,6 @@
 import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
-import {Arbeidsforhold, JaNei, JaNeiVetikke, PunchStep} from 'app/models/enums';
+import {Arbeidsforhold, JaNei, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {IInputError, IPunchFormState, ISignaturState, SelvstendigNaerinsdrivende} from 'app/models/types';
 import {
