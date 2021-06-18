@@ -262,11 +262,11 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                   <hr className={classNames('linje')}/>
                   <p>
                     <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
-                      {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                      {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
                   </p>
                   <p>
                     <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
-                      {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
+                      {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
                   </p>
                 </div>
                 }
