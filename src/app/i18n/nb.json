@@ -64,6 +64,8 @@
   "fordeling.lukkoppgave.utfort":                                                                 "Oppgaven er lukket",
   "fordeling.omfordeling.feil":                                                                   "Det oppsto en feil. Prøv igjen senere.",
   "fordeling.kanikkesendeinn":                                                                    "Informasjon fra denne journalposten er registrert og sendt inn til K9-sak. Journalposten kan ikke sendes inn på nytt.",
+  "fordeling.ikkesaksbehandler":                                                                  "Du har ikke tilgang til denne applikasjonen.",
+  "fordeling.gjelderpp":                                                                          "Gjelder dokumentet Pleiepenger sykt barn?",
   "gosysOppgave.opprettet":                                                                       "Journalføringsoppgave oprettet i Gosys",
   "gosysOppgave.feilet":                                                                          "Oppretting av journalføringsoppgave i Gosys feilet",
   "ident.signatur.overskrift":                                                                    "Signatur",
@@ -387,6 +389,7 @@
   "modal.settpaavent.til": "Saken er satt på vent til {dato}.",
   "modal.okgaatillos.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
   "modal.settpaavent.feil": "Det oppstod en feil. Prøv igjen senere.",
+  "modal.settpaavent.ok": "OK",
 
   "søk.overskrift": "Søk på journalpost-ID",
   "søk.label": "Søk med fødselsnummer eller D-nummer",

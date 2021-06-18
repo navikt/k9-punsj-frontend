@@ -50,7 +50,7 @@ export interface IPSBSoknadUt {
     harMedisinskeOpplysninger?: boolean;
 }
 
-export class PSBSoknadUt implements Required<IPSBSoknadUt> {
+export class PSBSoknadUt implements IPSBSoknadUt {
 
     soeknadId: string;
     soekerId: string;

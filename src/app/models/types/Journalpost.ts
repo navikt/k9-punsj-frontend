@@ -9,6 +9,7 @@ export interface IJournalpost {
         erScanning: boolean;
     },
     kanSendeInn: boolean;
+    erSaksbehandler: boolean;
 }
 
 export interface IDokument {

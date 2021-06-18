@@ -1,6 +1,6 @@
 import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
-import {Arbeidsforhold, JaNei, JaNeiVetikke, PunchStep} from 'app/models/enums';
+import {Arbeidsforhold, JaNei, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {IInputError, IPunchFormState, ISignaturState, SelvstendigNaerinsdrivende} from 'app/models/types';
 import {
@@ -167,6 +167,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             tilsynsordning: {},
             utenlandsopphold: [],
             omsorg: {},
+            harInfoSomIkkeKanPunsjes: false,
+            harMedisinskeOpplysninger: false,
         },
         perioder: undefined,
         isFetched: false,
@@ -951,7 +953,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 />
                 <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
+                    apen={true}
                     className={"punchform__paneler"}
                     tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}
@@ -1299,10 +1301,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={this.state.soknad.harInfoSomIkkeKanPunsjes}
+                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => {
-                            this.updateSoknadState({harInfoSomIkkeKanPunsjes: event.target.checked}, true);
-                            this.updateSoknad({harInfoSomIkkeKanPunsjes: event.target.checked});
+                            this.updateSoknadState({...soknad, harInfoSomIkkeKanPunsjes: !!event.target.checked}, true);
+                            this.updateSoknad({...soknad, harInfoSomIkkeKanPunsjes: !!event.target.checked});
                         }}
                     /><Hjelpetekst
                     className={"hjelpetext"}
@@ -1313,10 +1315,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <div className={"flex-container"}>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                        checked={this.state.soknad.harMedisinskeOpplysninger}
+                        checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => {
-                            this.updateSoknadState({harMedisinskeOpplysninger: event.target.checked}, true);
-                            this.updateSoknad({harMedisinskeOpplysninger: event.target.checked});
+                            this.updateSoknadState({...soknad, harMedisinskeOpplysninger: !!event.target.checked}, true);
+                            this.updateSoknad({...soknad, harMedisinskeOpplysninger: !!event.target.checked});
                         }}
                     />
                     <Hjelpetekst
