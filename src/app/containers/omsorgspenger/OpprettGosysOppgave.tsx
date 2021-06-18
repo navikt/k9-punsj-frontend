@@ -7,9 +7,7 @@ import {RootStateType} from "../../state/RootState";
 import {IJournalpost} from "../../models/types";
 import {AlertStripeFeil, AlertStripeSuksess} from "nav-frontend-alertstriper";
 import intlHelper from "../../utils/intlUtils";
-import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
 import NavFrontendSpinner from "nav-frontend-spinner";
-import {Sakstype} from "../../models/enums";
 
 export interface IOpprettOppgaveStateProps {
     journalpost?: IJournalpost;
@@ -61,7 +59,7 @@ const OpprettGosysOppgaveComponent: React.FunctionComponent<IOpprettOppgaveProps
             <AlertStripeFeil>
                 {intlHelper(intl, 'gosysOppgave.feilet')}
             </AlertStripeFeil>
-        );};
+        );}
 
 
     if (gosysOppgaveOprettet) {
@@ -69,7 +67,7 @@ const OpprettGosysOppgaveComponent: React.FunctionComponent<IOpprettOppgaveProps
             <AlertStripeSuksess>
                 {intlHelper(intl, 'gosysOppgave.opprettet')}
             </AlertStripeSuksess>
-        );};
+        );}
 
     return (
         <OpprettGosysOppgaveKnapp
