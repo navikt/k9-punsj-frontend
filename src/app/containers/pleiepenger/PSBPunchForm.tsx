@@ -82,6 +82,7 @@ import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import ErDuSikkerModal from "./ErDuSikkerModal";
 import moment from "moment";
 import classNames from "classnames";
+import { Datepicker, isISODateString } from 'nav-datovelger';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -893,30 +894,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <SkjemaGruppe feil={this.getErrorMessage('søknadsperiode/endringsperiode')}>
                         {!!soknad.soeknadsperiode &&
                         <div className={"soknadsperiodecontainer"}>
-                            <Input
-                                id="soknadsperiode-fra"
-                                bredde={"M"}
-                                label={intlHelper(intl, 'skjema.soknasperiodefra')}
-                                type="date"
-                                className="fom"
-                                value={soknad.soeknadsperiode.fom || ''}
-                                {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                    soeknadsperiode: {...soknad.soeknadsperiode, fom: event.target.value}
-                                }))}
+                          <label><b>{intlHelper(intl, 'skjema.soknasperiodefra')}</b>
+                            <div
+                              id="soknadsperiode-fra"
+                              className="fom"
+                              onBlur={(e) => {
+                                  if(e.target.getAttribute('aria-expanded') === 'false' && e.target.className === 'nav-datovelger__kalenderknapp' || e.target.className === 'nav-datovelger__input'){
+                                      this.updateSoknad({soeknadsperiode: {...soknad.soeknadsperiode, fom: this.state.soknad.soeknadsperiode?.fom}})}
+                              }
+                              }>
+                              <Datepicker value={soknad.soeknadsperiode.fom || 'dd.mm.åååå'}
+                                          onChange={value => this.updateSoknadState({
+                                              soeknadsperiode: {...soknad.soeknadsperiode, fom: value}
+                                          }, false)}
+                              />
+                            </div>
+                          </label>
 
-                            />
-                            <Input
-                                id="soknadsperiode-til"
-                                bredde={"M"}
-                                label={intlHelper(intl, 'skjema.soknasperiodetil')}
-                                type="date"
-                                className="tom"
-                                value={soknad.soeknadsperiode.tom || ''}
-                                {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                    soeknadsperiode: {...soknad.soeknadsperiode, tom: event.target.value},
-                                }))}
-
-                            />
+                          <label> <b>{intlHelper(intl, 'skjema.soknasperiodetil')}</b>
+                            <div
+                              id="soknadsperiode-til"
+                              className="tom"
+                              onBlur={(e) => {
+                                  if(e.target.getAttribute('aria-expanded') === 'false' && e.target.className === 'nav-datovelger__kalenderknapp' || e.target.className === 'nav-datovelger__input'){
+                                      this.updateSoknad({soeknadsperiode: {...soknad.soeknadsperiode, tom: this.state.soknad.soeknadsperiode?.tom}})}
+                              }
+                              }>
+                              <Datepicker value={soknad.soeknadsperiode.tom || 'dd.mm.åååå'}
+                                          onChange={value => this.updateSoknadState({
+                                              soeknadsperiode: {...soknad.soeknadsperiode, tom: value}
+                                          }, false)}
+                              />
+                            </div>
+                          </label>
                             <div
                                 id="fjern"
                                 className={"fjern"}
@@ -1939,9 +1949,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         setHash('/');
     };
 
-    private changeAndBlurUpdatesSoknad = (
-        change: (event: any) => Partial<IPSBSoknad>
-    ) => ({
+    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPSBSoknad>) => ({
         onChange: (event: any) =>
             this.updateSoknadState(change(event), false),
         onBlur: (event: any) => this.updateSoknad
