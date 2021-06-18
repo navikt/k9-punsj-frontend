@@ -13,7 +13,9 @@ import {mocked} from 'ts-jest/utils';
 import {IIdentState} from "../../../app/models/types/IdentState";
 import {JaNeiIkkeRelevant} from "../../../app/models/enums/JaNeiIkkeRelevant";
 import {IJournalposterPerIdentState} from "../../../app/models/types/JournalposterPerIdentState";
-import {JaNeiIkkeOpplyst} from "../../../app/models/enums/JaNeiIkkeOpplyst";
+import {
+    IPSBSoknadKvittering,
+} from "../../../app/models/types/PSBSoknadKvittering";
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -66,6 +68,40 @@ const initialSoknad: IPSBSoknad = {
     uttak: []
 }
 
+const validertSoknad: IPSBSoknadKvittering = {
+    mottattDato: '',
+    ytelse: {
+        type: '',
+        barn: {
+            norskIdentitetsnummer: '',
+            fødselsdato: null
+        },
+        søknadsperiode: [],
+        bosteder: { perioder: {} },
+        utenlandsopphold: { perioder: {} },
+        beredskap: { perioder: {} },
+        nattevåk: { perioder: {} },
+        tilsynsordning: { perioder: {} },
+        lovbestemtFerie: { perioder: {} },
+        arbeidstid: {
+            arbeidstakerList: [{
+                norskIdentitetsnummer: null,
+                organisasjonsnummer: '',
+                arbeidstidInfo: { perioder: {}}
+            }],
+            frilanserArbeidstidInfo: null,
+            selvstendigNæringsdrivendeArbeidstidInfo: null,
+
+        },
+        uttak: { perioder: {} },
+        omsorg: {
+            relasjonTilBarnet: null,
+            beskrivelseAvOmsorgsrollen: null
+        },
+        opptjeningAktivitet: {
+        },
+    }
+}
 
 const setupPunchForm = (
     punchFormStateSetup?: Partial<IPunchFormState>,
@@ -376,9 +412,11 @@ describe('PunchForm', () => {
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', () => {
         const validateSoknad = jest.fn();
-        const punchForm = setupPunchForm({soknad: initialSoknad, isValid: true}, {validateSoknad});
+        const punchForm = setupPunchForm({soknad: initialSoknad, validertSoknad, isValid: true}, {validateSoknad});
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
+        expect(punchForm.find('.validertSoknadModal')).toHaveLength(1);
+        punchForm.find('.validertSoknadOppsummeringContainerKnapper').find('.validertSoknadOppsummeringContainer_knappVidere').simulate('click');
         expect(punchForm.find('.erdusikkermodal')).toHaveLength(1);
     });
 
