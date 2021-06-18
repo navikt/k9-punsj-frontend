@@ -282,9 +282,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             checked={riktigIdentIJournalposten}
                             onChange={(event) => handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
                         />
-                          <VerticalSpacer sixteenPx={true} />
                         </>}
-                        {riktigIdentIJournalposten === JaNei.NEI && <Input
+                        {riktigIdentIJournalposten === JaNei.NEI && <>
+                          <VerticalSpacer sixteenPx={true} />
+                          <Input
                             label={intlHelper(
                                 intl, 'ident.identifikasjon.felt'
                             )}
@@ -299,7 +300,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     : undefined
                             }
                             bredde={"M"}
-                        />}
+                        />
+                        </>}
                         {gjelderPP === JaNei.JA && journalpost?.punsjInnsendingType?.erScanning && journalpost?.punsjInnsendingType?.kode !== 'KOPI' && <>
                           <VerticalSpacer sixteenPx={true}/>
                           <Checkbox
