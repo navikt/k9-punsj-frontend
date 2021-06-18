@@ -23,7 +23,7 @@ class JournalpostPanelComponent extends React.Component<WrappedComponentProps & 
 
         return (
             <Panel border={true} className={'journalpostpanel'}>
-                <FlexRow childrenMargin={'medium'}>
+                <FlexRow wrap={true} childrenMargin={'medium'}>
                     <LabelValue
                         labelTextId="journalpost.id"
                         value={journalpost?.journalpostId}
