@@ -31,8 +31,8 @@ export interface IPSBSoknad {
     omsorg?: IOmsorg;
     bosteder?: Periodeinfo<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
-    harInfoSomIkkeKanPunsjes?: boolean | undefined;
-    harMedisinskeOpplysninger?: boolean | undefined;
+    harInfoSomIkkeKanPunsjes?: boolean;
+    harMedisinskeOpplysninger?: boolean;
 }
 
 export class PSBSoknad implements IPSBSoknad {
@@ -57,8 +57,8 @@ export class PSBSoknad implements IPSBSoknad {
     omsorg: Omsorg;
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;
-    harInfoSomIkkeKanPunsjes: boolean | undefined;
-    harMedisinskeOpplysninger: boolean | undefined;
+    harInfoSomIkkeKanPunsjes: boolean;
+    harMedisinskeOpplysninger: boolean;
 
     constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
@@ -81,8 +81,8 @@ export class PSBSoknad implements IPSBSoknad {
         this.omsorg = new Omsorg(soknad.omsorg || {});
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
-        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || undefined;
-        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || undefined;
+        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
+        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || false;
     }
 }
 
