@@ -48,7 +48,8 @@ const fullResponse: IPSBSoknadKvittering = {
                         endringBegrunnelse: "begunnelse",
                         bruttoInntekt: 1000000,
                         erNyoppstartet: false,
-                        registrertIUtlandet: false
+                        registrertIUtlandet: false,
+                        landkode: 'USA'
                     }
                 },
                 organisasjonsnummer: "231232321323",
@@ -288,7 +289,6 @@ describe('SoknadKvittering', () => {
 
     it('Viser alle perioder', () => {
         expect(soknadKvitteringFull.find('VisningAvPerioderSoknadKvittering')).toHaveLength(8);
-
         expect(soknadKvitteringTom.find('VisningAvPerioderSoknadKvittering')).toHaveLength(0);
     });
 

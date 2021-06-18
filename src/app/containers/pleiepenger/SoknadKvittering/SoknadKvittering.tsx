@@ -46,7 +46,7 @@ export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]
     return typeof landNavn !== undefined ? landNavn?.name : '';
 };
 
-const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
+export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach(periode => {
         kopiAvPerioder[periode].jobberNormaltTimerPerDag = formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag);
