@@ -46,11 +46,11 @@ export interface IPSBSoknadUt {
     omsorg?: IOmsorg;
     bosteder?: Periodeinfo<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
-    harInfoSomIkkeKanPunsjes?: boolean;
-    harMedisinskeOpplysninger?: boolean;
+    harInfoSomIkkeKanPunsjes?: boolean | undefined;
+    harMedisinskeOpplysninger?: boolean | undefined;
 }
 
-export class PSBSoknadUt implements Required<IPSBSoknadUt> {
+export class PSBSoknadUt implements IPSBSoknadUt {
 
     soeknadId: string;
     soekerId: string;
@@ -72,8 +72,8 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;
-    harInfoSomIkkeKanPunsjes: boolean;
-    harMedisinskeOpplysninger: boolean;
+    harInfoSomIkkeKanPunsjes: boolean | undefined;
+    harMedisinskeOpplysninger: boolean | undefined;
 
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
@@ -96,8 +96,8 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
-        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
-        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || false;
+        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || undefined;
+        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || undefined;
     }
 }
 

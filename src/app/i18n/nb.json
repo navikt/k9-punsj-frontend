@@ -389,6 +389,7 @@
   "modal.settpaavent.til": "Saken er satt på vent til {dato}.",
   "modal.okgaatillos.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
   "modal.settpaavent.feil": "Det oppstod en feil. Prøv igjen senere.",
+  "modal.settpaavent.ok": "OK",
 
   "søk.overskrift": "Søk på journalpost-ID",
   "søk.label": "Søk med fødselsnummer eller D-nummer",
