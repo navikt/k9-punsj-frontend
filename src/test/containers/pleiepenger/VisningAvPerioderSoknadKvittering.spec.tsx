@@ -3,12 +3,9 @@ import * as React from 'react';
 import {createIntl, IntlShape} from 'react-intl';
 import {
     IPSBSoknadKvitteringArbeidstidInfo,
-    IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode
 } from "../../../app/models/types/PSBSoknadKvittering";
 import {mocked} from "ts-jest/utils";
 import intlHelper from "../../../app/utils/intlUtils";
-import VisningAvPerioderSNSoknadKvittering
-    from "../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSNSoknadKvittering";
 import VisningAvPerioderSoknadKvittering
     from "../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSoknadKvittering";
 import {formattereTimerForArbeidstakerPerioder} from "../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering";
@@ -40,7 +37,6 @@ const flerePerioder: IPSBSoknadKvitteringArbeidstidInfo = {
 
 const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringArbeidstidInfo) => {
     const intlMock = createIntl({locale: 'nb', defaultLocale: 'nb'});
-
     mocked(intlHelper).mockImplementation(
         (intl: IntlShape, id: string, value?: { [key: string]: string }) => id
     );

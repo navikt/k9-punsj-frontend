@@ -16,7 +16,7 @@ jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
-const fullResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [{
+const fullstendigResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [{
     perioder: {
         '2021-06-01/2021-06-30': {
             virksomhetstyper: [
@@ -71,17 +71,17 @@ const setupVisningAvPerioderSNSoknadKvittering = (response : IPSBSoknadKvitterin
 };
 
 describe('VisningAvPerioderSNSoknadKvittering', () => {
-    const visningAvPerioderSNSoknadKvitteringFull = setupVisningAvPerioderSNSoknadKvittering(fullResponse);
+    const visningAvPerioderSNSoknadKvitteringFull = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
     const visningAvPerioderSNSoknadKvitteringVarigEndring = setupVisningAvPerioderSNSoknadKvittering(varigEndring);
 
     it('Viser orgnummer', () => {
        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.arbeidstaker.orgnr')).toBe(true);
-       expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullResponse[0].organisasjonsnummer)).toBe(true);
+       expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].organisasjonsnummer)).toBe(true);
     });
 
     it('Viser orgnavn', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.virksomhetsnavn')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullResponse[0].virksomhetNavn)).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].virksomhetNavn)).toBe(true);
     });
 
     it('Viser periode', () => {
@@ -103,10 +103,18 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
     });
 
-    it('Viser om informasjon om varig endring', () => {
+    it('Viser att virksomheten er registrert i annet land', () => {
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
+    });
+
+    it('Viser om ikke informasjon av varig endring da det ikke eksisterer', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.sn.varigendring')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Nei')).toBe(true);
+    });
 
+    it('Viser om informasjon om varig endring', () => {
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendring')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Ja')).toBe(true);
 

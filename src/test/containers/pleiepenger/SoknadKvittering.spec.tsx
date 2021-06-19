@@ -255,7 +255,7 @@ describe('SoknadKvittering', () => {
         expect(soknadKvitteringFull.text().includes('selvstendig')).toBe(true);
         expect(soknadKvitteringFull.find('VisningAvPerioderSNSoknadKvittering')).toHaveLength(1);
 
-        expect(soknadKvitteringTom.text().includes('selvstendig')).toBe(false);;
+        expect(soknadKvitteringTom.text().includes('selvstendig')).toBe(false);
         expect(soknadKvitteringTom.find('VisningAvPerioderSNSoknadKvittering')).toHaveLength(0);
     });
 
