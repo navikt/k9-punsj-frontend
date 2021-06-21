@@ -39,7 +39,6 @@ const initialSoknad: IPSBSoknad = {
     },
     beredskap: [],
     bosteder: [],
-    erFraK9: false,
     harInfoSomIkkeKanPunsjes: false,
     harMedisinskeOpplysninger: false,
     journalposter: new Set([]),
@@ -53,7 +52,6 @@ const initialSoknad: IPSBSoknad = {
         frilanser: null,
         selvstendigNaeringsdrivende: null
     },
-    sendtInn: false,
     soekerId: ident1,
     soeknadId: "123",
     soeknadsperiode: null,
@@ -405,7 +403,7 @@ describe('PunchForm', () => {
     it('Oppdaterer staten og søknaden riktig ved klikk på checkbox ', () => {
         const updateSoknad = jest.fn();
         const punchForm = setupPunchForm({soknad: initialSoknad}, {updateSoknad});
-        const checkbox = punchForm.find('.opplysningerikkepunsjetcheckbox');
+        const checkbox = punchForm.find('#opplysningerikkepunsjetcheckbox');
         checkbox.simulate('change', {target: {checked: true}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
@@ -414,7 +412,7 @@ describe('PunchForm', () => {
         expect(updateSoknad).toHaveBeenCalledWith(
             expectedUpdatedSoknad
         );
-        expect(punchForm.find('.opplysningerikkepunsjetcheckbox').prop('checked')).toBeTruthy();
+        expect(punchForm.find('#opplysningerikkepunsjetcheckbox').prop('checked')).toBeTruthy();
         checkbox.simulate('change', {target: {checked: false}});
         expect(updateSoknad).toHaveBeenCalledTimes(2);
         const expectedUpdatedSoknad2 = expect.objectContaining({

@@ -150,10 +150,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         soknad: {
             soeknadId: '',
             soekerId: '',
-            erFraK9: false,
             mottattDato: '',
             journalposter: new Set([]),
-            sendtInn: false,
             barn:
                 {
                     norskIdent: '',
@@ -1299,12 +1297,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <p className={"ikkeregistrert"}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className={"flex-container"}>
                     <CheckboksPanel
-                        className={"opplysningerikkepunsjetcheckbox"}
+                        id={"opplysningerikkepunsjetcheckbox"}
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
-                        onChange={(event) => {
-                           this.updateOpplysningerIkkeKanPunsjes(event.target.checked);
-                        }}
+                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     /><Hjelpetekst
                     className={"hjelpetext"}
                     type={PopoverOrientering.OverHoyre}
@@ -1313,11 +1309,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <VerticalSpacer eightPx={true}/>
                 <div className={"flex-container"}>
                     <CheckboksPanel
+                        id={"medisinskeopplysningercheckbox"}
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                         checked={!!soknad.harMedisinskeOpplysninger}
-                        onChange={(event) => {
-                            this.updateMedisinskeOpplysninger(event.target.checked);
-                        }}
+                        onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
                     <Hjelpetekst
                         className={"hjelpetext"}
@@ -1813,11 +1808,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private updateMedisinskeOpplysninger (checked: boolean) {
+        console.log("Oppdaterer medisinske til " + checked)
         this.updateSoknadState({harMedisinskeOpplysninger: checked}, true);
         this.updateSoknad({harMedisinskeOpplysninger: checked});
     }
 
     private updateOpplysningerIkkeKanPunsjes (checked: boolean) {
+        console.log("Oppdaterer ikke kan punsjes til " + checked)
         this.updateSoknadState({harInfoSomIkkeKanPunsjes: checked}, true);
         this.updateSoknad({harInfoSomIkkeKanPunsjes: checked});
     }
