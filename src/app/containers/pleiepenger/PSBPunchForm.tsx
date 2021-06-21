@@ -1423,6 +1423,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
+        this.updateSoknad(this.state.soknad);
         this.props.validateSoknad(
             this.state.soknad.soekerId,
             this.props.id
@@ -1808,13 +1809,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private updateMedisinskeOpplysninger (checked: boolean) {
-        this.updateSoknadState({harMedisinskeOpplysninger: checked}, true);
-        this.updateSoknad({harMedisinskeOpplysninger: checked});
+        this.updateSoknadState({harMedisinskeOpplysninger: !!checked}, true);
+        this.updateSoknad({harMedisinskeOpplysninger: !!checked});
     }
 
     private updateOpplysningerIkkeKanPunsjes (checked: boolean) {
-        this.updateSoknadState({harInfoSomIkkeKanPunsjes: checked}, true);
-        this.updateSoknad({harInfoSomIkkeKanPunsjes: checked});
+        this.updateSoknadState({harInfoSomIkkeKanPunsjes: !!checked}, true);
+        this.updateSoknad({harInfoSomIkkeKanPunsjes: !!checked});
     }
 
     private backButton() {
