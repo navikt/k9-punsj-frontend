@@ -1808,13 +1808,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private updateMedisinskeOpplysninger (checked: boolean) {
-        console.log("Oppdaterer medisinske til " + checked)
         this.updateSoknadState({harMedisinskeOpplysninger: checked}, true);
         this.updateSoknad({harMedisinskeOpplysninger: checked});
     }
 
     private updateOpplysningerIkkeKanPunsjes (checked: boolean) {
-        console.log("Oppdaterer ikke kan punsjes til " + checked)
         this.updateSoknadState({harInfoSomIkkeKanPunsjes: checked}, true);
         this.updateSoknad({harInfoSomIkkeKanPunsjes: checked});
     }
