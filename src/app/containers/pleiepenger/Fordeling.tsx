@@ -266,8 +266,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <Hovedknapp mini={true} onClick={() => omfordel(journalpost!.journalpostId, journalpost?.norskIdent)}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>}
-                        {gjelderPP === JaNei.JA &&
-                        <RadioPanelGruppe
+                        {gjelderPP === JaNei.JA && <>
+                          <VerticalSpacer sixteenPx={true} />
+                          <RadioPanelGruppe
                             className="horizontalRadios"
                             name={"identsjekk"}
                             radios={Object.values(JaNei).map((jn) => ({
@@ -280,8 +281,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             />}
                             checked={riktigIdentIJournalposten}
                             onChange={(event) => handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
-                        />}
-                        {riktigIdentIJournalposten === JaNei.NEI && <Input
+                        />
+                        </>}
+                        {riktigIdentIJournalposten === JaNei.NEI && <>
+                          <VerticalSpacer sixteenPx={true} />
+                          <Input
                             label={intlHelper(
                                 intl, 'ident.identifikasjon.felt'
                             )}
@@ -296,7 +300,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     : undefined
                             }
                             bredde={"M"}
-                        />}
+                        />
+                        </>}
                         {gjelderPP === JaNei.JA && journalpost?.punsjInnsendingType?.erScanning && journalpost?.punsjInnsendingType?.kode !== 'KOPI' && <>
                           <VerticalSpacer sixteenPx={true}/>
                           <Checkbox

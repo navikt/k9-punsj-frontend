@@ -22,7 +22,7 @@ import {
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
-import {Knapp} from 'nav-frontend-knapper';
+import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import {
     CheckboksPanel,
     CheckboksPanelGruppe,
@@ -82,6 +82,7 @@ import {FrilanserOpptjening} from "../../models/types/FrilanserOpptjening";
 import ErDuSikkerModal from "./ErDuSikkerModal";
 import moment from "moment";
 import classNames from "classnames";
+import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -135,6 +136,7 @@ export interface IPunchFormComponentState {
     medlemskap: IUtenlandsOpphold[];
     aapnePaneler: PunchFormPaneler[]
     showSettPaaVentModal: boolean;
+    visErDuSikkerModal: boolean;
     errors: IInputError[];
     harRegnskapsfører: boolean;
 }
@@ -186,6 +188,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         skalHaFerie: undefined,
         aapnePaneler: [],
         showSettPaaVentModal: false,
+        visErDuSikkerModal: false,
         errors: [],
         harRegnskapsfører: false,
     };
@@ -273,7 +276,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return eksisterendePerioder.some(ep => (moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) && moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))))
     }
 
-
     componentDidMount(): void {
         const {id} = this.props;
         this.props.getSoknad(id);
@@ -306,7 +308,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
         const eksisterendePerioder = punchFormState.perioder;
-
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -1402,21 +1403,47 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()}/>
                     </ModalWrapper>
                 )}
-                {!!this.props.punchFormState.isValid && (
+
+                {!!this.props.punchFormState.isValid && !this.state.visErDuSikkerModal && typeof this.props.punchFormState.validertSoknad !== 'undefined' && (
+                    <ModalWrapper
+                        key={"validertSoknadModal"}
+                        className={"validertSoknadModal"}
+                        onRequestClose={() => this.props.validerSoknadReset()}
+                        contentLabel={"validertSoknadModal"}
+                        closeButton={false}
+                        isOpen={!!this.props.punchFormState.isValid}
+                    >
+                       <div className={classNames('validertSoknadOppsummeringContainer')}>
+                           <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
+                       </div>
+                        <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                        <Hovedknapp mini={true} className="validertSoknadOppsummeringContainer_knappVidere" onClick={() => this.setState({visErDuSikkerModal: true})}>
+                            {intlHelper(intl, 'fordeling.knapp.videre')}
+                        </Hovedknapp>
+                        <Knapp mini={true} className="validertSoknadOppsummeringContainer_knappTilbake" onClick={() => this.props.validerSoknadReset()}>
+                            {intlHelper(intl, 'skjema.knapp.avbryt')}
+                        </Knapp>
+                        </div>
+
+                    </ModalWrapper>
+                )}
+
+
+                {this.state.visErDuSikkerModal && (
                     <ModalWrapper
                         key={"erdusikkermodal"}
                         className={"erdusikkermodal"}
                         onRequestClose={() => this.props.validerSoknadReset()}
                         contentLabel={"erdusikkermodal"}
                         closeButton={false}
-                        isOpen={!!this.props.punchFormState.isValid}
+                        isOpen={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
                             melding={'modal.erdusikker.sendinn'}
                             extraInfo={'modal.erdusikker.sendinn.extrainfo'}
                             onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
                             submitKnappText={'skjema.knapp.send'}
-                            onClose={() => this.props.validerSoknadReset()}/>
+                            onClose={() => {this.props.validerSoknadReset(); this.setState({visErDuSikkerModal: false});}}/>
                     </ModalWrapper>
                 )}
             </>);
