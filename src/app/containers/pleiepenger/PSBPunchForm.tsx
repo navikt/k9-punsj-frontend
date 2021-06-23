@@ -281,6 +281,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
+        // tslint:disable-next-line:no-console
         console.log('componentDidMount', this.state);
         const {ident1, ident2} = this.props.identState;
         if (ident1 && ident2) {
@@ -1943,7 +1944,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
         if (!this.state.soknad.barn.norskIdent) {
+            // tslint:disable-next-line:no-console
             console.log('updateSoknadState norskIdent:', this.state.soknad.barn.norskIdent)
+            // tslint:disable-next-line:no-console
             console.log('updateSoknadState nuvarande söknad', this.state.soknad);
             this.updateSoknad
             ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}}, 'updateSoknadState');
@@ -1956,8 +1959,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private updateSoknad = (soknad: Partial<IPSBSoknad>, event?:string) => {
+        // tslint:disable-next-line:no-console
         console.log('updateSoknad trigget av ', event);
+        // tslint:disable-next-line:no-console
         console.log('Input soknad til updateSoknad', soknad);
+        // tslint:disable-next-line:no-console
         console.log('Soknad fra store innen endringer', this.getSoknadFromStore());
         this.setState({showStatus: true});
         return this.props.updateSoknad(

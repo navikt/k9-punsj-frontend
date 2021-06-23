@@ -216,6 +216,7 @@ export function updateSoknad(soknad: Partial<IPSBSoknadUt>, trigger?: string ) {
                 case 200:
                     return response.json()
                         .then(mappe => {
+                            // tslint:disable-next-line:no-console
                             console.log(`Respone er klar med soknad sent int fra ${trigger}`, soknad);
                             dispatch(setSoknadAction(mappe));
                             dispatch(updateSoknadSuccessAction());
