@@ -62,6 +62,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
+                updateSoknadSuccess: true,
                 updateSoknadError: undefined
             };
 
@@ -69,6 +70,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
+                updateSoknadSuccess: false,
                 updateSoknadError: action.error
             };
 

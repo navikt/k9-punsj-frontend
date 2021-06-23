@@ -1452,15 +1452,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
-        this.props.updateSoknad(
-            {...this.getSoknadFromStore()}, 'handleSubmit'
-        );
-        this.props.validateSoknad(
-            this.state.soknad.soekerId,
-            this.props.id
-        )
-        // tslint:disable-next-line:no-console
-        console.log('Ferdig med denne handleSubmit');
+        if(!!this.props.punchFormState.updateSoknadSuccess){
+            this.props.validateSoknad(
+                this.state.soknad.soekerId,
+                this.props.id
+            )
+        }
+        else{
+            // tslint:disable-next-line:no-console
+            console.log('Update soknad er ikke klar');
+        }
     }
 
     private handleSettPaaVent = () => {
@@ -1945,14 +1946,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
-        if (!this.state.soknad.barn.norskIdent) {
-            // tslint:disable-next-line:no-console
-            console.log('updateSoknadState norskIdent:', this.state.soknad.barn.norskIdent)
-            // tslint:disable-next-line:no-console
-            console.log('updateSoknadState nuvarande söknad', this.state.soknad);
-            this.updateSoknad
-            ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}}, 'updateSoknadState');
-        }
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
