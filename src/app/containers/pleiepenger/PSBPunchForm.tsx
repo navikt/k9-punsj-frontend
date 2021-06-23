@@ -1452,7 +1452,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
-        if(!!this.props.punchFormState.updateSoknadSuccess){
+
+        // tslint:disable-next-line:no-console
+        console.log('this.props.punchFormState.isAwaitingUpdateResponse', this.props.punchFormState.isAwaitingUpdateResponse);
+        console.log('this.props.punchFormState.updateSoknadSuccess', this.props.punchFormState.updateSoknadSuccess);
+        if(!this.props.punchFormState.isAwaitingUpdateResponse){
+            console.log('Update soknad er klar');
             this.props.validateSoknad(
                 this.state.soknad.soekerId,
                 this.props.id
