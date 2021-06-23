@@ -208,7 +208,7 @@ export function getSoknad(id: string) {
     }
 }
 
-export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {
+export function updateSoknad(soknad: Partial<IPSBSoknadUt>, trigger?: string ) {
     return (dispatch: any) => {
         dispatch(updateSoknadRequestAction());
         return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, response => {
@@ -216,6 +216,7 @@ export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {
                 case 200:
                     return response.json()
                         .then(mappe => {
+                            console.log(`Respone er klar med soknad sent int fra ${trigger}`, soknad);
                             dispatch(setSoknadAction(mappe));
                             dispatch(updateSoknadSuccessAction());
                         });

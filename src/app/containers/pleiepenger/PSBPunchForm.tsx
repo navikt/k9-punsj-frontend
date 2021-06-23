@@ -281,6 +281,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
+        console.log('componentDidMount', this.state);
         const {ident1, ident2} = this.props.identState;
         if (ident1 && ident2) {
             this.props.hentPerioder(ident1, ident2)
@@ -1451,7 +1452,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private handleSubmit = () => {
         this.props.updateSoknad(
-            {...this.getSoknadFromStore()},
+            {...this.getSoknadFromStore()}, 'handleSubmit'
         );
         this.props.validateSoknad(
             this.state.soknad.soekerId,
@@ -1942,8 +1943,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
         if (!this.state.soknad.barn.norskIdent) {
+            console.log('updateSoknadState norskIdent:', this.state.soknad.barn.norskIdent)
+            console.log('updateSoknadState nuvarande söknad', this.state.soknad);
             this.updateSoknad
-            ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}});
+            ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}}, 'updateSoknadState');
         }
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
@@ -1952,10 +1955,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         });
     }
 
-    private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
+    private updateSoknad = (soknad: Partial<IPSBSoknad>, event?:string) => {
+        console.log('updateSoknad trigget av ', event);
+        console.log('Input soknad til updateSoknad', soknad);
+        console.log('Soknad fra store innen endringer', this.getSoknadFromStore());
         this.setState({showStatus: true});
         return this.props.updateSoknad(
-            {...this.getSoknadFromStore(), ...soknad},
+            {...this.getSoknadFromStore(), ...soknad}, 'updateSoknad'
         );
     };
 
