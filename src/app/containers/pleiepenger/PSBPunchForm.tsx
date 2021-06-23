@@ -1459,6 +1459,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.soknad.soekerId,
             this.props.id
         )
+        // tslint:disable-next-line:no-console
+        console.log('Ferdig med denne handleSubmit');
     }
 
     private handleSettPaaVent = () => {

@@ -209,6 +209,8 @@ export function getSoknad(id: string) {
 }
 
 export function updateSoknad(soknad: Partial<IPSBSoknadUt>, trigger?: string ) {
+    // tslint:disable-next-line:no-console
+    console.log(`Nettverkskall trigger av ${trigger} med soknad`, soknad);
     return (dispatch: any) => {
         dispatch(updateSoknadRequestAction());
         return put(ApiPath.SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, response => {
@@ -217,7 +219,7 @@ export function updateSoknad(soknad: Partial<IPSBSoknadUt>, trigger?: string ) {
                     return response.json()
                         .then(mappe => {
                             // tslint:disable-next-line:no-console
-                            console.log(`Respone er klar med soknad sent int fra ${trigger}`, soknad);
+                            console.log(`Response er klar`, mappe);
                             dispatch(setSoknadAction(mappe));
                             dispatch(updateSoknadSuccessAction());
                         });
