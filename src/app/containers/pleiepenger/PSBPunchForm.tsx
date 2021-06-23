@@ -1455,6 +1455,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         // tslint:disable-next-line:no-console
         console.log('this.props.punchFormState.isAwaitingUpdateResponse', this.props.punchFormState.isAwaitingUpdateResponse);
+        // tslint:disable-next-line:no-console
         console.log('this.props.punchFormState.updateSoknadSuccess', this.props.punchFormState.updateSoknadSuccess);
         if(!this.props.punchFormState.isAwaitingUpdateResponse){
             console.log('Update soknad er klar');
