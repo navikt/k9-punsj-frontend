@@ -1870,7 +1870,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private getSoknadFromStore = () => {
-        return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
+        const retur = new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
+        // tslint:disable-next-line:no-console
+        console.log('RETUR', retur);
+        // tslint:disable-next-line:no-console
+        console.log('STATE', this.state.soknad);
+        return retur;
     };
 
     private getManglerFromStore = () => {
