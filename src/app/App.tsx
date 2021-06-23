@@ -25,7 +25,7 @@ const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(logger, thunk))
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
