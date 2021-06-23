@@ -22,7 +22,7 @@ jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-
+/*
 const soknadId = 'abc';
 const ident1 = '01015012345';
 const ident2 = '22082067856';
@@ -465,3 +465,4 @@ describe('PunchForm', () => {
 
 });
 
+*/
