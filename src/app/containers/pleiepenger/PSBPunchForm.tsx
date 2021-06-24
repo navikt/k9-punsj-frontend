@@ -1323,7 +1323,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 </div>
                 <VerticalSpacer twentyPx={true}/>
 
-                {true &&
+                {punchFormState.isAwaitingValidateResponse &&
                 <div className={classNames('loadingSpinner')}><NavFrontendSpinner/></div>
                 }
                 <div className={"submit-knapper"}>
