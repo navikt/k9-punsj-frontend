@@ -1450,13 +1450,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
-        this.props.updateSoknad(
-            {...this.getSoknadFromStore()},
-        );
-        this.props.validateSoknad(
-            this.state.soknad.soekerId,
-            this.props.id
-        )
+        this.props.validateSoknad({...this.getSoknadFromStore()})
     }
 
     private handleSettPaaVent = () => {
@@ -1941,10 +1935,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
-        if (!this.state.soknad.barn.norskIdent) {
-            this.updateSoknad
-            ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}});
-        }
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
@@ -1957,6 +1947,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.updateSoknad(
             {...this.getSoknadFromStore(), ...soknad},
         );
+
     };
 
     private handleBackButtonClick = () => {
@@ -2062,8 +2053,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (ident: string, soeknadid: string) =>
-        dispatch(validerSoknad(ident, soeknadid)),
+    validateSoknad: (soknad: IPSBSoknadUt) =>
+        dispatch(validerSoknad(soknad)),
     validerSoknadReset: () =>
         dispatch(validerSoknadResetAction())
 });
