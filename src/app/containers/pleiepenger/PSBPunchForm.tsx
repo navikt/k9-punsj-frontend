@@ -1450,8 +1450,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
-        this.props.validateSoknad({...this.getSoknadFromStore()})
-    }
+        this.props.validateSoknad(this.state.soknad);
+}
 
     private handleSettPaaVent = () => {
         this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
