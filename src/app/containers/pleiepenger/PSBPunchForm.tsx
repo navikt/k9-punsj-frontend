@@ -1323,6 +1323,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 </div>
                 <VerticalSpacer twentyPx={true}/>
 
+                {true &&
+                <div className={classNames('loadingSpinner')}><NavFrontendSpinner/></div>
+                }
                 <div className={"submit-knapper"}>
                     <p className="sendknapp-wrapper">
                         <Knapp
@@ -1362,6 +1365,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         {intlHelper(intl, 'skjema.feil.konflikt')}
                     </AlertStripeFeil>
                 )}
+
                 {this.state.showSettPaaVentModal && (
                     <ModalWrapper
                         key={"settpaaventmodal"}
@@ -1451,7 +1455,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private handleSubmit = () => {
         this.props.validateSoknad(this.state.soknad);
-}
+    }
 
     private handleSettPaaVent = () => {
         this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
