@@ -1716,7 +1716,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.innleggelseUtlandet!.push({fom: '', tom: ''});
             this.forceUpdate();
         }
-        ;
 
         if (jaNei !== JaNei.JA) {
             this.setState({innleggelseUtlandet: []})
@@ -1733,7 +1732,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.soknad.bosteder!.push({periode: {fom: '', tom: ''}, land: ''});
             this.forceUpdate();
         }
-        ;
 
         if (jaNei !== JaNeiIkkeOpplyst.JA) {
             this.updateSoknadState({bosteder: []}, true);
@@ -1772,7 +1770,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
             });
             this.forceUpdate();
-        };
+        }
 
         if (jaNei !== JaNei.JA) {
             this.updateSoknadState({
@@ -1801,7 +1799,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
             });
             this.forceUpdate();
-        };
+        }
     }
 
     private updateFerie(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {

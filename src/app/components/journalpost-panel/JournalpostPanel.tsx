@@ -49,7 +49,7 @@ class JournalpostPanelComponent extends React.Component<WrappedComponentProps & 
             </Panel>
         );
     }
-};
+}
 
 const mapStateToProps = (state: RootStateType): IJournalpostPanelStateProps => ({
     identState: state.identState,

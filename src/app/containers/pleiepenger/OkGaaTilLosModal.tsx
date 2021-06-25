@@ -2,7 +2,7 @@ import * as React from "react";
 import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
 import intlHelper from "../../utils/intlUtils";
 
-import {Hovedknapp, Knapp} from "nav-frontend-knapper";
+import {Hovedknapp} from "nav-frontend-knapper";
 import {getEnvironmentVariable} from "../../utils";
 import './okGaaTilLosModal.less'
 import CheckCircleSvg from "../../assets/SVG/CheckCircleSVG";

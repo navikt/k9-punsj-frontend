@@ -1,6 +1,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
+import {Hovedknapp} from 'nav-frontend-knapper';
 import './knapper.less';
 
 interface ISokKnappProps {
