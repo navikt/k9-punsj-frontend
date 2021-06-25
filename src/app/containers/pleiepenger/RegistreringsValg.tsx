@@ -8,7 +8,7 @@ import {createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderActi
 import {connect} from "react-redux";
 import {setHash} from "../../utils";
 import {AlertStripeFeil} from "nav-frontend-alertstriper";
-import {IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState} from "../../models/types";
+import {IEksisterendeSoknaderState, IPleiepengerPunchState} from "../../models/types";
 import {RootStateType} from "../../state/RootState";
 
 import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
