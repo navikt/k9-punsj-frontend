@@ -382,11 +382,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     })}
                                 </AlertStripeAdvarsel>
                             )}
-                        <Knapp
+                            {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
-                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error || typeof riktigIdentIJournalposten === 'undefined'}>
-                            {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp></>}
+                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
+                            {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
+                        </>}
                     </div>
                     <VerticalSpacer sixteenPx={true}/>
                     {(!!fordelingState.skalTilK9 || visSakstypeValg) && <>
