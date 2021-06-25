@@ -17,8 +17,6 @@ export interface IPSBSoknad {
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    sendtInn?: boolean;
-    erFraK9?: boolean;
     soeknadsperiode?: IPeriode | null;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
@@ -43,8 +41,6 @@ export class PSBSoknad implements IPSBSoknad {
     mottattDato: string;
     klokkeslett: string;
     barn: Barn;
-    sendtInn: boolean;
-    erFraK9: boolean;
     soeknadsperiode: Periode | null;
     opptjeningAktivitet: OpptjeningAktivitet;
     arbeidstid: Arbeidstid;
@@ -67,8 +63,6 @@ export class PSBSoknad implements IPSBSoknad {
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
         this.barn = new Barn(soknad.barn || {});
-        this.sendtInn = soknad.sendtInn || false;
-        this.erFraK9 = soknad.erFraK9 || false;
         this.soeknadsperiode = soknad.soeknadsperiode ? new Periode(soknad.soeknadsperiode) : null;
         this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {})
@@ -81,8 +75,8 @@ export class PSBSoknad implements IPSBSoknad {
         this.omsorg = new Omsorg(soknad.omsorg || {});
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
-        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
-        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || false;
+        this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
+        this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
     }
 }
 

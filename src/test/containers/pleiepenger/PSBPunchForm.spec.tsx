@@ -13,7 +13,9 @@ import {mocked} from 'ts-jest/utils';
 import {IIdentState} from "../../../app/models/types/IdentState";
 import {JaNeiIkkeRelevant} from "../../../app/models/enums/JaNeiIkkeRelevant";
 import {IJournalposterPerIdentState} from "../../../app/models/types/JournalposterPerIdentState";
-import {JaNeiIkkeOpplyst} from "../../../app/models/enums/JaNeiIkkeOpplyst";
+import {
+    IPSBSoknadKvittering,
+} from "../../../app/models/types/PSBSoknadKvittering";
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -39,7 +41,6 @@ const initialSoknad: IPSBSoknad = {
     },
     beredskap: [],
     bosteder: [],
-    erFraK9: false,
     harInfoSomIkkeKanPunsjes: false,
     harMedisinskeOpplysninger: false,
     journalposter: new Set([]),
@@ -53,7 +54,6 @@ const initialSoknad: IPSBSoknad = {
         frilanser: null,
         selvstendigNaeringsdrivende: null
     },
-    sendtInn: false,
     soekerId: ident1,
     soeknadId: "123",
     soeknadsperiode: null,
@@ -66,6 +66,40 @@ const initialSoknad: IPSBSoknad = {
     uttak: []
 }
 
+const validertSoknad: IPSBSoknadKvittering = {
+    mottattDato: '',
+    ytelse: {
+        type: '',
+        barn: {
+            norskIdentitetsnummer: '',
+            fødselsdato: null
+        },
+        søknadsperiode: [],
+        bosteder: { perioder: {} },
+        utenlandsopphold: { perioder: {} },
+        beredskap: { perioder: {} },
+        nattevåk: { perioder: {} },
+        tilsynsordning: { perioder: {} },
+        lovbestemtFerie: { perioder: {} },
+        arbeidstid: {
+            arbeidstakerList: [{
+                norskIdentitetsnummer: null,
+                organisasjonsnummer: '',
+                arbeidstidInfo: { perioder: {}}
+            }],
+            frilanserArbeidstidInfo: null,
+            selvstendigNæringsdrivendeArbeidstidInfo: null,
+
+        },
+        uttak: { perioder: {} },
+        omsorg: {
+            relasjonTilBarnet: null,
+            beskrivelseAvOmsorgsrollen: null
+        },
+        opptjeningAktivitet: {
+        },
+    }
+}
 
 const setupPunchForm = (
     punchFormStateSetup?: Partial<IPunchFormState>,
@@ -376,9 +410,11 @@ describe('PunchForm', () => {
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', () => {
         const validateSoknad = jest.fn();
-        const punchForm = setupPunchForm({soknad: initialSoknad, isValid: true}, {validateSoknad});
+        const punchForm = setupPunchForm({soknad: initialSoknad, validertSoknad, isValid: true}, {validateSoknad});
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
+        expect(punchForm.find('.validertSoknadModal')).toHaveLength(1);
+        punchForm.find('.validertSoknadOppsummeringContainerKnapper').find('.validertSoknadOppsummeringContainer_knappVidere').simulate('click');
         expect(punchForm.find('.erdusikkermodal')).toHaveLength(1);
     });
 
@@ -400,6 +436,31 @@ describe('PunchForm', () => {
         const soknad = {...initialSoknad, soeknadsperiode: {fom: '2020-02-23', tom: '2020-08-23'}}
         const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
         expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(0);
+    });
+
+    it('Oppdaterer staten og søknaden riktig ved klikk på checkbox ', () => {
+        const updateSoknad = jest.fn();
+        const punchForm = setupPunchForm({soknad: initialSoknad}, {updateSoknad});
+        const checkbox = punchForm.find('#opplysningerikkepunsjetcheckbox');
+        checkbox.simulate('change', {target: {checked: true}});
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({
+            harInfoSomIkkeKanPunsjes: true
+        });
+        expect(updateSoknad).toHaveBeenCalledWith(
+            expectedUpdatedSoknad
+        );
+        expect(punchForm.find('#opplysningerikkepunsjetcheckbox').prop('checked')).toBeTruthy();
+        checkbox.simulate('change', {target: {checked: false}});
+        expect(updateSoknad).toHaveBeenCalledTimes(2);
+        const expectedUpdatedSoknad2 = expect.objectContaining({
+            harInfoSomIkkeKanPunsjes: false
+        });
+        expect(updateSoknad).toHaveBeenCalledWith(
+            expectedUpdatedSoknad2
+        );
+        expect(checkbox.prop('checked')).toBeFalsy();
+
     });
 
 });

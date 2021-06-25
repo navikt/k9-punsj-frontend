@@ -30,6 +30,12 @@ export interface ISkalTilK9 {
     journalpostId: string;
 }
 
+export interface IOpprettSoknad {
+    norskIdent: string;
+    journalpostId: string;
+    barnIdent: string | null;
+}
+
 export interface IKopierJournalpost {
     dedupKey: string;
     fra: string;

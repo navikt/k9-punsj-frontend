@@ -13,11 +13,10 @@ import {RootStateType} from "../../state/RootState";
 
 import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
 import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from "../../state/actions/JournalposterPerIdentActions";
+import {IIdentState} from "../../models/types/IdentState";
 
 export interface IRegistreringsValgComponentProps {
     journalpostid: string;
-    ident1: string;
-    ident2: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
@@ -32,6 +31,7 @@ export interface IEksisterendeSoknaderStateProps {
     punchState: IPleiepengerPunchState;
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
     journalposterState: IJournalposterPerIdentState;
+    identState: IIdentState;
 }
 
 
@@ -42,12 +42,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     const {
         journalpostid,
-        ident1,
-        ident2,
+        identState,
         getPunchPath,
         eksisterendeSoknaderState,
     } = props;
     const [valgtOption, setValgtOption] = useState<string>("nysoknad");
+
+    const {ident1, ident2} = identState;
 
     React.useEffect(() => {
         if (
@@ -113,7 +114,10 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     return (
         <div className={"registrering-page"}>
             <EksisterendeSoknader
-                {...props}
+                ident1={ident1}
+                ident2={ident2}
+                getPunchPath={getPunchPath}
+                journalpostid={journalpostid}
             />
 
             <div className="knapperad">
@@ -152,6 +156,7 @@ const mapStateToProps = (
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
+    identState: state.identState,
 });
 
 

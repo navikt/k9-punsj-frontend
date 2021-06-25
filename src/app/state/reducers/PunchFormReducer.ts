@@ -175,6 +175,7 @@ export function PunchFormReducer(
         case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:
             return {
                 ...punchFormState,
+                validertSoknad: action.validertSoknad,
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
                 inputErrors: undefined,

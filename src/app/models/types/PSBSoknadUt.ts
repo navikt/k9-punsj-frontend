@@ -32,8 +32,6 @@ export interface IPSBSoknadUt {
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    sendtInn?: boolean;
-    erFraK9?: boolean;
     soeknadsperiode?: IPeriode | null;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
@@ -50,7 +48,7 @@ export interface IPSBSoknadUt {
     harMedisinskeOpplysninger?: boolean;
 }
 
-export class PSBSoknadUt implements Required<IPSBSoknadUt> {
+export class PSBSoknadUt implements IPSBSoknadUt {
 
     soeknadId: string;
     soekerId: string;
@@ -58,8 +56,6 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
     mottattDato: string;
     klokkeslett: string;
     barn: Barn | {};
-    sendtInn: boolean;
-    erFraK9: boolean;
     soeknadsperiode: Periode | null;
     opptjeningAktivitet: OpptjeningAktivitetUt;
     arbeidstid: ArbeidstidUt;
@@ -82,8 +78,6 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
-        this.sendtInn = soknad.sendtInn || false;
-        this.erFraK9 = soknad.erFraK9 || false;
         this.soeknadsperiode = soknad.soeknadsperiode ? new Periode(soknad.soeknadsperiode) : null;
         this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {})
         this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {})
@@ -96,8 +90,8 @@ export class PSBSoknadUt implements Required<IPSBSoknadUt> {
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
-        this.harInfoSomIkkeKanPunsjes = soknad.harInfoSomIkkeKanPunsjes || false;
-        this.harMedisinskeOpplysninger = soknad.harMedisinskeOpplysninger || false;
+        this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
+        this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
     }
 }
 

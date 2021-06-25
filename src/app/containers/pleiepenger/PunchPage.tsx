@@ -142,7 +142,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
 
         switch (this.props.step) {
             case PunchStep.CHOOSE_SOKNAD:
-                return <RegistreringsValg {...commonProps} {...this.extractIdents()} />;
+                return <RegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
                 return <PSBPunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:

@@ -75,7 +75,8 @@ interface IValiderSoknadRequestAction {
 }
 
 interface IValiderSoknadSuccessAction {
-    type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS
+    type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
+    validertSoknad?: IPSBSoknadKvittering
 }
 
 interface IValiderSoknadErrorAction {
@@ -288,7 +289,7 @@ export const submitSoknadConflictAction = (): ISubmitSoknadConflictAction  => ({
 });
 
 export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST});
-export const validerSoknadSuccessAction = (): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS});
+export const validerSoknadSuccessAction = (validertSoknad: IPSBSoknadKvittering): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS, validertSoknad});
 export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
     error
@@ -334,12 +335,12 @@ export function validerSoknad(norskIdent: string, soeknadId: string) {
         }
 
         dispatch(validerSoknadRequestAction());
-        post(ApiPath.SOKNAD_VALIDER, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, errors) => {
+        post(ApiPath.SOKNAD_VALIDER, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, data) => {
             switch (response.status) {
                 case 202:
-                    return dispatch(validerSoknadSuccessAction());
+                    return dispatch(validerSoknadSuccessAction(data));
                 case 400:
-                    return  dispatch(validerSoknadUncompleteAction(errors.feil));
+                    return  dispatch(validerSoknadUncompleteAction(data.feil));
                 default:
                     return dispatch(validerSoknadErrorAction(convertResponseToError(response)));
             }
