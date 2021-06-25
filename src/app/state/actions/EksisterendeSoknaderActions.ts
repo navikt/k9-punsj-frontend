@@ -1,10 +1,10 @@
 import {ApiPath}                                  from 'app/apiConfig';
-import {JaNeiVetikke, EksisterendeSoknaderActionKeys} from 'app/models/enums';
+import { EksisterendeSoknaderActionKeys} from 'app/models/enums';
 import {IError} from 'app/models/types';
-import {convertResponseToError, get, post}        from 'app/utils';;
+import {convertResponseToError, get, post}        from 'app/utils';
 import {IPSBSoknad} from "../../models/types/PSBSoknad";
 import {ISoknadSvar} from "../../models/types/SoknadSvar";
-import {IOpprettSoknad, ISkalTilK9} from "../../models/types/RequestBodies";
+import {IOpprettSoknad} from "../../models/types/RequestBodies";
 
 interface ISetEksisterendeSoknaderAction                  {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET, eksisterendeSoknaderSvar: ISoknadSvar}
 interface IFindEksisterendeSoknaderLoadingAction          {type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_LOAD, isLoading: boolean}

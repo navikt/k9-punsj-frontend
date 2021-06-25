@@ -4,7 +4,7 @@ import intlHelper from "../../utils/intlUtils";
 
 import {Knapp} from "nav-frontend-knapper";
 import './okGaaTilLosModal.less'
-import {IJournalpost, IJournalpostInfo} from "../../models/types";
+import { IJournalpostInfo} from "../../models/types";
 import {AlertStripeInfo} from "nav-frontend-alertstriper";
 import {apiUrl} from "../../utils";
 import {ApiPath} from "../../apiConfig";

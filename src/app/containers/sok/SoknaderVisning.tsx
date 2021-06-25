@@ -6,7 +6,6 @@ import { datetime, setHash, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';

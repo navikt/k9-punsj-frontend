@@ -858,8 +858,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     panelid={(i) => `nattevaakspanel_${i}`}
                     initialPeriodeinfo={this.initialTillegsinfo}
                     component={pfTilleggsinformasjon("nattevaak")}
-                    editSoknad={(nattevaak) => this.updateSoknad
-                    ({nattevaak})}
+                    editSoknad={(nattevaak) => this.updateSoknad({nattevaak})}
                     editSoknadState={(nattevaak, showStatus) =>
                         this.updateSoknadState({nattevaak}, showStatus)
                     }
@@ -1026,8 +1025,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(perioder) => this.updateSoknad
-                            ({utenlandsopphold: perioder})}
+                            editSoknad={(perioder) => this.updateSoknad({utenlandsopphold: perioder})}
                             editSoknadState={(perioder, showStatus) =>
                                 this.updateSoknadState({utenlandsopphold: perioder}, showStatus)
                             }
@@ -1103,9 +1101,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             panelid={(i) => `ferieperiodepanel_${i}`}
                             initialPeriode={this.initialPeriode}
                             editSoknad={(perioder) =>
-                                this.updateSoknad
-                                (
-                                    {lovbestemtFerie: perioder})
+                                this.updateSoknad({lovbestemtFerie: perioder})
                             }
                             editSoknadState={(perioder, showStatus) =>
                                 this.updateSoknadState(
@@ -1278,8 +1274,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(bosteder) => this.updateSoknad
-                            ({bosteder})}
+                            editSoknad={(bosteder) => this.updateSoknad({bosteder})}
                             editSoknadState={(bosteder, showStatus) =>
                                 this.updateSoknadState({bosteder}, showStatus)
                             }
@@ -1671,23 +1666,23 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 if (checked) {
                     if (!this.state.soknad.beredskap?.length) {
                         this.updateSoknadState({beredskap: [this.initialTillegsinfo]})
-                    };
+                    }
                 } else {
                     this.updateSoknadState({beredskap: []})
-                };
+                }
                 break;
             case BeredskapNattevaak.NATTEVAAK:
                 if (checked) {
                     if (!this.state.soknad.nattevaak?.length) {
                         this.updateSoknadState({nattevaak: [this.initialTillegsinfo]})
-                    };
+                    }
                 } else {
                     this.updateSoknadState({nattevaak: []})
-                };
+                }
                 break;
 
-        };
-    };
+        }
+    }
 
     private updateUtenlandsopphold(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
         this.setState({
@@ -1701,8 +1696,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
             this.updateSoknadState({utenlandsopphold: []}, true);
-            this.updateSoknad
-            ({utenlandsopphold: []})
+            this.updateSoknad({utenlandsopphold: []})
         }
     }
 
@@ -1735,8 +1729,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         if (jaNei !== JaNeiIkkeOpplyst.JA) {
             this.updateSoknadState({bosteder: []}, true);
-            this.updateSoknad
-            ({bosteder: []})
+            this.updateSoknad({bosteder: []})
         }
     }
 
@@ -1756,8 +1749,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     }
                 }
             });
-            this.updateSoknad
-            ({
+            this.updateSoknad({
                 arbeidstid: {
                     ...this.state.soknad.arbeidstid,
                     frilanserArbeidstidInfo: {}
@@ -1940,8 +1932,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
         if (!this.state.soknad.barn.norskIdent) {
-            this.updateSoknad
-            ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}});
+            this.updateSoknad({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}});
         }
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
@@ -1976,8 +1967,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     ) => ({
         onChange: (event: any) =>
             this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad
-        (change(event)),
+        onBlur: (event: any) => this.updateSoknad(change(event)),
     });
 
     private addOmsorgstilbud = () => {

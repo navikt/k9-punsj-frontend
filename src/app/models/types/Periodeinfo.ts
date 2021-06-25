@@ -11,4 +11,4 @@ export interface IPeriodeinfoExtension {
 export interface IPeriodeinfo {
     periode?: IPeriode;
     [key: string]: any;
-};
+}

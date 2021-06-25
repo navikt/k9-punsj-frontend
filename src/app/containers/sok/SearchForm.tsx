@@ -96,8 +96,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
             </div>
         );
     }
-
-};
+}
 
 const mapStateToProps = (state: RootStateType) => ( {
     journalpost: state.felles.journalpost,

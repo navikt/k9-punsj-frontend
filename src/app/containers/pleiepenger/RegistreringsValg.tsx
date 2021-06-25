@@ -93,16 +93,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             ident2
         );
 
-    const technicalError =
-        eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
-        ) : null;
-
-    const infoText = (journalpost: IJournalpost, index: number) => {
-        const dato = journalpost.dato ? ", dato: " + journalpost.dato : ""
-        return `Journalpost ${index}${dato}`
-    }
-
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (!!soknader?.length) {

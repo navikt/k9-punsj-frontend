@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
+import {injectIntl, WrappedComponentProps} from "react-intl";
 import intlHelper from "../../utils/intlUtils";
 
 import {Knapp} from "nav-frontend-knapper";
