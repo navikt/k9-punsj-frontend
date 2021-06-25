@@ -22,7 +22,7 @@ jest.mock('app/utils/pathUtils');
 
 const journalpostid = '200';
 
-const setupFordeling = (
+export const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
     opprettIGosysStatePartial?: Partial<IGosysOppgaveState>,
@@ -40,6 +40,7 @@ const setupFordeling = (
         lukkJournalpostOppgave: jest.fn(),
         resetOmfordelAction: jest.fn(),
         lukkOppgaveReset: jest.fn(),
+        hentBarn: jest.fn(),
         ...fordelingDispatchPropsPartial,
     };
 
@@ -108,23 +109,24 @@ describe('Fordeling', () => {
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
     });
 
-  /*  it('Viser radioknapp for hver sakstype', () => {
-        const fordeling = setupFordeling({skalTilK9: true});
-        const radios = fordeling.find('RadioPanel');
-        const radioForSakstype = (sakstype: Sakstype) =>
-            radios.findWhere((radio) => radio.prop('value') === sakstype);
 
-        expect(radios).toHaveLength(6);
-        expect(radioForSakstype(Sakstype.PLEIEPENGER_SYKT_BARN)).toHaveLength(1);
-        expect(radioForSakstype(Sakstype.OMSORGSPENGER)).toHaveLength(1);
-        expect(radioForSakstype(Sakstype.OPPLAERINGSPENGER)).toHaveLength(1);
-        expect(
-            radioForSakstype(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE)
-        ).toHaveLength(1);
-        expect(radioForSakstype(Sakstype.ANNET)).toHaveLength(1);
-    });
+    /*  it('Viser radioknapp for hver sakstype', () => {
+          const fordeling = setupFordeling({skalTilK9: true});
+          const radios = fordeling.find('RadioPanel');
+          const radioForSakstype = (sakstype: Sakstype) =>
+              radios.findWhere((radio) => radio.prop('value') === sakstype);
 
-   */
+          expect(radios).toHaveLength(6);
+          expect(radioForSakstype(Sakstype.PLEIEPENGER_SYKT_BARN)).toHaveLength(1);
+          expect(radioForSakstype(Sakstype.OMSORGSPENGER)).toHaveLength(1);
+          expect(radioForSakstype(Sakstype.OPPLAERINGSPENGER)).toHaveLength(1);
+          expect(
+              radioForSakstype(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE)
+          ).toHaveLength(1);
+          expect(radioForSakstype(Sakstype.ANNET)).toHaveLength(1);
+      });
+
+     */
 
     it('Kaller setSakstypeAction', () => {
         const setSakstypeAction = jest.fn();

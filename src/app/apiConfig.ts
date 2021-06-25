@@ -12,6 +12,7 @@ export enum ApiPath {
   EKSISTERENDE_SOKNADER_SOK = '/mapper',
   EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',
   SOKNAD_GET = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
+  BARN_GET = '/barn',
   SOKNAD_CREATE = '/pleiepenger-sykt-barn-soknad',
   SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
   SOKNAD_VALIDER= '/pleiepenger-sykt-barn-soknad/valider',

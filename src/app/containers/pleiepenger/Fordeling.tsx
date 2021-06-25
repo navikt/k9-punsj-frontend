@@ -7,13 +7,14 @@ import {
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
+import {v4 as uuidv4} from 'uuid';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
-import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
+import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
@@ -35,6 +36,8 @@ import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import ModalWrapper from "nav-frontend-modal";
 import {IFellesState, kopierJournalpost} from "../../state/reducers/FellesReducer";
+import WarningCircle from "../../assets/SVG/WarningCircle";
+import {hentBarn} from "../../state/reducers/HentBarn";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -52,6 +55,7 @@ export interface IFordelingDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
     kopierJournalpost: typeof kopierJournalpost;
+    hentBarn: typeof hentBarn;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
@@ -147,10 +151,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
+    const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
 
+    useEffect(() =>  {props.hentBarn(identState.ident1)}, []);
     const skalViseFeilmelding = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
-
-
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
     const handleIdent2Change = (event: any) => {
@@ -158,24 +162,21 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         setIdentAction(identState.ident1, event.target.value)
     }
 
+    const nullUtBarnetsIdent = () => {
+        setBarnetsIdent('');
+        setIdentAction(identState.ident1, '');
+        props.setIdentAction(identState.ident1, '', '');
+    }
+
     const handleIdent1Blur = (event: any) =>
         props.setIdentAction(event.target.value, identState.ident2);
-    const handleIdent2Blur = (event: any) =>
-        props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
+    const handleIdent2Blur = (event: any) =>{
+        props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);}
     const handleIdentAnnenSokerBlur = (event: any) =>
         props.setIdentAction(identState.ident1, identState.ident2, event.target.value);
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
-        if (jn === JaNei.JA) {
-            props.setIdentAction(journalpostident || '', identState.ident2)
-        } else {
-            props.setIdentAction('', identState.ident2)
-        }
-    }
-
-    const handlePPRadioChange = (jn: JaNei) => {
-        setGjelderPP(jn);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
         } else {
@@ -344,43 +345,80 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             }
                         </>}
                         <VerticalSpacer eightPx={true}/>
-                        {gjelderPP === JaNei.JA && <><Input
-                            label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                            onChange={handleIdent2Change}
-                            onBlur={handleIdent2Blur}
-                            value={barnetsIdent}
-                            className="bold-label ident-soker-2"
-                            maxLength={11}
-                            feil={
-                                skalViseFeilmelding(identState.ident2)
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
+                        {gjelderPP === JaNei.JA && <>
+                          <VerticalSpacer sixteenPx={true}/>
+                            {!!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+                              <Select
+                                value={barnetsIdent}
+                                bredde="l"
+                                label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
+                                onChange={handleIdent2Change}
+                                onBlur={handleIdent2Blur}
+                              >
+                                  {props.fellesState.barn.map(b =>
+                                      <option key={uuidv4()} value={b.identitetsnummer}>
+                                          {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
+                                      </option>)
+                                  }
+                              </Select>
+                              <VerticalSpacer sixteenPx={true}/>
+                              <Checkbox
+                                label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                                onChange={(e) => {
+                                    setGjelderAnnetBarn(e.target.checked);
+                                    nullUtBarnetsIdent();
+                                }}
+                              />
+                            </>
                             }
-                            bredde={"M"}
-                            disabled={barnetHarIkkeFnr}
-                        />
-                        <VerticalSpacer sixteenPx={true}/>
-                        <Checkbox
+                            <VerticalSpacer sixteenPx={true}/>
+                            {(gjelderAnnetBarn
+                            || !!props.fellesState.hentBarnError
+                            || !!props.fellesState.hentBarnForbidden
+                            || (typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length === 0))
+                            && <>
+                           <div className={'fyllUtIdentAnnetBarnContainer'}>
+                            <Input
+                                label={intlHelper(intl, 'ident.identifikasjon.barn')}
+                                onChange={handleIdent2Change}
+                                onBlur={handleIdent2Blur}
+                                value={barnetsIdent}
+                                className="bold-label ident-soker-2"
+                                maxLength={11}
+                                feil={
+                                    skalViseFeilmelding(identState.ident2)
+                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                        : undefined
+                                }
+                                bredde={"M"}
+                                disabled={barnetHarIkkeFnr}
+                            />
+                               {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) && <div className="dobbelSjekkIdent"><WarningCircle /><p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
+                             </div>
+                            <VerticalSpacer sixteenPx={true}/>
+                            <Checkbox
                             label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
                             onChange={(e) => handleCheckboxChange(e.target.checked)}
-                        />
-                        <VerticalSpacer sixteenPx={true}/>
+                            />
+                            {barnetHarIkkeFnr && <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
+                            <VerticalSpacer sixteenPx={true}/>
                         {
                             antallIdenter > 0 &&
                             journalpostident &&
                             props &&
                             identer.every(
-                                (ident) =>
-                                    !ident ||
-                                    (IdentRules.isIdentValid(ident) && ident !== journalpostident)
+                            (ident) =>
+                            !ident ||
+                            (IdentRules.isIdentValid(ident) && ident !== journalpostident)
                             ) && (
-                                <AlertStripeAdvarsel>
-                                    {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
-                                        antallIdenter: antallIdenter.toString(),
-                                        journalpostident,
-                                    })}
-                                </AlertStripeAdvarsel>
+                            <AlertStripeAdvarsel>
+                        {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
+                            antallIdenter: antallIdenter.toString(),
+                            journalpostident,
+                        })}
+                            </AlertStripeAdvarsel>
                             )}
+                        </>}
                         <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
@@ -522,6 +560,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
+    hentBarn: (ident1: string) =>
+        dispatch(hentBarn(ident1)),
     lukkJournalpostOppgave: (jpid: string) =>
         dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () =>

@@ -3,6 +3,14 @@ import { IError, IJournalpost } from '../../models/types';
 import {convertResponseToError, get, post} from '../../utils';
 import { ApiPath } from '../../apiConfig';
 import {IKopierJournalpost} from "../../models/types/RequestBodies";
+import {
+  ActiontypesHentBarn,
+  IHentBarnErrorAction,
+  IHentBarnForbiddenAction,
+  IHentBarnRequestAction,
+  IHentBarnSuccessAction
+} from "./HentBarn";
+import {IBarn} from "../../models/types/Barn";
 
 export interface IFellesState {
   dedupKey: string;
@@ -16,6 +24,11 @@ export interface IFellesState {
   kopierJournalpostError?: boolean;
   kopierJournalpostSuccess?: boolean;
   kopierJournalpostConflict?: boolean;
+  isAwaitingHentBarnResponse?:boolean;
+  hentBarnForbidden?: boolean;
+  hentBarnError?: boolean;
+  hentBarnSuccess?: boolean;
+  barn?: IBarn[];
 }
 
 enum Actiontypes {
@@ -167,7 +180,12 @@ type IJournalpostActionTypes =
     | IJournalpostKopiereConflictAction
     | IJournalpostKopiereRequestAction
     | IJournalpostKopiereSuccessAction
-    | IJournalpostKopiereErrorAction;
+    | IJournalpostKopiereErrorAction
+    | IHentBarnForbiddenAction
+    | IHentBarnRequestAction
+    | IHentBarnSuccessAction
+    | IHentBarnErrorAction;
+
 
 export function kopierJournalpost(kopierFraIdent: string, kopierTilIdent: string, barnIdent: string, journalPostID: string, dedupKey: string) {
   return (dispatch: any) => {
@@ -194,7 +212,6 @@ export function kopierJournalpost(kopierFraIdent: string, kopierTilIdent: string
     });
   }
 }
-
 
 const initialState: IFellesState = {
   dedupKey: ulid(),
@@ -284,6 +301,34 @@ export default function FellesReducer(
         ...state,
         isAwaitingKopierJournalPostResponse: false,
         kopierJournalpostError: true
+      };
+
+    case ActiontypesHentBarn.HENTBARN_REQUEST:
+      return {
+        ...state,
+        isAwaitingHentBarnResponse: true
+      };
+
+    case ActiontypesHentBarn.HENTBARN_FORBIDDEN:
+      return {
+        ...state,
+        isAwaitingHentBarnResponse: false,
+        hentBarnForbidden: true
+      };
+
+    case ActiontypesHentBarn.HENTBARN_SUCCESS:
+      return {
+        ...state,
+        barn: action.barn,
+        isAwaitingHentBarnResponse: false,
+        hentBarnSuccess: true
+      };
+
+    case ActiontypesHentBarn.HENTBARN_ERROR:
+      return {
+        ...state,
+        isAwaitingHentBarnResponse: false,
+        hentBarnError: true
       };
 
     default:
