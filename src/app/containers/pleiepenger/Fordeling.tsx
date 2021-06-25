@@ -137,7 +137,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
-    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>(JaNei.JA);
+    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+
     const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
 
     const [visSakstypeValg, setVisSakstypeValg] = useState<boolean>(false);
@@ -384,7 +385,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
-                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
+                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error || typeof riktigIdentIJournalposten === 'undefined'}>
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp></>}
                     </div>
                     <VerticalSpacer sixteenPx={true}/>
