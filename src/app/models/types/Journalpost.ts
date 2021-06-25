@@ -8,6 +8,7 @@ export interface IJournalpost {
         navn: string;
         erScanning: boolean;
     },
+    kanKopieres?: boolean;
     kanSendeInn: boolean;
     erSaksbehandler: boolean;
 }

@@ -40,7 +40,7 @@
   "startPage.feil.ingendokumenter":                                                               "Journalposten har ingen tilhørende dokumenter",
   "startPage.feil.ikketilgang":                                                                   "Du har ikke tilgang til journalposten",
   "fordeling.overskrift":                                                                         "Hva ønsker du å gjøre med dokumentet?",
-  "fordeling.sakstype.PLEIEPENGER_SYKT_BARN":                                                     "Pleiepenger sykt barn",
+  "fordeling.sakstype.PLEIEPENGER_SYKT_BARN":                                                     "Registrere opplysninger i Punsj",
   "fordeling.sakstype.OMSORGSPENGER":                                                             "Omsorgspenger",
   "fordeling.sakstype.OMSORGSPENGER_OVERFØRING":                                                  "Omsorgsdager: overføring av omsorgsdager",
   "fordeling.sakstype.OMSORGSPENGER_FORDELING":                                                   "Omsorgsdager: fordeling av omsorgsdager",
