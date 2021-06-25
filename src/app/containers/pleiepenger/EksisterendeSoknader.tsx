@@ -222,11 +222,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         return (
             <>
                 {technicalError}
-                <AlertStripeInfo>
-                    {intlHelper(intl, 'mapper.infoboks', {
-                        antallSokere: ident2 ? '2' : '1',
-                    })}
-                </AlertStripeInfo>
                 {showSoknader()}
             </>
         );
