@@ -308,7 +308,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                           <VerticalSpacer sixteenPx={true}/>
                           <Checkbox
                             label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
-                            onChange={(e) => {setToSokereIJournalpost(e.target.checked)}}
+                            onChange={(e) => {
+                                setToSokereIJournalpost(e.target.checked)
+                            }}
                           />
                           <VerticalSpacer sixteenPx={true}/>
                             {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
@@ -328,24 +330,24 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 bredde={"M"}
                               />
                                 {!!props.fellesState.kopierJournalpostConflict &&
-                                    <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
+                                <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
                                 }
 
                                 {!!props.fellesState.kopierJournalpostSuccess &&
-                                    <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
+                                <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
                                 }
 
                                 {!!props.fellesState.kopierJournalpostForbidden &&
-                                    <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
+                                <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
                                 }
 
                                 {!!props.fellesState.kopierJournalpostError &&
-                                    <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
+                                <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
                                 }
                             </div>
                             }
                         </>}
-                        <VerticalSpacer eightPx={true}/>
+                      <VerticalSpacer eightPx={true}/>
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx={true}/>
                             {!!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
@@ -372,59 +374,63 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                               />
                             </>
                             }
-                            <VerticalSpacer sixteenPx={true}/>
+                          <VerticalSpacer sixteenPx={true}/>
                             {(gjelderAnnetBarn
-                            || !!props.fellesState.hentBarnError
-                            || !!props.fellesState.hentBarnForbidden
-                            || (typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length === 0))
+                                || !!props.fellesState.hentBarnError
+                                || !!props.fellesState.hentBarnForbidden
+                                || (typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length === 0))
                             && <>
-                           <div className={'fyllUtIdentAnnetBarnContainer'}>
-                            <Input
-                                label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                                onChange={handleIdent2Change}
-                                onBlur={handleIdent2Blur}
-                                value={barnetsIdent}
-                                className="bold-label ident-soker-2"
-                                maxLength={11}
-                                feil={
-                                    skalViseFeilmelding(identState.ident2)
-                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                        : undefined
-                                }
-                                bredde={"M"}
-                                disabled={barnetHarIkkeFnr}
-                            />
-                               {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) && <div className="dobbelSjekkIdent"><WarningCircle /><p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
-                             </div>
-                            <VerticalSpacer sixteenPx={true}/>
-                            <Checkbox
-                            label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
-                            onChange={(e) => handleCheckboxChange(e.target.checked)}
-                            />
-                            {barnetHarIkkeFnr && <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
-                            <VerticalSpacer sixteenPx={true}/>
-                        {
-                            antallIdenter > 0 &&
-                            journalpostident &&
-                            props &&
-                            identer.every(
-                            (ident) =>
-                            !ident ||
-                            (IdentRules.isIdentValid(ident) && ident !== journalpostident)
-                            ) && (
-                            <AlertStripeAdvarsel>
-                        {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
-                            antallIdenter: antallIdenter.toString(),
-                            journalpostident,
-                        })}
-                            </AlertStripeAdvarsel>
-                            )}
-                            
+                              <div className={'fyllUtIdentAnnetBarnContainer'}>
+                                <Input
+                                  label={intlHelper(intl, 'ident.identifikasjon.barn')}
+                                  onChange={handleIdent2Change}
+                                  onBlur={handleIdent2Blur}
+                                  value={barnetsIdent}
+                                  className="bold-label ident-soker-2"
+                                  maxLength={11}
+                                  feil={
+                                      skalViseFeilmelding(identState.ident2)
+                                          ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                          : undefined
+                                  }
+                                  bredde={"M"}
+                                  disabled={barnetHarIkkeFnr}
+                                />
+                                  {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) &&
+                                  <div className="dobbelSjekkIdent"><WarningCircle/><p>
+                                    <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
+                              </div>
+                              <VerticalSpacer sixteenPx={true}/>
+                              <Checkbox
+                                label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
+                                onChange={(e) => handleCheckboxChange(e.target.checked)}
+                              />
+                                {barnetHarIkkeFnr && <AlertStripeInfo
+                                  className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
+                              <VerticalSpacer sixteenPx={true}/>
+                                {
+                                    antallIdenter > 0 &&
+                                    journalpostident &&
+                                    props &&
+                                    identer.every(
+                                        (ident) =>
+                                            !ident ||
+                                            (IdentRules.isIdentValid(ident) && ident !== journalpostident)
+                                    ) && (
+                                        <AlertStripeAdvarsel>
+                                            {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
+                                                antallIdenter: antallIdenter.toString(),
+                                                journalpostident,
+                                            })}
+                                        </AlertStripeAdvarsel>
+                                    )}
+                            </>}
+
                             {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
-                            mini={true}
-                            onClick={() => handleVidereClick()}
-                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
-                            {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
+                              mini={true}
+                              onClick={() => handleVidereClick()}
+                              disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
+                                {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
                         </>}
                     </div>
                     <VerticalSpacer sixteenPx={true}/>
