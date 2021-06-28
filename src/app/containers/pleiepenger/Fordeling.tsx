@@ -154,7 +154,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
 
-    useEffect(() =>  {props.hentBarn(identState.ident1)}, []);
+    useEffect(() =>  {if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent)}, []);
+    
     const skalViseFeilmelding = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
