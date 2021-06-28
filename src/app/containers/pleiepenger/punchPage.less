@@ -457,7 +457,11 @@
 .flex-container {
   display: inline-flex;
   width: 100%;
-  .hjelpetext { margin: 1rem }
+  .hjelpetext { margin: 1rem;
+    :last-child {
+      max-width: 30rem;
+    }
+  }
   .inputPanel { width: 100% }
 }
 
@@ -547,6 +551,12 @@
   .validertSoknadOppsummeringContainer_knappTilbake{
     margin-top: 0.9rem;
   }
+}
+
+.loadingSpinner{
+  position: relative;
+  margin-bottom: -4rem;
+  padding-bottom: 3rem;
 }
 
 .validertSoknadOppsummeringContainer:first-child > div{

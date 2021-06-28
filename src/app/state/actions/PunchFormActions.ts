@@ -327,15 +327,12 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
     }
 }
 
-export function validerSoknad(norskIdent: string, soeknadId: string) {
-    return (dispatch: any) => {
-        const requestBody: ISendSoknad = {
-            norskIdent,
-            soeknadId
-        }
+export function validerSoknad(soknad: IPSBSoknadUt) {
+    const norskIdent: string = typeof soknad.soeknadId === 'undefined' ? '' : soknad.soeknadId;
 
+    return (dispatch: any) => {
         dispatch(validerSoknadRequestAction());
-        post(ApiPath.SOKNAD_VALIDER, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, data) => {
+        post(ApiPath.SOKNAD_VALIDER, {id: soknad.soeknadId}, {'X-Nav-NorskIdent': norskIdent}, soknad, (response, data) => {
             switch (response.status) {
                 case 202:
                     return dispatch(validerSoknadSuccessAction(data));

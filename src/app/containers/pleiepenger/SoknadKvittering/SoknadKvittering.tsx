@@ -258,16 +258,16 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                 </div>}
 
                 {'infoFraPunsj' in ytelse && <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                    <hr className={classNames('linje')}/>
-                    <p>
-                        <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
-                        {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
-                    </p>
-                    <p>
-                        <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
-                        {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
-                    </p>
+                  <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
+                  <hr className={classNames('linje')}/>
+                  <p>
+                    <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
+                      {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
+                  </p>
+                  <p>
+                    <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
+                      {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                  </p>
                 </div>
                 }
             </div>);

@@ -942,14 +942,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>}
                 </Panel>
                 <VerticalSpacer sixteenPx={true}/>
-                <Checkbox
-                    label={intlHelper(intl, "skjema.ekspander")}
-                    onChange={(e) => {
-                        this.setState({expandAll: e.target.checked});
-                        this.forceUpdate();
-                    }}
-                />
-                <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
                     apen={true}
                     className={"punchform__paneler"}
@@ -999,6 +991,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>}
                     </SkjemaGruppe>
                 </EkspanderbartpanelBase>
+                <VerticalSpacer sixteenPx={true}/>
+                <Checkbox
+                    label={intlHelper(intl, "skjema.ekspander")}
+                    onChange={(e) => {
+                        this.setState({expandAll: e.target.checked});
+                        this.forceUpdate();
+                    }}
+                />
+                <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                     className={"punchform__paneler"}
@@ -1298,18 +1299,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <p className={"ikkeregistrert"}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className={"flex-container"}>
                     <CheckboksPanel
-                        id={"opplysningerikkepunsjetcheckbox"}
-                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
-                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
-                    /><Hjelpetekst
-                    className={"hjelpetext"}
-                    type={PopoverOrientering.OverHoyre}
-                    tabIndex={-1}
-                >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
-                <VerticalSpacer eightPx={true}/>
-                <div className={"flex-container"}>
-                    <CheckboksPanel
                         id={"medisinskeopplysningercheckbox"}
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                         checked={!!soknad.harMedisinskeOpplysninger}
@@ -1321,8 +1310,23 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         tabIndex={-1}
                     >{intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}</Hjelpetekst>
                 </div>
+                <VerticalSpacer eightPx={true}/>
+                <div className={"flex-container"}>
+                    <CheckboksPanel
+                        id={"opplysningerikkepunsjetcheckbox"}
+                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
+                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
+                    /><Hjelpetekst
+                    className={"hjelpetext"}
+                    type={PopoverOrientering.OverHoyre}
+                    tabIndex={-1}
+                >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
                 <VerticalSpacer twentyPx={true}/>
 
+                {punchFormState.isAwaitingValidateResponse &&
+                <div className={classNames('loadingSpinner')}><NavFrontendSpinner/></div>
+                }
                 <div className={"submit-knapper"}>
                     <p className="sendknapp-wrapper">
                         <Knapp
@@ -1362,6 +1366,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         {intlHelper(intl, 'skjema.feil.konflikt')}
                     </AlertStripeFeil>
                 )}
+
                 {this.state.showSettPaaVentModal && (
                     <ModalWrapper
                         key={"settpaaventmodal"}
@@ -1450,13 +1455,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
-        this.props.updateSoknad(
-            {...this.getSoknadFromStore()},
-        );
-        this.props.validateSoknad(
-            this.state.soknad.soekerId,
-            this.props.id
-        )
+        this.props.validateSoknad(this.state.soknad);
     }
 
     private handleSettPaaVent = () => {
@@ -1939,10 +1938,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
-        if (!this.state.soknad.barn.norskIdent) {
-            this.updateSoknad
-            ({...this.state.soknad, barn: {norskIdent: this.props.identState.ident2 || ''}});
-        }
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
@@ -1955,6 +1950,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.updateSoknad(
             {...this.getSoknadFromStore(), ...soknad},
         );
+
     };
 
     private handleBackButtonClick = () => {
@@ -2060,8 +2056,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (ident: string, soeknadid: string) =>
-        dispatch(validerSoknad(ident, soeknadid)),
+    validateSoknad: (soknad: IPSBSoknadUt) =>
+        dispatch(validerSoknad(soknad)),
     validerSoknadReset: () =>
         dispatch(validerSoknadResetAction())
 });
