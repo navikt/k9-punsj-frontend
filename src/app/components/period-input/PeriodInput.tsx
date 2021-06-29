@@ -22,10 +22,21 @@ export interface IPeriodInputProps {
     inputIdFom?: string;
     inputIdTom?: string;
     className?: string;
+    initialValues?: {
+        fom: string | undefined;
+        tom: string | undefined;
+    }
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
-    const {periode, intl, onChange, onBlur, onFocus, disabled} = props;
+    const {periode, intl, onChange, onBlur, onFocus, disabled, initialValues} = props;
+
+   const renderDato = (property: string) => {
+       if(periode?.[property] && periode?.[property].length) return periode?.[property];
+       else if(typeof initialValues !== 'undefined' && typeof initialValues[property] !== 'undefined') return initialValues?.[property];
+       else return '';
+   };
+
     return <SkjemaGruppe feil={props.errorMessage} className={classNames('period-input', props.className)}>
         <Container>
             <Row noGutters={true}>
@@ -35,7 +46,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     type="date"
                     label={intlHelper(intl, 'skjema.perioder.fom')}
                     className="bold-label"
-                    value={periode?.fom || ''}
+                    value={renderDato('fom')}
                     onChange={event => onChange({fom: event.target.value, tom: periode.tom})}
                     onBlur={event => onBlur({fom: event.target.value, tom: periode.tom})}
                     onFocus={onFocus}
@@ -48,7 +59,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     type="date"
                     label={intlHelper(intl, 'skjema.perioder.tom')}
                     className="right"
-                    value={periode?.tom || ''}
+                    value={renderDato('tom')}
                     onChange={event => onChange({fom: periode.fom, tom: event.target.value})}
                     onBlur={event => onBlur({fom: periode.fom, tom: event.target.value})}
                     onFocus={onFocus}

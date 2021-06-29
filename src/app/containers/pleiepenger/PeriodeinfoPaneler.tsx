@@ -44,12 +44,16 @@ export interface IPeriodeinfopanelerProps {
     onRemove?: () => any;
     kanHaFlere: boolean;
     medSlettKnapp: boolean;
+    initialValues?: {
+        fom: string | undefined;
+        tom: string | undefined;
+    }
 }
 
 export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (props: IPeriodeinfopanelerProps) => {
 
     const periods = !!props.periods ? props.periods : [];
-    const {intl, component, editSoknad, editSoknadState, kanHaFlere} = props;
+    const {intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues} = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: IPeriodeinfo = {...props.periods[index], ...periodeinfo};
@@ -88,6 +92,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
                 errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
                 errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
+                initialValues={initialValues}
             />
             <div
                 id="slett"

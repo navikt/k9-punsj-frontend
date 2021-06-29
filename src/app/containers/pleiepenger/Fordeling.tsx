@@ -2,7 +2,7 @@ import {JaNei, Sakstype, TilgjengeligSakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
-    lukkOppgaveResetAction,
+    lukkOppgaveResetAction, setErIdent1BekreftetAction,
     setIdentAction,
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
@@ -29,7 +29,7 @@ import {
 } from "../../state/actions/GosysOppgaveActions";
 import {setHash} from "../../utils";
 import {IdentRules} from "../../rules";
-import {setIdentFellesAction} from "../../state/actions/IdentActions";
+import { setIdentFellesAction} from "../../state/actions/IdentActions";
 import {IIdentState} from "../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
@@ -55,6 +55,7 @@ export interface IFordelingDispatchProps {
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
+    setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
 }
 
 type IFordelingProps = WrappedComponentProps &
@@ -159,8 +160,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         setIdentAction(identState.ident1, event.target.value)
     }
 
-    const handleIdent1Blur = (event: any) =>
-        props.setIdentAction(event.target.value, identState.ident2);
+    const handleIdent1Blur = (event: any) => {props.setIdentAction(event.target.value, identState.ident2); props.setErIdent1Bekreftet(true);}
     const handleIdent2Blur = (event: any) =>
         props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
     const handleIdentAnnenSokerBlur = (event: any) =>
@@ -281,7 +281,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 values={{ident: journalpost?.norskIdent}}
                             />}
                             checked={riktigIdentIJournalposten}
-                            onChange={(event) => handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
+                            onChange={(event) => {props.setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA ? true : false); handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}}
                         />
                         </>}
                         {riktigIdentIJournalposten === JaNei.NEI && <>
@@ -385,7 +385,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
-                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
+                            disabled={skalViseFeilmelding(barnetsIdent) || (!barnetsIdent && !barnetHarIkkeFnr)}>
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
                         </>}
                     </div>
@@ -520,6 +520,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(omfordelAction(journalpostid, norskIdent)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
+    setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>

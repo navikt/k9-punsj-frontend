@@ -3,6 +3,7 @@ import {FordelingActionKeys, Sakstype} from 'app/models/enums';
 import {IError}                        from 'app/models/types';
 import {convertResponseToError, post}  from 'app/utils';
 import {ISkalTilK9} from "../../models/types/RequestBodies";
+import {IdentActionKeys} from "./IdentActions";
 
 interface ISetSakstypeAction        {type: FordelingActionKeys.SAKSTYPE_SET, sakstype?: Sakstype}
 
@@ -21,10 +22,14 @@ interface ILukkOggpgaveSuccessAction {type: FordelingActionKeys.LUKK_OPPGAVE_SUC
 interface ILukkOggpgaveErrorAction   {type: FordelingActionKeys.LUKK_OPPGAVE_ERROR, error: IError}
 interface ILukkOggpgaveResetAction   {type: FordelingActionKeys.LUKK_OPPGAVE_RESET}
 
+interface ISetErIdent1BekreftetAction{type: FordelingActionKeys.IDENT_BEKREFT_IDENT1; erIdent1Bekreftet: boolean;}
+
 export const lukkOppgaveRequestAction   = ():               ILukkOggpgaveRequestAction   => ({type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST});
 export const lukkOppgaveSuccessAction   = ():               ILukkOggpgaveSuccessAction   => ({type: FordelingActionKeys.LUKK_OPPGAVE_SUCCESS});
 export const lukkOppgaveErrorAction     = (error: IError):  ILukkOggpgaveErrorAction     => ({type: FordelingActionKeys.LUKK_OPPGAVE_ERROR, error});
 export const lukkOppgaveResetAction     = ():               ILukkOggpgaveResetAction     => ({type: FordelingActionKeys.LUKK_OPPGAVE_RESET});
+
+export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction     => ({type: FordelingActionKeys.IDENT_BEKREFT_IDENT1, erIdent1Bekreftet: identBekreftet});
 
 export type IFordelingActionTypes =
     ISetSakstypeAction |
@@ -37,7 +42,8 @@ export type IFordelingActionTypes =
     ILukkOggpgaveRequestAction |
     ILukkOggpgaveErrorAction   |
     ILukkOggpgaveSuccessAction |
-    ILukkOggpgaveResetAction;
+    ILukkOggpgaveResetAction |
+    ISetErIdent1BekreftetAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST});
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
