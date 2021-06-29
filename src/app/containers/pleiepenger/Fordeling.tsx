@@ -169,8 +169,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         props.setIdentAction(identState.ident1, '', '');
     }
 
-    const handleIdent1Blur = (event: any) =>
+    const handleIdent1Blur = (event: any) => {
         props.setIdentAction(event.target.value, identState.ident2);
+        props.hentBarn(event.target.value);
+    }
+
     const handleIdent2Blur = (event: any) =>{
         props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);}
     const handleIdentAnnenSokerBlur = (event: any) =>
@@ -369,7 +372,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                       </option>)
                                   }
                               </Select>
-                              <VerticalSpacer sixteenPx={true}/>
+                              <VerticalSpacer eightPx={true}/>
                               <Checkbox
                                 label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                                 onChange={(e) => {
@@ -402,8 +405,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                   disabled={barnetHarIkkeFnr}
                                 />
                                   {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) &&
-                                  <div className="dobbelSjekkIdent"><WarningCircle/><p>
-                                    <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
+                                  <div className="dobbelSjekkIdent"><div><WarningCircle/></div><p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
                               </div>
                               <VerticalSpacer eightPx={true}/>
                               <Checkbox
