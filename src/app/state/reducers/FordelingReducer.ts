@@ -11,6 +11,7 @@ const initialState: IFordelingState = {
     isAwaitingLukkOppgaveResponse: false,
     lukkOppgaveDone: false,
     skalTilK9: undefined,
+    erIdent1Bekreftet: false,
 };
 
 export function FordelingReducer(
@@ -104,6 +105,12 @@ export function FordelingReducer(
                 lukkOppgaveDone: false,
                 isAwaitingLukkOppgaveResponse: false,
                 lukkOppgaveError: undefined
+            };
+
+        case FordelingActionKeys.IDENT_BEKREFT_IDENT1:
+            return {
+                ...fordelingState,
+                erIdent1Bekreftet: action.erIdent1Bekreftet,
             };
 
         default:

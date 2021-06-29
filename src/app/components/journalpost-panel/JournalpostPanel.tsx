@@ -8,17 +8,17 @@ import { WrappedComponentProps, injectIntl} from 'react-intl';
 import {IIdentState} from "../../models/types/IdentState";
 import {RootStateType} from "../../state/RootState";
 import {connect} from "react-redux";
-import {IJournalpost} from "../../models/types";
+import {IFordelingState, IJournalpost} from "../../models/types";
 
 export interface IJournalpostPanelStateProps {
     journalpost?: IJournalpost;
     identState: IIdentState;
+    fordelingState: IFordelingState;
 }
 
 class JournalpostPanelComponent extends React.Component<WrappedComponentProps & IJournalpostPanelStateProps> {
     render() {
-
-        const { intl, journalpost } = this.props;
+        const { intl, journalpost, fordelingState } = this.props;
         const { ident1, ident2 } = this.props.identState;
 
         return (
@@ -29,13 +29,14 @@ class JournalpostPanelComponent extends React.Component<WrappedComponentProps & 
                         value={journalpost?.journalpostId}
                         retning="horisontal"
                     />
-                    <LabelValue
+
+                    {fordelingState.erIdent1Bekreftet && <LabelValue
                         labelTextId="journalpost.norskIdent"
                         value={ ident1 ? ident1 : journalpost?.norskIdent ||
                             intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                         }
                         retning="horisontal"
-                    />
+                    />}
                     {!!ident2 &&
                     <LabelValue
                         labelTextId="journalpost.ident2"
@@ -53,7 +54,8 @@ class JournalpostPanelComponent extends React.Component<WrappedComponentProps & 
 
 const mapStateToProps = (state: RootStateType): IJournalpostPanelStateProps => ({
     identState: state.identState,
-    journalpost: state.felles.journalpost
+    journalpost: state.felles.journalpost,
+    fordelingState: state.fordelingState,
 });
 
 const JournalpostPanel =  injectIntl(

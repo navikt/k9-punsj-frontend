@@ -41,6 +41,7 @@ export const setupFordeling = (
         resetOmfordelAction: jest.fn(),
         lukkOppgaveReset: jest.fn(),
         hentBarn: jest.fn(),
+        setErIdent1Bekreftet: jest.fn(),
         ...fordelingDispatchPropsPartial,
     };
 
@@ -67,6 +68,7 @@ export const setupFordeling = (
         isAwaitingSjekkTilK9Response: false,
         isAwaitingLukkOppgaveResponse: false,
         sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
+        erIdent1Bekreftet: false,
         ...fordelingStatePartial,
     };
 
