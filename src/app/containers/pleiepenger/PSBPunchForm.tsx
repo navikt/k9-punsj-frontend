@@ -298,8 +298,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
             });
-            if(!this.state.soknad.barn || !this.state.soknad.barn.norskIdent) {
-                this.updateSoknad({barn: {norskIdent: this.props.identState.ident2 || ''}})
+            if(!soknad.barn || soknad.barn.norskIdent === '') {
+                this.updateSoknad({barn: {norskIdent: this.props.identState.ident2 || ''}});
             }
         }
     }
