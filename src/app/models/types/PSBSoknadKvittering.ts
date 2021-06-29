@@ -93,6 +93,7 @@ export interface IPSBSoknadKvittering {
         nattevåk: { perioder: IPSBSoknadKvitteringBeredskapNattevak };
         tilsynsordning: { perioder: IPSBSoknadKvitteringTilsynsordning; }
         lovbestemtFerie: { perioder: IPSBSoknadKvitteringLovbestemtFerie; }
+        lovbestemtFerieSomSkalSlettes: { perioder: IPSBSoknadKvitteringLovbestemtFerie; }
         arbeidstid: IPSBSoknadKvitteringArbeidstid;
         uttak: { perioder: IPSBSoknadKvitteringUttak; }
         omsorg: IPSBSoknadKvitteringOmsorg;

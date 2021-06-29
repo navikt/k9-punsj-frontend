@@ -77,6 +77,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
         const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
         const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
         const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse);
+        const visFerieSomSkalSLettes = sjekkHvisPerioderEksisterer('visFerieSomSkalSLettes', ytelse);
         const visOpplysningerOmSoker = ytelse.omsorg?.relasjonTilBarnet !== null;
         const visArbeidsforhold = sjekkPropertyEksistererOgIkkeErNull('arbeidstakerList', ytelse.arbeidstid) && ytelse.arbeidstid?.arbeidstakerList.length > 0;
         const visSelvstendigNæringsdrivendeInfo = ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null || sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet);
@@ -129,6 +130,16 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
                         perioder={ytelse.lovbestemtFerie?.perioder}
+                        tittel={['skjema.periode.overskrift']}
+                    />
+                </div>}
+
+                {visFerieSomSkalSLettes && <div>
+                    <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
+                    <hr className={classNames('linje')}/>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={ytelse.lovbestemtFerieSomSkalSlettes?.perioder}
                         tittel={['skjema.periode.overskrift']}
                     />
                 </div>}
