@@ -163,7 +163,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
         setIdentAction(identState.ident1, event.target.value)
     }
-
     const nullUtBarnetsIdent = () => {
         setBarnetsIdent('');
         setIdentAction(identState.ident1, '');
@@ -357,8 +356,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 bredde="l"
                                 label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                                 onChange={handleIdent2Change}
+                                disabled={gjelderAnnetBarn}
                                 onBlur={handleIdent2Blur}
                               >
+                                <option key={uuidv4()} value={"start"}>
+                                    {``}
+                                </option>)
+
                                   {props.fellesState.barn.map(b =>
                                       <option key={uuidv4()} value={b.identitetsnummer}>
                                           {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
