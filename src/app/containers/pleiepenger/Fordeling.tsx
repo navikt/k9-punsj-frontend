@@ -306,7 +306,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         />
                         </>}
                         {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && <>
-                          <VerticalSpacer sixteenPx={true}/>
+                          <VerticalSpacer eightPx={true}/>
                           <Checkbox
                             label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
                             onChange={(e) => {
@@ -401,7 +401,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                   <div className="dobbelSjekkIdent"><WarningCircle/><p>
                                     <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
                               </div>
-                              <VerticalSpacer sixteenPx={true}/>
+                              <VerticalSpacer eightPx={true}/>
                               <Checkbox
                                 label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
                                 onChange={(e) => handleCheckboxChange(e.target.checked)}

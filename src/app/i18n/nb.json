@@ -77,7 +77,7 @@
   "ident.identifikasjon.velgBarn":                                                                "Velg hvilket barn det gjelder",
   "ident.identifikasjon.annetBarn":                                                               "Det gjelder et annet barn",
   "ident.identifikasjon.barnHarIkkeFnr":                                                          "Barnet har ikke fødselsnummer",
-  "ident.identifikasjon.barnHarIkkeFnrInformasjon":                                               "Oppgaven kan ikke sendes til K9 uten barnets fødselsnummer. Registrer opplysningene fra dokumentet og sett saken på vent.",
+  "ident.identifikasjon.barnHarIkkeFnrInformasjon":                                               "Dokumentet kan ikke sendes til K9 uten barnets fødselsnummer. Registrer opplysningene fra dokumentet og sett saken på vent.",
   "ident.identifikasjon.dobbelsjekkident":                                                        "Dobbeltsjekk at fødselsnummer er korrekt.",
   "ident.identifikasjon.sjekkident":                                                              "Stemmer det at søkers fødselsnummer er {ident}?",
   "ident.identifikasjon.tosokere":                                                                "Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)",
