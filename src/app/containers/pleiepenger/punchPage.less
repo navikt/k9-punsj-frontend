@@ -400,7 +400,7 @@
       .beskrivelseAvOmsorgsrollen {
         margin-top: 1rem;
       }
-      
+
       .sendknapp-wrapper {
         margin-bottom: 0
       }
@@ -456,7 +456,11 @@
 .flex-container {
   display: inline-flex;
   width: 100%;
-  .hjelpetext { margin: 1rem }
+  .hjelpetext { margin: 1rem;
+    :last-child {
+      max-width: 30rem;
+    }
+  }
   .inputPanel { width: 100% }
 }
 

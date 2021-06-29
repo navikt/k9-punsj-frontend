@@ -89,7 +89,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({
                   <FormattedMessage
                     id="dokument.flere"
                     values={{
-                      doknr: `${dokumentnummer}`,
+                      doknr: `${i+1}`,
                       totalnr: dokumenter.length.toString(),
                     }}
                   />

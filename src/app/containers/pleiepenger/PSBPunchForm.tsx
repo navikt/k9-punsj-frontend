@@ -942,14 +942,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>}
                 </Panel>
                 <VerticalSpacer sixteenPx={true}/>
-                <Checkbox
-                    label={intlHelper(intl, "skjema.ekspander")}
-                    onChange={(e) => {
-                        this.setState({expandAll: e.target.checked});
-                        this.forceUpdate();
-                    }}
-                />
-                <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
                     apen={true}
                     className={"punchform__paneler"}
@@ -999,6 +991,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>}
                     </SkjemaGruppe>
                 </EkspanderbartpanelBase>
+                <VerticalSpacer sixteenPx={true}/>
+                <Checkbox
+                    label={intlHelper(intl, "skjema.ekspander")}
+                    onChange={(e) => {
+                        this.setState({expandAll: e.target.checked});
+                        this.forceUpdate();
+                    }}
+                />
+                <VerticalSpacer sixteenPx={true}/>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                     className={"punchform__paneler"}
@@ -1322,18 +1323,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <p className={"ikkeregistrert"}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className={"flex-container"}>
                     <CheckboksPanel
-                        id={"opplysningerikkepunsjetcheckbox"}
-                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
-                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
-                    /><Hjelpetekst
-                    className={"hjelpetext"}
-                    type={PopoverOrientering.OverHoyre}
-                    tabIndex={-1}
-                >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
-                <VerticalSpacer eightPx={true}/>
-                <div className={"flex-container"}>
-                    <CheckboksPanel
                         id={"medisinskeopplysningercheckbox"}
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                         checked={!!soknad.harMedisinskeOpplysninger}
@@ -1345,6 +1334,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         tabIndex={-1}
                     >{intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}</Hjelpetekst>
                 </div>
+                <VerticalSpacer eightPx={true}/>
+                <div className={"flex-container"}>
+                    <CheckboksPanel
+                        id={"opplysningerikkepunsjetcheckbox"}
+                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
+                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
+                    /><Hjelpetekst
+                    className={"hjelpetext"}
+                    type={PopoverOrientering.OverHoyre}
+                    tabIndex={-1}
+                >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
                 <VerticalSpacer twentyPx={true}/>
 
                 {punchFormState.isAwaitingValidateResponse &&
