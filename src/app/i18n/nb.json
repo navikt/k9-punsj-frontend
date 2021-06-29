@@ -258,6 +258,7 @@
   "skjema.medsoker":                                                                              "Er det en annen person som søker om pleiepenger i samme periode?",
   "skjema.beggehjemme":                                                                           "Skal begge være hjemme/på sykehus samtidig for å pleie barnet?",
   "skjema.ferie":                                                                                 "Ferie",
+  "skjema.ferie.skalslettes":                                                                     "Ferie som skal slettes",
   "skjema.kvittering.oppsummering":                                                               "Oppsummering",
   "skjema.utenlandsopphold.opplysninger":                                                         "Utenlandsopphold",
   "skjema.utenlandsopphold.label":                                                                "Skal søker reise til utlandet i perioden det søkes for?",

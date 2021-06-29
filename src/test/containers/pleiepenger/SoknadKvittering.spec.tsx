@@ -101,6 +101,11 @@ const fullResponse: IPSBSoknadKvittering = {
                 "2021-06-01/2021-06-04": null
             },
         },
+        lovbestemtFerieSomSkalSlettes: {
+            perioder: {
+                "2021-06-07/2021-06-12": null
+            },
+        },
         arbeidstid: {
             arbeidstakerList: [
                 {
@@ -169,6 +174,9 @@ const minimalResponse: IPSBSoknadKvittering = {
             perioder: {},
         },
         lovbestemtFerie: {
+            perioder: {},
+        },
+        lovbestemtFerieSomSkalSlettes: {
             perioder: {},
         },
         arbeidstid: {
