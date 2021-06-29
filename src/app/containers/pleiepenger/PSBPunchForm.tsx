@@ -2,7 +2,7 @@ import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {Arbeidsforhold, JaNei, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import {IInputError, IPunchFormState, ISignaturState, SelvstendigNaerinsdrivende} from 'app/models/types';
+import {IInputError, IPunchFormState, ISignaturState, Periode, SelvstendigNaerinsdrivende} from 'app/models/types';
 import {
     getSoknad,
     hentPerioderFraK9Sak,
@@ -1081,20 +1081,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     className={classNames('punchform__paneler', 'feriepanel')}
                     tittel={intlHelper(intl, PunchFormPaneler.FERIE)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.FERIE)}>
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                            label: intlHelper(intl, jnv),
-                            value: jnv,
-                        }))}
-                        name="feriejaneiikeeopplyst"
-                        legend={intlHelper(intl, 'skjema.ferie.label')}
-                        onChange={(event) =>
-                            this.updateFerie(
-                                (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst
-                            )
-                        }
-                        checked={this.state.soknad.lovbestemtFerie?.length ? JaNeiIkkeOpplyst.JA : this.state.skalHaFerie}
+                    <VerticalSpacer eightPx={true}/>
+                    <CheckboksPanel
+                        label={intlHelper(intl, 'skjema.ferie.leggtil')}
+                        value={'skjema.ferie.leggtil'}
+                        onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
+                        checked={!!soknad.lovbestemtFerie.length}
                     />
                     {!!soknad.lovbestemtFerie.length && (
                         <Periodepaneler
@@ -1118,30 +1110,38 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             minstEn={false}
                             kanHaFlere={true}
                         />)}
-                </EkspanderbartpanelBase>
-                <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                    className={"punchform__paneler"}
-                    tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}>
-                    <Select value={soknad.omsorg.relasjonTilBarnet}
-                            label={intlHelper(intl, 'skjema.relasjontilbarnet')}
-                            {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                omsorg: {...soknad.omsorg, relasjonTilBarnet: event.target.value}
-                            }))}>
-                        {Object.values(RelasjonTilBarnet).map(rel =>
-                            <option key={rel} value={rel}>{rel}</option>)}
-                    </Select>
-                    {soknad.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET &&
-                    <Input
-                        bredde={"M"}
-                        label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
-                        className="beskrivelseAvOmsorgsrollen"
-                        value={soknad.omsorg.beskrivelseAvOmsorgsrollen}
-                        {...this.changeAndBlurUpdatesSoknad((event) => ({
-                            omsorg: {...soknad.omsorg, beskrivelseAvOmsorgsrollen: event.target.value},
-                        }))}
-                    />}
+                    <VerticalSpacer eightPx={true}/>
+                    <CheckboksPanel
+                        label={intlHelper(intl, 'skjema.ferie.fjern')}
+                        value={'skjema.ferie.fjern'}
+                        onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
+                        checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
+                    />
+                    {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
+                        <>
+                        <Periodepaneler
+                            intl={intl}
+                            periods={soknad.lovbestemtFerieSomSkalSlettes}
+                            panelid={(i) => `ferieperiodepanel_${i}`}
+                            initialPeriode={this.initialPeriode}
+                            editSoknad={(perioder) =>
+                                this.updateSoknad
+                                (
+                                    {lovbestemtFerieSomSkalSlettes: perioder})
+                            }
+                            editSoknadState={(perioder, showStatus) =>
+                                this.updateSoknadState(
+                                    {lovbestemtFerieSomSkalSlettes: perioder},
+                                    showStatus
+                                )
+                            }
+                            getErrorMessage={() => undefined}
+                            feilkodeprefiks={'lovbestemtFerie'}
+                            minstEn={false}
+                            kanHaFlere={true}
+                        />
+                            <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
+                        </>)}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.ARBEID)}
@@ -1184,6 +1184,30 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 {selvstendigperioder()}
                             </Panel></>
                     )}
+                </EkspanderbartpanelBase>
+                <EkspanderbartpanelBase
+                    apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    className={"punchform__paneler"}
+                    tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}>
+                    <Select value={soknad.omsorg.relasjonTilBarnet}
+                            label={intlHelper(intl, 'skjema.relasjontilbarnet')}
+                            {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                omsorg: {...soknad.omsorg, relasjonTilBarnet: event.target.value}
+                            }))}>
+                        {Object.values(RelasjonTilBarnet).map(rel =>
+                            <option key={rel} value={rel}>{rel}</option>)}
+                    </Select>
+                    {soknad.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET &&
+                    <Input
+                        bredde={"M"}
+                        label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
+                        className="beskrivelseAvOmsorgsrollen"
+                        value={soknad.omsorg.beskrivelseAvOmsorgsrollen}
+                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            omsorg: {...soknad.omsorg, beskrivelseAvOmsorgsrollen: event.target.value},
+                        }))}
+                    />}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
@@ -1800,21 +1824,49 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         }
     }
 
-    private updateFerie(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
-        this.setState({
-            skalHaFerie: jaNeiIkkeOpplyst,
-        });
-
-        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA &&
-            this.state.soknad.lovbestemtFerie!.length === 0) {
-            this.addFerie()
+    private updateSkalHaFerie(checked: boolean) {
+        if (!this.state.soknad.lovbestemtFerie) {
+            this.state.soknad = {...this.state.soknad, lovbestemtFerie: [{}]};
         }
-
-        if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
+        if (!!checked &&
+            this.state.soknad.lovbestemtFerie?.length === 0) {
+            this.addSkalHaFerie()
+        } else {
             this.updateSoknadState({lovbestemtFerie: []}, true);
             this.updateSoknad({lovbestemtFerie: []})
         }
     }
+
+    private updateIkkeSkalHaFerie(checked: boolean) {
+        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
+            this.state.soknad = {...this.state.soknad, lovbestemtFerieSomSkalSlettes: [{}]};
+        }
+        if (!!checked &&
+            this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
+            this.addIkkeSkalHaFerie()
+        } else {
+            this.updateSoknadState({lovbestemtFerieSomSkalSlettes: []}, true);
+            this.updateSoknad({lovbestemtFerieSomSkalSlettes: []})
+        }
+    }
+
+    private addSkalHaFerie = () => {
+        if (!this.state.soknad.lovbestemtFerie) {
+            this.state.soknad = {...this.state.soknad, lovbestemtFerie: [{}]};
+        }
+        this.state.soknad.lovbestemtFerie!.push({fom: '', tom: ''});
+        this.forceUpdate();
+        this.updateSoknad({lovbestemtFerie: this.state.soknad.lovbestemtFerie})
+    };
+
+    private addIkkeSkalHaFerie = () => {
+        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
+            this.state.soknad = {...this.state.soknad, lovbestemtFerieSomSkalSlettes: [{}]};
+        }
+        this.state.soknad.lovbestemtFerieSomSkalSlettes!.push({fom: '', tom: ''});
+        this.forceUpdate();
+        this.updateSoknad({lovbestemtFerieSomSkalSlettes: this.state.soknad.lovbestemtFerieSomSkalSlettes})
+    };
 
     private updateOmsorgstilbud(checked: boolean) {
 
@@ -2000,15 +2052,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private setOpphold = () => this.updateSoknad({utenlandsopphold: this.state.soknad.utenlandsopphold});
-
-    private addFerie = () => {
-        if (!this.state.soknad.lovbestemtFerie) {
-            this.state.soknad = {...this.state.soknad, lovbestemtFerie: [{}]};
-        }
-        this.state.soknad.lovbestemtFerie!.push({fom: '', tom: ''});
-        this.forceUpdate();
-        this.updateSoknad({lovbestemtFerie: this.state.soknad.lovbestemtFerie})
-    };
 
     private statusetikett() {
         if (!this.state.showStatus) {

@@ -7,6 +7,7 @@ import intlHelper from "../../utils/intlUtils";
 import {Knapp} from "nav-frontend-knapper";
 import Panel from "nav-frontend-paneler";
 import {Row} from "react-bootstrap";
+import AddCircleSvg from "../../assets/SVG/AddCircleSVG";
 
 export type GetErrorMessage = (kode: string, indeks?: number) => (React.ReactNode | boolean | undefined);
 
@@ -90,18 +91,19 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 </Row>)}
             {kanHaFlere &&
             <Row noGutters={true}>
-                <Knapp
+                <div
+                    id="leggtilperiode"
+                    className={"leggtilperiode"}
+                    role="button"
                     onClick={() => {
                         const newArray: IPeriode[] = addItem();
                         editSoknadState(newArray);
                         editSoknad(newArray);
                         !!props.onAdd && props.onAdd();
                     }}
-                    className="leggtil"
-                    mini={true}
-                >
-                    {intlHelper(intl, props.textLeggTil || 'skjema.perioder.legg_til')}
-                </Knapp></Row>}
+                    tabIndex={0}
+                ><div className={"leggtilperiodeIcon"}><AddCircleSvg title={"leggtil"}/></div>
+                    {intlHelper(intl, props.textLeggTil || 'skjema.periodepanel.legg_til')}</div></Row>}
 
         </Panel>);
 };

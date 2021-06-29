@@ -273,8 +273,14 @@
         border-radius: 5px;
 
         .leggtillisteelementknapp {
-          margin: 0 1rem 1rem 0;
+          display: inline-flex;
+          margin: 1rem 0 0 0;
+          color: #0067C5;
+          text-decoration: underline;
+          cursor: pointer;
+          .leggtilperiodeIcon {margin-right: 0.5rem}
         }
+
       }
 
       .periodepanel {
@@ -302,8 +308,13 @@
           }
         }
 
-        .leggtil {
-          margin: 1rem 0 0 0
+        .leggtilperiode {
+          display: inline-flex;
+          margin: 1rem 0 0 0;
+          color: #0067C5;
+          text-decoration: underline;
+          cursor: pointer;
+          .leggtilperiodeIcon {margin-right: 0.5rem}
         }
       }
 
@@ -389,19 +400,7 @@
       .beskrivelseAvOmsorgsrollen {
         margin-top: 1rem;
       }
-
-      .leggtillisteelementknapp {
-        width: 30%;
-        float: left;
-        border: 2px solid #0067C5;
-        box-sizing: border-box;
-        border-radius: 2px;
-
-        &:not(:hover) {
-          background-color: @white
-        }
-      }
-
+      
       .sendknapp-wrapper {
         margin-bottom: 0
       }

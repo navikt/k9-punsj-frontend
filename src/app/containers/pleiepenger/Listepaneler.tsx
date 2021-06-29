@@ -6,6 +6,8 @@ import {SkjemaGruppe}      from 'nav-frontend-skjema';
 import * as React          from 'react';
 import {FormattedMessage, IntlShape} from 'react-intl';
 import BinSvg from "../../assets/SVG/BinSVG";
+import {IPeriode} from "../../models/types";
+import AddCircleSvg from "../../assets/SVG/AddCircleSVG";
 
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
@@ -112,17 +114,18 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             </Panel>
         })}
         {kanHaFlere &&
-        <Knapp
+            <div
+            id="leggtillisteelementknapp"
+            className={"leggtillisteelementknapp"}
+            role="button"
             onClick={() => {
-                const newArray: ItemInfo[] = addItem();
-                editSoknadState(newArray);
-                editSoknad(newArray);
-                !!props.onAdd && props.onAdd();
-            }}
-            className="leggtillisteelementknapp"
-            mini={true}
-        >
-            {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
-        </Knapp>}
+            const newArray: ItemInfo[] = addItem();
+            editSoknadState(newArray);
+            editSoknad(newArray);
+            !!props.onAdd && props.onAdd();
+        }}
+            tabIndex={0}
+            ><div className={"leggtilperiodeIcon"}><AddCircleSvg title={"leggtil"}/></div>
+        {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}</div>}
     </SkjemaGruppe>;
 };
