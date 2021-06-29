@@ -362,7 +362,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 disabled={gjelderAnnetBarn}
                                 onBlur={handleIdent2Blur}
                               >
-                                <option key={uuidv4()} value={"start"}>
+                                <option key={uuidv4()} value={""}>
                                     {``}
                                 </option>)
 
