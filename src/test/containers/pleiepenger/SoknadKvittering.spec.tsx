@@ -98,12 +98,9 @@ const fullResponse: IPSBSoknadKvittering = {
         },
         lovbestemtFerie: {
             perioder: {
-                "2021-06-01/2021-06-04": null
-            },
-        },
-        lovbestemtFerieSomSkalSlettes: {
-            perioder: {
-                "2021-06-07/2021-06-12": null
+                "2021-06-01/2021-06-04": {
+                    skalHaFerie: 'true'
+                }
             },
         },
         arbeidstid: {
@@ -174,9 +171,6 @@ const minimalResponse: IPSBSoknadKvittering = {
             perioder: {},
         },
         lovbestemtFerie: {
-            perioder: {},
-        },
-        lovbestemtFerieSomSkalSlettes: {
             perioder: {},
         },
         arbeidstid: {
