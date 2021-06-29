@@ -40,6 +40,7 @@ const setupFordeling = (
         lukkJournalpostOppgave: jest.fn(),
         resetOmfordelAction: jest.fn(),
         lukkOppgaveReset: jest.fn(),
+        setErIdent1Bekreftet: jest.fn(),
         ...fordelingDispatchPropsPartial,
     };
 
@@ -66,6 +67,7 @@ const setupFordeling = (
         isAwaitingSjekkTilK9Response: false,
         isAwaitingLukkOppgaveResponse: false,
         sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
+        erIdent1Bekreftet: false,
         ...fordelingStatePartial,
     };
 
