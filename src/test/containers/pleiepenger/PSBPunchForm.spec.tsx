@@ -81,7 +81,6 @@ const validertSoknad: IPSBSoknadKvittering = {
         nattevåk: { perioder: {} },
         tilsynsordning: { perioder: {} },
         lovbestemtFerie: { perioder: {} },
-        lovbestemtFerieSomSkalSlettes: { perioder: {} },
         arbeidstid: {
             arbeidstakerList: [{
                 norskIdentitetsnummer: null,

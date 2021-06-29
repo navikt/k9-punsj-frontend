@@ -18,7 +18,7 @@ export interface IPSBSoknadKvitteringTilsynsordning {
 }
 
 export interface IPSBSoknadKvitteringLovbestemtFerie {
-    [key: string]: null | string;
+    [key: string]: { skalHaFerie: string; }
 }
 
 export interface IPSBSoknadKvitteringOmsorg {
@@ -93,7 +93,6 @@ export interface IPSBSoknadKvittering {
         nattevåk: { perioder: IPSBSoknadKvitteringBeredskapNattevak };
         tilsynsordning: { perioder: IPSBSoknadKvitteringTilsynsordning; }
         lovbestemtFerie: { perioder: IPSBSoknadKvitteringLovbestemtFerie; }
-        lovbestemtFerieSomSkalSlettes: { perioder: IPSBSoknadKvitteringLovbestemtFerie; }
         arbeidstid: IPSBSoknadKvitteringArbeidstid;
         uttak: { perioder: IPSBSoknadKvitteringUttak; }
         omsorg: IPSBSoknadKvitteringOmsorg;
