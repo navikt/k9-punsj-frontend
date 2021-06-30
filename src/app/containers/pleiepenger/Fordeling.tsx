@@ -70,7 +70,6 @@ type BehandlingsknappProps = Pick<IFordelingProps,
     'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent?: string;
     sakstypeConfig?: ISakstypeDefault;
-
 };
 
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
@@ -154,8 +153,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
-
-    useEffect(() =>  {if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent)}, []);
     
     const skalViseFeilmelding = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
     const handleIdent1Change = (event: any) =>
@@ -184,6 +181,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         setRiktigIdentIJournalposten(jn);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
+           if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent);
         } else {
             props.setIdentAction('', identState.ident2)
         }
