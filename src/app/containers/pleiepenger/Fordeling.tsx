@@ -14,7 +14,7 @@ import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSukses
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
