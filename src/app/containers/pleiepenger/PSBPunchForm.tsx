@@ -849,6 +849,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     feilkodeprefiks={'beredskap'}
                     kanHaFlere={true}
                     medSlettKnapp={false}
+                    initialValues={{
+                        fom: soknad?.soeknadsperiode?.fom,
+                        tom: soknad?.soeknadsperiode?.tom
+                    }}
                 />
             )
         };
@@ -873,6 +877,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     feilkodeprefiks={'nattevåk'}
                     kanHaFlere={true}
                     medSlettKnapp={false}
+                    initialValues={{
+                        fom: soknad?.soeknadsperiode?.fom,
+                        tom: soknad?.soeknadsperiode?.tom
+                    }}
                 />
             )
         };

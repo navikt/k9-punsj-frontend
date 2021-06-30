@@ -76,7 +76,7 @@ describe('Fordeling: Flyt for pleiepenger', () => {
         expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
         fordeling.find('Input').simulate('change', {target: {value: '12345678910'}});
         expect(fordeling.find('.dobbelSjekkIdent')).toHaveLength(1);
-        expect(fordeling.find('Knapp').prop('disabled')).toEqual(false);
+        expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
     });
 
     it('Kan fylle in barns identitetsnummer manuellt dersom apikall går feil', () => {

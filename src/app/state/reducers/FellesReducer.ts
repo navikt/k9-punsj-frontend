@@ -313,6 +313,7 @@ export default function FellesReducer(
       return {
         ...state,
         isAwaitingHentBarnResponse: false,
+        hentBarnSuccess: false,
         hentBarnForbidden: true
       };
 
@@ -328,6 +329,7 @@ export default function FellesReducer(
       return {
         ...state,
         isAwaitingHentBarnResponse: false,
+        hentBarnSuccess: false,
         hentBarnError: true
       };
 

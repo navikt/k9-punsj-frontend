@@ -3,6 +3,7 @@ import {IError}   from 'app/models/types/Error';
 
 export interface IFordelingState {
     sakstype?: Sakstype;
+    erIdent1Bekreftet: boolean;
     omfordelingDone: boolean;
     isAwaitingOmfordelingResponse: boolean;
     omfordelingError?: IError;
