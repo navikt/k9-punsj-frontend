@@ -14,7 +14,7 @@ import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSukses
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
@@ -142,6 +142,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+    const [erBarnUtdatert, setErBarnUtdatert]= useState<boolean>(false);
 
     const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
 
@@ -171,6 +172,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         props.setIdentAction(event.target.value, identState.ident2);
         props.hentBarn(event.target.value);
         props.setErIdent1Bekreftet(true);
+        setErBarnUtdatert(false);
     }
     const handleIdent2Blur = (event: any) =>{
         props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);}
@@ -179,9 +181,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
+        setErBarnUtdatert(true);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
-           if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent);
+           if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
         } else {
             props.setIdentAction('', identState.ident2)
         }
@@ -352,7 +355,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                       <VerticalSpacer eightPx={true}/>
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx={true}/>
-                            {!!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+                            {!erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
                               <Select
                                 value={barnetsIdent}
                                 bredde="l"
