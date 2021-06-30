@@ -310,7 +310,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
         const eksisterendePerioder = punchFormState.perioder;
-
+        
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
             return null;
@@ -1122,7 +1122,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             kanHaFlere={true}
                         />)}
                     <VerticalSpacer eightPx={true}/>
-                    {eksisterendePerioder?.length === 0 && !punchFormState.hentPerioderError && <>
+                    {typeof eksisterendePerioder !== 'undefined' && eksisterendePerioder?.length > 0 && !punchFormState.hentPerioderError && <>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.ferie.fjern')}
                         value={'skjema.ferie.fjern'}
