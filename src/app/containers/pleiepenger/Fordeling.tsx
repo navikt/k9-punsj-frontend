@@ -183,7 +183,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         setErBarnUtdatert(true);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
-           if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);
+           if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
         } else {
             props.setIdentAction('', identState.ident2)
         }
