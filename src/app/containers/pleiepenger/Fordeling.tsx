@@ -141,6 +141,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+    const [erBarnUtdatert, setErBarnUtdatert]= useState<boolean>(false);
 
     const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
 
@@ -169,6 +170,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const handleIdent1Blur = (event: any) => {
         props.setIdentAction(event.target.value, identState.ident2);
         props.hentBarn(event.target.value);
+        setErBarnUtdatert(false);
     }
 
     const handleIdent2Blur = (event: any) =>{
@@ -178,9 +180,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
+        setErBarnUtdatert(true);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
-           if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent);
+           if(journalpost?.norskIdent) props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);
         } else {
             props.setIdentAction('', identState.ident2)
         }
@@ -351,7 +354,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                       <VerticalSpacer eightPx={true}/>
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx={true}/>
-                            {!!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+                            {!erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
                               <Select
                                 value={barnetsIdent}
                                 bredde="l"
