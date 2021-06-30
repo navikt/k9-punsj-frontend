@@ -1122,6 +1122,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             kanHaFlere={true}
                         />)}
                     <VerticalSpacer eightPx={true}/>
+                    {eksisterendePerioder?.length === 0 && !punchFormState.hentPerioderError && <>
                     <CheckboksPanel
                         label={intlHelper(intl, 'skjema.ferie.fjern')}
                         value={'skjema.ferie.fjern'}
@@ -1153,6 +1154,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 kanHaFlere={true}
                             />
                         </>)}
+                    </>}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.ARBEID)}
