@@ -58,6 +58,8 @@
   "fordeling.knapp.videre":                                                                       "Videre",
   "fordeling.knapp.omfordel":                                                                     "Omfordel",
   "fordeling.knapp.bekreft":                                                                      "Bekreft",
+  "fordeling.infobox.lukkoppgave":                                                                "Er du sikker på at du vil lukke oppgaven? Dette alternativet skal kun brukes når et samtalereferat er journalført på saken, men det ikke finnes opplysninger som skal registreres i saken",
+  "fordeling.infobox.opprettigosys":                                                                "Er du sikker på at du vil opprette journalføringsoppgave i Gosys. Dette alternativet skal kun brukes når dokumentet skal håndteres videre i Gosys og/eller Infotrygd, og dokumentet ikke skal inngå i saksbehandling i K9sak.",
   "fordeling.infotrygd":                                                                          "Det finnes et vedtak tilknyttet søker og/eller barn i Infotrygd, dokumentet må derfor behandles videre der.",
   "fordeling.infortygd.error":                                                                    "Kunne ikke sjekke opplysninger mot Infotrygd. Prøv igjen senere.",
   "fordeling.opprettigosys.utfort":                                                               "Journalføringsoppgave i Gosys opprettet",

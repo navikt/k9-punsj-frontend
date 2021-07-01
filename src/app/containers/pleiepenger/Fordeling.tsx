@@ -522,7 +522,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer sixteenPx={true}/>
-                        <Behandlingsknapp
+                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>}
+                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
+                      <Behandlingsknapp
                             norskIdent={identState.ident1}
                             omfordel={omfordel}
                             lukkJournalpostOppgave={lukkJournalpostOppgave}
