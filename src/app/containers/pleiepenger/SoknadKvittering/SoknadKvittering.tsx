@@ -10,7 +10,7 @@ import {ICountry} from "../../../components/country-select/CountrySelect";
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
-    IPSBSoknadKvitteringBosteder,
+    IPSBSoknadKvitteringBosteder, IPSBSoknadKvitteringLovbestemtFerie,
     IPSBSoknadKvitteringTilsynsordning,
     IPSBSoknadKvitteringUtenlandsopphold
 } from "../../../models/types/PSBSoknadKvittering";
@@ -71,12 +71,33 @@ export const formattereDatoIArray = (dato: number[]) => {
     return formatertDato.join('');
 };
 
+export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => {
+    return Object.entries(perioder).reduce((acc, [key, value]) => {
+        if (!!value.skalHaFerie) {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+};
+
+export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => {
+    return Object.entries(perioder).reduce((acc, [key, value]) => {
+        if (!value.skalHaFerie) {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+};
+
 const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) => {
         const ytelse = response.ytelse;
+        const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
+        const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
         const visSoknadsperiode = sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
         const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
         const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
-        const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse);
+        const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
+        const visFerieSomSkalSLettes = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalIkkeHaFerieListe).length > 0;
         const visOpplysningerOmSoker = ytelse.omsorg?.relasjonTilBarnet !== null;
         const visArbeidsforhold = sjekkPropertyEksistererOgIkkeErNull('arbeidstakerList', ytelse.arbeidstid) && ytelse.arbeidstid?.arbeidstakerList.length > 0;
         const visSelvstendigNæringsdrivendeInfo = ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null || sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet);
@@ -128,7 +149,17 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                     <hr className={classNames('linje')}/>
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={ytelse.lovbestemtFerie?.perioder}
+                        perioder={skalHaferieListe}
+                        tittel={['skjema.periode.overskrift']}
+                    />
+                </div>}
+
+                {visFerieSomSkalSLettes && <div>
+                    <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
+                    <hr className={classNames('linje')}/>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={skalIkkeHaFerieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
                 </div>}

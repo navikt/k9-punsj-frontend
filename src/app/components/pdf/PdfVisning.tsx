@@ -84,6 +84,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({
         {dokumenter.length > 1 && (
           <div className="fleredokumenter">
             <ToggleGruppe
+              kompakt={true}
               defaultToggles={dokumenter.map((_, i) => ({
                 children: (
                   <FormattedMessage

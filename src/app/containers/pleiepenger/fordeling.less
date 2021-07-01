@@ -16,6 +16,9 @@
     & > label {
       margin-bottom: 0.5em;
     }
+    legend{
+      margin-bottom: 0.5rem !important;
+    }
 
     .omsorgspenger-radios {
       margin: 1em 0 1em 1em;
@@ -41,3 +44,22 @@
   }
 }
 
+.fyllUtIdentAnnetBarnContainer{
+  display: flex;
+  align-items: center;
+
+  .dobbelSjekkIdent{
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+    padding-left: 1rem;
+    margin-top: 1.75rem;
+    :first-child{
+      width: 24px;
+      height: 28px;
+    }
+    p{
+      padding-left: 0.5rem;
+    }
+  }
+}

@@ -41,6 +41,7 @@ export interface IPSBSoknadUt {
     uttak?: Periodeinfo<IUttak>[];
     utenlandsopphold?: Periodeinfo<IUtenlandsOpphold>[];
     lovbestemtFerie?: IPeriode[];
+    lovbestemtFerieSomSkalSlettes?: IPeriode[];
     omsorg?: IOmsorg;
     bosteder?: Periodeinfo<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
@@ -65,6 +66,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
     uttak: Uttak[];
     utenlandsopphold: UtenlandsOpphold[];
     lovbestemtFerie: Periode[];
+    lovbestemtFerieSomSkalSlettes: Periode[];
     omsorg: Omsorg | {};
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;

@@ -2,18 +2,19 @@ import {JaNei, Sakstype, TilgjengeligSakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
-    lukkOppgaveResetAction,
+    lukkOppgaveResetAction, setErIdent1BekreftetAction,
     setIdentAction,
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
+import {v4 as uuidv4} from 'uuid';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
-import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
+import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, {useMemo, useState} from 'react';
+import React, { useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import PdfVisning from '../../components/pdf/PdfVisning';
@@ -29,12 +30,14 @@ import {
 } from "../../state/actions/GosysOppgaveActions";
 import {setHash} from "../../utils";
 import {IdentRules} from "../../rules";
-import {setIdentFellesAction} from "../../state/actions/IdentActions";
+import { setIdentFellesAction} from "../../state/actions/IdentActions";
 import {IIdentState} from "../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
 import OkGaaTilLosModal from "./OkGaaTilLosModal";
 import ModalWrapper from "nav-frontend-modal";
 import {IFellesState, kopierJournalpost} from "../../state/reducers/FellesReducer";
+import {hentBarn} from "../../state/reducers/HentBarn";
+import WarningCircle from "../../assets/SVG/WarningCircle";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -52,9 +55,11 @@ export interface IFordelingDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
     kopierJournalpost: typeof kopierJournalpost;
+    hentBarn: typeof hentBarn;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
+    setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
 }
 
 type IFordelingProps = WrappedComponentProps &
@@ -65,7 +70,6 @@ type BehandlingsknappProps = Pick<IFordelingProps,
     'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent?: string;
     sakstypeConfig?: ISakstypeDefault;
-
 };
 
 const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
@@ -138,6 +142,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+    const [erBarnUtdatert, setErBarnUtdatert]= useState<boolean>(false);
 
     const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
 
@@ -148,37 +153,38 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
-
+    const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
+    
     const skalViseFeilmelding = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
-
-
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
     const handleIdent2Change = (event: any) => {
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
         setIdentAction(identState.ident1, event.target.value)
     }
+    const nullUtBarnetsIdent = () => {
+        setBarnetsIdent('');
+        setIdentAction(identState.ident1, '');
+        props.setIdentAction(identState.ident1, '', '');
+    }
 
-    const handleIdent1Blur = (event: any) =>
+    const handleIdent1Blur = (event: any) => {
         props.setIdentAction(event.target.value, identState.ident2);
-    const handleIdent2Blur = (event: any) =>
-        props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
+        props.hentBarn(event.target.value);
+        props.setErIdent1Bekreftet(true);
+        setErBarnUtdatert(false);
+    }
+    const handleIdent2Blur = (event: any) =>{
+        props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);}
     const handleIdentAnnenSokerBlur = (event: any) =>
         props.setIdentAction(identState.ident1, identState.ident2, event.target.value);
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
+        setErBarnUtdatert(true);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
-        } else {
-            props.setIdentAction('', identState.ident2)
-        }
-    }
-
-    const handlePPRadioChange = (jn: JaNei) => {
-        setGjelderPP(jn);
-        if (jn === JaNei.JA) {
-            props.setIdentAction(journalpostident || '', identState.ident2)
+           if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
         } else {
             props.setIdentAction('', identState.ident2)
         }
@@ -281,7 +287,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 values={{ident: journalpost?.norskIdent}}
                             />}
                             checked={riktigIdentIJournalposten}
-                            onChange={(event) => handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}
+                            onChange={(event) => {props.setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA ? true : false); handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}}
                         />
                         </>}
                         {riktigIdentIJournalposten === JaNei.NEI && <>
@@ -304,10 +310,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         />
                         </>}
                         {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && <>
-                          <VerticalSpacer sixteenPx={true}/>
+                          <VerticalSpacer eightPx={true}/>
                           <Checkbox
                             label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
-                            onChange={(e) => {setToSokereIJournalpost(e.target.checked)}}
+                            onChange={(e) => {
+                                setToSokereIJournalpost(e.target.checked)
+                            }}
                           />
                           <VerticalSpacer sixteenPx={true}/>
                             {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
@@ -327,65 +335,110 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 bredde={"M"}
                               />
                                 {!!props.fellesState.kopierJournalpostConflict &&
-                                    <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
+                                <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
                                 }
 
                                 {!!props.fellesState.kopierJournalpostSuccess &&
-                                    <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
+                                <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
                                 }
 
                                 {!!props.fellesState.kopierJournalpostForbidden &&
-                                    <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
+                                <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
                                 }
 
                                 {!!props.fellesState.kopierJournalpostError &&
-                                    <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
+                                <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
                                 }
                             </div>
                             }
                         </>}
-                        <VerticalSpacer eightPx={true}/>
-                        {gjelderPP === JaNei.JA && <><Input
-                            label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                            onChange={handleIdent2Change}
-                            onBlur={handleIdent2Blur}
-                            value={barnetsIdent}
-                            className="bold-label ident-soker-2"
-                            maxLength={11}
-                            feil={
-                                skalViseFeilmelding(identState.ident2)
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
+                      <VerticalSpacer eightPx={true}/>
+                        {gjelderPP === JaNei.JA && <>
+                          <VerticalSpacer sixteenPx={true}/>
+                            {!erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+                              <Select
+                                value={barnetsIdent}
+                                bredde="l"
+                                label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
+                                onChange={handleIdent2Change}
+                                disabled={gjelderAnnetBarn}
+                                onBlur={handleIdent2Blur}
+                              >
+                                <option key={uuidv4()} value={""}>
+                                    {``}
+                                </option>)
+
+                                  {props.fellesState.barn.map(b =>
+                                      <option key={uuidv4()} value={b.identitetsnummer}>
+                                          {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
+                                      </option>)
+                                  }
+                              </Select>
+                              <VerticalSpacer eightPx={true}/>
+                              <Checkbox
+                                label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                                onChange={(e) => {
+                                    setGjelderAnnetBarn(e.target.checked);
+                                    nullUtBarnetsIdent();
+                                }}
+                              />
+                            </>
                             }
-                            bredde={"M"}
-                            disabled={barnetHarIkkeFnr}
-                        />
-                        <VerticalSpacer sixteenPx={true}/>
-                        <Checkbox
-                            label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
-                            onChange={(e) => handleCheckboxChange(e.target.checked)}
-                        />
-                        <VerticalSpacer sixteenPx={true}/>
-                        {
-                            antallIdenter > 0 &&
-                            journalpostident &&
-                            props &&
-                            identer.every(
-                                (ident) =>
-                                    !ident ||
-                                    (IdentRules.isIdentValid(ident) && ident !== journalpostident)
-                            ) && (
-                                <AlertStripeAdvarsel>
-                                    {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
-                                        antallIdenter: antallIdenter.toString(),
-                                        journalpostident,
-                                    })}
-                                </AlertStripeAdvarsel>
-                            )}
+                          <VerticalSpacer sixteenPx={true}/>
+                            {(gjelderAnnetBarn
+                                || !!props.fellesState.hentBarnError
+                                || !!props.fellesState.hentBarnForbidden
+                                || (typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length === 0))
+                            && <>
+                              <div className={'fyllUtIdentAnnetBarnContainer'}>
+                                <Input
+                                  label={intlHelper(intl, 'ident.identifikasjon.barn')}
+                                  onChange={handleIdent2Change}
+                                  onBlur={handleIdent2Blur}
+                                  value={barnetsIdent}
+                                  className="bold-label ident-soker-2"
+                                  maxLength={11}
+                                  feil={
+                                      skalViseFeilmelding(identState.ident2)
+                                          ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                          : undefined
+                                  }
+                                  bredde={"M"}
+                                  disabled={barnetHarIkkeFnr}
+                                />
+                                  {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) &&
+                                  <div className="dobbelSjekkIdent"><div><WarningCircle/></div><p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
+                              </div>
+                              <VerticalSpacer eightPx={true}/>
+                              <Checkbox
+                                label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
+                                onChange={(e) => handleCheckboxChange(e.target.checked)}
+                              />
+                                {barnetHarIkkeFnr && <AlertStripeInfo
+                                  className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
+                              <VerticalSpacer sixteenPx={true}/>
+                                {
+                                    antallIdenter > 0 &&
+                                    journalpostident &&
+                                    props &&
+                                    identer.every(
+                                        (ident) =>
+                                            !ident ||
+                                            (IdentRules.isIdentValid(ident) && ident !== journalpostident)
+                                    ) && (
+                                        <AlertStripeAdvarsel>
+                                            {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
+                                                antallIdenter: antallIdenter.toString(),
+                                                journalpostident,
+                                            })}
+                                        </AlertStripeAdvarsel>
+                                    )}
+                            </>}
+
                             {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
                             mini={true}
                             onClick={() => handleVidereClick()}
-                            disabled={(!barnetsIdent && !barnetHarIkkeFnr) || !!fordelingState.sjekkTilK9Error}>
+                            disabled={skalViseFeilmelding(barnetsIdent) || (!barnetsIdent && !barnetHarIkkeFnr)}>
                             {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
                         </>}
                     </div>
@@ -469,7 +522,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer sixteenPx={true}/>
-                        <Behandlingsknapp
+                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>}
+                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
+                      <Behandlingsknapp
                             norskIdent={identState.ident1}
                             omfordel={omfordel}
                             lukkJournalpostOppgave={lukkJournalpostOppgave}
@@ -520,10 +575,13 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(omfordelAction(journalpostid, norskIdent)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
+    setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
+    hentBarn: (ident1: string) =>
+        dispatch(hentBarn(ident1)),
     lukkJournalpostOppgave: (jpid: string) =>
         dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () =>

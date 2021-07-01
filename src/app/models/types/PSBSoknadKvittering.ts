@@ -18,7 +18,7 @@ export interface IPSBSoknadKvitteringTilsynsordning {
 }
 
 export interface IPSBSoknadKvitteringLovbestemtFerie {
-    [key: string]: null | string;
+    [key: string]: { skalHaFerie: string; }
 }
 
 export interface IPSBSoknadKvitteringOmsorg {

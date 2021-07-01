@@ -172,3 +172,18 @@ export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMed
     }
 }
 
+export interface IPeriodeFerieMedFlagg {
+    skalHaFerie?: boolean;
+
+}
+
+export class PeriodeFerieMedFlagg implements Required<Periodeinfo<IPeriodeFerieMedFlagg>> {
+    periode: Periode;
+    skalHaFerie: boolean;
+
+    constructor(pmf: Periodeinfo<IPeriodeFerieMedFlagg>) {
+        this.periode = new Periode(pmf.periode || {})
+        this.skalHaFerie = pmf.skalHaFerie || false;
+    }
+}
+

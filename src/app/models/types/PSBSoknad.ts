@@ -6,7 +6,7 @@ import {
     IPeriodeMedTimerMinutter,
     IPeriode,
     ArbeidstidPeriodeMedTimer, PeriodeMedTimerMinutter,
-    Periode
+    Periode, PeriodeFerieMedFlagg, IPeriodeFerieMedFlagg
 } from "./Periode";
 import {Arbeidstaker, IArbeidstaker} from "./Arbeidstaker";
 
@@ -26,6 +26,7 @@ export interface IPSBSoknad {
     uttak?: Periodeinfo<IUttak>[];
     utenlandsopphold?: Periodeinfo<IUtenlandsOpphold>[];
     lovbestemtFerie?: IPeriode[];
+    lovbestemtFerieSomSkalSlettes?: IPeriode[];
     omsorg?: IOmsorg;
     bosteder?: Periodeinfo<IUtenlandsOpphold>[];
     soknadsinfo?: ISoknadsInfo;
@@ -50,6 +51,7 @@ export class PSBSoknad implements IPSBSoknad {
     uttak: Uttak[];
     utenlandsopphold: UtenlandsOpphold[];
     lovbestemtFerie: Periode[];
+    lovbestemtFerieSomSkalSlettes: Periode[];
     omsorg: Omsorg;
     bosteder: UtenlandsOpphold[];
     soknadsinfo: SoknadsInfo;
@@ -72,6 +74,7 @@ export class PSBSoknad implements IPSBSoknad {
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new Periode(p));
+        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map(p => new Periode(p));
         this.omsorg = new Omsorg(soknad.omsorg || {});
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});

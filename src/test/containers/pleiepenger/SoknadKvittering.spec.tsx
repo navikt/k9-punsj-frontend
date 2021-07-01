@@ -98,7 +98,9 @@ const fullResponse: IPSBSoknadKvittering = {
         },
         lovbestemtFerie: {
             perioder: {
-                "2021-06-01/2021-06-04": null
+                "2021-06-01/2021-06-04": {
+                    skalHaFerie: 'true'
+                }
             },
         },
         arbeidstid: {
