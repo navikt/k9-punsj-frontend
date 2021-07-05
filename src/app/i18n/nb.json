@@ -132,6 +132,7 @@
   "mappe.lesemodus.knapp.velg":                                                                   "Fortsett",
   "mappe.lesemodus.knapp.lukk":                                                                   "Lukk",
   "skjema.ekspander":                                                                             "Ekspander alle paneler",
+  "skjema.soknadsperiode":                                                                        "Søknadsperiode",
   "skjema.eksisterende":                                                                          "Eksisterende søknadsperioder:",
   "skjema.eksisterende.ingen":                                                                    "Det finnes ingen eksisterende søknadsperioder. Du må legge til en ny søknadsperiode for å kunne registrere opplysninger. ",
   "skjema.eksisterende.feil":                                                                     "Kunne ikke laste inn eksisterende søknadsperioder",

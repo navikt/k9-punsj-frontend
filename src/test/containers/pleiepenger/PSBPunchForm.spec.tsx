@@ -191,7 +191,7 @@ const setupPunchForm = (
 describe('PunchForm', () => {
     it('Viser skjema', () => {
         const punchForm = setupPunchForm();
-        expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(8);
+        expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(7);
     });
 
     it('Henter søknadsinformasjon', () => {
@@ -239,9 +239,10 @@ describe('PunchForm', () => {
         expect(punchForm.find('#soknad-dato').prop('value')).toEqual(newDato);
     });
 
-    it('Viser knapp for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
+    it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({soknad: initialSoknad}, {});
-        expect(punchForm.find('.leggtilsoknadsperiode')).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra')).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til')).toHaveLength(1);
     });
 
     it('Skuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', () => {
@@ -256,6 +257,8 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({soknad}, {updateSoknad});
         punchForm
+            .find('Soknadsperioder')
+            .dive()
             .find('#soknadsperiode-fra')
             .simulate('blur', {target: {value: newDato}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
@@ -270,9 +273,11 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({soknad});
         punchForm
+            .find('Soknadsperioder')
+            .dive()
             .find('#soknadsperiode-fra')
             .simulate('change', {target: {value: newDato}});
-        expect(punchForm.find('#soknadsperiode-fra').prop('value')).toEqual(newDato);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra').prop('value')).toEqual(newDato);
     });
 
     it('Oppdaterer søknad når til-dato på søknadsperioden endres', () => {
@@ -281,6 +286,8 @@ describe('PunchForm', () => {
         const newDato = '2020-01-01';
         const punchForm = setupPunchForm({soknad}, {updateSoknad});
         punchForm
+            .find('Soknadsperioder')
+            .dive()
             .find('#soknadsperiode-til')
             .simulate('blur', {target: {value: newDato}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
@@ -295,9 +302,11 @@ describe('PunchForm', () => {
         const newDato = '2020-01-01';
         const punchForm = setupPunchForm({soknad});
         punchForm
+            .find('Soknadsperioder')
+            .dive()
             .find('#soknadsperiode-til')
             .simulate('change', {target: {value: newDato}});
-        expect(punchForm.find('#soknadsperiode-til').prop('value')).toEqual(newDato);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til').prop('value')).toEqual(newDato);
     });
 
     it('Viser checkboks for tilsyn', () => {
@@ -426,8 +435,8 @@ describe('PunchForm', () => {
     it('Viser avdvarsel om overlappende periode', () => {
         const soknad = {...initialSoknad, soeknadsperiode: {fom: '2021-02-23', tom: '2021-08-23'}}
         const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
-        expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(1);
-        expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel').childAt(0).text()).toEqual('skjema.soknadsperiode.overlapper');
+        expect(punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel').childAt(0).text()).toEqual('skjema.soknadsperiode.overlapper');
     });
 
     it('Viser ikke avdvarsel om overlappende periode når periodene ikke overlapper', () => {
