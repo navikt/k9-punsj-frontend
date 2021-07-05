@@ -194,6 +194,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private initialPeriode: IPeriode = {fom: '', tom: ''};
+    private getSoknadsperiode = () => {
+        if (typeof this.state.soknad?.soeknadsperiode !== 'undefined' &&
+            typeof this.state.soknad.soeknadsperiode?.fom !== 'undefined' &&
+            typeof this.state.soknad.soeknadsperiode?.tom !== 'undefined') {
+            return this.state.soknad.soeknadsperiode;
+        } else {
+            return this.initialPeriode;
+        }
+    }
 
     private initialPeriodeTimerMinutter = new PeriodeMedTimerMinutter({
         timer: 0,
@@ -205,18 +214,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         faktiskArbeidTimerPerDag: ''
     });
 
-    private initialTillegsinfo = new Tilleggsinformasjon({
-        periode: this.initialPeriode,
-        tilleggsinformasjon: '',
-    });
-
-    private initialArbeidstaker = new Arbeidstaker({
+    private initialTillegsinfo = () => {
+        const periode = this.getSoknadsperiode();
+        return new Tilleggsinformasjon({
+            periode,
+            tilleggsinformasjon: '',
+        });
+    };
+    private initialArbeidstaker = () => (new Arbeidstaker({
         arbeidstidInfo: {
             perioder: [{
-                periode: {
-                    fom: '',
-                    tom: '',
-                },
+                periode: this.getSoknadsperiode(),
                 faktiskArbeidTimerPerDag: '',
                 jobberNormaltTimerPerDag: '',
             }],
@@ -224,18 +232,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         },
         organisasjonsnummer: '',
         norskIdent: null,
-    });
+    }));
 
-    private initialArbeidstidInfo = new ArbeidstidInfo({
+    private initialArbeidstidInfo = () => (new ArbeidstidInfo({
         perioder: [{
-            periode: {
-                fom: '',
-                tom: '',
-            },
+            periode: this.getSoknadsperiode(),
             faktiskArbeidTimerPerDag: '',
             jobberNormaltTimerPerDag: '',
         }]
-    });
+    }));
 
     private initialFrilanser = new FrilanserOpptjening(
         {
@@ -245,7 +250,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     )
 
     private initialSelvstedigNæringsdrivende = new SelvstendigNaerinsdrivende({
-        periode: this.initialPeriode,
+        periode: this.getSoknadsperiode(),
         virksomhetstyper: [],
         registrertIUtlandet: false,
         landkode: '',
@@ -310,6 +315,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
         const eksisterendePerioder = punchFormState.perioder;
+
+        // TODO initialSoknadsperiode med existerandePerioder dersom det existerer og den er KUN en?
         
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -350,7 +357,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 items={arbeid.arbeidstakerList}
                 component={pfArbeidstaker()}
                 panelid={(i) => `arbeidstakerpanel_${i}`}
-                initialItem={this.initialArbeidstaker}
+                initialItem={this.initialArbeidstaker()}
                 editSoknad={(arbeidstakerList) =>
                     this.updateSoknad(
                         {
@@ -835,7 +842,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     intl={intl}
                     periods={soknad.beredskap}
                     panelid={(i) => `beredskapspanel_${i}`}
-                    initialPeriodeinfo={this.initialTillegsinfo}
+                    initialPeriodeinfo={this.initialTillegsinfo()}
                     component={pfTilleggsinformasjon("beredskap")}
                     editSoknad={(beredskap) => this.updateSoknad({beredskap})}
                     editSoknadState={(beredskap, showStatus) =>
@@ -858,7 +865,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     intl={intl}
                     periods={soknad.nattevaak}
                     panelid={(i) => `nattevaakspanel_${i}`}
-                    initialPeriodeinfo={this.initialTillegsinfo}
+                    initialPeriodeinfo={this.initialTillegsinfo()}
                     component={pfTilleggsinformasjon("nattevaak")}
                     editSoknad={(nattevaak) => this.updateSoknad
                     ({nattevaak})}
@@ -1585,7 +1592,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         this.updateSoknadState({
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                arbeidstakerList: [this.initialArbeidstaker]
+                                arbeidstakerList: [this.initialArbeidstaker()]
                             }
                         })
                     }
@@ -1601,7 +1608,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         this.updateSoknadState({
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                frilanserArbeidstidInfo: this.initialArbeidstidInfo
+                                frilanserArbeidstidInfo: this.initialArbeidstidInfo()
                             },
                             opptjeningAktivitet: {
                                 ...this.state.soknad.opptjeningAktivitet,
@@ -1643,7 +1650,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             },
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo
+                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo()
                             },
                         })
                     }
@@ -1700,31 +1707,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private handleBeredskapNattevaakChange = (bn: BeredskapNattevaak, checked: boolean) => {
         switch (bn) {
             case BeredskapNattevaak.BEREDSKAP:
-                if (checked) {
-                    if (!this.state.soknad.beredskap?.length) {
-                        this.updateSoknadState({beredskap: [this.initialTillegsinfo]})
-                    }
-                    ;
-                } else {
-                    this.updateSoknadState({beredskap: []})
-                }
-                ;
+                if (checked) {this.updateSoknadState({beredskap: [this.initialTillegsinfo()]})}
+                else {this.updateSoknadState({beredskap: []})}
                 break;
             case BeredskapNattevaak.NATTEVAAK:
-                if (checked) {
-                    if (!this.state.soknad.nattevaak?.length) {
-                        this.updateSoknadState({nattevaak: [this.initialTillegsinfo]})
-                    }
-                    ;
-                } else {
-                    this.updateSoknadState({nattevaak: []})
-                }
-                ;
+                if (checked) {this.updateSoknadState({nattevaak: [this.initialTillegsinfo()]})}
+                else {this.updateSoknadState({nattevaak: []})}
                 break;
-
         }
-        ;
-    };
+    }
 
     private updateUtenlandsopphold(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
         this.setState({
@@ -1783,7 +1774,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.updateSoknadState({
                 arbeidstid: {
                     ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: this.initialArbeidstidInfo
+                    frilanserArbeidstidInfo: this.initialArbeidstidInfo()
                 }, opptjeningAktivitet: {
                     ...this.state.soknad.opptjeningAktivitet,
                     frilanser: {
