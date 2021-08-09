@@ -312,8 +312,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const soknad = new PSBSoknad(this.state.soknad);
         const {signert} = signaturState;
         const eksisterendePerioder = punchFormState.perioder;
-
-        // TODO initialSoknadsperiode med existerandePerioder dersom det existerer og den er KUN en?
         
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
