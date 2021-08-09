@@ -7,14 +7,14 @@ import AddCircleSvg from "../../../assets/SVG/AddCircleSVG";
 import {Input, SkjemaGruppe} from "nav-frontend-skjema";
 import BinSvg from "../../../assets/SVG/BinSVG";
 import Panel from "nav-frontend-paneler";
-import {IPeriode, IPSBSoknad, IPunchFormState} from "../../../models/types";
+import {IPeriode, IPSBSoknad} from "../../../models/types";
 import './soknadsperioder.less';
 import VerticalSpacer from "../../../components/VerticalSpacer";
+import {useSelector} from "react-redux";
+import {RootStateType} from "../../../state/RootState";
 
 interface IOwnProps {
     intl: any;
-    punchFormState: IPunchFormState;
-    eksisterendePerioder: IPeriode[] | undefined;
     updateSoknadState: (object: any) => void;
     initialPeriode: IPeriode;
     getErrorMessage: any;
@@ -26,8 +26,6 @@ interface IOwnProps {
 
 const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     intl,
-    punchFormState,
-    eksisterendePerioder,
     updateSoknadState,
     initialPeriode,
     getErrorMessage,
@@ -37,23 +35,24 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     overlappendeSoknadsperiode
 }) => {
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(false);
-    const finnesIkkeEksisterendePerioder: boolean = !punchFormState.hentPerioderError && (typeof eksisterendePerioder === 'undefined' || !eksisterendePerioder);
+    const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
+    const finnesIkkeEksisterendePerioder: boolean = !punchFormState.hentPerioderError
+        && (typeof punchFormState.perioder === 'undefined' || punchFormState.perioder.length <= 0 || !punchFormState.perioder);
 
     return (
         <Panel className={"eksiterendesoknaderpanel"}>
             <h3>{intlHelper(intl, 'skjema.soknadsperiode')}</h3>
 
             {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
-            {!punchFormState.hentPerioderError && !!eksisterendePerioder?.length && <>
+            {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && <>
               <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
               <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
-                {eksisterendePerioder.map((p, i) => <div key={i} className={"datocontainer"}><CalendarSvg
+                {punchFormState.perioder.map((p, i) => <div key={i} className={"datocontainer"}><CalendarSvg
                     title={"calendar"}/>
                     <div className={"periode"}>{generateDateString(p)}</div>
                 </div>)}
 
               <VerticalSpacer eightPx={true}/>
-
                 {!visLeggTilPerioder && <div className={"knappecontainer"}>
                   <div
                     id="leggtilsoknadsperiode"
@@ -115,10 +114,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                         </div>
                     </div>}
             </SkjemaGruppe>}
-            {!!soknad.soeknadsperiode?.fom && !!soknad.soeknadsperiode.tom && !!eksisterendePerioder?.length && overlappendeSoknadsperiode(eksisterendePerioder, soknad.soeknadsperiode) &&
+            {!!soknad.soeknadsperiode?.fom && !!soknad.soeknadsperiode.tom && !!punchFormState.perioder?.length && overlappendeSoknadsperiode(punchFormState.perioder, soknad.soeknadsperiode) &&
             <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>}
         </Panel>
     )
 }
-
 export default Soknadsperioder;

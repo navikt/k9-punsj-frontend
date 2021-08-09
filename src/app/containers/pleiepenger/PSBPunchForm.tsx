@@ -887,8 +887,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 <VerticalSpacer sixteenPx={true}/>
                 <Soknadsperioder
                     intl={intl}
-                    punchFormState={punchFormState}
-                    eksisterendePerioder={eksisterendePerioder}
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
