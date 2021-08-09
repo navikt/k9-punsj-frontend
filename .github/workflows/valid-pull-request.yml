@@ -1,0 +1,21 @@
+name: Validere pull request
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  valid-pull-request:
+    name: Validere pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hente kode
+        uses: actions/checkout@v2
+      - name: Sette opp Node
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: 12.x
+      - name: Installere moduler
+        run: npm install
+      - name: Sjekke opp mot Lint-regler
+        run: npm run lint
+      - name: Kjøre tester
+        run: npm run test
