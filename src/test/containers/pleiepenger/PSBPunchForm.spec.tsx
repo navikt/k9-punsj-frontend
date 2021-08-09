@@ -16,12 +16,14 @@ import {IJournalposterPerIdentState} from "../../../app/models/types/Journalpost
 import {
     IPSBSoknadKvittering,
 } from "../../../app/models/types/PSBSoknadKvittering";
+import * as reactRedux from 'react-redux'
 
 jest.mock('react-intl');
 jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
+
 
 const soknadId = 'abc';
 const ident1 = '01015012345';
@@ -189,6 +191,9 @@ const setupPunchForm = (
 };
 
 describe('PunchForm', () => {
+    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector')
+    beforeEach(() => {useSelectorMock.mockClear();})
+
     it('Viser skjema', () => {
         const punchForm = setupPunchForm();
         expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(7);
@@ -241,11 +246,12 @@ describe('PunchForm', () => {
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({soknad: initialSoknad}, {});
+        useSelectorMock.mockReturnValue({});
         expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra')).toHaveLength(1);
         expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til')).toHaveLength(1);
     });
 
-    it('Skuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', () => {
+    it('Skjuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', () => {
         const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: ''}}
         const punchForm = setupPunchForm({soknad}, {});
         expect(punchForm.find('.leggtilsoknadsperiode')).toHaveLength(0);
@@ -432,17 +438,19 @@ describe('PunchForm', () => {
         expect(punchForm.find('.settpaaventmodal')).toHaveLength(1);
     });
 
-    it('Viser avdvarsel om overlappende periode', () => {
+    it('Viser advarsel om overlappende periode', () => {
         const soknad = {...initialSoknad, soeknadsperiode: {fom: '2021-02-23', tom: '2021-08-23'}}
         const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+        useSelectorMock.mockReturnValue({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]});
         expect(punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(1);
         expect(punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel').childAt(0).text()).toEqual('skjema.soknadsperiode.overlapper');
     });
 
-    it('Viser ikke avdvarsel om overlappende periode når periodene ikke overlapper', () => {
-        const soknad = {...initialSoknad, soeknadsperiode: {fom: '2020-02-23', tom: '2020-08-23'}}
-        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
-        expect(punchForm.find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(0);
+    it('Viser ikke advarsel om overlappende periode når periodene ikke overlapper', () => {
+        const soknad = {...initialSoknad, soeknadsperiode: {fom: '2021-02-23', tom: '2021-08-23'}}
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-08-30', tom: '2021-09-15'}]}, {});
+        useSelectorMock.mockReturnValue({soknad, perioder: [{fom: '2021-08-30', tom: '2021-09-15'}]});
+        expect(punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')).toHaveLength(0);
     });
 
     it('Oppdaterer staten og søknaden riktig ved klikk på checkbox ', () => {
