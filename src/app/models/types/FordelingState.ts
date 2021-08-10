@@ -9,6 +9,7 @@ export interface IFordelingState {
     omfordelingError?: IError;
     isAwaitingSjekkTilK9Response: boolean,
     sjekkTilK9Error?: IError,
+    sjekkTilK9JournalpostStottesIkke?: boolean;
     isAwaitingLukkOppgaveResponse: boolean,
     lukkOppgaveError?: IError,
     lukkOppgaveDone: boolean,
