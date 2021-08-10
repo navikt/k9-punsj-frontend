@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { HashRouter, Route, RouteComponentProps } from 'react-router-dom';
 import JournalpostLoader from './JournalpostLoader';
-import { Fordeling } from './pleiepenger/Fordeling';
+import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 import { Sakstyper } from './SakstypeImpls';
 import SakstypeStepRouter from './SakstypeStepRouter';
 

@@ -17,27 +17,28 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
-import PdfVisning from '../../components/pdf/PdfVisning';
-import {ISakstypeDefault, ISakstypePunch} from '../../models/Sakstype';
-import {Sakstyper} from '../SakstypeImpls';
+import PdfVisning from '../../../components/pdf/PdfVisning';
+import {ISakstypeDefault, ISakstypePunch} from '../../../models/Sakstype';
+import {Sakstyper} from '../../SakstypeImpls';
 import './fordeling.less';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import FormPanel from '../../components/FormPanel';
-import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import FormPanel from '../../../components/FormPanel';
+import {JournalpostPanel} from '../../../components/journalpost-panel/JournalpostPanel';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction
-} from "../../state/actions/GosysOppgaveActions";
-import {setHash} from "../../utils";
-import {IdentRules} from "../../rules";
-import { setIdentFellesAction} from "../../state/actions/IdentActions";
-import {IIdentState} from "../../models/types/IdentState";
-import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
-import OkGaaTilLosModal from "./OkGaaTilLosModal";
+} from "../../../state/actions/GosysOppgaveActions";
+import {setHash} from "../../../utils";
+import {IdentRules} from "../../../rules";
+import { setIdentFellesAction} from "../../../state/actions/IdentActions";
+import {IIdentState} from "../../../models/types/IdentState";
+import {IGosysOppgaveState} from "../../../models/types/GosysOppgaveState";
+import OkGaaTilLosModal from "../OkGaaTilLosModal";
 import ModalWrapper from "nav-frontend-modal";
-import {IFellesState, kopierJournalpost} from "../../state/reducers/FellesReducer";
-import {hentBarn} from "../../state/reducers/HentBarn";
-import WarningCircle from "../../assets/SVG/WarningCircle";
+import {IFellesState, kopierJournalpost} from "../../../state/reducers/FellesReducer";
+import {hentBarn} from "../../../state/reducers/HentBarn";
+import WarningCircle from "../../../assets/SVG/WarningCircle";
+import {skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi} from "./FordelingFeilmeldinger";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -154,8 +155,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
-    
-    const skalViseFeilmelding = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
+
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
     const handleIdent2Change = (event: any) => {
@@ -327,11 +327,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 value={annenSokerIdent}
                                 className="bold-label"
                                 maxLength={11}
-                                feil={
-                                    skalViseFeilmelding(identState.annenSokerIdent)
-                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                        : undefined
-                                }
+                                feil={visFeilmeldingForAnnenIdentVidJournalKopi(identState.annenSokerIdent, identState.ident1, identState.ident2, intl)}
                                 bredde={"M"}
                               />
                                 {!!props.fellesState.kopierJournalpostConflict &&

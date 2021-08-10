@@ -97,6 +97,8 @@
   "ident.usignert.feil.melding":                                                                  "Det oppsto en feil.",
   "ident.usignert.feil.tilbake":                                                                  "Tilbake",
   "ident.feil.ugyldigident":                                                                      "Dette er ikke et gyldig fødsels- eller D-nummer.",
+  "ident.feil.annenSøkerJournalkopiSoker":                                                        "Fødselsnummeret kan ikke være søkers fødselsnummer.",
+  "ident.feil.annenSøkerJournalkopiBarn":                                                          "Fødselsnummeret kan ikke være barnets fødselsnummer.",
   "ident.advarsel.samsvarerikke":                                                                 "{antallIdenter, plural, one {Identitetsnummeret samsvarer ikke} other {Ingen av identitetsnumrene samsvarer}} med det som hører til journalposten. Journalpostens fødsels-/D-nummer er {journalpostident}.",
   "arbeidsforhold.arbeidstaker":                                                                  "Arbeidstaker",
   "arbeidsforhold.annet":                                                                         "Annet",
