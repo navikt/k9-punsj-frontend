@@ -1,5 +1,4 @@
 const webpackConfig = require('./webpack.config.global.js');
-const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 webpackConfig.mode = 'production';
@@ -11,14 +10,6 @@ webpackConfig.plugins.push(
         hash: true
     })
 );
-
-webpackConfig.optimization = {
-    minimizer: [
-        new TerserPlugin({
-            sourceMap: true
-        })
-    ]
-};
 
 module.exports = Object.assign(webpackConfig, {
     devtool: 'source-map',
