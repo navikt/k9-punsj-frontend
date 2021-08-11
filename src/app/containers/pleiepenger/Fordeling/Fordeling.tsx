@@ -540,8 +540,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         </Hovedknapp>
                     </>}
                     <VerticalSpacer sixteenPx={true} />
-                    {!!fordelingState.sjekkTilK9Error &&
-                    <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
+                    {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
+                    {!!fordelingState.sjekkTilK9JournalpostStottesIkke && <div className={'fordeling-page__sjekk-til-K9-journalpost-stottes-ikke'}>
+                      <AlertStripeFeil>{intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}</AlertStripeFeil>
+                      <Knapp mini={true} onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                      </Knapp>
+                    </div>}
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                 </div>
             </FormPanel>}
