@@ -39,10 +39,25 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     const finnesIkkeEksisterendePerioder: boolean = !punchFormState.hentPerioderError
         && (typeof punchFormState.perioder === 'undefined' || punchFormState.perioder.length <= 0 || !punchFormState.perioder);
 
+    const sjekkFelmeldingDato = () => {
+        if(typeof soknad.soeknadsperiode !== 'undefined' && !!soknad.soeknadsperiode && !!soknad.soeknadsperiode.fom && !!soknad.soeknadsperiode.tom){
+            if(new Date(soknad.soeknadsperiode.fom) > new Date(soknad.soeknadsperiode.tom)) return intlHelper(intl, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED');
+        }
+        return undefined;
+    };
+
+    const sjekkFelmeldingPeriode = () => {
+        const valideringsFeilmelding = getErrorMessage('søknadsperiode/endringsperiode');
+        const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
+
+        if(typeof valideringsFeilmelding !== 'undefined') return valideringsFeilmelding;
+        else if(typeof feilFunnitInnenValideringMelding !== 'undefined') return feilFunnitInnenValideringMelding;
+        else return undefined;
+    }
+
     return (
         <Panel className={"eksiterendesoknaderpanel"}>
             <h3>{intlHelper(intl, 'skjema.soknadsperiode')}</h3>
-
             {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
             {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && <>
               <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
@@ -75,7 +90,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             <AlertStripeInfo>{intlHelper(intl, 'skjema.eksisterende.ingen')}</AlertStripeInfo>}
 
             {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) &&
-            <SkjemaGruppe feil={getErrorMessage('søknadsperiode/endringsperiode')}>
+            <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                 {
                     <div className={"soknadsperiodecontainer"}>
                         <Input
