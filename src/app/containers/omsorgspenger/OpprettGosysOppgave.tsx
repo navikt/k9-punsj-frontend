@@ -27,7 +27,7 @@ type OpprettGosysOppgaveKnappProps = Pick<
     >;
 
 const OpprettGosysOppgaveKnapp: React.FunctionComponent<OpprettGosysOppgaveKnappProps> = ({opprettGosysOppgave, journalpost}) => {
-    //TODO ta en runda på journalpost og optional så det ikke er !. 
+    // TODO ta en runda på journalpost og optional så det ikke er !.
     return (
         <Knapp htmlType="button" type="hoved"
                onClick={() => opprettGosysOppgave(journalpost!.journalpostId, journalpost!.norskIdent!)}>
