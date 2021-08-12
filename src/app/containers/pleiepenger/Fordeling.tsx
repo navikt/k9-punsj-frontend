@@ -120,7 +120,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         journalpost,
         identState,
         opprettIGosysState,
-        sjekkOmSkalTilK9,
         lukkJournalpostOppgave,
         resetOmfordelAction,
         lukkOppgaveReset
@@ -209,7 +208,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                 setSokersIdent(journalpost?.norskIdent);
             }else{
                 setSokersIdent(identState.ident1)
-            };
+            }
         }else if(jn === JaNei.JA) {
             setSokersIdent('');
             props.setIdentAction('', identState.ident2);
