@@ -16,7 +16,7 @@ const           opprettGosysOppgaveSuccessAction   = ():                       I
 const           opprettGosysOppgaveErrorAction     = (error: IError):          IOpprettGosysOppgaveErrorAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error});
 export const    opprettGosysOppgaveResetAction     = ():                       IOpprettGosysOppgaveResetAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET});
 
-export const opprettGosysOppgave = (journalpostid: string, norskident?: string) => {return (dispatch: any) => {
+export const opprettGosysOppgave = (journalpostid: string, norskident: string) => {return (dispatch: any) => {
 
     dispatch(opprettGosysOppgaveRequestAction());
 

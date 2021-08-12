@@ -68,7 +68,7 @@ type IFordelingProps = WrappedComponentProps &
 
 type BehandlingsknappProps = Pick<IFordelingProps,
     'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
-    norskIdent?: string;
+    norskIdent: string;
     sakstypeConfig?: ISakstypeDefault;
 };
 
@@ -203,6 +203,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         }
     }
 
+    const handleGjelderPP = (jn: JaNei) => {
+        if(jn === JaNei.NEI){
+            if(!identState.ident1 && !!journalpost?.norskIdent) {
+                setSokersIdent(journalpost?.norskIdent);
+            }else{
+                setSokersIdent(identState.ident1)
+            };
+        }else if(jn === JaNei.JA) {
+            setSokersIdent('');
+            props.setIdentAction('', identState.ident2);
+        }
+        setGjelderPP(jn);
+    }
+
     const handleCheckboxChange = (checked: boolean) => {
         setBarnetHarIkkeFnr(checked);
         if (checked) {
@@ -267,12 +281,28 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             }))}
                             legend={intlHelper(intl, 'fordeling.gjelderpp')}
                             checked={gjelderPP}
-                            onChange={(event) => setGjelderPP((event.target as HTMLInputElement).value as JaNei)}
+                            onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
                         />
-                        {gjelderPP === JaNei.NEI &&
-                        <Hovedknapp mini={true} onClick={() => omfordel(journalpost!.journalpostId, journalpost?.norskIdent)}>
+                        {gjelderPP === JaNei.NEI && <>
+                          <VerticalSpacer sixteenPx={true} />
+                          <Input
+                            label={intlHelper(intl, 'ident.identifikasjon.felt')}
+                            onChange={handleIdent1Change}
+                            onBlur={handleIdent1Blur}
+                            value={sokersIdent}
+                            className="bold-label ident-soker-1"
+                            maxLength={11}
+                            feil={skalViseFeilmelding(identState.ident1) ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
+                            bredde={"M"}
+                          />
+                          <VerticalSpacer eightPx={true}/>
+                          <Hovedknapp
+                            mini={true}
+                            disabled={!identState.ident1 && !journalpost?.norskIdent || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
+                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                        </Hovedknapp>}
+                          </Hovedknapp>
+                        </>}
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx={true} />
                           <RadioPanelGruppe
@@ -525,12 +555,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>}
                         {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
                       <Behandlingsknapp
-                            norskIdent={identState.ident1}
-                            omfordel={omfordel}
-                            lukkJournalpostOppgave={lukkJournalpostOppgave}
-                            journalpost={journalpost}
-                            sakstypeConfig={konfigForValgtSakstype}
-                        />
+                      norskIdent={identState.ident1}
+                      omfordel={omfordel}
+                      lukkJournalpostOppgave={lukkJournalpostOppgave}
+                      journalpost={journalpost}
+                      sakstypeConfig={konfigForValgtSakstype}
+                    />
                     </>}
                     {fordelingState.skalTilK9 === false &&
                     <>
