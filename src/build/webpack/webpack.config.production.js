@@ -1,5 +1,6 @@
 const webpackConfig = require('./webpack.config.global.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 webpackConfig.mode = 'production';
 
@@ -10,6 +11,10 @@ webpackConfig.plugins.push(
         hash: true
     })
 );
+
+webpackConfig.optimization = {
+  minimizer: [new CssMinimizerPlugin()]
+};
 
 module.exports = Object.assign(webpackConfig, {
     devtool: 'source-map',

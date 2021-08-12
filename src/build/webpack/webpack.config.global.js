@@ -6,9 +6,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const webpackConfig = {
-  entry: {
-    bundle: ['babel-polyfill', `${__dirname}/../../app/App.tsx`]
-  },
+  entry: [`${__dirname}/../../app/App.tsx`],
   output: {
     path: path.resolve(__dirname, './../../../dist'),
     filename: 'js/[name].js',
