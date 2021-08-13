@@ -62,7 +62,7 @@
   "fordeling.infobox.opprettigosys":                                                              "Er du sikker på at du vil opprette journalføringsoppgave i Gosys. Dette alternativet skal kun brukes når dokumentet skal håndteres videre i Gosys og/eller Infotrygd, og dokumentet ikke skal inngå i saksbehandling i K9sak.",
   "fordeling.infotrygd":                                                                          "Det finnes et vedtak tilknyttet søker og/eller barn i Infotrygd, dokumentet må derfor behandles videre der.",
   "fordeling.infortygd.error":                                                                    "Kunne ikke sjekke opplysninger mot Infotrygd. Prøv igjen senere.",
-  "fordeling.infotrygd.journalpoststottesikke":                                                   "Opplysningene stemmer ikke overens med saksnummeret på journalposten. Se over barnets fødselsnummer. Saken ikke behandles videre.",
+  "fordeling.infotrygd.journalpoststottesikke":                                                   "Opplysningene stemmer ikke overens med det som er registrert. Se over barnets fødselsnummer. Journalposten kan ikke behandles videre i Punsj.",
   "fordeling.opprettigosys.utfort":                                                               "Journalføringsoppgave i Gosys opprettet",
   "fordeling.lukkoppgave.utfort":                                                                 "Oppgaven er lukket",
   "fordeling.omfordeling.feil":                                                                   "Det oppsto en feil. Prøv igjen senere.",
