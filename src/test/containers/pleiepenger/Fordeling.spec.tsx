@@ -2,7 +2,7 @@ import {
     FordelingComponent,
     IFordelingDispatchProps,
     IFordelingStateProps,
-} from 'app/containers/pleiepenger/Fordeling';
+} from 'app/containers/pleiepenger/Fordeling/Fordeling';
 import {JaNei, Sakstype} from 'app/models/enums';
 import {IFordelingState, IJournalpost} from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
@@ -111,6 +111,17 @@ describe('Fordeling', () => {
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
     });
 
+    it('Viser radiopanel for identsjekk når bruker velger pleiepenger', () => {
+        const fordeling = setupFordeling();
+        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        expect(fordeling.find('Hovedknapp')).toHaveLength(1);
+
+        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'ja'}})
+        expect(fordeling.find('RadioPanelGruppe')).toHaveLength(2);
+
+        fordeling.find('RadioPanelGruppe').at(1).dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        expect(fordeling.find('Input')).toHaveLength(1);
+    });
 
     /*  it('Viser radioknapp for hver sakstype', () => {
           const fordeling = setupFordeling({skalTilK9: true});
@@ -148,7 +159,6 @@ describe('Fordeling', () => {
         expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901");
     });
 
-
     it('Viser spinner mens svar avventes', () => {
         const omfordel = jest.fn();
         const fordeling = setupFordeling(undefined, {omfordel}, {isAwaitingGosysOppgaveRequestResponse: true});
@@ -167,5 +177,13 @@ describe('Fordeling', () => {
         expect(fordeling.find('AlertStripeFeil').children().text()).toEqual(
             'fordeling.omfordeling.feil'
         );
+    });
+
+    it('Viser feilmelding for omfordeling når journalpost ikke stöttes', () => {
+        const setSakstypeAction = jest.fn();
+        const fordeling = setupFordeling({sjekkTilK9JournalpostStottesIkke: true}, {setSakstypeAction}, {isAwaitingGosysOppgaveRequestResponse: false, gosysOppgaveRequestError: undefined});
+        expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
+        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual('fordeling.infotrygd.journalpoststottesikke');
+        expect(fordeling.find('Knapp')).toHaveLength(1);
     });
 });

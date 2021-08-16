@@ -18,7 +18,7 @@ jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
-jest.mock('app/containers/pleiepenger/Fordeling', () => ({
+jest.mock('app/containers/pleiepenger/Fordeling/Fordeling', () => ({
   Fordeling: () => <></>,
 }));
 jest.mock('app/containers/pleiepenger/EksisterendeSoknader', () => ({
