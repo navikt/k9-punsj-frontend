@@ -16,6 +16,7 @@ export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({
 interface ISjekkOmSkalTilK9LoadingAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST}
 interface ISjekkOmSkalTilK9ErrorAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR, error: IError}
 interface ISjekkOmSkalTilK9SuccessAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS, k9sak: boolean}
+interface ISjekkOmSkalTilK9JournalpostStottesIkkeAction {type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE}
 
 interface ILukkOggpgaveRequestAction {type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST}
 interface ILukkOggpgaveSuccessAction {type: FordelingActionKeys.LUKK_OPPGAVE_SUCCESS}
@@ -39,6 +40,7 @@ export type IFordelingActionTypes =
     ISjekkOmSkalTilK9LoadingAction |
     ISjekkOmSkalTilK9ErrorAction   |
     ISjekkOmSkalTilK9SuccessAction |
+    ISjekkOmSkalTilK9JournalpostStottesIkkeAction |
     ILukkOggpgaveRequestAction |
     ILukkOggpgaveErrorAction   |
     ILukkOggpgaveSuccessAction |
@@ -53,6 +55,10 @@ export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9Su
 export const sjekkSkalTilK9ErrorAction = (error: IError): ISjekkOmSkalTilK9ErrorAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR,
     error
+});
+
+export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9JournalpostStottesIkkeAction => ({
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE
 });
 
 export const lukkJournalpostOppgave = (journalpostid: string) => {return (dispatch: any) => {
@@ -83,6 +89,8 @@ export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid:
         post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, svar) => {
             if (response.ok) {
                 return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak));
+            } else if(response.status === 409){
+                return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction())
             }
             return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(response)));
         });

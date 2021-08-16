@@ -75,6 +75,15 @@ export function FordelingReducer(
                 sjekkTilK9Error: undefined,
                 skalTilK9: action.k9sak
             };
+
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                sjekkTilK9Error: undefined,
+                sjekkTilK9JournalpostStottesIkke: true
+            };
+
         case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:
             return {
                 ...fordelingState,
