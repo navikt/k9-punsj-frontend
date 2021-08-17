@@ -45,7 +45,7 @@ const initialSoknad: IPSBSoknad = {
     bosteder: [],
     harInfoSomIkkeKanPunsjes: false,
     harMedisinskeOpplysninger: false,
-    journalposter: new Set([]),
+    journalposter: [],
     klokkeslett: '',
     lovbestemtFerie: [],
     mottattDato: '',
