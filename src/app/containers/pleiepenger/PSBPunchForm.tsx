@@ -150,7 +150,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             soeknadId: '',
             soekerId: '',
             mottattDato: '',
-            journalposter: new Set([]),
+            journalposter: [],
             barn:
                 {
                     norskIdent: '',
@@ -1934,7 +1934,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     };
 
     private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
-        this.state.soknad.journalposter!.add(this.props.journalpostid);
+        if(!this.state.soknad.journalposter!.includes(this.props.journalpostid)){
+            this.state.soknad.journalposter!.push(this.props.journalpostid);
+        }
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
             showStatus: !!showStatus,
