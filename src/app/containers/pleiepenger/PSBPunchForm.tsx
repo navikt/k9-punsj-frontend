@@ -1434,7 +1434,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private handleSubmit = () => {
-        this.props.validateSoknad(this.state.soknad);
+        const navarandeSoknad: IPSBSoknad = this.state.soknad;
+        const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
+        this.props.validateSoknad({...navarandeSoknad, ...journalposter});
     }
 
     private handleSettPaaVent = () => {
@@ -1947,10 +1949,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
         this.setState({showStatus: true});
-        return this.props.updateSoknad(
-            {...this.getSoknadFromStore(), ...soknad},
-        );
-
+        const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
+        const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
+        return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
     };
 
     private handleBackButtonClick = () => {
@@ -2038,7 +2039,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
     updateSoknad: (
-        soknad: Partial<IPSBSoknad>
+        soknad: Partial<IPSBSoknadUt>
     ) => dispatch(updateSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) =>
         dispatch(submitSoknad(ident, soeknadid)),
