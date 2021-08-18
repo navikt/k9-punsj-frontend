@@ -350,7 +350,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
                               <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}</AlertStripeInfo>
                               <Input
-                                type="number"
                                 label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
                                 onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
                                 onBlur={handleIdentAnnenSokerBlur}
