@@ -76,6 +76,6 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
         return dato.substr(11,5);
     }
     // @ts-ignore
-    const datoTilGMT = datoTmp.toLocaleString('no-NO', { timeZone: 'Europe/Oslo' }).replace(',', '')
-    return datoTilGMT.substr(11,5);
+    const datoTilGMT = datoTmp.toLocaleTimeString('no-NO', { timeZone: 'Europe/Oslo' });
+    return datoTilGMT.substr(0,5);
 };
