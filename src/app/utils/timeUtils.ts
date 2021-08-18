@@ -75,7 +75,6 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     if(isNaN(datoTmp.getTime())){
         return dato.substr(11,5);
     }
-    // @ts-ignore
-    const datoTilGMT = datoTmp.toLocaleTimeString('no-NO', { timeZone: 'Europe/Oslo' });
+    const datoTilGMT = datoTmp.toLocaleTimeString([], { timeZone: 'Europe/Oslo', hour12: false });
     return datoTilGMT.substr(0,5);
 };

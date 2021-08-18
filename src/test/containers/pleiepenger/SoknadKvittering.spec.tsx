@@ -219,11 +219,11 @@ describe('SoknadKvittering', () => {
         expect(soknadKvitteringFull.text().includes('12.10.2020')).toBe(true);
         // tslint:disable-next-line:no-console
         console.log(soknadKvitteringFull.text());
-        // expect(soknadKvitteringFull.text().includes('14:53')).toBe(true);
+        expect(soknadKvitteringFull.text().includes('14:53')).toBe(true);
 
         expect(soknadKvitteringTom.text().includes('skjema.mottakelsesdato:')).toBe(true);
         expect(soknadKvitteringTom.text().includes('12.10.2020')).toBe(true);
-        // expect(soknadKvitteringTom.text().includes('14:53')).toBe(true);
+        expect(soknadKvitteringTom.text().includes('14:53')).toBe(true);
     });
 
     it('Viser utenlandsoppehold', () => {
