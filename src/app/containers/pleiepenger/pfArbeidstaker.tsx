@@ -60,7 +60,6 @@ export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex
                             {selectedType === 'o'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                                       bredde={"M"}
-                                      type="number"
                                       value={arbeidstaker.organisasjonsnummer || ''}
                                       className="arbeidstaker-organisasjonsnummer"
                                       onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value})}
@@ -69,7 +68,6 @@ export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex
                             {selectedType === 'p'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                                       value={arbeidstaker.norskIdent || ''}
-                                      type="number"
                                       bredde={"M"}
                                       className="arbeidstaker-norskIdent"
                                       onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}

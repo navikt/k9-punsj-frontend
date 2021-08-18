@@ -285,7 +285,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         {gjelderPP === JaNei.NEI && <>
                           <VerticalSpacer sixteenPx={true} />
                           <Input
-                            type="number"
                             label={intlHelper(intl, 'ident.identifikasjon.felt')}
                             onChange={handleIdent1Change}
                             onBlur={handleIdent1Blur}
@@ -323,7 +322,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         {riktigIdentIJournalposten === JaNei.NEI && <>
                           <VerticalSpacer sixteenPx={true} />
                           <Input
-                            type="number"
                             label={intlHelper(
                                 intl, 'ident.identifikasjon.felt'
                             )}
@@ -420,7 +418,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             && <>
                               <div className={'fyllUtIdentAnnetBarnContainer'}>
                                 <Input
-                                  type="number"
                                   label={intlHelper(intl, 'ident.identifikasjon.barn')}
                                   onChange={handleIdent2Change}
                                   onBlur={handleIdent2Blur}
