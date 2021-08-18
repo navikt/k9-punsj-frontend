@@ -285,6 +285,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         {gjelderPP === JaNei.NEI && <>
                           <VerticalSpacer sixteenPx={true} />
                           <Input
+                            type="number"
                             label={intlHelper(intl, 'ident.identifikasjon.felt')}
                             onChange={handleIdent1Change}
                             onBlur={handleIdent1Blur}
@@ -322,6 +323,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         {riktigIdentIJournalposten === JaNei.NEI && <>
                           <VerticalSpacer sixteenPx={true} />
                           <Input
+                            type="number"
                             label={intlHelper(
                                 intl, 'ident.identifikasjon.felt'
                             )}
@@ -350,6 +352,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
                               <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}</AlertStripeInfo>
                               <Input
+                                type="number"
                                 label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
                                 onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
                                 onBlur={handleIdentAnnenSokerBlur}
@@ -417,6 +420,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             && <>
                               <div className={'fyllUtIdentAnnetBarnContainer'}>
                                 <Input
+                                  type="number"
                                   label={intlHelper(intl, 'ident.identifikasjon.barn')}
                                   onChange={handleIdent2Change}
                                   onBlur={handleIdent2Blur}
