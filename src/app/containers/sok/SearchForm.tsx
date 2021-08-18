@@ -69,7 +69,6 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                 <SkjemaGruppe>
                     <div className={"input-rad"}>
                         <Input
-                            type="number"
                             value={journalpostid}
                             bredde="L"
                             onChange={(e) => this.setState({journalpostid: e.target.value})}
