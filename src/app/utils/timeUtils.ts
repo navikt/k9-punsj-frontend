@@ -69,3 +69,13 @@ export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
     if(minutter === 0 && timer === 0) return '0';
     return `${timerTekst} og ${minutterTekst}`
 };
+
+export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
+    const datoTmp = new Date("2021-08-13T11:13:00.000Z");
+    if(isNaN(datoTmp.getTime())){
+        return dato.substr(11,5);
+    }
+    // @ts-ignore
+    const datoTilGMT = dato.toLocaleString('no-NO', { timeZone: 'Europe/Oslo' });
+    return datoTilGMT.substr(11,5);
+};
