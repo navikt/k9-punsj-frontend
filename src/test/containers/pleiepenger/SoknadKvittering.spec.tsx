@@ -217,11 +217,11 @@ describe('SoknadKvittering', () => {
         expect(soknadKvitteringFull.text().includes('skjema.opplysningeromsoknad')).toBe(true);
         expect(soknadKvitteringFull.text().includes('skjema.mottakelsesdato:')).toBe(true);
         expect(soknadKvitteringFull.text().includes('12.10.2020')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('12:53')).toBe(true);
+        expect(soknadKvitteringFull.text().includes('14:53')).toBe(true);
 
         expect(soknadKvitteringTom.text().includes('skjema.mottakelsesdato:')).toBe(true);
         expect(soknadKvitteringTom.text().includes('12.10.2020')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('12:53')).toBe(true);
+        expect(soknadKvitteringTom.text().includes('14:53')).toBe(true);
     });
 
     it('Viser utenlandsoppehold', () => {

@@ -72,12 +72,10 @@ export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
 
 export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     const datoTmp = new Date(dato);
-    // tslint:disable-next-line:no-console
-    console.log(datoTmp);
     if(isNaN(datoTmp.getTime())){
         return dato.substr(11,5);
     }
     // @ts-ignore
-    const datoTilGMT = datoTmp.toLocaleString('no-NO', { timeZone: 'Europe/Oslo' });
+    const datoTilGMT = datoTmp.toLocaleString('no-NO', { timeZone: 'Europe/Oslo' }).replace(',', '')
     return datoTilGMT.substr(11,5);
 };
