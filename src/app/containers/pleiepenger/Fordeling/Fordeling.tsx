@@ -10,7 +10,7 @@ import {
 import {v4 as uuidv4} from 'uuid';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
