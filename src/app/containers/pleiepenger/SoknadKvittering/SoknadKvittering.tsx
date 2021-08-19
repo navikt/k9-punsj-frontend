@@ -3,7 +3,12 @@ import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import './soknadKvittering.less';
 import {PunchFormPaneler} from "../../../models/enums/PunchFormPaneler";
-import {formatereTekstMedTimerOgMinutter, getLocaleFromSessionStorage, periodToFormattedString} from "../../../utils";
+import {
+    formatereTekstMedTimerOgMinutter,
+    formattereTidspunktFraUTCTilGMT,
+    getLocaleFromSessionStorage,
+    periodToFormattedString
+} from "../../../utils";
 import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
 import countries from 'i18n-iso-countries';
 import {ICountry} from "../../../components/country-select/CountrySelect";
@@ -129,7 +134,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')}/>
                     <p><b>{intlHelper(intl, 'skjema.mottakelsesdato') + ': '}</b>
-                        {`${periodToFormattedString(response.mottattDato.substr(0, 10))}  ${response.mottattDato.substr(11, 5)}`}
+                        {`${periodToFormattedString(response.mottattDato.substr(0, 10))}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
                     </p>
                 </div>}
 
