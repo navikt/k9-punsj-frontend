@@ -1,4 +1,3 @@
-import '@babel/polyfill';
 import { ApiPath } from 'app/apiConfig';
 import { apiUrl, convertResponseToError, get, post, put } from 'app/utils';
 import { redirect } from 'app/utils/browserUtils';

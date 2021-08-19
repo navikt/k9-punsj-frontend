@@ -1,6 +1,6 @@
 const webpackConfig = require('./webpack.config.global.js');
-const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 webpackConfig.mode = 'production';
 
@@ -13,11 +13,7 @@ webpackConfig.plugins.push(
 );
 
 webpackConfig.optimization = {
-    minimizer: [
-        new TerserPlugin({
-            sourceMap: true
-        })
-    ]
+  minimizer: [new CssMinimizerPlugin()]
 };
 
 module.exports = Object.assign(webpackConfig, {
