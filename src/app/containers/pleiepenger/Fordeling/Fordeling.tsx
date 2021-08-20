@@ -234,6 +234,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         }
     }
 
+    useEffect(() => {
+        if(skalJournalpostSomIkkeStottesKopieres && !props.fellesState.isAwaitingKopierJournalPostResponse && !!props.fellesState.kopierJournalpostSuccess){
+            lukkJournalpostOppgave(journalpost?.journalpostId!);
+        }
+    }, [props.fellesState.isAwaitingKopierJournalPostResponse])
+
     if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner/>;
     }
@@ -251,11 +257,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             </ModalWrapper>
         );
     }
-    useEffect(() => {
-        if(skalJournalpostSomIkkeStottesKopieres && !props.fellesState.isAwaitingKopierJournalPostResponse && !!props.fellesState.kopierJournalpostSuccess){
-            lukkJournalpostOppgave(journalpost?.journalpostId!);
-        }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse])
 
     if (!!fordelingState.isAwaitingLukkOppgaveResponse) {
         return <NavFrontendSpinner/>;
