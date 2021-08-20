@@ -216,6 +216,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         if(jn === JaNei.NEI){
             if(!identState.ident1 && !!journalpost?.norskIdent) {
                 setSokersIdent(journalpost?.norskIdent);
+                props.setIdentAction(journalpost?.norskIdent, identState.ident2);
             }else{
                 setSokersIdent(identState.ident1)
             }
