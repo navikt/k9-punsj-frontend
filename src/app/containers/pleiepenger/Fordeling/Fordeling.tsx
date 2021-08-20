@@ -207,7 +207,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     }
 
     const kopierJournalpostOgLukkOppgave = () => {
-        if(identState.ident1 && identState.ident2 && journalpost?.journalpostId && !!journalpost?.kanKopieres){
+        if(identState.ident1 && identState.ident2 && journalpost?.journalpostId){
             props.kopierJournalpost(identState.ident1, identState.ident1, identState.ident2, props.dedupkey, journalpost?.journalpostId);
         }
     };
