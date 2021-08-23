@@ -21,4 +21,4 @@ spec:
   service:
     port: 6379
   envFrom:
-    - secret: omsorgspenger-oidc-auth-proxy-redis-password
+    - secret: k9-punsj-oidc-auth-proxy-redis-password
