@@ -2,7 +2,9 @@ name: k9-punsj-oidc-auth-proxy
 on:
   push:
     paths:
-      - 'nais/proxy/*'
+      - 'nais/proxy/k9-punsj-oidc-auth-proxy.yml'
+      - 'nais/proxy/dev.json'
+      - 'nais/proxy/prod.json'
 jobs:
   deploy:
     name: deploy k9-punsj-oidc-auth-proxy
