@@ -1,38 +1,27 @@
-name: Deploy OIDC auth proxy
+name: k9-punsj-oidc-auth-proxy
 on:
   push:
     paths:
-      - 'nais/dev/k9-punsj-oidc-auth-proxy.yml'
-      - 'nais/prod/k9-punsj-oidc-auth-proxy.yml'
-    branches:
-      - master
+      - 'nais/proxy/*'
 jobs:
-  deploy-dev:
-    name: Deploye til DEV
+  deploy:
+    name: deploy k9-punsj-oidc-auth-proxy
     runs-on: ubuntu-latest
     steps:
       - name: Hente kode
-        uses: actions/checkout@v2.3.4
-      - name: Deploye til dev
-        uses: navikt/deployment-cli/action@0.4.1
+        uses: actions/checkout@v2
+      - name: Deploy dev-fss
+        uses: nais/deploy/actions/deploy@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          cluster: dev-fss
-          team: k9saksbehandling
-          rawresources: nais/dev/k9-punsj-oidc-auth-proxy.yml
-  deploy-prod:
-    name: Deploye til PROD
-    if: startsWith(github.ref, 'refs/heads/master')   # If the branch is master
-    runs-on: ubuntu-latest
-    steps:
-      - name: Hente kode
-        uses: actions/checkout@v2.3.4
-      - name: Deploye til prod
-        uses: navikt/deployment-cli/action@0.4.1
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-fss
+          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
+          VARS: nais/proxy/dev.json
+      - name: Deploy prod-fss
+        if: github.ref == 'refs/heads/master'
+        uses: nais/deploy/actions/deploy@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          cluster: prod-fss
-          team: k9saksbehandling
-          rawresources: nais/prod/k9-punsj-oidc-auth-proxy.yml
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-fss
+          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
+          VARS: nais/proxy/prod.json

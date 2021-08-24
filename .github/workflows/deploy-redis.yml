@@ -2,7 +2,7 @@ name: k9-punsj-oidc-auth-proxy-redis
 on:
   push:
     paths:
-      - 'nais/k9-punsj-oidc-auth-proxy-redis.yml'
+      - 'nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml'
 jobs:
   deploy:
     name: deploy redis
@@ -15,13 +15,11 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          RESOURCE: nais/k9-punsj-oidc-auth-proxy-redis.yml
-          PRINT_PAYLOAD: true
+          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml
       - name: Deploy prod-fss
         if: github.ref == 'refs/heads/master'
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
-          RESOURCE: nais/k9-punsj-oidc-auth-proxy-redis.yml
-          PRINT_PAYLOAD: true
+          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml

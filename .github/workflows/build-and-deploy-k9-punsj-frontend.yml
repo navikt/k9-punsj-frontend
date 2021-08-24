@@ -6,9 +6,7 @@ on:
       - '.gitignore'
       - 'LICENCE'
       - 'CODEOWNERS'
-      - 'nais/dev/k9-punsj-oidc-auth-proxy.yml'
-      - 'nais/dev/k9-punsj-oidc-auth-proxy-redis.yml'
-      - 'nais/dev/k9-punsj-oidc-auth-proxy-redis-exporter.yml'
+      - 'nais/proxy/*'
     branches:
       - master
 jobs:
