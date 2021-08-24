@@ -43,4 +43,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          RESOURCE: nais/dev/k9-punsj-frontend.yml
+          RESOURCE: nais/frontend/k9-punsj-frontend.yml
+          VARS: nais/frontend/dev.json
