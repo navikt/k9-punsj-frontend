@@ -9,6 +9,7 @@ on:
       - 'nais/proxy/*'
     branches:
       - master
+      - teamnamespace
 jobs:
   deploy-dev:
     name: Deploye til DEV og PROD
@@ -50,10 +51,13 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          RESOURCE: nais/dev/k9-punsj-frontend.yml
+          RESOURCE: nais/frontend/k9-punsj-frontend.yml
+          VARS: nais/frontend/dev.json
       - name: Deploye til prod
+        if: github.ref == 'refs/heads/master'
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
-          RESOURCE: nais/prod/k9-punsj-frontend.yml
+          RESOURCE: nais/frontend/k9-punsj-frontend.yml
+          VARS: nais/frontend/prod.json
