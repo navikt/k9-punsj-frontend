@@ -8,6 +8,6 @@
     "env": {
         "LOGIN_SCOPES": "value:openid profile api://prod-fss.k9saksbehandling.k9-punsj-oidc-auth-proxy/.default",
         "OIDC_AUTH_PROXY_BASE_URL": "value:https://k9-punsj-oidc-auth-proxy.intern.nav.no",
-        "APPLICATION_BASE_URL": "value:https://k9-punsj-frontend.adeo.no"
+        "APPLICATION_BASE_URL": "value:https://k9-punsj-frontend.nais.adeo.no"
     }
 }
