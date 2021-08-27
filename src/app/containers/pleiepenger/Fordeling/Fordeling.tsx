@@ -10,11 +10,11 @@ import {
 import {v4 as uuidv4} from 'uuid';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess} from 'nav-frontend-alertstriper';
+import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, { useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import PdfVisning from '../../../components/pdf/PdfVisning';
@@ -39,6 +39,9 @@ import {IFellesState, kopierJournalpost} from "../../../state/reducers/FellesRed
 import {hentBarn} from "../../../state/reducers/HentBarn";
 import WarningCircle from "../../../assets/SVG/WarningCircle";
 import {skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi} from "./FordelingFeilmeldinger";
+import JournalPostKopiFelmeldinger from "./Komponenter/JournalPostKopiFelmeldinger";
+import {PopoverOrientering} from "nav-frontend-popover";
+import Hjelpetekst from "nav-frontend-hjelpetekst";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -154,6 +157,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
+    const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
@@ -202,6 +206,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         }
     }
 
+    const kopierJournalpostOgLukkOppgave = () => {
+        if(identState.ident1 && identState.ident2 && journalpost?.journalpostId){
+            props.kopierJournalpost(identState.ident1, identState.ident2, identState.ident1, props.dedupkey, journalpost?.journalpostId);
+        }
+    };
+
     const handleGjelderPP = (jn: JaNei) => {
         if(jn === JaNei.NEI){
             if(!identState.ident1 && !!journalpost?.norskIdent) {
@@ -224,6 +234,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, null);
         }
     }
+
+    useEffect(() => {
+        if(skalJournalpostSomIkkeStottesKopieres && !props.fellesState.isAwaitingKopierJournalPostResponse && !!props.fellesState.kopierJournalpostSuccess){
+            lukkJournalpostOppgave(journalpost?.journalpostId!);
+        }
+    }, [props.fellesState.isAwaitingKopierJournalPostResponse])
 
     if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner/>;
@@ -260,6 +276,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
             </ModalWrapper>
         );
     }
+
 
     return (
         <div className="fordeling-container">
@@ -360,21 +377,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 feil={visFeilmeldingForAnnenIdentVidJournalKopi(identState.annenSokerIdent, identState.ident1, identState.ident2, intl)}
                                 bredde={"M"}
                               />
-                                {!!props.fellesState.kopierJournalpostConflict &&
-                                <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
-                                }
-
-                                {!!props.fellesState.kopierJournalpostSuccess &&
-                                <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
-                                }
-
-                                {!!props.fellesState.kopierJournalpostForbidden &&
-                                <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
-                                }
-
-                                {!!props.fellesState.kopierJournalpostError &&
-                                <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
-                                }
+                              <JournalPostKopiFelmeldinger
+                                skalVisesNårJournalpostSomIkkeStottesKopieres={!skalJournalpostSomIkkeStottesKopieres}
+                                fellesState={props.fellesState}
+                                intl={intl}
+                              />
                             </div>
                             }
                         </>}
@@ -547,7 +554,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     );
                                 })}
                         </RadioGruppe>
-                        <VerticalSpacer sixteenPx={true}/>
+                        <VerticalSpacer eightPx={true}/>
                         {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>}
                         {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
                       <Behandlingsknapp
@@ -573,9 +580,37 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
                     {!!fordelingState.sjekkTilK9JournalpostStottesIkke && <div className={'fordeling-page__sjekk-til-K9-journalpost-stottes-ikke'}>
                       <AlertStripeFeil>{intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}</AlertStripeFeil>
-                      <Knapp mini={true} onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                      <VerticalSpacer sixteenPx={true}/>
+                      <div className="journalikkestottetkopi-checkboks">
+                        <Checkbox
+                          label={intlHelper(intl, 'fordeling.kopiereJournal')}
+                          onChange={(e) => {
+                              setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
+                          }}
+                        />
+                        <Hjelpetekst
+                          className="journalikkestottetkopi-checkboks__hjelpetekst"
+                          type={PopoverOrientering.Hoyre}
+                          tabIndex={-1}
+                        >{intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
+                        </Hjelpetekst>
+                      </div>
+                      <JournalPostKopiFelmeldinger
+                        skalVisesNårJournalpostSomIkkeStottesKopieres={skalJournalpostSomIkkeStottesKopieres}
+                        fellesState={props.fellesState}
+                        intl={intl}
+                      />
+                        {!!props.fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner/>}
+                      <Knapp onClick={() => {
+                          if (skalJournalpostSomIkkeStottesKopieres) {
+                              kopierJournalpostOgLukkOppgave();
+                          } else {
+                              lukkJournalpostOppgave(journalpost?.journalpostId);
+                          }
+                      }}>
                         <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                       </Knapp>
+
                     </div>}
                     {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                 </div>
