@@ -172,7 +172,6 @@ describe('convertResponseToError', () => {
       headers: new Headers(),
       body: null,
       bodyUsed: false,
-      trailer: new Promise<Headers>(jest.fn),
       clone: jest.fn(),
       arrayBuffer: jest.fn(),
       blob: jest.fn(),
