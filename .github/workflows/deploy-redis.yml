@@ -1,13 +1,11 @@
-name: k9-punsj-oidc-auth-proxy
+name: k9-punsj-oidc-auth-proxy-redis
 on:
   push:
     paths:
-      - 'nais/proxy/k9-punsj-oidc-auth-proxy.yml'
-      - 'nais/proxy/dev.json'
-      - 'nais/proxy/prod.json'
+      - 'nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml'
 jobs:
   deploy:
-    name: deploy k9-punsj-oidc-auth-proxy
+    name: deploy redis
     runs-on: ubuntu-latest
     steps:
       - name: Hente kode
@@ -17,13 +15,11 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
-          VARS: nais/proxy/dev.json
+          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml
       - name: Deploy prod-fss
         if: github.ref == 'refs/heads/master'
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
-          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
-          VARS: nais/proxy/prod.json
+          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml

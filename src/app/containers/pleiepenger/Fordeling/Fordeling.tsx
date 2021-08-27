@@ -309,13 +309,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             value={sokersIdent}
                             className="bold-label ident-soker-1"
                             maxLength={11}
-                            feil={skalViseFeilmelding(identState.ident1) ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
+                            feil={skalViseFeilmelding(identState.ident1) || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
                             bredde={"M"}
                           />
                           <VerticalSpacer eightPx={true}/>
                           <Hovedknapp
                             mini={true}
-                            disabled={!identState.ident1 && !journalpost?.norskIdent || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
+                            disabled={!identState.ident1 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
                             onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                           </Hovedknapp>
