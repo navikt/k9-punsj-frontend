@@ -1,6 +1,6 @@
 import {IArbeidstidPeriodeMedTimer, IPeriode, IPunchFormState, Periodeinfo} from "../../../models/types";
 
-const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[]): boolean => {
+export const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[]): boolean => {
     if (periode.length > 0
         && typeof periode[0].faktiskArbeidTimerPerDag !== 'undefined'
         && typeof periode[0].jobberNormaltTimerPerDag !== 'undefined'
@@ -11,7 +11,7 @@ const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (periode: Periodeinfo<IArbei
     return false;
 }
 
-const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
+export const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
     if (periode.length > 0
         && !!periode[0].fom && !!periode[0].tom
         && periode[0].fom.length > 0
@@ -21,7 +21,7 @@ const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
     return false;
 }
 
-const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
+export const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
     let erArbeidstidAngitt = false;
     const erArbeidstidFyltUt = !!punchFormState.soknad?.arbeidstid?.arbeidstakerList
         && punchFormState.soknad?.arbeidstid?.arbeidstakerList.length > 0
@@ -46,5 +46,3 @@ const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
 
     return erArbeidstidAngitt;
 };
-
-export default sjekkHvisArbeidstidErAngitt;

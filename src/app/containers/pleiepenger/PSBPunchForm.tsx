@@ -85,7 +85,7 @@ import moment from "moment";
 import classNames from "classnames";
 import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 import Soknadsperioder from "./PSBPunchForm/Soknadsperioder";
-import sjekkHvisArbeidstidErAngitt from "./PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner";
+import {sjekkHvisArbeidstidErAngitt} from "./PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
