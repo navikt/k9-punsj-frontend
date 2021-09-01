@@ -12,12 +12,10 @@ const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (periode: Periodeinfo<IArbei
 }
 
 const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
-    console.log('PERIODE', periode);
     if (periode.length > 0
         && !!periode[0].fom && !!periode[0].tom
         && periode[0].fom.length > 0
         && periode[0].tom.length > 0) {
-        console.log('PERIODE true');
         return true;
     }
     return false;
@@ -25,8 +23,6 @@ const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
 
 const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
     let erArbeidstidAngitt = false;
-    console.log('ARG 1', !!punchFormState.soknad?.lovbestemtFerieSomSkalSlettes);
-    console.log('ARG 1', punchFormState.soknad?.lovbestemtFerieSomSkalSlettes);
     if (!!punchFormState.soknad?.lovbestemtFerieSomSkalSlettes && sjekkHvisPeriodeErFylltUt(punchFormState.soknad?.lovbestemtFerieSomSkalSlettes)) {
         if (!!punchFormState.soknad?.arbeidstid?.arbeidstakerList
             && punchFormState.soknad?.arbeidstid?.arbeidstakerList.length > 0
@@ -37,19 +33,15 @@ const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
         } else if (!!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo
             && !!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder
             && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder)) {
-            console.log('return third')
             erArbeidstidAngitt = true;
         } else if (!!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo
             && !!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder
             && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder)) {
-            console.log('return fourth')
             erArbeidstidAngitt = true;
         }
     }else{
-        console.log('HEREEE');
         erArbeidstidAngitt = true;
     }
-    console.log('return fifth')
     return erArbeidstidAngitt;
 };
 
