@@ -446,6 +446,131 @@ describe('PunchForm', () => {
         expect(punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel').childAt(0).text()).toEqual('skjema.soknadsperiode.overlapper');
     });
 
+    it('Viser legg till ferie', () => {
+        const soknad = {...initialSoknad};
+        const punchForm = setupPunchForm({soknad}, {});
+
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(1);
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').prop('label')).toEqual('skjema.ferie.leggtil');
+    });
+
+    it('Viser legg till ferie og slettade perioder dersom det finns periode', () => {
+        const soknad = {...initialSoknad};
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(2);
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(0).prop('label')).toEqual('skjema.ferie.leggtil');
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(1).prop('label')).toEqual('skjema.ferie.fjern');
+    });
+
+
+    it('Viser ferieperioder dersom det finnes', () => {
+        const soknad = {...initialSoknad, lovbestemtFerie: [{fom: '2021-01-30', tom: '2021-04-15'}]}
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+
+        expect(punchForm.find('.feriepanel').dive().find('Periodepaneler').at(0).prop('periods')).toEqual([{fom: '2021-01-30', tom: '2021-04-15'}]);
+    });
+
+    it('Viser slettade ferieperioder dersom det finnes', () => {
+        const soknad = {...initialSoknad, lovbestemtFerieSomSkalSlettes: [{fom: '2021-01-30', tom: '2021-04-15'}]}
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+
+        expect(punchForm.find('.feriepanel').dive().find('Periodepaneler').prop('periods')).toEqual([{fom: '2021-01-30', tom: '2021-04-15'}]);
+        expect(punchForm.find('.feriepanel').dive().find('.ekspanderbartPanel__innhold').find('AlertStripeInfo')).toHaveLength(1);
+    });
+
+    it('Viser advarsel om att arbeidstid må angis vid slettade perioder', () => {
+        const soknad = {...initialSoknad, lovbestemtFerieSomSkalSlettes: [{fom: '2021-01-30', tom: '2021-04-15'}]}
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+        
+        expect(punchForm.find('AlertStripeFeil')).toHaveLength(1);
+        expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(true);
+        expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(true);
+    });
+
+    it('Viser ikke advarsel om att arbeidstid må angis vid slettade perioder når arbeidstid er angivet for arbeidstaker', () => {
+        const soknad = {
+            ...initialSoknad, ...{
+                lovbestemtFerieSomSkalSlettes: [{fom: '2021-01-30', tom: '2021-04-15'}],
+                arbeidstid: {
+                    arbeidstakerList: [{
+                        norskIdentitetsnummer: null,
+                        organisasjonsnummer: '',
+                        arbeidstidInfo: {
+                            perioder: [{
+                                periode: {
+                                    fom: '2021-01-30',
+                                    tom: '2021-04-15'
+                                },
+                                faktiskArbeidTimerPerDag: '8',
+                                jobberNormaltTimerPerDag: '8'
+                            }]
+                        }
+                    }],
+                },
+            }
+        }
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+
+        expect(punchForm.find('AlertStripeFeil')).toHaveLength(0);
+        expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
+        expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
+    });
+
+    it('Viser ikke advarsel om att arbeidstid må angis vid slettade perioder når arbeidstid er angivet for FL', () => {
+        const soknad = {
+            ...initialSoknad, ...{
+                lovbestemtFerieSomSkalSlettes: [{fom: '2021-01-30', tom: '2021-04-15'}],
+                arbeidstid: {
+                    frilanserArbeidstidInfo: {
+                        perioder: [
+                            {
+                                periode: {
+                                    fom: '2021-09-01',
+                                    tom: '2021-09-30'
+                                },
+                                faktiskArbeidTimerPerDag: "8",
+                                jobberNormaltTimerPerDag: "8"
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+
+        expect(punchForm.find('AlertStripeFeil')).toHaveLength(0);
+        expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
+        expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
+    });
+
+    it('Viser ikke advarsel om att arbeidstid må angis vid slettade perioder når arbeidstid er angivet for SN', () => {
+        const soknad = {
+            ...initialSoknad, ...{
+                lovbestemtFerieSomSkalSlettes: [{fom: '2021-01-30', tom: '2021-04-15'}],
+                arbeidstid: {
+                    selvstendigNæringsdrivendeArbeidstidInfo: {
+                        perioder: [
+                            {
+                                periode: {
+                                    fom: '2021-09-01',
+                                    tom: '2021-09-30'
+                                },
+                                faktiskArbeidTimerPerDag: "8",
+                                jobberNormaltTimerPerDag: "8"
+                            }
+                        ]
+                    }
+                },
+            }
+        }
+        const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-01-30', tom: '2021-04-15'}]}, {});
+
+        expect(punchForm.find('AlertStripeFeil')).toHaveLength(0);
+        expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
+        expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
+    });
+
     it('Viser ikke advarsel om overlappende periode når periodene ikke overlapper', () => {
         const soknad = {...initialSoknad, soeknadsperiode: {fom: '2021-02-23', tom: '2021-08-23'}}
         const punchForm = setupPunchForm({soknad, perioder: [{fom: '2021-08-30', tom: '2021-09-15'}]}, {});

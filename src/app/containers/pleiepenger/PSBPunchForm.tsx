@@ -2,7 +2,12 @@ import {Listepaneler} from 'app/containers/pleiepenger/Listepaneler';
 import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {Arbeidsforhold, JaNei, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import {IInputError, IPunchFormState, ISignaturState, Periode, SelvstendigNaerinsdrivende} from 'app/models/types';
+import {
+    IInputError,
+    IPunchFormState,
+    ISignaturState,
+    SelvstendigNaerinsdrivende
+} from 'app/models/types';
 import {
     getSoknad,
     hentPerioderFraK9Sak,
@@ -80,6 +85,7 @@ import moment from "moment";
 import classNames from "classnames";
 import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 import Soknadsperioder from "./PSBPunchForm/Soknadsperioder";
+import {sjekkHvisArbeidstidErAngitt} from "./PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -1306,6 +1312,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <Knapp
                             className={"send-knapp"}
                             onClick={() => this.handleSubmit()}
+                            disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Knapp>
@@ -1313,7 +1320,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         <Knapp
                             className={"vent-knapp"}
                             onClick={() => this.setState({showSettPaaVentModal: true})}
-                            disabled={false}
+                            disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
                         </Knapp>
@@ -1340,6 +1347,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         {intlHelper(intl, 'skjema.feil.konflikt')}
                     </AlertStripeFeil>
                 )}
+                {!sjekkHvisArbeidstidErAngitt(this.props.punchFormState) && <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</AlertStripeFeil>}
 
                 {this.state.showSettPaaVentModal && (
                     <ModalWrapper
@@ -1785,9 +1793,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     }
 
     private updateIkkeSkalHaFerie(checked: boolean) {
+        const {aapnePaneler} = this.state;
         if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
             this.state.soknad = {...this.state.soknad, lovbestemtFerieSomSkalSlettes: [{}]};
         }
+
+        if(!!checked && !aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
+                aapnePaneler.push(PunchFormPaneler.ARBEID);
+        }else if(!checked && aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)){
+                aapnePaneler.splice(aapnePaneler.indexOf(PunchFormPaneler.ARBEID), 1);
+        }
+
         if (!!checked &&
             this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
             this.addIkkeSkalHaFerie()
