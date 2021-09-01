@@ -23,25 +23,27 @@ const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
 
 const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
     let erArbeidstidAngitt = false;
-    if (!!punchFormState.soknad?.lovbestemtFerieSomSkalSlettes && sjekkHvisPeriodeErFylltUt(punchFormState.soknad?.lovbestemtFerieSomSkalSlettes)) {
-        if (!!punchFormState.soknad?.arbeidstid?.arbeidstakerList
-            && punchFormState.soknad?.arbeidstid?.arbeidstakerList.length > 0
-            && !!punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo
-            && !!punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder
-            && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder)) {
-            erArbeidstidAngitt = true;
-        } else if (!!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo
-            && !!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder
-            && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder)) {
-            erArbeidstidAngitt = true;
-        } else if (!!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo
-            && !!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder
-            && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder)) {
-            erArbeidstidAngitt = true;
-        }
+    const erArbeidstidFyltUt = !!punchFormState.soknad?.arbeidstid?.arbeidstakerList
+        && punchFormState.soknad?.arbeidstid?.arbeidstakerList.length > 0
+        && !!punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo
+        && !!punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder
+        && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder);
+
+    const erFLArbeidstidFyltUt = !!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo
+        && !!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder
+        && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder);
+
+    const erSNArbeidstidFyltUt = !!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo
+        && !!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder
+        && sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder);
+
+    if (!!punchFormState.soknad?.lovbestemtFerieSomSkalSlettes
+        && sjekkHvisPeriodeErFylltUt(punchFormState.soknad?.lovbestemtFerieSomSkalSlettes)) {
+        if(erArbeidstidFyltUt || erFLArbeidstidFyltUt || erSNArbeidstidFyltUt) erArbeidstidAngitt = true;
     }else{
         erArbeidstidAngitt = true;
     }
+
     return erArbeidstidAngitt;
 };
 

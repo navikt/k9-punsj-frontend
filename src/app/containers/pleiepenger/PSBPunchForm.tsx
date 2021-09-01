@@ -3,12 +3,9 @@ import {pfArbeidstaker} from 'app/containers/pleiepenger/pfArbeidstaker';
 import {Arbeidsforhold, JaNei, PunchStep} from 'app/models/enums';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {
-    IArbeidstidPeriodeMedTimer,
     IInputError,
     IPunchFormState,
     ISignaturState,
-    Periode,
-    Periodeinfo,
     SelvstendigNaerinsdrivende
 } from 'app/models/types';
 import {
