@@ -282,6 +282,7 @@
   "skjema.feil.ikketom":                                                                          "Kan ikke være tom",
   "skjema.feil.ikkefremitid":                                                                     "Kan ikke være frem i tid",
   "skjema.feil.validering":                                                                       "Skjemaet inneholder valideringsfeil. Vennligst rett opp i feilene før du sender inn.",
+  "skjema.feil.sletteferie_manglerarbeidstid":                                                    "Mangler informasjon om arbeidstid for periodene som er fjernet.",
   "skjema.feil.ikke_lagret":                                                                      "Det oppsto en feil under lagring av endringer.",
   "skjema.feil.ikke_sendt":                                                                       "Det oppsto en feil under innsending av søknad. Prøv igjen senere.",
   "skjema.feil.konflikt":                                                                         "Denne journalposten har allerede blitt sendt inn.",

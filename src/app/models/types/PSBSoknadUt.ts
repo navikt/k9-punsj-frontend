@@ -50,7 +50,6 @@ export interface IPSBSoknadUt {
 }
 
 export class PSBSoknadUt implements IPSBSoknadUt {
-
     soeknadId: string;
     soekerId: string;
     journalposter: Set<string>;
@@ -89,6 +88,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.uttak = (soknad.uttak || []).map(t => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map(u => new UtenlandsOpphold(u));
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map(p => new Periode(p));
+        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map(p => new Periode(p));
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
         this.bosteder = (soknad.bosteder || []).map(m => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
