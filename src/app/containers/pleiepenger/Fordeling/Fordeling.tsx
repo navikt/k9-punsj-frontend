@@ -168,7 +168,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const nullUtBarnetsIdent = () => {
         setBarnetsIdent('');
         setIdentAction(identState.ident1, '');
-        props.setIdentAction(identState.ident1, '', '');
+        props.setIdentAction(identState.ident1, '', identState.annenSokerIdent);
     }
 
     const handleIdent1Blur = (event: any) => {
