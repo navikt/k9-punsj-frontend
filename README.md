@@ -56,9 +56,11 @@ cd startup-utils/
 ````
 ## Saksnummer for lokal utvikling
 Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnummer har ulike responser. 
+````
 200: Gir journalpost med PDF dokument.
 463687943: Finns informasjon i Infotrygd.
 45537868838: Journalpost støttes ikke.
+````
 
 ## Test
 ````
