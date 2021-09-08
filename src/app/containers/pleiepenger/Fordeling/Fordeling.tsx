@@ -29,7 +29,6 @@ import {
     opprettGosysOppgaveResetAction
 } from "../../../state/actions/GosysOppgaveActions";
 import {setHash} from "../../../utils";
-import {IdentRules} from "../../../rules";
 import { setIdentFellesAction} from "../../../state/actions/IdentActions";
 import {IIdentState} from "../../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../../models/types/GosysOppgaveState";
@@ -138,8 +137,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         [sakstype]
     );
 
-    const identer = [identState.ident1, identState.ident2];
-    const antallIdenter = identer.filter((id) => id && id.length).length;
     const journalpostident = journalpost?.norskIdent;
 
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
