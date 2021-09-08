@@ -54,11 +54,17 @@ echo ".env fil opprettet @ $ENV_PATH med azure host $AZURE_HOST"
 cd startup-utils/
 ./start-for-integration-tests.sh 
 ````
+## Saksnummer for lokal utvikling
+Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnummer har ulike responser. 
+200: Gir journalpost med PDF dokument.
+463687943: Finns informasjon i Infotrygd.
+45537868838: Journalpost støttes ikke.
 
-For å kjøre opp mock i **k9-punsj**, kjør *K9PunsjApplicationWithMocks*.
-
-* Erstatt i filen MockConfiguration.kt: 
-"AZURE_V2_discovery_url" to "http://azure-mock:8100/v2.0/.well-known/openid-configuration",
+## Test
+````
+yarn test
+````
+Testene kjører automatisk når ny kode dyttes til [master](https://github.com/navikt/k9-punsj-frontend).
 
 ## Enhetstester
 Alle enhetstester er plassert i [src/test](src/test). De kan kjøres med følgende kommando:
