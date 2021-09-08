@@ -12,7 +12,7 @@ import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
 import {mocked} from 'ts-jest/utils';
 import {IIdentState} from "../../../app/models/types/IdentState";
 import {JaNeiIkkeRelevant} from "../../../app/models/enums/JaNeiIkkeRelevant";
-import {IJournalposterPerIdentState} from "../../../app/models/types/JournalposterPerIdentState";
+import {IJournalposterPerIdentState} from "../../../app/models/types/Journalpost/JournalposterPerIdentState";
 import {
     IPSBSoknadKvittering,
 } from "../../../app/models/types/PSBSoknadKvittering";
