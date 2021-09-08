@@ -28,7 +28,7 @@ import {
 export interface IPSBSoknadUt {
     soeknadId?: string;
     soekerId: string;
-    journalposter?: Set<string>;
+    journalposter?: string[];
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
@@ -52,7 +52,7 @@ export interface IPSBSoknadUt {
 export class PSBSoknadUt implements IPSBSoknadUt {
     soeknadId: string;
     soekerId: string;
-    journalposter: Set<string>;
+    journalposter: string[];
     mottattDato: string;
     klokkeslett: string;
     barn: Barn | {};
@@ -75,7 +75,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
-        this.journalposter = new Set(soknad.journalposter || []);
+        this.journalposter =soknad.journalposter || [];
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
         this.barn = soknad.barn ? new Barn(soknad.barn) : {};
