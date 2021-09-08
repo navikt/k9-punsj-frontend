@@ -450,22 +450,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 {barnetHarIkkeFnr && <AlertStripeInfo
                                   className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
                               <VerticalSpacer sixteenPx={true}/>
-                                {
-                                    antallIdenter > 0 &&
-                                    journalpostident &&
-                                    props &&
-                                    identer.every(
-                                        (ident) =>
-                                            !ident ||
-                                            (IdentRules.isIdentValid(ident) && ident !== journalpostident)
-                                    ) && (
-                                        <AlertStripeAdvarsel>
-                                            {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
-                                                antallIdenter: antallIdenter.toString(),
-                                                journalpostident,
-                                            })}
-                                        </AlertStripeAdvarsel>
-                                    )}
                             </>}
 
                             {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
