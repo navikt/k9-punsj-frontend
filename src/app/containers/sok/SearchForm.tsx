@@ -9,20 +9,27 @@ import {IJournalpost} from "../../models/types";
 import {connect} from "react-redux";
 import {RootStateType} from "../../state/RootState";
 import {AlertStripeAdvarsel, AlertStripeInfo} from "nav-frontend-alertstriper";
+import {JournalpostConflictTyper} from "../../models/enums/Journalpost/JournalpostConflictTyper";
+import {IJournalpostConflictResponse} from "../../models/types/Journalpost/IJournalpostConflictResponse";
+import {Knapp} from "nav-frontend-knapper";
+import {lukkJournalpostOppgave as lukkJournalpostOppgaveAction} from "../../state/actions";
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
     notFound: boolean;
     forbidden: boolean;
+    conflict: boolean | undefined;
+    journalpostConflictError?: IJournalpostConflictResponse;
 }
 
 export interface ISearchFormDispatchProps {
     getJournalpost: typeof getJournalpost;
+    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
 }
 
 export interface ISearchFormComponentState {
     identitetsnummer?: string,
-    journalpostid?: string;
+    journalpostid: string;
 }
 
 type ISearchFormProps =
@@ -47,9 +54,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
     }
 
     render() {
-
-
         const {journalpostid} = this.state;
+        const {notFound, forbidden, conflict, journalpostConflictError, journalpost, lukkJournalpostOppgave} = this.props;
 
         const disabled = !journalpostid;
 
@@ -59,7 +65,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
             }
         }
 
-        if (this.props.journalpost?.journalpostId) {
+        if (journalpost?.journalpostId) {
             window.location.assign('journalpost/' + journalpostid)
         }
 
@@ -82,15 +88,27 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         />
                         <VerticalSpacer sixteenPx={true}/>
                     </div>
-                    {!!this.props.notFound &&
+                    {!!notFound &&
                     <AlertStripeInfo>
                         <FormattedMessage id={'søk.jp.notfound'} values={{jpid: journalpostid}}/>
                     </AlertStripeInfo>}
-                    {!!this.props.forbidden &&
+                    {!!forbidden &&
                     <AlertStripeAdvarsel>
                         <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
                     </AlertStripeAdvarsel>}
-                    {!!this.props.journalpost  && !this.props.journalpost?.kanSendeInn &&
+                    {
+                        !!conflict
+                        && typeof journalpostConflictError !== 'undefined'
+                        && journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET
+                        && <>
+                          <AlertStripeAdvarsel><FormattedMessage id={'startPage.feil.ikkeStøttet'}/></AlertStripeAdvarsel>
+                          <VerticalSpacer eightPx={true} />
+                          <Knapp onClick={() => lukkJournalpostOppgave(journalpostid)}>
+                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                          </Knapp>
+                        </>
+                    }
+                    {!!journalpost && !journalpost?.kanSendeInn &&
                     <AlertStripeAdvarsel><FormattedMessage id={'fordeling.kanikkesendeinn'}/></AlertStripeAdvarsel>}
                 </SkjemaGruppe>
             </div>
@@ -102,7 +120,9 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 const mapStateToProps = (state: RootStateType) => ( {
     journalpost: state.felles.journalpost,
     notFound: state.felles.journalpostNotFound,
-    forbidden: state.felles.journalpostForbidden
+    forbidden: state.felles.journalpostForbidden,
+    conflict: state.felles.journalpostConflict,
+    journalpostConflictError: state.felles.journalpostConflictError
 }
 
 );
@@ -111,6 +131,8 @@ const mapDispatchToProps = (dispatch: any) => (
 {
     getJournalpost: (journalpostid: string) =>
         dispatch(getJournalpost(journalpostid)),
+    lukkJournalpostOppgave: (journalpostid: string) =>
+        dispatch(lukkJournalpostOppgaveAction(journalpostid)),
 }
 );
 
