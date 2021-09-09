@@ -12,6 +12,7 @@ import {
 } from "./HentBarn";
 import {IBarn} from "../../models/types/Barn";
 import {IJournalpostConflictResponse} from "../../models/types/Journalpost/IJournalpostConflictResponse";
+import {setSoknadAction, updateSoknadSuccessAction} from "../actions";
 
 export interface IFellesState {
   dedupKey: string;
@@ -134,32 +135,19 @@ export function getJournalpostConflictAction(response: IJournalpostConflictRespo
 export function getJournalpost(journalpostid: string) {
   return (dispatch: any) => {
     dispatch(getJournalpostLoadAction());
-    return get(
-      ApiPath.JOURNALPOST_GET,
-      { journalpostId: journalpostid },
-      undefined,
-      (response, journalpost) => {
-        if (response.ok) {
-          return dispatch(setJournalpostAction(journalpost));
+    return get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostid }, undefined, (response, journalpost) => {
+        if (response.ok) { return dispatch(setJournalpostAction(journalpost));}
+        switch(response.status){
+          case 403: return dispatch(getJournalpostForbiddenAction());
+          case 404: return dispatch(getJournalpostNotFoundAction());
+          case 409: return response.json().then(res => dispatch(getJournalpostConflictAction(res)));
+          default: return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
         }
-        if (response.status === 404) {
-          return dispatch(getJournalpostNotFoundAction());
-        }
-        if (response.status === 403) {
-          return dispatch(getJournalpostForbiddenAction());
-        }
-        if (response.status === 409) {
-          return dispatch(getJournalpostConflictAction(response));
-        }
-        return dispatch(
-          getJournalpostErrorAction(convertResponseToError(response))
-        );
       }
     );
   };
 }
 
-// Kopiere journalpost
 export function getJournalpostKopiereForbiddenAction(
 ): IJournalpostKopiereForbiddenAction {
   return { type: Actiontypes.JOURNALPOST_KOPIERE_FORBIDDEN };
