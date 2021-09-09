@@ -140,9 +140,7 @@ export function getJournalpost(journalpostid: string) {
       undefined,
       (response, journalpost) => {
         if (response.ok) {
-          return dispatch(getJournalpostConflictAction({
-            type: "punsj://ikke-støttet-journalpost"
-          }))
+          return dispatch(setJournalpostAction(journalpost));
         }
         if (response.status === 404) {
           return dispatch(getJournalpostNotFoundAction());
