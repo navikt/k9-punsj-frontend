@@ -29,7 +29,7 @@ export interface ISearchFormDispatchProps {
 
 export interface ISearchFormComponentState {
     identitetsnummer?: string,
-    journalpostid: string;
+    journalpostid?: string;
 }
 
 type ISearchFormProps =
@@ -103,7 +103,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         && <>
                           <AlertStripeAdvarsel><FormattedMessage id={'startPage.feil.ikkeStøttet'}/></AlertStripeAdvarsel>
                           <VerticalSpacer eightPx={true} />
-                          <Knapp onClick={() => lukkJournalpostOppgave(journalpostid)}>
+                          <Knapp onClick={() => {if(typeof journalpostid !== 'undefined') lukkJournalpostOppgave(journalpostid)}}>
                             <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                           </Knapp>
                         </>
