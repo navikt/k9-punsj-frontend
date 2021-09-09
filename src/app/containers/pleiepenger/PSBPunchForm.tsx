@@ -996,40 +996,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             medSlettKnapp={false}
                         />
                     )}
-                    {/*this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
-                    (<RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNei).map((jn) => ({
-                            label: intlHelper(intl, jn),
-                            value: jn,
-                        }))}
-                        name="innleggelseiutlandetjanei"
-                        legend={intlHelper(intl, 'skjema.utenlandsopphold.innleggelse')}
-                        onChange={(event) =>
-                            this.handleBarnetSkalLeggesInn((event.target as HTMLInputElement).value as JaNei)
-                        }
-                        checked={this.state.barnetSkalLeggesInn}
-                    />)}
-                    {this.state.barnetSkalLeggesInn === JaNei.JA && (
-                        <Periodepaneler
-                            intl={intl}
-                            periods={this.state.innleggelseUtlandet}
-                            panelid={(i) => `innleggelseperiodepanel_${i}`}
-                            initialPeriode={this.initialPeriode}
-                            editSoknad={(perioder) =>
-                                this.setState(
-                                    {innleggelseUtlandet: perioder})
-                            }
-                            editSoknadState={(perioder, showStatus) =>
-                                this.setState(
-                                    {innleggelseUtlandet: perioder}
-                                )
-                            }
-                            getErrorMessage={() => undefined}
-                            feilkodeprefiks={'perioder'}
-                            minstEn={false}
-                            kanHaFlere={true}
-                        />)*/}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.FERIE)}
