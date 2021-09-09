@@ -86,6 +86,7 @@ import classNames from "classnames";
 import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 import Soknadsperioder from "./PSBPunchForm/Soknadsperioder";
 import {sjekkHvisArbeidstidErAngitt} from "./PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner";
+import OpplysningerOmSoknad from "./PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad";
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -900,51 +901,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true}/>
-                <Panel className={"opplysningerOmSoknad"}>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <SkjemaGruppe>
-                        <div className={"input-row"}>
-                            <Input
-                                id="soknad-dato"
-                                bredde={"M"}
-                                label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                                type="date"
-                                value={soknad.mottattDato}
-                                {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                    mottattDato: event.target.value,
-                                }))}
-                                feil={this.getErrorMessage('mottattDato')}
-                            />
-                            <Input
-                                value={soknad.klokkeslett || ''}
-                                type={"time"}
-                                className={"klokkeslett"}
-                                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                                {...this.changeAndBlurUpdatesSoknad((event) => ({
-                                    klokkeslett: event.target.value,
-                                }))}
-                                feil={this.getErrorMessage('klokkeslett')}
-                            />
-                        </div>
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            name="signatur"
-                            legend={intlHelper(intl, 'ident.signatur.etikett')}
-                            checked={signert || undefined}
-                            onChange={(event) =>
-                                this.props.setSignaturAction(
-                                    ((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null
-                                )
-                            }
-                        />
-                        {signert === JaNeiIkkeRelevant.NEI &&
-                        <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>}
-                    </SkjemaGruppe>
-                </Panel>
+                <OpplysningerOmSoknad
+                    intl={intl}
+                    changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
+                    getErrorMessage={this.getErrorMessage}
+                    setSignaturAction={this.props.setSignaturAction}
+                    signert={signert}
+                    soknad={soknad}
+                />
                 <VerticalSpacer sixteenPx={true}/>
                 <Checkbox
                     label={intlHelper(intl, "skjema.ekspander")}
@@ -1921,7 +1885,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         return !!errorMsg
             ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
-
 
             intlHelper(
                 this.props.intl,
