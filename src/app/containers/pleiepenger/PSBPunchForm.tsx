@@ -1824,16 +1824,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.updateSoknad({harInfoSomIkkeKanPunsjes: !!checked});
     }
 
-    private backButton() {
-        return (
-            <p>
-                <Knapp onClick={this.handleBackButtonClick}>
-                    {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
-                </Knapp>
-            </p>
-        );
-    }
-
     private getSoknadFromStore = () => {
         return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
     };
@@ -1936,15 +1926,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
     };
 
-    private handleBackButtonClick = () => {
-        const {getPunchPath} = this.props;
-        this.props.resetSoknadAction();
-        this.props.undoChoiceOfEksisterendeSoknadAction();
-        setHash(
-            getPunchPath(PunchStep.CHOOSE_SOKNAD)
-        );
-    };
-
     private handleStartButtonClick = () => {
         this.props.resetPunchFormAction();
         setHash('/');
@@ -1973,12 +1954,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.soknad = {...this.state.soknad, utenlandsopphold: [{}]};
         }
         this.state.soknad.utenlandsopphold!.push({land: '', periode: {}});
-        this.forceUpdate();
-        this.setOpphold();
-    };
-
-    private removeOpphold = (index: number) => {
-        this.state.soknad.utenlandsopphold!.splice(index, 1);
         this.forceUpdate();
         this.setOpphold();
     };
