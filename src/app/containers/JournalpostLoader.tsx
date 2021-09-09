@@ -1,4 +1,4 @@
-import {AlertStripeAdvarsel, AlertStripeFeil} from 'nav-frontend-alertstriper';
+import {AlertStripeFeil} from 'nav-frontend-alertstriper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, {useEffect} from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
