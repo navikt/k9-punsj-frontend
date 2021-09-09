@@ -140,7 +140,7 @@ export function getJournalpost(journalpostid: string) {
         switch(response.status){
           case 403: return dispatch(getJournalpostForbiddenAction());
           case 404: return dispatch(getJournalpostNotFoundAction());
-          case 409: return response.json().then(res => dispatch(getJournalpostConflictAction(res)));
+          case 409: return response.json().then(res => dispatch(getJournalpostConflictAction(res.body)));
           default: return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
         }
       }
