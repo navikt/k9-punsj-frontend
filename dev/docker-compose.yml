@@ -1,0 +1,32 @@
+version: '2'
+services:
+  azure-mock:
+    image: ghcr.io/navikt/azure-mock:latest
+    container_name: azure-mock
+    restart: on-failure
+    ports:
+      - "8100:8100"
+    mem_limit: 64m
+    environment:
+      ISSUER_HOST: localhost
+
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    restart: on-failure
+    mem_limit: 64m
+    environment:
+      REDIS_PASSWORD: foobar
+
+  oidc-auth-proxy:
+    image: ghcr.io/navikt/oidc-auth-proxy:latest
+    container_name: oidc-auth-proxy
+    restart: on-failure
+    ports:
+      - "8101:8101"
+    env_file:
+      - ".oidc-auth-proxy.env"
+    depends_on:
+      - azure-mock
+      - redis
+    mem_limit: 64m
