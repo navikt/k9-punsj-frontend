@@ -26,7 +26,7 @@ import {
 } from 'app/state/actions';
 import {setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
+import {AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import {
     CheckboksPanel,
@@ -35,7 +35,7 @@ import {
     Input,
     RadioPanelGruppe,
     Select,
-    SkjemaGruppe, Textarea
+    Textarea
 } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
