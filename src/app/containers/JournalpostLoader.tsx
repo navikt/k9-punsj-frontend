@@ -89,15 +89,15 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         && typeof journalpostConflictError !== 'undefined'
         && journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET) {
         return (
-            <div>
+            <>
                 <FeilmeldingPanel messageId={"startPage.feil.ikkeStøttet"}/>
-                <VerticalSpacer eightPx={true} />
+                <VerticalSpacer eightPx={true}/>
                 <div className="journalpostloader-conflict__container">
-                <Knapp onClick={() => lukkJournalpostOppgave(journalpostId)}>
-                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
-                </Knapp>
+                    <Knapp onClick={() => lukkJournalpostOppgave(journalpostId)}>
+                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                    </Knapp>
                 </div>
-            </div>
+            </>
         );
     }
 
