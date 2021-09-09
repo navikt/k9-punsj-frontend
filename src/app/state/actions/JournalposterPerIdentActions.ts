@@ -1,5 +1,5 @@
 import {IError, IJournalpostInfo} from "../../models/types";
-import {JournalposterPerIdentActionKeys} from "../../models/enums/JournalposterPerIdentActionKeys";
+import {JournalposterPerIdentActionKeys} from "../../models/enums/Journalpost/JournalposterPerIdentActionKeys";
 import {convertResponseToError, get, post} from "../../utils";
 import {ApiPath} from "../../apiConfig";
 import {IHentSoknad} from "../../models/types/RequestBodies";

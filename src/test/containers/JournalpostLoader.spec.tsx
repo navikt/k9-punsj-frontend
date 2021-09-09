@@ -14,21 +14,24 @@ const setupLoader = ({
   journalpost,
   renderOnLoadComplete = () => '',
   getJournalpost = jest.fn(),
+  lukkJournalpostOppgave = jest.fn(),
   journalpostId = '200',
   journalpostRequestError,
   isJournalpostLoading,
-    forbidden,
-    notFound
+  forbidden,
+  notFound
 }: Partial<JournapostLoaderProps>): RenderResult => {
   const loader = render(
     <JournalpostLoaderImpl
       journalpostId={journalpostId}
       renderOnLoadComplete={renderOnLoadComplete}
       getJournalpost={getJournalpost}
+      lukkJournalpostOppgave={lukkJournalpostOppgave}
       journalpost={journalpost}
       journalpostRequestError={journalpostRequestError}
       isJournalpostLoading={isJournalpostLoading}
       forbidden={forbidden}
+      conflict={false}
       notFound={notFound}
     />
   );
@@ -39,77 +42,130 @@ const setupLoader = ({
 };
 
 describe('JournalpostLoader', () => {
-  it('Henter journalpost og viser innhold', () => {
-    const journalpostId = '200';
+    it('Henter journalpost og viser innhold', () => {
+        const journalpostId = '200';
 
-    const testId = 'test-id';
-    const renderedOnLoad = () => <div data-testid={testId} />;
+        const testId = 'test-id';
+        const renderedOnLoad = () => <div data-testid={testId}/>;
 
-    const journalpost = {
-      dokumenter: [
-        {
-          dokumentId: '123',
-        },
-      ],
-      journalpostId,
-      kanSendeInn: true,
-      erSaksbehandler: true,
-    };
+        const journalpost = {
+            dokumenter: [
+                {
+                    dokumentId: '123',
+                },
+            ],
+            journalpostId,
+            kanSendeInn: true,
+            erSaksbehandler: true,
+        };
 
-    const { getByTestId } = setupLoader({
-      journalpost,
-      renderOnLoadComplete: renderedOnLoad,
+        const {getByTestId} = setupLoader({
+            journalpost,
+            renderOnLoadComplete: renderedOnLoad,
+        });
+
+        expect(getByTestId(testId)).toBeDefined();
     });
 
-    expect(getByTestId(testId)).toBeDefined();
-  });
+    it('Viser spinner mens journalpost lastes inn', () => {
+        const journalpostId = '200';
+        const testId = 'test-id';
+        const renderedOnLoad = () => <div data-testid={testId}/>;
 
-  it('Viser spinner mens journalpost lastes inn', () => {
-    const journalpostId = '200';
-    const testId = 'test-id';
-    const renderedOnLoad = () => <div data-testid={testId} />;
+        const journalpost = shallow(
+            <JournalpostLoaderImpl
+                isJournalpostLoading={true}
+                renderOnLoadComplete={renderedOnLoad}
+                journalpostId={journalpostId}
+                getJournalpost={jest.fn()}
+                lukkJournalpostOppgave={jest.fn()}
+                forbidden={false}
+                conflict={false}
+                notFound={false}
+            />
+        );
 
-    const journalpost = shallow(
-      <JournalpostLoaderImpl
-        isJournalpostLoading={true}
-        renderOnLoadComplete={renderedOnLoad}
-        journalpostId={journalpostId}
-        getJournalpost={jest.fn()}
-        forbidden={false}
-        notFound={false}
-      />
-    );
+        expect(journalpost.find('NavFrontendSpinner')).toHaveLength(1);
+    });
 
-    expect(journalpost.find('NavFrontendSpinner')).toHaveLength(1);
-  });
+    it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
+        const journalpostId = '200';
+        const testId = 'test-id';
+        const renderedOnLoad = () => <div data-testid={testId}/>;
 
- it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
-    const journalpostId = '200';
-    const testId = 'test-id';
-    const renderedOnLoad = () => <div data-testid={testId} />;
+        const journalpostIngenDokumenter: IJournalpost = {
+            dokumenter: [],
+            journalpostId,
+            kanSendeInn: true,
+            erSaksbehandler: true,
+        };
 
-    const journalpostIngenDokumenter: IJournalpost = {
-      dokumenter: [],
-      journalpostId,
-      kanSendeInn: true,
-      erSaksbehandler: true,
-    };
+        const journalpost = shallow(
+            <JournalpostLoaderImpl
+                journalpost={journalpostIngenDokumenter}
+                renderOnLoadComplete={renderedOnLoad}
+                journalpostId={journalpostId}
+                getJournalpost={jest.fn()}
+                lukkJournalpostOppgave={jest.fn()}
+                forbidden={false}
+                conflict={false}
+                notFound={false}
+            />
+        );
 
-    const journalpost = shallow(
-      <JournalpostLoaderImpl
-        journalpost={journalpostIngenDokumenter}
-        renderOnLoadComplete={renderedOnLoad}
-        journalpostId={journalpostId}
-        getJournalpost={jest.fn()}
-        forbidden={false}
-        notFound={false}
-      />
-    );
+        const alert = journalpost.find('AlertStripeFeil');
+        expect(alert).toHaveLength(1);
+        expect(alert.childAt(0).prop('id')).toEqual(
+            'startPage.feil.ingendokumenter'
+        );
+    });
 
-    const alert = journalpost.find('AlertStripeFeil');
-    expect(alert).toHaveLength(1);
-    expect(alert.childAt(0).prop('id')).toEqual(
-      'startPage.feil.ingendokumenter'
-    );
-  });
+    it('Viser feilmelding når journalposten ikke stöttes', () => {
+        const journalpostId = '200';
+        const testId = 'test-id';
+        const renderedOnLoad = () => <div data-testid={testId}/>;
+
+        const journalpost = shallow(
+            <JournalpostLoaderImpl
+                renderOnLoadComplete={renderedOnLoad}
+                journalpostId={journalpostId}
+                getJournalpost={jest.fn()}
+                lukkJournalpostOppgave={jest.fn()}
+                forbidden={false}
+                conflict={true}
+                journalpostConflictError={{type: 'punsj://ikke-støttet-journalpost'}}
+                notFound={false}
+            />
+        );
+
+        const felmelding = journalpost.find('FeilmeldingPanel');
+        expect(felmelding).toHaveLength(1);
+        expect(felmelding.prop('messageId')).toEqual('startPage.feil.ikkeStøttet');
+        const knappGåTilLos = journalpost.find('Knapp');
+        expect(knappGåTilLos).toHaveLength(1);
+        expect(knappGåTilLos.find('Memo(FormattedMessage)').prop('id')).toEqual('fordeling.sakstype.SKAL_IKKE_PUNSJES');
+    });
+
+
+    it('Viser feilmelding når SB ikke har tillgang att se journalposten', () => {
+        const journalpostId = '200';
+        const testId = 'test-id';
+        const renderedOnLoad = () => <div data-testid={testId}/>;
+
+        const journalpost = shallow(
+            <JournalpostLoaderImpl
+                renderOnLoadComplete={renderedOnLoad}
+                journalpostId={journalpostId}
+                getJournalpost={jest.fn()}
+                lukkJournalpostOppgave={jest.fn()}
+                forbidden={true}
+                conflict={false}
+                notFound={false}
+            />
+        );
+
+        const felmelding = journalpost.find('FeilmeldingPanel');
+        expect(felmelding).toHaveLength(1);
+        expect(felmelding.prop('messageId')).toEqual('startPage.feil.ikketilgang');
+    });
 });

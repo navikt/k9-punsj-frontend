@@ -11,7 +11,7 @@ import {AlertStripeFeil} from "nav-frontend-alertstriper";
 import {IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState} from "../../models/types";
 import {RootStateType} from "../../state/RootState";
 
-import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
+import {IJournalposterPerIdentState} from "../../models/types/Journalpost/JournalposterPerIdentState";
 import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from "../../state/actions/JournalposterPerIdentActions";
 import {IIdentState} from "../../models/types/IdentState";
 
