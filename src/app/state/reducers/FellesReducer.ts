@@ -12,7 +12,6 @@ import {
 } from "./HentBarn";
 import {IBarn} from "../../models/types/Barn";
 import {IJournalpostConflictResponse} from "../../models/types/Journalpost/IJournalpostConflictResponse";
-import {setSoknadAction, updateSoknadSuccessAction} from "../actions";
 
 export interface IFellesState {
   dedupKey: string;
@@ -113,6 +112,7 @@ export function setJournalpostAction(
 export function getJournalpostLoadAction(): IGetJournalpostLoadAction {
   return { type: Actiontypes.JOURNALPOST_LOAD };
 }
+
 export function getJournalpostErrorAction(
   error: IError
 ): IGetJournalpostErrorAction {
