@@ -9,7 +9,7 @@ import {PunchStep} from 'app/models/enums';
 import {IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState} from 'app/models/types';
 import {setIdentAction, setStepAction} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
-import {getPath} from 'app/utils';
+import {getEnvironmentVariable, getPath} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {
     AlertStripeAdvarsel,
@@ -27,6 +27,7 @@ import {IIdentState} from "../../models/types/IdentState";
 import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
 import {PSBPunchForm} from './PSBPunchForm';
 import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
+import {Hovedknapp, Knapp} from "nav-frontend-knapper";
 
 
 export interface IPunchPageStateProps {
@@ -150,7 +151,7 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
                         <AlertStripeSuksess className="fullfortmelding">
                             Søknaden er sendt til behandling.
                         </AlertStripeSuksess>
-
+                        <Hovedknapp onClick={() => window.location.href = getEnvironmentVariable('K9_LOS_URL')}>{intlHelper(this.props.intl, 'tilbaketilLOS')}</Hovedknapp>
                         {typeof this.props.punchFormState.innsentSoknad !== "undefined" &&
                         <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
                                           intl={this.props.intl}/>}
