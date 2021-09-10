@@ -47,7 +47,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         return (
             <Container style={{ height: '100%' }}>
                 <Row className="justify-content-center align-items-center" style={{ height: '100%' }}>
-                    <Col xs={'auto'}>
+                    <Col xs="auto">
                         <NavFrontendSpinner />
                     </Col>
                 </Row>
@@ -55,12 +55,12 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
-    if (!!notFound) {
-        return <FeilmeldingPanel messageId={'startPage.feil.journalpost'} />;
+    if (notFound) {
+        return <FeilmeldingPanel messageId="startPage.feil.journalpost" />;
     }
 
-    if (!!forbidden) {
-        return <FeilmeldingPanel messageId={'startPage.feil.ikketilgang'} />;
+    if (forbidden) {
+        return <FeilmeldingPanel messageId="startPage.feil.ikketilgang" />;
     }
 
     if (!journalpost) {

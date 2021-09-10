@@ -29,7 +29,7 @@ const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ j
                 .filter((step) => !isNaN(step))
                 .map((step) => (
                     <Route
-                        exact={true}
+                        exact
                         key={`hashroute_${step}`}
                         path={getPath(paths, step)}
                         children={<PunchPage {...{ journalpostid, step, paths }} />}

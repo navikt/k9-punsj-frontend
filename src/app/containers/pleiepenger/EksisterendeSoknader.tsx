@@ -137,14 +137,14 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             const soknadId = søknad.soeknadId;
             const { chosenSoknad } = props.eksisterendeSoknaderState;
             const rowContent = [
-                !!søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                (!!søknad.barn.norskIdent
+                søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
+                (søknad.barn.norskIdent
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
-                <Knapp key={soknadId} mini={true} onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
+                <Knapp key={soknadId} mini onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Knapp>,
             ];
@@ -168,10 +168,10 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     closeButton={false}
                 >
                     <ErDuSikkerModal
-                        melding={'modal.erdusikker.info'}
+                        melding="modal.erdusikker.info"
                         onSubmit={() => chooseSoknad(soknadInfo)}
                         onClose={() => props.closeEksisterendeSoknadAction()}
-                        submitKnappText={'mappe.lesemodus.knapp.velg'}
+                        submitKnappText="mappe.lesemodus.knapp.velg"
                     />
                 </ModalWrapper>
             );

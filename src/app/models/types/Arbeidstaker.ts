@@ -12,7 +12,9 @@ export type OrgOrPers = 'o' | 'p';
 
 export class Arbeidstaker implements Required<IArbeidstaker> {
     arbeidstidInfo: ArbeidstidInfo;
+
     organisasjonsnummer: string | null;
+
     norskIdent: string | null;
 
     constructor(arbeidstaker: IArbeidstaker) {
@@ -42,10 +44,10 @@ export class Arbeidstaker implements Required<IArbeidstaker> {
             return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.org.beskrivelse', {
                 nr: this.organisasjonsnummer,
             });
-        } else if (orgOrPers === 'p' && this.norskIdent && this.norskIdent.length) {
+        } if (orgOrPers === 'p' && this.norskIdent && this.norskIdent.length) {
             return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.pers.beskrivelse', { nr: this.norskIdent });
-        } else {
+        } 
             return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.ingenarbeidsgiver.beskrivelse');
-        }
+        
     }
 }

@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape } from 'react-intl';
-import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
 import { mocked } from 'ts-jest/utils';
+import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 import VisningAvPerioderSoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSoknadKvittering';
 import { formattereTimerForArbeidstakerPerioder } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';

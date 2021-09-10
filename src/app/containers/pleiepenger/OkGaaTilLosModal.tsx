@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import intlHelper from '../../utils/intlUtils';
 
-import { Hovedknapp } from 'nav-frontend-knapper';
 import { getEnvironmentVariable } from '../../utils';
 import './okGaaTilLosModal.less';
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
@@ -14,18 +14,16 @@ interface IOkGaaTilLOsModalProps {
     extraInfo?: string;
 }
 
-const getDate = () => {
-    return moment()
+const getDate = () => moment()
         .add(21, 'days')
         .format('DD.MM.YYYY');
-};
 
 const utledMelding = (mld: string) => {
     if (mld === 'modal.settpaavent.til') {
         return <FormattedMessage id={mld} values={{ dato: getDate() }} />;
-    } else {
+    } 
         return <FormattedMessage id={mld} />;
-    }
+    
 };
 
 class OkGaaTilLosModal extends React.Component<WrappedComponentProps & IOkGaaTilLOsModalProps> {
@@ -33,18 +31,18 @@ class OkGaaTilLosModal extends React.Component<WrappedComponentProps & IOkGaaTil
         const { intl, melding, extraInfo } = this.props;
 
         return (
-            <div className={'ok-gaa-til-los'}>
-                <CheckCircleSvg title={'check'} />
-                <div className={'vl'} />
-                <div className={'info'}>
+            <div className="ok-gaa-til-los">
+                <CheckCircleSvg title="check" />
+                <div className="vl" />
+                <div className="info">
                     <Row>{utledMelding(melding)}</Row>
                     <Row>
-                        <FormattedMessage id={'modal.okgaatillos.tillos'} />
+                        <FormattedMessage id="modal.okgaatillos.tillos" />
                     </Row>
                 </div>
                 <Hovedknapp
-                    className={'okknapp'}
-                    mini={true}
+                    className="okknapp"
+                    mini
                     onClick={() => (window.location.href = getEnvironmentVariable('K9_LOS_URL'))}
                 >
                     {intlHelper(intl, 'modal.okgaatillos.ok')}

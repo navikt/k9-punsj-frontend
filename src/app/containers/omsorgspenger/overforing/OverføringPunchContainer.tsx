@@ -1,8 +1,8 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import OverføringPunchSkjema from './OverføringPunchSkjema';
 import { IOverføringPunchSkjema, validatePunch } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import SkjemaContext from '../../../components/skjema/SkjemaContext';
-import { useDispatch, useSelector } from 'react-redux';
 import { sendInnSkjema } from '../../../state/reducers/omsorgspengeroverførdager/overføringPunchReducer';
 import { RootStateType } from '../../../state/RootState';
 import { Sakstype } from '../../../models/enums';

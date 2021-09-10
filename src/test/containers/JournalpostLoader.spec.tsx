@@ -1,8 +1,8 @@
-import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
 import { render, RenderResult } from '@testing-library/react';
 import React from 'react';
-import { IJournalpost } from '../../app/models/types';
 import { shallow } from 'enzyme';
+import { IJournalpost } from '../../app/models/types';
+import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
 
 jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
@@ -68,7 +68,7 @@ describe('JournalpostLoader', () => {
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
-                isJournalpostLoading={true}
+                isJournalpostLoading
                 renderOnLoadComplete={renderedOnLoad}
                 journalpostId={journalpostId}
                 getJournalpost={jest.fn()}

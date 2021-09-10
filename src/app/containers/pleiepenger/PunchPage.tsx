@@ -97,17 +97,17 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
         const { journalpostid, journalpost, forbidden } = this.props;
         const dokumenter = journalpost?.dokumenter || [];
 
-        if (!!forbidden) {
+        if (forbidden) {
             return (
                 <AlertStripeAdvarsel>
-                    <FormattedMessage id={'søk.jp.forbidden'} values={{ jpid: journalpostid }} />
+                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                 </AlertStripeAdvarsel>
             );
         }
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border={true}>
+                <Panel className="pleiepenger_punch_form" border>
                     <JournalpostPanel />
                     {this.underFnr()}
                 </Panel>

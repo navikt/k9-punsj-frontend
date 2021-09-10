@@ -79,7 +79,7 @@
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
         "build": "node ./src/build/scripts/production-build.js",
         "test": "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --config ./jest.config.json",
-        "lint": "tslint --project ./",
+        "lint": "eslint --fix 'src/**/*.{ts,tsx,js,jsx}'",
         "eject": "react-scripts eject",
         "snyk-protect": "snyk protect"
     },
@@ -127,6 +127,7 @@
         "eslint": "^7.22.0",
         "eslint-config-airbnb": "^18.2.1",
         "eslint-config-prettier": "^8.3.0",
+        "eslint-import-resolver-webpack": "^0.13.1",
         "eslint-plugin-import": "^2.23.4",
         "eslint-plugin-jsx-a11y": "^6.4.1",
         "eslint-plugin-prettier": "^3.4.0",

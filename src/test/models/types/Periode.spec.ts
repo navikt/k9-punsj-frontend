@@ -20,9 +20,9 @@ describe('Periode', () => {
         mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => {
             if (id === 'tidsformat.DATE_SHORT') {
                 return 'DD.MM.YYYY';
-            } else {
+            } 
                 return '';
-            }
+            
         });
 
         return new Periode(periode);

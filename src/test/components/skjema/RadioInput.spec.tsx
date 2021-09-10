@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { By, TestSkjema } from './testskjema';
 import RadioInput from '../../../app/components/skjema/RadioInput';
-import userEvent from '@testing-library/user-event';
 
 describe('<RadioInput>', () => {
     test('rendrer radios for options', () => {

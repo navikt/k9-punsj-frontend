@@ -13,8 +13,7 @@ const JournalPostKopiFelmeldinger: React.FunctionComponent<IOwnProps> = ({
     skalVisesNårJournalpostSomIkkeStottesKopieres,
     fellesState,
     intl,
-}) => {
-    return (
+}) => (
         <>
             {skalVisesNårJournalpostSomIkkeStottesKopieres && fellesState.kopierJournalpostConflict && (
                 <AlertStripeInfo>
@@ -39,6 +38,5 @@ const JournalPostKopiFelmeldinger: React.FunctionComponent<IOwnProps> = ({
             )}
         </>
     );
-};
 
 export default JournalPostKopiFelmeldinger;

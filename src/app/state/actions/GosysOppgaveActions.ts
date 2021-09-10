@@ -37,8 +37,7 @@ export const opprettGosysOppgaveResetAction = (): IOpprettGosysOppgaveResetActio
     type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET,
 });
 
-export const opprettGosysOppgave = (journalpostid: string, norskident: string) => {
-    return (dispatch: any) => {
+export const opprettGosysOppgave = (journalpostid: string, norskident: string) => (dispatch: any) => {
         dispatch(opprettGosysOppgaveRequestAction());
 
         post(
@@ -57,4 +56,3 @@ export const opprettGosysOppgave = (journalpostid: string, norskident: string) =
             }
         );
     };
-};

@@ -16,8 +16,7 @@ interface IProps {
 
 const AvailableLocales: Locale[] = ['nb', 'nn'];
 
-const renderMenuItem = (intl: IntlShape, locale: Locale) => {
-    return (
+const renderMenuItem = (intl: IntlShape, locale: Locale) => (
         <li key={locale}>
             <MenuItem className="languageToggle__menu__item">
                 <div className="languageToggle__button__flag">
@@ -29,7 +28,6 @@ const renderMenuItem = (intl: IntlShape, locale: Locale) => {
             </MenuItem>
         </li>
     );
-};
 
 const LanguageToggle: React.StatelessComponent<IProps & WrappedComponentProps> = ({
     intl,

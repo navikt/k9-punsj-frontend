@@ -4,6 +4,7 @@ import { Input, InputProps } from 'nav-frontend-skjema';
 import { useField } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { fjernIndexFraLabel } from './skjemaUtils';
+
 interface IDateInputProps {
     label?: ReactNode;
     feltnavn: string;

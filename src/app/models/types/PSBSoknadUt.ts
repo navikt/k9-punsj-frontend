@@ -49,25 +49,45 @@ export interface IPSBSoknadUt {
 
 export class PSBSoknadUt implements IPSBSoknadUt {
     soeknadId: string;
+
     soekerId: string;
+
     journalposter: string[];
+
     mottattDato: string;
+
     klokkeslett: string;
+
     barn: Barn | {};
+
     soeknadsperiode: Periode | null;
+
     opptjeningAktivitet: OpptjeningAktivitetUt;
+
     arbeidstid: ArbeidstidUt;
+
     beredskap: Tilleggsinformasjon[];
+
     nattevaak: Tilleggsinformasjon[];
+
     tilsynsordning: Tilsynsordning;
+
     uttak: Uttak[];
+
     utenlandsopphold: UtenlandsOpphold[];
+
     lovbestemtFerie: Periode[];
+
     lovbestemtFerieSomSkalSlettes: Periode[];
+
     omsorg: Omsorg | {};
+
     bosteder: UtenlandsOpphold[];
+
     soknadsinfo: SoknadsInfo;
+
     harInfoSomIkkeKanPunsjes: boolean;
+
     harMedisinskeOpplysninger: boolean;
 
     constructor(soknad: IPSBSoknadUt) {
@@ -97,7 +117,9 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
 export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
     selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
+
     frilanser: FrilanserOpptjening | null;
+
     arbeidstaker: Arbeidstaker[];
 
     constructor(arbeid: IOpptjeningAktivitet) {
@@ -111,7 +133,9 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
 
 export class ArbeidstidUt implements Required<IArbeidstid> {
     arbeidstakerList: Arbeidstaker[];
+
     frilanserArbeidstidInfo: ArbeidstidInfo | null;
+
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | {};
 
     constructor(a: IArbeidstid) {

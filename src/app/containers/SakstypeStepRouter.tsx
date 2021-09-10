@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { useIntl } from 'react-intl';
 import useRedirect from '../hooks/useRedirect';
 import { ISakstypePunch, ISakstypeStep } from '../models/Sakstype';
 import Page from '../components/page/Page';
 import intlHelper from '../utils/intlUtils';
 import PdfVisning from '../components/pdf/PdfVisning';
 import { RootStateType } from '../state/RootState';
-import { connect } from 'react-redux';
-import { useIntl } from 'react-intl';
 import { IDokument } from '../models/types';
 import SkjemaHeader from '../components/skjema/SkjemaHeader';
 import { getPathForValues, setHash } from '../utils';
@@ -70,7 +70,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
 
                             return (
                                 <Route
-                                    exact={true}
+                                    exact
                                     key={`${navn}-${stepName}`}
                                     path={`${punchPath}${getPathForValues(path)}`}
                                     children={getComponent({

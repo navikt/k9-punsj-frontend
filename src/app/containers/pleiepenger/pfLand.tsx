@@ -20,12 +20,11 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => {
-        return (
+    ) => (
             <div className="countryselect">
                 <CountrySelect
                     label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
-                    unselectedoption={'Velg land'}
+                    unselectedoption="Velg land"
                     selectedcountry={periodeinfo.land || ''}
                     onChange={(event) => {
                         updatePeriodeinfoInSoknadState({ land: event.target.value }, false);
@@ -36,5 +35,4 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
                 />
             </div>
         );
-    };
 }

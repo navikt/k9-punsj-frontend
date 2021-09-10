@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import intlHelper from '../../utils/intlUtils';
 
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import VerticalSpacer from '../../components/VerticalSpacer';
 
 interface IErDuSikkerModalProps {
@@ -20,11 +20,11 @@ class ErDuSikkerModal extends React.Component<WrappedComponentProps & IErDuSikke
         return (
             <div className="modal_content">
                 {intlHelper(intl, melding)}
-                <VerticalSpacer sixteenPx={true} />
+                <VerticalSpacer sixteenPx />
                 {extraInfo && <div>{intlHelper(intl, extraInfo)}</div>}
                 <div className="punch_mappemodal_knapperad">
                     <Hovedknapp
-                        mini={true}
+                        mini
                         className="knapp1"
                         onClick={() => {
                             onSubmit();
@@ -33,7 +33,7 @@ class ErDuSikkerModal extends React.Component<WrappedComponentProps & IErDuSikke
                     >
                         {intlHelper(intl, submitKnappText)}
                     </Hovedknapp>
-                    <Knapp mini={true} className="knapp2" onClick={() => onClose()}>
+                    <Knapp mini className="knapp2" onClick={() => onClose()}>
                         {intlHelper(intl, 'skjema.knapp.avbryt')}
                     </Knapp>
                 </div>

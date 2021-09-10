@@ -29,8 +29,7 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     properties,
     perioder,
     lessClassForAdjustment,
-}) => {
-    return (
+}) => (
         <div>
             <div
                 className={classNames(
@@ -38,12 +37,9 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
                 )}
             >
-                {tittel.map((t) => {
-                    return <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>;
-                })}
+                {tittel.map((t) => <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>)}
             </div>
-            {Object.keys(perioder).map((periode) => {
-                return (
+            {Object.keys(perioder).map((periode) => (
                     <div
                         key={uuidv4()}
                         className={classNames(
@@ -54,14 +50,10 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                         <p>{periodToFormattedString(periode)}</p>
 
                         {typeof properties !== 'undefined' &&
-                            properties.map((prop) => {
-                                return <p key={uuidv4()}>{perioder[periode]![prop]}</p>;
-                            })}
+                            properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
                     </div>
-                );
-            })}
+                ))}
         </div>
     );
-};
 
 export default VisningAvPerioderSoknadKvittering;

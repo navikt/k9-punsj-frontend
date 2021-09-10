@@ -27,8 +27,7 @@ const testkomponent: ListeComponent<ITestItem> = (
     updateListeinfoInSoknad: (info: Partial<ITestItem>) => any,
     updateListeinfoInSoknadState: (info: Partial<ITestItem>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string
-) => {
-    return (
+) => (
         <Input
             label=""
             id={testinputid(itemIndex)}
@@ -39,7 +38,6 @@ const testkomponent: ListeComponent<ITestItem> = (
             feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
         />
     );
-};
 
 const initialitemtest: ITestItem = { test: 'cba' };
 

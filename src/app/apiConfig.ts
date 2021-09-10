@@ -3,7 +3,7 @@ import { getEnvironmentVariable } from 'app/utils/envUtils';
 const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
 const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
 const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
-export const URL_API = URL_BACKEND + '/api/k9-punsj';
+export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
 
 export enum ApiPath {
     EKSISTERENDE_SOKNADER_SOK = '/mapper',
@@ -30,5 +30,5 @@ export enum ApiPath {
     K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
 }
 
-export const URL_AUTH_CHECK = URL_BACKEND + '/me';
-export const URL_AUTH_LOGIN = URL_BACKEND + '/login?redirect_uri={uri}';
+export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
+export const URL_AUTH_LOGIN = `${URL_BACKEND}/login?redirect_uri={uri}`;

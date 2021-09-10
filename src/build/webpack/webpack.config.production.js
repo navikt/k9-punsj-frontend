@@ -1,6 +1,6 @@
-const webpackConfig = require('./webpack.config.global.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const webpackConfig = require('./webpack.config.global.js');
 
 webpackConfig.mode = 'production';
 

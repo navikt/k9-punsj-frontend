@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
     Innsendingsstatus,
     IOverføringPunchSkjema,
@@ -6,7 +7,6 @@ import {
 import { convertResponseToError, post } from '../../../utils';
 import { ApiPath } from '../../../apiConfig';
 import { RootStateType } from '../../RootState';
-import { Dispatch } from 'redux';
 import { IError } from '../../../models/types';
 import { resetDedupKey } from '../FellesReducer';
 

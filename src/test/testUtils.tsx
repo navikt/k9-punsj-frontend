@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 import { IntlShape } from 'react-intl';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { rootReducer, RootStateType } from '../app/state/RootState';
-import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { render } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
+import IntlProvider from '../app/components/intl-provider/IntlProvider';
+import { rootReducer, RootStateType } from '../app/state/RootState';
 
 // @ts-ignore
 export const testIntl: IntlShape = {

@@ -5,11 +5,11 @@ import Panel from 'nav-frontend-paneler';
 import { Resizable } from 're-resizable';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { ToggleGruppe } from 'nav-frontend-toggle';
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
 import { apiUrl, setQueryInHash } from '../../utils';
-import { ToggleGruppe } from 'nav-frontend-toggle';
 import './pdfVisning.less';
 
 const goToDok = (nr: number) => {
@@ -75,7 +75,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
                 {dokumenter.length > 1 && (
                     <div className="fleredokumenter">
                         <ToggleGruppe
-                            kompakt={true}
+                            kompakt
                             defaultToggles={dokumenter.map((_, i) => ({
                                 children: (
                                     <FormattedMessage

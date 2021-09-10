@@ -5,8 +5,7 @@ import { RedigeringLoaderImpl } from './RedigeringLoader';
 import { Sakstyper } from '../SakstypeImpls';
 import SakstypeStepRouter from '../SakstypeStepRouter';
 
-const RedigeringRouter: React.FunctionComponent = () => {
-    return (
+const RedigeringRouter: React.FunctionComponent = () => (
         <RedigeringLoaderImpl
             renderOnLoadComplete={() => (
                 <HashRouter>
@@ -29,6 +28,5 @@ const RedigeringRouter: React.FunctionComponent = () => {
             )}
         />
     );
-};
 
 export default RedigeringRouter;

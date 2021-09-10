@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mustacheExpress = require('mustache-express');
-var path = require('path');
+const path = require('path');
 
 const configureDevServer = (decoratorFragments) => ({
     before: (app) => {

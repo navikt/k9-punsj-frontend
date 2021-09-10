@@ -1,12 +1,12 @@
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
-import { IPeriode } from '../../models/types/Periode';
-import BinSvg from '../../assets/SVG/BinSVG';
-import intlHelper from '../../utils/intlUtils';
 import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { Row } from 'react-bootstrap';
+import { IPeriode } from '../../models/types/Periode';
+import BinSvg from '../../assets/SVG/BinSVG';
+import intlHelper from '../../utils/intlUtils';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 
 export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
@@ -31,7 +31,7 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const periods = !!props.periods ? props.periods : [];
+    const periods = props.periods ? props.periods : [];
     const { intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
@@ -59,10 +59,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     };
 
     return (
-        <Panel className={'periodepanel'}>
+        <Panel className="periodepanel">
             {periods.map((p, i) => (
-                <Row noGutters={true} key={i}>
-                    <div className={'periodepanel-input'}>
+                <Row noGutters key={i}>
+                    <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}
                             intl={intl}
@@ -82,7 +82,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         />
                         <div
                             id="slett"
-                            className={!!getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
+                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
                             role="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);
@@ -92,8 +92,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             }}
                             tabIndex={0}
                         >
-                            <div className={'slettIcon'}>
-                                <BinSvg title={'fjern'} />
+                            <div className="slettIcon">
+                                <BinSvg title="fjern" />
                             </div>
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                         </div>
@@ -101,10 +101,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                 </Row>
             ))}
             {kanHaFlere && (
-                <Row noGutters={true}>
+                <Row noGutters>
                     <div
                         id="leggtilperiode"
-                        className={'leggtilperiode'}
+                        className="leggtilperiode"
                         role="button"
                         onClick={() => {
                             const newArray: IPeriode[] = addItem();
@@ -114,8 +114,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         }}
                         tabIndex={0}
                     >
-                        <div className={'leggtilperiodeIcon'}>
-                            <AddCircleSvg title={'leggtil'} />
+                        <div className="leggtilperiodeIcon">
+                            <AddCircleSvg title="leggtil" />
                         </div>
                         {intlHelper(intl, props.textLeggTil || 'skjema.periodepanel.legg_til')}
                     </div>

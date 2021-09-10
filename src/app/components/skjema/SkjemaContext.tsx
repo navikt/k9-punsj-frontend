@@ -21,8 +21,8 @@ const SkjemaContext: React.FunctionComponent<ISkjemaContext> = ({
         <Formik
             onSubmit={onSubmitCallback}
             initialValues={initialValues}
-            validateOnChange={true}
-            validateOnBlur={true}
+            validateOnChange
+            validateOnBlur
             validate={validerSkjema(intl)}
         >
             {children}

@@ -2,6 +2,7 @@ import React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import './soknadKvittering.less';
+import countries from 'i18n-iso-countries';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formatereTekstMedTimerOgMinutter,
@@ -10,7 +11,6 @@ import {
     periodToFormattedString,
 } from '../../../utils';
 import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
-import countries from 'i18n-iso-countries';
 import { ICountry } from '../../../components/country-select/CountrySelect';
 import {
     IPSBSoknadKvittering,
@@ -34,9 +34,7 @@ export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: an
     return false;
 };
 
-const sjekkHvisPerioderEksisterer = (property: string, object: any) => {
-    return sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
-};
+const sjekkHvisPerioderEksisterer = (property: string, object: any) => sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
 const formattereLandTilNavnIObjekt = (
     perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
@@ -86,26 +84,22 @@ export const formattereDatoIArray = (dato: number[]) => {
     return formatertDato.join('');
 };
 
-export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => {
-    return Object.entries(perioder).reduce((acc, [key, value]) => {
-        if (!!value.skalHaFerie) {
+export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => Object.entries(perioder).reduce((acc, [key, value]) => {
+        if (value.skalHaFerie) {
             acc[key] = value;
         }
         return acc;
     }, {});
-};
 
-export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => {
-    return Object.entries(perioder).reduce((acc, [key, value]) => {
+export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => Object.entries(perioder).reduce((acc, [key, value]) => {
         if (!value.skalHaFerie) {
             acc[key] = value;
         }
         return acc;
     }, {});
-};
 
 const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
-    const ytelse = response.ytelse;
+    const {ytelse} = response;
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
@@ -157,7 +151,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{intlHelper(intl, 'skjema.mottakelsesdato') + ': '}</b>
+                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')  }: `}</b>
                         {`${periodToFormattedString(
                             response.mottattDato.substr(0, 10)
                         )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
@@ -207,7 +201,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}</h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
+                        <b>{`${intlHelper(intl, 'skjema.relasjontilbarnet')  }: `}</b>
                         {ytelse.omsorg.relasjonTilBarnet === 'ANNET'
                             ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}`
                             : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) +
@@ -230,12 +224,12 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                                     <>
                                         <p className={classNames('soknadKvitteringUnderTittel')}>
                                             <b>
-                                                {intlHelper(
+                                                {`${intlHelper(
                                                     intl,
                                                     skalOrgNummerVises
                                                         ? 'skjema.arbeid.arbeidstaker.orgnr'
                                                         : 'skjema.arbeid.arbeidstaker.ident'
-                                                ) + ': '}
+                                                )  }: `}
                                             </b>
                                             {`${
                                                 skalOrgNummerVises
@@ -268,7 +262,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                             {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser) &&
                                 ytelse.opptjeningAktivitet.frilanser?.startdato?.length! > 0 && (
                                     <p>
-                                        <b>{intlHelper(intl, 'skjema.frilanserdato') + ' '}</b>
+                                        <b>{`${intlHelper(intl, 'skjema.frilanserdato')  } `}</b>
                                         {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato!)}
                                     </p>
                                 )}
@@ -280,7 +274,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                                 ) &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length! > 0 && (
                                     <p>
-                                        <b>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' '}</b>
+                                        <b>{`${intlHelper(intl, 'skjema.frilanserdato.slutt')  } `}</b>
                                         {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}
                                     </p>
                                 )}
@@ -345,7 +339,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                         perioder={formattereTimerOgMinutterForOmsorgstilbudPerioder(ytelse.tilsynsordning.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.omsorgstilbud.gjennomsnittlig']}
                         properties={['etablertTilsynTimerPerDag']}
-                        lessClassForAdjustment={'visningAvPerioderOmsorgstilbud'}
+                        lessClassForAdjustment="visningAvPerioderOmsorgstilbud"
                     />
                 </div>
             )}
@@ -356,7 +350,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                     <hr className={classNames('linje')} />
                     {visBeredskap && (
                         <>
-                            <h4 className={'soknadKvitteringUnderTittel'}>
+                            <h4 className="soknadKvitteringUnderTittel">
                                 {intlHelper(intl, 'skjema.beredskap.overskrift')}
                             </h4>
                             <VisningAvPerioderSoknadKvittering
@@ -364,14 +358,14 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                                 perioder={ytelse.beredskap.perioder}
                                 tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
                                 properties={['tilleggsinformasjon']}
-                                lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
+                                lessClassForAdjustment="visningAvPerioderSoknadBeredskap"
                             />
                         </>
                     )}
 
                     {visNattevak && (
                         <div>
-                            <h4 className={'soknadKvitteringUnderTittel'}>
+                            <h4 className="soknadKvitteringUnderTittel">
                                 {intlHelper(intl, 'skjema.nattevaak.overskrift')}
                             </h4>
                             <VisningAvPerioderSoknadKvittering
@@ -379,7 +373,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                                 perioder={ytelse.nattevåk.perioder}
                                 tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
                                 properties={['tilleggsinformasjon']}
-                                lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
+                                lessClassForAdjustment="visningAvPerioderSoknadBeredskap"
                             />
                         </div>
                     )}
@@ -404,7 +398,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
+                        <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')  }: `}</b>
                         {`${
                             ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null &&
                             ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger
@@ -413,7 +407,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                         }`}
                     </p>
                     <p>
-                        <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
+                        <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')  }: `}</b>
                         {`${
                             ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null &&
                             ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes

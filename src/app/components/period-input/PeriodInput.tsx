@@ -33,18 +33,18 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
 
     const renderDato = (property: string) => {
         if (periode?.[property] && periode?.[property].length) return periode?.[property];
-        else if (typeof initialValues !== 'undefined' && typeof initialValues[property] !== 'undefined')
+        if (typeof initialValues !== 'undefined' && typeof initialValues[property] !== 'undefined')
             return initialValues?.[property];
-        else return '';
+        return '';
     };
 
     return (
         <SkjemaGruppe feil={props.errorMessage} className={classNames('period-input', props.className)}>
             <Container>
-                <Row noGutters={true}>
+                <Row noGutters>
                     <Input
                         id={props.inputIdFom}
-                        bredde={'M'}
+                        bredde="M"
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         className="bold-label"
@@ -57,7 +57,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     />
                     <Input
                         id={props.inputIdTom}
-                        bredde={'M'}
+                        bredde="M"
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.tom')}
                         className="right"

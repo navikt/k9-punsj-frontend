@@ -8,7 +8,9 @@ export interface ISoknadSvar {
 
 export class SoknadSvar implements ISoknadSvar {
     søker: string;
+
     fagsakTypeKode: string;
+
     søknader: PSBSoknad[];
 
     constructor(svar: ISoknadSvar) {

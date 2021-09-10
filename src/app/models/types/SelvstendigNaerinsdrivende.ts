@@ -1,5 +1,5 @@
-import intlHelper from '../../utils/intlUtils';
 import { IntlShape } from 'react-intl';
+import intlHelper from '../../utils/intlUtils';
 import { IPeriode, Periode } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 
@@ -20,16 +20,27 @@ export interface ISelvstendigNaerinsdrivende {
 
 export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvstendigNaerinsdrivende>> {
     periode: Periode;
+
     virksomhetstyper: string[];
+
     registrertIUtlandet: boolean;
+
     landkode: string | null;
+
     regnskapsførerNavn: string | null;
+
     regnskapsførerTlf: string | null;
+
     bruttoInntekt: string | null;
+
     erNyoppstartet: boolean;
+
     erVarigEndring: boolean;
+
     endringDato: string | null;
+
     endringInntekt: string | null;
+
     endringBegrunnelse: string | null;
 
     constructor(selvstendigNaeringsdrivende: Periodeinfo<ISelvstendigNaerinsdrivende>) {

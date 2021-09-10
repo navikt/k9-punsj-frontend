@@ -40,7 +40,7 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
     const { authState, locale } = props;
 
-    if (!!authState.error) {
+    if (authState.error) {
         return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
     }
 
@@ -48,17 +48,17 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
         if (!authState.redirectUrl) {
             props.checkAuth();
             return null;
-        } else {
+        } 
             window.location.replace(authState.redirectUrl);
             return null;
-        }
+        
     }
 
     if (authState.isLoading) {
         return (
             <Container>
                 <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
-                    <Col xs={'auto'}>
+                    <Col xs="auto">
                         <NavFrontendSpinner />
                     </Col>
                 </Row>

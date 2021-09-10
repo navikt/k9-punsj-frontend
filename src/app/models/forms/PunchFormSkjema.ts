@@ -1,6 +1,6 @@
-import { fødselsnummervalidator, gyldigDato, IFeltValidator, påkrevd, validerSkjema } from '../../rules/valideringer';
 import { IntlShape } from 'react-intl';
 import { useFormikContext } from 'formik';
+import { fødselsnummervalidator, gyldigDato, IFeltValidator, påkrevd, validerSkjema } from '../../rules/valideringer';
 import { IOverføringPunchSkjema } from './omsorgspenger/overføring/PunchSkjema';
 
 export interface IPunchFormSkjema {

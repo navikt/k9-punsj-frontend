@@ -6,10 +6,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 
+import logger from 'redux-logger';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
 import { Locale } from './models/types';
-import logger from 'redux-logger';
 import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
 import './styles/globalStyles.less';

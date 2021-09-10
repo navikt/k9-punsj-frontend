@@ -6,7 +6,7 @@ export interface ISakstypeDefault {
     navn: Sakstype;
 }
 
-export interface ISakstypeOmfordeling extends ISakstypeDefault {}
+export type ISakstypeOmfordeling = ISakstypeDefault
 
 export interface ISakstypeComponentProps {
     journalpostid?: string;

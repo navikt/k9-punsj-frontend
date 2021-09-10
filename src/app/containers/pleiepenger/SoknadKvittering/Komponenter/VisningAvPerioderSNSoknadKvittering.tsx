@@ -14,8 +14,7 @@ interface IOwnProps {
     countryList: ICountry[];
 }
 
-const formaterTypeVirksomhet = (virksomheter: string[]) => {
-    return virksomheter.map((type) => {
+const formaterTypeVirksomhet = (virksomheter: string[]) => virksomheter.map((type) => {
         switch (type) {
             case 'FISKE':
                 return Virksomhetstyper.FISKE;
@@ -27,37 +26,33 @@ const formaterTypeVirksomhet = (virksomheter: string[]) => {
                 return Virksomhetstyper.ANNEN;
         }
     });
-};
 
-const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, perioder, countryList }) => {
-    return (
+const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, perioder, countryList }) => (
         <div>
-            {perioder.map((SN) => {
-                return Object.keys(SN.perioder).map((periode) => {
-                    return (
+            {perioder.map((SN) => Object.keys(SN.perioder).map((periode) => (
                         <div key={uuidv4()}>
                             {sjekkPropertyEksistererOgIkkeErNull('organisasjonsnummer', SN) && (
                                 <p>
-                                    <b>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr') + ': '}</b>
+                                    <b>{`${intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')  }: `}</b>
                                     {SN.organisasjonsnummer}
                                 </p>
                             )}
 
                             {sjekkPropertyEksistererOgIkkeErNull('virksomhetNavn', SN) && (
                                 <p>
-                                    <b>{intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn') + ' '}</b>
+                                    <b>{`${intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')  } `}</b>
                                     {SN.virksomhetNavn}
                                 </p>
                             )}
 
                             <p>
-                                <b>{intlHelper(intl, 'skjema.arbeid.sn.når') + ' '}</b>
+                                <b>{`${intlHelper(intl, 'skjema.arbeid.sn.når')  } `}</b>
                                 {periodToFormattedString(periode)}
                             </p>
                             {sjekkPropertyEksistererOgIkkeErNull('virksomhetstyper', SN.perioder[periode]) &&
                                 SN.perioder[periode].virksomhetstyper.length > 0 && (
                                     <p>
-                                        <b>{intlHelper(intl, 'skjema.arbeid.sn.type') + ': '}</b>
+                                        <b>{`${intlHelper(intl, 'skjema.arbeid.sn.type')  }: `}</b>
                                         {formaterTypeVirksomhet(SN.perioder[periode].virksomhetstyper).map(
                                             (virksomhetstype, index) => (
                                                 <span key={uuidv4()}>
@@ -72,14 +67,14 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
 
                             {sjekkPropertyEksistererOgIkkeErNull('registrertIUtlandet', SN.perioder[periode]) && (
                                 <p>
-                                    <b>{intlHelper(intl, 'skjema.sn.registrertINorge') + ' '}</b>
+                                    <b>{`${intlHelper(intl, 'skjema.sn.registrertINorge')  } `}</b>
                                     {`${SN.perioder[periode].registrertIUtlandet ? 'Nei' : 'Ja'}`}
                                 </p>
                             )}
 
                             {sjekkPropertyEksistererOgIkkeErNull('landkode', SN.perioder[periode]) && (
                                 <p>
-                                    <b>{intlHelper(intl, 'skjema.sn.registrertLand') + ' '}</b>
+                                    <b>{`${intlHelper(intl, 'skjema.sn.registrertLand')  } `}</b>
                                     {formattereLandTilNavn(SN.perioder[periode].landkode!, countryList)}
                                 </p>
                             )}
@@ -87,13 +82,13 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                             {sjekkPropertyEksistererOgIkkeErNull('erVarigEndring', SN.perioder[periode]) && (
                                 <>
                                     <p>
-                                        <b>{intlHelper(intl, 'skjema.sn.varigendring') + ' '}</b>
+                                        <b>{`${intlHelper(intl, 'skjema.sn.varigendring')  } `}</b>
                                         {`${SN.perioder[periode].erVarigEndring ? 'Ja' : 'Nei'}`}
                                     </p>
 
                                     {sjekkPropertyEksistererOgIkkeErNull('endringDato', SN.perioder[periode]) && (
                                         <p>
-                                            <b>{intlHelper(intl, 'skjema.sn.varigendringdato') + ' '}</b>
+                                            <b>{`${intlHelper(intl, 'skjema.sn.varigendringdato')  } `}</b>
                                             {formattereDatoIArray(SN.perioder[periode].endringDato)}
                                         </p>
                                     )}
@@ -103,7 +98,7 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                                         SN.perioder[periode]
                                     ) && (
                                         <p>
-                                            <b>{intlHelper(intl, 'skjema.sn.endringbegrunnelse') + ': '}</b>
+                                            <b>{`${intlHelper(intl, 'skjema.sn.endringbegrunnelse')  }: `}</b>
                                             {SN.perioder[periode].endringBegrunnelse}
                                         </p>
                                     )}
@@ -113,12 +108,12 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                             {sjekkPropertyEksistererOgIkkeErNull('bruttoInntekt', SN.perioder[periode]) && (
                                 <p>
                                     <b>
-                                        {intlHelper(
+                                        {`${intlHelper(
                                             intl,
-                                            !!SN.perioder[periode].erVarigEndring
+                                            SN.perioder[periode].erVarigEndring
                                                 ? 'skjema.sn.endringinntekt'
                                                 : 'skjema.sn.bruttoinntekt'
-                                        ) + ': '}
+                                        )  }: `}
                                     </b>
                                     {SN.perioder[periode].bruttoInntekt}
                                 </p>
@@ -126,23 +121,20 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
 
                             {sjekkPropertyEksistererOgIkkeErNull('regnskapsførerNavn', SN.perioder[periode]) && (
                                 <p>
-                                    <b>{intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn') + ': '}</b>
+                                    <b>{`${intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')  }: `}</b>
                                     {SN.perioder[periode].regnskapsførerNavn}
                                 </p>
                             )}
 
                             {sjekkPropertyEksistererOgIkkeErNull('regnskapsførerTlf', SN.perioder[periode]) && (
                                 <p>
-                                    <b>{intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf') + ': '}</b>
+                                    <b>{`${intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')  }: `}</b>
                                     {SN.perioder[periode].regnskapsførerTlf}
                                 </p>
                             )}
                         </div>
-                    );
-                });
-            })}
+                    )))}
         </div>
     );
-};
 
 export default VisningAvPerioderSNSoknadKvittering;

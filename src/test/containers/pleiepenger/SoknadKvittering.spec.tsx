@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape } from 'react-intl';
+import { mocked } from 'ts-jest/utils';
 import SoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
-import { mocked } from 'ts-jest/utils';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');

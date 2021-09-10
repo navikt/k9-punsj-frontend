@@ -1,6 +1,6 @@
 import React from 'react';
-import SkjemaContext from '../../../app/components/skjema/SkjemaContext';
 import { Form, FormikErrors } from 'formik';
+import SkjemaContext from '../../../app/components/skjema/SkjemaContext';
 import TestIntlProvider from '../intl/TestIntlProvider';
 
 export enum By {
@@ -32,8 +32,7 @@ export const TestSkjema: React.FunctionComponent<ITestSkjemaProps> = ({
     initialValues,
     valider = () => ({}),
     children,
-}) => {
-    return (
+}) => (
         <TestIntlProvider>
             <SkjemaContext
                 initialValues={{
@@ -47,4 +46,3 @@ export const TestSkjema: React.FunctionComponent<ITestSkjemaProps> = ({
             </SkjemaContext>
         </TestIntlProvider>
     );
-};

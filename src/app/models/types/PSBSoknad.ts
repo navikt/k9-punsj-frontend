@@ -39,25 +39,45 @@ export interface IPSBSoknad {
 
 export class PSBSoknad implements IPSBSoknad {
     soeknadId: string;
+
     soekerId: string;
+
     journalposter: Set<string>;
+
     mottattDato: string;
+
     klokkeslett: string;
+
     barn: Barn;
+
     soeknadsperiode: Periode | null;
+
     opptjeningAktivitet: OpptjeningAktivitet;
+
     arbeidstid: Arbeidstid;
+
     beredskap: Tilleggsinformasjon[];
+
     nattevaak: Tilleggsinformasjon[];
+
     tilsynsordning: Tilsynsordning;
+
     uttak: Uttak[];
+
     utenlandsopphold: UtenlandsOpphold[];
+
     lovbestemtFerie: Periode[];
+
     lovbestemtFerieSomSkalSlettes: Periode[];
+
     omsorg: Omsorg;
+
     bosteder: UtenlandsOpphold[];
+
     soknadsinfo: SoknadsInfo;
+
     harInfoSomIkkeKanPunsjes: boolean;
+
     harMedisinskeOpplysninger: boolean;
 
     constructor(soknad: IPSBSoknad) {
@@ -93,7 +113,9 @@ export interface IOpptjeningAktivitet {
 
 export class OpptjeningAktivitet implements IOpptjeningAktivitet {
     selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
+
     frilanser: FrilanserOpptjening | null;
+
     arbeidstaker: Arbeidstaker[];
 
     constructor(arbeid: IOpptjeningAktivitet) {
@@ -113,7 +135,9 @@ export interface IArbeidstid {
 
 export class Arbeidstid implements Required<IArbeidstid> {
     arbeidstakerList: Arbeidstaker[];
+
     frilanserArbeidstidInfo: ArbeidstidInfo | null;
+
     selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | null;
 
     constructor(a: IArbeidstid) {
@@ -145,7 +169,9 @@ export interface ISelvstendigNaeringsdrivendeOpptjening {
 
 export class SelvstendigNaeringsdrivendeOpptjening implements Required<ISelvstendigNaeringsdrivendeOpptjening> {
     virksomhetNavn: string;
+
     organisasjonsnummer: string;
+
     info: SelvstendigNaerinsdrivende | null;
 
     constructor(s: ISelvstendigNaeringsdrivendeOpptjening) {
@@ -162,6 +188,7 @@ export interface ISoknadsInfo {
 
 export class SoknadsInfo implements ISoknadsInfo {
     samtidigHjemme: boolean | null;
+
     harMedsøker: boolean | null;
 
     constructor(s: ISoknadsInfo) {
@@ -193,6 +220,7 @@ export interface IOmsorg {
 
 export class Omsorg implements Required<IOmsorg> {
     relasjonTilBarnet: string;
+
     beskrivelseAvOmsorgsrollen: string;
 
     constructor(omsorg: IOmsorg) {
@@ -208,7 +236,9 @@ export interface IUttak {
 
 export class Uttak implements Required<Periodeinfo<IUttak>> {
     periode: Periode;
+
     etablertTilsynTimerPerDag: string;
+
     constructor(tilsynsordning: Periodeinfo<IUttak>) {
         this.periode = new Periode(tilsynsordning.periode || {});
         this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
@@ -222,6 +252,7 @@ export interface IBarn {
 
 export class Barn implements Required<IBarn> {
     norskIdent: string;
+
     foedselsdato: string;
 
     constructor(barn: IBarn) {
@@ -241,6 +272,7 @@ export interface ITilleggsinformasjon {
 
 export class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>> {
     periode: Periode;
+
     tilleggsinformasjon: string;
 
     constructor(periodeinfo: Periodeinfo<ITilleggsinformasjon>) {
@@ -267,7 +299,9 @@ export interface IUtenlandsOpphold {
 
 export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>> {
     periode: Periode;
+
     land: string;
+
     årsak: string;
 
     constructor(periodeinfo: Periodeinfo<IUtenlandsOpphold>) {

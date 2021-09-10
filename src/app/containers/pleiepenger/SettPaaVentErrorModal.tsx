@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Knapp } from 'nav-frontend-knapper';
 import intlHelper from '../../utils/intlUtils';
 
-import { Knapp } from 'nav-frontend-knapper';
 import './okGaaTilLosModal.less';
 import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
 
@@ -15,10 +15,10 @@ class SettPaaVentErrorModal extends React.Component<WrappedComponentProps & ISet
         const { intl, close } = this.props;
 
         return (
-            <div className={'sett-paa-vent-ok'}>
-                <FeilCircleSvg title={'check'} />
-                <div className={'infoFeil'}>{intlHelper(intl, 'modal.settpaavent.feil')}</div>
-                <Knapp mini={true} onClick={() => close()}>
+            <div className="sett-paa-vent-ok">
+                <FeilCircleSvg title="check" />
+                <div className="infoFeil">{intlHelper(intl, 'modal.settpaavent.feil')}</div>
+                <Knapp mini onClick={() => close()}>
                     {intlHelper(intl, 'modal.settpaavent.ok')}
                 </Knapp>
             </div>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { TestSkjema } from './testskjema';
 import NumberInput from '../../../app/components/skjema/NumberInput';
-import userEvent from '@testing-library/user-event';
 
 describe('<NumberInput>', () => {
     const initAlder = 4;

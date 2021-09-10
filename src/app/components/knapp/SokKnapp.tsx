@@ -10,7 +10,7 @@ interface ISokKnappProps {
 }
 
 const SokKnapp: React.FunctionComponent<ISokKnappProps> = ({ onClick, tekstId, disabled }) => (
-    <Hovedknapp onClick={() => onClick()} mini={true} className="sokknapp" disabled={disabled}>
+    <Hovedknapp onClick={() => onClick()} mini className="sokknapp" disabled={disabled}>
         <FormattedMessage id={tekstId} />
     </Hovedknapp>
 );

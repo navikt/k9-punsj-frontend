@@ -10,9 +10,9 @@ export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     intl: any
 ) => {
     if (annenIdent && skalViseFeilmelding(annenIdent)) return intlHelper(intl, 'ident.feil.ugyldigident');
-    else if (annenIdent && sokerIdent && annenIdent.length > 0 && annenIdent === sokerIdent)
+    if (annenIdent && sokerIdent && annenIdent.length > 0 && annenIdent === sokerIdent)
         return intlHelper(intl, 'ident.feil.annenSøkerJournalkopiSoker');
-    else if (annenIdent && barnIdent && annenIdent.length > 0 && annenIdent === barnIdent)
+    if (annenIdent && barnIdent && annenIdent.length > 0 && annenIdent === barnIdent)
         return intlHelper(intl, 'ident.feil.annenSøkerJournalkopiBarn');
-    else return undefined;
+    return undefined;
 };

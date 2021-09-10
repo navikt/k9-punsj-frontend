@@ -12,7 +12,7 @@ describe('<InnsendingModal>', () => {
         const { getByRole } = renderWithIntl(
             <InnsendingModal
                 innsendingsstatus={Innsendingsstatus.SenderInn}
-                vis={true}
+                vis
                 onRequestClose={() => undefined}
             />
         );

@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { TestSkjema } from './testskjema';
 import CheckboxInput from '../../../app/components/skjema/CheckboxInput';
-import userEvent from '@testing-library/user-event';
 
 describe('<CheckboxInput>', () => {
     test('rendrer checkbox', () => {

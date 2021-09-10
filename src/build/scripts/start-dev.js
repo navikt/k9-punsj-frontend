@@ -1,8 +1,8 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const path = require('path');
 const webpackConfig = require('../webpack/webpack.config.dev');
 const configureDevServer = require('../webpack/devserver.config');
-const path = require('path');
 const createEnvSettingsFile = require('./envSettings');
 
 require('dotenv').config();

@@ -10,6 +10,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import { openEksisterendeSoknadAction, chooseEksisterendeSoknadAction } from 'app/state/actions';
 import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
 import { setIdentSokAction, setStepSokAction } from '../../state/actions/SoknaderSokActions';
 import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
@@ -21,7 +22,6 @@ import {
     setIdentAction,
     undoSearchForSoknaderAction,
 } from '../../state/actions';
-import { openEksisterendeSoknadAction, chooseEksisterendeSoknadAction } from 'app/state/actions';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 
 export interface ISoknaderSokStateProps {
@@ -64,9 +64,7 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
         { step: PunchStep.COMPLETED, path: `$/pleiepenger/fullfort` },
     ];
 
-    const getPunchPath = (step: PunchStep, values?: any) => {
-        return getPath(paths, step, values, undefined);
-    };
+    const getPunchPath = (step: PunchStep, values?: any) => getPath(paths, step, values, undefined);
 
     React.useEffect(() => {
         props.setIdentAction(ident);
@@ -80,7 +78,7 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
 
     if (
         eksisterendeSoknaderState.eksisterendeSoknaderRequestError &&
-        eksisterendeSoknaderState.eksisterendeSoknaderRequestError!!.status === 403
+        eksisterendeSoknaderState.eksisterendeSoknaderRequestError!.status === 403
     ) {
         return (
             <>
@@ -121,22 +119,22 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
     function showSoknader() {
         const rows = [];
 
-        for (const s of soknader!!) {
+        for (const s of soknader!) {
             const søknad = new PSBSoknad(s);
             const soknadId = s.soeknadId as string;
             const { chosenSoknad } = props.eksisterendeSoknaderState;
             const fom = søknad.soeknadsperiode?.fom || '';
             const tom = søknad.soeknadsperiode?.tom || '';
             const rowContent = [
-                !!søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
+                søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 SoknadType.PSB,
-                (!!søknad.barn.norskIdent
+                (søknad.barn.norskIdent
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
-                !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
-                !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
-                <Knapp key={soknadId} mini={true} onClick={() => chooseSoknad(s)}>
+                fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
+                tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
+                <Knapp key={soknadId} mini onClick={() => chooseSoknad(s)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Knapp>,
             ];

@@ -1,7 +1,7 @@
 import Panel from 'nav-frontend-paneler';
+import React from 'react';
 import FlexRow from '../flexgrid/FlexRow';
 import LabelValue from '../skjema/LabelValue';
-import React from 'react';
 import './journalpostPanel.less';
 import intlHelper from '../../utils/intlUtils';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
@@ -22,17 +22,15 @@ class JournalpostPanelComponent extends React.Component<WrappedComponentProps & 
         const { ident1, ident2 } = this.props.identState;
 
         return (
-            <Panel border={true} className={'journalpostpanel'}>
-                <FlexRow wrap={true} childrenMargin={'medium'}>
+            <Panel border className="journalpostpanel">
+                <FlexRow wrap childrenMargin="medium">
                     <LabelValue labelTextId="journalpost.id" value={journalpost?.journalpostId} retning="horisontal" />
 
                     {fordelingState.erIdent1Bekreftet && (
                         <LabelValue
                             labelTextId="journalpost.norskIdent"
                             value={
-                                ident1
-                                    ? ident1
-                                    : journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
+                                ident1 || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                             }
                             retning="horisontal"
                         />

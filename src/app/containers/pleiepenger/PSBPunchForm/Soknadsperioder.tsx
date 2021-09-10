@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import intlHelper from '../../../utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import Panel from 'nav-frontend-paneler';
+import { useSelector } from 'react-redux';
+import intlHelper from '../../../utils/intlUtils';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import BinSvg from '../../../assets/SVG/BinSVG';
-import Panel from 'nav-frontend-paneler';
 import { IPeriode, IPSBSoknad } from '../../../models/types';
 import './soknadsperioder.less';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { useSelector } from 'react-redux';
 import { RootStateType } from '../../../state/RootState';
 
 interface IOwnProps {
@@ -60,12 +60,12 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
 
         if (typeof valideringsFeilmelding !== 'undefined') return valideringsFeilmelding;
-        else if (typeof feilFunnitInnenValideringMelding !== 'undefined') return feilFunnitInnenValideringMelding;
-        else return undefined;
+        if (typeof feilFunnitInnenValideringMelding !== 'undefined') return feilFunnitInnenValideringMelding;
+        return undefined;
     };
 
     return (
-        <Panel className={'eksiterendesoknaderpanel'}>
+        <Panel className="eksiterendesoknaderpanel">
             <h3>{intlHelper(intl, 'skjema.soknadsperiode')}</h3>
             {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
             {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
@@ -73,18 +73,18 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
                     {punchFormState.perioder.map((p, i) => (
-                        <div key={i} className={'datocontainer'}>
-                            <CalendarSvg title={'calendar'} />
-                            <div className={'periode'}>{generateDateString(p)}</div>
+                        <div key={i} className="datocontainer">
+                            <CalendarSvg title="calendar" />
+                            <div className="periode">{generateDateString(p)}</div>
                         </div>
                     ))}
 
-                    <VerticalSpacer eightPx={true} />
+                    <VerticalSpacer eightPx />
                     {!visLeggTilPerioder && (
-                        <div className={'knappecontainer'}>
+                        <div className="knappecontainer">
                             <div
                                 id="leggtilsoknadsperiode"
-                                className={'leggtilsoknadsperiode'}
+                                className="leggtilsoknadsperiode"
                                 role="button"
                                 onClick={() => {
                                     setVisLeggTilPerioder(true);
@@ -92,8 +92,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                                 }}
                                 tabIndex={0}
                             >
-                                <div className={'leggtilcircle'}>
-                                    <AddCircleSvg title={'leggtilcircle'} />
+                                <div className="leggtilcircle">
+                                    <AddCircleSvg title="leggtilcircle" />
                                 </div>
                                 {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
                             </div>
@@ -108,11 +108,10 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
             {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
-                    {
-                        <div className={'soknadsperiodecontainer'}>
+                    <div className="soknadsperiodecontainer">
                             <Input
                                 id="soknadsperiode-fra"
-                                bredde={'M'}
+                                bredde="M"
                                 label={intlHelper(intl, 'skjema.soknasperiodefra')}
                                 type="date"
                                 className="fom"
@@ -126,7 +125,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             />
                             <Input
                                 id="soknadsperiode-til"
-                                bredde={'M'}
+                                bredde="M"
                                 label={intlHelper(intl, 'skjema.soknasperiodetil')}
                                 type="date"
                                 className="tom"
@@ -141,7 +140,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
                             <div
                                 id="fjern"
-                                className={'fjern'}
+                                className="fjern"
                                 role="button"
                                 onClick={() => {
                                     deleteSoknadsperiode();
@@ -149,10 +148,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                                 }}
                                 tabIndex={0}
                             >
-                                <BinSvg title={'fjern'} />
+                                <BinSvg title="fjern" />
                             </div>
                         </div>
-                    }
                 </SkjemaGruppe>
             )}
             {!!soknad.soeknadsperiode?.fom &&

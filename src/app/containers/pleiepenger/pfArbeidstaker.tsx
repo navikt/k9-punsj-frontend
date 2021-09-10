@@ -45,11 +45,11 @@ export function pfArbeidstaker(): (
 
         return (
             <SkjemaGruppe
-                className={'arbeidstaker-panel'}
+                className="arbeidstaker-panel"
                 feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}
             >
                 <Container>
-                    <Row noGutters={true}>
+                    <Row noGutters>
                         <RadioPanelGruppe
                             className="horizontalRadios"
                             radios={[
@@ -68,12 +68,12 @@ export function pfArbeidstaker(): (
                             checked={selectedType}
                         />
                     </Row>
-                    <Row noGutters={true}>
-                        <div className={'input-row'}>
+                    <Row noGutters>
+                        <div className="input-row">
                             {selectedType === 'o' && (
                                 <Input
                                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                    bredde={'M'}
+                                    bredde="M"
                                     value={arbeidstaker.organisasjonsnummer || ''}
                                     className="arbeidstaker-organisasjonsnummer"
                                     onChange={(event) =>
@@ -93,7 +93,7 @@ export function pfArbeidstaker(): (
                                 <Input
                                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                                     value={arbeidstaker.norskIdent || ''}
-                                    bredde={'M'}
+                                    bredde="M"
                                     className="arbeidstaker-norskIdent"
                                     onChange={(event) =>
                                         updateListeinfoInSoknadState({
@@ -132,11 +132,11 @@ export function pfArbeidstaker(): (
                             })
                         }
                         component={pfArbeidstider()}
-                        minstEn={true}
+                        minstEn
                         textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                         getErrorMessage={getErrorMessage}
                         feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
-                        kanHaFlere={true}
+                        kanHaFlere
                         medSlettKnapp={false}
                     />
                 </Container>

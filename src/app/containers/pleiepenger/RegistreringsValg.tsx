@@ -91,13 +91,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         ) : null;
 
     const infoText = (journalpost: IJournalpost, index: number) => {
-        const dato = journalpost.dato ? ', dato: ' + journalpost.dato : '';
+        const dato = journalpost.dato ? `, dato: ${  journalpost.dato}` : '';
         return `Journalpost ${index}${dato}`;
     };
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-        if (!!soknader?.length) {
+        if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
                 Array.from(es.journalposter!).some((jp) => jp === journalpostid)
             );
@@ -106,7 +106,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     };
 
     return (
-        <div className={'registrering-page'}>
+        <div className="registrering-page">
             <EksisterendeSoknader
                 ident1={ident1}
                 ident2={ident2}
@@ -115,12 +115,12 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini={true}>
+                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
                     Tilbake
                 </Knapp>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} mini={true}>
-                        {<FormattedMessage id={'ident.knapp.nyregistrering'} />}
+                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} mini>
+                        <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Hovedknapp>
                 )}
             </div>

@@ -110,8 +110,7 @@ export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9J
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE,
 });
 
-export const lukkJournalpostOppgave = (journalpostid: string) => {
-    return (dispatch: any) => {
+export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any) => {
         dispatch(lukkOppgaveRequestAction());
         post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, undefined, (response) => {
             if (response.status === 200) {
@@ -120,7 +119,6 @@ export const lukkJournalpostOppgave = (journalpostid: string) => {
             return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
         });
     };
-};
 
 export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string) {
     return (dispatch: any) => {
@@ -134,7 +132,7 @@ export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid:
         post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, svar) => {
             if (response.ok) {
                 return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak));
-            } else if (response.status === 409) {
+            } if (response.status === 409) {
                 return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
             }
             return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(response)));

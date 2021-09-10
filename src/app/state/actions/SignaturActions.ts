@@ -50,8 +50,7 @@ export const usignertResetAction = (): IUsignertResetAction => ({
     type: SignaturActionKeys.USIGNERT_RESET,
 });
 
-export const usignert = (journalpostid: string) => {
-    return (dispatch: any) => {
+export const usignert = (journalpostid: string) => (dispatch: any) => {
         dispatch(usignertRequestAction());
 
         post(
@@ -67,4 +66,3 @@ export const usignert = (journalpostid: string) => {
             }
         );
     };
-};

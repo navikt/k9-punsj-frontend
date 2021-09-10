@@ -20,8 +20,7 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => {
-        return (
+    ) => (
             <div className="tilleggsinfo">
                 <Textarea
                     label={intlHelper(intl, `skjema.${path}.tilleggsinfo`)}
@@ -41,5 +40,4 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                 />
             </div>
         );
-    };
 }

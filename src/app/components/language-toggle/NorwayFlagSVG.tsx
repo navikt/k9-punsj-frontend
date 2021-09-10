@@ -2,7 +2,7 @@ import React from 'react';
 
 const NorwayFlagSVG = () => (
     <svg focusable="false" role="presentation" width={25} height={18}>
-        <title>{'Flag_of_Norway'}</title>
+        <title>Flag_of_Norway</title>
         <g fill="none" fillRule="evenodd">
             <path fill="#EF2B2D" d="M0 0h25v18H0z" />
             <path fill="#FFF" d="M6.875 0h4.688v18H6.875z" />

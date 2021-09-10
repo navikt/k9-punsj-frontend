@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { JaNei } from '../../../models/enums';
 import { FormattedMessage } from 'react-intl';
+import { Knapp } from 'nav-frontend-knapper';
+import { Form, useFormikContext } from 'formik';
+import { Nesteknapp, Tilbakeknapp } from 'nav-frontend-ikonknapper';
+import { JaNei } from '../../../models/enums';
 import TextInput from '../../../components/skjema/TextInput';
 import { setHash } from '../../../utils';
-import { Knapp } from 'nav-frontend-knapper';
 import Knapper from '../../../components/knapp/Knapper';
-import { Form, useFormikContext } from 'formik';
 import RadioInput from '../../../components/skjema/RadioInput';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { ISignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
-import { Nesteknapp, Tilbakeknapp } from 'nav-frontend-ikonknapper';
 
 interface IOverføringIdentSjekk {
     journalpostensRegistrertePersonident?: string;
@@ -45,7 +45,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
                 retning="horisontal"
                 styling="medPanel"
             />
-            <VerticalSpacer twentyPx={true} />
+            <VerticalSpacer twentyPx />
             {skalViseSammeSomRegistrertRadios && (
                 <RadioInput
                     feltnavn="sammeIdentSomRegistrert"
@@ -62,7 +62,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
             )}
             {skalViseIdentInput && (
                 <>
-                    <VerticalSpacer twentyPx={true} />
+                    <VerticalSpacer twentyPx />
                     <TextInput
                         feltnavn="identitetsnummer"
                         bredde="M"
@@ -70,7 +70,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
                     />
                 </>
             )}
-            <VerticalSpacer thirtyTwoPx={true} />
+            <VerticalSpacer thirtyTwoPx />
             <Knapper>
                 <Tilbakeknapp htmlType="button" onClick={() => setHash('/')}>
                     <FormattedMessage id="ident.knapp.forrigesteg" />

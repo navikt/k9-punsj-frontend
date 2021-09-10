@@ -260,38 +260,38 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [props.fellesState.isAwaitingKopierJournalPostResponse]);
 
-    if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
+    if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
     }
 
-    if (!!opprettIGosysState.gosysOppgaveRequestSuccess) {
+    if (opprettIGosysState.gosysOppgaveRequestSuccess) {
         return (
             <ModalWrapper
-                key={'opprettigosysokmodal'}
+                key="opprettigosysokmodal"
                 onRequestClose={() => resetOmfordelAction()}
-                contentLabel={'settpaaventokmodal'}
+                contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
             >
-                <OkGaaTilLosModal melding={'fordeling.opprettigosys.utfort'} />
+                <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
             </ModalWrapper>
         );
     }
 
-    if (!!fordelingState.isAwaitingLukkOppgaveResponse) {
+    if (fordelingState.isAwaitingLukkOppgaveResponse) {
         return <NavFrontendSpinner />;
     }
 
-    if (!!fordelingState.lukkOppgaveDone) {
+    if (fordelingState.lukkOppgaveDone) {
         return (
             <ModalWrapper
-                key={'lukkoppgaveokmodal'}
+                key="lukkoppgaveokmodal"
                 onRequestClose={() => lukkOppgaveReset()}
-                contentLabel={'settpaaventokmodal'}
+                contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen={!!fordelingState.lukkOppgaveDone}
             >
-                <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'} />
+                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
             </ModalWrapper>
         );
     }
@@ -308,7 +308,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         <div>
                             <RadioPanelGruppe
                                 className="horizontalRadios"
-                                name={'ppsjekk'}
+                                name="ppsjekk"
                                 radios={Object.values(JaNei).map((jn) => ({
                                     label: intlHelper(intl, jn),
                                     value: jn,
@@ -319,7 +319,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             />
                             {gjelderPP === JaNei.NEI && (
                                 <>
-                                    <VerticalSpacer sixteenPx={true} />
+                                    <VerticalSpacer sixteenPx />
                                     <Input
                                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
                                         onChange={handleIdent1Change}
@@ -332,11 +332,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                                 : undefined
                                         }
-                                        bredde={'M'}
+                                        bredde="M"
                                     />
-                                    <VerticalSpacer eightPx={true} />
+                                    <VerticalSpacer eightPx />
                                     <Hovedknapp
-                                        mini={true}
+                                        mini
                                         disabled={
                                             !identState.ident1 ||
                                             (!!identState.ident1 && !!skalViseFeilmelding(identState.ident1))
@@ -349,10 +349,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {gjelderPP === JaNei.JA && (
                                 <>
-                                    <VerticalSpacer sixteenPx={true} />
+                                    <VerticalSpacer sixteenPx />
                                     <RadioPanelGruppe
                                         className="horizontalRadios"
-                                        name={'identsjekk'}
+                                        name="identsjekk"
                                         radios={Object.values(JaNei).map((jn) => ({
                                             label: intlHelper(intl, jn),
                                             value: jn,
@@ -366,7 +366,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         checked={riktigIdentIJournalposten}
                                         onChange={(event) => {
                                             props.setErIdent1Bekreftet(
-                                                (event.target as HTMLInputElement).value === JaNei.JA ? true : false
+                                                (event.target as HTMLInputElement).value === JaNei.JA
                                             );
                                             handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei);
                                         }}
@@ -375,7 +375,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {riktigIdentIJournalposten === JaNei.NEI && (
                                 <>
-                                    <VerticalSpacer sixteenPx={true} />
+                                    <VerticalSpacer sixteenPx />
                                     <Input
                                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
                                         onChange={handleIdent1Change}
@@ -388,20 +388,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                                 : undefined
                                         }
-                                        bredde={'M'}
+                                        bredde="M"
                                     />
                                 </>
                             )}
                             {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && (
                                 <>
-                                    <VerticalSpacer eightPx={true} />
+                                    <VerticalSpacer eightPx />
                                     <Checkbox
                                         label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
                                         onChange={(e) => {
                                             setToSokereIJournalpost(e.target.checked);
                                         }}
                                     />
-                                    <VerticalSpacer sixteenPx={true} />
+                                    <VerticalSpacer sixteenPx />
                                     {toSokereIJournalpost && (
                                         <div className="fordeling-page__to-sokere-i-journalpost">
                                             <AlertStripeInfo>
@@ -420,7 +420,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     identState.ident2,
                                                     intl
                                                 )}
-                                                bredde={'M'}
+                                                bredde="M"
                                             />
                                             <JournalPostKopiFelmeldinger
                                                 skalVisesNårJournalpostSomIkkeStottesKopieres={
@@ -433,10 +433,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     )}
                                 </>
                             )}
-                            <VerticalSpacer eightPx={true} />
+                            <VerticalSpacer eightPx />
                             {gjelderPP === JaNei.JA && (
                                 <>
-                                    <VerticalSpacer sixteenPx={true} />
+                                    <VerticalSpacer sixteenPx />
                                     {!erBarnUtdatert &&
                                         !!props.fellesState.hentBarnSuccess &&
                                         typeof props.fellesState.barn !== 'undefined' &&
@@ -450,9 +450,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     disabled={gjelderAnnetBarn}
                                                     onBlur={handleIdent2Blur}
                                                 >
-                                                    <option key={uuidv4()} value={''}>
-                                                        {``}
-                                                    </option>
+                                                    <option key={uuidv4()} value="" />
                                                     )
                                                     {props.fellesState.barn.map((b) => (
                                                         <option key={uuidv4()} value={b.identitetsnummer}>
@@ -460,7 +458,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                         </option>
                                                     ))}
                                                 </Select>
-                                                <VerticalSpacer eightPx={true} />
+                                                <VerticalSpacer eightPx />
                                                 <Checkbox
                                                     label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                                                     onChange={(e) => {
@@ -470,14 +468,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 />
                                             </>
                                         )}
-                                    <VerticalSpacer sixteenPx={true} />
+                                    <VerticalSpacer sixteenPx />
                                     {(gjelderAnnetBarn ||
                                         !!props.fellesState.hentBarnError ||
                                         !!props.fellesState.hentBarnForbidden ||
                                         (typeof props.fellesState.barn !== 'undefined' &&
                                             props.fellesState.barn.length === 0)) && (
                                         <>
-                                            <div className={'fyllUtIdentAnnetBarnContainer'}>
+                                            <div className="fyllUtIdentAnnetBarnContainer">
                                                 <Input
                                                     label={intlHelper(intl, 'ident.identifikasjon.barn')}
                                                     onChange={handleIdent2Change}
@@ -490,7 +488,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                             ? intlHelper(intl, 'ident.feil.ugyldigident')
                                                             : undefined
                                                     }
-                                                    bredde={'M'}
+                                                    bredde="M"
                                                     disabled={barnetHarIkkeFnr}
                                                 />
                                                 {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) && (
@@ -509,18 +507,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     </div>
                                                 )}
                                             </div>
-                                            <VerticalSpacer eightPx={true} />
+                                            <VerticalSpacer eightPx />
                                             <Checkbox
                                                 label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
                                                 onChange={(e) => handleCheckboxChange(e.target.checked)}
                                             />
                                             {barnetHarIkkeFnr && (
-                                                <AlertStripeInfo className={'infotrygd_info'}>
+                                                <AlertStripeInfo className="infotrygd_info">
                                                     {' '}
                                                     {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}
                                                 </AlertStripeInfo>
                                             )}
-                                            <VerticalSpacer sixteenPx={true} />
+                                            <VerticalSpacer sixteenPx />
                                             {antallIdenter > 0 &&
                                                 journalpostident &&
                                                 props &&
@@ -541,7 +539,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                                         <Knapp
-                                            mini={true}
+                                            mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
                                                 skalViseFeilmelding(barnetsIdent) ||
@@ -554,7 +552,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </>
                             )}
                         </div>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         {(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                             <>
                                 <RadioGruppe
@@ -563,7 +561,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 >
                                     {Object.keys(TilgjengeligSakstype)
                                         //  .filter((key) => !key.includes(`${Sakstype.OMSORGSPENGER}_`))
-                                        .map((key) => {
+                                        .map((key) => 
                                             /*    if (key === Sakstype.OMSORGSPENGER) {
                                             const radioOmsorgspenger = (
                                                 <RadioPanel
@@ -616,8 +614,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 );
                                             }
                                         return radioOmsorgspenger;
-                                    }*/
-                                            return (
+                                    } */
+                                             (
                                                 <RadioPanel
                                                     key={key}
                                                     label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
@@ -628,10 +626,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     }}
                                                     checked={konfigForValgtSakstype?.navn === key}
                                                 />
-                                            );
-                                        })}
+                                            )
+                                        )}
                                 </RadioGruppe>
-                                <VerticalSpacer eightPx={true} />
+                                <VerticalSpacer eightPx />
                                 {typeof fordelingState.sakstype !== 'undefined' &&
                                     fordelingState.sakstype === Sakstype.ANNET && (
                                         <AlertStripeInfo>
@@ -657,28 +655,28 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         )}
                         {fordelingState.skalTilK9 === false && (
                             <>
-                                <AlertStripeInfo className={'infotrygd_info'}>
+                                <AlertStripeInfo className="infotrygd_info">
                                     {' '}
                                     {intlHelper(intl, 'fordeling.infotrygd')}
                                 </AlertStripeInfo>
                                 <Hovedknapp
-                                    mini={true}
+                                    mini
                                     onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}
                                 >
                                     <FormattedMessage id="fordeling.sakstype.ANNET" />
                                 </Hovedknapp>
                             </>
                         )}
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
                             <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>
                         )}
                         {!!fordelingState.sjekkTilK9JournalpostStottesIkke && (
-                            <div className={'fordeling-page__sjekk-til-K9-journalpost-stottes-ikke'}>
+                            <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">
                                 <AlertStripeFeil>
                                     {intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}
                                 </AlertStripeFeil>
-                                <VerticalSpacer sixteenPx={true} />
+                                <VerticalSpacer sixteenPx />
                                 <div className="journalikkestottetkopi-checkboks">
                                     <Checkbox
                                         label={intlHelper(intl, 'fordeling.kopiereJournal')}

@@ -1,14 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Element, Undertittel } from 'nav-frontend-typografi';
-import intlHelper from '../../../utils/intlUtils';
-import { Innsendingsstatus } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
 import { FormattedMessage, useIntl } from 'react-intl';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import CheckSvg from '../../../assets/SVG/CheckSVG';
 import Lenke from 'nav-frontend-lenker';
 import ModalWrapper from 'nav-frontend-modal';
+import intlHelper from '../../../utils/intlUtils';
+import { Innsendingsstatus } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import CheckSvg from '../../../assets/SVG/CheckSVG';
 import { IError } from '../../../models/types';
 import './innsendingModal.less';
 import KryssSVG from '../../../assets/SVG/KryssSVG';
@@ -39,16 +39,16 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
                 'innsendingsmodal--feil': innsendingsstatus === Innsendingsstatus.Innsendingsfeil,
             })}
             closeButton={innsendingsstatus === Innsendingsstatus.Innsendingsfeil}
-            shouldCloseOnOverlayClick={true}
+            shouldCloseOnOverlayClick
         >
             <>
                 {innsendingsstatus === Innsendingsstatus.SenderInn && (
                     <>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <div role="status">
                             <NavFrontendSpinner className="innsendingsmodal_ikon" />
                         </div>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <Undertittel tag="h1">
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.senderInn" />
                         </Undertittel>
@@ -56,13 +56,13 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
                 )}
                 {innsendingsstatus === Innsendingsstatus.SendtInn && (
                     <>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <CheckSvg title={<FormattedMessage id="check.svg.title" />} className="innsendingsmodal_ikon" />
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <Undertittel tag="h1">
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.sendtInn" />
                         </Undertittel>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <Lenke href={getEnvironmentVariable('K9_LOS_URL')}>
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
                         </Lenke>
@@ -70,21 +70,21 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
                 )}
                 {innsendingsstatus === Innsendingsstatus.Innsendingsfeil && (
                     <>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <KryssSVG type="filled" farge="#A13A28" className="innsendingsmodal_ikon" />
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <Undertittel tag="h1">
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.overskrift" />
                         </Undertittel>
-                        <VerticalSpacer eightPx={true} />
+                        <VerticalSpacer eightPx />
                         <div>
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.prøvigjen" />
                         </div>
-                        <VerticalSpacer sixteenPx={true} />
+                        <VerticalSpacer sixteenPx />
                         <Lenke href={getEnvironmentVariable('K9_LOS_URL')}>
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
                         </Lenke>
-                        <VerticalSpacer twentyPx={true} />
+                        <VerticalSpacer twentyPx />
                         <Element>
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.detaljer" />
                         </Element>

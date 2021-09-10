@@ -10,10 +10,9 @@ interface ISkjemaHeaderProps {
     headerTextId: string;
 }
 
-const SkjemaHeader: React.FunctionComponent<ISkjemaHeaderProps> = ({ headerTextId }) => {
-    return (
+const SkjemaHeader: React.FunctionComponent<ISkjemaHeaderProps> = ({ headerTextId }) => (
         <>
-            <FlexRow spaceBetween={true}>
+            <FlexRow spaceBetween>
                 <h1 className="skjemaheader__overskrift">
                     <FormattedMessage id={headerTextId} />
                 </h1>
@@ -24,10 +23,9 @@ const SkjemaHeader: React.FunctionComponent<ISkjemaHeaderProps> = ({ headerTextI
                     <KryssSVG />
                 </Link>
             </FlexRow>
-            <VerticalSpacer sixteenPx={true} hr={true} />
-            <VerticalSpacer thirtyTwoPx={true} />
+            <VerticalSpacer sixteenPx hr />
+            <VerticalSpacer thirtyTwoPx />
         </>
     );
-};
 
 export default SkjemaHeader;

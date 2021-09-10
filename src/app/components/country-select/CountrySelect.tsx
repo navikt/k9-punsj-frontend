@@ -22,7 +22,7 @@ export const CountrySelect = (props: ICountrySelectProps) => {
         countryList.push({ code, name: countries.getName(code, locale) })
     );
     countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
-    if (!!props.unselectedoption) {
+    if (props.unselectedoption) {
         countryList.unshift({ code: '', name: props.unselectedoption });
     }
 

@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const webpackConfig = require('../webpack/webpack.config.heroku');
 const fsExtra = require('fs-extra');
+const webpackConfig = require('../webpack/webpack.config.heroku');
 
 function createEnvSettingsFileForHeroku() {
     const settingsFile = path.resolve(__dirname, './../../../heroku/dist/js/settings.js');
@@ -21,7 +21,7 @@ function createEnvSettingsFileForHeroku() {
 
 webpack(webpackConfig, (err, stats) => {
     if (err || (stats.compilation.errors && stats.compilation.errors.length > 0)) {
-        let error = err || stats.compilation.errors;
+        const error = err || stats.compilation.errors;
         console.error(error);
         process.exit(1);
     }

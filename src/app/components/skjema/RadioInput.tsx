@@ -1,9 +1,9 @@
 import React from 'react';
 import { useField } from 'formik';
 import { Radio, RadioPanel, SkjemaGruppe } from 'nav-frontend-skjema';
-import intlHelper from '../../utils/intlUtils';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
+import intlHelper from '../../utils/intlUtils';
 import './radioInput.less';
 import { fjernIndexFraLabel } from './skjemaUtils';
 

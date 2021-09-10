@@ -7,12 +7,12 @@ import {
 import intlHelper from 'app/utils/intlUtils';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
-import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
+import { Periodeinfo } from '../../models/types/Periodeinfo';
 
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
     return (
@@ -23,14 +23,13 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => {
-        return (
+    ) => (
             <div className="arbeidstider">
-                <Row noGutters={true}>
-                    <div className={'input-row'}>
+                <Row noGutters>
+                    <div className="input-row">
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}
-                            bredde={'XS'}
+                            bredde="XS"
                             value={periodeinfo.jobberNormaltTimerPerDag}
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
@@ -44,7 +43,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             }}
                             onFocus={(event) => (event.target.selectionStart = 0)}
                         />
-                        <Hjelpetekst className={'arbeidstid-hjelpetext'} type={PopoverOrientering.Hoyre} tabIndex={-1}>
+                        <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
                         </Hjelpetekst>
                         <Input
@@ -63,14 +62,13 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             }}
                             onFocus={(event) => (event.target.selectionStart = 0)}
                             feil={getErrorMessage(`${feilprefiks}.timerfaktisk`)}
-                            bredde={'XS'}
+                            bredde="XS"
                         />
-                        <Hjelpetekst className={'arbeidstid-hjelpetext'} type={PopoverOrientering.Hoyre} tabIndex={-1}>
+                        <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}
                         </Hjelpetekst>
                     </div>
                 </Row>
             </div>
         );
-    };
 }

@@ -30,7 +30,7 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
     }),
-    ['SØK']: combineReducers({
+    'SØK': combineReducers({
         soknaderSokState: SoknaderSokReducer,
         visningState: SoknaderVisningReducer,
     }),

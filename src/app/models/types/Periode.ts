@@ -11,6 +11,7 @@ export interface IPeriode {
 
 export class Periode implements Required<IPeriode> {
     fom: string;
+
     tom: string;
 
     constructor(periode: IPeriode) {
@@ -24,21 +25,21 @@ export class Periode implements Required<IPeriode> {
     }
 
     fomTekstKort(intl: IntlShape) {
-        return !!this.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.fom) : '';
+        return this.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.fom) : '';
     }
 
     tilOgmedTekstKort(intl: IntlShape) {
-        return !!this.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.tom) : '';
+        return this.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.tom) : '';
     }
 
     generateStringsForDescription(intl: IntlShape): IPeriodeStringsForDescription {
-        let ft: string = ''; // 'ft' hvis både fraOgMed og tilOgMed er gitt, 'f' hvis kun fraOgMed er gitt og 't' hvis kun tilOgMed er gitt
+        let ft = ''; // 'ft' hvis både fraOgMed og tilOgMed er gitt, 'f' hvis kun fraOgMed er gitt og 't' hvis kun tilOgMed er gitt
 
         if (!!this.fom && !!this.tom) {
             ft = 'ft';
-        } else if (!!this.fom) {
+        } else if (this.fom) {
             ft = 'f';
-        } else if (!!this.tom) {
+        } else if (this.tom) {
             ft = 't';
         }
 
@@ -53,9 +54,9 @@ export class Periode implements Required<IPeriode> {
 
         if (!!this.fom && !!this.tom) {
             key = 'periode.fratil';
-        } else if (!!this.fom) {
+        } else if (this.fom) {
             key = 'periode.fra';
-        } else if (!!this.tom) {
+        } else if (this.tom) {
             key = 'periode.til';
         } else {
             key = 'periode.udefinert';
@@ -82,7 +83,9 @@ export interface IArbeidstidPeriodeMedTimer {
 
 export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidstidPeriodeMedTimer>> {
     periode: Periode;
+
     faktiskArbeidTimerPerDag: string;
+
     jobberNormaltTimerPerDag: string;
 
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
@@ -92,11 +95,11 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
     }
 
     fomTekstKort(intl: IntlShape) {
-        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
+        return this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
     }
 
     tilOgmedTekstKort(intl: IntlShape) {
-        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
+        return this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
     }
 
     description(intl: IntlShape): string {
@@ -104,9 +107,9 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
         if (!!this.periode.fom && !!this.periode.tom) {
             key = 'periode.fratil';
-        } else if (!!this.periode.fom) {
+        } else if (this.periode.fom) {
             key = 'periode.fra';
-        } else if (!!this.periode.tom) {
+        } else if (this.periode.tom) {
             key = 'periode.til';
         } else {
             key = 'periode.udefinert';
@@ -126,7 +129,9 @@ export interface IPeriodeMedTimerMinutter {
 
 export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMedTimerMinutter>> {
     periode: Periode;
+
     timer: number;
+
     minutter: number;
 
     constructor(pmf: Periodeinfo<IPeriodeMedTimerMinutter>) {
@@ -144,11 +149,11 @@ export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMed
     }
 
     fomTekstKort(intl: IntlShape) {
-        return !!this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
+        return this.periode.fom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.fom) : '';
     }
 
     tilOgmedTekstKort(intl: IntlShape) {
-        return !!this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
+        return this.periode.tom ? datetime(intl, TimeFormat.DATE_SHORT, this.periode.tom) : '';
     }
 
     description(intl: IntlShape): string {
@@ -156,9 +161,9 @@ export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMed
 
         if (!!this.periode.fom && !!this.periode.tom) {
             key = 'periode.fratil';
-        } else if (!!this.periode.fom) {
+        } else if (this.periode.fom) {
             key = 'periode.fra';
-        } else if (!!this.periode.tom) {
+        } else if (this.periode.tom) {
             key = 'periode.til';
         } else {
             key = 'periode.udefinert';
@@ -177,6 +182,7 @@ export interface IPeriodeFerieMedFlagg {
 
 export class PeriodeFerieMedFlagg implements Required<Periodeinfo<IPeriodeFerieMedFlagg>> {
     periode: Periode;
+
     skalHaFerie: boolean;
 
     constructor(pmf: Periodeinfo<IPeriodeFerieMedFlagg>) {

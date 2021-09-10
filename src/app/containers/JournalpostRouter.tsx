@@ -17,7 +17,7 @@ const JournalpostRouter: React.FunctionComponent<RouteComponentProps<IRouterPara
             journalpostId={journalpostid}
             renderOnLoadComplete={() => (
                 <HashRouter>
-                    <Route exact={true} path="/">
+                    <Route exact path="/">
                         <Fordeling journalpostId={journalpostid} />
                     </Route>
                     {Sakstyper.punchSakstyper.map((sakstypeConfig) => (

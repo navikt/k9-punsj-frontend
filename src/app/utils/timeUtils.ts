@@ -60,11 +60,11 @@ export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) 
 
     if (isoWeekdayStart < isoWeekdayEnd) {
         return isoWeekday >= isoWeekdayStart && isoWeekday <= isoWeekdayEnd;
-    } else if (isoWeekdayStart > isoWeekdayEnd) {
+    } if (isoWeekdayStart > isoWeekdayEnd) {
         return isoWeekday >= isoWeekdayStart || isoWeekday <= isoWeekdayEnd;
-    } else {
+    } 
         return isoWeekday === isoWeekdayStart;
-    }
+    
 }
 
 export const formatereTekstMedTimerOgMinutter = (tekst: string) => {

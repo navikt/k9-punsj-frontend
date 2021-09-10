@@ -1,8 +1,10 @@
 export class IdentRules {
     public static REGEX_FNR = /^((((0[1-9]|[12]\d|30)(0[469]|11)|(0[1-9]|[12]\d|3[01])(0[13578]|1[02])|((0[1-9]|1\d|2[0-8])02))\d{2})|2902([02468][048]|[13579][26]))\d{5}$/;
+
     public static REGEX_DNR = /^((((4[1-9]|[56]\d|70)(0[469]|11)|(4[1-9]|[56]\d|7[01])(0[13578]|1[02])|((4[1-9]|5\d|6[0-8])02))\d{2})|6902([02468][048]|[13579][26]))\d{5}$/;
 
     public static CONTROL_KEY_1 = [3, 7, 6, 1, 8, 9, 4, 5, 2];
+
     public static CONTROL_KEY_2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
     public static hasIdent11Digits(ident?: any) {
@@ -25,9 +27,9 @@ export class IdentRules {
         if (typeof ident1 === 'string') {
             if (typeof ident2 === 'string' && ident2 !== '') {
                 return this.isIdentValid(ident1) && this.isIdentValid(ident2);
-            } else if (!ident2) {
+            } if (!ident2) {
                 return this.isIdentValid(ident1);
-            } else if (typeof annenSokerIdent === 'string' && annenSokerIdent !== '') {
+            } if (typeof annenSokerIdent === 'string' && annenSokerIdent !== '') {
                 return this.isIdentValid(annenSokerIdent);
             }
             return false;

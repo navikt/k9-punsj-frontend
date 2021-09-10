@@ -94,16 +94,16 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && items.length > 1 && (
                                     <h2>
                                         <FormattedMessage
-                                            id={'skjema.arbeidsforhold.teller'}
+                                            id="skjema.arbeidsforhold.teller"
                                             values={{ indeks: itemIndex + 1 }}
                                         />
                                     </h2>
                                 )}
                                 {!!medSlettKnapp && items.length > 1 && (
-                                    <div className={'listepanelbunn'}>
+                                    <div className="listepanelbunn">
                                         <div
                                             id="slett"
-                                            className={'fjernlisteelementknapp'}
+                                            className="fjernlisteelementknapp"
                                             role="button"
                                             onClick={() => {
                                                 const newArray: ItemInfo[] = removeItem(itemIndex);
@@ -113,8 +113,8 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                             }}
                                             tabIndex={0}
                                         >
-                                            <div className={'slettIcon'}>
-                                                <BinSvg title={'fjern'} />
+                                            <div className="slettIcon">
+                                                <BinSvg title="fjern" />
                                             </div>
                                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                                         </div>
@@ -137,7 +137,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             {kanHaFlere && (
                 <div
                     id="leggtillisteelementknapp"
-                    className={'leggtillisteelementknapp'}
+                    className="leggtillisteelementknapp"
                     role="button"
                     onClick={() => {
                         const newArray: ItemInfo[] = addItem();
@@ -147,8 +147,8 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                     }}
                     tabIndex={0}
                 >
-                    <div className={'leggtilperiodeIcon'}>
-                        <AddCircleSvg title={'leggtil'} />
+                    <div className="leggtilperiodeIcon">
+                        <AddCircleSvg title="leggtil" />
                     </div>
                     {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
                 </div>

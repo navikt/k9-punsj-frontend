@@ -9,7 +9,9 @@ export interface IFrilanserOpptjening {
 
 export class FrilanserOpptjening implements IFrilanserOpptjening {
     startdato: string;
+
     sluttdato: string;
+
     jobberFortsattSomFrilans: boolean;
 
     constructor(frilanser: IFrilanserOpptjening) {

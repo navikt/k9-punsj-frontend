@@ -1,3 +1,4 @@
+import { IntlShape } from 'react-intl';
 import {
     fødselsnummervalidator,
     gyldigDato,
@@ -5,7 +6,6 @@ import {
     påkrevd,
     validerSkjema,
 } from '../../../rules/valideringer';
-import { IntlShape } from 'react-intl';
 import { IOverføringPunchSkjema } from '../omsorgspenger/overføring/PunchSkjema';
 
 export interface ISokeSkjema {

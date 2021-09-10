@@ -46,7 +46,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
         <Col>
             <ul>
                 {sokandsperioder.map((p, i) => (
-                    <li key={i}>{p.fom + '-' + p.tom}</li>
+                    <li key={i}>{`${p.fom  }-${  p.tom}`}</li>
                 ))}
             </ul>
         </Col>

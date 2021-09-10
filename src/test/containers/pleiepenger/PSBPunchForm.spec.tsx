@@ -10,11 +10,11 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
+import * as reactRedux from 'react-redux';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IJournalposterPerIdentState } from '../../../app/models/types/JournalposterPerIdentState';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
-import * as reactRedux from 'react-redux';
 
 jest.mock('react-intl');
 jest.mock('react-router');

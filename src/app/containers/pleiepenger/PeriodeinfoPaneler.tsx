@@ -55,7 +55,7 @@ export interface IPeriodeinfopanelerProps {
 export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (
     props: IPeriodeinfopanelerProps
 ) => {
-    const periods = !!props.periods ? props.periods : [];
+    const periods = props.periods ? props.periods : [];
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (
@@ -86,7 +86,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         intlShape: IntlShape
     ) => (
         <>
-            <div className={'periodeinfopanel_container'}>
+            <div className="periodeinfopanel_container">
                 <PeriodInput
                     periode={periodeinfo.periode || {}}
                     intl={intlShape}
@@ -103,7 +103,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 />
                 <div
                     id="slett"
-                    className={'removePeriodeKnapp'}
+                    className="removePeriodeKnapp"
                     role="button"
                     onClick={() => {
                         const newArray: IPeriodeinfo[] = removeItem(periodeindeks);
@@ -113,8 +113,8 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                     }}
                     tabIndex={0}
                 >
-                    <div className={'slettIkon'}>
-                        <BinSvg title={'fjern'} />
+                    <div className="slettIkon">
+                        <BinSvg title="fjern" />
                     </div>
                     {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
                 </div>

@@ -1,6 +1,6 @@
-import { IdentRules } from './IdentRules';
 import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
+import { IdentRules } from './IdentRules';
 import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
@@ -27,7 +27,7 @@ export function validerSkjema<SkjemaType>(feltvalidatorer: IFeltValidator<any, S
                     }
                     return tmp;
                 }, tempErrors);
-            } else {
+            } 
                 const feltError = validatorer
                     .map((validator) => validator(getIn(skjema, feltPath), skjema))
                     .find((error) => error);
@@ -35,12 +35,12 @@ export function validerSkjema<SkjemaType>(feltvalidatorer: IFeltValidator<any, S
                     return setIn(tempErrors, feltPath, intlHelper(intl, feltError));
                 }
                 return tempErrors;
-            }
+            
         }, {});
 }
 
 export function påkrevd<VerdiType>(verdi: VerdiType) {
-    return !!verdi ? undefined : 'skjema.validering.påkrevd';
+    return verdi ? undefined : 'skjema.validering.påkrevd';
 }
 
 export function fødselsnummervalidator(verdi: string) {

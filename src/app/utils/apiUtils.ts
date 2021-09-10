@@ -8,7 +8,7 @@ import { canStringBeParsedToJSON } from './formatUtils';
 const Headers = require('fetch-headers');
 
 export const apiUrl = (path: ApiPath, parameters?: any) =>
-    URL_API + (!!parameters ? String.Format(path, parameters) : path);
+    URL_API + (parameters ? String.Format(path, parameters) : path);
 
 export async function get(
     path: ApiPath,
@@ -22,7 +22,7 @@ export async function get(
     });
     if (response.status === 401) {
         login();
-    } else if (!!callbackIfAuth) {
+    } else if (callbackIfAuth) {
         const data = await response.text();
         const jsonData = data ? JSON.parse(data) : undefined;
         await callbackIfAuth(response, jsonData);
@@ -85,14 +85,14 @@ export async function post<BodyType>(
         });
         if (response.status === 401) {
             login();
-        } else if (!!callbackIfAuth) {
+        } else if (callbackIfAuth) {
             const data = await response.text();
             const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
             await callbackIfAuth(response, jsonData);
         }
         return response;
     } catch (error) {
-        if (!!callbackIfError) {
+        if (callbackIfError) {
             return callbackIfError(error);
         }
         return error;
@@ -113,7 +113,7 @@ export async function put(
     });
     if (response.status === 401) {
         login();
-    } else if (!!callbackIfAuth) {
+    } else if (callbackIfAuth) {
         await callbackIfAuth(response);
     }
     return response;

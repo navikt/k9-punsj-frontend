@@ -10,6 +10,7 @@ export interface ISoknadPeriode {
 
 export class SoknadPeriode implements Required<ISoknadPeriode> {
     fom: string;
+
     tom: string;
 
     constructor(periode: ISoknadPeriode) {

@@ -1,6 +1,7 @@
-import VerticalSpacer from '../../components/VerticalSpacer';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import React from 'react';
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import './sok.less';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -8,7 +9,6 @@ import { getJournalpost } from '../../state/reducers/FellesReducer';
 import { IJournalpost } from '../../models/types';
 import { connect } from 'react-redux';
 import { RootStateType } from '../../state/RootState';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
@@ -57,7 +57,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
         };
 
         if (this.props.journalpost?.journalpostId) {
-            window.location.assign('journalpost/' + journalpostid);
+            window.location.assign(`journalpost/${  journalpostid}`);
         }
 
         return (
@@ -66,29 +66,29 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                     <FormattedMessage id="søk.overskrift" />
                 </h1>
                 <SkjemaGruppe>
-                    <div className={'input-rad'}>
+                    <div className="input-rad">
                         <Input
                             value={journalpostid}
                             bredde="L"
                             onChange={(e) => this.setState({ journalpostid: e.target.value })}
                             label={<FormattedMessage id="søk.label.jpid" />}
                         />
-                        <SokKnapp onClick={onClick} tekstId={'søk.knapp.label'} disabled={disabled} />
-                        <VerticalSpacer sixteenPx={true} />
+                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                        <VerticalSpacer sixteenPx />
                     </div>
                     {!!this.props.notFound && (
                         <AlertStripeInfo>
-                            <FormattedMessage id={'søk.jp.notfound'} values={{ jpid: journalpostid }} />
+                            <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
                         </AlertStripeInfo>
                     )}
                     {!!this.props.forbidden && (
                         <AlertStripeAdvarsel>
-                            <FormattedMessage id={'søk.jp.forbidden'} values={{ jpid: journalpostid }} />
+                            <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                         </AlertStripeAdvarsel>
                     )}
                     {!!this.props.journalpost && !this.props.journalpost?.kanSendeInn && (
                         <AlertStripeAdvarsel>
-                            <FormattedMessage id={'fordeling.kanikkesendeinn'} />
+                            <FormattedMessage id="fordeling.kanikkesendeinn" />
                         </AlertStripeAdvarsel>
                     )}
                 </SkjemaGruppe>

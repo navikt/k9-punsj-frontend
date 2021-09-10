@@ -2,12 +2,12 @@ import React from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Knapp } from 'nav-frontend-knapper';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import { opprettGosysOppgave as opprettGosysOppgaveAction } from '../../state/actions/GosysOppgaveActions';
 import { RootStateType } from '../../state/RootState';
 import { IJournalpost } from '../../models/types';
-import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import intlHelper from '../../utils/intlUtils';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 
 export interface IOpprettOppgaveStateProps {
     journalpost?: IJournalpost;
@@ -24,9 +24,9 @@ type OpprettGosysOppgaveKnappProps = Pick<IOpprettOppgaveProps, 'opprettGosysOpp
 const OpprettGosysOppgaveKnapp: React.FunctionComponent<OpprettGosysOppgaveKnappProps> = ({
     opprettGosysOppgave,
     journalpost,
-}) => {
+}) => 
     // TODO ta en runda på journalpost og optional så det ikke er !.
-    return (
+     (
         <Knapp
             htmlType="button"
             type="hoved"
@@ -34,8 +34,8 @@ const OpprettGosysOppgaveKnapp: React.FunctionComponent<OpprettGosysOppgaveKnapp
         >
             <FormattedMessage id="opprettGosysOppgave" />
         </Knapp>
-    );
-};
+    )
+;
 
 const OpprettGosysOppgaveComponent: React.FunctionComponent<IOpprettOppgaveProps> = (props: IOpprettOppgaveProps) => {
     const { intl, opprettGosysOppgave, journalpost } = props;

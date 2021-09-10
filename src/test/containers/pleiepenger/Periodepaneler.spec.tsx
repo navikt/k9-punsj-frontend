@@ -43,8 +43,7 @@ const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (
     updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
     updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string
-) => {
-    return (
+) => (
         <Input
             label=""
             id={testinputid(periodeindex)}
@@ -55,7 +54,6 @@ const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (
             feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
         />
     );
-};
 
 const initialperiodetest: Testperiodeinfo = {
     periode: { fom: '2020-04-01', tom: '2020-04-30' },
