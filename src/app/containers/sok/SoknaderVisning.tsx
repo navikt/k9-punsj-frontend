@@ -10,18 +10,17 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { openEksisterendeSoknadAction, chooseEksisterendeSoknadAction } from 'app/state/actions';
+import { openEksisterendeSoknadAction, chooseEksisterendeSoknadAction ,
+    findEksisterendeSoknader,
+    resetPunchAction,
+    setIdentAction,
+    undoSearchForSoknaderAction,
+} from 'app/state/actions';
 import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
 import { setIdentSokAction, setStepSokAction } from '../../state/actions/SoknaderSokActions';
 import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
 import { closeSoknadAction, openSoknadAction, resetSoknadidAction } from '../../state/actions/SoknaderVisningActions';
 import { SoknadType } from '../../models/enums/SoknadType';
-import {
-    findEksisterendeSoknader,
-    resetPunchAction,
-    setIdentAction,
-    undoSearchForSoknaderAction,
-} from '../../state/actions';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 
 export interface ISoknaderSokStateProps {
