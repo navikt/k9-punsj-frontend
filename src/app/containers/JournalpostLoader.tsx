@@ -22,10 +22,10 @@ interface IJournaPostStateProps {
     isJournalpostLoading?: boolean;
     journalpostRequestError?: IError;
     journalpostConflictError?: IJournalpostConflictResponse;
-    forbidden: boolean | undefined;
-    conflict: boolean | undefined;
-    notFound: boolean | undefined;
-    lukkOppgaveDone: boolean | undefined;
+    forbidden?: boolean;
+    conflict?: boolean;
+    notFound?: boolean;
+    lukkOppgaveDone?: boolean;
 }
 
 interface IJournalpostProps {
@@ -98,7 +98,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
                 onRequestClose={() => lukkOppgaveReset()}
                 contentLabel={"settpaaventokmodal"}
                 closeButton={false}
-                isOpen={!!lukkOppgaveDone}
+                isOpen={true}
             >
                 <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
             </ModalWrapper>

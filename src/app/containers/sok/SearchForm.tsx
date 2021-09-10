@@ -20,9 +20,9 @@ export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
     notFound: boolean;
     forbidden: boolean;
-    conflict: boolean | undefined;
+    conflict?: boolean;
     journalpostConflictError?: IJournalpostConflictResponse;
-    lukkOppgaveDone?: boolean | undefined;
+    lukkOppgaveDone?: boolean;
     lukkOppgaveReset: () => void;
 }
 
@@ -89,7 +89,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                     onRequestClose={() => lukkOppgaveReset()}
                     contentLabel={"settpaaventokmodal"}
                     closeButton={false}
-                    isOpen={!!lukkOppgaveDone}
+                    isOpen={true}
                 >
                     <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
                 </ModalWrapper>
