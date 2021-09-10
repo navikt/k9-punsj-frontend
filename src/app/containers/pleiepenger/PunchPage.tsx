@@ -27,7 +27,7 @@ import {IIdentState} from "../../models/types/IdentState";
 import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
 import {PSBPunchForm} from './PSBPunchForm';
 import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
-import {Hovedknapp, Knapp} from "nav-frontend-knapper";
+import {Hovedknapp} from "nav-frontend-knapper";
 
 
 export interface IPunchPageStateProps {
