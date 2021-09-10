@@ -17,12 +17,11 @@ describe('Periode', () => {
             ...periodePartial,
         };
 
-        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => {
+        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => {
             if (id === 'tidsformat.DATE_SHORT') {
                 return 'DD.MM.YYYY';
-            } 
-                return '';
-            
+            }
+            return '';
         });
 
         return new Periode(periode);

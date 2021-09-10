@@ -1,15 +1,14 @@
+import { render } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
 import React, { ReactNode } from 'react';
 import { IntlShape } from 'react-intl';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { render } from '@testing-library/react';
 import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { createStore } from 'redux';
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { rootReducer, RootStateType } from '../app/state/RootState';
 
-// @ts-ignore
-export const testIntl: IntlShape = {
+export const testIntl: Partial<IntlShape> = {
     formatMessage(descriptor: { id: string }): string {
         return descriptor.id;
     },

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { setupFordeling } from './Fordeling.spec';
 
 jest.mock('react-intl');

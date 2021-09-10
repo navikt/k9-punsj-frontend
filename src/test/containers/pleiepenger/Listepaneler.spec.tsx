@@ -28,16 +28,16 @@ const testkomponent: ListeComponent<ITestItem> = (
     updateListeinfoInSoknadState: (info: Partial<ITestItem>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string
 ) => (
-        <Input
-            label=""
-            id={testinputid(itemIndex)}
-            className="testinput"
-            value={info.test}
-            onChange={(event) => updateListeinfoInSoknadState({ test: event.target.value }, false)}
-            onBlur={(event) => updateListeinfoInSoknad({ test: event.target.value })}
-            feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
-        />
-    );
+    <Input
+        label=""
+        id={testinputid(itemIndex)}
+        className="testinput"
+        value={info.test}
+        onChange={(event) => updateListeinfoInSoknadState({ test: event.target.value }, false)}
+        onBlur={(event) => updateListeinfoInSoknad({ test: event.target.value })}
+        feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
+    />
+);
 
 const initialitemtest: ITestItem = { test: 'cba' };
 
@@ -57,6 +57,7 @@ const setupListepaneler = (listepanelerPropsPartial?: Partial<IListepanelerProps
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
+    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<Listepaneler {...listepanelerProps} />);
 };
 

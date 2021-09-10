@@ -44,16 +44,16 @@ const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (
     updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string
 ) => (
-        <Input
-            label=""
-            id={testinputid(periodeindex)}
-            className="testinput"
-            value={info.test}
-            onChange={(event) => updatePeriodeinfoInSoknadState({ test: event.target.value }, false)}
-            onBlur={(event) => updatePeriodeinfoInSoknad({ test: event.target.value })}
-            feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
-        />
-    );
+    <Input
+        label=""
+        id={testinputid(periodeindex)}
+        className="testinput"
+        value={info.test}
+        onChange={(event) => updatePeriodeinfoInSoknadState({ test: event.target.value }, false)}
+        onBlur={(event) => updatePeriodeinfoInSoknad({ test: event.target.value })}
+        feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
+    />
+);
 
 const initialperiodetest: Testperiodeinfo = {
     periode: { fom: '2020-04-01', tom: '2020-04-30' },
@@ -76,6 +76,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
+    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodeinfoPaneler {...periodepanelerProps} />);
 };
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export enum FordelingActionKeys {
     SAKSTYPE_SET = 'FORDELING_SAKSTYPE_SET',
 

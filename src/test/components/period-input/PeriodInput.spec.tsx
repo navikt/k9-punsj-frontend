@@ -24,6 +24,7 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
+    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodInput {...periodInputProps} />);
 };
 
