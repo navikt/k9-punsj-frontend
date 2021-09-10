@@ -1,6 +1,6 @@
 export interface IHentSoknad {
     norskIdent: string;
-    periode?: ISoknadPeriode
+    periode?: ISoknadPeriode;
 }
 
 export interface ISoknadPeriode {
@@ -13,7 +13,6 @@ export class SoknadPeriode implements Required<ISoknadPeriode> {
     tom: string;
 
     constructor(periode: ISoknadPeriode) {
-
         this.fom = periode.fom || '';
         this.tom = periode.tom || '';
     }

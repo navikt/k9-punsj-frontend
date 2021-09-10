@@ -1,6 +1,5 @@
 import { PunchStep, TimeFormat } from 'app/models/enums';
-import {IPath, IEksisterendeSoknaderState,
-} from 'app/models/types';
+import { IPath, IEksisterendeSoknaderState } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -10,27 +9,20 @@ import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import {connect} from 'react-redux';
-import {ISoknaderVisningState} from "../../models/types/SoknaderVisningState";
-import {setIdentSokAction, setStepSokAction} from "../../state/actions/SoknaderSokActions";
-import {SoknaderVisningStep} from "../../models/enums/SoknaderVisningStep";
-import {
-    closeSoknadAction,
-    openSoknadAction,
-    resetSoknadidAction,
-} from "../../state/actions/SoknaderVisningActions";
-import {SoknadType} from "../../models/enums/SoknadType";
+import { connect } from 'react-redux';
+import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
+import { setIdentSokAction, setStepSokAction } from '../../state/actions/SoknaderSokActions';
+import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
+import { closeSoknadAction, openSoknadAction, resetSoknadidAction } from '../../state/actions/SoknaderVisningActions';
+import { SoknadType } from '../../models/enums/SoknadType';
 import {
     findEksisterendeSoknader,
     resetPunchAction,
     setIdentAction,
-    undoSearchForSoknaderAction
-} from "../../state/actions";
-import {
-    openEksisterendeSoknadAction,
-    chooseEksisterendeSoknadAction,
-} from 'app/state/actions';
-import {IPSBSoknad, PSBSoknad} from "../../models/types/PSBSoknad";
+    undoSearchForSoknaderAction,
+} from '../../state/actions';
+import { openEksisterendeSoknadAction, chooseEksisterendeSoknadAction } from 'app/state/actions';
+import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 
 export interface ISoknaderSokStateProps {
     visningState: ISoknaderVisningState;
@@ -59,15 +51,8 @@ type ISoknaderSokProps = WrappedComponentProps &
     ISoknaderSokStateProps &
     ISoknaderSokDispatchProps;
 
-export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps> = (
-    props: ISoknaderSokProps
-) => {
-    const {
-        intl,
-        eksisterendeSoknaderState,
-        visningState,
-        ident,
-    } = props;
+export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps> = (props: ISoknaderSokProps) => {
+    const { intl, eksisterendeSoknaderState, visningState, ident } = props;
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     const paths: IPath[] = [
@@ -79,14 +64,9 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
         { step: PunchStep.COMPLETED, path: `$/pleiepenger/fullfort` },
     ];
 
-const getPunchPath = (step: PunchStep, values?: any) => {
-        return getPath(
-            paths,
-            step,
-            values,
-           undefined
-        );
-};
+    const getPunchPath = (step: PunchStep, values?: any) => {
+        return getPath(paths, step, values, undefined);
+    };
 
     React.useEffect(() => {
         props.setIdentAction(ident);
@@ -98,12 +78,13 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         return null;
     }
 
-    if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError && eksisterendeSoknaderState.eksisterendeSoknaderRequestError!!.status === 403) {
+    if (
+        eksisterendeSoknaderState.eksisterendeSoknaderRequestError &&
+        eksisterendeSoknaderState.eksisterendeSoknaderRequestError!!.status === 403
+    ) {
         return (
             <>
-                <AlertStripeFeil>
-                    Du har ikke tilgang til å slå opp denne personen.
-                </AlertStripeFeil>
+                <AlertStripeFeil>Du har ikke tilgang til å slå opp denne personen.</AlertStripeFeil>
             </>
         );
     }
@@ -111,9 +92,7 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <>
-                <AlertStripeFeil>
-                    Det oppsto en feil i henting av søknader.
-                </AlertStripeFeil>
+                <AlertStripeFeil>Det oppsto en feil i henting av søknader.</AlertStripeFeil>
             </>
         );
     }
@@ -124,18 +103,17 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     ) {
         return (
             <div>
-                <NavFrontendSpinner/>
+                <NavFrontendSpinner />
             </div>
         );
     }
 
-    const technicalError =
-        eksisterendeSoknaderState.eksisterendeSoknaderRequestError ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
-        ) : null;
+    const technicalError = eksisterendeSoknaderState.eksisterendeSoknaderRequestError ? (
+        <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
+    ) : null;
 
     const chooseSoknad = (soknad: IPSBSoknad) => {
-        window.history.pushState("","", "/rediger");
+        window.history.pushState('', '', '/rediger');
         props.chooseEksisterendeSoknadAction(soknad);
         setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
     };
@@ -144,29 +122,23 @@ const getPunchPath = (step: PunchStep, values?: any) => {
         const rows = [];
 
         for (const s of soknader!!) {
-            const søknad = new PSBSoknad(s)
+            const søknad = new PSBSoknad(s);
             const soknadId = s.soeknadId as string;
-            const {chosenSoknad} = props.eksisterendeSoknaderState;
+            const { chosenSoknad } = props.eksisterendeSoknaderState;
             const fom = søknad.soeknadsperiode?.fom || '';
             const tom = søknad.soeknadsperiode?.tom || '';
             const rowContent = [
-                !!søknad.mottattDato
-                    ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato)
-                    : '',
+                !!søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 SoknadType.PSB,
                 (!!søknad.barn.norskIdent
                     ? søknad.barn.norskIdent
-                    : søknad.barn.foedselsdato &&
-                    datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
-                '',
+                    : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
+                    '',
                 !!fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
                 !!tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
-                <Knapp
-                    key={soknadId}
-                    mini={true}
-                    onClick={() => chooseSoknad(s)}
-                >{intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                </Knapp>
+                <Knapp key={soknadId} mini={true} onClick={() => chooseSoknad(s)}>
+                    {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                </Knapp>,
             ];
             rows.push(
                 <tr key={soknadId} onClick={() => props.openSoknadAction(s)}>
@@ -186,21 +158,20 @@ const getPunchPath = (step: PunchStep, values?: any) => {
                 <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
                 <table className="tabell tabell--stripet punch_mappetabell">
                     <thead>
-                    <tr>
-                        <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                        <th>{intlHelper(intl, 'tabell.søknadtype')}</th>
-                        <th>{intlHelper(intl, 'tabell.fnrellerdato')}</th>
-                        <th>{intlHelper(intl, 'tabell.fraogmed')}</th>
-                        <th>{intlHelper(intl, 'tabell.tilogmed')}</th>
-                        <th/>
-                    </tr>
+                        <tr>
+                            <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                            <th>{intlHelper(intl, 'tabell.søknadtype')}</th>
+                            <th>{intlHelper(intl, 'tabell.fnrellerdato')}</th>
+                            <th>{intlHelper(intl, 'tabell.fraogmed')}</th>
+                            <th>{intlHelper(intl, 'tabell.tilogmed')}</th>
+                            <th />
+                        </tr>
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>
             </>
         );
     }
-
 
     function undoSearchForSoknader() {
         props.undoSearchForSoknaderAction();
@@ -232,20 +203,15 @@ const getPunchPath = (step: PunchStep, values?: any) => {
     );
 };
 
-
-const mapStateToProps = (
-    state: RootStateType
-): ISoknaderSokStateProps => ({
+const mapStateToProps = (state: RootStateType): ISoknaderSokStateProps => ({
     visningState: state.SØK.visningState,
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) =>
-        dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: SoknaderVisningStep) => dispatch(setStepSokAction(step)),
-    findSoknader: (ident1: string) =>
-        dispatch(findEksisterendeSoknader(ident1, null)),
+    findSoknader: (ident1: string) => dispatch(findEksisterendeSoknader(ident1, null)),
     undoSearchForSoknaderAction: () => dispatch(undoSearchForSoknaderAction()),
     openSoknadAction: (soknad: IPSBSoknad) => dispatch(openSoknadAction(soknad)),
     closeSoknadAction: () => dispatch(closeSoknadAction()),
@@ -255,6 +221,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
 });
 
-export const SoknaderVisning = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(SoknaderVisningComponent)
-);
+export const SoknaderVisning = injectIntl(connect(mapStateToProps, mapDispatchToProps)(SoknaderVisningComponent));

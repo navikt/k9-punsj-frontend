@@ -1,7 +1,7 @@
-import {EksisterendeSoknaderActionKeys}            from 'app/models/enums';
-import {IEksisterendeSoknaderState}                from 'app/models/types';
-import {IEksisterendeSoknaderActionTypes}          from 'app/state/actions';
-import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
+import { EksisterendeSoknaderActionKeys } from 'app/models/enums';
+import { IEksisterendeSoknaderState } from 'app/models/types';
+import { IEksisterendeSoknaderActionTypes } from 'app/state/actions';
+import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
 
 const initialState: IEksisterendeSoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -16,7 +16,6 @@ export function EksisterendeSoknaderReducer(
     action: IEksisterendeSoknaderActionTypes | LocationChangeAction
 ): IEksisterendeSoknaderState {
     switch (action.type) {
-
         case LOCATION_CHANGE:
             return initialState;
 
@@ -43,7 +42,6 @@ export function EksisterendeSoknaderReducer(
                 isSoknadCreated: false,
             };
 
-
         case EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_OPEN:
             return {
                 ...eksisterendeSoknaderState,
@@ -53,7 +51,7 @@ export function EksisterendeSoknaderReducer(
         case EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CLOSE:
             return {
                 ...eksisterendeSoknaderState,
-                chosenSoknad: undefined
+                chosenSoknad: undefined,
             };
 
         case EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNAD_CHOOSE:
@@ -68,13 +66,12 @@ export function EksisterendeSoknaderReducer(
                 chosenSoknad: undefined,
             };
 
-
         case EksisterendeSoknaderActionKeys.SOKNAD_CREATE_REQUEST:
             return {
                 ...eksisterendeSoknaderState,
                 soknadid: undefined,
                 isAwaitingSoknadCreation: true,
-                createSoknadRequestError: undefined
+                createSoknadRequestError: undefined,
             };
 
         case EksisterendeSoknaderActionKeys.SOKNAD_CREATE_SUCCESS:
@@ -93,16 +90,17 @@ export function EksisterendeSoknaderReducer(
                 soknadid: undefined,
                 isAwaitingSoknadCreation: false,
                 createSoknadRequestError: action.error,
-                isSoknadCreated: false
+                isSoknadCreated: false,
             };
 
         case EksisterendeSoknaderActionKeys.SOKNADID_RESET:
             return {
                 ...eksisterendeSoknaderState,
                 soknadid: undefined,
-                isSoknadCreated: false
+                isSoknadCreated: false,
             };
 
-        default: return eksisterendeSoknaderState;
+        default:
+            return eksisterendeSoknaderState;
     }
 }

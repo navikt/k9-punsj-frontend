@@ -1,7 +1,7 @@
-import {ISoknaderSokState} from 'app/models/types';
-import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
-import {SoknaderVisningActionKeys} from "../../models/enums/SoknaderVisningActionKeys";
-import {ISoknaderVisningActionTypes} from "../actions/SoknaderVisningActions";
+import { ISoknaderSokState } from 'app/models/types';
+import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
+import { SoknaderVisningActionKeys } from '../../models/enums/SoknaderVisningActionKeys';
+import { ISoknaderVisningActionTypes } from '../actions/SoknaderVisningActions';
 
 const initialState: ISoknaderSokState = {
     soknadSvar: [],
@@ -14,7 +14,6 @@ export function SoknaderSokReducer(
     action: ISoknaderVisningActionTypes | LocationChangeAction
 ): ISoknaderSokState {
     switch (action.type) {
-
         case LOCATION_CHANGE:
             return initialState;
 
@@ -23,7 +22,7 @@ export function SoknaderSokReducer(
                 ...soknaderVisningState,
                 soknadSvar: action.soknadSvar,
                 isSoknaderLoading: false,
-                soknaderRequestError: undefined
+                soknaderRequestError: undefined,
             };
 
         case SoknaderVisningActionKeys.SOKNADER_LOAD:
@@ -43,25 +42,25 @@ export function SoknaderSokReducer(
         case SoknaderVisningActionKeys.SOKNAD_OPEN:
             return {
                 ...soknaderVisningState,
-                chosenSoknad: action.soknad
+                chosenSoknad: action.soknad,
             };
 
         case SoknaderVisningActionKeys.SOKNAD_CLOSE:
             return {
                 ...soknaderVisningState,
-                chosenSoknad: undefined
+                chosenSoknad: undefined,
             };
 
         case SoknaderVisningActionKeys.SOKNAD_CHOOSE:
             return {
                 ...soknaderVisningState,
-                chosenSoknad: action.soknad
+                chosenSoknad: action.soknad,
             };
 
         case SoknaderVisningActionKeys.SOKNAD_UNDO_CHOICE:
             return {
                 ...soknaderVisningState,
-                chosenSoknad: undefined
+                chosenSoknad: undefined,
             };
 
         case SoknaderVisningActionKeys.SOKNADID_RESET:
@@ -70,6 +69,7 @@ export function SoknaderSokReducer(
                 soknadid: undefined,
             };
 
-        default: return soknaderVisningState;
+        default:
+            return soknaderVisningState;
     }
 }

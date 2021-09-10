@@ -1,13 +1,12 @@
-import {Select, SelectProps} from 'nav-frontend-skjema';
-import * as React            from 'react';
+import { Select, SelectProps } from 'nav-frontend-skjema';
+import * as React from 'react';
 
 export interface INumberSelectProps extends Omit<SelectProps, 'children'> {
-    from?:  number;
-    to:     number;
+    from?: number;
+    to: number;
 }
 
 export const NumberSelect: React.FunctionComponent<INumberSelectProps> = (props: INumberSelectProps) => {
-
     const from: number = props.from || 0;
     const length: number = props.to - from + 1;
 
@@ -15,10 +14,16 @@ export const NumberSelect: React.FunctionComponent<INumberSelectProps> = (props:
         return null;
     }
 
-    return <Select {...props}>
-        {Array.from(Array(length).keys()).map(int => {
-            const value = int + from;
-            return <option {...{value}} key={value}>{value}</option>
-        })}
-    </Select>;
+    return (
+        <Select {...props}>
+            {Array.from(Array(length).keys()).map((int) => {
+                const value = int + from;
+                return (
+                    <option {...{ value }} key={value}>
+                        {value}
+                    </option>
+                );
+            })}
+        </Select>
+    );
 };

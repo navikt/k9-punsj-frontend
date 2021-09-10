@@ -1,7 +1,7 @@
-import {fødselsnummervalidator, gyldigDato, IFeltValidator, påkrevd, validerSkjema} from "../../rules/valideringer";
-import {IntlShape} from "react-intl";
-import {useFormikContext} from "formik";
-import {IOverføringPunchSkjema} from "./omsorgspenger/overføring/PunchSkjema";
+import { fødselsnummervalidator, gyldigDato, IFeltValidator, påkrevd, validerSkjema } from '../../rules/valideringer';
+import { IntlShape } from 'react-intl';
+import { useFormikContext } from 'formik';
+import { IOverføringPunchSkjema } from './omsorgspenger/overføring/PunchSkjema';
 
 export interface IPunchFormSkjema {
     identitetsnummer: string;
@@ -25,11 +25,6 @@ const timerValidator: IFeltValidator<string, IPunchFormSkjema> = {
 };
 
 export const validerPunchForm = (intl: IntlShape) =>
-    validerSkjema<IPunchFormSkjema>(
-        [fnrFeltValidator,
-            periodeFraValidator, timerValidator],
-        intl
-    );
+    validerSkjema<IPunchFormSkjema>([fnrFeltValidator, periodeFraValidator, timerValidator], intl);
 
-export const usePunchFormContext = () =>
-    useFormikContext<IPunchFormSkjema>();
+export const usePunchFormContext = () => useFormikContext<IPunchFormSkjema>();

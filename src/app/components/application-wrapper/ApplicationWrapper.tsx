@@ -12,92 +12,81 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
-import {getEnvironmentVariable} from "../../utils";
+import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
 
 interface IApplicationWrapperComponentProps {
-  locale: Locale;
-  onChangeLocale: (locale: Locale) => void;
+    locale: Locale;
+    onChangeLocale: (locale: Locale) => void;
 }
 
 interface IApplicationWrapperStateProps {
-  authState: IAuthState;
+    authState: IAuthState;
 }
 interface IApplicationWrapperDispatchProps {
-  checkAuth: typeof checkAuth;
+    checkAuth: typeof checkAuth;
 }
 
 const isDev = window.location.hostname.includes('dev.adeo.no');
 
 const K9_LOS_URL = getEnvironmentVariable('K9_LOS_URL');
-const K9_LOS_URL_SET: boolean =
-    !!K9_LOS_URL && K9_LOS_URL !== 'undefined';
-const REDIRECT_URL_LOS = K9_LOS_URL_SET
-    ? K9_LOS_URL
-    : 'http://localhost:8030';
+const K9_LOS_URL_SET: boolean = !!K9_LOS_URL && K9_LOS_URL !== 'undefined';
+const REDIRECT_URL_LOS = K9_LOS_URL_SET ? K9_LOS_URL : 'http://localhost:8030';
 
-type IApplicationWrapperProps = React.PropsWithChildren<
-  IApplicationWrapperComponentProps
-> &
-  IApplicationWrapperStateProps &
-  IApplicationWrapperDispatchProps;
+type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperComponentProps> &
+    IApplicationWrapperStateProps &
+    IApplicationWrapperDispatchProps;
 
-const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (
-  props: IApplicationWrapperProps
-) => {
-  const { authState, locale } = props;
+const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
+    const { authState, locale } = props;
 
-  if (!!authState.error) {
-    return (
-      <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>
-    );
-  }
-
-  if (!authState.loggedIn && !authState.isLoading) {
-    if (!authState.redirectUrl) {
-      props.checkAuth();
-      return null;
-    } else {
-      window.location.replace(authState.redirectUrl);
-      return null;
+    if (!!authState.error) {
+        return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
     }
-  }
 
-  if (authState.isLoading) {
+    if (!authState.loggedIn && !authState.isLoading) {
+        if (!authState.redirectUrl) {
+            props.checkAuth();
+            return null;
+        } else {
+            window.location.replace(authState.redirectUrl);
+            return null;
+        }
+    }
+
+    if (authState.isLoading) {
+        return (
+            <Container>
+                <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
+                    <Col xs={'auto'}>
+                        <NavFrontendSpinner />
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
+
     return (
-      <Container>
-        <Row
-          className="justify-content-center align-items-center"
-          style={{ height: '100vh' }}
-        >
-          <Col xs={'auto'}>
-            <NavFrontendSpinner />
-          </Col>
-        </Row>
-      </Container>
+        <IntlProvider {...{ locale }}>
+            <Normaltekst tag="div" className="fit-window-height">
+                <div className={isDev ? 'headercontainer' : ''}>
+                    <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
+                        <UserPanel name={props.authState.userName!} />
+                    </Header>
+                </div>
+                <AppContainer>
+                    <Router>{props.children}</Router>
+                </AppContainer>
+            </Normaltekst>
+        </IntlProvider>
     );
-  }
-
-  return (
-    <IntlProvider {...{ locale }}>
-      <Normaltekst tag="div" className="fit-window-height">
-        <div className={isDev ? "headercontainer": ""}>
-        <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
-          <UserPanel name={props.authState.userName!} />
-        </Header></div>
-        <AppContainer>
-          <Router>{props.children}</Router>
-        </AppContainer>
-      </Normaltekst>
-    </IntlProvider>
-  );
 };
 
 function mapStateToProps(state: RootStateType) {
-  return { authState: state.authState };
+    return { authState: state.authState };
 }
 function mapDispatchToProps(dispatch: any) {
-  return { checkAuth: () => dispatch(checkAuth()) };
+    return { checkAuth: () => dispatch(checkAuth()) };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApplicationWrapper);

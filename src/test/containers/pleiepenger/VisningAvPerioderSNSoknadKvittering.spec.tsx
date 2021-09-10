@@ -1,13 +1,10 @@
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import {createIntl, IntlShape} from 'react-intl';
-import {
-    IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode
-} from "../../../app/models/types/PSBSoknadKvittering";
-import {mocked} from "ts-jest/utils";
-import intlHelper from "../../../app/utils/intlUtils";
-import VisningAvPerioderSNSoknadKvittering
-    from "../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSNSoknadKvittering";
+import { createIntl, IntlShape } from 'react-intl';
+import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../app/models/types/PSBSoknadKvittering';
+import { mocked } from 'ts-jest/utils';
+import intlHelper from '../../../app/utils/intlUtils';
+import VisningAvPerioderSNSoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSNSoknadKvittering';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -16,58 +13,56 @@ jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
-const fullstendigResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [{
-    perioder: {
-        '2021-06-01/2021-06-30': {
-            virksomhetstyper: [
-                "FISKE",
-            ],
-            regnskapsførerNavn: 'Ola Nordmann',
-            regnskapsførerTlf: '00000000',
-            erVarigEndring: false,
-            endringDato: [],
-            endringBegrunnelse: '',
-            bruttoInntekt: 100000,
-            erNyoppstartet: false,
-            registrertIUtlandet: false,
-            landkode: null
-        }
+const fullstendigResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
+    {
+        perioder: {
+            '2021-06-01/2021-06-30': {
+                virksomhetstyper: ['FISKE'],
+                regnskapsførerNavn: 'Ola Nordmann',
+                regnskapsførerTlf: '00000000',
+                erVarigEndring: false,
+                endringDato: [],
+                endringBegrunnelse: '',
+                bruttoInntekt: 100000,
+                erNyoppstartet: false,
+                registrertIUtlandet: false,
+                landkode: null,
+            },
+        },
+        organisasjonsnummer: '3243434',
+        virksomhetNavn: 'Fiske AS',
     },
-    organisasjonsnummer: '3243434',
-    virksomhetNavn: 'Fiske AS'
-}];
+];
 
-const varigEndring: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [{
-    perioder: {
-        '2021-06-01/2021-06-30': {
-            virksomhetstyper: [
-                "FISKE",
-            ],
-            regnskapsførerNavn: 'Ola Nordmann',
-            regnskapsførerTlf: '00000000',
-            erVarigEndring: true,
-            endringDato: [2021, 3, 16],
-            endringBegrunnelse: 'Begrunnelse',
-            bruttoInntekt: 100000,
-            erNyoppstartet: false,
-            registrertIUtlandet: true,
-            landkode: 'USA'
-        }
+const varigEndring: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
+    {
+        perioder: {
+            '2021-06-01/2021-06-30': {
+                virksomhetstyper: ['FISKE'],
+                regnskapsførerNavn: 'Ola Nordmann',
+                regnskapsførerTlf: '00000000',
+                erVarigEndring: true,
+                endringDato: [2021, 3, 16],
+                endringBegrunnelse: 'Begrunnelse',
+                bruttoInntekt: 100000,
+                erNyoppstartet: false,
+                registrertIUtlandet: true,
+                landkode: 'USA',
+            },
+        },
+        organisasjonsnummer: '3243434',
+        virksomhetNavn: 'Fiske AS',
     },
-    organisasjonsnummer: '3243434',
-    virksomhetNavn: 'Fiske AS'
-}];
+];
 
-const setupVisningAvPerioderSNSoknadKvittering = (response : IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[]) => {
-    const intlMock = createIntl({locale: 'nb', defaultLocale: 'nb'});
+const setupVisningAvPerioderSNSoknadKvittering = (
+    response: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[]
+) => {
+    const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
-    mocked(intlHelper).mockImplementation(
-        (intl: IntlShape, id: string, value?: { [key: string]: string }) => id
-    );
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
-    return shallow(
-        <VisningAvPerioderSNSoknadKvittering intl={intlMock} countryList={[]} perioder={response}/>
-    );
+    return shallow(<VisningAvPerioderSNSoknadKvittering intl={intlMock} countryList={[]} perioder={response} />);
 };
 
 describe('VisningAvPerioderSNSoknadKvittering', () => {
@@ -75,13 +70,17 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
     const visningAvPerioderSNSoknadKvitteringVarigEndring = setupVisningAvPerioderSNSoknadKvittering(varigEndring);
 
     it('Viser orgnummer', () => {
-       expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.arbeidstaker.orgnr')).toBe(true);
-       expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].organisasjonsnummer)).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.arbeidstaker.orgnr')).toBe(true);
+        expect(
+            visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].organisasjonsnummer)
+        ).toBe(true);
     });
 
     it('Viser orgnavn', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.virksomhetsnavn')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].virksomhetNavn)).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].virksomhetNavn)).toBe(
+            true
+        );
     });
 
     it('Viser periode', () => {
@@ -98,13 +97,17 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.sn.registrertINorge')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Ja')).toBe(true);
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
     });
 
     it('Viser att virksomheten er registrert i annet land', () => {
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
     });
@@ -118,13 +121,19 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendring')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Ja')).toBe(true);
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendringdato')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendringdato')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('16.3.2021')).toBe(true);
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('egrunnelse')).toBe(true);
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('egrunnelse')).toBe(true);
     });
 
@@ -134,10 +143,14 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
     });
 
     it('Viser om informasjon om regnskapsfører', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførernavn')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførernavn')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Ola Nordmann')).toBe(true);
 
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførertlf')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførertlf')).toBe(
+            true
+        );
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('00000000')).toBe(true);
     });
 });

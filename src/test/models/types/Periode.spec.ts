@@ -1,22 +1,20 @@
-import {IPeriode, Periode}     from 'app/models/types';
-import intlHelper              from 'app/utils/intlUtils';
-import {createIntl, IntlShape} from 'react-intl';
-import {mocked}                from 'ts-jest/utils';
+import { IPeriode, Periode } from 'app/models/types';
+import intlHelper from 'app/utils/intlUtils';
+import { createIntl, IntlShape } from 'react-intl';
+import { mocked } from 'ts-jest/utils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
 describe('Periode', () => {
-
     const fom = '2020-01-01';
     const tom = '2020-01-31';
 
     const setupPeriode = (periodePartial?: Partial<IPeriode>) => {
-
         const periode: IPeriode = {
             fom: null,
             tom: null,
-            ...periodePartial
+            ...periodePartial,
         };
 
         mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => {
@@ -31,34 +29,37 @@ describe('Periode', () => {
     };
 
     describe('Periode.generateStringsForDescription', () => {
-
-        const intl = createIntl({locale: 'nb', defaultLocale: 'nb'});
+        const intl = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
         it('Returnerer tomme strenger når ingen datoer er satt', () => {
-            expect(setupPeriode().generateStringsForDescription(intl)).toEqual({ft: '', fom: '', tom: ''});
+            expect(setupPeriode().generateStringsForDescription(intl)).toEqual({
+                ft: '',
+                fom: '',
+                tom: '',
+            });
         });
 
         it('Returnerer "f" og datostreng for fomdato når kun denne er satt', () => {
-            expect(setupPeriode({fom}).generateStringsForDescription(intl)).toEqual({
+            expect(setupPeriode({ fom }).generateStringsForDescription(intl)).toEqual({
                 ft: 'f',
                 fom: '01.01.2020',
-                tom: ''
+                tom: '',
             });
         });
 
         it('Returnerer "t" og datostreng for tomdato når kun denne er satt', () => {
-            expect(setupPeriode({tom}).generateStringsForDescription(intl)).toEqual({
+            expect(setupPeriode({ tom }).generateStringsForDescription(intl)).toEqual({
                 ft: 't',
                 fom: '',
-                tom: '31.01.2020'
+                tom: '31.01.2020',
             });
         });
 
         it('Returnerer "ft" og datostrenger når begge datoer er satt', () => {
-            expect(setupPeriode({fom, tom}).generateStringsForDescription(intl)).toEqual({
+            expect(setupPeriode({ fom, tom }).generateStringsForDescription(intl)).toEqual({
                 ft: 'ft',
                 fom: '01.01.2020',
-                tom: '31.01.2020'
+                tom: '31.01.2020',
             });
         });
     });

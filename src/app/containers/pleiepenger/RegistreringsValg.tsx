@@ -1,19 +1,19 @@
-import React, {useState} from "react";
-import {FormattedMessage} from "react-intl";
-import {EksisterendeSoknader} from "./EksisterendeSoknader";
-import {PunchStep} from "../../models/enums";
+import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { EksisterendeSoknader } from './EksisterendeSoknader';
+import { PunchStep } from '../../models/enums';
 import './registreringsValg.less';
-import {Hovedknapp, Knapp} from "nav-frontend-knapper";
-import {createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction} from "../../state/actions";
-import {connect} from "react-redux";
-import {setHash} from "../../utils";
-import {AlertStripeFeil} from "nav-frontend-alertstriper";
-import {IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState} from "../../models/types";
-import {RootStateType} from "../../state/RootState";
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
+import { connect } from 'react-redux';
+import { setHash } from '../../utils';
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState } from '../../models/types';
+import { RootStateType } from '../../state/RootState';
 
-import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
-import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from "../../state/actions/JournalposterPerIdentActions";
-import {IIdentState} from "../../models/types/IdentState";
+import { IJournalposterPerIdentState } from '../../models/types/JournalposterPerIdentState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { IIdentState } from '../../models/types/IdentState';
 
 export interface IRegistreringsValgComponentProps {
     journalpostid: string;
@@ -34,29 +34,24 @@ export interface IEksisterendeSoknaderStateProps {
     identState: IIdentState;
 }
 
+type IRegistreringsValgProps = IRegistreringsValgComponentProps &
+    IEksisterendeSoknaderStateProps &
+    IRegistreringsValgDispatchProps;
 
-type IRegistreringsValgProps = IRegistreringsValgComponentProps & IEksisterendeSoknaderStateProps
-    & IRegistreringsValgDispatchProps;
+export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (
+    props: IRegistreringsValgProps
+) => {
+    const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
+    const [valgtOption, setValgtOption] = useState<string>('nysoknad');
 
-export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (props: IRegistreringsValgProps) => {
-
-    const {
-        journalpostid,
-        identState,
-        getPunchPath,
-        eksisterendeSoknaderState,
-    } = props;
-    const [valgtOption, setValgtOption] = useState<string>("nysoknad");
-
-    const {ident1, ident2} = identState;
+    const { ident1, ident2 } = identState;
 
     React.useEffect(() => {
-        if (
-            !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
-            eksisterendeSoknaderState.isSoknadCreated
-        ) {
+        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
             setHash(
-                getPunchPath(PunchStep.FILL_FORM, {id: eksisterendeSoknaderState.soknadid})
+                getPunchPath(PunchStep.FILL_FORM, {
+                    id: eksisterendeSoknaderState.soknadid,
+                })
             );
             props.resetSoknadidAction();
         }
@@ -68,30 +63,27 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     const redirectToPreviousStep = () => {
         setHash('/');
-        props.undoSearchForEksisterendeSoknaderAction()
-    }
+        props.undoSearchForEksisterendeSoknaderAction();
+    };
 
     const redirectToNextStep = () => {
         props.createSoknad(journalpostid, ident1, ident2);
-        setHash(getPunchPath(PunchStep.FILL_FORM, {id: eksisterendeSoknaderState.soknadid}));
-    }
+        setHash(
+            getPunchPath(PunchStep.FILL_FORM, {
+                id: eksisterendeSoknaderState.soknadid,
+            })
+        );
+    };
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
             <>
-                <AlertStripeFeil>
-                    Det oppsto en feil under opprettelse av søknad.
-                </AlertStripeFeil>
+                <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
             </>
         );
     }
 
-    const newSoknad = () =>
-        props.createSoknad(
-            journalpostid,
-            ident1,
-            ident2
-        );
+    const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
 
     const technicalError =
         eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
@@ -99,20 +91,22 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         ) : null;
 
     const infoText = (journalpost: IJournalpost, index: number) => {
-        const dato = journalpost.dato ? ", dato: " + journalpost.dato : ""
-        return `Journalpost ${index}${dato}`
-    }
+        const dato = journalpost.dato ? ', dato: ' + journalpost.dato : '';
+        return `Journalpost ${index}${dato}`;
+    };
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (!!soknader?.length) {
-            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some(es => Array.from(es.journalposter!).some(jp => jp === journalpostid));
+            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
+                Array.from(es.journalposter!).some((jp) => jp === journalpostid)
+            );
         }
         return true;
-    }
+    };
 
     return (
-        <div className={"registrering-page"}>
+        <div className={'registrering-page'}>
             <EksisterendeSoknader
                 ident1={ident1}
                 ident2={ident2}
@@ -121,27 +115,18 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             />
 
             <div className="knapperad">
-                <Knapp
-                    className="knapp knapp1"
-                    onClick={redirectToPreviousStep}
-                    mini={true}
-                >
+                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini={true}>
                     Tilbake
                 </Knapp>
-                {kanStarteNyRegistrering() &&
-                <Hovedknapp
-                    onClick={newSoknad}
-                    className="knapp knapp2"
-                    disabled={valgtOption === ""}
-                    mini={true}
-                >
-                    {<FormattedMessage id={'ident.knapp.nyregistrering'}/>}
-                </Hovedknapp>}
+                {kanStarteNyRegistrering() && (
+                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} mini={true}>
+                        {<FormattedMessage id={'ident.knapp.nyregistrering'} />}
+                    </Hovedknapp>
+                )}
             </div>
         </div>
-
-    )
-}
+    );
+};
 const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
         dispatch(createSoknad(journalpostid, ident1, ident2)),
@@ -150,14 +135,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 
-const mapStateToProps = (
-    state: RootStateType
-): IEksisterendeSoknaderStateProps => ({
+const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });
-
 
 export const RegistreringsValg = connect(mapStateToProps, mapDispatchToProps)(RegistreringsValgComponent);

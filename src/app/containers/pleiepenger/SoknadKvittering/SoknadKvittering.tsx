@@ -2,24 +2,25 @@ import React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import './soknadKvittering.less';
-import {PunchFormPaneler} from "../../../models/enums/PunchFormPaneler";
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formatereTekstMedTimerOgMinutter,
     formattereTidspunktFraUTCTilGMT,
     getLocaleFromSessionStorage,
-    periodToFormattedString
-} from "../../../utils";
-import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
+    periodToFormattedString,
+} from '../../../utils';
+import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
 import countries from 'i18n-iso-countries';
-import {ICountry} from "../../../components/country-select/CountrySelect";
+import { ICountry } from '../../../components/country-select/CountrySelect';
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
-    IPSBSoknadKvitteringBosteder, IPSBSoknadKvitteringLovbestemtFerie,
+    IPSBSoknadKvitteringBosteder,
+    IPSBSoknadKvitteringLovbestemtFerie,
     IPSBSoknadKvitteringTilsynsordning,
-    IPSBSoknadKvitteringUtenlandsopphold
-} from "../../../models/types/PSBSoknadKvittering";
-import VisningAvPerioderSNSoknadKvittering from "./Komponenter/VisningAvPerioderSNSoknadKvittering";
+    IPSBSoknadKvitteringUtenlandsopphold,
+} from '../../../models/types/PSBSoknadKvittering';
+import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioderSNSoknadKvittering';
 
 interface IOwnProps {
     intl: any;
@@ -28,50 +29,59 @@ interface IOwnProps {
 
 export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
     if (property in object && object[property] !== null) {
-        return true
+        return true;
     }
-    return false
+    return false;
 };
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) => {
     return sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
-}
+};
 
-const formattereLandTilNavnIObjekt = (perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold, countryList: ICountry[]) => {
+const formattereLandTilNavnIObjekt = (
+    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
+    countryList: ICountry[]
+) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach(periode => {
-        const landNavn = countryList.find(country => country.code === perioder[periode].land);
+    Object.keys(perioder).forEach((periode) => {
+        const landNavn = countryList.find((country) => country.code === perioder[periode].land);
         if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
-    })
-    return kopiAvPerioder
+    });
+    return kopiAvPerioder;
 };
 
 export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]) => {
-    const landNavn = countryList.find(country => country.code === landskode);
+    const landNavn = countryList.find((country) => country.code === landskode);
     return typeof landNavn !== undefined ? landNavn?.name : '';
 };
 
 export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach(periode => {
-        kopiAvPerioder[periode].jobberNormaltTimerPerDag = formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag);
-        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].faktiskArbeidTimerPerDag);
-    })
-    return kopiAvPerioder
+    Object.keys(perioder).forEach((periode) => {
+        kopiAvPerioder[periode].jobberNormaltTimerPerDag = formatereTekstMedTimerOgMinutter(
+            kopiAvPerioder[periode].jobberNormaltTimerPerDag
+        );
+        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = formatereTekstMedTimerOgMinutter(
+            kopiAvPerioder[periode].faktiskArbeidTimerPerDag
+        );
+    });
+    return kopiAvPerioder;
 };
 
 const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadKvitteringTilsynsordning) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach(periode => {
-        kopiAvPerioder[periode].etablertTilsynTimerPerDag = formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].etablertTilsynTimerPerDag);
-    })
-    return kopiAvPerioder
+    Object.keys(perioder).forEach((periode) => {
+        kopiAvPerioder[periode].etablertTilsynTimerPerDag = formatereTekstMedTimerOgMinutter(
+            kopiAvPerioder[periode].etablertTilsynTimerPerDag
+        );
+    });
+    return kopiAvPerioder;
 };
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
     for (let i = dato.length - 1; i >= 0; i--) {
-        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`)
+        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
     }
     return formatertDato.join('');
 };
@@ -94,159 +104,242 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
     }, {});
 };
 
-const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) => {
-        const ytelse = response.ytelse;
-        const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
-        const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
-        const visSoknadsperiode = sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
-        const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
-        const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
-        const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
-        const visFerieSomSkalSLettes = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalIkkeHaFerieListe).length > 0;
-        const visOpplysningerOmSoker = ytelse.omsorg?.relasjonTilBarnet !== null;
-        const visArbeidsforhold = sjekkPropertyEksistererOgIkkeErNull('arbeidstakerList', ytelse.arbeidstid) && ytelse.arbeidstid?.arbeidstakerList.length > 0;
-        const visSelvstendigNæringsdrivendeInfo = ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null || sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet);
-        const visFrilanserArbeidstidInfo = ytelse.arbeidstid.frilanserArbeidstidInfo !== null || sjekkPropertyEksistererOgIkkeErNull('frilanser', ytelse.opptjeningAktivitet);
-        const visOmsorgstilbud = sjekkHvisPerioderEksisterer('tilsynsordning', ytelse);
-        const visNattevak = sjekkHvisPerioderEksisterer('nattevåk', ytelse);
-        const visBeredskap = sjekkHvisPerioderEksisterer('beredskap', ytelse);
-        const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
+const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
+    const ytelse = response.ytelse;
+    const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
+    const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
+    const visSoknadsperiode =
+        sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
+    const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+    const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
+    const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
+    const visFerieSomSkalSLettes =
+        sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalIkkeHaFerieListe).length > 0;
+    const visOpplysningerOmSoker = ytelse.omsorg?.relasjonTilBarnet !== null;
+    const visArbeidsforhold =
+        sjekkPropertyEksistererOgIkkeErNull('arbeidstakerList', ytelse.arbeidstid) &&
+        ytelse.arbeidstid?.arbeidstakerList.length > 0;
+    const visSelvstendigNæringsdrivendeInfo =
+        ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null ||
+        sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet);
+    const visFrilanserArbeidstidInfo =
+        ytelse.arbeidstid.frilanserArbeidstidInfo !== null ||
+        sjekkPropertyEksistererOgIkkeErNull('frilanser', ytelse.opptjeningAktivitet);
+    const visOmsorgstilbud = sjekkHvisPerioderEksisterer('tilsynsordning', ytelse);
+    const visNattevak = sjekkHvisPerioderEksisterer('nattevåk', ytelse);
+    const visBeredskap = sjekkHvisPerioderEksisterer('beredskap', ytelse);
+    const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
 
-        const locale = getLocaleFromSessionStorage();
-        countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
+    const locale = getLocaleFromSessionStorage();
+    countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
 
-        const countryList: ICountry[] = [];
-        Object.keys(countries.getAlpha3Codes()).forEach(code => countryList.push({
+    const countryList: ICountry[] = [];
+    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
+        countryList.push({
             code,
-            name: countries.getName(code, locale)
-        }));
+            name: countries.getName(code, locale),
+        })
+    );
 
-        return (
-            <div className={classNames('SoknadKvitteringContainer')}>
-                <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
-                {visSoknadsperiode && <div>
+    return (
+        <div className={classNames('SoknadKvitteringContainer')}>
+            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
+            {visSoknadsperiode && (
+                <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <p>{periodToFormattedString(ytelse.søknadsperiode[0])}</p>
-                </div>}
+                </div>
+            )}
 
-                {visOpplysningerOmSoknad && <div>
+            {visOpplysningerOmSoknad && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <hr className={classNames('linje')}/>
-                    <p><b>{intlHelper(intl, 'skjema.mottakelsesdato') + ': '}</b>
-                        {`${periodToFormattedString(response.mottattDato.substr(0, 10))}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
+                    <hr className={classNames('linje')} />
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.mottakelsesdato') + ': '}</b>
+                        {`${periodToFormattedString(
+                            response.mottattDato.substr(0, 10)
+                        )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
                     </p>
-                </div>}
+                </div>
+            )}
 
-                {visUtenlandsopphold && <div>
+            {visUtenlandsopphold && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
                         perioder={formattereLandTilNavnIObjekt(ytelse.utenlandsopphold?.perioder, countryList)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />
-                </div>}
+                </div>
+            )}
 
-                {visFerie && <div>
+            {visFerie && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
                         perioder={skalHaferieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
-                </div>}
+                </div>
+            )}
 
-                {visFerieSomSkalSLettes && <div>
+            {visFerieSomSkalSLettes && (
+                <div>
                     <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
                         perioder={skalIkkeHaFerieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
-                </div>}
+                </div>
+            )}
 
-                {visOpplysningerOmSoker && <div>
+            {visOpplysningerOmSoker && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <p>
                         <b>{intlHelper(intl, 'skjema.relasjontilbarnet') + ': '}</b>
-                        {ytelse.omsorg.relasjonTilBarnet === 'ANNET' ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}` : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) + ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
+                        {ytelse.omsorg.relasjonTilBarnet === 'ANNET'
+                            ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}`
+                            : `${ytelse.omsorg.relasjonTilBarnet!.charAt(0) +
+                                  ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}`}
                     </p>
-                </div>}
+                </div>
+            )}
 
-                {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && <div>
+            {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
 
-                    {visArbeidsforhold && <div>
-                        <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
-                        {ytelse.arbeidstid?.arbeidstakerList.map(arbeidstakerperiode => {
-                            const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
-                            return <>
-                                <p className={classNames('soknadKvitteringUnderTittel')}>
-                                    <b>{intlHelper(intl, skalOrgNummerVises ? 'skjema.arbeid.arbeidstaker.orgnr' : 'skjema.arbeid.arbeidstaker.ident') + ': '}</b>
-                                    {`${skalOrgNummerVises ? arbeidstakerperiode.organisasjonsnummer : arbeidstakerperiode.norskIdentitetsnummer}`}
-                                </p>
+                    {visArbeidsforhold && (
+                        <div>
+                            <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
+                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
+                                const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
+                                return (
+                                    <>
+                                        <p className={classNames('soknadKvitteringUnderTittel')}>
+                                            <b>
+                                                {intlHelper(
+                                                    intl,
+                                                    skalOrgNummerVises
+                                                        ? 'skjema.arbeid.arbeidstaker.orgnr'
+                                                        : 'skjema.arbeid.arbeidstaker.ident'
+                                                ) + ': '}
+                                            </b>
+                                            {`${
+                                                skalOrgNummerVises
+                                                    ? arbeidstakerperiode.organisasjonsnummer
+                                                    : arbeidstakerperiode.norskIdentitetsnummer
+                                            }`}
+                                        </p>
 
+                                        <VisningAvPerioderSoknadKvittering
+                                            intl={intl}
+                                            perioder={formattereTimerForArbeidstakerPerioder(
+                                                arbeidstakerperiode.arbeidstidInfo.perioder
+                                            )}
+                                            tittel={[
+                                                'skjema.periode.overskrift',
+                                                'skjema.arbeid.arbeidstaker.timernormalt',
+                                                'skjema.arbeid.arbeidstaker.timerfaktisk',
+                                            ]}
+                                            properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                                        />
+                                    </>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {visFrilanserArbeidstidInfo && (
+                        <div>
+                            <h3>{intlHelper(intl, 'frilanser')}</h3>
+                            {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser) &&
+                                ytelse.opptjeningAktivitet.frilanser?.startdato?.length! > 0 && (
+                                    <p>
+                                        <b>{intlHelper(intl, 'skjema.frilanserdato') + ' '}</b>
+                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato!)}
+                                    </p>
+                                )}
+
+                            {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
+                                sjekkPropertyEksistererOgIkkeErNull(
+                                    'sluttdato',
+                                    ytelse.opptjeningAktivitet.frilanser
+                                ) &&
+                                ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length! > 0 && (
+                                    <p>
+                                        <b>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' '}</b>
+                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}
+                                    </p>
+                                )}
+
+                            {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
                                     intl={intl}
-                                    perioder={formattereTimerForArbeidstakerPerioder(arbeidstakerperiode.arbeidstidInfo.perioder)}
-                                    tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
+                                    perioder={formattereTimerForArbeidstakerPerioder(
+                                        ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder!
+                                    )}
+                                    tittel={[
+                                        'skjema.periode.overskrift',
+                                        'skjema.arbeid.arbeidstaker.timernormalt',
+                                        'skjema.arbeid.arbeidstaker.timerfaktisk',
+                                    ]}
                                     properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
                                 />
-                            </>
-                        })}
-                    </div>}
+                            )}
+                        </div>
+                    )}
 
-                    {visFrilanserArbeidstidInfo && <div>
-                        <h3>{intlHelper(intl, 'frilanser')}</h3>
-                        {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser)
-                        && ytelse.opptjeningAktivitet.frilanser?.startdato?.length! > 0
-                        && <p>
-                            <b>{intlHelper(intl, 'skjema.frilanserdato') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato!)}
-                        </p>}
+                    {visSelvstendigNæringsdrivendeInfo && (
+                        <div>
+                            <h3>{intlHelper(intl, 'selvstendig')}</h3>
 
-                        {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans
-                        && sjekkPropertyEksistererOgIkkeErNull('sluttdato', ytelse.opptjeningAktivitet.frilanser)
-                        && ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length! > 0
-                        && <p>
-                            <b>{intlHelper(intl, 'skjema.frilanserdato.slutt') + ' '}</b>{formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato!)}
-                        </p>
-                        }
+                            {sjekkPropertyEksistererOgIkkeErNull(
+                                'selvstendigNæringsdrivende',
+                                ytelse.opptjeningAktivitet
+                            ) && (
+                                <VisningAvPerioderSNSoknadKvittering
+                                    intl={intl}
+                                    perioder={ytelse.opptjeningAktivitet.selvstendigNæringsdrivende!}
+                                    countryList={countryList}
+                                />
+                            )}
 
-                        {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && <VisningAvPerioderSoknadKvittering
-                            intl={intl}
-                            perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder!)}
-                            tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
-                            properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
-                        />}
-                    </div>}
+                            {ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null && (
+                                <VisningAvPerioderSoknadKvittering
+                                    intl={intl}
+                                    perioder={formattereTimerForArbeidstakerPerioder(
+                                        ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder!
+                                    )}
+                                    tittel={[
+                                        'skjema.periode.overskrift',
+                                        'skjema.arbeid.arbeidstaker.timernormalt',
+                                        'skjema.arbeid.arbeidstaker.timerfaktisk',
+                                    ]}
+                                    properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                                />
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
 
-                    {visSelvstendigNæringsdrivendeInfo && <div>
-                        <h3>{intlHelper(intl, 'selvstendig')}</h3>
-
-                        {sjekkPropertyEksistererOgIkkeErNull('selvstendigNæringsdrivende', ytelse.opptjeningAktivitet) &&
-                        <VisningAvPerioderSNSoknadKvittering intl={intl}
-                                                             perioder={ytelse.opptjeningAktivitet.selvstendigNæringsdrivende!}
-                                                             countryList={countryList}/>}
-
-                        {ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null &&
-                        <VisningAvPerioderSoknadKvittering
-                            intl={intl}
-                            perioder={formattereTimerForArbeidstakerPerioder(ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder!)}
-                            tittel={['skjema.periode.overskrift', 'skjema.arbeid.arbeidstaker.timernormalt', 'skjema.arbeid.arbeidstaker.timerfaktisk']}
-                            properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
-                        />}
-                    </div>}
-                </div>}
-
-                {visOmsorgstilbud && <div>
+            {visOmsorgstilbud && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
                         perioder={formattereTimerOgMinutterForOmsorgstilbudPerioder(ytelse.tilsynsordning.perioder)}
@@ -254,60 +347,84 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({intl, response}) 
                         properties={['etablertTilsynTimerPerDag']}
                         lessClassForAdjustment={'visningAvPerioderOmsorgstilbud'}
                     />
-                </div>}
+                </div>
+            )}
 
-                {(visNattevak || visBeredskap) && <div>
+            {(visNattevak || visBeredskap) && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.BEREDSKAPNATTEVAAK)}</h3>
-                    <hr className={classNames('linje')}/>
-                    {visBeredskap && <>
-                        <h4 className={'soknadKvitteringUnderTittel'}>{intlHelper(intl, 'skjema.beredskap.overskrift')}</h4>
-                        <VisningAvPerioderSoknadKvittering
-                            intl={intl}
-                            perioder={ytelse.beredskap.perioder}
-                            tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
-                            properties={['tilleggsinformasjon']}
-                            lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
-                        />
-                    </>}
+                    <hr className={classNames('linje')} />
+                    {visBeredskap && (
+                        <>
+                            <h4 className={'soknadKvitteringUnderTittel'}>
+                                {intlHelper(intl, 'skjema.beredskap.overskrift')}
+                            </h4>
+                            <VisningAvPerioderSoknadKvittering
+                                intl={intl}
+                                perioder={ytelse.beredskap.perioder}
+                                tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
+                                properties={['tilleggsinformasjon']}
+                                lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
+                            />
+                        </>
+                    )}
 
-                    {visNattevak && <div>
-                        <h4 className={'soknadKvitteringUnderTittel'}>{intlHelper(intl, 'skjema.nattevaak.overskrift')}</h4>
-                        <VisningAvPerioderSoknadKvittering
-                            intl={intl}
-                            perioder={ytelse.nattevåk.perioder}
-                            tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
-                            properties={['tilleggsinformasjon']}
-                            lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
-                        />
-                    </div>}
-                </div>}
+                    {visNattevak && (
+                        <div>
+                            <h4 className={'soknadKvitteringUnderTittel'}>
+                                {intlHelper(intl, 'skjema.nattevaak.overskrift')}
+                            </h4>
+                            <VisningAvPerioderSoknadKvittering
+                                intl={intl}
+                                perioder={ytelse.nattevåk.perioder}
+                                tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
+                                properties={['tilleggsinformasjon']}
+                                lessClassForAdjustment={'visningAvPerioderSoknadBeredskap'}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
 
-                {visMedlemskap && <div>
+            {visMedlemskap && (
+                <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
                         perioder={formattereLandTilNavnIObjekt(ytelse.bosteder?.perioder, countryList)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />
-                </div>}
-
-                {'infoFraPunsj' in ytelse && <div>
-                  <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                  <hr className={classNames('linje')}/>
-                  <p>
-                    <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
-                      {`${ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null && ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
-                  </p>
-                  <p>
-                    <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
-                      {`${ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null && ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
-                  </p>
                 </div>
-                }
-            </div>);
-    }
-;
+            )}
+
+            {'infoFraPunsj' in ytelse && (
+                <div>
+                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
+                    <hr className={classNames('linje')} />
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.medisinskeopplysninger') + ': '}</b>
+                        {`${
+                            ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null &&
+                            ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger
+                                ? 'Ja'
+                                : 'Nei'
+                        }`}
+                    </p>
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.opplysningerikkepunsjet') + ': '}</b>
+                        {`${
+                            ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null &&
+                            ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes
+                                ? 'Ja'
+                                : 'Nei'
+                        }`}
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default SoknadKvittering;

@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 
-import {RedigeringLoaderImpl} from "./RedigeringLoader";
-import {Sakstyper} from "../SakstypeImpls";
-import SakstypeStepRouter from "../SakstypeStepRouter";
-
+import { RedigeringLoaderImpl } from './RedigeringLoader';
+import { Sakstyper } from '../SakstypeImpls';
+import SakstypeStepRouter from '../SakstypeStepRouter';
 
 const RedigeringRouter: React.FunctionComponent = () => {
     return (
@@ -18,13 +17,10 @@ const RedigeringRouter: React.FunctionComponent = () => {
                             children={
                                 sakstypeConfig.getComponent ? (
                                     sakstypeConfig.getComponent({
-                                        punchPath: sakstypeConfig.punchPath
+                                        punchPath: sakstypeConfig.punchPath,
                                     })
                                 ) : (
-                                    <SakstypeStepRouter
-                                        sakstypeConfig={sakstypeConfig}
-                                        journalpostid={undefined}
-                                    />
+                                    <SakstypeStepRouter sakstypeConfig={sakstypeConfig} journalpostid={undefined} />
                                 )
                             }
                         />

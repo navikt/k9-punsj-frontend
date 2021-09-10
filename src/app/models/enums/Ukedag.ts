@@ -1,9 +1,9 @@
 export enum Ukedag {
     MANDAG,
     TIRSDAG,
-    ONSDAG ,
+    ONSDAG,
     TORSDAG,
     FREDAG,
     LORDAG,
-    SONDAG
+    SONDAG,
 }

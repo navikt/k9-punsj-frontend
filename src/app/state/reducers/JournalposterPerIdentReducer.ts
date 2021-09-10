@@ -1,12 +1,12 @@
-import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
-import {IJournalposterPerIdentActions} from "../actions/JournalposterPerIdentActions";
-import {JournalposterPerIdentActionKeys} from "../../models/enums/JournalposterPerIdentActionKeys";
+import { IJournalposterPerIdentState } from '../../models/types/JournalposterPerIdentState';
+import { IJournalposterPerIdentActions } from '../actions/JournalposterPerIdentActions';
+import { JournalposterPerIdentActionKeys } from '../../models/enums/JournalposterPerIdentActionKeys';
 
 const initialState: IJournalposterPerIdentState = {
     journalposter: [],
     isJournalposterLoading: false,
-    journalposterRequestError: undefined
-}
+    journalposterRequestError: undefined,
+};
 
 export function JournalposterPerIdentReducer(
     journalposterPerIdentState: IJournalposterPerIdentState = initialState,
@@ -18,23 +18,23 @@ export function JournalposterPerIdentReducer(
                 ...journalposterPerIdentState,
                 journalposter: action.journalposter,
                 isJournalposterLoading: false,
-                journalposterRequestError: undefined
+                journalposterRequestError: undefined,
             };
 
         case JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_LOAD:
             return {
                 ...journalposterPerIdentState,
                 isJournalposterLoading: action.isLoading,
-                journalposterRequestError: undefined
+                journalposterRequestError: undefined,
             };
         case JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_REQUEST_ERROR:
             return {
                 ...journalposterPerIdentState,
                 isJournalposterLoading: false,
-                journalposterRequestError: action.error
+                journalposterRequestError: action.error,
             };
 
-        default: return journalposterPerIdentState;
-
+        default:
+            return journalposterPerIdentState;
     }
 }

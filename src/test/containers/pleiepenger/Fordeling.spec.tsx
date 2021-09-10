@@ -3,15 +3,15 @@ import {
     IFordelingDispatchProps,
     IFordelingStateProps,
 } from 'app/containers/pleiepenger/Fordeling/Fordeling';
-import {JaNei, Sakstype} from 'app/models/enums';
-import {IFordelingState, IJournalpost} from 'app/models/types';
+import { JaNei, Sakstype } from 'app/models/enums';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import {createIntl, IntlShape, WrappedComponentProps} from 'react-intl';
-import {mocked} from 'ts-jest/utils';
-import {IIdentState} from "../../../app/models/types/IdentState";
-import {IGosysOppgaveState} from "../../../app/models/types/GosysOppgaveState";
+import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
+import { mocked } from 'ts-jest/utils';
+import { IIdentState } from '../../../app/models/types/IdentState';
+import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -25,10 +25,10 @@ const journalpostid = '200';
 export const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
-    opprettIGosysStatePartial?: Partial<IGosysOppgaveState>,
+    opprettIGosysStatePartial?: Partial<IGosysOppgaveState>
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
-        intl: createIntl({locale: 'nb', defaultLocale: 'nb'}),
+        intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
     };
 
     const fordelingDispatchProps: IFordelingDispatchProps = {
@@ -46,19 +46,18 @@ export const setupFordeling = (
     };
 
     const journalpost: IJournalpost = {
-        dokumenter: [{dokumentId: '123'}],
+        dokumenter: [{ dokumentId: '123' }],
         journalpostId: journalpostid,
         norskIdent: '12345678901',
         kanSendeInn: true,
-        erSaksbehandler: true
+        erSaksbehandler: true,
     };
 
     const opprettIGosys: IGosysOppgaveState = {
         isAwaitingGosysOppgaveRequestResponse: false,
         gosysOppgaveRequestSuccess: false,
         gosysOppgaveRequestError: undefined,
-            ...opprettIGosysStatePartial,
-
+        ...opprettIGosysStatePartial,
     };
 
     const fordelingState: IFordelingState = {
@@ -75,7 +74,7 @@ export const setupFordeling = (
     const identState: IIdentState = {
         ident1: '12345678901',
         ident2: '',
-        annenSokerIdent: ''
+        annenSokerIdent: '',
     };
 
     const fordelingStateProps: IFordelingStateProps = {
@@ -87,13 +86,11 @@ export const setupFordeling = (
         dedupkey: '',
         fellesState: {
             dedupKey: '',
-            kopierJournalpostSuccess: true
-        }
+            kopierJournalpostSuccess: true,
+        },
     };
 
-    mocked(intlHelper).mockImplementation(
-        (intl: IntlShape, id: string, value?: { [key: string]: string }) => id
-    );
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
     return shallow(
         <FordelingComponent
@@ -113,13 +110,29 @@ describe('Fordeling', () => {
 
     it('Viser radiopanel for identsjekk når bruker velger pleiepenger', () => {
         const fordeling = setupFordeling();
-        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        fordeling
+            .find('RadioPanelGruppe')
+            .dive()
+            .find('RadioPanel')
+            .at(0)
+            .simulate('change', { target: { value: 'nei' } });
         expect(fordeling.find('Hovedknapp')).toHaveLength(1);
 
-        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'ja'}})
+        fordeling
+            .find('RadioPanelGruppe')
+            .dive()
+            .find('RadioPanel')
+            .at(0)
+            .simulate('change', { target: { value: 'ja' } });
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(2);
 
-        fordeling.find('RadioPanelGruppe').at(1).dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        fordeling
+            .find('RadioPanelGruppe')
+            .at(1)
+            .dive()
+            .find('RadioPanel')
+            .at(0)
+            .simulate('change', { target: { value: 'nei' } });
         expect(fordeling.find('Input')).toHaveLength(1);
     });
 
@@ -143,9 +156,19 @@ describe('Fordeling', () => {
 
     it('Kaller setSakstypeAction', () => {
         const setSakstypeAction = jest.fn();
-        const fordeling = setupFordeling({skalTilK9: true}, {setSakstypeAction}, {isAwaitingGosysOppgaveRequestResponse: false, gosysOppgaveRequestError: undefined});
+        const fordeling = setupFordeling(
+            { skalTilK9: true },
+            { setSakstypeAction },
+            {
+                isAwaitingGosysOppgaveRequestResponse: false,
+                gosysOppgaveRequestError: undefined,
+            }
+        );
         const newSakstype = Sakstype.ANNET;
-        fordeling.find('RadioPanel').at(1).simulate('change');
+        fordeling
+            .find('RadioPanel')
+            .at(1)
+            .simulate('change');
         expect(setSakstypeAction).toHaveBeenCalledTimes(1);
         expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
     });
@@ -153,37 +176,59 @@ describe('Fordeling', () => {
     it('Omfordeler', () => {
         const omfordel = jest.fn();
         const sakstype = Sakstype.ANNET;
-        const fordeling = setupFordeling({sakstype, skalTilK9: true}, {omfordel});
-        fordeling.find('Behandlingsknapp').dive().simulate('click');
+        const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
+        fordeling
+            .find('Behandlingsknapp')
+            .dive()
+            .simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
-        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901");
+        expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901');
     });
 
     it('Viser spinner mens svar avventes', () => {
         const omfordel = jest.fn();
-        const fordeling = setupFordeling(undefined, {omfordel}, {isAwaitingGosysOppgaveRequestResponse: true});
+        const fordeling = setupFordeling(undefined, { omfordel }, { isAwaitingGosysOppgaveRequestResponse: true });
         expect(fordeling.find('NavFrontendSpinner')).toHaveLength(1);
     });
 
     it('Viser suksessmelding når omfordeling er utført', () => {
-        const fordeling = setupFordeling(undefined, undefined, {gosysOppgaveRequestSuccess: true});
-        const wrapper = fordeling.find("ModalWrapper")
+        const fordeling = setupFordeling(undefined, undefined, {
+            gosysOppgaveRequestSuccess: true,
+        });
+        const wrapper = fordeling.find('ModalWrapper');
         expect(wrapper.children().prop('melding')).toEqual('fordeling.opprettigosys.utfort');
     });
 
     it('Viser feilmelding for omfordeling', () => {
-        const fordeling = setupFordeling(undefined, undefined,{gosysOppgaveRequestError: {status: 404}});
+        const fordeling = setupFordeling(undefined, undefined, {
+            gosysOppgaveRequestError: { status: 404 },
+        });
         expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual(
-            'fordeling.omfordeling.feil'
-        );
+        expect(
+            fordeling
+                .find('AlertStripeFeil')
+                .children()
+                .text()
+        ).toEqual('fordeling.omfordeling.feil');
     });
 
     it('Viser feilmelding for omfordeling når journalpost ikke stöttes', () => {
         const setSakstypeAction = jest.fn();
-        const fordeling = setupFordeling({sjekkTilK9JournalpostStottesIkke: true}, {setSakstypeAction}, {isAwaitingGosysOppgaveRequestResponse: false, gosysOppgaveRequestError: undefined});
+        const fordeling = setupFordeling(
+            { sjekkTilK9JournalpostStottesIkke: true },
+            { setSakstypeAction },
+            {
+                isAwaitingGosysOppgaveRequestResponse: false,
+                gosysOppgaveRequestError: undefined,
+            }
+        );
         expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual('fordeling.infotrygd.journalpoststottesikke');
+        expect(
+            fordeling
+                .find('AlertStripeFeil')
+                .children()
+                .text()
+        ).toEqual('fordeling.infotrygd.journalpoststottesikke');
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });
 });

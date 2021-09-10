@@ -1,5 +1,5 @@
-import {IPath} from "../../models/types";
-import {PunchStep} from "../../models/enums";
+import { IPath } from '../../models/types';
+import { PunchStep } from '../../models/enums';
 
 export const peiepengerPaths: IPath[] = [
     {

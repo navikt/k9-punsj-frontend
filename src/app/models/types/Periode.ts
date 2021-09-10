@@ -1,8 +1,8 @@
-import {TimeFormat} from 'app/models/enums';
-import {datetime} from 'app/utils';
+import { TimeFormat } from 'app/models/enums';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import {IntlShape} from 'react-intl';
-import {Periodeinfo} from "./Periodeinfo";
+import { IntlShape } from 'react-intl';
+import { Periodeinfo } from './Periodeinfo';
 
 export interface IPeriode {
     fom?: string | null;
@@ -10,7 +10,6 @@ export interface IPeriode {
 }
 
 export class Periode implements Required<IPeriode> {
-
     fom: string;
     tom: string;
 
@@ -20,8 +19,8 @@ export class Periode implements Required<IPeriode> {
     }
 
     values(): Required<IPeriode> {
-        const {fom, tom} = this; // tslint:disable-line:no-this-assignment
-        return {fom, tom};
+        const { fom, tom } = this; // tslint:disable-line:no-this-assignment
+        return { fom, tom };
     }
 
     fomTekstKort(intl: IntlShape) {
@@ -33,7 +32,6 @@ export class Periode implements Required<IPeriode> {
     }
 
     generateStringsForDescription(intl: IntlShape): IPeriodeStringsForDescription {
-
         let ft: string = ''; // 'ft' hvis både fraOgMed og tilOgMed er gitt, 'f' hvis kun fraOgMed er gitt og 't' hvis kun tilOgMed er gitt
 
         if (!!this.fom && !!this.tom) {
@@ -47,11 +45,10 @@ export class Periode implements Required<IPeriode> {
         const fom = this.fomTekstKort(intl);
         const tom = this.tilOgmedTekstKort(intl);
 
-        return {ft, fom, tom};
+        return { ft, fom, tom };
     }
 
     description(intl: IntlShape): string {
-
         let key: string;
 
         if (!!this.fom && !!this.tom) {
@@ -67,7 +64,7 @@ export class Periode implements Required<IPeriode> {
         const fom = this.fomTekstKort(intl);
         const tom = this.tilOgmedTekstKort(intl);
 
-        return intlHelper(intl, key, {fom, tom});
+        return intlHelper(intl, key, { fom, tom });
     }
 }
 
@@ -89,7 +86,7 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
     jobberNormaltTimerPerDag: string;
 
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
-        this.periode = new Periode(pmf.periode || {})
+        this.periode = new Periode(pmf.periode || {});
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
     }
@@ -103,7 +100,6 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
     }
 
     description(intl: IntlShape): string {
-
         let key: string;
 
         if (!!this.periode.fom && !!this.periode.tom) {
@@ -119,7 +115,7 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
         const fom = this.fomTekstKort(intl);
         const tom = this.tilOgmedTekstKort(intl);
 
-        return intlHelper(intl, key, {fom, tom});
+        return intlHelper(intl, key, { fom, tom });
     }
 }
 
@@ -134,13 +130,17 @@ export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMed
     minutter: number;
 
     constructor(pmf: Periodeinfo<IPeriodeMedTimerMinutter>) {
-        this.periode = new Periode(pmf.periode || {})
+        this.periode = new Periode(pmf.periode || {});
         this.timer = pmf.timer || 0;
         this.minutter = pmf.minutter || 0;
     }
 
     values(): Required<Periodeinfo<IPeriodeMedTimerMinutter>> {
-        return {periode: this.periode.values(), timer: this.timer, minutter: this.minutter};
+        return {
+            periode: this.periode.values(),
+            timer: this.timer,
+            minutter: this.minutter,
+        };
     }
 
     fomTekstKort(intl: IntlShape) {
@@ -152,7 +152,6 @@ export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMed
     }
 
     description(intl: IntlShape): string {
-
         let key: string;
 
         if (!!this.periode.fom && !!this.periode.tom) {
@@ -168,13 +167,12 @@ export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMed
         const fom = this.fomTekstKort(intl);
         const tom = this.tilOgmedTekstKort(intl);
 
-        return intlHelper(intl, key, {fom, tom});
+        return intlHelper(intl, key, { fom, tom });
     }
 }
 
 export interface IPeriodeFerieMedFlagg {
     skalHaFerie?: boolean;
-
 }
 
 export class PeriodeFerieMedFlagg implements Required<Periodeinfo<IPeriodeFerieMedFlagg>> {
@@ -182,8 +180,7 @@ export class PeriodeFerieMedFlagg implements Required<Periodeinfo<IPeriodeFerieM
     skalHaFerie: boolean;
 
     constructor(pmf: Periodeinfo<IPeriodeFerieMedFlagg>) {
-        this.periode = new Periode(pmf.periode || {})
+        this.periode = new Periode(pmf.periode || {});
         this.skalHaFerie = pmf.skalHaFerie || false;
     }
 }
-

@@ -1,5 +1,4 @@
 export enum PunchFormActionKeys {
-
     RESET = 'PUNCH_FORM_RESET',
 
     SOKNAD_LOAD = 'PUNCH_FORM_SOKNAD_LOAD',

@@ -1,7 +1,7 @@
-import intlHelper from "../../utils/intlUtils";
-import {IntlShape} from "react-intl";
-import {IPeriode, Periode} from "./Periode";
-import {Periodeinfo} from "./Periodeinfo";
+import intlHelper from '../../utils/intlUtils';
+import { IntlShape } from 'react-intl';
+import { IPeriode, Periode } from './Periode';
+import { Periodeinfo } from './Periodeinfo';
 
 export interface ISelvstendigNaerinsdrivende {
     periode?: IPeriode;
@@ -26,7 +26,7 @@ export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvste
     regnskapsførerNavn: string | null;
     regnskapsførerTlf: string | null;
     bruttoInntekt: string | null;
-    erNyoppstartet: boolean
+    erNyoppstartet: boolean;
     erVarigEndring: boolean;
     endringDato: string | null;
     endringInntekt: string | null;
@@ -48,10 +48,8 @@ export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvste
     }
 
     description(intl: IntlShape): string {
-        return intlHelper(
-            intl,
-            'mappe.lesemodus.arbeid.selvstendigNaeringsdrivende.beskrivelse',
-            {...this.periode.generateStringsForDescription(intl)}
-        );
+        return intlHelper(intl, 'mappe.lesemodus.arbeid.selvstendigNaeringsdrivende.beskrivelse', {
+            ...this.periode.generateStringsForDescription(intl),
+        });
     }
 }

@@ -1,10 +1,10 @@
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import {createIntl, IntlShape} from 'react-intl';
-import SoknadKvittering from "../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering";
-import {IPSBSoknadKvittering} from "../../../app/models/types/PSBSoknadKvittering";
-import {mocked} from "ts-jest/utils";
-import intlHelper from "../../../app/utils/intlUtils";
+import { createIntl, IntlShape } from 'react-intl';
+import SoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
+import { mocked } from 'ts-jest/utils';
+import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -14,146 +14,136 @@ jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
 const fullResponse: IPSBSoknadKvittering = {
-    mottattDato: "2020-10-12T12:53:00.000Z",
+    mottattDato: '2020-10-12T12:53:00.000Z',
     ytelse: {
-        type: "PLEIEPENGER_SYKT_BARN",
+        type: 'PLEIEPENGER_SYKT_BARN',
         barn: {
-            norskIdentitetsnummer: "23123123123",
-            fødselsdato: null
+            norskIdentitetsnummer: '23123123123',
+            fødselsdato: null,
         },
-        søknadsperiode: [
-            "2021-06-01/2021-06-30"
-        ],
+        søknadsperiode: ['2021-06-01/2021-06-30'],
         opptjeningAktivitet: {
             frilanser: {
                 startdato: [2021, 1, 1],
                 sluttdato: null,
-                jobberFortsattSomFrilans: false
+                jobberFortsattSomFrilans: false,
             },
-            selvstendigNæringsdrivende: [{
-                perioder: {
-                    "2015-06-11/..": {
-                        virksomhetstyper: [
-                            "FISKE",
-                            "DAGMAMMA"
-                        ],
-                        regnskapsførerNavn: "Test ",
-                        regnskapsførerTlf: "46320852",
-                        erVarigEndring: true,
-                        endringDato: [
-                            2021,
-                            2,
-                            24
-                        ],
-                        endringBegrunnelse: "begunnelse",
-                        bruttoInntekt: 1000000,
-                        erNyoppstartet: false,
-                        registrertIUtlandet: false,
-                        landkode: 'USA'
-                    }
+            selvstendigNæringsdrivende: [
+                {
+                    perioder: {
+                        '2015-06-11/..': {
+                            virksomhetstyper: ['FISKE', 'DAGMAMMA'],
+                            regnskapsførerNavn: 'Test ',
+                            regnskapsførerTlf: '46320852',
+                            erVarigEndring: true,
+                            endringDato: [2021, 2, 24],
+                            endringBegrunnelse: 'begunnelse',
+                            bruttoInntekt: 1000000,
+                            erNyoppstartet: false,
+                            registrertIUtlandet: false,
+                            landkode: 'USA',
+                        },
+                    },
+                    organisasjonsnummer: '231232321323',
+                    virksomhetNavn: 'Navn As',
                 },
-                organisasjonsnummer: "231232321323",
-                virksomhetNavn: "Navn As"
-            }]
+            ],
         },
         infoFraPunsj: {
             søknadenInneholderInfomasjonSomIkkeKanPunsjes: false,
-            inneholderMedisinskeOpplysninger: false
+            inneholderMedisinskeOpplysninger: false,
         },
         bosteder: {
             perioder: {
-                "2021-04-13/2021-06-01": {
-                    land: "AZE"
-                }
+                '2021-04-13/2021-06-01': {
+                    land: 'AZE',
+                },
             },
         },
         utenlandsopphold: {
             perioder: {
-                "2021-06-01/2021-06-16": {
-                    land: "BHR",
-                    årsak: null
-                }
+                '2021-06-01/2021-06-16': {
+                    land: 'BHR',
+                    årsak: null,
+                },
             },
         },
         beredskap: {
             perioder: {
-                "2021-06-01/2021-06-10": {
-                    "tilleggsinformasjon": "Beredskap"
-                }
+                '2021-06-01/2021-06-10': {
+                    tilleggsinformasjon: 'Beredskap',
+                },
             },
         },
         nattevåk: {
             perioder: {
-                "2021-06-21/2021-06-25": {
-                    "tilleggsinformasjon": "Nattevåk"
-                }
+                '2021-06-21/2021-06-25': {
+                    tilleggsinformasjon: 'Nattevåk',
+                },
             },
         },
         tilsynsordning: {
             perioder: {
-                "2021-06-14/2021-06-19": {
-                    etablertTilsynTimerPerDag: "PT7H30M"
-                }
+                '2021-06-14/2021-06-19': {
+                    etablertTilsynTimerPerDag: 'PT7H30M',
+                },
             },
         },
         lovbestemtFerie: {
             perioder: {
-                "2021-06-01/2021-06-04": {
-                    skalHaFerie: 'true'
-                }
+                '2021-06-01/2021-06-04': {
+                    skalHaFerie: 'true',
+                },
             },
         },
         arbeidstid: {
             arbeidstakerList: [
                 {
                     norskIdentitetsnummer: null,
-                    organisasjonsnummer: "1313123212323",
+                    organisasjonsnummer: '1313123212323',
                     arbeidstidInfo: {
                         perioder: {
-                            "2021-06-01/2021-06-30": {
-                                jobberNormaltTimerPerDag: "PT8H",
-                                faktiskArbeidTimerPerDag: "PT5H"
-                            }
-                        }
-                    }
-                }
+                            '2021-06-01/2021-06-30': {
+                                jobberNormaltTimerPerDag: 'PT8H',
+                                faktiskArbeidTimerPerDag: 'PT5H',
+                            },
+                        },
+                    },
+                },
             ],
             frilanserArbeidstidInfo: {
                 perioder: {
-                    "2021-06-01/2021-06-30": {
-                        "jobberNormaltTimerPerDag": "PT8H",
-                        "faktiskArbeidTimerPerDag": "PT5H"
-                    }
-                }
+                    '2021-06-01/2021-06-30': {
+                        jobberNormaltTimerPerDag: 'PT8H',
+                        faktiskArbeidTimerPerDag: 'PT5H',
+                    },
+                },
             },
-            selvstendigNæringsdrivendeArbeidstidInfo: null
+            selvstendigNæringsdrivendeArbeidstidInfo: null,
         },
         uttak: {
             perioder: {
-                "2021-06-01/2021-06-30": {
-                    timerPleieAvBarnetPerDag: "PT7H30M"
-                }
+                '2021-06-01/2021-06-30': {
+                    timerPleieAvBarnetPerDag: 'PT7H30M',
+                },
             },
         },
         omsorg: {
-            relasjonTilBarnet: "MEDMOR",
-            beskrivelseAvOmsorgsrollen: ""
-        }
-
-    }
+            relasjonTilBarnet: 'MEDMOR',
+            beskrivelseAvOmsorgsrollen: '',
+        },
+    },
 };
 
 const minimalResponse: IPSBSoknadKvittering = {
-    mottattDato: "2020-10-12T12:53:00.000Z",
+    mottattDato: '2020-10-12T12:53:00.000Z',
     ytelse: {
-        type: "PLEIEPENGER_SYKT_BARN",
+        type: 'PLEIEPENGER_SYKT_BARN',
         barn: {
-            norskIdentitetsnummer: "23123123123",
-            fødselsdato: null
+            norskIdentitetsnummer: '23123123123',
+            fødselsdato: null,
         },
-        søknadsperiode: [
-            "2021-06-01/2021-06-30"
-        ],
+        søknadsperiode: ['2021-06-01/2021-06-30'],
         opptjeningAktivitet: {},
         bosteder: {
             perioder: {},
@@ -176,29 +166,24 @@ const minimalResponse: IPSBSoknadKvittering = {
         arbeidstid: {
             arbeidstakerList: [],
             frilanserArbeidstidInfo: null,
-            selvstendigNæringsdrivendeArbeidstidInfo: null
+            selvstendigNæringsdrivendeArbeidstidInfo: null,
         },
         uttak: {
             perioder: {},
         },
         omsorg: {
-            relasjonTilBarnet: "ANNET",
-            beskrivelseAvOmsorgsrollen: "Bestemor"
-        }
-
-    }
+            relasjonTilBarnet: 'ANNET',
+            beskrivelseAvOmsorgsrollen: 'Bestemor',
+        },
+    },
 };
 
-const setupSoknadKvittering = (response : IPSBSoknadKvittering) => {
-    const intlMock = createIntl({locale: 'nb', defaultLocale: 'nb'});
+const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
+    const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
-    mocked(intlHelper).mockImplementation(
-        (intl: IntlShape, id: string, value?: { [key: string]: string }) => id
-    );
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
-    return shallow(
-        <SoknadKvittering intl={intlMock} response={response}/>
-    );
+    return shallow(<SoknadKvittering intl={intlMock} response={response} />);
 };
 
 describe('SoknadKvittering', () => {
@@ -293,6 +278,4 @@ describe('SoknadKvittering', () => {
         expect(soknadKvitteringFull.find('VisningAvPerioderSoknadKvittering')).toHaveLength(8);
         expect(soknadKvitteringTom.find('VisningAvPerioderSoknadKvittering')).toHaveLength(0);
     });
-
-
 });

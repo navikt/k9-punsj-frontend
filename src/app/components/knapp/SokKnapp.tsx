@@ -1,6 +1,6 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
-import {Hovedknapp} from 'nav-frontend-knapper';
+import { FormattedMessage } from 'react-intl';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import './knapper.less';
 
 interface ISokKnappProps {
@@ -9,18 +9,9 @@ interface ISokKnappProps {
     disabled: boolean;
 }
 
-const SokKnapp: React.FunctionComponent<ISokKnappProps> = ({
-onClick,
-tekstId,
-disabled,
-                                                               }) => (
-    <Hovedknapp
-        onClick={() => onClick()}
-        mini={true}
-        className="sokknapp"
-        disabled={disabled}
-    >
-      <FormattedMessage id={tekstId}/>
+const SokKnapp: React.FunctionComponent<ISokKnappProps> = ({ onClick, tekstId, disabled }) => (
+    <Hovedknapp onClick={() => onClick()} mini={true} className="sokknapp" disabled={disabled}>
+        <FormattedMessage id={tekstId} />
     </Hovedknapp>
 );
 

@@ -1,13 +1,13 @@
 export interface IJournalpost {
-    journalpostId: string,
-    norskIdent?: string,
+    journalpostId: string;
+    norskIdent?: string;
     dokumenter: IDokument[];
     dato?: string;
-    punsjInnsendingType? : {
+    punsjInnsendingType?: {
         kode: string;
         navn: string;
         erScanning: boolean;
-    },
+    };
     kanKopieres?: boolean;
     kanSendeInn: boolean;
     erSaksbehandler: boolean;
@@ -32,5 +32,5 @@ export interface IJournalpostInfo {
 export interface IInnsendingType {
     kode: string;
     navn: string;
-    erScanning: boolean
+    erScanning: boolean;
 }

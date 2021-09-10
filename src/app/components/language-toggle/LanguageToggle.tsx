@@ -1,13 +1,13 @@
-import {Locale}                                       from 'app/models/types/Locale';
-import intlHelper                                     from 'app/utils/intlUtils';
+import { Locale } from 'app/models/types/Locale';
+import intlHelper from 'app/utils/intlUtils';
 import 'nav-frontend-lenker-style';
-import * as React                                     from 'react';
-import {Button, Menu, MenuItem, Wrapper}              from 'react-aria-menubutton';
-import {injectIntl, IntlShape, WrappedComponentProps} from 'react-intl';
+import * as React from 'react';
+import { Button, Menu, MenuItem, Wrapper } from 'react-aria-menubutton';
+import { injectIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import './languageToggle.less';
-import NorwayFlagSVG                                  from './NorwayFlagSVG';
+import NorwayFlagSVG from './NorwayFlagSVG';
 
-const {NedChevron} = require('nav-frontend-chevron');
+const { NedChevron } = require('nav-frontend-chevron');
 
 interface IProps {
     toggle: (locale: Locale) => void;
@@ -34,7 +34,7 @@ const renderMenuItem = (intl: IntlShape, locale: Locale) => {
 const LanguageToggle: React.StatelessComponent<IProps & WrappedComponentProps> = ({
     intl,
     locale,
-    toggle: toggleLanguage
+    toggle: toggleLanguage,
 }) => {
     const selectableOtherMenuLanguages: Locale[] = [...AvailableLocales].filter((code) => code !== locale) as Locale[];
 
@@ -42,7 +42,8 @@ const LanguageToggle: React.StatelessComponent<IProps & WrappedComponentProps> =
         <div className="languageToggle">
             <Wrapper
                 className="languageToggle__wrapper"
-                onSelection={(element: JSX.Element[]) => toggleLanguage(element[1].props['data-locale'])}>
+                onSelection={(element: JSX.Element[]) => toggleLanguage(element[1].props['data-locale'])}
+            >
                 <Button className="languageToggle__button">
                     <div className="languageToggle__button__flag">
                         <NorwayFlagSVG />

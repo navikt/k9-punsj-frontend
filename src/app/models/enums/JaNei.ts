@@ -1,4 +1,4 @@
 export enum JaNei {
-    JA          = 'ja',
-    NEI         = 'nei'
+    JA = 'ja',
+    NEI = 'nei',
 }

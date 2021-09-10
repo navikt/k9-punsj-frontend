@@ -1,4 +1,4 @@
-import {IdentRules} from 'app/rules';
+import { IdentRules } from 'app/rules';
 
 const gyldigeFnr = [
     '29010000074',
@@ -14,7 +14,7 @@ const gyldigeFnr = [
     '19119011003',
     '31129921164',
     '29029200120',
-    '01010050053'
+    '01010050053',
 ];
 
 const gyldigeDnr = [
@@ -31,28 +31,14 @@ const gyldigeDnr = [
     '59119211039',
     '71129921158',
     '69029200114',
-    '41010050047'
+    '41010050047',
 ];
 
 const gyldigeFnrOgDnr = gyldigeFnr.concat(gyldigeDnr);
 
-const fnrMedFeilFormat = [
-    '39010000045',
-    '29020900103',
-    '00031800218',
-    '26142700300',
-    '32053600475',
-    '31064500514'
-];
+const fnrMedFeilFormat = ['39010000045', '29020900103', '00031800218', '26142700300', '32053600475', '31064500514'];
 
-const dnrMedFeilFormat = [
-    '79010000039',
-    '69020920122',
-    '40031800201',
-    '66142730392',
-    '72053600469',
-    '71064500508'
-];
+const dnrMedFeilFormat = ['79010000039', '69020920122', '40031800201', '66142730392', '72053600469', '71064500508'];
 
 const fnrMedFeilKontrollnumre = [
     '29010000075',
@@ -68,7 +54,7 @@ const fnrMedFeilKontrollnumre = [
     '19119011023',
     '31129921144',
     '29029200102',
-    '01010050035'
+    '01010050035',
 ];
 
 const dnrMedFeilKontrollnumre = [
@@ -85,62 +71,58 @@ const dnrMedFeilKontrollnumre = [
     '59119211017',
     '71129921170',
     '69029200123',
-    '41010050038'
+    '41010050038',
 ];
 
-const ugyldigeFnrOgDnr = fnrMedFeilFormat.concat(dnrMedFeilFormat)
-                                         .concat(fnrMedFeilKontrollnumre)
-                                         .concat(dnrMedFeilKontrollnumre);
+const ugyldigeFnrOgDnr = fnrMedFeilFormat
+    .concat(dnrMedFeilFormat)
+    .concat(fnrMedFeilKontrollnumre)
+    .concat(dnrMedFeilKontrollnumre);
 
 describe('IdentRules', () => {
-
     describe('IdentRules.isIdentValid', () => {
-
         it('Blir sann når ident er gyldig', () => {
-            gyldigeFnr.forEach(fnr => expect(IdentRules.isIdentValid(fnr)).toBeTruthy());
-            gyldigeDnr.forEach(dnr => expect(IdentRules.isIdentValid(dnr)).toBeTruthy());
+            gyldigeFnr.forEach((fnr) => expect(IdentRules.isIdentValid(fnr)).toBeTruthy());
+            gyldigeDnr.forEach((dnr) => expect(IdentRules.isIdentValid(dnr)).toBeTruthy());
         });
 
         it('Blir usann når ident ikke er gyldig', () => {
-            fnrMedFeilFormat.forEach(fnr => expect(IdentRules.isIdentValid(fnr)).toBeFalsy());
-            dnrMedFeilFormat.forEach(dnr => expect(IdentRules.isIdentValid(dnr)).toBeFalsy());
-            fnrMedFeilKontrollnumre.forEach(fnr => expect(IdentRules.isIdentValid(fnr)).toBeFalsy());
-            dnrMedFeilKontrollnumre.forEach(dnr => expect(IdentRules.isIdentValid(dnr)).toBeFalsy());
+            fnrMedFeilFormat.forEach((fnr) => expect(IdentRules.isIdentValid(fnr)).toBeFalsy());
+            dnrMedFeilFormat.forEach((dnr) => expect(IdentRules.isIdentValid(dnr)).toBeFalsy());
+            fnrMedFeilKontrollnumre.forEach((fnr) => expect(IdentRules.isIdentValid(fnr)).toBeFalsy());
+            dnrMedFeilKontrollnumre.forEach((dnr) => expect(IdentRules.isIdentValid(dnr)).toBeFalsy());
         });
     });
 
     describe('IdentRules.isIdentFormatValid', () => {
-
         it('Blir sann når format er gyldig', () => {
-            gyldigeFnr.forEach(fnr => expect(IdentRules.isIdentFormatValid(fnr)).toBeTruthy());
-            gyldigeDnr.forEach(dnr => expect(IdentRules.isIdentFormatValid(dnr)).toBeTruthy());
-            fnrMedFeilKontrollnumre.forEach(fnr => expect(IdentRules.isIdentFormatValid(fnr)).toBeTruthy());
-            dnrMedFeilKontrollnumre.forEach(dnr => expect(IdentRules.isIdentFormatValid(dnr)).toBeTruthy());
+            gyldigeFnr.forEach((fnr) => expect(IdentRules.isIdentFormatValid(fnr)).toBeTruthy());
+            gyldigeDnr.forEach((dnr) => expect(IdentRules.isIdentFormatValid(dnr)).toBeTruthy());
+            fnrMedFeilKontrollnumre.forEach((fnr) => expect(IdentRules.isIdentFormatValid(fnr)).toBeTruthy());
+            dnrMedFeilKontrollnumre.forEach((dnr) => expect(IdentRules.isIdentFormatValid(dnr)).toBeTruthy());
         });
 
         it('Blir usann når fomat ikke er gyldig', () => {
-            fnrMedFeilFormat.forEach(fnr => expect(IdentRules.isIdentFormatValid(fnr)).toBeFalsy());
-            dnrMedFeilFormat.forEach(dnr => expect(IdentRules.isIdentFormatValid(dnr)).toBeFalsy());
+            fnrMedFeilFormat.forEach((fnr) => expect(IdentRules.isIdentFormatValid(fnr)).toBeFalsy());
+            dnrMedFeilFormat.forEach((dnr) => expect(IdentRules.isIdentFormatValid(dnr)).toBeFalsy());
         });
     });
 
     describe('IdentRules.areControlDigitsValid', () => {
-
         it('Blir sann når kontrollsifre er gyldige', () => {
-            gyldigeFnr.forEach(fnr => expect(IdentRules.areControlDigitsValid(fnr)).toBeTruthy());
-            gyldigeDnr.forEach(dnr => expect(IdentRules.areControlDigitsValid(dnr)).toBeTruthy());
-            fnrMedFeilFormat.forEach(fnr => expect(IdentRules.areControlDigitsValid(fnr)).toBeTruthy());
-            dnrMedFeilFormat.forEach(dnr => expect(IdentRules.areControlDigitsValid(dnr)).toBeTruthy());
+            gyldigeFnr.forEach((fnr) => expect(IdentRules.areControlDigitsValid(fnr)).toBeTruthy());
+            gyldigeDnr.forEach((dnr) => expect(IdentRules.areControlDigitsValid(dnr)).toBeTruthy());
+            fnrMedFeilFormat.forEach((fnr) => expect(IdentRules.areControlDigitsValid(fnr)).toBeTruthy());
+            dnrMedFeilFormat.forEach((dnr) => expect(IdentRules.areControlDigitsValid(dnr)).toBeTruthy());
         });
 
         it('Blir usann når kontrollsifre ikke er gyldige', () => {
-            fnrMedFeilKontrollnumre.forEach(fnr => expect(IdentRules.areControlDigitsValid(fnr)).toBeFalsy());
-            dnrMedFeilKontrollnumre.forEach(dnr => expect(IdentRules.areControlDigitsValid(dnr)).toBeFalsy());
+            fnrMedFeilKontrollnumre.forEach((fnr) => expect(IdentRules.areControlDigitsValid(fnr)).toBeFalsy());
+            dnrMedFeilKontrollnumre.forEach((dnr) => expect(IdentRules.areControlDigitsValid(dnr)).toBeFalsy());
         });
     });
 
     describe('IdentRules.areIdentsValid', () => {
-
         it('Blir sann når kun ett identitetsnummer er oppgitt og dette er gyldig', () => {
             expect(IdentRules.areIdentsValid(gyldigeFnrOgDnr[0])).toBeTruthy();
         });

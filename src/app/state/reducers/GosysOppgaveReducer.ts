@@ -1,10 +1,9 @@
-
-import {GosysOppgaveActionKeys} from "../../models/enums/GosysOppgaveActionKeys";
-import {IOpprettGosysOppgaveActionTypes} from "../actions/GosysOppgaveActions";
-import {IGosysOppgaveState} from "../../models/types/GosysOppgaveState";
+import { GosysOppgaveActionKeys } from '../../models/enums/GosysOppgaveActionKeys';
+import { IOpprettGosysOppgaveActionTypes } from '../actions/GosysOppgaveActions';
+import { IGosysOppgaveState } from '../../models/types/GosysOppgaveState';
 
 const initialState: IGosysOppgaveState = {
-    isAwaitingGosysOppgaveRequestResponse: false
+    isAwaitingGosysOppgaveRequestResponse: false,
 };
 
 export function GosysOppgaveReducer(
@@ -12,13 +11,12 @@ export function GosysOppgaveReducer(
     action: IOpprettGosysOppgaveActionTypes
 ): IGosysOppgaveState {
     switch (action.type) {
-
         case GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST:
             return {
                 ...gosysOppgaveState,
                 isAwaitingGosysOppgaveRequestResponse: true,
                 gosysOppgaveRequestSuccess: undefined,
-                gosysOppgaveRequestError: undefined
+                gosysOppgaveRequestError: undefined,
             };
 
         case GosysOppgaveActionKeys.OPPRETT_OPPGAVE_SUCCESS:
@@ -26,7 +24,7 @@ export function GosysOppgaveReducer(
                 ...gosysOppgaveState,
                 isAwaitingGosysOppgaveRequestResponse: false,
                 gosysOppgaveRequestSuccess: true,
-                gosysOppgaveRequestError: undefined
+                gosysOppgaveRequestError: undefined,
             };
 
         case GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR:
@@ -34,7 +32,7 @@ export function GosysOppgaveReducer(
                 ...gosysOppgaveState,
                 isAwaitingGosysOppgaveRequestResponse: false,
                 gosysOppgaveRequestSuccess: false,
-                gosysOppgaveRequestError: action.error
+                gosysOppgaveRequestError: action.error,
             };
 
         case GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET:
@@ -42,7 +40,7 @@ export function GosysOppgaveReducer(
                 ...gosysOppgaveState,
                 isAwaitingGosysOppgaveRequestResponse: false,
                 gosysOppgaveRequestSuccess: false,
-                gosysOppgaveRequestError: undefined
+                gosysOppgaveRequestError: undefined,
             };
 
         default:

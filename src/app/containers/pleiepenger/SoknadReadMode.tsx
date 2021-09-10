@@ -1,24 +1,20 @@
-import {TimeFormat}                                    from 'app/models/enums';
-import {datetime}                                                    from 'app/utils';
-import intlHelper                                                    from 'app/utils/intlUtils';
-import classNames                                                    from 'classnames';
-import * as React                                                    from 'react';
-import {Col, Container, Row}                                         from 'react-bootstrap';
-import {injectIntl, WrappedComponentProps}                           from 'react-intl';
-import {
-    PSBSoknad,
-    Tilsynsordning
-} from "../../models/types/PSBSoknad";
-import {IPeriode} from "../../models/types/Periode";
+import { TimeFormat } from 'app/models/enums';
+import { datetime } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import classNames from 'classnames';
+import * as React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { PSBSoknad, Tilsynsordning } from '../../models/types/PSBSoknad';
+import { IPeriode } from '../../models/types/Periode';
 
 interface ISoknadReadModeProps {
     soknad: PSBSoknad;
 }
 
 class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadReadModeProps> {
-
     render() {
-        const {intl, soknad} = this.props;
+        const { intl, soknad } = this.props;
 
         return (
             <Container className={classNames('read-modal soknad-read-mode', 'enkel')}>
@@ -28,7 +24,7 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                 </Row>
                 <Row>
                     <Col>{intlHelper(intl, 'mappe.lesemodus.perioder')}</Col>
-                    {this.soknadsperioder([soknad.soeknadsperiode ? soknad.soeknadsperiode : { fom: '', tom: ''}])}
+                    {this.soknadsperioder([soknad.soeknadsperiode ? soknad.soeknadsperiode : { fom: '', tom: '' }])}
                 </Row>
                 <Row className="felles">
                     <Col>{intlHelper(intl, 'mappe.lesemodus.barn')}</Col>
@@ -38,23 +34,40 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
                     <Col>{intlHelper(intl, 'mappe.lesemodus.tilsyn')}</Col>
                     {this.tilsynsordning(soknad.tilsynsordning)}
                 </Row>
-
             </Container>
         );
     }
 
-    private mottakelsesdato = (dato: string) => <Col>{datetime(this.props.intl, TimeFormat.DATE_WITH_MONTH_NAME, dato)}</Col>;
+    private mottakelsesdato = (dato: string) => (
+        <Col>{datetime(this.props.intl, TimeFormat.DATE_WITH_MONTH_NAME, dato)}</Col>
+    );
 
-    private soknadsperioder = (sokandsperioder: IPeriode[]) => <Col><ul>{sokandsperioder.map((p, i) => <li key={i}>{p.fom + '-' + p.tom}</li>)}</ul></Col>;
-
+    private soknadsperioder = (sokandsperioder: IPeriode[]) => (
+        <Col>
+            <ul>
+                {sokandsperioder.map((p, i) => (
+                    <li key={i}>{p.fom + '-' + p.tom}</li>
+                ))}
+            </ul>
+        </Col>
+    );
 
     private tilsynsordning = (tilsynsordning: Tilsynsordning) => {
-        const {intl} = this.props;
-        return <Col>{tilsynsordning.perioder.length > 0
-            ? <ul>{tilsynsordning.perioder.map((t,i) => <li key={i}>{t.description(intl)}</li>)}</ul>
-            : intlHelper(intl, tilsynsordning.perioder.length > 0 ? "ja" : "nei")}</Col>;
-    }
+        const { intl } = this.props;
+        return (
+            <Col>
+                {tilsynsordning.perioder.length > 0 ? (
+                    <ul>
+                        {tilsynsordning.perioder.map((t, i) => (
+                            <li key={i}>{t.description(intl)}</li>
+                        ))}
+                    </ul>
+                ) : (
+                    intlHelper(intl, tilsynsordning.perioder.length > 0 ? 'ja' : 'nei')
+                )}
+            </Col>
+        );
+    };
 }
-
 
 export default injectIntl(SoknadReadMode);

@@ -1,4 +1,4 @@
-import {IPerson} from "app/models/types";
+import { IPerson } from 'app/models/types';
 
 export interface IFagsak {
     fagsak_id: string;
