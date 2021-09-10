@@ -62,3 +62,4 @@ export const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchPSBFormState) 
 
     return erArbeidstidAngitt;
 };
+
