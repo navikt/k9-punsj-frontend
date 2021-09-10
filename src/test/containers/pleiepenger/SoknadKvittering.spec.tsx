@@ -145,6 +145,7 @@ const fullResponse: IPSBSoknadKvittering = {
 };
 
 const minimalResponse: IPSBSoknadKvittering = {
+    journalposter: [],
     mottattDato: "2020-10-12T12:53:00.000Z",
     ytelse: {
         type: "PLEIEPENGER_SYKT_BARN",
