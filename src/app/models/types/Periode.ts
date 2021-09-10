@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { TimeFormat } from 'app/models/enums';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';

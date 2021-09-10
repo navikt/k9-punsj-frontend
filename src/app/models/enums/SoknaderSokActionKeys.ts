@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export enum SoknaderSokActionKeys {
     IDENT_SET = 'PUNCH_IDENT_SET',
     STEP_SET = 'PUNCH_STEP_SET',

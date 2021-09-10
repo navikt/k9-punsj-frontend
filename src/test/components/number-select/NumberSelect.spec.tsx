@@ -9,6 +9,7 @@ const setupNumberSelect = (numberSelectPropsPartial?: Partial<INumberSelectProps
         ...numberSelectPropsPartial,
     };
 
+    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<NumberSelect {...numberSelectProps} />);
 };
 

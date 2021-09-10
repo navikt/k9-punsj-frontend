@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export enum PunchFormActionKeys {
     RESET = 'PUNCH_FORM_RESET',
 

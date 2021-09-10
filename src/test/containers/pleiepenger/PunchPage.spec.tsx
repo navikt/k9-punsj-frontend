@@ -101,11 +101,13 @@ const setupPunchPage = (
 
     return shallow(
         <PunchPageComponent
+            /* eslint-disable react/jsx-props-no-spreading */
             {...punchPageComponentProps}
             {...wrappedComponentProps}
             {...routeComponentProps}
             {...punchPageStateProps}
             {...punchPageDispatchProps}
+            /* eslint-enable react/jsx-props-no-spreading */
         />
     );
 };

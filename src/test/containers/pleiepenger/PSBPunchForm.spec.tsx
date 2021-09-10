@@ -177,11 +177,13 @@ const setupPunchForm = (
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
     return shallow(
+        /* eslint-disable react/jsx-props-no-spreading */
         <PunchFormComponent
             {...punchFormComponentProps}
             {...wrappedComponentProps}
             {...punchFormStateProps}
             {...punchFormDispatchProps}
+            /* eslint-enable react/jsx-props-no-spreading */
         />
     );
 };
@@ -237,18 +239,8 @@ describe('PunchForm', () => {
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad }, {});
         useSelectorMock.mockReturnValue({});
-        expect(
-            punchForm
-                .find('Soknadsperioder')
-                .dive()
-                .find('#soknadsperiode-fra')
-        ).toHaveLength(1);
-        expect(
-            punchForm
-                .find('Soknadsperioder')
-                .dive()
-                .find('#soknadsperiode-til')
-        ).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra')).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til')).toHaveLength(1);
     });
 
     it('Skjuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', () => {
@@ -283,13 +275,7 @@ describe('PunchForm', () => {
             .dive()
             .find('#soknadsperiode-fra')
             .simulate('change', { target: { value: newDato } });
-        expect(
-            punchForm
-                .find('Soknadsperioder')
-                .dive()
-                .find('#soknadsperiode-fra')
-                .prop('value')
-        ).toEqual(newDato);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra').prop('value')).toEqual(newDato);
     });
 
     it('Oppdaterer søknad når til-dato på søknadsperioden endres', () => {
@@ -318,13 +304,7 @@ describe('PunchForm', () => {
             .dive()
             .find('#soknadsperiode-til')
             .simulate('change', { target: { value: newDato } });
-        expect(
-            punchForm
-                .find('Soknadsperioder')
-                .dive()
-                .find('#soknadsperiode-til')
-                .prop('value')
-        ).toEqual(newDato);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til').prop('value')).toEqual(newDato);
     });
 
     it('Viser checkboks for tilsyn', () => {
@@ -416,11 +396,7 @@ describe('PunchForm', () => {
     it('Validerer søknad når saksbehandler trykker på "Send inn"', () => {
         const validateSoknad = jest.fn();
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
-        punchForm
-            .find('.submit-knapper')
-            .find('.sendknapp-wrapper')
-            .find('.send-knapp')
-            .simulate('click');
+        punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
 
@@ -439,29 +415,16 @@ describe('PunchForm', () => {
             },
             { validateSoknad }
         );
-        punchForm
-            .find('.submit-knapper')
-            .find('.sendknapp-wrapper')
-            .find('.send-knapp')
-            .simulate('click');
+        punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
         expect(punchForm.find('.valideringstripefeil')).toHaveLength(1);
-        expect(
-            punchForm
-                .find('.valideringstripefeil')
-                .childAt(0)
-                .text()
-        ).toEqual('skjema.feil.validering');
+        expect(punchForm.find('.valideringstripefeil').childAt(0).text()).toEqual('skjema.feil.validering');
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', () => {
         const validateSoknad = jest.fn();
         const punchForm = setupPunchForm({ soknad: initialSoknad, validertSoknad, isValid: true }, { validateSoknad });
-        punchForm
-            .find('.submit-knapper')
-            .find('.sendknapp-wrapper')
-            .find('.send-knapp')
-            .simulate('click');
+        punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
         expect(punchForm.find('.validertSoknadModal')).toHaveLength(1);
         punchForm
@@ -474,11 +437,7 @@ describe('PunchForm', () => {
     it('Viser modal når saksbehandler trykker på "Sett på vent" og det er ingen valideringsfeil', () => {
         const validateSoknad = jest.fn();
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
-        punchForm
-            .find('.submit-knapper')
-            .find('.sendknapp-wrapper')
-            .find('.vent-knapp')
-            .simulate('click');
+        punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.vent-knapp').simulate('click');
         expect(punchForm.find('.settpaaventmodal')).toHaveLength(1);
     });
 
@@ -493,11 +452,7 @@ describe('PunchForm', () => {
             perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
         });
         expect(
-            punchForm
-                .find('Soknadsperioder')
-                .dive()
-                .find('.eksiterendesoknaderpanel')
-                .find('AlertStripeAdvarsel')
+            punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')
         ).toHaveLength(1);
         expect(
             punchForm
@@ -515,12 +470,7 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({ soknad }, {});
 
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(1);
-        expect(
-            punchForm
-                .find('.feriepanel')
-                .find('CheckboksPanel')
-                .prop('label')
-        ).toEqual('skjema.ferie.leggtil');
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').prop('label')).toEqual('skjema.ferie.leggtil');
     });
 
     it('Viser legg till ferie og slettade perioder dersom det finns periode', () => {
@@ -528,20 +478,10 @@ describe('PunchForm', () => {
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(2);
-        expect(
-            punchForm
-                .find('.feriepanel')
-                .find('CheckboksPanel')
-                .at(0)
-                .prop('label')
-        ).toEqual('skjema.ferie.leggtil');
-        expect(
-            punchForm
-                .find('.feriepanel')
-                .find('CheckboksPanel')
-                .at(1)
-                .prop('label')
-        ).toEqual('skjema.ferie.fjern');
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(0).prop('label')).toEqual(
+            'skjema.ferie.leggtil'
+        );
+        expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(1).prop('label')).toEqual('skjema.ferie.fjern');
     });
 
     it('Viser ferieperioder dersom det finnes', () => {
@@ -551,14 +491,9 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(
-            punchForm
-                .find('.feriepanel')
-                .dive()
-                .find('Periodepaneler')
-                .at(0)
-                .prop('periods')
-        ).toEqual([{ fom: '2021-01-30', tom: '2021-04-15' }]);
+        expect(punchForm.find('.feriepanel').dive().find('Periodepaneler').at(0).prop('periods')).toEqual([
+            { fom: '2021-01-30', tom: '2021-04-15' },
+        ]);
     });
 
     it('Viser slettade ferieperioder dersom det finnes', () => {
@@ -568,19 +503,11 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
+        expect(punchForm.find('.feriepanel').dive().find('Periodepaneler').prop('periods')).toEqual([
+            { fom: '2021-01-30', tom: '2021-04-15' },
+        ]);
         expect(
-            punchForm
-                .find('.feriepanel')
-                .dive()
-                .find('Periodepaneler')
-                .prop('periods')
-        ).toEqual([{ fom: '2021-01-30', tom: '2021-04-15' }]);
-        expect(
-            punchForm
-                .find('.feriepanel')
-                .dive()
-                .find('.ekspanderbartPanel__innhold')
-                .find('AlertStripeInfo')
+            punchForm.find('.feriepanel').dive().find('.ekspanderbartPanel__innhold').find('AlertStripeInfo')
         ).toHaveLength(1);
     });
 
@@ -697,11 +624,7 @@ describe('PunchForm', () => {
             perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
         });
         expect(
-            punchForm
-                .find('Soknadsperioder')
-                .dive()
-                .find('.eksiterendesoknaderpanel')
-                .find('AlertStripeAdvarsel')
+            punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')
         ).toHaveLength(0);
     });
 

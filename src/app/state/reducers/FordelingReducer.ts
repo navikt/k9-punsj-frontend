@@ -14,6 +14,7 @@ const initialState: IFordelingState = {
     erIdent1Bekreftet: false,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export function FordelingReducer(
     fordelingState: IFordelingState = initialState,
     action: IFordelingActionTypes | LocationChangeAction

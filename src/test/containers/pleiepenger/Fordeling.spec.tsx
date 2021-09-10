@@ -22,6 +22,7 @@ jest.mock('app/utils/pathUtils');
 
 const journalpostid = '200';
 
+// eslint-disable-next-line import/prefer-default-export
 export const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
@@ -93,12 +94,14 @@ export const setupFordeling = (
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
     return shallow(
+        /* eslint-disable react/jsx-props-no-spreading */
         <FordelingComponent
             {...wrappedComponentProps}
             {...fordelingStateProps}
             {...fordelingDispatchProps}
             {...opprettIGosysStatePartial}
         />
+        /* eslint-enable react/jsx-props-no-spreading */
     );
 };
 
@@ -165,10 +168,7 @@ describe('Fordeling', () => {
             }
         );
         const newSakstype = Sakstype.ANNET;
-        fordeling
-            .find('RadioPanel')
-            .at(1)
-            .simulate('change');
+        fordeling.find('RadioPanel').at(1).simulate('change');
         expect(setSakstypeAction).toHaveBeenCalledTimes(1);
         expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
     });
@@ -177,10 +177,7 @@ describe('Fordeling', () => {
         const omfordel = jest.fn();
         const sakstype = Sakstype.ANNET;
         const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
-        fordeling
-            .find('Behandlingsknapp')
-            .dive()
-            .simulate('click');
+        fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
         expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901');
     });
@@ -204,12 +201,7 @@ describe('Fordeling', () => {
             gosysOppgaveRequestError: { status: 404 },
         });
         expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
-        expect(
-            fordeling
-                .find('AlertStripeFeil')
-                .children()
-                .text()
-        ).toEqual('fordeling.omfordeling.feil');
+        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual('fordeling.omfordeling.feil');
     });
 
     it('Viser feilmelding for omfordeling når journalpost ikke stöttes', () => {
@@ -223,12 +215,9 @@ describe('Fordeling', () => {
             }
         );
         expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
-        expect(
-            fordeling
-                .find('AlertStripeFeil')
-                .children()
-                .text()
-        ).toEqual('fordeling.infotrygd.journalpoststottesikke');
+        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual(
+            'fordeling.infotrygd.journalpoststottesikke'
+        );
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });
 });
