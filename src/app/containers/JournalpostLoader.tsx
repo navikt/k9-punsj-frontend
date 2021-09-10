@@ -12,8 +12,10 @@ import {IJournalpostConflictResponse} from "../models/types/Journalpost/IJournal
 import {JournalpostConflictTyper} from "../models/enums/Journalpost/JournalpostConflictTyper";
 import VerticalSpacer from "../components/VerticalSpacer";
 import {Knapp} from "nav-frontend-knapper";
-import {lukkJournalpostOppgave as lukkJournalpostOppgaveAction} from "../state/actions";
+import {lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction} from "../state/actions";
 import './journalpostLoader.less';
+import ModalWrapper from "nav-frontend-modal";
+import OkGaaTilLosModal from "./pleiepenger/OkGaaTilLosModal";
 
 interface IJournaPostStateProps {
     journalpost?: IJournalpost;
@@ -23,6 +25,7 @@ interface IJournaPostStateProps {
     forbidden: boolean | undefined;
     conflict: boolean | undefined;
     notFound: boolean | undefined;
+    lukkOppgaveDone: boolean | undefined;
 }
 
 interface IJournalpostProps {
@@ -33,6 +36,7 @@ interface IJournalpostProps {
 interface IDispatchProps {
     getJournalpost: typeof getJournalpostAction;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
+    lukkOppgaveReset: typeof lukkOppgaveResetAction;
 }
 
 export type JournapostLoaderProps = IJournaPostStateProps &
@@ -44,12 +48,14 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     isJournalpostLoading,
     getJournalpost,
     lukkJournalpostOppgave,
+    lukkOppgaveReset,
     journalpostId,
     journalpost,
     journalpostConflictError,
     forbidden,
     conflict,
-    notFound
+    notFound,
+    lukkOppgaveDone
 }) => {
     useEffect(() => {
         if (journalpostId) {
@@ -85,6 +91,20 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
+    if (!!lukkOppgaveDone) {
+        return (
+            <ModalWrapper
+                key={"lukkoppgaveokmodal"}
+                onRequestClose={() => lukkOppgaveReset()}
+                contentLabel={"settpaaventokmodal"}
+                closeButton={false}
+                isOpen={!!lukkOppgaveDone}
+            >
+                <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
+            </ModalWrapper>
+        );
+    }
+
     if (!!conflict
         && typeof journalpostConflictError !== 'undefined'
         && journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET) {
@@ -115,20 +135,21 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     return <>{renderOnLoadComplete()}</>;
 };
 
-const mapStateToProps = ({felles}: RootStateType): IJournaPostStateProps => ({
+const mapStateToProps = ({felles, fordelingState}: RootStateType): IJournaPostStateProps => ({
     journalpost: felles.journalpost,
     journalpostRequestError: felles.journalpostRequestError,
     isJournalpostLoading: felles.isJournalpostLoading,
     forbidden: felles.journalpostForbidden,
     conflict: felles.journalpostConflict,
     journalpostConflictError: felles.journalpostConflictError,
-    notFound: felles.journalpostNotFound
+    notFound: felles.journalpostNotFound,
+    lukkOppgaveDone: fordelingState.lukkOppgaveDone
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (id: string) => dispatch(getJournalpostAction(id)),
-    lukkJournalpostOppgave: (journalpostid: string) =>
-        dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction())
 });
 
 export default connect(

@@ -33,6 +33,8 @@ const setupLoader = ({
       forbidden={forbidden}
       conflict={false}
       notFound={notFound}
+      lukkOppgaveReset={jest.fn()}
+      lukkOppgaveDone={undefined}
     />
   );
 
@@ -82,6 +84,8 @@ describe('JournalpostLoader', () => {
                 forbidden={false}
                 conflict={false}
                 notFound={false}
+                lukkOppgaveReset={jest.fn()}
+                lukkOppgaveDone={undefined}
             />
         );
 
@@ -110,6 +114,8 @@ describe('JournalpostLoader', () => {
                 forbidden={false}
                 conflict={false}
                 notFound={false}
+                lukkOppgaveReset={jest.fn()}
+                lukkOppgaveDone={undefined}
             />
         );
 
@@ -135,6 +141,8 @@ describe('JournalpostLoader', () => {
                 conflict={true}
                 journalpostConflictError={{type: 'punsj://ikke-støttet-journalpost'}}
                 notFound={false}
+                lukkOppgaveReset={jest.fn()}
+                lukkOppgaveDone={undefined}
             />
         );
 
@@ -145,7 +153,6 @@ describe('JournalpostLoader', () => {
         expect(knappGåTilLos).toHaveLength(1);
         expect(knappGåTilLos.find('Memo(FormattedMessage)').prop('id')).toEqual('fordeling.sakstype.SKAL_IKKE_PUNSJES');
     });
-
 
     it('Viser feilmelding når SB ikke har tillgang att se journalposten', () => {
         const journalpostId = '200';
@@ -161,11 +168,36 @@ describe('JournalpostLoader', () => {
                 forbidden={true}
                 conflict={false}
                 notFound={false}
+                lukkOppgaveReset={jest.fn()}
+                lukkOppgaveDone={undefined}
             />
         );
 
         const felmelding = journalpost.find('FeilmeldingPanel');
         expect(felmelding).toHaveLength(1);
         expect(felmelding.prop('messageId')).toEqual('startPage.feil.ikketilgang');
+    });
+
+    it('Viser LOS lukk oppgave modal etter att oppgaven har blivit lukket', () => {
+        const journalpostId = '200';
+        const testId = 'test-id';
+        const renderedOnLoad = () => <div data-testid={testId}/>;
+
+        const journalpost = shallow(
+            <JournalpostLoaderImpl
+                renderOnLoadComplete={renderedOnLoad}
+                journalpostId={journalpostId}
+                getJournalpost={jest.fn()}
+                lukkJournalpostOppgave={jest.fn()}
+                forbidden={false}
+                conflict={false}
+                notFound={false}
+                lukkOppgaveReset={jest.fn()}
+                lukkOppgaveDone={true}
+            />
+        );
+
+        const Modal = journalpost.find('ModalWrapper');
+        expect(Modal).toHaveLength(1);
     });
 });
