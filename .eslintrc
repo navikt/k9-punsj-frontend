@@ -16,7 +16,8 @@
     "settings": {
         "import/resolver": {
             "node": {
-                "extensions": [".js", ".jsx", ".ts", ".tsx", ".less", ".scss"]
+                "extensions": [".js", ".jsx", ".ts", ".tsx", ".less", ".scss"],
+                "moduleDirectory": ["node_modules", "src/"]
             }
         }
     },
@@ -32,7 +33,7 @@
         "@typescript-eslint/no-use-before-define": ["error"],
         "@typescript-eslint/no-shadow": "error",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-        "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.ts", "**/*.test.tsx"] }],
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"] }],
         "import/extensions": [
             "error",
             "ignorePackages",
