@@ -2,10 +2,8 @@ import { IPath } from 'app/models/types';
 import * as querystring from 'querystring';
 import { String } from 'typescript-string-operations';
 
-export function getPath(paths: IPath[], step: number, values?: any, query?: { [key: string]: string }) {
-    const {path} = paths.filter((p) => p.step === step)[0];
-
-    return getPathForValues(path, values, query);
+function formatForRouter(path: string) {
+    return path.replace(/{/g, ':').replace(/}/g, '');
 }
 
 export function getPathForValues(path: string, values?: any, query?: { [key: string]: string }) {
@@ -14,7 +12,8 @@ export function getPathForValues(path: string, values?: any, query?: { [key: str
         (query ? `?${querystring.stringify(query)}` : '')
     );
 }
+export function getPath(paths: IPath[], step: number, values?: any, query?: { [key: string]: string }) {
+    const { path } = paths.filter((p) => p.step === step)[0];
 
-function formatForRouter(path: string) {
-    return path.replace(/{/g, ':').replace(/}/g, '');
+    return getPathForValues(path, values, query);
 }

@@ -20,7 +20,7 @@ export function minutesFromString(iso8601duration: string) {
     return moment.duration(iso8601duration).asMinutes() % 60;
 }
 
-export function convertNumberToUkedag(num: UkedagNumber): Ukedag {
+export function convertNumberToUkedag(num: UkedagNumber): Ukedag | string {
     switch (num) {
         case 0:
             return 'mandag';
@@ -36,6 +36,8 @@ export function convertNumberToUkedag(num: UkedagNumber): Ukedag {
             return 'lørdag';
         case 6:
             return 'søndag';
+        default:
+            return '';
     }
 }
 
@@ -60,11 +62,11 @@ export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) 
 
     if (isoWeekdayStart < isoWeekdayEnd) {
         return isoWeekday >= isoWeekdayStart && isoWeekday <= isoWeekdayEnd;
-    } if (isoWeekdayStart > isoWeekdayEnd) {
+    }
+    if (isoWeekdayStart > isoWeekdayEnd) {
         return isoWeekday >= isoWeekdayStart || isoWeekday <= isoWeekdayEnd;
-    } 
-        return isoWeekday === isoWeekdayStart;
-    
+    }
+    return isoWeekday === isoWeekdayStart;
 }
 
 export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
@@ -80,7 +82,7 @@ export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
 
 export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     const datoTmp = new Date(dato);
-    if (isNaN(datoTmp.getTime())) {
+    if (Number.isNaN(datoTmp.getTime())) {
         return dato.substr(11, 5);
     }
     const datoTilGMT = datoTmp.toLocaleTimeString([], {

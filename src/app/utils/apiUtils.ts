@@ -2,13 +2,18 @@ import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 import { String } from 'typescript-string-operations';
-import ResponseError from '../models/types/ResponseError';
 import { canStringBeParsedToJSON } from './formatUtils';
 
 const Headers = require('fetch-headers');
 
 export const apiUrl = (path: ApiPath, parameters?: any) =>
     URL_API + (parameters ? String.Format(path, parameters) : path);
+
+export const loginUrl = () => String.Format(URL_AUTH_LOGIN, { uri: encodeURIComponent(getLocation()) });
+
+export function login() {
+    redirect(loginUrl());
+}
 
 export async function get(
     path: ApiPath,
@@ -117,12 +122,6 @@ export async function put(
         await callbackIfAuth(response);
     }
     return response;
-}
-
-export const loginUrl = () => String.Format(URL_AUTH_LOGIN, { uri: encodeURIComponent(getLocation()) });
-
-export function login() {
-    redirect(loginUrl());
 }
 
 export function convertResponseToError(response: Partial<Response>): IError {

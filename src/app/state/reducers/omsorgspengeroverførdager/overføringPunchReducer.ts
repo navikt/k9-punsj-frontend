@@ -68,40 +68,39 @@ interface IOverførDagerDTO {
     dedupKey: string;
 }
 
-export const sendInnSkjema = (skjema: IOverføringPunchSkjema) => (
-    dispatch: Dispatch,
-    getState: () => RootStateType
-) => {
-    dispatch(senderInnSkjema());
+export const sendInnSkjema =
+    (skjema: IOverføringPunchSkjema) => (dispatch: Dispatch, getState: () => RootStateType) => {
+        dispatch(senderInnSkjema());
 
-    const { felles } = getState();
-    const postBody: IOverførDagerDTO = {
-        journalpostIder: [felles.journalpost!.journalpostId],
-        søknad: skjema,
-        dedupKey: felles.dedupKey,
-    };
-    post<IOverførDagerDTO>(
-        ApiPath.OMS_OVERFØR_DAGER,
-        undefined,
-        undefined,
-        postBody,
-        // @ts-ignore
-        (response, responseData) => {
-            switch (response.status) {
-                case 202:
-                    dispatch(skjemaErSendtInn());
-                    return dispatch(resetDedupKey());
-                default:
-                    const error: IError = {
-                        ...convertResponseToError(response),
-                        exceptionId: responseData?.exceptionId,
-                        message: responseData?.message,
-                    };
-                    return dispatch(innsendingsfeil(error));
+        const { felles } = getState();
+        const postBody: IOverførDagerDTO = {
+            journalpostIder: [felles.journalpost!.journalpostId],
+            søknad: skjema,
+            dedupKey: felles.dedupKey,
+        };
+        post<IOverførDagerDTO>(
+            ApiPath.OMS_OVERFØR_DAGER,
+            undefined,
+            undefined,
+            postBody,
+            // @ts-ignore
+            (response, responseData) => {
+                switch (response.status) {
+                    case 202:
+                        dispatch(skjemaErSendtInn());
+                        return dispatch(resetDedupKey());
+                    default: {
+                        const error: IError = {
+                            ...convertResponseToError(response),
+                            exceptionId: responseData?.exceptionId,
+                            message: responseData?.message,
+                        };
+                        return dispatch(innsendingsfeil(error));
+                    }
+                }
             }
-        }
-    );
-};
+        );
+    };
 
 const initialState: IOverføringPunchState = {
     skjema: tomtSkjema,

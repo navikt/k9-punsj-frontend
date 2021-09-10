@@ -9,6 +9,7 @@ const initialState: ISoknaderSokState = {
     soknaderRequestError: undefined,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export function SoknaderSokReducer(
     soknaderVisningState: ISoknaderSokState = initialState,
     action: ISoknaderVisningActionTypes | LocationChangeAction

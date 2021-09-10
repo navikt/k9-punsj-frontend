@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { FrilanserOpptjening } from './FrilanserOpptjening';
 import { Periodeinfo } from './Periodeinfo';
 import { IPeriode, Periode } from './Periode';
@@ -47,6 +48,38 @@ export interface IPSBSoknadUt {
     harMedisinskeOpplysninger?: boolean;
 }
 
+export class ArbeidstidUt implements Required<IArbeidstid> {
+    arbeidstakerList: Arbeidstaker[];
+
+    frilanserArbeidstidInfo: ArbeidstidInfo | null;
+
+    selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | Record<string, unknown>;
+
+    constructor(a: IArbeidstid) {
+        this.arbeidstakerList = (a.arbeidstakerList || []).map((at) => new Arbeidstaker(at));
+        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidInfo(a.frilanserArbeidstidInfo) : null;
+        this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo
+            ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo)
+            : {};
+    }
+}
+
+export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
+    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
+
+    frilanser: FrilanserOpptjening | null;
+
+    arbeidstaker: Arbeidstaker[];
+
+    constructor(arbeid: IOpptjeningAktivitet) {
+        this.arbeidstaker = (arbeid.arbeidstaker || []).map((at) => new Arbeidstaker(at));
+        this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende
+            ? new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende)
+            : null;
+        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
+    }
+}
+
 export class PSBSoknadUt implements IPSBSoknadUt {
     soeknadId: string;
 
@@ -58,7 +91,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     klokkeslett: string;
 
-    barn: Barn | {};
+    barn: Barn | Record<string, unknown>;
 
     soeknadsperiode: Periode | null;
 
@@ -80,7 +113,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     lovbestemtFerieSomSkalSlettes: Periode[];
 
-    omsorg: Omsorg | {};
+    omsorg: Omsorg | Record<string, unknown>;
 
     bosteder: UtenlandsOpphold[];
 
@@ -112,37 +145,5 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
-    }
-}
-
-export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
-    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
-
-    frilanser: FrilanserOpptjening | null;
-
-    arbeidstaker: Arbeidstaker[];
-
-    constructor(arbeid: IOpptjeningAktivitet) {
-        this.arbeidstaker = (arbeid.arbeidstaker || []).map((at) => new Arbeidstaker(at));
-        this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende
-            ? new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende)
-            : null;
-        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
-    }
-}
-
-export class ArbeidstidUt implements Required<IArbeidstid> {
-    arbeidstakerList: Arbeidstaker[];
-
-    frilanserArbeidstidInfo: ArbeidstidInfo | null;
-
-    selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | {};
-
-    constructor(a: IArbeidstid) {
-        this.arbeidstakerList = (a.arbeidstakerList || []).map((at) => new Arbeidstaker(at));
-        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidInfo(a.frilanserArbeidstidInfo) : null;
-        this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo
-            ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo)
-            : {};
     }
 }

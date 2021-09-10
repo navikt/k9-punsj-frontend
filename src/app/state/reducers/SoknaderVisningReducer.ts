@@ -15,7 +15,6 @@ export function SoknaderVisningReducer(
 ): ISoknaderVisningState {
     switch (action.type) {
         case LOCATION_CHANGE:
-
         case SoknaderSokActionKeys.IDENT_SET:
             return {
                 ...visningState,

@@ -13,6 +13,7 @@ const initialState: IPunchFormState = {
     inputErrors: undefined,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export function PunchFormReducer(
     punchFormState: IPunchFormState = initialState,
     action: IPunchFormActionTypes | LocationChangeAction

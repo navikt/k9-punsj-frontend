@@ -8,6 +8,7 @@ const initialState: ISignaturState = {
     isAwaitingUsignertRequestResponse: false,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export function SignaturReducer(
     signaturState: ISignaturState = initialState,
     action: SignaturActionTypes | LocationChangeAction
