@@ -16,6 +16,7 @@ export interface ICountry {
 }
 
 export const CountrySelect = (props: ICountrySelectProps) => {
+    const {unselectedoption, selectedcountry} = props;
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
