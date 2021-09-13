@@ -69,6 +69,7 @@ const initialSoknad: IPSBSoknad = {
 }
 
 const validertSoknad: IPSBSoknadKvittering = {
+    journalposter: [],
     mottattDato: '',
     ytelse: {
         type: '',

@@ -73,9 +73,15 @@ export interface IPSBSoknadKvitteringFrilanser {
     jobberFortsattSomFrilans: boolean;
 }
 
+export interface IPSBSoknadKvitteringJournalpost {
+    inneholderInfomasjonSomIkkeKanPunsjes?: boolean;
+    inneholderMedisinskeOpplysninger?: boolean;
+    journalpostId: string;
+}
 
 export interface IPSBSoknadKvittering {
     mottattDato: string;
+    journalposter: IPSBSoknadKvitteringJournalpost[];
     ytelse: {
         type: string;
         barn: {
@@ -83,10 +89,6 @@ export interface IPSBSoknadKvittering {
             fødselsdato: string | null;
         },
         søknadsperiode: string[];
-        infoFraPunsj?: {
-            søknadenInneholderInfomasjonSomIkkeKanPunsjes: boolean;
-            inneholderMedisinskeOpplysninger: boolean
-        };
         bosteder: { perioder: IPSBSoknadKvitteringBosteder };
         utenlandsopphold: { perioder: IPSBSoknadKvitteringUtenlandsopphold; }
         beredskap: { perioder: IPSBSoknadKvitteringBeredskapNattevak };

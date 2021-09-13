@@ -14,6 +14,11 @@ jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
 const fullResponse: IPSBSoknadKvittering = {
+    journalposter: [{
+        journalpostId: '',
+        inneholderInfomasjonSomIkkeKanPunsjes: false,
+        inneholderMedisinskeOpplysninger: false
+    }],
     mottattDato: "2020-10-12T12:53:00.000Z",
     ytelse: {
         type: "PLEIEPENGER_SYKT_BARN",
@@ -55,10 +60,6 @@ const fullResponse: IPSBSoknadKvittering = {
                 organisasjonsnummer: "231232321323",
                 virksomhetNavn: "Navn As"
             }]
-        },
-        infoFraPunsj: {
-            søknadenInneholderInfomasjonSomIkkeKanPunsjes: false,
-            inneholderMedisinskeOpplysninger: false
         },
         bosteder: {
             perioder: {
@@ -144,6 +145,7 @@ const fullResponse: IPSBSoknadKvittering = {
 };
 
 const minimalResponse: IPSBSoknadKvittering = {
+    journalposter: [],
     mottattDato: "2020-10-12T12:53:00.000Z",
     ytelse: {
         type: "PLEIEPENGER_SYKT_BARN",
