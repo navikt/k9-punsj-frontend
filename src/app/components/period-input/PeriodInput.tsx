@@ -29,7 +29,23 @@ export interface IPeriodInputProps {
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
-    const { periode, intl, onChange, onBlur, onFocus, disabled, initialValues } = props;
+    const {
+        periode,
+        intl,
+        onChange,
+        onBlur,
+        onFocus,
+        disabled,
+        initialValues,
+        errorMessage,
+        className,
+        inputIdFom,
+        inputIdTom,
+        disabledFom,
+        disabledTom,
+        errorMessageFom,
+        errorMessageTom,
+    } = props;
 
     const renderDato = (property: string) => {
         if (periode?.[property] && periode?.[property].length) return periode?.[property];
@@ -39,11 +55,11 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     };
 
     return (
-        <SkjemaGruppe feil={props.errorMessage} className={classNames('period-input', props.className)}>
+        <SkjemaGruppe feil={errorMessage} className={classNames('period-input', className)}>
             <Container>
                 <Row noGutters>
                     <Input
-                        id={props.inputIdFom}
+                        id={inputIdFom}
                         bredde="M"
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.fom')}
@@ -52,11 +68,11 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         onChange={(event) => onChange({ fom: event.target.value, tom: periode.tom })}
                         onBlur={(event) => onBlur({ fom: event.target.value, tom: periode.tom })}
                         onFocus={onFocus}
-                        feil={props.errorMessageFom}
-                        disabled={disabled || props.disabledFom}
+                        feil={errorMessageFom}
+                        disabled={disabled || disabledFom}
                     />
                     <Input
-                        id={props.inputIdTom}
+                        id={inputIdTom}
                         bredde="M"
                         type="date"
                         label={intlHelper(intl, 'skjema.perioder.tom')}
@@ -65,8 +81,8 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         onChange={(event) => onChange({ fom: periode.fom, tom: event.target.value })}
                         onBlur={(event) => onBlur({ fom: periode.fom, tom: event.target.value })}
                         onFocus={onFocus}
-                        feil={props.errorMessageTom}
-                        disabled={disabled || props.disabledTom}
+                        feil={errorMessageTom}
+                        disabled={disabled || disabledTom}
                     />
                 </Row>
             </Container>

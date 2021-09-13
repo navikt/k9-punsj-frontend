@@ -14,6 +14,7 @@ export interface ICountry {
 }
 
 export const CountrySelect = (props: ICountrySelectProps) => {
+    const {unselectedoption, selectedcountry} = props;
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
 
@@ -22,13 +23,13 @@ export const CountrySelect = (props: ICountrySelectProps) => {
         countryList.push({ code, name: countries.getName(code, locale) })
     );
     countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
-    if (props.unselectedoption) {
-        countryList.unshift({ code: '', name: props.unselectedoption });
+    if (unselectedoption) {
+        countryList.unshift({ code: '', name: unselectedoption });
     }
 
     return (
         // eslint-disable-next-line react/jsx-props-no-spreading
-        <Select {...props} value={props.selectedcountry}>
+        <Select {...props} value={selectedcountry}>
             {countryList.map((country) => (
                 <option key={country.code} value={country.code}>
                     {country.name}

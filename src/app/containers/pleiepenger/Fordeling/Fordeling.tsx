@@ -18,6 +18,9 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import { PopoverOrientering } from 'nav-frontend-popover';
+import ModalWrapper from 'nav-frontend-modal';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import PdfVisning from '../../../components/pdf/PdfVisning';
 import { ISakstypeDefault, ISakstypePunch } from '../../../models/Sakstype';
 import { Sakstyper } from '../../SakstypeImpls';
@@ -35,14 +38,11 @@ import { setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
-import ModalWrapper from 'nav-frontend-modal';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../state/reducers/HentBarn';
 import WarningCircle from '../../../assets/SVG/WarningCircle';
 import { skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
-import { PopoverOrientering } from 'nav-frontend-popover';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -121,6 +121,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         lukkJournalpostOppgave,
         resetOmfordelAction,
         lukkOppgaveReset,
+        fellesState,
     } = props;
     const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -258,7 +259,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         ) {
             lukkJournalpostOppgave(journalpost?.journalpostId!);
         }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse]);
+    }, [fellesState.isAwaitingKopierJournalPostResponse]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
@@ -426,7 +427,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 skalVisesNårJournalpostSomIkkeStottesKopieres={
                                                     !skalJournalpostSomIkkeStottesKopieres
                                                 }
-                                                fellesState={props.fellesState}
+                                                fellesState={fellesState}
                                                 intl={intl}
                                             />
                                         </div>
@@ -438,9 +439,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <>
                                     <VerticalSpacer sixteenPx />
                                     {!erBarnUtdatert &&
-                                        !!props.fellesState.hentBarnSuccess &&
-                                        typeof props.fellesState.barn !== 'undefined' &&
-                                        props.fellesState.barn.length > 0 && (
+                                        !!fellesState.hentBarnSuccess &&
+                                        typeof fellesState.barn !== 'undefined' &&
+                                        fellesState.barn.length > 0 && (
                                             <>
                                                 <Select
                                                     value={barnetsIdent}
@@ -450,9 +451,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     disabled={gjelderAnnetBarn}
                                                     onBlur={handleIdent2Blur}
                                                 >
-                                                    <option key={uuidv4()} value="" />
-                                                    )
-                                                    {props.fellesState.barn.map((b) => (
+                                                    <option key={uuidv4()} value="" />)
+                                                    {fellesState.barn.map((b) => (
                                                         <option key={uuidv4()} value={b.identitetsnummer}>
                                                             {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
                                                         </option>
@@ -470,10 +470,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         )}
                                     <VerticalSpacer sixteenPx />
                                     {(gjelderAnnetBarn ||
-                                        !!props.fellesState.hentBarnError ||
-                                        !!props.fellesState.hentBarnForbidden ||
-                                        (typeof props.fellesState.barn !== 'undefined' &&
-                                            props.fellesState.barn.length === 0)) && (
+                                        !!fellesState.hentBarnError ||
+                                        !!fellesState.hentBarnForbidden ||
+                                        (typeof fellesState.barn !== 'undefined' && fellesState.barn.length === 0)) && (
                                         <>
                                             <div className="fyllUtIdentAnnetBarnContainer">
                                                 <Input
@@ -561,7 +560,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 >
                                     {Object.keys(TilgjengeligSakstype)
                                         //  .filter((key) => !key.includes(`${Sakstype.OMSORGSPENGER}_`))
-                                        .map((key) => 
+                                        .map((key) => (
                                             /*    if (key === Sakstype.OMSORGSPENGER) {
                                             const radioOmsorgspenger = (
                                                 <RadioPanel
@@ -615,19 +614,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             }
                                         return radioOmsorgspenger;
                                     } */
-                                             (
-                                                <RadioPanel
-                                                    key={key}
-                                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                                    value={Sakstype[key]}
-                                                    onChange={() => {
-                                                        props.setSakstypeAction(Sakstype[key]);
-                                                        setOmsorgspengerValgt(false);
-                                                    }}
-                                                    checked={konfigForValgtSakstype?.navn === key}
-                                                />
-                                            )
-                                        )}
+                                            <RadioPanel
+                                                key={key}
+                                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                                value={Sakstype[key]}
+                                                onChange={() => {
+                                                    props.setSakstypeAction(Sakstype[key]);
+                                                    setOmsorgspengerValgt(false);
+                                                }}
+                                                checked={konfigForValgtSakstype?.navn === key}
+                                            />
+                                        ))}
                                 </RadioGruppe>
                                 <VerticalSpacer eightPx />
                                 {typeof fordelingState.sakstype !== 'undefined' &&
@@ -696,10 +693,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     skalVisesNårJournalpostSomIkkeStottesKopieres={
                                         skalJournalpostSomIkkeStottesKopieres
                                     }
-                                    fellesState={props.fellesState}
+                                    fellesState={fellesState}
                                     intl={intl}
                                 />
-                                {!!props.fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner />}
+                                {!!fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner />}
                                 <Knapp
                                     onClick={() => {
                                         if (skalJournalpostSomIkkeStottesKopieres) {

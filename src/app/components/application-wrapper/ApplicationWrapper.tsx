@@ -38,7 +38,7 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
     IApplicationWrapperDispatchProps;
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
-    const { authState, locale } = props;
+    const { authState, locale, children} = props;
 
     if (authState.error) {
         return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
@@ -71,11 +71,11 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
             <Normaltekst tag="div" className="fit-window-height">
                 <div className={isDev ? 'headercontainer' : ''}>
                     <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
-                        <UserPanel name={props.authState.userName!} />
+                        <UserPanel name={authState.userName!} />
                     </Header>
                 </div>
                 <AppContainer>
-                    <Router>{props.children}</Router>
+                    <Router>{children}</Router>
                 </AppContainer>
             </Normaltekst>
         </IntlProvider>
