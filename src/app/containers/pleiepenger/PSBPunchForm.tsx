@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import { Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
 import { pfArbeidstaker } from 'app/containers/pleiepenger/pfArbeidstaker';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
