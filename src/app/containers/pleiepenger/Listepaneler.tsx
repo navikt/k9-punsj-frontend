@@ -1,12 +1,10 @@
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
