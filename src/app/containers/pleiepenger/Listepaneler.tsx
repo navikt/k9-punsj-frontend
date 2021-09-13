@@ -1,12 +1,10 @@
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
@@ -49,7 +47,8 @@ type ItemInfo = any;
 export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (
     props: IListepanelerProps<ItemInfo>
 ) => {
-    const items = props.items.length > 0 ? props.items : [props.initialItem];
+    const { items, initialItem, className, textLeggTil } = props;
+    const itemsWithInitialItem = items.length > 0 ? items : [initialItem];
     const { intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere, medSlettKnapp } = props;
     const getErrorMessage = (code: string) =>
         props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
@@ -58,28 +57,47 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         index: number,
         iteminfo: Partial<ItemInfo>
     ) => {
-        const newInfo: ItemInfo = { ...props.items[index], ...iteminfo };
-        const newArray = items;
+        const newInfo: ItemInfo = { ...items[index], ...iteminfo };
+        const newArray = itemsWithInitialItem;
         newArray[index] = newInfo;
         return newArray;
     };
 
     const addItem = () => {
-        const newArray = items;
-        newArray.push(props.initialItem);
+        const newArray = itemsWithInitialItem;
+        newArray.push(initialItem);
         return newArray;
     };
 
     const removeItem = (index: number) => {
-        const newArray = items;
+        const newArray = itemsWithInitialItem;
         newArray.splice(index, 1);
         return newArray;
     };
 
+    const removeItemHandler = (itemIndex: number) => {
+        const newArray: ItemInfo[] = removeItem(itemIndex);
+        editSoknadState(newArray);
+        editSoknad(newArray);
+
+        if (props.onRemove) {
+            props.onRemove();
+        }
+    };
+
+    const addItemHandler = () => {
+        const newArray: ItemInfo[] = addItem();
+        editSoknadState(newArray);
+        editSoknad(newArray);
+        if (props.onAdd) {
+            props.onAdd();
+        }
+    };
+
     return (
-        <SkjemaGruppe feil={getErrorMessage('')} className={classNames('listepaneler', props.className)}>
-            {!!props.items &&
-                props.items!.map((itemInfo, itemIndex) => {
+        <SkjemaGruppe feil={getErrorMessage('')} className={classNames('listepaneler', className)}>
+            {!!items &&
+                items!.map((itemInfo, itemIndex) => {
                     const panelErrorMessage =
                         feilkodeprefiks === 'perioder' ? undefined : getErrorMessage(`[${itemIndex}]`);
                     const panelid = props.panelid(itemIndex);
@@ -88,10 +106,10 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                             className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
                             border={false}
                             id={panelid}
-                            key={itemIndex}
+                            key={panelid}
                         >
                             <SkjemaGruppe feil={panelErrorMessage}>
-                                {feilkodeprefiks === 'arbeidstid.arbeidstaker' && items.length > 1 && (
+                                {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
                                     <h2>
                                         <FormattedMessage
                                             id="skjema.arbeidsforhold.teller"
@@ -99,18 +117,14 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         />
                                     </h2>
                                 )}
-                                {!!medSlettKnapp && items.length > 1 && (
+                                {!!medSlettKnapp && itemsWithInitialItem.length > 1 && (
                                     <div className="listepanelbunn">
                                         <div
                                             id="slett"
                                             className="fjernlisteelementknapp"
                                             role="button"
-                                            onClick={() => {
-                                                const newArray: ItemInfo[] = removeItem(itemIndex);
-                                                editSoknadState(newArray);
-                                                editSoknad(newArray);
-                                                !!props.onRemove && props.onRemove();
-                                            }}
+                                            onKeyPress={() => removeItemHandler(itemIndex)}
+                                            onClick={() => removeItemHandler(itemIndex)}
                                             tabIndex={0}
                                         >
                                             <div className="slettIcon">
@@ -139,18 +153,14 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                     id="leggtillisteelementknapp"
                     className="leggtillisteelementknapp"
                     role="button"
-                    onClick={() => {
-                        const newArray: ItemInfo[] = addItem();
-                        editSoknadState(newArray);
-                        editSoknad(newArray);
-                        !!props.onAdd && props.onAdd();
-                    }}
+                    onKeyPress={addItemHandler}
+                    onClick={addItemHandler}
                     tabIndex={0}
                 >
                     <div className="leggtilperiodeIcon">
                         <AddCircleSvg title="leggtil" />
                     </div>
-                    {intlHelper(intl, props.textLeggTil || 'skjema.liste.legg_til')}
+                    {intlHelper(intl, textLeggTil || 'skjema.liste.legg_til')}
                 </div>
             )}
         </SkjemaGruppe>
