@@ -60,7 +60,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     return (
         <Panel className="periodepanel">
             {periods.map((p, i) => (
-                <Row noGutters key={i}>
+                <Row noGutters key={`${p.fom}_${p.tom}`}>
                     <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}
@@ -87,7 +87,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 const newArray: IPeriode[] = removeItem(i);
                                 editSoknadState(newArray);
                                 editSoknad(newArray);
-                                !!props.onRemove && props.onRemove();
+                                if (props.onRemove) {
+                                    props.onRemove();
+                                }
                             }}
                             tabIndex={0}
                         >
@@ -109,7 +111,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             const newArray: IPeriode[] = addItem();
                             editSoknadState(newArray);
                             editSoknad(newArray);
-                            !!props.onAdd && props.onAdd();
+                            if (props.onAdd) {
+                                props.onAdd();
+                            }
                         }}
                         tabIndex={0}
                     >

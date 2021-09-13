@@ -49,6 +49,8 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             case Innsendingsstatus.SenderInn:
             case Innsendingsstatus.SendtInn:
                 return true;
+            default:
+                return false;
         }
     }, [innsendingsstatus]);
 
@@ -118,7 +120,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                     render={({ push, remove }) => (
                         <>
                             {values.barn.map((b, index) => (
-                                <SkjemaGruppe key={index}>
+                                <SkjemaGruppe key={b.norskIdent}>
                                     <legend className="sr-only">
                                         <FormattedMessage
                                             id="omsorgsdager.overføring.barn.nummer"

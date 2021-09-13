@@ -129,10 +129,10 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     };
 
     function showSoknader() {
-        const modaler = [];
-        const rows = [];
+        const modaler: Array<JSX.Element> = [];
+        const rows: Array<JSX.Element> = [];
 
-        for (const soknadInfo of soknader!) {
+        soknader?.forEach((soknadInfo) => {
             const søknad = new PSBSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const { chosenSoknad } = props.eksisterendeSoknaderState;
@@ -175,7 +175,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     />
                 </ModalWrapper>
             );
-        }
+        });
 
         return (
             <>
@@ -187,7 +187,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                             <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
                             <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
                             <th>{intlHelper(intl, 'skjema.periode')}</th>
-                            <th />
+                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

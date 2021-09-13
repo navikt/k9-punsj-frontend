@@ -1,6 +1,7 @@
 import { IPath } from '../../models/types';
 import { PunchStep } from '../../models/enums';
 
+// eslint-disable-next-line import/prefer-default-export
 export const peiepengerPaths: IPath[] = [
     {
         step: PunchStep.CHOOSE_SOKNAD,

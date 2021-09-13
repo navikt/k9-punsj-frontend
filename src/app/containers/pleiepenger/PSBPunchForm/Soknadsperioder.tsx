@@ -73,7 +73,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
                     {punchFormState.perioder.map((p, i) => (
-                        <div key={i} className="datocontainer">
+                        <div key={`${p.fom}_${p.tom}`} className="datocontainer">
                             <CalendarSvg title="calendar" />
                             <div className="periode">{generateDateString(p)}</div>
                         </div>
@@ -109,48 +109,50 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
-                            <Input
-                                id="soknadsperiode-fra"
-                                bredde="M"
-                                label={intlHelper(intl, 'skjema.soknasperiodefra')}
-                                type="date"
-                                className="fom"
-                                value={soknad.soeknadsperiode?.fom || ''}
-                                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                                    soeknadsperiode: {
-                                        ...soknad.soeknadsperiode,
-                                        fom: event.target.value,
-                                    },
-                                }))}
-                            />
-                            <Input
-                                id="soknadsperiode-til"
-                                bredde="M"
-                                label={intlHelper(intl, 'skjema.soknasperiodetil')}
-                                type="date"
-                                className="tom"
-                                value={soknad.soeknadsperiode?.tom || ''}
-                                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                                    soeknadsperiode: {
-                                        ...soknad.soeknadsperiode,
-                                        tom: event.target.value,
-                                    },
-                                }))}
-                            />
+                        <Input
+                            id="soknadsperiode-fra"
+                            bredde="M"
+                            label={intlHelper(intl, 'skjema.soknasperiodefra')}
+                            type="date"
+                            className="fom"
+                            value={soknad.soeknadsperiode?.fom || ''}
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            {...changeAndBlurUpdatesSoknad((event: any) => ({
+                                soeknadsperiode: {
+                                    ...soknad.soeknadsperiode,
+                                    fom: event.target.value,
+                                },
+                            }))}
+                        />
+                        <Input
+                            id="soknadsperiode-til"
+                            bredde="M"
+                            label={intlHelper(intl, 'skjema.soknasperiodetil')}
+                            type="date"
+                            className="tom"
+                            value={soknad.soeknadsperiode?.tom || ''}
+                            // eslint-disable-next-line react/jsx-props-no-spreading
+                            {...changeAndBlurUpdatesSoknad((event: any) => ({
+                                soeknadsperiode: {
+                                    ...soknad.soeknadsperiode,
+                                    tom: event.target.value,
+                                },
+                            }))}
+                        />
 
-                            <div
-                                id="fjern"
-                                className="fjern"
-                                role="button"
-                                onClick={() => {
-                                    deleteSoknadsperiode();
-                                    setVisLeggTilPerioder(false);
-                                }}
-                                tabIndex={0}
-                            >
-                                <BinSvg title="fjern" />
-                            </div>
+                        <div
+                            id="fjern"
+                            className="fjern"
+                            role="button"
+                            onClick={() => {
+                                deleteSoknadsperiode();
+                                setVisLeggTilPerioder(false);
+                            }}
+                            tabIndex={0}
+                        >
+                            <BinSvg title="fjern" />
                         </div>
+                    </div>
                 </SkjemaGruppe>
             )}
             {!!soknad.soeknadsperiode?.fom &&

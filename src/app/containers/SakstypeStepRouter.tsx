@@ -69,16 +69,13 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                             const initialValues = sakstypeState[stepName]?.skjema;
 
                             return (
-                                <Route
-                                    exact
-                                    key={`${navn}-${stepName}`}
-                                    path={`${punchPath}${getPathForValues(path)}`}
-                                    children={getComponent({
+                                <Route exact key={`${navn}-${stepName}`} path={`${punchPath}${getPathForValues(path)}`}>
+                                    {getComponent({
                                         gåTilNesteSteg,
                                         gåTilForrigeSteg,
                                         initialValues,
                                     })}
-                                />
+                                </Route>
                             );
                         })}
                     </Switch>
@@ -94,8 +91,7 @@ const mapStateToProps = (state: RootStateType, ownProps: IStepRouterProps) => ({
     sakstypeState: state[ownProps.sakstypeConfig.navn],
 });
 
-const SakstypeStepRouter: React.FunctionComponent<ISakstypePunchProps> = connect(mapStateToProps)(
-    SakstypeStepRouterImpl
-);
+const SakstypeStepRouter: React.FunctionComponent<ISakstypePunchProps> =
+    connect(mapStateToProps)(SakstypeStepRouterImpl);
 
 export default SakstypeStepRouter;

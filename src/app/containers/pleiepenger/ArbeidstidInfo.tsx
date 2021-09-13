@@ -3,6 +3,7 @@ import * as React from 'react';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import intlHelper from '../../utils/intlUtils';
 
+// eslint-disable-next-line import/prefer-default-export
 export function arbeidstidInformasjon(intl: IntlShape) {
     return (
         <div className="arbeidstidInfo">

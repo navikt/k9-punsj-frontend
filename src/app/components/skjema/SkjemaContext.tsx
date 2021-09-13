@@ -1,7 +1,6 @@
 import { IntlShape, useIntl } from 'react-intl';
-import { Formik, FormikErrors } from 'formik';
+import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
-import { FormikHelpers } from 'formik/dist/types';
 
 export interface ISkjemaContext {
     initialValues: any;
