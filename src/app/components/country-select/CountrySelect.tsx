@@ -27,6 +27,7 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     }
 
     return (
+        // eslint-disable-next-line react/jsx-props-no-spreading
         <Select {...props} value={props.selectedcountry}>
             {countryList.map((country) => (
                 <option key={country.code} value={country.code}>

@@ -164,7 +164,7 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
                             <th>{intlHelper(intl, 'tabell.fnrellerdato')}</th>
                             <th>{intlHelper(intl, 'tabell.fraogmed')}</th>
                             <th>{intlHelper(intl, 'tabell.tilogmed')}</th>
-                            <th />
+                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

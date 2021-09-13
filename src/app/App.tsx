@@ -24,6 +24,7 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, 
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
 
+// eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
     moment.locale(localeFromSessionStorage);
@@ -39,9 +40,15 @@ export const App: React.FunctionComponent = () => {
             >
                 <BrowserRouter>
                     <Switch>
-                        <Route path="/rediger/" children={RedigeringRouter} />
-                        <Route path="/journalpost/:journalpostid/" children={JournalpostRouter} />
-                        <Route path="/" children={SokIndex} />
+                        <Route path="/rediger/">
+                            <RedigeringRouter />
+                        </Route>
+                        <Route path="/journalpost/:journalpostid/">
+                            <JournalpostRouter />
+                        </Route>
+                        <Route path="/">
+                            <SokIndex />
+                        </Route>
                     </Switch>
                 </BrowserRouter>
             </ApplicationWrapper>

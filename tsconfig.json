@@ -18,7 +18,8 @@
         "suppressImplicitAnyIndexErrors": true,
         "noUnusedLocals": false,
         "baseUrl": "./src",
-        "typeRoots": ["./node_modules/@types", "./src/@types"]
+        "typeRoots": ["./node_modules/@types", "./src/@types"],
+        "resolveJsonModule": true
     },
     "tsLoaderOptions": {
         "useCache": false

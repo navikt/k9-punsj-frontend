@@ -17,19 +17,19 @@ interface IProps {
 const AvailableLocales: Locale[] = ['nb', 'nn'];
 
 const renderMenuItem = (intl: IntlShape, locale: Locale) => (
-        <li key={locale}>
-            <MenuItem className="languageToggle__menu__item">
-                <div className="languageToggle__button__flag">
-                    <NorwayFlagSVG />
-                </div>
-                <div className="languageToggle__button__language" data-locale={locale}>
-                    {intlHelper(intl, `locale.${locale}`)}
-                </div>
-            </MenuItem>
-        </li>
-    );
+    <li key={locale}>
+        <MenuItem className="languageToggle__menu__item">
+            <div className="languageToggle__button__flag">
+                <NorwayFlagSVG />
+            </div>
+            <div className="languageToggle__button__language" data-locale={locale}>
+                {intlHelper(intl, `locale.${locale}`)}
+            </div>
+        </MenuItem>
+    </li>
+);
 
-const LanguageToggle: React.StatelessComponent<IProps & WrappedComponentProps> = ({
+const LanguageToggle: React.FunctionComponent<IProps & WrappedComponentProps> = ({
     intl,
     locale,
     toggle: toggleLanguage,
