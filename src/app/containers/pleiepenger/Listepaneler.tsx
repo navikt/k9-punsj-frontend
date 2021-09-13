@@ -4,8 +4,8 @@ import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
-import BinSvg from '../../assets/SVG/BinSVG';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
+import BinSvg from '../../assets/SVG/BinSVG';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;

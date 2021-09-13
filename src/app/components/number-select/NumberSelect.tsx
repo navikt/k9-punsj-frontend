@@ -15,6 +15,7 @@ export const NumberSelect: React.FunctionComponent<INumberSelectProps> = (props:
     }
 
     return (
+        // eslint-disable-next-line react/jsx-props-no-spreading
         <Select {...props}>
             {Array.from(Array(length).keys()).map((int) => {
                 const value = int + from;
