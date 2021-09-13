@@ -5,7 +5,8 @@ import * as React from 'react';
 import './delete-button.less';
 
 const DeleteButton: React.FunctionComponent<KnappBaseProps> = (props: KnappBaseProps) => {
-    const className = classNames(props.className, 'delete-button');
+    const {className: baseClassName} = props;
+    const className = classNames(baseClassName, 'delete-button');
     return (
         // eslint-disable-next-line react/jsx-props-no-spreading
         <Flatknapp {...{ ...props, className }}>
