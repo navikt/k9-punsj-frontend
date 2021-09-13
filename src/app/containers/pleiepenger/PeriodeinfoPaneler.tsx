@@ -55,14 +55,29 @@ export interface IPeriodeinfopanelerProps {
 export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (
     props: IPeriodeinfopanelerProps
 ) => {
-    const periods = props.periods ? props.periods : [];
+    const {
+        periods,
+        medSlettKnapp,
+        textLeggTil,
+        textFjern,
+        panelid,
+        initialPeriodeinfo,
+        getErrorMessage: errorMessageFunc,
+        className,
+        minstEn,
+        feilkodeprefiks,
+        onAdd,
+        onRemove,
+        panelClassName,
+    } = props;
+
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (
         index: number,
         periodeinfo: Partial<IPeriodeinfo>
     ) => {
-        const newInfo: IPeriodeinfo = { ...props.periods[index], ...periodeinfo };
+        const newInfo: IPeriodeinfo = { ...periods[index], ...periodeinfo };
         const newArray = periods;
         newArray[index] = newInfo;
         return newArray;
@@ -84,74 +99,85 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         feilkodeprefiksMedIndeks: string,
         getErrorMessage: GetErrorMessage,
         intlShape: IntlShape
-    ) => (
-        <>
-            <div className="periodeinfopanel_container">
-                <PeriodInput
-                    periode={periodeinfo.periode || {}}
-                    intl={intlShape}
-                    onChange={(periode) => {
-                        editSoknadState(editPeriode(periodeindeks, periode));
-                    }}
-                    onBlur={(periode) => {
-                        editSoknad(editPeriode(periodeindeks, periode));
-                    }}
-                    errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-                    errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
-                    errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
-                    initialValues={initialValues}
-                />
-                <div
-                    id="slett"
-                    className="removePeriodeKnapp"
-                    role="button"
-                    onClick={() => {
-                        const newArray: IPeriodeinfo[] = removeItem(periodeindeks);
-                        editSoknadState(newArray);
-                        editSoknad(newArray);
-                        !!props.onRemove && props.onRemove();
-                    }}
-                    tabIndex={0}
-                >
-                    <div className="slettIkon">
-                        <BinSvg title="fjern" />
+    ) => {
+        const removePeriode = () => {
+            const newArray: IPeriodeinfo[] = removeItem(periodeindeks);
+            editSoknadState(newArray);
+            editSoknad(newArray);
+
+            if (onRemove) {
+                onRemove();
+            }
+        };
+        return (
+            <>
+                <div className="periodeinfopanel_container">
+                    <PeriodInput
+                        periode={periodeinfo.periode || {}}
+                        intl={intlShape}
+                        onChange={(periode) => {
+                            editSoknadState(editPeriode(periodeindeks, periode));
+                        }}
+                        onBlur={(periode) => {
+                            editSoknad(editPeriode(periodeindeks, periode));
+                        }}
+                        errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
+                        errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
+                        errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
+                        initialValues={initialValues}
+                    />
+                    <div
+                        id="slett"
+                        className="removePeriodeKnapp"
+                        role="button"
+                        onKeyPress={removePeriode}
+                        onClick={removePeriode}
+                        tabIndex={0}
+                    >
+                        <div className="slettIkon">
+                            <BinSvg title="fjern" />
+                        </div>
+                        {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
                     </div>
-                    {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
                 </div>
-            </div>
-            {!!component &&
-                component(
-                    periodeinfo,
-                    periodeindeks,
-                    updatePeriodeinfoInSoknad,
-                    updatePeriodeinfoInSoknadState,
-                    feilkodeprefiksMedIndeks,
-                    getErrorMessage,
-                    intlShape
-                )}
-        </>
-    );
+                {!!component &&
+                    component(
+                        periodeinfo,
+                        periodeindeks,
+                        updatePeriodeinfoInSoknad,
+                        updatePeriodeinfoInSoknadState,
+                        feilkodeprefiksMedIndeks,
+                        getErrorMessage,
+                        intlShape
+                    )}
+            </>
+        );
+    };
 
     return (
         <Listepaneler
             intl={intl}
             items={periods}
-            panelid={props.panelid}
-            initialItem={props.initialPeriodeinfo}
+            panelid={panelid}
+            initialItem={initialPeriodeinfo}
             editSoknad={editSoknad}
             editSoknadState={editSoknadState}
-            getErrorMessage={props.getErrorMessage}
-            className={props.className}
-            minstEn={props.minstEn}
-            feilkodeprefiks={props.feilkodeprefiks}
+            getErrorMessage={errorMessageFunc}
+            className={className}
+            minstEn={minstEn}
+            feilkodeprefiks={feilkodeprefiks}
             component={periodComponent}
-            onAdd={props.onAdd}
-            onRemove={props.onRemove}
-            panelClassName={props.panelClassName}
-            textFjern={props.textFjern || 'skjema.perioder.fjern'}
-            textLeggTil={props.textLeggTil || 'skjema.perioder.legg_til'}
+            onAdd={onAdd}
+            onRemove={onRemove}
+            panelClassName={panelClassName}
+            textFjern={textFjern || 'skjema.perioder.fjern'}
+            textLeggTil={textLeggTil || 'skjema.perioder.legg_til'}
             kanHaFlere={kanHaFlere}
-            medSlettKnapp={props.medSlettKnapp}
+            medSlettKnapp={medSlettKnapp}
         />
     );
+};
+
+PeriodeinfoPaneler.defaultProps = {
+    periods: [],
 };
