@@ -1,27 +1,28 @@
 import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IPath, IEksisterendeSoknaderState } from 'app/models/types';
-import { RootStateType } from 'app/state/RootState';
-import { datetime, setHash, getPath } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
-import { openEksisterendeSoknadAction, chooseEksisterendeSoknadAction ,
+import { IEksisterendeSoknaderState, IPath } from 'app/models/types';
+import {
+    chooseEksisterendeSoknadAction,
     findEksisterendeSoknader,
+    openEksisterendeSoknadAction,
     resetPunchAction,
     setIdentAction,
     undoSearchForSoknaderAction,
 } from 'app/state/actions';
-import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
-import { setIdentSokAction, setStepSokAction } from '../../state/actions/SoknaderSokActions';
+import { RootStateType } from 'app/state/RootState';
+import { datetime, getPath, setHash } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import * as React from 'react';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
 import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
-import { closeSoknadAction, openSoknadAction, resetSoknadidAction } from '../../state/actions/SoknaderVisningActions';
 import { SoknadType } from '../../models/enums/SoknadType';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
+import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
+import { setIdentSokAction, setStepSokAction } from '../../state/actions/SoknaderSokActions';
+import { closeSoknadAction, openSoknadAction, resetSoknadidAction } from '../../state/actions/SoknaderVisningActions';
 
 export interface ISoknaderSokStateProps {
     visningState: ISoknaderVisningState;
@@ -118,36 +119,38 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
     function showSoknader() {
         const rows = [];
 
-        for (const s of soknader!) {
-            const søknad = new PSBSoknad(s);
-            const soknadId = s.soeknadId as string;
-            const { chosenSoknad } = props.eksisterendeSoknaderState;
-            const fom = søknad.soeknadsperiode?.fom || '';
-            const tom = søknad.soeknadsperiode?.tom || '';
-            const rowContent = [
-                søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                SoknadType.PSB,
-                (søknad.barn.norskIdent
-                    ? søknad.barn.norskIdent
-                    : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
-                    '',
-                fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
-                tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
-                <Knapp key={soknadId} mini onClick={() => chooseSoknad(s)}>
-                    {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                </Knapp>,
-            ];
-            rows.push(
-                <tr key={soknadId} onClick={() => props.openSoknadAction(s)}>
-                    {rowContent.filter((v) => !!v).length ? (
-                        rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
-                    ) : (
-                        <td colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
-                        </td>
-                    )}
-                </tr>
-            );
+        if (soknader && soknader.length > 0) {
+            for (let index = 0; index < soknader.length; index += 1) {
+                const s = soknader[index];
+                const søknad = new PSBSoknad(s);
+                const soknadId = s.soeknadId as string;
+                const fom = søknad.soeknadsperiode?.fom || '';
+                const tom = søknad.soeknadsperiode?.tom || '';
+                const rowContent = [
+                    søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
+                    SoknadType.PSB,
+                    (søknad.barn.norskIdent
+                        ? søknad.barn.norskIdent
+                        : søknad.barn.foedselsdato &&
+                          datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) || '',
+                    fom ? datetime(intl, TimeFormat.DATE_SHORT, fom) : '', // Viser tidligste startdato
+                    tom ? datetime(intl, TimeFormat.DATE_SHORT, tom) : '', // Viser seneste sluttdato
+                    <Knapp key={soknadId} mini onClick={() => chooseSoknad(s)}>
+                        {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                    </Knapp>,
+                ];
+                rows.push(
+                    <tr key={soknadId} onClick={() => props.openSoknadAction(s)}>
+                        {rowContent.filter((v) => !!v).length ? (
+                            rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
+                        ) : (
+                            <td colSpan={4} className="punch_mappetabell_tom_soknad">
+                                Tom søknad
+                            </td>
+                        )}
+                    </tr>
+                );
+            }
         }
 
         return (
@@ -168,10 +171,6 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
                 </table>
             </>
         );
-    }
-
-    function undoSearchForSoknader() {
-        props.undoSearchForSoknaderAction();
     }
 
     if (soknader?.length) {

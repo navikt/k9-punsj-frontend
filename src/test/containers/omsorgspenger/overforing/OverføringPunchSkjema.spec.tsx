@@ -21,7 +21,9 @@ jest.mock('app/components/journalpost-panel/JournalpostPanel', () => ({
 describe('<OverføringPunchSkjema>', () => {
     test('Viser alle feltfeil hvis man sender inn skjema med feil', async () => {
         let numberOfTimesSubmitted = 0;
-        const onSubmitCallback = () => numberOfTimesSubmitted++;
+        const onSubmitCallback = () => {
+            numberOfTimesSubmitted += 1;
+        };
         const gåTilForrigeSteg = jest.fn;
 
         renderWithRouterAndIntl(
@@ -51,7 +53,9 @@ describe('<OverføringPunchSkjema>', () => {
 
     test('Kan sende inn når alle påkrevde felter er OK', async () => {
         let numberOfTimesSubmitted = 0;
-        const onSubmitCallback = () => numberOfTimesSubmitted++;
+        const onSubmitCallback = () => {
+            numberOfTimesSubmitted += 1;
+        };
         const gåTilForrigeSteg = jest.fn;
 
         const skjema: IOverføringPunchSkjema = {

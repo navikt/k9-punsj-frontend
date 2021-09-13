@@ -11,6 +11,7 @@ import { IntlShape } from 'react-intl';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { ITilleggsinformasjon } from '../../models/types/PSBSoknad';
 
+// eslint-disable-next-line import/prefer-default-export
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
     return (
         periodeinfo: Periodeinfo<ITilleggsinformasjon>,
@@ -20,11 +21,13 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => (
+    ) => {
+        const { tilleggsinformasjon } = periodeinfo;
+        return (
             <div className="tilleggsinfo">
                 <Textarea
                     label={intlHelper(intl, `skjema.${path}.tilleggsinfo`)}
-                    value={periodeinfo.tilleggsinformasjon || ''}
+                    value={tilleggsinformasjon || ''}
                     onChange={(event) => {
                         updatePeriodeinfoInSoknadState({ tilleggsinformasjon: event.target.value }, false);
                         updatePeriodeinfoInSoknad({
@@ -40,4 +43,5 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                 />
             </div>
         );
+    };
 }

@@ -98,6 +98,7 @@
         "@testing-library/user-event": "^13.2.1",
         "@types/enzyme": "^3.10.7",
         "@types/enzyme-adapter-react-16": "^1.0.6",
+        "@types/fetch-headers": "^2.0.0",
         "@types/intl": "^1.2.0",
         "@types/jest": "^26.0.15",
         "@types/react": "^17.0.16",

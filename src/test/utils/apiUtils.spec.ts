@@ -3,7 +3,7 @@ import { apiUrl, convertResponseToError, get, post, put } from 'app/utils';
 import { redirect } from 'app/utils/browserUtils';
 import fetchMock from 'fetch-mock';
 
-const Headers = require('fetch-headers');
+import Headers from 'fetch-headers';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');

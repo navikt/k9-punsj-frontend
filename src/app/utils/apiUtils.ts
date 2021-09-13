@@ -1,10 +1,9 @@
+import Headers from 'fetch-headers';
 import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 import { String } from 'typescript-string-operations';
 import { canStringBeParsedToJSON } from './formatUtils';
-
-const Headers = require('fetch-headers');
 
 export const apiUrl = (path: ApiPath, parameters?: any) =>
     URL_API + (parameters ? String.Format(path, parameters) : path);

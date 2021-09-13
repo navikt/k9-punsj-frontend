@@ -11,6 +11,7 @@ import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { IOppholdsLand } from '../../models/types/PSBSoknad';
 import { CountrySelect } from '../../components/country-select/CountrySelect';
 
+// eslint-disable-next-line import/prefer-default-export
 export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
     return (
         periodeinfo: Periodeinfo<IOppholdsLand>,
@@ -20,12 +21,14 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => (
+    ) => {
+        const { land } = periodeinfo;
+        return (
             <div className="countryselect">
                 <CountrySelect
                     label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
                     unselectedoption="Velg land"
-                    selectedcountry={periodeinfo.land || ''}
+                    selectedcountry={land || ''}
                     onChange={(event) => {
                         updatePeriodeinfoInSoknadState({ land: event.target.value }, false);
                         updatePeriodeinfoInSoknad({ land: event.target.value });
@@ -35,4 +38,5 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
                 />
             </div>
         );
+    };
 }

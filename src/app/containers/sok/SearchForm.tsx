@@ -1,14 +1,14 @@
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import React from 'react';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import SokKnapp from '../../components/knapp/SokKnapp';
-import './sok.less';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { getJournalpost } from '../../state/reducers/FellesReducer';
-import { IJournalpost } from '../../models/types';
+import React from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import SokKnapp from '../../components/knapp/SokKnapp';
+import VerticalSpacer from '../../components/VerticalSpacer';
+import { IJournalpost } from '../../models/types';
+import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
 import { RootStateType } from '../../state/RootState';
+import './sok.less';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
@@ -17,11 +17,10 @@ export interface ISearchFormStateProps {
 }
 
 export interface ISearchFormDispatchProps {
-    getJournalpost: typeof getJournalpost;
+    getJournalpost: typeof fellesReducerGetJournalpost;
 }
 
 export interface ISearchFormComponentState {
-    identitetsnummer?: string;
     journalpostid?: string;
 }
 
@@ -30,34 +29,27 @@ type ISearchFormProps = WrappedComponentProps &
     ISearchFormDispatchProps &
     ISearchFormComponentState;
 
-export class SearchFormComponent extends React.Component<ISearchFormProps> {
-    state: ISearchFormComponentState = {
-        identitetsnummer: '',
-        journalpostid: '',
-    };
-
+export class SearchFormComponent extends React.Component<ISearchFormProps, ISearchFormComponentState> {
     componentDidMount(): void {
         this.setState({
-            identitetsnummer: '',
             journalpostid: '',
-            visMapper: false,
-            sokMedFnr: false,
         });
     }
 
     render() {
         const { journalpostid } = this.state;
+        const { getJournalpost, journalpost, notFound, forbidden } = this.props;
 
         const disabled = !journalpostid;
 
         const onClick = () => {
             if (journalpostid) {
-                this.props.getJournalpost(journalpostid);
+                getJournalpost(journalpostid);
             }
         };
 
-        if (this.props.journalpost?.journalpostId) {
-            window.location.assign(`journalpost/${  journalpostid}`);
+        if (journalpost?.journalpostId) {
+            window.location.assign(`journalpost/${journalpostid}`);
         }
 
         return (
@@ -76,17 +68,17 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                         <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
                         <VerticalSpacer sixteenPx />
                     </div>
-                    {!!this.props.notFound && (
+                    {!!notFound && (
                         <AlertStripeInfo>
                             <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
                         </AlertStripeInfo>
                     )}
-                    {!!this.props.forbidden && (
+                    {!!forbidden && (
                         <AlertStripeAdvarsel>
                             <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                         </AlertStripeAdvarsel>
                     )}
-                    {!!this.props.journalpost && !this.props.journalpost?.kanSendeInn && (
+                    {!!journalpost && !journalpost?.kanSendeInn && (
                         <AlertStripeAdvarsel>
                             <FormattedMessage id="fordeling.kanikkesendeinn" />
                         </AlertStripeAdvarsel>
@@ -104,7 +96,7 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getJournalpost: (journalpostid: string) => dispatch(getJournalpost(journalpostid)),
+    getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
 });
 
 export const SearchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent));

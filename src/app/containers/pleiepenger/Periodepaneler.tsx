@@ -1,13 +1,12 @@
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import * as React from 'react';
-import { IntlShape } from 'react-intl';
-import { Knapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
+import * as React from 'react';
 import { Row } from 'react-bootstrap';
-import { IPeriode } from '../../models/types/Periode';
-import BinSvg from '../../assets/SVG/BinSVG';
-import intlHelper from '../../utils/intlUtils';
+import { IntlShape } from 'react-intl';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
+import BinSvg from '../../assets/SVG/BinSVG';
+import { IPeriode } from '../../models/types/Periode';
+import intlHelper from '../../utils/intlUtils';
 
 export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
 
@@ -31,7 +30,7 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const periods = props.periods ? props.periods : [];
+    const { periods, textLeggTil } = props;
     const { intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
@@ -39,7 +38,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         periodeinfo: Partial<IPeriode>
     ) => {
         const newInfo: IPeriode = { ...props.periods[index], ...periodeinfo };
-        const newArray = periods;
+        const newArray = periods || [];
         newArray[index] = newInfo;
         return newArray;
     };
@@ -47,13 +46,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, periode);
 
     const addItem = () => {
-        const newArray = periods;
+        const newArray = periods || [];
         newArray.push(props.initialPeriode);
         return newArray;
     };
 
     const removeItem = (index: number) => {
-        const newArray = periods;
+        const newArray = periods || [];
         newArray.splice(index, 1);
         return newArray;
     };
@@ -117,7 +116,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         <div className="leggtilperiodeIcon">
                             <AddCircleSvg title="leggtil" />
                         </div>
-                        {intlHelper(intl, props.textLeggTil || 'skjema.periodepanel.legg_til')}
+                        {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
                     </div>
                 </Row>
             )}

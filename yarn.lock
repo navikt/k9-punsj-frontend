@@ -1884,6 +1884,11 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.50.tgz#1e0caa9364d3fccd2931c3ed96fdbeaa5d4cca83"
   integrity sha512-C6N5s2ZFtuZRj54k2/zyRhNDjJwwcViAM3Nbm8zjBpbqAdZ00mr0CFxvSKeO8Y/e03WVFLpQMdHYVfUd6SB+Hw==
 
+"@types/fetch-headers@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/fetch-headers/-/fetch-headers-2.0.0.tgz#8bc9321fc43797be59b9f69942afa5f5d1ed2a0d"
+  integrity sha512-zJ1F8w2iFs68z5lAEcsa6S8wAwoc0bK7ZJkNgMb46HFP0uqWPpPc7HCKdZMSRDCrlAd7L1sgDuh/BzmCe64Xew==
+
 "@types/flat-cache@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/flat-cache/-/flat-cache-2.0.0.tgz#64e5d3b426c392b603a208a55bdcc7d920ce6e57"

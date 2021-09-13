@@ -1,19 +1,18 @@
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { EksisterendeSoknader } from './EksisterendeSoknader';
-import { PunchStep } from '../../models/enums';
-import './registreringsValg.less';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
 import { connect } from 'react-redux';
-import { setHash } from '../../utils';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { PunchStep } from '../../models/enums';
 import { IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState } from '../../models/types';
-import { RootStateType } from '../../state/RootState';
-
-import { IJournalposterPerIdentState } from '../../models/types/JournalposterPerIdentState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/JournalposterPerIdentState';
+import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { RootStateType } from '../../state/RootState';
+import { setHash } from '../../utils';
+import { EksisterendeSoknader } from './EksisterendeSoknader';
+import './registreringsValg.less';
 
 export interface IRegistreringsValgComponentProps {
     journalpostid: string;
@@ -91,7 +90,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         ) : null;
 
     const infoText = (journalpost: IJournalpost, index: number) => {
-        const dato = journalpost.dato ? `, dato: ${  journalpost.dato}` : '';
+        const dato = journalpost.dato ? `, dato: ${journalpost.dato}` : '';
         return `Journalpost ${index}${dato}`;
     };
 

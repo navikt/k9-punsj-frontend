@@ -14,6 +14,7 @@ import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 
+// eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
     return (
         periodeinfo: Periodeinfo<IArbeidstidPeriodeMedTimer>,
@@ -23,14 +24,16 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => (
+    ) => {
+        const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag } = periodeinfo;
+        return (
             <div className="arbeidstider">
                 <Row noGutters>
                     <div className="input-row">
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}
                             bredde="XS"
-                            value={periodeinfo.jobberNormaltTimerPerDag}
+                            value={jobberNormaltTimerPerDag}
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
                                     jobberNormaltTimerPerDag: event.target.value,
@@ -41,14 +44,13 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     jobberNormaltTimerPerDag: event.target.value,
                                 });
                             }}
-                            onFocus={(event) => (event.target.selectionStart = 0)}
                         />
                         <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
                         </Hjelpetekst>
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
-                            value={periodeinfo.faktiskArbeidTimerPerDag}
+                            value={faktiskArbeidTimerPerDag}
                             className="right"
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
@@ -60,7 +62,6 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     faktiskArbeidTimerPerDag: event.target.value,
                                 });
                             }}
-                            onFocus={(event) => (event.target.selectionStart = 0)}
                             feil={getErrorMessage(`${feilprefiks}.timerfaktisk`)}
                             bredde="XS"
                         />
@@ -71,4 +72,5 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                 </Row>
             </div>
         );
+    };
 }

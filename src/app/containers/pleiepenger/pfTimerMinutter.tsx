@@ -13,6 +13,7 @@ import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { IPeriodeMedTimerMinutter } from '../../models/types/Periode';
 import { stringToNumber } from '../../utils';
 
+// eslint-disable-next-line import/prefer-default-export
 export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter> {
     return (
         periodeinfo: Periodeinfo<IPeriodeMedTimerMinutter>,
@@ -22,14 +23,16 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
-    ) => (
+    ) => {
+        const { timer, minutter } = periodeinfo;
+        return (
             <div className="timerminutter">
                 <Row noGutters>
                     <p>{intlHelper(intl, 'skjema.omsorgstilbud.gjennomsnittlig')}</p>
                     <div className="input-row">
                         <Input
                             label={intlHelper(intl, 'skjema.perioder.timer')}
-                            value={periodeinfo.timer}
+                            value={timer}
                             bredde="XS"
                             className="timer"
                             onChange={(event) =>
@@ -50,7 +53,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                         />
                         <Input
                             label={intlHelper(intl, 'skjema.perioder.minutter')}
-                            value={periodeinfo.minutter}
+                            value={minutter}
                             bredde="XS"
                             className="right"
                             onChange={(event) =>
@@ -73,4 +76,5 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                 </Row>
             </div>
         );
+    };
 }

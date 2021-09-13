@@ -9,6 +9,7 @@ import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../models/types/Arbei
 import { arbeidstidInformasjon } from './ArbeidstidInfo';
 import { pfArbeidstider } from './pfArbeidstider';
 
+// eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstaker(): (
     arbeidstaker: Arbeidstaker,
     listeelementindex: number,
@@ -41,7 +42,9 @@ export function pfArbeidstaker(): (
             updateListeinfoInSoknad({ organisasjonsnummer, norskIdent });
         };
 
-        const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
+        const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
+
+        const selectedType: OrgOrPers = orgOrPers();
 
         return (
             <SkjemaGruppe
@@ -74,7 +77,7 @@ export function pfArbeidstaker(): (
                                 <Input
                                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                                     bredde="M"
-                                    value={arbeidstaker.organisasjonsnummer || ''}
+                                    value={organisasjonsnummer || ''}
                                     className="arbeidstaker-organisasjonsnummer"
                                     onChange={(event) =>
                                         updateListeinfoInSoknadState({
@@ -92,7 +95,7 @@ export function pfArbeidstaker(): (
                             {selectedType === 'p' && (
                                 <Input
                                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
-                                    value={arbeidstaker.norskIdent || ''}
+                                    value={norskIdent || ''}
                                     bredde="M"
                                     className="arbeidstaker-norskIdent"
                                     onChange={(event) =>
@@ -109,25 +112,25 @@ export function pfArbeidstaker(): (
                     {arbeidstidInformasjon(intl)}
                     <PeriodeinfoPaneler
                         intl={intl}
-                        periods={arbeidstaker.arbeidstidInfo.perioder}
+                        periods={arbeidstidInfo.perioder}
                         panelid={(i) => `arbeidstakerpanel_${listeelementindex}_${i}`}
                         initialPeriodeinfo={{
                             faktiskArbeidTimerPerDag: '',
                             periode: { fom: '', tom: '' },
                         }}
-                        editSoknad={(arbeidstidInfo) =>
+                        editSoknad={(periodeinfo) =>
                             updateListeinfoInSoknad({
                                 arbeidstidInfo: {
                                     ...arbeidstaker.arbeidstidInfo,
-                                    perioder: arbeidstidInfo,
+                                    perioder: periodeinfo,
                                 },
                             })
                         }
-                        editSoknadState={(arbeidstidInfo) =>
+                        editSoknadState={(periodeinfo) =>
                             updateListeinfoInSoknadState({
                                 arbeidstidInfo: {
                                     ...arbeidstaker.arbeidstidInfo,
-                                    perioder: arbeidstidInfo,
+                                    perioder: periodeinfo,
                                 },
                             })
                         }

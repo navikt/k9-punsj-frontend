@@ -13,6 +13,38 @@ interface ISoknadReadModeProps {
 }
 
 class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadReadModeProps> {
+    private mottakelsesdato = (dato: string) => {
+        const { intl } = this.props;
+        return <Col>{datetime(intl, TimeFormat.DATE_WITH_MONTH_NAME, dato)}</Col>;
+    };
+
+    private soknadsperioder = (sokandsperioder: IPeriode[]) => (
+        <Col>
+            <ul>
+                {sokandsperioder.map((p) => (
+                    <li key={`${p.fom}-${p.tom}`}>{`${p.fom}-${p.tom}`}</li>
+                ))}
+            </ul>
+        </Col>
+    );
+
+    private tilsynsordning = (tilsynsordning: Tilsynsordning) => {
+        const { intl } = this.props;
+        return (
+            <Col>
+                {tilsynsordning.perioder.length > 0 ? (
+                    <ul>
+                        {tilsynsordning.perioder.map((t) => (
+                            <li key={`${t.periode?.fom}-${t.periode?.tom}`}>{t.description(intl)}</li>
+                        ))}
+                    </ul>
+                ) : (
+                    intlHelper(intl, tilsynsordning.perioder.length > 0 ? 'ja' : 'nei')
+                )}
+            </Col>
+        );
+    };
+
     render() {
         const { intl, soknad } = this.props;
 
@@ -37,37 +69,6 @@ class SoknadReadMode extends React.Component<WrappedComponentProps & ISoknadRead
             </Container>
         );
     }
-
-    private mottakelsesdato = (dato: string) => (
-        <Col>{datetime(this.props.intl, TimeFormat.DATE_WITH_MONTH_NAME, dato)}</Col>
-    );
-
-    private soknadsperioder = (sokandsperioder: IPeriode[]) => (
-        <Col>
-            <ul>
-                {sokandsperioder.map((p, i) => (
-                    <li key={i}>{`${p.fom  }-${  p.tom}`}</li>
-                ))}
-            </ul>
-        </Col>
-    );
-
-    private tilsynsordning = (tilsynsordning: Tilsynsordning) => {
-        const { intl } = this.props;
-        return (
-            <Col>
-                {tilsynsordning.perioder.length > 0 ? (
-                    <ul>
-                        {tilsynsordning.perioder.map((t, i) => (
-                            <li key={i}>{t.description(intl)}</li>
-                        ))}
-                    </ul>
-                ) : (
-                    intlHelper(intl, tilsynsordning.perioder.length > 0 ? 'ja' : 'nei')
-                )}
-            </Col>
-        );
-    };
 }
 
 export default injectIntl(SoknadReadMode);
