@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import Page from 'app/components/page/Page';
 import { IEksisterendeSoknaderComponentProps } from 'app/containers/pleiepenger/EksisterendeSoknader';
@@ -11,6 +12,7 @@ import { getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -50,7 +52,6 @@ export interface IPunchPageComponentProps {
 export interface IPunchPageComponentState {
     ident1: string;
     ident2: string;
-    barnetHarIkkeFnr: boolean;
 }
 
 type IPunchPageProps = WrappedComponentProps &
@@ -61,37 +62,40 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageQueryProps;
 
 export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchPageComponentState> {
-    state: IPunchPageComponentState = {
-        ident1: '',
-        ident2: '',
-        barnetHarIkkeFnr: false,
-    };
+    constructor(props: IPunchPageProps) {
+        super(props);
+        this.state = {
+            ident1: '',
+            ident2: '',
+        };
+    }
 
     componentDidMount(): void {
+        const { punchState } = this.props;
         this.setState({
-            ident1: this.props.punchState.ident1,
-            ident2: this.props.punchState.ident2 || '',
-            barnetHarIkkeFnr: false,
+            ident1: punchState.ident1,
+            ident2: punchState.ident2 || '',
         });
     }
 
-    componentDidUpdate(
-        prevProps: Readonly<IPunchPageProps>,
-        prevState: Readonly<IPunchPageComponentState>,
-        snapshot?: any
-    ): void {
-        !this.state.ident1 && this.props.punchState.ident1 && this.setState({ ident1: this.props.punchState.ident1 });
-        !this.state.ident2 && this.props.punchState.ident2 && this.setState({ ident2: this.props.punchState.ident2 });
+    componentDidUpdate(): void {
+        const { ident1, ident2 } = this.state;
+        const { punchState } = this.props;
+        if (!ident1 && punchState.ident1) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ ident1: punchState.ident1 });
+        }
+
+        if (!ident2 && punchState.ident2) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ ident2: punchState.ident2 });
+        }
     }
 
-    render() {
-        const { intl } = this.props;
-        return (
-            <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
-                {this.content()}
-            </Page>
-        );
-    }
+    private getPath = (step: PunchStep, values?: any) => {
+        const { dok } = this.props;
+        return getPath(peiepengerPaths, step, values, dok ? { dok } : undefined);
+    };
 
     private content() {
         const { journalpostid, journalpost, forbidden } = this.props;
@@ -116,20 +120,21 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
         );
     }
 
-    private getPath = (step: PunchStep, values?: any) =>
-        getPath(peiepengerPaths, step, values, this.props.dok ? { dok: this.props.dok } : undefined);
-
+    // eslint-disable-next-line consistent-return
     private underFnr() {
+        const { journalpostid, step, match, punchFormState, intl } = this.props;
+
         const commonProps = {
-            journalpostid: this.props.journalpostid || '',
+            journalpostid: journalpostid || '',
             getPunchPath: this.getPath,
         };
 
-        switch (this.props.step) {
+        // eslint-disable-next-line default-case
+        switch (step) {
             case PunchStep.CHOOSE_SOKNAD:
                 return <RegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
-                return <PSBPunchForm {...commonProps} id={this.props.match.params.id} />;
+                return <PSBPunchForm {...commonProps} id={match.params.id} />;
             case PunchStep.COMPLETED:
                 return (
                     <>
@@ -137,11 +142,8 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                             Søknaden er sendt til behandling.
                         </AlertStripeSuksess>
 
-                        {typeof this.props.punchFormState.innsentSoknad !== 'undefined' && (
-                            <SoknadKvittering
-                                response={this.props.punchFormState.innsentSoknad}
-                                intl={this.props.intl}
-                            />
+                        {typeof punchFormState.innsentSoknad !== 'undefined' && (
+                            <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
                         )}
                     </>
                 );
@@ -149,10 +151,21 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
     }
 
     private extractIdents(): Pick<IEksisterendeSoknaderComponentProps, 'ident1' | 'ident2'> {
-        const ident = this.props.identState.ident1;
+        const { identState } = this.props;
+
+        const ident = identState.ident1;
         return /^\d+&\d+$/.test(ident)
             ? { ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0] }
             : { ident1: ident, ident2: null };
+    }
+
+    render() {
+        const { intl } = this.props;
+        return (
+            <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
+                {this.content()}
+            </Page>
+        );
     }
 }
 
