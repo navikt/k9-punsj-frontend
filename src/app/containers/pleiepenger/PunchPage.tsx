@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
 import { IEksisterendeSoknaderComponentProps } from 'app/containers/pleiepenger/EksisterendeSoknader';
 import 'app/containers/pleiepenger/punchPage.less';
@@ -8,7 +9,7 @@ import { PunchStep } from 'app/models/enums';
 import { IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState } from 'app/models/types';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { getPath } from 'app/utils';
+import { getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeSuksess } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
@@ -141,7 +142,13 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                         <AlertStripeSuksess className="fullfortmelding">
                             Søknaden er sendt til behandling.
                         </AlertStripeSuksess>
-
+                        <Hovedknapp
+                            onClick={() => {
+                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            }}
+                        >
+                            {intlHelper(intl, 'tilbaketilLOS')}
+                        </Hovedknapp>
                         {typeof punchFormState.innsentSoknad !== 'undefined' && (
                             <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
                         )}

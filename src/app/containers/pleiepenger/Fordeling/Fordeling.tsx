@@ -8,39 +8,38 @@ import {
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
-import { v4 as uuidv4 } from 'uuid';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import ModalWrapper from 'nav-frontend-modal';
+import { PopoverOrientering } from 'nav-frontend-popover';
 import { Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { PopoverOrientering } from 'nav-frontend-popover';
-import ModalWrapper from 'nav-frontend-modal';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import PdfVisning from '../../../components/pdf/PdfVisning';
-import { ISakstypeDefault, ISakstypePunch } from '../../../models/Sakstype';
-import { Sakstyper } from '../../SakstypeImpls';
-import './fordeling.less';
-import VerticalSpacer from '../../../components/VerticalSpacer';
+import { v4 as uuidv4 } from 'uuid';
+import WarningCircle from '../../../assets/SVG/WarningCircle';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
+import PdfVisning from '../../../components/pdf/PdfVisning';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import { ISakstypeDefault, ISakstypePunch } from '../../../models/Sakstype';
+import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
+import { IIdentState } from '../../../models/types/IdentState';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
-import { setHash } from '../../../utils';
-import { IdentRules } from '../../../rules';
 import { setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IIdentState } from '../../../models/types/IdentState';
-import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
-import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../state/reducers/HentBarn';
-import WarningCircle from '../../../assets/SVG/WarningCircle';
+import { setHash } from '../../../utils';
+import { Sakstyper } from '../../SakstypeImpls';
+import OkGaaTilLosModal from '../OkGaaTilLosModal';
+import './fordeling.less';
 import { skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
 
@@ -130,8 +129,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
-    const identer = [identState.ident1, identState.ident2];
-    const antallIdenter = identer.filter((id) => id && id.length).length;
     const journalpostident = journalpost?.norskIdent;
 
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
@@ -254,8 +251,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (
             skalJournalpostSomIkkeStottesKopieres &&
-            !props.fellesState.isAwaitingKopierJournalPostResponse &&
-            !!props.fellesState.kopierJournalpostSuccess &&
+            !fellesState.isAwaitingKopierJournalPostResponse &&
+            !!fellesState.kopierJournalpostSuccess &&
             journalpost?.journalpostId
         ) {
             lukkJournalpostOppgave(journalpost?.journalpostId);
@@ -519,21 +516,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 </AlertStripeInfo>
                                             )}
                                             <VerticalSpacer sixteenPx />
-                                            {antallIdenter > 0 &&
-                                                journalpostident &&
-                                                props &&
-                                                identer.every(
-                                                    (ident) =>
-                                                        !ident ||
-                                                        (IdentRules.isIdentValid(ident) && ident !== journalpostident)
-                                                ) && (
-                                                    <AlertStripeAdvarsel>
-                                                        {intlHelper(intl, 'ident.advarsel.samsvarerikke', {
-                                                            antallIdenter: antallIdenter.toString(),
-                                                            journalpostident,
-                                                        })}
-                                                    </AlertStripeAdvarsel>
-                                                )}
                                         </>
                                     )}
 

@@ -113,7 +113,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
         getLocaleJson();
     }, []);
 
-    const { ytelse } = response;
+    const { ytelse, journalposter } = response;
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
@@ -412,15 +412,15 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                 </div>
             )}
 
-            {'infoFraPunsj' in ytelse && (
+            {!!journalposter && journalposter.length > 0 && (
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
                         {`${
-                            ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger !== null &&
-                            ytelse.infoFraPunsj?.inneholderMedisinskeOpplysninger
+                            typeof journalposter[0].inneholderMedisinskeOpplysninger !== 'undefined' &&
+                            journalposter[0].inneholderMedisinskeOpplysninger
                                 ? 'Ja'
                                 : 'Nei'
                         }`}
@@ -428,8 +428,8 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
                         {`${
-                            ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes !== null &&
-                            ytelse.infoFraPunsj?.søknadenInneholderInfomasjonSomIkkeKanPunsjes
+                            typeof journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes !== 'undefined' &&
+                            journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes
                                 ? 'Ja'
                                 : 'Nei'
                         }`}

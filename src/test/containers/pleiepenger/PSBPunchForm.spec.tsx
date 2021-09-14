@@ -9,10 +9,11 @@ import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import { mocked } from 'ts-jest/utils';
 import * as reactRedux from 'react-redux';
-import { IIdentState } from '../../../app/models/types/IdentState';
+import { mocked } from 'ts-jest/utils';
+import OpplysningerOmSoknad from '../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
+import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/JournalposterPerIdentState';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 
@@ -65,6 +66,7 @@ const initialSoknad: IPSBSoknad = {
 };
 
 const validertSoknad: IPSBSoknadKvittering = {
+    journalposter: [],
     mottattDato: '',
     ytelse: {
         type: '',
@@ -221,7 +223,11 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
-        punchForm.find('#soknad-dato').simulate('blur', { target: { value: newDato } });
+        punchForm
+            .find(OpplysningerOmSoknad)
+            .dive()
+            .find('#soknad-dato')
+            .simulate('blur', { target: { value: newDato } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             mottattDato: newDato,
@@ -232,8 +238,12 @@ describe('PunchForm', () => {
     it('Oppdaterer felt når mottakelsesdato endres', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad });
-        punchForm.find('#soknad-dato').simulate('change', { target: { value: newDato } });
-        expect(punchForm.find('#soknad-dato').prop('value')).toEqual(newDato);
+        punchForm
+            .find(OpplysningerOmSoknad)
+            .dive()
+            .find('#soknad-dato')
+            .simulate('change', { target: { value: newDato } });
+        expect(punchForm.find(OpplysningerOmSoknad).dive().find('#soknad-dato').prop('value')).toEqual(newDato);
     });
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {

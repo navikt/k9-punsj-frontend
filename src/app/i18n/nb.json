@@ -40,7 +40,7 @@
     "startPage.feil.ingendokumenter": "Journalposten har ingen tilhørende dokumenter",
     "startPage.feil.ikketilgang": "Du har ikke tilgang til journalposten",
     "fordeling.overskrift": "Hva ønsker du å gjøre med dokumentet?",
-    "fordeling.sakstype.PLEIEPENGER_SYKT_BARN": "Registrere opplysninger i Punsj",
+    "fordeling.sakstype.PLEIEPENGER_SYKT_BARN": "Registrere opplysninger til K9",
     "fordeling.sakstype.OMSORGSPENGER": "Omsorgspenger",
     "fordeling.sakstype.OMSORGSPENGER_OVERFØRING": "Omsorgsdager: overføring av omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_FORDELING": "Omsorgsdager: fordeling av omsorgsdager",
@@ -102,7 +102,6 @@
     "ident.feil.ugyldigident": "Dette er ikke et gyldig fødsels- eller D-nummer.",
     "ident.feil.annenSøkerJournalkopiSoker": "Fødselsnummeret kan ikke være søkers fødselsnummer.",
     "ident.feil.annenSøkerJournalkopiBarn": "Fødselsnummeret kan ikke være barnets fødselsnummer.",
-    "ident.advarsel.samsvarerikke": "{antallIdenter, plural, one {Identitetsnummeret samsvarer ikke} other {Ingen av identitetsnumrene samsvarer}} med det som hører til journalposten. Journalpostens fødsels-/D-nummer er {journalpostident}.",
     "arbeidsforhold.arbeidstaker": "Arbeidstaker",
     "arbeidsforhold.annet": "Annet",
     "mapper.infoboks": "Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.",
@@ -152,6 +151,7 @@
     "skjema.opplysningeromsoker": "Opplysninger om søker",
     "skjema.opplysningerombarnet": "Opplysninger om barnet",
     "skjema.mottakelsesdato": "Mottatt dato",
+    "skjema.mottakelsesdato.informasjon": "Dobbeltsjekk at mottatt dato og tidspunkt er korrekt. Dette er viktig for å sikre riktig behandlingsrekkefølge. Dersom dokumentet er scannet er det allerede trukket fra to virkedager automatisk.",
     "skjema.mottatt.klokkeslett": "Mottatt klokkeslett",
     "skjema.soknasperiodefra": "Søknadsperiode fra og med",
     "skjema.soknasperiodetil": "Søknadsperiode til og med",
@@ -333,12 +333,10 @@
     "journalpost.norskIdent": "Søkers fødselsnummer:",
     "journalpost.ident2": "Barnets fødselsnummer:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
-
     "registrering.nysoknad": "Ny søknad",
     "registrering.etterrapportering": "Etterrapportering",
     "registrering.overskrift": "Hva ønsker du å registrere?",
     "registrering.journalpostinfo": "Det finnes flere journalposter på søkeren",
-
     "skjema.felt.signert.label": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
     "skjema.felt.signert.ja": "Ja",
     "skjema.felt.signert.nei": "Nei",
@@ -395,7 +393,6 @@
     "omsorgsdager.overføring.punch.modal.feil.overskrift": "Det skjedde en feil under innsending",
     "omsorgsdager.overføring.punch.modal.feil.prøvigjen": "Prøv igjen senere.",
     "omsorgsdager.overføring.punch.modal.feil.detaljer": "Oppgi følgende id ved kontakt med teknisk support:",
-
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
     "modal.settpaavent.visjournalpost": "Vis journalpost",
@@ -408,7 +405,6 @@
     "modal.okgaatillos.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
     "modal.settpaavent.feil": "Det oppstod en feil. Prøv igjen senere.",
     "modal.settpaavent.ok": "OK",
-
     "søk.overskrift": "Søk på journalpost-ID",
     "søk.label": "Søk med fødselsnummer eller D-nummer",
     "søk.label.fnr": "Fødselsnummer",
@@ -417,9 +413,8 @@
     "søk.info.perioder": "Velg perioden for søknaden:",
     "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
-
     "opprettGosysOppgave": "Opprett oppgave i Gosys",
-
+    "tilbaketilLOS": "Tilbake til LOS",
     "numberinput.øk": "Øk {felt} med 1",
     "numberinput.mink": "Mink {felt} med 1",
     "check.svg.title": "Suksess",
