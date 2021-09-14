@@ -1,7 +1,6 @@
 export * from 'app/models/types/Arbeidstaker';
 export * from 'app/models/types/AuthState';
 export * from 'app/models/types/Error';
-export * from 'app/models/types/Fagsak';
 export * from 'app/models/types/FordelingState';
 export * from 'app/models/types/Frilanser';
 export * from 'app/models/types/InputError';

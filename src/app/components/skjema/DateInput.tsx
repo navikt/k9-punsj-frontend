@@ -21,6 +21,7 @@ const DateInput: React.FunctionComponent<IDateInputProps & InputProps> = ({
 
     return (
         <Input
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...inputProps}
             type="date"
             label={label || <FormattedMessage id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`} />}

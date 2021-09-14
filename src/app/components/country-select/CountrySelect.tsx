@@ -2,6 +2,7 @@ import { getLocaleFromSessionStorage } from 'app/utils';
 import countries from 'i18n-iso-countries';
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     selectedcountry?: string;
@@ -14,9 +15,18 @@ export interface ICountry {
 }
 
 export const CountrySelect = (props: ICountrySelectProps) => {
-    const {unselectedoption, selectedcountry} = props;
     const locale = getLocaleFromSessionStorage();
-    countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
+    const [isLoading, setIsLoading] = React.useState(true);
+    useEffect(() => {
+        const getLocaleJson = async () => {
+            const json = await import(`i18n-iso-countries/langs/${locale}.json`);
+            countries.registerLocale(json);
+            setIsLoading(false);
+        };
+        getLocaleJson();
+    }, []);
+
+    const { unselectedoption, selectedcountry } = props;
 
     const countryList: ICountry[] = [];
     Object.keys(countries.getAlpha3Codes()).forEach((code) =>
@@ -25,6 +35,10 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
     if (unselectedoption) {
         countryList.unshift({ code: '', name: unselectedoption });
+    }
+
+    if (isLoading) {
+        return null;
     }
 
     return (

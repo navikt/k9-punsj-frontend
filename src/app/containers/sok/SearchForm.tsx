@@ -30,10 +30,11 @@ type ISearchFormProps = WrappedComponentProps &
     ISearchFormComponentState;
 
 export class SearchFormComponent extends React.Component<ISearchFormProps, ISearchFormComponentState> {
-    componentDidMount(): void {
-        this.setState({
+    constructor(props: ISearchFormProps) {
+        super(props);
+        this.state = {
             journalpostid: '',
-        });
+        };
     }
 
     render() {

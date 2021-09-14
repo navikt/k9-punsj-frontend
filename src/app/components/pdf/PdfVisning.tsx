@@ -92,7 +92,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
                         />
                     </div>
                 )}
-                <iframe src={pdfUrl} />
+                <iframe title="pdf" src={pdfUrl} />
                 <div className="knapperad">
                     <Flatknapp onClick={togglePdf} className="knapp1">
                         <FormattedMessage id="dokument.skjul" />

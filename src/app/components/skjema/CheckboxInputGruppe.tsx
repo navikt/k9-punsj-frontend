@@ -23,7 +23,7 @@ const CheckboxInputGruppe: React.FunctionComponent<ICheckboxInputGruppeProps> = 
     disabled = false,
     styling = 'utenPanel',
 }) => {
-    const { error = {}, touched } = useField<{}>(feltnavn)[1];
+    const { error = {}, touched } = useField(feltnavn)[1];
 
     const feil: boolean = error[metaHarFeilFeltnavn];
 

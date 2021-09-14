@@ -255,9 +255,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (
             skalJournalpostSomIkkeStottesKopieres &&
             !props.fellesState.isAwaitingKopierJournalPostResponse &&
-            !!props.fellesState.kopierJournalpostSuccess
+            !!props.fellesState.kopierJournalpostSuccess &&
+            journalpost?.journalpostId
         ) {
-            lukkJournalpostOppgave(journalpost?.journalpostId!);
+            lukkJournalpostOppgave(journalpost?.journalpostId);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse]);
 
@@ -451,7 +452,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     disabled={gjelderAnnetBarn}
                                                     onBlur={handleIdent2Blur}
                                                 >
-                                                    <option key={uuidv4()} value="" />)
+                                                    <option key={uuidv4()} value="" aria-label="Tomt valg" />)
                                                     {fellesState.barn.map((b) => (
                                                         <option key={uuidv4()} value={b.identitetsnummer}>
                                                             {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
