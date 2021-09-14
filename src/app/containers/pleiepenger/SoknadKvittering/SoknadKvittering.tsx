@@ -102,6 +102,17 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
     }, {});
 
 const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
+    const locale = getLocaleFromSessionStorage();
+    const [isLoading, setIsLoading] = React.useState(true);
+    React.useEffect(() => {
+        const getLocaleJson = async () => {
+            const json = await import(`i18n-iso-countries/langs/${locale}.json`);
+            countries.registerLocale(json);
+            setIsLoading(false);
+        };
+        getLocaleJson();
+    }, []);
+
     const { ytelse } = response;
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
@@ -127,9 +138,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
     const visBeredskap = sjekkHvisPerioderEksisterer('beredskap', ytelse);
     const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
 
-    const locale = getLocaleFromSessionStorage();
-    countries.registerLocale(require(`i18n-iso-countries/langs/${locale}.json`));
-
     const countryList: ICountry[] = [];
     Object.keys(countries.getAlpha3Codes()).forEach((code) =>
         countryList.push({
@@ -137,6 +145,10 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
             name: countries.getName(code, locale),
         })
     );
+
+    if (isLoading) {
+        return null;
+    }
 
     return (
         <div className={classNames('SoknadKvitteringContainer')}>

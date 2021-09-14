@@ -142,6 +142,7 @@ export const SoknaderVisningComponent: React.FunctionComponent<ISoknaderSokProps
                 rows.push(
                     <tr key={soknadId} onClick={() => props.openSoknadAction(s)}>
                         {rowContent.filter((v) => !!v).length ? (
+                            // eslint-disable-next-line react/no-array-index-key
                             rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
                         ) : (
                             <td colSpan={4} className="punch_mappetabell_tom_soknad">

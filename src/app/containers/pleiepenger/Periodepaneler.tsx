@@ -79,10 +79,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
-                        <div
+                        <button
                             id="slett"
                             className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
-                            role="button"
+                            type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);
                                 editSoknadState(newArray);
@@ -91,22 +91,21 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                     props.onRemove();
                                 }
                             }}
-                            tabIndex={0}
                         >
                             <div className="slettIcon">
                                 <BinSvg title="fjern" />
                             </div>
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
-                        </div>
+                        </button>
                     </div>
                 </Row>
             ))}
             {kanHaFlere && (
                 <Row noGutters>
-                    <div
+                    <button
                         id="leggtilperiode"
                         className="leggtilperiode"
-                        role="button"
+                        type="button"
                         onClick={() => {
                             const newArray: IPeriode[] = addItem();
                             editSoknadState(newArray);
@@ -115,13 +114,12 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 props.onAdd();
                             }
                         }}
-                        tabIndex={0}
                     >
                         <div className="leggtilperiodeIcon">
                             <AddCircleSvg title="leggtil" />
                         </div>
                         {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
-                    </div>
+                    </button>
                 </Row>
             )}
         </Panel>

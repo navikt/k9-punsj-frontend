@@ -11,7 +11,6 @@ export * from 'app/models/types/SoknaderSokState';
 export * from 'app/models/types/Path';
 export * from 'app/models/types/Periode';
 export * from 'app/models/types/Periodeinfo';
-export * from 'app/models/types/Person';
 export * from 'app/models/types/PunchFormState';
 export * from 'app/models/types/PunchPath';
 export * from 'app/models/types/PunchState';

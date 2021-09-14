@@ -82,21 +82,20 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     <VerticalSpacer eightPx />
                     {!visLeggTilPerioder && (
                         <div className="knappecontainer">
-                            <div
+                            <button
                                 id="leggtilsoknadsperiode"
                                 className="leggtilsoknadsperiode"
-                                role="button"
+                                type="button"
                                 onClick={() => {
                                     setVisLeggTilPerioder(true);
                                     updateSoknadState({ soeknadsperiode: initialPeriode });
                                 }}
-                                tabIndex={0}
                             >
                                 <div className="leggtilcircle">
                                     <AddCircleSvg title="leggtilcircle" />
                                 </div>
                                 {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
-                            </div>
+                            </button>
                         </div>
                     )}
                 </>
@@ -140,18 +139,17 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             }))}
                         />
 
-                        <div
+                        <button
                             id="fjern"
                             className="fjern"
-                            role="button"
+                            type="button"
                             onClick={() => {
                                 deleteSoknadsperiode();
                                 setVisLeggTilPerioder(false);
                             }}
-                            tabIndex={0}
                         >
                             <BinSvg title="fjern" />
-                        </div>
+                        </button>
                     </div>
                 </SkjemaGruppe>
             )}

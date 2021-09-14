@@ -83,6 +83,7 @@ export const sendInnSkjema =
             undefined,
             undefined,
             postBody,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             (response, responseData) => {
                 switch (response.status) {
