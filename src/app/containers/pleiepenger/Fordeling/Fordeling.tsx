@@ -136,7 +136,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         () => sakstyper.find((st) => st.navn === sakstype),
         [sakstype]
     );
-
+    
     const journalpostident = journalpost?.norskIdent;
 
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
