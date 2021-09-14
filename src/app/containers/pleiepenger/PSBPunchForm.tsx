@@ -67,7 +67,7 @@ import {RelasjonTilBarnet} from "../../models/enums/RelasjonTilBarnet";
 import {IIdentState} from "../../models/types/IdentState";
 import ModalWrapper from "nav-frontend-modal";
 import SettPaaVentModal from "./SettPaaVentModal";
-import {IJournalposterPerIdentState} from "../../models/types/JournalposterPerIdentState";
+import {IJournalposterPerIdentState} from "../../models/types/Journalpost/JournalposterPerIdentState";
 import {pfTilleggsinformasjon} from "./pfTilleggsinformasjon";
 import {Container, Row} from "react-bootstrap";
 import {pfArbeidstider} from "./pfArbeidstider";

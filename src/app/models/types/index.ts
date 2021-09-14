@@ -5,7 +5,7 @@ export * from 'app/models/types/Fagsak';
 export * from 'app/models/types/FordelingState';
 export * from 'app/models/types/Frilanser';
 export * from 'app/models/types/InputError';
-export * from 'app/models/types/Journalpost';
+export * from 'app/models/types/Journalpost/Journalpost';
 export * from 'app/models/types/Locale';
 export * from 'app/models/types/EksisterendeSoknaderState';
 export * from 'app/models/types/SoknaderSokState';

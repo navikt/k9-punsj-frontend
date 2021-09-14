@@ -8,13 +8,24 @@ import {IError, IJournalpost} from '../models/types';
 import {getJournalpost as getJournalpostAction} from '../state/reducers/FellesReducer';
 import {RootStateType} from '../state/RootState';
 import FeilmeldingPanel from "../components/FeilmeldingPanel";
+import {IJournalpostConflictResponse} from "../models/types/Journalpost/IJournalpostConflictResponse";
+import {JournalpostConflictTyper} from "../models/enums/Journalpost/JournalpostConflictTyper";
+import VerticalSpacer from "../components/VerticalSpacer";
+import {Knapp} from "nav-frontend-knapper";
+import {lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction} from "../state/actions";
+import './journalpostLoader.less';
+import ModalWrapper from "nav-frontend-modal";
+import OkGaaTilLosModal from "./pleiepenger/OkGaaTilLosModal";
 
 interface IJournaPostStateProps {
     journalpost?: IJournalpost;
     isJournalpostLoading?: boolean;
     journalpostRequestError?: IError;
-    forbidden: boolean | undefined;
-    notFound: boolean | undefined;
+    journalpostConflictError?: IJournalpostConflictResponse;
+    forbidden?: boolean;
+    conflict?: boolean;
+    notFound?: boolean;
+    lukkOppgaveDone?: boolean;
 }
 
 interface IJournalpostProps {
@@ -24,6 +35,8 @@ interface IJournalpostProps {
 
 interface IDispatchProps {
     getJournalpost: typeof getJournalpostAction;
+    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
+    lukkOppgaveReset: typeof lukkOppgaveResetAction;
 }
 
 export type JournapostLoaderProps = IJournaPostStateProps &
@@ -31,18 +44,25 @@ export type JournapostLoaderProps = IJournaPostStateProps &
     IDispatchProps;
 
 export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProps> = ({
-                                                                                          renderOnLoadComplete,
-                                                                                          isJournalpostLoading,
-                                                                                          getJournalpost,
-                                                                                          journalpostId,
-                                                                                          journalpost,
-                                                                                          forbidden, notFound
-                                                                                      }) => {
+    renderOnLoadComplete,
+    isJournalpostLoading,
+    getJournalpost,
+    lukkJournalpostOppgave,
+    lukkOppgaveReset,
+    journalpostId,
+    journalpost,
+    journalpostConflictError,
+    forbidden,
+    conflict,
+    notFound,
+    lukkOppgaveDone
+}) => {
     useEffect(() => {
         if (journalpostId) {
             getJournalpost(journalpostId);
         }
     }, [journalpostId]);
+
 
     if (isJournalpostLoading) {
         return (
@@ -71,6 +91,36 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
+    if (!!lukkOppgaveDone) {
+        return (
+            <ModalWrapper
+                key={"lukkoppgaveokmodal"}
+                onRequestClose={() => lukkOppgaveReset()}
+                contentLabel={"settpaaventokmodal"}
+                closeButton={false}
+                isOpen={true}
+            >
+                <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
+            </ModalWrapper>
+        );
+    }
+
+    if (!!conflict
+        && typeof journalpostConflictError !== 'undefined'
+        && journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET) {
+        return (
+            <>
+                <FeilmeldingPanel messageId={"startPage.feil.ikkeStøttet"}/>
+                <VerticalSpacer eightPx={true}/>
+                <div className="journalpostloader-conflict__container">
+                    <Knapp onClick={() => lukkJournalpostOppgave(journalpostId)}>
+                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                    </Knapp>
+                </div>
+            </>
+        );
+    }
+
     if (!journalpost) {
         return null;
     }
@@ -85,16 +135,21 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     return <>{renderOnLoadComplete()}</>;
 };
 
-const mapStateToProps = ({felles}: RootStateType): IJournaPostStateProps => ({
+const mapStateToProps = ({felles, fordelingState}: RootStateType): IJournaPostStateProps => ({
     journalpost: felles.journalpost,
     journalpostRequestError: felles.journalpostRequestError,
     isJournalpostLoading: felles.isJournalpostLoading,
     forbidden: felles.journalpostForbidden,
-    notFound: felles.journalpostNotFound
+    conflict: felles.journalpostConflict,
+    journalpostConflictError: felles.journalpostConflictError,
+    notFound: felles.journalpostNotFound,
+    lukkOppgaveDone: fordelingState.lukkOppgaveDone
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (id: string) => dispatch(getJournalpostAction(id)),
+    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction())
 });
 
 export default connect(
