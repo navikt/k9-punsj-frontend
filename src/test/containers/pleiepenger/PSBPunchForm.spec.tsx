@@ -17,6 +17,8 @@ import {
     IPSBSoknadKvittering,
 } from "../../../app/models/types/PSBSoknadKvittering";
 import * as reactRedux from 'react-redux'
+import OpplysningerOmSoknad
+    from "../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad";
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -225,7 +227,7 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({soknad: initialSoknad}, {updateSoknad});
         punchForm
-            .find('#soknad-dato')
+            .find(OpplysningerOmSoknad).dive().find('#soknad-dato')
             .simulate('blur', {target: {value: newDato}});
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
@@ -240,9 +242,9 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({soknad: initialSoknad});
         punchForm
-            .find('#soknad-dato')
+            .find(OpplysningerOmSoknad).dive().find('#soknad-dato')
             .simulate('change', {target: {value: newDato}});
-        expect(punchForm.find('#soknad-dato').prop('value')).toEqual(newDato);
+        expect(punchForm.find(OpplysningerOmSoknad).dive().find('#soknad-dato').prop('value')).toEqual(newDato);
     });
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
