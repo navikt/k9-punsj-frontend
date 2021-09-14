@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable */
 /* eslint-disable react/destructuring-assignment */
 import { Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
 import { pfArbeidstaker } from 'app/containers/pleiepenger/pfArbeidstaker';
@@ -148,7 +148,62 @@ type IPunchFormProps = IPunchFormComponentProps &
     IPunchFormDispatchProps;
 
 export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
+    state: IPunchFormComponentState = {
+        soknad: {
+            soeknadId: '',
+            soekerId: '',
+            mottattDato: '',
+            journalposter: new Set([]),
+            barn: {
+                norskIdent: '',
+                foedselsdato: '',
+            },
+            opptjeningAktivitet: {},
+            arbeidstid: {},
+
+            tilsynsordning: {},
+            utenlandsopphold: [],
+            omsorg: {},
+            harInfoSomIkkeKanPunsjes: false,
+            harMedisinskeOpplysninger: false,
+        },
+        perioder: undefined,
+        isFetched: false,
+        showStatus: false,
+        faktiskeTimer: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet}
+        iTilsynsordning: undefined,
+        arbeidstaker: false,
+        frilanser: false,
+        selvstendigNæringsdrivende: false,
+        expandAll: false,
+        frilanserStartdato: '',
+        jobberFortsattSomFrilanser: undefined,
+        innleggelseUtlandet: [],
+        barnetSkalLeggesInn: undefined,
+        harBoddIUtlandet: undefined,
+        skalBoIUtlandet: undefined,
+        medlemskap: [],
+        iUtlandet: undefined,
+        skalHaFerie: undefined,
+        aapnePaneler: [],
+        showSettPaaVentModal: false,
+        visErDuSikkerModal: false,
+        errors: [],
+        harRegnskapsfører: false,
+    };
+
     private initialPeriode: IPeriode = { fom: '', tom: '' };
+
+    private getSoknadsperiode = () => {
+        if (
+            typeof this.state.soknad?.soeknadsperiode !== 'undefined' &&
+            typeof this.state.soknad.soeknadsperiode?.fom !== 'undefined' &&
+            typeof this.state.soknad.soeknadsperiode?.tom !== 'undefined'
+        ) {
+            return this.state.soknad.soeknadsperiode;
+        }
+        return this.initialPeriode;
+    };
 
     private initialPeriodeTimerMinutter = new PeriodeMedTimerMinutter({
         timer: 0,
@@ -160,11 +215,44 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         faktiskArbeidTimerPerDag: '',
     });
 
+    private initialTillegsinfo = () => {
+        const periode = this.getSoknadsperiode();
+        return new Tilleggsinformasjon({
+            periode,
+            tilleggsinformasjon: '',
+        });
+    };
+
+    private initialArbeidstaker = () =>
+        new Arbeidstaker({
+            arbeidstidInfo: {
+                perioder: [
+                    {
+                        periode: this.getSoknadsperiode(),
+                        faktiskArbeidTimerPerDag: '',
+                        jobberNormaltTimerPerDag: '',
+                    },
+                ],
+            },
+            organisasjonsnummer: '',
+            norskIdent: null,
+        });
+
+    private initialArbeidstidInfo = () =>
+        new ArbeidstidInfo({
+            perioder: [
+                {
+                    periode: this.getSoknadsperiode(),
+                    faktiskArbeidTimerPerDag: '',
+                    jobberNormaltTimerPerDag: '',
+                },
+            ],
+        });
+
     private initialFrilanser = new FrilanserOpptjening({
         jobberFortsattSomFrilans: undefined,
         startdato: undefined,
     });
-    
 
     private initialSelvstedigNæringsdrivende = new SelvstendigNaerinsdrivende({
         periode: this.getSoknadsperiode(),
@@ -179,52 +267,28 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         info: this.initialSelvstedigNæringsdrivende,
     });
 
-    constructor(props: IPunchFormProps) {
-        super(props);
-        this.state = {
-            soknad: {
-                soeknadId: '',
-                soekerId: '',
-                mottattDato: '',
-                journalposter: new Set([]),
-                barn: {
-                    norskIdent: '',
-                    foedselsdato: '',
-                },
-                opptjeningAktivitet: {},
-                arbeidstid: {},
+    private erEldreEnn4år = (dato: string) => {
+        const fireAarSiden = new Date();
+        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+        return new Date(dato) < fireAarSiden;
+    };
 
-                tilsynsordning: {},
-                utenlandsopphold: [],
-                omsorg: {},
-                harInfoSomIkkeKanPunsjes: false,
-                harMedisinskeOpplysninger: false,
-            },
-            perioder: undefined,
-            isFetched: false,
-            showStatus: false,
-            faktiskeTimer: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet}
-            iTilsynsordning: undefined,
-            arbeidstaker: false,
-            frilanser: false,
-            selvstendigNæringsdrivende: false,
-            expandAll: false,
-            frilanserStartdato: '',
-            jobberFortsattSomFrilanser: undefined,
-            innleggelseUtlandet: [],
-            barnetSkalLeggesInn: undefined,
-            harBoddIUtlandet: undefined,
-            skalBoIUtlandet: undefined,
-            medlemskap: [],
-            iUtlandet: undefined,
-            skalHaFerie: undefined,
-            aapnePaneler: [],
-            showSettPaaVentModal: false,
-            visErDuSikkerModal: false,
-            errors: [],
-            harRegnskapsfører: false,
-        };
-    }
+    private erYngreEnn4år = (dato: string) => {
+        const fireAarSiden = new Date();
+        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+        return new Date(dato) > fireAarSiden;
+    };
+
+    private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
+        if (!eksisterendePerioder.length) {
+            return false;
+        }
+        return eksisterendePerioder.some(
+            (ep) =>
+                moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) &&
+                moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))
+        );
+    };
 
     componentDidMount(): void {
         const { id } = this.props;
@@ -254,698 +318,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 });
             }
         }
-    }
-
-    private handleSubmit = () => {
-        const navarandeSoknad: IPSBSoknad = this.state.soknad;
-        const journalposter = {
-            journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
-                    ? navarandeSoknad?.journalposter
-                    : []
-            ),
-        };
-        this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
-    };
-
-    private handleSettPaaVent = () => {
-        this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
-        this.setState({ showSettPaaVentModal: false });
-    };
-
-    private handlePanelClick = (p: PunchFormPaneler) => {
-        const { aapnePaneler } = this.state;
-        if (aapnePaneler.some((panel) => panel === p)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(p), 1);
-        } else {
-            aapnePaneler.push(p);
-        }
-        this.forceUpdate();
-    };
-
-    private handleRegnskapsførerChange = (jn: JaNei) => {
-        if (jn === JaNei.JA) {
-            this.setState({ harRegnskapsfører: true });
-        } else {
-            this.setState({ harRegnskapsfører: false });
-            this.updateSoknad({
-                opptjeningAktivitet: {
-                    ...this.state.soknad.opptjeningAktivitet,
-                    selvstendigNaeringsdrivende: {
-                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
-                        info: {
-                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
-                            regnskapsførerNavn: '',
-                            regnskapsførerTlf: '',
-                        },
-                    },
-                },
-            });
-            this.updateSoknadState({
-                opptjeningAktivitet: {
-                    ...this.state.soknad.opptjeningAktivitet,
-                    selvstendigNaeringsdrivende: {
-                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
-                        info: {
-                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
-                            regnskapsførerNavn: '',
-                            regnskapsførerTlf: '',
-                        },
-                    },
-                },
-            });
-        }
-    };
-
-    private handleArbeidsforholdChange = (af: Arbeidsforhold, checked: boolean) => {
-        switch (af) {
-            case Arbeidsforhold.ARBEIDSTAKER:
-                this.setState({ arbeidstaker: checked });
-                if (checked) {
-                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.arbeidstakerList?.length) {
-                        this.updateSoknadState({
-                            arbeidstid: {
-                                ...this.state.soknad.arbeidstid,
-                                arbeidstakerList: [this.initialArbeidstaker()],
-                            },
-                        });
-                    }
-                } else {
-                    this.updateSoknadState({
-                        arbeidstid: {
-                            ...this.state.soknad.arbeidstid,
-                            arbeidstakerList: [],
-                        },
-                    });
-                    this.updateSoknad({
-                        arbeidstid: {
-                            ...this.state.soknad.arbeidstid,
-                            arbeidstakerList: [],
-                        },
-                    });
-                }
-                break;
-            case Arbeidsforhold.FRILANSER:
-                this.setState({ frilanser: checked });
-                if (checked) {
-                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.frilanserArbeidstidInfo) {
-                        this.updateSoknadState({
-                            arbeidstid: {
-                                ...this.state.soknad.arbeidstid,
-                                frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
-                            },
-                            opptjeningAktivitet: {
-                                ...this.state.soknad.opptjeningAktivitet,
-                                frilanser: this.initialFrilanser,
-                            },
-                        });
-                    }
-                } else {
-                    this.updateSoknadState({
-                        arbeidstid: {
-                            ...this.state.soknad.arbeidstid,
-                            frilanserArbeidstidInfo: null,
-                        },
-                        opptjeningAktivitet: {
-                            ...this.state.soknad.opptjeningAktivitet,
-                            frilanser: null,
-                        },
-                    });
-                    this.updateSoknad({
-                        arbeidstid: {
-                            ...this.state.soknad.arbeidstid,
-                            frilanserArbeidstidInfo: null,
-                        },
-                        opptjeningAktivitet: {
-                            ...this.state.soknad.opptjeningAktivitet,
-                            frilanser: null,
-                        },
-                    });
-                }
-                break;
-            case Arbeidsforhold.SELVSTENDIG:
-                this.setState({ selvstendigNæringsdrivende: checked });
-                if (checked) {
-                    if (
-                        !this.state.soknad.opptjeningAktivitet ||
-                        !this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende
-                    ) {
-                        this.updateSoknadState({
-                            opptjeningAktivitet: {
-                                ...this.state.soknad.opptjeningAktivitet,
-                                selvstendigNaeringsdrivende: this.initialSelvstendigNæringsdrivendeOpptjening,
-                            },
-                            arbeidstid: {
-                                ...this.state.soknad.arbeidstid,
-                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo(),
-                            },
-                        });
-                    }
-                } else {
-                    this.updateSoknadState({
-                        opptjeningAktivitet: {
-                            ...this.state.soknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: null,
-                        },
-                        arbeidstid: {
-                            ...this.state.soknad.arbeidstid,
-                            selvstendigNæringsdrivendeArbeidstidInfo: null,
-                        },
-                    });
-                    this.updateSoknad({
-                        opptjeningAktivitet: {
-                            ...this.state.soknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: null,
-                        },
-                        arbeidstid: {
-                            ...this.state.soknad.arbeidstid,
-                            selvstendigNæringsdrivendeArbeidstidInfo: null,
-                        },
-                    });
-                }
-                break;
-        }
-    };
-
-    private getCheckedValueArbeid = (af: Arbeidsforhold): boolean => {
-        switch (af) {
-            case Arbeidsforhold.ARBEIDSTAKER:
-                if (this.state.soknad.arbeidstid?.arbeidstakerList?.length) {
-                    return true;
-                }
-                return false;
-
-            case Arbeidsforhold.FRILANSER:
-                if (this.state.soknad.opptjeningAktivitet.frilanser) {
-                    return true;
-                }
-                return false;
-
-            case Arbeidsforhold.SELVSTENDIG:
-                if (this.state.soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende) {
-                    return true;
-                }
-                return false;
-        }
-    };
-
-    private handleBeredskapNattevaakChange = (bn: BeredskapNattevaak, checked: boolean) => {
-        switch (bn) {
-            case BeredskapNattevaak.BEREDSKAP:
-                if (checked) {
-                    this.updateSoknadState({ beredskap: [this.initialTillegsinfo()] });
-                } else {
-                    this.updateSoknadState({ beredskap: [] });
-                }
-                break;
-            case BeredskapNattevaak.NATTEVAAK:
-                if (checked) {
-                    this.updateSoknadState({ nattevaak: [this.initialTillegsinfo()] });
-                } else {
-                    this.updateSoknadState({ nattevaak: [] });
-                }
-                break;
-        }
-    };
-
-    private updateUtenlandsopphold(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
-        this.setState({
-            iUtlandet: jaNeiIkkeOpplyst,
-        });
-
-        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA && this.state.soknad.utenlandsopphold!.length === 0) {
-            this.addOpphold();
-        }
-
-        if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
-            this.updateSoknadState({ utenlandsopphold: [] }, true);
-            this.updateSoknad({ utenlandsopphold: [] });
-        }
-    }
-
-    private handleBarnetSkalLeggesInn(jaNei: JaNei) {
-        this.setState({
-            barnetSkalLeggesInn: jaNei,
-        });
-
-        if (jaNei === JaNei.JA && this.state.innleggelseUtlandet!.length === 0) {
-            this.state.innleggelseUtlandet!.push({ fom: '', tom: '' });
-            this.forceUpdate();
-        }
-
-        if (jaNei !== JaNei.JA) {
-            this.setState({ innleggelseUtlandet: [] });
-        }
-    }
-
-    private handleMedlemskapChange(jaNei: JaNeiIkkeOpplyst) {
-        this.setState({
-            harBoddIUtlandet: jaNei,
-        });
-
-        if (jaNei === JaNeiIkkeOpplyst.JA && this.state.soknad.bosteder!.length === 0) {
-            this.state.soknad.bosteder!.push({
-                periode: { fom: '', tom: '' },
-                land: '',
-            });
-            this.forceUpdate();
-        }
-
-        if (jaNei !== JaNeiIkkeOpplyst.JA) {
-            this.updateSoknadState({ bosteder: [] }, true);
-            this.updateSoknad({ bosteder: [] });
-        }
-    }
-
-    private handleFrilanserChange(jaNei: JaNei) {
-        if (jaNei === JaNei.JA) {
-            this.updateSoknadState({
-                arbeidstid: {
-                    ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
-                },
-                opptjeningAktivitet: {
-                    ...this.state.soknad.opptjeningAktivitet,
-                    frilanser: {
-                        ...this.state.soknad.opptjeningAktivitet.frilanser,
-                        jobberFortsattSomFrilans: true,
-                        sluttdato: undefined,
-                    },
-                },
-            });
-            this.updateSoknad({
-                arbeidstid: {
-                    ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: {},
-                },
-                opptjeningAktivitet: {
-                    ...this.state.soknad.opptjeningAktivitet,
-                    frilanser: {
-                        ...this.state.soknad.opptjeningAktivitet.frilanser,
-                        jobberFortsattSomFrilans: true,
-                    },
-                },
-            });
-            this.forceUpdate();
-        }
-
-        if (jaNei !== JaNei.JA) {
-            this.updateSoknadState({
-                arbeidstid: {
-                    ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: {},
-                },
-                opptjeningAktivitet: {
-                    ...this.state.soknad.opptjeningAktivitet,
-                    frilanser: {
-                        ...this.state.soknad.opptjeningAktivitet.frilanser,
-                        jobberFortsattSomFrilans: false,
-                    },
-                },
-            });
-            this.updateSoknad({
-                arbeidstid: {
-                    ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: {},
-                },
-                opptjeningAktivitet: {
-                    frilanser: {
-                        ...this.state.soknad.opptjeningAktivitet,
-                        ...this.state.soknad.opptjeningAktivitet.frilanser,
-                        jobberFortsattSomFrilans: false,
-                    },
-                },
-            });
-            this.forceUpdate();
-        }
-    }
-
-    private getSoknadsperiode = () => {
-        if (
-            typeof this.state.soknad?.soeknadsperiode !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.fom !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.tom !== 'undefined'
-        ) {
-            return this.state.soknad.soeknadsperiode;
-        } 
-            return this.initialPeriode;
-        
-    };
-
-    private checkOpenState = (p: PunchFormPaneler): boolean => {
-        const { aapnePaneler, expandAll } = this.state;
-        if (this.props.punchFormState.inputErrors?.length) {
-            return true;
-        }
-        if (expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        }
-        if (!expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        }
-        if (!expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        return false;
-    };
-
-    private updateVirksomhetstyper = (v: Virksomhetstyper, checked: boolean) => {
-        const sn = this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende;
-
-        if (checked && !sn?.info?.virksomhetstyper?.some((vtype) => vtype === v)) {
-            sn?.info?.virksomhetstyper?.push(v);
-        } else if (sn?.info?.virksomhetstyper?.some((vtype) => vtype === v)) {
-            sn?.info?.virksomhetstyper?.splice(sn?.info?.virksomhetstyper?.indexOf(v), 1);
-        }
-        this.forceUpdate();
-    };
-
-    private deleteSoknadsperiode = () => {
-        this.updateSoknadState({ ...this.state.soknad, soeknadsperiode: null });
-        this.updateSoknad({ ...this.state.soknad, soeknadsperiode: null });
-    };
-
-    private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
-        if (!eksisterendePerioder.length) {
-            return false;
-        }
-        return eksisterendePerioder.some(
-            (ep) =>
-                moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) &&
-                moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))
-        );
-    };
-
-    private erYngreEnn4år = (dato: string) => {
-        const fireAarSiden = new Date();
-        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
-        return new Date(dato) > fireAarSiden;
-    };
-
-    private erEldreEnn4år = (dato: string) => {
-        const fireAarSiden = new Date();
-        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
-        return new Date(dato) < fireAarSiden;
-    };
-
-    private initialArbeidstidInfo = () =>
-        new ArbeidstidInfo({
-            perioder: [
-                {
-                    periode: this.getSoknadsperiode(),
-                    faktiskArbeidTimerPerDag: '',
-                    jobberNormaltTimerPerDag: '',
-                },
-            ],
-        });
-
-    private initialArbeidstaker = () =>
-        new Arbeidstaker({
-            arbeidstidInfo: {
-                perioder: [
-                    {
-                        periode: this.getSoknadsperiode(),
-                        faktiskArbeidTimerPerDag: '',
-                        jobberNormaltTimerPerDag: '',
-                    },
-                ],
-            },
-            organisasjonsnummer: '',
-            norskIdent: null,
-        });
-
-    private initialTillegsinfo = () => {
-        const periode = this.getSoknadsperiode();
-        return new Tilleggsinformasjon({
-            periode,
-            tilleggsinformasjon: '',
-        });
-    };
-
-
-
-    private updateSkalHaFerie(checked: boolean) {
-        if (!this.state.soknad.lovbestemtFerie) {
-            this.state.soknad = { ...this.state.soknad, lovbestemtFerie: [{}] };
-        }
-        if (!!checked && this.state.soknad.lovbestemtFerie?.length === 0) {
-            this.addSkalHaFerie();
-        } else {
-            this.updateSoknadState({ lovbestemtFerie: [] }, true);
-            this.updateSoknad({ lovbestemtFerie: [] });
-        }
-    }
-
-    private updateIkkeSkalHaFerie(checked: boolean) {
-        const { aapnePaneler } = this.state;
-        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
-            this.state.soknad = {
-                ...this.state.soknad,
-                lovbestemtFerieSomSkalSlettes: [{}],
-            };
-        }
-
-        if (!!checked && !aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
-            aapnePaneler.push(PunchFormPaneler.ARBEID);
-        } else if (!checked && aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(PunchFormPaneler.ARBEID), 1);
-        }
-
-        if (!!checked && this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
-            this.addIkkeSkalHaFerie();
-        } else {
-            this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
-            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
-        }
-    }
-
-    private addSkalHaFerie = () => {
-        if (!this.state.soknad.lovbestemtFerie) {
-            this.state.soknad = { ...this.state.soknad, lovbestemtFerie: [{}] };
-        }
-        this.state.soknad.lovbestemtFerie!.push({ fom: '', tom: '' });
-        this.forceUpdate();
-        this.updateSoknad({ lovbestemtFerie: this.state.soknad.lovbestemtFerie });
-    };
-
-    private addIkkeSkalHaFerie = () => {
-        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
-            this.state.soknad = {
-                ...this.state.soknad,
-                lovbestemtFerieSomSkalSlettes: [{}],
-            };
-        }
-        this.state.soknad.lovbestemtFerieSomSkalSlettes!.push({ fom: '', tom: '' });
-        this.forceUpdate();
-        this.updateSoknad({
-            lovbestemtFerieSomSkalSlettes: this.state.soknad.lovbestemtFerieSomSkalSlettes,
-        });
-    };
-
-    private updateOmsorgstilbud(checked: boolean) {
-        this.setState({
-            iTilsynsordning: checked,
-        });
-
-        if (
-            !!checked &&
-            (!this.state.soknad.tilsynsordning || this.state.soknad.tilsynsordning?.perioder?.length === 0)
-        ) {
-            this.addOmsorgstilbud();
-        }
-
-        if (!checked) {
-            this.updateSoknadState({ tilsynsordning: undefined }, true);
-            this.updateSoknad({ tilsynsordning: undefined });
-        }
-    }
-
-    private updateMedisinskeOpplysninger(checked: boolean) {
-        this.updateSoknadState({ harMedisinskeOpplysninger: !!checked }, true);
-        this.updateSoknad({ harMedisinskeOpplysninger: !!checked });
-    }
-
-    private updateOpplysningerIkkeKanPunsjes(checked: boolean) {
-        this.updateSoknadState({ harInfoSomIkkeKanPunsjes: !!checked }, true);
-        this.updateSoknad({ harInfoSomIkkeKanPunsjes: !!checked });
-    }
-
-    private backButton() {
-        return (
-            <p>
-                <Knapp onClick={this.handleBackButtonClick}>
-                    {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
-                </Knapp>
-            </p>
-        );
-    }
-
-    private getSoknadFromStore = () => new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt);
-
-    private getManglerFromStore = () => this.props.punchFormState.inputErrors;
-
-    private erFremITid(dato: string) {
-        const naa = new Date();
-        return naa < new Date(dato);
-    }
-
-    private erFremITidKlokkeslett(dato: string) {
-        const { mottattDato } = this.state.soknad;
-        const naa = new Date();
-        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
-            return true;
-        }
-        return false;
-    }
-
-    private getErrorMessage = (attribute: string, indeks?: number) => {
-        const { mottattDato, klokkeslett } = this.state.soknad;
-
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
-        }
-
-        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato!)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
-            ?.feilmelding;
-
-        if (errorMsg) {
-            if (errorMsg.startsWith('Mangler søknadsperiode')) {
-                return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode');
-            }
-            if (attribute === 'nattevåk' || attribute === 'beredskap' || 'lovbestemtFerie') {
-                return errorMsg;
-            }
-        }
-
-        return errorMsg
-            ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
-
-              intlHelper(
-                  this.props.intl,
-                  `skjema.feil.${attribute}.${errorMsg}`
-                      .replace(/\[\d+]/g, '[]')
-                      .replace(
-                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
-                      )
-                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                      .replace(
-                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
-                      )
-                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
-              )
-            : undefined;
-    };
-
-    private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
-        this.state.soknad.journalposter!.add(this.props.journalpostid);
-        this.setState({
-            soknad: { ...this.state.soknad, ...soknad },
-            showStatus: !!showStatus,
-        });
-    }
-
-    private updateSoknadStateCallbackFunction = (soknad: Partial<IPSBSoknad>) => {
-        this.updateSoknadState(soknad);
-    };
-
-    private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
-        this.setState({ showStatus: true });
-        const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
-        const journalposter = {
-            journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
-                    ? navarandeSoknad?.journalposter
-                    : []
-            ),
-        };
-        return this.props.updateSoknad({
-            ...this.getSoknadFromStore(),
-            ...soknad,
-            ...journalposter,
-        });
-    };
-
-    private handleBackButtonClick = () => {
-        const { getPunchPath } = this.props;
-        this.props.resetSoknadAction();
-        this.props.undoChoiceOfEksisterendeSoknadAction();
-        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD));
-    };
-
-    private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
-    };
-
-    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPSBSoknad>) => ({
-        onChange: (event: any) => this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad(change(event)),
-    });
-
-    private addOmsorgstilbud = () => {
-        if (!this.state.soknad.tilsynsordning) {
-            this.state.soknad = {
-                ...this.state.soknad,
-                tilsynsordning: { perioder: [] },
-            };
-        }
-        this.state.soknad.tilsynsordning!.perioder!.push({
-            periode: {},
-            timer: 0,
-            minutter: 0,
-        });
-        this.forceUpdate();
-        this.updateSoknad({ tilsynsordning: this.state.soknad.tilsynsordning });
-    };
-
-    private addOpphold = () => {
-        if (!this.state.soknad.utenlandsopphold) {
-            this.state.soknad = { ...this.state.soknad, utenlandsopphold: [{}] };
-        }
-        this.state.soknad.utenlandsopphold!.push({ land: '', periode: {} });
-        this.forceUpdate();
-        this.setOpphold();
-    };
-
-    private removeOpphold = (index: number) => {
-        this.state.soknad.utenlandsopphold!.splice(index, 1);
-        this.forceUpdate();
-        this.setOpphold();
-    };
-
-    private setOpphold = () => this.updateSoknad({ utenlandsopphold: this.state.soknad.utenlandsopphold });
-
-    private statusetikett() {
-        if (!this.state.showStatus) {
-            return null;
-        }
-
-        const { punchFormState } = this.props;
-        const className = 'statusetikett';
-
-        if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
-        }
-        if (punchFormState.updateSoknadError) {
-            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
-        }
-        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
     }
 
     render() {
@@ -2160,6 +1532,627 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             </>
         );
     }
+
+    private handleSubmit = () => {
+        const navarandeSoknad: IPSBSoknad = this.state.soknad;
+        const journalposter = {
+            journalposter: Array.from(
+                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
+                    ? navarandeSoknad?.journalposter
+                    : []
+            ),
+        };
+        this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
+    };
+
+    private handleSettPaaVent = () => {
+        this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
+        this.setState({ showSettPaaVentModal: false });
+    };
+
+    private deleteSoknadsperiode = () => {
+        this.updateSoknadState({ ...this.state.soknad, soeknadsperiode: null });
+        this.updateSoknad({ ...this.state.soknad, soeknadsperiode: null });
+    };
+
+    private handlePanelClick = (p: PunchFormPaneler) => {
+        const { aapnePaneler } = this.state;
+        if (aapnePaneler.some((panel) => panel === p)) {
+            aapnePaneler.splice(aapnePaneler.indexOf(p), 1);
+        } else {
+            aapnePaneler.push(p);
+        }
+        this.forceUpdate();
+    };
+
+    private checkOpenState = (p: PunchFormPaneler): boolean => {
+        const { aapnePaneler, expandAll } = this.state;
+        if (this.props.punchFormState.inputErrors?.length) {
+            return true;
+        }
+        if (expandAll && aapnePaneler.some((panel) => panel === p)) {
+            return false;
+        }
+        if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
+            return true;
+        }
+        if (!expandAll && aapnePaneler.some((panel) => panel === p)) {
+            return true;
+        }
+        if (!expandAll && !aapnePaneler.some((panel) => panel === p)) {
+            return false;
+        }
+        return false;
+    };
+
+    private updateVirksomhetstyper = (v: Virksomhetstyper, checked: boolean) => {
+        const sn = this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende;
+
+        if (checked && !sn?.info?.virksomhetstyper?.some((vtype) => vtype === v)) {
+            sn?.info?.virksomhetstyper?.push(v);
+        } else if (sn?.info?.virksomhetstyper?.some((vtype) => vtype === v)) {
+            sn?.info?.virksomhetstyper?.splice(sn?.info?.virksomhetstyper?.indexOf(v), 1);
+        }
+        this.forceUpdate();
+    };
+
+    private handleRegnskapsførerChange = (jn: JaNei) => {
+        if (jn === JaNei.JA) {
+            this.setState({ harRegnskapsfører: true });
+        } else {
+            this.setState({ harRegnskapsfører: false });
+            this.updateSoknad({
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: '',
+                        },
+                    },
+                },
+            });
+            this.updateSoknadState({
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: '',
+                        },
+                    },
+                },
+            });
+        }
+    };
+
+    private handleArbeidsforholdChange = (af: Arbeidsforhold, checked: boolean) => {
+        switch (af) {
+            case Arbeidsforhold.ARBEIDSTAKER:
+                this.setState({ arbeidstaker: checked });
+                if (checked) {
+                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.arbeidstakerList?.length) {
+                        this.updateSoknadState({
+                            arbeidstid: {
+                                ...this.state.soknad.arbeidstid,
+                                arbeidstakerList: [this.initialArbeidstaker()],
+                            },
+                        });
+                    }
+                } else {
+                    this.updateSoknadState({
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            arbeidstakerList: [],
+                        },
+                    });
+                    this.updateSoknad({
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            arbeidstakerList: [],
+                        },
+                    });
+                }
+                break;
+            case Arbeidsforhold.FRILANSER:
+                this.setState({ frilanser: checked });
+                if (checked) {
+                    if (!this.state.soknad.arbeidstid || !this.state.soknad.arbeidstid.frilanserArbeidstidInfo) {
+                        this.updateSoknadState({
+                            arbeidstid: {
+                                ...this.state.soknad.arbeidstid,
+                                frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                            },
+                            opptjeningAktivitet: {
+                                ...this.state.soknad.opptjeningAktivitet,
+                                frilanser: this.initialFrilanser,
+                            },
+                        });
+                    }
+                } else {
+                    this.updateSoknadState({
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            frilanserArbeidstidInfo: null,
+                        },
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            frilanser: null,
+                        },
+                    });
+                    this.updateSoknad({
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            frilanserArbeidstidInfo: null,
+                        },
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            frilanser: null,
+                        },
+                    });
+                }
+                break;
+            case Arbeidsforhold.SELVSTENDIG:
+                this.setState({ selvstendigNæringsdrivende: checked });
+                if (checked) {
+                    if (
+                        !this.state.soknad.opptjeningAktivitet ||
+                        !this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende
+                    ) {
+                        this.updateSoknadState({
+                            opptjeningAktivitet: {
+                                ...this.state.soknad.opptjeningAktivitet,
+                                selvstendigNaeringsdrivende: this.initialSelvstendigNæringsdrivendeOpptjening,
+                            },
+                            arbeidstid: {
+                                ...this.state.soknad.arbeidstid,
+                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo(),
+                            },
+                        });
+                    }
+                } else {
+                    this.updateSoknadState({
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: null,
+                        },
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            selvstendigNæringsdrivendeArbeidstidInfo: null,
+                        },
+                    });
+                    this.updateSoknad({
+                        opptjeningAktivitet: {
+                            ...this.state.soknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: null,
+                        },
+                        arbeidstid: {
+                            ...this.state.soknad.arbeidstid,
+                            selvstendigNæringsdrivendeArbeidstidInfo: null,
+                        },
+                    });
+                }
+                break;
+        }
+    };
+
+    private getCheckedValueArbeid = (af: Arbeidsforhold): boolean => {
+        switch (af) {
+            case Arbeidsforhold.ARBEIDSTAKER:
+                if (this.state.soknad.arbeidstid?.arbeidstakerList?.length) {
+                    return true;
+                }
+                return false;
+
+            case Arbeidsforhold.FRILANSER:
+                if (this.state.soknad.opptjeningAktivitet.frilanser) {
+                    return true;
+                }
+                return false;
+
+            case Arbeidsforhold.SELVSTENDIG:
+                if (this.state.soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende) {
+                    return true;
+                }
+                return false;
+        }
+    };
+
+    private handleBeredskapNattevaakChange = (bn: BeredskapNattevaak, checked: boolean) => {
+        switch (bn) {
+            case BeredskapNattevaak.BEREDSKAP:
+                if (checked) {
+                    this.updateSoknadState({ beredskap: [this.initialTillegsinfo()] });
+                } else {
+                    this.updateSoknadState({ beredskap: [] });
+                }
+                break;
+            case BeredskapNattevaak.NATTEVAAK:
+                if (checked) {
+                    this.updateSoknadState({ nattevaak: [this.initialTillegsinfo()] });
+                } else {
+                    this.updateSoknadState({ nattevaak: [] });
+                }
+                break;
+        }
+    };
+
+    private updateUtenlandsopphold(jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) {
+        this.setState({
+            iUtlandet: jaNeiIkkeOpplyst,
+        });
+
+        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA && this.state.soknad.utenlandsopphold!.length === 0) {
+            this.addOpphold();
+        }
+
+        if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
+            this.updateSoknadState({ utenlandsopphold: [] }, true);
+            this.updateSoknad({ utenlandsopphold: [] });
+        }
+    }
+
+    private handleBarnetSkalLeggesInn(jaNei: JaNei) {
+        this.setState({
+            barnetSkalLeggesInn: jaNei,
+        });
+
+        if (jaNei === JaNei.JA && this.state.innleggelseUtlandet!.length === 0) {
+            this.state.innleggelseUtlandet!.push({ fom: '', tom: '' });
+            this.forceUpdate();
+        }
+
+        if (jaNei !== JaNei.JA) {
+            this.setState({ innleggelseUtlandet: [] });
+        }
+    }
+
+    private handleMedlemskapChange(jaNei: JaNeiIkkeOpplyst) {
+        this.setState({
+            harBoddIUtlandet: jaNei,
+        });
+
+        if (jaNei === JaNeiIkkeOpplyst.JA && this.state.soknad.bosteder!.length === 0) {
+            this.state.soknad.bosteder!.push({
+                periode: { fom: '', tom: '' },
+                land: '',
+            });
+            this.forceUpdate();
+        }
+
+        if (jaNei !== JaNeiIkkeOpplyst.JA) {
+            this.updateSoknadState({ bosteder: [] }, true);
+            this.updateSoknad({ bosteder: [] });
+        }
+    }
+
+    private handleFrilanserChange(jaNei: JaNei) {
+        if (jaNei === JaNei.JA) {
+            this.updateSoknadState({
+                arbeidstid: {
+                    ...this.state.soknad.arbeidstid,
+                    frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                },
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: true,
+                        sluttdato: undefined,
+                    },
+                },
+            });
+            this.updateSoknad({
+                arbeidstid: {
+                    ...this.state.soknad.arbeidstid,
+                    frilanserArbeidstidInfo: {},
+                },
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: true,
+                    },
+                },
+            });
+            this.forceUpdate();
+        }
+
+        if (jaNei !== JaNei.JA) {
+            this.updateSoknadState({
+                arbeidstid: {
+                    ...this.state.soknad.arbeidstid,
+                    frilanserArbeidstidInfo: {},
+                },
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: false,
+                    },
+                },
+            });
+            this.updateSoknad({
+                arbeidstid: {
+                    ...this.state.soknad.arbeidstid,
+                    frilanserArbeidstidInfo: {},
+                },
+                opptjeningAktivitet: {
+                    frilanser: {
+                        ...this.state.soknad.opptjeningAktivitet,
+                        ...this.state.soknad.opptjeningAktivitet.frilanser,
+                        jobberFortsattSomFrilans: false,
+                    },
+                },
+            });
+            this.forceUpdate();
+        }
+    }
+
+    private updateSkalHaFerie(checked: boolean) {
+        if (!this.state.soknad.lovbestemtFerie) {
+            this.state.soknad = { ...this.state.soknad, lovbestemtFerie: [{}] };
+        }
+        if (!!checked && this.state.soknad.lovbestemtFerie?.length === 0) {
+            this.addSkalHaFerie();
+        } else {
+            this.updateSoknadState({ lovbestemtFerie: [] }, true);
+            this.updateSoknad({ lovbestemtFerie: [] });
+        }
+    }
+
+    private updateIkkeSkalHaFerie(checked: boolean) {
+        const { aapnePaneler } = this.state;
+        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
+            this.state.soknad = {
+                ...this.state.soknad,
+                lovbestemtFerieSomSkalSlettes: [{}],
+            };
+        }
+
+        if (!!checked && !aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
+            aapnePaneler.push(PunchFormPaneler.ARBEID);
+        } else if (!checked && aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
+            aapnePaneler.splice(aapnePaneler.indexOf(PunchFormPaneler.ARBEID), 1);
+        }
+
+        if (!!checked && this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
+            this.addIkkeSkalHaFerie();
+        } else {
+            this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
+            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
+        }
+    }
+
+    private addSkalHaFerie = () => {
+        if (!this.state.soknad.lovbestemtFerie) {
+            this.state.soknad = { ...this.state.soknad, lovbestemtFerie: [{}] };
+        }
+        this.state.soknad.lovbestemtFerie!.push({ fom: '', tom: '' });
+        this.forceUpdate();
+        this.updateSoknad({ lovbestemtFerie: this.state.soknad.lovbestemtFerie });
+    };
+
+    private addIkkeSkalHaFerie = () => {
+        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
+            this.state.soknad = {
+                ...this.state.soknad,
+                lovbestemtFerieSomSkalSlettes: [{}],
+            };
+        }
+        this.state.soknad.lovbestemtFerieSomSkalSlettes!.push({ fom: '', tom: '' });
+        this.forceUpdate();
+        this.updateSoknad({
+            lovbestemtFerieSomSkalSlettes: this.state.soknad.lovbestemtFerieSomSkalSlettes,
+        });
+    };
+
+    private updateOmsorgstilbud(checked: boolean) {
+        this.setState({
+            iTilsynsordning: checked,
+        });
+
+        if (
+            !!checked &&
+            (!this.state.soknad.tilsynsordning || this.state.soknad.tilsynsordning?.perioder?.length === 0)
+        ) {
+            this.addOmsorgstilbud();
+        }
+
+        if (!checked) {
+            this.updateSoknadState({ tilsynsordning: undefined }, true);
+            this.updateSoknad({ tilsynsordning: undefined });
+        }
+    }
+
+    private updateMedisinskeOpplysninger(checked: boolean) {
+        this.updateSoknadState({ harMedisinskeOpplysninger: !!checked }, true);
+        this.updateSoknad({ harMedisinskeOpplysninger: !!checked });
+    }
+
+    private updateOpplysningerIkkeKanPunsjes(checked: boolean) {
+        this.updateSoknadState({ harInfoSomIkkeKanPunsjes: !!checked }, true);
+        this.updateSoknad({ harInfoSomIkkeKanPunsjes: !!checked });
+    }
+
+    private backButton() {
+        return (
+            <p>
+                <Knapp onClick={this.handleBackButtonClick}>
+                    {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
+                </Knapp>
+            </p>
+        );
+    }
+
+    private getSoknadFromStore = () => new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt);
+
+    private getManglerFromStore = () => this.props.punchFormState.inputErrors;
+
+    private erFremITid(dato: string) {
+        const naa = new Date();
+        return naa < new Date(dato);
+    }
+
+    private erFremITidKlokkeslett(dato: string) {
+        const { mottattDato } = this.state.soknad;
+        const naa = new Date();
+        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
+            return true;
+        }
+        return false;
+    }
+
+    private getErrorMessage = (attribute: string, indeks?: number) => {
+        const { mottattDato, klokkeslett } = this.state.soknad;
+
+        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
+            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
+                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+            }
+        }
+
+        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato!)) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
+        }
+
+        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
+        }
+
+        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
+            ?.feilmelding;
+
+        if (errorMsg) {
+            if (errorMsg.startsWith('Mangler søknadsperiode')) {
+                return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode');
+            }
+            if (attribute === 'nattevåk' || attribute === 'beredskap' || 'lovbestemtFerie') {
+                return errorMsg;
+            }
+        }
+
+        return errorMsg
+            ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
+
+              intlHelper(
+                  this.props.intl,
+                  `skjema.feil.${attribute}.${errorMsg}`
+                      .replace(/\[\d+]/g, '[]')
+                      .replace(
+                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
+                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+                      )
+                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
+                      .replace(
+                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
+                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+                      )
+                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
+                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
+              )
+            : undefined;
+    };
+
+    private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
+        this.state.soknad.journalposter!.add(this.props.journalpostid);
+        this.setState({
+            soknad: { ...this.state.soknad, ...soknad },
+            showStatus: !!showStatus,
+        });
+    }
+
+    private updateSoknadStateCallbackFunction = (soknad: Partial<IPSBSoknad>) => {
+        this.updateSoknadState(soknad);
+    };
+
+    private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
+        this.setState({ showStatus: true });
+        const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
+        const journalposter = {
+            journalposter: Array.from(
+                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
+                    ? navarandeSoknad?.journalposter
+                    : []
+            ),
+        };
+        return this.props.updateSoknad({
+            ...this.getSoknadFromStore(),
+            ...soknad,
+            ...journalposter,
+        });
+    };
+
+    private handleBackButtonClick = () => {
+        const { getPunchPath } = this.props;
+        this.props.resetSoknadAction();
+        this.props.undoChoiceOfEksisterendeSoknadAction();
+        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD));
+    };
+
+    private handleStartButtonClick = () => {
+        this.props.resetPunchFormAction();
+        setHash('/');
+    };
+
+    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPSBSoknad>) => ({
+        onChange: (event: any) => this.updateSoknadState(change(event), false),
+        onBlur: (event: any) => this.updateSoknad(change(event)),
+    });
+
+    private addOmsorgstilbud = () => {
+        if (!this.state.soknad.tilsynsordning) {
+            this.state.soknad = {
+                ...this.state.soknad,
+                tilsynsordning: { perioder: [] },
+            };
+        }
+        this.state.soknad.tilsynsordning!.perioder!.push({
+            periode: {},
+            timer: 0,
+            minutter: 0,
+        });
+        this.forceUpdate();
+        this.updateSoknad({ tilsynsordning: this.state.soknad.tilsynsordning });
+    };
+
+    private addOpphold = () => {
+        if (!this.state.soknad.utenlandsopphold) {
+            this.state.soknad = { ...this.state.soknad, utenlandsopphold: [{}] };
+        }
+        this.state.soknad.utenlandsopphold!.push({ land: '', periode: {} });
+        this.forceUpdate();
+        this.setOpphold();
+    };
+
+    private removeOpphold = (index: number) => {
+        this.state.soknad.utenlandsopphold!.splice(index, 1);
+        this.forceUpdate();
+        this.setOpphold();
+    };
+
+    private setOpphold = () => this.updateSoknad({ utenlandsopphold: this.state.soknad.utenlandsopphold });
+
+    private statusetikett() {
+        if (!this.state.showStatus) {
+            return null;
+        }
+
+        const { punchFormState } = this.props;
+        const className = 'statusetikett';
+
+        if (punchFormState.isAwaitingUpdateResponse) {
+            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
+        }
+        if (punchFormState.updateSoknadError) {
+            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
+        }
+        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
+    }
 }
 
 const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
@@ -2188,3 +2181,4 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export const PSBPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
+/* eslint-enable */
