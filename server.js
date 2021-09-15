@@ -4,6 +4,8 @@ const mustacheExpress = require('mustache-express');
 const Promise = require('promise');
 const compression = require('compression');
 const helmet = require('helmet');
+const tmpPath = require('/tmp/settings.js');
+
 const createEnvSettingsFile = require('./src/build/scripts/envSettings');
 
 const server = express();
@@ -26,7 +28,7 @@ server.set('views', `${rootPath}/dist`);
 server.set('view engine', 'mustache');
 server.engine('html', mustacheExpress());
 
-createEnvSettingsFile('/tmp/settings.js');
+createEnvSettingsFile(tmpPath);
 
 const renderApp = () =>
   new Promise((resolve, reject) => {
