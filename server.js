@@ -26,7 +26,7 @@ server.set('views', `${rootPath}/dist`);
 server.set('view engine', 'mustache');
 server.engine('html', mustacheExpress());
 
-createEnvSettingsFile(path.resolve(`${rootPath}/dist/js/settings.js`));
+createEnvSettingsFile('/tmp/settings.js');
 
 const renderApp = () =>
   new Promise((resolve, reject) => {
@@ -40,6 +40,7 @@ const renderApp = () =>
   });
 
 const startServer = (html) => {
+    server.use('/settings/settings.js', express.static('/tmp/settings.js'));
     server.use('/dist/js', express.static(path.resolve(rootPath, 'dist/js')));
     server.use('/dist/css', express.static(path.resolve(rootPath, 'dist/css')));
     server.use('/dist/favicon.png', express.static(path.resolve(rootPath, 'dist/favicon.png')));
