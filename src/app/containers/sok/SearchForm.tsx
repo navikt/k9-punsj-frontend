@@ -1,6 +1,6 @@
 import VerticalSpacer from "../../components/VerticalSpacer";
 import {FormattedMessage, injectIntl, WrappedComponentProps} from "react-intl";
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import SokKnapp from "../../components/knapp/SokKnapp";
 import './sok.less';
 import {Input, SkjemaGruppe} from "nav-frontend-skjema";
@@ -49,12 +49,29 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
     };
 
     componentDidMount(): void {
+        window.addEventListener('keydown', this.handleKeydown)
         this.setState({
             identitetsnummer: '',
             journalpostid: '',
             visMapper: false,
             sokMedFnr: false
         });
+    }
+
+    componentWillUnmount(): void {
+        window.removeEventListener('keydown', this.handleKeydown)
+    }
+
+    handleKeydown = (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                this.onClick()
+            }
+    }
+    
+    onClick = () => {
+        if (this.state.journalpostid) {
+            this.props.getJournalpost(this.state.journalpostid);
+        }
     }
 
     render() {
@@ -72,11 +89,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
 
         const disabled = !journalpostid;
 
-        const onClick = () => {
-            if (journalpostid) {
-                this.props.getJournalpost(journalpostid);
-            }
-        }
+
 
         if (journalpost?.journalpostId) {
             window.location.assign('journalpost/' + journalpostid)
@@ -109,7 +122,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps> {
                                 <FormattedMessage id="søk.label.jpid"/>
                             }/>
                         <SokKnapp
-                            onClick={onClick}
+                            onClick={this.onClick}
                             tekstId={"søk.knapp.label"}
                             disabled={disabled}
                         />
