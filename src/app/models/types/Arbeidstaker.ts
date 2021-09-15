@@ -34,20 +34,18 @@ export class Arbeidstaker implements Required<IArbeidstaker> {
         return { arbeidstidInfo, organisasjonsnummer, norskIdent };
     }
 
-    orgOrPers(): OrgOrPers {
-        return this.organisasjonsnummer === null ? 'p' : 'o';
-    }
+    orgOrPers = (): OrgOrPers => (this.organisasjonsnummer === null ? 'p' : 'o');
 
-    description(intl: IntlShape): string {
+    description = (intl: IntlShape): string => {
         const orgOrPers = this.orgOrPers();
         if (orgOrPers === 'o' && this.organisasjonsnummer && this.organisasjonsnummer.length) {
             return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.org.beskrivelse', {
                 nr: this.organisasjonsnummer,
             });
-        } if (orgOrPers === 'p' && this.norskIdent && this.norskIdent.length) {
+        }
+        if (orgOrPers === 'p' && this.norskIdent && this.norskIdent.length) {
             return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.pers.beskrivelse', { nr: this.norskIdent });
-        } 
-            return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.ingenarbeidsgiver.beskrivelse');
-        
-    }
+        }
+        return intlHelper(intl, 'mappe.lesemodus.arbeid.arbeidstaker.ingenarbeidsgiver.beskrivelse');
+    };
 }

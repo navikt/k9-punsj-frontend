@@ -149,19 +149,18 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                     );
                 })}
             {kanHaFlere && (
-                <div
+                <button
                     id="leggtillisteelementknapp"
                     className="leggtillisteelementknapp"
-                    role="button"
+                    type="button"
                     onKeyPress={addItemHandler}
                     onClick={addItemHandler}
-                    tabIndex={0}
                 >
                     <div className="leggtilperiodeIcon">
                         <AddCircleSvg title="leggtil" />
                     </div>
                     {intlHelper(intl, textLeggTil || 'skjema.liste.legg_til')}
-                </div>
+                </button>
             )}
         </SkjemaGruppe>
     );
