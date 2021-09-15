@@ -79,7 +79,7 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
-    for (let i = dato.length - 1; i >= 0; i = -1) {
+    for (let i = dato.length - 1; i >= 0; i -= 1) {
         formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
     }
     return formatertDato.join('');
@@ -139,15 +139,14 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
     const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
 
     const countryList: ICountry[] = [];
-    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-        countryList.push({
-            code,
-            name: countries.getName(code, locale),
-        })
-    );
 
-    if (isLoading) {
-        return null;
+    if (!isLoading) {
+        Object.keys(countries.getAlpha3Codes()).forEach((code) =>
+            countryList.push({
+                code,
+                name: countries.getName(code, locale),
+            })
+        );
     }
 
     return (

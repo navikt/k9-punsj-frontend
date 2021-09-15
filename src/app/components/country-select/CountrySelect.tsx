@@ -29,16 +29,14 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     const { unselectedoption, selectedcountry } = props;
 
     const countryList: ICountry[] = [];
-    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-        countryList.push({ code, name: countries.getName(code, locale) })
-    );
-    countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
-    if (unselectedoption) {
-        countryList.unshift({ code: '', name: unselectedoption });
-    }
-
-    if (isLoading) {
-        return null;
+    if (!isLoading) {
+        Object.keys(countries.getAlpha3Codes()).forEach((code) =>
+            countryList.push({ code, name: countries.getName(code, locale) })
+        );
+        countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
+        if (unselectedoption) {
+            countryList.unshift({ code: '', name: unselectedoption });
+        }
     }
 
     return (

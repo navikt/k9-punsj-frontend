@@ -98,9 +98,9 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         <SkjemaGruppe feil={getErrorMessage('')} className={classNames('listepaneler', className)}>
             {!!items &&
                 items!.map((itemInfo, itemIndex) => {
-                    const panelErrorMessage =
-                        feilkodeprefiks === 'perioder' ? undefined : getErrorMessage(`[${itemIndex}]`);
                     const panelid = props.panelid(itemIndex);
+                    const panelErrorMessage =
+                        feilkodeprefiks === 'perioder' ? undefined : getErrorMessage(`[${panelid}]`);
                     return (
                         <Panel
                             className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
