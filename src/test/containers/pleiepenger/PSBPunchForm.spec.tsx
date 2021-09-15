@@ -14,7 +14,7 @@ import { mocked } from 'ts-jest/utils';
 import OpplysningerOmSoknad from '../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../../app/models/types/JournalposterPerIdentState';
+import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 
 jest.mock('react-intl');

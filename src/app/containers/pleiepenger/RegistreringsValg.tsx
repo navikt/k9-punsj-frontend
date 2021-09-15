@@ -6,13 +6,13 @@ import { connect } from 'react-redux';
 import { PunchStep } from '../../models/enums';
 import { IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/JournalposterPerIdentState';
 import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { RootStateType } from '../../state/RootState';
 import { setHash } from '../../utils';
 import { EksisterendeSoknader } from './EksisterendeSoknader';
 import './registreringsValg.less';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 
 export interface IRegistreringsValgComponentProps {
     journalpostid: string;

@@ -1,5 +1,5 @@
 import { IError } from 'app/models/types/Error';
-import { IJournalpost, IJournalpostInfo } from './Journalpost';
+import { IJournalpostInfo } from './Journalpost';
 
 export interface IJournalposterPerIdentState {
     journalposter: IJournalpostInfo[];

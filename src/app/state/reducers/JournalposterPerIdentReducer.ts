@@ -1,6 +1,6 @@
-import { IJournalposterPerIdentState } from '../../models/types/JournalposterPerIdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { IJournalposterPerIdentActions } from '../actions/JournalposterPerIdentActions';
-import { JournalposterPerIdentActionKeys } from '../../models/enums/JournalposterPerIdentActionKeys';
+import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
 
 const initialState: IJournalposterPerIdentState = {
     journalposter: [],

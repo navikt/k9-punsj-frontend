@@ -11,6 +11,7 @@ import {
     IHentBarnSuccessAction,
 } from './HentBarn';
 import { IBarn } from '../../models/types/Barn';
+import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 
 export interface IFellesState {
     dedupKey: string;
@@ -18,7 +19,9 @@ export interface IFellesState {
     isJournalpostLoading?: boolean;
     journalpostNotFound?: boolean;
     journalpostForbidden?: boolean;
+    journalpostConflict?: boolean;
     journalpostRequestError?: IError;
+    journalpostConflictError?: IJournalpostConflictResponse;
     isAwaitingKopierJournalPostResponse?: boolean;
     kopierJournalpostForbidden?: boolean;
     kopierJournalpostError?: boolean;
@@ -38,6 +41,7 @@ enum Actiontypes {
     JOURNALPOST_REQUEST_ERROR = 'FELLES/PUNCH_JOURNALPOST_REQUEST_ERROR',
     JOURNALPOST_NOT_FOUND = 'FELLES/PUNCH_JOURNALPOST_NOT_FOUND',
     JOURNALPOST_FORBIDDEN = 'FELLES/PUNCH_JOURNALPOST_FORBIDDEN',
+    JOURNALPOST_CONFLICT = 'FELLES/PUNCH_JOURNALPOST_CONFLICT',
     JOURNALPOST_KOPIERE_FORBIDDEN = 'FELLES/JOURNALPOST_KOPIERE_FORBIDDEN',
     JOURNALPOST_KOPIERE_CONFLICT = 'FELLES/JOURNALPOST_KOPIERE_CONFLICT',
     JOURNALPOST_KOPIERE_SUCCESS = 'FELLES/JOURNALPOST_KOPIERE_SUCCESS',
@@ -71,6 +75,11 @@ interface IGetJournalpostForbiddenAction {
     type: Actiontypes.JOURNALPOST_FORBIDDEN;
 }
 
+interface IGetJournalpostConflictAction {
+    type: Actiontypes.JOURNALPOST_CONFLICT;
+    response: IJournalpostConflictResponse;
+}
+
 interface IJournalpostKopiereForbiddenAction {
     type: Actiontypes.JOURNALPOST_KOPIERE_FORBIDDEN;
 }
@@ -101,6 +110,7 @@ export function setJournalpostAction(journalpost: IJournalpost): ISetJournalpost
 export function getJournalpostLoadAction(): IGetJournalpostLoadAction {
     return { type: Actiontypes.JOURNALPOST_LOAD };
 }
+
 export function getJournalpostErrorAction(error: IError): IGetJournalpostErrorAction {
     return { type: Actiontypes.JOURNALPOST_REQUEST_ERROR, error };
 }
@@ -113,25 +123,31 @@ export function getJournalpostForbiddenAction(): IGetJournalpostForbiddenAction 
     return { type: Actiontypes.JOURNALPOST_FORBIDDEN };
 }
 
+export function getJournalpostConflictAction(response: IJournalpostConflictResponse): IGetJournalpostConflictAction {
+    return { type: Actiontypes.JOURNALPOST_CONFLICT, response };
+}
+
 export function getJournalpost(journalpostid: string) {
     return (dispatch: any) => {
         dispatch(getJournalpostLoadAction());
-        return get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostid }, undefined, (response, journalpost) => {
+        return get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostid }, undefined, (response, data) => {
             if (response.ok) {
-                return dispatch(setJournalpostAction(journalpost));
+                return dispatch(setJournalpostAction(data));
             }
-            if (response.status === 404) {
-                return dispatch(getJournalpostNotFoundAction());
+            switch (response.status) {
+                case 403:
+                    return dispatch(getJournalpostForbiddenAction());
+                case 404:
+                    return dispatch(getJournalpostNotFoundAction());
+                case 409:
+                    return dispatch(getJournalpostConflictAction(data));
+                default:
+                    return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
             }
-            if (response.status === 403) {
-                return dispatch(getJournalpostForbiddenAction());
-            }
-            return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
         });
     };
 }
 
-// Kopiere journalpost
 export function getJournalpostKopiereForbiddenAction(): IJournalpostKopiereForbiddenAction {
     return { type: Actiontypes.JOURNALPOST_KOPIERE_FORBIDDEN };
 }
@@ -158,6 +174,7 @@ type IJournalpostActionTypes =
     | IGetJournalpostErrorAction
     | IGetJournalpostNotFoundAction
     | IGetJournalpostForbiddenAction
+    | IGetJournalpostConflictAction
     | IJournalpostKopiereForbiddenAction
     | IJournalpostKopiereConflictAction
     | IJournalpostKopiereRequestAction
@@ -259,6 +276,15 @@ export default function FellesReducer(
                 journalpost: undefined,
                 isJournalpostLoading: false,
                 journalpostForbidden: true,
+            };
+
+        case Actiontypes.JOURNALPOST_CONFLICT:
+            return {
+                ...state,
+                journalpost: undefined,
+                isJournalpostLoading: false,
+                journalpostConflict: true,
+                journalpostConflictError: action.response,
             };
 
         case Actiontypes.JOURNALPOST_KOPIERE_REQUEST:

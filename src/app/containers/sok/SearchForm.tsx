@@ -1,23 +1,34 @@
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import ModalWrapper from 'nav-frontend-modal';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import VerticalSpacer from '../../components/VerticalSpacer';
+import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { IJournalpost } from '../../models/types';
-import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
+import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
+import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../../state/actions';
+import { getJournalpost as fellesReducerGetJournalpost, getJournalpost } from '../../state/reducers/FellesReducer';
 import { RootStateType } from '../../state/RootState';
+import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import './sok.less';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
     notFound: boolean;
     forbidden: boolean;
+    conflict?: boolean;
+    journalpostConflictError?: IJournalpostConflictResponse;
+    lukkOppgaveDone?: boolean;
+    lukkOppgaveReset: () => void;
 }
 
 export interface ISearchFormDispatchProps {
     getJournalpost: typeof fellesReducerGetJournalpost;
+    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
 }
 
 export interface ISearchFormComponentState {
@@ -39,7 +50,16 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
 
     render() {
         const { journalpostid } = this.state;
-        const { getJournalpost, journalpost, notFound, forbidden } = this.props;
+        const {
+            notFound,
+            forbidden,
+            conflict,
+            journalpostConflictError,
+            journalpost,
+            lukkJournalpostOppgave,
+            lukkOppgaveDone,
+            lukkOppgaveReset,
+        } = this.props;
 
         const disabled = !journalpostid;
 
@@ -51,6 +71,20 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
 
         if (journalpost?.journalpostId) {
             window.location.assign(`journalpost/${journalpostid}`);
+        }
+
+        if (lukkOppgaveDone) {
+            return (
+                <ModalWrapper
+                    key="lukkoppgaveokmodal"
+                    onRequestClose={() => lukkOppgaveReset()}
+                    contentLabel="settpaaventokmodal"
+                    closeButton={false}
+                    isOpen
+                >
+                    <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
+                </ModalWrapper>
+            );
         }
 
         return (
@@ -69,16 +103,37 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
                         <VerticalSpacer sixteenPx />
                     </div>
+
                     {!!notFound && (
                         <AlertStripeInfo>
                             <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
                         </AlertStripeInfo>
                     )}
+
                     {!!forbidden && (
                         <AlertStripeAdvarsel>
                             <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                         </AlertStripeAdvarsel>
                     )}
+
+                    {!!conflict &&
+                        typeof journalpostConflictError !== 'undefined' &&
+                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                            <>
+                                <AlertStripeAdvarsel>
+                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                </AlertStripeAdvarsel>
+                                <VerticalSpacer eightPx />
+                                <Knapp
+                                    onClick={() => {
+                                        if (typeof journalpostid !== 'undefined') lukkJournalpostOppgave(journalpostid);
+                                    }}
+                                >
+                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                </Knapp>
+                            </>
+                        )}
+
                     {!!journalpost && !journalpost?.kanSendeInn && (
                         <AlertStripeAdvarsel>
                             <FormattedMessage id="fordeling.kanikkesendeinn" />
@@ -94,10 +149,15 @@ const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     notFound: state.felles.journalpostNotFound,
     forbidden: state.felles.journalpostForbidden,
+    conflict: state.felles.journalpostConflict,
+    journalpostConflictError: state.felles.journalpostConflictError,
+    lukkOppgaveDone: state.fordelingState.lukkOppgaveDone,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
+    getJournalpost: (journalpostid: string) => dispatch(getJournalpost(journalpostid)),
+    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
 
 export const SearchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent));
