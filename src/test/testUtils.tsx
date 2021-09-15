@@ -8,7 +8,9 @@ import { createStore } from 'redux';
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { rootReducer, RootStateType } from '../app/state/RootState';
 
-export const testIntl: Partial<IntlShape> = {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const testIntl: IntlShape = {
     formatMessage(descriptor: { id: string }): string {
         return descriptor.id;
     },
