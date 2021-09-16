@@ -2,9 +2,6 @@ import { rest } from 'msw';
 
 export const handlers = [
   // Handles a POST /login request
-  rest.get('http://localhost:8101/me', (req, res, ctx) => {
-    return res(ctx.status(401, 'top kek'));
-  }),
   rest.get('http://localhost:8101/api/k9-punsj/barn', (req, res, ctx) => {
     return res(ctx.status(401, 'top kek'));
   }),
