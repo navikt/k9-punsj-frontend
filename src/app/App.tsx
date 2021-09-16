@@ -34,6 +34,15 @@ export const App: React.FunctionComponent = () => {
   const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
   moment.locale(localeFromSessionStorage);
 
+    // mock-service-worker
+  if (process.env.NODE_ENV === 'development') {
+      const { worker } = require('../mocks/browser')
+      worker.start({
+        onUnhandledRequest: "error",
+        serviceWorker: {url: '/dist/mockServiceWorker.js'}
+      })
+  }
+  
   return (
     <Provider store={store}>
       <ApplicationWrapper
