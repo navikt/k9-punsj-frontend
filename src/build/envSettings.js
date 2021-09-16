@@ -9,4 +9,4 @@ const envSettings = () => {
   }
 }
 
-export default envSettings;
+module.exports = envSettings;
