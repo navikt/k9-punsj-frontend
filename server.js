@@ -4,9 +4,6 @@ const mustacheExpress = require('mustache-express');
 const Promise = require('promise');
 const compression = require('compression');
 const helmet = require('helmet');
-const tmpPath = require('/tmp/settings.js');
-
-const createEnvSettingsFile = require('./src/build/scripts/envSettings');
 
 const server = express();
 server.use(helmet({
@@ -28,7 +25,6 @@ server.set('views', `${rootPath}/dist`);
 server.set('view engine', 'mustache');
 server.engine('html', mustacheExpress());
 
-createEnvSettingsFile(tmpPath);
 
 const renderApp = () =>
   new Promise((resolve, reject) => {
@@ -41,8 +37,20 @@ const renderApp = () =>
       });
   });
 
+const envSettings = () => {
+    const appSettings = `window.appSettings = {OIDC_AUTH_PROXY: '${process.env.OIDC_AUTH_PROXY}', K9_LOS_URL: '${process.env.K9_LOS_URL}'};`.trim().replace(/ /g, '');
+    try {
+        return appSettings;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 const startServer = (html) => {
-    server.use('/settings/settings.js', express.static('/tmp/settings.js'));
+    server.get(`/settings/settings.js`, (req, res) => {
+        res.set('content-type', 'application/javascript');
+        res.send(`${envSettings()}`);
+    });
     server.use('/dist/js', express.static(path.resolve(rootPath, 'dist/js')));
     server.use('/dist/css', express.static(path.resolve(rootPath, 'dist/css')));
     server.use('/dist/favicon.png', express.static(path.resolve(rootPath, 'dist/favicon.png')));
