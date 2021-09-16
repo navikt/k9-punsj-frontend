@@ -3,7 +3,8 @@ const mustacheExpress = require('mustache-express');
 const envVariables = require('../envVariables');
 
 const configureDevServer = (decoratorFragments) => ({
-    before: (app) => {
+    onBeforeSetupMiddleware: (devServer) => {
+        const {app} = devServer;
         app.engine('html', mustacheExpress());
         app.set('views', `${__dirname}/../../../dist/dev`);
         app.set('view engine', 'mustache');
@@ -15,12 +16,11 @@ const configureDevServer = (decoratorFragments) => ({
             res.render('index.html', Object.assign(decoratorFragments));
         });
     },
-    contentBase: ['app'],
-    watchContentBase: true,
-    quiet: false,
-    noInfo: false,
-    stats: 'minimal',
-    publicPath: '/dist',
-});
+    devMiddleware: {
+        publicPath: '/dist',
+        stats: 'minimal',
+    },
+    static: ['app'],
+    });
 
 module.exports = configureDevServer;
