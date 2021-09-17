@@ -20,10 +20,12 @@ const configureDevServer = (decoratorFragments) => ({
         stats: 'minimal',
     },
     static: ['app'],
-    headers: {
-        'Allow-Service-Worker': '/',
+    client: {
+        overlay: {
+            errors: true,
+            warnings: false
+        }
     }
-    
 });
 
 module.exports = configureDevServer;
