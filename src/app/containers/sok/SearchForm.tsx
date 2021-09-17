@@ -75,6 +75,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             lukkJournalpostOppgave,
             lukkOppgaveDone,
             lukkOppgaveReset,
+            getJournalpost,
         } = this.props;
 
         const disabled = !journalpostid;
