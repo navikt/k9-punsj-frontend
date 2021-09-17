@@ -5,6 +5,9 @@ metadata:
   namespace: k9saksbehandling
   labels:
     team: k9saksbehandling
+  annotations:
+    nais.io/run-as-group: "0"
+    nais.io/read-only-file-system: "false"
 spec:
   image: bitnami/redis:6.2.5
   port: 6379
