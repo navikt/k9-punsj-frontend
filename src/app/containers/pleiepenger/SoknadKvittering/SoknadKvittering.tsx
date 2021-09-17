@@ -106,8 +106,13 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
     const [isLoading, setIsLoading] = React.useState(true);
     React.useEffect(() => {
         const getLocaleJson = async () => {
-            const json = await import(`i18n-iso-countries/langs/${locale}.json`);
-            countries.registerLocale(json);
+            if (locale === 'nn') {
+                const nynorsk = await import(`i18n-iso-countries/langs/nn.json`);
+                countries.registerLocale(nynorsk);
+            } else {
+                const bokmål = await import(`i18n-iso-countries/langs/nb.json`);
+                countries.registerLocale(bokmål);
+            }
             setIsLoading(false);
         };
         getLocaleJson();
