@@ -6,3 +6,4 @@ export * from 'app/utils/intlUtils';
 export * from 'app/utils/localeUtils';
 export * from 'app/utils/pathUtils';
 export * from 'app/utils/timeUtils';
+export * from 'app/utils/utils';

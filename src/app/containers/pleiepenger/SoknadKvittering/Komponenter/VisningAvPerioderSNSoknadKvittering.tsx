@@ -2,11 +2,10 @@ import React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import './visningAvPerioderSoknadKvittering.less';
 import {v4 as uuidv4} from 'uuid';
-import {periodToFormattedString} from "../../../../utils";
-import {
+import {periodToFormattedString, formattereDatoIArray, sjekkPropertyEksistererOgIkkeErNull, formattereLandTilNavn} from "../../../../utils";
+import { 
     IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode,
 } from "../../../../models/types/PSBSoknadKvittering";
-import {formattereDatoIArray, formattereLandTilNavn, sjekkPropertyEksistererOgIkkeErNull} from "../SoknadKvittering";
 import {ICountry} from "../../../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../../../models/enums/Virksomhetstyper";
 

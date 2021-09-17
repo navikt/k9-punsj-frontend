@@ -5,8 +5,8 @@ import {
     Periode
 } from "./Periode";
 import {Arbeidstaker} from "./Arbeidstaker";
+import {ArbeidstidInfo} from "./ArbeidstidInfo";
 import {
-    ArbeidstidInfo,
     Barn,
     IArbeidstid,
     IBarn,

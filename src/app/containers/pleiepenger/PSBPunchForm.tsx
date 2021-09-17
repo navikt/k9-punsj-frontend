@@ -40,8 +40,8 @@ import {
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {Arbeidstaker} from "../../models/types/Arbeidstaker";
+import {ArbeidstidInfo} from "../../models/types/ArbeidstidInfo";
 import {
-    ArbeidstidInfo,
     IPSBSoknad,
     IUtenlandsOpphold,
     PSBSoknad,

@@ -7,7 +7,9 @@ import {
     formatereTekstMedTimerOgMinutter,
     formattereTidspunktFraUTCTilGMT,
     getLocaleFromSessionStorage,
-    periodToFormattedString
+    periodToFormattedString,
+    sjekkPropertyEksistererOgIkkeErNull,
+    formattereDatoIArray
 } from "../../../utils";
 import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
 import countries from 'i18n-iso-countries';
@@ -26,13 +28,6 @@ interface IOwnProps {
     response: IPSBSoknadKvittering;
 }
 
-export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
-    if (property in object && object[property] !== null) {
-        return true
-    }
-    return false
-};
-
 const sjekkHvisPerioderEksisterer = (property: string, object: any) => {
     return sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 }
@@ -44,11 +39,6 @@ const formattereLandTilNavnIObjekt = (perioder: IPSBSoknadKvitteringBosteder | I
         if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
     })
     return kopiAvPerioder
-};
-
-export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]) => {
-    const landNavn = countryList.find(country => country.code === landskode);
-    return typeof landNavn !== undefined ? landNavn?.name : '';
 };
 
 export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
@@ -68,13 +58,6 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
     return kopiAvPerioder
 };
 
-export const formattereDatoIArray = (dato: number[]) => {
-    const formatertDato: string[] = [];
-    for (let i = dato.length - 1; i >= 0; i--) {
-        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`)
-    }
-    return formatertDato.join('');
-};
 
 export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) => {
     return Object.entries(perioder).reduce((acc, [key, value]) => {
