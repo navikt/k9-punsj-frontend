@@ -11,7 +11,7 @@ import { JournalpostConflictTyper } from '../../models/enums/Journalpost/Journal
 import { IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../../state/actions';
-import { getJournalpost as fellesReducerGetJournalpost, getJournalpost } from '../../state/reducers/FellesReducer';
+import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
 import { RootStateType } from '../../state/RootState';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import './sok.less';
@@ -59,6 +59,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             lukkJournalpostOppgave,
             lukkOppgaveDone,
             lukkOppgaveReset,
+            getJournalpost,
         } = this.props;
 
         const disabled = !journalpostid;
@@ -155,7 +156,7 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getJournalpost: (journalpostid: string) => dispatch(getJournalpost(journalpostid)),
+    getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
     lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
