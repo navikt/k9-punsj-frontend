@@ -1,4 +1,5 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
@@ -8,11 +9,13 @@ import { getEnvironmentVariable } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
 import './okGaaTilLosModal.less';
 
+dayjs.extend(utc);
+
 interface IOkGaaTilLOsModalProps {
     melding: string;
 }
 
-const getDate = () => moment().add(21, 'days').format('DD.MM.YYYY');
+const getDate = () => dayjs().utc(true).add(21, 'days').format('DD.MM.YYYY');
 
 const utledMelding = (mld: string) => {
     if (mld === 'modal.settpaavent.til') {
