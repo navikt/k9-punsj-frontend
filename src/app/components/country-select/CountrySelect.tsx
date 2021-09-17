@@ -1,8 +1,9 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { getLocaleFromSessionStorage } from 'app/utils';
 import countries from 'i18n-iso-countries';
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { useEffect } from 'react';
 
 interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     selectedcountry?: string;
@@ -16,32 +17,18 @@ export interface ICountry {
 
 export const CountrySelect = (props: ICountrySelectProps) => {
     const locale = getLocaleFromSessionStorage();
-    const [isLoading, setIsLoading] = React.useState(true);
-    useEffect(() => {
-        const getLocaleJson = async () => {
-            if (locale === 'nn') {
-                const nynorsk = await import(`i18n-iso-countries/langs/nn.json`);
-                countries.registerLocale(nynorsk);
-            } else {
-                const bokmål = await import(`i18n-iso-countries/langs/nb.json`);
-                countries.registerLocale(bokmål);
-            }
-            setIsLoading(false);
-        };
-        getLocaleJson();
-    }, []);
+    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
     const { unselectedoption, selectedcountry } = props;
 
     const countryList: ICountry[] = [];
-    if (!isLoading) {
-        Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-            countryList.push({ code, name: countries.getName(code, locale) })
-        );
-        countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
-        if (unselectedoption) {
-            countryList.unshift({ code: '', name: unselectedoption });
-        }
+
+    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
+        countryList.push({ code, name: countries.getName(code, locale) })
+    );
+    countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
+    if (unselectedoption) {
+        countryList.unshift({ code: '', name: unselectedoption });
     }
 
     return (

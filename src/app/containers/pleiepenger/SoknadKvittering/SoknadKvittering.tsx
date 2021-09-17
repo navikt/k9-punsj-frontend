@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
@@ -103,20 +105,7 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
 
 const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
     const locale = getLocaleFromSessionStorage();
-    const [isLoading, setIsLoading] = React.useState(true);
-    React.useEffect(() => {
-        const getLocaleJson = async () => {
-            if (locale === 'nn') {
-                const nynorsk = await import(`i18n-iso-countries/langs/nn.json`);
-                countries.registerLocale(nynorsk);
-            } else {
-                const bokmål = await import(`i18n-iso-countries/langs/nb.json`);
-                countries.registerLocale(bokmål);
-            }
-            setIsLoading(false);
-        };
-        getLocaleJson();
-    }, []);
+    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
     const { ytelse, journalposter } = response;
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
@@ -145,14 +134,12 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
 
     const countryList: ICountry[] = [];
 
-    if (!isLoading) {
-        Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-            countryList.push({
-                code,
-                name: countries.getName(code, locale),
-            })
-        );
-    }
+    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
+        countryList.push({
+            code,
+            name: countries.getName(code, locale),
+        })
+    );
 
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
