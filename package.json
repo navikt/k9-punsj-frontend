@@ -173,8 +173,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "snyk": false,
-  "msw": {
-    "workerDirectory": "dist"
-  }
+  "snyk": false
 }

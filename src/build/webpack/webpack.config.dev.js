@@ -3,7 +3,6 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const webpackConfig = require('./webpack.config.global.js');
-const CopyPlugin = require('copy-webpack-plugin');
 
 require('dotenv').config();
 
@@ -30,11 +29,6 @@ webpackConfig.plugins.push(
   })
 );
 
-webpackConfig.plugins.push(
-  new CopyPlugin({
-    patterns: [{ from: 'src/app/mockServiceWorker.js' }],
-  })
-);
 
 webpackConfig.module.rules.push({
   test: /\.js$/,
