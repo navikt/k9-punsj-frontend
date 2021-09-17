@@ -1,4 +1,7 @@
 /* eslint-disable */
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import utc from 'dayjs/plugin/utc';
 import { Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
 import { pfArbeidstaker } from 'app/containers/pleiepenger/pfArbeidstaker';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
@@ -77,12 +80,14 @@ import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import OkGaaTilLosModal from './OkGaaTilLosModal';
 import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import ErDuSikkerModal from './ErDuSikkerModal';
-import moment from 'moment';
 import classNames from 'classnames';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
+
+dayjs.extend(utc);
+dayjs.extend(isSameOrBefore);
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -283,8 +288,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return eksisterendePerioder.some(
             (ep) =>
-                moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) &&
-                moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))
+                dayjs(ep.fom!).utc(true).isSameOrBefore(dayjs(nyPeriode.tom!).utc(true)) &&
+                dayjs(nyPeriode.fom!).utc(true).isSameOrBefore(dayjs(ep.tom!).utc(true))
         );
     };
 
@@ -1899,7 +1904,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private erFremITidKlokkeslett(dato: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
-        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
+        if (
+            !!mottattDato &&
+            naa.getDate() === new Date(mottattDato!).getDate() &&
+            dayjs(naa).utc(true).format('HH:mm') < dato
+        ) {
             return true;
         }
         return false;
