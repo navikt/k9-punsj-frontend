@@ -65,6 +65,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
 
+
     useEffect(() => {
         if(!!journalpost && typeof journalpost?.norskIdent !== 'undefined') {
             props.hentBarn(journalpost?.norskIdent);
@@ -96,7 +97,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     }
 
     return (<div className="sokersBarn">
-        {typeof erBarnUtdatert !== 'undefined' && !erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+        {(typeof erBarnUtdatert !== 'undefined' && !erBarnUtdatert || typeof erBarnUtdatert === 'undefined') && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
           <Select
             value={barnetsIdent}
             bredde="l"
