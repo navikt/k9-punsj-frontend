@@ -156,6 +156,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
+    const kanJournalforingsoppgaveOpprettesiGosys = typeof journalpost?.kanOpprettesJournalføringsoppgave !== 'undefined' && journalpost?.kanOpprettesJournalføringsoppgave;
+
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
     const handleIdent2Change = (event: any) => {
@@ -298,7 +300,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
                         />
                         {gjelderPP === JaNei.NEI && <>
-                          <VerticalSpacer sixteenPx={true} />
+                          <VerticalSpacer sixteenPx={true}/>
+                          {!kanJournalforingsoppgaveOpprettesiGosys && <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys"><FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/></AlertStripeInfo>}
                           <Input
                             label={intlHelper(intl, 'ident.identifikasjon.felt')}
                             onChange={handleIdent1Change}
@@ -306,13 +309,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             value={sokersIdent}
                             className="bold-label ident-soker-1"
                             maxLength={11}
-                            feil={skalViseFeilmelding(identState.ident1) || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
+                            feil={skalViseFeilmelding(identState.ident1)
+                            || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
+                            disabled={!kanJournalforingsoppgaveOpprettesiGosys}
                             bredde={"M"}
                           />
                           <VerticalSpacer eightPx={true}/>
                           <Hovedknapp
                             mini={true}
-                            disabled={!identState.ident1 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
+                            disabled={!identState.ident1
+                            || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)
+                            || !kanJournalforingsoppgaveOpprettesiGosys}
                             onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                           </Hovedknapp>
@@ -548,11 +555,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     </>}
                     {fordelingState.skalTilK9 === false &&
                     <>
-                        <AlertStripeInfo
-                            className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
+                        <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
+                        {!kanJournalforingsoppgaveOpprettesiGosys && <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys"><FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/></AlertStripeInfo>}
                         <Hovedknapp
                             mini={true}
                             onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}
+                            disabled={!kanJournalforingsoppgaveOpprettesiGosys}
                         >
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>
