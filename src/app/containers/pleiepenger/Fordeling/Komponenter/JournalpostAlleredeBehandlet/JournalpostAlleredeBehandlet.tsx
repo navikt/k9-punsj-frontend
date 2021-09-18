@@ -58,7 +58,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             />
             <Knapp
                 disabled={skalViseFeilmelding(identState.ident2) || !identState.ident2}
-                onClick={() => props.kopierJournalpost(sokersIdent, '', sokersIdent, props.dedupkey, journalpost?.journalpostId)}>
+                onClick={() => {if(!!sokersIdent && !!identState.ident2) props.kopierJournalpost(sokersIdent, identState.ident2, sokersIdent, props.dedupkey, journalpost?.journalpostId)}}>
                 <FormattedMessage id="fordeling.kopiereJournal"/>
             </Knapp>
         </div>
