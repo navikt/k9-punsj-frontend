@@ -4,7 +4,7 @@ import intlHelper from "../../../../utils/intlUtils";
 import {IFellesState} from "../../../../state/reducers/FellesReducer";
 
 interface IOwnProps {
-    skalVisesNårJournalpostSomIkkeStottesKopieres: boolean;
+    skalVisesNårJournalpostSomIkkeStottesKopieres?: boolean;
     fellesState: IFellesState;
     intl: any;
 }
@@ -14,20 +14,21 @@ const JournalPostKopiFelmeldinger: React.FunctionComponent<IOwnProps> = ({
     fellesState,
     intl
 }) => {
+    const feilmeldingSkalVises = typeof skalVisesNårJournalpostSomIkkeStottesKopieres === 'undefined' ? true : skalVisesNårJournalpostSomIkkeStottesKopieres;
     return (<>
-        {skalVisesNårJournalpostSomIkkeStottesKopieres && fellesState.kopierJournalpostConflict &&
+        {feilmeldingSkalVises && fellesState.kopierJournalpostConflict &&
         <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
         }
 
-        {skalVisesNårJournalpostSomIkkeStottesKopieres && fellesState.kopierJournalpostSuccess &&
+        {feilmeldingSkalVises && fellesState.kopierJournalpostSuccess &&
         <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
         }
 
-        {skalVisesNårJournalpostSomIkkeStottesKopieres && fellesState.kopierJournalpostForbidden &&
+        {feilmeldingSkalVises && fellesState.kopierJournalpostForbidden &&
         <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
         }
 
-        {skalVisesNårJournalpostSomIkkeStottesKopieres && fellesState.kopierJournalpostError &&
+        {feilmeldingSkalVises && fellesState.kopierJournalpostError &&
         <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
         }
     </>);
