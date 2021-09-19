@@ -126,11 +126,10 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
                         initialValues={initialValues}
                     />
-                    <div
+                    <button
                         id="slett"
                         className="removePeriodeKnapp"
-                        role="button"
-                        onKeyPress={removePeriode}
+                        type="button"
                         onClick={removePeriode}
                         tabIndex={0}
                     >
@@ -138,7 +137,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                             <BinSvg title="fjern" />
                         </div>
                         {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
-                    </div>
+                    </button>
                 </div>
                 {!!component &&
                     component(

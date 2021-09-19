@@ -119,11 +119,10 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                 )}
                                 {!!medSlettKnapp && itemsWithInitialItem.length > 1 && (
                                     <div className="listepanelbunn">
-                                        <div
+                                        <button
                                             id="slett"
                                             className="fjernlisteelementknapp"
-                                            role="button"
-                                            onKeyPress={() => removeItemHandler(itemIndex)}
+                                            type="button"
                                             onClick={() => removeItemHandler(itemIndex)}
                                             tabIndex={0}
                                         >
@@ -131,7 +130,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                                 <BinSvg title="fjern" />
                                             </div>
                                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
-                                        </div>
+                                        </button>
                                     </div>
                                 )}
                                 {!!component &&
@@ -153,7 +152,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                     id="leggtillisteelementknapp"
                     className="leggtillisteelementknapp"
                     type="button"
-                    onKeyPress={addItemHandler}
                     onClick={addItemHandler}
                 >
                     <div className="leggtilperiodeIcon">
