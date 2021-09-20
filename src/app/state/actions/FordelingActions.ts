@@ -3,8 +3,6 @@ import {FordelingActionKeys, Sakstype} from 'app/models/enums';
 import {IError}                        from 'app/models/types';
 import {convertResponseToError, get, post} from 'app/utils';
 import {ISkalTilK9} from "../../models/types/RequestBodies";
-import {IdentActionKeys} from "./IdentActions";
-import {findEksisterendeSoknaderErrorAction, setEksisterendeSoknaderAction} from "./EksisterendeSoknaderActions";
 
 interface ISetSakstypeAction        {type: FordelingActionKeys.SAKSTYPE_SET, sakstype?: Sakstype}
 
