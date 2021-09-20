@@ -83,6 +83,7 @@ import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
+import EksisterendeSøknadsperioder from './PSBPunchForm/EksisterendeSøknadsperioder/EksisterendeSøknadsperioder';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -969,6 +970,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     deleteSoknadsperiode={this.deleteSoknadsperiode}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
+                />
+                <VerticalSpacer sixteenPx={true} />
+                <EksisterendeSøknadsperioder
+                    isOpen
+                    onClick={() => null}
+                    intl={intl}
+                    getErrorMessage={this.getErrorMessage}
+                    soknad={soknad}
+                    updateSoknad={this.updateSoknad}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <OpplysningerOmSoknad

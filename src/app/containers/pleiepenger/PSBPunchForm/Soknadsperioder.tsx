@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import Panel from 'nav-frontend-paneler';
+import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import intlHelper from '../../../utils/intlUtils';
-import CalendarSvg from '../../../assets/SVG/CalendarSVG';
-import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../../assets/SVG/BinSVG';
-import { IPeriode, IPSBSoknad } from '../../../models/types';
-import './soknadsperioder.less';
+import CalendarSvg from '../../../assets/SVG/CalendarSVG';
+import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import { IPeriode, IPSBSoknad } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
+import intlHelper from '../../../utils/intlUtils';
+import './soknadsperioder.less';
 
 interface IOwnProps {
     intl: any;
@@ -34,7 +34,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     changeAndBlurUpdatesSoknad,
     overlappendeSoknadsperiode,
 }) => {
-    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(false);
+    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError &&
@@ -80,14 +80,14 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     ))}
 
                     <VerticalSpacer eightPx />
-                    {!visLeggTilPerioder && (
+                    {visLeggTilPerioder && (
                         <div className="knappecontainer">
                             <button
                                 id="leggtilsoknadsperiode"
                                 className="leggtilsoknadsperiode"
                                 type="button"
                                 onClick={() => {
-                                    setVisLeggTilPerioder(true);
+                                    setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: initialPeriode });
                                 }}
                             >
@@ -105,7 +105,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                 <AlertStripeInfo>{intlHelper(intl, 'skjema.eksisterende.ingen')}</AlertStripeInfo>
             )}
 
-            {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
+            {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
                         <Input
@@ -145,7 +145,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             type="button"
                             onClick={() => {
                                 deleteSoknadsperiode();
-                                setVisLeggTilPerioder(false);
+                                setVisLeggTilPerioder(true);
                             }}
                         >
                             <BinSvg title="fjern" />
