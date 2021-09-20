@@ -549,6 +549,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                                 checked={konfigForValgtSakstype?.navn === key}
                                             />
                                         );
+                                    }else{
+                                        return null;
                                     }
                                 })}
                         </RadioGruppe>
