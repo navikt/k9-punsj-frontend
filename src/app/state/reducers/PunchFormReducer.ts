@@ -86,7 +86,8 @@ export function PunchFormReducer(
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: undefined,
                 inputErrors: undefined,
-                isComplete: true
+                isComplete: true,
+                linkTilBehandlingIK9: action.linkTilBehandlingIK9,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE:
