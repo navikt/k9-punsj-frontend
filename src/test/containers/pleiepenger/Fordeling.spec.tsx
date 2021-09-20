@@ -138,7 +138,7 @@ describe('Fordeling', () => {
         const fordeling = setupFordeling({sakstype, skalTilK9: true}, {omfordel});
         fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
-        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901");
+        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901", 'Annet');
     });
 
     it('Viser spinner mens svar avventes', () => {

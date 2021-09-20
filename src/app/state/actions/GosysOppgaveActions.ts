@@ -16,8 +16,7 @@ const           opprettGosysOppgaveSuccessAction   = ():                       I
 const           opprettGosysOppgaveErrorAction     = (error: IError):          IOpprettGosysOppgaveErrorAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_ERROR, error});
 export const    opprettGosysOppgaveResetAction     = ():                       IOpprettGosysOppgaveResetAction    => ({type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET});
 
-export const opprettGosysOppgave = (journalpostid: string, norskident: string) => {return (dispatch: any) => {
-
+export const opprettGosysOppgave = (journalpostid: string, norskident: string, gosysKategori: string) => {return (dispatch: any) => {
     dispatch(opprettGosysOppgaveRequestAction());
 
     post(
@@ -27,7 +26,9 @@ export const opprettGosysOppgave = (journalpostid: string, norskident: string) =
         undefined,
         {
             journalpostId: journalpostid,
-            norskIdent: norskident},
+            norskIdent: norskident,
+            gjelder: gosysKategori
+        },
         response => {
             if (response.status === 200) {return dispatch(opprettGosysOppgaveSuccessAction())}
             return dispatch(opprettGosysOppgaveErrorAction(convertResponseToError(response)));

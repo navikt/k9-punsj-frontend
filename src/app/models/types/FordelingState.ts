@@ -7,12 +7,15 @@ export interface IFordelingState {
     omfordelingDone: boolean;
     isAwaitingOmfordelingResponse: boolean;
     omfordelingError?: IError;
-    isAwaitingSjekkTilK9Response: boolean,
-    sjekkTilK9Error?: IError,
+    isAwaitingSjekkTilK9Response: boolean;
+    sjekkTilK9Error?: IError;
     sjekkTilK9JournalpostStottesIkke?: boolean;
-    isAwaitingLukkOppgaveResponse: boolean,
-    lukkOppgaveError?: IError,
-    lukkOppgaveDone: boolean,
-    skalTilK9?: boolean
+    isAwaitingLukkOppgaveResponse: boolean;
+    lukkOppgaveError?: IError;
+    lukkOppgaveDone: boolean;
+    skalTilK9?: boolean;
+    isAwaitingGosysGjelderResponse?: boolean;
+    gosysGjelderKategorier?: any[];
+    gosysGjelderKategorierError?: IError;
 }
 
