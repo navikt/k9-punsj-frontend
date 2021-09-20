@@ -16,7 +16,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import PdfVisning from '../../../components/pdf/PdfVisning';
-import {ISakstypeDefault, ISakstypePunch} from '../../../models/Sakstype';
+import {ISakstypeDefault} from '../../../models/Sakstype';
 import {Sakstyper} from '../../SakstypeImpls';
 import './fordeling.less';
 import VerticalSpacer from '../../../components/VerticalSpacer';
@@ -26,7 +26,6 @@ import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction
 } from "../../../state/actions/GosysOppgaveActions";
-import {setHash} from "../../../utils";
 import { setIdentFellesAction} from "../../../state/actions/IdentActions";
 import {IIdentState} from "../../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../../models/types/GosysOppgaveState";
@@ -40,6 +39,8 @@ import {PopoverOrientering} from "nav-frontend-popover";
 import Hjelpetekst from "nav-frontend-hjelpetekst";
 import {JournalpostAlleredeBehandlet} from "./Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet";
 import {SokersBarn } from "./Komponenter/SokersBarn";
+import {GosysGjelderKategorier} from "./Komponenter/GoSysGjelderKategorier";
+import Behandlingsknapp from "./Komponenter/Behandlingsknapp";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -64,53 +65,9 @@ export interface IFordelingDispatchProps {
     setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
 }
 
-type IFordelingProps = WrappedComponentProps &
+export type IFordelingProps = WrappedComponentProps &
     IFordelingStateProps &
     IFordelingDispatchProps;
-
-type BehandlingsknappProps = Pick<IFordelingProps,
-    'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
-    norskIdent: string;
-    sakstypeConfig?: ISakstypeDefault;
-};
-
-const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
-                                                                              norskIdent,
-                                                                              omfordel,
-                                                                              lukkJournalpostOppgave,
-                                                                              journalpost,
-                                                                              sakstypeConfig
-                                                                          }) => {
-    if (!sakstypeConfig) {
-        return null;
-    }
-
-    if ((sakstypeConfig as ISakstypePunch).punchPath) {
-        const punchConfig = sakstypeConfig as ISakstypePunch;
-
-        return (
-            <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
-                <FormattedMessage id="fordeling.knapp.punsj"/>
-            </Hovedknapp>
-        );
-    }
-
-    if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
-        return (
-            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost!.journalpostId)}>
-                <FormattedMessage id="fordeling.knapp.bekreft"/>
-            </Hovedknapp>
-        );
-    }
-
-    return (
-        <Hovedknapp
-            onClick={() => omfordel(journalpost!.journalpostId, norskIdent)}
-        >
-            <FormattedMessage id="fordeling.knapp.bekreft"/>
-        </Hovedknapp>
-    );
-};
 
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     props: IFordelingProps
@@ -152,6 +109,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
+    const [gosysKategoriJournalforing, setGosysKategoriJournalforing] = useState<string>('');
 
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
@@ -289,10 +247,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             bredde={"M"}
                           />
                           <VerticalSpacer eightPx={true}/>
+                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing} />
                           <Hovedknapp
                             mini={true}
                             disabled={!identState.ident1 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
-                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
+                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                           </Hovedknapp>
                         </>}
@@ -458,7 +417,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer eightPx={true}/>
-                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>}
+                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET
+                        && <div className="fordeling-page__gosysGjelderKategorier">
+                          <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
+                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
+                        </div>
+                        }
                         {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
                       <Behandlingsknapp
                       norskIdent={identState.ident1}
@@ -466,15 +430,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                       lukkJournalpostOppgave={lukkJournalpostOppgave}
                       journalpost={journalpost}
                       sakstypeConfig={konfigForValgtSakstype}
+                      gosysKategoriJournalforing={gosysKategoriJournalforing}
                     />
                     </>}
                     {fordelingState.skalTilK9 === false &&
                     <>
                         <AlertStripeInfo
                             className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
+                        <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
                         <Hovedknapp
                             mini={true}
-                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}
+                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
                         >
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>
@@ -540,8 +506,8 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) =>
         dispatch(setSakstypeAction(sakstype)),
-    omfordel: (journalpostid: string, norskIdent: string) =>
-        dispatch(omfordelAction(journalpostid, norskIdent)),
+    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
+        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),

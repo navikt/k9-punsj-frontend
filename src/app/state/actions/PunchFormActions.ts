@@ -53,7 +53,8 @@ interface ISubmitSoknadRequestAction {
 
 interface ISubmitSoknadSuccessAction {
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
-    innsentSoknad?: IPSBSoknadKvittering
+    innsentSoknad?: IPSBSoknadKvittering,
+    linkTilBehandlingIK9: string | null
 }
 
 interface ISubmitSoknadConflictAction {
@@ -274,7 +275,7 @@ export function updateSoknader(mappeid: string,
 
 
 export const submitSoknadRequestAction = (): ISubmitSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST});
-export const submitSoknadSuccessAction = (innsentSoknad: IPSBSoknadKvittering): ISubmitSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS, innsentSoknad});
+export const submitSoknadSuccessAction = (innsentSoknad: IPSBSoknadKvittering, linkTilBehandlingIK9: string | null): ISubmitSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS, innsentSoknad, linkTilBehandlingIK9});
 export const submitSoknadUncompleteAction = (errors: IInputError[]): ISubmitSoknadUncompleteAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
     errors,
@@ -315,7 +316,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
         post(ApiPath.SOKNAD_SUBMIT, {id: soeknadId}, {'X-Nav-NorskIdent': norskIdent}, requestBody, (response, responseData) => {
             switch (response.status) {
                 case 202:
-                    return dispatch(submitSoknadSuccessAction(responseData));
+                    return dispatch(submitSoknadSuccessAction(responseData, response.headers.get('Location')));
                 case 400:
                     return  dispatch(submitSoknadUncompleteAction(responseData.feil));
                 case 409:
