@@ -21,7 +21,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     sakstypeConfig,
     gosysKategoriJournalforing
 }) => {
-    if (!sakstypeConfig) {
+    if (!sakstypeConfig || !journalpost) {
         return null;
     }
 
@@ -37,7 +37,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
         return (
-            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost!.journalpostId)}>
+            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost.journalpostId)}>
                 <FormattedMessage id="fordeling.knapp.bekreft"/>
             </Hovedknapp>
         );
@@ -45,7 +45,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     return (
         <Hovedknapp
-            onClick={() => omfordel(journalpost!.journalpostId, norskIdent,  gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
+            onClick={() => omfordel(journalpost.journalpostId, norskIdent,  gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
         >
             <FormattedMessage id="fordeling.knapp.bekreft"/>
         </Hovedknapp>

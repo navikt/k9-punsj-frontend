@@ -272,7 +272,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                           <Hovedknapp
                             mini={true}
                             disabled={!identState.ident1 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
-                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}>
+                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}>
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                           </Hovedknapp>
                         </>}
@@ -518,7 +518,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
                         <Hovedknapp
                             mini={true}
-                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
+                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
                         >
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
                         </Hovedknapp>
