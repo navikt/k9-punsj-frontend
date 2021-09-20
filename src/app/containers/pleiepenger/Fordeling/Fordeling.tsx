@@ -301,28 +301,36 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         />
                         {gjelderPP === JaNei.NEI && <>
                           <VerticalSpacer sixteenPx={true}/>
-                          {!kanJournalforingsoppgaveOpprettesiGosys && <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys"><FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/></AlertStripeInfo>}
-                          <Input
-                            label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                            onChange={handleIdent1Change}
-                            onBlur={handleIdent1Blur}
-                            value={sokersIdent}
-                            className="bold-label ident-soker-1"
-                            maxLength={11}
-                            feil={skalViseFeilmelding(identState.ident1)
-                            || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
-                            disabled={!kanJournalforingsoppgaveOpprettesiGosys}
-                            bredde={"M"}
-                          />
-                          <VerticalSpacer eightPx={true}/>
-                          <Hovedknapp
-                            mini={true}
-                            disabled={!identState.ident1
-                            || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)
-                            || !kanJournalforingsoppgaveOpprettesiGosys}
-                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
-                            <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                          </Hovedknapp>
+                            {!kanJournalforingsoppgaveOpprettesiGosys && <div>
+                              <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                                <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
+                              </AlertStripeInfo>
+                              <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                              </Knapp>
+                            </div>}
+
+                            {kanJournalforingsoppgaveOpprettesiGosys && <div>
+                              <Input
+                                label={intlHelper(intl, 'ident.identifikasjon.felt')}
+                                onChange={handleIdent1Change}
+                                onBlur={handleIdent1Blur}
+                                value={sokersIdent}
+                                className="bold-label ident-soker-1"
+                                maxLength={11}
+                                feil={skalViseFeilmelding(identState.ident1)
+                                || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
+                                bredde={"M"}
+                              />
+                              <VerticalSpacer eightPx={true}/>
+                              <Hovedknapp
+                                mini={true}
+                                disabled={!identState.ident1
+                                || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
+                                onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
+                                <FormattedMessage id="fordeling.sakstype.ANNET"/>
+                              </Hovedknapp>
+                            </div>}
                         </>}
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx={true} />
@@ -525,21 +533,23 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                             }
                                         return radioOmsorgspenger;
                                     }*/
-                                    return (
-                                        <RadioPanel
-                                            key={key}
-                                            label={intlHelper(
-                                                intl,
-                                                `fordeling.sakstype.${Sakstype[key]}`
-                                            )}
-                                            value={Sakstype[key]}
-                                            onChange={() => {
-                                                props.setSakstypeAction(Sakstype[key]);
-                                                setOmsorgspengerValgt(false);
-                                            }}
-                                            checked={konfigForValgtSakstype?.navn === key}
-                                        />
-                                    );
+                                    if(!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)){
+                                        return (
+                                            <RadioPanel
+                                                key={key}
+                                                label={intlHelper(
+                                                    intl,
+                                                    `fordeling.sakstype.${Sakstype[key]}`
+                                                )}
+                                                value={Sakstype[key]}
+                                                onChange={() => {
+                                                    props.setSakstypeAction(Sakstype[key]);
+                                                    setOmsorgspengerValgt(false);
+                                                }}
+                                                checked={konfigForValgtSakstype?.navn === key}
+                                            />
+                                        );
+                                    }
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer eightPx={true}/>
@@ -556,14 +566,21 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     {fordelingState.skalTilK9 === false &&
                     <>
                         <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
-                        {!kanJournalforingsoppgaveOpprettesiGosys && <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys"><FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/></AlertStripeInfo>}
-                        <Hovedknapp
+                        {!kanJournalforingsoppgaveOpprettesiGosys && <div>
+                          <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
+                          </AlertStripeInfo>
+                          <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                          </Knapp>
+                        </div>}
+
+                        {kanJournalforingsoppgaveOpprettesiGosys && <Hovedknapp
                             mini={true}
                             onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}
-                            disabled={!kanJournalforingsoppgaveOpprettesiGosys}
                         >
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                        </Hovedknapp>
+                        </Hovedknapp>}
                     </>}
                     <VerticalSpacer sixteenPx={true} />
                     {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
