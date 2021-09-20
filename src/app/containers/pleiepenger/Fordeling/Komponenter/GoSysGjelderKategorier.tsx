@@ -2,7 +2,6 @@ import {IFordelingState} from 'app/models/types';
 import {
     hentGjelderKategorierFraGosys
 } from 'app/state/actions';
-import {v4 as uuidv4} from 'uuid';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {Select} from 'nav-frontend-skjema';
