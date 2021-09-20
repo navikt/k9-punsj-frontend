@@ -122,6 +122,27 @@ export function FordelingReducer(
                 erIdent1Bekreftet: action.erIdent1Bekreftet,
             };
 
+        case FordelingActionKeys.GOSYS_GJELDER_REQUEST:
+            return {
+                ...fordelingState,
+                isAwaitingGosysGjelderResponse: true
+            };
+
+        case FordelingActionKeys.GOSYS_GJELDER_SUCCESS:
+            return {
+                ...fordelingState,
+                isAwaitingGosysGjelderResponse: false,
+                gosysGjelderKategorier: action.gjelderKategorierFraGosys
+
+            };
+
+        case FordelingActionKeys.GOSYS_GJELDER_ERROR:
+            return {
+                ...fordelingState,
+                isAwaitingGosysGjelderResponse: false,
+                gosysGjelderKategorierError: action.error
+            };
+
         default:
             return {...fordelingState};
     }
