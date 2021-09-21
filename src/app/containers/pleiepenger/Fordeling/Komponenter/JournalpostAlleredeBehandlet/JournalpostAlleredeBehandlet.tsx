@@ -36,6 +36,9 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
         intl,
         journalpost,
         identState,
+        fellesState,
+        dedupkey,
+        kopierJournalpost,
     } = props;
 
     let sokersIdent: string;
@@ -53,12 +56,12 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 sokersIdent={sokersIdent}
             />
             <JournalPostKopiFelmeldinger
-                fellesState={props.fellesState}
+                fellesState={fellesState}
                 intl={intl}
             />
             <Knapp
                 disabled={skalViseFeilmelding(identState.ident2) || !identState.ident2}
-                onClick={() => {if(!!sokersIdent && !!identState.ident2) props.kopierJournalpost(sokersIdent, identState.ident2, sokersIdent, props.dedupkey, journalpost?.journalpostId)}}>
+                onClick={() => {if(!!sokersIdent && !!identState.ident2) kopierJournalpost(sokersIdent, identState.ident2, sokersIdent, dedupkey, journalpost?.journalpostId)}}>
                 <FormattedMessage id="fordeling.kopiereJournal"/>
             </Knapp>
         </div>

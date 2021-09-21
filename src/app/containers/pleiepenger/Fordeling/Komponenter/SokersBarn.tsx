@@ -11,7 +11,6 @@ import {injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 
 import {Checkbox, Input, Select} from "nav-frontend-skjema";
-import {v4 as uuidv4} from "uuid";
 import {IIdentState} from "../../../../models/types/IdentState";
 import {IFellesState} from "../../../../state/reducers/FellesReducer";
 import {setIdentFellesAction} from "../../../../state/actions/IdentActions";
@@ -58,7 +57,6 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     } = props;
 
     const journalpostident = journalpost?.norskIdent;
-    const finnesRiktigIdentIJournalposten = typeof riktigIdentIJournalposten !== 'undefined';
     const skalBarnetHarIkkeFnrCheckboksVises = typeof barnetHarInteFnrFn !== 'undefined';
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
@@ -78,7 +76,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     }
 
     const barnetsIdentInputFieldOBlur = (event: any) => {
-        props.setIdentAction(finnesRiktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
+        props.setIdentAction(!!riktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
     }
 
     const nullUtBarnetsIdent = () => {
@@ -92,12 +90,12 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
         skalBarnetHarIkkeFnrCheckboksVises && barnetHarInteFnrFn(checked);
         if (checked) {
             setBarnetsIdent('');
-            props.setIdentAction(finnesRiktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, null);
+            props.setIdentAction(!!riktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, null);
         }
     }
 
     return (<div className="sokersBarn">
-        {(typeof erBarnUtdatert !== 'undefined' && !erBarnUtdatert || typeof erBarnUtdatert === 'undefined') && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+        {!erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
           <Select
             value={barnetsIdent}
             bredde="l"
@@ -106,13 +104,13 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
             disabled={gjelderAnnetBarn}
             onBlur={barnetsIdentInputFieldOBlur}
           >
-            <option key={uuidv4()} value={""}>
+            <option key="default" value={""}>
                 {``}
             </option>
             )
 
               {props.fellesState.barn.map(b =>
-                  <option key={uuidv4()} value={b.identitetsnummer}>
+                  <option key={b.identitetsnummer} value={b.identitetsnummer}>
                       {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
                   </option>)
               }
