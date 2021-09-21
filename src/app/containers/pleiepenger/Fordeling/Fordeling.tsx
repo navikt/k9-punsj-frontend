@@ -14,13 +14,11 @@ import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import { Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
+import { Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
-import WarningCircle from '../../../assets/SVG/WarningCircle';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../../components/pdf/PdfVisning';
@@ -41,10 +39,10 @@ import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import './fordeling.less';
 import { skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
-import {GosysGjelderKategorier} from "./Komponenter/GoSysGjelderKategorier";
-import {SokersBarn} from "./Komponenter/SokersBarn";
-import Behandlingsknapp from "./Komponenter/Behandlingsknapp";
-import {JournalpostAlleredeBehandlet} from "./Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet";
+import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
+import { SokersBarn } from './Komponenter/SokersBarn';
+import Behandlingsknapp from './Komponenter/Behandlingsknapp';
+import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -110,7 +108,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
     const [gosysKategoriJournalforing, setGosysKategoriJournalforing] = useState<string>('');
 
-    const kanJournalforingsoppgaveOpprettesiGosys = typeof journalpost?.kanOpprettesJournalføringsoppgave !== 'undefined' && journalpost?.kanOpprettesJournalføringsoppgave;
+    const kanJournalforingsoppgaveOpprettesiGosys =
+        typeof journalpost?.kanOpprettesJournalføringsoppgave !== 'undefined' &&
+        journalpost?.kanOpprettesJournalføringsoppgave;
 
     const handleIdent1Change = (event: any) => setSokersIdent(event.target.value.replace(/\D+/, ''));
 
@@ -190,14 +190,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     };
 
     useEffect(() => {
-        const lukkEtterJournalpostSomIkkeStottesKopieres: boolean = skalJournalpostSomIkkeStottesKopieres
-            && !props.fellesState.isAwaitingKopierJournalPostResponse
-            && !!props.fellesState.kopierJournalpostSuccess;
+        const lukkEtterJournalpostSomIkkeStottesKopieres: boolean =
+            skalJournalpostSomIkkeStottesKopieres &&
+            !fellesState.isAwaitingKopierJournalPostResponse &&
+            !!fellesState.kopierJournalpostSuccess;
 
-        if(lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess){
-            lukkJournalpostOppgave(journalpost?.journalpostId!);
+        if (
+            journalpost?.journalpostId &&
+            (lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess)
+        ) {
+            lukkJournalpostOppgave(journalpost.journalpostId);
         }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
+    }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
@@ -237,253 +241,352 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     return (
         <div className="fordeling-container">
-            {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <FormPanel>
-                <JournalpostPanel/>
-                <div className="fordeling-page">
-                    {!!opprettIGosysState.gosysOppgaveRequestError && (
-                        <AlertStripeFeil>
-                            {intlHelper(intl, 'fordeling.omfordeling.feil')}
-                        </AlertStripeFeil>
-                    )}
-                    <div>
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            name={"ppsjekk"}
-                            radios={Object.values(JaNei).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            legend={intlHelper(intl, 'fordeling.gjelderpp')}
-                            checked={gjelderPP}
-                            onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
-                        />
-                        {gjelderPP === JaNei.NEI && <>
-                          <VerticalSpacer sixteenPx={true}/>
-                            {!kanJournalforingsoppgaveOpprettesiGosys && <div>
-                              <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
-                                <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
-                              </AlertStripeInfo>
-                              <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
-                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
-                              </Knapp>
-                            </div>}
+            {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
+                <FormPanel>
+                    <JournalpostPanel />
+                    <div className="fordeling-page">
+                        {!!opprettIGosysState.gosysOppgaveRequestError && (
+                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>
+                        )}
+                        <div>
+                            <RadioPanelGruppe
+                                className="horizontalRadios"
+                                name="ppsjekk"
+                                radios={Object.values(JaNei).map((jn) => ({
+                                    label: intlHelper(intl, jn),
+                                    value: jn,
+                                }))}
+                                legend={intlHelper(intl, 'fordeling.gjelderpp')}
+                                checked={gjelderPP}
+                                onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
+                            />
+                            {gjelderPP === JaNei.NEI && (
+                                <>
+                                    <VerticalSpacer sixteenPx />
+                                    {!kanJournalforingsoppgaveOpprettesiGosys && (
+                                        <div>
+                                            <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                                                <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
+                                            </AlertStripeInfo>
+                                            <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                            </Knapp>
+                                        </div>
+                                    )}
 
-                            {kanJournalforingsoppgaveOpprettesiGosys && <div>
-                              <Input
-                                label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                                onChange={handleIdent1Change}
-                                onBlur={handleIdent1Blur}
-                                value={sokersIdent}
-                                className="bold-label ident-soker-1"
-                                maxLength={11}
-                                feil={skalViseFeilmelding(identState.ident1) || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
-                                bredde={"M"}
-                              />
-                              <VerticalSpacer eightPx={true}/>
-                              <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
-                              <Hovedknapp
-                                mini={true}
-                                disabled={!identState.ident1 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
-                                onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}>
-                                <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                              </Hovedknapp>
-                            </div>}
-                        </>}
-                        {gjelderPP === JaNei.JA && <>
-                          <VerticalSpacer sixteenPx={true} />
-                          <RadioPanelGruppe
-                            className="horizontalRadios"
-                            name={"identsjekk"}
-                            radios={Object.values(JaNei).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            legend={<FormattedMessage
-                                id="ident.identifikasjon.sjekkident"
-                                values={{ident: journalpost?.norskIdent}}
-                            />}
-                            checked={riktigIdentIJournalposten}
-                            onChange={(event) => {props.setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA ? true : false); handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}}
-                        />
-                        </>}
-                        {riktigIdentIJournalposten === JaNei.NEI && <>
-                          <VerticalSpacer sixteenPx={true} />
-                          <Input
-                            label={intlHelper(
-                                intl, 'ident.identifikasjon.felt'
-                            )}
-                            onChange={handleIdent1Change}
-                            onBlur={handleIdent1Blur}
-                            value={sokersIdent}
-                            className="bold-label ident-soker-1"
-                            maxLength={11}
-                            feil={
-                                skalViseFeilmelding(identState.ident1)
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
-                            }
-                            bredde={"M"}
-                        />
-                        </>}
-                        {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && <>
-                          <VerticalSpacer eightPx={true}/>
-                          <Checkbox
-                            label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
-                            onChange={(e) => {
-                                setToSokereIJournalpost(e.target.checked)
-                            }}
-                          />
-                          <VerticalSpacer sixteenPx={true}/>
-                            {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
-                              <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}</AlertStripeInfo>
-                              <Input
-                                label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
-                                onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
-                                onBlur={handleIdentAnnenSokerBlur}
-                                value={annenSokerIdent}
-                                className="bold-label"
-                                maxLength={11}
-                                feil={visFeilmeldingForAnnenIdentVidJournalKopi(identState.annenSokerIdent, identState.ident1, identState.ident2, intl)}
-                                bredde={"M"}
-                              />
-                              <JournalPostKopiFelmeldinger
-                                skalVisesNårJournalpostSomIkkeStottesKopieres={!skalJournalpostSomIkkeStottesKopieres}
-                                fellesState={props.fellesState}
-                                intl={intl}
-                              />
-                            </div>
-                            }
-                        </>}
-                      <VerticalSpacer eightPx={true}/>
-                        {gjelderPP === JaNei.JA && <>
-                          <VerticalSpacer sixteenPx={true}/>
-                           <SokersBarn
-                             erBarnUtdatert={erBarnUtdatert}
-                             riktigIdentIJournalposten={riktigIdentIJournalposten}
-                             sokersIdent={sokersIdent}
-                             barnetHarInteFnrFn={(harBarnetFnr: boolean) => setBarnetHarIkkeFnr(harBarnetFnr)}
-                           />
-                            {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
-                            mini={true}
-                            onClick={() => handleVidereClick()}
-                            disabled={skalViseFeilmelding(identState.ident2) || (!identState.ident2 && !barnetHarIkkeFnr)}>
-                            {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
-                          </>
-                        }
-                    </div>
-                    <VerticalSpacer sixteenPx={true}/>
-                    {(!!fordelingState.skalTilK9 || visSakstypeValg) && <>
-                        <RadioGruppe
-                            legend={intlHelper(intl, 'fordeling.overskrift')}
-                            className="fordeling-page__options"
-                        >
-                            {Object.keys(TilgjengeligSakstype)
-                                .map((key) => {
-                                    if(!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)){
-                                        return (
-                                            <RadioPanel
-                                                key={key}
-                                                label={intlHelper(
-                                                    intl,
-                                                    `fordeling.sakstype.${Sakstype[key]}`
-                                                )}
-                                                value={Sakstype[key]}
-                                                onChange={() => {
-                                                    props.setSakstypeAction(Sakstype[key]);
-                                                    setOmsorgspengerValgt(false);
-                                                }}
-                                                checked={konfigForValgtSakstype?.navn === key}
+                                    {kanJournalforingsoppgaveOpprettesiGosys && (
+                                        <div>
+                                            <Input
+                                                label={intlHelper(intl, 'ident.identifikasjon.felt')}
+                                                onChange={handleIdent1Change}
+                                                onBlur={handleIdent1Blur}
+                                                value={sokersIdent}
+                                                className="bold-label ident-soker-1"
+                                                maxLength={11}
+                                                feil={
+                                                    skalViseFeilmelding(identState.ident1) ||
+                                                    identState.ident1.length <= 0
+                                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                                        : undefined
+                                                }
+                                                bredde="M"
                                             />
-                                        );
-                                    }else{
-                                        return null;
-                                    }
-                                })}
-                        </RadioGruppe>
-                        <VerticalSpacer eightPx={true}/>
-                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET
-                        && <div className="fordeling-page__gosysGjelderKategorier">
-                          <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
-                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
+                                            <VerticalSpacer eightPx />
+                                            <GosysGjelderKategorier
+                                                setGosysKategoriJournalforing={setGosysKategoriJournalforing}
+                                            />
+                                            <Hovedknapp
+                                                mini
+                                                disabled={
+                                                    !identState.ident1 ||
+                                                    (!!identState.ident1 && !!skalViseFeilmelding(identState.ident1))
+                                                }
+                                                onClick={() =>
+                                                    omfordel(
+                                                        journalpost.journalpostId,
+                                                        identState.ident1,
+                                                        gosysKategoriJournalforing.length > 0
+                                                            ? gosysKategoriJournalforing
+                                                            : 'Annet'
+                                                    )
+                                                }
+                                            >
+                                                <FormattedMessage id="fordeling.sakstype.ANNET" />
+                                            </Hovedknapp>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                            {gjelderPP === JaNei.JA && (
+                                <>
+                                    <VerticalSpacer sixteenPx />
+                                    <RadioPanelGruppe
+                                        className="horizontalRadios"
+                                        name="identsjekk"
+                                        radios={Object.values(JaNei).map((jn) => ({
+                                            label: intlHelper(intl, jn),
+                                            value: jn,
+                                        }))}
+                                        legend={
+                                            <FormattedMessage
+                                                id="ident.identifikasjon.sjekkident"
+                                                values={{ ident: journalpost?.norskIdent }}
+                                            />
+                                        }
+                                        checked={riktigIdentIJournalposten}
+                                        onChange={(event) => {
+                                            props.setErIdent1Bekreftet(
+                                                (event.target as HTMLInputElement).value === JaNei.JA
+                                            );
+                                            handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei);
+                                        }}
+                                    />
+                                </>
+                            )}
+                            {riktigIdentIJournalposten === JaNei.NEI && (
+                                <>
+                                    <VerticalSpacer sixteenPx />
+                                    <Input
+                                        label={intlHelper(intl, 'ident.identifikasjon.felt')}
+                                        onChange={handleIdent1Change}
+                                        onBlur={handleIdent1Blur}
+                                        value={sokersIdent}
+                                        className="bold-label ident-soker-1"
+                                        maxLength={11}
+                                        feil={
+                                            skalViseFeilmelding(identState.ident1)
+                                                ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                                : undefined
+                                        }
+                                        bredde="M"
+                                    />
+                                </>
+                            )}
+                            {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && (
+                                <>
+                                    <VerticalSpacer eightPx />
+                                    <Checkbox
+                                        label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
+                                        onChange={(e) => {
+                                            setToSokereIJournalpost(e.target.checked);
+                                        }}
+                                    />
+                                    <VerticalSpacer sixteenPx />
+                                    {toSokereIJournalpost && (
+                                        <div className="fordeling-page__to-sokere-i-journalpost">
+                                            <AlertStripeInfo>
+                                                {intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}
+                                            </AlertStripeInfo>
+                                            <Input
+                                                label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
+                                                onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
+                                                onBlur={handleIdentAnnenSokerBlur}
+                                                value={annenSokerIdent}
+                                                className="bold-label"
+                                                maxLength={11}
+                                                feil={visFeilmeldingForAnnenIdentVidJournalKopi(
+                                                    identState.annenSokerIdent,
+                                                    identState.ident1,
+                                                    identState.ident2,
+                                                    intl
+                                                )}
+                                                bredde="M"
+                                            />
+                                            <JournalPostKopiFelmeldinger
+                                                skalVisesNårJournalpostSomIkkeStottesKopieres={
+                                                    !skalJournalpostSomIkkeStottesKopieres
+                                                }
+                                                fellesState={fellesState}
+                                                intl={intl}
+                                            />
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                            <VerticalSpacer eightPx />
+                            {gjelderPP === JaNei.JA && (
+                                <>
+                                    <VerticalSpacer sixteenPx />
+                                    <SokersBarn
+                                        erBarnUtdatert={erBarnUtdatert}
+                                        riktigIdentIJournalposten={riktigIdentIJournalposten}
+                                        sokersIdent={sokersIdent}
+                                        barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
+                                            setBarnetHarIkkeFnr(harBarnetFnr)
+                                        }
+                                    />
+                                    {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
+                                        <Knapp
+                                            mini
+                                            onClick={() => handleVidereClick()}
+                                            disabled={
+                                                skalViseFeilmelding(identState.ident2) ||
+                                                (!identState.ident2 && !barnetHarIkkeFnr)
+                                            }
+                                        >
+                                            {intlHelper(intl, 'fordeling.knapp.videre')}
+                                        </Knapp>
+                                    )}
+                                </>
+                            )}
                         </div>
-                        }
-                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
-                      <Behandlingsknapp
-                      norskIdent={identState.ident1}
-                      omfordel={omfordel}
-                      lukkJournalpostOppgave={lukkJournalpostOppgave}
-                      journalpost={journalpost}
-                      sakstypeConfig={konfigForValgtSakstype}
-                      gosysKategoriJournalforing={gosysKategoriJournalforing}
-                    />
-                    </>}
-                    {fordelingState.skalTilK9 === false && <>
-                      <AlertStripeInfo
-                        className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
-                        {!kanJournalforingsoppgaveOpprettesiGosys && <div>
-                          <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
-                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
-                          </AlertStripeInfo>
-                          <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
-                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
-                          </Knapp>
-                        </div>}
+                        <VerticalSpacer sixteenPx />
+                        {(!!fordelingState.skalTilK9 || visSakstypeValg) && (
+                            <>
+                                <RadioGruppe
+                                    legend={intlHelper(intl, 'fordeling.overskrift')}
+                                    className="fordeling-page__options"
+                                >
+                                    {Object.keys(TilgjengeligSakstype).map((key) => {
+                                        if (
+                                            !(
+                                                key === TilgjengeligSakstype.ANNET &&
+                                                !kanJournalforingsoppgaveOpprettesiGosys
+                                            )
+                                        ) {
+                                            return (
+                                                <RadioPanel
+                                                    key={key}
+                                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                                    value={Sakstype[key]}
+                                                    onChange={() => {
+                                                        props.setSakstypeAction(Sakstype[key]);
+                                                        setOmsorgspengerValgt(false);
+                                                    }}
+                                                    checked={konfigForValgtSakstype?.navn === key}
+                                                />
+                                            );
+                                        }
+                                        return null;
+                                    })}
+                                </RadioGruppe>
+                                <VerticalSpacer eightPx />
+                                {typeof fordelingState.sakstype !== 'undefined' &&
+                                    fordelingState.sakstype === Sakstype.ANNET && (
+                                        <div className="fordeling-page__gosysGjelderKategorier">
+                                            <AlertStripeInfo>
+                                                {' '}
+                                                {intlHelper(intl, 'fordeling.infobox.opprettigosys')}
+                                            </AlertStripeInfo>
+                                            <GosysGjelderKategorier
+                                                setGosysKategoriJournalforing={setGosysKategoriJournalforing}
+                                            />
+                                        </div>
+                                    )}
+                                {typeof fordelingState.sakstype !== 'undefined' &&
+                                    fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
+                                        <AlertStripeInfo>
+                                            {' '}
+                                            {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
+                                        </AlertStripeInfo>
+                                    )}
+                                <Behandlingsknapp
+                                    norskIdent={identState.ident1}
+                                    omfordel={omfordel}
+                                    lukkJournalpostOppgave={lukkJournalpostOppgave}
+                                    journalpost={journalpost}
+                                    sakstypeConfig={konfigForValgtSakstype}
+                                    gosysKategoriJournalforing={gosysKategoriJournalforing}
+                                />
+                            </>
+                        )}
+                        {fordelingState.skalTilK9 === false && (
+                            <>
+                                <AlertStripeInfo className="infotrygd_info">
+                                    {' '}
+                                    {intlHelper(intl, 'fordeling.infotrygd')}
+                                </AlertStripeInfo>
+                                {!kanJournalforingsoppgaveOpprettesiGosys && (
+                                    <div>
+                                        <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
+                                        </AlertStripeInfo>
+                                        <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                        </Knapp>
+                                    </div>
+                                )}
 
-                        {kanJournalforingsoppgaveOpprettesiGosys && <>
-                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
-                          <Hovedknapp
-                            mini={true}
-                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
-                          >
-                            <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                          </Hovedknapp>
-                        </>}
-                    </>}
-                    <VerticalSpacer sixteenPx={true} />
-                    {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
-                    {!!fordelingState.sjekkTilK9JournalpostStottesIkke && <div className={'fordeling-page__sjekk-til-K9-journalpost-stottes-ikke'}>
-                      <AlertStripeFeil>{intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}</AlertStripeFeil>
-                      <VerticalSpacer sixteenPx={true}/>
-                      <div className="journalikkestottetkopi-checkboks">
-                        <Checkbox
-                          label={intlHelper(intl, 'fordeling.kopiereJournal')}
-                          onChange={(e) => {
-                              setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
-                          }}
-                        />
-                        <Hjelpetekst
-                          className="journalikkestottetkopi-checkboks__hjelpetekst"
-                          type={PopoverOrientering.Hoyre}
-                          tabIndex={-1}
-                        >{intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
-                        </Hjelpetekst>
-                      </div>
-                      <JournalPostKopiFelmeldinger
-                        skalVisesNårJournalpostSomIkkeStottesKopieres={skalJournalpostSomIkkeStottesKopieres}
-                        fellesState={props.fellesState}
-                        intl={intl}
-                      />
-                        {!!props.fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner/>}
-                      <Knapp onClick={() => {
-                          if (skalJournalpostSomIkkeStottesKopieres) {
-                              kopierJournalpostOgLukkOppgave();
-                          } else {
-                              lukkJournalpostOppgave(journalpost?.journalpostId);
-                          }
-                      }}>
-                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
-                      </Knapp>
-
-                    </div>}
-                    {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
-                </div>
-            </FormPanel>}
+                                {kanJournalforingsoppgaveOpprettesiGosys && (
+                                    <>
+                                        <GosysGjelderKategorier
+                                            setGosysKategoriJournalforing={setGosysKategoriJournalforing}
+                                        />
+                                        <Hovedknapp
+                                            mini
+                                            onClick={() =>
+                                                omfordel(
+                                                    journalpost.journalpostId,
+                                                    identState.ident1,
+                                                    gosysKategoriJournalforing.length > 0
+                                                        ? gosysKategoriJournalforing
+                                                        : 'Annet'
+                                                )
+                                            }
+                                        >
+                                            <FormattedMessage id="fordeling.sakstype.ANNET" />
+                                        </Hovedknapp>
+                                    </>
+                                )}
+                            </>
+                        )}
+                        <VerticalSpacer sixteenPx />
+                        {!!fordelingState.sjekkTilK9Error && (
+                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>
+                        )}
+                        {!!fordelingState.sjekkTilK9JournalpostStottesIkke && (
+                            <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">
+                                <AlertStripeFeil>
+                                    {intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}
+                                </AlertStripeFeil>
+                                <VerticalSpacer sixteenPx />
+                                <div className="journalikkestottetkopi-checkboks">
+                                    <Checkbox
+                                        label={intlHelper(intl, 'fordeling.kopiereJournal')}
+                                        onChange={(e) => {
+                                            setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
+                                        }}
+                                    />
+                                    <Hjelpetekst
+                                        className="journalikkestottetkopi-checkboks__hjelpetekst"
+                                        type={PopoverOrientering.Hoyre}
+                                        tabIndex={-1}
+                                    >
+                                        {intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
+                                    </Hjelpetekst>
+                                </div>
+                                <JournalPostKopiFelmeldinger
+                                    skalVisesNårJournalpostSomIkkeStottesKopieres={
+                                        skalJournalpostSomIkkeStottesKopieres
+                                    }
+                                    fellesState={fellesState}
+                                    intl={intl}
+                                />
+                                {!!fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner />}
+                                <Knapp
+                                    onClick={() => {
+                                        if (skalJournalpostSomIkkeStottesKopieres) {
+                                            kopierJournalpostOgLukkOppgave();
+                                        } else {
+                                            lukkJournalpostOppgave(journalpost?.journalpostId);
+                                        }
+                                    }}
+                                >
+                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                </Knapp>
+                            </div>
+                        )}
+                        {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner />}
+                    </div>
+                </FormPanel>
+            )}
             {!journalpost?.kanSendeInn && <JournalpostAlleredeBehandlet />}
-            {!journalpost?.erSaksbehandler && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel></div>}
-            <PdfVisning
-                dokumenter={journalpost!.dokumenter}
-                journalpostId={journalpost!.journalpostId}
-            />
+            {!journalpost?.erSaksbehandler && (
+                <div>
+                    <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel>
+                </div>
+            )}
+            <PdfVisning dokumenter={journalpost!.dokumenter} journalpostId={journalpost!.journalpostId} />
         </div>
     );
 };
@@ -499,7 +602,8 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstypeAction(sakstype)),
-    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) => dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
+    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
+        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),

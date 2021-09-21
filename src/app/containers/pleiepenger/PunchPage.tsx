@@ -137,29 +137,34 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
             case PunchStep.FILL_FORM:
                 return <PSBPunchForm {...commonProps} id={match.params.id} />;
             case PunchStep.COMPLETED:
-                return (<>
-                    <AlertStripeInfo className="fullfortmelding">
-                        <FormattedMessage id="skjema.sentInn"/>
-                    </AlertStripeInfo>
-                    <div className="punchPage__knapper">
-                        <Hovedknapp onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL')
-                        }}>
-                            {intlHelper(this.props.intl, 'tilbaketilLOS')}
-                        </Hovedknapp>
-                        {!!this.props.punchFormState.linkTilBehandlingIK9 &&
-                        <Hovedknapp onClick={() => {
-                            window.location.href = this.props.punchFormState.linkTilBehandlingIK9!
-                        }}>
-                            {intlHelper(this.props.intl, 'tilBehandlingIK9')}
-                        </Hovedknapp>
-                        }
-                    </div>
-                    {!!this.props.punchFormState.innsentSoknad &&
-                    <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
-                                      intl={this.props.intl}/>
-                    }
-                </>);
+                return (
+                    <>
+                        <AlertStripeInfo className="fullfortmelding">
+                            <FormattedMessage id="skjema.sentInn" />
+                        </AlertStripeInfo>
+                        <div className="punchPage__knapper">
+                            <Hovedknapp
+                                onClick={() => {
+                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                }}
+                            >
+                                {intlHelper(intl, 'tilbaketilLOS')}
+                            </Hovedknapp>
+                            {!!punchFormState.linkTilBehandlingIK9 && (
+                                <Hovedknapp
+                                    onClick={() => {
+                                        window.location.href = punchFormState.linkTilBehandlingIK9!;
+                                    }}
+                                >
+                                    {intlHelper(intl, 'tilBehandlingIK9')}
+                                </Hovedknapp>
+                            )}
+                        </div>
+                        {!!punchFormState.innsentSoknad && (
+                            <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
+                        )}
+                    </>
+                );
         }
     }
 

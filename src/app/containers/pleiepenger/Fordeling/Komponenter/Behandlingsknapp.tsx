@@ -1,13 +1,12 @@
-import {ISakstypeDefault, ISakstypePunch} from "../../../../models/Sakstype";
-import React from "react";
-import {Hovedknapp} from "nav-frontend-knapper";
-import {setHash} from "../../../../utils";
-import {FormattedMessage} from "react-intl";
-import {Sakstype} from "../../../../models/enums";
-import {IFordelingProps} from "../Fordeling";
+import React from 'react';
+import { Hovedknapp } from 'nav-frontend-knapper';
+import { FormattedMessage } from 'react-intl';
+import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
+import { setHash } from '../../../../utils';
+import { Sakstype } from '../../../../models/enums';
+import { IFordelingProps } from '../Fordeling';
 
-type BehandlingsknappProps = Pick<IFordelingProps,
-    'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
+type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent: string;
     sakstypeConfig?: ISakstypeDefault;
     gosysKategoriJournalforing: string;
@@ -19,7 +18,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     lukkJournalpostOppgave,
     journalpost,
     sakstypeConfig,
-    gosysKategoriJournalforing
+    gosysKategoriJournalforing,
 }) => {
     if (!sakstypeConfig || !journalpost) {
         return null;
@@ -30,7 +29,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
         return (
             <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
-                <FormattedMessage id="fordeling.knapp.punsj"/>
+                <FormattedMessage id="fordeling.knapp.punsj" />
             </Hovedknapp>
         );
     }
@@ -38,16 +37,22 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
         return (
             <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost.journalpostId)}>
-                <FormattedMessage id="fordeling.knapp.bekreft"/>
+                <FormattedMessage id="fordeling.knapp.bekreft" />
             </Hovedknapp>
         );
     }
 
     return (
         <Hovedknapp
-            onClick={() => omfordel(journalpost.journalpostId, norskIdent,  gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
+            onClick={() =>
+                omfordel(
+                    journalpost.journalpostId,
+                    norskIdent,
+                    gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet'
+                )
+            }
         >
-            <FormattedMessage id="fordeling.knapp.bekreft"/>
+            <FormattedMessage id="fordeling.knapp.bekreft" />
         </Hovedknapp>
     );
 };
