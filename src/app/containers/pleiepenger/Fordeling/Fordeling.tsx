@@ -170,16 +170,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     }
 
     useEffect(() => {
-        if(skalJournalpostSomIkkeStottesKopieres && !props.fellesState.isAwaitingKopierJournalPostResponse && !!props.fellesState.kopierJournalpostSuccess){
+        const lukkEtterJournalpostSomIkkeStottesKopieres: boolean = skalJournalpostSomIkkeStottesKopieres
+            && !props.fellesState.isAwaitingKopierJournalPostResponse
+            && !!props.fellesState.kopierJournalpostSuccess;
+
+        if(lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess){
             lukkJournalpostOppgave(journalpost?.journalpostId!);
         }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse])
+    }, [props.fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess])
 
     if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner/>;
     }
 
-    if (!!opprettIGosysState.gosysOppgaveRequestSuccess) {
+    if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone ) {
         return (
             <ModalWrapper
                 key={"opprettigosysokmodal"}
@@ -344,61 +348,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             className="fordeling-page__options"
                         >
                             {Object.keys(TilgjengeligSakstype)
-                              //  .filter((key) => !key.includes(`${Sakstype.OMSORGSPENGER}_`))
                                 .map((key) => {
-                                    /*    if (key === Sakstype.OMSORGSPENGER) {
-                                            const radioOmsorgspenger = (
-                                                <RadioPanel
-                                                    key={key}
-                                                    label={intlHelper(
-                                                        intl,
-                                                        `fordeling.sakstype.${Sakstype[key]}`
-                                                    )}
-                                                    value={Sakstype[key]}
-                                                    onChange={() => {
-                                                        setOmsorgspengerValgt(true);
-                                                        props.setSakstypeAction(undefined);
-                                                    }}
-                                                    checked={omsorgspengerValgt}
-                                                />
-                                            );
-                                            if (omsorgspengerValgt) {
-                                                return (
-                                                    <React.Fragment key={key}>
-                                                        {radioOmsorgspenger}
-                                                        <RadioGruppe className="omsorgspenger-radios">
-                                                            {Object.keys(Sakstype)
-                                                                .filter((sakstypenavn) =>
-                                                                    sakstypenavn.includes(
-                                                                        `${Sakstype.OMSORGSPENGER}_`
-                                                                    )
-                                                                )
-                                                                .map((sakstypenavn) => (
-                                                                    <Radio
-                                                                        key={sakstypenavn}
-                                                                        label={intlHelper(
-                                                                            intl,
-                                                                            `fordeling.sakstype.${Sakstype[sakstypenavn]}`
-                                                                        )}
-                                                                        value={Sakstype[sakstypenavn]}
-                                                                        onChange={() =>
-                                                                            props.setSakstypeAction(
-                                                                                Sakstype[sakstypenavn]
-                                                                            )
-                                                                        }
-                                                                        name="sakstype"
-                                                                        checked={
-                                                                            Sakstype[sakstypenavn] ===
-                                                                            konfigForValgtSakstype?.navn
-                                                                        }
-                                                                    />
-                                                                ))}
-                                                        </RadioGruppe>
-                                                    </React.Fragment>
-                                                );
-                                            }
-                                        return radioOmsorgspenger;
-                                    }*/
                                     return (
                                         <RadioPanel
                                             key={key}

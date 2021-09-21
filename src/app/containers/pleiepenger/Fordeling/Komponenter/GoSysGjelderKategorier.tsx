@@ -2,7 +2,6 @@ import {IFordelingState} from 'app/models/types';
 import {
     hentGjelderKategorierFraGosys
 } from 'app/state/actions';
-import {v4 as uuidv4} from 'uuid';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {Select} from 'nav-frontend-skjema';
@@ -35,9 +34,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
         hentGjelderKategorier();
     }, [])
 
-    const harKategorierBlivitHentet = typeof fordelingState.isAwaitingGosysGjelderResponse !== 'undefined'
-        && !fordelingState.isAwaitingGosysGjelderResponse
-        && typeof fordelingState.isAwaitingGosysGjelderResponse !== 'undefined'
+    const harKategorierBlivitHentet = fordelingState.isAwaitingGosysGjelderResponse === false
         && typeof fordelingState.gosysGjelderKategorier !== 'undefined'
         && Object.keys(fordelingState.gosysGjelderKategorier).length > 0;
 
@@ -51,10 +48,10 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
                 onChange={(e) => setValgtKategori(e.target.value)}
                 onBlur={(e) => setGosysKategoriJournalforing(e.target.value)}
               >
-                <option key={uuidv4()} value="Annet" />
+                <option disabled={true} value="" />
 
                   {Object.keys(fordelingState.gosysGjelderKategorier!).map(kategori =>
-                      <option key={uuidv4()} value={kategori}>
+                      <option key={kategori} value={kategori}>
                           {fordelingState.gosysGjelderKategorier![kategori]}
                       </option>)
                   }

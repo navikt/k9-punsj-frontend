@@ -30,45 +30,6 @@ export async function get(
   return response;
 }
 
-/*
-export async function post<BodyType>(
-  path: ApiPath,
-  parameters?: any,
-  headers?: HeadersInit,
-  body?: BodyType,
-  callbackIfAuth?: (
-    response: Response,
-    responseData?: any
-  ) => Promise<Response>,
-  callbackIfError?: (error: any) => any
-): Promise<Response> {
-  try {
-    const response = await fetch(apiUrl(path, parameters), {
-      method: 'post',
-      credentials: 'include',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json', ...headers },
-    });
-
-    if (response.status === 401) {
-      login();
-    } else if (!!callbackIfAuth) {
-      const data = await response.text();
-      const jsonData = data ? JSON.parse(data) : undefined;
-
-      await callbackIfAuth(response, jsonData);
-    }
-    return response;
-  } catch (error) {
-    if (!!callbackIfError) {
-      return callbackIfError(error);
-    }
-    return error;
-  }
-}
-*/
-
-
 export async function post<BodyType>(
     path: ApiPath,
     parameters?: any,
