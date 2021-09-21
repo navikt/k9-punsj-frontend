@@ -152,19 +152,23 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
                         <FormattedMessage id="skjema.sentInn"/>
                     </AlertStripeSuksess>
                     <div className="punchPage__knapper">
-                        <Hovedknapp onClick={() => {window.location.href = getEnvironmentVariable('K9_LOS_URL')}}>
+                        <Hovedknapp onClick={() => {
+                            window.location.href = getEnvironmentVariable('K9_LOS_URL')
+                        }}>
                             {intlHelper(this.props.intl, 'tilbaketilLOS')}
                         </Hovedknapp>
-                        {typeof this.props.punchFormState.linkTilBehandlingIK9 !== 'undefined' && !!this.props.punchFormState.linkTilBehandlingIK9 &&
-                        <Hovedknapp onClick={() => {window.location.href = this.props.punchFormState.linkTilBehandlingIK9!}}>
+                        {!!this.props.punchFormState.linkTilBehandlingIK9 &&
+                        <Hovedknapp onClick={() => {
+                            window.location.href = this.props.punchFormState.linkTilBehandlingIK9!
+                        }}>
                             {intlHelper(this.props.intl, 'tilBehandlingIK9')}
                         </Hovedknapp>
                         }
-                        {typeof this.props.punchFormState.innsentSoknad !== "undefined" &&
-                        <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
-                                          intl={this.props.intl}/>
-                        }
                     </div>
+                    {!!this.props.punchFormState.innsentSoknad &&
+                    <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
+                                      intl={this.props.intl}/>
+                    }
                 </>);
         }
     }
