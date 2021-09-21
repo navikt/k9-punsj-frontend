@@ -72,10 +72,9 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
 
     const barnetsIdentInputFieldOnChange = (event: any) => {
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
-        setIdentAction(identState.ident1, event.target.value)
     }
 
-    const barnetsIdentInputFieldOBlur = (event: any) => {
+    const oppdaterStateMedBarnetsFnr = (event: any) => {
         props.setIdentAction(!!riktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
     }
 
@@ -100,9 +99,8 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
             value={barnetsIdent}
             bredde="l"
             label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
-            onChange={barnetsIdentInputFieldOnChange}
+            onChange={(e) => {barnetsIdentInputFieldOnChange(e); oppdaterStateMedBarnetsFnr(e);}}
             disabled={gjelderAnnetBarn}
-            onBlur={barnetsIdentInputFieldOBlur}
           >
             <option key="default" value={""}>
                 {``}
@@ -135,7 +133,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
             <Input
               label={intlHelper(intl, 'ident.identifikasjon.barn')}
               onChange={barnetsIdentInputFieldOnChange}
-              onBlur={barnetsIdentInputFieldOBlur}
+              onBlur={oppdaterStateMedBarnetsFnr}
               value={barnetsIdent}
               className="bold-label ident-soker-2"
               maxLength={11}
