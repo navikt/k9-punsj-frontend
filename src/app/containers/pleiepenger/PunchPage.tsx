@@ -12,8 +12,7 @@ import {RootStateType} from 'app/state/RootState';
 import {getEnvironmentVariable, getPath} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {
-    AlertStripeAdvarsel,
-    AlertStripeSuksess,
+    AlertStripeAdvarsel, AlertStripeInfo,
 } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import 'nav-frontend-tabell-style';
@@ -148,9 +147,9 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
                 return <PSBPunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:
                 return (<>
-                    <AlertStripeSuksess className="fullfortmelding">
+                    <AlertStripeInfo className="fullfortmelding">
                         <FormattedMessage id="skjema.sentInn"/>
-                    </AlertStripeSuksess>
+                    </AlertStripeInfo>
                     <div className="punchPage__knapper">
                         <Hovedknapp onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL')
