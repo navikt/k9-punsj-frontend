@@ -49,7 +49,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
 
     const items = props.items.length > 0 ? props.items : [props.initialItem];
     const {intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere, medSlettKnapp} = props;
-    const getErrorMessage = (code: string) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
+    const getErrorMessage = (code: string | null) => props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (index: number, iteminfo: Partial<ItemInfo>) => {
         const newInfo: ItemInfo = {...props.items[index], ...iteminfo};

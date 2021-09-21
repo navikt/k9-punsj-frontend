@@ -26,6 +26,8 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         getErrorMessage: GetErrorMessage,
         intl: IntlShape,
     ) => {
+        // TODO: sjekke om feilkoden blir riktig her
+        const feilkode =`.arbeidstidInfo.perioder.[${periodeindex}].periode`
 
         return <div className="arbeidstider">
             <Row noGutters={true}>
@@ -59,7 +61,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             updatePeriodeinfoInSoknad({faktiskArbeidTimerPerDag: (event.target.value)});
                         }}
                         onFocus={event => event.target.selectionStart = 0}
-                        feil={getErrorMessage(`${feilprefiks}.timerfaktisk`)}
+                        feil={getErrorMessage(`${feilkode}.timerfaktisk`)}
                         bredde={"XS"}
                     />
                     <Hjelpetekst

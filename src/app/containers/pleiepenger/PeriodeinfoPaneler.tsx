@@ -78,7 +78,10 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         feilkodeprefiksMedIndeks: string,
         getErrorMessage: GetErrorMessage,
         intlShape: IntlShape,
-    ) => <>
+    ) => {
+        const feilkode = `.arbeidstidInfo.perioder.[${periodeindeks}].periode`;
+    return (
+    <>
         <div className={"periodeinfopanel_container"}>
             <PeriodInput
                 periode={periodeinfo.periode || {}}
@@ -89,9 +92,9 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 onBlur={(periode) => {
                     editSoknad(editPeriode(periodeindeks, periode))
                 }}
-                errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-                errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
-                errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
+                errorMessage={getErrorMessage(feilkode)}
+                errorMessageFom={getErrorMessage(`${feilkode}.fom`)}
+                errorMessageTom={getErrorMessage(`${feilkode}.tom`)}
                 initialValues={initialValues}
             />
             <div
@@ -109,6 +112,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 <div className={"slettIkon"}><BinSvg title={"fjern"}/></div>
                 {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
             </div>
+            
 
         </div>
         {!!component && component(
@@ -120,7 +124,8 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
             getErrorMessage,
             intlShape
         )}
-    </>;
+    </>
+    )}
 
     return <Listepaneler
         intl={intl}

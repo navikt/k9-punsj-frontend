@@ -385,7 +385,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
                 textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
                 panelClassName="arbeidstakerpanel"
-                feilkodeprefiks={'arbeidstid.arbeidstaker'}
+                feilkodeprefiks={'ytelse.arbeidstid.arbeidstakerList'}
                 getErrorMessage={this.getErrorMessage}
                 kanHaFlere={true}
                 medSlettKnapp={true}
@@ -1856,7 +1856,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
         const {mottattDato, klokkeslett} = this.state.soknad;
-
+        console.log('attribute', attribute)
         if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
             if (klokkeslett === null || klokkeslett === "" || mottattDato === null || mottattDato === "") {
                 return intlHelper(this.props.intl, 'skjema.feil.ikketom');

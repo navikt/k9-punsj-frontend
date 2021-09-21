@@ -35,11 +35,8 @@ export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex
             updateListeinfoInSoknadState({organisasjonsnummer, norskIdent});
             updateListeinfoInSoknad({organisasjonsnummer, norskIdent});
         };
-
         const selectedType: OrgOrPers = arbeidstaker.orgOrPers();
-
-        return <SkjemaGruppe className={"arbeidstaker-panel"}
-                             feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}>
+        return <SkjemaGruppe className={"arbeidstaker-panel"} feil={getErrorMessage('')}>
             <Container>
                     <Row noGutters={true}>
                         <RadioPanelGruppe
@@ -59,20 +56,21 @@ export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex
                         <div className={"input-row"}>
                             {selectedType === 'o'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                      bredde={"M"}
-                                      value={arbeidstaker.organisasjonsnummer || ''}
-                                      className="arbeidstaker-organisasjonsnummer"
-                                      onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value})}
-                                      onBlur={event => updateListeinfoInSoknad({organisasjonsnummer: event.target.value})}
-                                      feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}/>}
+                                    bredde={"M"}
+                                    value={arbeidstaker.organisasjonsnummer || ''}
+                                    className="arbeidstaker-organisasjonsnummer"
+                                    onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value})}
+                                    onBlur={event => updateListeinfoInSoknad({organisasjonsnummer: event.target.value})}
+                                    feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}/>}
                             {selectedType === 'p'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
-                                      value={arbeidstaker.norskIdent || ''}
-                                      bredde={"M"}
-                                      className="arbeidstaker-norskIdent"
-                                      onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}
-                                      onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value})}
-                                      feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}/>}
+                                    value={arbeidstaker.norskIdent || ''}
+                                    bredde={"M"}
+                                    className="arbeidstaker-norskIdent"
+                                    onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}
+                                    onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value})}
+                                    
+                                    feil={getErrorMessage(`[${listeelementindex}].norskIdentitetsnummer`)}/>}
                         </div>
                     </Row>
                     {arbeidstidInformasjon(intl)}
@@ -97,7 +95,7 @@ export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex
                     minstEn={true}
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     getErrorMessage={getErrorMessage}
-                    feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
+                    feilkodeprefiks={`[${listeelementindex}]`}
                     kanHaFlere={true}
                     medSlettKnapp={false}
                 />
