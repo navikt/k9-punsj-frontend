@@ -149,17 +149,26 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
             case PunchStep.COMPLETED:
                 return (<>
                     <AlertStripeSuksess className="fullfortmelding">
-                        Søknaden er sendt til behandling.
+                        <FormattedMessage id="skjema.sentInn"/>
                     </AlertStripeSuksess>
-
-                    <Hovedknapp
-                        onClick={() => window.location.href = getEnvironmentVariable('K9_LOS_URL')}>{intlHelper(this.props.intl, 'tilbaketilLOS')}</Hovedknapp>
-                    {typeof this.props.punchFormState.linkTilBehandlingIK9 !== 'undefined' && !!this.props.punchFormState.linkTilBehandlingIK9 && <Hovedknapp className="punchPage__knappTilK9"
-                      onClick={() => window.location.href = this.props.punchFormState.linkTilBehandlingIK9!}>{intlHelper(this.props.intl, 'tilBehandlingIK9')}
-                    </Hovedknapp>}
-                    {typeof this.props.punchFormState.innsentSoknad !== "undefined" &&
+                    <div className="punchPage__knapper">
+                        <Hovedknapp onClick={() => {
+                            window.location.href = getEnvironmentVariable('K9_LOS_URL')
+                        }}>
+                            {intlHelper(this.props.intl, 'tilbaketilLOS')}
+                        </Hovedknapp>
+                        {!!this.props.punchFormState.linkTilBehandlingIK9 &&
+                        <Hovedknapp onClick={() => {
+                            window.location.href = this.props.punchFormState.linkTilBehandlingIK9!
+                        }}>
+                            {intlHelper(this.props.intl, 'tilBehandlingIK9')}
+                        </Hovedknapp>
+                        }
+                    </div>
+                    {!!this.props.punchFormState.innsentSoknad &&
                     <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
-                                      intl={this.props.intl}/>}
+                                      intl={this.props.intl}/>
+                    }
                 </>);
         }
     }
