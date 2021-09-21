@@ -2,7 +2,7 @@ import {IJournalpost} from 'app/models/types';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeAdvarsel} from 'nav-frontend-alertstriper';
-import {Knapp} from 'nav-frontend-knapper';
+import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import React from 'react';
 import {FormattedMessage, injectIntl, IntlShape} from 'react-intl';
 import {connect} from 'react-redux';
@@ -12,6 +12,7 @@ import JournalPostKopiFelmeldinger from "../JournalPostKopiFelmeldinger";
 import {SokersBarn} from "../SokersBarn";
 import {skalViseFeilmelding} from "../../FordelingFeilmeldinger";
 import './journalpostAlleredeBehandlet.less';
+import {getEnvironmentVariable} from "../../../../../utils";
 
 export interface IJournalpostAlleredeBehandletStateProps {
     intl: IntlShape
@@ -22,7 +23,7 @@ export interface IJournalpostAlleredeBehandletStateProps {
 }
 
 export interface IJournalpostAlleredeBehandletDispatchProps {
-    kopierJournalpost: typeof kopierJournalpost;
+    kopiereJournalpost: typeof kopierJournalpost;
 }
 
 type IJournalpostAlleredeBehandletProps =
@@ -38,7 +39,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
         identState,
         fellesState,
         dedupkey,
-        kopierJournalpost,
+        kopiereJournalpost,
     } = props;
 
     let sokersIdent: string;
@@ -59,11 +60,19 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 fellesState={fellesState}
                 intl={intl}
             />
-            <Knapp
-                disabled={skalViseFeilmelding(identState.ident2) || !identState.ident2}
-                onClick={() => {if(!!sokersIdent && !!identState.ident2) kopierJournalpost(sokersIdent, identState.ident2, sokersIdent, dedupkey, journalpost?.journalpostId)}}>
-                <FormattedMessage id="fordeling.kopiereJournal"/>
+            {!fellesState.kopierJournalpostSuccess && <Knapp
+              disabled={skalViseFeilmelding(identState.ident2) || !identState.ident2}
+              onClick={() => {
+                  if (!!sokersIdent && !!identState.ident2) kopiereJournalpost(sokersIdent, identState.ident2, sokersIdent, dedupkey, journalpost?.journalpostId)
+              }}>
+              <FormattedMessage id="fordeling.kopiereJournal"/>
             </Knapp>
+            }
+            {!!fellesState.kopierJournalpostSuccess &&
+            <Hovedknapp onClick={() => {
+                window.location.href = getEnvironmentVariable('K9_LOS_URL')
+            }}>{intlHelper(intl, 'tilbaketilLOS')}</Hovedknapp>
+            }
         </div>
     );
 };
@@ -76,7 +85,7 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
+    kopiereJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey))
 });
 
