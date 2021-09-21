@@ -191,16 +191,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     }
 
     useEffect(() => {
-        if(skalJournalpostSomIkkeStottesKopieres && !props.fellesState.isAwaitingKopierJournalPostResponse && !!props.fellesState.kopierJournalpostSuccess){
+        const lukkEtterJournalpostSomIkkeStottesKopieres: boolean = skalJournalpostSomIkkeStottesKopieres
+            && !props.fellesState.isAwaitingKopierJournalPostResponse
+            && !!props.fellesState.kopierJournalpostSuccess;
+
+        if(lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess){
             lukkJournalpostOppgave(journalpost?.journalpostId!);
         }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse])
+    }, [props.fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess])
 
     if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner/>;
     }
 
-    if (!!opprettIGosysState.gosysOppgaveRequestSuccess) {
+    if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone ) {
         return (
             <ModalWrapper
                 key={"opprettigosysokmodal"}
