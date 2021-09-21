@@ -44,7 +44,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
                         onChange={(e) => setValgtKategori(e.target.value)}
                         onBlur={(e) => setGosysKategoriJournalforing(e.target.value)}
                     >
-                        <option disabled value="" label="default" />
+                        <option disabled value="" label=" " />
 
                         {Object.keys(fordelingState.gosysGjelderKategorier!).map((kategori) => (
                             <option key={kategori} value={kategori}>

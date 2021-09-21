@@ -114,7 +114,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props: I
                             }}
                             disabled={gjelderAnnetBarn}
                         >
-                            <option key="default" value="" label="default" />)
+                            <option key="default" value="" label=" " />)
                             {fellesState.barn.map((b) => (
                                 <option key={b.identitetsnummer} value={b.identitetsnummer}>
                                     {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
