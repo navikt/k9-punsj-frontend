@@ -13,6 +13,7 @@ import {SokersBarn} from "../SokersBarn";
 import {skalViseFeilmelding} from "../../FordelingFeilmeldinger";
 import './journalpostAlleredeBehandlet.less';
 import {getEnvironmentVariable} from "../../../../../utils";
+import VerticalSpacer from "../../../../../components/VerticalSpacer";
 
 export interface IJournalpostAlleredeBehandletStateProps {
     intl: IntlShape
@@ -54,6 +55,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
         <div className="journalpostAlleredeBehandlet__container">
             <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
             <div><b><FormattedMessage id="journalpost.norskIdent" /></b> {sokersIdent}</div>
+            <VerticalSpacer eightPx={true} />
             <SokersBarn
                 sokersIdent={sokersIdent}
             />
