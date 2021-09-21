@@ -34,8 +34,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
         hentGjelderKategorier();
     }, [])
 
-    const harKategorierBlivitHentet = typeof fordelingState.isAwaitingGosysGjelderResponse !== 'undefined'
-        && !fordelingState.isAwaitingGosysGjelderResponse
+    const harKategorierBlivitHentet = fordelingState.isAwaitingGosysGjelderResponse === false
         && typeof fordelingState.gosysGjelderKategorier !== 'undefined'
         && Object.keys(fordelingState.gosysGjelderKategorier).length > 0;
 
@@ -49,7 +48,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
                 onChange={(e) => setValgtKategori(e.target.value)}
                 onBlur={(e) => setGosysKategoriJournalforing(e.target.value)}
               >
-                <option key="default" value="Annet" />
+                <option disabled={true} selected={true} value="" />
 
                   {Object.keys(fordelingState.gosysGjelderKategorier!).map(kategori =>
                       <option key={kategori} value={kategori}>
