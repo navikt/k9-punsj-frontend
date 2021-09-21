@@ -53,6 +53,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
     return (
         <div className="journalpostAlleredeBehandlet__container">
             <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
+            <div><b><FormattedMessage id="journalpost.norskIdent" /></b> {sokersIdent}</div>
             <SokersBarn
                 sokersIdent={sokersIdent}
             />
