@@ -1,6 +1,6 @@
-import {shallow}      from 'enzyme';
-import React          from 'react';
-import PdfVisning     from '../../../app/components/pdf/PdfVisning';
+import { shallow } from 'enzyme';
+import React from 'react';
+import PdfVisning from '../../../app/components/pdf/PdfVisning';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
@@ -13,10 +13,7 @@ describe('<PdfVisning>', () => {
         const dokumentid = '123';
 
         const pdfVisning = shallow(
-            <PdfVisning
-                dokumenter={[{dokumentId: dokumentid}]}
-                journalpostId={journalpostid}
-            />
+            <PdfVisning dokumenter={[{ dokumentId: dokumentid }]} journalpostId={journalpostid} />
         );
 
         expect(pdfVisning.find('iframe').prop('src')).toContain(journalpostid);

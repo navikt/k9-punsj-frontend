@@ -8,17 +8,17 @@ jest.mock('app/utils/envUtils');
 Modal.setAppElement(document.createElement('div'));
 
 describe('<InnsendingModal>', () => {
-  test('Viser spinner når den laster', () => {
-    const { getByRole } = renderWithIntl(
-      <InnsendingModal
-        innsendingsstatus={Innsendingsstatus.SenderInn}
-        vis={true}
-        onRequestClose={() => undefined}
-      />
-    );
+    test('Viser spinner når den laster', () => {
+        const { getByRole } = renderWithIntl(
+            <InnsendingModal
+                innsendingsstatus={Innsendingsstatus.SenderInn}
+                vis
+                onRequestClose={() => undefined}
+            />
+        );
 
-    const spinner = getByRole('status');
+        const spinner = getByRole('status');
 
-    expect(spinner).toBeDefined();
-  });
+        expect(spinner).toBeDefined();
+    });
 });

@@ -1,13 +1,13 @@
 export interface IJournalpost {
-    journalpostId: string,
-    norskIdent?: string,
+    journalpostId: string;
+    norskIdent?: string;
     dokumenter: IDokument[];
     dato?: string;
-    punsjInnsendingType? : {
+    punsjInnsendingType?: {
         kode: string;
         navn: string;
         erScanning: boolean;
-    },
+    };
     kanKopieres?: boolean;
     kanOpprettesJournalføringsoppgave?: boolean;
     kanSendeInn: boolean;
@@ -19,6 +19,7 @@ export interface IDokument {
 }
 
 export interface IDokumentInfo {
+    // eslint-disable-next-line camelcase
     dokument_id: string;
 }
 
@@ -33,5 +34,5 @@ export interface IJournalpostInfo {
 export interface IInnsendingType {
     kode: string;
     navn: string;
-    erScanning: boolean
+    erScanning: boolean;
 }

@@ -5,23 +5,23 @@ import TextInput from '../../../app/components/skjema/TextInput';
 import { TestSkjema } from './testskjema';
 
 describe('TextInput', () => {
-  test('oppdaterer felt ved inntasting', () => {
-    const { getByLabelText } = render(
-      <TestSkjema
-        initialValues={{
-          fødselsnummer: '',
-        }}
-      >
-        <TextInput feltnavn="fødselsnummer" />
-      </TestSkjema>
-    );
+    test('oppdaterer felt ved inntasting', () => {
+        const { getByLabelText } = render(
+            <TestSkjema
+                initialValues={{
+                    fødselsnummer: '',
+                }}
+            >
+                <TextInput feltnavn="fødselsnummer" />
+            </TestSkjema>
+        );
 
-    const inputfelt = getByLabelText(/fødselsnummer/i);
+        const inputfelt = getByLabelText(/fødselsnummer/i);
 
-    expect(inputfelt.getAttribute('value')).toEqual('');
+        expect(inputfelt.getAttribute('value')).toEqual('');
 
-    const fnrValue = '12312312312';
-    userEvent.type(inputfelt, fnrValue);
-    expect(inputfelt.getAttribute('value')).toEqual(fnrValue);
-  });
+        const fnrValue = '12312312312';
+        userEvent.type(inputfelt, fnrValue);
+        expect(inputfelt.getAttribute('value')).toEqual(fnrValue);
+    });
 });

@@ -1,5 +1,5 @@
-import {useEffect}   from 'react';
-import {useHistory}  from 'react-router-dom';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 function useRedirect(from: string, to: string): void {
     const { location, push } = useHistory();

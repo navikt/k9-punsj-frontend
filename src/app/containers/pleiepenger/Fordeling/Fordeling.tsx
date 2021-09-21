@@ -1,46 +1,50 @@
-import {JaNei, Sakstype, TilgjengeligSakstype} from 'app/models/enums';
-import {IFordelingState, IJournalpost} from 'app/models/types';
+import { JaNei, Sakstype, TilgjengeligSakstype } from 'app/models/enums';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
-    lukkOppgaveResetAction, setErIdent1BekreftetAction,
+    lukkOppgaveResetAction,
+    setErIdent1BekreftetAction,
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
+import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
-import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
-import {Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe} from 'nav-frontend-skjema';
+import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import ModalWrapper from 'nav-frontend-modal';
+import { PopoverOrientering } from 'nav-frontend-popover';
+import { Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import React, {useEffect, useMemo, useState} from 'react';
-import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
-import {connect} from 'react-redux';
-import PdfVisning from '../../../components/pdf/PdfVisning';
-import {ISakstypeDefault} from '../../../models/Sakstype';
-import {Sakstyper} from '../../SakstypeImpls';
-import './fordeling.less';
-import VerticalSpacer from '../../../components/VerticalSpacer';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import WarningCircle from '../../../assets/SVG/WarningCircle';
 import FormPanel from '../../../components/FormPanel';
-import {JournalpostPanel} from '../../../components/journalpost-panel/JournalpostPanel';
+import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
+import PdfVisning from '../../../components/pdf/PdfVisning';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import { ISakstypeDefault, ISakstypePunch } from '../../../models/Sakstype';
+import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
+import { IIdentState } from '../../../models/types/IdentState';
 import {
     opprettGosysOppgave as omfordelAction,
-    opprettGosysOppgaveResetAction
-} from "../../../state/actions/GosysOppgaveActions";
-import { setIdentFellesAction} from "../../../state/actions/IdentActions";
-import {IIdentState} from "../../../models/types/IdentState";
-import {IGosysOppgaveState} from "../../../models/types/GosysOppgaveState";
-import OkGaaTilLosModal from "../OkGaaTilLosModal";
-import ModalWrapper from "nav-frontend-modal";
-import {IFellesState, kopierJournalpost} from "../../../state/reducers/FellesReducer";
-import {hentBarn} from "../../../state/reducers/HentBarn";
-import {skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi} from "./FordelingFeilmeldinger";
-import JournalPostKopiFelmeldinger from "./Komponenter/JournalPostKopiFelmeldinger";
-import {PopoverOrientering} from "nav-frontend-popover";
-import Hjelpetekst from "nav-frontend-hjelpetekst";
-import {JournalpostAlleredeBehandlet} from "./Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet";
-import {SokersBarn } from "./Komponenter/SokersBarn";
+    opprettGosysOppgaveResetAction,
+} from '../../../state/actions/GosysOppgaveActions';
+import { setIdentFellesAction } from '../../../state/actions/IdentActions';
+import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
+import { hentBarn } from '../../../state/reducers/HentBarn';
+import { setHash } from '../../../utils';
+import { Sakstyper } from '../../SakstypeImpls';
+import OkGaaTilLosModal from '../OkGaaTilLosModal';
+import './fordeling.less';
+import { skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
+import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
 import {GosysGjelderKategorier} from "./Komponenter/GoSysGjelderKategorier";
+import {SokersBarn} from "./Komponenter/SokersBarn";
 import Behandlingsknapp from "./Komponenter/Behandlingsknapp";
+import {JournalpostAlleredeBehandlet} from "./Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet";
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -65,13 +69,9 @@ export interface IFordelingDispatchProps {
     setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
 }
 
-export type IFordelingProps = WrappedComponentProps &
-    IFordelingStateProps &
-    IFordelingDispatchProps;
+export type IFordelingProps = WrappedComponentProps & IFordelingStateProps & IFordelingDispatchProps;
 
-const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
-    props: IFordelingProps
-) => {
+const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
     const {
         intl,
         fordelingState,
@@ -81,24 +81,23 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         opprettIGosysState,
         lukkJournalpostOppgave,
         resetOmfordelAction,
-        lukkOppgaveReset
+        lukkOppgaveReset,
+        fellesState,
     } = props;
-    const {sakstype} = fordelingState;
+    const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         []
     );
-    const konfigForValgtSakstype = useMemo(
-        () => sakstyper.find((st) => st.navn === sakstype),
-        [sakstype]
-    );
+
+    const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
     const journalpostident = journalpost?.norskIdent;
 
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
-    const [erBarnUtdatert, setErBarnUtdatert]= useState<boolean>(false);
+    const [erBarnUtdatert, setErBarnUtdatert] = useState<boolean>(false);
 
     const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
 
@@ -113,15 +112,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const kanJournalforingsoppgaveOpprettesiGosys = typeof journalpost?.kanOpprettesJournalføringsoppgave !== 'undefined' && journalpost?.kanOpprettesJournalføringsoppgave;
 
-    const handleIdent1Change = (event: any) =>
-        setSokersIdent(event.target.value.replace(/\D+/, ''))
+    const handleIdent1Change = (event: any) => setSokersIdent(event.target.value.replace(/\D+/, ''));
 
     const handleIdent1Blur = (event: any) => {
         props.setIdentAction(event.target.value, identState.ident2);
         props.hentBarn(event.target.value);
         props.setErIdent1Bekreftet(true);
         setErBarnUtdatert(false);
-    }
+    };
 
     const handleIdentAnnenSokerBlur = (event: any) =>
         props.setIdentAction(identState.ident1, identState.ident2, event.target.value);
@@ -130,46 +128,66 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         setRiktigIdentIJournalposten(jn);
         setErBarnUtdatert(true);
         if (jn === JaNei.JA) {
-            props.setIdentAction(journalpostident || '', identState.ident2)
-           if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
+            props.setIdentAction(journalpostident || '', identState.ident2);
+            if (journalpost?.norskIdent) {
+                props.hentBarn(journalpost?.norskIdent);
+                setErBarnUtdatert(false);
+            }
         } else {
-            props.setIdentAction('', identState.ident2)
+            props.setIdentAction('', identState.ident2);
         }
-    }
+    };
 
     const handleVidereClick = () => {
-        if(identState.ident1 && identState.ident2 && identState.annenSokerIdent && journalpost?.journalpostId && !!journalpost?.kanKopieres){
-            props.kopierJournalpost(identState.ident1, identState.ident2, identState.annenSokerIdent, props.dedupkey, journalpost.journalpostId);
+        if (
+            identState.ident1 &&
+            identState.ident2 &&
+            identState.annenSokerIdent &&
+            journalpost?.journalpostId &&
+            !!journalpost?.kanKopieres
+        ) {
+            props.kopierJournalpost(
+                identState.ident1,
+                identState.ident2,
+                identState.annenSokerIdent,
+                props.dedupkey,
+                journalpost.journalpostId
+            );
         }
 
         if (!identState.ident2 || !journalpost?.journalpostId) {
             setVisSakstypeValg(true);
+        } else {
+            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId);
         }
-        else {
-            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId)
-        }
-    }
+    };
 
     const kopierJournalpostOgLukkOppgave = () => {
-        if(identState.ident1 && identState.ident2 && journalpost?.journalpostId){
-            props.kopierJournalpost(identState.ident1, identState.ident2, identState.ident1, props.dedupkey, journalpost?.journalpostId);
+        if (identState.ident1 && identState.ident2 && journalpost?.journalpostId) {
+            props.kopierJournalpost(
+                identState.ident1,
+                identState.ident2,
+                identState.ident1,
+                props.dedupkey,
+                journalpost?.journalpostId
+            );
         }
     };
 
     const handleGjelderPP = (jn: JaNei) => {
-        if(jn === JaNei.NEI){
-            if(!identState.ident1 && !!journalpost?.norskIdent) {
+        if (jn === JaNei.NEI) {
+            if (!identState.ident1 && !!journalpost?.norskIdent) {
                 setSokersIdent(journalpost?.norskIdent);
                 props.setIdentAction(journalpost?.norskIdent, identState.ident2);
-            }else{
-                setSokersIdent(identState.ident1)
+            } else {
+                setSokersIdent(identState.ident1);
             }
-        }else if(jn === JaNei.JA) {
+        } else if (jn === JaNei.JA) {
             setSokersIdent('');
             props.setIdentAction('', identState.ident2);
         }
         setGjelderPP(jn);
-    }
+    };
 
     useEffect(() => {
         const lukkEtterJournalpostSomIkkeStottesKopieres: boolean = skalJournalpostSomIkkeStottesKopieres
@@ -179,44 +197,43 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         if(lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess){
             lukkJournalpostOppgave(journalpost?.journalpostId!);
         }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess])
+    }, [props.fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
-    if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
-        return <NavFrontendSpinner/>;
+    if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
+        return <NavFrontendSpinner />;
     }
 
-    if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone ) {
+    if (opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone) {
         return (
             <ModalWrapper
-                key={"opprettigosysokmodal"}
+                key="opprettigosysokmodal"
                 onRequestClose={() => resetOmfordelAction()}
-                contentLabel={"settpaaventokmodal"}
+                contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
             >
-                <OkGaaTilLosModal melding={'fordeling.opprettigosys.utfort'}/>
+                <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
             </ModalWrapper>
         );
     }
 
-    if (!!fordelingState.isAwaitingLukkOppgaveResponse) {
-        return <NavFrontendSpinner/>;
+    if (fordelingState.isAwaitingLukkOppgaveResponse) {
+        return <NavFrontendSpinner />;
     }
 
-    if (!!fordelingState.lukkOppgaveDone) {
+    if (fordelingState.lukkOppgaveDone) {
         return (
             <ModalWrapper
-                key={"lukkoppgaveokmodal"}
+                key="lukkoppgaveokmodal"
                 onRequestClose={() => lukkOppgaveReset()}
-                contentLabel={"settpaaventokmodal"}
+                contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen={!!fordelingState.lukkOppgaveDone}
             >
-                <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
+                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
             </ModalWrapper>
         );
     }
-
 
     return (
         <div className="fordeling-container">
@@ -477,14 +494,12 @@ const mapStateToProps = (state: RootStateType) => ({
     identState: state.identState,
     opprettIGosysState: state.opprettIGosys,
     fellesState: state.felles,
-    dedupkey: state.felles.dedupKey
+    dedupkey: state.felles.dedupKey,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setSakstypeAction: (sakstype: Sakstype) =>
-        dispatch(setSakstypeAction(sakstype)),
-    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
-        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
+    setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstypeAction(sakstype)),
+    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) => dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
@@ -492,18 +507,12 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
-    hentBarn: (ident1: string) =>
-        dispatch(hentBarn(ident1)),
-    lukkJournalpostOppgave: (jpid: string) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid)),
-    resetOmfordelAction: () =>
-        dispatch(opprettGosysOppgaveResetAction()),
-    lukkOppgaveReset: () =>
-        dispatch(lukkOppgaveResetAction())
+    hentBarn: (ident1: string) => dispatch(hentBarn(ident1)),
+    lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
+    resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
+    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
 
-const Fordeling = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(FordelingComponent)
-);
+const Fordeling = injectIntl(connect(mapStateToProps, mapDispatchToProps)(FordelingComponent));
 
-export {Fordeling, FordelingComponent};
+export { Fordeling, FordelingComponent };

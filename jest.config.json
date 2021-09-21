@@ -1,38 +1,24 @@
 {
-  "moduleFileExtensions":       [
-    "js",
-    "json",
-    "jsx",
-    "ts",
-    "tsx",
-    "node",
-    "less",
-    "d.ts"
-  ],
-  "moduleNameMapper":           {
-    "\\.(css|jpg|png|svg|less)$": "<rootDir>/node_modules/jest-css-modules",
-    "nav-(.*)-style":             "<rootDir>/node_modules/jest-css-modules",
-    "\\.\\/userContent":          "<rootDir>/node_modules/jest-css-modules",
-    "\\.\\/systemsStyles":        "<rootDir>/node_modules/jest-css-modules",
-    "\\.\\/header":               "<rootDir>/node_modules/jest-css-modules",
-    "^app/(.*)":                  "<rootDir>/src/app/$1"
-  },
-  "testPathIgnorePatterns":     [
-    "/node_modules/",
-    "/dist/"
-  ],
-  "testEnvironment":            "jsdom",
-  "testRegex":                  "(<rootDir>/test/.*|(\\.|/)(spec))\\.tsx?$",
-  "transform":                  {
-    "^.+\\.[t|j]sx?$": "babel-jest"
-  },
-  "transformIgnorePatterns":    [
-    "<rootDir>.*(node_modules)(?!.*nav.*).*$"
-  ],
-  "unmockedModulePathPatterns": [
-    "<rootDir>/node_modules/react",
-    "<rootDir>/node_modules/react-router",
-    "<rootDir>/node_modules/react-router-dom"
-  ],
-  "setupFilesAfterEnv": ["<rootDir>/src/test/testConfig.js"]
+    "moduleFileExtensions": ["js", "json", "jsx", "ts", "tsx", "node", "less", "d.ts"],
+    "moduleNameMapper": {
+        "\\.(css|jpg|png|svg|less)$": "<rootDir>/node_modules/jest-css-modules",
+        "nav-(.*)-style": "<rootDir>/node_modules/jest-css-modules",
+        "\\.\\/userContent": "<rootDir>/node_modules/jest-css-modules",
+        "\\.\\/systemsStyles": "<rootDir>/node_modules/jest-css-modules",
+        "\\.\\/header": "<rootDir>/node_modules/jest-css-modules",
+        "^app/(.*)": "<rootDir>/src/app/$1"
+    },
+    "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
+    "testEnvironment": "jsdom",
+    "testRegex": "(<rootDir>/test/.*|(\\.|/)(spec))\\.tsx?$",
+    "transform": {
+        "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": ["<rootDir>.*(node_modules)(?!.*nav.*).*$"],
+    "unmockedModulePathPatterns": [
+        "<rootDir>/node_modules/react",
+        "<rootDir>/node_modules/react-router",
+        "<rootDir>/node_modules/react-router-dom"
+    ],
+    "setupFilesAfterEnv": ["<rootDir>/src/test/testConfig.js"]
 }

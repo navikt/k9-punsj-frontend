@@ -1,24 +1,24 @@
 export interface IPSBSoknadKvitteringBosteder {
-    [key: string]: { land: string; }
+    [key: string]: { land: string };
 }
 
 export interface IPSBSoknadKvitteringUtenlandsopphold {
     [key: string]: {
         land: string;
         årsak?: null | string;
-    }
+    };
 }
 
 export interface IPSBSoknadKvitteringBeredskapNattevak {
-    [key: string]: { tilleggsinformasjon: string; }
+    [key: string]: { tilleggsinformasjon: string };
 }
 
 export interface IPSBSoknadKvitteringTilsynsordning {
-    [key: string]: { etablertTilsynTimerPerDag: string; }
+    [key: string]: { etablertTilsynTimerPerDag: string };
 }
 
 export interface IPSBSoknadKvitteringLovbestemtFerie {
-    [key: string]: { skalHaFerie: string; }
+    [key: string]: { skalHaFerie: string };
 }
 
 export interface IPSBSoknadKvitteringOmsorg {
@@ -27,25 +27,28 @@ export interface IPSBSoknadKvitteringOmsorg {
 }
 
 export interface IPSBSoknadKvitteringUttak {
-    [key: string]: { timerPleieAvBarnetPerDag: string; }
+    [key: string]: { timerPleieAvBarnetPerDag: string };
 }
 
 export interface IPSBSoknadKvitteringArbeidstidInfo {
     [key: string]: {
         jobberNormaltTimerPerDag: string;
         faktiskArbeidTimerPerDag: string;
-    }
+    };
 }
 
 export interface IPSBSoknadKvitteringArbeidstid {
     arbeidstakerList: {
         norskIdentitetsnummer: null | string;
         organisasjonsnummer: null | string;
-        arbeidstidInfo: { perioder: IPSBSoknadKvitteringArbeidstidInfo; }
+        arbeidstidInfo: { perioder: IPSBSoknadKvitteringArbeidstidInfo };
     }[];
-    frilanserArbeidstidInfo: null | { perioder: IPSBSoknadKvitteringArbeidstidInfo; }
-    selvstendigNæringsdrivendeArbeidstidInfo: null | { perioder: IPSBSoknadKvitteringArbeidstidInfo; }
-
+    frilanserArbeidstidInfo: null | {
+        perioder: IPSBSoknadKvitteringArbeidstidInfo;
+    };
+    selvstendigNæringsdrivendeArbeidstidInfo: null | {
+        perioder: IPSBSoknadKvitteringArbeidstidInfo;
+    };
 }
 
 export interface IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode {
@@ -62,7 +65,7 @@ export interface IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode {
             registrertIUtlandet: boolean;
             landkode: string | null;
         };
-    },
+    };
     organisasjonsnummer: string;
     virksomhetNavn: string;
 }
@@ -87,20 +90,20 @@ export interface IPSBSoknadKvittering {
         barn: {
             norskIdentitetsnummer: string;
             fødselsdato: string | null;
-        },
+        };
         søknadsperiode: string[];
         bosteder: { perioder: IPSBSoknadKvitteringBosteder };
-        utenlandsopphold: { perioder: IPSBSoknadKvitteringUtenlandsopphold; }
+        utenlandsopphold: { perioder: IPSBSoknadKvitteringUtenlandsopphold };
         beredskap: { perioder: IPSBSoknadKvitteringBeredskapNattevak };
         nattevåk: { perioder: IPSBSoknadKvitteringBeredskapNattevak };
-        tilsynsordning: { perioder: IPSBSoknadKvitteringTilsynsordning; }
-        lovbestemtFerie: { perioder: IPSBSoknadKvitteringLovbestemtFerie; }
+        tilsynsordning: { perioder: IPSBSoknadKvitteringTilsynsordning };
+        lovbestemtFerie: { perioder: IPSBSoknadKvitteringLovbestemtFerie };
         arbeidstid: IPSBSoknadKvitteringArbeidstid;
-        uttak: { perioder: IPSBSoknadKvitteringUttak; }
+        uttak: { perioder: IPSBSoknadKvitteringUttak };
         omsorg: IPSBSoknadKvitteringOmsorg;
         opptjeningAktivitet: {
-            selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[],
+            selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
             frilanser?: IPSBSoknadKvitteringFrilanser;
-        },
-    }
+        };
+    };
 }

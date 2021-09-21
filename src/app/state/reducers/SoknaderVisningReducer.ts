@@ -1,12 +1,12 @@
-import {LocationChangeAction, LOCATION_CHANGE} from 'react-router-redux';
-import {SoknaderSokActionKeys} from "../../models/enums/SoknaderSokActionKeys";
-import {ISoknaderVisningState} from "../../models/types/SoknaderVisningState";
-import { ISoknaderSokActionTypes} from "../actions/SoknaderSokActions";
-import {SoknaderVisningStep} from "../../models/enums/SoknaderVisningStep";
+import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
+import { SoknaderSokActionKeys } from '../../models/enums/SoknaderSokActionKeys';
+import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
+import { ISoknaderSokActionTypes } from '../actions/SoknaderSokActions';
+import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
 
 export const initialState: ISoknaderVisningState = {
     step: SoknaderVisningStep.IDENT,
-    ident: ''
+    ident: '',
 };
 
 export function SoknaderVisningReducer(
@@ -15,7 +15,6 @@ export function SoknaderVisningReducer(
 ): ISoknaderVisningState {
     switch (action.type) {
         case LOCATION_CHANGE:
-
         case SoknaderSokActionKeys.IDENT_SET:
             return {
                 ...visningState,
@@ -24,7 +23,7 @@ export function SoknaderVisningReducer(
         case SoknaderSokActionKeys.STEP_SET:
             return {
                 ...visningState,
-                step: action.step
+                step: action.step,
             };
 
         default:

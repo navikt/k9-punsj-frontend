@@ -1,5 +1,6 @@
+// eslint-disable-next-line import/prefer-default-export
 export enum JaNeiIkkeRelevant {
     JA = 'ja',
     NEI = 'nei',
-    IKKE_RELEVANT = 'ikkeRelevant'
+    IKKE_RELEVANT = 'ikkeRelevant',
 }

@@ -1,22 +1,18 @@
 import React from 'react';
-import {Sakstype} from '../models/enums';
-import {
-    ISakstypeOmfordeling,
-    ISakstypePunch,
-    ISakstyper,
-} from '../models/Sakstype';
+import { Sakstype } from '../models/enums';
+import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
-import {ApiPath} from '../apiConfig';
-import {OpprettGosysOppgavePanel} from "./omsorgspenger/OpprettGosysOppgave";
+import { ApiPath } from '../apiConfig';
+import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
     punchPath: '/pleiepenger',
-    getComponent: ({journalpostid, punchPath}) => (
-        <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath}/>
+    getComponent: ({ journalpostid, punchPath }) => (
+        <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath} />
     ),
     steps: [], // TODO: implementert annerledes - konverter hvis nødvendig
 };
@@ -28,7 +24,7 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
         {
             path: '/opprett-i-gosys',
             stepName: 'opprettIGosys',
-            getComponent: () => <OpprettGosysOppgavePanel/>,
+            getComponent: () => <OpprettGosysOppgavePanel />,
             stepOrder: 0,
         },
     ],
@@ -42,11 +38,8 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
         {
             path: '/signatur',
             stepName: 'signatur',
-            getComponent: ({gåTilNesteSteg, initialValues}) => (
-                <OverføringIdentSjekkContainer
-                    initialValues={initialValues}
-                    gåTilNesteSteg={gåTilNesteSteg}
-                />
+            getComponent: ({ gåTilNesteSteg, initialValues }) => (
+                <OverføringIdentSjekkContainer initialValues={initialValues} gåTilNesteSteg={gåTilNesteSteg} />
             ),
             stepOrder: 0,
         },
@@ -54,11 +47,8 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
             path: '/punch/skjema',
             stepName: 'punch',
             stepOrder: 1,
-            getComponent: ({gåTilForrigeSteg, initialValues}) => (
-                <OverføringPunchContainer
-                    initialValues={initialValues}
-                    gåTilForrigeSteg={gåTilForrigeSteg}
-                />
+            getComponent: ({ gåTilForrigeSteg, initialValues }) => (
+                <OverføringPunchContainer initialValues={initialValues} gåTilForrigeSteg={gåTilForrigeSteg} />
             ),
         },
     ],
@@ -101,11 +91,7 @@ export const SkalIkkePUnsjes: ISakstypeOmfordeling = {
 };
 
 export const Sakstyper: ISakstyper = {
-    punchSakstyper: [
-        Pleiepenger,
-        OmsorgspengerFordeling,
-        OmsorgspengerOverføring,
-    ],
+    punchSakstyper: [Pleiepenger, OmsorgspengerFordeling, OmsorgspengerOverføring],
     omfordelingssakstyper: [
         OmsorgspengerUtvidetRett,
         OmsorgspengerLegeerklæring,
