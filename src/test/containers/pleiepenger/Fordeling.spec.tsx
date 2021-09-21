@@ -26,6 +26,7 @@ export const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
     opprettIGosysStatePartial?: Partial<IGosysOppgaveState>,
+    journalpostPartial?: Partial<IJournalpost>
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({locale: 'nb', defaultLocale: 'nb'}),
@@ -50,7 +51,9 @@ export const setupFordeling = (
         journalpostId: journalpostid,
         norskIdent: '12345678901',
         kanSendeInn: true,
-        erSaksbehandler: true
+        erSaksbehandler: true,
+        kanOpprettesJournalføringsoppgave: true,
+        ...journalpostPartial
     };
 
     const opprettIGosys: IGosysOppgaveState = {
@@ -166,6 +169,15 @@ describe('Fordeling', () => {
         const fordeling = setupFordeling({sjekkTilK9JournalpostStottesIkke: true}, {setSakstypeAction}, {isAwaitingGosysOppgaveRequestResponse: false, gosysOppgaveRequestError: undefined});
         expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
         expect(fordeling.find('AlertStripeFeil').children().text()).toEqual('fordeling.infotrygd.journalpoststottesikke');
+        expect(fordeling.find('Knapp')).toHaveLength(1);
+    });
+
+    it('Viser feilmelding når journalforingsoppgave i gosys ikke kan opprettes', () => {
+        const fordeling = setupFordeling({}, {}, {}, {kanOpprettesJournalføringsoppgave: false});
+        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        expect(fordeling.find('AlertStripeInfo')).toHaveLength(1);
+        expect(fordeling.find('AlertStripeInfo').find('Memo(FormattedMessage)').prop('id')).toEqual('fordeling.kanIkkeOppretteJPIGosys.info');
+
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });
 });
