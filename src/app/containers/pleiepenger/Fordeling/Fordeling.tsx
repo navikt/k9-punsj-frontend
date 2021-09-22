@@ -464,13 +464,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer eightPx={true}/>
-                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.ANNET
+                        {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET
                         && <div className="fordeling-page__gosysGjelderKategorier">
                           <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
                           <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
                         </div>
                         }
-                        {typeof fordelingState.sakstype !== 'undefined' && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
+                        {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
                       <Behandlingsknapp
                       norskIdent={identState.ident1}
                       omfordel={omfordel}
