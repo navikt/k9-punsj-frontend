@@ -960,40 +960,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             medSlettKnapp={false}
                         />
                     )}
-                    {/*this.state.iUtlandet === JaNeiIkkeOpplyst.JA &&
-                    (<RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNei).map((jn) => ({
-                            label: intlHelper(intl, jn),
-                            value: jn,
-                        }))}
-                        name="innleggelseiutlandetjanei"
-                        legend={intlHelper(intl, 'skjema.utenlandsopphold.innleggelse')}
-                        onChange={(event) =>
-                            this.handleBarnetSkalLeggesInn((event.target as HTMLInputElement).value as JaNei)
-                        }
-                        checked={this.state.barnetSkalLeggesInn}
-                    />)}
-                    {this.state.barnetSkalLeggesInn === JaNei.JA && (
-                        <Periodepaneler
-                            intl={intl}
-                            periods={this.state.innleggelseUtlandet}
-                            panelid={(i) => `innleggelseperiodepanel_${i}`}
-                            initialPeriode={this.initialPeriode}
-                            editSoknad={(perioder) =>
-                                this.setState(
-                                    {innleggelseUtlandet: perioder})
-                            }
-                            editSoknadState={(perioder, showStatus) =>
-                                this.setState(
-                                    {innleggelseUtlandet: perioder}
-                                )
-                            }
-                            getErrorMessage={() => undefined}
-                            feilkodeprefiks={'perioder'}
-                            minstEn={false}
-                            kanHaFlere={true}
-                        />)*/}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.FERIE)}
@@ -1822,16 +1788,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.updateSoknad({harInfoSomIkkeKanPunsjes: !!checked});
     }
 
-    private backButton() {
-        return (
-            <p>
-                <Knapp onClick={this.handleBackButtonClick}>
-                    {intlHelper(this.props.intl, 'skjema.knapp.tilbake')}
-                </Knapp>
-            </p>
-        );
-    }
-
     private getSoknadFromStore = () => {
         return new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt)
     };
@@ -1933,15 +1889,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
     };
 
-    private handleBackButtonClick = () => {
-        const {getPunchPath} = this.props;
-        this.props.resetSoknadAction();
-        this.props.undoChoiceOfEksisterendeSoknadAction();
-        setHash(
-            getPunchPath(PunchStep.CHOOSE_SOKNAD)
-        );
-    };
-
     private handleStartButtonClick = () => {
         this.props.resetPunchFormAction();
         setHash('/');
@@ -1970,12 +1917,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             this.state.soknad = {...this.state.soknad, utenlandsopphold: [{}]};
         }
         this.state.soknad.utenlandsopphold!.push({land: '', periode: {}});
-        this.forceUpdate();
-        this.setOpphold();
-    };
-
-    private removeOpphold = (index: number) => {
-        this.state.soknad.utenlandsopphold!.splice(index, 1);
         this.forceUpdate();
         this.setOpphold();
     };
