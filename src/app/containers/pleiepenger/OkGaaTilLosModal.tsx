@@ -39,7 +39,7 @@ class OkGaaTilLosModal extends React.Component<WrappedComponentProps & IOkGaaTil
                     <Row>{utledMelding(melding)}</Row>
                     <Row><FormattedMessage id={'modal.okgaatillos.tillos'}/></Row>
                 </div>
-                <Hovedknapp className={"okknapp"} mini={true} onClick={() => window.location.href = getEnvironmentVariable('K9_LOS_URL')}>{intlHelper(intl, 'modal.okgaatillos.ok')}</Hovedknapp>
+                <Hovedknapp className={"okknapp"} mini={true} onClick={() => {window.location.href = getEnvironmentVariable('K9_LOS_URL')}}>{intlHelper(intl, 'modal.okgaatillos.ok')}</Hovedknapp>
             </div>
         );
     }

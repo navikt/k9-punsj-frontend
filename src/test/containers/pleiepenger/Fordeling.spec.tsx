@@ -141,7 +141,7 @@ describe('Fordeling', () => {
         const fordeling = setupFordeling({sakstype, skalTilK9: true}, {omfordel});
         fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
-        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901");
+        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901", 'Annet');
     });
 
     it('Viser spinner mens svar avventes', () => {
@@ -151,7 +151,7 @@ describe('Fordeling', () => {
     });
 
     it('Viser suksessmelding når omfordeling er utført', () => {
-        const fordeling = setupFordeling(undefined, undefined, {gosysOppgaveRequestSuccess: true});
+        const fordeling = setupFordeling({lukkOppgaveDone: true}, {}, {gosysOppgaveRequestSuccess: true});
         const wrapper = fordeling.find("ModalWrapper")
         expect(wrapper.children().prop('melding')).toEqual('fordeling.opprettigosys.utfort');
     });
