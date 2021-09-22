@@ -330,6 +330,7 @@
   "skjema.feil.tilsynsordning.opphold[].periode.OVERLAPP":                                        "Denne tilsynsperioden overlapper en annen.",
   "skjema.soknadskvittering.tilleggsopplysninger":                                                 "Tilleggsopplysninger",
   "skjema.soknadskvittering.soknadsperiode":                                                       "Søknadsperioder",
+  "skjema.sentInn":                                                                                "Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.",
   "journalpost.id": "Journalpostnummer:",
   "journalpost.norskIdent": "Søkers fødselsnummer:",
   "journalpost.ident2": "Barnets fødselsnummer:",
@@ -421,6 +422,7 @@
 
   "opprettGosysOppgave": "Opprett oppgave i Gosys",
   "tilbaketilLOS": "Tilbake til LOS",
+  "tilBehandlingIK9": "Til behandling i K9",
 
   "numberinput.øk": "Øk {felt} med 1",
   "numberinput.mink": "Mink {felt} med 1",

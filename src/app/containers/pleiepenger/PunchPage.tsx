@@ -12,8 +12,7 @@ import {RootStateType} from 'app/state/RootState';
 import {getEnvironmentVariable, getPath} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {
-    AlertStripeAdvarsel,
-    AlertStripeSuksess,
+    AlertStripeAdvarsel, AlertStripeInfo,
 } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import 'nav-frontend-tabell-style';
@@ -148,14 +147,28 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
                 return <PSBPunchForm {...commonProps} id={this.props.match.params.id}/>;
             case PunchStep.COMPLETED:
                 return (<>
-                        <AlertStripeSuksess className="fullfortmelding">
-                            Søknaden er sendt til behandling.
-                        </AlertStripeSuksess>
-                        <Hovedknapp onClick={() => window.location.href = getEnvironmentVariable('K9_LOS_URL')}>{intlHelper(this.props.intl, 'tilbaketilLOS')}</Hovedknapp>
-                        {typeof this.props.punchFormState.innsentSoknad !== "undefined" &&
-                        <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
-                                          intl={this.props.intl}/>}
-                    </>);
+                    <AlertStripeInfo className="fullfortmelding">
+                        <FormattedMessage id="skjema.sentInn"/>
+                    </AlertStripeInfo>
+                    <div className="punchPage__knapper">
+                        <Hovedknapp onClick={() => {
+                            window.location.href = getEnvironmentVariable('K9_LOS_URL')
+                        }}>
+                            {intlHelper(this.props.intl, 'tilbaketilLOS')}
+                        </Hovedknapp>
+                        {!!this.props.punchFormState.linkTilBehandlingIK9 &&
+                        <Hovedknapp onClick={() => {
+                            window.location.href = this.props.punchFormState.linkTilBehandlingIK9!
+                        }}>
+                            {intlHelper(this.props.intl, 'tilBehandlingIK9')}
+                        </Hovedknapp>
+                        }
+                    </div>
+                    {!!this.props.punchFormState.innsentSoknad &&
+                    <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
+                                      intl={this.props.intl}/>
+                    }
+                </>);
         }
     }
 

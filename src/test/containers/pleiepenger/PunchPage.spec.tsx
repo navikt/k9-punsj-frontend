@@ -153,6 +153,6 @@ describe('PunchPage', () => {
       step: 2,
       ident1: '',
     });
-    expect(punchPage.find('AlertStripeSuksess')).toHaveLength(1);
+    expect(punchPage.find('AlertStripeInfo')).toHaveLength(1);
   });
 });
