@@ -464,8 +464,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer eightPx={true}/>
-                        {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET
-                        && <div className="fordeling-page__gosysGjelderKategorier">
+                        {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && <div className="fordeling-page__gosysGjelderKategorier">
                           <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
                           <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
                         </div>
