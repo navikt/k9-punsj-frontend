@@ -413,6 +413,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 }
                             }
                         }))}
+                        feil={this.getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
                     />
                     <RadioPanelGruppe
                         className="horizontalRadios"
@@ -435,6 +436,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                         type="date"
                         value={this.state.soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className={"frilanser-sluttdato"}
+                        feil={this.getErrorMessage('ytelse.opptjeningAktivitet.frilanser.sluttdato')}
                         {...this.changeAndBlurUpdatesSoknad((event) => ({
                             opptjeningAktivitet: {
                                 ...opptjening,
@@ -444,6 +446,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 }
                             }
                         }))}
+                        
                     />}
                     {this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
                     (<>
@@ -1916,12 +1919,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         if (!this.state.soknad.utenlandsopphold) {
             this.state.soknad = {...this.state.soknad, utenlandsopphold: [{}]};
         }
-        this.state.soknad.utenlandsopphold!.push({land: '', periode: {}});
-        this.forceUpdate();
-        this.setOpphold();
+        const utenlandsopphold = [{land: undefined, periode: {}}]
+        this.updateSoknadState({utenlandsopphold})
+        this.updateSoknad({utenlandsopphold})
     };
-
-    private setOpphold = () => this.updateSoknad({utenlandsopphold: this.state.soknad.utenlandsopphold});
 
     private statusetikett() {
         if (!this.state.showStatus) {

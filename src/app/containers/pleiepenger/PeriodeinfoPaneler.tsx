@@ -79,7 +79,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         getErrorMessage: GetErrorMessage,
         intlShape: IntlShape,
     ) => {
-        const feilkode = `.arbeidstidInfo.perioder.[${periodeindeks}].periode`;
+
     return (
     <>
         <div className={"periodeinfopanel_container"}>
@@ -92,9 +92,9 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 onBlur={(periode) => {
                     editSoknad(editPeriode(periodeindeks, periode))
                 }}
-                errorMessage={getErrorMessage(feilkode)}
-                errorMessageFom={getErrorMessage(`${feilkode}.fom`)}
-                errorMessageTom={getErrorMessage(`${feilkode}.tom`)}
+                errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
+                errorMessageFom={getErrorMessage(`[${periodeindeks}]}.fom`)}
+                errorMessageTom={getErrorMessage(`[${periodeindeks}]}.tom`)}
                 initialValues={initialValues}
             />
             <div
