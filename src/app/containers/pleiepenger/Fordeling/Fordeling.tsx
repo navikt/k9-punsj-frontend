@@ -156,6 +156,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
+    const kanJournalforingsoppgaveOpprettesiGosys = typeof journalpost?.kanOpprettesJournalføringsoppgave !== 'undefined' && journalpost?.kanOpprettesJournalføringsoppgave;
+
     const handleIdent1Change = (event: any) =>
         setSokersIdent(event.target.value.replace(/\D+/, ''))
     const handleIdent2Change = (event: any) => {
@@ -298,24 +300,37 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
                         />
                         {gjelderPP === JaNei.NEI && <>
-                          <VerticalSpacer sixteenPx={true} />
-                          <Input
-                            label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                            onChange={handleIdent1Change}
-                            onBlur={handleIdent1Blur}
-                            value={sokersIdent}
-                            className="bold-label ident-soker-1"
-                            maxLength={11}
-                            feil={skalViseFeilmelding(identState.ident1) || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
-                            bredde={"M"}
-                          />
-                          <VerticalSpacer eightPx={true}/>
-                          <Hovedknapp
-                            mini={true}
-                            disabled={!identState.ident1 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
-                            onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
-                            <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                          </Hovedknapp>
+                          <VerticalSpacer sixteenPx={true}/>
+                            {!kanJournalforingsoppgaveOpprettesiGosys && <div>
+                              <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                                <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
+                              </AlertStripeInfo>
+                              <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                              </Knapp>
+                            </div>}
+
+                            {kanJournalforingsoppgaveOpprettesiGosys && <div>
+                              <Input
+                                label={intlHelper(intl, 'ident.identifikasjon.felt')}
+                                onChange={handleIdent1Change}
+                                onBlur={handleIdent1Blur}
+                                value={sokersIdent}
+                                className="bold-label ident-soker-1"
+                                maxLength={11}
+                                feil={skalViseFeilmelding(identState.ident1)
+                                || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
+                                bredde={"M"}
+                              />
+                              <VerticalSpacer eightPx={true}/>
+                              <Hovedknapp
+                                mini={true}
+                                disabled={!identState.ident1
+                                || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
+                                onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}>
+                                <FormattedMessage id="fordeling.sakstype.ANNET"/>
+                              </Hovedknapp>
+                            </div>}
                         </>}
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx={true} />
@@ -464,21 +479,25 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         >
                             {Object.keys(TilgjengeligSakstype)
                                 .map((key) => {
-                                    return (
-                                        <RadioPanel
-                                            key={key}
-                                            label={intlHelper(
-                                                intl,
-                                                `fordeling.sakstype.${Sakstype[key]}`
-                                            )}
-                                            value={Sakstype[key]}
-                                            onChange={() => {
-                                                props.setSakstypeAction(Sakstype[key]);
-                                                setOmsorgspengerValgt(false);
-                                            }}
-                                            checked={konfigForValgtSakstype?.navn === key}
-                                        />
-                                    );
+                                    if(!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)){
+                                        return (
+                                            <RadioPanel
+                                                key={key}
+                                                label={intlHelper(
+                                                    intl,
+                                                    `fordeling.sakstype.${Sakstype[key]}`
+                                                )}
+                                                value={Sakstype[key]}
+                                                onChange={() => {
+                                                    props.setSakstypeAction(Sakstype[key]);
+                                                    setOmsorgspengerValgt(false);
+                                                }}
+                                                checked={konfigForValgtSakstype?.navn === key}
+                                            />
+                                        );
+                                    }else{
+                                        return null;
+                                    }
                                 })}
                         </RadioGruppe>
                         <VerticalSpacer eightPx={true}/>
@@ -494,14 +513,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                     </>}
                     {fordelingState.skalTilK9 === false &&
                     <>
-                        <AlertStripeInfo
-                            className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
-                        <Hovedknapp
+                        <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
+                        {!kanJournalforingsoppgaveOpprettesiGosys && <div>
+                          <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
+                          </AlertStripeInfo>
+                          <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                          </Knapp>
+                        </div>}
+
+                        {kanJournalforingsoppgaveOpprettesiGosys && <Hovedknapp
                             mini={true}
                             onClick={() => omfordel(journalpost!.journalpostId, identState.ident1)}
                         >
                             <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                        </Hovedknapp>
+                        </Hovedknapp>}
                     </>}
                     <VerticalSpacer sixteenPx={true} />
                     {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
