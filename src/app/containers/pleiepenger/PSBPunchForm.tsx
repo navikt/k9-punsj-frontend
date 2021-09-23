@@ -498,6 +498,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                        bredde={"M"}
                                        value={this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.virksomhetNavn || ''}
                                        className="virksomhetsNavn"
+                                       feil={this.getErrorMessage('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].virksomhetNavn')}
                                        {...this.changeAndBlurUpdatesSoknad((event) => ({
                                            opptjeningAktivitet: {
                                                ...opptjening,
@@ -550,6 +551,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                    bredde={"M"}
                                    value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
                                    className="sn-organisasjonsnummer"
+                                   feil={this.getErrorMessage('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer')}
                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
                                        opptjeningAktivitet: {
                                            ...opptjening,
