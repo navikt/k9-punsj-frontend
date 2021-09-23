@@ -52,11 +52,12 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
-
-
+    
     useEffect(() => {
-        henteBarn(sokersIdent);
-    }, []);
+        if(sokersIdent.length > 0){
+            henteBarn(sokersIdent);
+        }
+    }, [sokersIdent]);
 
     const barnetsIdentInputFieldOnChange = (event: any) => {
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
