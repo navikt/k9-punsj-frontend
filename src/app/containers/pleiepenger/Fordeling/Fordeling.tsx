@@ -341,7 +341,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                       <VerticalSpacer eightPx/>
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx/>
-                          {visSokersBarn && <SokersBarn
+                          {visSokersBarn && !!identState.ident1 && !skalViseFeilmelding(identState.ident1) && <SokersBarn
                              sokersIdent={identState.ident1}
                              barnetHarInteFnrFn={(harBarnetFnr: boolean) => setBarnetHarIkkeFnr(harBarnetFnr)}
                            />}
