@@ -5,7 +5,7 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
-import { IPeriode, Periode } from '../../../../models/types/Periode';
+import { IPeriode } from '../../../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { Periodepaneler } from '../../Periodepaneler';
 import './eksisterendeSøknadsperioder.less';
@@ -26,9 +26,17 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
         props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
     const [skalTrekkePerioder, setSkalTrekkePerioder] = React.useState(false);
+
+    React.useEffect(() => {
+        if (selectedPeriods.length === 0 && soknad.trekkKravPerioder && soknad.trekkKravPerioder.length > 0) {
+            setSelectedPeriods(soknad.trekkKravPerioder);
+        }
+    }, [soknad.trekkKravPerioder]);
+
     if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
         return null;
     }
+
     const getAlertstriper = () => {
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = selectedPeriods.some((periode) =>
             eksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom)
