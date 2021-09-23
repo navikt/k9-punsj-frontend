@@ -1,11 +1,16 @@
-import {IntlShape} from 'react-intl';
+import { IntlShape } from 'react-intl';
 
 export function numberToString(intl: IntlShape, num: number, numberOfFractionDigits?: number) {
     return intl.formatNumber(num, {
         style: 'decimal',
         minimumFractionDigits: numberOfFractionDigits,
-        maximumFractionDigits: numberOfFractionDigits
+        maximumFractionDigits: numberOfFractionDigits,
     });
+}
+
+function cleanNumberString(formattedNumber: string) {
+    // Fjerner alle tegn som ikke er sifre
+    return formattedNumber.replace(/\D/gm, '');
 }
 
 export function stringToNumber(formattedNumber: string) {
@@ -16,24 +21,22 @@ export function stringToNumber(formattedNumber: string) {
     return Number(cleanNumberString(formattedNumber)) / 10 ** exp;
 }
 
-function cleanNumberString(formattedNumber: string) {
-    // Fjerner alle tegn som ikke er sifre
-    return formattedNumber.replace(/\D/gm, '');
-}
-
 export function periodToFormattedString(periode: string) {
     const formateradPeriode = periode.replace('..', '');
     let splittetFormateradePerioder = formateradPeriode.split('/');
-    splittetFormateradePerioder = splittetFormateradePerioder.filter(p => p.length > 0);
-    const formateradeDato = splittetFormateradePerioder.map(p => {
+    splittetFormateradePerioder = splittetFormateradePerioder.filter((p) => p.length > 0);
+    const formateradeDato = splittetFormateradePerioder.map((p) => {
         const splittetDato = p.split('-');
         return splittetDato.length > 0 ? `${splittetDato[2]}.${splittetDato[1]}.${splittetDato[0]}` : '';
-    })
+    });
 
-    switch(formateradeDato.length){
-        case 1 : return  `${formateradeDato[0]} - `;
-        case 2 : return `${formateradeDato[0]} - ${formateradeDato[1]}`;
-        default: return ''
+    switch (formateradeDato.length) {
+        case 1:
+            return `${formateradeDato[0]} - `;
+        case 2:
+            return `${formateradeDato[0]} - ${formateradeDato[1]}`;
+        default:
+            return '';
     }
 }
 
@@ -44,4 +47,4 @@ export const canStringBeParsedToJSON = (stringToBeParsed: string) => {
         return false;
     }
     return true;
-}
+};

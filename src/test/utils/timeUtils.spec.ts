@@ -3,7 +3,7 @@ import {
     durationToString,
     hoursFromString,
     isWeekdayWithinPeriod,
-    minutesFromString
+    minutesFromString,
 } from 'app/utils';
 
 jest.mock('app/utils/envUtils');
@@ -40,7 +40,6 @@ describe('convertNumberToUkedag', () => {
 });
 
 describe('isWeekdayWithinPeriod', () => {
-
     const mandag = 0;
     const tirsdag = 1;
     const onsdag = 2;
@@ -49,22 +48,22 @@ describe('isWeekdayWithinPeriod', () => {
     const lordag = 5;
     const sondag = 6;
 
-    const periodeSomErLengreEnnEnUke = {fom: '2019-12-01', tom: '2020-01-31'};
-    const fraTirsdagTilTorsdag = {fom: '2019-12-31', tom: '2020-01-02'};
-    const fraLordagTilTirsdag = {fom: '2020-01-04', tom: '2020-01-07'};
-    const bareTorsdag = {fom: '2020-01-02', tom: '2020-01-02'};
+    const periodeSomErLengreEnnEnUke = { fom: '2019-12-01', tom: '2020-01-31' };
+    const fraTirsdagTilTorsdag = { fom: '2019-12-31', tom: '2020-01-02' };
+    const fraLordagTilTirsdag = { fom: '2020-01-04', tom: '2020-01-07' };
+    const bareTorsdag = { fom: '2020-01-02', tom: '2020-01-02' };
 
     it('Blir sann når fullstendig periode ikke er oppgitt', () => {
         expect(isWeekdayWithinPeriod(torsdag)).toBeTruthy();
         expect(isWeekdayWithinPeriod(torsdag, {})).toBeTruthy();
-        expect(isWeekdayWithinPeriod(torsdag, {fom: '2020-01-01'})).toBeTruthy();
-        expect(isWeekdayWithinPeriod(torsdag, {fom: '2020-01-01', tom: ''})).toBeTruthy();
-        expect(isWeekdayWithinPeriod(torsdag, {tom: '2020-01-01'})).toBeTruthy();
-        expect(isWeekdayWithinPeriod(torsdag, {fom: '', tom: '2020-01-01'})).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, { fom: '2020-01-01' })).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, { fom: '2020-01-01', tom: '' })).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, { tom: '2020-01-01' })).toBeTruthy();
+        expect(isWeekdayWithinPeriod(torsdag, { fom: '', tom: '2020-01-01' })).toBeTruthy();
     });
 
     it('Blir usann når periode ikke er gyldig', () => {
-        expect(isWeekdayWithinPeriod(torsdag, {fom: '2020-01-02', tom: '2019-12-31'})).toBeFalsy();
+        expect(isWeekdayWithinPeriod(torsdag, { fom: '2020-01-02', tom: '2019-12-31' })).toBeFalsy();
     });
 
     it('Blir sann når gitt ukedag inngår i perioden', () => {
@@ -99,5 +98,5 @@ describe('isWeekdayWithinPeriod', () => {
         expect(isWeekdayWithinPeriod(fredag, bareTorsdag)).toBeFalsy();
         expect(isWeekdayWithinPeriod(lordag, bareTorsdag)).toBeFalsy();
         expect(isWeekdayWithinPeriod(sondag, bareTorsdag)).toBeFalsy();
-    })
+    });
 });

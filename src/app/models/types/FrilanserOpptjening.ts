@@ -1,5 +1,5 @@
-import intlHelper    from 'app/utils/intlUtils';
-import {IntlShape}   from 'react-intl';
+import intlHelper from 'app/utils/intlUtils';
+import { IntlShape } from 'react-intl';
 
 export interface IFrilanserOpptjening {
     startdato?: string;
@@ -8,9 +8,10 @@ export interface IFrilanserOpptjening {
 }
 
 export class FrilanserOpptjening implements IFrilanserOpptjening {
-
     startdato: string;
+
     sluttdato: string;
+
     jobberFortsattSomFrilans: boolean;
 
     constructor(frilanser: IFrilanserOpptjening) {
@@ -23,15 +24,13 @@ export class FrilanserOpptjening implements IFrilanserOpptjening {
         return {
             startdato: this.startdato,
             sluttdato: this.sluttdato,
-            jobberFortsattSomFrilans: this.jobberFortsattSomFrilans
+            jobberFortsattSomFrilans: this.jobberFortsattSomFrilans,
         };
     }
 
     description(intl: IntlShape): string {
-        return intlHelper(
-            intl,
-            'mappe.lesemodus.arbeid.frilanser.beskrivelse',
-            {startdato: this.startdato}
-        );
+        return intlHelper(intl, 'mappe.lesemodus.arbeid.frilanser.beskrivelse', {
+            startdato: this.startdato,
+        });
     }
 }

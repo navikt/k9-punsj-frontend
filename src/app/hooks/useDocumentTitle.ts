@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
 function useDocumentTitle(title: string) {
     useEffect(() => {

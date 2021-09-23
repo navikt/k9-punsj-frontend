@@ -1,39 +1,28 @@
 {
-  "compilerOptions":                {
-    "outDir":                           "build/dist",
-    "module":                           "esnext",
-    "target":                           "es5",
-    "lib":                              [
-      "es6",
-      "dom",
-      "es2017"
-    ],
-    "sourceMap":                        true,
-    "allowJs":                          true,
-    "allowSyntheticDefaultImports":     true,
-    "jsx":                              "react",
-    "moduleResolution":                 "node",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns":                true,
-    "noImplicitThis":                   true,
-    "noImplicitAny":                    true,
-    "strictNullChecks":                 true,
-    "skipLibCheck":                     true,
-    "suppressImplicitAnyIndexErrors":   true,
-    "noUnusedLocals":                   false,
-    "baseUrl":                          "./src",
-    "typeRoots":                        [
-      "./node_modules/@types",
-      "./src/@types"
-    ]
-  },
-  "tsLoaderOptions": {
-    "useCache": false
-  },
-  "exclude":                        [
-    "node_modules",
-    "src/build",
-    "**.js",
-    "dist"
-  ]
+    "compilerOptions": {
+        "outDir": "build/dist",
+        "module": "esnext",
+        "target": "es5",
+        "lib": ["es6", "dom", "es2017"],
+        "sourceMap": true,
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": false,
+        "baseUrl": "./src",
+        "typeRoots": ["./node_modules/@types", "./src/@types"],
+        "resolveJsonModule": true
+    },
+    "tsLoaderOptions": {
+        "useCache": false
+    },
+    "exclude": ["node_modules", "src/build", "**.js", "dist"]
 }

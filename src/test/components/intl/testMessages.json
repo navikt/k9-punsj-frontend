@@ -1,11 +1,11 @@
 {
-  "skjema.felt.fødselsnummer.label": "Fødselsnummer",
-  "skjema.felt.alder.label": "Alder",
-  "skjema.felt.erBlond.label": "Blond",
-  "skjema.felt.favorittby.label": "Favorittby",
-  "skjema.felt.favorittby.Oslo": "Oslo",
-  "skjema.felt.favorittby.Barcelona": "Barcelona",
-  "skjema.felt.favorittby.New York": "New York",
-  "numberinput.mink": "Mink",
-  "numberinput.øk": "Øk"
+    "skjema.felt.fødselsnummer.label": "Fødselsnummer",
+    "skjema.felt.alder.label": "Alder",
+    "skjema.felt.erBlond.label": "Blond",
+    "skjema.felt.favorittby.label": "Favorittby",
+    "skjema.felt.favorittby.Oslo": "Oslo",
+    "skjema.felt.favorittby.Barcelona": "Barcelona",
+    "skjema.felt.favorittby.New York": "New York",
+    "numberinput.mink": "Mink",
+    "numberinput.øk": "Øk"
 }
