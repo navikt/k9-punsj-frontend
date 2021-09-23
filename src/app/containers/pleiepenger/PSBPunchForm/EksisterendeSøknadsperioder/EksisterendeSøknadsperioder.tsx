@@ -82,7 +82,7 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
         <EkspanderbartpanelBase
             apen={isOpen}
             className="eksisterendeSøknadsperioder"
-            tittel="Eksisterende søknadsperioder"
+            tittel="Endring av søknadsperiode"
             onClick={onClick}
         >
             <Element>
