@@ -55,7 +55,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
         <div className="journalpostAlleredeBehandlet__container">
             <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
             <div><b><FormattedMessage id="journalpost.norskIdent" /></b> {sokersIdent}</div>
-            <VerticalSpacer eightPx={true} />
+            <VerticalSpacer eightPx />
             {!fellesState.kopierJournalpostSuccess && <SokersBarn sokersIdent={sokersIdent} /> }
             <JournalPostKopiFelmeldinger
                 fellesState={fellesState}

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {createIntl, IntlShape, WrappedComponentProps} from "react-intl";
+import {mocked} from "ts-jest/utils";
+import {shallow} from "enzyme";
 import {IJournalpost} from "../../../app/models/types";
 import {JaNei} from "../../../app/models/enums";
 import {IIdentState} from "../../../app/models/types/IdentState";
-import {mocked} from "ts-jest/utils";
 import intlHelper from "../../../app/utils/intlUtils";
-import {shallow} from "enzyme";
 import {
     ISokersBarn,
     ISokersBarnDispatchProps,
