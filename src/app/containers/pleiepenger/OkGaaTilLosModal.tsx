@@ -25,12 +25,12 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
     const { intl, melding } = props;
 
         return (
-            <div className={"ok-gaa-til-los"}>
-                <CheckCircleSvg title={"check"}/>
-                <div className={"vl"}/>
-                <div className={"info"}>
+            <div className="ok-gaa-til-los">
+                <CheckCircleSvg title="check"/>
+                <div className="vl"/>
+                <div className="info">
                     <Row>{utledMelding(melding)}</Row>
-                    <Row><FormattedMessage id={'modal.okgaatillos.tillos'}/></Row>
+                    <Row><FormattedMessage id="modal.okgaatillos.tillos"/></Row>
                 </div>
             <Hovedknapp
                 className="okknapp"

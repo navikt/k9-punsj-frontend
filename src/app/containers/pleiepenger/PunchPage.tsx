@@ -146,19 +146,19 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                         <Hovedknapp onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL')
                         }}>
-                            {intlHelper(this.props.intl, 'tilbaketilLOS')}
+                            {intlHelper(intl, 'tilbaketilLOS')}
                         </Hovedknapp>
-                        {!!this.props.punchFormState.linkTilBehandlingIK9 &&
+                        {!!punchFormState.linkTilBehandlingIK9 &&
                         <Hovedknapp onClick={() => {
-                            window.location.href = this.props.punchFormState.linkTilBehandlingIK9!
+                            window.location.href = punchFormState.linkTilBehandlingIK9!
                         }}>
-                            {intlHelper(this.props.intl, 'tilBehandlingIK9')}
+                            {intlHelper(intl, 'tilBehandlingIK9')}
                         </Hovedknapp>
                         }
                     </div>
-                    {!!this.props.punchFormState.innsentSoknad &&
-                    <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
-                                      intl={this.props.intl}/>
+                    {!!punchFormState.innsentSoknad &&
+                    <SoknadKvittering response={punchFormState.innsentSoknad}
+                                      intl={intl}/>
                     }
                 </>);
         }

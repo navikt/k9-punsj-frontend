@@ -30,7 +30,7 @@ const OpprettGosysOppgaveKnapp: React.FunctionComponent<OpprettGosysOppgaveKnapp
         <Knapp
             htmlType="button"
             type="hoved"
-            onClick={() => opprettGosysOppgave(journalpost!.journalpostId, journalpost!.norskIdent!)}
+            onClick={() => opprettGosysOppgave(journalpost!.journalpostId, journalpost!.norskIdent!, '')}
         >
             <FormattedMessage id="opprettGosysOppgave" />
         </Knapp>

@@ -3,7 +3,6 @@ import { FordelingActionKeys, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
 import { ISkalTilK9 } from '../../models/types/RequestBodies';
-import { IdentActionKeys } from './IdentActions';
 
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
@@ -117,8 +116,7 @@ export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9J
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE,
 });
 
-export const lukkJournalpostOppgave = (journalpostid: string) => {
-    return (dispatch: any) => {
+export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any) => {
         dispatch(lukkOppgaveRequestAction());
         post(
           ApiPath.JOURNALPOST_LUKK_OPPGAVE,
@@ -131,8 +129,7 @@ export const lukkJournalpostOppgave = (journalpostid: string) => {
               }
               return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
           });
-    };
-}
+    }
 
 export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string) {
     return (dispatch: any) => {
