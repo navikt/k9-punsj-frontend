@@ -974,8 +974,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <EksisterendeSøknadsperioder
-                    isOpen
-                    onClick={() => null}
+                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
                     intl={intl}
                     getErrorMessage={this.getErrorMessage}
                     soknad={soknad}
