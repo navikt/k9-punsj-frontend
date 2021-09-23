@@ -27,6 +27,7 @@ import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioder
 interface IOwnProps {
     intl: any;
     response: IPSBSoknadKvittering;
+    skalViseTrukkedePerioder?: boolean;
 }
 
 export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
@@ -103,7 +104,7 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
+const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, skalViseTrukkedePerioder }) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
@@ -112,6 +113,10 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
+    const visTrukkedePerioder =
+        skalViseTrukkedePerioder !== false &&
+        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) &&
+        ytelse.trekkKravPerioder.length > 0;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
@@ -162,6 +167,12 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                             response.mottattDato.substr(0, 10)
                         )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
                     </p>
+                    {visTrukkedePerioder && (
+                        <p>
+                            <b>Perioder som er fjernet fra søknadsperioden: </b>
+                            {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
+                        </p>
+                    )}
                 </div>
             )}
 
