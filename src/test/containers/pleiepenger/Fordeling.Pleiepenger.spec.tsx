@@ -56,94 +56,20 @@ describe('Fordeling: Flyt for pleiepenger', () => {
         expect(fordeling.find('Checkbox')).toHaveLength(0);
     });
 
-    it('Viser barn i dropdown dersom det eksisterer', () => {
-        expect(fordeling.find('Select')).toHaveLength(0);
+    it('Kan ikke gå videre dersom man ikke fyllt in barn', () => {
         fordeling.setProps({
-            fellesState: {
-                hentBarnSuccess: true,
-                barn: [
-                    {
-                        identitetsnummer: '12345678910',
-                        fødselsdato: '1232333',
-                        fornavn: 'Ella',
-                        etternavn: 'Nordmann',
-                        sammensattNavn: 'Ella Nordmann',
-                    },
-                ],
-            },
-            journalpost: {
-                kanKopieres: true,
-                kanSendeInn: true,
-                erSaksbehandler: true,
-            },
-        });
-        expect(fordeling.find('Select').html()).toContain('Ella Nordmann');
-        expect(fordeling.find('Select').html()).toContain('12345678910');
-    });
-
-    it('Kan fylle in barns identitetsnummer manuellt dersom barn fra apikall er tom', () => {
-        fordeling.setProps({
-            fellesState: { hentBarnSuccess: true, barn: [] },
-            journalpost: {
-                kanKopieres: true,
-                kanSendeInn: true,
-                erSaksbehandler: true,
-            },
-        });
-        expect(fordeling.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
-        expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
-        fordeling.find('Input').simulate('change', { target: { value: '12345678910' } });
-        expect(fordeling.find('.dobbelSjekkIdent')).toHaveLength(1);
+            fellesState: {hentBarnSuccess: true, barn: []},
+            journalpost: {kanKopieres: true, kanSendeInn: true, erSaksbehandler: true}
+        })
         expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
     });
 
-    it('Kan fylle in barns identitetsnummer manuellt dersom apikall går feil', () => {
+    it('Kan ikke gå videre dersom barnets ident ikke er riktig', () => {
         fordeling.setProps({
-            fellesState: { hentBarnError: true, barn: [] },
-            journalpost: {
-                kanKopieres: true,
-                kanSendeInn: true,
-                erSaksbehandler: true,
-            },
-        });
-        expect(fordeling.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
-        fordeling.setProps({
-            fellesState: {
-                hentBarnSuccess: true,
-                barn: [
-                    {
-                        identitetsnummer: '12345678910',
-                        fødselsdato: '1232333',
-                        fornavn: 'Ella',
-                        etternavn: 'Nordmann',
-                        sammensattNavn: 'Ella Nordmann',
-                    },
-                ],
-            },
-            journalpost: {
-                kanKopieres: true,
-                kanSendeInn: true,
-                erSaksbehandler: true,
-            },
-        });
-        expect(fordeling.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(0);
-        fordeling.setProps({
-            fellesState: { hentBarnForbidden: true, barn: [] },
-            journalpost: {
-                kanKopieres: true,
-                kanSendeInn: true,
-                erSaksbehandler: true,
-            },
-        });
-        expect(fordeling.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
-    });
-
-    it('Kan fylle in barns identitetsnummer manuellt dersom apikall går feil', () => {
-        expect(fordeling.find('Checkbox')).toHaveLength(2);
-        fordeling
-            .find('Checkbox')
-            .at(1)
-            .simulate('change', { target: { checked: true } });
-        expect(fordeling.find('.infotrygd_info')).toHaveLength(1);
+            fellesState: {hentBarnSuccess: true, barn: []},
+            identState: {ident2: '12'},
+            journalpost: {kanKopieres: true, kanSendeInn: true, erSaksbehandler: true}
+        })
+        expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
     });
 });
