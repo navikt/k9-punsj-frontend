@@ -83,6 +83,7 @@ import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
+import EksisterendeSøknadsperioder from './PSBPunchForm/EksisterendeSøknadsperioder/EksisterendeSøknadsperioder';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -165,6 +166,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             omsorg: {},
             harInfoSomIkkeKanPunsjes: false,
             harMedisinskeOpplysninger: false,
+            skalTrekkePerioder: false,
         },
         perioder: undefined,
         isFetched: false,
@@ -971,6 +973,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true} />
+                
                 <OpplysningerOmSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -986,6 +989,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
+                />
+                <VerticalSpacer sixteenPx={true} />
+                <EksisterendeSøknadsperioder
+                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                    intl={intl}
+                    getErrorMessage={this.getErrorMessage}
+                    soknad={soknad}
+                    updateSoknad={this.updateSoknad}
+                    updateSoknadState={this.updateSoknadState}
+                    eksisterendePerioder={eksisterendePerioder}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <EkspanderbartpanelBase
@@ -1411,7 +1425,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             isOpen={!!this.props.punchFormState.isValid}
                         >
                             <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
+                                <SoknadKvittering
+                                    intl={intl}
+                                    response={this.props.punchFormState.validertSoknad}
+                                    skalViseTrukkedePerioder={soknad.skalTrekkePerioder}
+                                />
                             </div>
                             <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                 <Hovedknapp
@@ -1458,7 +1476,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private handleSubmit = () => {
-        const navarandeSoknad: IPSBSoknad = this.state.soknad;
+        let navarandeSoknad: IPSBSoknad = this.state.soknad;
+        if (!this.state.soknad.skalTrekkePerioder) {
+            navarandeSoknad.trekkKravPerioder = [];
+        }
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
@@ -1956,13 +1977,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             : undefined;
     };
 
-    private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
+    private updateSoknadState = (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => {
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: { ...this.state.soknad, ...soknad },
             showStatus: !!showStatus,
         });
-    }
+    };
 
     private updateSoknadStateCallbackFunction = (soknad: Partial<IPSBSoknad>) => {
         this.updateSoknadState(soknad);
@@ -1972,13 +1993,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {
-            journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
-                    ? navarandeSoknad?.journalposter
-                    : []
-            ),
+            journalposter: Array.from(navarandeSoknad ? navarandeSoknad?.journalposter : []),
         };
-        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, ...journalposter });
+        return this.props.updateSoknad({ ...navarandeSoknad, ...soknad, ...journalposter });
     };
     
     private handleBackButtonClick = () => {

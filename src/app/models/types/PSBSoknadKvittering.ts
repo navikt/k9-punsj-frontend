@@ -105,5 +105,6 @@ export interface IPSBSoknadKvittering {
             selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
             frilanser?: IPSBSoknadKvitteringFrilanser;
         };
+        trekkKravPerioder: string[];
     };
 }
