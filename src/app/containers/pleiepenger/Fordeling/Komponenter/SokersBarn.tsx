@@ -1,7 +1,3 @@
-import {JaNei} from 'app/models/enums';
-import {IJournalpost} from 'app/models/types';
-import {setIdentAction,
-} from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeInfo} from 'nav-frontend-alertstriper';
@@ -20,7 +16,6 @@ import WarningCircle from "../../../../assets/SVG/WarningCircle";
 import {skalViseFeilmelding} from "../FordelingFeilmeldinger";
 
 export interface ISokersBarnStateProps {
-    journalpost?: IJournalpost;
     identState: IIdentState;
     fellesState: IFellesState;
     dedupkey: string;
@@ -28,14 +23,12 @@ export interface ISokersBarnStateProps {
 
 export interface ISokersBarnDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
-    hentBarn: typeof hentBarn;
+    henteBarn: typeof hentBarn;
 }
 
 export interface ISokersBarn {
     sokersIdent: string;
     barnetHarInteFnrFn?: (harBarnetFnr: boolean) => void;
-    erBarnUtdatert?: boolean;
-    riktigIdentIJournalposten?: JaNei;
 }
 
 type ISokersBarnProps = WrappedComponentProps &
@@ -49,15 +42,12 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     const {
         intl,
         barnetHarInteFnrFn,
-        journalpost,
         identState,
-        erBarnUtdatert,
-        riktigIdentIJournalposten,
         sokersIdent,
-        fellesState
+        fellesState,
+        setIdentAction,
+        henteBarn
     } = props;
-
-    const journalpostident = journalpost?.norskIdent;
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
@@ -65,9 +55,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
 
 
     useEffect(() => {
-        if(!!journalpost && typeof journalpost?.norskIdent !== 'undefined') {
-            props.hentBarn(journalpost?.norskIdent);
-        }
+        henteBarn(sokersIdent);
     }, []);
 
     const barnetsIdentInputFieldOnChange = (event: any) => {
@@ -75,13 +63,12 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     }
 
     const oppdaterStateMedBarnetsFnr = (event: any) => {
-        props.setIdentAction(!!riktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);
+        setIdentAction(identState.ident1, event.target.value, identState.annenSokerIdent);
     }
 
     const nullUtBarnetsIdent = () => {
         setBarnetsIdent('');
-        setIdentAction(identState.ident1, '');
-        props.setIdentAction(identState.ident1, '', identState.annenSokerIdent);
+        setIdentAction(identState.ident1, '', identState.annenSokerIdent);
     }
 
     const barnHarIkkeFnrCheckboks = (checked: boolean) => {
@@ -89,12 +76,12 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
         if(barnetHarInteFnrFn) barnetHarInteFnrFn(checked);
         if (checked) {
             setBarnetsIdent('');
-            props.setIdentAction(!!riktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, null);
+            setIdentAction(identState.ident1, null);
         }
     }
 
     return (<div className="sokersBarn">
-        {!erBarnUtdatert && !!fellesState.hentBarnSuccess && typeof fellesState.barn !== 'undefined' && fellesState.barn.length > 0 && <>
+        {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && <>
           <Select
             value={barnetsIdent}
             bredde="l"
@@ -163,7 +150,6 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
     identState: state.identState,
     fellesState: state.felles,
     dedupkey: state.felles.dedupKey
@@ -172,7 +158,7 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
-    hentBarn: (ident1: string) =>
+    henteBarn: (ident1: string) =>
         dispatch(hentBarn(ident1))
 });
 

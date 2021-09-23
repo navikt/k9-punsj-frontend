@@ -30,7 +30,7 @@ const setupSokersBarn = (
 
     const dispatchProps: ISokersBarnDispatchProps = {
         setIdentAction: jest.fn(),
-        hentBarn: jest.fn(),
+        henteBarn: jest.fn(),
         ...dispatchPropsPartial
     };
 
@@ -49,7 +49,6 @@ const setupSokersBarn = (
     };
 
     const sokersBarnStateProps: ISokersBarnStateProps = {
-        journalpost,
         identState,
         fellesState: {
             dedupKey: '',
@@ -61,8 +60,6 @@ const setupSokersBarn = (
     const sokersBarnComponentProps: ISokersBarn = {
         sokersIdent: '12345678910',
         barnetHarInteFnrFn: jest.fn(),
-        erBarnUtdatert: false,
-        riktigIdentIJournalposten: JaNei.JA,
         ...sokersBarnComponentPropsPartial
     };
 

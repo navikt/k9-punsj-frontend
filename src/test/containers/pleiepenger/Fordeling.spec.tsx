@@ -43,7 +43,6 @@ export const setupFordeling = (
         lukkJournalpostOppgave: jest.fn(),
         resetOmfordelAction: jest.fn(),
         lukkOppgaveReset: jest.fn(),
-        hentBarn: jest.fn(),
         setErIdent1Bekreftet: jest.fn(),
         ...fordelingDispatchPropsPartial,
     };

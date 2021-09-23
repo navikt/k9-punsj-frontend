@@ -34,7 +34,6 @@ import {IIdentState} from "../../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../../models/types/GosysOppgaveState";
 import OkGaaTilLosModal from "../OkGaaTilLosModal";
 import {IFellesState, kopierJournalpost} from "../../../state/reducers/FellesReducer";
-import {hentBarn} from "../../../state/reducers/HentBarn";
 import {skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi} from "./FordelingFeilmeldinger";
 import JournalPostKopiFelmeldinger from "./Komponenter/JournalPostKopiFelmeldinger";
 import {JournalpostAlleredeBehandlet} from "./Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet";
@@ -58,7 +57,6 @@ export interface IFordelingDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
     kopierJournalpost: typeof kopierJournalpost;
-    hentBarn: typeof hentBarn;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
@@ -99,7 +97,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
-    const [erBarnUtdatert, setErBarnUtdatert]= useState<boolean>(false);
 
     const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
 
@@ -107,6 +104,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
+    const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
 
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
@@ -119,9 +117,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const handleIdent1Blur = (event: any) => {
         props.setIdentAction(event.target.value, identState.ident2);
-        props.hentBarn(event.target.value);
         props.setErIdent1Bekreftet(true);
-        setErBarnUtdatert(false);
+        setVisSokersBarn(true);
     }
 
     const handleIdentAnnenSokerBlur = (event: any) =>
@@ -129,11 +126,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
-        setErBarnUtdatert(true);
+        setVisSokersBarn(false);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
-            if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
+            if(journalpost?.norskIdent) {setVisSokersBarn(true);}
         } else {
+            setSokersIdent('');
             props.setIdentAction('', identState.ident2)
         }
     }
@@ -343,12 +341,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                       <VerticalSpacer eightPx/>
                         {gjelderPP === JaNei.JA && <>
                           <VerticalSpacer sixteenPx/>
-                           <SokersBarn
-                             erBarnUtdatert={erBarnUtdatert}
-                             riktigIdentIJournalposten={riktigIdentIJournalposten}
-                             sokersIdent={sokersIdent}
+                          {visSokersBarn && <SokersBarn
+                             sokersIdent={identState.ident1}
                              barnetHarInteFnrFn={(harBarnetFnr: boolean) => setBarnetHarIkkeFnr(harBarnetFnr)}
-                           />
+                           />}
                             {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
                             mini
                             onClick={() => handleVidereClick()}
@@ -493,8 +489,6 @@ const mapDispatchToProps = (dispatch: any) => ({
       dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
       dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
-    hentBarn: (ident1: string) =>
-      dispatch(hentBarn(ident1)),
     lukkJournalpostOppgave: (jpid: string) =>
       dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () =>
