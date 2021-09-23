@@ -70,6 +70,7 @@ const setupSokersBarn = (
         (intl: IntlShape, id: string, value?: { [key: string]: string }) => id
     );
 
+    /* eslint-disable react/jsx-props-no-spreading */
     return shallow(
         <SokersBarnComponent
             {...wrappedComponentProps}

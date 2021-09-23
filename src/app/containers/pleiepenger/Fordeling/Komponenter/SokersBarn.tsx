@@ -53,11 +53,11 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
         identState,
         erBarnUtdatert,
         riktigIdentIJournalposten,
-        sokersIdent
+        sokersIdent,
+        fellesState
     } = props;
 
     const journalpostident = journalpost?.norskIdent;
-    const skalBarnetHarIkkeFnrCheckboksVises = typeof barnetHarInteFnrFn !== 'undefined';
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
@@ -86,7 +86,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
 
     const barnHarIkkeFnrCheckboks = (checked: boolean) => {
         setBarnetHarIkkeFnr(checked);
-        skalBarnetHarIkkeFnrCheckboksVises && barnetHarInteFnrFn(checked);
+        if(barnetHarInteFnrFn) barnetHarInteFnrFn(checked);
         if (checked) {
             setBarnetsIdent('');
             props.setIdentAction(!!riktigIdentIJournalposten && riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, null);
@@ -94,7 +94,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
     }
 
     return (<div className="sokersBarn">
-        {!erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+        {!erBarnUtdatert && !!fellesState.hentBarnSuccess && typeof fellesState.barn !== 'undefined' && fellesState.barn.length > 0 && <>
           <Select
             value={barnetsIdent}
             bredde="l"
@@ -102,18 +102,16 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
             onChange={(e) => {barnetsIdentInputFieldOnChange(e); oppdaterStateMedBarnetsFnr(e);}}
             disabled={gjelderAnnetBarn}
           >
-            <option key="default" value={""}>
-                {``}
-            </option>
+            <option key="default" value="" label=" " />
             )
 
-              {props.fellesState.barn.map(b =>
+              {fellesState.barn.map(b =>
                   <option key={b.identitetsnummer} value={b.identitetsnummer}>
                       {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
                   </option>)
               }
           </Select>
-          <VerticalSpacer eightPx={true}/>
+          <VerticalSpacer eightPx/>
           <Checkbox
             label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
             onChange={(e) => {
@@ -123,13 +121,13 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
           />
         </>
         }
-        <VerticalSpacer sixteenPx={true}/>
+        <VerticalSpacer sixteenPx/>
         {(gjelderAnnetBarn
-            || !!props.fellesState.hentBarnError
-            || !!props.fellesState.hentBarnForbidden
-            || (typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length === 0))
+            || !!fellesState.hentBarnError
+            || !!fellesState.hentBarnForbidden
+            || (!!fellesState.barn && fellesState.barn.length === 0))
         && <>
-          <div className={'fyllUtIdentAnnetBarnContainer'}>
+          <div className="fyllUtIdentAnnetBarnContainer">
             <Input
               label={intlHelper(intl, 'ident.identifikasjon.barn')}
               onChange={barnetsIdentInputFieldOnChange}
@@ -142,7 +140,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
                       ? intlHelper(intl, 'ident.feil.ugyldigident')
                       : undefined
               }
-              bredde={"M"}
+              bredde="M"
               disabled={barnetHarIkkeFnr}
             />
               {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) &&
@@ -150,16 +148,16 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
                 <div><WarningCircle/></div>
                 <p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
           </div>
-          <VerticalSpacer eightPx={true}/>
-            {skalBarnetHarIkkeFnrCheckboksVises && <>
+          <VerticalSpacer eightPx/>
+            {barnetHarInteFnrFn && <>
               <Checkbox
                 label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
                 onChange={(e) => barnHarIkkeFnrCheckboks(e.target.checked)}
               />
                 {barnetHarIkkeFnr && <AlertStripeInfo
-                  className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
+                  className="infotrygd_info"> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
             </>}
-          <VerticalSpacer sixteenPx={true}/>
+          <VerticalSpacer sixteenPx/>
         </>}
     </div>);
 };
