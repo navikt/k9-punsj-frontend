@@ -1,4 +1,4 @@
-name: Build and deploy K9-punsj-frontend
+name: Build and deploy to prod - K9-punsj-frontend
 on:
   push:
     paths-ignore:
@@ -45,13 +45,6 @@ jobs:
           docker push $(cat .docker_image):latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploye til dev
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
-          RESOURCE: nais/frontend/k9-punsj-frontend.yml
-          VARS: nais/frontend/dev.json
       - name: Deploye til prod
         uses: nais/deploy/actions/deploy@v1
         env:
