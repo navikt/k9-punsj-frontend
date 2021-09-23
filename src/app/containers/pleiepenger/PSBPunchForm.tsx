@@ -973,17 +973,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true} />
-                <EksisterendeSøknadsperioder
-                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
-                    intl={intl}
-                    getErrorMessage={this.getErrorMessage}
-                    soknad={soknad}
-                    updateSoknad={this.updateSoknad}
-                    updateSoknadState={this.updateSoknadState}
-                    eksisterendePerioder={eksisterendePerioder}
-                />
-                <VerticalSpacer sixteenPx={true} />
+                
                 <OpplysningerOmSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -999,6 +989,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
+                />
+                <VerticalSpacer sixteenPx={true} />
+                <EksisterendeSøknadsperioder
+                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                    intl={intl}
+                    getErrorMessage={this.getErrorMessage}
+                    soknad={soknad}
+                    updateSoknad={this.updateSoknad}
+                    updateSoknadState={this.updateSoknadState}
+                    eksisterendePerioder={eksisterendePerioder}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <EkspanderbartpanelBase
