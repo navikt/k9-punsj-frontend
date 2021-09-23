@@ -1,4 +1,4 @@
-name: Build and deploy to prod - K9-punsj-frontend
+name: Build and deploy to prod
 on:
   push:
     paths-ignore:
@@ -10,8 +10,8 @@ on:
     branches:
       - master
 jobs:
-  deploy-dev:
-    name: Deploye til DEV og PROD
+  deploy:
+    name: Deploye til PROD
     runs-on: ubuntu-latest
     steps:
       - name: Hente kode
