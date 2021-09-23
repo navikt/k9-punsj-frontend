@@ -69,7 +69,7 @@ const mapStateToProps = (state: RootStateType): IOpprettOppgaveStateProps => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     opprettGosysOppgave: (journalpostid: string, norskident: string) =>
-        dispatch(opprettGosysOppgaveAction(journalpostid, norskident)),
+        dispatch(opprettGosysOppgaveAction(journalpostid, norskident, '')),
 });
 
 export const OpprettGosysOppgavePanel = injectIntl(

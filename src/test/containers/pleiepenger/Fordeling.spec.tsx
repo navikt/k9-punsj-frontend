@@ -26,7 +26,9 @@ const journalpostid = '200';
 export const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
-    opprettIGosysStatePartial?: Partial<IGosysOppgaveState>
+    opprettIGosysStatePartial?: Partial<IGosysOppgaveState>,
+    journalpostPartial?: Partial<IJournalpost>
+
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
@@ -52,6 +54,8 @@ export const setupFordeling = (
         norskIdent: '12345678901',
         kanSendeInn: true,
         erSaksbehandler: true,
+        kanOpprettesJournalføringsoppgave: true,
+        ...journalpostPartial
     };
 
     const opprettIGosys: IGosysOppgaveState = {
@@ -139,24 +143,6 @@ describe('Fordeling', () => {
         expect(fordeling.find('Input')).toHaveLength(1);
     });
 
-    /*  it('Viser radioknapp for hver sakstype', () => {
-          const fordeling = setupFordeling({skalTilK9: true});
-          const radios = fordeling.find('RadioPanel');
-          const radioForSakstype = (sakstype: Sakstype) =>
-              radios.findWhere((radio) => radio.prop('value') === sakstype);
-
-          expect(radios).toHaveLength(6);
-          expect(radioForSakstype(Sakstype.PLEIEPENGER_SYKT_BARN)).toHaveLength(1);
-          expect(radioForSakstype(Sakstype.OMSORGSPENGER)).toHaveLength(1);
-          expect(radioForSakstype(Sakstype.OPPLAERINGSPENGER)).toHaveLength(1);
-          expect(
-              radioForSakstype(Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE)
-          ).toHaveLength(1);
-          expect(radioForSakstype(Sakstype.ANNET)).toHaveLength(1);
-      });
-
-     */
-
     it('Kaller setSakstypeAction', () => {
         const setSakstypeAction = jest.fn();
         const fordeling = setupFordeling(
@@ -179,7 +165,7 @@ describe('Fordeling', () => {
         const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
         fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
-        expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901');
+        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901", 'Annet');
     });
 
     it('Viser spinner mens svar avventes', () => {
@@ -189,7 +175,7 @@ describe('Fordeling', () => {
     });
 
     it('Viser suksessmelding når omfordeling er utført', () => {
-        const fordeling = setupFordeling(undefined, undefined, {
+        const fordeling = setupFordeling({lukkOppgaveDone: true}, undefined, {
             gosysOppgaveRequestSuccess: true,
         });
         const wrapper = fordeling.find('ModalWrapper');
@@ -218,6 +204,15 @@ describe('Fordeling', () => {
         expect(fordeling.find('AlertStripeFeil').children().text()).toEqual(
             'fordeling.infotrygd.journalpoststottesikke'
         );
+        expect(fordeling.find('Knapp')).toHaveLength(1);
+    });
+
+    it('Viser feilmelding når journalforingsoppgave i gosys ikke kan opprettes', () => {
+        const fordeling = setupFordeling({}, {}, {}, {kanOpprettesJournalføringsoppgave: false});
+        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        expect(fordeling.find('AlertStripeInfo')).toHaveLength(1);
+        expect(fordeling.find('AlertStripeInfo').find('Memo(FormattedMessage)').prop('id')).toEqual('fordeling.kanIkkeOppretteJPIGosys.info');
+
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });
 });

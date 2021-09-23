@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { FordelingActionKeys, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
-import { convertResponseToError, post } from 'app/utils';
+import { convertResponseToError, get, post } from 'app/utils';
 import { ISkalTilK9 } from '../../models/types/RequestBodies';
 import { IdentActionKeys } from './IdentActions';
 
@@ -55,6 +55,10 @@ interface ILukkOggpgaveResetAction {
     type: FordelingActionKeys.LUKK_OPPGAVE_RESET;
 }
 
+interface IGosysGjelderRequestAction {type: FordelingActionKeys.GOSYS_GJELDER_REQUEST}
+interface IGosysGjelderSuccessAction {type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS, gjelderKategorierFraGosys: string[]}
+interface IGosysGjelderErrorAction   {type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error: IError}
+
 interface ISetErIdent1BekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
     erIdent1Bekreftet: boolean;
@@ -74,29 +78,32 @@ export const lukkOppgaveResetAction = (): ILukkOggpgaveResetAction => ({
     type: FordelingActionKeys.LUKK_OPPGAVE_RESET,
 });
 
-export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction => ({
-    type: FordelingActionKeys.IDENT_BEKREFT_IDENT1,
-    erIdent1Bekreftet: identBekreftet,
-});
+export const gosysGjelderRequestAction   = ():               IGosysGjelderRequestAction   => ({type: FordelingActionKeys.GOSYS_GJELDER_REQUEST});
+export const gosysGjelderSuccessAction   = (gjelderKategorierFraGosys: any):IGosysGjelderSuccessAction   => ({type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS, gjelderKategorierFraGosys});
+export const gosysGjelderErrorAction     = (error: IError):  IGosysGjelderErrorAction     => ({type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error});
+
+export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction     => ({type: FordelingActionKeys.IDENT_BEKREFT_IDENT1, erIdent1Bekreftet: identBekreftet});
 
 export type IFordelingActionTypes =
-    | ISetSakstypeAction
-    | IOmfordelingRequestAction
-    | IOmfordelingSuccessAction
-    | IOmfordelingErrorAction
-    | ISjekkOmSkalTilK9LoadingAction
-    | ISjekkOmSkalTilK9ErrorAction
-    | ISjekkOmSkalTilK9SuccessAction
-    | ISjekkOmSkalTilK9JournalpostStottesIkkeAction
-    | ILukkOggpgaveRequestAction
-    | ILukkOggpgaveErrorAction
-    | ILukkOggpgaveSuccessAction
-    | ILukkOggpgaveResetAction
-    | ISetErIdent1BekreftetAction;
+    ISetSakstypeAction |
+    IOmfordelingRequestAction |
+    IOmfordelingSuccessAction |
+    IOmfordelingErrorAction   |
+    ISjekkOmSkalTilK9LoadingAction |
+    ISjekkOmSkalTilK9ErrorAction   |
+    ISjekkOmSkalTilK9SuccessAction |
+    ISjekkOmSkalTilK9JournalpostStottesIkkeAction |
+    ILukkOggpgaveRequestAction |
+    ILukkOggpgaveErrorAction   |
+    ILukkOggpgaveSuccessAction |
+    ILukkOggpgaveResetAction |
+    IGosysGjelderRequestAction |
+    IGosysGjelderSuccessAction |
+    IGosysGjelderErrorAction |
+    ISetErIdent1BekreftetAction;
 
-export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
-});
+export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST});
+
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS,
     k9sak,
@@ -110,15 +117,22 @@ export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9J
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE,
 });
 
-export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any) => {
+export const lukkJournalpostOppgave = (journalpostid: string) => {
+    return (dispatch: any) => {
         dispatch(lukkOppgaveRequestAction());
-        post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, undefined, (response) => {
-            if (response.status === 200) {
-                return dispatch(lukkOppgaveSuccessAction());
-            }
-            return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
-        });
+        post(
+          ApiPath.JOURNALPOST_LUKK_OPPGAVE,
+          {journalpostId: journalpostid},
+          undefined,
+          undefined,
+          response => {
+              if (response.status === 200) {
+                  return dispatch(lukkOppgaveSuccessAction())
+              }
+              return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
+          });
     };
+}
 
 export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string) {
     return (dispatch: any) => {
@@ -138,4 +152,16 @@ export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid:
             return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(response)));
         });
     };
+}
+
+export function hentGjelderKategorierFraGosys() {
+    return (dispatch: any) => {
+        dispatch(gosysGjelderRequestAction());
+        get(ApiPath.GOSYS_GJELDER, {}, {}, (response, svar) => {
+            if (response.ok) {
+                return dispatch(gosysGjelderSuccessAction(svar));
+            }
+            return dispatch(gosysGjelderErrorAction(convertResponseToError(response)));
+        });
+    }
 }
