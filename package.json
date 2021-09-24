@@ -82,7 +82,8 @@
         "test": "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --config ./jest.config.json",
         "lint": "eslint --quiet 'src/**/*.{ts,tsx}'",
         "eject": "react-scripts eject",
-        "snyk-protect": "snyk protect"
+        "snyk-protect": "snyk protect",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "@babel/core": "^7.12.3",
@@ -136,12 +137,14 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "fetch-mock": "^9.10.7",
         "html-webpack-harddisk-plugin": "^2.0.0",
+        "husky": ">=6",
         "intl": "^1.2.5",
         "jest": "^27.0.6",
         "jest-cli": "^27.0.6",
         "jest-css-modules": "^2.1.0",
         "less": "^4.1.1",
         "less-loader": "^10.0.1",
+        "lint-staged": ">=10",
         "nav-frontend-alertstriper-style": "^3.0.1",
         "nav-frontend-chevron-style": "^1.0.4",
         "nav-frontend-ekspanderbartpanel-style": "^2.0.1",
@@ -179,5 +182,8 @@
         "not ie <= 11",
         "not op_mini all"
     ],
-    "snyk": false
+    "snyk": false,
+    "lint-staged": {
+        "src/app/**/*.ts?(x)": "eslint --cache --fix"
+    }
 }

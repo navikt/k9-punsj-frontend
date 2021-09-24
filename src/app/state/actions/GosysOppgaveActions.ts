@@ -37,7 +37,7 @@ export const opprettGosysOppgaveResetAction = (): IOpprettGosysOppgaveResetActio
     type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET,
 });
 
-export const opprettGosysOppgave = (journalpostid: string, norskident: string) => (dispatch: any) => {
+export const opprettGosysOppgave = (journalpostid: string, norskident: string, gosysKategori: string) => (dispatch: any) => {
         dispatch(opprettGosysOppgaveRequestAction());
 
         post(
@@ -47,6 +47,7 @@ export const opprettGosysOppgave = (journalpostid: string, norskident: string) =
             {
                 journalpostId: journalpostid,
                 norskIdent: norskident,
+                gjelder: gosysKategori
             },
             (response) => {
                 if (response.status === 200) {

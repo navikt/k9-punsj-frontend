@@ -88,6 +88,7 @@ const getTrekkKravPerioder = (soknad: IPSBSoknadUt) => {
     return undefined;
 };
 
+
 export class PSBSoknadUt implements IPSBSoknadUt {
     soeknadId: string;
 
