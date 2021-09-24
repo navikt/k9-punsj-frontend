@@ -56,11 +56,16 @@ interface ILukkOggpgaveResetAction {
 
 interface IGosysGjelderRequestAction {type: FordelingActionKeys.GOSYS_GJELDER_REQUEST}
 interface IGosysGjelderSuccessAction {type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS, gjelderKategorierFraGosys: string[]}
-interface IGosysGjelderErrorAction   {type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error: IError}
+interface IGosysGjelderErrorAction {type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error: IError}
 
 interface ISetErIdent1BekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
     erIdent1Bekreftet: boolean;
+}
+
+interface ISetValgtGosysKategori {
+    type: FordelingActionKeys.VALGT_GOSYS_KATEGORI;
+    valgtGosysKategori: string;
 }
 
 export const lukkOppgaveRequestAction = (): ILukkOggpgaveRequestAction => ({
@@ -82,6 +87,7 @@ export const gosysGjelderSuccessAction   = (gjelderKategorierFraGosys: any):IGos
 export const gosysGjelderErrorAction     = (error: IError):  IGosysGjelderErrorAction     => ({type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error});
 
 export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction     => ({type: FordelingActionKeys.IDENT_BEKREFT_IDENT1, erIdent1Bekreftet: identBekreftet});
+export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetValgtGosysKategori      => ({type: FordelingActionKeys.VALGT_GOSYS_KATEGORI, valgtGosysKategori});
 
 export type IFordelingActionTypes =
     ISetSakstypeAction |
@@ -99,7 +105,9 @@ export type IFordelingActionTypes =
     IGosysGjelderRequestAction |
     IGosysGjelderSuccessAction |
     IGosysGjelderErrorAction |
-    ISetErIdent1BekreftetAction;
+    ISetErIdent1BekreftetAction |
+    ISetValgtGosysKategori;
+
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST});
 
