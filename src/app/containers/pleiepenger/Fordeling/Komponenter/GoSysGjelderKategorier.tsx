@@ -5,7 +5,7 @@ import {
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {Select} from 'nav-frontend-skjema';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import VerticalSpacer from "../../../../components/VerticalSpacer";

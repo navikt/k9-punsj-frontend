@@ -113,7 +113,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
-    const [gosysKategoriJournalforing, setGosysKategoriJournalforing] = useState<string>('');
 
     const kanJournalforingsoppgaveOpprettesiGosys = !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
 
