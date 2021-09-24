@@ -17,6 +17,9 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, {useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
+import {PopoverOrientering} from "nav-frontend-popover";
+import Hjelpetekst from "nav-frontend-hjelpetekst";
+import ModalWrapper from "nav-frontend-modal";
 import PdfVisning from '../../../components/pdf/PdfVisning';
 import {ISakstypeDefault} from '../../../models/Sakstype';
 import {Sakstyper} from '../../SakstypeImpls';
@@ -32,14 +35,11 @@ import { setIdentFellesAction} from "../../../state/actions/IdentActions";
 import {IIdentState} from "../../../models/types/IdentState";
 import {IGosysOppgaveState} from "../../../models/types/GosysOppgaveState";
 import OkGaaTilLosModal from "../OkGaaTilLosModal";
-import ModalWrapper from "nav-frontend-modal";
 import {IFellesState, kopierJournalpost} from "../../../state/reducers/FellesReducer";
 import {hentBarn} from "../../../state/reducers/HentBarn";
 import WarningCircle from "../../../assets/SVG/WarningCircle";
 import {skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi} from "./FordelingFeilmeldinger";
 import JournalPostKopiFelmeldinger from "./Komponenter/JournalPostKopiFelmeldinger";
-import {PopoverOrientering} from "nav-frontend-popover";
-import Hjelpetekst from "nav-frontend-hjelpetekst";
 import {GosysGjelderKategorier} from "./Komponenter/GoSysGjelderKategorier";
 import Behandlingsknapp from "./Komponenter/Behandlingsknapp";
 
@@ -67,11 +67,11 @@ export interface IFordelingDispatchProps {
 }
 
 export type IFordelingProps = WrappedComponentProps &
-    IFordelingStateProps &
-    IFordelingDispatchProps;
+  IFordelingStateProps &
+  IFordelingDispatchProps;
 
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
-    props: IFordelingProps
+  props: IFordelingProps
 ) => {
     const {
         intl,
@@ -82,16 +82,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
         opprettIGosysState,
         lukkJournalpostOppgave,
         resetOmfordelAction,
-        lukkOppgaveReset
+        lukkOppgaveReset,
+        fellesState
     } = props;
     const {sakstype} = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
-        () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
-        []
+      () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
+      []
     );
     const konfigForValgtSakstype = useMemo(
-        () => sakstyper.find((st) => st.navn === sakstype),
-        [sakstype]
+      () => sakstyper.find((st) => st.navn === sakstype),
+      [sakstype]
     );
 
     const journalpostident = journalpost?.norskIdent;
@@ -114,10 +115,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
     const [gosysKategoriJournalforing, setGosysKategoriJournalforing] = useState<string>('');
 
-    const kanJournalforingsoppgaveOpprettesiGosys = typeof journalpost?.kanOpprettesJournalføringsoppgave !== 'undefined' && journalpost?.kanOpprettesJournalføringsoppgave;
+    const kanJournalforingsoppgaveOpprettesiGosys = !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
 
     const handleIdent1Change = (event: any) =>
-        setSokersIdent(event.target.value.replace(/\D+/, ''))
+      setSokersIdent(event.target.value.replace(/\D+/, ''))
     const handleIdent2Change = (event: any) => {
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
         setIdentAction(identState.ident1, event.target.value)
@@ -137,14 +138,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
     const handleIdent2Blur = (event: any) =>{
         props.setIdentAction(riktigIdentIJournalposten === JaNei.JA ? (journalpostident || '') : sokersIdent, event.target.value, identState.annenSokerIdent);}
     const handleIdentAnnenSokerBlur = (event: any) =>
-        props.setIdentAction(identState.ident1, identState.ident2, event.target.value);
+      props.setIdentAction(identState.ident1, identState.ident2, event.target.value);
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
         setErBarnUtdatert(true);
         if (jn === JaNei.JA) {
             props.setIdentAction(journalpostident || '', identState.ident2)
-           if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
+            if(journalpost?.norskIdent) {props.hentBarn(journalpost?.norskIdent); setErBarnUtdatert(false);}
         } else {
             props.setIdentAction('', identState.ident2)
         }
@@ -194,85 +195,85 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
 
     useEffect(() => {
         const lukkEtterJournalpostSomIkkeStottesKopieres: boolean = skalJournalpostSomIkkeStottesKopieres
-            && !props.fellesState.isAwaitingKopierJournalPostResponse
-            && !!props.fellesState.kopierJournalpostSuccess;
+          && !fellesState.isAwaitingKopierJournalPostResponse
+          && !!fellesState.kopierJournalpostSuccess;
 
-        if(lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess){
-            lukkJournalpostOppgave(journalpost?.journalpostId!);
+        if((lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess) && journalpost){
+            lukkJournalpostOppgave(journalpost.journalpostId!);
         }
-    }, [props.fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess])
+    }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess])
 
-    if (!!opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
+    if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner/>;
     }
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone ) {
         return (
-            <ModalWrapper
-                key={"opprettigosysokmodal"}
-                onRequestClose={() => resetOmfordelAction()}
-                contentLabel={"settpaaventokmodal"}
-                closeButton={false}
-                isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
-            >
-                <OkGaaTilLosModal melding={'fordeling.opprettigosys.utfort'}/>
-            </ModalWrapper>
+          <ModalWrapper
+            key="opprettigosysokmodal"
+            onRequestClose={() => resetOmfordelAction()}
+            contentLabel="settpaaventokmodal"
+            closeButton={false}
+            isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
+          >
+              <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort"/>
+          </ModalWrapper>
         );
     }
 
-    if (!!fordelingState.isAwaitingLukkOppgaveResponse) {
+    if (fordelingState.isAwaitingLukkOppgaveResponse) {
         return <NavFrontendSpinner/>;
     }
 
-    if (!!fordelingState.lukkOppgaveDone) {
+    if (fordelingState.lukkOppgaveDone) {
         return (
-            <ModalWrapper
-                key={"lukkoppgaveokmodal"}
-                onRequestClose={() => lukkOppgaveReset()}
-                contentLabel={"settpaaventokmodal"}
-                closeButton={false}
-                isOpen={!!fordelingState.lukkOppgaveDone}
-            >
-                <OkGaaTilLosModal melding={'fordeling.lukkoppgave.utfort'}/>
-            </ModalWrapper>
+          <ModalWrapper
+            key="lukkoppgaveokmodal"
+            onRequestClose={() => lukkOppgaveReset()}
+            contentLabel="settpaaventokmodal"
+            closeButton={false}
+            isOpen={!!fordelingState.lukkOppgaveDone}
+          >
+              <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort"/>
+          </ModalWrapper>
         );
     }
 
 
     return (
-        <div className="fordeling-container">
-            {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <FormPanel>
-                <JournalpostPanel/>
-                <div className="fordeling-page">
-                    {!!opprettIGosysState.gosysOppgaveRequestError && (
-                        <AlertStripeFeil>
-                            {intlHelper(intl, 'fordeling.omfordeling.feil')}
-                        </AlertStripeFeil>
-                    )}
-                    <div>
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            name={"ppsjekk"}
-                            radios={Object.values(JaNei).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            legend={intlHelper(intl, 'fordeling.gjelderpp')}
-                            checked={gjelderPP}
-                            onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
-                        />
-                        {gjelderPP === JaNei.NEI && <>
-                          <VerticalSpacer sixteenPx={true}/>
-                            {!kanJournalforingsoppgaveOpprettesiGosys && <div>
+      <div className="fordeling-container">
+          {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <FormPanel>
+              <JournalpostPanel/>
+              <div className="fordeling-page">
+                  {!!opprettIGosysState.gosysOppgaveRequestError && (
+                    <AlertStripeFeil>
+                        {intlHelper(intl, 'fordeling.omfordeling.feil')}
+                    </AlertStripeFeil>
+                  )}
+                  <div>
+                      <RadioPanelGruppe
+                        className="horizontalRadios"
+                        name="ppsjekk"
+                        radios={Object.values(JaNei).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                        legend={intlHelper(intl, 'fordeling.gjelderpp')}
+                        checked={gjelderPP}
+                        onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
+                      />
+                      {gjelderPP === JaNei.NEI && <>
+                          <VerticalSpacer sixteenPx/>
+                          {!kanJournalforingsoppgaveOpprettesiGosys && <div>
                               <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
-                                <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
+                                  <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
                               </AlertStripeInfo>
                               <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
-                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                                  <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                               </Knapp>
-                            </div>}
+                          </div>}
 
-                            {kanJournalforingsoppgaveOpprettesiGosys && <div>
+                          {kanJournalforingsoppgaveOpprettesiGosys && <div>
                               <Input
                                 label={intlHelper(intl, 'ident.identifikasjon.felt')}
                                 onChange={handleIdent1Change}
@@ -282,41 +283,41 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 maxLength={11}
                                 feil={skalViseFeilmelding(identState.ident1)
                                 || identState.ident1.length <= 0 ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined}
-                                bredde={"M"}
+                                bredde="M"
                               />
-                              <VerticalSpacer eightPx={true}/>
+                              <VerticalSpacer eightPx/>
                               <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing} />
                               <Hovedknapp
-                                mini={true}
+                                mini
                                 disabled={!identState.ident1
                                 || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
                                 onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}>
-                                <FormattedMessage id="fordeling.sakstype.ANNET"/>
+                                  <FormattedMessage id="fordeling.sakstype.ANNET"/>
                               </Hovedknapp>
-                            </div>}
-                        </>}
-                        {gjelderPP === JaNei.JA && <>
-                          <VerticalSpacer sixteenPx={true} />
+                          </div>}
+                      </>}
+                      {gjelderPP === JaNei.JA && <>
+                          <VerticalSpacer sixteenPx />
                           <RadioPanelGruppe
                             className="horizontalRadios"
-                            name={"identsjekk"}
+                            name="identsjekk"
                             radios={Object.values(JaNei).map((jn) => ({
                                 label: intlHelper(intl, jn),
                                 value: jn,
                             }))}
                             legend={<FormattedMessage
-                                id="ident.identifikasjon.sjekkident"
-                                values={{ident: journalpost?.norskIdent}}
+                              id="ident.identifikasjon.sjekkident"
+                              values={{ident: journalpost?.norskIdent}}
                             />}
                             checked={riktigIdentIJournalposten}
-                            onChange={(event) => {props.setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA ? true : false); handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}}
-                        />
-                        </>}
-                        {riktigIdentIJournalposten === JaNei.NEI && <>
-                          <VerticalSpacer sixteenPx={true} />
+                            onChange={(event) => {props.setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA); handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei)}}
+                          />
+                      </>}
+                      {riktigIdentIJournalposten === JaNei.NEI && <>
+                          <VerticalSpacer sixteenPx />
                           <Input
                             label={intlHelper(
-                                intl, 'ident.identifikasjon.felt'
+                              intl, 'ident.identifikasjon.felt'
                             )}
                             onChange={handleIdent1Change}
                             onBlur={handleIdent1Blur}
@@ -325,22 +326,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                             maxLength={11}
                             feil={
                                 skalViseFeilmelding(identState.ident1)
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
+                                  ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                  : undefined
                             }
-                            bredde={"M"}
-                        />
-                        </>}
-                        {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && <>
-                          <VerticalSpacer eightPx={true}/>
+                            bredde="M"
+                          />
+                      </>}
+                      {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && <>
+                          <VerticalSpacer eightPx/>
                           <Checkbox
                             label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
                             onChange={(e) => {
                                 setToSokereIJournalpost(e.target.checked)
                             }}
                           />
-                          <VerticalSpacer sixteenPx={true}/>
-                            {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
+                          <VerticalSpacer sixteenPx/>
+                          {toSokereIJournalpost && <div className="fordeling-page__to-sokere-i-journalpost">
                               <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}</AlertStripeInfo>
                               <Input
                                 label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
@@ -350,20 +351,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 className="bold-label"
                                 maxLength={11}
                                 feil={visFeilmeldingForAnnenIdentVidJournalKopi(identState.annenSokerIdent, identState.ident1, identState.ident2, intl)}
-                                bredde={"M"}
+                                bredde="M"
                               />
                               <JournalPostKopiFelmeldinger
                                 skalVisesNårJournalpostSomIkkeStottesKopieres={!skalJournalpostSomIkkeStottesKopieres}
-                                fellesState={props.fellesState}
+                                fellesState={fellesState}
                                 intl={intl}
                               />
-                            </div>
-                            }
-                        </>}
-                      <VerticalSpacer eightPx={true}/>
-                        {gjelderPP === JaNei.JA && <>
-                          <VerticalSpacer sixteenPx={true}/>
-                            {!erBarnUtdatert && !!props.fellesState.hentBarnSuccess && typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length > 0 && <>
+                          </div>
+                          }
+                      </>}
+                      <VerticalSpacer eightPx/>
+                      {gjelderPP === JaNei.JA && <>
+                          <VerticalSpacer sixteenPx/>
+                          {!erBarnUtdatert && !!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && <>
                               <Select
                                 value={barnetsIdent}
                                 bredde="l"
@@ -372,17 +373,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 disabled={gjelderAnnetBarn}
                                 onBlur={handleIdent2Blur}
                               >
-                                <option key={uuidv4()} value={""}>
-                                    {``}
-                                </option>)
+                                  <option key={uuidv4()} value="" label=" " />)
 
-                                  {props.fellesState.barn.map(b =>
-                                      <option key={uuidv4()} value={b.identitetsnummer}>
-                                          {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
-                                      </option>)
+                                  {fellesState.barn.map(b =>
+                                    <option key={uuidv4()} value={b.identitetsnummer}>
+                                        {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
+                                    </option>)
                                   }
                               </Select>
-                              <VerticalSpacer eightPx={true}/>
+                              <VerticalSpacer eightPx/>
                               <Checkbox
                                 label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                                 onChange={(e) => {
@@ -390,142 +389,142 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     nullUtBarnetsIdent();
                                 }}
                               />
-                            </>
-                            }
-                          <VerticalSpacer sixteenPx={true}/>
-                            {(gjelderAnnetBarn
-                                || !!props.fellesState.hentBarnError
-                                || !!props.fellesState.hentBarnForbidden
-                                || (typeof props.fellesState.barn !== 'undefined' && props.fellesState.barn.length === 0))
-                            && <>
-                              <div className={'fyllUtIdentAnnetBarnContainer'}>
-                                <Input
-                                  label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                                  onChange={handleIdent2Change}
-                                  onBlur={handleIdent2Blur}
-                                  value={barnetsIdent}
-                                  className="bold-label ident-soker-2"
-                                  maxLength={11}
-                                  feil={
-                                      skalViseFeilmelding(identState.ident2)
+                          </>
+                          }
+                          <VerticalSpacer sixteenPx/>
+                          {(gjelderAnnetBarn
+                            || !!fellesState.hentBarnError
+                            || !!fellesState.hentBarnForbidden
+                            || (!!fellesState.barn && fellesState.barn.length === 0))
+                          && <>
+                              <div className="fyllUtIdentAnnetBarnContainer">
+                                  <Input
+                                    label={intlHelper(intl, 'ident.identifikasjon.barn')}
+                                    onChange={handleIdent2Change}
+                                    onBlur={handleIdent2Blur}
+                                    value={barnetsIdent}
+                                    className="bold-label ident-soker-2"
+                                    maxLength={11}
+                                    feil={
+                                        skalViseFeilmelding(identState.ident2)
                                           ? intlHelper(intl, 'ident.feil.ugyldigident')
                                           : undefined
-                                  }
-                                  bredde={"M"}
-                                  disabled={barnetHarIkkeFnr}
-                                />
+                                    }
+                                    bredde="M"
+                                    disabled={barnetHarIkkeFnr}
+                                  />
                                   {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) &&
                                   <div className="dobbelSjekkIdent"><div><WarningCircle/></div><p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}
                               </div>
-                              <VerticalSpacer eightPx={true}/>
+                              <VerticalSpacer eightPx/>
                               <Checkbox
                                 label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
                                 onChange={(e) => handleCheckboxChange(e.target.checked)}
                               />
-                                {barnetHarIkkeFnr && <AlertStripeInfo
-                                  className={"infotrygd_info"}> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
-                              <VerticalSpacer sixteenPx={true}/>
-                            </>}
+                              {barnetHarIkkeFnr && <AlertStripeInfo
+                                className="infotrygd_info"> {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}</AlertStripeInfo>}
+                              <VerticalSpacer sixteenPx/>
+                          </>}
 
-                            {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
-                            mini={true}
+                          {(!(!!fordelingState.skalTilK9 || visSakstypeValg)) && <Knapp
+                            mini
                             onClick={() => handleVidereClick()}
                             disabled={skalViseFeilmelding(barnetsIdent) || (!barnetsIdent && !barnetHarIkkeFnr)}>
-                            {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
-                        </>}
-                    </div>
-                    <VerticalSpacer sixteenPx={true}/>
-                    {(!!fordelingState.skalTilK9 || visSakstypeValg) && <>
-                        <RadioGruppe
-                            legend={intlHelper(intl, 'fordeling.overskrift')}
-                            className="fordeling-page__options"
-                        >
-                            {Object.keys(TilgjengeligSakstype)
-                                .map((key) => {
-                                    if(!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)){
-                                        return (
-                                            <RadioPanel
-                                                key={key}
-                                                label={intlHelper(
-                                                    intl,
-                                                    `fordeling.sakstype.${Sakstype[key]}`
-                                                )}
-                                                value={Sakstype[key]}
-                                                onChange={() => {
-                                                    props.setSakstypeAction(Sakstype[key]);
-                                                    setOmsorgspengerValgt(false);
-                                                }}
-                                                checked={konfigForValgtSakstype?.navn === key}
-                                            />
-                                        );
-                                    }else{
-                                        return null;
-                                    }
-                                })}
-                        </RadioGruppe>
-                        <VerticalSpacer eightPx={true}/>
-                        {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && <div className="fordeling-page__gosysGjelderKategorier">
+                              {intlHelper(intl, 'fordeling.knapp.videre')}</Knapp>}
+                      </>}
+                  </div>
+                  <VerticalSpacer sixteenPx/>
+                  {(!!fordelingState.skalTilK9 || visSakstypeValg) && <>
+                      <RadioGruppe
+                        legend={intlHelper(intl, 'fordeling.overskrift')}
+                        className="fordeling-page__options"
+                      >
+                          {Object.keys(TilgjengeligSakstype)
+                            .map((key) => {
+                                if(!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)){
+                                    return (
+                                      <RadioPanel
+                                        key={key}
+                                        label={intlHelper(
+                                          intl,
+                                          `fordeling.sakstype.${Sakstype[key]}`
+                                        )}
+                                        value={Sakstype[key]}
+                                        onChange={() => {
+                                            props.setSakstypeAction(Sakstype[key]);
+                                            setOmsorgspengerValgt(false);
+                                        }}
+                                        checked={konfigForValgtSakstype?.navn === key}
+                                      />
+                                    );
+                                }
+                                    return null;
+                                
+                            })}
+                      </RadioGruppe>
+                      <VerticalSpacer eightPx/>
+                      {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && <div className="fordeling-page__gosysGjelderKategorier">
                           <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
                           <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
-                        </div>
-                        }
-                        {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
+                      </div>
+                      }
+                      {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
                       <Behandlingsknapp
-                      norskIdent={identState.ident1}
-                      omfordel={omfordel}
-                      lukkJournalpostOppgave={lukkJournalpostOppgave}
-                      journalpost={journalpost}
-                      sakstypeConfig={konfigForValgtSakstype}
-                      gosysKategoriJournalforing={gosysKategoriJournalforing}
-                    />
-                    </>}
-                    {fordelingState.skalTilK9 === false &&
-                    <>
-                        <AlertStripeInfo className={"infotrygd_info"}> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
-                        {!kanJournalforingsoppgaveOpprettesiGosys && <div>
+                        norskIdent={identState.ident1}
+                        omfordel={omfordel}
+                        lukkJournalpostOppgave={lukkJournalpostOppgave}
+                        journalpost={journalpost}
+                        sakstypeConfig={konfigForValgtSakstype}
+                        gosysKategoriJournalforing={gosysKategoriJournalforing}
+                      />
+                  </>}
+                  {fordelingState.skalTilK9 === false &&
+                  <>
+                      <AlertStripeInfo className="infotrygd_info"> {intlHelper(intl, 'fordeling.infotrygd')}</AlertStripeInfo>
+                      {!kanJournalforingsoppgaveOpprettesiGosys && <div>
                           <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
-                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
+                              <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
                           </AlertStripeInfo>
                           <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
-                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                              <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                           </Knapp>
-                        </div>}
+                      </div>}
 
-                        {kanJournalforingsoppgaveOpprettesiGosys && <>
-                        <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
-                        <Hovedknapp
-                            mini={true}
+                      {kanJournalforingsoppgaveOpprettesiGosys && <>
+                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
+                          <Hovedknapp
+                            mini
                             onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
-                        >
-                            <FormattedMessage id="fordeling.sakstype.ANNET"/>
-                        </Hovedknapp>
-                        </>}
-                    </>}
-                    <VerticalSpacer sixteenPx={true} />
-                    {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
-                    {!!fordelingState.sjekkTilK9JournalpostStottesIkke && <div className={'fordeling-page__sjekk-til-K9-journalpost-stottes-ikke'}>
+                          >
+                              <FormattedMessage id="fordeling.sakstype.ANNET"/>
+                          </Hovedknapp>
+                      </>}
+                  </>}
+                  <VerticalSpacer sixteenPx />
+                  {!!fordelingState.sjekkTilK9Error && <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>}
+                  {!!fordelingState.sjekkTilK9JournalpostStottesIkke && <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">
                       <AlertStripeFeil>{intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}</AlertStripeFeil>
-                      <VerticalSpacer sixteenPx={true}/>
+                      <VerticalSpacer sixteenPx/>
                       <div className="journalikkestottetkopi-checkboks">
-                        <Checkbox
-                          label={intlHelper(intl, 'fordeling.kopiereJournal')}
-                          onChange={(e) => {
-                              setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
-                          }}
-                        />
-                        <Hjelpetekst
-                          className="journalikkestottetkopi-checkboks__hjelpetekst"
-                          type={PopoverOrientering.Hoyre}
-                          tabIndex={-1}
-                        >{intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
-                        </Hjelpetekst>
+                          <Checkbox
+                            label={intlHelper(intl, 'fordeling.kopiereJournal')}
+                            onChange={(e) => {
+                                setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
+                            }}
+                          />
+                          <Hjelpetekst
+                            className="journalikkestottetkopi-checkboks__hjelpetekst"
+                            type={PopoverOrientering.Hoyre}
+                            tabIndex={-1}
+                          >{intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
+                          </Hjelpetekst>
                       </div>
                       <JournalPostKopiFelmeldinger
                         skalVisesNårJournalpostSomIkkeStottesKopieres={skalJournalpostSomIkkeStottesKopieres}
-                        fellesState={props.fellesState}
+                        fellesState={fellesState}
                         intl={intl}
                       />
-                        {!!props.fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner/>}
+                      {!!fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner/>}
                       <Knapp onClick={() => {
                           if (skalJournalpostSomIkkeStottesKopieres) {
                               kopierJournalpostOgLukkOppgave();
@@ -533,20 +532,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                               lukkJournalpostOppgave(journalpost?.journalpostId);
                           }
                       }}>
-                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
+                          <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                       </Knapp>
 
-                    </div>}
-                    {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
-                </div>
-            </FormPanel>}
-            {!journalpost?.kanSendeInn && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel></div>}
-            {!journalpost?.erSaksbehandler && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel></div>}
-            <PdfVisning
-                dokumenter={journalpost!.dokumenter}
-                journalpostId={journalpost!.journalpostId}
-            />
-        </div>
+                  </div>}
+                  {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
+              </div>
+          </FormPanel>}
+          {!journalpost?.kanSendeInn && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel></div>}
+          {!journalpost?.erSaksbehandler && <div><AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel></div>}
+          <PdfVisning
+            dokumenter={journalpost!.dokumenter}
+            journalpostId={journalpost!.journalpostId}
+          />
+      </div>
     );
 };
 
@@ -561,28 +560,28 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) =>
-        dispatch(setSakstypeAction(sakstype)),
+      dispatch(setSakstypeAction(sakstype)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
-        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
+      dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
+      dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
     sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
+      dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
-        dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
+      dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     hentBarn: (ident1: string) =>
-        dispatch(hentBarn(ident1)),
+      dispatch(hentBarn(ident1)),
     lukkJournalpostOppgave: (jpid: string) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid)),
+      dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () =>
-        dispatch(opprettGosysOppgaveResetAction()),
+      dispatch(opprettGosysOppgaveResetAction()),
     lukkOppgaveReset: () =>
-        dispatch(lukkOppgaveResetAction())
+      dispatch(lukkOppgaveResetAction())
 });
 
 const Fordeling = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(FordelingComponent)
+  connect(mapStateToProps, mapDispatchToProps)(FordelingComponent)
 );
 
 export {Fordeling, FordelingComponent};

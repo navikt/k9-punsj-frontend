@@ -40,7 +40,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
 
     return (<>
             {harKategorierBlivitHentet && <div>
-              <VerticalSpacer sixteenPx={true}/>
+              <VerticalSpacer sixteenPx/>
               <Select
                 value={valgtKategori}
                 bredde="l"
@@ -48,7 +48,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
                 onChange={(e) => setValgtKategori(e.target.value)}
                 onBlur={(e) => setGosysKategoriJournalforing(e.target.value)}
               >
-                <option disabled={true} value="" />
+                <option disabled value="" label=" " />
 
                   {Object.keys(fordelingState.gosysGjelderKategorier!).map(kategori =>
                       <option key={kategori} value={kategori}>
@@ -56,7 +56,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
                       </option>)
                   }
               </Select>
-              <VerticalSpacer eightPx={true}/>
+              <VerticalSpacer eightPx/>
             </div>
             }
         </>

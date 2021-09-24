@@ -1,33 +1,31 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
-import {
-    IEksisterendeSoknaderComponentProps,
-} from 'app/containers/pleiepenger/EksisterendeSoknader';
+import { IEksisterendeSoknaderComponentProps } from 'app/containers/pleiepenger/EksisterendeSoknader';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
-import {PunchStep} from 'app/models/enums';
-import {IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState} from 'app/models/types';
-import {setIdentAction, setStepAction} from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
-import {getEnvironmentVariable, getPath} from 'app/utils';
+import { PunchStep } from 'app/models/enums';
+import { IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState } from 'app/models/types';
+import { setIdentAction, setStepAction } from 'app/state/actions';
+import { RootStateType } from 'app/state/RootState';
+import { getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import {
-    AlertStripeAdvarsel, AlertStripeInfo,
-} from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-import 'nav-frontend-tabell-style';
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import {connect} from 'react-redux';
-import {RouteComponentProps, withRouter} from 'react-router';
-import PdfVisning from '../../components/pdf/PdfVisning';
-import {peiepengerPaths} from "./PeiepengerRoutes";
-import {RegistreringsValg} from "./RegistreringsValg";
-import {IIdentState} from "../../models/types/IdentState";
-import {JournalpostPanel} from "../../components/journalpost-panel/JournalpostPanel";
-import {PSBPunchForm} from './PSBPunchForm';
-import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
-import {Hovedknapp} from "nav-frontend-knapper";
 
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Panel from 'nav-frontend-paneler';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'nav-frontend-tabell-style';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+import PdfVisning from '../../components/pdf/PdfVisning';
+import { peiepengerPaths } from './PeiepengerRoutes';
+import { RegistreringsValg } from './RegistreringsValg';
+import { IIdentState } from '../../models/types/IdentState';
+import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
+import { PSBPunchForm } from './PSBPunchForm';
+import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 
 export interface IPunchPageStateProps {
     punchState: IPleiepengerPunchState;
@@ -56,7 +54,6 @@ export interface IPunchPageComponentProps {
 export interface IPunchPageComponentState {
     ident1: string;
     ident2: string;
-    barnetHarIkkeFnr: boolean;
 }
 
 type IPunchPageProps = WrappedComponentProps &
@@ -66,85 +63,80 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageDispatchProps &
     IPunchPageQueryProps;
 
-export class PunchPageComponent extends React.Component<IPunchPageProps,
-    IPunchPageComponentState> {
-    state: IPunchPageComponentState = {
-        ident1: '',
-        ident2: '',
-        barnetHarIkkeFnr: false,
-    };
+export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchPageComponentState> {
+    constructor(props: IPunchPageProps) {
+        super(props);
+        this.state = {
+            ident1: '',
+            ident2: '',
+        };
+    }
 
     componentDidMount(): void {
+        const { punchState } = this.props;
         this.setState({
-            ident1: this.props.punchState.ident1,
-            ident2: this.props.punchState.ident2 || '',
-            barnetHarIkkeFnr: false,
+            ident1: punchState.ident1,
+            ident2: punchState.ident2 || '',
         });
     }
 
-    componentDidUpdate(
-        prevProps: Readonly<IPunchPageProps>,
-        prevState: Readonly<IPunchPageComponentState>,
-        snapshot?: any
-    ): void {
-        !this.state.ident1 &&
-        this.props.punchState.ident1 &&
-        this.setState({ident1: this.props.punchState.ident1});
-        !this.state.ident2 &&
-        this.props.punchState.ident2 &&
-        this.setState({ident2: this.props.punchState.ident2});
+    componentDidUpdate(): void {
+        const { ident1, ident2 } = this.state;
+        const { punchState } = this.props;
+        if (!ident1 && punchState.ident1) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ ident1: punchState.ident1 });
+        }
+
+        if (!ident2 && punchState.ident2) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ ident2: punchState.ident2 });
+        }
     }
 
-    render() {
-        const {intl} = this.props;
-        return (
-            <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
-                {this.content()}
-            </Page>
-        );
-    }
+    private getPath = (step: PunchStep, values?: any) => {
+        const { dok } = this.props;
+        return getPath(peiepengerPaths, step, values, dok ? { dok } : undefined);
+    };
 
     private content() {
-        const {journalpostid, journalpost, forbidden} = this.props;
+        const { journalpostid, journalpost, forbidden } = this.props;
         const dokumenter = journalpost?.dokumenter || [];
 
-        if (!!forbidden) {
-            return <AlertStripeAdvarsel>
-                <FormattedMessage id={'søk.jp.forbidden'} values={{jpid: journalpostid}}/>
-            </AlertStripeAdvarsel>
+        if (forbidden) {
+            return (
+                <AlertStripeAdvarsel>
+                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                </AlertStripeAdvarsel>
+            );
         }
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border={true}>
-                    <JournalpostPanel/>
+                <Panel className="pleiepenger_punch_form" border>
+                    <JournalpostPanel />
                     {this.underFnr()}
                 </Panel>
-                {journalpostid &&
-                <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid}/>}
+                {journalpostid && <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
             </div>
         );
     }
 
-    private getPath = (step: PunchStep, values?: any) =>
-        getPath(
-            peiepengerPaths,
-            step,
-            values,
-            this.props.dok ? {dok: this.props.dok} : undefined
-        );
-
+    // eslint-disable-next-line consistent-return
     private underFnr() {
+        const { journalpostid, step, match, punchFormState, intl } = this.props;
+
         const commonProps = {
-            journalpostid: this.props.journalpostid || '',
+            journalpostid: journalpostid || '',
             getPunchPath: this.getPath,
         };
 
-        switch (this.props.step) {
+        // eslint-disable-next-line default-case
+        switch (step) {
             case PunchStep.CHOOSE_SOKNAD:
                 return <RegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
-                return <PSBPunchForm {...commonProps} id={this.props.match.params.id}/>;
+                return <PSBPunchForm {...commonProps} id={match.params.id} />;
             case PunchStep.COMPLETED:
                 return (<>
                     <AlertStripeInfo className="fullfortmelding">
@@ -154,32 +146,41 @@ export class PunchPageComponent extends React.Component<IPunchPageProps,
                         <Hovedknapp onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL')
                         }}>
-                            {intlHelper(this.props.intl, 'tilbaketilLOS')}
+                            {intlHelper(intl, 'tilbaketilLOS')}
                         </Hovedknapp>
-                        {!!this.props.punchFormState.linkTilBehandlingIK9 &&
+                        {!!punchFormState.linkTilBehandlingIK9 &&
                         <Hovedknapp onClick={() => {
-                            window.location.href = this.props.punchFormState.linkTilBehandlingIK9!
+                            window.location.href = punchFormState.linkTilBehandlingIK9!
                         }}>
-                            {intlHelper(this.props.intl, 'tilBehandlingIK9')}
+                            {intlHelper(intl, 'tilBehandlingIK9')}
                         </Hovedknapp>
                         }
                     </div>
-                    {!!this.props.punchFormState.innsentSoknad &&
-                    <SoknadKvittering response={this.props.punchFormState.innsentSoknad}
-                                      intl={this.props.intl}/>
+                    {!!punchFormState.innsentSoknad &&
+                    <SoknadKvittering response={punchFormState.innsentSoknad}
+                                      intl={intl}/>
                     }
                 </>);
         }
     }
 
-    private extractIdents(): Pick<IEksisterendeSoknaderComponentProps,
-        'ident1' | 'ident2'> {
-        const ident = this.props.identState.ident1;
+    private extractIdents(): Pick<IEksisterendeSoknaderComponentProps, 'ident1' | 'ident2'> {
+        const { identState } = this.props;
+
+        const ident = identState.ident1;
         return /^\d+&\d+$/.test(ident)
-            ? {ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0]}
-            : {ident1: ident, ident2: null};
+            ? { ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0] }
+            : { ident1: ident, ident2: null };
     }
 
+    render() {
+        const { intl } = this.props;
+        return (
+            <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
+                {this.content()}
+            </Page>
+        );
+    }
 }
 
 const mapStateToProps = (state: RootStateType) => ({
@@ -187,24 +188,19 @@ const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
-    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState
+    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) =>
-        dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
-const PunchPageComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (
-    props: IPunchPageProps
-) => {
+const PunchPageComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
     const dok = useQuery().get('dok');
-    return <PunchPageComponent {...props} dok={dok}/>;
+    return <PunchPageComponent {...props} dok={dok} />;
 };
 
 export const PunchPage = withRouter(
-    injectIntl(
-        connect(mapStateToProps, mapDispatchToProps)(PunchPageComponentWithQuery)
-    )
+    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponentWithQuery))
 );

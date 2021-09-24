@@ -1,10 +1,10 @@
 {
-  "Ja": "Ja",
-  "Nei": "Nei",
-  "VetIkke": "Veit ikkje",
+    "Ja": "Ja",
+    "Nei": "Nei",
+    "VetIkke": "Veit ikkje",
 
-  "locale.nb": "Bokmål - norsk",
-  "locale.nn": "Nynorsk - norsk",
+    "locale.nb": "Bokmål - norsk",
+    "locale.nn": "Nynorsk - norsk",
 
-  "startPage.tittel": "K9-punsj"
+    "startPage.tittel": "K9-punsj"
 }

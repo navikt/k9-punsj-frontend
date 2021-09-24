@@ -1,13 +1,14 @@
-import {IJournalposterPerIdentState} from "../../models/types/Journalpost/JournalposterPerIdentState";
-import {IJournalposterPerIdentActions} from "../actions/JournalposterPerIdentActions";
-import {JournalposterPerIdentActionKeys} from "../../models/enums/Journalpost/JournalposterPerIdentActionKeys";
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { IJournalposterPerIdentActions } from '../actions/JournalposterPerIdentActions';
+import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
 
 const initialState: IJournalposterPerIdentState = {
     journalposter: [],
     isJournalposterLoading: false,
-    journalposterRequestError: undefined
-}
+    journalposterRequestError: undefined,
+};
 
+// eslint-disable-next-line import/prefer-default-export
 export function JournalposterPerIdentReducer(
     journalposterPerIdentState: IJournalposterPerIdentState = initialState,
     action: IJournalposterPerIdentActions
@@ -18,23 +19,23 @@ export function JournalposterPerIdentReducer(
                 ...journalposterPerIdentState,
                 journalposter: action.journalposter,
                 isJournalposterLoading: false,
-                journalposterRequestError: undefined
+                journalposterRequestError: undefined,
             };
 
         case JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_LOAD:
             return {
                 ...journalposterPerIdentState,
                 isJournalposterLoading: action.isLoading,
-                journalposterRequestError: undefined
+                journalposterRequestError: undefined,
             };
         case JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_REQUEST_ERROR:
             return {
                 ...journalposterPerIdentState,
                 isJournalposterLoading: false,
-                journalposterRequestError: action.error
+                journalposterRequestError: action.error,
             };
 
-        default: return journalposterPerIdentState;
-
+        default:
+            return journalposterPerIdentState;
     }
 }

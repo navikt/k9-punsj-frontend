@@ -1,5 +1,5 @@
+// eslint-disable-next-line import/prefer-default-export
 export enum FordelingActionKeys {
-
     SAKSTYPE_SET = 'FORDELING_SAKSTYPE_SET',
 
     OMFORDELING_REQUEST = 'FORDELING_OMFORDELING_REQUEST',
@@ -20,5 +20,5 @@ export enum FordelingActionKeys {
     GOSYS_GJELDER_SUCCESS = 'GOSYS_GJELDER_SUCCESS',
     GOSYS_GJELDER_ERROR = 'GOSYS_GJELDER_ERROR',
 
-    IDENT_BEKREFT_IDENT1 = "FORDELING_BEKREFT_IDENT1"
+    IDENT_BEKREFT_IDENT1 = 'FORDELING_BEKREFT_IDENT1',
 }

@@ -1,5 +1,5 @@
-import {Sakstype} from 'app/models/enums';
-import {IError}   from 'app/models/types/Error';
+import { Sakstype } from 'app/models/enums';
+import { IError } from 'app/models/types/Error';
 
 export interface IFordelingState {
     sakstype?: Sakstype;
@@ -18,4 +18,3 @@ export interface IFordelingState {
     gosysGjelderKategorier?: any[];
     gosysGjelderKategorierError?: IError;
 }
-

@@ -1,4 +1,4 @@
-import {IPeriode} from "./Periode";
+import { IPeriode } from './Periode';
 
 export type Periodeinfo<T> = {
     periode?: IPeriode;
@@ -11,4 +11,4 @@ export interface IPeriodeinfoExtension {
 export interface IPeriodeinfo {
     periode?: IPeriode;
     [key: string]: any;
-};
+}

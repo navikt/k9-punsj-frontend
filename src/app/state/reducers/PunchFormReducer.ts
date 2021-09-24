@@ -1,7 +1,7 @@
-import {PunchFormActionKeys} from 'app/models/enums';
-import {IPunchFormState} from 'app/models/types';
-import {IPunchFormActionTypes} from 'app/state/actions/PunchFormActions';
-import {LOCATION_CHANGE, LocationChangeAction} from 'react-router-redux';
+import { PunchFormActionKeys } from 'app/models/enums';
+import { IPunchFormState } from 'app/models/types';
+import { IPunchFormActionTypes } from 'app/state/actions/PunchFormActions';
+import { LOCATION_CHANGE, LocationChangeAction } from 'react-router-redux';
 
 const initialState: IPunchFormState = {
     isSoknadLoading: false,
@@ -13,13 +13,12 @@ const initialState: IPunchFormState = {
     inputErrors: undefined,
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export function PunchFormReducer(
     punchFormState: IPunchFormState = initialState,
     action: IPunchFormActionTypes | LocationChangeAction
 ): IPunchFormState {
-
     switch (action.type) {
-
         case LOCATION_CHANGE:
         case PunchFormActionKeys.RESET:
             return initialState;
@@ -27,56 +26,56 @@ export function PunchFormReducer(
         case PunchFormActionKeys.SOKNAD_LOAD:
             return {
                 ...punchFormState,
-                isSoknadLoading: true
+                isSoknadLoading: true,
             };
 
         case PunchFormActionKeys.SOKNAD_REQUEST_ERROR:
             return {
                 ...punchFormState,
                 isSoknadLoading: false,
-                error: action.error
+                error: action.error,
             };
 
         case PunchFormActionKeys.SOKNAD_SET:
             return {
                 ...punchFormState,
                 isSoknadLoading: false,
-                soknad: action.soknad
+                soknad: action.soknad,
             };
 
         case PunchFormActionKeys.SOKNAD_RESET:
             return {
                 ...punchFormState,
                 isSoknadLoading: false,
-                soknad: undefined
+                soknad: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_REQUEST:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: true,
-                updateSoknadError: undefined
+                updateSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                updateSoknadError: undefined
+                updateSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_ERROR:
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,
-                updateSoknadError: action.error
+                updateSoknadError: action.error,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: true,
-                submitSoknadError: undefined
+                submitSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS:
@@ -102,14 +101,14 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitSoknadError: action.error
+                submitSoknadError: action.error,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitSoknadConflict: true
+                submitSoknadConflict: true,
             };
 
         case PunchFormActionKeys.HENT_PERIODER_REQUEST:
@@ -117,7 +116,6 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isPerioderLoading: true,
                 hentPerioderError: undefined,
-
             };
 
         case PunchFormActionKeys.HENT_PERIODER_ERROR:
@@ -125,7 +123,6 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isPerioderLoading: false,
                 hentPerioderError: action.error,
-
             };
 
         case PunchFormActionKeys.HENT_PERIODER_SUCCESS:
@@ -133,8 +130,7 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isPerioderLoading: false,
                 hentPerioderError: undefined,
-                perioder: action.perioder
-
+                perioder: action.perioder,
             };
 
         case PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT:
@@ -170,7 +166,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingValidateResponse: true,
-                validateSoknadError: undefined
+                validateSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:
@@ -180,7 +176,7 @@ export function PunchFormReducer(
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
                 inputErrors: undefined,
-                isValid: true
+                isValid: true,
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE:
@@ -196,7 +192,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingValidateResponse: false,
-                validateSoknadError: action.error
+                validateSoknadError: action.error,
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_RESET:
@@ -204,9 +200,10 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
-                isValid: undefined
+                isValid: undefined,
             };
 
-        default: return punchFormState;
+        default:
+            return punchFormState;
     }
 }
