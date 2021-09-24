@@ -60,7 +60,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     return (
         <Panel className="periodepanel">
             {periods.map((p, i) => (
-                <Row noGutters key={`${p.fom}_${p.tom}`}>
+                // eslint-disable-next-line react/no-array-index-key
+                <Row noGutters key={i}>
                     <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}

@@ -461,7 +461,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     );
                                 }
                                     return null;
-
                             })}
                       </RadioGruppe>
                       <VerticalSpacer eightPx/>
