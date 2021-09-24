@@ -73,6 +73,7 @@ export const setupFordeling = (
         isAwaitingLukkOppgaveResponse: false,
         sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
         erIdent1Bekreftet: false,
+        valgtGosysKategori: '',
         ...fordelingStatePartial,
     };
 

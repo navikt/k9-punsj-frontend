@@ -286,12 +286,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                 bredde="M"
                               />
                               <VerticalSpacer eightPx/>
-                              <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing} />
+                              <GosysGjelderKategorier />
                               <Hovedknapp
                                 mini
                                 disabled={!identState.ident1
-                                || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)}
-                                onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}>
+                                || !!identState.ident1 && !!skalViseFeilmelding(identState.ident1)
+                                || !fordelingState.valgtGosysKategori}
+
+                                onClick={() => omfordel(journalpost.journalpostId, identState.ident1, fordelingState.valgtGosysKategori)}>
                                   <FormattedMessage id="fordeling.sakstype.ANNET"/>
                               </Hovedknapp>
                           </div>}
@@ -459,13 +461,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                                     );
                                 }
                                     return null;
-                                
+
                             })}
                       </RadioGruppe>
                       <VerticalSpacer eightPx/>
                       {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && <div className="fordeling-page__gosysGjelderKategorier">
                           <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
-                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
+                          <GosysGjelderKategorier/>
                       </div>
                       }
                       {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>}
@@ -475,7 +477,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                         lukkJournalpostOppgave={lukkJournalpostOppgave}
                         journalpost={journalpost}
                         sakstypeConfig={konfigForValgtSakstype}
-                        gosysKategoriJournalforing={gosysKategoriJournalforing}
+                        gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
                       />
                   </>}
                   {fordelingState.skalTilK9 === false &&
@@ -491,10 +493,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (
                       </div>}
 
                       {kanJournalforingsoppgaveOpprettesiGosys && <>
-                          <GosysGjelderKategorier setGosysKategoriJournalforing={setGosysKategoriJournalforing}/>
+                          <GosysGjelderKategorier />
                           <Hovedknapp
                             mini
-                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
+                            disabled={!fordelingState.valgtGosysKategori}
+                            onClick={() => omfordel(journalpost.journalpostId, identState.ident1, fordelingState.valgtGosysKategori)}
                           >
                               <FormattedMessage id="fordeling.sakstype.ANNET"/>
                           </Hovedknapp>
