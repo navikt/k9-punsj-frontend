@@ -24,7 +24,7 @@ import {
     validerSoknad,
     validerSoknadResetAction,
 } from 'app/state/actions';
-import {setHash} from 'app/utils';
+import {nummerPrefiks, setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
@@ -87,6 +87,7 @@ import SoknadKvittering from "./SoknadKvittering/SoknadKvittering";
 import Soknadsperioder from "./PSBPunchForm/Soknadsperioder";
 import {sjekkHvisArbeidstidErAngitt} from "./PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner";
 import OpplysningerOmSoknad from "./PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad";
+import Feilmelding from 'app/components/Feilmelding';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -143,6 +144,7 @@ export interface IPunchFormComponentState {
     visErDuSikkerModal: boolean;
     errors: IInputError[];
     harRegnskapsfører: boolean;
+    feilmeldingStier: Set<string>;
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -195,6 +197,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         visErDuSikkerModal: false,
         errors: [],
         harRegnskapsfører: false,
+        feilmeldingStier: new Set()
     };
 
     private initialPeriode: IPeriode = {fom: '', tom: ''};
@@ -1238,6 +1241,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     tabIndex={-1}
                 >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
                 <VerticalSpacer twentyPx={true}/>
+                {
+                    this.getErrorMessage('')
+                        ?.split(';')
+                        .map((feilmelding, index) => nummerPrefiks(feilmelding, index + 1))
+                        .map(feilmelding => {
+                            return <Feilmelding key={feilmelding} feil={feilmelding}/>
+                    })
+                }          
 
                 {punchFormState.isAwaitingValidateResponse &&
                 <div className={classNames('loadingSpinner')}><NavFrontendSpinner/></div>
@@ -1817,7 +1828,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
         const {mottattDato, klokkeslett} = this.state.soknad;
-        console.log('attribute', attribute)
+
+        if (!this.state.feilmeldingStier.has(attribute)) {
+            this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)})
+        }
+
         if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
             if (klokkeslett === null || klokkeslett === "" || mottattDato === null || mottattDato === "") {
                 return intlHelper(this.props.intl, 'skjema.feil.ikketom');
@@ -1832,8 +1847,33 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
+        
+
         const errorMsg = this.getManglerFromStore()?.filter(
             (m: IInputError) => m.felt === attribute)?.[indeks || 0]?.feilmelding;
+        
+        if (!errorMsg) {
+        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
+                const felter = m.felt?.split('.') || []
+                for (let index = felter.length - 1; index >= -1; index--) {
+                    const felt = felter.slice(0, index + 1).join('.')
+                    const andreFeilmeldingStier = new Set(this.state.feilmeldingStier)
+                    andreFeilmeldingStier.delete(attribute);
+                    if (attribute === felt) {
+                        return true;
+                    }
+                    if (andreFeilmeldingStier.has(felt)) {
+                        return false;
+                    }
+                }
+                return false;
+        })
+
+        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
+            return uhaandterteFeilmeldinger?.map(error => error.feilmelding).join(';')
+        } 
+    }
+        
 
         if (errorMsg) {
             if (errorMsg.startsWith('Mangler søknadsperiode')) {

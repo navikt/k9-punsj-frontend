@@ -93,8 +93,8 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                     editSoknad(editPeriode(periodeindeks, periode))
                 }}
                 errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-                errorMessageFom={getErrorMessage(`[${periodeindeks}]}.fom`)}
-                errorMessageTom={getErrorMessage(`[${periodeindeks}]}.tom`)}
+                errorMessageFom={getErrorMessage(`[${periodeindeks}].fom`)}
+                errorMessageTom={getErrorMessage(`[${periodeindeks}].tom`)}
                 initialValues={initialValues}
             />
             <div

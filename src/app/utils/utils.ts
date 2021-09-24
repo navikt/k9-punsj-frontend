@@ -25,3 +25,5 @@ export const formattereLandTilNavn = (
   const landNavn = countryList.find((country) => country.code === landskode);
   return typeof landNavn !== undefined ? landNavn?.name : '';
 };
+
+export const nummerPrefiks = (tekst: string, number: number) => `${number}. ${tekst}`
