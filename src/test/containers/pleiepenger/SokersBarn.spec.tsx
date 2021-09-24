@@ -3,7 +3,6 @@ import {createIntl, IntlShape, WrappedComponentProps} from "react-intl";
 import {mocked} from "ts-jest/utils";
 import {shallow} from "enzyme";
 import {IJournalpost} from "../../../app/models/types";
-import {JaNei} from "../../../app/models/enums";
 import {IIdentState} from "../../../app/models/types/IdentState";
 import intlHelper from "../../../app/utils/intlUtils";
 import {
@@ -32,14 +31,6 @@ const setupSokersBarn = (
         setIdentAction: jest.fn(),
         henteBarn: jest.fn(),
         ...dispatchPropsPartial
-    };
-
-    const journalpost: IJournalpost = {
-        dokumenter: [{dokumentId: '123'}],
-        journalpostId: '11111111111',
-        norskIdent: '12345678901',
-        kanSendeInn: true,
-        erSaksbehandler: true
     };
 
     const identState: IIdentState = {
