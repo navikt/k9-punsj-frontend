@@ -145,6 +145,7 @@ export interface IPunchFormComponentState {
     errors: IInputError[];
     harRegnskapsfører: boolean;
     feilmeldingStier: Set<string>;
+    harForsoektAaSendeInn: boolean;
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
@@ -197,7 +198,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         visErDuSikkerModal: false,
         errors: [],
         harRegnskapsfører: false,
-        feilmeldingStier: new Set()
+        feilmeldingStier: new Set(),
+        harForsoektAaSendeInn: false
     };
 
     private initialPeriode: IPeriode = {fom: '', tom: ''};
@@ -1390,6 +1392,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
     private handleSubmit = () => {
         const navarandeSoknad: IPSBSoknad = this.state.soknad;
         const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
+        this.setState({harForsoektAaSendeInn: true});
         this.props.validateSoknad({...navarandeSoknad, ...journalposter});
     }
 
@@ -1931,6 +1934,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         this.setState({showStatus: true});
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
+        if (this.state.harForsoektAaSendeInn) {
+            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter})
+        }
         return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
     };
 
