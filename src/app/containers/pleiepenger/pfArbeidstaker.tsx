@@ -1,13 +1,19 @@
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
 import { GetErrorMessage, PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
-import * as React from 'react';
+import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+import { ApiPath } from '../../apiConfig';
+import { ArbeidsgivereResponse } from '../../models/types/ArbeidsgivereResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../models/types/Arbeidstaker';
+import Organisasjon from '../../models/types/Organisasjon';
 import { arbeidstidInformasjon } from './ArbeidstidInfo';
 import { pfArbeidstider } from './pfArbeidstider';
+import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstaker(): (
@@ -28,6 +34,51 @@ export function pfArbeidstaker(): (
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
     ) => {
+        const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
+        // eslint-disable-next-line react/destructuring-assignment
+        const [selectedArbeidsgiver, setSelectedArbeidsgiver] = useState(arbeidstaker?.organisasjonsnummer || '');
+        const [gjelderAnnenArbeidsgiver, setGjelderAnnenArbeidsgiver] = useState(false);
+        const [arbeidsgiverNavn, setArbeidsgivernavn] = useState('');
+
+        const søkPåArbeidsgiver = (orgnr: string) => {
+            const { norskIdent } = arbeidstaker;
+            if (norskIdent) {
+                get(
+                    `${ApiPath.SØK_ORGNUMMER}?organisasjonsnummer=${orgnr}`,
+                    { norskIdent },
+                    { 'X-Nav-NorskIdent': norskIdent },
+                    (response, data: ArbeidsgiverResponse) => {
+                        if (response.status === 200) {
+                            if (data.navn) {
+                                setArbeidsgivernavn(data.navn);
+                            }
+                        }
+                    }
+                );
+            }
+        };
+
+        useEffect(() => {
+            const { norskIdent } = arbeidstaker;
+            if (norskIdent) {
+                get(
+                    ApiPath.FINN_ARBEIDSGIVERE,
+                    { norskIdent },
+                    { 'X-Nav-NorskIdent': norskIdent },
+                    (response, data: ArbeidsgivereResponse) => {
+                        if (response.status === 200) {
+                            if (data.organisasjoner) {
+                                setArbeidsgivere(data.organisasjoner);
+                            }
+                        }
+                    }
+                );
+                if (arbeidstaker.organisasjonsnummer) {
+                    søkPåArbeidsgiver(arbeidstaker.organisasjonsnummer);
+                }
+            }
+        }, [arbeidstaker]);
+
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
             let norskIdent: string | null;
@@ -71,27 +122,86 @@ export function pfArbeidstaker(): (
                             checked={selectedType}
                         />
                     </Row>
+                    {selectedType === 'o' && (
+                        <>
+                            {arbeidsgivere?.length > 0 && (
+                                <Select
+                                    value={selectedArbeidsgiver}
+                                    bredde="l"
+                                    label="Velg hvilken arbeidsgiver det gjelder"
+                                    onChange={(event) => {
+                                        const { value } = event.target;
+                                        setSelectedArbeidsgiver(value);
+                                        updateListeinfoInSoknadState({
+                                            organisasjonsnummer: value,
+                                        });
+                                        updateListeinfoInSoknad({
+                                            organisasjonsnummer: value,
+                                        });
+                                        if (!value) {
+                                            setArbeidsgivernavn('');
+                                        }
+                                    }}
+                                    disabled={gjelderAnnenArbeidsgiver}
+                                    onBlur={() => console.log('blur')}
+                                    selected={selectedArbeidsgiver}
+                                >
+                                    <option key="default" value="" label="" aria-label="Tomt valg" />)
+                                    {arbeidsgivere.map((arbeidsgiver) => (
+                                        <option
+                                            key={arbeidsgiver.organisasjonsnummer}
+                                            value={arbeidsgiver.organisasjonsnummer}
+                                        >
+                                            {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
+                                        </option>
+                                    ))}
+                                </Select>
+                            )}
+                            <VerticalSpacer eightPx />
+                            <Checkbox
+                                label="Det gjelder annen arbeidsgiver"
+                                onChange={(e) => {
+                                    setGjelderAnnenArbeidsgiver(e.target.checked);
+                                }}
+                            />
+                            {gjelderAnnenArbeidsgiver && (
+                                <>
+                                    <VerticalSpacer sixteenPx />
+                                    <Row noGutters>
+                                        <div className="input-row">
+                                            <Input
+                                                label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
+                                                bredde="M"
+                                                value={organisasjonsnummer || ''}
+                                                className="arbeidstaker-organisasjonsnummer"
+                                                onChange={(event) => {
+                                                    updateListeinfoInSoknadState({
+                                                        organisasjonsnummer: event.target.value,
+                                                    });
+                                                    if (event.target.value.length === 9) {
+                                                        søkPåArbeidsgiver(event.target.value);
+                                                    }
+                                                }}
+                                                onBlur={(event) =>
+                                                    updateListeinfoInSoknad({
+                                                        organisasjonsnummer: event.target.value,
+                                                    })
+                                                }
+                                                feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
+                                            />
+                                            {arbeidsgiverNavn && (
+                                                <p style={{ margin: '0 0 8px 8px', alignSelf: 'flex-end' }}>
+                                                    {arbeidsgiverNavn}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </Row>
+                                </>
+                            )}
+                        </>
+                    )}
                     <Row noGutters>
                         <div className="input-row">
-                            {selectedType === 'o' && (
-                                <Input
-                                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                    bredde="M"
-                                    value={organisasjonsnummer || ''}
-                                    className="arbeidstaker-organisasjonsnummer"
-                                    onChange={(event) =>
-                                        updateListeinfoInSoknadState({
-                                            organisasjonsnummer: event.target.value,
-                                        })
-                                    }
-                                    onBlur={(event) =>
-                                        updateListeinfoInSoknad({
-                                            organisasjonsnummer: event.target.value,
-                                        })
-                                    }
-                                    feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
-                                />
-                            )}
                             {selectedType === 'p' && (
                                 <Input
                                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
