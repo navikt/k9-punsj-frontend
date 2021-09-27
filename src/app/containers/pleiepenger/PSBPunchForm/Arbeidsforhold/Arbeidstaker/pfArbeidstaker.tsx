@@ -234,6 +234,12 @@ export function pfArbeidstaker(
                                                     updateListeinfoInSoknad({
                                                         organisasjonsnummer: valueWithoutWhitespaces,
                                                     });
+                                                    if (valueWithoutWhitespaces.length !== 9) {
+                                                        dispatch({
+                                                            type: ActionType.SET_SEARCH_ORGANISASJONSNUMMER_FAILED,
+                                                            searchOrganisasjonsnummerFailed: true,
+                                                        });
+                                                    }
                                                 }}
                                                 feil={
                                                     searchOrganisasjonsnummerFailed
