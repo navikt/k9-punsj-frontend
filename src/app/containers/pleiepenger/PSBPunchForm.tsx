@@ -219,7 +219,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 ],
             },
             organisasjonsnummer: '',
-            norskIdent: this.state.soknad.soekerId,
+            norskIdent: null,
         });
 
     private initialArbeidstidInfo = () =>
