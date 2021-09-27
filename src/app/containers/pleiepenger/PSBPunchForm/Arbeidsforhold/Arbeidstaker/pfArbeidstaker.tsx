@@ -226,6 +226,15 @@ export function pfArbeidstaker(
                                                         });
                                                     }
                                                 }}
+                                                onBlur={(event) => {
+                                                    const valueWithoutWhitespaces = event.target.value.replace(
+                                                        /\s/g,
+                                                        ''
+                                                    );
+                                                    updateListeinfoInSoknad({
+                                                        organisasjonsnummer: valueWithoutWhitespaces,
+                                                    });
+                                                }}
                                                 feil={
                                                     searchOrganisasjonsnummerFailed
                                                         ? 'Ingen treff på organisasjonsnummer'
