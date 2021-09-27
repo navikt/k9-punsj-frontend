@@ -35,6 +35,7 @@ const pfArbeidstakerReducer = (state: State, action: Action) => {
                 gjelderAnnenArbeidsgiver: !state.gjelderAnnenArbeidsgiver,
                 selectedArbeidsgiver: '',
                 navnPåArbeidsgiver: '',
+                searchOrganisasjonsnummerFailed: false,
             };
         case ActionType.SET_NAVN_ARBEIDSDGIVER:
             return { ...state, navnPåArbeidsgiver: action.navnPåArbeidsgiver, searchOrganisasjonsnummerFailed: false };

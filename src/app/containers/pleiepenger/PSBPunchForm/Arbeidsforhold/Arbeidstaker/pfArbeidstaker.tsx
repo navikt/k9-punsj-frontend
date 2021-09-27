@@ -191,9 +191,15 @@ export function pfArbeidstaker(
                             {!getArbeidsgivereFailed && (
                                 <Checkbox
                                     label="Det gjelder annen arbeidsgiver"
-                                    onChange={(e) => {
+                                    onChange={() => {
                                         dispatch({
                                             type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
+                                        });
+                                        updateListeinfoInSoknad({
+                                            organisasjonsnummer: '',
+                                        });
+                                        updateListeinfoInSoknadState({
+                                            organisasjonsnummer: '',
                                         });
                                     }}
                                     checked={gjelderAnnenArbeidsgiver}
