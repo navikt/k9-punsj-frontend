@@ -27,7 +27,7 @@ const Arbeidstakerperioder = ({
         <Listepaneler
             intl={intl}
             items={arbeidstid?.arbeidstakerList || []}
-            component={pfArbeidstaker()}
+            component={pfArbeidstaker(soknad.soekerId)}
             panelid={(i) => `arbeidstakerpanel_${i}`}
             initialItem={initialArbeidstaker}
             editSoknad={(arbeidstakerList) =>

@@ -14,9 +14,12 @@ import Organisasjon from '../../models/types/Organisasjon';
 import { arbeidstidInformasjon } from './ArbeidstidInfo';
 import { pfArbeidstider } from './pfArbeidstider';
 import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
+import './pfArbeidstaker.less';
 
 // eslint-disable-next-line import/prefer-default-export
-export function pfArbeidstaker(): (
+export function pfArbeidstaker(
+    søkerId: string
+): (
     arbeidstaker: Arbeidstaker,
     listeelementindex: number,
     updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstaker>,
@@ -41,12 +44,11 @@ export function pfArbeidstaker(): (
         const [arbeidsgiverNavn, setArbeidsgivernavn] = useState('');
 
         const søkPåArbeidsgiver = (orgnr: string) => {
-            const { norskIdent } = arbeidstaker;
-            if (norskIdent) {
+            if (søkerId) {
                 get(
                     `${ApiPath.SØK_ORGNUMMER}?organisasjonsnummer=${orgnr}`,
-                    { norskIdent },
-                    { 'X-Nav-NorskIdent': norskIdent },
+                    { norskIdent: søkerId },
+                    { 'X-Nav-NorskIdent': søkerId },
                     (response, data: ArbeidsgiverResponse) => {
                         if (response.status === 200) {
                             if (data.navn) {
@@ -59,12 +61,11 @@ export function pfArbeidstaker(): (
         };
 
         useEffect(() => {
-            const { norskIdent } = arbeidstaker;
-            if (norskIdent) {
+            if (søkerId) {
                 get(
                     ApiPath.FINN_ARBEIDSGIVERE,
-                    { norskIdent },
-                    { 'X-Nav-NorskIdent': norskIdent },
+                    { norskIdent: søkerId },
+                    { 'X-Nav-NorskIdent': søkerId },
                     (response, data: ArbeidsgivereResponse) => {
                         if (response.status === 200) {
                             if (data.organisasjoner) {
@@ -77,7 +78,7 @@ export function pfArbeidstaker(): (
                     søkPåArbeidsgiver(arbeidstaker.organisasjonsnummer);
                 }
             }
-        }, [arbeidstaker]);
+        }, []);
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
             let organisasjonsnummer: string | null;
@@ -143,8 +144,8 @@ export function pfArbeidstaker(): (
                                         }
                                     }}
                                     disabled={gjelderAnnenArbeidsgiver}
-                                    onBlur={() => console.log('blur')}
                                     selected={selectedArbeidsgiver}
+                                    feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
                                 >
                                     <option key="default" value="" label="" aria-label="Tomt valg" />)
                                     {arbeidsgivere.map((arbeidsgiver) => (
@@ -190,9 +191,7 @@ export function pfArbeidstaker(): (
                                                 feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
                                             />
                                             {arbeidsgiverNavn && (
-                                                <p style={{ margin: '0 0 8px 8px', alignSelf: 'flex-end' }}>
-                                                    {arbeidsgiverNavn}
-                                                </p>
+                                                <p className="arbeidstaker__arbeidsgiverNavn">{arbeidsgiverNavn}</p>
                                             )}
                                         </div>
                                     </Row>
