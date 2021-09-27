@@ -72,7 +72,7 @@ export function pfArbeidstaker(
             }
         };
 
-        useEffect(() => {
+        const finnArbeidsgivere = () => {
             if (søkerId) {
                 get(
                     ApiPath.FINN_ARBEIDSGIVERE,
@@ -92,6 +92,10 @@ export function pfArbeidstaker(
                     søkPåArbeidsgiver(arbeidstaker.organisasjonsnummer);
                 }
             }
+        };
+
+        useEffect(() => {
+            finnArbeidsgivere();
         }, []);
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
