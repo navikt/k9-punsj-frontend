@@ -59,17 +59,16 @@ export function pfArbeidstaker(): (arbeidstaker: Arbeidstaker, listeelementindex
                                     bredde={"M"}
                                     value={arbeidstaker.organisasjonsnummer || ''}
                                     className="arbeidstaker-organisasjonsnummer"
-                                    onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value})}
-                                    onBlur={event => updateListeinfoInSoknad({organisasjonsnummer: event.target.value})}
+                                    onChange={event => updateListeinfoInSoknadState({organisasjonsnummer: event.target.value.replace(' ', '')})}
+                                    onBlur={event => updateListeinfoInSoknad({organisasjonsnummer: event.target.value.replace(' ', '')})}
                                     feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}/>}
                             {selectedType === 'p'
                             && <Input label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                                     value={arbeidstaker.norskIdent || ''}
                                     bredde={"M"}
                                     className="arbeidstaker-norskIdent"
-                                    onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value})}
-                                    onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value})}
-                                    
+                                    onChange={event => updateListeinfoInSoknadState({norskIdent: event.target.value.replace(' ', '')})}
+                                    onBlur={event => updateListeinfoInSoknad({norskIdent: event.target.value.replace(' ', '')})}
                                     feil={getErrorMessage(`[${listeelementindex}].norskIdentitetsnummer`)}/>}
                         </div>
                     </Row>
