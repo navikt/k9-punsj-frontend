@@ -4,17 +4,18 @@ import { GetErrorMessage, PeriodeinfoPaneler } from 'app/containers/pleiepenger/
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import { ApiPath } from '../../apiConfig';
-import { ArbeidsgivereResponse } from '../../models/types/ArbeidsgivereResponse';
-import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../models/types/Arbeidstaker';
-import Organisasjon from '../../models/types/Organisasjon';
-import { arbeidstidInformasjon } from './ArbeidstidInfo';
-import { pfArbeidstider } from './pfArbeidstider';
-import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
+import { ApiPath } from '../../../../../apiConfig';
+import { ArbeidsgivereResponse } from '../../../../../models/types/ArbeidsgivereResponse';
+import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
+import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
+import ActionType from './actionTypes';
+import { arbeidstidInformasjon } from '../../../ArbeidstidInfo';
 import './pfArbeidstaker.less';
+import pfArbeidstakerReducer from './pfArbeidstakerReducer';
+import { pfArbeidstider } from '../../../pfArbeidstider';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstaker(
@@ -37,11 +38,22 @@ export function pfArbeidstaker(
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
     ) => {
-        const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
-        // eslint-disable-next-line react/destructuring-assignment
-        const [selectedArbeidsgiver, setSelectedArbeidsgiver] = useState(arbeidstaker?.organisasjonsnummer || '');
-        const [gjelderAnnenArbeidsgiver, setGjelderAnnenArbeidsgiver] = useState(false);
-        const [arbeidsgiverNavn, setArbeidsgivernavn] = useState('');
+        const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
+            arbeidsgivere: [],
+            // eslint-disable-next-line react/destructuring-assignment
+            selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
+            gjelderAnnenArbeidsgiver: false,
+            navnPåArbeidsgiver: '',
+            getArbeidsgivereFailed: false,
+        });
+
+        const {
+            arbeidsgivere,
+            selectedArbeidsgiver,
+            gjelderAnnenArbeidsgiver,
+            navnPåArbeidsgiver,
+            getArbeidsgivereFailed,
+        } = state;
 
         const søkPåArbeidsgiver = (orgnr: string) => {
             if (søkerId) {
@@ -52,7 +64,7 @@ export function pfArbeidstaker(
                     (response, data: ArbeidsgiverResponse) => {
                         if (response.status === 200) {
                             if (data.navn) {
-                                setArbeidsgivernavn(data.navn);
+                                dispatch({ type: ActionType.SET_NAVN_ARBEIDSDGIVER, navnPåArbeidsgiver: data.navn });
                             }
                         }
                     }
@@ -69,8 +81,10 @@ export function pfArbeidstaker(
                     (response, data: ArbeidsgivereResponse) => {
                         if (response.status === 200) {
                             if (data.organisasjoner) {
-                                setArbeidsgivere(data.organisasjoner);
+                                dispatch({ type: ActionType.SET_ARBEIDSGIVERE, arbeidsgivere: data.organisasjoner });
                             }
+                        } else {
+                            dispatch({ type: ActionType.GET_ARBEIDSGIVERE_FAILED });
                         }
                     }
                 );
@@ -125,14 +139,14 @@ export function pfArbeidstaker(
                     </Row>
                     {selectedType === 'o' && (
                         <>
-                            {arbeidsgivere?.length > 0 && (
+                            {arbeidsgivere?.length > 0 && !getArbeidsgivereFailed && (
                                 <Select
                                     value={selectedArbeidsgiver}
                                     bredde="l"
                                     label="Velg hvilken arbeidsgiver det gjelder"
                                     onChange={(event) => {
                                         const { value } = event.target;
-                                        setSelectedArbeidsgiver(value);
+                                        dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
                                         updateListeinfoInSoknadState({
                                             organisasjonsnummer: value,
                                         });
@@ -140,7 +154,10 @@ export function pfArbeidstaker(
                                             organisasjonsnummer: value,
                                         });
                                         if (!value) {
-                                            setArbeidsgivernavn('');
+                                            dispatch({
+                                                type: ActionType.SET_NAVN_ARBEIDSDGIVER,
+                                                navnPåArbeidsgiver: '',
+                                            });
                                         }
                                     }}
                                     disabled={gjelderAnnenArbeidsgiver}
@@ -159,12 +176,17 @@ export function pfArbeidstaker(
                                 </Select>
                             )}
                             <VerticalSpacer eightPx />
-                            <Checkbox
-                                label="Det gjelder annen arbeidsgiver"
-                                onChange={(e) => {
-                                    setGjelderAnnenArbeidsgiver(e.target.checked);
-                                }}
-                            />
+                            {!getArbeidsgivereFailed && (
+                                <Checkbox
+                                    label="Det gjelder annen arbeidsgiver"
+                                    onChange={(e) => {
+                                        dispatch({
+                                            type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
+                                        });
+                                    }}
+                                    checked={gjelderAnnenArbeidsgiver}
+                                />
+                            )}
                             {gjelderAnnenArbeidsgiver && (
                                 <>
                                     <VerticalSpacer sixteenPx />
@@ -181,6 +203,11 @@ export function pfArbeidstaker(
                                                     });
                                                     if (event.target.value.length === 9) {
                                                         søkPåArbeidsgiver(event.target.value);
+                                                    } else if (navnPåArbeidsgiver) {
+                                                        dispatch({
+                                                            type: ActionType.SET_NAVN_ARBEIDSDGIVER,
+                                                            navnPåArbeidsgiver: '',
+                                                        });
                                                     }
                                                 }}
                                                 onBlur={(event) =>
@@ -190,8 +217,8 @@ export function pfArbeidstaker(
                                                 }
                                                 feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
                                             />
-                                            {arbeidsgiverNavn && (
-                                                <p className="arbeidstaker__arbeidsgiverNavn">{arbeidsgiverNavn}</p>
+                                            {navnPåArbeidsgiver && (
+                                                <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
                                             )}
                                         </div>
                                     </Row>

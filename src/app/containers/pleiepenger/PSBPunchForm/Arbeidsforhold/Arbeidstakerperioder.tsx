@@ -1,4 +1,4 @@
-import { pfArbeidstaker } from 'app/containers/pleiepenger/pfArbeidstaker';
+import { pfArbeidstaker } from 'app/containers/pleiepenger/PSBPunchForm/Arbeidsforhold/Arbeidstaker/pfArbeidstaker';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
