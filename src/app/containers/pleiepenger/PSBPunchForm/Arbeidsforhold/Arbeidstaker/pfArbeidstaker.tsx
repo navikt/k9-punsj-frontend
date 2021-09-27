@@ -88,14 +88,14 @@ export function pfArbeidstaker(
                         }
                     }
                 );
-                if (arbeidstaker.organisasjonsnummer) {
-                    søkPåArbeidsgiver(arbeidstaker.organisasjonsnummer);
-                }
             }
         };
 
         useEffect(() => {
             finnArbeidsgivere();
+            if (arbeidstaker.organisasjonsnummer) {
+                søkPåArbeidsgiver(arbeidstaker.organisasjonsnummer);
+            }
         }, []);
 
         const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
