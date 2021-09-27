@@ -7,6 +7,7 @@ interface State {
     gjelderAnnenArbeidsgiver: boolean;
     navnPåArbeidsgiver: string;
     getArbeidsgivereFailed: boolean;
+    searchOrganisasjonsnummerFailed: boolean;
 }
 
 interface Action {
@@ -14,6 +15,7 @@ interface Action {
     arbeidsgivere?: Organisasjon[];
     selectedArbeidsgiver?: string;
     navnPåArbeidsgiver?: string;
+    searchOrganisasjonsnummerFailed?: boolean;
 }
 
 const pfArbeidstakerReducer = (state: State, action: Action) => {
@@ -30,7 +32,9 @@ const pfArbeidstakerReducer = (state: State, action: Action) => {
         case ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER:
             return { ...state, gjelderAnnenArbeidsgiver: !state.gjelderAnnenArbeidsgiver };
         case ActionType.SET_NAVN_ARBEIDSDGIVER:
-            return { ...state, navnPåArbeidsgiver: action.navnPåArbeidsgiver };
+            return { ...state, navnPåArbeidsgiver: action.navnPåArbeidsgiver, searchOrganisasjonsnummerFailed: false };
+        case ActionType.SET_SEARCH_ORGANISASJONSNUMMER_FAILED:
+            return { ...state, searchOrganisasjonsnummerFailed: action.searchOrganisasjonsnummerFailed };
         default:
             return state;
     }

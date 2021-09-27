@@ -11,11 +11,11 @@ import { ApiPath } from '../../../../../apiConfig';
 import { ArbeidsgivereResponse } from '../../../../../models/types/ArbeidsgivereResponse';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
-import ActionType from './actionTypes';
 import { arbeidstidInformasjon } from '../../../ArbeidstidInfo';
+import { pfArbeidstider } from '../../../pfArbeidstider';
+import ActionType from './actionTypes';
 import './pfArbeidstaker.less';
 import pfArbeidstakerReducer from './pfArbeidstakerReducer';
-import { pfArbeidstider } from '../../../pfArbeidstider';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstaker(
@@ -45,6 +45,7 @@ export function pfArbeidstaker(
             gjelderAnnenArbeidsgiver: false,
             navnPåArbeidsgiver: '',
             getArbeidsgivereFailed: false,
+            searchOrganisasjonsnummerFailed: false,
         });
 
         const {
@@ -53,6 +54,7 @@ export function pfArbeidstaker(
             gjelderAnnenArbeidsgiver,
             navnPåArbeidsgiver,
             getArbeidsgivereFailed,
+            searchOrganisasjonsnummerFailed,
         } = state;
 
         const søkPåArbeidsgiver = (orgnr: string) => {
@@ -66,6 +68,12 @@ export function pfArbeidstaker(
                             if (data.navn) {
                                 dispatch({ type: ActionType.SET_NAVN_ARBEIDSDGIVER, navnPåArbeidsgiver: data.navn });
                             }
+                        }
+                        if (response.status === 404) {
+                            dispatch({
+                                type: ActionType.SET_SEARCH_ORGANISASJONSNUMMER_FAILED,
+                                searchOrganisasjonsnummerFailed: true,
+                            });
                         }
                     }
                 );
@@ -202,11 +210,15 @@ export function pfArbeidstaker(
                                                 value={organisasjonsnummer || ''}
                                                 className="arbeidstaker-organisasjonsnummer"
                                                 onChange={(event) => {
+                                                    const valueWithoutWhitespaces = event.target.value.replace(
+                                                        /\s/g,
+                                                        ''
+                                                    );
                                                     updateListeinfoInSoknadState({
-                                                        organisasjonsnummer: event.target.value,
+                                                        organisasjonsnummer: valueWithoutWhitespaces,
                                                     });
-                                                    if (event.target.value.length === 9) {
-                                                        søkPåArbeidsgiver(event.target.value);
+                                                    if (valueWithoutWhitespaces.length === 9) {
+                                                        søkPåArbeidsgiver(valueWithoutWhitespaces);
                                                     } else if (navnPåArbeidsgiver) {
                                                         dispatch({
                                                             type: ActionType.SET_NAVN_ARBEIDSDGIVER,
@@ -214,12 +226,11 @@ export function pfArbeidstaker(
                                                         });
                                                     }
                                                 }}
-                                                onBlur={(event) =>
-                                                    updateListeinfoInSoknad({
-                                                        organisasjonsnummer: event.target.value,
-                                                    })
+                                                feil={
+                                                    searchOrganisasjonsnummerFailed
+                                                        ? 'Ingen treff på organisasjonsnummer'
+                                                        : getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)
                                                 }
-                                                feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
                                             />
                                             {navnPåArbeidsgiver && (
                                                 <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
