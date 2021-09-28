@@ -160,10 +160,10 @@ export function pfArbeidstaker(
                                         const { value } = event.target;
                                         dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
                                         updateListeinfoInSoknadState({
-                                            organisasjonsnummer: value.replace(/\s/g, ''),
+                                            organisasjonsnummer: value,
                                         });
                                         updateListeinfoInSoknad({
-                                            organisasjonsnummer: value.replace(/\s/g, ''),
+                                            organisasjonsnummer: value,
                                         });
                                         if (!value) {
                                             dispatch({

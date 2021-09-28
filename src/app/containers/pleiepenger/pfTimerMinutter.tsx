@@ -38,14 +38,14 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                             onChange={(event) =>
                                 updatePeriodeinfoInSoknadState({
                                     ...periodeinfo,
-                                    timer: stringToNumber(event.target.value.replace(/\s/g, '')),
+                                    timer: stringToNumber(event.target.value.replace(/ /g, '')),
                                     minutter: periodeinfo.minutter,
                                 })
                             }
                             onBlur={(event) =>
                                 updatePeriodeinfoInSoknad({
                                     ...periodeinfo,
-                                    timer: stringToNumber(event.target.value.replace(/\s/g, '')),
+                                    timer: stringToNumber(event.target.value.replace(/ /g, '')),
                                     minutter: periodeinfo.minutter,
                                 })
                             }
@@ -60,14 +60,14 @@ export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter
                                 updatePeriodeinfoInSoknadState({
                                     ...periodeinfo,
                                     timer: periodeinfo.timer,
-                                    minutter: stringToNumber(event.target.value.replace(/\s/g, '')),
+                                    minutter: stringToNumber(event.target.value.replace(/ /g, '')),
                                 })
                             }
                             onBlur={(event) =>
                                 updatePeriodeinfoInSoknad({
                                     ...periodeinfo,
                                     timer: periodeinfo.timer,
-                                    minutter: stringToNumber(event.target.value.replace(/\s/g, '')),
+                                    minutter: stringToNumber(event.target.value.replace(/ /g, '')),
                                 })
                             }
                             feil={getErrorMessage(`${feilprefiks}.minutter`)}
