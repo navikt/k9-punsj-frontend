@@ -36,12 +36,12 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             value={jobberNormaltTimerPerDag}
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
-                                    jobberNormaltTimerPerDag: event.target.value.replace(/ /g, ''),
+                                    jobberNormaltTimerPerDag: event.target.value,
                                 });
                             }}
                             onBlur={(event) => {
                                 updatePeriodeinfoInSoknad({
-                                    jobberNormaltTimerPerDag: event.target.value.replace(/ /g, ''),
+                                    jobberNormaltTimerPerDag: event.target.value,
                                 });
                             }}
                         />
@@ -54,12 +54,12 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             className="right"
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
-                                    faktiskArbeidTimerPerDag: event.target.value.replace(/ /g, ''),
+                                    faktiskArbeidTimerPerDag: event.target.value,
                                 });
                             }}
                             onBlur={(event) => {
                                 updatePeriodeinfoInSoknad({
-                                    faktiskArbeidTimerPerDag: event.target.value.replace(/ /g, ''),
+                                    faktiskArbeidTimerPerDag: event.target.value,
                                 });
                             }}
                             feil={getErrorMessage(`${feilprefiks}.timerfaktisk`)}

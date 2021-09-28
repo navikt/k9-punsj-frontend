@@ -89,7 +89,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
         }
 
         return (
-            <div className="sok-container">
+            <div className="container">
                 <h1>
                     <FormattedMessage id="søk.overskrift" />
                 </h1>
