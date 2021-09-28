@@ -12,6 +12,7 @@ const initialState: IFordelingState = {
     lukkOppgaveDone: false,
     skalTilK9: undefined,
     erIdent1Bekreftet: false,
+    valgtGosysKategori: ''
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -140,6 +141,12 @@ export function FordelingReducer(
                 ...fordelingState,
                 isAwaitingGosysGjelderResponse: false,
                 gosysGjelderKategorierError: action.error
+            };
+
+        case FordelingActionKeys.VALGT_GOSYS_KATEGORI:
+            return {
+                ...fordelingState,
+                valgtGosysKategori: action.valgtGosysKategori
             };
 
         default:
