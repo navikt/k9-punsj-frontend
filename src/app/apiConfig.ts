@@ -29,8 +29,6 @@ export enum ApiPath {
     PSB_MAPPE_SOK = '/k9-sak/pleiepenger-sykt-barn-soknad',
     K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
     GOSYS_GJELDER = '/gosys/gjelder',
-    FINN_ARBEIDSGIVERE = '/arbeidsgivere',
-    SØK_ORGNUMMER = '/arbeidsgiver',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

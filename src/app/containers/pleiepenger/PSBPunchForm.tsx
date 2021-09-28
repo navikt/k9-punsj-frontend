@@ -1,5 +1,8 @@
 /* eslint-disable */
+import { Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
+import { pfArbeidstaker } from 'app/containers/pleiepenger/pfArbeidstaker';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { IInputError, IPunchFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
@@ -19,32 +22,20 @@ import {
 } from 'app/state/actions';
 import { setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import moment from 'moment';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import { PopoverOrientering } from 'nav-frontend-popover';
-import { CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
+import {
+    CheckboksPanel,
+    CheckboksPanelGruppe,
+    Checkbox,
+    Input,
+    RadioPanelGruppe,
+    Select,
+    Textarea,
+} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import { BeredskapNattevaak } from '../../models/enums/BeredskapNattevaak';
-import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
-import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
-import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
-import { RelasjonTilBarnet } from '../../models/enums/RelasjonTilBarnet';
-import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
 import { Arbeidstaker } from '../../models/types/Arbeidstaker';
-import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
-import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { ArbeidstidPeriodeMedTimer, IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
 import {
     ArbeidstidInfo,
     IPSBSoknad,
@@ -53,23 +44,45 @@ import {
     SelvstendigNaeringsdrivendeOpptjening,
     Tilleggsinformasjon,
 } from '../../models/types/PSBSoknad';
-import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
-import { RootStateType } from '../../state/RootState';
-import ErDuSikkerModal from './ErDuSikkerModal';
-import OkGaaTilLosModal from './OkGaaTilLosModal';
-import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
+import { ArbeidstidPeriodeMedTimer, IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
+import VerticalSpacer from '../../components/VerticalSpacer';
 import { Periodepaneler } from './Periodepaneler';
+import Panel from 'nav-frontend-paneler';
+import { BeredskapNattevaak } from '../../models/enums/BeredskapNattevaak';
+import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
+import { RootStateType } from '../../state/RootState';
+import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
+import { connect } from 'react-redux';
+import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
 import { pfLand } from './pfLand';
-import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { pfTimerMinutter } from './pfTimerMinutter';
-import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
+import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
+import { RelasjonTilBarnet } from '../../models/enums/RelasjonTilBarnet';
+import { IIdentState } from '../../models/types/IdentState';
+import ModalWrapper from 'nav-frontend-modal';
+import SettPaaVentModal from './SettPaaVentModal';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
+import { Container, Row } from 'react-bootstrap';
+import { pfArbeidstider } from './pfArbeidstider';
+import { arbeidstidInformasjon } from './ArbeidstidInfo';
+import { CountrySelect } from '../../components/country-select/CountrySelect';
+import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
+import SettPaaVentErrorModal from './SettPaaVentErrorModal';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { PopoverOrientering } from 'nav-frontend-popover';
+import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
+import OkGaaTilLosModal from './OkGaaTilLosModal';
+import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
+import ErDuSikkerModal from './ErDuSikkerModal';
+import moment from 'moment';
+import classNames from 'classnames';
+import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
-import EksisterendeSøknadsperioder from './PSBPunchForm/EksisterendeSøknadsperioder/EksisterendeSøknadsperioder';
-import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
-import SettPaaVentErrorModal from './SettPaaVentErrorModal';
-import SettPaaVentModal from './SettPaaVentModal';
-import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -152,7 +165,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             omsorg: {},
             harInfoSomIkkeKanPunsjes: false,
             harMedisinskeOpplysninger: false,
-            skalTrekkePerioder: false,
         },
         perioder: undefined,
         isFetched: false,
@@ -253,6 +265,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         info: this.initialSelvstedigNæringsdrivende,
     });
 
+    private erEldreEnn4år = (dato: string) => {
+        const fireAarSiden = new Date();
+        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+        return new Date(dato) < fireAarSiden;
+    };
+
+    private erYngreEnn4år = (dato: string) => {
+        const fireAarSiden = new Date();
+        fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+        return new Date(dato) > fireAarSiden;
+    };
+
     private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
         if (!eksisterendePerioder.length) {
             return false;
@@ -327,6 +351,567 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
 
+        const arbeidstakerperioder = () => {
+            const arbeid = soknad.arbeidstid;
+
+            return (
+                <Listepaneler
+                    intl={intl}
+                    items={arbeid.arbeidstakerList}
+                    component={pfArbeidstaker()}
+                    panelid={(i) => `arbeidstakerpanel_${i}`}
+                    initialItem={this.initialArbeidstaker()}
+                    editSoknad={(arbeidstakerList) =>
+                        this.updateSoknad({
+                            arbeidstid: {
+                                ...arbeid,
+                                arbeidstakerList,
+                            },
+                        })
+                    }
+                    editSoknadState={(arbeidstakerList, showStatus) =>
+                        this.updateSoknadState(
+                            {
+                                arbeidstid: {
+                                    ...arbeid,
+                                    arbeidstakerList,
+                                },
+                            },
+                            showStatus
+                        )
+                    }
+                    textLeggTil={'skjema.arbeid.arbeidstaker.leggtilperiode'}
+                    textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
+                    panelClassName="arbeidstakerpanel"
+                    feilkodeprefiks={'arbeidstid.arbeidstaker'}
+                    getErrorMessage={this.getErrorMessage}
+                    kanHaFlere={true}
+                    medSlettKnapp={true}
+                />
+            );
+        };
+
+        const frilanserperioder = () => {
+            const arbeid = soknad.arbeidstid;
+            const opptjening = soknad.opptjeningAktivitet;
+            return (
+                <>
+                    <Input
+                        id="frilanser-startdato"
+                        bredde={'M'}
+                        label={intlHelper(intl, 'skjema.frilanserdato')}
+                        type="date"
+                        value={this.state.soknad.opptjeningAktivitet.frilanser?.startdato || ''}
+                        className={'frilanser-startdato'}
+                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                            opptjeningAktivitet: {
+                                ...opptjening,
+                                frilanser: {
+                                    ...soknad.opptjeningAktivitet.frilanser,
+                                    startdato: event.target.value,
+                                },
+                            },
+                        }))}
+                    />
+                    <RadioPanelGruppe
+                        className="horizontalRadios"
+                        name={'fortsattFrilanser'}
+                        radios={Object.values(JaNei).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                        legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
+                        checked={
+                            opptjening.frilanser
+                                ? opptjening.frilanser.jobberFortsattSomFrilans
+                                    ? JaNei.JA
+                                    : JaNei.NEI
+                                : JaNei.NEI
+                        }
+                        onChange={(event) => {
+                            this.handleFrilanserChange((event.target as HTMLInputElement).value as JaNei);
+                        }}
+                    />
+                    <VerticalSpacer eightPx={true} />
+                    {!opptjening.frilanser?.jobberFortsattSomFrilans && (
+                        <Input
+                            id="frilanser-sluttdato"
+                            bredde={'M'}
+                            label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                            type="date"
+                            value={this.state.soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
+                            className={'frilanser-sluttdato'}
+                            {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                opptjeningAktivitet: {
+                                    ...opptjening,
+                                    frilanser: {
+                                        ...soknad.opptjeningAktivitet.frilanser,
+                                        sluttdato: event.target.value,
+                                    },
+                                },
+                            }))}
+                        />
+                    )}
+                    {this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
+                        <>
+                            {arbeidstidInformasjon(intl)}
+                            <PeriodeinfoPaneler
+                                intl={intl}
+                                periods={arbeid.frilanserArbeidstidInfo?.perioder || []}
+                                panelid={(i) => `frilanserpanel_${i}`}
+                                initialPeriodeinfo={this.initialPeriodeMedTimer}
+                                editSoknad={(perioder) =>
+                                    this.updateSoknad({
+                                        arbeidstid: { ...arbeid, frilanserArbeidstidInfo: { perioder } },
+                                    })
+                                }
+                                editSoknadState={(perioder, showStatus) =>
+                                    this.updateSoknadState(
+                                        {
+                                            arbeidstid: {
+                                                ...arbeid,
+                                                frilanserArbeidstidInfo: { perioder },
+                                            },
+                                        },
+                                        showStatus
+                                    )
+                                }
+                                component={pfArbeidstider()}
+                                minstEn={true}
+                                textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                                kanHaFlere={true}
+                                getErrorMessage={this.getErrorMessage}
+                                feilkodeprefiks={'arbeidstid.frilanser'}
+                                medSlettKnapp={false}
+                            />
+                        </>
+                    )}
+                </>
+            );
+        };
+
+        const selvstendigperioder = () => {
+            const opptjening = soknad.opptjeningAktivitet;
+            const arbeid = soknad.arbeidstid;
+            return (
+                <>
+                    <Container className="infoContainer">
+                        <CheckboksPanelGruppe
+                            className={'virksomhetstypercheckbox'}
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                            checkboxes={Object.values(Virksomhetstyper).map((v) => ({
+                                label: v,
+                                value: v,
+                                onChange: (e) => this.updateVirksomhetstyper(v, e.target.checked),
+                                checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper.some(
+                                    (vt) => vt === v
+                                ),
+                            }))}
+                            onChange={() => undefined}
+                        />
+                        <div className={'generelleopplysiniger'}>
+                            <Row noGutters={true}>
+                                <Input
+                                    label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
+                                    bredde={'M'}
+                                    value={
+                                        this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende
+                                            ?.virksomhetNavn || ''
+                                    }
+                                    className="virksomhetsNavn"
+                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                virksomhetNavn: event.target.value,
+                                            },
+                                        },
+                                    }))}
+                                />
+                            </Row>
+                        </div>
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            name={'virksomhetRegistrertINorge'}
+                            radios={Object.values(JaNei).map((jn) => ({
+                                label: intlHelper(intl, jn),
+                                value: jn,
+                            }))}
+                            legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
+                            checked={
+                                !!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet
+                                    ? JaNei.NEI
+                                    : JaNei.JA
+                            }
+                            onChange={(event) => {
+                                this.updateSoknad({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                registrertIUtlandet:
+                                                    ((event.target as HTMLInputElement).value as JaNei) === JaNei.JA
+                                                        ? false
+                                                        : true,
+                                            },
+                                        },
+                                    },
+                                });
+                                this.updateSoknadState({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                registrertIUtlandet:
+                                                    ((event.target as HTMLInputElement).value as JaNei) === JaNei.JA
+                                                        ? false
+                                                        : true,
+                                            },
+                                        },
+                                    },
+                                });
+                            }}
+                        />
+                        {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
+                            <Row noGutters={true}>
+                                <Input
+                                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
+                                    bredde={'M'}
+                                    value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
+                                    className="sn-organisasjonsnummer"
+                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                organisasjonsnummer: event.target.value,
+                                            },
+                                        },
+                                    }))}
+                                />
+                            </Row>
+                        )}
+                        {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
+                            <CountrySelect
+                                selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
+                                label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                                onChange={(event) => {
+                                    this.updateSoknad({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    landkode: event.target.value,
+                                                },
+                                            },
+                                        },
+                                    });
+                                    this.updateSoknadState({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    landkode: event.target.value,
+                                                },
+                                            },
+                                        },
+                                    });
+                                }}
+                            />
+                        )}
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            name={'harRegnskapsfører'}
+                            radios={Object.values(JaNei).map((jn) => ({
+                                label: intlHelper(intl, jn),
+                                value: jn,
+                            }))}
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
+                            checked={
+                                !!this.state.harRegnskapsfører ||
+                                opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn ||
+                                opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn
+                                    ? JaNei.JA
+                                    : JaNei.NEI
+                            }
+                            onChange={(event) => {
+                                this.handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei);
+                            }}
+                        />
+                        {this.state.harRegnskapsfører && (
+                            <div className={'generelleopplysiniger'}>
+                                <Row noGutters={true}>
+                                    <Input
+                                        label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
+                                        bredde={'M'}
+                                        value={opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || ''}
+                                        className="regnskapsførerNavn"
+                                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                            opptjeningAktivitet: {
+                                                ...opptjening,
+                                                selvstendigNaeringsdrivende: {
+                                                    ...opptjening.selvstendigNaeringsdrivende,
+                                                    info: {
+                                                        ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                        regnskapsførerNavn: event.target.value,
+                                                    },
+                                                },
+                                            },
+                                        }))}
+                                    />
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Input
+                                        label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
+                                        bredde={'M'}
+                                        value={opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerTlf || ''}
+                                        className="sn-regskasførertlf"
+                                        type={'number'}
+                                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                            opptjeningAktivitet: {
+                                                ...opptjening,
+                                                selvstendigNaeringsdrivende: {
+                                                    ...opptjening.selvstendigNaeringsdrivende,
+                                                    info: {
+                                                        ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                        regnskapsførerTlf: event.target.value,
+                                                    },
+                                                },
+                                            },
+                                        }))}
+                                    />
+                                </Row>
+                            </div>
+                        )}
+                        <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+                        <div className={'sn-startdatocontainer'}>
+                            <Input
+                                bredde={'M'}
+                                label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                                type="date"
+                                className="fom"
+                                value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
+                                {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                periode: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
+                                                    fom: event.target.value,
+                                                },
+                                            },
+                                        },
+                                    },
+                                }))}
+                            />
+                            <Input
+                                bredde={'M'}
+                                label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                                type="date"
+                                className="tom"
+                                value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
+                                {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                periode: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
+                                                    tom: event.target.value,
+                                                },
+                                            },
+                                        },
+                                    },
+                                }))}
+                            />
+                        </div>
+                        {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
+                            this.erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom!) && (
+                                <Input
+                                    label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                                    bredde={'M'}
+                                    className={'bruttoinntekt'}
+                                    value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
+                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    bruttoInntekt: event.target.value,
+                                                },
+                                            },
+                                        },
+                                    }))}
+                                    onFocus={(event) => (event.target.selectionStart = 0)}
+                                />
+                            )}
+                        {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
+                            this.erEldreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom!) && (
+                                <>
+                                    <RadioPanelGruppe
+                                        className="horizontalRadios"
+                                        name={'varigEndringradios'}
+                                        radios={Object.values(JaNei).map((jn) => ({
+                                            label: intlHelper(intl, jn),
+                                            value: jn,
+                                        }))}
+                                        legend={intlHelper(intl, 'skjema.sn.varigendring')}
+                                        checked={
+                                            !!opptjening.selvstendigNaeringsdrivende?.info.erVarigEndring
+                                                ? JaNei.JA
+                                                : JaNei.NEI
+                                        }
+                                        onChange={(event) => {
+                                            this.updateSoknad({
+                                                opptjeningAktivitet: {
+                                                    ...opptjening,
+                                                    selvstendigNaeringsdrivende: {
+                                                        ...opptjening.selvstendigNaeringsdrivende,
+                                                        info: {
+                                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                            erVarigEndring:
+                                                                ((event.target as HTMLInputElement).value as JaNei) ===
+                                                                JaNei.JA
+                                                                    ? true
+                                                                    : false,
+                                                        },
+                                                    },
+                                                },
+                                            });
+                                            this.updateSoknadState({
+                                                opptjeningAktivitet: {
+                                                    ...opptjening,
+                                                    selvstendigNaeringsdrivende: {
+                                                        ...opptjening.selvstendigNaeringsdrivende,
+                                                        info: {
+                                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                            erVarigEndring:
+                                                                ((event.target as HTMLInputElement).value as JaNei) ===
+                                                                JaNei.JA
+                                                                    ? true
+                                                                    : false,
+                                                        },
+                                                    },
+                                                },
+                                            });
+                                        }}
+                                    />
+                                </>
+                            )}
+                        {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
+                            <>
+                                <Row noGutters={true}>
+                                    <Input
+                                        bredde={'M'}
+                                        label={intlHelper(intl, 'skjema.sn.varigendringdato')}
+                                        type="date"
+                                        className={'endringdato'}
+                                        value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
+                                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                            opptjeningAktivitet: {
+                                                ...opptjening,
+                                                selvstendigNaeringsdrivende: {
+                                                    ...opptjening.selvstendigNaeringsdrivende,
+                                                    info: {
+                                                        ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                        endringDato: event.target.value,
+                                                    },
+                                                },
+                                            },
+                                        }))}
+                                    />
+                                </Row>
+                                <Row noGutters={true}>
+                                    <Input
+                                        bredde={'M'}
+                                        label={intlHelper(intl, 'skjema.sn.endringinntekt')}
+                                        type="number"
+                                        className={'endringinntekt'}
+                                        value={opptjening.selvstendigNaeringsdrivende?.info?.endringInntekt || ''}
+                                        {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                            opptjeningAktivitet: {
+                                                ...opptjening,
+                                                selvstendigNaeringsdrivende: {
+                                                    ...opptjening.selvstendigNaeringsdrivende,
+                                                    info: {
+                                                        ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                        endringInntekt: event.target.value,
+                                                    },
+                                                },
+                                            },
+                                        }))}
+                                    />
+                                </Row>
+
+                                <Textarea
+                                    label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
+                                    className={'endringbegrunnelse'}
+                                    value={opptjening.selvstendigNaeringsdrivende?.info?.endringBegrunnelse || ''}
+                                    {...this.changeAndBlurUpdatesSoknad((event) => ({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    endringBegrunnelse: event.target.value,
+                                                },
+                                            },
+                                        },
+                                    }))}
+                                />
+                            </>
+                        )}
+                        <VerticalSpacer eightPx={true} />
+                        {arbeidstidInformasjon(intl)}
+                        <PeriodeinfoPaneler
+                            intl={intl}
+                            periods={arbeid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder || []}
+                            panelid={(i) => `snpanel_${i}`}
+                            initialPeriodeinfo={this.initialPeriodeMedTimer}
+                            editSoknad={(perioder) =>
+                                this.updateSoknad({
+                                    arbeidstid: { ...arbeid, selvstendigNæringsdrivendeArbeidstidInfo: { perioder } },
+                                })
+                            }
+                            editSoknadState={(perioder, showStatus) =>
+                                this.updateSoknadState(
+                                    {
+                                        arbeidstid: {
+                                            ...arbeid,
+                                            selvstendigNæringsdrivendeArbeidstidInfo: { perioder },
+                                        },
+                                    },
+                                    showStatus
+                                )
+                            }
+                            component={pfArbeidstider()}
+                            minstEn={true}
+                            textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+                            kanHaFlere={true}
+                            medSlettKnapp={false}
+                        />
+                    </Container>
+                </>
+            );
+        };
+
         const beredskapperioder = () => {
             return (
                 <PeriodeinfoPaneler
@@ -386,7 +971,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true} />
-
                 <OpplysningerOmSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -402,17 +986,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
-                />
-                <VerticalSpacer sixteenPx={true} />
-                <EksisterendeSøknadsperioder
-                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
-                    intl={intl}
-                    getErrorMessage={this.getErrorMessage}
-                    soknad={soknad}
-                    updateSoknad={this.updateSoknad}
-                    updateSoknadState={this.updateSoknadState}
-                    eksisterendePerioder={eksisterendePerioder}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <EkspanderbartpanelBase
@@ -525,19 +1098,45 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             </>
                         )}
                 </EkspanderbartpanelBase>
-                <ArbeidsforholdPanel
-                    isOpen={this.checkOpenState(PunchFormPaneler.ARBEID)}
-                    onPanelClick={() => this.handlePanelClick(PunchFormPaneler.ARBEID)}
-                    handleArbeidsforholdChange={this.handleArbeidsforholdChange}
-                    getCheckedValueArbeid={this.getCheckedValueArbeid}
-                    soknad={soknad}
-                    initialArbeidstaker={this.initialArbeidstaker()}
-                    updateSoknad={this.updateSoknad}
-                    updateSoknadState={this.updateSoknadState}
-                    getErrorMessage={this.getErrorMessage}
-                    handleFrilanserChange={this.handleFrilanserChange}
-                    updateVirksomhetstyper={this.updateVirksomhetstyper}
-                />
+                <EkspanderbartpanelBase
+                    apen={this.checkOpenState(PunchFormPaneler.ARBEID)}
+                    className={'punchform__paneler'}
+                    tittel={intlHelper(intl, PunchFormPaneler.ARBEID)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.ARBEID)}
+                >
+                    <CheckboksPanel
+                        label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
+                        value={Arbeidsforhold.ARBEIDSTAKER}
+                        onChange={(e) => this.handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
+                        checked={this.getCheckedValueArbeid(Arbeidsforhold.ARBEIDSTAKER)}
+                    />
+                    <VerticalSpacer eightPx={true} />
+                    {!!soknad.arbeidstid.arbeidstakerList.length && <>{arbeidstakerperioder()}</>}
+                    <CheckboksPanel
+                        label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
+                        value={Arbeidsforhold.FRILANSER}
+                        onChange={(e) => this.handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
+                        checked={this.getCheckedValueArbeid(Arbeidsforhold.FRILANSER)}
+                    />
+                    <VerticalSpacer eightPx={true} />
+                    {!!soknad.opptjeningAktivitet.frilanser && (
+                        <Panel className={'frilanserpanel'}>{frilanserperioder()}</Panel>
+                    )}
+                    <CheckboksPanel
+                        label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
+                        value={Arbeidsforhold.SELVSTENDIG}
+                        onChange={(e) => this.handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
+                        checked={this.getCheckedValueArbeid(Arbeidsforhold.SELVSTENDIG)}
+                    />
+                    {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
+                        <>
+                            <AlertStripeInfo className={'sn-alertstripe'}>
+                                {intlHelper(intl, 'skjema.sn.info')}
+                            </AlertStripeInfo>
+                            <Panel className={'selvstendigpanel'}>{selvstendigperioder()}</Panel>
+                        </>
+                    )}
+                </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                     className={'punchform__paneler'}
@@ -812,11 +1411,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             isOpen={!!this.props.punchFormState.isValid}
                         >
                             <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <SoknadKvittering
-                                    intl={intl}
-                                    response={this.props.punchFormState.validertSoknad}
-                                    skalViseTrukkedePerioder={soknad.skalTrekkePerioder}
-                                />
+                                <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
                             </div>
                             <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                 <Hovedknapp
@@ -863,10 +1458,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private handleSubmit = () => {
-        let navarandeSoknad: IPSBSoknad = this.state.soknad;
-        if (!this.state.soknad.skalTrekkePerioder) {
-            navarandeSoknad.trekkKravPerioder = [];
-        }
+        const navarandeSoknad: IPSBSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
@@ -925,6 +1517,40 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }
         }
         this.forceUpdate();
+    };
+
+    private handleRegnskapsførerChange = (jn: JaNei) => {
+        if (jn === JaNei.JA) {
+            this.setState({ harRegnskapsfører: true });
+        } else {
+            this.setState({ harRegnskapsfører: false });
+            this.updateSoknad({
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: '',
+                        },
+                    },
+                },
+            });
+            this.updateSoknadState({
+                opptjeningAktivitet: {
+                    ...this.state.soknad.opptjeningAktivitet,
+                    selvstendigNaeringsdrivende: {
+                        ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+                        info: {
+                            ...this.state.soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.info,
+                            regnskapsførerNavn: '',
+                            regnskapsførerTlf: '',
+                        },
+                    },
+                },
+            });
+        }
     };
 
     private handleArbeidsforholdChange = (af: Arbeidsforhold, checked: boolean) => {
@@ -1085,6 +1711,21 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
     }
 
+    private handleBarnetSkalLeggesInn(jaNei: JaNei) {
+        this.setState({
+            barnetSkalLeggesInn: jaNei,
+        });
+
+        if (jaNei === JaNei.JA && this.state.innleggelseUtlandet!.length === 0) {
+            this.state.innleggelseUtlandet!.push({ fom: '', tom: '' });
+            this.forceUpdate();
+        }
+
+        if (jaNei !== JaNei.JA) {
+            this.setState({ innleggelseUtlandet: [] });
+        }
+    }
+
     private handleMedlemskapChange(jaNei: JaNeiIkkeOpplyst) {
         this.setState({
             harBoddIUtlandet: jaNei,
@@ -1101,7 +1742,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
     }
 
-    private handleFrilanserChange = (jaNei: JaNei) => {
+    private handleFrilanserChange(jaNei: JaNei) {
         if (jaNei === JaNei.JA) {
             this.updateSoknadState({
                 arbeidstid: {
@@ -1162,7 +1803,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             });
             this.forceUpdate();
         }
-    };
+    }
 
     private updateSkalHaFerie(checked: boolean) {
         if (!this.state.soknad.lovbestemtFerie) {
@@ -1315,13 +1956,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             : undefined;
     };
 
-    private updateSoknadState = (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => {
+    private updateSoknadState(soknad: Partial<IPSBSoknad>, showStatus?: boolean) {
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: { ...this.state.soknad, ...soknad },
             showStatus: !!showStatus,
         });
-    };
+    }
 
     private updateSoknadStateCallbackFunction = (soknad: Partial<IPSBSoknad>) => {
         this.updateSoknadState(soknad);
@@ -1331,9 +1972,20 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {
-            journalposter: Array.from(navarandeSoknad ? navarandeSoknad?.journalposter : []),
+            journalposter: Array.from(
+                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
+                    ? navarandeSoknad?.journalposter
+                    : []
+            ),
         };
-        return this.props.updateSoknad({ ...navarandeSoknad, ...soknad, ...journalposter });
+        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, ...journalposter });
+    };
+    
+    private handleBackButtonClick = () => {
+        const { getPunchPath } = this.props;
+        this.props.resetSoknadAction();
+        this.props.undoChoiceOfEksisterendeSoknadAction();
+        setHash(getPunchPath(PunchStep.CHOOSE_SOKNAD));
     };
 
     private handleStartButtonClick = () => {

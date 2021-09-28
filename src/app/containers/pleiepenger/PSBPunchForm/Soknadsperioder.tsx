@@ -1,17 +1,17 @@
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import Panel from 'nav-frontend-paneler';
 import { useSelector } from 'react-redux';
-import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../../assets/SVG/BinSVG';
+import intlHelper from '../../../utils/intlUtils';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
-import VerticalSpacer from '../../../components/VerticalSpacer';
+import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
+import BinSvg from '../../../assets/SVG/BinSVG';
 import { IPeriode, IPSBSoknad } from '../../../models/types';
-import { RootStateType } from '../../../state/RootState';
-import intlHelper from '../../../utils/intlUtils';
 import './soknadsperioder.less';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import { RootStateType } from '../../../state/RootState';
 
 interface IOwnProps {
     intl: any;
@@ -34,7 +34,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     changeAndBlurUpdatesSoknad,
     overlappendeSoknadsperiode,
 }) => {
-    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
+    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(false);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError &&
@@ -56,8 +56,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     };
 
     const sjekkFelmeldingPeriode = () => {
-        const valideringsFeilmelding =
-            getErrorMessage('søknadsperiode/endringsperiode') || getErrorMessage('søknadperiode.perioder');
+        const valideringsFeilmelding = getErrorMessage('søknadsperiode/endringsperiode');
         const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
 
         if (typeof valideringsFeilmelding !== 'undefined') return valideringsFeilmelding;
@@ -81,14 +80,14 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     ))}
 
                     <VerticalSpacer eightPx />
-                    {visLeggTilPerioder && (
+                    {!visLeggTilPerioder && (
                         <div className="knappecontainer">
                             <button
                                 id="leggtilsoknadsperiode"
                                 className="leggtilsoknadsperiode"
                                 type="button"
                                 onClick={() => {
-                                    setVisLeggTilPerioder(false);
+                                    setVisLeggTilPerioder(true);
                                     updateSoknadState({ soeknadsperiode: initialPeriode });
                                 }}
                             >
@@ -106,7 +105,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                 <AlertStripeInfo>{intlHelper(intl, 'skjema.eksisterende.ingen')}</AlertStripeInfo>
             )}
 
-            {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
+            {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
                         <Input
@@ -146,7 +145,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             type="button"
                             onClick={() => {
                                 deleteSoknadsperiode();
-                                setVisLeggTilPerioder(true);
+                                setVisLeggTilPerioder(false);
                             }}
                         >
                             <BinSvg title="fjern" />

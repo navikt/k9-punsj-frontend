@@ -135,7 +135,6 @@ const fullResponse: IPSBSoknadKvittering = {
             relasjonTilBarnet: 'MEDMOR',
             beskrivelseAvOmsorgsrollen: '',
         },
-        trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
 };
 
@@ -180,7 +179,6 @@ const minimalResponse: IPSBSoknadKvittering = {
             relasjonTilBarnet: 'ANNET',
             beskrivelseAvOmsorgsrollen: 'Bestemor',
         },
-        trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
 };
 

@@ -34,8 +34,6 @@ export interface IPSBSoknad {
     soknadsinfo?: ISoknadsInfo;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
-    trekkKravPerioder?: IPeriode[];
-    skalTrekkePerioder?: boolean;
 }
 
 export interface ISelvstendigNaeringsdrivendeOpptjening {
@@ -252,13 +250,6 @@ export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>
     }
 }
 
-const getTrekkKravPerioder = (soknad: IPSBSoknad) => {
-    if (soknad.trekkKravPerioder) {
-        return soknad.trekkKravPerioder.map((periode) => new Periode(periode));
-    }
-    return undefined;
-};
-
 export class PSBSoknad implements IPSBSoknad {
     soeknadId: string;
 
@@ -302,10 +293,6 @@ export class PSBSoknad implements IPSBSoknad {
 
     harMedisinskeOpplysninger: boolean;
 
-    trekkKravPerioder?: Periode[];
-
-    skalTrekkePerioder: boolean;
-
     constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
@@ -328,7 +315,5 @@ export class PSBSoknad implements IPSBSoknad {
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
-        this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.skalTrekkePerioder = !!soknad.skalTrekkePerioder;
     }
 }
