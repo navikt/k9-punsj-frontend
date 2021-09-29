@@ -81,12 +81,12 @@ export function pfArbeidstaker(): (
                                     className="arbeidstaker-organisasjonsnummer"
                                     onChange={(event) =>
                                         updateListeinfoInSoknadState({
-                                            organisasjonsnummer: event.target.value,
+                                            organisasjonsnummer: event.target.value.replace(/\s/g, ''),
                                         })
                                     }
                                     onBlur={(event) =>
                                         updateListeinfoInSoknad({
-                                            organisasjonsnummer: event.target.value,
+                                            organisasjonsnummer: event.target.value.replace(/\s/g, ''),
                                         })
                                     }
                                     feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
@@ -100,10 +100,10 @@ export function pfArbeidstaker(): (
                                     className="arbeidstaker-norskIdent"
                                     onChange={(event) =>
                                         updateListeinfoInSoknadState({
-                                            norskIdent: event.target.value,
+                                            norskIdent: event.target.value.replace(/\s/g, ''),
                                         })
                                     }
-                                    onBlur={(event) => updateListeinfoInSoknad({ norskIdent: event.target.value })}
+                                    onBlur={(event) => updateListeinfoInSoknad({ norskIdent: event.target.value.replace(/\s/g, '') })}
                                     feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}
                                 />
                             )}
