@@ -254,10 +254,12 @@ const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
                                 className="arbeidstaker-norskIdent"
                                 onChange={(event) =>
                                     updateListeinfoInSoknadState({
-                                        norskIdent: event.target.value,
+                                        norskIdent: event.target.value.replace(/\s/g, ''),
                                     })
                                 }
-                                onBlur={(event) => updateListeinfoInSoknad({ norskIdent: event.target.value })}
+                                onBlur={(event) =>
+                                    updateListeinfoInSoknad({ norskIdent: event.target.value.replace(/\s/g, '') })
+                                }
                                 feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}
                             />
                         )}

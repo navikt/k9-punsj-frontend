@@ -45,7 +45,8 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     return (
         <Hovedknapp
-            onClick={() => omfordel(journalpost.journalpostId, norskIdent,  gosysKategoriJournalforing.length > 0 ? gosysKategoriJournalforing : 'Annet')}
+            disabled={!gosysKategoriJournalforing}
+            onClick={() => omfordel(journalpost.journalpostId, norskIdent,  gosysKategoriJournalforing)}
         >
             <FormattedMessage id="fordeling.knapp.bekreft"/>
         </Hovedknapp>
