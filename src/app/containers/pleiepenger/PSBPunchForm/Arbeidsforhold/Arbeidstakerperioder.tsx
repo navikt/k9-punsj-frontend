@@ -113,9 +113,14 @@ const Arbeidstakerperioder = ({
 
     return (
         <SkjemaGruppe feil={getErrorMessageWithPrefix('')} className="listepaneler">
-            {items?.map((itemInfo, itemIndex) => {
-                const panelid = `arbeidstakerpanel_${itemIndex}`;
+            {items?.map((currentItem, currentItemIndex) => {
+                const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                 const panelErrorMessage = getErrorMessage(`[${panelid}]`);
+                const getHarDuplikatOrgnr = () =>
+                    items.filter(
+                        (item) =>
+                            item.organisasjonsnummer && item.organisasjonsnummer === currentItem.organisasjonsnummer
+                    ).length > 1;
                 return (
                     <Panel
                         className={classNames('listepanel', 'arbeidstakerpanel')}
@@ -128,7 +133,7 @@ const Arbeidstakerperioder = ({
                                 <h2>
                                     <FormattedMessage
                                         id="skjema.arbeidsforhold.teller"
-                                        values={{ indeks: itemIndex + 1 }}
+                                        values={{ indeks: currentItemIndex + 1 }}
                                     />
                                 </h2>
                             )}
@@ -138,7 +143,7 @@ const Arbeidstakerperioder = ({
                                         id="slett"
                                         className="fjernlisteelementknapp"
                                         type="button"
-                                        onClick={() => removeItemHandler(itemIndex)}
+                                        onClick={() => removeItemHandler(currentItemIndex)}
                                         tabIndex={0}
                                     >
                                         <div className="slettIcon">
@@ -150,18 +155,19 @@ const Arbeidstakerperioder = ({
                             )}
                             <PfArbeidstaker
                                 søkerId={soknad.soekerId}
-                                arbeidstaker={itemInfo as Arbeidstaker}
-                                listeelementindex={itemIndex}
+                                arbeidstaker={currentItem as Arbeidstaker}
+                                listeelementindex={currentItemIndex}
                                 updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
-                                    editSoknad(editItem(itemIndex, info))
+                                    editSoknad(editItem(currentItemIndex, info))
                                 }
                                 updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
-                                    editSoknadState(editItem(itemIndex, info), showStatus)
+                                    editSoknadState(editItem(currentItemIndex, info), showStatus)
                                 }
-                                feilprefiks={`arbeidstid.arbeidstaker[${itemIndex}]`}
+                                feilprefiks={`arbeidstid.arbeidstaker[${currentItemIndex}]`}
                                 getErrorMessage={getErrorMessageWithPrefix}
                                 intl={intl}
                                 arbeidsgivere={arbeidsgivere}
+                                harDuplikatOrgnr={getHarDuplikatOrgnr()}
                             />
                         </SkjemaGruppe>
                     </Panel>

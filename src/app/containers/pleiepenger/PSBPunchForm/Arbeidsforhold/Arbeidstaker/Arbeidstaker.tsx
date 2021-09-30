@@ -6,6 +6,7 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Feilmelding } from 'nav-frontend-typografi';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
@@ -28,6 +29,7 @@ interface PfArbeidstakerProps {
     getErrorMessage: GetErrorMessage;
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
+    harDuplikatOrgnr?: boolean;
 }
 
 const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
@@ -40,6 +42,7 @@ const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
     getErrorMessage,
     intl,
     arbeidsgivere,
+    harDuplikatOrgnr,
 }): JSX.Element => {
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
@@ -161,7 +164,11 @@ const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
                                 }}
                                 disabled={gjelderAnnenArbeidsgiver}
                                 selected={selectedArbeidsgiver}
-                                feil={getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)}
+                                feil={
+                                    harDuplikatOrgnr
+                                        ? 'Organisasjonsnummeret er valgt flere ganger.'
+                                        : getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)
+                                }
                             >
                                 <option key="default" value="" label="" aria-label="Tomt valg" />)
                                 {arbeidsgivere.map((arbeidsgiver) => (
