@@ -5,7 +5,7 @@ import { getLocation, redirect } from 'app/utils/browserUtils';
 import { String } from 'typescript-string-operations';
 import { canStringBeParsedToJSON } from './formatUtils';
 
-export const apiUrl = (path: ApiPath, parameters?: any) =>
+export const apiUrl = (path: ApiPath | string, parameters?: any) =>
     URL_API + (parameters ? String.Format(path, parameters) : path);
 
 export const loginUrl = () => String.Format(URL_AUTH_LOGIN, { uri: encodeURIComponent(getLocation()) });
@@ -15,10 +15,10 @@ export function login() {
 }
 
 export async function get(
-    path: ApiPath,
+    path: ApiPath | string,
     parameters?: any,
     headers?: HeadersInit,
-    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response>
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void
 ): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         credentials: 'include',
