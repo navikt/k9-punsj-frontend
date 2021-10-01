@@ -421,7 +421,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
                         {`${
-                            typeof journalposter[0].inneholderMedisinskeOpplysninger !== 'undefined' &&
                             journalposter[0].inneholderMedisinskeOpplysninger
                                 ? 'Ja'
                                 : 'Nei'
@@ -430,7 +429,6 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
                         {`${
-                            typeof journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes !== 'undefined' &&
                             journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes
                                 ? 'Ja'
                                 : 'Nei'

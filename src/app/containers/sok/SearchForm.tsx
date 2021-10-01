@@ -117,8 +117,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         </AlertStripeAdvarsel>
                     )}
 
-                    {!!conflict &&
-                        typeof journalpostConflictError !== 'undefined' &&
+                    {conflict &&
+                        journalpostConflictError &&
                         journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
                             <>
                                 <AlertStripeAdvarsel>
@@ -127,7 +127,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                                 <VerticalSpacer eightPx />
                                 <Knapp
                                     onClick={() => {
-                                        if (typeof journalpostid !== 'undefined') lukkJournalpostOppgave(journalpostid);
+                                        if (journalpostid) lukkJournalpostOppgave(journalpostid);
                                     }}
                                 >
                                     <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
