@@ -49,7 +49,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
 
     const renderDato = (property: string) => {
         if (periode?.[property] && periode?.[property].length) return periode?.[property];
-        if (!!initialValues && typeof initialValues[property] !== 'undefined')
+        if (typeof initialValues !== 'undefined' && typeof initialValues[property] !== 'undefined')
             return initialValues?.[property];
         return '';
     };

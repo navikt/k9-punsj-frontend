@@ -44,9 +44,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
     const sjekkFelmeldingDato = () => {
         if (
-            !!soknad.soeknadsperiode &&
-            !!soknad.soeknadsperiode.fom &&
-            !!soknad.soeknadsperiode.tom
+            !!soknad.soeknadsperiode?.fom &&
+            !!soknad.soeknadsperiode?.tom
         ) {
             if (new Date(soknad.soeknadsperiode.fom) > new Date(soknad.soeknadsperiode.tom))
                 return intlHelper(intl, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED');

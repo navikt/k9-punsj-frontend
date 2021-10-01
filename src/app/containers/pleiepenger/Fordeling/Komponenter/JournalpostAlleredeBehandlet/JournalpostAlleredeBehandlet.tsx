@@ -45,7 +45,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
 
     let sokersIdent: string;
 
-    if(!!journalpost && !!journalpost?.norskIdent){
+    if(journalpost?.norskIdent){
         sokersIdent = journalpost?.norskIdent;
     }else{
         return(<AlertStripeAdvarsel>{intlHelper(intl, 'ident.usignert.feil.melding')}</AlertStripeAdvarsel>)
