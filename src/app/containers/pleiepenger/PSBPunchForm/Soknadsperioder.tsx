@@ -57,8 +57,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         const valideringsFeilmelding = getErrorMessage('søknadsperiode/endringsperiode');
         const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
 
-        if (typeof valideringsFeilmelding !== 'undefined') return valideringsFeilmelding;
-        if (typeof feilFunnitInnenValideringMelding !== 'undefined') return feilFunnitInnenValideringMelding;
+        if (valideringsFeilmelding) return valideringsFeilmelding;
+        if (feilFunnitInnenValideringMelding) return feilFunnitInnenValideringMelding;
         return undefined;
     };
 
