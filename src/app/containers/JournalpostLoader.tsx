@@ -97,7 +97,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (
         !!conflict &&
-        !!journalpostConflictError &&
+        journalpostConflictError &&
         journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET
     ) {
         return (

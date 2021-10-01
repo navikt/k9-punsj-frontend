@@ -117,8 +117,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         </AlertStripeAdvarsel>
                     )}
 
-                    {!!conflict &&
-                        !!journalpostConflictError &&
+                    {conflict &&
+                        journalpostConflictError &&
                         journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
                             <>
                                 <AlertStripeAdvarsel>
