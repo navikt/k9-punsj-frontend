@@ -13,7 +13,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { ApiPath } from '../../../../apiConfig';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
-import PfArbeidstaker from './Arbeidstaker/Arbeidstaker';
+import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 
 type ItemInfo = any;
 
@@ -153,7 +153,7 @@ const Arbeidstakerperioder = ({
                                     </button>
                                 </div>
                             )}
-                            <PfArbeidstaker
+                            <ArbeidstakerComponent
                                 søkerId={soknad.soekerId}
                                 arbeidstaker={currentItem as Arbeidstaker}
                                 listeelementindex={currentItemIndex}
