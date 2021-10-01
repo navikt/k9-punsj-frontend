@@ -49,7 +49,7 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     >
                         <p>{periodToFormattedString(periode)}</p>
 
-                        {typeof properties !== 'undefined' &&
+                        {!!properties &&
                             properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
                     </div>
                 ))}

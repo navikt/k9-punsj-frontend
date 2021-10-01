@@ -5,8 +5,8 @@ export const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (
 ): boolean => {
     if (
         periode.length > 0 &&
-        typeof periode[0].faktiskArbeidTimerPerDag !== 'undefined' &&
-        typeof periode[0].jobberNormaltTimerPerDag !== 'undefined' &&
+        !!periode[0].faktiskArbeidTimerPerDag &&
+        !!periode[0].jobberNormaltTimerPerDag &&
         periode[0].faktiskArbeidTimerPerDag.length > 0 &&
         periode[0].jobberNormaltTimerPerDag.length > 0
     ) {

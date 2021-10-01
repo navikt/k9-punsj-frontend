@@ -44,7 +44,6 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
     const sjekkFelmeldingDato = () => {
         if (
-            typeof soknad.soeknadsperiode !== 'undefined' &&
             !!soknad.soeknadsperiode &&
             !!soknad.soeknadsperiode.fom &&
             !!soknad.soeknadsperiode.tom

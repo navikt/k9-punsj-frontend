@@ -194,9 +194,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private initialPeriode: IPeriode = { fom: '', tom: '' };
     private getSoknadsperiode = () => {
         if (
-            typeof this.state.soknad?.soeknadsperiode !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.fom !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.tom !== 'undefined'
+            !!this.state.soknad?.soeknadsperiode &&
+            !!this.state.soknad.soeknadsperiode?.fom &&
+            !!this.state.soknad.soeknadsperiode?.tom
         ) {
             return this.state.soknad.soeknadsperiode;
         } else {
@@ -1061,7 +1061,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         />
                     )}
                     <VerticalSpacer eightPx={true} />
-                    {typeof eksisterendePerioder !== 'undefined' &&
+                    {!!eksisterendePerioder &&
                         eksisterendePerioder?.length > 0 &&
                         !punchFormState.hentPerioderError && (
                             <>
@@ -1401,7 +1401,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 {!!this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&
-                    typeof this.props.punchFormState.validertSoknad !== 'undefined' && (
+                    !!this.props.punchFormState.validertSoknad && (
                         <ModalWrapper
                             key={'validertSoknadModal'}
                             className={'validertSoknadModal'}
@@ -1461,7 +1461,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const navarandeSoknad: IPSBSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
+                navarandeSoknad && !!navarandeSoknad.journalposter
                     ? navarandeSoknad?.journalposter
                     : []
             ),
@@ -1973,7 +1973,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
+                navarandeSoknad && !!navarandeSoknad.journalposter
                     ? navarandeSoknad?.journalposter
                     : []
             ),
