@@ -194,7 +194,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private initialPeriode: IPeriode = { fom: '', tom: '' };
     private getSoknadsperiode = () => {
         if (
-            this.state.soknad?.soeknadsperiode &&
             this.state.soknad.soeknadsperiode?.fom &&
             this.state.soknad.soeknadsperiode?.tom
         ) {
