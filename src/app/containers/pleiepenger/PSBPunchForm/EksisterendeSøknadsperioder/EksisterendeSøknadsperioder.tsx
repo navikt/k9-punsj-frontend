@@ -1,4 +1,5 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel } from 'nav-frontend-skjema';
@@ -9,6 +10,8 @@ import { IPeriode } from '../../../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { Periodepaneler } from '../../Periodepaneler';
 import './eksisterendeSøknadsperioder.less';
+
+dayjs.extend(utc);
 
 interface EksisterendeSøknadsperioderProps {
     isOpen: boolean;
@@ -44,8 +47,8 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = selectedPeriods.some((periode) =>
             eksisterendePerioder.some(
                 (eksisterendePeriode) =>
-                    moment(periode.fom).isAfter(eksisterendePeriode.fom) &&
-                    moment(periode.tom).isBefore(eksisterendePeriode.tom)
+                    dayjs(periode.fom).utc(true).isAfter(eksisterendePeriode.fom) &&
+                    dayjs(periode.tom).utc(true).isBefore(eksisterendePeriode.tom)
             )
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = selectedPeriods.some((periode) =>
