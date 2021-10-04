@@ -12,6 +12,9 @@ export const sjekkPropertyEksistererOgIkkeErNull = (
   property: string,
   object: any
 ) => {
+  if (!object) {
+    return false;
+  }
   if (property in object && object[property] !== null) {
     return true;
   }
