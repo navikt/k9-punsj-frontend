@@ -199,7 +199,8 @@ describe('PunchForm', () => {
 
     it('Viser skjema', () => {
         const punchForm = setupPunchForm();
-        expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(7);
+        expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(6);
+        expect(punchForm.find('ArbeidsforholdPanel')).toHaveLength(1);
     });
 
     it('Henter søknadsinformasjon', () => {

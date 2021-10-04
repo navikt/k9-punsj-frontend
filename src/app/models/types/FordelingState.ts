@@ -17,4 +17,5 @@ export interface IFordelingState {
     isAwaitingGosysGjelderResponse?: boolean;
     gosysGjelderKategorier?: any[];
     gosysGjelderKategorierError?: IError;
+    valgtGosysKategori: string;
 }

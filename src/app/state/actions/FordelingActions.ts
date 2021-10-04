@@ -54,13 +54,26 @@ interface ILukkOggpgaveResetAction {
     type: FordelingActionKeys.LUKK_OPPGAVE_RESET;
 }
 
-interface IGosysGjelderRequestAction {type: FordelingActionKeys.GOSYS_GJELDER_REQUEST}
-interface IGosysGjelderSuccessAction {type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS, gjelderKategorierFraGosys: string[]}
-interface IGosysGjelderErrorAction   {type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error: IError}
+interface IGosysGjelderRequestAction {
+    type: FordelingActionKeys.GOSYS_GJELDER_REQUEST;
+}
+interface IGosysGjelderSuccessAction {
+    type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS;
+    gjelderKategorierFraGosys: string[];
+}
+interface IGosysGjelderErrorAction {
+    type: FordelingActionKeys.GOSYS_GJELDER_ERROR;
+    error: IError;
+}
 
 interface ISetErIdent1BekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
     erIdent1Bekreftet: boolean;
+}
+
+interface ISetValgtGosysKategori {
+    type: FordelingActionKeys.VALGT_GOSYS_KATEGORI;
+    valgtGosysKategori: string;
 }
 
 export const lukkOppgaveRequestAction = (): ILukkOggpgaveRequestAction => ({
@@ -77,34 +90,49 @@ export const lukkOppgaveResetAction = (): ILukkOggpgaveResetAction => ({
     type: FordelingActionKeys.LUKK_OPPGAVE_RESET,
 });
 
-export const gosysGjelderRequestAction   = ():               IGosysGjelderRequestAction   => ({type: FordelingActionKeys.GOSYS_GJELDER_REQUEST});
-export const gosysGjelderSuccessAction   = (gjelderKategorierFraGosys: any):IGosysGjelderSuccessAction   => ({type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS, gjelderKategorierFraGosys});
-export const gosysGjelderErrorAction     = (error: IError):  IGosysGjelderErrorAction     => ({type: FordelingActionKeys.GOSYS_GJELDER_ERROR, error});
+export const gosysGjelderRequestAction = (): IGosysGjelderRequestAction => ({
+    type: FordelingActionKeys.GOSYS_GJELDER_REQUEST,
+});
+export const gosysGjelderSuccessAction = (gjelderKategorierFraGosys: any): IGosysGjelderSuccessAction => ({
+    type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS,
+    gjelderKategorierFraGosys,
+});
+export const gosysGjelderErrorAction = (error: IError): IGosysGjelderErrorAction => ({
+    type: FordelingActionKeys.GOSYS_GJELDER_ERROR,
+    error,
+});
 
 export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction => ({
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1,
     erIdent1Bekreftet: identBekreftet,
 });
+export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetValgtGosysKategori => ({
+    type: FordelingActionKeys.VALGT_GOSYS_KATEGORI,
+    valgtGosysKategori,
+});
 
 export type IFordelingActionTypes =
-    ISetSakstypeAction |
-    IOmfordelingRequestAction |
-    IOmfordelingSuccessAction |
-    IOmfordelingErrorAction   |
-    ISjekkOmSkalTilK9LoadingAction |
-    ISjekkOmSkalTilK9ErrorAction   |
-    ISjekkOmSkalTilK9SuccessAction |
-    ISjekkOmSkalTilK9JournalpostStottesIkkeAction |
-    ILukkOggpgaveRequestAction |
-    ILukkOggpgaveErrorAction   |
-    ILukkOggpgaveSuccessAction |
-    ILukkOggpgaveResetAction |
-    IGosysGjelderRequestAction |
-    IGosysGjelderSuccessAction |
-    IGosysGjelderErrorAction |
-    ISetErIdent1BekreftetAction;
+    | ISetSakstypeAction
+    | IOmfordelingRequestAction
+    | IOmfordelingSuccessAction
+    | IOmfordelingErrorAction
+    | ISjekkOmSkalTilK9LoadingAction
+    | ISjekkOmSkalTilK9ErrorAction
+    | ISjekkOmSkalTilK9SuccessAction
+    | ISjekkOmSkalTilK9JournalpostStottesIkkeAction
+    | ILukkOggpgaveRequestAction
+    | ILukkOggpgaveErrorAction
+    | ILukkOggpgaveSuccessAction
+    | ILukkOggpgaveResetAction
+    | IGosysGjelderRequestAction
+    | IGosysGjelderSuccessAction
+    | IGosysGjelderErrorAction
+    | ISetErIdent1BekreftetAction
+    | ISetValgtGosysKategori;
 
-export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST});
+export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
+});
 
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS,
@@ -120,19 +148,14 @@ export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9J
 });
 
 export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any) => {
-        dispatch(lukkOppgaveRequestAction());
-        post(
-          ApiPath.JOURNALPOST_LUKK_OPPGAVE,
-          {journalpostId: journalpostid},
-          undefined,
-          undefined,
-          response => {
-              if (response.status === 200) {
-                  return dispatch(lukkOppgaveSuccessAction())
-              }
-              return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
-          });
-    }
+    dispatch(lukkOppgaveRequestAction());
+    post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, undefined, (response) => {
+        if (response.status === 200) {
+            return dispatch(lukkOppgaveSuccessAction());
+        }
+        return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
+    });
+};
 
 export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string) {
     return (dispatch: any) => {
@@ -146,7 +169,8 @@ export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid:
         post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, svar) => {
             if (response.ok) {
                 return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak));
-            } if (response.status === 409) {
+            }
+            if (response.status === 409) {
                 return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
             }
             return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(response)));
@@ -163,5 +187,5 @@ export function hentGjelderKategorierFraGosys() {
             }
             return dispatch(gosysGjelderErrorAction(convertResponseToError(response)));
         });
-    }
+    };
 }

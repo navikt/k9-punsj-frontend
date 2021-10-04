@@ -1,11 +1,11 @@
 import {IFordelingState} from 'app/models/types';
 import {
-    hentGjelderKategorierFraGosys
+    hentGjelderKategorierFraGosys, setValgtGosysKategoriAction
 } from 'app/state/actions';
 import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import {Select} from 'nav-frontend-skjema';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {injectIntl, WrappedComponentProps,} from 'react-intl';
 import {connect} from 'react-redux';
 import VerticalSpacer from "../../../../components/VerticalSpacer";
@@ -13,7 +13,7 @@ import VerticalSpacer from "../../../../components/VerticalSpacer";
 export interface IOwnProps {
     fordelingState: IFordelingState;
     hentGjelderKategorier: typeof hentGjelderKategorierFraGosys;
-    setGosysKategoriJournalforing: (gosysKategori: string) => void;
+    setValgtGosysKategori: typeof setValgtGosysKategoriAction;
 }
 
 type IGosysGjelderKategorierProps = WrappedComponentProps & IOwnProps;
@@ -25,28 +25,25 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
         intl,
         fordelingState,
         hentGjelderKategorier,
-        setGosysKategoriJournalforing
+        setValgtGosysKategori
     } = props;
-
-    const [valgtKategori, setValgtKategori] = useState<string>('');
 
     useEffect(() => {
         hentGjelderKategorier();
     }, [])
 
     const harKategorierBlivitHentet = fordelingState.isAwaitingGosysGjelderResponse === false
-        && typeof fordelingState.gosysGjelderKategorier !== 'undefined'
+        && !!fordelingState.gosysGjelderKategorier
         && Object.keys(fordelingState.gosysGjelderKategorier).length > 0;
 
     return (<>
             {harKategorierBlivitHentet && <div>
               <VerticalSpacer sixteenPx/>
               <Select
-                value={valgtKategori}
+                value={fordelingState.valgtGosysKategori}
                 bredde="l"
                 label={intlHelper(intl, 'fordeling.kategoriGosys')}
-                onChange={(e) => setValgtKategori(e.target.value)}
-                onBlur={(e) => setGosysKategoriJournalforing(e.target.value)}
+                onChange={(e) => setValgtGosysKategori(e.target.value)}
               >
                 <option disabled value="" label=" " />
 
@@ -69,6 +66,7 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     hentGjelderKategorier: () => dispatch(hentGjelderKategorierFraGosys()),
+    setValgtGosysKategori: (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori))
 });
 
 const GosysGjelderKategorier = injectIntl(connect(mapStateToProps, mapDispatchToProps)(GosysGjelderKategorierComponent));
