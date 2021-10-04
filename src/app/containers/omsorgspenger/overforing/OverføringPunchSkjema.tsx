@@ -20,7 +20,7 @@ import FlexRow from '../../../components/flexgrid/FlexRow';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import './overføringPunchSkjema.less';
 import { IError } from '../../../models/types';
-import DateInput from '../../../components/skjema/DateInput';
+import OverføringDateInput from './OverføringDateInput';
 import InnsendingModal from './InnsendingModal';
 import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
@@ -81,7 +81,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
             <section>
                 <VerticalSpacer sixteenPx />
                 <JournalpostPanel />
-                <DateInput feltnavn="mottaksdato" bredde="M" />
+                <OverføringDateInput feltnavn="mottaksdato" bredde="M" />
                 <VerticalSpacer twentyPx dashed />
                 <Undertittel tag="h2">
                     <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
@@ -129,7 +129,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                                     </legend>
                                     <FlexRow childrenMargin="small">
                                         <TextInput feltnavn={`barn[${index}].norskIdent`} bredde="M" />
-                                        <DateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
+                                        <OverføringDateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
                                         {values.barn.length > 1 && (
                                             <Xknapp
                                                 htmlType="button"
@@ -164,7 +164,7 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 <VerticalSpacer sixteenPx />
                 {values.omsorgenDelesMed?.mottaker === Mottaker.Samboer && (
                     <>
-                        <DateInput feltnavn="omsorgenDelesMed.samboerSiden" bredde="M" />
+                        <OverføringDateInput feltnavn="omsorgenDelesMed.samboerSiden" bredde="M" />
                         <VerticalSpacer sixteenPx />
                     </>
                 )}

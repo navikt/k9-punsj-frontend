@@ -6,7 +6,6 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import { Feilmelding } from 'nav-frontend-typografi';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
@@ -19,7 +18,7 @@ import ActionType from './actionTypes';
 import './arbeidstaker.less';
 import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 
-interface PfArbeidstakerProps {
+interface ArbeidstakerComponentProps {
     søkerId: string;
     arbeidstaker: Arbeidstaker;
     listeelementindex: number;
@@ -32,7 +31,7 @@ interface PfArbeidstakerProps {
     harDuplikatOrgnr?: boolean;
 }
 
-const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
+const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     søkerId,
     arbeidstaker,
     listeelementindex,
@@ -96,18 +95,18 @@ const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
         }
     }, [arbeidsgivere]);
 
-    const updateOrgOrPers = (orgOrPers: OrgOrPers) => {
-        let organisasjonsnummer: string | null;
-        let norskIdent: string | null;
-        if (orgOrPers === 'o') {
-            organisasjonsnummer = '';
-            norskIdent = null;
+    const updateOrgOrPers = (isOrgOrPers: OrgOrPers) => {
+        let newOrganisasjonsnummer: string | null;
+        let newNorskIdent: string | null;
+        if (isOrgOrPers === 'o') {
+            newOrganisasjonsnummer = '';
+            newNorskIdent = null;
         } else {
-            organisasjonsnummer = null;
-            norskIdent = '';
+            newOrganisasjonsnummer = null;
+            newNorskIdent = '';
         }
-        updateListeinfoInSoknadState({ organisasjonsnummer, norskIdent });
-        updateListeinfoInSoknad({ organisasjonsnummer, norskIdent });
+        updateListeinfoInSoknadState({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
+        updateListeinfoInSoknad({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
     };
 
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
@@ -310,4 +309,4 @@ const PfArbeidstaker: React.FC<PfArbeidstakerProps> = ({
     );
 };
 
-export default PfArbeidstaker;
+export default ArbeidstakerComponent;

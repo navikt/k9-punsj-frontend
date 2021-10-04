@@ -1,11 +1,12 @@
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import './periodInput.less';
 import { IPeriode } from '../../models/types/Periode';
+import DateInput from '../skjema/DateInput';
+import './periodInput.less';
 
 export interface IPeriodInputProps {
     periode: IPeriode;
@@ -33,8 +34,6 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         periode,
         intl,
         onChange,
-        onBlur,
-        onFocus,
         disabled,
         initialValues,
         errorMessage,
@@ -45,6 +44,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         disabledTom,
         errorMessageFom,
         errorMessageTom,
+        onBlur,
     } = props;
 
     const renderDato = (property: string) => {
@@ -55,35 +55,37 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     };
 
     return (
-        <SkjemaGruppe feil={errorMessage} className={classNames('period-input', className)}>
+        <SkjemaGruppe feil={errorMessage} className={classNames('periodInput', className)}>
             <Container>
                 <Row noGutters>
-                    <Input
-                        id={inputIdFom}
-                        bredde="M"
-                        type="date"
-                        label={intlHelper(intl, 'skjema.perioder.fom')}
-                        className="bold-label"
+                    <DateInput
                         value={renderDato('fom')}
-                        onChange={(event) => onChange({ fom: event.target.value, tom: periode.tom })}
-                        onBlur={(event) => onBlur({ fom: event.target.value, tom: periode.tom })}
-                        onFocus={onFocus}
-                        feil={errorMessageFom}
+                        onChange={(selectedDate) => {
+                            onChange({ fom: selectedDate, tom: periode.tom });
+                            if (onBlur) {
+                                onBlur({ fom: selectedDate, tom: periode.tom });
+                            }
+                        }}
+                        id={inputIdFom}
                         disabled={disabled || disabledFom}
+                        errorMessage={errorMessageFom}
+                        label={intlHelper(intl, 'skjema.perioder.fom')}
                     />
-                    <Input
-                        id={inputIdTom}
-                        bredde="M"
-                        type="date"
-                        label={intlHelper(intl, 'skjema.perioder.tom')}
-                        className="right"
-                        value={renderDato('tom')}
-                        onChange={(event) => onChange({ fom: periode.fom, tom: event.target.value })}
-                        onBlur={(event) => onBlur({ fom: periode.fom, tom: event.target.value })}
-                        onFocus={onFocus}
-                        feil={errorMessageTom}
-                        disabled={disabled || disabledTom}
-                    />
+                    <div className="periodInput__tom-container">
+                        <DateInput
+                            value={renderDato('tom')}
+                            onChange={(selectedDate) => {
+                                onChange({ fom: periode.fom, tom: selectedDate });
+                                if (onBlur) {
+                                    onBlur({ fom: periode.fom, tom: selectedDate });
+                                }
+                            }}
+                            id={inputIdTom}
+                            disabled={disabled || disabledTom}
+                            errorMessage={errorMessageTom}
+                            label={intlHelper(intl, 'skjema.perioder.tom')}
+                        />
+                    </div>
                 </Row>
             </Container>
         </SkjemaGruppe>

@@ -1,23 +1,34 @@
 import { TimeFormat } from 'app/models/enums';
 import { Ukedag, UkedagNumber } from 'app/models/types';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import duration from 'dayjs/plugin/duration';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { IntlShape } from 'react-intl';
 import intlHelper from './intlUtils';
 import { IPeriode } from '../models/types/Periode';
 
+dayjs.extend(utc);
+dayjs.extend(duration);
+dayjs.extend(isoWeek);
+dayjs.extend(customParseFormat);
+
 export const datetime = (intl: IntlShape, outputFormat: TimeFormat, time?: string, inputFormat?: string) =>
-    moment(time, inputFormat).format(intlHelper(intl, `tidsformat.${outputFormat}`));
+    dayjs(time, inputFormat)
+        .utc(true)
+        .format(intlHelper(intl, `tidsformat.${outputFormat}`));
 
 export function durationToString(hours: number, minutes: number) {
-    return moment.duration(hours * 60 + minutes, 'minutes').toISOString();
+    return dayjs.duration(hours * 60 + minutes, 'minutes').toISOString();
 }
 
 export function hoursFromString(iso8601duration: string) {
-    return Math.floor(moment.duration(iso8601duration).asHours());
+    return Math.floor(dayjs.duration(iso8601duration).asHours());
 }
 
 export function minutesFromString(iso8601duration: string) {
-    return moment.duration(iso8601duration).asMinutes() % 60;
+    return dayjs.duration(iso8601duration).asMinutes() % 60;
 }
 
 export function convertNumberToUkedag(num: UkedagNumber): Ukedag | string {
@@ -46,8 +57,8 @@ export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) 
         return true;
     }
 
-    const start = moment(period.fom);
-    const end = moment(period.tom);
+    const start = dayjs(period.fom).utc(true);
+    const end = dayjs(period.tom).utc(true);
 
     if (end.isBefore(start)) {
         return false;
