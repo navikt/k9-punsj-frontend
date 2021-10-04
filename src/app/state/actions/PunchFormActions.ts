@@ -76,7 +76,8 @@ interface IValiderSoknadRequestAction {
 
 interface IValiderSoknadSuccessAction {
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
-    validertSoknad?: IPSBSoknadKvittering
+    validertSoknad?: IPSBSoknadKvittering,
+    erMellomlagring?: boolean
 }
 
 interface IValiderSoknadErrorAction {
@@ -289,7 +290,7 @@ export const submitSoknadConflictAction = (): ISubmitSoknadConflictAction  => ({
 });
 
 export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST});
-export const validerSoknadSuccessAction = (validertSoknad: IPSBSoknadKvittering): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS, validertSoknad});
+export const validerSoknadSuccessAction = (validertSoknad: IPSBSoknadKvittering, erMellomlagring?: boolean): IValiderSoknadSuccessAction => ({type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS, validertSoknad, erMellomlagring});
 export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
     error
@@ -327,7 +328,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
     }
 }
 
-export function validerSoknad(soknad: IPSBSoknadUt) {
+export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
     const norskIdent: string = typeof soknad.soeknadId === 'undefined' ? '' : soknad.soeknadId;
 
     return (dispatch: any) => {
@@ -335,7 +336,7 @@ export function validerSoknad(soknad: IPSBSoknadUt) {
         post(ApiPath.SOKNAD_VALIDER, {id: soknad.soeknadId}, {'X-Nav-NorskIdent': norskIdent}, soknad, (response, data) => {
             switch (response.status) {
                 case 202:
-                    return dispatch(validerSoknadSuccessAction(data));
+                    return dispatch(validerSoknadSuccessAction(data, erMellomlagring));
                 case 400:
                     return  dispatch(validerSoknadUncompleteAction(data.feil));
                 default:
