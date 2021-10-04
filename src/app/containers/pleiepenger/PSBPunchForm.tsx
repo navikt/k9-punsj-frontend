@@ -20,7 +20,9 @@ import {
 import { setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import utc from 'dayjs/plugin/utc';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
@@ -69,6 +71,9 @@ import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+
+dayjs.extend(utc);
+dayjs.extend(isSameOrBefore);
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -257,8 +262,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return eksisterendePerioder.some(
             (ep) =>
-                moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) &&
-                moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))
+                dayjs(ep.fom!).utc(true).isSameOrBefore(dayjs(nyPeriode.tom!).utc(true)) &&
+                dayjs(nyPeriode.fom!).utc(true).isSameOrBefore(dayjs(ep.tom!).utc(true))
         );
     };
 
@@ -1237,7 +1242,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private erFremITidKlokkeslett(dato: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
-        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
+        if (
+            !!mottattDato &&
+            naa.getDate() === new Date(mottattDato!).getDate() &&
+            dayjs(naa).utc(true).format('HH:mm') < dato
+        ) {
             return true;
         }
         return false;

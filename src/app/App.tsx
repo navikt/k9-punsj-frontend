@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
 import { render } from 'react-dom';
@@ -27,7 +26,6 @@ const localeFromSessionStorage = getLocaleFromSessionStorage();
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
-    moment.locale(localeFromSessionStorage);
 
     return (
         <Provider store={store}>
