@@ -1,9 +1,13 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { TimeFormat } from 'app/models/enums';
 import { Ukedag, UkedagNumber } from 'app/models/types';
 import moment from 'moment';
 import { IntlShape } from 'react-intl';
 import intlHelper from './intlUtils';
 import { IPeriode } from '../models/types/Periode';
+
+dayjs.extend(utc);
 
 export const datetime = (intl: IntlShape, outputFormat: TimeFormat, time?: string, inputFormat?: string) =>
     moment(time, inputFormat).format(intlHelper(intl, `tidsformat.${outputFormat}`));
@@ -91,3 +95,5 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     });
     return datoTilGMT.substr(0, 5);
 };
+
+export const initializeDate = (date?: string | null): dayjs.Dayjs => dayjs(date).utc(true);

@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { initializeDate } from 'app/utils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel } from 'nav-frontend-skjema';
@@ -44,8 +44,8 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = selectedPeriods.some((periode) =>
             eksisterendePerioder.some(
                 (eksisterendePeriode) =>
-                    moment(periode.fom).isAfter(eksisterendePeriode.fom) &&
-                    moment(periode.tom).isBefore(eksisterendePeriode.tom)
+                    initializeDate(periode.fom).isAfter(initializeDate(eksisterendePeriode.fom)) &&
+                    initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom))
             )
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = selectedPeriods.some((periode) =>
