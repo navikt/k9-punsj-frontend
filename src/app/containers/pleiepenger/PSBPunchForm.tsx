@@ -1935,6 +1935,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
         if (this.state.harForsoektAaSendeInn) {
+            if (this.state.visErDuSikkerModal) {
+                this.setState({visErDuSikkerModal: false})
+            }
             this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter})
         }
         return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
