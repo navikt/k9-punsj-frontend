@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { TimeFormat } from 'app/models/enums';
 import { Ukedag, UkedagNumber } from 'app/models/types';
 import dayjs from 'dayjs';
@@ -22,6 +24,8 @@ export const initializeDate = (date?: string | Date | null, format?: string | st
     }
     return dayjs().utc(true);
 };
+
+dayjs.extend(utc);
 
 export const datetime = (intl: IntlShape, outputFormat: TimeFormat, time?: string, inputFormat?: string) =>
     initializeDate(time, inputFormat).format(intlHelper(intl, `tidsformat.${outputFormat}`));
