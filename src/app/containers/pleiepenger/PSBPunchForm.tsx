@@ -390,8 +390,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 }
                 textFjern="skjema.arbeid.arbeidstaker.fjernarbeidsgiver"
                 panelClassName="arbeidstakerpanel"
-                feilkodeprefiks={'ytelse.arbeidstid.arbeidstakerList'}
+                feilkodeprefiks={'ytelse.arbeidstid.arbeidstakerList[0]'}
                 getErrorMessage={this.getErrorMessage}
+                getUhaandterteFeil={this.getUhaandterteFeil}
                 kanHaFlere={true}
                 medSlettKnapp={true}
             />)
@@ -476,7 +477,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere={true}
                             getErrorMessage={this.getErrorMessage}
-                            feilkodeprefiks={'arbeidstid.frilanser'}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
+                            feilkodeprefiks={'ytelse.arbeidstid.frilanserArbeidstidInfo'}
                             medSlettKnapp={false}
                         />
                     </>)}</>);
@@ -839,6 +841,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                                 }, showStatus)
                             }
                             component={pfArbeidstider()}
+                            getErrorMessage={this.getErrorMessage}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
+                            feilkodeprefiks={'ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo'}
                             minstEn={true}
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere={true}
@@ -865,7 +870,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     className="beredskapsperioder"
                     panelClassName="beredskapspanel"
                     getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'beredskap'}
+                    getUhaandterteFeil={this.getUhaandterteFeil}
+                    feilkodeprefiks={'ytelse.beredskap'}
                     kanHaFlere={true}
                     medSlettKnapp={false}
                 />
@@ -889,7 +895,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                     className="nattevaaksperioder"
                     panelClassName="nattevaakspanel"
                     getErrorMessage={this.getErrorMessage}
-                    feilkodeprefiks={'nattevåk'}
+                    getUhaandterteFeil={this.getUhaandterteFeil}
+                    feilkodeprefiks={'ytelse.nattevåk'}
                     kanHaFlere={true}
                     medSlettKnapp={false}
                 />
@@ -1142,7 +1149,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             textFjern="skjema.perioder.fjern"
                             panelClassName="tilsynsordningpanel"
                             getErrorMessage={this.getErrorMessage}
-                            feilkodeprefiks={'tilsynsordning'}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
+                            feilkodeprefiks={'ytelse.tilsynsordning'}
                             kanHaFlere={true}
                             medSlettKnapp={false}
                         />)}
@@ -1209,7 +1217,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                             className="bosteder"
                             panelClassName="bostederpanel"
                             getErrorMessage={this.getErrorMessage}
-                            feilkodeprefiks={'bosteder'}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
+                            feilkodeprefiks={'ytelse.bosteder'}
                             kanHaFlere={true}
                             medSlettKnapp={false}
                         />
@@ -1244,9 +1253,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
                 >{intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}</Hjelpetekst></div>
                 <VerticalSpacer twentyPx={true}/>
                 {
-                    this.getErrorMessage('')
-                        ?.split(';')
-                        .map((feilmelding, index) => nummerPrefiks(feilmelding, index + 1))
+                    this.getUhaandterteFeil('')
+                        .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                         .map(feilmelding => {
                             return <Feilmelding key={feilmelding} feil={feilmelding}/>
                     })
@@ -1364,7 +1372,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
                     </ModalWrapper>
                 )}
-
 
                 {this.state.visErDuSikkerModal && (
                     <ModalWrapper
@@ -1828,10 +1835,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         }
         return false;
     }
+    
+    getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
+        console.log(attribute)
+        if (!this.state.feilmeldingStier.has(attribute)) {
+            this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)})
+        }
+        
+        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
+            const felter = m.felt?.split('.') || []
+            for (let index = felter.length - 1; index >= -1; index--) {
+                const felt = felter.slice(0, index + 1).join('.')
+                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier)
+                andreFeilmeldingStier.delete(attribute);
+                if (attribute === felt) {
+                    return true;
+                }
+                if (andreFeilmeldingStier.has(felt)) {
+                    return false;
+                }
+            }
+            return false;
+    })
+
+    if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
+        return uhaandterteFeilmeldinger.map(error => error.feilmelding).filter(Boolean)
+    } 
+    return [];
+
+    }
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
         const {mottattDato, klokkeslett} = this.state.soknad;
-
+        console.log(attribute)
         if (!this.state.feilmeldingStier.has(attribute)) {
             this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)})
         }
@@ -1854,28 +1890,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
 
         const errorMsg = this.getManglerFromStore()?.filter(
             (m: IInputError) => m.felt === attribute)?.[indeks || 0]?.feilmelding;
-        
-        if (!errorMsg) {
-        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
-                const felter = m.felt?.split('.') || []
-                for (let index = felter.length - 1; index >= -1; index--) {
-                    const felt = felter.slice(0, index + 1).join('.')
-                    const andreFeilmeldingStier = new Set(this.state.feilmeldingStier)
-                    andreFeilmeldingStier.delete(attribute);
-                    if (attribute === felt) {
-                        return true;
-                    }
-                    if (andreFeilmeldingStier.has(felt)) {
-                        return false;
-                    }
-                }
-                return false;
-        })
-
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger?.map(error => error.feilmelding).join(';')
-        } 
-    }
         
 
         if (errorMsg) {
@@ -1935,10 +1949,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps,
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
         if (this.state.harForsoektAaSendeInn) {
-            if (this.state.visErDuSikkerModal) {
-                this.setState({visErDuSikkerModal: false})
-            }
-            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter})
+            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter}, true)
         }
         return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
     };
@@ -2020,8 +2031,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (soknad: IPSBSoknadUt) =>
-        dispatch(validerSoknad(soknad)),
+    validateSoknad: (soknad: IPSBSoknadUt, erMellomlagring: boolean) =>
+        dispatch(validerSoknad(soknad, erMellomlagring)),
     validerSoknadReset: () =>
         dispatch(validerSoknadResetAction())
 });

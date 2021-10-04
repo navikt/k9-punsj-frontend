@@ -16,6 +16,7 @@ import './periodeinfoPaneler.less';
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
 export type GetErrorMessage = (kode: string) => (React.ReactNode | boolean | undefined);
+export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export type PeriodeinfoComponent<T> = (info: Periodeinfo<T>,
                                        periodeindex: number,
@@ -38,6 +39,7 @@ export interface IPeriodeinfopanelerProps {
     textFjern?: string;
     panelClassName?: string;
     getErrorMessage?: GetErrorMessage;
+    getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
@@ -135,6 +137,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         editSoknad={editSoknad}
         editSoknadState={editSoknadState}
         getErrorMessage={props.getErrorMessage}
+        getUhaandterteFeil={props.getUhaandterteFeil}
         className={props.className}
         minstEn={props.minstEn}
         feilkodeprefiks={props.feilkodeprefiks}
