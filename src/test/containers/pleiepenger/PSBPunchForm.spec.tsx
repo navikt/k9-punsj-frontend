@@ -225,11 +225,17 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
-        punchForm
-            .find(OpplysningerOmSoknad)
+        const inputField = punchForm
+            .find('OpplysningerOmSoknad')
+            .shallow()
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === 'soknad-dato')
+            .at(0)
+            .shallow()
+            .find('Datepicker')
             .dive()
             .find('#soknad-dato')
-            .simulate('blur', { target: { value: newDato } });
+            .dive();
+        inputField.simulate('blur', { target: { value: newDato } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             mottattDato: newDato,
@@ -240,12 +246,18 @@ describe('PunchForm', () => {
     it('Oppdaterer felt når mottakelsesdato endres', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad });
-        punchForm
-            .find(OpplysningerOmSoknad)
+        const inputField = punchForm
+            .find('OpplysningerOmSoknad')
+            .shallow()
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === 'soknad-dato')
+            .at(0)
+            .shallow()
+            .find('Datepicker')
             .dive()
             .find('#soknad-dato')
-            .simulate('change', { target: { value: newDato } });
-        expect(punchForm.find(OpplysningerOmSoknad).dive().find('#soknad-dato').prop('value')).toEqual(newDato);
+            .dive();
+        inputField.simulate('change', { target: { value: newDato } });
+        expect(inputField.prop('value')).toEqual(newDato);
     });
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
@@ -266,11 +278,17 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad }, { updateSoknad });
-        punchForm
+        const inputField = punchForm
             .find('Soknadsperioder')
+            .shallow()
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === 'soknadsperiode-fra')
+            .at(0)
+            .shallow()
+            .find('Datepicker')
             .dive()
             .find('#soknadsperiode-fra')
-            .simulate('blur', { target: { value: newDato } });
+            .dive();
+        inputField.simulate('blur', { target: { value: newDato } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             soeknadsperiode: expect.objectContaining({ fom: newDato, tom: '' }),
@@ -282,12 +300,18 @@ describe('PunchForm', () => {
         const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad });
-        punchForm
+        const inputField = punchForm
             .find('Soknadsperioder')
+            .shallow()
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === 'soknadsperiode-fra')
+            .at(0)
+            .shallow()
+            .find('Datepicker')
             .dive()
             .find('#soknadsperiode-fra')
-            .simulate('change', { target: { value: newDato } });
-        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra').prop('value')).toEqual(newDato);
+            .dive();
+        inputField.simulate('change', { target: { value: newDato } });
+        expect(inputField.prop('value')).toEqual(newDato);
     });
 
     it('Oppdaterer søknad når til-dato på søknadsperioden endres', () => {
@@ -295,11 +319,17 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
         const newDato = '2020-01-01';
         const punchForm = setupPunchForm({ soknad }, { updateSoknad });
-        punchForm
+        const inputField = punchForm
             .find('Soknadsperioder')
+            .shallow()
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === 'soknadsperiode-til')
+            .at(0)
+            .shallow()
+            .find('Datepicker')
             .dive()
             .find('#soknadsperiode-til')
-            .simulate('blur', { target: { value: newDato } });
+            .dive();
+        inputField.simulate('blur', { target: { value: newDato } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             soeknadsperiode: expect.objectContaining({ fom: '', tom: newDato }),
@@ -311,12 +341,18 @@ describe('PunchForm', () => {
         const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
         const newDato = '2020-01-01';
         const punchForm = setupPunchForm({ soknad });
-        punchForm
+        const inputField = punchForm
             .find('Soknadsperioder')
+            .shallow()
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === 'soknadsperiode-til')
+            .at(0)
+            .shallow()
+            .find('Datepicker')
             .dive()
             .find('#soknadsperiode-til')
-            .simulate('change', { target: { value: newDato } });
-        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til').prop('value')).toEqual(newDato);
+            .dive();
+        inputField.simulate('change', { target: { value: newDato } });
+        expect(inputField.prop('value')).toEqual(newDato);
     });
 
     it('Viser checkboks for tilsyn', () => {
