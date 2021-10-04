@@ -102,3 +102,5 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     });
     return datoTilGMT.substr(0, 5);
 };
+
+export const initializeDate = (date?: string | null): dayjs.Dayjs => dayjs(date).utc(true);
