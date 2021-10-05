@@ -169,15 +169,17 @@ export function PunchFormReducer(
                 validateSoknadError: undefined,
             };
 
-        case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:
+        case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:{
+            const {erMellomlagring} = action;
             return {
                 ...punchFormState,
                 validertSoknad: action.validertSoknad,
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
                 inputErrors: undefined,
-                isValid: true,
+                isValid: !erMellomlagring
             };
+        }
 
         case PunchFormActionKeys.SOKNAD_VALIDER_UNCOMPLETE:
             return {

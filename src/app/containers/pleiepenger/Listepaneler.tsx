@@ -6,10 +6,12 @@ import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
+import Feilmelding from '../../components/Feilmelding';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
 export type GetErrorMessage = (kode: string) => React.ReactNode | boolean | undefined;
+export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export type ListeComponent<T> = (
     itemInfo: T,
@@ -34,6 +36,7 @@ export interface IListepanelerProps<T> {
     textFjern?: string;
     panelClassName?: string;
     getErrorMessage?: GetErrorMessage;
+    getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
@@ -49,7 +52,16 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
 ) => {
     const { items, initialItem, className, textLeggTil } = props;
     const itemsWithInitialItem = items.length > 0 ? items : [initialItem];
-    const { intl, component, editSoknad, editSoknadState, feilkodeprefiks, kanHaFlere, medSlettKnapp } = props;
+    const {
+        intl,
+        component,
+        editSoknad,
+        editSoknadState,
+        feilkodeprefiks,
+        kanHaFlere,
+        medSlettKnapp,
+        getUhaandterteFeil,
+    } = props;
     const getErrorMessage = (code: string) =>
         props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
@@ -95,12 +107,10 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
     };
 
     return (
-        <SkjemaGruppe feil={getErrorMessage('')} className={classNames('listepaneler', className)}>
+        <SkjemaGruppe className={classNames('listepaneler', className)}>
             {!!items &&
                 items!.map((itemInfo, itemIndex) => {
                     const panelid = props.panelid(itemIndex);
-                    const panelErrorMessage =
-                        feilkodeprefiks === 'perioder' ? undefined : getErrorMessage(`[${panelid}]`);
                     return (
                         <Panel
                             className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
@@ -108,7 +118,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                             id={panelid}
                             key={panelid}
                         >
-                            <SkjemaGruppe feil={panelErrorMessage}>
+                            <SkjemaGruppe feil={getErrorMessage(`.perioder[${itemIndex}]`)}>
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
                                     <h2>
                                         <FormattedMessage
@@ -143,6 +153,12 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         getErrorMessage,
                                         intl
                                     )}
+                                {feilkodeprefiks &&
+                                    getUhaandterteFeil &&
+                                    getUhaandterteFeil(feilkodeprefiks).map((feilmelding, index) => (
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        <Feilmelding key={index} feil={feilmelding} />
+                                    ))}
                             </SkjemaGruppe>
                         </Panel>
                     );

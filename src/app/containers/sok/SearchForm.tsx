@@ -1,12 +1,12 @@
+import React from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import SokKnapp from '../../components/knapp/SokKnapp';
 import VerticalSpacer from '../../components/VerticalSpacer';
+import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
@@ -48,6 +48,20 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
         };
     }
 
+    onClick = (): void => {
+        const { journalpostid } = this.state;
+        const { getJournalpost } = this.props;
+        if (journalpostid) {
+            getJournalpost(journalpostid);
+        }
+    };
+
+    handleKeydown = (event: React.KeyboardEvent): void => {
+        if (event.key === 'Enter') {
+            this.onClick();
+        }
+    };
+
     render() {
         const { journalpostid } = this.state;
         const {
@@ -59,16 +73,9 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             lukkJournalpostOppgave,
             lukkOppgaveDone,
             lukkOppgaveReset,
-            getJournalpost,
         } = this.props;
 
         const disabled = !journalpostid;
-
-        const onClick = () => {
-            if (journalpostid) {
-                getJournalpost(journalpostid);
-            }
-        };
 
         if (journalpost?.journalpostId) {
             window.location.assign(`journalpost/${journalpostid}`);
@@ -100,8 +107,9 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                             bredde="L"
                             onChange={(e) => this.setState({ journalpostid: e.target.value })}
                             label={<FormattedMessage id="søk.label.jpid" />}
+                            onKeyDown={this.handleKeydown}
                         />
-                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                        <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
                         <VerticalSpacer sixteenPx />
                     </div>
 
