@@ -118,7 +118,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                             id={panelid}
                             key={panelid}
                         >
-                            <SkjemaGruppe feil={getErrorMessage(`.perioder[${itemIndex}]`)}>
+                            <SkjemaGruppe>
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
                                     <h2>
                                         <FormattedMessage
