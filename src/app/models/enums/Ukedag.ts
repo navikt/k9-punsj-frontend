@@ -1,9 +1,10 @@
+// eslint-disable-next-line import/prefer-default-export
 export enum Ukedag {
     MANDAG,
     TIRSDAG,
-    ONSDAG ,
+    ONSDAG,
     TORSDAG,
     FREDAG,
     LORDAG,
-    SONDAG
+    SONDAG,
 }

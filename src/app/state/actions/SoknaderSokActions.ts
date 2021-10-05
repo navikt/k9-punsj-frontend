@@ -1,5 +1,5 @@
-import {SoknaderSokActionKeys} from "../../models/enums/SoknaderSokActionKeys";
-import {SoknaderVisningStep} from "../../models/enums/SoknaderVisningStep";
+import { SoknaderSokActionKeys } from '../../models/enums/SoknaderSokActionKeys';
+import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
 
 interface ISetIdentSokAction {
     type: SoknaderSokActionKeys.IDENT_SET;
@@ -11,14 +11,10 @@ interface ISetStepSokAction {
     step: SoknaderVisningStep;
 }
 
-export type ISoknaderSokActionTypes =
-    | ISetStepSokAction
-    | ISetIdentSokAction;
+export type ISoknaderSokActionTypes = ISetStepSokAction | ISetIdentSokAction;
 
-export function setIdentSokAction(
-    ident: string
-): ISetIdentSokAction {
-    return { type: SoknaderSokActionKeys.IDENT_SET, ident};
+export function setIdentSokAction(ident: string): ISetIdentSokAction {
+    return { type: SoknaderSokActionKeys.IDENT_SET, ident };
 }
 
 export function setStepSokAction(step: SoknaderVisningStep): ISetStepSokAction {

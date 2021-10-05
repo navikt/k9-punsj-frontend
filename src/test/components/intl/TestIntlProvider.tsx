@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 
-const messages = require('./testMessages.json');
+import messages from './testMessages.json';
 
-const TestIntlProvider: React.FunctionComponent = ({ children }) => {
-  return (
+const TestIntlProvider: React.FunctionComponent = ({ children }) => (
     <IntlProvider locale="nb" messages={messages}>
-      {children}
+        {children}
     </IntlProvider>
-  );
-};
+);
 
 export default TestIntlProvider;

@@ -1,46 +1,43 @@
-import {
-  JournalpostLoaderImpl,
-  JournapostLoaderProps,
-} from '../../app/containers/JournalpostLoader';
 import { render, RenderResult } from '@testing-library/react';
 import React from 'react';
-import { IJournalpost } from '../../app/models/types';
 import { shallow } from 'enzyme';
+import { IJournalpost } from '../../app/models/types';
+import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
 
 jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
 
 const setupLoader = ({
-  journalpost,
-  renderOnLoadComplete = () => '',
-  getJournalpost = jest.fn(),
-  lukkJournalpostOppgave = jest.fn(),
-  journalpostId = '200',
-  journalpostRequestError,
-  isJournalpostLoading,
-  forbidden,
-  notFound
+    journalpost,
+    renderOnLoadComplete = () => '',
+    getJournalpost = jest.fn(),
+    lukkJournalpostOppgave = jest.fn(),
+    journalpostId = '200',
+    journalpostRequestError,
+    isJournalpostLoading,
+    forbidden,
+    notFound,
 }: Partial<JournapostLoaderProps>): RenderResult => {
-  const loader = render(
-    <JournalpostLoaderImpl
-      journalpostId={journalpostId}
-      renderOnLoadComplete={renderOnLoadComplete}
-      getJournalpost={getJournalpost}
-      lukkJournalpostOppgave={lukkJournalpostOppgave}
-      journalpost={journalpost}
-      journalpostRequestError={journalpostRequestError}
-      isJournalpostLoading={isJournalpostLoading}
-      forbidden={forbidden}
-      conflict={false}
-      notFound={notFound}
-      lukkOppgaveReset={jest.fn()}
-      lukkOppgaveDone={undefined}
-    />
-  );
+    const loader = render(
+        <JournalpostLoaderImpl
+            journalpostId={journalpostId}
+            renderOnLoadComplete={renderOnLoadComplete}
+            getJournalpost={getJournalpost}
+            lukkJournalpostOppgave={lukkJournalpostOppgave}
+            journalpost={journalpost}
+            journalpostRequestError={journalpostRequestError}
+            isJournalpostLoading={isJournalpostLoading}
+            forbidden={forbidden}
+            conflict={false}
+            notFound={notFound}
+            lukkOppgaveReset={jest.fn()}
+            lukkOppgaveDone={undefined}
+        />
+    );
 
-  expect(getJournalpost).toHaveBeenCalledTimes(1);
+    expect(getJournalpost).toHaveBeenCalledTimes(1);
 
-  return loader;
+    return loader;
 };
 
 describe('JournalpostLoader', () => {
@@ -48,7 +45,7 @@ describe('JournalpostLoader', () => {
         const journalpostId = '200';
 
         const testId = 'test-id';
-        const renderedOnLoad = () => <div data-testid={testId}/>;
+        const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = {
             dokumenter: [
@@ -61,7 +58,7 @@ describe('JournalpostLoader', () => {
             erSaksbehandler: true,
         };
 
-        const {getByTestId} = setupLoader({
+        const { getByTestId } = setupLoader({
             journalpost,
             renderOnLoadComplete: renderedOnLoad,
         });
@@ -72,11 +69,11 @@ describe('JournalpostLoader', () => {
     it('Viser spinner mens journalpost lastes inn', () => {
         const journalpostId = '200';
         const testId = 'test-id';
-        const renderedOnLoad = () => <div data-testid={testId}/>;
+        const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
-                isJournalpostLoading={true}
+                isJournalpostLoading
                 renderOnLoadComplete={renderedOnLoad}
                 journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
@@ -95,7 +92,7 @@ describe('JournalpostLoader', () => {
     it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
         const journalpostId = '200';
         const testId = 'test-id';
-        const renderedOnLoad = () => <div data-testid={testId}/>;
+        const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpostIngenDokumenter: IJournalpost = {
             dokumenter: [],
@@ -121,15 +118,13 @@ describe('JournalpostLoader', () => {
 
         const alert = journalpost.find('AlertStripeFeil');
         expect(alert).toHaveLength(1);
-        expect(alert.childAt(0).prop('id')).toEqual(
-            'startPage.feil.ingendokumenter'
-        );
+        expect(alert.childAt(0).prop('id')).toEqual('startPage.feil.ingendokumenter');
     });
 
     it('Viser feilmelding når journalposten ikke stöttes', () => {
         const journalpostId = '200';
         const testId = 'test-id';
-        const renderedOnLoad = () => <div data-testid={testId}/>;
+        const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
@@ -138,8 +133,8 @@ describe('JournalpostLoader', () => {
                 getJournalpost={jest.fn()}
                 lukkJournalpostOppgave={jest.fn()}
                 forbidden={false}
-                conflict={true}
-                journalpostConflictError={{type: 'punsj://ikke-støttet-journalpost'}}
+                conflict
+                journalpostConflictError={{ type: 'punsj://ikke-støttet-journalpost' }}
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
                 lukkOppgaveDone={undefined}
@@ -157,7 +152,7 @@ describe('JournalpostLoader', () => {
     it('Viser feilmelding når SB ikke har tillgang att se journalposten', () => {
         const journalpostId = '200';
         const testId = 'test-id';
-        const renderedOnLoad = () => <div data-testid={testId}/>;
+        const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
@@ -165,7 +160,7 @@ describe('JournalpostLoader', () => {
                 journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
                 lukkJournalpostOppgave={jest.fn()}
-                forbidden={true}
+                forbidden
                 conflict={false}
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
@@ -181,7 +176,7 @@ describe('JournalpostLoader', () => {
     it('Viser LOS lukk oppgave modal etter att oppgaven har blivit lukket', () => {
         const journalpostId = '200';
         const testId = 'test-id';
-        const renderedOnLoad = () => <div data-testid={testId}/>;
+        const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
@@ -193,7 +188,7 @@ describe('JournalpostLoader', () => {
                 conflict={false}
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
-                lukkOppgaveDone={true}
+                lukkOppgaveDone
             />
         );
 

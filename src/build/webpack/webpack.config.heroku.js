@@ -1,7 +1,7 @@
 const path = require('path');
-const webpackConfig = require('./webpack.config.global.js');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpackConfig = require('./webpack.config.global.js');
 
 webpackConfig.mode = 'production';
 

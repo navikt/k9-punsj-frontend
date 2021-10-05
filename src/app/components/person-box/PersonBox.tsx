@@ -7,16 +7,19 @@ interface IPersonBoxProps {
     ident: string;
     header: string;
 }
-
-export const PersonBox: React.FunctionComponent<IPersonBoxProps> = (props: IPersonBoxProps) => {
-    const {ident} = props;
-    return <div className="personBox alertstripe alertstripe--info">
-        <div className="personBoxIcon">
-            {ident && Number(ident.charAt(8))%2 ? <PersonMSVG/> : <PersonWSVG/>}
+const PersonBox: React.FunctionComponent<IPersonBoxProps> = (props: IPersonBoxProps) => {
+    const { ident, header } = props;
+    return (
+        <div className="personBox alertstripe alertstripe--info">
+            <div className="personBoxIcon">
+                {ident && Number(ident.charAt(8)) % 2 ? <PersonMSVG /> : <PersonWSVG />}
+            </div>
+            <div className="personBoxInfo">
+                <p>{header}</p>
+                <p>{ident}</p>
+            </div>
         </div>
-        <div className="personBoxInfo">
-            <p>{props.header}</p>
-            <p>{ident}</p>
-        </div>
-    </div>;
+    );
 };
+
+export default PersonBox;

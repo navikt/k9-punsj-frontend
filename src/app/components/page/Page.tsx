@@ -1,5 +1,5 @@
 import DocumentTitle from 'app/components/document-title/DocumentTitle';
-import * as React    from 'react';
+import * as React from 'react';
 import './page.less';
 
 interface IPageProps {

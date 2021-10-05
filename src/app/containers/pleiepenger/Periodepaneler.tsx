@@ -1,15 +1,14 @@
-import {PeriodInput} from 'app/components/period-input/PeriodInput';
+import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
-import {IntlShape} from 'react-intl';
-import {IPeriode} from "../../models/types/Periode";
-import BinSvg from "../../assets/SVG/BinSVG";
-import intlHelper from "../../utils/intlUtils";
-import {Knapp} from "nav-frontend-knapper";
-import Panel from "nav-frontend-paneler";
-import {Row} from "react-bootstrap";
-import AddCircleSvg from "../../assets/SVG/AddCircleSVG";
+import { Row } from 'react-bootstrap';
+import { IntlShape } from 'react-intl';
+import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
+import BinSvg from '../../assets/SVG/BinSVG';
+import { IPeriode } from '../../models/types/Periode';
+import intlHelper from '../../utils/intlUtils';
 
-export type GetErrorMessage = (kode: string, indeks?: number) => (React.ReactNode | boolean | undefined);
+export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -31,13 +30,15 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
+    const { periods, textLeggTil } = props;
+    const { intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks } = props;
 
-    const periods = !!props.periods ? props.periods : [];
-    const {intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks} = props;
-
-    const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (index: number, periodeinfo: Partial<IPeriode>) => {
-        const newInfo: IPeriode = {...props.periods[index], ...periodeinfo};
-        const newArray = periods;
+    const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
+        index: number,
+        periodeinfo: Partial<IPeriode>
+    ) => {
+        const newInfo: IPeriode = { ...props.periods[index], ...periodeinfo };
+        const newArray = periods || [];
         newArray[index] = newInfo;
         return newArray;
     };
@@ -45,65 +46,83 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, periode);
 
     const addItem = () => {
-        const newArray = periods;
+        const newArray = periods || [];
         newArray.push(props.initialPeriode);
         return newArray;
     };
 
     const removeItem = (index: number) => {
-        const newArray = periods;
+        const newArray = periods || [];
         newArray.splice(index, 1);
         return newArray;
     };
 
     return (
-        <Panel className={"periodepanel"}>
-            {periods.map((p, i) =>
-                <Row noGutters={true} key={i}>
-                    <div className={"periodepanel-input"}>
+        <Panel className="periodepanel">
+            {periods.map((p, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Row noGutters key={i}>
+                    <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}
                             intl={intl}
                             onChange={(periode) => {
-                                editSoknadState(editPeriode(i, periode))
+                                editSoknadState(editPeriode(i, periode));
                             }}
                             onBlur={(periode) => {
-                                editSoknad(editPeriode(i, periode))
+                                editSoknad(editPeriode(i, periode));
                             }}
-                            errorMessage={feilkodeprefiks ? getErrorMessage!(feilkodeprefiks, i) : getErrorMessage!(`[${i}].periode`)}
+                            errorMessage={
+                                feilkodeprefiks
+                                    ? getErrorMessage!(feilkodeprefiks, i)
+                                    : getErrorMessage!(`[${i}].periode`)
+                            }
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
-                        <div
+                        <button
                             id="slett"
-                            className={!!getErrorMessage!(feilkodeprefiks!, i) ? "fjern-feil" : "fjern"}
-                            role="button"
+                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
+                            type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);
                                 editSoknadState(newArray);
                                 editSoknad(newArray);
-                                !!props.onRemove && props.onRemove();
+                                if (props.onRemove) {
+                                    props.onRemove();
+                                }
                             }}
-                            tabIndex={0}
-                        ><div className={"slettIcon"}><BinSvg title={"fjern"}/></div>
-                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}</div>
+                        >
+                            <div className="slettIcon">
+                                <BinSvg title="fjern" />
+                            </div>
+                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
+                        </button>
                     </div>
-                </Row>)}
-            {kanHaFlere &&
-            <Row noGutters={true}>
-                <div
-                    id="leggtilperiode"
-                    className={"leggtilperiode"}
-                    role="button"
-                    onClick={() => {
-                        const newArray: IPeriode[] = addItem();
-                        editSoknadState(newArray);
-                        editSoknad(newArray);
-                        !!props.onAdd && props.onAdd();
-                    }}
-                    tabIndex={0}
-                ><div className={"leggtilperiodeIcon"}><AddCircleSvg title={"leggtil"}/></div>
-                    {intlHelper(intl, props.textLeggTil || 'skjema.periodepanel.legg_til')}</div></Row>}
-
-        </Panel>);
+                </Row>
+            ))}
+            {kanHaFlere && (
+                <Row noGutters>
+                    <button
+                        id="leggtilperiode"
+                        className="leggtilperiode"
+                        type="button"
+                        onClick={() => {
+                            const newArray: IPeriode[] = addItem();
+                            editSoknadState(newArray);
+                            editSoknad(newArray);
+                            if (props.onAdd) {
+                                props.onAdd();
+                            }
+                        }}
+                    >
+                        <div className="leggtilperiodeIcon">
+                            <AddCircleSvg title="leggtil" />
+                        </div>
+                        {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
+                    </button>
+                </Row>
+            )}
+        </Panel>
+    );
 };

@@ -1,5 +1,5 @@
-import {Sakstype} from 'app/models/enums';
-import {IError}   from 'app/models/types/Error';
+import { Sakstype } from 'app/models/enums';
+import { IError } from 'app/models/types/Error';
 
 export interface IFordelingState {
     sakstype?: Sakstype;
@@ -7,12 +7,15 @@ export interface IFordelingState {
     omfordelingDone: boolean;
     isAwaitingOmfordelingResponse: boolean;
     omfordelingError?: IError;
-    isAwaitingSjekkTilK9Response: boolean,
-    sjekkTilK9Error?: IError,
+    isAwaitingSjekkTilK9Response: boolean;
+    sjekkTilK9Error?: IError;
     sjekkTilK9JournalpostStottesIkke?: boolean;
-    isAwaitingLukkOppgaveResponse: boolean,
-    lukkOppgaveError?: IError,
-    lukkOppgaveDone: boolean,
-    skalTilK9?: boolean
+    isAwaitingLukkOppgaveResponse: boolean;
+    lukkOppgaveError?: IError;
+    lukkOppgaveDone: boolean;
+    skalTilK9?: boolean;
+    isAwaitingGosysGjelderResponse?: boolean;
+    gosysGjelderKategorier?: any[];
+    gosysGjelderKategorierError?: IError;
+    valgtGosysKategori: string;
 }
-
