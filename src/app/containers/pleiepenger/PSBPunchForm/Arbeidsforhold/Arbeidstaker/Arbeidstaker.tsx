@@ -116,7 +116,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <SkjemaGruppe
             className="arbeidstaker-panel"
-            feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}
+            feil={getErrorMessage('')}
         >
             <Container>
                 <Row noGutters>
