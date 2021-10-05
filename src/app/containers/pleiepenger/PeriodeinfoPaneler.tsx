@@ -94,9 +94,9 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 onBlur={(periode) => {
                     editSoknad(editPeriode(periodeindeks, periode))
                 }}
-                errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-                errorMessageFom={getErrorMessage(`[${periodeindeks}].fom`)}
-                errorMessageTom={getErrorMessage(`[${periodeindeks}].tom`)}
+                errorMessage={getErrorMessage(`.periode[${periodeindeks}]`)}
+                errorMessageFom={getErrorMessage(`.periode[${periodeindeks}].fom`)}
+                errorMessageTom={getErrorMessage(`.periode[${periodeindeks}].tom`)}
                 initialValues={initialValues}
             />
             <div
