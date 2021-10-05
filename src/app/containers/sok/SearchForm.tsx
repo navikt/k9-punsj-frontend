@@ -48,25 +48,17 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
         };
     }
 
-    componentDidMount(): void {
-        window.addEventListener('keydown', this.handleKeydown);
-    }
-
-    componentWillUnmount(): void {
-        window.removeEventListener('keydown', this.handleKeydown);
-    }
-
-    handleKeydown = (event: KeyboardEvent) => {
-        if (event.key === 'Enter') {
-            this.onClick();
+    onClick = (): void => {
+        const { journalpostid } = this.state;
+        const { getJournalpost } = this.props;
+        if (journalpostid) {
+            getJournalpost(journalpostid);
         }
     };
 
-    onClick = () => {
-        const {journalpostid} = this.state;
-        const {getJournalpost} = this.props;
-        if (journalpostid) {
-            getJournalpost(journalpostid);
+    handleKeydown = (event: React.KeyboardEvent): void => {
+        if (event.key === 'Enter') {
+            this.onClick();
         }
     };
 
@@ -81,7 +73,6 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             lukkJournalpostOppgave,
             lukkOppgaveDone,
             lukkOppgaveReset,
-            getJournalpost,
         } = this.props;
 
         const disabled = !journalpostid;
@@ -116,8 +107,9 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                             bredde="L"
                             onChange={(e) => this.setState({ journalpostid: e.target.value })}
                             label={<FormattedMessage id="søk.label.jpid" />}
+                            onKeyDown={this.handleKeydown}
                         />
-                        <SokKnapp onClick={this.onClick} tekstId='søk.knapp.label' disabled={disabled} />
+                        <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
                         <VerticalSpacer sixteenPx />
                     </div>
 
