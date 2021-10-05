@@ -43,7 +43,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 showYearSelector
                 disabled={disabled}
             />
-            {errorMessage && <Feilmelding> message={errorMessage} </Feilmelding>}
+            {errorMessage && <Feilmelding>{errorMessage}</Feilmelding>}
         </div>
     );
 };
