@@ -2,6 +2,7 @@ import { ICountry } from '../components/country-select/CountrySelect';
 
 export const formattereDatoIArray = (dato: number[]) => {
   const formatertDato: string[] = [];
+  // eslint-disable-next-line no-plusplus
   for (let i = dato.length - 1; i >= 0; i--) {
     formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
   }
