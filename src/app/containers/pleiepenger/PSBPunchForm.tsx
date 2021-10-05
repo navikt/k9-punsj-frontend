@@ -20,9 +20,6 @@ import {
 import { setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import utc from 'dayjs/plugin/utc';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
@@ -57,6 +54,7 @@ import {
 } from '../../models/types/PSBSoknad';
 import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { RootStateType } from '../../state/RootState';
+import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import OkGaaTilLosModal from './OkGaaTilLosModal';
 import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
@@ -71,9 +69,6 @@ import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
-
-dayjs.extend(utc);
-dayjs.extend(isSameOrBefore);
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -262,8 +257,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return eksisterendePerioder.some(
             (ep) =>
-                dayjs(ep.fom!).utc(true).isSameOrBefore(dayjs(nyPeriode.tom!).utc(true)) &&
-                dayjs(nyPeriode.fom!).utc(true).isSameOrBefore(dayjs(ep.tom!).utc(true))
+                initializeDate(ep.fom!).isSameOrBefore(initializeDate(nyPeriode.tom!)) &&
+                initializeDate(nyPeriode.fom!).isSameOrBefore(initializeDate(ep.tom!))
         );
     };
 
@@ -1245,7 +1240,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (
             !!mottattDato &&
             naa.getDate() === new Date(mottattDato!).getDate() &&
-            dayjs(naa).utc(true).format('HH:mm') < dato
+            initializeDate(naa).format('HH:mm') < dato
         ) {
             return true;
         }
