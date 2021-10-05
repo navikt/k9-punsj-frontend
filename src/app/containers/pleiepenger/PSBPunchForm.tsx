@@ -528,6 +528,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     updateSoknad={this.updateSoknad}
                     updateSoknadState={this.updateSoknadState}
                     getErrorMessage={this.getErrorMessage}
+                    getUhaandterteFeil={this.getUhaandterteFeil}
                     handleFrilanserChange={this.handleFrilanserChange}
                     updateVirksomhetstyper={this.updateVirksomhetstyper}
                 />
@@ -1261,7 +1262,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
     
     getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
-        console.log(attribute)
         if (!this.state.feilmeldingStier.has(attribute)) {
             this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)})
         }
