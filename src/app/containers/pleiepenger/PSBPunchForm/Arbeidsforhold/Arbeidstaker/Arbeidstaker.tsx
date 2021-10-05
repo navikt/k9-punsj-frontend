@@ -24,8 +24,9 @@ interface ArbeidstakerComponentProps {
     listeelementindex: number;
     updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstaker>;
     updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>;
-    feilprefiks: string;
+    feilkodeprefiks: string;
     getErrorMessage: GetErrorMessage;
+    getUhaandterteFeil: (kode: string) => (string | undefined)[];
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
@@ -37,7 +38,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     listeelementindex,
     updateListeinfoInSoknad,
     updateListeinfoInSoknadState,
-    feilprefiks,
+    feilkodeprefiks,
+    getUhaandterteFeil,
     getErrorMessage,
     intl,
     arbeidsgivere,
@@ -116,7 +118,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <SkjemaGruppe
             className="arbeidstaker-panel"
-            feil={getErrorMessage('')}
         >
             <Container>
                 <Row noGutters>
@@ -300,7 +301,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     minstEn
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     getErrorMessage={getErrorMessage}
-                    feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
+                    getUhaandterteFeil={getUhaandterteFeil}
+                    feilkodeprefiks={feilkodeprefiks}
                     kanHaFlere
                     medSlettKnapp={false}
                 />
