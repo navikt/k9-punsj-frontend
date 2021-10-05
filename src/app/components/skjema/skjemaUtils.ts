@@ -1,10 +1,7 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import { initializeDate } from 'app/utils';
 import { IPeriode } from '../../models/types/Periode';
-
-dayjs.extend(utc);
 
 export const fjernIndexFraLabel = (label: string) => label.replace(/\[.*\]/g, '[]');
 
 export const generateDateString = (p: IPeriode | null) =>
-    p ? `${dayjs(p.fom).utc(true).format('DD.MM.YYYY')} - ${dayjs(p.tom).utc(true).format('DD.MM.YYYY')}` : '-';
+    p ? `${initializeDate(p.fom).format('DD.MM.YYYY')} - ${initializeDate(p.tom).format('DD.MM.YYYY')}` : '-';

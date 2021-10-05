@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import duration from 'dayjs/plugin/duration';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { IntlShape } from 'react-intl';
 import intlHelper from './intlUtils';
 import { IPeriode } from '../models/types/Periode';
@@ -13,6 +14,7 @@ dayjs.extend(utc);
 dayjs.extend(duration);
 dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
+dayjs.extend(isSameOrBefore);
 
 export const datetime = (intl: IntlShape, outputFormat: TimeFormat, time?: string, inputFormat?: string) =>
     dayjs(time, inputFormat)
@@ -103,4 +105,9 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     return datoTilGMT.substr(0, 5);
 };
 
-export const initializeDate = (date?: string | null): dayjs.Dayjs => dayjs(date).utc(true);
+export const initializeDate = (date?: string | Date | null): dayjs.Dayjs => {
+    if (date) {
+        return dayjs(date).utc(true);
+    }
+    return dayjs().utc(true);
+};

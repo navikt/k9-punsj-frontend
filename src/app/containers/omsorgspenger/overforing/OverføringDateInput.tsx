@@ -20,7 +20,7 @@ const OverføringDateInput: React.FunctionComponent<IDateInputProps & InputProps
                 {label || <FormattedMessage id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`} />}
             </Label>
             <Datepicker locale="nb" inputId={name} value={value || ''} onChange={onChange} showYearSelector />
-            {touched && error ? <Feilmelding> message={error} </Feilmelding> : null}
+            {touched && error ? <Feilmelding>{error}</Feilmelding> : null}
         </>
     );
 };
