@@ -73,9 +73,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 editSoknad(editPeriode(i, periode));
                             }}
                             errorMessage={
-                                feilkodeprefiks
-                                    ? getErrorMessage!(feilkodeprefiks, i)
-                                    : getErrorMessage!(`[${i}].periode`)
+                                feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`)
                             }
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
