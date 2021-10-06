@@ -16,10 +16,15 @@ dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
 
+export const initializeDate = (date?: string | Date | null, format?: string): dayjs.Dayjs => {
+    if (date) {
+        return dayjs(date, format).utc(true);
+    }
+    return dayjs().utc(true);
+};
+
 export const datetime = (intl: IntlShape, outputFormat: TimeFormat, time?: string, inputFormat?: string) =>
-    dayjs(time, inputFormat)
-        .utc(true)
-        .format(intlHelper(intl, `tidsformat.${outputFormat}`));
+    initializeDate(time, inputFormat).format(intlHelper(intl, `tidsformat.${outputFormat}`));
 
 export function durationToString(hours: number, minutes: number) {
     return dayjs.duration(hours * 60 + minutes, 'minutes').toISOString();
@@ -59,8 +64,8 @@ export function isWeekdayWithinPeriod(weekday: UkedagNumber, period?: IPeriode) 
         return true;
     }
 
-    const start = dayjs(period.fom).utc(true);
-    const end = dayjs(period.tom).utc(true);
+    const start = initializeDate(period.fom);
+    const end = initializeDate(period.tom);
 
     if (end.isBefore(start)) {
         return false;
@@ -103,11 +108,4 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
         hour12: false,
     });
     return datoTilGMT.substr(0, 5);
-};
-
-export const initializeDate = (date?: string | Date | null): dayjs.Dayjs => {
-    if (date) {
-        return dayjs(date).utc(true);
-    }
-    return dayjs().utc(true);
 };
