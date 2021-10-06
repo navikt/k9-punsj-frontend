@@ -10,6 +10,13 @@ interface IUtregningArbeidstidProps {
 
 const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid, intl }: IUtregningArbeidstidProps): JSX.Element | null => {
     const convert = (tid: string) => Number(tid.replace(',', '.'));
+    const regnUt = (tid: string, tidTilDeling: string) =>
+        ((convert(tid) / convert(tidTilDeling)) * 100).toLocaleString(undefined, {
+            maximumFractionDigits: 3,
+            minimumFractionDigits: 0,
+        });
+
+    const skalRegneProsent = normalArbeidstid && !Number.isNaN(Number(normalArbeidstid));
 
     if (!arbeidstid || Number.isNaN(convert(arbeidstid))) {
         return null;
@@ -22,10 +29,11 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid, intl }: IUtregningA
                     intl,
                     'skjema.arbeid.arbeidstaker.timerperuke'
                 )}`}</div>
-                {normalArbeidstid && !Number.isNaN(Number(normalArbeidstid)) && (
-                    <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${
-                        ((convert(arbeidstid) / convert(normalArbeidstid)) * 100).toLocaleString(undefined, {maximumFractionDigits: 3, minimumFractionDigits: 0})
-                    }% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
+                {skalRegneProsent && (
+                    <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${regnUt(
+                        arbeidstid,
+                        normalArbeidstid
+                    )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
                 )}
             </div>
         </>
