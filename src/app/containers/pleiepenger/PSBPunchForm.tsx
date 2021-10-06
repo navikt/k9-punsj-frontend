@@ -65,7 +65,7 @@ import { pfTimerMinutter } from './pfTimerMinutter';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
-import EksisterendeSøknadsperioder from './PSBPunchForm/EksisterendeSøknadsperioder/EksisterendeSøknadsperioder';
+import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
@@ -403,9 +403,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     }}
                 />
                 <VerticalSpacer sixteenPx={true} />
-                <EksisterendeSøknadsperioder
-                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                <EndringAvSøknadsperioder
+                    isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
                     intl={intl}
                     getErrorMessage={this.getErrorMessage}
                     soknad={soknad}
