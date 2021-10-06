@@ -142,18 +142,6 @@ describe('Listepaneler', () => {
         expect(getUhaandterteFeil).toHaveBeenCalledWith(feilkodeprefiks);
     });
 
-    it('Skal vise feilmeldinger for enkeltelementer', () => {
-        const feilkodeprefiks = 'test';
-        const getErrorMessage = jest.fn();
-        const listepaneler = setupListepaneler({
-            getErrorMessage,
-            feilkodeprefiks,
-        });
-        listepaneler
-            .find('Panel')
-            .forEach((panel, index) => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}.perioder[${index}]`));
-    });
-
     it('Kaller onAdd når et listeelement legges til', () => {
         const onAdd = jest.fn();
         const listepaneler = setupListepaneler({ onAdd });
