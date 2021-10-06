@@ -60,7 +60,7 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
 export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps
 ) => {
-    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, ident1, ident2 } = props;
+    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, ident1, ident2, journalpostid } = props;
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
@@ -123,8 +123,8 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
-    const chooseSoknad = (soknad: IPSBSoknad) => {
-        props.chooseEksisterendeSoknadAction(soknad);
+    const chooseSoknad = (soknad: IPSBSoknad, journalpost: string) => {
+        props.chooseEksisterendeSoknadAction({...soknad, journalposter: soknad?.journalposter?.add(journalpost)});
         setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
     };
 
@@ -170,7 +170,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
-                        onSubmit={() => chooseSoknad(soknadInfo)}
+                        onSubmit={() => chooseSoknad(soknadInfo, journalpostid,)}
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
