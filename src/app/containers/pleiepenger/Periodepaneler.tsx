@@ -1,3 +1,4 @@
+import Feilmelding from 'app/components/Feilmelding';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
@@ -9,6 +10,7 @@ import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
 export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
+export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -22,6 +24,7 @@ export interface IPeriodepanelerProps {
     textFjern?: string;
     panelClassName?: string;
     getErrorMessage?: GetErrorMessage;
+    getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
@@ -41,6 +44,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         getErrorMessage,
         feilkodeprefiks,
         hideDeleteButton,
+        getUhaandterteFeil
     } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
@@ -82,9 +86,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             onBlur={(periode) => {
                                 editSoknad(editPeriode(i, periode));
                             }}
-                            errorMessage={
-                                feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`)
-                            }
+                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`)}
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
@@ -111,6 +113,12 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                     </div>
                 </Row>
             ))}
+            {feilkodeprefiks &&
+                getUhaandterteFeil &&
+                getUhaandterteFeil(feilkodeprefiks).map((feilmelding, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Feilmelding key={index} feil={feilmelding} />
+                ))}
             {kanHaFlere && (
                 <Row noGutters>
                     <button
