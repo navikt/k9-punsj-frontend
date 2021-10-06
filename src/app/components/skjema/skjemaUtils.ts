@@ -1,4 +1,4 @@
-import { initializeDate } from 'app/utils';
+import { initializeDate } from '../../utils/timeUtils';
 import { IPeriode } from '../../models/types/Periode';
 
 export const fjernIndexFraLabel = (label: string) => label.replace(/\[.*\]/g, '[]');
