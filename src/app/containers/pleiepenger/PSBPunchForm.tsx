@@ -445,7 +445,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             className="utenlandsopphold"
                             panelClassName="utenlandsoppholdpanel"
                             getErrorMessage={this.getErrorMessage}
-                            feilkodeprefiks={'utenlandsopphold'}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
+                            feilkodeprefiks={'ytelse.utenlandsopphold'}
                             kanHaFlere={true}
                             medSlettKnapp={false}
                         />
@@ -475,6 +476,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                             }
                             getErrorMessage={this.getErrorMessage}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
                             feilkodeprefiks={'ytelse.lovbestemtFerie'}
                             minstEn={false}
                             kanHaFlere={true}
@@ -509,6 +511,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                 )
                                             }
                                             getErrorMessage={() => undefined}
+                                            getUhaandterteFeil={this.getUhaandterteFeil}
                                             feilkodeprefiks={'lovbestemtFerie'}
                                             minstEn={false}
                                             kanHaFlere={true}
