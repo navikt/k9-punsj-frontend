@@ -72,12 +72,16 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                     </div>
                 </Row>
                 <div className="utregnetArbeidstid__container">
-                    <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag} intl={intl} />
-                    <UtregningArbeidstid
-                        arbeidstid={faktiskArbeidTimerPerDag}
-                        normalArbeidstid={jobberNormaltTimerPerDag}
-                        intl={intl}
-                    />
+                    <div>
+                        <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag} intl={intl} />
+                    </div>
+                    <div>
+                        <UtregningArbeidstid
+                            arbeidstid={faktiskArbeidTimerPerDag}
+                            normalArbeidstid={jobberNormaltTimerPerDag}
+                            intl={intl}
+                        />
+                    </div>
                 </div>
             </div>
         );
