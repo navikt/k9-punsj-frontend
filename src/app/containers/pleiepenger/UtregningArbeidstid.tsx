@@ -23,20 +23,15 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid, intl }: IUtregningA
     }
 
     return (
-        <>
-            <div>
-                <div>{`= ${convert(arbeidstid) * 5} ${intlHelper(
-                    intl,
-                    'skjema.arbeid.arbeidstaker.timerperuke'
-                )}`}</div>
-                {skalRegneProsent && (
-                    <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${regnUt(
-                        arbeidstid,
-                        normalArbeidstid
-                    )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
-                )}
-            </div>
-        </>
+        <div>
+            <div>{`= ${convert(arbeidstid) * 5} ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerperuke')}`}</div>
+            {skalRegneProsent && (
+                <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${regnUt(
+                    arbeidstid,
+                    normalArbeidstid
+                )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
+            )}
+        </div>
     );
 };
 
