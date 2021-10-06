@@ -485,7 +485,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                             }
                             getErrorMessage={this.getErrorMessage}
-                            feilkodeprefiks={'lovbestemtFerie'}
+                            feilkodeprefiks={'ytelse.lovbestemtFerie'}
                             minstEn={false}
                             kanHaFlere={true}
                         />
