@@ -13,6 +13,7 @@ import { PopoverOrientering } from 'nav-frontend-popover';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
+import UtregningArbeidstid from './UtregningArbeidstid';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
@@ -70,6 +71,18 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                         </Hjelpetekst>
                     </div>
                 </Row>
+                <div className="utregnetArbeidstid__container">
+                    <div>
+                        <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag} intl={intl} />
+                    </div>
+                    <div>
+                        <UtregningArbeidstid
+                            arbeidstid={faktiskArbeidTimerPerDag}
+                            normalArbeidstid={jobberNormaltTimerPerDag}
+                            intl={intl}
+                        />
+                    </div>
+                </div>
             </div>
         );
     };
