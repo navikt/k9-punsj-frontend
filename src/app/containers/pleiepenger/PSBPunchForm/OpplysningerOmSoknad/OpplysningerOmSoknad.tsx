@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import DateInput from 'app/components/skjema/DateInput';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -32,16 +33,14 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
         <AlertStripeInfo>{intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}</AlertStripeInfo>
         <SkjemaGruppe>
             <div className="input-row">
-                <Input
-                    id="soknad-dato"
-                    bredde="M"
-                    label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                    type="date"
+                <DateInput
                     value={soknad.mottattDato}
-                    {...changeAndBlurUpdatesSoknad((event: any) => ({
-                        mottattDato: event.target.value,
+                    id="soknad-dato"
+                    errorMessage={getErrorMessage('mottattDato')}
+                    label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                    {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
+                        mottattDato: selectedDate,
                     }))}
-                    feil={getErrorMessage('mottattDato')}
                 />
                 <Input
                     value={soknad.klokkeslett || ''}

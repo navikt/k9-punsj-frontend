@@ -31,7 +31,7 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
 describe('PerodInput', () => {
     it('Skal vise inputfelter', () => {
         const periodInput = setupPeriodInput();
-        expect(periodInput.find('Input')).toHaveLength(2);
+        expect(periodInput.find('DateInput')).toHaveLength(2);
         expect(periodInput.find(`#${inputIdFom}`)).toHaveLength(1);
         expect(periodInput.find(`#${inputIdTom}`)).toHaveLength(1);
     });
@@ -53,13 +53,13 @@ describe('PerodInput', () => {
     it('Skal vise feilmelding for fom-dato', () => {
         const errorMessageFom = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({ errorMessageFom });
-        expect(periodInput.find(`#${inputIdFom}`).prop('feil')).toEqual(errorMessageFom);
+        expect(periodInput.find(`#${inputIdFom}`).prop('errorMessage')).toEqual(errorMessageFom);
     });
 
     it('Skal vise feilmelding for tom-dato', () => {
         const errorMessageTom = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({ errorMessageTom });
-        expect(periodInput.find(`#${inputIdTom}`).prop('feil')).toEqual(errorMessageTom);
+        expect(periodInput.find(`#${inputIdTom}`).prop('errorMessage')).toEqual(errorMessageTom);
     });
 
     it('Skal kalle onChange med ny fom-dato', () => {
@@ -68,7 +68,12 @@ describe('PerodInput', () => {
         const newFraOgMed = '2020-01-03';
         const onChange = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onChange });
-        periodInput.find(`#${inputIdFom}`).simulate('change', { target: { value: newFraOgMed } });
+        const inputField = periodInput
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdFom)
+            .at(0)
+            .shallow()
+            .find('Datepicker');
+        inputField.simulate('change', newFraOgMed);
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
     });
@@ -79,7 +84,15 @@ describe('PerodInput', () => {
         const newFraOgMed = '2020-01-03';
         const onBlur = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onBlur });
-        periodInput.find(`#${inputIdFom}`).simulate('blur', { target: { value: newFraOgMed } });
+        const inputField = periodInput
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdFom)
+            .at(0)
+            .shallow()
+            .find('Datepicker')
+            .dive()
+            .find(`#${inputIdFom}`)
+            .dive();
+        inputField.simulate('blur', { target: { value: newFraOgMed } });
         expect(onBlur).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
     });
@@ -90,7 +103,12 @@ describe('PerodInput', () => {
         const newTilOgMed = '2020-02-03';
         const onChange = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onChange });
-        periodInput.find(`#${inputIdTom}`).simulate('change', { target: { value: newTilOgMed } });
+        const inputField = periodInput
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdTom)
+            .at(0)
+            .shallow()
+            .find('Datepicker');
+        inputField.simulate('change', newTilOgMed);
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith({ fom, tom: newTilOgMed });
     });
@@ -101,7 +119,15 @@ describe('PerodInput', () => {
         const newTilOgMed = '2020-02-03';
         const onBlur = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onBlur });
-        periodInput.find(`#${inputIdTom}`).simulate('blur', { target: { value: newTilOgMed } });
+        const inputField = periodInput
+            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdTom)
+            .at(0)
+            .shallow()
+            .find('Datepicker')
+            .dive()
+            .find(`#${inputIdTom}`)
+            .dive();
+        inputField.simulate('blur', { target: { value: newTilOgMed } });
         expect(onBlur).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledWith({ fom, tom: newTilOgMed });
     });
