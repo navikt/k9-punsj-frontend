@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import DateInput from 'app/components/skjema/DateInput';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import Panel from 'nav-frontend-paneler';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import intlHelper from '../../../utils/intlUtils';
-import CalendarSvg from '../../../assets/SVG/CalendarSVG';
-import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../../assets/SVG/BinSVG';
-import { IPeriode, IPSBSoknad } from '../../../models/types';
-import './soknadsperioder.less';
+import CalendarSvg from '../../../assets/SVG/CalendarSVG';
+import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import { IPeriode, IPSBSoknad } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
+import intlHelper from '../../../utils/intlUtils';
+import './soknadsperioder.less';
 
 interface IOwnProps {
     intl: any;
@@ -108,37 +109,32 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
-                        <Input
+                        <DateInput
                             id="soknadsperiode-fra"
-                            bredde="M"
                             label={intlHelper(intl, 'skjema.soknasperiodefra')}
-                            type="date"
                             className="fom"
                             value={soknad.soeknadsperiode?.fom || ''}
                             // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...changeAndBlurUpdatesSoknad((event: any) => ({
+                            {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                                 soeknadsperiode: {
                                     ...soknad.soeknadsperiode,
-                                    fom: event.target.value,
+                                    fom: selectedDate,
                                 },
                             }))}
                         />
-                        <Input
+                        <DateInput
                             id="soknadsperiode-til"
-                            bredde="M"
                             label={intlHelper(intl, 'skjema.soknasperiodetil')}
-                            type="date"
                             className="tom"
                             value={soknad.soeknadsperiode?.tom || ''}
                             // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...changeAndBlurUpdatesSoknad((event: any) => ({
+                            {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                                 soeknadsperiode: {
                                     ...soknad.soeknadsperiode,
-                                    tom: event.target.value,
+                                    tom: selectedDate,
                                 },
                             }))}
                         />
-
                         <button
                             id="fjern"
                             className="fjern"

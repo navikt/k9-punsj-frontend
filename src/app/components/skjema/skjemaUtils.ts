@@ -1,7 +1,7 @@
-import moment from 'moment';
+import { initializeDate } from '../../utils/timeUtils';
 import { IPeriode } from '../../models/types/Periode';
 
 export const fjernIndexFraLabel = (label: string) => label.replace(/\[.*\]/g, '[]');
 
 export const generateDateString = (p: IPeriode | null) =>
-    p ? `${moment(p.fom).format('DD.MM.YYYY')} - ${moment(p.tom).format('DD.MM.YYYY')}` : '-';
+    p ? `${initializeDate(p.fom).format('DD.MM.YYYY')} - ${initializeDate(p.tom).format('DD.MM.YYYY')}` : '-';
