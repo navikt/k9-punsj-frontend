@@ -8,6 +8,7 @@ interface IUtregningArbeidstidProps {
 }
 
 const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeidstidProps): JSX.Element | null => {
+    const intl = useIntl();
     const convert = (tid: string) => Number(tid.replace(',', '.'));
     const regnUt = (tid: string, tidTilDeling: string) =>
         ((convert(tid) / convert(tidTilDeling)) * 100).toLocaleString(undefined, {
@@ -15,8 +16,7 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeids
             minimumFractionDigits: 0,
         });
 
-    const skalRegneProsent = normalArbeidstid && !Number.isNaN(Number(normalArbeidstid));
-    const intl = useIntl();
+    const skalRegneProsent = normalArbeidstid && !Number.isNaN(convert(normalArbeidstid));
     
 
     if (!arbeidstid || Number.isNaN(convert(arbeidstid))) {
