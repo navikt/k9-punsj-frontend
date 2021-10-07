@@ -8670,10 +8670,10 @@ nav-frontend-toggle-style@^2.0.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-toggle-style/-/nav-frontend-toggle-style-2.0.2.tgz#88541bd838d749e941e41409ddf9c5858bccaa0e"
   integrity sha512-IF//0PMFUUT/zvKOtE9cdbU+As+jrC3O+kZfTgkucHLnyzW1T0knvgdEO0LFjGqHLaxocp0NRTfdN4bwrd0AsA==
 
-nav-frontend-toggle@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/nav-frontend-toggle/-/nav-frontend-toggle-2.0.2.tgz#57f4d76161cded3be0e42cdb6c29baaa8c827c9c"
-  integrity sha512-aZytxVGyHl+gRxLYxDLEqL9ofNeSxnz3VBOt6ZqtgE920RQaU+d0LzfZSQZapUNaMZCM1yUZcOOweCV2eyozFw==
+nav-frontend-toggle@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-toggle/-/nav-frontend-toggle-2.1.2.tgz#21048b698a60fef69608435f4cc75378569e5c0a"
+  integrity sha512-OMA2TLAt179CJMp+ZAw92bZToyY65wPD6Gv5dnP0I6yb4zz8iQDhBydEJGYOg9Cf89k9UbxBnVrvDy0mz7zOmw==
 
 nav-frontend-typografi-style@^1.0.17, nav-frontend-typografi-style@^1.0.34:
   version "1.1.1"
