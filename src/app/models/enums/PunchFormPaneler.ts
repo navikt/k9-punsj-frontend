@@ -8,5 +8,5 @@ export enum PunchFormPaneler {
     MEDLEMSKAP = 'skjema.medlemskap.overskrift',
     OMSORGSTILBUD = 'skjema.omsorgstilbud.overskrift',
     BEREDSKAPNATTEVAAK = 'skjema.beredskapognattevaak.overskrift',
-    EKSISTERENDE_SØKNADSPERIODER = 'skjema.eksisterendesøknadsperioder',
+    ENDRING_AV_SØKNADSPERIODER = 'skjema.endringAvSøknadsperioder',
 }

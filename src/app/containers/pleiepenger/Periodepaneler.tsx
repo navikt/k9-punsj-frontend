@@ -30,21 +30,19 @@ export interface IPeriodepanelerProps {
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
-    hideDeleteButton?: boolean;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const {
         periods,
-        textLeggTil,
         intl,
         editSoknad,
         editSoknadState,
         kanHaFlere,
         getErrorMessage,
         feilkodeprefiks,
-        hideDeleteButton,
-        getUhaandterteFeil
+        textLeggTil,
+        getUhaandterteFeil,
     } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
@@ -90,26 +88,24 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
-                        {!hideDeleteButton && (
-                            <button
-                                id="slett"
-                                className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
-                                type="button"
-                                onClick={() => {
-                                    const newArray: IPeriode[] = removeItem(i);
-                                    editSoknadState(newArray);
-                                    editSoknad(newArray);
-                                    if (props.onRemove) {
-                                        props.onRemove();
-                                    }
-                                }}
-                            >
-                                <div className="slettIcon">
-                                    <BinSvg title="fjern" />
-                                </div>
-                                {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
-                            </button>
-                        )}
+                        <button
+                            id="slett"
+                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
+                            type="button"
+                            onClick={() => {
+                                const newArray: IPeriode[] = removeItem(i);
+                                editSoknadState(newArray);
+                                editSoknad(newArray);
+                                if (props.onRemove) {
+                                    props.onRemove();
+                                }
+                            }}
+                        >
+                            <div className="slettIcon">
+                                <BinSvg title="fjern" />
+                            </div>
+                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
+                        </button>
                     </div>
                 </Row>
             ))}
