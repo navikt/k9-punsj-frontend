@@ -1,9 +1,5 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import { IPeriode } from '../../models/types/Periode';
 import { initializeDate } from '../../utils/timeUtils';
-
-dayjs.extend(utc);
+import { IPeriode } from '../../models/types/Periode';
 
 export const fjernIndexFraLabel = (label: string) => label.replace(/\[.*\]/g, '[]');
 
