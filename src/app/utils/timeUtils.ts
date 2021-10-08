@@ -1,14 +1,14 @@
 import { TimeFormat } from 'app/models/enums';
 import { Ukedag, UkedagNumber } from 'app/models/types';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import utc from 'dayjs/plugin/utc';
 import { IntlShape } from 'react-intl';
-import intlHelper from './intlUtils';
 import { IPeriode } from '../models/types/Periode';
+import intlHelper from './intlUtils';
 
 dayjs.extend(utc);
 dayjs.extend(duration);

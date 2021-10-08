@@ -8,9 +8,9 @@ import { IntlShape } from 'react-intl';
 import { IPeriode } from '../../../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { Periodepaneler } from '../../Periodepaneler';
-import './eksisterendeSøknadsperioder.less';
+import './endringAvSøknadsperioder.less';
 
-interface EksisterendeSøknadsperioderProps {
+interface EndringAvSøknadsperioderProps {
     isOpen: boolean;
     onClick: () => void;
     intl: IntlShape;
@@ -21,7 +21,7 @@ interface EksisterendeSøknadsperioderProps {
     eksisterendePerioder?: IPeriode[];
 }
 
-const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps): JSX.Element | null => {
+const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.Element | null => {
     const { isOpen, onClick, intl, getErrorMessage, soknad, updateSoknad, updateSoknadState, eksisterendePerioder } =
         props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
@@ -38,6 +38,10 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
     }
 
     const getAlertstriper = () => {
+        const hasPerioder = selectedPeriods.some((periode) => periode.fom && periode.tom);
+        if (!hasPerioder) {
+            return null;
+        }
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = selectedPeriods.some((periode) =>
             eksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom)
         );
@@ -55,21 +59,21 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
         return (
             <>
                 {hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && (
-                    <AlertStripeAdvarsel className="eksisterendeSøknadsperioder__alert">
+                    <AlertStripeAdvarsel className="endringAvSøknadsperioder__alert">
                         Du vil fjerne en periode i starten av eksisterende søknadsperiode. Dette vil føre til nytt
                         skjæringstidspunkt i behandlingen, og vil endre tidspunktet vi regner rett til ytelse fra.
                         Utfallet i behandlingen kan bli avslag selv om det tidligere var innvilget.
                     </AlertStripeAdvarsel>
                 )}
                 {hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && (
-                    <AlertStripeAdvarsel className="eksisterendeSøknadsperioder__alert">
+                    <AlertStripeAdvarsel className="endringAvSøknadsperioder__alert">
                         Du vil fjerne en periode i midten av en eksisterende søknadsperiode. Dette vil føre til nye
                         skjæringstidspunkt i behandlingen, og vi vil regne rett til ytelse fra flere ulike tidspunkt.
                         Utfallet i behandlingen kan bli avslag for en eller flere perioder som tidligere var innvilget.
                     </AlertStripeAdvarsel>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
-                    <AlertStripeInfo className="eksisterendeSøknadsperioder__alert">
+                    <AlertStripeInfo className="endringAvSøknadsperioder__alert">
                         Du vil fjerne en periode i slutten av en eksisterende søknadsperiode. Vi vil ikke vurdere vilkår
                         for perioden du fjerner. Dette vil ikke påvirke resultatet i saken for andre perioder enn den du
                         fjerner.
@@ -81,17 +85,17 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
     return (
         <EkspanderbartpanelBase
             apen={isOpen}
-            className="eksisterendeSøknadsperioder"
+            className="endringAvSøknadsperioder"
             tittel="Endring av søknadsperiode"
             onClick={onClick}
         >
             <Element>
-                Hvilken periode vil du <span className="eksisterendeSøknadsperioder__underscore">fjerne</span>?
+                Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
             </Element>
             <Periodepaneler
                 intl={intl}
                 periods={soknad.trekkKravPerioder || []}
-                panelid={(i) => `eksisterendeSøknadsperioder_${i}`}
+                panelid={(i) => `endringAvSøknadsperioder_${i}`}
                 initialPeriode={{ fom: '', tom: '' }}
                 editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: skalTrekkePerioder ? perioder : [] })}
                 editSoknadState={(perioder, showStatus) => {
@@ -101,12 +105,12 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
                 textLeggTil="skjema.perioder.legg_til"
                 textFjern="skjema.perioder.fjern"
                 getErrorMessage={getErrorMessage}
-                feilkodeprefiks="eksisterendeSøknadsperioder"
+                feilkodeprefiks="endringAvSøknadsperioder"
                 kanHaFlere
             />
 
             {getAlertstriper()}
-            <div className="eksisterendeSøknadsperioder__checkbox">
+            <div className="endringAvSøknadsperioder__checkbox">
                 <CheckboksPanel
                     id="fjernsoknadsperiodecheckbox"
                     label="Bekreft at søknadsperioden skal fjernes"
@@ -122,4 +126,4 @@ const EksisterendeSøknadsperioder = (props: EksisterendeSøknadsperioderProps):
         </EkspanderbartpanelBase>
     );
 };
-export default EksisterendeSøknadsperioder;
+export default EndringAvSøknadsperioder;

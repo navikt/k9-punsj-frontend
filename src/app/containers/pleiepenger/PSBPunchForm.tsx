@@ -17,7 +17,7 @@ import {
     validerSoknad,
     validerSoknadResetAction,
 } from 'app/state/actions';
-import {nummerPrefiks, setHash} from 'app/utils';
+import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -33,7 +33,7 @@ import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import VerticalSpacer from '../../components/VerticalSpacer';
-import {ArbeidstidInfo} from "../../models/types/ArbeidstidInfo";
+import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import { BeredskapNattevaak } from '../../models/enums/BeredskapNattevaak';
 import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
@@ -65,7 +65,7 @@ import { pfTimerMinutter } from './pfTimerMinutter';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
-import EksisterendeSøknadsperioder from './PSBPunchForm/EksisterendeSøknadsperioder/EksisterendeSøknadsperioder';
+import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
@@ -181,7 +181,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         errors: [],
         harRegnskapsfører: false,
         feilmeldingStier: new Set(),
-        harForsoektAaSendeInn: false
+        harForsoektAaSendeInn: false,
     };
 
     private initialPeriode: IPeriode = { fom: '', tom: '' };
@@ -389,7 +389,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true} />
-
                 <OpplysningerOmSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -407,9 +406,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     }}
                 />
                 <VerticalSpacer sixteenPx={true} />
-                <EksisterendeSøknadsperioder
-                    isOpen={this.checkOpenState(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.EKSISTERENDE_SØKNADSPERIODER)}
+                <EndringAvSøknadsperioder
+                    isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
                     intl={intl}
                     getErrorMessage={this.getErrorMessage}
                     soknad={soknad}
@@ -493,43 +492,41 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         />
                     )}
                     <VerticalSpacer eightPx={true} />
-                    {eksisterendePerioder &&
-                        eksisterendePerioder?.length > 0 &&
-                        !punchFormState.hentPerioderError && (
-                            <>
-                                <CheckboksPanel
-                                    label={intlHelper(intl, 'skjema.ferie.fjern')}
-                                    value={'skjema.ferie.fjern'}
-                                    onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
-                                    checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
-                                />
-                                {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
-                                    <>
-                                        <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
-                                        <Periodepaneler
-                                            intl={intl}
-                                            periods={soknad.lovbestemtFerieSomSkalSlettes}
-                                            panelid={(i) => `ferieperiodepanel_${i}`}
-                                            initialPeriode={this.initialPeriode}
-                                            editSoknad={(perioder) =>
-                                                this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
-                                            }
-                                            editSoknadState={(perioder, showStatus) =>
-                                                this.updateSoknadState(
-                                                    { lovbestemtFerieSomSkalSlettes: perioder },
-                                                    showStatus
-                                                )
-                                            }
-                                            getErrorMessage={() => undefined}
-                                            getUhaandterteFeil={this.getUhaandterteFeil}
-                                            feilkodeprefiks={'lovbestemtFerie'}
-                                            minstEn={false}
-                                            kanHaFlere={true}
-                                        />
-                                    </>
-                                )}
-                            </>
-                        )}
+                    {eksisterendePerioder && eksisterendePerioder?.length > 0 && !punchFormState.hentPerioderError && (
+                        <>
+                            <CheckboksPanel
+                                label={intlHelper(intl, 'skjema.ferie.fjern')}
+                                value={'skjema.ferie.fjern'}
+                                onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
+                                checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
+                            />
+                            {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
+                                <>
+                                    <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
+                                    <Periodepaneler
+                                        intl={intl}
+                                        periods={soknad.lovbestemtFerieSomSkalSlettes}
+                                        panelid={(i) => `ferieperiodepanel_${i}`}
+                                        initialPeriode={this.initialPeriode}
+                                        editSoknad={(perioder) =>
+                                            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
+                                        }
+                                        editSoknadState={(perioder, showStatus) =>
+                                            this.updateSoknadState(
+                                                { lovbestemtFerieSomSkalSlettes: perioder },
+                                                showStatus
+                                            )
+                                        }
+                                        getErrorMessage={() => undefined}
+                                        getUhaandterteFeil={this.getUhaandterteFeil}
+                                        feilkodeprefiks={'lovbestemtFerie'}
+                                        minstEn={false}
+                                        kanHaFlere={true}
+                                    />
+                                </>
+                            )}
+                        </>
+                    )}
                 </EkspanderbartpanelBase>
                 <ArbeidsforholdPanel
                     isOpen={this.checkOpenState(PunchFormPaneler.ARBEID)}
@@ -721,13 +718,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     </Hjelpetekst>
                 </div>
                 <VerticalSpacer twentyPx={true} />
-                {
-                    this.getUhaandterteFeil('')
-                        .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                        .map(feilmelding => {
-                            return <Feilmelding key={feilmelding} feil={feilmelding}/>
-                    })
-                }    
+                {this.getUhaandterteFeil('')
+                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
+                    .map((feilmelding) => {
+                        return <Feilmelding key={feilmelding} feil={feilmelding} />;
+                    })}
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className={classNames('loadingSpinner')}>
@@ -888,7 +883,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
             ),
         };
-        this.setState({harForsoektAaSendeInn: true});
+        this.setState({ harForsoektAaSendeInn: true });
         this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
     };
 
@@ -1282,17 +1277,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return false;
     }
-    
-    getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
+
+    getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)})
+            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
         }
-        
+
         const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || []
+            const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.')
-                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier)
+                const felt = felter.slice(0, index + 1).join('.');
+                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
                 andreFeilmeldingStier.delete(attribute);
                 if (attribute === felt) {
                     return true;
@@ -1302,19 +1297,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 }
             }
             return false;
-    })
+        });
 
-    if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-        return uhaandterteFeilmeldinger.map(error => error.feilmelding).filter(Boolean)
-    } 
-    return [];
-
-    }
+        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
+            return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
+        }
+        return [];
+    };
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
-        const {mottattDato, klokkeslett} = this.state.soknad;
+        const { mottattDato, klokkeslett } = this.state.soknad;
         if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)})
+            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
         }
 
         if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
@@ -1384,9 +1378,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             journalposter: Array.from(navarandeSoknad ? navarandeSoknad?.journalposter : []),
         };
         if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter}, true)
+            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, ...journalposter }, true);
         }
-        return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
+        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, ...journalposter });
     };
 
     private handleStartButtonClick = () => {
@@ -1412,9 +1406,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (!this.state.soknad.utenlandsopphold) {
             this.state.soknad = { ...this.state.soknad, utenlandsopphold: [{}] };
         }
-        const utenlandsopphold = [{land: undefined, periode: {}}]
-        this.updateSoknadState({utenlandsopphold})
-        this.updateSoknad({utenlandsopphold})
+        const utenlandsopphold = [{ land: undefined, periode: {} }];
+        this.updateSoknadState({ utenlandsopphold });
+        this.updateSoknad({ utenlandsopphold });
     };
 
     private statusetikett() {
@@ -1458,8 +1452,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
     validateSoknad: (soknad: IPSBSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerSoknad(soknad, erMellomlagring)),
-    validerSoknadReset: () =>
-        dispatch(validerSoknadResetAction())
+    validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
 export const PSBPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
