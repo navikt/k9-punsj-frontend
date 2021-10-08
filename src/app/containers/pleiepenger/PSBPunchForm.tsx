@@ -365,13 +365,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
                 <Soknadsperioder
-                    intl={intl}
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
                     soknad={soknad}
-                    deleteSoknadsperiode={this.deleteSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <OpplysningerOmSoknad
@@ -849,11 +847,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private handleSettPaaVent = () => {
         this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
         this.setState({ showSettPaaVentModal: false });
-    };
-
-    private deleteSoknadsperiode = () => {
-        this.updateSoknadState({ ...this.state.soknad, soeknadsperiode: null });
-        this.updateSoknad({ ...this.state.soknad, soeknadsperiode: null });
     };
 
     private handlePanelClick = (p: PunchFormPaneler) => {

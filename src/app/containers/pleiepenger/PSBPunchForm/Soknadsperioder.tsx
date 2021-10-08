@@ -1,12 +1,11 @@
-import DateInput from 'app/components/skjema/DateInput';
 import { initializeDate } from 'app/utils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../../assets/SVG/BinSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
@@ -17,24 +16,21 @@ import { Periodepaneler } from '../Periodepaneler';
 import './soknadsperioder.less';
 
 interface IOwnProps {
-    intl: any;
     updateSoknadState: (soknad: Partial<IPSBSoknad>) => void;
     initialPeriode: IPeriode;
-    getErrorMessage: any;
+    getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
     soknad: IPSBSoknad;
-    deleteSoknadsperiode: () => void;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
 }
 
 const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
-    intl,
     updateSoknadState,
     initialPeriode,
     getErrorMessage,
     soknad,
-    deleteSoknadsperiode,
     updateSoknad,
 }) => {
+    const intl = useIntl();
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(false);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
@@ -117,52 +113,14 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
-                        {/* <DateInput
-                            id="soknadsperiode-fra"
-                            label={intlHelper(intl, 'skjema.soknasperiodefra')}
-                            className="fom"
-                            value={soknad.soeknadsperiode?.fom || ''}
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
-                                soeknadsperiode: {
-                                    ...soknad.soeknadsperiode,
-                                    fom: selectedDate,
-                                },
-                            }))}
-                        />
-                        <DateInput
-                            id="soknadsperiode-til"
-                            label={intlHelper(intl, 'skjema.soknasperiodetil')}
-                            className="tom"
-                            value={soknad.soeknadsperiode?.tom || ''}
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
-                                soeknadsperiode: {
-                                    ...soknad.soeknadsperiode,
-                                    tom: selectedDate,
-                                },
-                            }))}
-                        />
-                        <button
-                            id="fjern"
-                            className="fjern"
-                            type="button"
-                            onClick={() => {
-                                deleteSoknadsperiode();
-                                setVisLeggTilPerioder(false);
-                            }}
-                        >
-                            <BinSvg title="fjern" />
-                        </button> */}
                         <Periodepaneler
                             intl={intl}
                             periods={soknad.soeknadsperiode || []}
                             panelid={(i) => `søknadsperioder_${i}`}
-                            initialPeriode={{ fom: '', tom: '' }}
+                            initialPeriode={initialPeriode}
                             editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
                             editSoknadState={(perioder) => {
                                 updateSoknadState({ soeknadsperiode: perioder });
-                                // setSelectedPeriods(perioder);
                             }}
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
