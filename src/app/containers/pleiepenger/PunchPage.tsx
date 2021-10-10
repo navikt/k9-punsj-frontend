@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
-import { IEksisterendeSoknaderComponentProps } from 'app/containers/pleiepenger/EksisterendeSoknader';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
@@ -63,72 +62,16 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageDispatchProps &
     IPunchPageQueryProps;
 
-export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchPageComponentState> {
-    constructor(props: IPunchPageProps) {
-        super(props);
-        this.state = {
-            ident1: '',
-            ident2: '',
-        };
-    }
-
-    componentDidMount(): void {
-        const { punchState } = this.props;
-        this.setState({
-            ident1: punchState.ident1,
-            ident2: punchState.ident2 || '',
-        });
-    }
-
-    componentDidUpdate(): void {
-        const { ident1, ident2 } = this.state;
-        const { punchState } = this.props;
-        if (!ident1 && punchState.ident1) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ ident1: punchState.ident1 });
-        }
-
-        if (!ident2 && punchState.ident2) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ ident2: punchState.ident2 });
-        }
-    }
-
-    private getPath = (step: PunchStep, values?: any) => {
-        const { dok } = this.props;
-        return getPath(peiepengerPaths, step, values, dok ? { dok } : undefined);
-    };
-
-    private content() {
-        const { journalpostid, journalpost, forbidden } = this.props;
-        const dokumenter = journalpost?.dokumenter || [];
-
-        if (forbidden) {
-            return (
-                <AlertStripeAdvarsel>
-                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
-            );
-        }
-
-        return (
-            <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
-                    <JournalpostPanel />
-                    {this.underFnr()}
-                </Panel>
-                {journalpostid && <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
-            </div>
-        );
-    }
+export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
+    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
+    const getPunchPath = (punchStep: PunchStep, values?: any) =>
+        getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
     // eslint-disable-next-line consistent-return
-    private underFnr() {
-        const { journalpostid, step, match, punchFormState, intl } = this.props;
-
+    const underFnr = () => {
         const commonProps = {
             journalpostid: journalpostid || '',
-            getPunchPath: this.getPath,
+            getPunchPath,
         };
 
         // eslint-disable-next-line default-case
@@ -138,50 +81,67 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
             case PunchStep.FILL_FORM:
                 return <PSBPunchForm {...commonProps} id={match.params.id} />;
             case PunchStep.COMPLETED:
-                return (<>
-                    <AlertStripeInfo className="fullfortmelding">
-                        <FormattedMessage id="skjema.sentInn"/>
-                    </AlertStripeInfo>
-                    <div className="punchPage__knapper">
-                        <Hovedknapp onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL')
-                        }}>
-                            {intlHelper(intl, 'tilbaketilLOS')}
-                        </Hovedknapp>
-                        {!!punchFormState.linkTilBehandlingIK9 &&
-                        <Hovedknapp onClick={() => {
-                            window.location.href = punchFormState.linkTilBehandlingIK9!
-                        }}>
-                            {intlHelper(intl, 'tilBehandlingIK9')}
-                        </Hovedknapp>
-                        }
-                    </div>
-                    {!!punchFormState.innsentSoknad &&
-                    <SoknadKvittering response={punchFormState.innsentSoknad}
-                                      intl={intl}/>
-                    }
-                </>);
+                return (
+                    <>
+                        <AlertStripeInfo className="fullfortmelding">
+                            <FormattedMessage id="skjema.sentInn" />
+                        </AlertStripeInfo>
+                        <div className="punchPage__knapper">
+                            <Hovedknapp
+                                onClick={() => {
+                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                }}
+                            >
+                                {intlHelper(intl, 'tilbaketilLOS')}
+                            </Hovedknapp>
+                            {!!punchFormState.linkTilBehandlingIK9 && (
+                                <Hovedknapp
+                                    onClick={() => {
+                                        window.location.href = punchFormState.linkTilBehandlingIK9!;
+                                    }}
+                                >
+                                    {intlHelper(intl, 'tilBehandlingIK9')}
+                                </Hovedknapp>
+                            )}
+                        </div>
+                        {!!punchFormState.innsentSoknad && (
+                            <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
+                        )}
+                    </>
+                );
         }
-    }
+    };
 
-    private extractIdents(): Pick<IEksisterendeSoknaderComponentProps, 'ident1' | 'ident2'> {
-        const { identState } = this.props;
+    const content = () => {
+        const dokumenter = journalpost?.dokumenter || [];
+        if (forbidden) {
+            return (
+                <AlertStripeAdvarsel>
+                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                </AlertStripeAdvarsel>
+            );
+        }
 
-        const ident = identState.ident1;
-        return /^\d+&\d+$/.test(ident)
-            ? { ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0] }
-            : { ident1: ident, ident2: null };
-    }
-
-    render() {
-        const { intl } = this.props;
+        const journalpostDokumenter = [{ journalpostid, dokumenter }];
         return (
-            <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
-                {this.content()}
-            </Page>
+            <div className="panels-wrapper" id="panels-wrapper">
+                <Panel className="pleiepenger_punch_form" border>
+                    <JournalpostPanel />
+                    {underFnr()}
+                </Panel>
+                {journalpostid && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
+            </div>
         );
-    }
-}
+    };
+
+    // eslint-disable-next-line consistent-return
+
+    return (
+        <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
+            {content()}
+        </Page>
+    );
+};
 
 const mapStateToProps = (state: RootStateType) => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
@@ -189,6 +149,7 @@ const mapStateToProps = (state: RootStateType) => ({
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
+    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

@@ -16,7 +16,7 @@ const goToDok = (nr: number) => {
     setQueryInHash({ dok: nr.toString() });
 };
 
-const dokumentnr = (dokumenter: IDokument[] = [], dok: string | null): number => {
+const dokumentnr = (dokumenter: any = [], dok: string | null): number => {
     let doknr: number;
     doknr = !!dok && /^\d+$/.test(dok) ? Number(dok) : 1;
     if (doknr < 1 || doknr > dokumenter.length) {
@@ -25,15 +25,32 @@ const dokumentnr = (dokumenter: IDokument[] = [], dok: string | null): number =>
     return doknr;
 };
 
-interface IPdfVisningProps {
+interface IJournalpostDokumenter {
     dokumenter: IDokument[];
-    journalpostId: string;
+    journalpostid?: string;
+}
+interface IPdfVisningProps {
+    journalpostDokumenter: IJournalpostDokumenter[];
 }
 
-const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = [], journalpostId }) => {
+const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
     const dok = useQuery().get('dok');
+    const mapDokument = (dokument: IDokument, journalpostid?: string) => ({
+        journalpostid,
+        dokumentId: dokument.dokumentId,
+    });
+    const dokumenter: any = journalpostDokumenter.reduce(
+        (prev, current) => [
+            ...prev,
+            ...current.dokumenter.map((dokumentId) => mapDokument(dokumentId, current?.journalpostid)),
+        ],
+        []
+    );
+
     const dokumentnummer = useMemo<number>(() => dokumentnr(dokumenter, dok), [dokumenter, dok]);
-    const dokumentId = dokumenter[dokumentnummer - 1]?.dokumentId;
+    const foersteDokument = dokumenter[dokumentnummer - 1];
+    const { dokumentId, journalpostid: journalpostId } = foersteDokument;
+    
     const pdfUrl = useMemo<string>(
         () =>
             apiUrl(ApiPath.DOKUMENT, {
@@ -76,6 +93,8 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
                     <div className="fleredokumenter">
                         <ToggleGruppe
                             kompakt
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
                             defaultToggles={dokumenter.map((_, i) => ({
                                 children: (
                                     <FormattedMessage
