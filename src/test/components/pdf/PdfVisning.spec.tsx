@@ -18,6 +18,6 @@ describe('<PdfVisning>', () => {
         );
 
         expect(pdfVisning.find('iframe').prop('src')).toContain(journalpostid);
-        expect(pdfVisning.find('iframe').prop('src')).toContain(dokumentid);
+        expect(pdfVisning.find('iframe').prop('src')).toContain(dokumentid.dokumentId);
     });
 });
