@@ -20,7 +20,6 @@ import {
 import { setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import moment from 'moment';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
@@ -55,6 +54,7 @@ import {
 } from '../../models/types/PSBSoknad';
 import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { RootStateType } from '../../state/RootState';
+import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import OkGaaTilLosModal from './OkGaaTilLosModal';
 import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
@@ -181,11 +181,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private initialPeriode: IPeriode = { fom: '', tom: '' };
     private getSoknadsperiode = () => {
-        if (
-            typeof this.state.soknad?.soeknadsperiode !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.fom !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.tom !== 'undefined'
-        ) {
+        if (this.state.soknad.soeknadsperiode?.fom && this.state.soknad.soeknadsperiode?.tom) {
             return this.state.soknad.soeknadsperiode;
         } else {
             return this.initialPeriode;
@@ -259,8 +255,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return eksisterendePerioder.some(
             (ep) =>
-                moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) &&
-                moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))
+                initializeDate(ep.fom!).isSameOrBefore(initializeDate(nyPeriode.tom!)) &&
+                initializeDate(nyPeriode.fom!).isSameOrBefore(initializeDate(ep.tom!))
         );
     };
 
@@ -487,42 +483,40 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         />
                     )}
                     <VerticalSpacer eightPx={true} />
-                    {typeof eksisterendePerioder !== 'undefined' &&
-                        eksisterendePerioder?.length > 0 &&
-                        !punchFormState.hentPerioderError && (
-                            <>
-                                <CheckboksPanel
-                                    label={intlHelper(intl, 'skjema.ferie.fjern')}
-                                    value={'skjema.ferie.fjern'}
-                                    onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
-                                    checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
-                                />
-                                {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
-                                    <>
-                                        <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
-                                        <Periodepaneler
-                                            intl={intl}
-                                            periods={soknad.lovbestemtFerieSomSkalSlettes}
-                                            panelid={(i) => `ferieperiodepanel_${i}`}
-                                            initialPeriode={this.initialPeriode}
-                                            editSoknad={(perioder) =>
-                                                this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
-                                            }
-                                            editSoknadState={(perioder, showStatus) =>
-                                                this.updateSoknadState(
-                                                    { lovbestemtFerieSomSkalSlettes: perioder },
-                                                    showStatus
-                                                )
-                                            }
-                                            getErrorMessage={() => undefined}
-                                            feilkodeprefiks={'lovbestemtFerie'}
-                                            minstEn={false}
-                                            kanHaFlere={true}
-                                        />
-                                    </>
-                                )}
-                            </>
-                        )}
+                    {eksisterendePerioder && eksisterendePerioder?.length > 0 && !punchFormState.hentPerioderError && (
+                        <>
+                            <CheckboksPanel
+                                label={intlHelper(intl, 'skjema.ferie.fjern')}
+                                value={'skjema.ferie.fjern'}
+                                onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
+                                checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
+                            />
+                            {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
+                                <>
+                                    <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
+                                    <Periodepaneler
+                                        intl={intl}
+                                        periods={soknad.lovbestemtFerieSomSkalSlettes}
+                                        panelid={(i) => `ferieperiodepanel_${i}`}
+                                        initialPeriode={this.initialPeriode}
+                                        editSoknad={(perioder) =>
+                                            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
+                                        }
+                                        editSoknadState={(perioder, showStatus) =>
+                                            this.updateSoknadState(
+                                                { lovbestemtFerieSomSkalSlettes: perioder },
+                                                showStatus
+                                            )
+                                        }
+                                        getErrorMessage={() => undefined}
+                                        feilkodeprefiks={'lovbestemtFerie'}
+                                        minstEn={false}
+                                        kanHaFlere={true}
+                                    />
+                                </>
+                            )}
+                        </>
+                    )}
                 </EkspanderbartpanelBase>
                 <ArbeidsforholdPanel
                     isOpen={this.checkOpenState(PunchFormPaneler.ARBEID)}
@@ -799,9 +793,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     </ModalWrapper>
                 )}
 
-                {!!this.props.punchFormState.isValid &&
+                {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&
-                    typeof this.props.punchFormState.validertSoknad !== 'undefined' && (
+                    this.props.punchFormState.validertSoknad && (
                         <ModalWrapper
                             key={'validertSoknadModal'}
                             className={'validertSoknadModal'}
@@ -868,9 +862,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
-                    ? navarandeSoknad?.journalposter
-                    : []
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
             ),
         };
         this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
@@ -1257,7 +1249,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private erFremITidKlokkeslett(dato: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
-        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
+        if (
+            !!mottattDato &&
+            naa.getDate() === new Date(mottattDato!).getDate() &&
+            initializeDate(naa).format('HH:mm') < dato
+        ) {
             return true;
         }
         return false;
@@ -1330,7 +1326,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
         const journalposter = {
-            journalposter: Array.from(navarandeSoknad ? navarandeSoknad?.journalposter : []),
+            journalposter: Array.from(
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
+            ),
         };
         return this.props.updateSoknad({ ...navarandeSoknad, ...soknad, ...journalposter });
     };
