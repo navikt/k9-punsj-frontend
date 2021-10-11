@@ -1,23 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQueries } from 'react-query';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
-import { IEksisterendeSoknaderComponentProps } from 'app/containers/pleiepenger/EksisterendeSoknader';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
 import { IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState } from 'app/models/types';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { getEnvironmentVariable, getPath } from 'app/utils';
+import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { ApiPath } from 'app/apiConfig';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
+
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import { peiepengerPaths } from './PeiepengerRoutes';
 import { RegistreringsValg } from './RegistreringsValg';
@@ -62,72 +65,28 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageDispatchProps &
     IPunchPageQueryProps;
 
-export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchPageComponentState> {
-    constructor(props: IPunchPageProps) {
-        super(props);
-        this.state = {
-            ident1: '',
-            ident2: '',
-        };
-    }
+export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
+    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
+    const journalposterFraSoknad = punchFormState.soknad?.journalposter;
+    const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [journalpostid];
+    const getPunchPath = (punchStep: PunchStep, values?: any) =>
+        getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
-    componentDidMount(): void {
-        const { punchState } = this.props;
-        this.setState({
-            ident1: punchState.ident1,
-            ident2: punchState.ident2 || '',
-        });
-    }
+    const queryObjects = journalposter.map((journalpostidentifikator) => ({
+        queryKey: ['journalpost', journalpostidentifikator],
+        queryFn: () =>
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }, undefined).then((res) =>
+                res.json()
+            ),
+    }));
 
-    componentDidUpdate(): void {
-        const { ident1, ident2 } = this.state;
-        const { punchState } = this.props;
-        if (!ident1 && punchState.ident1) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ ident1: punchState.ident1 });
-        }
-
-        if (!ident2 && punchState.ident2) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ ident2: punchState.ident2 });
-        }
-    }
-
-    private getPath = (step: PunchStep, values?: any) => {
-        const { dok } = this.props;
-        return getPath(peiepengerPaths, step, values, dok ? { dok } : undefined);
-    };
-
-    private content() {
-        const { journalpostid, journalpost, forbidden } = this.props;
-        const dokumenter = journalpost?.dokumenter || [];
-
-        if (forbidden) {
-            return (
-                <AlertStripeAdvarsel>
-                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
-            );
-        }
-
-        return (
-            <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
-                    <JournalpostPanel />
-                    {this.underFnr()}
-                </Panel>
-                {journalpostid && <PdfVisning dokumenter={dokumenter} journalpostId={journalpostid} />}
-            </div>
-        );
-    }
+    const queries = useQueries(queryObjects);
 
     // eslint-disable-next-line consistent-return
-    private underFnr() {
-        const { journalpostid, step, match, punchFormState, intl } = this.props;
-
+    const underFnr = () => {
         const commonProps = {
             journalpostid: journalpostid || '',
-            getPunchPath: this.getPath,
+            getPunchPath,
         };
 
         // eslint-disable-next-line default-case
@@ -166,26 +125,52 @@ export class PunchPageComponent extends React.Component<IPunchPageProps, IPunchP
                     </>
                 );
         }
-    }
+    };
 
-    private extractIdents(): Pick<IEksisterendeSoknaderComponentProps, 'ident1' | 'ident2'> {
-        const { identState } = this.props;
+    const content = () => {
+        if (forbidden) {
+            return (
+                <AlertStripeAdvarsel>
+                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                </AlertStripeAdvarsel>
+            );
+        }
 
-        const ident = identState.ident1;
-        return /^\d+&\d+$/.test(ident)
-            ? { ident1: /^\d+/.exec(ident)![0], ident2: /\d+$/.exec(ident)![0] }
-            : { ident1: ident, ident2: null };
-    }
+        const journalpostDokumenter: IJournalpostDokumenter[] = queries.map((query) => {
+            const data: any = query?.data;
 
-    render() {
-        const { intl } = this.props;
+            return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
+        });
+        if (
+            journalpost &&
+            journalpostDokumenter.filter((post) => post.journalpostid === journalpost?.journalpostId).length === 0
+        ) {
+            journalpostDokumenter.push({
+                dokumenter: journalpost.dokumenter,
+                journalpostid: journalpost.journalpostId,
+            });
+        }
         return (
-            <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
-                {this.content()}
-            </Page>
+            <div className="panels-wrapper" id="panels-wrapper">
+                <Panel className="pleiepenger_punch_form" border>
+                    <JournalpostPanel />
+                    {underFnr()}
+                </Panel>
+                {queries.every((query) => query?.isSuccess) && (
+                    <PdfVisning journalpostDokumenter={journalpostDokumenter} />
+                )}
+            </div>
         );
-    }
-}
+    };
+
+    // eslint-disable-next-line consistent-return
+
+    return (
+        <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
+            {content()}
+        </Page>
+    );
+};
 
 const mapStateToProps = (state: RootStateType) => ({
     punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
@@ -193,6 +178,7 @@ const mapStateToProps = (state: RootStateType) => ({
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
+    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
