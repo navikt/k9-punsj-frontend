@@ -41,7 +41,7 @@ const setupPunchPage = (
     const journalpostid = typeof journalpostinfo === 'string' ? journalpostinfo : journalpostinfo.journalpostId;
 
     const routeComponentProps = {
-        match: { params: { id: mappeid } },
+        match: { params: { id: mappeid }, isExact: true, path: 'bla', url: 'bla' },
         history: createMemoryHistory({}),
         location: { pathname: `/${journalpostid}`, hash, search: '', state: '' },
     };

@@ -10,10 +10,11 @@ jest.mock('app/hooks/useQuery', () => () => ({ get: () => '1' }));
 describe('<PdfVisning>', () => {
     it('Henter journalpost og viser dokument', () => {
         const journalpostid = '200';
-        const dokumentid = '123';
-
+        const dokumentid = {dokumentId: '123'};
+        const journalpostDokumenter = [{journalpostid, dokumenter: [dokumentid]}]
         const pdfVisning = shallow(
-            <PdfVisning dokumenter={[{ dokumentId: dokumentid }]} journalpostId={journalpostid} />
+            
+            <PdfVisning journalpostDokumenter={journalpostDokumenter} />
         );
 
         expect(pdfVisning.find('iframe').prop('src')).toContain(journalpostid);

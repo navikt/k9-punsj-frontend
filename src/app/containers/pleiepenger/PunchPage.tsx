@@ -1,5 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
+import { useQueries } from 'react-query';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
 import 'app/containers/pleiepenger/punchPage.less';
@@ -8,16 +12,15 @@ import { PunchStep } from 'app/models/enums';
 import { IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState } from 'app/models/types';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { getEnvironmentVariable, getPath } from 'app/utils';
+import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { ApiPath } from 'app/apiConfig';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import { peiepengerPaths } from './PeiepengerRoutes';
 import { RegistreringsValg } from './RegistreringsValg';
@@ -64,8 +67,20 @@ type IPunchPageProps = WrappedComponentProps &
 
 export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
+    const journalposterFraSoknad = punchFormState.soknad?.journalposter;
+    const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [journalpostid];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
+
+    const queryObjects = journalposter.map((journalpostidentifikator) => ({
+        queryKey: ['journalpost', journalpostidentifikator],
+        queryFn: () =>
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }, undefined).then((res) =>
+                res.json()
+            ),
+    }));
+
+    const queries = useQueries(queryObjects);
 
     // eslint-disable-next-line consistent-return
     const underFnr = () => {
@@ -113,7 +128,6 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
     };
 
     const content = () => {
-        const dokumenter = journalpost?.dokumenter || [];
         if (forbidden) {
             return (
                 <AlertStripeAdvarsel>
@@ -122,14 +136,29 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
             );
         }
 
-        const journalpostDokumenter = [{ journalpostid, dokumenter }];
+        const journalpostDokumenter: IJournalpostDokumenter[] = queries.map((query) => {
+            const data: any = query?.data;
+
+            return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
+        });
+        if (
+            journalpost &&
+            journalpostDokumenter.filter((post) => post.journalpostid === journalpost?.journalpostId).length === 0
+        ) {
+            journalpostDokumenter.push({
+                dokumenter: journalpost.dokumenter,
+                journalpostid: journalpost.journalpostId,
+            });
+        }
         return (
             <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="pleiepenger_punch_form" border>
                     <JournalpostPanel />
                     {underFnr()}
                 </Panel>
-                {journalpostid && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
+                {queries.every((query) => query?.isSuccess) && (
+                    <PdfVisning journalpostDokumenter={journalpostDokumenter} />
+                )}
             </div>
         );
     };

@@ -6,6 +6,7 @@ import { Resizable } from 're-resizable';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ToggleGruppe } from 'nav-frontend-toggle';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
@@ -25,24 +26,25 @@ const dokumentnr = (dokumenter: any = [], dok: string | null): number => {
     return doknr;
 };
 
-interface IJournalpostDokumenter {
-    dokumenter: IDokument[];
-    journalpostid?: string;
-}
 interface IPdfVisningProps {
     journalpostDokumenter: IJournalpostDokumenter[];
 }
 
+interface IDokumentMedJournalpost {
+    dokumentId: string;
+    journalpostid: string;
+}
+
 const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
     const dok = useQuery().get('dok');
-    const mapDokument = (dokument: IDokument, journalpostid?: string) => ({
+    const mapDokument = (dokument: IDokument, journalpostid: string) => ({
         journalpostid,
         dokumentId: dokument.dokumentId,
     });
-    const dokumenter: any = journalpostDokumenter.reduce(
+    const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter.reduce(
         (prev, current) => [
             ...prev,
-            ...current.dokumenter.map((dokumentId) => mapDokument(dokumentId, current?.journalpostid)),
+            ...current.dokumenter.map((dokumentId) => mapDokument(dokumentId, current.journalpostid)),
         ],
         []
     );
@@ -50,7 +52,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
     const dokumentnummer = useMemo<number>(() => dokumentnr(dokumenter, dok), [dokumenter, dok]);
     const foersteDokument = dokumenter[dokumentnummer - 1];
     const { dokumentId, journalpostid: journalpostId } = foersteDokument;
-    
+
     const pdfUrl = useMemo<string>(
         () =>
             apiUrl(ApiPath.DOKUMENT, {
@@ -93,9 +95,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                     <div className="fleredokumenter">
                         <ToggleGruppe
                             kompakt
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            defaultToggles={dokumenter.map((_, i) => ({
+                            defaultToggles={dokumenter.map((_: unknown, i: number) => ({
                                 children: (
                                     <FormattedMessage
                                         id="dokument.flere"
