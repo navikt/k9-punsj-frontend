@@ -143,7 +143,7 @@
         "jest-cli": "^27.2.5",
         "jest-css-modules": "^2.1.0",
         "less": "^4.1.2",
-        "less-loader": "^10.0.1",
+        "less-loader": "^10.1.0",
         "lint-staged": ">=11.2.3",
         "nav-frontend-alertstriper-style": "^3.0.1",
         "nav-frontend-chevron-style": "^1.0.4",
