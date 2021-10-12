@@ -1,14 +1,13 @@
-import { initializeDate } from 'app/utils';
+import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
-import { IPeriode } from '../../../../models/types/Periode';
+import { IPeriode, Periode } from '../../../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { Periodepaneler } from '../../Periodepaneler';
-import './endringAvSøknadsperioder.less';
 
 interface EndringAvSøknadsperioderProps {
     isOpen: boolean;
@@ -42,18 +41,23 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
         if (!hasPerioder) {
             return null;
         }
+
+        const formaterteEksisterendePerioder = slåSammenSammenhengendePerioder(
+            eksisterendePerioder.map((periode) => new Periode(periode))
+        );
+
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = selectedPeriods.some((periode) =>
-            eksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom)
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom)
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = selectedPeriods.some((periode) =>
-            eksisterendePerioder.some(
+            formaterteEksisterendePerioder.some(
                 (eksisterendePeriode) =>
                     initializeDate(periode.fom).isAfter(initializeDate(eksisterendePeriode.fom)) &&
                     initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom))
             )
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = selectedPeriods.some((periode) =>
-            eksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom)
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom)
         );
 
         return (
@@ -74,9 +78,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
                     <AlertStripeInfo className="endringAvSøknadsperioder__alert">
-                        Du vil fjerne en periode i slutten av en eksisterende søknadsperiode. Vi vil ikke vurdere vilkår
-                        for perioden du fjerner. Dette vil ikke påvirke resultatet i saken for andre perioder enn den du
-                        fjerner.
+                        Du vil fjerne en periode i slutten av en eksisterende søknadsperiode. Vilkår for perioden du
+                        fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder enn
+                        den du fjerner.
                     </AlertStripeInfo>
                 )}
             </>

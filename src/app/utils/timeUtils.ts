@@ -16,7 +16,7 @@ dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
 
-export const initializeDate = (date?: string | Date | null, format?: string): dayjs.Dayjs => {
+export const initializeDate = (date?: string | Date | null, format?: string | string[]): dayjs.Dayjs => {
     if (date) {
         return dayjs(date, format).utc(true);
     }
