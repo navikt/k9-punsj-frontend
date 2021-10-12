@@ -159,7 +159,7 @@
         "nav-frontend-spinner-style": "^1.0.2",
         "nav-frontend-tabell-style": "^2.1.1",
         "nav-frontend-typografi-style": "^2.0.1",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^3.0.0",
         "postcss-input-range": "^4.0.0",
         "postcss-loader": "^6.1.1",
         "prettier": "^2.4.1",
