@@ -4,6 +4,7 @@ import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 import { Periodeinfo } from './Periodeinfo';
+import { initializeDate } from '../../utils/timeUtils';
 
 export interface IPeriode {
     fom?: string | null;
@@ -67,6 +68,22 @@ export class Periode implements Required<IPeriode> {
         const tom = this.tilOgmedTekstKort(intl);
 
         return intlHelper(intl, key, { fom, tom });
+    }
+
+    startsBefore(otherPeriod: Periode): boolean {
+        const dateInQuestion = initializeDate(otherPeriod.fom);
+        const periodFom = initializeDate(this.fom);
+        return periodFom.isBefore(dateInQuestion);
+    }
+
+    includesDate(dateString: string) {
+        const dateInQuestion = initializeDate(dateString);
+        const fomDayjs = initializeDate(this.fom);
+        const tomDayjs = initializeDate(this.tom);
+        return (
+            (dateInQuestion.isSame(fomDayjs) || dateInQuestion.isAfter(fomDayjs)) &&
+            (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
+        );
     }
 }
 
