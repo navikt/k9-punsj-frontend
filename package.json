@@ -96,7 +96,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@testing-library/jest-dom": "^5.11.4",
         "@testing-library/react": "^12.1.2",
-        "@testing-library/user-event": "^13.2.1",
+        "@testing-library/user-event": "^13.3.0",
         "@types/enzyme": "^3.10.7",
         "@types/enzyme-adapter-react-16": "^1.0.6",
         "@types/fetch-headers": "^2.0.0",
