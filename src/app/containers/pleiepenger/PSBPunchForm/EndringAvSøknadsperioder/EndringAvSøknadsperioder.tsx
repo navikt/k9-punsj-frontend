@@ -74,9 +74,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
                     <AlertStripeInfo className="endringAvSøknadsperioder__alert">
-                        Du vil fjerne en periode i slutten av en eksisterende søknadsperiode. Vi vil ikke vurdere vilkår
-                        for perioden du fjerner. Dette vil ikke påvirke resultatet i saken for andre perioder enn den du
-                        fjerner.
+                        Du vil fjerne en periode i slutten av en eksisterende søknadsperiode. Vilkår for perioden du
+                        fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder enn
+                        den du fjerner.
                     </AlertStripeInfo>
                 )}
             </>
