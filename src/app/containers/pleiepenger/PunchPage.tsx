@@ -75,7 +75,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
-            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }, undefined).then((res) =>
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) =>
                 res.json()
             ),
     }));
