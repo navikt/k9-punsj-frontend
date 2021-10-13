@@ -68,7 +68,7 @@ type IPunchPageProps = WrappedComponentProps &
 export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
-    const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [journalpostid];
+    const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
@@ -136,11 +136,11 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
             );
         }
 
-        const journalpostDokumenter: IJournalpostDokumenter[] = queries.map((query) => {
+        const journalpostDokumenter: IJournalpostDokumenter[] = (queries.every(query => query.isSuccess) && queries.map((query) => {
             const data: any = query?.data;
 
             return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
-        });
+        })) || [];
         if (
             journalpost &&
             journalpostDokumenter.filter((post) => post.journalpostid === journalpost?.journalpostId).length === 0
@@ -153,10 +153,12 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
         return (
             <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="pleiepenger_punch_form" border>
-                    <JournalpostPanel />
+                    <JournalpostPanel 
+                        journalposter={[...journalposter, journalpost?.journalpostId]}
+                    />
                     {underFnr()}
                 </Panel>
-                {queries.every((query) => query?.isSuccess) && (
+                {(journalpostDokumenter.length) && (
                     <PdfVisning journalpostDokumenter={journalpostDokumenter} />
                 )}
             </div>

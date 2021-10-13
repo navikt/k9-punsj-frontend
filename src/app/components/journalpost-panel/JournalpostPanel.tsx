@@ -14,20 +14,28 @@ export interface IJournalpostPanelStateProps {
     journalpost?: IJournalpost;
     identState: IIdentState;
     fordelingState: IFordelingState;
+    journalposter?: string[];
 }
 
-const JournalpostPanelComponent = (props: WrappedComponentProps & IJournalpostPanelStateProps) => {
+export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponentProps & IJournalpostPanelStateProps> = (
+    props
+) => {
     const {
         intl,
         journalpost,
         fordelingState,
         identState: { ident1, ident2 },
+        journalposter,
     } = props;
 
     return (
         <Panel border className="journalpostpanel">
             <FlexRow wrap childrenMargin="medium">
-                <LabelValue labelTextId="journalpost.id" value={journalpost?.journalpostId} retning="horisontal" />
+                <LabelValue
+                    labelTextId="journalpost.id"
+                    value={journalposter?.join(', ') || journalpost?.journalpostId}
+                    retning="horisontal"
+                />
 
                 {fordelingState.erIdent1Bekreftet && (
                     <LabelValue
@@ -56,6 +64,4 @@ const mapStateToProps = (state: RootStateType): IJournalpostPanelStateProps => (
     fordelingState: state.fordelingState,
 });
 
-const JournalpostPanel = injectIntl(connect(mapStateToProps)(JournalpostPanelComponent));
-
-export { JournalpostPanel, JournalpostPanelComponent };
+export const JournalpostPanel = injectIntl(connect(mapStateToProps)(JournalpostPanelComponent));
