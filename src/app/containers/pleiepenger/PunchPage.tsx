@@ -67,10 +67,8 @@ type IPunchPageProps = WrappedComponentProps &
 
 export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
-    const journalposterFraSoknad: Set<string> | undefined = punchFormState.soknad?.journalposter;
-    const journalposter: string[] = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
-    if(journalpost?.journalpostId) journalposter.push(journalpost?.journalpostId);
-
+    const journalposterFraSoknad = punchFormState.soknad?.journalposter;
+    const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
@@ -138,11 +136,14 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
             );
         }
 
-        const journalpostDokumenter: IJournalpostDokumenter[] = (queries.every(query => query.isSuccess) && queries.map((query) => {
-            const data: any = query?.data;
+        const journalpostDokumenter: IJournalpostDokumenter[] =
+            (queries.every((query) => query.isSuccess) &&
+                queries.map((query) => {
+                    const data: any = query?.data;
 
-            return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
-        })) || [];
+                    return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
+                })) ||
+            [];
         if (
             journalpost &&
             journalpostDokumenter.filter((post) => post.journalpostid === journalpost?.journalpostId).length === 0
@@ -152,17 +153,14 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                 journalpostid: journalpost.journalpostId,
             });
         }
+
         return (
             <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="pleiepenger_punch_form" border>
-                    <JournalpostPanel 
-                        journalposter={journalposter}
-                    />
+                    <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {underFnr()}
                 </Panel>
-                {(journalpostDokumenter.length) && (
-                    <PdfVisning journalpostDokumenter={journalpostDokumenter} />
-                )}
+                {journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
             </div>
         );
     };
