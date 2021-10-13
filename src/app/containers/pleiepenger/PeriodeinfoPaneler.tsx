@@ -7,6 +7,8 @@ import {
 } from 'app/containers/pleiepenger/Listepaneler';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
+import Feilmelding from 'app/components/Feilmelding';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from '../../models/types/Periodeinfo';
 import { IPeriode } from '../../models/types/Periode';
 import BinSvg from '../../assets/SVG/BinSVG';
@@ -112,6 +114,8 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 onRemove();
             }
         };
+        console.log(feilkodeprefiks)
+        const feltIndeks = periodeSpenn(periodeinfo.periode)
         return (
             <>
                 <div className="periodeinfopanel_container">
@@ -124,9 +128,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         onBlur={(periode) => {
                             editSoknad(editPeriode(periodeindeks, periode));
                         }}
-                        errorMessage={getErrorMessage(`.perioder[${periodeindeks}]`)}
-                        errorMessageFom={getErrorMessage(`.perioder[${periodeindeks}].fom`)}
-                        errorMessageTom={getErrorMessage(`.perioder[${periodeindeks}].tom`)}
+                        errorMessage={getErrorMessage(`${feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
                     />
                     <button
@@ -152,6 +154,12 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         getErrorMessage,
                         intlShape
                     )}
+                {feilkodeprefiks &&
+                    getUhaandterteFeil &&
+                    getUhaandterteFeil(`${feilkodeprefiks}.perioder[${feltIndeks}]`).map((feilmelding, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Feilmelding key={index} feil={feilmelding} />
+                    ))}
             </>
         );
     };

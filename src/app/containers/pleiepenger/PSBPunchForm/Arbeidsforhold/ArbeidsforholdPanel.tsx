@@ -81,6 +81,7 @@ const ArbeidsforholdPanel = ({
                     type="date"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
+                    feil={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
                     onChange={(event: any) =>
                         updateSoknadState(
                             {
@@ -853,7 +854,6 @@ const ArbeidsforholdPanel = ({
                     updateSoknadState={updateSoknadState}
                     getErrorMessage={getErrorMessage}
                     getUhaandterteFeil={getUhaandterteFeil}
-                    feilkodeprefiks="ytelse.arbeidstid.arbeidstakerList[0]"
                 />
             )}
             <CheckboksPanel
