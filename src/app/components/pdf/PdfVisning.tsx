@@ -6,6 +6,7 @@ import { Resizable } from 're-resizable';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ToggleGruppe } from 'nav-frontend-toggle';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
@@ -16,7 +17,7 @@ const goToDok = (nr: number) => {
     setQueryInHash({ dok: nr.toString() });
 };
 
-const dokumentnr = (dokumenter: IDokument[] = [], dok: string | null): number => {
+const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
     let doknr: number;
     doknr = !!dok && /^\d+$/.test(dok) ? Number(dok) : 1;
     if (doknr < 1 || doknr > dokumenter.length) {
@@ -26,14 +27,32 @@ const dokumentnr = (dokumenter: IDokument[] = [], dok: string | null): number =>
 };
 
 interface IPdfVisningProps {
-    dokumenter: IDokument[];
-    journalpostId: string;
+    journalpostDokumenter: IJournalpostDokumenter[];
 }
 
-const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = [], journalpostId }) => {
+interface IDokumentMedJournalpost {
+    dokumentId: string;
+    journalpostid: string;
+}
+
+const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
     const dok = useQuery().get('dok');
-    const dokumentnummer = useMemo<number>(() => dokumentnr(dokumenter, dok), [dokumenter, dok]);
-    const dokumentId = dokumenter[dokumentnummer - 1]?.dokumentId;
+    const mapDokument = (dokument: IDokument, journalpostid: string) => ({
+        journalpostid,
+        dokumentId: dokument.dokumentId,
+    });
+    const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter.reduce(
+        (prev, current) => [
+            ...prev,
+            ...current.dokumenter.map((dokument) => mapDokument(dokument, current.journalpostid)),
+        ],
+        []
+    );
+
+    const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter), [dokumenter, dok]);
+    const foersteDokument = dokumenter[dokumentnummer - 1];
+    const { dokumentId, journalpostid: journalpostId } = foersteDokument;
+
     const pdfUrl = useMemo<string>(
         () =>
             apiUrl(ApiPath.DOKUMENT, {
@@ -76,7 +95,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ dokumenter = []
                     <div className="fleredokumenter">
                         <ToggleGruppe
                             kompakt
-                            defaultToggles={dokumenter.map((_, i) => ({
+                            defaultToggles={dokumenter.map((_: unknown, i: number) => ({
                                 children: (
                                     <FormattedMessage
                                         id="dokument.flere"
