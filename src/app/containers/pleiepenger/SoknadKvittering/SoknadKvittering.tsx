@@ -128,6 +128,9 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
         })
     );
 
+    const formaterSøknadsperioder = () =>
+        ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
+
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
@@ -135,7 +138,7 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
                     <hr className={classNames('linje')} />
-                    <p>{periodToFormattedString(ytelse.søknadsperiode[0])}</p>
+                    <p>{formaterSøknadsperioder()}</p>
                 </div>
             )}
 
@@ -402,19 +405,11 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                        {`${
-                            journalposter[0].inneholderMedisinskeOpplysninger
-                                ? 'Ja'
-                                : 'Nei'
-                        }`}
+                        {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
                     </p>
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                        {`${
-                            journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes
-                                ? 'Ja'
-                                : 'Nei'
-                        }`}
+                        {`${journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
                     </p>
                 </div>
             )}

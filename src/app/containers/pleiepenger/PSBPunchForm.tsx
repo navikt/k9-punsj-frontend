@@ -186,10 +186,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private initialPeriode: IPeriode = { fom: '', tom: '' };
     private getSoknadsperiode = () => {
-        if (this.state.soknad.soeknadsperiode?.fom && this.state.soknad.soeknadsperiode?.tom) {
-            return this.state.soknad.soeknadsperiode;
+        const { soknad } = this.state;
+        if (soknad?.soeknadsperiode && soknad.soeknadsperiode.length > 0) {
+            return soknad.soeknadsperiode;
         } else {
-            return this.initialPeriode;
+            return [this.initialPeriode];
         }
     };
 
@@ -204,7 +205,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     });
 
     private initialTillegsinfo = () => {
-        const periode = this.getSoknadsperiode();
+        const periode = this.getSoknadsperiode()[0];
         return new Tilleggsinformasjon({
             periode,
             tilleggsinformasjon: '',
@@ -215,7 +216,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             arbeidstidInfo: {
                 perioder: [
                     {
-                        periode: this.getSoknadsperiode(),
+                        periode: this.getSoknadsperiode()[0],
                         faktiskArbeidTimerPerDag: '',
                         jobberNormaltTimerPerDag: '',
                     },
@@ -229,7 +230,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         new ArbeidstidInfo({
             perioder: [
                 {
-                    periode: this.getSoknadsperiode(),
+                    periode: this.getSoknadsperiode()[0],
                     faktiskArbeidTimerPerDag: '',
                     jobberNormaltTimerPerDag: '',
                 },
@@ -242,7 +243,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     });
 
     private initialSelvstedigNæringsdrivende = new SelvstendigNaerinsdrivende({
-        periode: this.getSoknadsperiode(),
+        periode: this.getSoknadsperiode()[0],
         virksomhetstyper: [],
         registrertIUtlandet: false,
         landkode: '',
@@ -253,17 +254,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         organisasjonsnummer: '',
         info: this.initialSelvstedigNæringsdrivende,
     });
-
-    private overlappendeSoknadsperiode = (eksisterendePerioder: IPeriode[], nyPeriode: IPeriode) => {
-        if (!eksisterendePerioder.length) {
-            return false;
-        }
-        return eksisterendePerioder.some(
-            (ep) =>
-                initializeDate(ep.fom!).isSameOrBefore(initializeDate(nyPeriode.tom!)) &&
-                initializeDate(nyPeriode.fom!).isSameOrBefore(initializeDate(ep.tom!))
-        );
-    };
 
     componentDidMount(): void {
         const { id } = this.props;
@@ -379,14 +369,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
                 <Soknadsperioder
-                    intl={intl}
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
+                    updateSoknad={this.updateSoknad}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
                     soknad={soknad}
-                    deleteSoknadsperiode={this.deleteSoknadsperiode}
-                    changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                    overlappendeSoknadsperiode={this.overlappendeSoknadsperiode}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <OpplysningerOmSoknad
@@ -890,11 +877,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private handleSettPaaVent = () => {
         this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
         this.setState({ showSettPaaVentModal: false });
-    };
-
-    private deleteSoknadsperiode = () => {
-        this.updateSoknadState({ ...this.state.soknad, soeknadsperiode: null });
-        this.updateSoknad({ ...this.state.soknad, soeknadsperiode: null });
     };
 
     private handlePanelClick = (p: PunchFormPaneler) => {

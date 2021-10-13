@@ -1,40 +1,36 @@
-import DateInput from 'app/components/skjema/DateInput';
+import { initializeDate } from 'app/utils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../../assets/SVG/BinSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { IPeriode, IPSBSoknad } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
 import intlHelper from '../../../utils/intlUtils';
+import { Periodepaneler } from '../Periodepaneler';
 import './soknadsperioder.less';
 
 interface IOwnProps {
-    intl: any;
-    updateSoknadState: (object: any) => void;
+    updateSoknadState: (soknad: Partial<IPSBSoknad>) => void;
     initialPeriode: IPeriode;
-    getErrorMessage: any;
+    getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
     soknad: IPSBSoknad;
-    deleteSoknadsperiode: () => void;
-    changeAndBlurUpdatesSoknad: (objekt: any) => any;
-    overlappendeSoknadsperiode: any;
+    updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
 }
 
 const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
-    intl,
     updateSoknadState,
     initialPeriode,
     getErrorMessage,
     soknad,
-    deleteSoknadsperiode,
-    changeAndBlurUpdatesSoknad,
-    overlappendeSoknadsperiode,
+    updateSoknad,
 }) => {
+    const intl = useIntl();
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
@@ -43,21 +39,36 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             punchFormState.perioder.length <= 0 ||
             !punchFormState.perioder);
 
-    const sjekkFelmeldingDato = () => {
-        if (soknad.soeknadsperiode?.fom && soknad.soeknadsperiode?.tom) {
-            if (new Date(soknad.soeknadsperiode.fom) > new Date(soknad.soeknadsperiode.tom))
-                return intlHelper(intl, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED');
-        }
-        return undefined;
-    };
+    const sjekkFelmeldingDato = () =>
+        soknad?.soeknadsperiode?.some((periode) => initializeDate(periode.fom).isAfter(initializeDate(periode.tom)));
 
     const sjekkFelmeldingPeriode = () => {
         const valideringsFeilmelding = getErrorMessage('ytelse.søknadsperiode');
         const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
 
-        if (valideringsFeilmelding) return valideringsFeilmelding;
-        if (feilFunnitInnenValideringMelding) return feilFunnitInnenValideringMelding;
+        if (valideringsFeilmelding) {
+            return valideringsFeilmelding;
+        }
+        if (feilFunnitInnenValideringMelding) {
+            return intlHelper(intl, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED');
+        }
         return undefined;
+    };
+
+    const overlappendeSoknadsperiode = () => {
+        const eksisterendePerioder = punchFormState.perioder;
+        const nyePerioder = soknad.soeknadsperiode;
+
+        if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
+            return false;
+        }
+        return eksisterendePerioder.some((ep) =>
+            nyePerioder?.some(
+                (nyPeriode) =>
+                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom))
+            )
+        );
     };
 
     return (
@@ -84,7 +95,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                                 type="button"
                                 onClick={() => {
                                     setVisLeggTilPerioder(false);
-                                    updateSoknadState({ soeknadsperiode: initialPeriode });
+                                    updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
                             >
                                 <div className="leggtilcircle">
@@ -104,52 +115,30 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
-                        <DateInput
-                            id="soknadsperiode-fra"
-                            label={intlHelper(intl, 'skjema.soknasperiodefra')}
-                            className="fom"
-                            value={soknad.soeknadsperiode?.fom || ''}
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
-                                soeknadsperiode: {
-                                    ...soknad.soeknadsperiode,
-                                    fom: selectedDate,
-                                },
-                            }))}
-                        />
-                        <DateInput
-                            id="soknadsperiode-til"
-                            label={intlHelper(intl, 'skjema.soknasperiodetil')}
-                            className="tom"
-                            value={soknad.soeknadsperiode?.tom || ''}
-                            // eslint-disable-next-line react/jsx-props-no-spreading
-                            {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
-                                soeknadsperiode: {
-                                    ...soknad.soeknadsperiode,
-                                    tom: selectedDate,
-                                },
-                            }))}
-                        />
-                        <button
-                            id="fjern"
-                            className="fjern"
-                            type="button"
-                            onClick={() => {
-                                deleteSoknadsperiode();
-                                setVisLeggTilPerioder(true);
+                        <Periodepaneler
+                            intl={intl}
+                            periods={
+                                soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0
+                                    ? soknad.soeknadsperiode
+                                    : [initialPeriode]
+                            }
+                            panelid={(i) => `søknadsperioder_${i}`}
+                            initialPeriode={initialPeriode}
+                            editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
+                            editSoknadState={(perioder) => {
+                                updateSoknadState({ soeknadsperiode: perioder });
                             }}
-                        >
-                            <BinSvg title="fjern" />
-                        </button>
+                            textLeggTil="skjema.perioder.legg_til"
+                            textFjern="skjema.perioder.fjern"
+                            getErrorMessage={getErrorMessage}
+                            kanHaFlere
+                        />
                     </div>
                 </SkjemaGruppe>
             )}
-            {!!soknad.soeknadsperiode?.fom &&
-                !!soknad.soeknadsperiode.tom &&
-                !!punchFormState.perioder?.length &&
-                overlappendeSoknadsperiode(punchFormState.perioder, soknad.soeknadsperiode) && (
-                    <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>
-                )}
+            {overlappendeSoknadsperiode() && (
+                <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>
+            )}
         </Panel>
     );
 };

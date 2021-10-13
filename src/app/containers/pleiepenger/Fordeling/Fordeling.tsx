@@ -106,7 +106,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
 
-    const handleIdent1Change = (event: any) => setSokersIdent(event.target.value.replace(/\D+/, ''));
+    const handleIdent1Change = (event: any) => {
+        const ident = event.target.value.replace(/\D+/, '');
+        setSokersIdent(ident);
+        if (ident.length === 11) {
+            props.setIdentAction(ident, identState.ident2);
+            props.setErIdent1Bekreftet(true);
+            setVisSokersBarn(true);
+        }
+    };
 
     const handleIdent1Blur = (event: any) => {
         props.setIdentAction(event.target.value, identState.ident2);

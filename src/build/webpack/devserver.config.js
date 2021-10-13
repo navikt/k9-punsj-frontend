@@ -4,7 +4,7 @@ const envVariables = require('../envVariables');
 
 const configureDevServer = (decoratorFragments) => ({
     onBeforeSetupMiddleware: (devServer) => {
-        const {app} = devServer;
+        const { app } = devServer;
         app.engine('html', mustacheExpress());
         app.set('views', `${__dirname}/../../../dist/dev`);
         app.set('view engine', 'mustache');
@@ -24,9 +24,9 @@ const configureDevServer = (decoratorFragments) => ({
     client: {
         overlay: {
             errors: true,
-            warnings: false
-        }
-    }
+            warnings: false,
+        },
+    },
 });
 
 module.exports = configureDevServer;
