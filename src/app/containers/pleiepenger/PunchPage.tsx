@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
