@@ -160,7 +160,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {underFnr()}
                 </Panel>
-                {journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
+                {!!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
             </div>
         );
     };

@@ -17,7 +17,7 @@ const goToDok = (nr: number) => {
     setQueryInHash({ dok: nr.toString() });
 };
 
-const dokumentnr = (dok: string | null, dokumenter: any = []): number => {
+const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
     let doknr: number;
     doknr = !!dok && /^\d+$/.test(dok) ? Number(dok) : 1;
     if (doknr < 1 || doknr > dokumenter.length) {
@@ -49,7 +49,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
         []
     );
 
-    const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter,), [dokumenter, dok]);
+    const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter), [dokumenter, dok]);
     const foersteDokument = dokumenter[dokumentnummer - 1];
     const { dokumentId, journalpostid: journalpostId } = foersteDokument;
 
