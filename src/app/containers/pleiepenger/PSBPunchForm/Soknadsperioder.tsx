@@ -31,7 +31,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     updateSoknad,
 }) => {
     const intl = useIntl();
-    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(false);
+    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
+    const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError &&
@@ -57,7 +58,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
     const overlappendeSoknadsperiode = () => {
         const eksisterendePerioder = punchFormState.perioder;
-        const nyePerioder = soknad.soeknadsperiode;
+        const nyePerioder = soknad.soeknadsperiode?.filter((periode) => periode.fom && periode.tom);
 
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
@@ -69,6 +70,18 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom))
             )
         );
+    };
+
+    const getPerioder = () => {
+        if (soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0) {
+            return soknad.soeknadsperiode;
+        }
+
+        if (harSlettetPerioder) {
+            return [];
+        }
+
+        return [initialPeriode];
     };
 
     return (
@@ -87,14 +100,14 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     ))}
 
                     <VerticalSpacer eightPx />
-                    {!visLeggTilPerioder && (
+                    {visLeggTilPerioder && (
                         <div className="knappecontainer">
                             <button
                                 id="leggtilsoknadsperiode"
                                 className="leggtilsoknadsperiode"
                                 type="button"
                                 onClick={() => {
-                                    setVisLeggTilPerioder(true);
+                                    setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
                             >
@@ -112,16 +125,12 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                 <AlertStripeInfo>{intlHelper(intl, 'skjema.eksisterende.ingen')}</AlertStripeInfo>
             )}
 
-            {(visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
+            {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
                     <div className="soknadsperiodecontainer">
                         <Periodepaneler
                             intl={intl}
-                            periods={
-                                soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0
-                                    ? soknad.soeknadsperiode
-                                    : [initialPeriode]
-                            }
+                            periods={getPerioder()}
                             panelid={(i) => `søknadsperioder_${i}`}
                             initialPeriode={initialPeriode}
                             editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
@@ -132,6 +141,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             textFjern="skjema.perioder.fjern"
                             getErrorMessage={getErrorMessage}
                             kanHaFlere
+                            onRemove={() => setHarSlettetPerioder(true)}
                         />
                     </div>
                 </SkjemaGruppe>
