@@ -14,10 +14,13 @@ export interface IJournalpostPanelStateProps {
     journalpost?: IJournalpost;
     identState: IIdentState;
     fordelingState: IFordelingState;
+}
+
+interface IJournalpostComponentStateProps {
     journalposter?: string[];
 }
 
-export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponentProps & IJournalpostPanelStateProps> = (
+export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponentProps & IJournalpostPanelStateProps & IJournalpostComponentStateProps> = (
     props
 ) => {
     const {

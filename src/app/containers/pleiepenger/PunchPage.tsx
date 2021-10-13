@@ -67,8 +67,10 @@ type IPunchPageProps = WrappedComponentProps &
 
 export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
-    const journalposterFraSoknad = punchFormState.soknad?.journalposter;
-    const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
+    const journalposterFraSoknad: Set<string> | undefined = punchFormState.soknad?.journalposter;
+    const journalposter: string[] = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
+    if(journalpost?.journalpostId) journalposter.push(journalpost?.journalpostId);
+
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
@@ -154,7 +156,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
             <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="pleiepenger_punch_form" border>
                     <JournalpostPanel 
-                        journalposter={[...journalposter, journalpost?.journalpostId]}
+                        journalposter={journalposter}
                     />
                     {underFnr()}
                 </Panel>
