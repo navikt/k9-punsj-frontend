@@ -135,13 +135,6 @@ describe('Listepaneler', () => {
             .forEach((panel) => expect(panel.prop('className')).toEqual(`listepanel ${panelClassName}`));
     });
 
-    it('Skal vise feilmelding for alle listeelementer', () => {
-        const feilkodeprefiks = 'test';
-        const getUhaandterteFeil = jest.fn().mockReturnValue([]);
-        setupListepaneler({ getUhaandterteFeil, feilkodeprefiks });
-        expect(getUhaandterteFeil).toHaveBeenCalledWith(feilkodeprefiks);
-    });
-
     it('Kaller onAdd når et listeelement legges til', () => {
         const onAdd = jest.fn();
         const listepaneler = setupListepaneler({ onAdd });
