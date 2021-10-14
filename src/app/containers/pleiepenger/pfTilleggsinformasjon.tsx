@@ -25,7 +25,6 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
     ) => {
         const { tilleggsinformasjon, periode } = periodeinfo;
         const feltindeks = periodeSpenn(periode);
-        console.log(`${feilprefiks}.periode[${feltindeks}].tilleggsinformasjon`)
         return (
             <div className="tilleggsinfo">
                 <Textarea
