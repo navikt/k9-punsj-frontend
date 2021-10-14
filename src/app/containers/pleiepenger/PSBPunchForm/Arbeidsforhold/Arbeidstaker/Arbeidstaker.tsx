@@ -1,6 +1,6 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
-import { GetErrorMessage, PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
@@ -9,6 +9,7 @@ import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-fro
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+import { GetErrorMessage } from 'app/models/types';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';

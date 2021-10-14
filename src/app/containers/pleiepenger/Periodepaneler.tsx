@@ -4,13 +4,12 @@ import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
-export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
-export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;

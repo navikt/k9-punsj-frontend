@@ -1,5 +1,4 @@
 import {
-    GetErrorMessage,
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
@@ -7,6 +6,7 @@ import {
 import intlHelper from 'app/utils/intlUtils';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
+import { GetErrorMessage } from 'app/models/types';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { IOppholdsLand } from '../../models/types/PSBSoknad';
 import { CountrySelect } from '../../components/country-select/CountrySelect';

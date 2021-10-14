@@ -1,6 +1,5 @@
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
-    GetErrorMessage,
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
@@ -10,7 +9,7 @@ import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
-import { ITilleggsinformasjon } from '../../models/types/PSBSoknad';
+import { ITilleggsinformasjon, GetErrorMessage } from '../../models/types';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {

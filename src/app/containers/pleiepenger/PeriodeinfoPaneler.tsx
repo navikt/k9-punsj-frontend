@@ -9,7 +9,7 @@ import * as React from 'react';
 import { IntlShape } from 'react-intl';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
-import { IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from '../../models/types/Periodeinfo';
+import { GetErrorMessage, GetUhaandterteFeil, IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from 'app/models/types';
 import { IPeriode } from '../../models/types/Periode';
 import BinSvg from '../../assets/SVG/BinSVG';
 import intlHelper from '../../utils/intlUtils';
@@ -17,8 +17,6 @@ import './periodeinfoPaneler.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
-export type GetErrorMessage = (kode: string) => React.ReactNode | boolean | undefined;
-export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export type PeriodeinfoComponent<T> = (
     info: Periodeinfo<T>,
