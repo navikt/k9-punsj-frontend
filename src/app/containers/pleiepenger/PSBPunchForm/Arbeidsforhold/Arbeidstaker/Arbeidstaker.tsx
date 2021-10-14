@@ -303,6 +303,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     getErrorMessage={getErrorMessage}
                     getUhaandterteFeil={getUhaandterteFeil}
                     feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
+                    periodeFeilkode={feilkodeprefiks}
                     kanHaFlere
                     medSlettKnapp={false}
                 />

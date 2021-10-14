@@ -188,7 +188,9 @@ const ArbeidsforholdPanel = ({
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere
                             getErrorMessage={getErrorMessage}
+                            getUhaandterteFeil={getUhaandterteFeil}
                             feilkodeprefiks="ytelse.arbeidstid.frilanserArbeidstidInfo"
+                            periodeFeilkode="ytelse.arbeidstid.frilanser"
                             medSlettKnapp={false}
                         />
                     </>
@@ -822,6 +824,7 @@ const ArbeidsforholdPanel = ({
                         getErrorMessage={getErrorMessage}
                         getUhaandterteFeil={getUhaandterteFeil}
                         feilkodeprefiks="ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo"
+                        periodeFeilkode="ytelse.arbeidstid.selvstendigNæringsdrivende"
                         minstEn
                         textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                         kanHaFlere

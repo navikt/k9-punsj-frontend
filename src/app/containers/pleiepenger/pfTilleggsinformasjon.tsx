@@ -1,3 +1,4 @@
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     GetErrorMessage,
     PeriodeinfoComponent,
@@ -22,7 +23,9 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
     ) => {
-        const { tilleggsinformasjon } = periodeinfo;
+        const { tilleggsinformasjon, periode } = periodeinfo;
+        const feltindeks = periodeSpenn(periode);
+        console.log(`${feilprefiks}.periode[${feltindeks}].tilleggsinformasjon`)
         return (
             <div className="tilleggsinfo">
                 <Textarea
@@ -39,7 +42,7 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                             tilleggsinformasjon: event.target.value,
                         })
                     }
-                    feil={getErrorMessage(`${feilprefiks}.tilleggsinformasjon`)}
+                    feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].tilleggsinformasjon`)}
                 />
             </div>
         );
