@@ -14,6 +14,7 @@ import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
+import UtregningArbeidstid from './UtregningArbeidstid';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
@@ -73,6 +74,17 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                         </Hjelpetekst>
                     </div>
                 </Row>
+                <div className="utregnetArbeidstid__container">
+                    <div>
+                        <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag} />
+                    </div>
+                    <div>
+                        <UtregningArbeidstid
+                            arbeidstid={faktiskArbeidTimerPerDag}
+                            normalArbeidstid={jobberNormaltTimerPerDag}
+                        />
+                    </div>
+                </div>
             </div>
         );
     };

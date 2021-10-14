@@ -371,7 +371,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
 }
 
 export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
-    const norskIdent: string = typeof soknad.soeknadId === 'undefined' ? '' : soknad.soeknadId;
+    const norskIdent: string = !soknad.soeknadId ? '' : soknad.soeknadId;
 
     return (dispatch: any) => {
         dispatch(validerSoknadRequestAction());

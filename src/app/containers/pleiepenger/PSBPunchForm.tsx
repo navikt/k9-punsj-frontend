@@ -20,7 +20,6 @@ import {
 import {nummerPrefiks, setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import moment from 'moment';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
@@ -55,6 +54,7 @@ import {
 } from '../../models/types/PSBSoknad';
 import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { RootStateType } from '../../state/RootState';
+import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import OkGaaTilLosModal from './OkGaaTilLosModal';
 import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
@@ -184,11 +184,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private initialPeriode: IPeriode = { fom: '', tom: '' };
     private getSoknadsperiode = () => {
-        if (
-            typeof this.state.soknad?.soeknadsperiode !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.fom !== 'undefined' &&
-            typeof this.state.soknad.soeknadsperiode?.tom !== 'undefined'
-        ) {
+        if (this.state.soknad.soeknadsperiode?.fom && this.state.soknad.soeknadsperiode?.tom) {
             return this.state.soknad.soeknadsperiode;
         } else {
             return this.initialPeriode;
@@ -262,8 +258,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
         return eksisterendePerioder.some(
             (ep) =>
-                moment(ep.fom!).isSameOrBefore(moment(nyPeriode.tom!)) &&
-                moment(nyPeriode.fom!).isSameOrBefore(moment(ep.tom!))
+                initializeDate(ep.fom!).isSameOrBefore(initializeDate(nyPeriode.tom!)) &&
+                initializeDate(nyPeriode.fom!).isSameOrBefore(initializeDate(ep.tom!))
         );
     };
 
@@ -483,7 +479,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         />
                     )}
                     <VerticalSpacer eightPx={true} />
-                    {typeof eksisterendePerioder !== 'undefined' &&
+                    {eksisterendePerioder &&
                         eksisterendePerioder?.length > 0 &&
                         !punchFormState.hentPerioderError && (
                             <>
@@ -806,9 +802,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     </ModalWrapper>
                 )}
 
-                {!!this.props.punchFormState.isValid &&
+                {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&
-                    typeof this.props.punchFormState.validertSoknad !== 'undefined' && (
+                    this.props.punchFormState.validertSoknad && (
                         <ModalWrapper
                             key={'validertSoknadModal'}
                             className={'validertSoknadModal'}
@@ -868,9 +864,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const navarandeSoknad: IPSBSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined'
-                    ? navarandeSoknad?.journalposter
-                    : []
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
             ),
         };
         this.setState({harForsoektAaSendeInn: true});
@@ -1258,7 +1252,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private erFremITidKlokkeslett(dato: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
-        if (!!mottattDato && naa.getDate() === new Date(mottattDato!).getDate() && moment(naa).format('HH:mm') < dato) {
+        if (
+            !!mottattDato &&
+            naa.getDate() === new Date(mottattDato!).getDate() &&
+            initializeDate(naa).format('HH:mm') < dato
+        ) {
             return true;
         }
         return false;
@@ -1361,11 +1359,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
-        const journalposter = {journalposter: Array.from(navarandeSoknad && typeof navarandeSoknad.journalposter !== 'undefined' ? navarandeSoknad?.journalposter : [])}
-        if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter}, true)
+        const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
+
+        if (!journalposter.includes(this.props.journalpostid)) {
+            journalposter.push(this.props.journalpostid);
         }
-        return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, ...journalposter});
+
+        if (this.state.harForsoektAaSendeInn) {
+            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, journalposter: journalposter}, true)
+        }
+
+        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter });
     };
 
     private handleStartButtonClick = () => {

@@ -1,38 +1,50 @@
-import React, { ReactNode } from 'react';
-import { Input, InputProps } from 'nav-frontend-skjema';
+import { Datepicker } from 'nav-datovelger';
+import { Label } from 'nav-frontend-skjema';
+import { Feilmelding } from 'nav-frontend-typografi';
+import * as React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-import { useField } from 'formik';
-import { FormattedMessage } from 'react-intl';
-import { fjernIndexFraLabel } from './skjemaUtils';
-
-interface IDateInputProps {
-    label?: ReactNode;
-    feltnavn: string;
+interface DateInputProps {
+    value: string;
+    onChange: (value: string) => void;
+    id?: string;
     disabled?: boolean;
+    errorMessage?: React.ReactNode | string;
+    label: string;
+    onBlur?: (value: string) => void;
+    className?: string;
 }
 
-const DateInput: React.FunctionComponent<IDateInputProps & InputProps> = ({
+const DateInput: React.FC<DateInputProps> = ({
+    value,
+    onChange,
+    onBlur,
+    id,
+    disabled,
+    errorMessage,
     label,
-    feltnavn,
-    disabled = false,
-    ...inputProps
+    className,
 }) => {
-    const [{ name, value, onBlur, onChange }, { error, touched }] = useField(feltnavn);
-
+    const datepickerId = id || uuidv4();
     return (
-        <Input
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...inputProps}
-            type="date"
-            label={label || <FormattedMessage id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`} />}
-            feil={touched && error}
-            name={name}
-            value={value || ''}
-            onBlur={onBlur}
-            onChange={onChange}
-            disabled={disabled}
-        />
+        <div className={className || ''}>
+            <Label htmlFor={datepickerId}>{label}</Label>
+            <Datepicker
+                locale="nb"
+                inputId={datepickerId}
+                value={value}
+                onChange={(v) => {
+                    onChange(v);
+                    if (onBlur) {
+                        onBlur(v);
+                    }
+                }}
+                calendarSettings={{ showWeekNumbers: true }}
+                showYearSelector
+                disabled={disabled}
+            />
+            {errorMessage && <Feilmelding>{errorMessage}</Feilmelding>}
+        </div>
     );
 };
-
 export default DateInput;

@@ -1,5 +1,6 @@
 import Feilmelding from 'app/components/Feilmelding';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import DateInput from 'app/components/skjema/DateInput';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
@@ -75,39 +76,35 @@ const ArbeidsforholdPanel = ({
 
         return (
             <>
-                <Input
+                <DateInput
                     id="frilanser-startdato"
-                    bredde="M"
-                    label={intlHelper(intl, 'skjema.frilanserdato')}
-                    type="date"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
-                    feil={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
-                    onChange={(event: any) =>
+                    label={intlHelper(intl, 'skjema.frilanserdato')}
+                    errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
+                    onChange={(selectedDate: any) => {
                         updateSoknadState(
                             {
                                 opptjeningAktivitet: {
                                     ...opptjening,
                                     frilanser: {
                                         ...soknad.opptjeningAktivitet.frilanser,
-                                        startdato: event.target.value,
+                                        startdato: selectedDate,
                                     },
                                 },
                             },
                             false
-                        )
-                    }
-                    onBlur={(event: any) =>
+                        );
                         updateSoknad({
                             opptjeningAktivitet: {
                                 ...opptjening,
                                 frilanser: {
                                     ...soknad.opptjeningAktivitet.frilanser,
-                                    startdato: event.target.value,
+                                    startdato: selectedDate,
                                 },
                             },
-                        })
-                    }
+                        });
+                    }}
                 />
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -126,38 +123,34 @@ const ArbeidsforholdPanel = ({
                 />
                 <VerticalSpacer eightPx />
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
-                    <Input
+                    <DateInput
                         id="frilanser-sluttdato"
-                        bredde="M"
-                        label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
-                        type="date"
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
-                        onChange={(event: any) =>
+                        label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                        onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
                                     opptjeningAktivitet: {
                                         ...opptjening,
                                         frilanser: {
                                             ...soknad.opptjeningAktivitet.frilanser,
-                                            sluttdato: event.target.value,
+                                            sluttdato: selectedDate,
                                         },
                                     },
                                 },
                                 false
-                            )
-                        }
-                        onBlur={(event: any) =>
+                            );
                             updateSoknad({
                                 opptjeningAktivitet: {
                                     ...opptjening,
                                     frilanser: {
                                         ...soknad.opptjeningAktivitet.frilanser,
-                                        sluttdato: event.target.value,
+                                        sluttdato: selectedDate,
                                     },
                                 },
-                            })
-                        }
+                            });
+                        }}
                     />
                 )}
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
@@ -499,13 +492,11 @@ const ArbeidsforholdPanel = ({
                     )}
                     <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
                     <div className="sn-startdatocontainer">
-                        <Input
-                            bredde="M"
-                            label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                            type="date"
+                        <DateInput
                             className="fom"
                             value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
-                            onChange={(event: any) =>
+                            label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                            onChange={(selectedDate: any) => {
                                 updateSoknadState(
                                     {
                                         opptjeningAktivitet: {
@@ -516,16 +507,14 @@ const ArbeidsforholdPanel = ({
                                                     ...opptjening.selvstendigNaeringsdrivende?.info,
                                                     periode: {
                                                         ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                        fom: event.target.value,
+                                                        fom: selectedDate,
                                                     },
                                                 },
                                             },
                                         },
                                     },
                                     false
-                                )
-                            }
-                            onBlur={(event: any) =>
+                                );
                                 updateSoknad({
                                     opptjeningAktivitet: {
                                         ...opptjening,
@@ -535,21 +524,19 @@ const ArbeidsforholdPanel = ({
                                                 ...opptjening.selvstendigNaeringsdrivende?.info,
                                                 periode: {
                                                     ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                    fom: event.target.value,
+                                                    fom: selectedDate,
                                                 },
                                             },
                                         },
                                     },
-                                })
-                            }
+                                });
+                            }}
                         />
-                        <Input
-                            bredde="M"
-                            label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                            type="date"
+                        <DateInput
                             className="tom"
                             value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
-                            onChange={(event: any) =>
+                            label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                            onChange={(selectedDate: any) => {
                                 updateSoknadState(
                                     {
                                         opptjeningAktivitet: {
@@ -560,16 +547,14 @@ const ArbeidsforholdPanel = ({
                                                     ...opptjening.selvstendigNaeringsdrivende?.info,
                                                     periode: {
                                                         ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                        tom: event.target.value,
+                                                        tom: selectedDate,
                                                     },
                                                 },
                                             },
                                         },
                                     },
                                     false
-                                )
-                            }
-                            onBlur={(event: any) =>
+                                );
                                 updateSoknad({
                                     opptjeningAktivitet: {
                                         ...opptjening,
@@ -579,13 +564,13 @@ const ArbeidsforholdPanel = ({
                                                 ...opptjening.selvstendigNaeringsdrivende?.info,
                                                 periode: {
                                                     ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                    tom: event.target.value,
+                                                    tom: selectedDate,
                                                 },
                                             },
                                         },
                                     },
-                                })
-                            }
+                                });
+                            }}
                         />
                     </div>
                     {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
@@ -680,13 +665,11 @@ const ArbeidsforholdPanel = ({
                     {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                         <>
                             <Row noGutters>
-                                <Input
-                                    bredde="M"
-                                    label={intlHelper(intl, 'skjema.sn.varigendringdato')}
-                                    type="date"
+                                <DateInput
                                     className="endringdato"
                                     value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
-                                    onChange={(event: any) =>
+                                    label={intlHelper(intl, 'skjema.sn.varigendringdato')}
+                                    onChange={(selectedDate: any) => {
                                         updateSoknadState(
                                             {
                                                 opptjeningAktivitet: {
@@ -695,15 +678,13 @@ const ArbeidsforholdPanel = ({
                                                         ...opptjening.selvstendigNaeringsdrivende,
                                                         info: {
                                                             ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                            endringDato: event.target.value,
+                                                            endringDato: selectedDate,
                                                         },
                                                     },
                                                 },
                                             },
                                             false
-                                        )
-                                    }
-                                    onBlur={(event: any) =>
+                                        );
                                         updateSoknad({
                                             opptjeningAktivitet: {
                                                 ...opptjening,
@@ -711,12 +692,12 @@ const ArbeidsforholdPanel = ({
                                                     ...opptjening.selvstendigNaeringsdrivende,
                                                     info: {
                                                         ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                        endringDato: event.target.value,
+                                                        endringDato: selectedDate,
                                                     },
                                                 },
                                             },
-                                        })
-                                    }
+                                        });
+                                    }}
                                 />
                             </Row>
                             <Row noGutters>
