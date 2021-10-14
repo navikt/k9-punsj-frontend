@@ -580,7 +580,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel>
                 </div>
             )}
-            <PdfVisning dokumenter={journalpost!.dokumenter} journalpostId={journalpost!.journalpostId} />
+            {journalpost && (
+                <PdfVisning
+                    journalpostDokumenter={[
+                        { journalpostid: journalpost?.journalpostId, dokumenter: journalpost?.dokumenter },
+                    ]}
+                />
+            )}
         </div>
     );
 };
