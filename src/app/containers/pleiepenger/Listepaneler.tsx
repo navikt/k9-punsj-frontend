@@ -63,8 +63,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         getUhaandterteFeil,
         getErrorMessage,
     } = props;
-    const getErrorMessage = (code: string) =>
-        props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
         index: number,
@@ -154,12 +152,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         getErrorMessage,
                                         intl
                                     )}
-                                {feilkodeprefiks &&
-                                    getUhaandterteFeil &&
-                                    getUhaandterteFeil(feilkodeprefiks).map((feilmelding, index) => (
-                                        // eslint-disable-next-line react/no-array-index-key
-                                        <Feilmelding key={index} feil={feilmelding} />
-                                    ))}
                             </SkjemaGruppe>
                         </Panel>
                     );
