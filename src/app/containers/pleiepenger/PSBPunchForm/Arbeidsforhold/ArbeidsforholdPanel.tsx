@@ -1,4 +1,3 @@
-import Feilmelding from 'app/components/Feilmelding';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import DateInput from 'app/components/skjema/DateInput';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
