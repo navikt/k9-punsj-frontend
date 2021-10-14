@@ -1325,12 +1325,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
-        const journalposter = {
-            journalposter: Array.from(
-                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
-            ),
-        };
-        return this.props.updateSoknad({ ...navarandeSoknad, ...soknad, ...journalposter });
+        const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
+
+        if (!journalposter.includes(this.props.journalpostid)) {
+            journalposter.push(this.props.journalpostid);
+        }
+
+        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter });
     };
 
     private handleStartButtonClick = () => {
