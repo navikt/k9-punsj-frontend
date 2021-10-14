@@ -21,7 +21,7 @@ const testPeriodeinfo: Periodeinfo<ITilleggsinformasjon> = {
 const testPeriodeindex = 0;
 const testUpdatePeriodeinfoInSoknad = jest.fn();
 const testUpdatePeriodeinfoInSoknadState = jest.fn();
-const testFeilprefiks = 'feilprefiks.perioder[2020-01-01/2020-12-31]';
+const testFeilprefiks = 'feilprefiks';
 const testGetErrorMessage = jest.fn();
 const testIntl = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 const testKodeord = 'kodeord';
@@ -94,6 +94,6 @@ describe('pfTilleggsinformasjon', () => {
     it('Viser feilmelding', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
         expect(testGetErrorMessage).toHaveBeenCalledTimes(1);
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.tilleggsinformasjon`);
+        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.perioder[2020-01-01/2020-12-31].tilleggsinformasjon`);
     });
 });
