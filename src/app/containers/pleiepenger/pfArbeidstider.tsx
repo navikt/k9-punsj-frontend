@@ -1,5 +1,4 @@
 import {
-    GetErrorMessage,
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
@@ -11,6 +10,7 @@ import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { GetErrorMessage } from 'app/models/types';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import UtregningArbeidstid from './UtregningArbeidstid';

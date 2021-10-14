@@ -1,16 +1,15 @@
-import Feilmelding from 'app/components/Feilmelding';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
-export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
-export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -109,12 +108,12 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                     </div>
                 </Row>
             ))}
-            {feilkodeprefiks &&
-                getUhaandterteFeil &&
-                getUhaandterteFeil(feilkodeprefiks).map((feilmelding, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Feilmelding key={index} feil={feilmelding} />
-                ))}
+            {feilkodeprefiks && (
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                />
+            )}
+
             {kanHaFlere && (
                 <Row noGutters>
                     <button

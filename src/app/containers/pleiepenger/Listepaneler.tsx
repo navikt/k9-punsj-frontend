@@ -1,17 +1,17 @@
+import * as React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
+import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import Feilmelding from 'app/components/Feilmelding';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
-import Feilmelding from '../../components/Feilmelding';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
-export type GetErrorMessage = (kode: string) => React.ReactNode | boolean | undefined;
-export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
 
 export type ListeComponent<T> = (
     itemInfo: T,
@@ -61,6 +61,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         kanHaFlere,
         medSlettKnapp,
         getUhaandterteFeil,
+        getErrorMessage,
     } = props;
     const getErrorMessage = (code: string) =>
         props.getErrorMessage && feilkodeprefiks ? props.getErrorMessage(`${feilkodeprefiks}${code}`) : undefined;
@@ -163,6 +164,12 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         </Panel>
                     );
                 })}
+            {feilkodeprefiks && (
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                />
+            )}
+
             {kanHaFlere && (
                 <button
                     id="leggtillisteelementknapp"

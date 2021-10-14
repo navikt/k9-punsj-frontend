@@ -1,5 +1,6 @@
 import DateInput from 'app/components/skjema/DateInput';
 import Feilmelding from 'app/components/Feilmelding';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
@@ -80,6 +81,7 @@ const ArbeidsforholdPanel = ({
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
                     label={intlHelper(intl, 'skjema.frilanserdato')}
+                    errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
                     onChange={(selectedDate: any) => {
                         updateSoknadState(
                             {
@@ -180,7 +182,9 @@ const ArbeidsforholdPanel = ({
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere
                             getErrorMessage={getErrorMessage}
+                            getUhaandterteFeil={getUhaandterteFeil}
                             feilkodeprefiks="ytelse.arbeidstid.frilanserArbeidstidInfo"
+                            periodeFeilkode="ytelse.arbeidstid.frilanser"
                             medSlettKnapp={false}
                         />
                     </>
@@ -802,6 +806,7 @@ const ArbeidsforholdPanel = ({
                         getErrorMessage={getErrorMessage}
                         getUhaandterteFeil={getUhaandterteFeil}
                         feilkodeprefiks="ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo"
+                        periodeFeilkode="ytelse.arbeidstid.selvstendigNæringsdrivende"
                         minstEn
                         textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                         kanHaFlere
@@ -857,11 +862,9 @@ const ArbeidsforholdPanel = ({
                     <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
                 </>
             )}
-
-            {getUhaandterteFeil('ytelse.arbeidstid').map((feilmelding, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Feilmelding key={index} feil={feilmelding} />
-            ))}
+            <UhaanderteFeilmeldinger
+                getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
+            />
         </EkspanderbartpanelBase>
     );
 };

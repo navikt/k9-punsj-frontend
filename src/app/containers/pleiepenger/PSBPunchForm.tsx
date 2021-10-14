@@ -1363,8 +1363,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
 
         if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter }, true);
+            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, journalposter: journalposter}, true)
         }
+
         return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter });
     };
 
