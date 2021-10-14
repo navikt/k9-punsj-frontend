@@ -7,7 +7,7 @@ import {
 } from 'app/containers/pleiepenger/Listepaneler';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
-import Feilmelding from 'app/components/Feilmelding';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from '../../models/types/Periodeinfo';
 import { IPeriode } from '../../models/types/Periode';
@@ -116,7 +116,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 onRemove();
             }
         };
-        const feltIndeks = periodeSpenn(periodeinfo.periode)
+        const feltIndeks = periodeSpenn(periodeinfo.periode);
         return (
             <>
                 <div className="periodeinfopanel_container">
@@ -155,12 +155,11 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         getErrorMessage,
                         intlShape
                     )}
-                {feilkodeprefiks &&
-                    getUhaandterteFeil &&
-                    getUhaandterteFeil(`${feilkodeprefiks}.perioder[${feltIndeks}]`).map((feilmelding, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <Feilmelding key={index} feil={feilmelding} />
-                    ))}
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() =>
+                        (getUhaandterteFeil && getUhaandterteFeil(`${feilkodeprefiks}.perioder[${feltIndeks}]`)) || []
+                    }
+                />
             </>
         );
     };

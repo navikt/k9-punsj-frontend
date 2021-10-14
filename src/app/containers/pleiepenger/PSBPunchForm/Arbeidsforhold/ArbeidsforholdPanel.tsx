@@ -1,4 +1,5 @@
 import Feilmelding from 'app/components/Feilmelding';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
@@ -879,11 +880,9 @@ const ArbeidsforholdPanel = ({
                     <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
                 </>
             )}
-
-            {getUhaandterteFeil('ytelse.arbeidstid').map((feilmelding, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Feilmelding key={index} feil={feilmelding} />
-            ))}
+            <UhaanderteFeilmeldinger
+                getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
+            />
         </EkspanderbartpanelBase>
     );
 };

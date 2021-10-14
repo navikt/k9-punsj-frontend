@@ -2,6 +2,7 @@
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import Feilmelding from 'app/components/Feilmelding';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
@@ -170,10 +171,15 @@ const Arbeidstakerperioder = ({
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
                             />
-                                {getUhaandterteFeil(`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`).map((feilmelding, index) => (
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    <Feilmelding key={index} feil={feilmelding} />
-                                ))}
+                            <UhaanderteFeilmeldinger
+                                getFeilmeldinger={() =>
+                                    (getUhaandterteFeil &&
+                                        getUhaandterteFeil(
+                                            `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`
+                                        )) ||
+                                    []
+                                }
+                            />
                         </SkjemaGruppe>
                     </Panel>
                 );

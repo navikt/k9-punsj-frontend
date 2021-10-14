@@ -1,5 +1,5 @@
-import Feilmelding from 'app/components/Feilmelding';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
@@ -101,12 +101,12 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                     </div>
                 </Row>
             ))}
-            {feilkodeprefiks &&
-                getUhaandterteFeil &&
-                getUhaandterteFeil(feilkodeprefiks).map((feilmelding, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Feilmelding key={index} feil={feilmelding} />
-                ))}
+            {feilkodeprefiks && (
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                />
+            )}
+
             {kanHaFlere && (
                 <Row noGutters>
                     <button

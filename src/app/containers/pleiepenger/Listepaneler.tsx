@@ -1,3 +1,4 @@
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import Panel from 'nav-frontend-paneler';
@@ -61,7 +62,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         kanHaFlere,
         medSlettKnapp,
         getUhaandterteFeil,
-        getErrorMessage
+        getErrorMessage,
     } = props;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
@@ -156,12 +157,12 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                         </Panel>
                     );
                 })}
-            {feilkodeprefiks &&
-                getUhaandterteFeil &&
-                getUhaandterteFeil(feilkodeprefiks).map((feilmelding, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Feilmelding key={index} feil={feilmelding} />
-                ))}
+            {feilkodeprefiks && (
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                />
+            )}
+
             {kanHaFlere && (
                 <button
                     id="leggtillisteelementknapp"
