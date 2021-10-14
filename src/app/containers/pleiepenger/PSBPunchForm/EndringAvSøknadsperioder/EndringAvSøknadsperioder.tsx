@@ -8,6 +8,7 @@ import { IntlShape } from 'react-intl';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { Periodepaneler } from '../../Periodepaneler';
+import './endringAvSøknadsperioder.less';
 
 interface EndringAvSøknadsperioderProps {
     isOpen: boolean;
@@ -90,7 +91,7 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
         <EkspanderbartpanelBase
             apen={isOpen}
             className="endringAvSøknadsperioder"
-            tittel="Endring av søknadsperiode"
+            tittel="Endre/fjerne søknadsperiode [BRUKES KUN AV KJERNEGRUPPA]"
             onClick={onClick}
         >
             <Element>
