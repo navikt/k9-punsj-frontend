@@ -19,10 +19,3 @@ export const generateDateString = (periode: IPeriode | IPeriode[] | null): strin
     }
     return '-';
 };
-
-export const periodeSpenn = (periode: IPeriode | undefined): string =>
-    periode
-        ? Object.values(periode)
-            .map((dato) => dato || '..')
-            .join('/')
-        : '';

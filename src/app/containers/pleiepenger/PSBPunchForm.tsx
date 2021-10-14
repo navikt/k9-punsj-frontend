@@ -506,7 +506,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         }
                                         getErrorMessage={() => undefined}
                                         getUhaandterteFeil={this.getUhaandterteFeil}
-                                        feilkodeprefiks={'ytelse.lovbestemtFerie'}
+                                        feilkodeprefiks={'lovbestemtFerie'}
                                         minstEn={false}
                                         kanHaFlere={true}
                                     />

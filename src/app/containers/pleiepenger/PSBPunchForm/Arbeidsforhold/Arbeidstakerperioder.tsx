@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
-import Feilmelding from 'app/components/Feilmelding';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
@@ -25,6 +24,7 @@ interface ArbeidstakerperioderProps {
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
     getUhaandterteFeil: (kode: string) => (string | undefined)[];
+    feilkodeprefiks: string;
 }
 
 const Arbeidstakerperioder = ({
@@ -33,7 +33,8 @@ const Arbeidstakerperioder = ({
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
-    getUhaandterteFeil,
+    feilkodeprefiks,
+    getUhaandterteFeil
 }: ArbeidstakerperioderProps): JSX.Element => {
     const intl = useIntl();
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
@@ -163,17 +164,13 @@ const Arbeidstakerperioder = ({
                                 updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
                                     editSoknadState(editItem(currentItemIndex, info), showStatus)
                                 }
-                                feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
+                                feilkodeprefiks='ytelse.arbeidstid.arbeidstakerList[0]'
                                 getErrorMessage={getErrorMessage}
                                 getUhaandterteFeil={getUhaandterteFeil}
                                 intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
                             />
-                                {getUhaandterteFeil(`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`).map((feilmelding, index) => (
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    <Feilmelding key={index} feil={feilmelding} />
-                                ))}
                         </SkjemaGruppe>
                     </Panel>
                 );

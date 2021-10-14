@@ -167,7 +167,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 feil={
                                     harDuplikatOrgnr
                                         ? 'Organisasjonsnummeret er valgt flere ganger.'
-                                        : getErrorMessage(`${feilkodeprefiks}.identified`)
+                                        : getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)
                                 }
                             >
                                 <option key="default" value="" label="" aria-label="Tomt valg" />)
@@ -239,7 +239,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                             feil={
                                                 searchOrganisasjonsnummerFailed
                                                     ? 'Ingen treff på organisasjonsnummer'
-                                                    : getErrorMessage(`${feilkodeprefiks}.identified`)
+                                                    : getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)
                                             }
                                         />
                                         {navnPåArbeidsgiver && (
@@ -267,7 +267,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 onBlur={(event) =>
                                     updateListeinfoInSoknad({ norskIdent: event.target.value.replace(/\s/g, '') })
                                 }
-                                feil={getErrorMessage(`${feilkodeprefiks}.identified`)}
+                                feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}
                             />
                         )}
                     </div>
@@ -302,7 +302,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     getErrorMessage={getErrorMessage}
                     getUhaandterteFeil={getUhaandterteFeil}
-                    feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
+                    feilkodeprefiks={feilkodeprefiks}
                     kanHaFlere
                     medSlettKnapp={false}
                 />
