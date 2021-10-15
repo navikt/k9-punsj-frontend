@@ -106,7 +106,7 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, kopierJournalpostSuccess }) => {
+export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, kopierJournalpostSuccess }) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
