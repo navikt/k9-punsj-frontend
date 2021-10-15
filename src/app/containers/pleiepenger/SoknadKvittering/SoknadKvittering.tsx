@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import './soknadKvittering.less';
 import countries from 'i18n-iso-countries';
 import { RootStateType } from 'app/state/RootState';
+import Kopier from 'app/components/kopier/Kopier';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formatereTekstMedTimerOgMinutter,
@@ -33,6 +34,7 @@ interface IOwnProps {
     response: IPSBSoknadKvittering;
     skalViseTrukkedePerioder?: boolean;
     kopierJournalpostSuccess?: boolean;
+    annenSokerIdent?: string | null;
 }
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) => sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0
@@ -89,7 +91,13 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, skalViseTrukkedePerioder, kopierJournalpostSuccess }) => {
+export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
+    intl,
+    response,
+    skalViseTrukkedePerioder,
+    kopierJournalpostSuccess,
+    annenSokerIdent,
+}) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
@@ -142,6 +150,12 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, res
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
                     <hr className={classNames('linje')} />
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
+                    {annenSokerIdent && (
+                        <p>
+                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
+                            <Kopier verdi={annenSokerIdent} />
+                        </p>
+                    )}
                 </div>
             )}
             {visSoknadsperiode && (
@@ -428,7 +442,8 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, res
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess
-})
+    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
+    annenSokerIdent: state.identState.annenSokerIdent,
+});
 
 export default connect(mapStateToProps)(SoknadKvittering);
