@@ -7,7 +7,6 @@ import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
 import FlexRow from '../flexgrid/FlexRow';
-import Kopier from '../kopier/Kopier';
 import LabelValue from '../skjema/LabelValue';
 import './journalpostPanel.less';
 
