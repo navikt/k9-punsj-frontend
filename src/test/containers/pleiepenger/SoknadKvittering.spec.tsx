@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
-import SoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import {SoknadKvittering} from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 
@@ -188,7 +188,6 @@ const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
     const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
-
     return shallow(<SoknadKvittering intl={intlMock} response={response} />);
 };
 
