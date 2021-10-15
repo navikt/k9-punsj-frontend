@@ -38,7 +38,6 @@ export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponent
                     labelTextId="journalpost.id"
                     value={journalposter?.join(', ') || journalpost?.journalpostId}
                     retning="horisontal"
-                    visKopier
                 />
 
                 {fordelingState.erIdent1Bekreftet && (
@@ -56,7 +55,6 @@ export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponent
                         labelTextId="journalpost.ident2"
                         value={ident2 || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                         retning="horisontal"
-                        visKopier
                     />
                 )}
             </FlexRow>
