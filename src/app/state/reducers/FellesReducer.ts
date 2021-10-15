@@ -246,7 +246,6 @@ export default function FellesReducer(
                 journalpost: action.journalpost,
                 isJournalpostLoading: false,
                 journalpostRequestError: undefined,
-                kopierJournalpostSuccess: true,
             };
 
         case Actiontypes.JOURNALPOST_LOAD:
