@@ -29,6 +29,9 @@ const webpackConfig = {
                 use: [
                     {
                         loader: 'babel-loader',
+                        options: {
+                            plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
+                        },
                     },
                 ],
             },
