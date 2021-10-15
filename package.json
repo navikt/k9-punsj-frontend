@@ -80,7 +80,7 @@
     "scripts": {
         "start": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
-        "build": "node ./src/build/scripts/production-build.js",
+        "build": "cross-env NODE_ENV=production node ./src/build/scripts/production-build.js",
         "test": "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --config ./jest.config.json",
         "lint": "eslint --quiet 'src/**/*.{ts,tsx}'",
         "eject": "react-scripts eject",
@@ -128,6 +128,7 @@
         "case-sensitive-paths-webpack-plugin": "^2.3.0",
         "circular-dependency-plugin": "^5.2.2",
         "copy-webpack-plugin": "^9.0.1",
+        "cross-env": "^7.0.3",
         "css-loader": "^6.3.0",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.6",
