@@ -7,6 +7,7 @@ import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
 import FlexRow from '../flexgrid/FlexRow';
+import Kopier from '../kopier/Kopier';
 import LabelValue from '../skjema/LabelValue';
 import './journalpostPanel.less';
 
@@ -38,6 +39,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponent
                     labelTextId="journalpost.id"
                     value={journalposter?.join(', ') || journalpost?.journalpostId}
                     retning="horisontal"
+                    visKopier
                 />
 
                 {fordelingState.erIdent1Bekreftet && (
@@ -55,6 +57,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponent
                         labelTextId="journalpost.ident2"
                         value={ident2 || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                         retning="horisontal"
+                        visKopier
                     />
                 )}
             </FlexRow>
