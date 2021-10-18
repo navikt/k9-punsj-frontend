@@ -109,7 +109,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                             >
                                 {intlHelper(intl, 'tilbaketilLOS')}
                             </Hovedknapp>
-                            {!!punchFormState.linkTilBehandlingIK9 && (
+{/*                             {!!punchFormState.linkTilBehandlingIK9 && (
                                 <Hovedknapp
                                     onClick={() => {
                                         window.location.href = punchFormState.linkTilBehandlingIK9!;
@@ -117,7 +117,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                                 >
                                     {intlHelper(intl, 'tilBehandlingIK9')}
                                 </Hovedknapp>
-                            )}
+                            )} */}
                         </div>
                         {!!punchFormState.innsentSoknad && (
                             <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
