@@ -19,7 +19,7 @@ export interface IPSBSoknad {
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    soeknadsperiode?: IPeriode | null;
+    soeknadsperiode?: IPeriode[] | null;
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
     beredskap?: Periodeinfo<ITilleggsinformasjon>[];
@@ -263,7 +263,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     barn: Barn;
 
-    soeknadsperiode: Periode | null;
+    soeknadsperiode: Periode[] | null;
 
     opptjeningAktivitet: OpptjeningAktivitet;
 
@@ -300,7 +300,7 @@ export class PSBSoknad implements IPSBSoknad {
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
         this.barn = new Barn(soknad.barn || {});
-        this.soeknadsperiode = soknad.soeknadsperiode ? new Periode(soknad.soeknadsperiode) : null;
+        this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
         this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.beredskap = (soknad.beredskap || []).map((b) => new Tilleggsinformasjon(b));

@@ -151,6 +151,9 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
         })
     );
 
+    const formaterSøknadsperioder = () =>
+        ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
+
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
@@ -171,7 +174,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
                     <hr className={classNames('linje')} />
-                    <p>{periodToFormattedString(ytelse.søknadsperiode[0])}</p>
+                    <p>{formaterSøknadsperioder()}</p>
                 </div>
             )}
 
