@@ -256,13 +256,60 @@ describe('PunchForm', () => {
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad }, {});
         useSelectorMock.mockReturnValue({});
-        expect(punchForm.find('Soknadsperioder').dive().find('Periodepaneler')).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-fra')).toHaveLength(1);
+        expect(punchForm.find('Soknadsperioder').dive().find('#soknadsperiode-til')).toHaveLength(1);
     });
 
     it('Skjuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', () => {
-        const soknad = { ...initialSoknad, soeknadsperiode: [{ fom: '', tom: '' }] };
+        const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
         const punchForm = setupPunchForm({ soknad }, {});
         expect(punchForm.find('.leggtilsoknadsperiode')).toHaveLength(0);
+    });
+
+    it('Oppdaterer søknad når fra-dato på søknadsperioden endres', () => {
+        const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
+        const updateSoknad = jest.fn();
+        const newDato = '2020-02-11';
+        const punchForm = setupPunchForm({ soknad }, { updateSoknad });
+        const inputField = getDateInputField(punchForm, 'Soknadsperioder', 'soknadsperiode-fra');
+        inputField.simulate('blur', { target: { value: newDato } });
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({
+            soeknadsperiode: expect.objectContaining({ fom: newDato, tom: '' }),
+        });
+        expect(updateSoknad).toHaveBeenCalledWith(expectedUpdatedSoknad);
+    });
+
+    it('Oppdaterer felt når fra-dato på søknadsperioden endres', () => {
+        const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
+        const newDato = '2020-02-11';
+        const punchForm = setupPunchForm({ soknad });
+        const inputField = getDateInputField(punchForm, 'Soknadsperioder', 'soknadsperiode-fra');
+        inputField.simulate('change', { target: { value: newDato } });
+        expect(inputField.prop('value')).toEqual(newDato);
+    });
+
+    it('Oppdaterer søknad når til-dato på søknadsperioden endres', () => {
+        const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
+        const updateSoknad = jest.fn();
+        const newDato = '2020-01-01';
+        const punchForm = setupPunchForm({ soknad }, { updateSoknad });
+        const inputField = getDateInputField(punchForm, 'Soknadsperioder', 'soknadsperiode-til');
+        inputField.simulate('blur', { target: { value: newDato } });
+        expect(updateSoknad).toHaveBeenCalledTimes(1);
+        const expectedUpdatedSoknad = expect.objectContaining({
+            soeknadsperiode: expect.objectContaining({ fom: '', tom: newDato }),
+        });
+        expect(updateSoknad).toHaveBeenCalledWith(expectedUpdatedSoknad);
+    });
+
+    it('Oppdaterer felt når til-dato på søknadsperioden endres', () => {
+        const soknad = { ...initialSoknad, soeknadsperiode: { fom: '', tom: '' } };
+        const newDato = '2020-01-01';
+        const punchForm = setupPunchForm({ soknad });
+        const inputField = getDateInputField(punchForm, 'Soknadsperioder', 'soknadsperiode-til');
+        inputField.simulate('change', { target: { value: newDato } });
+        expect(inputField.prop('value')).toEqual(newDato);
     });
 
     it('Viser checkboks for tilsyn', () => {
@@ -402,7 +449,7 @@ describe('PunchForm', () => {
     it('Viser advarsel om overlappende periode', () => {
         const soknad = {
             ...initialSoknad,
-            soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
+            soeknadsperiode: { fom: '2021-02-23', tom: '2021-08-23' },
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
         useSelectorMock.mockReturnValue({
@@ -574,7 +621,7 @@ describe('PunchForm', () => {
     it('Viser ikke advarsel om overlappende periode når periodene ikke overlapper', () => {
         const soknad = {
             ...initialSoknad,
-            soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
+            soeknadsperiode: { fom: '2021-02-23', tom: '2021-08-23' },
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }] }, {});
         useSelectorMock.mockReturnValue({
