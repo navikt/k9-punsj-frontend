@@ -1,10 +1,13 @@
 /* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
+import { connect } from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import './soknadKvittering.less';
 import countries from 'i18n-iso-countries';
+import { RootStateType } from 'app/state/RootState';
+import Kopier from 'app/components/kopier/Kopier';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formatereTekstMedTimerOgMinutter,
@@ -27,6 +30,8 @@ import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioder
 interface IOwnProps {
     intl: any;
     response: IPSBSoknadKvittering;
+    kopierJournalpostSuccess?: boolean;
+    annenSokerIdent?: string | null;
 }
 
 export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
@@ -103,7 +108,12 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
+export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
+    intl,
+    response,
+    kopierJournalpostSuccess,
+    annenSokerIdent,
+}) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
@@ -144,6 +154,19 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
+            {kopierJournalpostSuccess && (
+                <div>
+                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
+                    <hr className={classNames('linje')} />
+                    <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
+                    {annenSokerIdent && (
+                        <p>
+                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
+                            <Kopier verdi={annenSokerIdent} />
+                        </p>
+                    )}
+                </div>
+            )}
             {visSoknadsperiode && (
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
@@ -409,19 +432,11 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                        {`${
-                            journalposter[0].inneholderMedisinskeOpplysninger
-                                ? 'Ja'
-                                : 'Nei'
-                        }`}
+                        {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
                     </p>
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                        {`${
-                            journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes
-                                ? 'Ja'
-                                : 'Nei'
-                        }`}
+                        {`${journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
                     </p>
                 </div>
             )}
@@ -429,4 +444,9 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }
     );
 };
 
-export default SoknadKvittering;
+const mapStateToProps = (state: RootStateType) => ({
+    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
+    annenSokerIdent: state.identState.annenSokerIdent,
+});
+
+export default connect(mapStateToProps)(SoknadKvittering);
