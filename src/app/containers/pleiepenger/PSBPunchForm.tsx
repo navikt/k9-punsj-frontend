@@ -214,13 +214,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private initialArbeidstaker = () =>
         new Arbeidstaker({
             arbeidstidInfo: {
-                perioder: [
-                    {
-                        periode: this.getSoknadsperiode()[0],
-                        faktiskArbeidTimerPerDag: '',
-                        jobberNormaltTimerPerDag: '',
-                    },
-                ],
+                perioder: this.getSoknadsperiode().map((periode) => ({
+                    periode,
+                    faktiskArbeidTimerPerDag: '',
+                    jobberNormaltTimerPerDag: '',
+                })),
             },
             organisasjonsnummer: '',
             norskIdent: null,
@@ -228,13 +226,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private initialArbeidstidInfo = () =>
         new ArbeidstidInfo({
-            perioder: [
-                {
-                    periode: this.getSoknadsperiode()[0],
-                    faktiskArbeidTimerPerDag: '',
-                    jobberNormaltTimerPerDag: '',
-                },
-            ],
+            perioder: this.getSoknadsperiode().map((periode) => ({
+                periode,
+                faktiskArbeidTimerPerDag: '',
+                jobberNormaltTimerPerDag: '',
+            })),
         });
 
     private initialFrilanser = new FrilanserOpptjening({
