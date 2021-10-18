@@ -5,14 +5,21 @@ import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import intlHelper from '../../utils/intlUtils';
 import './labelValue.less';
+import Kopier from '../kopier/Kopier';
 
 interface ILabelValueProps {
     labelTextId: string;
-    value: React.ReactNode;
+    value: string | undefined;
     retning?: 'vertikal' | 'horisontal';
+    visKopier?: boolean;
 }
 
-const LabelValue: React.FunctionComponent<ILabelValueProps> = ({ labelTextId, value, retning = 'vertikal' }) => {
+const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
+    labelTextId,
+    value,
+    retning = 'vertikal',
+    visKopier,
+}) => {
     const valueId = useMemo(() => uuidv4(), []);
     const intl = useIntl();
 
@@ -24,6 +31,7 @@ const LabelValue: React.FunctionComponent<ILabelValueProps> = ({ labelTextId, va
         >
             <Label htmlFor={valueId}>{intlHelper(intl, labelTextId)}</Label>
             <div id={valueId}>{value}</div>
+            {visKopier && <Kopier verdi={value} />}
         </div>
     );
 };
