@@ -5,6 +5,8 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 const webpackConfig = {
     entry: [`${__dirname}/../../app/App.tsx`],
     output: {
@@ -24,7 +26,14 @@ const webpackConfig = {
             {
                 test: /\.(ts|tsx)$/,
                 include: [path.resolve(__dirname, './../../app')],
-                loader: require.resolve('ts-loader'),
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
+                        },
+                    },
+                ],
             },
             {
                 test: /\.less$/,
