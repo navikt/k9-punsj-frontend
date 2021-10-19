@@ -1,3 +1,5 @@
+import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+
 export interface IPSBSoknadKvitteringBosteder {
     [key: string]: { land: string };
 }
@@ -107,4 +109,5 @@ export interface IPSBSoknadKvittering {
         };
         trekkKravPerioder: string[];
     };
+    begrunnelseForInnsending: BegrunnelseForInnsending;
 }

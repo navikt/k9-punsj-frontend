@@ -15,10 +15,10 @@ import {
     getLocaleFromSessionStorage,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
-    formattereDatoIArray
-} from "../../../utils";
-import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
-import {ICountry} from "../../../components/country-select/CountrySelect";
+    formattereDatoIArray,
+} from '../../../utils';
+import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
+import { ICountry } from '../../../components/country-select/CountrySelect';
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
@@ -32,12 +32,12 @@ import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioder
 interface IOwnProps {
     intl: any;
     response: IPSBSoknadKvittering;
-    skalViseTrukkedePerioder?: boolean;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
-const sjekkHvisPerioderEksisterer = (property: string, object: any) => sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0
+const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
+    sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
 const formattereLandTilNavnIObjekt = (
     perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
@@ -74,7 +74,6 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
     return kopiAvPerioder;
 };
 
-
 export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
         if (value.skalHaFerie) {
@@ -94,7 +93,6 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
 export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     intl,
     response,
-    skalViseTrukkedePerioder,
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
@@ -107,9 +105,10 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
     const visTrukkedePerioder =
-        skalViseTrukkedePerioder !== false &&
-        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) &&
-        ytelse.trekkKravPerioder.length > 0;
+        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) && ytelse.trekkKravPerioder.length > 0;
+    const visBegrunnelseForInnsending =
+        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', response) &&
+        response.begrunnelseForInnsending.tekst;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
@@ -180,6 +179,12 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                         <p>
                             <b>Perioder som er fjernet fra søknadsperioden: </b>
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
+                        </p>
+                    )}
+                    {visBegrunnelseForInnsending && (
+                        <p>
+                            <b>Begrunnelse for endring: </b>
+                            {response.begrunnelseForInnsending.tekst}
                         </p>
                     )}
                 </div>

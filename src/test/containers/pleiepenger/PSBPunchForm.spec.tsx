@@ -266,41 +266,6 @@ describe('PunchForm', () => {
         expect(punchForm.find('.leggtilsoknadsperiode')).toHaveLength(0);
     });
 
-    // it('Oppdaterer søknad når fra-dato på søknadsperioden endres', () => {
-    //     const soknad = { ...initialSoknad, soeknadsperiode: [{ fom: '', tom: '' }] };
-    //     const updateSoknad = jest.fn();
-    //     const newDato = '2020-02-11';
-    //     const punchForm = setupPunchForm({ soknad }, { updateSoknad });
-    //     const inputField = getDateInputField(punchForm, 'Soknadsperioder', 'soknadsperiode-fra');
-    //     inputField.simulate('blur', { target: { value: newDato } });
-    //     expect(updateSoknad).toHaveBeenCalledTimes(1);
-    //     const expectedUpdatedSoknad = expect.objectContaining({
-    //         soeknadsperiode: expect.objectContaining({ fom: newDato, tom: '' }),
-    //     });
-    //     expect(updateSoknad).toHaveBeenCalledWith(expectedUpdatedSoknad);
-    // });
-
-    // it('Oppdaterer søknad når til-dato på søknadsperioden endres', () => {
-    //     const soknad = { ...initialSoknad, soeknadsperiode: [{ fom: '', tom: '' }] };
-    //     const updateSoknad = jest.fn();
-    //     const newDato = '2020-01-01';
-    //     const punchForm = setupPunchForm({ soknad }, { updateSoknad });
-    //     const periodInput = punchForm
-    //         .find('Soknadsperioder')
-    //         .shallow()
-    //         .find('Periodepaneler')
-    //         .shallow()
-    //         .find('PeriodInput');
-    //     expect(periodInput).toHaveLength(1);
-
-    //     inputField.simulate('blur', { target: { value: newDato } });
-    //     expect(updateSoknad).toHaveBeenCalledTimes(1);
-    //     const expectedUpdatedSoknad = expect.objectContaining({
-    //         soeknadsperiode: expect.objectContaining({ fom: '', tom: newDato }),
-    //     });
-    //     expect(updateSoknad).toHaveBeenCalledWith(expectedUpdatedSoknad);
-    // });
-
     it('Viser checkboks for tilsyn', () => {
         const punchForm = setupPunchForm();
         expect(punchForm.find('.tilsynsordning CheckboksPanel')).toHaveLength(1);
