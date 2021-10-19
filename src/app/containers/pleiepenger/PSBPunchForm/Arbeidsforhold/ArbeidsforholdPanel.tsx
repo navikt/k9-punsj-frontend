@@ -1,5 +1,4 @@
 import DateInput from 'app/components/skjema/DateInput';
-import Feilmelding from 'app/components/Feilmelding';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
