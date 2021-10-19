@@ -11,6 +11,7 @@ import {
     PeriodeMedTimerMinutter,
 } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
+import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -35,7 +36,7 @@ export interface IPSBSoknad {
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
-    skalTrekkePerioder?: boolean;
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
 }
 
 export interface ISelvstendigNaeringsdrivendeOpptjening {
@@ -304,7 +305,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     trekkKravPerioder?: Periode[];
 
-    skalTrekkePerioder: boolean;
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
 
     constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
@@ -329,6 +330,6 @@ export class PSBSoknad implements IPSBSoknad {
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.skalTrekkePerioder = !!soknad.skalTrekkePerioder;
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
     }
 }

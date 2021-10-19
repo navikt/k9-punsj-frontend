@@ -152,7 +152,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             omsorg: {},
             harInfoSomIkkeKanPunsjes: false,
             harMedisinskeOpplysninger: false,
-            skalTrekkePerioder: false,
         },
         perioder: undefined,
         isFetched: false,
@@ -402,7 +401,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <EndringAvSøknadsperioder
                     isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
-                    intl={intl}
                     getErrorMessage={this.getErrorMessage}
                     soknad={soknad}
                     updateSoknad={this.updateSoknad}
@@ -805,11 +803,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             isOpen={!!this.props.punchFormState.isValid}
                         >
                             <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <SoknadKvittering
-                                    intl={intl}
-                                    response={this.props.punchFormState.validertSoknad}
-                                    skalViseTrukkedePerioder={soknad.skalTrekkePerioder}
-                                />
+                                <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
                             </div>
                             <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                 <Hovedknapp
@@ -857,9 +851,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private handleSubmit = () => {
         let navarandeSoknad: IPSBSoknad = this.state.soknad;
-        if (!this.state.soknad.skalTrekkePerioder) {
-            navarandeSoknad.trekkKravPerioder = [];
-        }
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []

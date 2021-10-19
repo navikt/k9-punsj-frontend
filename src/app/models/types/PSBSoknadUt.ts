@@ -23,6 +23,7 @@ import {
     UtenlandsOpphold,
     Uttak,
 } from './PSBSoknad';
+import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 
 export interface IPSBSoknadUt {
     soeknadId?: string;
@@ -47,6 +48,7 @@ export interface IPSBSoknadUt {
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
 }
 
 export class ArbeidstidUt implements Required<IArbeidstid> {
@@ -87,7 +89,6 @@ const getTrekkKravPerioder = (soknad: IPSBSoknadUt) => {
     }
     return undefined;
 };
-
 
 export class PSBSoknadUt implements IPSBSoknadUt {
     soeknadId: string;
@@ -134,6 +135,8 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     trekkKravPerioder?: Periode[];
 
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
+
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
@@ -157,5 +160,6 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
     }
 }

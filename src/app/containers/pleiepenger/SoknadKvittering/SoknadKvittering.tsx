@@ -27,7 +27,6 @@ import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioder
 interface IOwnProps {
     intl: any;
     response: IPSBSoknadKvittering;
-    skalViseTrukkedePerioder?: boolean;
 }
 
 export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
@@ -104,7 +103,7 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, skalViseTrukkedePerioder }) => {
+const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response }) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
@@ -114,9 +113,10 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
     const visTrukkedePerioder =
-        skalViseTrukkedePerioder !== false &&
-        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) &&
-        ytelse.trekkKravPerioder.length > 0;
+        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) && ytelse.trekkKravPerioder.length > 0;
+    const visBegrunnelseForInnsending =
+        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', response) &&
+        response.begrunnelseForInnsending.tekst;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
@@ -171,6 +171,12 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
                         <p>
                             <b>Perioder som er fjernet fra søknadsperioden: </b>
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
+                        </p>
+                    )}
+                    {visBegrunnelseForInnsending && (
+                        <p>
+                            <b>Begrunnelse for endring: </b>
+                            {response.begrunnelseForInnsending.tekst}
                         </p>
                     )}
                 </div>
@@ -420,19 +426,11 @@ const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, response, 
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                        {`${
-                            journalposter[0].inneholderMedisinskeOpplysninger
-                                ? 'Ja'
-                                : 'Nei'
-                        }`}
+                        {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
                     </p>
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                        {`${
-                            journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes
-                                ? 'Ja'
-                                : 'Nei'
-                        }`}
+                        {`${journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
                     </p>
                 </div>
             )}
