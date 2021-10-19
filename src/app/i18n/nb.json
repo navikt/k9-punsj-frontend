@@ -382,7 +382,7 @@
     "skjema.felt.mottaksdato.label": "Mottaksdato",
     "skjema.felt.fraOgMed.label": "Fra: ",
     "skjema.felt.tilOgMed.label": "Til: ",
-    "skjema.felt.endringAvSøknadsperioder.begrunnelse": "Begrunnelse for endring",
+    "skjema.felt.endringAvSøknadsperioder.begrunnelse": "Begrunnelse for alle endringer",
     "skjema.validering.påkrevd": "Påkrevd felt",
     "skjema.validering.11siffer": "Fødsels- / D-nummer består av 11 siffer",
     "skjema.validering.minstEn": "Må velge minst én",
