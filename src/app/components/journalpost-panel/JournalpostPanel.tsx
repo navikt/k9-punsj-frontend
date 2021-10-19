@@ -47,6 +47,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponent
                             ident1 || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                         }
                         retning="horisontal"
+                        visKopier
                     />
                 )}
                 {!!ident2 && (
