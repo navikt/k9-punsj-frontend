@@ -87,7 +87,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                         Du vil fjerne en periode i <b>starten</b> av eksisterende søknadsperiode. Dette vil føre til
                         nytt skjæringstidspunkt i behandlingen, og vil endre tidspunktet vi regner rett til ytelse fra.
                         Utfallet i behandlingen kan bli avslag selv om det tidligere var innvilget.
-                        {begrunnelsesfelt}
+                        {!hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode &&
+                            !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode &&
+                            begrunnelsesfelt}
                     </CustomAlertstripeAdvarsel>
                 )}
                 {hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && (
@@ -96,7 +98,7 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                         nye skjæringstidspunkt i behandlingen, og vi vil regne rett til ytelse fra flere ulike
                         tidspunkt. Utfallet i behandlingen kan bli avslag for en eller flere perioder som tidligere var
                         innvilget.
-                        {begrunnelsesfelt}
+                        {!hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && begrunnelsesfelt}
                     </CustomAlertstripeAdvarsel>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
