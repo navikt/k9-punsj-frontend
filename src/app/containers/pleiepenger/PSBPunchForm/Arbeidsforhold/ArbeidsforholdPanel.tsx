@@ -834,7 +834,6 @@ const ArbeidsforholdPanel = ({
                     updateSoknadState={updateSoknadState}
                     getErrorMessage={getErrorMessage}
                     getUhaandterteFeil={getUhaandterteFeil}
-                    feilkodeprefiks="ytelse.arbeidstid.arbeidstakerList[0]"
                 />
             )}
             <CheckboksPanel

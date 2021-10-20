@@ -12,6 +12,7 @@ import { PopoverOrientering } from 'nav-frontend-popover';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import UtregningArbeidstid from './UtregningArbeidstid';
