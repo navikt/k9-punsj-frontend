@@ -102,7 +102,7 @@ describe('Listepaneler', () => {
         expect(listepaneler.find('.testinput')).toHaveLength(testItems.length);
         expect(listepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
         expect(listepaneler.find(`#${testinputid(1)}`).prop('feil')).toEqual(
-            `Feilmelding med kode ${feilkodeprefiks}[1]`
+            `Feilmelding med kode ${feilkodeprefiks}`
         );
     });
 
