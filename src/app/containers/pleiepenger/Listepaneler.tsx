@@ -148,7 +148,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         itemIndex,
                                         (info) => editSoknad(editItem(itemIndex, info)),
                                         (info, showStatus) => editSoknadState(editItem(itemIndex, info), showStatus),
-                                        `${feilkodeprefiks}[${itemIndex}]`,
+                                        feilkodeprefiks,
                                         getErrorMessage,
                                         intl
                                     )}

@@ -25,7 +25,6 @@ interface ArbeidstakerperioderProps {
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
     getUhaandterteFeil: (kode: string) => (string | undefined)[];
-    feilkodeprefiks: string;
 }
 
 const Arbeidstakerperioder = ({
@@ -34,8 +33,7 @@ const Arbeidstakerperioder = ({
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
-    feilkodeprefiks,
-    getUhaandterteFeil
+    getUhaandterteFeil,
 }: ArbeidstakerperioderProps): JSX.Element => {
     const intl = useIntl();
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
@@ -165,7 +163,7 @@ const Arbeidstakerperioder = ({
                                 updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
                                     editSoknadState(editItem(currentItemIndex, info), showStatus)
                                 }
-                                feilkodeprefiks='ytelse.arbeidstid.arbeidstakerList[0]'
+                                feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
                                 getErrorMessage={getErrorMessage}
                                 getUhaandterteFeil={getUhaandterteFeil}
                                 intl={intl}

@@ -127,7 +127,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         onBlur={(periode) => {
                             editSoknad(editPeriode(periodeindeks, periode));
                         }}
-                        errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
+                        errorMessage={getErrorMessage(`${feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
                     />
                     <button
