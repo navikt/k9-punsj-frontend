@@ -3,7 +3,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Textarea } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
+import { Element, Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
@@ -36,6 +36,11 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
     if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
         return null;
     }
+
+    const begrunnelseForInnsendingFeilmelding = () =>
+        getErrorMessage('begrunnelseForInnsending')
+            ? intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding')
+            : null;
 
     const getAlertstriper = () => {
         const komplettePerioder = selectedPeriods.filter((periode) => periode.fom && periode.tom);
@@ -75,7 +80,7 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                         const { value } = event.target;
                         updateSoknad({ begrunnelseForInnsending: { tekst: value } });
                     }}
-                    feil={getErrorMessage('begrunnelseForInnsending')}
+                    feil={begrunnelseForInnsendingFeilmelding()}
                 />
             </div>
         );
@@ -141,6 +146,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             />
 
             {getAlertstriper()}
+            <Feilmelding className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                {begrunnelseForInnsendingFeilmelding()}
+            </Feilmelding>
         </EkspanderbartpanelBase>
     );
 };
