@@ -98,6 +98,7 @@ const validertSoknad: IPSBSoknadKvittering = {
             beskrivelseAvOmsorgsrollen: null,
         },
         opptjeningAktivitet: {},
+        trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
 };
 

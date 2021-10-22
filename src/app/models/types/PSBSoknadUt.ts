@@ -24,6 +24,7 @@ import {
     UtenlandsOpphold,
     Uttak,
 } from './PSBSoknad';
+import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 
 export interface IPSBSoknadUt {
     soeknadId?: string;
@@ -47,6 +48,8 @@ export interface IPSBSoknadUt {
     soknadsinfo?: ISoknadsInfo;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
+    trekkKravPerioder?: IPeriode[];
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
 }
 
 export class ArbeidstidUt implements Required<IArbeidstid> {
@@ -80,6 +83,13 @@ export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
         this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
     }
 }
+
+const getTrekkKravPerioder = (soknad: IPSBSoknadUt) => {
+    if (soknad.trekkKravPerioder) {
+        return soknad.trekkKravPerioder.map((periode) => new Periode(periode));
+    }
+    return undefined;
+};
 
 export class PSBSoknadUt implements IPSBSoknadUt {
     soeknadId: string;
@@ -124,6 +134,10 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     harMedisinskeOpplysninger: boolean;
 
+    trekkKravPerioder?: Periode[];
+
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
+
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
@@ -146,5 +160,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
+        this.trekkKravPerioder = getTrekkKravPerioder(soknad);
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
     }
 }

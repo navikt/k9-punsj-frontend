@@ -65,6 +65,7 @@ import { pfTimerMinutter } from './pfTimerMinutter';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
+import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
@@ -385,6 +386,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
+                />
+                <VerticalSpacer sixteenPx={true} />
+                <EndringAvSøknadsperioder
+                    isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                    getErrorMessage={this.getErrorMessage}
+                    soknad={soknad}
+                    updateSoknad={this.updateSoknad}
+                    updateSoknadState={this.updateSoknadState}
+                    eksisterendePerioder={eksisterendePerioder}
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <EkspanderbartpanelBase
@@ -844,7 +855,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private handleSubmit = () => {
-        const navarandeSoknad: IPSBSoknad = this.state.soknad;
+        let navarandeSoknad: IPSBSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []

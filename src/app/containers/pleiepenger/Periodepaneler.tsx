@@ -32,9 +32,7 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const { periods, textLeggTil } = props;
-    const { intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks, getUhaandterteFeil } =
-        props;
+    const { periods, intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks, textLeggTil, getUhaandterteFeil } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,
