@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import ModalWrapper from 'nav-frontend-modal';
+import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PdfVisning from '../../../components/pdf/PdfVisning';
 import { ISakstypeDefault } from '../../../models/Sakstype';
 import { Sakstyper } from '../../SakstypeImpls';
@@ -105,6 +106,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
+
+    const erJournalfoert = journalpost?.journalpostStatus === journalpostStatus.JOURNALFOERT;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -438,6 +441,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     className="fordeling-page__options"
                                 >
                                     {Object.keys(TilgjengeligSakstype).map((key) => {
+                                        if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoert) {
+                                            return null;
+                                        }
                                         if (
                                             !(
                                                 key === TilgjengeligSakstype.ANNET &&
