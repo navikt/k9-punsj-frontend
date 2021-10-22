@@ -72,7 +72,7 @@
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.9",
         "redux-logger": "^3.0.6",
-        "snyk": "^1.733.0",
+        "snyk": "^1.744.0",
         "source-map-loader": "^3.0.0",
         "typescript-string-operations": "^1.4.1",
         "ulid": "^2.3.0",
@@ -91,7 +91,7 @@
     "devDependencies": {
         "@babel/core": "^7.15.8",
         "@babel/plugin-proposal-class-properties": "^7.8.3",
-        "@babel/plugin-proposal-optional-chaining": "^7.12.1",
+        "@babel/plugin-proposal-optional-chaining": "^7.14.5",
         "@babel/plugin-transform-modules-commonjs": "^7.15.4",
         "@babel/plugin-transform-react-jsx": "^7.8.3",
         "@babel/plugin-transform-runtime": "^7.15.8",

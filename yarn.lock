@@ -558,7 +558,7 @@
     "@babel/helper-plugin-utils" "^7.14.5"
     "@babel/plugin-syntax-optional-catch-binding" "^7.8.3"
 
-"@babel/plugin-proposal-optional-chaining@^7.12.1", "@babel/plugin-proposal-optional-chaining@^7.14.5":
+"@babel/plugin-proposal-optional-chaining@^7.14.5":
   version "7.14.5"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-chaining/-/plugin-proposal-optional-chaining-7.14.5.tgz#fa83651e60a360e3f13797eef00b8d519695b603"
   integrity sha512-ycz+VOzo2UbWNI1rQXxIuMOzrDdHGrI23fRiz/Si2R4kv2XZQ1BK8ccdHwehMKBlcH/joGW/tzrUmo67gbJHlQ==
@@ -9817,10 +9817,10 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snyk@^1.733.0:
-  version "1.733.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.733.0.tgz#e3982dfa0fba0ab1d0b2b84c07b6f109b2b4e0f2"
-  integrity sha512-Mi/wk9tw8ma4P2+2QwgzGDHcIG0Tfj0Wn7cliuUqd7CM8bg+Oryq3g4NcNK6mJZz0VaISF8MCIcIzbqV8v0JYg==
+snyk@^1.744.0:
+  version "1.744.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.744.0.tgz#b772995f9fa5ed79edc69cbc7aa787b88e915281"
+  integrity sha512-tqTyBd7t9m4YPWW4SSXHGsr6v2d36CnwuFj3mEuu8yeJxJPcCLXQuarwhEQqYxDmPjcSfPOzyTw9Gsl+sF0bNg==
 
 sockjs@^0.3.21:
   version "0.3.21"
