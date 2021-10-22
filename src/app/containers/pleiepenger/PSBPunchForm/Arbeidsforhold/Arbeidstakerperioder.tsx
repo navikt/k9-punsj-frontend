@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
@@ -23,6 +24,7 @@ interface ArbeidstakerperioderProps {
     updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
+    getUhaandterteFeil: (kode: string) => (string | undefined)[];
 }
 
 const Arbeidstakerperioder = ({
@@ -31,6 +33,7 @@ const Arbeidstakerperioder = ({
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
+    getUhaandterteFeil,
 }: ArbeidstakerperioderProps): JSX.Element => {
     const intl = useIntl();
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
@@ -55,8 +58,6 @@ const Arbeidstakerperioder = ({
 
     const items = arbeidstid?.arbeidstakerList || [];
     const itemsWithInitialItem = items.length > 0 ? items : [initialArbeidstaker];
-    const getErrorMessageWithPrefix = (code: string) =>
-        getErrorMessage ? getErrorMessage(`arbeidstid.arbeidstaker${code}`) : undefined;
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
         index: number,
@@ -112,10 +113,9 @@ const Arbeidstakerperioder = ({
     };
 
     return (
-        <SkjemaGruppe feil={getErrorMessageWithPrefix('')} className="listepaneler">
+        <SkjemaGruppe className="listepaneler">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
-                const panelErrorMessage = getErrorMessage(`[${panelid}]`);
                 const getHarDuplikatOrgnr = () =>
                     items.filter(
                         (item) =>
@@ -128,7 +128,7 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <SkjemaGruppe feil={panelErrorMessage}>
+                        <SkjemaGruppe>
                             {itemsWithInitialItem.length > 1 && (
                                 <h2>
                                     <FormattedMessage
@@ -163,17 +163,26 @@ const Arbeidstakerperioder = ({
                                 updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
                                     editSoknadState(editItem(currentItemIndex, info), showStatus)
                                 }
-                                feilprefiks={`arbeidstid.arbeidstaker[${currentItemIndex}]`}
-                                getErrorMessage={getErrorMessageWithPrefix}
+                                feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
+                                getErrorMessage={getErrorMessage}
+                                getUhaandterteFeil={getUhaandterteFeil}
                                 intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
+                            />
+                            <UhaanderteFeilmeldinger
+                                getFeilmeldinger={() =>
+                                    (getUhaandterteFeil &&
+                                        getUhaandterteFeil(
+                                            `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`
+                                        )) ||
+                                    []
+                                }
                             />
                         </SkjemaGruppe>
                     </Panel>
                 );
             })}
-
             <button
                 id="leggtillisteelementknapp"
                 className="leggtillisteelementknapp"

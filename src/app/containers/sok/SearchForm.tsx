@@ -1,12 +1,12 @@
+import React from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import SokKnapp from '../../components/knapp/SokKnapp';
 import VerticalSpacer from '../../components/VerticalSpacer';
+import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';

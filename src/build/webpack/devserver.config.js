@@ -24,9 +24,9 @@ const configureDevServer = (decoratorFragments) => ({
     client: {
         overlay: {
             errors: true,
-            warnings: false,
-        },
-    },
+            warnings: false
+        }
+    }
 });
 
 module.exports = configureDevServer;

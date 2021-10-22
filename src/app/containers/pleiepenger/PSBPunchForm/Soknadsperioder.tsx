@@ -40,22 +40,6 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             punchFormState.perioder.length <= 0 ||
             !punchFormState.perioder);
 
-    const sjekkFelmeldingDato = () =>
-        soknad?.soeknadsperiode?.some((periode) => initializeDate(periode.fom).isAfter(initializeDate(periode.tom)));
-
-    const sjekkFelmeldingPeriode = () => {
-        const valideringsFeilmelding = getErrorMessage('søknadsperiode/endringsperiode');
-        const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
-
-        if (valideringsFeilmelding) {
-            return valideringsFeilmelding;
-        }
-        if (feilFunnitInnenValideringMelding) {
-            return intlHelper(intl, 'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED');
-        }
-        return undefined;
-    };
-
     const overlappendeSoknadsperiode = () => {
         const eksisterendePerioder = punchFormState.perioder;
         const nyePerioder = soknad.soeknadsperiode?.filter((periode) => periode.fom && periode.tom);
@@ -126,7 +110,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
-                <SkjemaGruppe feil={sjekkFelmeldingPeriode()}>
+                <SkjemaGruppe>
                     <div className="soknadsperiodecontainer">
                         <Periodepaneler
                             intl={intl}
@@ -139,6 +123,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             }}
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
+                            feilkodeprefiks="ytelse.søknadsperiode"
                             getErrorMessage={getErrorMessage}
                             kanHaFlere
                             onRemove={() => setHarSlettetPerioder(true)}

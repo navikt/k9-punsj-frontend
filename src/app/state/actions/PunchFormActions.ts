@@ -78,6 +78,7 @@ interface IValiderSoknadRequestAction {
 interface IValiderSoknadSuccessAction {
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS;
     validertSoknad?: IPSBSoknadKvittering;
+    erMellomlagring?: boolean;
 }
 
 interface IValiderSoknadErrorAction {
@@ -294,10 +295,13 @@ export function updateSoknader(
 export const submitSoknadRequestAction = (): ISubmitSoknadRequestAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_REQUEST,
 });
-export const submitSoknadSuccessAction = (innsentSoknad: IPSBSoknadKvittering, linkTilBehandlingIK9: string | null): ISubmitSoknadSuccessAction => ({
+export const submitSoknadSuccessAction = (
+    innsentSoknad: IPSBSoknadKvittering,
+    linkTilBehandlingIK9: string | null
+): ISubmitSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
     innsentSoknad,
-    linkTilBehandlingIK9
+    linkTilBehandlingIK9,
 });
 export const submitSoknadUncompleteAction = (errors: IInputError[]): ISubmitSoknadUncompleteAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_UNCOMPLETE,
@@ -315,9 +319,13 @@ export const submitSoknadConflictAction = (): ISubmitSoknadConflictAction => ({
 export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_REQUEST,
 });
-export const validerSoknadSuccessAction = (validertSoknad: IPSBSoknadKvittering): IValiderSoknadSuccessAction => ({
+export const validerSoknadSuccessAction = (
+    validertSoknad: IPSBSoknadKvittering,
+    erMellomlagring?: boolean
+): IValiderSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
     validertSoknad,
+    erMellomlagring,
 });
 export const validerSoknadErrorAction = (error: IError): IValiderSoknadErrorAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_ERROR,
@@ -362,7 +370,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
     };
 }
 
-export function validerSoknad(soknad: IPSBSoknadUt) {
+export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
     const norskIdent: string = !soknad.soeknadId ? '' : soknad.soeknadId;
 
     return (dispatch: any) => {
@@ -375,7 +383,7 @@ export function validerSoknad(soknad: IPSBSoknadUt) {
             (response, data) => {
                 switch (response.status) {
                     case 202:
-                        return dispatch(validerSoknadSuccessAction(data));
+                        return dispatch(validerSoknadSuccessAction(data, erMellomlagring));
                     case 400:
                         return dispatch(validerSoknadUncompleteAction(data.feil));
                     default:

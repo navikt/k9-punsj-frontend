@@ -3,7 +3,6 @@ import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/mod
 import { Arbeidstaker, IArbeidstaker } from './Arbeidstaker';
 import { FrilanserOpptjening, IFrilanserOpptjening } from './FrilanserOpptjening';
 import {
-    ArbeidstidPeriodeMedTimer,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
     IPeriodeMedTimerMinutter,
@@ -11,6 +10,9 @@ import {
     PeriodeMedTimerMinutter,
 } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
+import { ArbeidstidInfo } from './ArbeidstidInfo';
+
+import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -34,6 +36,8 @@ export interface IPSBSoknad {
     soknadsinfo?: ISoknadsInfo;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
+    trekkKravPerioder?: IPeriode[];
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
 }
 
 export interface ISelvstendigNaeringsdrivendeOpptjening {
@@ -81,21 +85,11 @@ export class OpptjeningAktivitet implements IOpptjeningAktivitet {
 export interface IArbeidstidInfo {
     perioder?: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
 }
-
 export interface IArbeidstid {
     arbeidstakerList?: IArbeidstaker[];
     frilanserArbeidstidInfo?: IArbeidstidInfo | null;
     selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo | null;
 }
-
-export class ArbeidstidInfo implements Required<IArbeidstidInfo> {
-    perioder: ArbeidstidPeriodeMedTimer[];
-
-    constructor(ai: IArbeidstidInfo) {
-        this.perioder = (ai.perioder || []).map((p) => new ArbeidstidPeriodeMedTimer(p));
-    }
-}
-
 export class Arbeidstid implements Required<IArbeidstid> {
     arbeidstakerList: Arbeidstaker[];
 
@@ -250,6 +244,13 @@ export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>
     }
 }
 
+const getTrekkKravPerioder = (soknad: IPSBSoknad) => {
+    if (soknad.trekkKravPerioder) {
+        return soknad.trekkKravPerioder.map((periode) => new Periode(periode));
+    }
+    return undefined;
+};
+
 export class PSBSoknad implements IPSBSoknad {
     soeknadId: string;
 
@@ -293,6 +294,10 @@ export class PSBSoknad implements IPSBSoknad {
 
     harMedisinskeOpplysninger: boolean;
 
+    trekkKravPerioder?: Periode[];
+
+    begrunnelseForInnsending?: BegrunnelseForInnsending;
+
     constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
@@ -315,5 +320,7 @@ export class PSBSoknad implements IPSBSoknad {
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
+        this.trekkKravPerioder = getTrekkKravPerioder(soknad);
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
     }
 }

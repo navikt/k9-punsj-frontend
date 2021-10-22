@@ -14,9 +14,11 @@ import {
     formattereTidspunktFraUTCTilGMT,
     getLocaleFromSessionStorage,
     periodToFormattedString,
-} from '../../../utils';
-import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
-import { ICountry } from '../../../components/country-select/CountrySelect';
+    sjekkPropertyEksistererOgIkkeErNull,
+    formattereDatoIArray
+} from "../../../utils";
+import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
+import {ICountry} from "../../../components/country-select/CountrySelect";
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
@@ -34,15 +36,7 @@ interface IOwnProps {
     annenSokerIdent?: string | null;
 }
 
-export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {
-    if (property in object && object[property] !== null) {
-        return true;
-    }
-    return false;
-};
-
-const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
-    sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
+const sjekkHvisPerioderEksisterer = (property: string, object: any) => sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0
 
 const formattereLandTilNavnIObjekt = (
     perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
@@ -54,11 +48,6 @@ const formattereLandTilNavnIObjekt = (
         if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
     });
     return kopiAvPerioder;
-};
-
-export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]) => {
-    const landNavn = countryList.find((country) => country.code === landskode);
-    return typeof landNavn !== undefined ? landNavn?.name : '';
 };
 
 export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
@@ -84,13 +73,6 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
     return kopiAvPerioder;
 };
 
-export const formattereDatoIArray = (dato: number[]) => {
-    const formatertDato: string[] = [];
-    for (let i = dato.length - 1; i >= 0; i -= 1) {
-        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
-    }
-    return formatertDato.join('');
-};
 
 export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
@@ -122,6 +104,11 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
+    const visTrukkedePerioder =
+        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) && ytelse.trekkKravPerioder.length > 0;
+    const visBegrunnelseForInnsending =
+        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', response) &&
+        response.begrunnelseForInnsending.tekst;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
@@ -188,6 +175,18 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                             response.mottattDato.substr(0, 10)
                         )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
                     </p>
+                    {visTrukkedePerioder && (
+                        <p>
+                            <b>Perioder som er fjernet fra søknadsperioden: </b>
+                            {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
+                        </p>
+                    )}
+                    {visBegrunnelseForInnsending && (
+                        <p>
+                            <b>Begrunnelse for endring: </b>
+                            {response.begrunnelseForInnsending.tekst}
+                        </p>
+                    )}
                 </div>
             )}
 

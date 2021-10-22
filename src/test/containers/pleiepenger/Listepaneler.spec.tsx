@@ -102,7 +102,7 @@ describe('Listepaneler', () => {
         expect(listepaneler.find('.testinput')).toHaveLength(testItems.length);
         expect(listepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
         expect(listepaneler.find(`#${testinputid(1)}`).prop('feil')).toEqual(
-            `Feilmelding med kode ${feilkodeprefiks}[1]`
+            `Feilmelding med kode ${feilkodeprefiks}`
         );
     });
 
@@ -133,25 +133,6 @@ describe('Listepaneler', () => {
         listepaneler
             .find('Panel')
             .forEach((panel) => expect(panel.prop('className')).toEqual(`listepanel ${panelClassName}`));
-    });
-
-    it('Skal vise feilmelding for alle listeelementer', () => {
-        const feilkodeprefiks = 'test';
-        const getErrorMessage = jest.fn();
-        setupListepaneler({ getErrorMessage, feilkodeprefiks });
-        expect(getErrorMessage).toHaveBeenCalledWith(feilkodeprefiks);
-    });
-
-    it('Skal vise feilmeldinger for enkeltelementer', () => {
-        const feilkodeprefiks = 'test';
-        const getErrorMessage = jest.fn();
-        const listepaneler = setupListepaneler({
-            getErrorMessage,
-            feilkodeprefiks,
-        });
-        listepaneler
-            .find('Panel')
-            .forEach((panel) => expect(getErrorMessage).toHaveBeenCalledWith(`${feilkodeprefiks}[${panel.key()}]`));
     });
 
     it('Kaller onAdd når et listeelement legges til', () => {

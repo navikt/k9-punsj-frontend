@@ -1,5 +1,4 @@
 import {
-    GetErrorMessage,
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
@@ -9,6 +8,7 @@ import * as React from 'react';
 import { IntlShape } from 'react-intl';
 import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
+import { GetErrorMessage } from 'app/models/types';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { IPeriodeMedTimerMinutter } from '../../models/types/Periode';
 import { stringToNumber } from '../../utils';
