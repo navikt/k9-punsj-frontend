@@ -44,7 +44,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         soknad?.soeknadsperiode?.some((periode) => initializeDate(periode.fom).isAfter(initializeDate(periode.tom)));
 
     const sjekkFelmeldingPeriode = () => {
-        const valideringsFeilmelding = getErrorMessage('søknadsperiode/endringsperiode');
+        const valideringsFeilmelding =
+            getErrorMessage('søknadsperiode/endringsperiode') || getErrorMessage('søknadperiode.perioder');
         const feilFunnitInnenValideringMelding = sjekkFelmeldingDato();
 
         if (valideringsFeilmelding) {

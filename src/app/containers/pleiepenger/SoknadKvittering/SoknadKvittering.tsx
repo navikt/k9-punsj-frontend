@@ -122,6 +122,11 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
+    const visTrukkedePerioder =
+        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) && ytelse.trekkKravPerioder.length > 0;
+    const visBegrunnelseForInnsending =
+        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', response) &&
+        response.begrunnelseForInnsending.tekst;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
@@ -188,6 +193,18 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                             response.mottattDato.substr(0, 10)
                         )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
                     </p>
+                    {visTrukkedePerioder && (
+                        <p>
+                            <b>Perioder som er fjernet fra søknadsperioden: </b>
+                            {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
+                        </p>
+                    )}
+                    {visBegrunnelseForInnsending && (
+                        <p>
+                            <b>Begrunnelse for endring: </b>
+                            {response.begrunnelseForInnsending.tekst}
+                        </p>
+                    )}
                 </div>
             )}
 

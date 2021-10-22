@@ -1,3 +1,5 @@
+import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+
 export interface IPSBSoknadKvitteringBosteder {
     [key: string]: { land: string };
 }
@@ -105,5 +107,7 @@ export interface IPSBSoknadKvittering {
             selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
             frilanser?: IPSBSoknadKvitteringFrilanser;
         };
+        trekkKravPerioder: string[];
     };
+    begrunnelseForInnsending: BegrunnelseForInnsending;
 }
