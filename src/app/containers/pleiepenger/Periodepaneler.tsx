@@ -10,7 +10,6 @@ import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
-
 export interface IPeriodepanelerProps {
     intl: IntlShape;
     periods: IPeriode[]; // Liste over periodisert informasjon

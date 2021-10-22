@@ -6,7 +6,6 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import Feilmelding from 'app/components/Feilmelding';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
 

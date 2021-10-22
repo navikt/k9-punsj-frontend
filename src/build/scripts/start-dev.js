@@ -10,9 +10,9 @@ const server = new WebpackDevServer(configureDevServer({}), compiler);
 const port = 8080;
 
 server.start(port, '127.0.0.1', (error) => {
-  if (error) {
-    console.log(error);
-    return;
-  }
-  console.log(`Started server on http://localhost:${port}/`);
+    if (error) {
+        console.log(error);
+        return;
+    }
+    console.log(`Started server on http://localhost:${port}/`);
 });

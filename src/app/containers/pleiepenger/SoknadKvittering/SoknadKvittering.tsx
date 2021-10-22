@@ -15,10 +15,10 @@ import {
     getLocaleFromSessionStorage,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
-    formattereDatoIArray,
-} from '../../../utils';
-import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
-import { ICountry } from '../../../components/country-select/CountrySelect';
+    formattereDatoIArray
+} from "../../../utils";
+import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
+import {ICountry} from "../../../components/country-select/CountrySelect";
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
@@ -36,8 +36,7 @@ interface IOwnProps {
     annenSokerIdent?: string | null;
 }
 
-const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
-    sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
+const sjekkHvisPerioderEksisterer = (property: string, object: any) => sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0
 
 const formattereLandTilNavnIObjekt = (
     perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
