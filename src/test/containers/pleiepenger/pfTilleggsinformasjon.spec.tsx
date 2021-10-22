@@ -94,6 +94,6 @@ describe('pfTilleggsinformasjon', () => {
     it('Viser feilmelding', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
         expect(testGetErrorMessage).toHaveBeenCalledTimes(1);
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.perioder[2020-01-01/2020-12-31].tilleggsinformasjon`);
+        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.perioder['2020-01-01/2020-12-31'].tilleggsinformasjon`);
     });
 });
