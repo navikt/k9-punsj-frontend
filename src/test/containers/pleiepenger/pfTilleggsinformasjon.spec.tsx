@@ -1,5 +1,4 @@
 import {
-    GetErrorMessage,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
@@ -8,6 +7,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
+import { GetErrorMessage } from 'app/models/types';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
 
@@ -94,6 +94,6 @@ describe('pfTilleggsinformasjon', () => {
     it('Viser feilmelding', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
         expect(testGetErrorMessage).toHaveBeenCalledTimes(1);
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.tilleggsinformasjon`);
+        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.perioder[2020-01-01/2020-12-31].tilleggsinformasjon`);
     });
 });

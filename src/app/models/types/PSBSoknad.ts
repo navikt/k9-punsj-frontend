@@ -3,7 +3,6 @@ import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/mod
 import { Arbeidstaker, IArbeidstaker } from './Arbeidstaker';
 import { FrilanserOpptjening, IFrilanserOpptjening } from './FrilanserOpptjening';
 import {
-    ArbeidstidPeriodeMedTimer,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
     IPeriodeMedTimerMinutter,
@@ -11,6 +10,8 @@ import {
     PeriodeMedTimerMinutter,
 } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
+import { ArbeidstidInfo } from './ArbeidstidInfo';
+
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 
 export interface IPSBSoknad {
@@ -84,21 +85,11 @@ export class OpptjeningAktivitet implements IOpptjeningAktivitet {
 export interface IArbeidstidInfo {
     perioder?: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
 }
-
 export interface IArbeidstid {
     arbeidstakerList?: IArbeidstaker[];
     frilanserArbeidstidInfo?: IArbeidstidInfo | null;
     selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo | null;
 }
-
-export class ArbeidstidInfo implements Required<IArbeidstidInfo> {
-    perioder: ArbeidstidPeriodeMedTimer[];
-
-    constructor(ai: IArbeidstidInfo) {
-        this.perioder = (ai.perioder || []).map((p) => new ArbeidstidPeriodeMedTimer(p));
-    }
-}
-
 export class Arbeidstid implements Required<IArbeidstid> {
     arbeidstakerList: Arbeidstaker[];
 

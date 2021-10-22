@@ -7,7 +7,9 @@ import {
 } from 'app/containers/pleiepenger/Listepaneler';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
-import { IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from '../../models/types/Periodeinfo';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import { GetErrorMessage, GetUhaandterteFeil, IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from 'app/models/types';
 import { IPeriode } from '../../models/types/Periode';
 import BinSvg from '../../assets/SVG/BinSVG';
 import intlHelper from '../../utils/intlUtils';
@@ -15,7 +17,6 @@ import './periodeinfoPaneler.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
-export type GetErrorMessage = (kode: string) => React.ReactNode | boolean | undefined;
 
 export type PeriodeinfoComponent<T> = (
     info: Periodeinfo<T>,
@@ -40,7 +41,9 @@ export interface IPeriodeinfopanelerProps {
     textFjern?: string;
     panelClassName?: string;
     getErrorMessage?: GetErrorMessage;
+    getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
+    periodeFeilkode?: string;
     minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
@@ -63,9 +66,11 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         panelid,
         initialPeriodeinfo,
         getErrorMessage: errorMessageFunc,
+        getUhaandterteFeil,
         className,
         minstEn,
         feilkodeprefiks,
+        periodeFeilkode,
         onAdd,
         onRemove,
         panelClassName,
@@ -109,6 +114,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                 onRemove();
             }
         };
+        const feltIndeks = periodeSpenn(periodeinfo.periode);
         return (
             <>
                 <div className="periodeinfopanel_container">
@@ -121,9 +127,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         onBlur={(periode) => {
                             editSoknad(editPeriode(periodeindeks, periode));
                         }}
-                        errorMessage={getErrorMessage(`[${periodeindeks}].periode`)}
-                        errorMessageFom={getErrorMessage(`[${periodeindeks}].periode.fom`)}
-                        errorMessageTom={getErrorMessage(`[${periodeindeks}].periode.tom`)}
+                        errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
                     />
                     <button
@@ -149,6 +153,11 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         getErrorMessage,
                         intlShape
                     )}
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() =>
+                        (getUhaandterteFeil && getUhaandterteFeil(`${feilkodeprefiks}.perioder[${feltIndeks}]`)) || []
+                    }
+                />
             </>
         );
     };
@@ -162,6 +171,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
             editSoknad={editSoknad}
             editSoknadState={editSoknadState}
             getErrorMessage={errorMessageFunc}
+            getUhaandterteFeil={getUhaandterteFeil}
             className={className}
             minstEn={minstEn}
             feilkodeprefiks={feilkodeprefiks}

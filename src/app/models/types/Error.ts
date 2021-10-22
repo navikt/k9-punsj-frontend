@@ -5,3 +5,6 @@ export interface IError {
     message?: string;
     exceptionId?: string;
 }
+
+export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
+export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;

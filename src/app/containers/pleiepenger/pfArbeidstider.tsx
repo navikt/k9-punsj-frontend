@@ -1,5 +1,4 @@
 import {
-    GetErrorMessage,
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
@@ -11,6 +10,8 @@ import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import { GetErrorMessage } from 'app/models/types';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import UtregningArbeidstid from './UtregningArbeidstid';
@@ -26,7 +27,8 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         getErrorMessage: GetErrorMessage,
         intl: IntlShape
     ) => {
-        const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag } = periodeinfo;
+        const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag, periode } = periodeinfo;
+        const feltindeks = periodeSpenn(periode);
         return (
             <div className="arbeidstider">
                 <Row noGutters>
@@ -45,6 +47,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     jobberNormaltTimerPerDag: event.target.value.replace(/\s/g, ''),
                                 });
                             }}
+                            feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].jobberNormaltTimerPerDag`)}
                         />
                         <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
@@ -63,7 +66,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     faktiskArbeidTimerPerDag: event.target.value.replace(/\s/g, ''),
                                 });
                             }}
-                            feil={getErrorMessage(`${feilprefiks}.timerfaktisk`)}
+                            feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].faktiskArbeidTimerPerDag`)}
                             bredde="XS"
                         />
                         <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>

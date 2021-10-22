@@ -1,14 +1,15 @@
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
-export type GetErrorMessage = (kode: string, indeks?: number) => React.ReactNode | boolean | undefined;
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -22,6 +23,7 @@ export interface IPeriodepanelerProps {
     textFjern?: string;
     panelClassName?: string;
     getErrorMessage?: GetErrorMessage;
+    getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
     minstEn?: boolean;
     onAdd?: () => any;
@@ -30,7 +32,7 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const { periods, intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks, textLeggTil } = props;
+    const { periods, intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks, textLeggTil, getUhaandterteFeil } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,
@@ -71,11 +73,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             onBlur={(periode) => {
                                 editSoknad(editPeriode(i, periode));
                             }}
-                            errorMessage={
-                                feilkodeprefiks
-                                    ? getErrorMessage!(feilkodeprefiks, i)
-                                    : getErrorMessage!(`[${i}].periode`)
-                            }
+                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`)}
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
@@ -100,6 +98,12 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                     </div>
                 </Row>
             ))}
+            {feilkodeprefiks && (
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                />
+            )}
+
             {kanHaFlere && (
                 <Row noGutters>
                     <button

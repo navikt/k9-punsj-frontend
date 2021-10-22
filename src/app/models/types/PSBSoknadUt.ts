@@ -3,8 +3,9 @@ import { FrilanserOpptjening } from './FrilanserOpptjening';
 import { Periodeinfo } from './Periodeinfo';
 import { IPeriode, Periode } from './Periode';
 import { Arbeidstaker } from './Arbeidstaker';
+import {ArbeidstidInfo} from "./ArbeidstidInfo";
+
 import {
-    ArbeidstidInfo,
     Barn,
     IArbeidstid,
     IBarn,

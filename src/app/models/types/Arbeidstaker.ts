@@ -1,6 +1,6 @@
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
-import { ArbeidstidInfo, IArbeidstidInfo } from './PSBSoknad';
+import { ArbeidstidInfo, IArbeidstidInfo } from './ArbeidstidInfo';
 
 export interface IArbeidstaker {
     arbeidstidInfo?: IArbeidstidInfo;

@@ -1,3 +1,4 @@
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import DateInput from 'app/components/skjema/DateInput';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
@@ -42,6 +43,7 @@ interface ArbeidsforholdPanelProps {
     updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
+    getUhaandterteFeil: (kode: string) => (string | undefined)[];
     handleFrilanserChange: (jaNei: JaNei) => void;
     updateVirksomhetstyper: (v: Virksomhetstyper, checked: boolean) => void;
 }
@@ -55,6 +57,7 @@ const ArbeidsforholdPanel = ({
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
+    getUhaandterteFeil,
     handleFrilanserChange,
     updateVirksomhetstyper,
     initialArbeidstaker,
@@ -77,6 +80,7 @@ const ArbeidsforholdPanel = ({
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
                     label={intlHelper(intl, 'skjema.frilanserdato')}
+                    errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
                     onChange={(selectedDate: any) => {
                         updateSoknadState(
                             {
@@ -177,7 +181,9 @@ const ArbeidsforholdPanel = ({
                             textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                             kanHaFlere
                             getErrorMessage={getErrorMessage}
-                            feilkodeprefiks="arbeidstid.frilanser"
+                            getUhaandterteFeil={getUhaandterteFeil}
+                            feilkodeprefiks="ytelse.arbeidstid.frilanserArbeidstidInfo"
+                            periodeFeilkode="ytelse.arbeidstid.frilanser"
                             medSlettKnapp={false}
                         />
                     </>
@@ -796,6 +802,10 @@ const ArbeidsforholdPanel = ({
                             )
                         }
                         component={pfArbeidstider()}
+                        getErrorMessage={getErrorMessage}
+                        getUhaandterteFeil={getUhaandterteFeil}
+                        feilkodeprefiks="ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo"
+                        periodeFeilkode="ytelse.arbeidstid.selvstendigNæringsdrivende"
                         minstEn
                         textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                         kanHaFlere
@@ -827,6 +837,7 @@ const ArbeidsforholdPanel = ({
                     updateSoknad={updateSoknad}
                     updateSoknadState={updateSoknadState}
                     getErrorMessage={getErrorMessage}
+                    getUhaandterteFeil={getUhaandterteFeil}
                 />
             )}
             <CheckboksPanel
@@ -849,6 +860,9 @@ const ArbeidsforholdPanel = ({
                     <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
                 </>
             )}
+            <UhaanderteFeilmeldinger
+                getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
+            />
         </EkspanderbartpanelBase>
     );
 };

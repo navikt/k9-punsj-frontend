@@ -1,6 +1,6 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
-import { GetErrorMessage, PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
@@ -9,6 +9,7 @@ import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-fro
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+import { GetErrorMessage } from 'app/models/types';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
@@ -24,8 +25,9 @@ interface ArbeidstakerComponentProps {
     listeelementindex: number;
     updateListeinfoInSoknad: UpdateListeinfoInSoknad<IArbeidstaker>;
     updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>;
-    feilprefiks: string;
+    feilkodeprefiks: string;
     getErrorMessage: GetErrorMessage;
+    getUhaandterteFeil: (kode: string) => (string | undefined)[];
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
@@ -37,7 +39,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     listeelementindex,
     updateListeinfoInSoknad,
     updateListeinfoInSoknadState,
-    feilprefiks,
+    feilkodeprefiks,
+    getUhaandterteFeil,
     getErrorMessage,
     intl,
     arbeidsgivere,
@@ -116,7 +119,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <SkjemaGruppe
             className="arbeidstaker-panel"
-            feil={getErrorMessage(`${feilprefiks}.${selectedType === 'o' ? 'norskIdent' : 'organisasjonsnummer'}`)}
         >
             <Container>
                 <Row noGutters>
@@ -166,7 +168,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 feil={
                                     harDuplikatOrgnr
                                         ? 'Organisasjonsnummeret er valgt flere ganger.'
-                                        : getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)
+                                        : getErrorMessage(`${feilkodeprefiks}.identified`)
                                 }
                             >
                                 <option key="default" value="" label="" aria-label="Tomt valg" />)
@@ -238,7 +240,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                             feil={
                                                 searchOrganisasjonsnummerFailed
                                                     ? 'Ingen treff på organisasjonsnummer'
-                                                    : getErrorMessage(`[${listeelementindex}].organisasjonsnummer`)
+                                                    : getErrorMessage(`${feilkodeprefiks}.identified`)
                                             }
                                         />
                                         {navnPåArbeidsgiver && (
@@ -266,7 +268,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 onBlur={(event) =>
                                     updateListeinfoInSoknad({ norskIdent: event.target.value.replace(/\s/g, '') })
                                 }
-                                feil={getErrorMessage(`[${listeelementindex}].norskIdent`)}
+                                feil={getErrorMessage(`${feilkodeprefiks}.identified`)}
                             />
                         )}
                     </div>
@@ -300,7 +302,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     minstEn
                     textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
                     getErrorMessage={getErrorMessage}
-                    feilkodeprefiks={`[${listeelementindex}].timerfaktisk`}
+                    getUhaandterteFeil={getUhaandterteFeil}
+                    feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
+                    periodeFeilkode={feilkodeprefiks}
                     kanHaFlere
                     medSlettKnapp={false}
                 />
