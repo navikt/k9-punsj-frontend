@@ -7,6 +7,8 @@ import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPun
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import { ApiPath } from '../apiConfig';
 import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
+import {SplitView} from "./omsorgspenger/korrigeringAvInntektsmelding/SplitView"
+import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -25,6 +27,19 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
             path: '/opprett-i-gosys',
             stepName: 'opprettIGosys',
             getComponent: () => <OpprettGosysOppgavePanel />,
+            stepOrder: 0,
+        },
+    ],
+};
+
+export const KorrigeringAvInntektsmelding: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
+    punchPath: '/korrigering-av-inntektsmelding',
+    steps: [
+        {
+            path: '/punch',
+            stepName: 'punch',
+            getComponent: () => <KorrigeringAvInntektsmeldingContainer />,
             stepOrder: 0,
         },
     ],
