@@ -1,7 +1,11 @@
 import Organisasjon from 'app/models/types/Organisasjon';
+import Lenke from 'nav-frontend-lenker';
 import Panel from 'nav-frontend-paneler';
 import { Input, Select } from 'nav-frontend-skjema';
+import { ExternalLink } from '@navikt/ds-icons';
 import React from 'react';
+import { AAREG_URL } from '../../../constants/eksterneLenker';
+import './virksomhetPanel.less';
 
 interface IVirksomhetPanelProps {
     arbeidsgivere: Organisasjon[];
@@ -23,6 +27,9 @@ export default function VirksomhetPanel({ arbeidsgivere }: IVirksomhetPanelProps
                     </option>
                 ))}
             </Select>
+            <Lenke className="eksternLenke" href={AAREG_URL}>
+                <span>Aa-registeret</span> <ExternalLink />
+            </Lenke>
             <Input bredde="L" label="Arbeidsforhold-ID" />
         </Panel>
     );
