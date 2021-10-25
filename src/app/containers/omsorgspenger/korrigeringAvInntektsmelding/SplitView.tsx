@@ -29,9 +29,7 @@ import { IIdentState } from 'app/models/types/IdentState';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import 'app/containers/pleiepenger/punchPage.less';
-
-
-
+import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
 export interface IPunchPageStateProps {
     punchState: IPleiepengerPunchState;
@@ -79,56 +77,16 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
-            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) =>
-                res.json()
-            ),
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => res.json()),
     }));
 
     const queries = useQueries(queryObjects);
 
-    // eslint-disable-next-line consistent-return
-    const underFnr = () => {
-        const commonProps = {
-            journalpostid: journalpostid || '',
-            getPunchPath,
-        };
-
-        // eslint-disable-next-line default-case
-        switch (step) {
-            case PunchStep.CHOOSE_SOKNAD:
-                return <RegistreringsValg {...commonProps} />;
-            case PunchStep.FILL_FORM:
-                return <PSBPunchForm {...commonProps} id={match.params.id} />;
-            case PunchStep.COMPLETED:
-                return (
-                    <>
-                        <AlertStripeInfo className="fullfortmelding">
-                            <FormattedMessage id="skjema.sentInn" />
-                        </AlertStripeInfo>
-                        <div className="punchPage__knapper">
-                            <Hovedknapp
-                                onClick={() => {
-                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                                }}
-                            >
-                                {intlHelper(intl, 'tilbaketilLOS')}
-                            </Hovedknapp>
-{/*                             {!!punchFormState.linkTilBehandlingIK9 && (
-                                <Hovedknapp
-                                    onClick={() => {
-                                        window.location.href = punchFormState.linkTilBehandlingIK9!;
-                                    }}
-                                >
-                                    {intlHelper(intl, 'tilBehandlingIK9')}
-                                </Hovedknapp>
-                            )} */}
-                        </div>
-                        {!!punchFormState.innsentSoknad && (
-                            <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
-                        )}
-                    </>
-                );
-        }
+    const leftSide = ({ journalpostDokumenter }: { journalpostDokumenter: IJournalpostDokumenter[] }) => {
+        <Panel className="pleiepenger_punch_form" border>
+            <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
+            <KorrigeringAvInntektsmeldingForm />
+        </Panel>;
     };
 
     const content = () => {
@@ -160,10 +118,7 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
-                    <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
-                    {underFnr()}
-                </Panel>
+                {leftSide({ journalpostDokumenter })}
                 {!!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
             </div>
         );
@@ -188,7 +143,6 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
