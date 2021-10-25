@@ -82,12 +82,12 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
 
     const queries = useQueries(queryObjects);
 
-    const leftSide = ({ journalpostDokumenter }: { journalpostDokumenter: IJournalpostDokumenter[] }) => {
+    const leftSide = ({ journalpostDokumenter }: { journalpostDokumenter: IJournalpostDokumenter[] }) => (
         <Panel className="pleiepenger_punch_form" border>
             <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
             <KorrigeringAvInntektsmeldingForm />
-        </Panel>;
-    };
+        </Panel>
+    );
 
     const content = () => {
         if (forbidden) {
