@@ -1,5 +1,7 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { CheckboksPanel, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
@@ -10,7 +12,7 @@ export default function LeggTilHelePerioder(): JSX.Element {
     return (
         <>
             <CheckboksPanel
-                label="Trekk perioder med fravær"
+                label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.checkbox')}
                 value="skjema.omsorgstilbud.checkboks"
                 onChange={(e) => ''}
                 checked={false}
@@ -19,9 +21,14 @@ export default function LeggTilHelePerioder(): JSX.Element {
             <Panel className="listepanel">
                 <SkjemaGruppe
                     legend={
-                        <h4 className="korrigering-legend">Perioder arbeidsgiver ønsker å trekke krav om refusjon</h4>
+                        <h4 className="korrigering-legend">
+                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend')}
+                        </h4>
                     }
                 >
+                    <AlertStripeInfo>
+                        {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info')}
+                    </AlertStripeInfo>
                     <div className="soknadsperiodecontainer">
                         <Periodepaneler
                             intl={intl}

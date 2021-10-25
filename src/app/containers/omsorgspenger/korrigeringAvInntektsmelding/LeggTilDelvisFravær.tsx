@@ -1,8 +1,7 @@
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
 import intlHelper from 'app/utils/intlUtils';
-import { Datepicker } from 'nav-datovelger';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { CheckboksPanel, Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
@@ -16,7 +15,7 @@ export default function LeggTilDelvisFravær(): JSX.Element {
     return (
         <>
             <CheckboksPanel
-                label="Trekk perioder med fravær"
+                label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.checkbox')}
                 value="skjema.omsorgstilbud.checkboks"
                 onChange={(e) => ''}
                 checked={false}
@@ -25,12 +24,22 @@ export default function LeggTilDelvisFravær(): JSX.Element {
             <Panel className="listepanel delvisFravaer">
                 <SkjemaGruppe
                     legend={
-                        <h4 className="korrigering-legend">Perioder arbeidsgiver ønsker å trekke krav om refusjon</h4>
+                        <h4 className="korrigering-legend">
+                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend')}
+                        </h4>
                     }
                 >
+                    <AlertStripeInfo>
+                        {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info')}
+                    </AlertStripeInfo>
                     <div className="delvisFravaer__inputfelter">
-                        <DateInput className="dateInput" value="" onChange={() => ''} label="Dato" />
-                        <Input label="Timer" bredde="XS" />
+                        <DateInput
+                            className="dateInput"
+                            value=""
+                            onChange={() => ''}
+                            label={intlHelper(intl, 'skjema.dato')}
+                        />
+                        <Input label={intlHelper(intl, 'skjema.perioder.timer')} bredde="XS" />
                     </div>
                 </SkjemaGruppe>
                 <Row noGutters>
@@ -38,7 +47,7 @@ export default function LeggTilDelvisFravær(): JSX.Element {
                         <div className="leggtilperiodeIcon">
                             <AddCircleSvg title="leggtil" />
                         </div>
-                        Legg til ny dag
+                        {intlHelper(intl, 'skjema.dag.legg_til')}
                     </button>
                 </Row>
             </Panel>

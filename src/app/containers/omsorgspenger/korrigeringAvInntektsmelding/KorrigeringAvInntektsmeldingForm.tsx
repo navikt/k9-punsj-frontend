@@ -1,26 +1,26 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 import Panel from 'nav-frontend-paneler';
-import { CheckboksPanel, SkjemaGruppe } from 'nav-frontend-skjema';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import intlHelper from 'app/utils/intlUtils';
 import VirksomhetPanel from './VirksomhetPanel';
-
-import './KorrigeringAvInntektsmeldingForm.less';
 import TrekkPerioder from './TrekkPerioder';
 import LeggTilHelePerioder from './LeggTilHelePerioder';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær';
+import './KorrigeringAvInntektsmeldingForm.less';
 
-export default function KorrigeringAvInntektsmeldingForm() {
+export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
+    const intl = useIntl();
     return (
-        <div>
-            <Panel border>
-                <h3>Korrigering av inntektsmelding omsorgspenger</h3>
-                <SkjemaGruppe legend={<h4 className="korrigering-legend">Korriger fravær i inntektsmelding</h4>}>
-                    <VirksomhetPanel arbeidsgivere={[]} />
-                </SkjemaGruppe>
-                <TrekkPerioder />
-                <LeggTilHelePerioder />
-                <LeggTilDelvisFravær />
-            </Panel>
-        </div>
+        <Panel border>
+            <h3>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h3>
+            <AlertStripeInfo>
+                {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
+            </AlertStripeInfo>
+            <VirksomhetPanel arbeidsgivere={[]} />
+            <TrekkPerioder />
+            <LeggTilHelePerioder />
+            <LeggTilDelvisFravær />
+        </Panel>
     );
 }

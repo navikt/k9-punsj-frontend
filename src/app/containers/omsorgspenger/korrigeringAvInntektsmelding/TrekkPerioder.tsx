@@ -1,16 +1,19 @@
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
-import Panel from 'nav-frontend-paneler';
-import { CheckboksPanel, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Panel from 'nav-frontend-paneler';
+import { CheckboksPanel, SkjemaGruppe } from 'nav-frontend-skjema';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import intlHelper from 'app/utils/intlUtils';
+
 
 export default function TrekkPerioder(): JSX.Element {
-    const intl = useIntl()
+    const intl = useIntl();
     return (
         <>
             <CheckboksPanel
-                label="Trekk perioder med fravær"
+                label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.checkbox')}
                 value="skjema.omsorgstilbud.checkboks"
                 onChange={(e) => ''}
                 checked={false}
@@ -19,15 +22,18 @@ export default function TrekkPerioder(): JSX.Element {
             <Panel className="listepanel">
                 <SkjemaGruppe
                     legend={
-                        <h4 className="korrigering-legend">Perioder arbeidsgiver ønsker å trekke krav om refusjon</h4>
+                        <h4 className="korrigering-legend">{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend')}</h4>
                     }
                 >
-                        <div className="soknadsperiodecontainer">
+                    <AlertStripeInfo>
+                        {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
+                    </AlertStripeInfo>
+                    <div className="soknadsperiodecontainer">
                         <Periodepaneler
                             intl={intl}
-                            periods={[{fom: '', tom: ''}]}
+                            periods={[{ fom: '', tom: '' }]}
                             panelid={(i) => `søknadsperioder_${i}`}
-                            initialPeriode={{fom: '', tom: ''}}
+                            initialPeriode={{ fom: '', tom: '' }}
                             editSoknad={(perioder) => ''}
                             editSoknadState={(perioder) => ''}
                             textLeggTil="skjema.perioder.legg_til"
