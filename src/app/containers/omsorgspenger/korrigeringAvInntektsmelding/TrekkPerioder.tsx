@@ -1,28 +1,31 @@
-import React from 'react';
-import { useIntl } from 'react-intl';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-import { CheckboksPanel, SkjemaGruppe } from 'nav-frontend-skjema';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
 import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Panel from 'nav-frontend-paneler';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import EkspanderbartPanel from './EkspanderbartPanel';
 
+interface TrekkPerioderProps {
+    isPanelOpen: boolean;
+    togglePanel: () => void;
+}
 
-export default function TrekkPerioder(): JSX.Element {
+const TrekkPerioder: React.FC<TrekkPerioderProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
     return (
-        <>
-            <CheckboksPanel
-                label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.checkbox')}
-                value="skjema.omsorgstilbud.checkboks"
-                onChange={(e) => ''}
-                checked={false}
-            />
-            <VerticalSpacer eightPx />
+        <EkspanderbartPanel
+            label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.checkbox')}
+            isPanelOpen={isPanelOpen}
+            togglePanel={togglePanel}
+        >
             <Panel className="listepanel">
                 <SkjemaGruppe
                     legend={
-                        <h4 className="korrigering-legend">{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend')}</h4>
+                        <h4 className="korrigering-legend">
+                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend')}
+                        </h4>
                     }
                 >
                     <AlertStripeInfo>
@@ -45,6 +48,8 @@ export default function TrekkPerioder(): JSX.Element {
                     </div>
                 </SkjemaGruppe>
             </Panel>
-        </>
+        </EkspanderbartPanel>
     );
-}
+};
+
+export default TrekkPerioder;
