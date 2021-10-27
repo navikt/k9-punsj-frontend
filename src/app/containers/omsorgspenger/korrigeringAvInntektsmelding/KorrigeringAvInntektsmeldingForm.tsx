@@ -14,7 +14,7 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
     const intl = useIntl();
     const [åpnePaneler, setÅpnePaneler] = useState({
         trekkperioderPanel: false,
-        leggTilHelePeriderPanel: false,
+        leggTilHelePerioderPanel: false,
         leggTilDelvisFravær: false,
     });
     const togglePaneler = (panel: { [key: string]: boolean }) => setÅpnePaneler({ ...åpnePaneler, ...panel });
@@ -40,8 +40,16 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
                         isPanelOpen={åpnePaneler.trekkperioderPanel}
                         togglePanel={() => togglePaneler({ trekkperioderPanel: !åpnePaneler.trekkperioderPanel })}
                     />
-                    <LeggTilHelePerioder />
-                    <LeggTilDelvisFravær />
+                    <LeggTilHelePerioder
+                        isPanelOpen={åpnePaneler.leggTilHelePerioderPanel}
+                        togglePanel={() =>
+                            togglePaneler({ leggTilHelePerioderPanel: !åpnePaneler.leggTilHelePerioderPanel })
+                        }
+                    />
+                    <LeggTilDelvisFravær
+                        isPanelOpen={åpnePaneler.leggTilDelvisFravær}
+                        togglePanel={() => togglePaneler({ leggTilDelvisFravær: !åpnePaneler.leggTilDelvisFravær })}
+                    />
                 </Panel>
             </Form>
         </Formik>

@@ -1,4 +1,5 @@
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
@@ -7,12 +8,8 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import EkspanderbartPanel from './EkspanderbartPanel';
 
-interface TrekkPerioderProps {
-    isPanelOpen: boolean;
-    togglePanel: () => void;
-}
 
-const TrekkPerioder: React.FC<TrekkPerioderProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
+const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
     return (
         <EkspanderbartPanel
