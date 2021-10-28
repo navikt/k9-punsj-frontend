@@ -1,4 +1,11 @@
-import { FordelingDokumenttype, JaNei, Sakstype, TilgjengeligSakstype } from 'app/models/enums';
+import {
+    FordelingDokumenttype,
+    JaNei,
+    Sakstype,
+    TilgjengeligSakstype,
+    pleiepengerSakstyper,
+    korrigeringAvInntektsmeldingSakstyper,
+} from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -429,8 +436,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
-                                                erUgyldigIdent(identState.ident2) ||
-                                                (!identState.ident2 && !barnetHarIkkeFnr)
+                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                                (erUgyldigIdent(identState.ident2) ||
+                                                    (!identState.ident2 && !barnetHarIkkeFnr))
                                             }
                                         >
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
@@ -446,7 +454,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     legend={intlHelper(intl, 'fordeling.overskrift')}
                                     className="fordeling-page__options"
                                 >
-                                    {Object.keys(TilgjengeligSakstype).map((key) => {
+                                    {(
+                                        (dokumenttype === FordelingDokumenttype.KORRIGERING_IM &&
+                                            korrigeringAvInntektsmeldingSakstyper) ||
+                                        pleiepengerSakstyper
+                                    ).map((key) => {
                                         if (
                                             key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES &&
                                             !erJournalfoertEllerFerdigstilt
