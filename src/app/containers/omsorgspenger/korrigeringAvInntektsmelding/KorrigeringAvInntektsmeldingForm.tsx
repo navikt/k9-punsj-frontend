@@ -1,3 +1,4 @@
+import { IPeriode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -10,6 +11,11 @@ import LeggTilHelePerioder from './LeggTilHelePerioder';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
 
+export interface KorrigeringAvInntektsmeldingFormValues {
+    virksomhet: string;
+    trekkperioder: IPeriode[];
+}
+
 export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
     const intl = useIntl();
     const [åpnePaneler, setÅpnePaneler] = useState({
@@ -21,7 +27,8 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
     return (
         <Formik
             initialValues={{
-                test: '',
+                virksomhet: '',
+                trekkperioder: [{ fom: '', tom: '' }],
             }}
             onSubmit={(values, actions) => {
                 console.log({ values, actions });

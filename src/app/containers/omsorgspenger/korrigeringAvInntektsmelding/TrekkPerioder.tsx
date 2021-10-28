@@ -1,12 +1,14 @@
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
+import { Field, FieldProps } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import EkspanderbartPanel from './EkspanderbartPanel';
+import { Periodepanel } from './Periodepanel';
 
 
 const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
@@ -29,19 +31,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                         {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
                     </AlertStripeInfo>
                     <div className="soknadsperiodecontainer">
-                        <Periodepaneler
-                            intl={intl}
-                            periods={[{ fom: '', tom: '' }]}
-                            panelid={(i) => `søknadsperioder_${i}`}
-                            initialPeriode={{ fom: '', tom: '' }}
-                            editSoknad={(perioder) => ''}
-                            editSoknadState={(perioder) => ''}
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            feilkodeprefiks="ytelse.søknadsperiode"
-                            getErrorMessage={() => ''}
-                            kanHaFlere
-                        />
+                        <Periodepanel name="trekkperioder" />
                     </div>
                 </SkjemaGruppe>
             </Panel>
