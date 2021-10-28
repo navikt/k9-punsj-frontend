@@ -1,15 +1,15 @@
 import { IPeriode } from 'app/models/types';
 
 export enum KorrigeringAvInntektsmeldingFormFields {
-    VIRKSOMHET = 'VIRKSOMHET',
-    ARBEIDSFORHOLD_ID = 'ARBEIDSFORHOLD_ID',
-    TREKKPERIODER = 'TREKKPERIODER',
-    PERIODER_MED_REFUSJONSKRAV = 'PERIODER_MED_REFUSJONSKRAV',
+    Virksomhet = 'Virksomhet',
+    ArbeidsforholdId = 'ArbeidsforholdId',
+    Trekkperioder = 'Trekkperioder',
+    PerioderMedRefusjonskrav = 'PerioderMedRefusjonskrav',
 }
 
 export interface KorrigeringAvInntektsmeldingFormValues {
-    [KorrigeringAvInntektsmeldingFormFields.VIRKSOMHET]: string;
-    [KorrigeringAvInntektsmeldingFormFields.ARBEIDSFORHOLD_ID]: string;
-    [KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER]: IPeriode[];
-    [KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV]: IPeriode[];
+    [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: string;
+    [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: string;
+    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: IPeriode[];
+    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: IPeriode[];
 }

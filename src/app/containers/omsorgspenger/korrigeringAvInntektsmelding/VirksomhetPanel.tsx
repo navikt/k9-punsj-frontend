@@ -38,7 +38,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
             }
         >
             <Panel className="listepanel virksomhetPanel">
-                <Field name={KorrigeringAvInntektsmeldingFormFields.VIRKSOMHET}>
+                <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
                     {({ field }: FieldProps) => (
                         <Select
                             bredde="l"
@@ -60,7 +60,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 <Lenke className="eksternLenke" href={AAREG_URL}>
                     <span>Aa-registeret</span> <ExternalLink />
                 </Lenke>
-                <Field name={KorrigeringAvInntektsmeldingFormFields.ARBEIDSFORHOLD_ID}>
+                <Field name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}>
                     {({ field }: FieldProps) => (
                         <Input
                             bredde="L"

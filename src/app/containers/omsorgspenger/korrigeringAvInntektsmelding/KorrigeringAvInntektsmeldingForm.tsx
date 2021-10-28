@@ -28,10 +28,10 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     return (
         <Formik
             initialValues={{
-                [KorrigeringAvInntektsmeldingFormFields.VIRKSOMHET]: '',
-                [KorrigeringAvInntektsmeldingFormFields.ARBEIDSFORHOLD_ID]: '',
-                [KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER]: [{ fom: '', tom: '' }],
-                [KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV]: [{ fom: '', tom: '' }],
+                [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
+                [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
+                [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [{ fom: '', tom: '' }],
+                [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [{ fom: '', tom: '' }],
             }}
             onSubmit={(values, actions) => {
                 console.log({ values, actions });

@@ -29,7 +29,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                         {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
                     </AlertStripeInfo>
                     <div className="soknadsperiodecontainer">
-                        <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER} />
+                        <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.Trekkperioder} />
                     </div>
                 </SkjemaGruppe>
             </Panel>
