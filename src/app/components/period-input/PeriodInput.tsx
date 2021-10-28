@@ -12,7 +12,7 @@ export interface IPeriodInputProps {
     periode: IPeriode;
     intl: IntlShape;
     onChange: (periode: IPeriode) => void;
-    onBlur: (periode: IPeriode) => void;
+    onBlur?: (periode: IPeriode) => void;
     onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;
@@ -61,9 +61,9 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     <DateInput
                         value={renderDato('fom')}
                         onChange={(selectedDate) => {
-                            onChange({ fom: selectedDate, tom: periode.tom });
+                            onChange({ fom: selectedDate, tom: periode?.tom || '' });
                             if (onBlur) {
-                                onBlur({ fom: selectedDate, tom: periode.tom });
+                                onBlur({ fom: selectedDate, tom: periode?.tom || '' });
                             }
                         }}
                         id={inputIdFom}
@@ -75,9 +75,9 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         <DateInput
                             value={renderDato('tom')}
                             onChange={(selectedDate) => {
-                                onChange({ fom: periode.fom, tom: selectedDate });
+                                onChange({ fom: periode?.fom || '', tom: selectedDate });
                                 if (onBlur) {
-                                    onBlur({ fom: periode.fom, tom: selectedDate });
+                                    onBlur({ fom: periode?.fom || '', tom: selectedDate });
                                 }
                             }}
                             id={inputIdTom}
