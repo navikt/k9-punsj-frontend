@@ -11,7 +11,13 @@ import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
 import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
-export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
+interface KorrigeringAvInntektsmeldingFormProps {
+    søkerId: string;
+}
+
+const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
+    søkerId,
+}): JSX.Element => {
     const intl = useIntl();
     const [åpnePaneler, setÅpnePaneler] = useState({
         trekkperioderPanel: false,
@@ -23,6 +29,7 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
         <Formik
             initialValues={{
                 [KorrigeringAvInntektsmeldingFormFields.VIRKSOMHET]: '',
+                [KorrigeringAvInntektsmeldingFormFields.ARBEIDSFORHOLD_ID]: '',
                 [KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER]: [{ fom: '', tom: '' }],
                 [KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV]: [{ fom: '', tom: '' }],
             }}
@@ -37,7 +44,7 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
                     <AlertStripeInfo>
                         {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
                     </AlertStripeInfo>
-                    <VirksomhetPanel />
+                    <VirksomhetPanel søkerId={søkerId} />
 
                     <TrekkPerioder
                         isPanelOpen={åpnePaneler.trekkperioderPanel}
@@ -57,4 +64,6 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
             </Form>
         </Formik>
     );
-}
+};
+
+export default KorrigeringAvInntektsmeldingForm;

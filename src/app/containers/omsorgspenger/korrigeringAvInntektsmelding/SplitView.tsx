@@ -68,8 +68,10 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageQueryProps;
 
 export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
-    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
-    const journalposterFraSoknad = punchFormState.soknad?.journalposter;
+    const { intl, dok, journalpostid, journalpost, forbidden, identState, punchFormState } = props;
+    const { soknad } = punchFormState;
+    const { ident1 } = identState;
+    const journalposterFraSoknad = soknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
@@ -85,7 +87,7 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const leftSide = ({ journalpostDokumenter }: { journalpostDokumenter: IJournalpostDokumenter[] }) => (
         <Panel className="pleiepenger_punch_form" border>
             <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
-            <KorrigeringAvInntektsmeldingForm />
+            <KorrigeringAvInntektsmeldingForm søkerId={ident1} />
         </Panel>
     );
 
