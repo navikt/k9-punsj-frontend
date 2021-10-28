@@ -1,4 +1,3 @@
-import { IPeriode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -10,11 +9,7 @@ import LeggTilDelvisFravær from './LeggTilDelvisFravær';
 import LeggTilHelePerioder from './LeggTilHelePerioder';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
-
-export interface KorrigeringAvInntektsmeldingFormValues {
-    virksomhet: string;
-    trekkperioder: IPeriode[];
-}
+import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
     const intl = useIntl();
@@ -27,8 +22,9 @@ export default function KorrigeringAvInntektsmeldingForm(): JSX.Element {
     return (
         <Formik
             initialValues={{
-                virksomhet: '',
-                trekkperioder: [{ fom: '', tom: '' }],
+                [KorrigeringAvInntektsmeldingFormFields.VIRKSOMHET]: '',
+                [KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER]: [{ fom: '', tom: '' }],
+                [KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV]: [{ fom: '', tom: '' }],
             }}
             onSubmit={(values, actions) => {
                 console.log({ values, actions });

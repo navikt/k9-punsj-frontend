@@ -9,16 +9,18 @@ import Panel from 'nav-frontend-paneler';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
-import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingForm';
+import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 export interface IPeriodepanelerProps {
     name: string;
+    textFjern?: string;
+    textLeggTil?: string;
 }
 
 /** Variant av periodepanel som baserer seg på Formik */
 export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const intl = useIntl();
-    const { name } = props;
+    const { name, textFjern, textLeggTil } = props;
     const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
     return (
         <Panel className="periodepanel">
@@ -57,7 +59,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                             <div className="slettIcon">
                                                 <BinSvg title="fjern" />
                                             </div>
-                                            {intlHelper(intl, 'skjema.liste.fjern')}
+                                            {intlHelper(intl, textFjern || 'skjema.liste.fjern_periode')}
                                         </button>
                                     </div>
                                 </Row>
@@ -76,7 +78,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 <div className="leggtilperiodeIcon">
                                     <AddCircleSvg title="leggtil" />
                                 </div>
-                                {intlHelper(intl, 'skjema.periodepanel.legg_til')}
+                                {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til_dag_periode')}
                             </button>
                         </Row>
                     </>

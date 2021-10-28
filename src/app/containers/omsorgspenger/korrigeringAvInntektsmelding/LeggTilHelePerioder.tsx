@@ -7,6 +7,8 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import EkspanderbartPanel from './EkspanderbartPanel';
+import { Periodepanel } from './Periodepanel';
+import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
@@ -29,19 +31,7 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
                             {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.info')}
                         </AlertStripeInfo>
                         <div className="soknadsperiodecontainer">
-                            <Periodepaneler
-                                intl={intl}
-                                periods={[{ fom: '', tom: '' }]}
-                                panelid={(i) => `søknadsperioder_${i}`}
-                                initialPeriode={{ fom: '', tom: '' }}
-                                editSoknad={(perioder) => ''}
-                                editSoknadState={(perioder) => ''}
-                                textLeggTil="skjema.perioder.legg_til"
-                                textFjern="skjema.perioder.fjern"
-                                feilkodeprefiks="ytelse.søknadsperiode"
-                                getErrorMessage={() => ''}
-                                kanHaFlere
-                            />
+                            <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV} />
                         </div>
                     </SkjemaGruppe>
                 </Panel>

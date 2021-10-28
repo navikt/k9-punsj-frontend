@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import { AAREG_URL } from '../../../constants/eksterneLenker';
 import { ArbeidsgivereResponse } from '../../../models/types/ArbeidsgivereResponse';
 import './virksomhetPanel.less';
+import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 interface IVirksomhetPanelProps {
     søkerId?: string;
@@ -37,7 +38,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
             }
         >
             <Panel className="listepanel virksomhetPanel">
-                <Field name="virksomhet">
+                <Field name={KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER}>
                     {({ field }: FieldProps) => (
                         <Select
                             bredde="l"
