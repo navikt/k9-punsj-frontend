@@ -1,6 +1,6 @@
 import { PunchFormActionKeys } from 'app/models/enums';
 import { IPunchFormState } from 'app/models/types';
-import { IPunchFormActionTypes } from 'app/state/actions/PunchFormActions';
+import { IPunchFormActionTypes } from 'app/state/actions/PSBPunchFormActions';
 import { LOCATION_CHANGE, LocationChangeAction } from 'react-router-redux';
 
 const initialState: IPunchFormState = {
@@ -169,15 +169,15 @@ export function PunchFormReducer(
                 validateSoknadError: undefined,
             };
 
-        case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS:{
-            const {erMellomlagring} = action;
+        case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS: {
+            const { erMellomlagring } = action;
             return {
                 ...punchFormState,
                 validertSoknad: action.validertSoknad,
                 isAwaitingValidateResponse: false,
                 validateSoknadError: undefined,
                 inputErrors: undefined,
-                isValid: !erMellomlagring
+                isValid: !erMellomlagring,
             };
         }
 

@@ -31,6 +31,14 @@ export enum ApiPath {
     GOSYS_GJELDER = '/gosys/gjelder',
     FINN_ARBEIDSGIVERE = '/arbeidsgivere',
     SØK_ORGNUMMER = '/arbeidsgiver',
+    OMS_EKSISTERENDE_SOKNADER_FIND = '/omsorgspenger-soknad/mappe',
+    OMS_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
+    OMS_MAPPE_SOK = '/k9-sak/omsorgspenger-soknad',
+    OMS_SOKNAD_CREATE = '/omsorgspenger-soknad',
+    OMS_SOKNAD_GET = '/omsorgspenger-soknad/mappe/{id}',
+    OMS_SOKNAD_SUBMIT = '/omsorgspenger-soknad/send',
+    OMS_SOKNAD_UPDATE = '/omsorgspenger-soknad/oppdater',
+    OMS_SOKNAD_VALIDER = '/omsorgspenger-soknad/valider',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
