@@ -1,30 +1,60 @@
+import { validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import Panel from 'nav-frontend-paneler';
-import React, { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
+import ActionType from './korrigeringAvInntektsmeldingActions';
 import './KorrigeringAvInntektsmeldingForm.less';
+import {
+    KorrigeringAvInntektsmeldingFormFields,
+    KorrigeringAvInntektsmeldingFormValues,
+} from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær';
 import LeggTilHelePerioder from './LeggTilHelePerioder';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
-import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import { OMSSoknadUt } from '../../../models/types/OMSSoknadUt';
 
 interface KorrigeringAvInntektsmeldingFormProps {
     søkerId: string;
+    søknadId: string;
+    journalposter: string[];
 }
 
 const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
     søkerId,
+    søknadId,
+    journalposter,
 }): JSX.Element => {
     const intl = useIntl();
-    const [åpnePaneler, setÅpnePaneler] = useState({
-        trekkperioderPanel: false,
-        leggTilHelePerioderPanel: false,
-        leggTilDelvisFravær: false,
+    const [state, dispatch] = React.useReducer(korrigeringAvInntektsmeldingReducer, {
+        åpnePaneler: {
+            trekkperioderPanel: false,
+            leggTilHelePerioderPanel: false,
+            leggTilDelvisFravær: false,
+        },
+        isLoading: false,
     });
-    const togglePaneler = (panel: { [key: string]: boolean }) => setÅpnePaneler({ ...åpnePaneler, ...panel });
+    const { åpnePaneler, isLoading } = state;
+    const togglePaneler = (panel: { [key: string]: boolean }) =>
+        dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
+
+    const validerSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
+        dispatch({ type: ActionType.VALIDER_SØKNAD_START });
+        const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
+        validerOMSSoknad(soknad, (response, data) => {
+            if (response.status === 202) {
+                dispatch({ type: ActionType.VALIDER_SØKNAD_SUCCESS });
+            } else if (response.status === 400) {
+                dispatch({ type: ActionType.VALIDER_SØKNAD_ERROR });
+            }
+        });
+    };
+
     return (
         <Formik
             initialValues={{
@@ -32,8 +62,10 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
                 [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [{ fom: '', tom: '' }],
                 [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [{ fom: '', tom: '' }],
+                [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
             }}
             onSubmit={(values, actions) => {
+                validerSøknad(values);
                 console.log({ values, actions });
                 actions.setSubmitting(false);
             }}
@@ -61,6 +93,9 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                         togglePanel={() => togglePaneler({ leggTilDelvisFravær: !åpnePaneler.leggTilDelvisFravær })}
                     />
                 </Panel>
+                <div className="korrigering__buttonContainer">
+                    <Hovedknapp disabled={isLoading}>Send inn</Hovedknapp>
+                </div>
             </Form>
         </Formik>
     );

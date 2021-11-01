@@ -242,6 +242,7 @@
     "skjema.dato": "Dato",
     "skjema.liste.fjern": "Fjern",
     "skjema.liste.fjern_periode": "Fjern periode",
+    "skjema.liste.fjern_dag": "Fjern dag",
     "skjema.liste.legg_til": "Legg til",
     "skjema.soknadsperiode.leggtil": "Legg til ny søknadsperiode",
     "skjema.soknadsperiode.overlapper": "Du har lagt til en ny søknadsperiode som overlapper med eksisterende søknadsperioder for søker. Vær oppmerksom på at informasjonen innenfor den overlappende søknadsperioden vil erstatte tidligere registrert informasjon i perioden.",

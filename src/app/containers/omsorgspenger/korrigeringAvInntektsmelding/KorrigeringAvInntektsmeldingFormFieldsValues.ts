@@ -1,10 +1,12 @@
 import { IPeriode } from 'app/models/types';
+import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 
 export enum KorrigeringAvInntektsmeldingFormFields {
     Virksomhet = 'Virksomhet',
     ArbeidsforholdId = 'ArbeidsforholdId',
     Trekkperioder = 'Trekkperioder',
     PerioderMedRefusjonskrav = 'PerioderMedRefusjonskrav',
+    DagerMedDelvisFravær = 'DagerMedDelvisFravær',
 }
 
 export interface KorrigeringAvInntektsmeldingFormValues {
@@ -12,4 +14,5 @@ export interface KorrigeringAvInntektsmeldingFormValues {
     [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: string;
     [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: IPeriode[];
     [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: IPeriode[];
+    [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: DatoMedTimetall[];
 }

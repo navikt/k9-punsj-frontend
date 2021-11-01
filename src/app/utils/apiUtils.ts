@@ -39,7 +39,7 @@ export async function post<BodyType>(
     parameters?: any,
     headers?: HeadersInit,
     body?: BodyType,
-    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response>,
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
     callbackIfError?: (error: any) => any
 ): Promise<Response> {
     try {

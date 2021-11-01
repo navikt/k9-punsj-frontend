@@ -1,34 +1,29 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import { ApiPath } from 'app/apiConfig';
+import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
+import Page from 'app/components/page/Page';
+import PdfVisning from 'app/components/pdf/PdfVisning';
+import { peiepengerPaths } from 'app/containers/pleiepenger/PeiepengerRoutes';
+import 'app/containers/pleiepenger/punchPage.less';
+import useQuery from 'app/hooks/useQuery';
+import { PunchStep } from 'app/models/enums';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
+import { IJournalpost, IPath, IPleiepengerPunchState, IPSBSoknad, IPunchFormState } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { setIdentAction, setStepAction } from 'app/state/actions';
+import { createOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
+import { RootStateType } from 'app/state/RootState';
+import { get, getPath } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import Panel from 'nav-frontend-paneler';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'nav-frontend-tabell-style';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-
-import Page from 'app/components/page/Page';
-import useQuery from 'app/hooks/useQuery';
-import { PunchStep } from 'app/models/enums';
-import { IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState } from 'app/models/types';
-import { setIdentAction, setStepAction } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
-import { get, getEnvironmentVariable, getPath } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { ApiPath } from 'app/apiConfig';
-import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import PdfVisning from 'app/components/pdf/PdfVisning';
-import { peiepengerPaths } from 'app/containers/pleiepenger/PeiepengerRoutes';
-import { RegistreringsValg } from 'app/containers/pleiepenger/RegistreringsValg';
-import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
-import { PSBPunchForm } from 'app/containers/pleiepenger/PSBPunchForm';
-import SoknadKvittering from 'app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
-import { IIdentState } from 'app/models/types/IdentState';
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
-import 'app/containers/pleiepenger/punchPage.less';
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
 export interface IPunchPageStateProps {
@@ -69,9 +64,14 @@ type IPunchPageProps = WrappedComponentProps &
 
 export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, identState, punchFormState } = props;
-    const { soknad } = punchFormState;
+    const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
     const { ident1 } = identState;
-    const journalposterFraSoknad = soknad?.journalposter;
+    useEffect(() => {
+        createOMSSoknad(ident1, journalpost?.journalpostId || '', (response, data) => {
+            setSoknad(data);
+        });
+    }, [ident1, journalpost]);
+    const journalposterFraSoknad = soknad?.journalposter || [];
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
@@ -87,7 +87,11 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const leftSide = ({ journalpostDokumenter }: { journalpostDokumenter: IJournalpostDokumenter[] }) => (
         <Panel className="pleiepenger_punch_form" border>
             <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
-            <KorrigeringAvInntektsmeldingForm søkerId={ident1} />
+            <KorrigeringAvInntektsmeldingForm
+                søkerId={ident1}
+                søknadId={soknad?.soeknadId || ''}
+                journalposter={journalposterFraSoknad}
+            />
         </Panel>
     );
 
