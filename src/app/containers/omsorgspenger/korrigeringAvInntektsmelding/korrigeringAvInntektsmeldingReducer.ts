@@ -9,6 +9,7 @@ interface Paneler {
 interface State {
     åpnePaneler: Paneler;
     isLoading?: boolean;
+    visBekreftelsemodal?: boolean;
 }
 
 interface Action {
@@ -30,6 +31,12 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
         }
         case ActionType.VALIDER_SØKNAD_ERROR: {
             return { ...state, isLoading: false };
+        }
+        case ActionType.VIS_BEKREFTELSEMODAL: {
+            return { ...state, visBekreftelsemodal: true };
+        }
+        case ActionType.SKJUL_BEKREFTELSEMODAL: {
+            return { ...state, visBekreftelsemodal: false };
         }
         default:
             return state;

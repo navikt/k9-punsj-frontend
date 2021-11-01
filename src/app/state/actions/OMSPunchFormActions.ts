@@ -1,6 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { OMSSoknadUt } from 'app/models/types/OMSSoknadUt';
-import { post } from 'app/utils';
+import { post, put } from 'app/utils';
 
 export function submitSoknad(norskIdent: string, soeknadId: string) {
     // return (dispatch: any) => {
@@ -46,4 +46,21 @@ export function createOMSSoknad(
     };
 
     post(ApiPath.OMS_SOKNAD_CREATE, undefined, undefined, requestBody, callback);
+}
+
+export function submitOMSSoknad(
+    norskIdent: string,
+    soeknadId: string,
+    callback: (response: Response, data: any) => void
+) {
+    const requestBody = {
+        norskIdent,
+        soeknadId,
+    };
+
+    post(ApiPath.OMS_SOKNAD_SUBMIT, { id: soeknadId }, { 'X-Nav-NorskIdent': norskIdent }, requestBody, callback);
+}
+
+export function updateOMSSoknad(soknad: OMSSoknadUt) {
+    put(ApiPath.OMS_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad);
 }

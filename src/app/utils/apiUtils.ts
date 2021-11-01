@@ -69,7 +69,7 @@ export async function put(
     path: ApiPath,
     parameters?: any,
     body?: any,
-    callbackIfAuth?: (response: Response) => Promise<Response>
+    callbackIfAuth?: (response: Response) => Promise<Response> | void
 ): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         method: 'put',
