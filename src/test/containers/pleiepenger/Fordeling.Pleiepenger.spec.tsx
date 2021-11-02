@@ -11,13 +11,13 @@ describe('Fordeling: Flyt for pleiepenger', () => {
     const fordeling = setupFordeling();
 
     it('Viser riktig informasjon dersom dokumentet ikke gjelder pleiepenger', () => {
-        fordeling.find('RadioPanelGruppe').simulate('change', { target: { value: 'nei' } });
+        fordeling.find('RadioPanelGruppe').simulate('change', { target: { value: 'ANNET' } });
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
         expect(fordeling.find('Hovedknapp')).toHaveLength(1);
     });
 
     it('Viser riktig informasjon dersom dokumentet gjelder pleiepenger', () => {
-        fordeling.find('RadioPanelGruppe').simulate('change', { target: { value: 'ja' } });
+        fordeling.find('RadioPanelGruppe').simulate('change', { target: { value: 'PLEIEPENGER' } });
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(2);
         expect(fordeling.find('Knapp')).toHaveLength(1);
         fordeling.find({ name: 'identsjekk' }).simulate('change', { target: { value: 'ja' } });
@@ -58,18 +58,18 @@ describe('Fordeling: Flyt for pleiepenger', () => {
 
     it('Kan ikke gå videre dersom man ikke fyllt in barn', () => {
         fordeling.setProps({
-            fellesState: {hentBarnSuccess: true, barn: []},
-            journalpost: {kanKopieres: true, kanSendeInn: true, erSaksbehandler: true}
-        })
+            fellesState: { hentBarnSuccess: true, barn: [] },
+            journalpost: { kanKopieres: true, kanSendeInn: true, erSaksbehandler: true },
+        });
         expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
     });
 
     it('Kan ikke gå videre dersom barnets ident ikke er riktig', () => {
         fordeling.setProps({
-            fellesState: {hentBarnSuccess: true, barn: []},
-            identState: {ident2: '12'},
-            journalpost: {kanKopieres: true, kanSendeInn: true, erSaksbehandler: true}
-        })
+            fellesState: { hentBarnSuccess: true, barn: [] },
+            identState: { ident2: '12' },
+            journalpost: { kanKopieres: true, kanSendeInn: true, erSaksbehandler: true },
+        });
         expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);
     });
 });
