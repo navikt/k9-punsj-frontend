@@ -1,56 +1,30 @@
-import { submitOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
+import intlHelper from 'app/utils/intlUtils';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import React, { useState } from 'react';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import './bekreftInnsendingModal.less';
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import OMSKvittering from './OMSKvittering';
 
 interface BekreftInnsendingModalProps {
     feltverdier: KorrigeringAvInntektsmeldingFormValues;
-    søkerId: string;
-    søknadId: string;
     lukkModal: () => void;
+    handleVidere: () => void;
 }
 
-const BekreftInnsendingModal: React.FC<BekreftInnsendingModalProps> = ({
-    feltverdier,
-    søknadId,
-    søkerId,
-    lukkModal,
-}) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleButtonClick = () => {
-        setIsLoading(true);
-        submitOMSSoknad(søkerId, søknadId, (response, responseData) => {
-            switch (response.status) {
-                case 202: {
-                    setIsLoading(false);
-                    lukkModal();
-                    break;
-                }
-                case 400: {
-                    console.log('400');
-                    break;
-                }
-                case 409: {
-                    console.log('409');
-                    break;
-                }
-                default: {
-                    console.log('default??');
-                }
-            }
-        });
-    };
+const BekreftInnsendingModal: React.FC<BekreftInnsendingModalProps> = ({ feltverdier, lukkModal, handleVidere }) => {
+    const intl = useIntl();
 
     return (
         <div className="bekreftInnsendingModal">
             <OMSKvittering feltverdier={feltverdier} />
-            <div className="korrigering__buttonContainer">
-                <Hovedknapp className="korrigering__submitButton" onClick={handleButtonClick} disabled={isLoading}>
-                    Send inn
+            <div className="bekreftInnsendingModal__buttonContainer">
+                <Hovedknapp mini className="bekreftInnsendingModal__knappVidere" onClick={() => handleVidere()}>
+                    {intlHelper(intl, 'fordeling.knapp.videre')}
                 </Hovedknapp>
-                <Knapp onClick={() => lukkModal()}>Avbryt</Knapp>
+                <Knapp mini className="validertSoknadOppsummeringContainer_knappTilbake" onClick={() => lukkModal()}>
+                    {intlHelper(intl, 'skjema.knapp.avbryt')}
+                </Knapp>
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import ActionType from './korrigeringAvInntektsmeldingActions';
+import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 interface Paneler {
     trekkperioderPanel: boolean;
@@ -10,12 +11,15 @@ interface State {
     åpnePaneler: Paneler;
     isLoading?: boolean;
     visBekreftelsemodal?: boolean;
+    visErDuSikkerModal?: boolean;
+    søknadErInnsendt?: boolean;
+    innsendteFormverdier?: KorrigeringAvInntektsmeldingFormValues;
 }
-
 interface Action {
     type: ActionType;
     åpnePaneler?: Paneler;
     isLoading?: boolean;
+    innsendteFormverdier?: KorrigeringAvInntektsmeldingFormValues;
 }
 
 const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): State => {
@@ -37,6 +41,20 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
         }
         case ActionType.SKJUL_BEKREFTELSEMODAL: {
             return { ...state, visBekreftelsemodal: false };
+        }
+        case ActionType.VIS_ER_DU_SIKKER_MODAL: {
+            return { ...state, visErDuSikkerModal: true, visBekreftelsemodal: false };
+        }
+        case ActionType.SKJUL_ER_DU_SIKKER_MODAL: {
+            return { ...state, visErDuSikkerModal: false };
+        }
+        case ActionType.SET_SØKNAD_INNSENDT: {
+            return {
+                ...state,
+                søknadErInnsendt: true,
+                visErDuSikkerModal: false,
+                innsendteFormverdier: action.innsendteFormverdier,
+            };
         }
         default:
             return state;
