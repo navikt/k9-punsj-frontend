@@ -10,7 +10,7 @@ import { useIntl } from 'react-intl';
 import { OMSSoknadUt } from '../../../models/types/OMSSoknadUt';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ActionType from './korrigeringAvInntektsmeldingActions';
-import './KorrigeringAvInntektsmeldingForm.less';
+import './korrigeringAvInntektsmeldingForm.less';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
@@ -18,6 +18,7 @@ import {
 import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær';
 import LeggTilHelePerioder from './LeggTilHelePerioder';
+import OpplysningerOmSøknaden from './OpplysningerOmSøknaden';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
 
@@ -65,6 +66,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
         <>
             <Formik
                 initialValues={{
+                    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden]: { dato: '', klokkeslett: '' },
                     [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
                     [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
                     [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getIinitialPeriode()],
@@ -85,8 +87,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                 <AlertStripeInfo>
                                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
                                 </AlertStripeInfo>
+                                <OpplysningerOmSøknaden />
                                 <VirksomhetPanel søkerId={søkerId} />
-
                                 <TrekkPerioder
                                     isPanelOpen={åpnePaneler.trekkperioderPanel}
                                     togglePanel={() => {
@@ -129,7 +131,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                 />
                             </Panel>
                             <div className="korrigering__buttonContainer">
-                                <Hovedknapp disabled={isLoading}>Send inn</Hovedknapp>
+                                <Hovedknapp>Send inn</Hovedknapp>
                             </div>
                         </Form>
                         {visBekreftelsemodal && (
