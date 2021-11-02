@@ -28,7 +28,6 @@ export const setupFordeling = (
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
     opprettIGosysStatePartial?: Partial<IGosysOppgaveState>,
     journalpostPartial?: Partial<IJournalpost>
-
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
@@ -54,7 +53,7 @@ export const setupFordeling = (
         kanSendeInn: true,
         erSaksbehandler: true,
         kanOpprettesJournalføringsoppgave: true,
-        ...journalpostPartial
+        ...journalpostPartial,
     };
 
     const opprettIGosys: IGosysOppgaveState = {
@@ -122,7 +121,7 @@ describe('Fordeling', () => {
             .dive()
             .find('RadioPanel')
             .at(0)
-            .simulate('change', { target: { value: 'nei' } });
+            .simulate('change', { target: { value: 'ANNET' } });
         expect(fordeling.find('Hovedknapp')).toHaveLength(1);
 
         fordeling
@@ -130,7 +129,7 @@ describe('Fordeling', () => {
             .dive()
             .find('RadioPanel')
             .at(0)
-            .simulate('change', { target: { value: 'ja' } });
+            .simulate('change', { target: { value: 'PLEIEPENGER' } });
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(2);
 
         fordeling
@@ -165,7 +164,7 @@ describe('Fordeling', () => {
         const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
         fordeling.find('Behandlingsknapp').dive().simulate('click');
         expect(omfordel).toHaveBeenCalledTimes(1);
-        expect(omfordel).toHaveBeenCalledWith(journalpostid, "12345678901", 'Annet');
+        expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901', 'Annet');
     });
 
     it('Viser spinner mens svar avventes', () => {
@@ -175,7 +174,7 @@ describe('Fordeling', () => {
     });
 
     it('Viser suksessmelding når omfordeling er utført', () => {
-        const fordeling = setupFordeling({lukkOppgaveDone: true}, undefined, {
+        const fordeling = setupFordeling({ lukkOppgaveDone: true }, undefined, {
             gosysOppgaveRequestSuccess: true,
         });
         const wrapper = fordeling.find('ModalWrapper');
@@ -208,10 +207,17 @@ describe('Fordeling', () => {
     });
 
     it('Viser feilmelding når journalforingsoppgave i gosys ikke kan opprettes', () => {
-        const fordeling = setupFordeling({}, {}, {}, {kanOpprettesJournalføringsoppgave: false});
-        fordeling.find('RadioPanelGruppe').dive().find('RadioPanel').at(0).simulate('change', {target: {value: 'nei'}})
+        const fordeling = setupFordeling({}, {}, {}, { kanOpprettesJournalføringsoppgave: false });
+        fordeling
+            .find('RadioPanelGruppe')
+            .dive()
+            .find('RadioPanel')
+            .at(0)
+            .simulate('change', { target: { value: 'ANNET' } });
         expect(fordeling.find('AlertStripeInfo')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeInfo').find('Memo(FormattedMessage)').prop('id')).toEqual('fordeling.kanIkkeOppretteJPIGosys.info');
+        expect(fordeling.find('AlertStripeInfo').find('Memo(FormattedMessage)').prop('id')).toEqual(
+            'fordeling.kanIkkeOppretteJPIGosys.info'
+        );
 
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });

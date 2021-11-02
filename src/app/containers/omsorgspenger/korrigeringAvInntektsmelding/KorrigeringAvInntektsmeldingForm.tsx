@@ -12,7 +12,7 @@ import { OMSSoknadUt } from '../../../models/types/OMSSoknadUt';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import ActionType from './korrigeringAvInntektsmeldingActions';
-import './korrigeringAvInntektsmeldingForm.less';
+import './KorrigeringAvInntektsmeldingForm.less';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
