@@ -7,6 +7,8 @@ import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPun
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import { ApiPath } from '../apiConfig';
 import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
+import { SplitView } from './omsorgspenger/korrigeringAvInntektsmelding/SplitView';
+import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -28,6 +30,13 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
             stepOrder: 0,
         },
     ],
+};
+
+export const KorrigeringAvInntektsmelding: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
+    punchPath: '/korrigering-av-inntektsmelding',
+    getComponent: () => <KorrigeringAvInntektsmeldingContainer />,
+    steps: [],
 };
 
 export const OmsorgspengerOverføring: ISakstypePunch = {
@@ -91,7 +100,7 @@ export const SkalIkkePUnsjes: ISakstypeOmfordeling = {
 };
 
 export const Sakstyper: ISakstyper = {
-    punchSakstyper: [Pleiepenger, OmsorgspengerFordeling, OmsorgspengerOverføring],
+    punchSakstyper: [Pleiepenger, OmsorgspengerFordeling, OmsorgspengerOverføring, KorrigeringAvInntektsmelding],
     omfordelingssakstyper: [
         OmsorgspengerUtvidetRett,
         OmsorgspengerLegeerklæring,

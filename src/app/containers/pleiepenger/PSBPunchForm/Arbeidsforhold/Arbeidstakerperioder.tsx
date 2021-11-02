@@ -4,14 +4,13 @@ import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { ApiPath } from '../../../../apiConfig';
+import { finnArbeidsgivere } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
@@ -39,21 +38,12 @@ const Arbeidstakerperioder = ({
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
     const { arbeidstid, soekerId } = soknad;
 
-    const finnArbeidsgivere = () => {
-        if (soekerId) {
-            get(
-                ApiPath.FINN_ARBEIDSGIVERE,
-                { norskIdent: soekerId },
-                { 'X-Nav-NorskIdent': soekerId },
-                (response, data: ArbeidsgivereResponse) => {
-                    setArbeidsgivere(data?.organisasjoner || []);
-                }
-            );
-        }
-    };
-
     useEffect(() => {
-        finnArbeidsgivere();
+        if (soekerId) {
+            finnArbeidsgivere(soekerId, (response, data: ArbeidsgivereResponse) => {
+                setArbeidsgivere(data?.organisasjoner || []);
+            });
+        }
     }, []);
 
     const items = arbeidstid?.arbeidstakerList || [];

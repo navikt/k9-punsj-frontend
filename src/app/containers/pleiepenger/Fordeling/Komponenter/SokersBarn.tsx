@@ -13,7 +13,7 @@ import {setIdentFellesAction} from "../../../../state/actions/IdentActions";
 import VerticalSpacer from "../../../../components/VerticalSpacer";
 import {hentBarn} from "../../../../state/reducers/HentBarn";
 import WarningCircle from "../../../../assets/SVG/WarningCircle";
-import {skalViseFeilmelding} from "../FordelingFeilmeldinger";
+import {erUgyldigIdent} from "../FordelingFeilmeldinger";
 
 export interface ISokersBarnStateProps {
     identState: IIdentState;
@@ -124,14 +124,14 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (
               className="bold-label ident-soker-2"
               maxLength={11}
               feil={
-                  skalViseFeilmelding(identState.ident2)
+                  erUgyldigIdent(identState.ident2)
                       ? intlHelper(intl, 'ident.feil.ugyldigident')
                       : undefined
               }
               bredde="M"
               disabled={barnetHarIkkeFnr}
             />
-              {barnetsIdent.length === 11 && !skalViseFeilmelding(identState.ident2) &&
+              {barnetsIdent.length === 11 && !erUgyldigIdent(identState.ident2) &&
               <div className="dobbelSjekkIdent">
                 <div><WarningCircle/></div>
                 <p><b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b></p></div>}

@@ -39,7 +39,7 @@ export async function post<BodyType>(
     parameters?: any,
     headers?: HeadersInit,
     body?: BodyType,
-    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response>,
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
     callbackIfError?: (error: any) => any
 ): Promise<Response> {
     try {
@@ -69,7 +69,7 @@ export async function put(
     path: ApiPath,
     parameters?: any,
     body?: any,
-    callbackIfAuth?: (response: Response) => Promise<Response>
+    callbackIfAuth?: (response: Response) => Promise<Response> | void
 ): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         method: 'put',
