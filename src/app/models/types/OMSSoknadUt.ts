@@ -40,6 +40,10 @@ const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => 
 };
 
 export class OMSSoknadUt {
+    mottattDato: string;
+
+    klokkeslett: string;
+
     soeknadId: string;
 
     soekerId: string;
@@ -58,6 +62,8 @@ export class OMSSoknadUt {
         søkerId: string,
         journalposter: string[]
     ) {
+        this.mottattDato = values.OpplysningerOmSøknaden.dato;
+        this.klokkeslett = values.OpplysningerOmSøknaden.klokkeslett;
         this.soeknadId = søknadId;
         this.soekerId = søkerId;
         this.journalposter = journalposter;
