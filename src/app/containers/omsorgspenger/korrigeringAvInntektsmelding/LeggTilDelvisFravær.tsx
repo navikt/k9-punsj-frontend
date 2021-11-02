@@ -16,7 +16,7 @@ import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import './LeggTilDelvisFravær.less';
+import './leggTilDelvisFravær.less';
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
@@ -49,51 +49,56 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                             'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info'
                                         )}
                                     </AlertStripeInfo>
-                                    {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
-                                        (value: DatoMedTimetall, index: number) => {
-                                            const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
-                                            return (
-                                                <Row noGutters key={fieldName}>
-                                                    <div className="delvisFravaer__inputfelter">
-                                                        <Field name={`${fieldName}.dato`}>
-                                                            {({ field }: FieldProps) => (
-                                                                <DateInput
-                                                                    value={field.value}
-                                                                    onChange={(dato) => {
-                                                                        setFieldValue(field.name, dato);
-                                                                    }}
-                                                                    className="dateInput"
-                                                                    label={intlHelper(intl, 'skjema.dato')}
-                                                                />
-                                                            )}
-                                                        </Field>
-                                                        <Field name={`${fieldName}.timer`}>
-                                                            {({ field }: FieldProps) => (
-                                                                <Input
-                                                                    {...field}
-                                                                    label={intlHelper(intl, 'skjema.perioder.timer')}
-                                                                    bredde="XS"
-                                                                />
-                                                            )}
-                                                        </Field>
-                                                        <button
-                                                            id="slett"
-                                                            className="fjern"
-                                                            type="button"
-                                                            onClick={() => {
-                                                                remove(index);
-                                                            }}
-                                                        >
-                                                            <div className="slettIcon">
-                                                                <BinSvg title="fjern" />
-                                                            </div>
-                                                            {intlHelper(intl, 'skjema.liste.fjern_dag')}
-                                                        </button>
-                                                    </div>
-                                                </Row>
-                                            );
-                                        }
-                                    )}
+                                    <Panel className="delvisFravaer__inputContainer">
+                                        {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
+                                            (value: DatoMedTimetall, index: number) => {
+                                                const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
+                                                return (
+                                                    <Row noGutters key={fieldName}>
+                                                        <div className="delvisFravaer__inputfelter">
+                                                            <Field name={`${fieldName}.dato`}>
+                                                                {({ field }: FieldProps) => (
+                                                                    <DateInput
+                                                                        value={field.value}
+                                                                        onChange={(dato) => {
+                                                                            setFieldValue(field.name, dato);
+                                                                        }}
+                                                                        className="dateInput"
+                                                                        label={intlHelper(intl, 'skjema.dato')}
+                                                                    />
+                                                                )}
+                                                            </Field>
+                                                            <Field name={`${fieldName}.timer`}>
+                                                                {({ field }: FieldProps) => (
+                                                                    <Input
+                                                                        {...field}
+                                                                        label={intlHelper(
+                                                                            intl,
+                                                                            'skjema.perioder.timer'
+                                                                        )}
+                                                                        bredde="XS"
+                                                                    />
+                                                                )}
+                                                            </Field>
+                                                            <button
+                                                                id="slett"
+                                                                className="fjern"
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    remove(index);
+                                                                }}
+                                                            >
+                                                                <div className="slettIcon">
+                                                                    <BinSvg title="fjern" />
+                                                                </div>
+                                                                {intlHelper(intl, 'skjema.liste.fjern_dag')}
+                                                            </button>
+                                                        </div>
+                                                    </Row>
+                                                );
+                                            }
+                                        )}
+                                    </Panel>
                                 </SkjemaGruppe>
                                 <Row noGutters>
                                     <button

@@ -47,12 +47,17 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     const togglePaneler = (panel: { [key: string]: boolean }) =>
         dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
 
+    const oppdaterSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
+        const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
+        updateOMSSoknad(soknad);
+    };
+
     const validerSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
         dispatch({ type: ActionType.VALIDER_SØKNAD_START });
         const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
         validerOMSSoknad(soknad, (response, data) => {
             if (response.status === 202) {
-                updateOMSSoknad(soknad);
+                oppdaterSøknad(values);
                 dispatch({ type: ActionType.VIS_BEKREFTELSEMODAL });
             } else if (response.status === 400) {
                 dispatch({ type: ActionType.VALIDER_SØKNAD_ERROR });
@@ -78,10 +83,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     console.log({ values, actions });
                     actions.setSubmitting(false);
                 }}
+                validate={(values) => {
+                    oppdaterSøknad(values);
+                    const errors = {};
+                    return errors;
+                }}
             >
                 {({ setFieldValue, values }) => (
                     <>
-                        <Form>
+                        <Form className="korrigering">
                             <Panel border>
                                 <h3>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h3>
                                 <AlertStripeInfo>
