@@ -39,6 +39,8 @@ const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => 
     return fraværsperioder;
 };
 
+const trimString = (string: string) => string.replace(/\s+/g, '');
+
 export class OMSSoknadUt {
     mottattDato: string;
 
@@ -52,7 +54,7 @@ export class OMSSoknadUt {
 
     organisasjonsnummer: string;
 
-    arbeidsforholdId: string;
+    arbeidsforholdId: string | null;
 
     fravaersperioder: Fravaersperioder[];
 
@@ -68,7 +70,7 @@ export class OMSSoknadUt {
         this.soekerId = søkerId;
         this.journalposter = journalposter;
         this.organisasjonsnummer = values.Virksomhet;
-        this.arbeidsforholdId = values.ArbeidsforholdId;
+        this.arbeidsforholdId = values.ArbeidsforholdId ? trimString(values.ArbeidsforholdId) : null;
         this.fravaersperioder = lagFraværsperioder(values);
     }
 }
