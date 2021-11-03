@@ -70,7 +70,7 @@
     "fordeling.omfordeling.feil": "Det oppsto en feil. Prøv igjen senere.",
     "fordeling.kanikkesendeinn": "Denne journalposten kan ikke håndteres flere ganger. Ved behov for korrigering, kopier journalposten. Det vil da opprettes en ny oppgave i Los.",
     "fordeling.ikkesaksbehandler": "Du har ikke tilgang til denne applikasjonen.",
-    "fordeling.gjelderpp": "Gjelder dokumentet Pleiepenger sykt barn?",
+    "fordeling.hvaGjelderDokumentet": "Hva gjelder dokumentet?",
     "fordeling.kopiereJournal": "Kopier journalpost",
     "fordeling.kopiereJournal.hjelpetekst": "Bør krysses av dersom det er opplysninger i dokumentet som må legges inn i saken. Dette vil skape en ny Punsj-oppgave i K9-Los.",
     "fordeling.kategoriGosys": "Velg hva journalposten gjelder",
