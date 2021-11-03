@@ -1,13 +1,21 @@
 import { IPeriode } from 'app/models/types';
+import DatoMedKlokkeslett from 'app/models/types/DatoMedKlokkeslett';
+import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 
 export enum KorrigeringAvInntektsmeldingFormFields {
-    VIRKSOMHET = 'VIRKSOMHET',
-    TREKKPERIODER = 'TREKKPERIODER',
-    PERIODER_MED_REFUSJONSKRAV = 'PERIODER_MED_REFUSJONSKRAV',
+    OpplysningerOmSøknaden = 'OpplysningerOmSøknaden',
+    Virksomhet = 'Virksomhet',
+    ArbeidsforholdId = 'ArbeidsforholdId',
+    Trekkperioder = 'Trekkperioder',
+    PerioderMedRefusjonskrav = 'PerioderMedRefusjonskrav',
+    DagerMedDelvisFravær = 'DagerMedDelvisFravær',
 }
 
 export interface KorrigeringAvInntektsmeldingFormValues {
-    [KorrigeringAvInntektsmeldingFormFields.VIRKSOMHET]: string;
-    [KorrigeringAvInntektsmeldingFormFields.TREKKPERIODER]: IPeriode[];
-    [KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV]: IPeriode[];
+    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden]: DatoMedKlokkeslett;
+    [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: string;
+    [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: string;
+    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: IPeriode[];
+    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: IPeriode[];
+    [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: DatoMedTimetall[];
 }

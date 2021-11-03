@@ -31,7 +31,7 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
                             {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.info')}
                         </AlertStripeInfo>
                         <div className="soknadsperiodecontainer">
-                            <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PERIODER_MED_REFUSJONSKRAV} />
+                            <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav} />
                         </div>
                     </SkjemaGruppe>
                 </Panel>

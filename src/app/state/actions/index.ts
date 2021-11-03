@@ -3,5 +3,5 @@ export * from './FordelingActions';
 export * from './EksisterendeSoknaderActions';
 export * from './SoknaderSokActions';
 export * from './PunchActions';
-export * from './PunchFormActions';
+export * from './PSBPunchFormActions';
 export * from './SignaturActions';
