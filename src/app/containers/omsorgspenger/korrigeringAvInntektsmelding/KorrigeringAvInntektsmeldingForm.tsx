@@ -41,7 +41,7 @@ const initialFormState = {
     visBekreftelsemodal: false,
     visErDuSikkerModal: false,
     søknadErInnsendt: false,
-    innsendteFormverdier: null,
+    innsendteFormverdier: undefined,
 };
 
 const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
