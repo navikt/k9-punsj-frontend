@@ -173,16 +173,21 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                         .then((data: ValiderOMSSøknadResponse) => {
                             const valideringIBackendFeilet = !!data.feil;
                             const errors: {
+                                OpplysningerOmSøknaden: string;
                                 Trekkperioder: string[];
                                 PerioderMedRefusjonskrav: string[];
                                 DagerMedDelvisFravær: DatoMedTimetall[];
                                 Virksomhet: string;
                             } = {
+                                OpplysningerOmSøknaden: '',
                                 Trekkperioder: [],
                                 PerioderMedRefusjonskrav: [],
                                 DagerMedDelvisFravær: [],
                                 Virksomhet: '',
                             };
+                            if (!values.OpplysningerOmSøknaden.dato || !values.OpplysningerOmSøknaden.klokkeslett) {
+                                errors.OpplysningerOmSøknaden = 'Du må fylle inn dato og klokkeslett';
+                            }
                             if (!values.Virksomhet) {
                                 errors.Virksomhet = 'Du må velge en virksomhet';
                             }
@@ -223,6 +228,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                 }
                             });
                             if (
+                                !errors.OpplysningerOmSøknaden &&
                                 !errors.Trekkperioder[0] &&
                                 !errors.PerioderMedRefusjonskrav[0] &&
                                 !errors.DagerMedDelvisFravær[0] &&
