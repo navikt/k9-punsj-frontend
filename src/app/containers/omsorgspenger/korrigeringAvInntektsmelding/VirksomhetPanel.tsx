@@ -3,7 +3,7 @@ import { ExternalLink } from '@navikt/ds-icons';
 import { finnArbeidsgivere } from 'app/api/api';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
-import { Field, FieldProps } from 'formik';
+import { ErrorMessage, Field, FieldProps } from 'formik';
 import Lenke from 'nav-frontend-lenker';
 import Panel from 'nav-frontend-paneler';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -38,28 +38,39 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
             }
         >
             <Panel className="listepanel virksomhetPanel">
-                <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
-                    {({ field }: FieldProps) => (
-                        <Select
-                            bredde="l"
-                            label={intlHelper(
-                                intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet'
-                            )}
-                            {...field}
-                        >
-                            <option key="default" value="" label="" aria-label="Tomt valg" />)
-                            {arbeidsgivere.map((arbeidsgiver) => (
-                                <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
-                                    {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
-                                </option>
-                            ))}
-                        </Select>
-                    )}
-                </Field>
-                <Lenke className="eksternLenke" href={AAREG_URL}>
-                    <span>Aa-registeret</span> <ExternalLink />
-                </Lenke>
+                <div className="virksomhetContainer">
+                    <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
+                        {({ field, meta }: FieldProps) => (
+                            <Select
+                                bredde="l"
+                                label={intlHelper(
+                                    intl,
+                                    'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet'
+                                )}
+                                {...field}
+                                feil={
+                                    meta.touched &&
+                                    meta.error && (
+                                        <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.Virksomhet} />
+                                    )
+                                }
+                            >
+                                <option key="default" value="" label="" aria-label="Tomt valg" />)
+                                {arbeidsgivere.map((arbeidsgiver) => (
+                                    <option
+                                        key={arbeidsgiver.organisasjonsnummer}
+                                        value={arbeidsgiver.organisasjonsnummer}
+                                    >
+                                        {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
+                                    </option>
+                                ))}
+                            </Select>
+                        )}
+                    </Field>
+                    <Lenke className="eksternLenke" href={AAREG_URL}>
+                        <span>Aa-registeret</span> <ExternalLink />
+                    </Lenke>
+                </div>
                 <Field name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}>
                     {({ field }: FieldProps) => (
                         <Input

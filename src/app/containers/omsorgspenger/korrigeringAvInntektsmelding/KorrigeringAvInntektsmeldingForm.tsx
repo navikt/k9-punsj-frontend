@@ -1,5 +1,8 @@
-import { validerOMSSoknad, updateOMSSoknad, submitOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
-import { getEnvironmentVariable } from 'app/utils';
+import { IPeriode } from 'app/models/types';
+import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
+import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
+import { submitOMSSoknad, updateOMSSoknad, validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
+import { getEnvironmentVariable, initializeDate } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -44,6 +47,36 @@ const initialFormState = {
     innsendteFormverdier: undefined,
 };
 
+const getPeriodRange = (fom: string, tom: string) => {
+    const dager = [];
+    let currentDate = initializeDate(fom);
+    dager.push(currentDate.format('YYYY-MM-DD'));
+    while (currentDate.isBefore(tom) || currentDate.isSame(tom)) {
+        currentDate = currentDate.add(1, 'day');
+        dager.push(currentDate.format('YYYY-MM-DD'));
+    }
+    return dager;
+};
+
+const getPeriodeFeil = (value: IPeriode, response: ValiderOMSSøknadResponse) => {
+    const fom = initializeDate(value.fom).format('YYYY-MM-DD');
+    const tom = initializeDate(value.tom).format('YYYY-MM-DD');
+    const dagerIPeriode = getPeriodRange(fom, tom);
+    let feilIndex = 0;
+    const harMatchendeFeil = response.feil.some((feil) =>
+        dagerIPeriode.some((dag, dagIndex) => {
+            const feltStreng = `fraværsperioderKorrigeringIm.perioder[${dag}/${dag}]`;
+            if (feil.felt === feltStreng) {
+                feilIndex = dagIndex;
+            }
+            return feil.felt === feltStreng;
+        })
+    );
+    return harMatchendeFeil ? response.feil[feilIndex].feilmelding : null;
+};
+
+const getIinitialPeriode = () => ({ fom: '', tom: '' });
+
 const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
     søkerId,
     søknadId,
@@ -51,8 +84,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
 }): JSX.Element => {
     const intl = useIntl();
     const [state, dispatch] = useReducer(korrigeringAvInntektsmeldingReducer, initialFormState);
-    const { åpnePaneler, isLoading, visBekreftelsemodal, visErDuSikkerModal, søknadErInnsendt, innsendteFormverdier } =
-        state;
+    const { åpnePaneler, visBekreftelsemodal, visErDuSikkerModal, søknadErInnsendt, innsendteFormverdier } = state;
     const togglePaneler = (panel: { [key: string]: boolean }) =>
         dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
 
@@ -64,7 +96,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     const validerSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
         dispatch({ type: ActionType.VALIDER_SØKNAD_START });
         const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
-        validerOMSSoknad(soknad, (response, data) => {
+        validerOMSSoknad(soknad).then((response) => {
             if (response.status === 202) {
                 oppdaterSøknad(values);
                 dispatch({ type: ActionType.VIS_BEKREFTELSEMODAL });
@@ -79,7 +111,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
         submitOMSSoknad(søkerId, søknadId, (response, responseData) => {
             switch (response.status) {
                 case 202: {
-                    // setIsLoading(false);
                     dispatch({ type: ActionType.SET_SØKNAD_INNSENDT, innsendteFormverdier: formVerdier });
                     break;
                 }
@@ -97,8 +128,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
             }
         });
     };
-
-    const getIinitialPeriode = () => ({ fom: '', tom: '' });
 
     if (søknadErInnsendt && innsendteFormverdier) {
         return (
@@ -138,8 +167,71 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 }}
                 validate={(values) => {
                     oppdaterSøknad(values);
-                    const errors = {};
-                    return errors;
+                    const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
+                    return validerOMSSoknad(soknad)
+                        .then((response) => response.json())
+                        .then((data: ValiderOMSSøknadResponse) => {
+                            const valideringIBackendFeilet = !!data.feil;
+                            const errors: {
+                                Trekkperioder: string[];
+                                PerioderMedRefusjonskrav: string[];
+                                DagerMedDelvisFravær: DatoMedTimetall[];
+                                Virksomhet: string;
+                            } = {
+                                Trekkperioder: [],
+                                PerioderMedRefusjonskrav: [],
+                                DagerMedDelvisFravær: [],
+                                Virksomhet: '',
+                            };
+                            if (!values.Virksomhet) {
+                                errors.Virksomhet = 'Du må velge en virksomhet';
+                            }
+                            values.Trekkperioder.forEach((value, index) => {
+                                errors.Trekkperioder.push('');
+                                if (!value.fom && value.tom) {
+                                    errors.Trekkperioder[index] = 'Fra og med (FOM) må være satt.';
+                                } else if (!value.tom && value.fom) {
+                                    errors.Trekkperioder[index] = 'Til og med (TOM) må være satt.';
+                                }
+                                if (valideringIBackendFeilet) {
+                                    const matchendeFeil = getPeriodeFeil(value, data);
+                                    if (matchendeFeil) {
+                                        errors.Trekkperioder[index] = matchendeFeil;
+                                    }
+                                }
+                            });
+                            values.PerioderMedRefusjonskrav.forEach((value, index) => {
+                                errors.PerioderMedRefusjonskrav.push('');
+                                if (!value.fom && value.tom) {
+                                    errors.PerioderMedRefusjonskrav[index] = 'Fra og med (FOM) må være satt.';
+                                } else if (!value.tom && value.fom) {
+                                    errors.PerioderMedRefusjonskrav[index] = 'Til og med (TOM) må være satt.';
+                                }
+                                if (valideringIBackendFeilet) {
+                                    const matchendeFeil = getPeriodeFeil(value, data);
+                                    if (matchendeFeil) {
+                                        errors.PerioderMedRefusjonskrav[index] = matchendeFeil;
+                                    }
+                                }
+                            });
+                            values.DagerMedDelvisFravær.forEach((value, index) => {
+                                errors.DagerMedDelvisFravær.push({ dato: '', timer: '' });
+                                if (value.dato && !value.timer) {
+                                    errors.DagerMedDelvisFravær[index].timer = 'Du må fylle inn timer';
+                                } else if (!value.dato && value.timer) {
+                                    errors.DagerMedDelvisFravær[index].dato = 'Dato må være satt';
+                                }
+                            });
+                            if (
+                                !errors.Trekkperioder[0] &&
+                                !errors.PerioderMedRefusjonskrav[0] &&
+                                !errors.DagerMedDelvisFravær[0] &&
+                                !errors.Virksomhet
+                            ) {
+                                return {};
+                            }
+                            return errors;
+                        });
                 }}
             >
                 {({ setFieldValue, values }) => (
