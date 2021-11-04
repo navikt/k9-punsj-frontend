@@ -34,6 +34,14 @@ interface KorrigeringAvInntektsmeldingFormProps {
     journalposter: string[];
 }
 
+interface FormErrors {
+    OpplysningerOmSøknaden: string;
+    Trekkperioder: string[];
+    PerioderMedRefusjonskrav: string[];
+    DagerMedDelvisFravær: DatoMedTimetall[];
+    Virksomhet: string;
+}
+
 const initialFormState = {
     åpnePaneler: {
         trekkperioderPanel: false,
@@ -76,6 +84,14 @@ const getPeriodeFeil = (value: IPeriode, response: ValiderOMSSøknadResponse) =>
 };
 
 const getIinitialPeriode = () => ({ fom: '', tom: '' });
+
+const harFormFeil = (errors: FormErrors) =>
+    errors.OpplysningerOmSøknaden ||
+    errors.Trekkperioder[0] ||
+    errors.PerioderMedRefusjonskrav[0] ||
+    errors.DagerMedDelvisFravær[0].dato ||
+    errors.DagerMedDelvisFravær[0].timer ||
+    errors.Virksomhet;
 
 const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
     søkerId,
@@ -172,13 +188,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                         .then((response) => response.json())
                         .then((data: ValiderOMSSøknadResponse) => {
                             const valideringIBackendFeilet = !!data.feil;
-                            const errors: {
-                                OpplysningerOmSøknaden: string;
-                                Trekkperioder: string[];
-                                PerioderMedRefusjonskrav: string[];
-                                DagerMedDelvisFravær: DatoMedTimetall[];
-                                Virksomhet: string;
-                            } = {
+                            const errors: FormErrors = {
                                 OpplysningerOmSøknaden: '',
                                 Trekkperioder: [],
                                 PerioderMedRefusjonskrav: [],
@@ -227,13 +237,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     errors.DagerMedDelvisFravær[index].dato = 'Dato må være satt';
                                 }
                             });
-                            if (
-                                !errors.OpplysningerOmSøknaden &&
-                                !errors.Trekkperioder[0] &&
-                                !errors.PerioderMedRefusjonskrav[0] &&
-                                !errors.DagerMedDelvisFravær[0] &&
-                                !errors.Virksomhet
-                            ) {
+                            if (!harFormFeil(errors)) {
                                 return {};
                             }
                             return errors;
