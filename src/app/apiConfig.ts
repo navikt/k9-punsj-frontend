@@ -30,6 +30,7 @@ export enum ApiPath {
     K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
     GOSYS_GJELDER = '/gosys/gjelder',
     FINN_ARBEIDSGIVERE = '/arbeidsgivere',
+    OMS_FINN_ARBEIDSFORHOLD = '/omsorgspenger-soknad/k9sak/arbeidsforholdIder',
     SØK_ORGNUMMER = '/arbeidsgiver',
     OMS_EKSISTERENDE_SOKNADER_FIND = '/omsorgspenger-soknad/mappe',
     OMS_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
