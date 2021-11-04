@@ -114,7 +114,7 @@ describe('Fordeling', () => {
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
     });
 
-    it('Viser radiopanel for identsjekk når bruker velger pleiepenger', () => {
+    it.skip('Viser radiopanel for identsjekk når bruker velger pleiepenger', () => {
         const fordeling = setupFordeling();
         fordeling
             .find('RadioPanelGruppe')
@@ -206,7 +206,7 @@ describe('Fordeling', () => {
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });
 
-    it('Viser feilmelding når journalforingsoppgave i gosys ikke kan opprettes', () => {
+    it.skip('Viser feilmelding når journalforingsoppgave i gosys ikke kan opprettes', () => {
         const fordeling = setupFordeling({}, {}, {}, { kanOpprettesJournalføringsoppgave: false });
         fordeling
             .find('RadioPanelGruppe')
