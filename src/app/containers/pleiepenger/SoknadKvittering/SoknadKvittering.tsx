@@ -15,10 +15,10 @@ import {
     getLocaleFromSessionStorage,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
-    formattereDatoIArray
-} from "../../../utils";
-import VisningAvPerioderSoknadKvittering from "./Komponenter/VisningAvPerioderSoknadKvittering";
-import {ICountry} from "../../../components/country-select/CountrySelect";
+    formattereDatoIArray,
+} from '../../../utils';
+import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
+import { ICountry } from '../../../components/country-select/CountrySelect';
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
@@ -36,7 +36,8 @@ interface IOwnProps {
     annenSokerIdent?: string | null;
 }
 
-const sjekkHvisPerioderEksisterer = (property: string, object: any) => sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0
+const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
+    sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
 const formattereLandTilNavnIObjekt = (
     perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
@@ -53,12 +54,12 @@ const formattereLandTilNavnIObjekt = (
 export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
-        kopiAvPerioder[periode].jobberNormaltTimerPerDag = formatereTekstMedTimerOgMinutter(
-            kopiAvPerioder[periode].jobberNormaltTimerPerDag
-        );
-        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = formatereTekstMedTimerOgMinutter(
-            kopiAvPerioder[periode].faktiskArbeidTimerPerDag
-        );
+        kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
+            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag)
+            : '';
+        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = kopiAvPerioder[periode].faktiskArbeidTimerPerDag
+            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].faktiskArbeidTimerPerDag)
+            : '';
     });
     return kopiAvPerioder;
 };
@@ -72,7 +73,6 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
     });
     return kopiAvPerioder;
 };
-
 
 export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
