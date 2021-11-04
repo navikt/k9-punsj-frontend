@@ -1,6 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { OMSSoknadUt } from 'app/models/types/OMSSoknadUt';
-import { post, put } from 'app/utils';
+import { apiUrl, initializeDate, post, put } from 'app/utils';
 
 export function submitSoknad(norskIdent: string, soeknadId: string) {
     // return (dispatch: any) => {
@@ -63,4 +63,20 @@ export function submitOMSSoknad(
 
 export function updateOMSSoknad(soknad: OMSSoknadUt) {
     put(ApiPath.OMS_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad);
+}
+
+export function hentArbeidsgivereMedId(søkerId: string, årstallForKorrigering: string) {
+    const dato = initializeDate(årstallForKorrigering).format('YYYY-MM-DD');
+    return fetch(apiUrl(ApiPath.OMS_FINN_ARBEIDSFORHOLD), {
+        method: 'post',
+        credentials: 'include',
+        body: JSON.stringify({
+            brukerIdent: søkerId,
+            periodeDto: {
+                fom: dato,
+                tom: dato,
+            },
+        }),
+        headers: { 'Content-Type': 'application/json', 'X-Nav-NorskIdent': søkerId },
+    });
 }
