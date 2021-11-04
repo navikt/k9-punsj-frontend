@@ -1,94 +1,95 @@
 @import (reference) '@{coreModulePath}nav-frontend-core/less/_variabler';
 
 .fordeling-container {
-  flex-basis:     100%;
-  display:        flex;
-  flex-direction: row;
-  height: 100%;
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
 }
 
 .fordeling-page {
-  & button {
-    margin-top: .5rem;
-  }
-
-
-  .fordeling-page__options {
-    & > label {
-      margin-bottom: 0.5em;
-    }
-    legend{
-      margin-bottom: 0.5rem !important;
+    max-width: 500px;
+    & button {
+        margin-top: 0.5rem;
     }
 
-    .omsorgspenger-radios {
-      margin: 1em 0 1em 1em;
+    .fordeling-page__options {
+        & > label {
+            margin-bottom: 0.5em;
+        }
+        legend {
+            margin-bottom: 0.5rem !important;
+        }
 
-      label {
-        margin: 0.3em 0;
-      }
+        .omsorgspenger-radios {
+            margin: 1em 0 1em 1em;
+
+            label {
+                margin: 0.3em 0;
+            }
+        }
     }
-  }
-  .infotrygd_info, .fordeling-page__kanIkkeOppretteJPIGosys {
-    width: fit-content;
-    margin: 1rem 0 1rem 0;
-  }
-
-  .fordeling-page__to-sokere-i-journalpost > *{
-    margin-bottom: 1rem;
-  }
-
-  .fordeling-page__sjekk-til-K9-journalpost-stottes-ikke{
-    .alertstripe{
-      margin-left: 0rem;
+    .infotrygd_info,
+    .fordeling-page__kanIkkeOppretteJPIGosys {
+        width: fit-content;
+        margin: 1rem 0 1rem 0;
     }
-  }
 
-  .fordeling-page__gosysGjelderKategorier > .alertstripe{
-      margin-left: 0;
-  }
+    .fordeling-page__to-sokere-i-journalpost > * {
+        margin-bottom: 1rem;
+    }
+
+    .fordeling-page__sjekk-til-K9-journalpost-stottes-ikke {
+        .alertstripe {
+            margin-left: 0rem;
+        }
+    }
+
+    .fordeling-page__gosysGjelderKategorier > .alertstripe {
+        margin-left: 0;
+    }
 }
 
-.journalikkestottetkopi-checkboks{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-items: center;
+.journalikkestottetkopi-checkboks {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
 
-  .journalikkestottetkopi-checkboks__hjelpetekst{
-    margin-left: 0.5rem;
-    :last-child {
-      max-width: 30rem;
+    .journalikkestottetkopi-checkboks__hjelpetekst {
+        margin-left: 0.5rem;
+        :last-child {
+            max-width: 30rem;
+        }
+        button {
+            margin-top: 0rem;
+        }
     }
-    button{
-      margin-top: 0rem;
-    }
-  }
 }
 
 .alertstripe {
-  margin: 1rem;
-  .alertstripe__tekst {
-    max-width: unset;
-  }
+    margin: 1rem;
+    .alertstripe__tekst {
+        max-width: unset;
+    }
 }
 
-.fyllUtIdentAnnetBarnContainer{
-  display: flex;
-  align-items: center;
-
-  .dobbelSjekkIdent{
+.fyllUtIdentAnnetBarnContainer {
     display: flex;
     align-items: center;
-    word-wrap: break-word;
-    padding-left: 1rem;
-    margin-top: 1.75rem;
-    :first-child{
-      width: 24px;
-      height: 28px;
+
+    .dobbelSjekkIdent {
+        display: flex;
+        align-items: center;
+        word-wrap: break-word;
+        padding-left: 1rem;
+        margin-top: 1.75rem;
+        :first-child {
+            width: 24px;
+            height: 28px;
+        }
+        p {
+            padding-left: 0.5rem;
+        }
     }
-    p{
-      padding-left: 0.5rem;
-    }
-  }
 }

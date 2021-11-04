@@ -7,14 +7,14 @@ export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
 
 export enum ApiPath {
     EKSISTERENDE_SOKNADER_SOK = '/mapper',
-    EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',
-    SOKNAD_GET = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
+    PSB_EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',
+    PSB_SOKNAD_GET = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
     BARN_GET = '/barn',
-    SOKNAD_CREATE = '/pleiepenger-sykt-barn-soknad',
-    SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
-    SOKNAD_VALIDER = '/pleiepenger-sykt-barn-soknad/valider',
-    SOKNAD_SUBMIT = '/pleiepenger-sykt-barn-soknad/send',
-    FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
+    PSB_SOKNAD_CREATE = '/pleiepenger-sykt-barn-soknad',
+    PSB_SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
+    PSB_SOKNAD_VALIDER = '/pleiepenger-sykt-barn-soknad/valider',
+    PSB_SOKNAD_SUBMIT = '/pleiepenger-sykt-barn-soknad/send',
+    PSB_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
     SJEKK_OM_SKAL_TIL_K9SAK = '/journalpost/skaltilk9sak',
     JOURNALPOST_SETT_PAA_VENT = '/journalpost/vent/{journalpostId}',
     JOURNALPOST_HENT = '/journalpost/hent',
@@ -31,6 +31,14 @@ export enum ApiPath {
     GOSYS_GJELDER = '/gosys/gjelder',
     FINN_ARBEIDSGIVERE = '/arbeidsgivere',
     SØK_ORGNUMMER = '/arbeidsgiver',
+    OMS_EKSISTERENDE_SOKNADER_FIND = '/omsorgspenger-soknad/mappe',
+    OMS_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
+    OMS_MAPPE_SOK = '/k9-sak/omsorgspenger-soknad',
+    OMS_SOKNAD_CREATE = '/omsorgspenger-soknad',
+    OMS_SOKNAD_GET = '/omsorgspenger-soknad/mappe/{id}',
+    OMS_SOKNAD_SUBMIT = '/omsorgspenger-soknad/send',
+    OMS_SOKNAD_UPDATE = '/omsorgspenger-soknad/oppdater',
+    OMS_SOKNAD_VALIDER = '/omsorgspenger-soknad/valider',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

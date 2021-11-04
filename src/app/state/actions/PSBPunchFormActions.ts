@@ -221,7 +221,7 @@ export const updateSoknadErrorAction = (error: IError): IUpdateSoknadErrorAction
 export function getSoknad(id: string) {
     return (dispatch: any) => {
         dispatch(getSoknadLoadingAction());
-        return get(ApiPath.SOKNAD_GET, { id }, undefined, (response, soknad) => {
+        return get(ApiPath.PSB_SOKNAD_GET, { id }, undefined, (response, soknad) => {
             if (response.ok || response.status === 400) {
                 return dispatch(setSoknadAction(soknad));
             }
@@ -233,7 +233,7 @@ export function getSoknad(id: string) {
 export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {
     return (dispatch: any) => {
         dispatch(updateSoknadRequestAction());
-        return put(ApiPath.SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, (response) => {
+        return put(ApiPath.PSB_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, (response) => {
             switch (response.status) {
                 case 200:
                     return response.json().then((mappe) => {
@@ -273,7 +273,7 @@ export function updateSoknader(
                 },
             },
         };
-        return put(ApiPath.SOKNAD_UPDATE, { id: mappeid }, request, (response) => {
+        return put(ApiPath.PSB_SOKNAD_UPDATE, { id: mappeid }, request, (response) => {
             switch (response.status) {
                 case 200:
                     return response.json().then((mappe) => {
@@ -350,7 +350,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
 
         dispatch(submitSoknadRequestAction());
         post(
-            ApiPath.SOKNAD_SUBMIT,
+            ApiPath.PSB_SOKNAD_SUBMIT,
             { id: soeknadId },
             { 'X-Nav-NorskIdent': norskIdent },
             requestBody,
@@ -376,7 +376,7 @@ export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
     return (dispatch: any) => {
         dispatch(validerSoknadRequestAction());
         post(
-            ApiPath.SOKNAD_VALIDER,
+            ApiPath.PSB_SOKNAD_VALIDER,
             { id: soknad.soeknadId },
             { 'X-Nav-NorskIdent': norskIdent },
             soknad,

@@ -1,4 +1,11 @@
-import { JaNei, Sakstype, TilgjengeligSakstype } from 'app/models/enums';
+import {
+    FordelingDokumenttype,
+    JaNei,
+    Sakstype,
+    TilgjengeligSakstype,
+    pleiepengerSakstyper,
+    korrigeringAvInntektsmeldingSakstyper,
+} from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -36,7 +43,7 @@ import { IIdentState } from '../../../models/types/IdentState';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
-import { skalViseFeilmelding, visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
+import { erUgyldigIdent, visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import { SokersBarn } from './Komponenter/SokersBarn';
@@ -93,8 +100,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
 
-    const [gjelderPP, setGjelderPP] = useState<JaNei | undefined>(undefined);
-
+    const [dokumenttype, setDokumenttype] = useState<FordelingDokumenttype>();
     const [visSakstypeValg, setVisSakstypeValg] = useState<boolean>(false);
 
     const [sokersIdent, setSokersIdent] = useState<string>('');
@@ -180,19 +186,19 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    const handleGjelderPP = (jn: JaNei) => {
-        if (jn === JaNei.NEI) {
+    const handleDokumenttype = (type: FordelingDokumenttype) => {
+        if (type === FordelingDokumenttype.ANNET) {
             if (!identState.ident1 && !!journalpost?.norskIdent) {
                 setSokersIdent(journalpost?.norskIdent);
                 props.setIdentAction(journalpost?.norskIdent, identState.ident2);
             } else {
                 setSokersIdent(identState.ident1);
             }
-        } else if (jn === JaNei.JA) {
+        } else {
             setSokersIdent('');
             props.setIdentAction('', identState.ident2);
         }
-        setGjelderPP(jn);
+        setDokumenttype(type);
     };
 
     useEffect(() => {
@@ -256,17 +262,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         )}
                         <div>
                             <RadioPanelGruppe
-                                className="horizontalRadios"
                                 name="ppsjekk"
-                                radios={Object.values(JaNei).map((jn) => ({
-                                    label: intlHelper(intl, jn),
-                                    value: jn,
+                                radios={Object.values(FordelingDokumenttype).map((type) => ({
+                                    label: intlHelper(intl, type),
+                                    value: type,
                                 }))}
                                 legend={intlHelper(intl, 'fordeling.gjelderpp')}
-                                checked={gjelderPP}
-                                onChange={(event) => handleGjelderPP((event.target as HTMLInputElement).value as JaNei)}
+                                checked={dokumenttype}
+                                onChange={(event) =>
+                                    handleDokumenttype(
+                                        (event.target as HTMLInputElement).value as FordelingDokumenttype
+                                    )
+                                }
                             />
-                            {gjelderPP === JaNei.NEI && (
+                            {dokumenttype === FordelingDokumenttype.ANNET && (
                                 <>
                                     <VerticalSpacer sixteenPx />
                                     {!kanJournalforingsoppgaveOpprettesiGosys && (
@@ -290,8 +299,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 className="bold-label ident-soker-1"
                                                 maxLength={11}
                                                 feil={
-                                                    skalViseFeilmelding(identState.ident1) ||
-                                                    identState.ident1.length <= 0
+                                                    erUgyldigIdent(identState.ident1) || identState.ident1.length <= 0
                                                         ? intlHelper(intl, 'ident.feil.ugyldigident')
                                                         : undefined
                                                 }
@@ -303,7 +311,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 mini
                                                 disabled={
                                                     !identState.ident1 ||
-                                                    (!!identState.ident1 && !!skalViseFeilmelding(identState.ident1)) ||
+                                                    (!!identState.ident1 && !!erUgyldigIdent(identState.ident1)) ||
                                                     !fordelingState.valgtGosysKategori
                                                 }
                                                 onClick={() =>
@@ -320,7 +328,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     )}
                                 </>
                             )}
-                            {gjelderPP === JaNei.JA && (
+                            {(dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+                                dokumenttype === FordelingDokumenttype.KORRIGERING_IM) && (
                                 <>
                                     <VerticalSpacer sixteenPx />
                                     <RadioPanelGruppe
@@ -357,7 +366,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         className="bold-label ident-soker-1"
                                         maxLength={11}
                                         feil={
-                                            skalViseFeilmelding(identState.ident1)
+                                            erUgyldigIdent(identState.ident1)
                                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                                 : undefined
                                         }
@@ -365,7 +374,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     />
                                 </>
                             )}
-                            {gjelderPP === JaNei.JA && !!journalpost?.kanKopieres && (
+                            {dokumenttype === FordelingDokumenttype.PLEIEPENGER && !!journalpost?.kanKopieres && (
                                 <>
                                     <VerticalSpacer eightPx />
                                     <Checkbox
@@ -407,12 +416,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </>
                             )}
                             <VerticalSpacer eightPx />
-                            {gjelderPP === JaNei.JA && (
+                            {(dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+                                dokumenttype === FordelingDokumenttype.KORRIGERING_IM) && (
                                 <>
                                     <VerticalSpacer sixteenPx />
                                     {visSokersBarn &&
+                                        dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
                                         !!identState.ident1 &&
-                                        !skalViseFeilmelding(identState.ident1) && (
+                                        !erUgyldigIdent(identState.ident1) && (
                                             <SokersBarn
                                                 sokersIdent={identState.ident1}
                                                 barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
@@ -425,8 +436,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
-                                                skalViseFeilmelding(identState.ident2) ||
-                                                (!identState.ident2 && !barnetHarIkkeFnr)
+                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                                (erUgyldigIdent(identState.ident2) ||
+                                                    (!identState.ident2 && !barnetHarIkkeFnr))
                                             }
                                         >
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
@@ -442,7 +454,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     legend={intlHelper(intl, 'fordeling.overskrift')}
                                     className="fordeling-page__options"
                                 >
-                                    {Object.keys(TilgjengeligSakstype).map((key) => {
+                                    {(
+                                        (dokumenttype === FordelingDokumenttype.KORRIGERING_IM &&
+                                            korrigeringAvInntektsmeldingSakstyper) ||
+                                        pleiepengerSakstyper
+                                    ).map((key) => {
                                         if (
                                             key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES &&
                                             !erJournalfoertEllerFerdigstilt
