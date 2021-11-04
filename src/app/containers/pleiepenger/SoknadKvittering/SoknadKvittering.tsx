@@ -56,10 +56,10 @@ export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitt
     Object.keys(perioder).forEach((periode) => {
         kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
             ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag)
-            : '';
+            : '0';
         kopiAvPerioder[periode].faktiskArbeidTimerPerDag = kopiAvPerioder[periode].faktiskArbeidTimerPerDag
             ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].faktiskArbeidTimerPerDag)
-            : '';
+            : '0';
     });
     return kopiAvPerioder;
 };
