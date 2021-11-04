@@ -14,6 +14,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { OMSSoknadUt } from '../../../models/types/OMSSoknadUt';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ErDuSikkerModal from './ErDuSikkerModal';
+import { getFormErrors } from './korrigeringAvFormValidering';
 import ActionType from './korrigeringAvInntektsmeldingActions';
 import './KorrigeringAvInntektsmeldingForm.less';
 import {
@@ -34,14 +35,6 @@ interface KorrigeringAvInntektsmeldingFormProps {
     journalposter: string[];
 }
 
-interface FormErrors {
-    OpplysningerOmSøknaden: string;
-    Trekkperioder: string[];
-    PerioderMedRefusjonskrav: string[];
-    DagerMedDelvisFravær: DatoMedTimetall[];
-    Virksomhet: string;
-}
-
 const initialFormState = {
     åpnePaneler: {
         trekkperioderPanel: false,
@@ -55,43 +48,7 @@ const initialFormState = {
     innsendteFormverdier: undefined,
 };
 
-const getPeriodRange = (fom: string, tom: string) => {
-    const dager = [];
-    let currentDate = initializeDate(fom);
-    dager.push(currentDate.format('YYYY-MM-DD'));
-    while (currentDate.isBefore(tom) || currentDate.isSame(tom)) {
-        currentDate = currentDate.add(1, 'day');
-        dager.push(currentDate.format('YYYY-MM-DD'));
-    }
-    return dager;
-};
-
-const getPeriodeFeil = (value: IPeriode, response: ValiderOMSSøknadResponse) => {
-    const fom = initializeDate(value.fom).format('YYYY-MM-DD');
-    const tom = initializeDate(value.tom).format('YYYY-MM-DD');
-    const dagerIPeriode = getPeriodRange(fom, tom);
-    let feilIndex = 0;
-    const harMatchendeFeil = response.feil.some((feil) =>
-        dagerIPeriode.some((dag, dagIndex) => {
-            const feltStreng = `fraværsperioderKorrigeringIm.perioder[${dag}/${dag}]`;
-            if (feil.felt === feltStreng) {
-                feilIndex = dagIndex;
-            }
-            return feil.felt === feltStreng;
-        })
-    );
-    return harMatchendeFeil ? response.feil[feilIndex].feilmelding : null;
-};
-
-const getIinitialPeriode = () => ({ fom: '', tom: '' });
-
-const harFormFeil = (errors: FormErrors) =>
-    errors.OpplysningerOmSøknaden ||
-    errors.Trekkperioder[0] ||
-    errors.PerioderMedRefusjonskrav[0] ||
-    errors.DagerMedDelvisFravær[0].dato ||
-    errors.DagerMedDelvisFravær[0].timer ||
-    errors.Virksomhet;
+const getInitialPeriode = () => ({ fom: '', tom: '' });
 
 const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
     søkerId,
@@ -172,8 +129,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden]: { dato: '', klokkeslett: '' },
                     [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
                     [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
-                    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getIinitialPeriode()],
-                    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getIinitialPeriode()],
+                    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getInitialPeriode()],
+                    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getInitialPeriode()],
                     [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
                 }}
                 onSubmit={(values, actions) => {
@@ -187,59 +144,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     return validerOMSSoknad(soknad)
                         .then((response) => response.json())
                         .then((data: ValiderOMSSøknadResponse) => {
-                            const valideringIBackendFeilet = !!data.feil;
-                            const errors: FormErrors = {
-                                OpplysningerOmSøknaden: '',
-                                Trekkperioder: [],
-                                PerioderMedRefusjonskrav: [],
-                                DagerMedDelvisFravær: [],
-                                Virksomhet: '',
-                            };
-                            if (!values.OpplysningerOmSøknaden.dato || !values.OpplysningerOmSøknaden.klokkeslett) {
-                                errors.OpplysningerOmSøknaden = 'Du må fylle inn dato og klokkeslett';
-                            }
-                            if (!values.Virksomhet) {
-                                errors.Virksomhet = 'Du må velge en virksomhet';
-                            }
-                            values.Trekkperioder.forEach((value, index) => {
-                                errors.Trekkperioder.push('');
-                                if (!value.fom && value.tom) {
-                                    errors.Trekkperioder[index] = 'Fra og med (FOM) må være satt.';
-                                } else if (!value.tom && value.fom) {
-                                    errors.Trekkperioder[index] = 'Til og med (TOM) må være satt.';
-                                }
-                                if (valideringIBackendFeilet) {
-                                    const matchendeFeil = getPeriodeFeil(value, data);
-                                    if (matchendeFeil) {
-                                        errors.Trekkperioder[index] = matchendeFeil;
-                                    }
-                                }
-                            });
-                            values.PerioderMedRefusjonskrav.forEach((value, index) => {
-                                errors.PerioderMedRefusjonskrav.push('');
-                                if (!value.fom && value.tom) {
-                                    errors.PerioderMedRefusjonskrav[index] = 'Fra og med (FOM) må være satt.';
-                                } else if (!value.tom && value.fom) {
-                                    errors.PerioderMedRefusjonskrav[index] = 'Til og med (TOM) må være satt.';
-                                }
-                                if (valideringIBackendFeilet) {
-                                    const matchendeFeil = getPeriodeFeil(value, data);
-                                    if (matchendeFeil) {
-                                        errors.PerioderMedRefusjonskrav[index] = matchendeFeil;
-                                    }
-                                }
-                            });
-                            values.DagerMedDelvisFravær.forEach((value, index) => {
-                                errors.DagerMedDelvisFravær.push({ dato: '', timer: '' });
-                                if (value.dato && !value.timer) {
-                                    errors.DagerMedDelvisFravær[index].timer = 'Du må fylle inn timer';
-                                } else if (!value.dato && value.timer) {
-                                    errors.DagerMedDelvisFravær[index].dato = 'Dato må være satt';
-                                }
-                            });
-                            if (!harFormFeil(errors)) {
-                                return {};
-                            }
+                            const errors = getFormErrors(values, data);
                             return errors;
                         });
                 }}
@@ -261,7 +166,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         togglePaneler({ trekkperioderPanel: toggledPanel });
                                         if (!toggledPanel) {
                                             setFieldValue(KorrigeringAvInntektsmeldingFormFields.Trekkperioder, [
-                                                getIinitialPeriode(),
+                                                getInitialPeriode(),
                                             ]);
                                         }
                                     }}
@@ -274,7 +179,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         if (!toggledPanel) {
                                             setFieldValue(
                                                 KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav,
-                                                [getIinitialPeriode()]
+                                                [getInitialPeriode()]
                                             );
                                         }
                                     }}
