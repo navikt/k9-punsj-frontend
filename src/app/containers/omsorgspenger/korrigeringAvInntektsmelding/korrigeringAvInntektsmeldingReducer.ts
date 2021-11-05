@@ -14,12 +14,15 @@ interface State {
     visErDuSikkerModal?: boolean;
     søknadErInnsendt?: boolean;
     innsendteFormverdier?: KorrigeringAvInntektsmeldingFormValues;
+    formError?: string;
+    hasSubmitted?: boolean;
 }
 interface Action {
     type: ActionType;
     åpnePaneler?: Paneler;
     isLoading?: boolean;
     innsendteFormverdier?: KorrigeringAvInntektsmeldingFormValues;
+    formError?: string;
 }
 
 const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): State => {
@@ -28,7 +31,7 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
             return { ...state, åpnePaneler: action.åpnePaneler || state.åpnePaneler };
         }
         case ActionType.VALIDER_SØKNAD_START: {
-            return { ...state, isLoading: true };
+            return { ...state, isLoading: true, hasSubmitted: true };
         }
         case ActionType.VALIDER_SØKNAD_SUCCESS: {
             return { ...state, isLoading: false };
@@ -55,6 +58,9 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
                 visErDuSikkerModal: false,
                 innsendteFormverdier: action.innsendteFormverdier,
             };
+        }
+        case ActionType.SET_FORM_ERROR: {
+            return { ...state, formError: action.formError };
         }
         default:
             return state;

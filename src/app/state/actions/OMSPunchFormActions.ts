@@ -2,37 +2,37 @@ import { ApiPath } from 'app/apiConfig';
 import { OMSSoknadUt } from 'app/models/types/OMSSoknadUt';
 import { apiUrl, initializeDate, post, put } from 'app/utils';
 
-export function submitSoknad(norskIdent: string, soeknadId: string) {
-    // return (dispatch: any) => {
-    //     const requestBody: ISendSoknad = {
-    //         norskIdent,
-    //         soeknadId,
-    //     };
-    //     dispatch(submitSoknadRequestAction());
-    //     post(
-    //         ApiPath.PSB_SOKNAD_SUBMIT,
-    //         { id: soeknadId },
-    //         { 'X-Nav-NorskIdent': norskIdent },
-    //         requestBody,
-    //         (response, responseData) => {
-    //             switch (response.status) {
-    //                 case 202:
-    //                     return dispatch(submitSoknadSuccessAction(responseData, response.headers.get('Location')));
-    //                 case 400:
-    //                     return dispatch(submitSoknadUncompleteAction(responseData.feil));
-    //                 case 409:
-    //                     return dispatch(submitSoknadConflictAction());
-    //                 default:
-    //                     return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
-    //             }
-    //         }
-    //     );
-    // };
+async function postPromise<BodyType>(
+    path: ApiPath,
+    parameters?: any,
+    headers?: HeadersInit,
+    body?: BodyType,
+    callbackIfError?: (error: any) => any
+): Promise<any> {
+    try {
+        const response = await fetch(apiUrl(path, parameters), {
+            method: 'post',
+            credentials: 'include',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json', ...headers },
+        });
+        return response;
+    } catch (error) {
+        if (callbackIfError) {
+            return callbackIfError(error);
+        }
+        return error;
+    }
 }
 
-export function validerOMSSoknad(soknad: OMSSoknadUt, callback: (response: Response, data: any) => void) {
+export function validerOMSSoknad(soknad: OMSSoknadUt) {
     const norskIdent: string = !soknad.soeknadId ? '' : soknad.soeknadId;
-    post(ApiPath.OMS_SOKNAD_VALIDER, { id: soknad.soeknadId }, { 'X-Nav-NorskIdent': norskIdent }, soknad, callback);
+    return postPromise(
+        ApiPath.OMS_SOKNAD_VALIDER,
+        { id: soknad.soeknadId },
+        { 'X-Nav-NorskIdent': norskIdent },
+        soknad
+    );
 }
 
 export function createOMSSoknad(

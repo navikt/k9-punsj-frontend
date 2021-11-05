@@ -8,5 +8,6 @@ enum ActionType {
     VIS_ER_DU_SIKKER_MODAL = 'visErDuSikkerModal',
     SKJUL_ER_DU_SIKKER_MODAL = 'skjulErDuSikkerModal',
     SET_SØKNAD_INNSENDT = 'setSøknadInnsendt',
+    SET_FORM_ERROR = 'setFormError',
 }
 export default ActionType;
