@@ -62,6 +62,12 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
         }
     }, [values.Virksomhet]);
 
+    useEffect(() => {
+        if (values.Virksomhet !== previousValgtVirksomhet) {
+            setFieldValue(KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId, '');
+        }
+    }, [values.Virksomhet]);
+
     const finnArbeidsforholdIdForValgtArbeidsgiver = () =>
         arbeidsgivereMedId
             ?.filter((item) => {
