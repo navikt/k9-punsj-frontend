@@ -100,7 +100,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                                 meta.error && <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.Virksomhet} />
                             }
                         >
-                            <option disabled key="default" value="" label="" aria-label="Tomt valg" />)
+                            <option disabled key="default" value="" label="">
+                                Velg
+                            </option>
                             {arbeidsgivereMedNavn.map((arbeidsgiver) => (
                                 <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
                                     {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
@@ -123,7 +125,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
                             {...field}
                         >
-                            <option disabled key="default" value="" label="" aria-label="Tomt valg" />)
+                            <option disabled key="default" value="" label="">
+                                Velg
+                            </option>
                             {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId) => (
                                 <option key={arbeidsforholdId} value={arbeidsforholdId}>
                                     {arbeidsforholdId}

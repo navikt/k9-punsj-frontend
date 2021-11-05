@@ -170,11 +170,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                         <Form className="korrigering">
                             <Panel border>
                                 <h3>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h3>
-                                <AlertStripeInfo>
+                                <AlertStripeInfo className="korrigering__headerInfo">
                                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
                                 </AlertStripeInfo>
-                                <OpplysningerOmSøknaden />
-                                <VirksomhetPanel søkerId={søkerId} />
+                                <div className="korrigering__opplysningerOmSøknadenContainer">
+                                    <OpplysningerOmSøknaden />
+                                </div>
+                                <div className="korrigering__virksomhetpanelContainer">
+                                    <VirksomhetPanel søkerId={søkerId} />
+                                </div>
                                 <TrekkPerioder
                                     isPanelOpen={åpnePaneler.trekkperioderPanel}
                                     togglePanel={() => {
