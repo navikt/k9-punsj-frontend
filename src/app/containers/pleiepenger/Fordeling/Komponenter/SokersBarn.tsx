@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -83,10 +82,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props: I
     };
 
     const vis =
-        visSokersBarn &&
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
-        !!identState.ident1 &&
-        !erUgyldigIdent(identState.ident1);
+        visSokersBarn && dokumenttype === FordelingDokumenttype.PLEIEPENGER && !erUgyldigIdent(identState.ident1);
 
     if (!vis) {
         return null;
@@ -138,7 +134,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props: I
                             className="bold-label ident-soker-2"
                             maxLength={11}
                             feil={
-                                erUgyldigIdent(identState.ident2)
+                                identState.ident2 && erUgyldigIdent(identState.ident2)
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }

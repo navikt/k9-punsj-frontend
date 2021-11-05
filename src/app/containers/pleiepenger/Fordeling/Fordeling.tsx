@@ -108,6 +108,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
 
+    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
@@ -184,6 +186,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setSokersIdent('');
             setIdentAction('', identState.ident2);
         }
+        setRiktigIdentIJournalposten(undefined);
         setDokumenttype(type);
     };
 
@@ -284,6 +287,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setSokersIdent={setSokersIdent}
                                 setIdentAction={setIdentAction}
                                 setErIdent1Bekreftet={setErIdent1Bekreftet}
+                                riktigIdentIJournalposten={riktigIdentIJournalposten}
+                                setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                             />
                             <ToSoekere
                                 journalpost={journalpost}
@@ -309,14 +314,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
-                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
-                                                (erUgyldigIdent(identState.ident2) ||
-                                                    (!identState.ident2 && !barnetHarIkkeFnr))
+                                                (dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                                    (erUgyldigIdent(identState.ident2) ||
+                                                        (!identState.ident2 && !barnetHarIkkeFnr))) ||
+                                                erUgyldigIdent(identState.ident1)
                                             }
                                         >
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
                                         </Knapp>
                                     )}
+                                    {console.log(erUgyldigIdent(identState.ident1))}
                                 </>
                             )}
                         </div>
