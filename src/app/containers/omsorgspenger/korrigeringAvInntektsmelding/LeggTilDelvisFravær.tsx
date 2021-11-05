@@ -3,7 +3,7 @@ import BinSvg from 'app/assets/SVG/BinSVG';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -65,11 +65,14 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                         }}
                                                                         className="dateInput"
                                                                         label={intlHelper(intl, 'skjema.dato')}
+                                                                        errorMessage={
+                                                                            <ErrorMessage name={`${fieldName}.dato`} />
+                                                                        }
                                                                     />
                                                                 )}
                                                             </Field>
                                                             <Field name={`${fieldName}.timer`}>
-                                                                {({ field }: FieldProps) => (
+                                                                {({ field, meta }: FieldProps) => (
                                                                     <Input
                                                                         {...field}
                                                                         label={intlHelper(
@@ -77,6 +80,14 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                             'skjema.perioder.timer'
                                                                         )}
                                                                         bredde="XS"
+                                                                        feil={
+                                                                            meta.error &&
+                                                                            meta.touched && (
+                                                                                <ErrorMessage
+                                                                                    name={`${fieldName}.timer`}
+                                                                                />
+                                                                            )
+                                                                        }
                                                                     />
                                                                 )}
                                                             </Field>

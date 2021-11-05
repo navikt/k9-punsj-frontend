@@ -1,4 +1,6 @@
-import { validerOMSSoknad, updateOMSSoknad, submitOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
+import Feilmelding from 'app/components/Feilmelding';
+import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
+import { submitOMSSoknad, updateOMSSoknad, validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
@@ -11,6 +13,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { OMSSoknadUt } from '../../../models/types/OMSSoknadUt';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ErDuSikkerModal from './ErDuSikkerModal';
+import { getFormErrors } from './korrigeringAvFormValidering';
 import ActionType from './korrigeringAvInntektsmeldingActions';
 import './KorrigeringAvInntektsmeldingForm.less';
 import {
@@ -42,7 +45,11 @@ const initialFormState = {
     visErDuSikkerModal: false,
     søknadErInnsendt: false,
     innsendteFormverdier: undefined,
+    formError: '',
+    hasSubmitted: false,
 };
+
+const getInitialPeriode = () => ({ fom: '', tom: '' });
 
 const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
     søkerId,
@@ -51,8 +58,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
 }): JSX.Element => {
     const intl = useIntl();
     const [state, dispatch] = useReducer(korrigeringAvInntektsmeldingReducer, initialFormState);
-    const { åpnePaneler, isLoading, visBekreftelsemodal, visErDuSikkerModal, søknadErInnsendt, innsendteFormverdier } =
-        state;
+    const {
+        åpnePaneler,
+        visBekreftelsemodal,
+        visErDuSikkerModal,
+        søknadErInnsendt,
+        innsendteFormverdier,
+        formError,
+        hasSubmitted,
+    } = state;
     const togglePaneler = (panel: { [key: string]: boolean }) =>
         dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
 
@@ -64,7 +78,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     const validerSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
         dispatch({ type: ActionType.VALIDER_SØKNAD_START });
         const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
-        validerOMSSoknad(soknad, (response, data) => {
+        validerOMSSoknad(soknad).then((response) => {
             if (response.status === 202) {
                 oppdaterSøknad(values);
                 dispatch({ type: ActionType.VIS_BEKREFTELSEMODAL });
@@ -79,7 +93,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
         submitOMSSoknad(søkerId, søknadId, (response, responseData) => {
             switch (response.status) {
                 case 202: {
-                    // setIsLoading(false);
                     dispatch({ type: ActionType.SET_SØKNAD_INNSENDT, innsendteFormverdier: formVerdier });
                     break;
                 }
@@ -97,8 +110,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
             }
         });
     };
-
-    const getIinitialPeriode = () => ({ fom: '', tom: '' });
 
     if (søknadErInnsendt && innsendteFormverdier) {
         return (
@@ -127,8 +138,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden]: { dato: '', klokkeslett: '' },
                     [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
                     [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
-                    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getIinitialPeriode()],
-                    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getIinitialPeriode()],
+                    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getInitialPeriode()],
+                    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getInitialPeriode()],
                     [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
                 }}
                 onSubmit={(values, actions) => {
@@ -138,8 +149,20 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 }}
                 validate={(values) => {
                     oppdaterSøknad(values);
-                    const errors = {};
-                    return errors;
+                    const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
+                    return validerOMSSoknad(soknad)
+                        .then((response) => response.json())
+                        .then((data: ValiderOMSSøknadResponse) => {
+                            const errors = getFormErrors(values, data);
+                            const globalFormError = data?.feil?.find(
+                                (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'
+                            );
+                            dispatch({
+                                type: ActionType.SET_FORM_ERROR,
+                                formError: globalFormError?.feilmelding || '',
+                            });
+                            return errors;
+                        });
                 }}
             >
                 {({ setFieldValue, values }) => (
@@ -159,7 +182,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         togglePaneler({ trekkperioderPanel: toggledPanel });
                                         if (!toggledPanel) {
                                             setFieldValue(KorrigeringAvInntektsmeldingFormFields.Trekkperioder, [
-                                                getIinitialPeriode(),
+                                                getInitialPeriode(),
                                             ]);
                                         }
                                     }}
@@ -172,7 +195,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         if (!toggledPanel) {
                                             setFieldValue(
                                                 KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav,
-                                                [getIinitialPeriode()]
+                                                [getInitialPeriode()]
                                             );
                                         }
                                     }}
@@ -192,6 +215,11 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         }
                                     }}
                                 />
+                                {formError && hasSubmitted && (
+                                    <div className="korrigering__feilmelding">
+                                        <Feilmelding feil={formError} />
+                                    </div>
+                                )}
                             </Panel>
                             <div className="korrigering__buttonContainer">
                                 <Hovedknapp>Send inn</Hovedknapp>

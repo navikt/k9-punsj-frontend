@@ -27,7 +27,7 @@ const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => 
     }
     if (values.DagerMedDelvisFravær.length > 0 && values.DagerMedDelvisFravær[0].dato) {
         values.DagerMedDelvisFravær.forEach((dagMedDelvisFravær) => {
-            if (dagMedDelvisFravær.dato && dagMedDelvisFravær.timer) {
+            if (dagMedDelvisFravær.dato || dagMedDelvisFravær.timer) {
                 fraværsperioder.push({
                     periode: { fom: dagMedDelvisFravær.dato, tom: dagMedDelvisFravær.dato },
                     faktiskTidPrDag: dagMedDelvisFravær.timer,

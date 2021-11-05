@@ -1,6 +1,6 @@
 import DateInput from 'app/components/skjema/DateInput';
 import intlHelper from 'app/utils/intlUtils';
-import { Field, FieldProps, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import Panel from 'nav-frontend-paneler';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
@@ -31,6 +31,11 @@ const OpplysningerOmSøknaden: React.FC = () => {
                                 }}
                                 className="opplysningerOmSoknaden__dateInput"
                                 label={intlHelper(intl, 'skjema.dato')}
+                                errorMessage={
+                                    <ErrorMessage
+                                        name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}
+                                    />
+                                }
                             />
                         )}
                     </Field>

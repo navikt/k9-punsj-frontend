@@ -8,7 +8,7 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import OrganisasjonMedArbeidsforhold from 'app/models/types/OrganisasjonMedArbeidsforhold';
 import { hentArbeidsgivereMedId } from 'app/state/actions/OMSPunchFormActions';
 import intlHelper from 'app/utils/intlUtils';
-import { Field, FieldProps, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import Lenke from 'nav-frontend-lenker';
 import Panel from 'nav-frontend-paneler';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -53,7 +53,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     }, [årstallForKorrigering, søkerId]);
 
     useEffect(() => {
-        if (values.Virksomhet !== previousValgtVirksomhet) {
+        if (previousValgtVirksomhet !== undefined && values.Virksomhet !== previousValgtVirksomhet) {
             setFieldValue(KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId, '');
         }
     }, [values.Virksomhet]);
@@ -86,7 +86,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                     </div>
                 )}
                 <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
-                    {({ field }: FieldProps) => (
+                    {({ field, meta }: FieldProps) => (
                         <Select
                             bredde="l"
                             label={intlHelper(
@@ -95,8 +95,12 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             )}
                             disabled={!arbeidsgivereMedId}
                             {...field}
+                            feil={
+                                meta.touched &&
+                                meta.error && <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.Virksomhet} />
+                            }
                         >
-                            <option key="default" value="" label="" aria-label="Tomt valg" />)
+                            <option disabled key="default" value="" label="" aria-label="Tomt valg" />)
                             {arbeidsgivereMedNavn.map((arbeidsgiver) => (
                                 <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
                                     {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
@@ -119,6 +123,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
                             {...field}
                         >
+                            <option disabled key="default" value="" label="" aria-label="Tomt valg" />)
                             {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId) => (
                                 <option key={arbeidsforholdId} value={arbeidsforholdId}>
                                     {arbeidsforholdId}
