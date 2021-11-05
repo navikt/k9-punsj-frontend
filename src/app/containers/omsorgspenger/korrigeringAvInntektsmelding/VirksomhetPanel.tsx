@@ -2,6 +2,7 @@
 import { ExternalLink } from '@navikt/ds-icons';
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
+import usePrevious from 'app/hooks/usePrevious';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import OrganisasjonMedArbeidsforhold from 'app/models/types/OrganisasjonMedArbeidsforhold';
@@ -29,7 +30,8 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     const [hasFetchArbeidsgiverIdError, setHasFetchArbeidsgiverIdError] = useState(false);
     const [årstallForKorrigering, setÅrstallForKorrigering] = useState<string>('');
     const intl = useIntl();
-    const { values } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const previousValgtVirksomhet = usePrevious(values.Virksomhet);
 
     useEffect(() => {
         if (søkerId) {
@@ -49,6 +51,12 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 });
         }
     }, [årstallForKorrigering, søkerId]);
+
+    useEffect(() => {
+        if (values.Virksomhet !== previousValgtVirksomhet) {
+            setFieldValue(KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId, '');
+        }
+    }, [values.Virksomhet]);
 
     const finnArbeidsforholdIdForValgtArbeidsgiver = () =>
         arbeidsgivereMedId?.find((item) => item.orgNummerEllerAktørID === values.Virksomhet)?.arbeidsforholdId || [];
