@@ -20,31 +20,36 @@ const OpplysningerOmSøknaden: React.FC = () => {
             legend={<h4 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h4>}
         >
             <Panel className="listepanel opplysningerOmSoknaden">
-                <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}.dato`}>
-                    {({ field }: FieldProps) => (
-                        <DateInput
-                            value={field.value}
-                            onChange={(dato) => {
-                                setFieldValue(field.name, dato);
-                            }}
-                            className="dateInput"
-                            label={intlHelper(intl, 'skjema.dato')}
-                            errorMessage={
-                                <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden} />
-                            }
-                        />
-                    )}
-                </Field>
-                <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}.klokkeslett`}>
-                    {({ field }: FieldProps) => (
-                        <Input
-                            {...field}
-                            type="time"
-                            className="klokkeslett"
-                            label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                        />
-                    )}
-                </Field>
+                <h4 className="opplysningerOmSoknaden__subHeading">Når ble dokumentet mottatt?</h4>
+                <div className="opplysningerOmSoknaden__fields">
+                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}.dato`}>
+                        {({ field }: FieldProps) => (
+                            <DateInput
+                                value={field.value}
+                                onChange={(dato) => {
+                                    setFieldValue(field.name, dato);
+                                }}
+                                className="opplysningerOmSoknaden__dateInput"
+                                label={intlHelper(intl, 'skjema.dato')}
+                                errorMessage={
+                                    <ErrorMessage
+                                        name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}
+                                    />
+                                }
+                            />
+                        )}
+                    </Field>
+                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}.klokkeslett`}>
+                        {({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="time"
+                                className="klokkeslett"
+                                label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
+                            />
+                        )}
+                    </Field>
+                </div>
             </Panel>
         </SkjemaGruppe>
     );
