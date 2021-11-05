@@ -36,7 +36,7 @@ export interface ISokersBarn {
 
 type ISokersBarnProps = WrappedComponentProps & ISokersBarnStateProps & ISokersBarnDispatchProps & ISokersBarn;
 
-const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props: ISokersBarnProps) => {
+const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) => {
     const {
         intl,
         barnetHarInteFnrFn,
