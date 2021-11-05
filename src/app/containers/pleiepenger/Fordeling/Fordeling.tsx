@@ -117,6 +117,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         journalpost?.journalpostStatus === journalpostStatus.JOURNALFOERT ||
         journalpost?.journalpostStatus === journalpostStatus.FERDIGSTILT;
 
+    const gjelderPleiepengerEllerOmsorgspenger =
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER || dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
         setSokersIdent(ident);
@@ -290,22 +293,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setIdentAction={setIdentAction}
                             />
 
-                            <VerticalSpacer eightPx />
-                            {(dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                dokumenttype === FordelingDokumenttype.KORRIGERING_IM) && (
+                            <VerticalSpacer twentyPx />
+                            {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
-                                    <VerticalSpacer sixteenPx />
-                                    {visSokersBarn &&
-                                        dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
-                                        !!identState.ident1 &&
-                                        !erUgyldigIdent(identState.ident1) && (
-                                            <SokersBarn
-                                                sokersIdent={identState.ident1}
-                                                barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
-                                                    setBarnetHarIkkeFnr(harBarnetFnr)
-                                                }
-                                            />
-                                        )}
+                                    <SokersBarn
+                                        sokersIdent={identState.ident1}
+                                        barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
+                                            setBarnetHarIkkeFnr(harBarnetFnr)
+                                        }
+                                        dokumenttype={dokumenttype}
+                                        visSokersBarn={visSokersBarn}
+                                    />
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                                         <Knapp
                                             mini
@@ -323,7 +321,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                         </div>
                         <VerticalSpacer sixteenPx />
-                        {(!!fordelingState.skalTilK9 || visSakstypeValg) && (
+                        {(!!fordelingState.skalTilK9 || visSakstypeValg) && gjelderPleiepengerEllerOmsorgspenger && (
                             <>
                                 <RadioGruppe
                                     legend={intlHelper(intl, 'fordeling.overskrift')}
