@@ -1,8 +1,7 @@
-import { IPeriode } from 'app/models/types';
-import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
+import Feilmelding from 'app/components/Feilmelding';
 import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
 import { submitOMSSoknad, updateOMSSoknad, validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
-import { getEnvironmentVariable, initializeDate } from 'app/utils';
+import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -46,6 +45,8 @@ const initialFormState = {
     visErDuSikkerModal: false,
     søknadErInnsendt: false,
     innsendteFormverdier: undefined,
+    formError: '',
+    hasSubmitted: false,
 };
 
 const getInitialPeriode = () => ({ fom: '', tom: '' });
@@ -57,7 +58,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
 }): JSX.Element => {
     const intl = useIntl();
     const [state, dispatch] = useReducer(korrigeringAvInntektsmeldingReducer, initialFormState);
-    const { åpnePaneler, visBekreftelsemodal, visErDuSikkerModal, søknadErInnsendt, innsendteFormverdier } = state;
+    const {
+        åpnePaneler,
+        visBekreftelsemodal,
+        visErDuSikkerModal,
+        søknadErInnsendt,
+        innsendteFormverdier,
+        formError,
+        hasSubmitted,
+    } = state;
     const togglePaneler = (panel: { [key: string]: boolean }) =>
         dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
 
@@ -145,6 +154,13 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                         .then((response) => response.json())
                         .then((data: ValiderOMSSøknadResponse) => {
                             const errors = getFormErrors(values, data);
+                            const globalFormError = data?.feil?.find(
+                                (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'
+                            );
+                            dispatch({
+                                type: ActionType.SET_FORM_ERROR,
+                                formError: globalFormError?.feilmelding || '',
+                            });
                             return errors;
                         });
                 }}
@@ -199,6 +215,11 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         }
                                     }}
                                 />
+                                {formError && hasSubmitted && (
+                                    <div className="korrigering__feilmelding">
+                                        <Feilmelding feil={formError} />
+                                    </div>
+                                )}
                             </Panel>
                             <div className="korrigering__buttonContainer">
                                 <Hovedknapp>Send inn</Hovedknapp>

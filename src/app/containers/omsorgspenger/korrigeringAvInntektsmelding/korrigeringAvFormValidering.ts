@@ -30,16 +30,16 @@ const getPeriodeFeil = (value: IPeriode, response: ValiderOMSSøknadResponse) =>
     const tom = initializeDate(value.tom).format('YYYY-MM-DD');
     const dagerIPeriode = getPeriodRange(fom, tom);
     let feilIndex = 0;
-    const harMatchendeFeil = response.feil.some((feil) =>
-        dagerIPeriode.some((dag, dagIndex) => {
+    const harMatchendeFeil = response.feil.some((feil, index) =>
+        dagerIPeriode.some((dag) => {
             const feltStreng = `fraværsperioderKorrigeringIm.perioder[${dag}/${dag}]`;
             if (feil.felt === feltStreng) {
-                feilIndex = dagIndex;
+                feilIndex = index;
             }
             return feil.felt === feltStreng;
         })
     );
-    return harMatchendeFeil ? response.feil[feilIndex].feilmelding : null;
+    return harMatchendeFeil ? response?.feil[feilIndex]?.feilmelding : null;
 };
 
 const harFormFeil = (errors: FormErrors) =>
@@ -98,6 +98,17 @@ export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, da
             errors.DagerMedDelvisFravær[index].timer = 'Du må fylle inn timer';
         } else if (!value.dato && value.timer) {
             errors.DagerMedDelvisFravær[index].dato = 'Dato må være satt';
+        } else if (value.timer) {
+            const timetall = value.timer.replace(/,/g, '.').replace(/\s+/g, '');
+            if (Number(timetall) > 7.5) {
+                errors.DagerMedDelvisFravær[index].timer = 'Delvis fravær kan ikke overstige 7 timer og 30 min';
+            }
+        }
+        if (valideringIBackendFeilet) {
+            const matchendeFeil = getPeriodeFeil({ fom: value.dato, tom: value.dato }, data);
+            if (matchendeFeil) {
+                errors.DagerMedDelvisFravær[index].dato = matchendeFeil;
+            }
         }
     });
     if (!harFormFeil(errors)) {

@@ -53,7 +53,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     }, [årstallForKorrigering, søkerId]);
 
     useEffect(() => {
-        if (values.Virksomhet !== previousValgtVirksomhet) {
+        if (previousValgtVirksomhet !== undefined && values.Virksomhet !== previousValgtVirksomhet) {
             setFieldValue(KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId, '');
         }
     }, [values.Virksomhet]);
