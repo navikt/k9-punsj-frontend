@@ -168,7 +168,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     <>
                         <Form className="korrigering">
                             <Panel border>
-                                <h3>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h3>
+                                <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
                                 <AlertStripeInfo className="korrigering__headerInfo">
                                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
                                 </AlertStripeInfo>

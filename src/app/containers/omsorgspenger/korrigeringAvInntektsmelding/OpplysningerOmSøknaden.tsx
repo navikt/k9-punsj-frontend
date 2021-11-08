@@ -17,7 +17,7 @@ const OpplysningerOmSøknaden: React.FC = () => {
 
     return (
         <SkjemaGruppe
-            legend={<h4 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h4>}
+            legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h3>}
         >
             <Panel className="listepanel opplysningerOmSoknaden">
                 <h4 className="opplysningerOmSoknaden__subHeading">Når ble dokumentet mottatt?</h4>

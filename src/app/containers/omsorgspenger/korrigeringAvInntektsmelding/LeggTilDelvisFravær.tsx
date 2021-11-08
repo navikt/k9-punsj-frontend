@@ -42,8 +42,9 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                             )}
                                         </h4>
                                     }
+                                    className="korrigering__skjemagruppe"
                                 >
-                                    <AlertStripeInfo>
+                                    <AlertStripeInfo className="korrigering__infostripe">
                                         {intlHelper(
                                             intl,
                                             'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info'
