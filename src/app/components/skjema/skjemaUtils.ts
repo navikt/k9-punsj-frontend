@@ -22,7 +22,7 @@ export const generateDateString = (periode: IPeriode | IPeriode[] | null): strin
 
 export const periodeSpenn = (periode: IPeriode | undefined): string =>
     periode
-        ? Object.values(periode)
+        ? `'${Object.values(periode)
             .map((dato) => `${dato}` || '..')
-            .join('/')
+            .join('/')}'`
         : '';
