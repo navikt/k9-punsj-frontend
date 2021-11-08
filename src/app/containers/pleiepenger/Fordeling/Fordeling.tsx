@@ -84,6 +84,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         fellesState,
         setIdentAction,
         setErIdent1Bekreftet,
+        setSakstypeAction: sakstypeAction
     } = props;
     const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -316,7 +317,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
                                         </Knapp>
                                     )}
-                                    {console.log(erUgyldigIdent(identState.ident1))}
                                 </>
                             )}
                         </div>
@@ -329,13 +329,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             identState={identState}
                             konfigForValgtSakstype={konfigForValgtSakstype}
                             fordelingState={fordelingState}
-                            setSakstypeAction={setSakstypeAction}
+                            setSakstypeAction={sakstypeAction}
                             lukkJournalpostOppgave={lukkJournalpostOppgave}
                             omfordel={omfordel}
                             visSakstypeValg={visSakstypeValg}
                             gjelderPleiepengerEllerOmsorgspenger={gjelderPleiepengerEllerOmsorgspenger}
                         />
-                        ¯{' '}
                         {fordelingState.skalTilK9 === false && (
                             <>
                                 <AlertStripeInfo className="infotrygd_info">
