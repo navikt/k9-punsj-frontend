@@ -96,7 +96,7 @@ describe('Sokers barn', () => {
     //     expect(sokersBarn.find('Select').html()).toContain('Ella Nordmann');
     //     expect(sokersBarn.find('Select').html()).toContain('12345678910');
     // });
-    // it('Får varselsboks om man velger annet barn og barnet har ikke fnr', () => {
+    it('Får varselsboks om man velger annet barn og barnet har ikke fnr', () => {
     //     const sokersBarn = setupSokersBarn({}, {}, {
     //         fellesState:
     //             {
@@ -113,5 +113,5 @@ describe('Sokers barn', () => {
     //     expect(sokersBarn.find({label: 'ident.identifikasjon.barnHarIkkeFnr'})).toHaveLength(1);
     //     sokersBarn.find({label: 'ident.identifikasjon.barnHarIkkeFnr'}).simulate('change', {target: {checked: true}});
     //     expect(sokersBarn.find('.infotrygd_info')).toHaveLength(1);
-    // });
+    });
 });
