@@ -10,6 +10,7 @@
         "@navikt/fnrvalidator": "^1.1.4",
         "@navikt/nap-header": "^1.0.10",
         "@navikt/nap-user-panel": "^1.0.0",
+        "@sentry/react": "^6.14.1",
         "@types/classnames": "^2.2.11",
         "@types/react-redux": "^7.1.19",
         "@types/redux-logger": "^3.0.8",
