@@ -9,7 +9,6 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
-
 interface ISokersIdentProps {
     dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
@@ -19,8 +18,10 @@ interface ISokersIdentProps {
     setSokersIdent: (event: any) => void;
     setIdentAction: typeof setIdentFellesAction;
     setErIdent1Bekreftet: (event: any) => void;
+    setRiktigIdentIJournalposten: (event: any) => void;
     sokersIdent: string;
     identState: IIdentState;
+    riktigIdentIJournalposten?: JaNei;
 }
 const SokersIdent: React.FC<ISokersIdentProps> = ({
     dokumenttype,
@@ -33,10 +34,11 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     setSokersIdent,
     setIdentAction,
     setErIdent1Bekreftet,
+    setRiktigIdentIJournalposten,
+    riktigIdentIJournalposten,
 }) => {
     const skalVises =
         dokumenttype === FordelingDokumenttype.PLEIEPENGER || dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
-    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
     const journalpostident = journalpost?.norskIdent;
 
     const handleIdentRadioChange = (jn: JaNei) => {
@@ -92,7 +94,9 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         className="bold-label ident-soker-1"
                         maxLength={11}
                         feil={
-                            erUgyldigIdent(identState.ident1) ? intlHelper(intl, 'ident.feil.ugyldigident') : undefined
+                            identState.ident1 && erUgyldigIdent(identState.ident1)
+                                ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                : undefined
                         }
                         bredde="M"
                     />

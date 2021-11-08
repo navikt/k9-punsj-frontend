@@ -1,7 +1,11 @@
 import { IdentRules } from '../../../rules';
 import intlHelper from '../../../utils/intlUtils';
 
-export const erUgyldigIdent = (ident: string | null) => ident && ident.length && !IdentRules.isIdentValid(ident);
+export const erUgyldigIdent = (ident: string | null) => {
+    if (!ident) return true;
+    if (!ident.length) return true;
+    return !IdentRules.isIdentValid(ident);
+};
 
 export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     annenIdent: string | null,

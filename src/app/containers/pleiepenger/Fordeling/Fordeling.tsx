@@ -1,11 +1,4 @@
-import {
-    FordelingDokumenttype,
-    JaNei,
-    Sakstype,
-    TilgjengeligSakstype,
-    pleiepengerSakstyper,
-    korrigeringAvInntektsmeldingSakstyper,
-} from 'app/models/enums';
+import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -18,7 +11,7 @@ import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import { Checkbox, Input, RadioGruppe, RadioPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
+import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
@@ -48,10 +41,10 @@ import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmelding
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import { SokersBarn } from './Komponenter/SokersBarn';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
-import Behandlingsknapp from './Komponenter/Behandlingsknapp';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
+import ValgForDokument from './Komponenter/ValgForDokument';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -91,6 +84,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         fellesState,
         setIdentAction,
         setErIdent1Bekreftet,
+        setSakstypeAction: sakstypeAction
     } = props;
     const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -108,6 +102,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
 
+    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
@@ -116,6 +112,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const erJournalfoertEllerFerdigstilt =
         journalpost?.journalpostStatus === journalpostStatus.JOURNALFOERT ||
         journalpost?.journalpostStatus === journalpostStatus.FERDIGSTILT;
+
+    const gjelderPleiepengerEllerOmsorgspenger =
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER || dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -181,6 +180,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setSokersIdent('');
             setIdentAction('', identState.ident2);
         }
+        setRiktigIdentIJournalposten(undefined);
         setDokumenttype(type);
     };
 
@@ -281,6 +281,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setSokersIdent={setSokersIdent}
                                 setIdentAction={setIdentAction}
                                 setErIdent1Bekreftet={setErIdent1Bekreftet}
+                                riktigIdentIJournalposten={riktigIdentIJournalposten}
+                                setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                             />
                             <ToSoekere
                                 journalpost={journalpost}
@@ -290,30 +292,26 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setIdentAction={setIdentAction}
                             />
 
-                            <VerticalSpacer eightPx />
-                            {(dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                dokumenttype === FordelingDokumenttype.KORRIGERING_IM) && (
+                            <VerticalSpacer twentyPx />
+                            {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
-                                    <VerticalSpacer sixteenPx />
-                                    {visSokersBarn &&
-                                        dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
-                                        !!identState.ident1 &&
-                                        !erUgyldigIdent(identState.ident1) && (
-                                            <SokersBarn
-                                                sokersIdent={identState.ident1}
-                                                barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
-                                                    setBarnetHarIkkeFnr(harBarnetFnr)
-                                                }
-                                            />
-                                        )}
+                                    <SokersBarn
+                                        sokersIdent={identState.ident1}
+                                        barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
+                                            setBarnetHarIkkeFnr(harBarnetFnr)
+                                        }
+                                        dokumenttype={dokumenttype}
+                                        visSokersBarn={visSokersBarn}
+                                    />
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                                         <Knapp
                                             mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
-                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
-                                                (erUgyldigIdent(identState.ident2) ||
-                                                    (!identState.ident2 && !barnetHarIkkeFnr))
+                                                (dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                                    (erUgyldigIdent(identState.ident2) ||
+                                                        (!identState.ident2 && !barnetHarIkkeFnr))) ||
+                                                erUgyldigIdent(identState.ident1)
                                             }
                                         >
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
@@ -323,72 +321,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                         </div>
                         <VerticalSpacer sixteenPx />
-                        {(!!fordelingState.skalTilK9 || visSakstypeValg) && (
-                            <>
-                                <RadioGruppe
-                                    legend={intlHelper(intl, 'fordeling.overskrift')}
-                                    className="fordeling-page__options"
-                                >
-                                    {(
-                                        (dokumenttype === FordelingDokumenttype.KORRIGERING_IM &&
-                                            korrigeringAvInntektsmeldingSakstyper) ||
-                                        pleiepengerSakstyper
-                                    ).map((key) => {
-                                        if (
-                                            key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES &&
-                                            !erJournalfoertEllerFerdigstilt
-                                        ) {
-                                            return null;
-                                        }
-                                        if (
-                                            !(
-                                                key === TilgjengeligSakstype.ANNET &&
-                                                !kanJournalforingsoppgaveOpprettesiGosys
-                                            )
-                                        ) {
-                                            return (
-                                                <RadioPanel
-                                                    key={key}
-                                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                                    value={Sakstype[key]}
-                                                    onChange={() => {
-                                                        props.setSakstypeAction(Sakstype[key]);
-                                                        setOmsorgspengerValgt(false);
-                                                    }}
-                                                    checked={konfigForValgtSakstype?.navn === key}
-                                                />
-                                            );
-                                        }
-                                        return null;
-                                    })}
-                                </RadioGruppe>
-                                <VerticalSpacer eightPx />
-                                {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
-                                    <div className="fordeling-page__gosysGjelderKategorier">
-                                        <AlertStripeInfo>
-                                            {' '}
-                                            {intlHelper(intl, 'fordeling.infobox.opprettigosys')}
-                                        </AlertStripeInfo>
-                                        <GosysGjelderKategorier />
-                                    </div>
-                                )}
-                                {!!fordelingState.sakstype &&
-                                    fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
-                                        <AlertStripeInfo>
-                                            {' '}
-                                            {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
-                                        </AlertStripeInfo>
-                                    )}
-                                <Behandlingsknapp
-                                    norskIdent={identState.ident1}
-                                    omfordel={omfordel}
-                                    lukkJournalpostOppgave={lukkJournalpostOppgave}
-                                    journalpost={journalpost}
-                                    sakstypeConfig={konfigForValgtSakstype}
-                                    gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
-                                />
-                            </>
-                        )}
+                        <ValgForDokument
+                            journalpost={journalpost}
+                            erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
+                            kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
+                            setOmsorgspengerValgt={setOmsorgspengerValgt}
+                            identState={identState}
+                            konfigForValgtSakstype={konfigForValgtSakstype}
+                            fordelingState={fordelingState}
+                            setSakstypeAction={sakstypeAction}
+                            lukkJournalpostOppgave={lukkJournalpostOppgave}
+                            omfordel={omfordel}
+                            visSakstypeValg={visSakstypeValg}
+                            gjelderPleiepengerEllerOmsorgspenger={gjelderPleiepengerEllerOmsorgspenger}
+                        />
                         {fordelingState.skalTilK9 === false && (
                             <>
                                 <AlertStripeInfo className="infotrygd_info">
