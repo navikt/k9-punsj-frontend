@@ -84,7 +84,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         fellesState,
         setIdentAction,
         setErIdent1Bekreftet,
-        setSakstypeAction: sakstypeAction
+        setSakstypeAction: sakstypeAction,
     } = props;
     const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -322,6 +322,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         </div>
                         <VerticalSpacer sixteenPx />
                         <ValgForDokument
+                            dokumenttype={dokumenttype}
                             journalpost={journalpost}
                             erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
                             kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
