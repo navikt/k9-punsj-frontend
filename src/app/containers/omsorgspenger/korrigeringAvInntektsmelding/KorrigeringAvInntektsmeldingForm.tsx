@@ -144,7 +144,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 }}
                 onSubmit={(values, actions) => {
                     validerSøknad(values);
-                    console.log({ values, actions });
                     actions.setSubmitting(false);
                 }}
                 validate={(values) => {
