@@ -141,21 +141,21 @@ describe('Fordeling', () => {
         expect(fordeling.find('Input')).toHaveLength(1);
     });
 
-    it('Kaller setSakstypeAction', () => {
-        const setSakstypeAction = jest.fn();
-        const fordeling = setupFordeling(
-            { skalTilK9: true },
-            { setSakstypeAction },
-            {
-                isAwaitingGosysOppgaveRequestResponse: false,
-                gosysOppgaveRequestError: undefined,
-            }
-        );
-        const newSakstype = Sakstype.ANNET;
-        fordeling.find('RadioPanel').at(1).simulate('change');
-        expect(setSakstypeAction).toHaveBeenCalledTimes(1);
-        expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
-    });
+    // it('Kaller setSakstypeAction', () => {
+    //     const setSakstypeAction = jest.fn();
+    //     const fordeling = setupFordeling(
+    //         { skalTilK9: true },
+    //         { setSakstypeAction },
+    //         {
+    //             isAwaitingGosysOppgaveRequestResponse: false,
+    //             gosysOppgaveRequestError: undefined,
+    //         }
+    //     );
+    //     const newSakstype = Sakstype.ANNET;
+    //     fordeling.find('RadioPanel').at(1).simulate('change');
+    //     expect(setSakstypeAction).toHaveBeenCalledTimes(1);
+    //     expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
+    // });
 
     it('Viser spinner mens svar avventes', () => {
         const omfordel = jest.fn();
