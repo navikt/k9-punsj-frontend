@@ -1,7 +1,6 @@
 import Feilmelding from 'app/components/Feilmelding';
 import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
 import { submitOMSSoknad, updateOMSSoknad, validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
-import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -120,7 +119,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 <div className="punchPage__knapper">
                     <Hovedknapp
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            window.location.href = process.env.K9_LOS_URL;
                         }}
                     >
                         {intlHelper(intl, 'tilbaketilLOS')}
