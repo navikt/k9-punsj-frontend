@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
-import { getEnvironmentVariable } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
 import { initializeDate } from '../../utils/timeUtils';
 import './okGaaTilLosModal.less';
@@ -38,7 +37,7 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
                 className="okknapp"
                 mini
                 onClick={() => {
-                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                    window.location.href = process.env.K9_LOS_URL;
                 }}
             >
                 {intlHelper(intl, 'modal.okgaatillos.ok')}
