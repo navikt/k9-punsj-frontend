@@ -9,7 +9,6 @@ import intlHelper from '../../../app/utils/intlUtils';
 jest.mock('react-intl');
 jest.mock('react-router');
 jest.mock('app/utils/browserUtils');
-jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
