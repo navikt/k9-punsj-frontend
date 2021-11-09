@@ -3,7 +3,7 @@ import DatoMedKlokkeslett from 'app/models/types/DatoMedKlokkeslett';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 
 export enum KorrigeringAvInntektsmeldingFormFields {
-    OpplysningerOmSøknaden = 'OpplysningerOmSøknaden',
+    OpplysningerOmKorrigering = 'OpplysningerOmKorrigering',
     Virksomhet = 'Virksomhet',
     ArbeidsforholdId = 'ArbeidsforholdId',
     Trekkperioder = 'Trekkperioder',
@@ -12,7 +12,7 @@ export enum KorrigeringAvInntektsmeldingFormFields {
 }
 
 export interface KorrigeringAvInntektsmeldingFormValues {
-    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden]: DatoMedKlokkeslett;
+    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: DatoMedKlokkeslett;
     [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: string;
     [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: string;
     [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: IPeriode[];
