@@ -1,4 +1,6 @@
-const OICD_AUTH_PROXY = process.env.OIDC_AUTH_PROXY;
+import { getEnvironmentVariable } from 'app/utils/envUtils';
+
+const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
 const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
 const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
 export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
