@@ -77,7 +77,11 @@ const webpackConfig = {
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
         new CopyPlugin({ patterns: [{ from: 'src/app/favicon.png' }] }),
+        new webpack.EnvironmentPlugin({
+            NODE_ENV: 'development',
+            OIDC_AUTH_PROXY: null,
+            K9_LOS_URL: 'http://localhost:8030',
+        }),
     ],
 };
-
 module.exports = webpackConfig;

@@ -12,7 +12,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from '../../containers/AppContainer';
-import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
 
 interface IApplicationWrapperComponentProps {
@@ -29,7 +28,7 @@ interface IApplicationWrapperDispatchProps {
 
 const isDev = window.location.hostname.includes('dev.adeo.no');
 
-const K9_LOS_URL = getEnvironmentVariable('K9_LOS_URL');
+const { K9_LOS_URL } = process.env;
 const K9_LOS_URL_SET: boolean = !!K9_LOS_URL && K9_LOS_URL !== 'undefined';
 const REDIRECT_URL_LOS = K9_LOS_URL_SET ? K9_LOS_URL : 'http://localhost:8030';
 
@@ -38,7 +37,7 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
     IApplicationWrapperDispatchProps;
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
-    const { authState, locale, children} = props;
+    const { authState, locale, children } = props;
 
     if (authState.error) {
         return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
@@ -48,10 +47,9 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
         if (!authState.redirectUrl) {
             props.checkAuth();
             return null;
-        } 
-            window.location.replace(authState.redirectUrl);
-            return null;
-        
+        }
+        window.location.replace(authState.redirectUrl);
+        return null;
     }
 
     if (authState.isLoading) {
