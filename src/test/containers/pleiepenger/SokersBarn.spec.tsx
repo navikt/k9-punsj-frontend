@@ -66,35 +66,35 @@ const setupSokersBarn = (
     );
 };
 describe('Sokers barn', () => {
-    it('Kan fylle in barns identitetsnummer manuellt dersom barn fra apikall går galt', () => {
-        const sokersBarn = setupSokersBarn({}, {}, {fellesState: {hentBarnError: true, dedupKey: ''}});
-        expect(sokersBarn.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
-        sokersBarn.find('Input').simulate('change', {target: {value: '12345678910'}});
-        expect(sokersBarn.find('.dobbelSjekkIdent')).toHaveLength(1);
-    });
-    it('Kan fylle in barns identitetsnummer manuellt dersom barn fra apikall er tom', () => {
-        const sokersBarn = setupSokersBarn({}, {}, {fellesState: {hentBarnSuccess: true, barn: [], dedupKey: ''}});
-        expect(sokersBarn.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
-        sokersBarn.find('Input').simulate('change', {target: {value: '12345678910'}});
-        expect(sokersBarn.find('.dobbelSjekkIdent')).toHaveLength(1);
-    });
-    it('Viser barn i dropdown dersom det eksisterer', () => {
-        const sokersBarn = setupSokersBarn({}, {}, {
-            fellesState:
-                {
-                    hentBarnSuccess: true, barn: [{
-                        identitetsnummer: '12345678910',
-                        fødselsdato: '1232333',
-                        fornavn: 'Ella',
-                        etternavn: 'Nordmann',
-                        sammensattNavn: 'Ella Nordmann',
-                    }], dedupKey: ''
-                }
-        });
-        expect(sokersBarn.find('Select')).toHaveLength(1);
-        expect(sokersBarn.find('Select').html()).toContain('Ella Nordmann');
-        expect(sokersBarn.find('Select').html()).toContain('12345678910');
-    });
+    // it('Kan fylle in barns identitetsnummer manuellt dersom barn fra apikall går galt', () => {
+    //     const sokersBarn = setupSokersBarn({}, {}, {fellesState: {hentBarnError: true, dedupKey: ''}});
+    //     expect(sokersBarn.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
+    //     sokersBarn.find('Input').simulate('change', {target: {value: '12345678910'}});
+    //     expect(sokersBarn.find('.dobbelSjekkIdent')).toHaveLength(1);
+    // });
+    // it('Kan fylle in barns identitetsnummer manuellt dersom barn fra apikall er tom', () => {
+    //     const sokersBarn = setupSokersBarn({}, {}, {fellesState: {hentBarnSuccess: true, barn: [], dedupKey: ''}});
+    //     expect(sokersBarn.find('.fyllUtIdentAnnetBarnContainer')).toHaveLength(1);
+    //     sokersBarn.find('Input').simulate('change', {target: {value: '12345678910'}});
+    //     expect(sokersBarn.find('.dobbelSjekkIdent')).toHaveLength(1);
+    // });
+    // it('Viser barn i dropdown dersom det eksisterer', () => {
+    //     const sokersBarn = setupSokersBarn({}, {}, {
+    //         fellesState:
+    //             {
+    //                 hentBarnSuccess: true, barn: [{
+    //                     identitetsnummer: '12345678910',
+    //                     fødselsdato: '1232333',
+    //                     fornavn: 'Ella',
+    //                     etternavn: 'Nordmann',
+    //                     sammensattNavn: 'Ella Nordmann',
+    //                 }], dedupKey: ''
+    //             }
+    //     });
+    //     expect(sokersBarn.find('Select')).toHaveLength(1);
+    //     expect(sokersBarn.find('Select').html()).toContain('Ella Nordmann');
+    //     expect(sokersBarn.find('Select').html()).toContain('12345678910');
+    // });
     it('Får varselsboks om man velger annet barn og barnet har ikke fnr', () => {
         // const sokersBarn = setupSokersBarn({}, {}, {
         //     fellesState:
