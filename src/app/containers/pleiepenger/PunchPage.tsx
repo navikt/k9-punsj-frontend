@@ -12,7 +12,7 @@ import { PunchStep } from 'app/models/enums';
 import { IJournalpost, IPath, IPunchState, IPunchPSBFormState } from 'app/models/types';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { get, getEnvironmentVariable, getPath } from 'app/utils';
+import { get, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ApiPath } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
@@ -107,7 +107,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                         <div className="punchPage__knapper">
                             <Hovedknapp
                                 onClick={() => {
-                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                    window.location.href = process.env.K9_LOS_URL;
                                 }}
                             >
                                 {intlHelper(intl, 'tilbaketilLOS')}
