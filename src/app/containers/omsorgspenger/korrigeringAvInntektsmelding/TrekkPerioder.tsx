@@ -24,8 +24,9 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                             {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend')}
                         </h4>
                     }
+                    className="korrigering__skjemagruppe"
                 >
-                    <AlertStripeInfo>
+                    <AlertStripeInfo className="korrigering__infostripe">
                         {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
                     </AlertStripeInfo>
                     <div className="soknadsperiodecontainer">

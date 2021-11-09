@@ -64,9 +64,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     return (
         <SkjemaGruppe
             legend={
-                <h4 className="korrigering-legend">
+                <h3 className="korrigering-legend">
                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend')}
-                </h4>
+                </h3>
             }
         >
             <Panel className="listepanel virksomhetPanel">

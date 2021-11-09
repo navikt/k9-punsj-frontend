@@ -1,7 +1,6 @@
 import Feilmelding from 'app/components/Feilmelding';
 import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
 import { submitOMSSoknad, updateOMSSoknad, validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
-import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -89,23 +88,23 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     };
 
     const sendInnSøknad = (formVerdier: KorrigeringAvInntektsmeldingFormValues) => {
-        // setIsLoading(true);
         submitOMSSoknad(søkerId, søknadId, (response, responseData) => {
             switch (response.status) {
-                case 202: {
+                case 202:
                     dispatch({ type: ActionType.SET_SØKNAD_INNSENDT, innsendteFormverdier: formVerdier });
                     break;
-                }
-                case 400: {
-                    console.log('400');
+                case 400:
+                case 409:
+                    dispatch({
+                        type: ActionType.SET_FORM_ERROR,
+                        formError: 'Innsending av korrigering feilet',
+                    });
                     break;
-                }
-                case 409: {
-                    console.log('409');
-                    break;
-                }
                 default: {
-                    console.log('default??');
+                    dispatch({
+                        type: ActionType.SET_FORM_ERROR,
+                        formError: 'Innsending av korrigering feilet',
+                    });
                 }
             }
         });
@@ -120,7 +119,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 <div className="punchPage__knapper">
                     <Hovedknapp
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            window.location.href = process.env.K9_LOS_URL;
                         }}
                     >
                         {intlHelper(intl, 'tilbaketilLOS')}
@@ -168,7 +167,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     <>
                         <Form className="korrigering">
                             <Panel border>
-                                <h3>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h3>
+                                <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
                                 <AlertStripeInfo className="korrigering__headerInfo">
                                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
                                 </AlertStripeInfo>
