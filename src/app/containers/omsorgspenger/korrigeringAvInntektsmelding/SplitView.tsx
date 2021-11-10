@@ -10,7 +10,7 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { IJournalpost, IPath, IPunchState, IPSBSoknad, IPunchPSBFormState } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentAction, setStepAction } from 'app/state/actions';
-import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
+import { createOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -66,7 +66,7 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
     const { ident1 } = identState;
     useEffect(() => {
-        createOMSKorrigering(ident1, journalpost?.journalpostId || '', (response, data) => {
+        createOMSSoknad(ident1, journalpost?.journalpostId || '', (response, data) => {
             setSoknad(data);
         });
     }, [ident1, journalpost]);
