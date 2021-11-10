@@ -101,6 +101,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
+    const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
     const [dokumenttype, setDokumenttype] = useState<FordelingDokumenttype>();
@@ -391,6 +392,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             journalpost={journalpost}
                             erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
                             kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
+                            setOmsorgspengerValgt={setOmsorgspengerValgt}
                             identState={identState}
                             konfigForValgtSakstype={konfigForValgtSakstype}
                             fordelingState={fordelingState}
