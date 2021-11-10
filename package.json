@@ -54,6 +54,7 @@
         "nav-frontend-toggle": "^2.1.2",
         "nav-frontend-toggle-style": "^2.1.1",
         "nav-frontend-typografi": "^4.0.1",
+        "node-polyfill-webpack-plugin": "^1.1.4",
         "popper.js": "^1.16.1",
         "promise": "^8.0.3",
         "prop-types": "^15.8.1",
