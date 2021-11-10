@@ -57,7 +57,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 </>
             </div>
             <VerticalSpacer eightPx />
-            {!fellesState.kopierJournalpostSuccess && <SokersBarn sokersIdent={sokersIdent} />}
+            {!fellesState.kopierJournalpostSuccess && <SokersBarn visSokersBarn sokersIdent={sokersIdent} />}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
             {!fellesState.kopierJournalpostSuccess && (
                 <Knapp

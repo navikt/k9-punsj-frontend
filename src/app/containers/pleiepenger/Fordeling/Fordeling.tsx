@@ -297,12 +297,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
                                     <SokersBarn
-                                        sokersIdent={identState.ident1}
                                         barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
                                             setBarnetHarIkkeFnr(harBarnetFnr)
                                         }
-                                        dokumenttype={dokumenttype}
-                                        visSokersBarn={visSokersBarn}
+                                        sokersIdent={identState.ident1}
+                                        visSokersBarn={
+                                            visSokersBarn &&
+                                            dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                            !erUgyldigIdent(identState.ident1)
+                                        }
                                     />
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                                         <Knapp
