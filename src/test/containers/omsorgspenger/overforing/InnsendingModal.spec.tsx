@@ -4,6 +4,7 @@ import InnsendingModal from '../../../../app/containers/omsorgspenger/overforing
 import { Innsendingsstatus } from '../../../../app/models/forms/omsorgspenger/overføring/PunchSkjema';
 import { renderWithIntl } from '../../../testUtils';
 
+jest.mock('app/utils/envUtils');
 Modal.setAppElement(document.createElement('div'));
 
 describe('<InnsendingModal>', () => {
