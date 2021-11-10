@@ -30,8 +30,7 @@ export interface ISokersBarnDispatchProps {
 export interface ISokersBarn {
     sokersIdent: string;
     barnetHarInteFnrFn?: (harBarnetFnr: boolean) => void;
-    visSokersBarn: boolean;
-    dokumenttype: FordelingDokumenttype;
+    visSokersBarn?: boolean;
 }
 
 type ISokersBarnProps = WrappedComponentProps & ISokersBarnStateProps & ISokersBarnDispatchProps & ISokersBarn;
@@ -45,8 +44,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
         fellesState,
         setIdentAction,
         henteBarn,
-        visSokersBarn,
-        dokumenttype,
+        visSokersBarn
     } = props;
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
@@ -81,10 +79,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
         }
     };
 
-    const vis =
-        visSokersBarn && dokumenttype === FordelingDokumenttype.PLEIEPENGER && !erUgyldigIdent(identState.ident1);
-
-    if (!vis) {
+    if (!visSokersBarn) {
         return null;
     }
 
