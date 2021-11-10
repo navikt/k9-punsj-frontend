@@ -113,7 +113,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 <div className="punchPage__knapper">
                     <Hovedknapp
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            window.location.href = process.env.K9_LOS_URL;
                         }}
                     >
                         {intlHelper(intl, 'tilbaketilLOS')}
