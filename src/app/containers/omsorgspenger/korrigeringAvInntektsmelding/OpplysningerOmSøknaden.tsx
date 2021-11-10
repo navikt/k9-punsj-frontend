@@ -9,37 +9,37 @@ import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import './opplysningerOmKorrigering.less';
+import './opplysningerOmSøknaden.less';
 
-const OpplysningerOmKorrigering: React.FC = () => {
+const OpplysningerOmSøknaden: React.FC = () => {
     const intl = useIntl();
     const { setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     return (
         <SkjemaGruppe
-            legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>}
+            legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromsoknad')}</h3>}
         >
-            <Panel className="listepanel opplysningerOmKorrigering">
-                <h4 className="opplysningerOmKorrigering__subHeading">Når ble dokumentet mottatt?</h4>
-                <div className="opplysningerOmKorrigering__fields">
-                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
+            <Panel className="listepanel opplysningerOmSoknaden">
+                <h4 className="opplysningerOmSoknaden__subHeading">Når ble dokumentet mottatt?</h4>
+                <div className="opplysningerOmSoknaden__fields">
+                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}.dato`}>
                         {({ field }: FieldProps) => (
                             <DateInput
                                 value={field.value}
                                 onChange={(dato) => {
                                     setFieldValue(field.name, dato);
                                 }}
-                                className="opplysningerOmKorrigering__dateInput"
+                                className="opplysningerOmSoknaden__dateInput"
                                 label={intlHelper(intl, 'skjema.dato')}
                                 errorMessage={
                                     <ErrorMessage
-                                        name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}
+                                        name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}
                                     />
                                 }
                             />
                         )}
                     </Field>
-                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
+                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden}.klokkeslett`}>
                         {({ field }: FieldProps) => (
                             <Input
                                 {...field}
@@ -55,4 +55,4 @@ const OpplysningerOmKorrigering: React.FC = () => {
     );
 };
 
-export default OpplysningerOmKorrigering;
+export default OpplysningerOmSøknaden;

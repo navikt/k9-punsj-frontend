@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
+import { OMSSoknadUt } from 'app/models/types/OMSSoknadUt';
 import { apiUrl, initializeDate, post, put } from 'app/utils';
 
 async function postPromise<BodyType>(
@@ -25,17 +25,17 @@ async function postPromise<BodyType>(
     }
 }
 
-export function validerOMSKorrigering(korrigering: OMSKorrigering) {
-    const norskIdent: string = !korrigering.soeknadId ? '' : korrigering.soeknadId;
+export function validerOMSSoknad(soknad: OMSSoknadUt) {
+    const norskIdent: string = !soknad.soeknadId ? '' : soknad.soeknadId;
     return postPromise(
         ApiPath.OMS_SOKNAD_VALIDER,
-        { id: korrigering.soeknadId },
+        { id: soknad.soeknadId },
         { 'X-Nav-NorskIdent': norskIdent },
-        korrigering
+        soknad
     );
 }
 
-export function createOMSKorrigering(
+export function createOMSSoknad(
     ident1: string,
     journalpostid: string,
     callback: (response: Response, data: any) => void
@@ -48,7 +48,7 @@ export function createOMSKorrigering(
     post(ApiPath.OMS_SOKNAD_CREATE, undefined, undefined, requestBody, callback);
 }
 
-export function submitOMSKorrigering(
+export function submitOMSSoknad(
     norskIdent: string,
     soeknadId: string,
     callback: (response: Response, data: any) => void
@@ -61,8 +61,8 @@ export function submitOMSKorrigering(
     post(ApiPath.OMS_SOKNAD_SUBMIT, { id: soeknadId }, { 'X-Nav-NorskIdent': norskIdent }, requestBody, callback);
 }
 
-export function updateOMSKorrigering(korrigering: OMSKorrigering) {
-    put(ApiPath.OMS_SOKNAD_UPDATE, { id: korrigering.soeknadId }, korrigering);
+export function updateOMSSoknad(soknad: OMSSoknadUt) {
+    put(ApiPath.OMS_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad);
 }
 
 export function hentArbeidsgivereMedId(søkerId: string, årstallForKorrigering: string) {

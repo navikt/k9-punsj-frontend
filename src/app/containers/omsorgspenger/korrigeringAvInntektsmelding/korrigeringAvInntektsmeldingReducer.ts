@@ -12,7 +12,7 @@ interface State {
     isLoading?: boolean;
     visBekreftelsemodal?: boolean;
     visErDuSikkerModal?: boolean;
-    korrigeringErInnsendt?: boolean;
+    søknadErInnsendt?: boolean;
     innsendteFormverdier?: KorrigeringAvInntektsmeldingFormValues;
     formError?: string;
     hasSubmitted?: boolean;
@@ -30,13 +30,13 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
         case ActionType.SET_ÅPNE_PANELER: {
             return { ...state, åpnePaneler: action.åpnePaneler || state.åpnePaneler };
         }
-        case ActionType.VALIDER_KORRIGERING_START: {
+        case ActionType.VALIDER_SØKNAD_START: {
             return { ...state, isLoading: true, hasSubmitted: true };
         }
-        case ActionType.VALIDER_KORRIGERING_SUCCESS: {
+        case ActionType.VALIDER_SØKNAD_SUCCESS: {
             return { ...state, isLoading: false };
         }
-        case ActionType.VALIDER_KORRIGERING_ERROR: {
+        case ActionType.VALIDER_SØKNAD_ERROR: {
             return { ...state, isLoading: false };
         }
         case ActionType.VIS_BEKREFTELSEMODAL: {
@@ -51,10 +51,10 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
         case ActionType.SKJUL_ER_DU_SIKKER_MODAL: {
             return { ...state, visErDuSikkerModal: false };
         }
-        case ActionType.SET_KORRIGERING_INNSENDT: {
+        case ActionType.SET_SØKNAD_INNSENDT: {
             return {
                 ...state,
-                korrigeringErInnsendt: true,
+                søknadErInnsendt: true,
                 visErDuSikkerModal: false,
                 innsendteFormverdier: action.innsendteFormverdier,
             };

@@ -41,7 +41,7 @@ const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => 
 
 const trimString = (string: string) => string.replace(/\s+/g, '');
 
-export class OMSKorrigering {
+export class OMSSoknadUt {
     mottattDato: string;
 
     klokkeslett: string;
@@ -64,8 +64,8 @@ export class OMSKorrigering {
         søkerId: string,
         journalposter: string[]
     ) {
-        this.mottattDato = values.OpplysningerOmKorrigering.dato;
-        this.klokkeslett = values.OpplysningerOmKorrigering.klokkeslett;
+        this.mottattDato = values.OpplysningerOmSøknaden.dato;
+        this.klokkeslett = values.OpplysningerOmSøknaden.klokkeslett;
         this.soeknadId = søknadId;
         this.soekerId = søkerId;
         this.journalposter = journalposter;

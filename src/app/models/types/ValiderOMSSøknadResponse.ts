@@ -1,4 +1,4 @@
-export interface ValiderOMSKorrigeringResponse {
+export interface ValiderOMSSøknadResponse {
     søknadIdDto: string;
     feil: Feil[];
 }
