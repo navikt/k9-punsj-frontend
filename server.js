@@ -4,6 +4,7 @@ const mustacheExpress = require('mustache-express');
 const Promise = require('promise');
 const compression = require('compression');
 const helmet = require('helmet');
+const envVariables = require('./envVariables');
 
 const server = express();
 server.use(helmet({
@@ -38,6 +39,10 @@ const renderApp = () =>
   });
 
 const startServer = (html) => {
+    server.get(`/getEnvVariables`, (req, res) => {
+        res.set('content-type', 'application/javascript');
+        res.send(`${envVariables()}`);
+    });
     server.use('/dist/js', express.static(path.resolve(rootPath, 'dist/js')));
     server.use('/dist/css', express.static(path.resolve(rootPath, 'dist/css')));
     server.use('/dist/favicon.png', express.static(path.resolve(rootPath, 'dist/favicon.png')));

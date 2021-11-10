@@ -1,6 +1,7 @@
 import { IFeltValidator, påkrevd, validerSkjema } from '../../app/rules/valideringer';
 import { testIntl } from '../testUtils';
 
+jest.mock('app/utils/envUtils');
 
 describe('valideringer', () => {
     it('returnerer alle feil i et skjema', () => {

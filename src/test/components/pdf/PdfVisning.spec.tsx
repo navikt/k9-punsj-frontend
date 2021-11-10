@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import React from 'react';
 import PdfVisning from '../../../app/components/pdf/PdfVisning';
 
+jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 jest.mock('app/hooks/useQuery', () => () => ({ get: () => '1' }));

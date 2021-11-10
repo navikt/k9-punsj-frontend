@@ -5,6 +5,7 @@ import fetchMock from 'fetch-mock';
 
 import Headers from 'fetch-headers';
 
+jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
 
 describe('apiUrl', () => {

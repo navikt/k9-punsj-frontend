@@ -6,6 +6,7 @@ import {
     minutesFromString,
 } from 'app/utils';
 
+jest.mock('app/utils/envUtils');
 jest.mock('app/utils/apiUtils');
 
 describe('durationToString', () => {
