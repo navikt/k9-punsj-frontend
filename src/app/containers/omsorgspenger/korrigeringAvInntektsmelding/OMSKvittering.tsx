@@ -24,7 +24,7 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
         Trekkperioder,
         PerioderMedRefusjonskrav,
         DagerMedDelvisFravær,
-        OpplysningerOmSøknaden,
+        OpplysningerOmKorrigering,
     } = feltverdier;
     const visTrekkperioder = () => Trekkperioder.length > 0 && Trekkperioder[0].fom;
     const visPerioderMedRefusjonskrav = () => PerioderMedRefusjonskrav.length > 0 && PerioderMedRefusjonskrav[0].fom;
@@ -34,11 +34,11 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
         <div className="omsKvittering">
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
             <>
-                <h3>Opplysninger om søknaden</h3>
+                <h3>{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>
                 <hr className={classNames('linje')} />
                 <p>
                     <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                    {initializeDate(OpplysningerOmSøknaden.dato).format('DD.MM.YYYY')}
+                    {initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY')}
                 </p>
             </>
             <>

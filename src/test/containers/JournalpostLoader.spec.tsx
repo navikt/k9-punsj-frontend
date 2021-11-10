@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 import { IJournalpost } from '../../app/models/types';
 import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
 
-jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
 
 const setupLoader = ({

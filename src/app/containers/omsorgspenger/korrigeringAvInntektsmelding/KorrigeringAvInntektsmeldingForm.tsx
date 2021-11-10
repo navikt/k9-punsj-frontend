@@ -1,7 +1,10 @@
 import Feilmelding from 'app/components/Feilmelding';
-import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
-import { submitOMSSoknad, updateOMSSoknad, validerOMSSoknad } from 'app/state/actions/OMSPunchFormActions';
-import { getEnvironmentVariable } from 'app/utils';
+import { ValiderOMSKorrigeringResponse } from 'app/models/types/ValiderOMSKorrigeringResponse';
+import {
+    submitOMSKorrigering,
+    updateOMSKorrigering,
+    validerOMSKorrigering,
+} from 'app/state/actions/OMSPunchFormActions';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -10,7 +13,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import Panel from 'nav-frontend-paneler';
 import React, { useReducer } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { OMSSoknadUt } from '../../../models/types/OMSSoknadUt';
+import { OMSKorrigering } from '../../../models/types/OMSKorrigering';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import { getFormErrors } from './korrigeringAvFormValidering';
@@ -24,7 +27,7 @@ import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingR
 import LeggTilDelvisFravær from './LeggTilDelvisFravær';
 import LeggTilHelePerioder from './LeggTilHelePerioder';
 import OMSKvittering from './OMSKvittering';
-import OpplysningerOmSøknaden from './OpplysningerOmSøknaden';
+import OpplysningerOmKorrigering from './OpplysningerOmKorrigering';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
 
@@ -43,7 +46,7 @@ const initialFormState = {
     isLoading: false,
     visBekreftelsemodal: false,
     visErDuSikkerModal: false,
-    søknadErInnsendt: false,
+    korrigeringErInnsendt: false,
     innsendteFormverdier: undefined,
     formError: '',
     hasSubmitted: false,
@@ -62,7 +65,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
         åpnePaneler,
         visBekreftelsemodal,
         visErDuSikkerModal,
-        søknadErInnsendt,
+        korrigeringErInnsendt,
         innsendteFormverdier,
         formError,
         hasSubmitted,
@@ -70,48 +73,48 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     const togglePaneler = (panel: { [key: string]: boolean }) =>
         dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
 
-    const oppdaterSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
-        const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
-        updateOMSSoknad(soknad);
+    const oppdaterKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) => {
+        const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+        updateOMSKorrigering(korrigering);
     };
 
-    const validerSøknad = (values: KorrigeringAvInntektsmeldingFormValues) => {
-        dispatch({ type: ActionType.VALIDER_SØKNAD_START });
-        const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
-        validerOMSSoknad(soknad).then((response) => {
+    const validerKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) => {
+        dispatch({ type: ActionType.VALIDER_KORRIGERING_START });
+        const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+        validerOMSKorrigering(korrigering).then((response) => {
             if (response.status === 202) {
-                oppdaterSøknad(values);
+                oppdaterKorrigering(values);
                 dispatch({ type: ActionType.VIS_BEKREFTELSEMODAL });
             } else if (response.status === 400) {
-                dispatch({ type: ActionType.VALIDER_SØKNAD_ERROR });
+                dispatch({ type: ActionType.VALIDER_KORRIGERING_ERROR });
             }
         });
     };
 
-    const sendInnSøknad = (formVerdier: KorrigeringAvInntektsmeldingFormValues) => {
-        // setIsLoading(true);
-        submitOMSSoknad(søkerId, søknadId, (response, responseData) => {
+    const sendInnKorrigering = (formVerdier: KorrigeringAvInntektsmeldingFormValues) => {
+        submitOMSKorrigering(søkerId, søknadId, (response, responseData) => {
             switch (response.status) {
-                case 202: {
-                    dispatch({ type: ActionType.SET_SØKNAD_INNSENDT, innsendteFormverdier: formVerdier });
+                case 202:
+                    dispatch({ type: ActionType.SET_KORRIGERING_INNSENDT, innsendteFormverdier: formVerdier });
                     break;
-                }
-                case 400: {
-                    console.log('400');
+                case 400:
+                case 409:
+                    dispatch({
+                        type: ActionType.SET_FORM_ERROR,
+                        formError: 'Innsending av korrigering feilet',
+                    });
                     break;
-                }
-                case 409: {
-                    console.log('409');
-                    break;
-                }
                 default: {
-                    console.log('default??');
+                    dispatch({
+                        type: ActionType.SET_FORM_ERROR,
+                        formError: 'Innsending av korrigering feilet',
+                    });
                 }
             }
         });
     };
 
-    if (søknadErInnsendt && innsendteFormverdier) {
+    if (korrigeringErInnsendt && innsendteFormverdier) {
         return (
             <>
                 <AlertStripeInfo className="fullfortmelding">
@@ -120,7 +123,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 <div className="punchPage__knapper">
                     <Hovedknapp
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            window.location.href = process.env.K9_LOS_URL;
                         }}
                     >
                         {intlHelper(intl, 'tilbaketilLOS')}
@@ -135,7 +138,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
         <>
             <Formik
                 initialValues={{
-                    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmSøknaden]: { dato: '', klokkeslett: '' },
+                    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: { dato: '', klokkeslett: '' },
                     [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
                     [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
                     [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getInitialPeriode()],
@@ -143,15 +146,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
                 }}
                 onSubmit={(values, actions) => {
-                    validerSøknad(values);
+                    validerKorrigering(values);
                     actions.setSubmitting(false);
                 }}
                 validate={(values) => {
-                    oppdaterSøknad(values);
-                    const soknad = new OMSSoknadUt(values, søknadId, søkerId, journalposter);
-                    return validerOMSSoknad(soknad)
+                    oppdaterKorrigering(values);
+                    const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+                    return validerOMSKorrigering(korrigering)
                         .then((response) => response.json())
-                        .then((data: ValiderOMSSøknadResponse) => {
+                        .then((data: ValiderOMSKorrigeringResponse) => {
                             const errors = getFormErrors(values, data);
                             const globalFormError = data?.feil?.find(
                                 (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'
@@ -172,8 +175,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                 <AlertStripeInfo className="korrigering__headerInfo">
                                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
                                 </AlertStripeInfo>
-                                <div className="korrigering__opplysningerOmSøknadenContainer">
-                                    <OpplysningerOmSøknaden />
+                                <div className="korrigering__opplysningerOmKorrigeringContainer">
+                                    <OpplysningerOmKorrigering />
                                 </div>
                                 <div className="korrigering__virksomhetpanelContainer">
                                     <VirksomhetPanel søkerId={søkerId} />
@@ -260,7 +263,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                 <ErDuSikkerModal
                                     melding="modal.erdusikker.sendinn"
                                     extraInfo="modal.erdusikker.sendinn.extrainfo"
-                                    onSubmit={() => sendInnSøknad(values)}
+                                    onSubmit={() => sendInnKorrigering(values)}
                                     submitKnappText="skjema.knapp.send"
                                     onClose={() => {
                                         dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
