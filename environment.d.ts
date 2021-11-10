@@ -1,7 +1,6 @@
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
-            NODE_ENV: 'development' | 'production';
             OIDC_AUTH_PROXY?: string;
             K9_LOS_URL: string;
         }
