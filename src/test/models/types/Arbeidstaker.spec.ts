@@ -1,6 +1,5 @@
 import { Arbeidstaker, IArbeidstaker } from 'app/models/types';
 
-jest.mock('app/utils/envUtils');
 
 const periode = { fom: '2020-01-01', tom: '2020-01-31' };
 const organisasjonsnummer = '123456789';

@@ -29,7 +29,6 @@ interface IValgForDokument {
     journalpost: IJournalpost;
     erJournalfoertEllerFerdigstilt: boolean;
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
-    setOmsorgspengerValgt: (event: any) => void;
     identState: IIdentState;
     konfigForValgtSakstype: any;
     fordelingState: IFordelingState;
@@ -45,7 +44,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     erJournalfoertEllerFerdigstilt,
     kanJournalforingsoppgaveOpprettesiGosys,
     setSakstypeAction,
-    setOmsorgspengerValgt,
     konfigForValgtSakstype,
     fordelingState,
     identState,
@@ -81,7 +79,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                                 value={Sakstype[key]}
                                 onChange={() => {
                                     setSakstypeAction(Sakstype[key]);
-                                    setOmsorgspengerValgt(false);
                                 }}
                                 checked={konfigForValgtSakstype?.navn === key}
                             />
