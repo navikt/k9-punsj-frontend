@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -78,6 +79,7 @@ const webpackConfig = {
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
         new CopyPlugin({ patterns: [{ from: 'src/app/favicon.png' }] }),
+        new NodePolyfillPlugin(),
         new webpack.DefinePlugin({
             'process.env.OIDC_AUTH_PROXY': JSON.stringify(process.env.OIDC_AUTH_PROXY),
             'process.env.K9_LOS_URL': JSON.stringify(process.env.K9_LOS_URL),
