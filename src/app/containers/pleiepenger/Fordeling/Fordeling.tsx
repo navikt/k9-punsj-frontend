@@ -284,6 +284,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                             />
                             <ToSoekere
+                                dokumenttype={dokumenttype}
                                 journalpost={journalpost}
                                 identState={identState}
                                 skalJournalpostSomIkkeStottesKopieres={skalJournalpostSomIkkeStottesKopieres}
