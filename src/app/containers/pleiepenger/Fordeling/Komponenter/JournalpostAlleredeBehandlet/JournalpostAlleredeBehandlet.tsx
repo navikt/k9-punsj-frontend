@@ -13,6 +13,7 @@ import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import { SokersBarn } from '../SokersBarn';
 import { erUgyldigIdent } from '../../FordelingFeilmeldinger';
 import './journalpostAlleredeBehandlet.less';
+import { getEnvironmentVariable } from '../../../../../utils';
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 
@@ -78,7 +79,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             {!!fellesState.kopierJournalpostSuccess && (
                 <Hovedknapp
                     onClick={() => {
-                        window.location.href = process.env.K9_LOS_URL;
+                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
                     }}
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}

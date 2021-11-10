@@ -3,6 +3,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
 
+jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
 describe('Periode', () => {

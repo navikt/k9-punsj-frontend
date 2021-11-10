@@ -12,6 +12,7 @@ import CheckSvg from '../../../assets/SVG/CheckSVG';
 import { IError } from '../../../models/types';
 import './innsendingModal.less';
 import KryssSVG from '../../../assets/SVG/KryssSVG';
+import { getEnvironmentVariable } from '../../../utils';
 
 interface IInnsendingModalProps {
     innsendingsstatus: Innsendingsstatus;
@@ -62,7 +63,7 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.sendtInn" />
                         </Undertittel>
                         <VerticalSpacer sixteenPx />
-                        <Lenke href={process.env.K9_LOS_URL}>
+                        <Lenke href={getEnvironmentVariable('K9_LOS_URL')}>
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
                         </Lenke>
                     </>
@@ -80,7 +81,7 @@ const InnsendingModal: React.FunctionComponent<IInnsendingModalProps> = ({
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.feil.prøvigjen" />
                         </div>
                         <VerticalSpacer sixteenPx />
-                        <Lenke href={process.env.K9_LOS_URL}>
+                        <Lenke href={getEnvironmentVariable('K9_LOS_URL')}>
                             <FormattedMessage id="omsorgsdager.overføring.punch.modal.success.gåTilLos" />
                         </Lenke>
                         <VerticalSpacer twentyPx />
