@@ -16,6 +16,7 @@ import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState'
 jest.mock('react-intl');
 jest.mock('react-router');
 jest.mock('app/utils/browserUtils');
+jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
@@ -155,6 +156,15 @@ describe('Fordeling', () => {
     //     fordeling.find('RadioPanel').at(1).simulate('change');
     //     expect(setSakstypeAction).toHaveBeenCalledTimes(1);
     //     expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
+    // });
+
+    // it('Omfordeler', () => {
+    //     const omfordel = jest.fn();
+    //     const sakstype = Sakstype.ANNET;
+    //     const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
+    //     fordeling.find('Behandlingsknapp').dive().simulate('click');
+    //     expect(omfordel).toHaveBeenCalledTimes(1);
+    //     expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901', 'Annet');
     // });
 
     it('Viser spinner mens svar avventes', () => {
