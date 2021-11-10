@@ -4,6 +4,7 @@ import { SakstypeStepRouterImpl } from '../../app/containers/SakstypeStepRouter'
 import { Sakstype } from '../../app/models/enums';
 
 jest.mock('app/hooks/useRedirect');
+jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
 
