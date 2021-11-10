@@ -1,12 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import { IPeriode } from 'app/models/types';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
-import { ValiderOMSSøknadResponse } from 'app/models/types/ValiderOMSSøknadResponse';
+import { ValiderOMSKorrigeringResponse } from 'app/models/types/ValiderOMSKorrigeringResponse';
 import { initializeDate } from 'app/utils';
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 interface FormErrors {
-    OpplysningerOmSøknaden: string;
+    OpplysningerOmKorrigering: string;
     Trekkperioder: string[];
     PerioderMedRefusjonskrav: string[];
     DagerMedDelvisFravær: DatoMedTimetall[];
@@ -25,7 +25,7 @@ const getPeriodRange = (fom: string, tom: string) => {
     return dager;
 };
 
-const getPeriodeFeil = (value: IPeriode, response: ValiderOMSSøknadResponse) => {
+const getPeriodeFeil = (value: IPeriode, response: ValiderOMSKorrigeringResponse) => {
     const fom = initializeDate(value.fom).format('YYYY-MM-DD');
     const tom = initializeDate(value.tom).format('YYYY-MM-DD');
     const dagerIPeriode = getPeriodRange(fom, tom);
@@ -43,23 +43,23 @@ const getPeriodeFeil = (value: IPeriode, response: ValiderOMSSøknadResponse) =>
 };
 
 const harFormFeil = (errors: FormErrors) =>
-    errors.OpplysningerOmSøknaden ||
+    errors.OpplysningerOmKorrigering ||
     errors.Trekkperioder.some((error) => !!error) ||
     errors.PerioderMedRefusjonskrav.some((error) => !!error) ||
     errors.DagerMedDelvisFravær.some((error) => !!error.dato || !!error.timer) ||
     errors.Virksomhet;
 
-export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, data: ValiderOMSSøknadResponse) => {
+export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, data: ValiderOMSKorrigeringResponse) => {
     const valideringIBackendFeilet = !!data.feil;
     const errors: FormErrors = {
-        OpplysningerOmSøknaden: '',
+        OpplysningerOmKorrigering: '',
         Trekkperioder: [],
         PerioderMedRefusjonskrav: [],
         DagerMedDelvisFravær: [],
         Virksomhet: '',
     };
-    if (!values.OpplysningerOmSøknaden.dato || !values.OpplysningerOmSøknaden.klokkeslett) {
-        errors.OpplysningerOmSøknaden = 'Du må fylle inn dato og klokkeslett';
+    if (!values.OpplysningerOmKorrigering.dato || !values.OpplysningerOmKorrigering.klokkeslett) {
+        errors.OpplysningerOmKorrigering = 'Du må fylle inn dato og klokkeslett';
     }
     if (!values.Virksomhet) {
         errors.Virksomhet = 'Du må velge en virksomhet';
