@@ -41,7 +41,7 @@ const queryClient = new QueryClient();
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
-
+    console.log(process.env.K9_LOS_URL)
     return (
         <Sentry.ErrorBoundary>
             <Provider store={store}>
