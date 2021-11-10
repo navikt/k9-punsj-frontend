@@ -1,7 +1,6 @@
 import { tomtSkjema, validatePunch } from '../../../../../app/models/forms/omsorgspenger/overføring/PunchSkjema';
 import { testIntl } from '../../../../testUtils';
 
-jest.mock('app/utils/envUtils');
 
 describe('PunchSkjema', () => {
     const validerSkjemaFn = validatePunch(testIntl);
