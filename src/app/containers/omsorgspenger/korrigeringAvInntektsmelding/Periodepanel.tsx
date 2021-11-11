@@ -2,6 +2,7 @@
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
@@ -10,6 +11,7 @@ import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import useFocus from './useFocus';
 
 export interface IPeriodepanelerProps {
     name: string;
@@ -22,6 +24,11 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
     const intl = useIntl();
     const { name, textFjern, textLeggTil } = props;
     const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const fomInputRef = React.useRef<HTMLInputElement>(null);
+    const currentListLength = values[name]?.length;
+    const previousListLength = usePrevious(currentListLength);
+    useFocus(currentListLength, previousListLength, fomInputRef);
+
     return (
         <Panel className="periodepanel">
             <FieldArray name={name}>
@@ -29,6 +36,8 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                     <>
                         {values[name]?.map((value: IPeriode, index: number) => {
                             const fieldName = `${name}.${index}`;
+                            const isLastElement =
+                                previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
                                 <Row noGutters key={index}>
@@ -42,8 +51,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                                     periode={field.value}
                                                     intl={intl}
                                                     errorMessage={<ErrorMessage name={fieldName} />}
-                                                    // errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
-                                                    // errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
+                                                    fomInputRef={isLastElement ? fomInputRef : undefined}
                                                 />
                                             )}
                                         </Field>

@@ -13,6 +13,7 @@ interface DateInputProps {
     label: string;
     onBlur?: (value: string) => void;
     className?: string;
+    inputRef?: React.Ref<HTMLInputElement>;
 }
 
 const DateInput: React.FC<DateInputProps> = ({
@@ -24,6 +25,7 @@ const DateInput: React.FC<DateInputProps> = ({
     errorMessage,
     label,
     className,
+    inputRef,
 }) => {
     const datepickerId = id || uuidv4();
     return (
@@ -42,6 +44,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 calendarSettings={{ showWeekNumbers: true }}
                 showYearSelector
                 disabled={disabled}
+                inputProps={{ inputRef }}
             />
             {errorMessage && <Feilmelding>{errorMessage}</Feilmelding>}
         </div>
