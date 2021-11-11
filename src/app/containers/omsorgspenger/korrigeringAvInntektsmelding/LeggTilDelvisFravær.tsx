@@ -1,5 +1,6 @@
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
+import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
@@ -17,10 +18,15 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import './LeggTilDelvisFravær.less';
+import useFocus from './useFocus';
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
     const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const datoInputRef = React.useRef<HTMLInputElement>(null);
+    const currentListLength = values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.length;
+    const previousListLength = usePrevious(currentListLength);
+    useFocus(currentListLength, previousListLength, datoInputRef);
 
     return (
         <>
@@ -54,6 +60,9 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                         {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
                                             (value: DatoMedTimetall, index: number) => {
                                                 const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
+                                                const isLastElement =
+                                                    previousListLength < currentListLength &&
+                                                    index === currentListLength - 1;
                                                 return (
                                                     <Row noGutters key={fieldName}>
                                                         <div className="delvisFravaer__inputfelter">
@@ -68,6 +77,9 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                         label={intlHelper(intl, 'skjema.dato')}
                                                                         errorMessage={
                                                                             <ErrorMessage name={`${fieldName}.dato`} />
+                                                                        }
+                                                                        inputRef={
+                                                                            isLastElement ? datoInputRef : undefined
                                                                         }
                                                                     />
                                                                 )}

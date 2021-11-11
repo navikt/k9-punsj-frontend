@@ -27,6 +27,7 @@ export interface IPeriodInputProps {
         fom: string | undefined;
         tom: string | undefined;
     };
+    fomInputRef?: React.Ref<HTMLInputElement>;
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
@@ -45,6 +46,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         errorMessageFom,
         errorMessageTom,
         onBlur,
+        fomInputRef,
     } = props;
 
     const renderDato = (property: string) => {
@@ -70,6 +72,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         disabled={disabled || disabledFom}
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
+                        inputRef={fomInputRef}
                     />
                     <div className="periodInput__tom-container">
                         <DateInput
