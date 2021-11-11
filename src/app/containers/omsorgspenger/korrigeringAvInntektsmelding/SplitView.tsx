@@ -63,7 +63,7 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageQueryProps;
 
 export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
-    const { intl, dok, journalpostid, journalpost, forbidden, identState, punchFormState } = props;
+    const { intl, journalpostid, journalpost, forbidden, identState } = props;
     const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
     const { ident1 } = identState;
     useEffect(() => {
@@ -73,8 +73,6 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     }, [ident1, journalpost]);
     const journalposterFraSoknad = soknad?.journalposter || [];
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
-    const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],

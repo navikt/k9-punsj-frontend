@@ -1,19 +1,16 @@
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Checkbox, Input, Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Checkbox, Input, Select } from 'nav-frontend-skjema';
-
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
-import { FordelingDokumenttype } from 'app/models/enums';
-import { IIdentState } from '../../../../models/types/IdentState';
-import { IFellesState } from '../../../../state/reducers/FellesReducer';
-import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
-import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { hentBarn } from '../../../../state/reducers/HentBarn';
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
+import VerticalSpacer from '../../../../components/VerticalSpacer';
+import { IIdentState } from '../../../../models/types/IdentState';
+import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
+import { IFellesState } from '../../../../state/reducers/FellesReducer';
+import { hentBarn } from '../../../../state/reducers/HentBarn';
 import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 export interface ISokersBarnStateProps {
@@ -36,16 +33,8 @@ export interface ISokersBarn {
 type ISokersBarnProps = WrappedComponentProps & ISokersBarnStateProps & ISokersBarnDispatchProps & ISokersBarn;
 
 const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) => {
-    const {
-        intl,
-        barnetHarInteFnrFn,
-        identState,
-        sokersIdent,
-        fellesState,
-        setIdentAction,
-        henteBarn,
-        visSokersBarn
-    } = props;
+    const { intl, barnetHarInteFnrFn, identState, sokersIdent, fellesState, setIdentAction, henteBarn, visSokersBarn } =
+        props;
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);

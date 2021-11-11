@@ -5,6 +5,7 @@ import {
     updateOMSKorrigering,
     validerOMSKorrigering,
 } from 'app/state/actions/OMSPunchFormActions';
+import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -92,24 +93,14 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     };
 
     const sendInnKorrigering = (formVerdier: KorrigeringAvInntektsmeldingFormValues) => {
-        submitOMSKorrigering(søkerId, søknadId, (response, responseData) => {
-            switch (response.status) {
-                case 202:
-                    dispatch({ type: ActionType.SET_KORRIGERING_INNSENDT, innsendteFormverdier: formVerdier });
-                    break;
-                case 400:
-                case 409:
-                    dispatch({
-                        type: ActionType.SET_FORM_ERROR,
-                        formError: 'Innsending av korrigering feilet',
-                    });
-                    break;
-                default: {
-                    dispatch({
-                        type: ActionType.SET_FORM_ERROR,
-                        formError: 'Innsending av korrigering feilet',
-                    });
-                }
+        submitOMSKorrigering(søkerId, søknadId, (response) => {
+            if (response.status === 202) {
+                dispatch({ type: ActionType.SET_KORRIGERING_INNSENDT, innsendteFormverdier: formVerdier });
+            } else {
+                dispatch({
+                    type: ActionType.SET_FORM_ERROR,
+                    formError: 'Innsending av korrigering feilet',
+                });
             }
         });
     };
