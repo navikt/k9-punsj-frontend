@@ -16,7 +16,8 @@ jobs:
       - name: Installer moduler og kjør cypress-tester
         uses: cypress-io/github-action@v2
         with:
-          start: npm start
+          build: yarn run build
+          start: yarn start
       - name: Sjekke opp mot Lint-regler
         run: npm run lint
       - name: Kjøre tester
