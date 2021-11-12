@@ -10,6 +10,7 @@ export const initialState: IIdentState = {
 export function IdentReducer(identState: IIdentState = initialState, action: IIdentActions): IIdentState {
     switch (action.type) {
         case IdentActionKeys.IDENT_FELLES_SET:
+            console.log('her jeg')
             return {
                 ...identState,
                 ident1: action.ident1,

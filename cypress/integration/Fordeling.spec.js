@@ -29,7 +29,7 @@ describe('Fordeling', () => {
         cy.contains('Nei').should('exist');
     });
 
-    it('kan opprette journaføringsoppgave i Gosys', () => {
+    it('kan opprette journalføringsoppgave i Gosys', () => {
         cy.intercept(
             {
                 method: 'GET',
