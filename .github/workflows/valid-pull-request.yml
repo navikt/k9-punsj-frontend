@@ -19,7 +19,7 @@ jobs:
           build: yarn run build
           start: yarn start
           wait-on: 'http://localhost:8080'
-          wait-on-timeout: 120
+          wait-on-timeout: 60
       - name: Sjekke opp mot Lint-regler
         run: npm run lint
       - name: Kjøre tester
