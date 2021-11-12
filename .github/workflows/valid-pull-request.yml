@@ -21,6 +21,6 @@ jobs:
           wait-on: 'http://localhost:8080'
           wait-on-timeout: 60
       - name: Sjekke opp mot Lint-regler
-        run: npm run lint
+        run: yarn run lint
       - name: Kjøre tester
-        run: npm run test
+        run: yarn run test
