@@ -131,7 +131,6 @@ export function getJournalpost(journalpostid: string) {
     return (dispatch: any) => {
         dispatch(getJournalpostLoadAction());
         return get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostid }, undefined, (response, data) => {
-            console.log(data)
             if (response.ok) {
                 return dispatch(setJournalpostAction(data));
             }
