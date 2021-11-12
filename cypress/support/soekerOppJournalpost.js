@@ -1,5 +1,4 @@
 beforeEach(() => {
-    cy.log('i ran');
     cy.intercept(
         {
             method: 'GET',

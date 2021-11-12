@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-node@v2.4.0
         with:
           node-version: 12.x
-      - name: Cypress run
+      - name: Installer moduler og kjør cypress-tester
         uses: cypress-io/github-action@v2
         with:
           start: npm start
