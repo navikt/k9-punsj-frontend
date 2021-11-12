@@ -13,8 +13,10 @@ jobs:
         uses: actions/setup-node@v2.4.0
         with:
           node-version: 12.x
-      - name: Installere moduler
-        run: npm install
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
       - name: Sjekke opp mot Lint-regler
         run: npm run lint
       - name: Kjøre tester
