@@ -1,4 +1,72 @@
 const initialState = {
+    PLEIEPENGER_SYKT_BARN: {
+        punchFormState: {
+            isSoknadLoading: false,
+            isComplete: false,
+            isValid: false,
+            awaitingSettPaaVentResponse: false,
+        },
+        punchState: {
+            step: 0,
+            ident1: '29099000129',
+            ident2: '13079438906',
+        },
+        signaturState: {
+            signert: null,
+            isAwaitingUsignertRequestResponse: false,
+        },
+    },
+    OMSORGSPENGER_OVERFØRING: {
+        signatur: {
+            skjema: {
+                identitetsnummer: '',
+                signert: null,
+                sammeIdentSomRegistrert: null,
+            },
+        },
+        punch: {
+            skjema: {
+                norskIdent: null,
+                arbeidssituasjon: {
+                    erArbeidstaker: false,
+                    erFrilanser: false,
+                    erSelvstendigNæringsdrivende: false,
+                    metaHarFeil: null,
+                },
+                borINorge: null,
+                omsorgenDelesMed: {
+                    norskIdent: '',
+                    antallOverførteDager: 0,
+                    mottaker: null,
+                    samboerSiden: null,
+                },
+                aleneOmOmsorgen: null,
+                barn: [
+                    {
+                        norskIdent: null,
+                        fødselsdato: null,
+                    },
+                ],
+                mottaksdato: null,
+            },
+            innsendingsstatus: 'IkkeSendtInn',
+        },
+    },
+    OMSORGSPENGER_FORDELING: {
+        opprettIGosys: {
+            isAwaitingGosysOppgaveRequestResponse: false,
+        },
+    },
+    SØK: {
+        soknaderSokState: {
+            soknadSvar: [],
+            isSoknaderLoading: false,
+        },
+        visningState: {
+            step: 0,
+            ident: '',
+        },
+    },
     fordelingState: {
         sakstype: 'PLEIEPENGER_SYKT_BARN',
         omfordelingDone: false,
@@ -18,7 +86,7 @@ const initialState = {
     felles: {
         dedupKey: '01FMAT4RR8K7A7C0PSPBDKM566',
         journalpost: {
-            journalpostId: '201',
+            journalpostId: '200',
             norskIdent: '29099000129',
             dokumenter: [
                 {
