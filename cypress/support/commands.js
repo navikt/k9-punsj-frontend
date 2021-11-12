@@ -24,3 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands';
+Cypress.Commands.add('soekPaaJournalpost', (journalpostId = '200') => {
+    const input = cy.findByLabelText(/journalpost-id/i).should('exist');
+    input.type(journalpostId);
+    cy.findByRole('button', { name: /søk/i }).click();
+});

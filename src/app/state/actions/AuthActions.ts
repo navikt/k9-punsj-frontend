@@ -26,7 +26,7 @@ const redirectAction = (redirectUrl: string): IAuthRedirectAction => ({
     type: AuthActionKeys.REDIRECT,
     redirectUrl,
 });
-const authOkAction = (name: string): IAuthOkAction => ({
+export const authOkAction = (name: string): IAuthOkAction => ({
     type: AuthActionKeys.OK,
     name,
 });

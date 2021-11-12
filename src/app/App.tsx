@@ -76,3 +76,12 @@ export const App: React.FunctionComponent = () => {
 const root = document.getElementById('app');
 Modal.setAppElement('#app');
 render(<App />, root);
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+if (window.Cypress) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // eslint-disable-next-line no-underscore-dangle
+    window.__store__ = store
+}
