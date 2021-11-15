@@ -42,7 +42,7 @@ describe('Eksisterende søknader pleiepenger', () => {
 
             cy.findByText(/200/i).should('exist');
             cy.findByText(/29099000129/i).should('exist');
-            cy.findByText(/13079438906/i).should('exist');
+            cy.findByText(/16017725002/i).should('exist');
         });
     });
 
