@@ -1,5 +1,4 @@
-import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import initialState from './initialState';
+import initialState from '../../state/EksisterendeSoknaderInitialState';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {

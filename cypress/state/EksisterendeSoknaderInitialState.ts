@@ -9,7 +9,7 @@ const initialState = {
         punchState: {
             step: 0,
             ident1: '29099000129',
-            ident2: '13079438906',
+            ident2: '16017725002',
         },
         signaturState: {
             signert: null,
@@ -115,7 +115,7 @@ const initialState = {
     },
     identState: {
         ident1: '29099000129',
-        ident2: '13079438906',
+        ident2: '16017725002',
         annenSokerIdent: null,
     },
     opprettIGosys: {
