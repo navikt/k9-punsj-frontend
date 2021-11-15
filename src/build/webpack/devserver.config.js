@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mustacheExpress = require('mustache-express');
 const envVariables = require('../envVariables');
+const path = require('path');
 
 const configureDevServer = (decoratorFragments) => ({
     onBeforeSetupMiddleware: (devServer) => {
@@ -11,6 +12,10 @@ const configureDevServer = (decoratorFragments) => ({
         app.get(`/getEnvVariables`, (req, res) => {
             res.set('content-type', 'application/javascript');
             res.send(`${envVariables()}`);
+        });
+        app.get('/mockServiceWorker.js', (req, res) => {
+            res.set('content-type', 'application/javascript');
+            res.sendFile(path.resolve(`dist/mockServiceWorker.js`));
         });
         app.get(/^\/(?!.*dist).*$/, (req, res) => {
             res.render('index.html', Object.assign(decoratorFragments));
@@ -24,9 +29,9 @@ const configureDevServer = (decoratorFragments) => ({
     client: {
         overlay: {
             errors: true,
-            warnings: false
-        }
-    }
+            warnings: false,
+        },
+    },
 });
 
 module.exports = configureDevServer;

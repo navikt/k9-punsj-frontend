@@ -14,7 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
-window.appSettings={OIDC_AUTH_PROXY:'undefined',K9_LOS_URL:'undefined'};
+import './commands';
+window.appSettings = { OIDC_AUTH_PROXY: 'undefined', K9_LOS_URL: 'undefined' };
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

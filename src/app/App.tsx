@@ -29,6 +29,10 @@ Sentry.init({
     },
 });
 
+if (process.env.NODE_ENV !== 'production') {
+    import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
+}
+
 const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 
