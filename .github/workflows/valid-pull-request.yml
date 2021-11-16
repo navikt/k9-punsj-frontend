@@ -19,10 +19,9 @@ jobs:
         run: yarn run lint
       - name: Kjøre tester
         run: yarn run test
-      - name: Kjør cypress-tester
+      - name: Kjør E2E-tester
         uses: cypress-io/github-action@v2
-        run: yarn run test
         with:
           start: yarn start
-          wait-on: 'http://localhost:8080'
+          wait-on: "http://localhost:8080"
           wait-on-timeout: 60
