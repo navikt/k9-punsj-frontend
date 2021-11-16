@@ -2,32 +2,6 @@ import initialState from '../../state/EksisterendeSoknaderInitialState';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
-        cy.intercept(
-            {
-                method: 'GET',
-                url: '/api/k9-punsj/journalpost/200',
-            },
-            { fixture: 'journalpost.json' }
-        );
-
-        cy.intercept(
-            {
-                method: 'POST',
-                url: '/api/k9-punsj/journalpost/hent',
-            },
-            JSON.stringify({ poster: [] })
-        );
-        cy.intercept(
-            {
-                method: 'GET',
-                url: '/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe',
-            },
-            JSON.stringify({
-                søker: '29099000129',
-                fagsakTypeKode: 'PSB',
-                søknader: [],
-            })
-        );
         cy.visit('/journalpost/200#/pleiepenger/hentsoknader', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
@@ -58,28 +32,8 @@ describe('Eksisterende søknader pleiepenger', () => {
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
-        cy.intercept(
-            {
-                method: 'POST',
-                url: '/api/k9-punsj/pleiepenger-sykt-barn-soknad',
-            },
-            { statusCode: 201, fixture: 'pleiepengerSoknad.json' }
-        );
-        cy.intercept(
-            {
-                method: 'POST',
-                url: '/api/k9-punsj/pleiepenger-sykt-barn-soknad/k9sak/info',
-            },
-            { statusCode: 200, body: [] }
-        );
-        cy.intercept(
-            {
-                method: 'GET',
-                url: '/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe',
-            },
-            { statusCode: 200, fixture: 'pleiepengerSoknad.json' }
-        );
-
         cy.findByRole('button', { name: /start ny registrering/i }).click();
     });
+
+    //
 });

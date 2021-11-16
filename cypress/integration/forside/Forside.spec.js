@@ -24,4 +24,7 @@ describe('forside', () => {
         cy.soekPaaJournalpost('202');
         cy.contains(/Du har ikke tilgang til å slå opp denne personen/i).should('exist');
     });
+
+    // teste 409 på journalpost
+    // teste uhåndterte feilmeldinger
 });

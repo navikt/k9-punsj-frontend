@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
 import journalpost from '../../cypress/fixtures/journalpost.json';
+import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
 
@@ -13,6 +14,22 @@ export const testHandlers = {
     ),
     hentJournalpost: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/journalpost/200`, (req, res, ctx) =>
         res(ctx.json(journalpost))
+    ),
+    opprettePleiepengesoknad: rest.post(
+        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad`,
+        (req, res, ctx) => res(ctx.status(201), ctx.json(pleiepengerSoknad))
+    ),
+    hentSoknader: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/journalpost/hent`, (req, res, ctx) =>
+        res(ctx.json({ poster: [] }))
+    ),
+    hentMappe: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                søker: '29099000129',
+                fagsakTypeKode: 'PSB',
+                søknader: [],
+            })
+        )
     ),
     infoPleiepenger: rest.post(
         `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/k9sak/info`,
