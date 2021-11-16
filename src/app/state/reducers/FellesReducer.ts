@@ -142,7 +142,9 @@ export function getJournalpost(journalpostid: string) {
                 case 409:
                     return dispatch(getJournalpostConflictAction(data));
                 default:
-                    return dispatch(getJournalpostErrorAction(convertResponseToError(response)));
+                    return dispatch(
+                        getJournalpostErrorAction({ ...convertResponseToError(response), message: data?.message })
+                    );
             }
         });
     };
