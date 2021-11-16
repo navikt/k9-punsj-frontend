@@ -61,6 +61,16 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     const finnArbeidsforholdIdForValgtArbeidsgiver = () =>
         arbeidsgivereMedId?.find((item) => item.orgNummerEllerAktørID === values.Virksomhet)?.arbeidsforholdId || [];
 
+    const validateArbeidsforholdId = (value: string) => {
+        if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {
+            const arbeidsforholdIDerForValgtArbeidsgiver = finnArbeidsforholdIdForValgtArbeidsgiver();
+            if (arbeidsforholdIDerForValgtArbeidsgiver.length > 0 && !value) {
+                return 'Du må velge et arbeidsforholdID';
+            }
+        }
+        return '';
+    };
+
     return (
         <SkjemaGruppe
             legend={
@@ -114,8 +124,11 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 <Lenke className="eksternLenke" href={AAREG_URL}>
                     <span>Aa-registeret</span> <ExternalLink />
                 </Lenke>
-                <Field name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}>
-                    {({ field }: FieldProps) => (
+                <Field
+                    name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}
+                    validate={validateArbeidsforholdId}
+                >
+                    {({ field, meta }: FieldProps) => (
                         <Select
                             bredde="l"
                             label={intlHelper(
@@ -123,6 +136,12 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId'
                             )}
                             disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
+                            feil={
+                                meta.touched &&
+                                meta.error && (
+                                    <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId} />
+                                )
+                            }
                             {...field}
                         >
                             <option disabled key="default" value="" label="">
