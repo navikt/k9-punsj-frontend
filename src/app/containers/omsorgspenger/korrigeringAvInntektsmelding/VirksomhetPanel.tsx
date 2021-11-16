@@ -91,6 +91,16 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
         return '';
     };
 
+    const validateArbeidsforholdId = (value: string) => {
+        if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {
+            const arbeidsforholdIDerForValgtArbeidsgiver = finnArbeidsforholdIdForValgtArbeidsgiver();
+            if (arbeidsforholdIDerForValgtArbeidsgiver.length > 0 && !value) {
+                return 'Du må velge et arbeidsforholdID';
+            }
+        }
+        return '';
+    };
+
     return (
         <SkjemaGruppe
             legend={
