@@ -59,7 +59,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     }, [values.Virksomhet]);
 
     const finnArbeidsforholdIdForValgtArbeidsgiver = () =>
-        arbeidsgivereMedId?.find((item) => item.orgNummerEllerAktørID === values.Virksomhet)?.arbeidsforholdId || [];
+        arbeidsgivereMedId
+            ?.filter((item) => item.arbeidsforholdId?.length && item.arbeidsforholdId[0])
+            .find((item) => item.orgNummerEllerAktørID === values.Virksomhet)?.arbeidsforholdId || [];
 
     const validateArbeidsforholdId = (value: string) => {
         if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {
