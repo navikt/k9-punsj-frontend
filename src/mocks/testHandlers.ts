@@ -18,7 +18,7 @@ export const testHandlers = {
         `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/k9sak/info`,
         (req, res, ctx) => res(ctx.json([]))
     ),
-    eksisterendePleiepengesoknad: rest.post(
+    eksisterendePleiepengesoknad: rest.get(
         `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe`,
         (req, res, ctx) => res(ctx.json(journalpost))
     ),
@@ -32,6 +32,6 @@ export const testHandlers = {
     ),
     sendPleiepengesoknad: rest.post(
         `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/send`,
-        (req, res, ctx) => res(ctx.status(202), ctx.json(pleiepengerSoknadSomKanSendesInn))
+        (req, res, ctx) => res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
     ),
 };

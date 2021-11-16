@@ -77,6 +77,7 @@
         "redux-logger": "^3.0.6",
         "snyk": "^1.733.0",
         "source-map-loader": "^3.0.0",
+        "start-server-and-test": "^1.14.0",
         "typescript-string-operations": "^1.4.1",
         "ulid": "^2.3.0",
         "uuid": "^8.3.1"
@@ -90,7 +91,9 @@
         "lint": "eslint --quiet 'src/**/*.{ts,tsx}'",
         "eject": "react-scripts eject",
         "snyk-protect": "snyk protect",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "cypress:headless": "cypress run",
+        "test:e2e": "start-server-and-test start:e2e http://localhost:8080 cypress:headless"
     },
     "devDependencies": {
         "@babel/cli": "^7.16.0",
