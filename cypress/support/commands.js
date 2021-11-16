@@ -24,3 +24,34 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands';
+
+Cypress.Commands.add('soekPaaJournalpost', (journalpostId = '200') => {
+    const input = cy.findByLabelText(/journalpost-id/i).should('exist');
+    input.type(journalpostId);
+    cy.findByRole('button', { name: /søk/i }).click();
+});
+
+Cypress.Commands.add('soknadperioderInput', (fom, tom) => {
+    cy.get('.soknadsperiodecontainer').within(() => {
+        cy.findByLabelText(/Fra og med/i)
+            .should('exist')
+            .type('08.11.2021');
+        cy.findByLabelText(/Til og med/i)
+            .should('exist')
+            .type('11.11.2021');
+    });
+});
+
+Cypress.Commands.add('sendInnPleiepengeSoknad', () => {
+    cy.findByRole('button', { name: /send inn/i })
+        .should('exist')
+        .click();
+
+    cy.findByRole('button', { name: /videre/i })
+        .should('exist')
+        .click();
+
+    cy.findByRole('button', { name: /send inn/i })
+        .should('exist')
+        .click();
+});
