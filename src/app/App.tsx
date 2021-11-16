@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable no-underscore-dangle */
+
 import * as Sentry from '@sentry/react';
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
@@ -36,7 +39,11 @@ if (process.env.NODE_ENV !== 'production') {
 const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
+// @ts-ignore
+const store = window.Cypress
+    ? // @ts-ignore
+      createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
+    : createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
 
@@ -80,3 +87,9 @@ export const App: React.FunctionComponent = () => {
 const root = document.getElementById('app');
 Modal.setAppElement('#app');
 render(<App />, root);
+
+// @ts-ignore
+if (window.Cypress) {
+    // @ts-ignore
+    window.__store__ = store;
+}

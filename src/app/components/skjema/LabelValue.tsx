@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React from 'react';
 import { Label } from 'nav-frontend-skjema';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
@@ -20,7 +19,6 @@ const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
     retning = 'vertikal',
     visKopier,
 }) => {
-    const valueId = useMemo(() => uuidv4(), []);
     const intl = useIntl();
 
     return (
@@ -29,8 +27,8 @@ const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
                 'horisontal-label': retning === 'horisontal',
             })}
         >
-            <Label htmlFor={valueId}>{intlHelper(intl, labelTextId)}</Label>
-            <div id={valueId}>{value}</div>
+            <Label htmlFor={`journalpostpanel.${labelTextId}.label`}>{intlHelper(intl, labelTextId)}</Label>
+            <div id={`journalpostpanel.${labelTextId}.value`}>{value}</div>
             {visKopier && <Kopier verdi={value} />}
         </div>
     );

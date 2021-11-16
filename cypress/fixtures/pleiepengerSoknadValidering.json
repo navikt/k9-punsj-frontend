@@ -1,0 +1,77 @@
+{
+    "søknadId": "0416e1a2-8d80-48b1-a56e-ab4f4b4821fe",
+    "versjon": "1.0.0",
+    "mottattDato": "2020-10-12T10:53:00.000Z",
+    "søker": {
+        "norskIdentitetsnummer": "29099000129"
+    },
+    "ytelse": {
+        "type": "PLEIEPENGER_SYKT_BARN",
+        "barn": {
+            "norskIdentitetsnummer": "16017725002",
+            "fødselsdato": null
+        },
+        "søknadsperiode": ["2021-11-08/2021-11-11"],
+        "endringsperiode": [],
+        "trekkKravPerioder": [],
+        "opptjeningAktivitet": {},
+        "dataBruktTilUtledning": {
+            "harForståttRettigheterOgPlikter": null,
+            "harBekreftetOpplysninger": null,
+            "samtidigHjemme": null,
+            "harMedsøker": null,
+            "bekrefterPeriodeOver8Uker": null
+        },
+        "infoFraPunsj": null,
+        "bosteder": {
+            "perioder": {},
+            "perioderSomSkalSlettes": {}
+        },
+        "utenlandsopphold": {
+            "perioder": {},
+            "perioderSomSkalSlettes": {}
+        },
+        "beredskap": {
+            "perioder": {},
+            "perioderSomSkalSlettes": {}
+        },
+        "nattevåk": {
+            "perioder": {},
+            "perioderSomSkalSlettes": {}
+        },
+        "tilsynsordning": {
+            "perioder": {}
+        },
+        "lovbestemtFerie": {
+            "perioder": {}
+        },
+        "arbeidstid": {
+            "arbeidstakerList": [],
+            "frilanserArbeidstidInfo": null,
+            "selvstendigNæringsdrivendeArbeidstidInfo": null
+        },
+        "uttak": {
+            "perioder": {
+                "2021-11-08/2021-11-11": {
+                    "timerPleieAvBarnetPerDag": "PT7H30M"
+                }
+            }
+        },
+        "omsorg": {
+            "relasjonTilBarnet": null,
+            "beskrivelseAvOmsorgsrollen": null
+        }
+    },
+    "språk": "nb",
+    "journalposter": [
+        {
+            "inneholderInfomasjonSomIkkeKanPunsjes": null,
+            "inneholderInformasjonSomIkkeKanPunsjes": false,
+            "inneholderMedisinskeOpplysninger": false,
+            "journalpostId": "201"
+        }
+    ],
+    "begrunnelseForInnsending": {
+        "tekst": ""
+    }
+}
