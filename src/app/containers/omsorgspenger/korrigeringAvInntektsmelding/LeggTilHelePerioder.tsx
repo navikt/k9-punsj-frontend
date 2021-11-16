@@ -1,4 +1,3 @@
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -7,8 +6,8 @@ import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import EkspanderbartPanel from './EkspanderbartPanel';
-import { Periodepanel } from './Periodepanel';
 import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import { Periodepanel } from './Periodepanel';
 
 const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();

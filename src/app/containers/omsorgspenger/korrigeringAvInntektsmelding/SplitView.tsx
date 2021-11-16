@@ -3,7 +3,6 @@ import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
-import { peiepengerPaths } from 'app/containers/pleiepenger/PeiepengerRoutes';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
@@ -13,7 +12,7 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
 import { RootStateType } from 'app/state/RootState';
-import { get, getPath } from 'app/utils';
+import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
@@ -63,7 +62,7 @@ type IPunchPageProps = WrappedComponentProps &
     IPunchPageQueryProps;
 
 export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
-    const { intl, dok, journalpostid, journalpost, forbidden, identState, punchFormState } = props;
+    const { intl, journalpostid, journalpost, forbidden, identState } = props;
     const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
     const { ident1 } = identState;
     useEffect(() => {
@@ -73,8 +72,6 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     }, [ident1, journalpost]);
     const journalposterFraSoknad = soknad?.journalposter || [];
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
-    const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
