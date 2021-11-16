@@ -428,9 +428,9 @@
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.checkbox": "Legg til hele dager eller perioder med refusjonskrav",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.legend": "Hele dager med fravær arbeidsgiver krever refusjon for",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.info": "Dette valget skal kun brukes for hele dager eller perioder.",
-    "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.checkbox": "Legg til dager med delvis fravær",
-    "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend": "Dager med delvis fravær arbeidsgiver krever refusjon for",
-    "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info": "Melder arbeidsgiver krav om refusjon for dager med delvis fravær, fyll ut dato og antall timer fravær.",
+    "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.checkbox": "Endre krav fra dag til timer",
+    "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend": "Refusjon av dag skal endres til timer",
+    "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info": "Melder arbeidsgiver at krav om hel dag skal endres til krav om timer, fyll ut dato og antall timer de krever refusjon for.",
 
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",

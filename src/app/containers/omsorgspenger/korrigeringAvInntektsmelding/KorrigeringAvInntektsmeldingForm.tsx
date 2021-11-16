@@ -26,7 +26,6 @@ import {
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær';
-import LeggTilHelePerioder from './LeggTilHelePerioder';
 import OMSKvittering from './OMSKvittering';
 import OpplysningerOmKorrigering from './OpplysningerOmKorrigering';
 import TrekkPerioder from './TrekkPerioder';
@@ -164,7 +163,11 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                             <Panel border>
                                 <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
                                 <AlertStripeInfo className="korrigering__headerInfo">
-                                    {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
+                                    Korrigering av inntektsmelding skal benyttes til å:
+                                    <ul>
+                                        <li> Slette dager/timer arbeidsgiver melder fra de har fått for mye</li>
+                                        <li>Endre dager til timer, når arbeidsgiver melder de har fått for mye</li>
+                                    </ul>
                                 </AlertStripeInfo>
                                 <div className="korrigering__opplysningerOmKorrigeringContainer">
                                     <OpplysningerOmKorrigering />
@@ -184,7 +187,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         }
                                     }}
                                 />
-                                <LeggTilHelePerioder
+                                {/* <LeggTilHelePerioder
                                     isPanelOpen={åpnePaneler.leggTilHelePerioderPanel}
                                     togglePanel={() => {
                                         const toggledPanel = !åpnePaneler.leggTilHelePerioderPanel;
@@ -196,7 +199,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                             );
                                         }
                                     }}
-                                />
+                                /> */}
                                 <LeggTilDelvisFravær
                                     isPanelOpen={åpnePaneler.leggTilDelvisFravær}
                                     togglePanel={() => {
