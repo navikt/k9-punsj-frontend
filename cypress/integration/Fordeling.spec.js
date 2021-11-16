@@ -1,6 +1,3 @@
-import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
-import { authOkAction } from 'app/state/actions/AuthActions';
-
 describe('Fordeling', () => {
     before(() => {
         cy.intercept(
@@ -19,8 +16,6 @@ describe('Fordeling', () => {
             { fixture: 'journalpost.json' }
         );
 
-
-
         cy.visit('/journalpost/200');
     });
     it('viser dokumentvalg', () => {
@@ -38,7 +33,7 @@ describe('Fordeling', () => {
             { fixture: 'gosysKategorier.json' }
         ).as('gosysKategorier');
         cy.contains('Nei').click();
-        cy.wait('@gosysKategorier')
+        cy.wait('@gosysKategorier');
         const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
         identifikatorInput.clear().type('13337');
     });

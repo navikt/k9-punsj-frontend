@@ -1,4 +1,4 @@
-const initialState = {
+const EksisterendeSoknaderInitialState = {
     PLEIEPENGER_SYKT_BARN: {
         punchFormState: {
             isSoknadLoading: false,
@@ -129,4 +129,4 @@ const initialState = {
     },
 };
 
-export default initialState;
+export default EksisterendeSoknaderInitialState;
