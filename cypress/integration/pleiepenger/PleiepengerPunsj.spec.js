@@ -19,4 +19,10 @@ describe('Pleiepenger punsj', () => {
         cy.findByText('Oppsummering').should('exist');
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
     });
+
+    // sjekke at journalpostnummer fra flere saker vises
+    // sjekk av validering og feilmeldinger på alle felter
+    // sjekk at man ikke får sende inn dersom man har valideringsfeil
+    // sjekk at alle input-felter fungerer og oppdaterer state?
+    // sjekke at eksisterende søknadsperioder vises?
 });
