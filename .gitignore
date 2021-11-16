@@ -16,7 +16,8 @@ cypress.env.json
 /node_modules
 npm-debug.log
 lib/
-dist
+dist/*
+!dist/mockServiceWorker.js
 lerna-debug.log
 .vscode
 .consumed-idents.json

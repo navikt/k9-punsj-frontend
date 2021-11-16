@@ -14,13 +14,13 @@ jobs:
         with:
           node-version: 12.x
       - name: Installere moduler
-        run: npm install
+        run: yarn install
       - name: Sjekke opp mot Lint-regler
-        run: npm run lint
+        run: yarn run lint
       - name: Kjøre tester
-        run: npm run test
+        run: yarn run test
       - name: Bygge kode
-        run: npm run build
+        run: yarn run build
       - name: Sette Docker-navn og -tag
         env:
           DOCKER_IMAGE: docker.pkg.github.com/${{ github.repository }}/k9-punsj-frontend
