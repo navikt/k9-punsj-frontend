@@ -46,7 +46,7 @@ const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 // @ts-ignore
 const store = window.Cypress
     ? // @ts-ignore
-      createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
+    createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
     : createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
