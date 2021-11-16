@@ -1,0 +1,19 @@
+{
+    "journalpostId": "200",
+    "norskIdent": "29099000129",
+    "dokumenter": [
+        {
+            "dokumentId": "470164680"
+        },
+        {
+            "dokumentId": "470164681"
+        }
+    ],
+    "venter": null,
+    "punsjInnsendingType": null,
+    "kanSendeInn": true,
+    "erSaksbehandler": true,
+    "journalpostStatus": "MOTTATT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true
+}

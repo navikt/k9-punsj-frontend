@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
-import { IJournalpost } from '../../models/types';
+import { IError, IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
@@ -22,6 +22,7 @@ export interface ISearchFormStateProps {
     forbidden: boolean;
     conflict?: boolean;
     journalpostConflictError?: IJournalpostConflictResponse;
+    journalpostRequestError?: IError;
     lukkOppgaveDone?: boolean;
     lukkOppgaveReset: () => void;
 }
@@ -69,6 +70,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             forbidden,
             conflict,
             journalpostConflictError,
+            journalpostRequestError,
             journalpost,
             lukkJournalpostOppgave,
             lukkOppgaveDone,
@@ -143,6 +145,20 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                             </>
                         )}
 
+                    {journalpostRequestError?.message && (
+                        <>
+                            <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
+                            <VerticalSpacer eightPx />
+                            <Knapp
+                                onClick={() => {
+                                    if (journalpostid) lukkJournalpostOppgave(journalpostid);
+                                }}
+                            >
+                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                            </Knapp>
+                        </>
+                    )}
+
                     {!!journalpost && !journalpost?.kanSendeInn && (
                         <AlertStripeAdvarsel>
                             <FormattedMessage id="fordeling.kanikkesendeinn" />
@@ -160,6 +176,7 @@ const mapStateToProps = (state: RootStateType) => ({
     forbidden: state.felles.journalpostForbidden,
     conflict: state.felles.journalpostConflict,
     journalpostConflictError: state.felles.journalpostConflictError,
+    journalpostRequestError: state.felles.journalpostRequestError,
     lukkOppgaveDone: state.fordelingState.lukkOppgaveDone,
 });
 

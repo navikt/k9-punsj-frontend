@@ -11,6 +11,7 @@
         "@navikt/nap-header": "^1.0.10",
         "@navikt/nap-user-panel": "^1.0.0",
         "@sentry/react": "^6.14.1",
+        "@testing-library/cypress": "^8.0.1",
         "@types/classnames": "^2.2.11",
         "@types/react-redux": "^7.1.20",
         "@types/redux-logger": "^3.0.8",
@@ -18,6 +19,7 @@
         "bootstrap": "^4.5.3",
         "classnames": "^2.2.6",
         "css-minimizer-webpack-plugin": "^3.1.1",
+        "cypress": "^9.0.0",
         "dayjs": "^1.10.7",
         "dotenv": "^8.1.0",
         "fetch-headers": "^2.0.0",
@@ -151,6 +153,7 @@
         "less": "^4.1.2",
         "less-loader": "^10.2.0",
         "lint-staged": ">=11.2.4",
+        "msw": "^0.35.0",
         "nav-frontend-alertstriper-style": "^3.0.1",
         "nav-frontend-chevron-style": "^1.0.4",
         "nav-frontend-ekspanderbartpanel-style": "^2.0.1",
@@ -192,5 +195,8 @@
     "snyk": false,
     "lint-staged": {
         "src/app/**/*.ts?(x)": "eslint --cache --fix"
+    },
+    "msw": {
+        "workerDirectory": "dist"
     }
 }
