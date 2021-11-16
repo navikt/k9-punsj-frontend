@@ -24,6 +24,6 @@ jobs:
       - name: Kjør E2E-tester
         uses: cypress-io/github-action@v2
         with:
-          start: yarn start
+          start: yarn start:e2e
           wait-on: "http://localhost:8080"
           wait-on-timeout: 60
