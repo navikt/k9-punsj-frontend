@@ -15,7 +15,7 @@ jobs:
           node-version: 12.x
       - name: Installerer moduler
         run: yarn install
-      - name: Installerer moduler
+      - name: Bygger
         run: yarn build
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
