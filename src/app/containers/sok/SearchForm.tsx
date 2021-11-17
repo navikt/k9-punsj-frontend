@@ -166,15 +166,6 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         </AlertStripeAdvarsel>
                     )}
                 </SkjemaGruppe>
-                <button
-                    type="button"
-                    style={{ display: 'none' }}
-                    onClick={() => {
-                        throw new Error();
-                    }}
-                >
-                    Ødelegg
-                </button>
             </div>
         );
     }
