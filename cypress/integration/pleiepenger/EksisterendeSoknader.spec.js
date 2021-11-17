@@ -1,4 +1,6 @@
 import initialState from '../../state/EksisterendeSoknaderInitialState';
+import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
+import pleiepengerSoknadSomKanSendesInn from '../../fixtures/pleiepengerSoknadSomKanSendesInn';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
@@ -39,5 +41,36 @@ describe('Eksisterende søknader pleiepenger', () => {
         );
     });
 
-    // kan fortsette på eksisterende sak
+    it('kan fortsette på eksisterende sak', () => {
+        cy.window().then((window) => {
+            const { worker, rest } = window.msw;
+            worker.use(
+                rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
+                    res(
+                        ctx.json({
+                            søker: '29099000129',
+                            fagsakTypeKode: 'PSB',
+                            søknader: [pleiepengerSoknadSomKanSendesInn],
+                        })
+                    )
+                )
+            );
+        });
+
+        cy.get('.punch_mappetabell').within(() => {
+            cy.findByText('12.10.2020').should('exist');
+            cy.findByText('16017725002').should('exist');
+            cy.findByText('200').should('exist');
+            cy.findByText('08.11.2021 - 11.11.2021').should('exist');
+        });
+
+        cy.findByRole('button', { name: /fortsett/i }).click();
+        cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
+        cy.findByRole('button', { name: /fortsett/i }).click();
+
+        cy.url().should(
+            'eq',
+            'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
+        );
+    });
 });

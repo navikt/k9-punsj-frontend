@@ -1,11 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
+import { BACKEND_BASE_URL } from './konstanter';
 import journalpost from '../../cypress/fixtures/journalpost.json';
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
-
-const BACKEND_BASE_URL = 'http://localhost:8101';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
