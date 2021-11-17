@@ -1,21 +1,5 @@
 describe('Fordeling', () => {
-    before(() => {
-        cy.intercept(
-            {
-                method: 'GET',
-                url: '/me',
-            },
-            JSON.stringify({ name: 'Bobby Binders' })
-        );
-
-        cy.intercept(
-            {
-                method: 'GET',
-                url: '/api/k9-punsj/journalpost/200',
-            },
-            { fixture: 'journalpost.json' }
-        );
-
+    beforeEach(() => {
         cy.visit('/journalpost/200');
     });
     it('viser dokumentvalg', () => {
