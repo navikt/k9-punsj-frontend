@@ -24,6 +24,7 @@ const environment = window.location.hostname;
 Sentry.init({
     dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
     environment,
+    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
     beforeSend: (event) => {
         if (environment === 'localhost') {
             return null;
