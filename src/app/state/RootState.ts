@@ -8,6 +8,7 @@ import {
     PunchFormReducer,
     PunchReducer,
     SignaturReducer,
+    FordelingSettPåVentReducer,
 } from './reducers';
 import FellesReducer from './reducers/FellesReducer';
 import { Sakstype } from '../models/enums';
@@ -30,7 +31,7 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
     }),
-    'SØK': combineReducers({
+    SØK: combineReducers({
         soknaderSokState: SoknaderSokReducer,
         visningState: SoknaderVisningReducer,
     }),
@@ -41,6 +42,7 @@ export const rootReducer = combineReducers({
     identState: IdentReducer,
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
+    fordelingSettPåVentState: FordelingSettPåVentReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

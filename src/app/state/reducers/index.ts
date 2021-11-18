@@ -6,3 +6,4 @@ export * from './PunchFormReducer';
 export * from './PunchReducer';
 export * from './SignaturReducer';
 export * from './GosysOppgaveReducer';
+export * from './FordelingSettPåVentReducer';
