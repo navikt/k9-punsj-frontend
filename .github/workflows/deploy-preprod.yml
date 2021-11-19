@@ -32,8 +32,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sett tag for docker image
-        run: |
-          echo "TAG=(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: echo "TAG=(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Bygge & laste opp Docker image
         run: |
