@@ -28,3 +28,4 @@ tmp/
 .scannerwork
 node_modules_bak
 .eslintcache
+*.mp4
