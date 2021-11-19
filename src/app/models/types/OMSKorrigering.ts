@@ -41,6 +41,13 @@ const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => 
 
 const trimString = (string: string) => string.replace(/\s+/g, '');
 
+const formaterArbeidforholdId = (string: string) => {
+    if (string === 'null') {
+        return null;
+    }
+    return trimString(string);
+};
+
 export class OMSKorrigering {
     mottattDato: string;
 
@@ -70,7 +77,7 @@ export class OMSKorrigering {
         this.soekerId = søkerId;
         this.journalposter = journalposter;
         this.organisasjonsnummer = values.Virksomhet;
-        this.arbeidsforholdId = values.ArbeidsforholdId ? trimString(values.ArbeidsforholdId) : null;
+        this.arbeidsforholdId = values.ArbeidsforholdId ? formaterArbeidforholdId(values.ArbeidsforholdId) : null;
         this.fravaersperioder = lagFraværsperioder(values);
     }
 }
