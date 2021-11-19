@@ -20,6 +20,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -208,9 +209,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     };
 
     const handleUtgåttInntektsmelding = (valgtHåndtering: string) => {
-        setSokersIdent('');
-        setIdentAction('', identState.ident2);
-        setRiktigIdentIJournalposten(undefined);
         setHåndterUtgåttInntektsmeldingValg(valgtHåndtering);
     };
 
@@ -274,31 +272,28 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
                 <FormPanel>
                     <JournalpostPanel />
+                    {erUtgåttInntektsmelding && (
+                        <>
+                            <VerticalSpacer thirtyTwoPx />
+                            <Systemtittel>Inntektsmelding uten søknad</Systemtittel>
+                            <VerticalSpacer twentyPx />
+                        </>
+                    )}
                     <div className="fordeling-page">
                         {!!opprettIGosysState.gosysOppgaveRequestError && (
                             <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>
                         )}
+                        {erUtgåttInntektsmelding && (
+                            <>
+                                <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
+                                    Inntektsmelding uten refusjonskrav er mottatt, uten at det er mottatt søknad for
+                                    bruker. Kontakt arbeidsgiver.
+                                </AlertStripeAdvarsel>
+                                <VerticalSpacer thirtyTwoPx />
+                            </>
+                        )}
                         <div>
-                            {erUtgåttInntektsmelding ? (
-                                <RadioPanelGruppe
-                                    name="utgåttInntektsmelding"
-                                    radios={[
-                                        {
-                                            label: 'Opprett journalføringsoppgave for å feilregistrere journalpost',
-                                            value: 'opprettJournalføringsoppgave',
-                                        },
-                                        {
-                                            label: 'Sett på vent',
-                                            value: 'settPåVent',
-                                        },
-                                    ]}
-                                    legend="Inntektsmelding uten refusjonskrav er mottatt, uten at det er mottatt søknad for bruker. Kontakt arbeidsgiver."
-                                    checked={håndterUtgåttInntektsmeldingValg}
-                                    onChange={(event) =>
-                                        handleUtgåttInntektsmelding((event.target as HTMLInputElement).value)
-                                    }
-                                />
-                            ) : (
+                            {!erUtgåttInntektsmelding && (
                                 <RadioPanelGruppe
                                     name="ppsjekk"
                                     radios={Object.values(FordelingDokumenttype).map((type) => ({
@@ -339,7 +334,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setErIdent1Bekreftet={setErIdent1Bekreftet}
                                 riktigIdentIJournalposten={riktigIdentIJournalposten}
                                 setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
-                                erUtgåttInntektsmelding={!!håndterUtgåttInntektsmeldingValg}
+                                erUtgåttInntektsmelding={erUtgåttInntektsmelding}
                             />
                             <ToSoekere
                                 dokumenttype={dokumenttype}
@@ -351,6 +346,26 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             />
 
                             <VerticalSpacer twentyPx />
+                            {erUtgåttInntektsmelding && (
+                                <RadioPanelGruppe
+                                    name="utgåttInntektsmelding"
+                                    radios={[
+                                        {
+                                            label: 'Opprett journalføringsoppgave for å feilregistrere journalpost',
+                                            value: 'opprettJournalføringsoppgave',
+                                        },
+                                        {
+                                            label: 'Sett på vent',
+                                            value: 'settPåVent',
+                                        },
+                                    ]}
+                                    legend="Inntektsmelding uten refusjonskrav er mottatt, uten at det er mottatt søknad for bruker. Kontakt arbeidsgiver."
+                                    checked={håndterUtgåttInntektsmeldingValg}
+                                    onChange={(event) =>
+                                        handleUtgåttInntektsmelding((event.target as HTMLInputElement).value)
+                                    }
+                                />
+                            )}
                             {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
                                     <SokersBarn
