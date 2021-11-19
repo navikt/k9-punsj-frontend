@@ -22,7 +22,7 @@ import {
 import './virksomhetPanel.less';
 
 interface IVirksomhetPanelProps {
-    søkerId?: string;
+    søkerId: string;
 }
 export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JSX.Element {
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
@@ -34,12 +34,11 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     const previousValgtVirksomhet = usePrevious(values.Virksomhet);
 
     useEffect(() => {
-        if (søkerId) {
-            finnArbeidsgivere(søkerId, (response, data: ArbeidsgivereResponse) => {
-                setArbeidsgivereMedNavn(data?.organisasjoner || []);
-            });
-        }
-        if (årstallForKorrigering && søkerId) {
+        finnArbeidsgivere(søkerId, (response, data: ArbeidsgivereResponse) => {
+            setArbeidsgivereMedNavn(data?.organisasjoner || []);
+        });
+
+        if (årstallForKorrigering) {
             hentArbeidsgivereMedId(søkerId, årstallForKorrigering)
                 .then((response) => response.json())
                 .then((data) => {
@@ -50,7 +49,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                     }
                 });
         }
-    }, [årstallForKorrigering, søkerId]);
+    }, [årstallForKorrigering]);
 
     useEffect(() => {
         if (previousValgtVirksomhet !== undefined && values.Virksomhet !== previousValgtVirksomhet) {

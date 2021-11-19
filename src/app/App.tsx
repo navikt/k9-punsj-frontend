@@ -33,8 +33,12 @@ Sentry.init({
     },
 });
 
-if (process.env.NODE_ENV !== 'production') {
-    import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
+function prepare() {
+    if (process.env.NODE_ENV !== 'production') {
+        return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
+    }
+
+    return Promise.resolve();
 }
 
 const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
@@ -43,7 +47,7 @@ const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 // @ts-ignore
 const store = window.Cypress
     ? // @ts-ignore
-      createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
+    createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
     : createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
@@ -87,7 +91,12 @@ export const App: React.FunctionComponent = () => {
 
 const root = document.getElementById('app');
 Modal.setAppElement('#app');
-render(<App />, root);
+
+// venter med å rendre applikasjonen til MSW er klar
+// https://mswjs.io/docs/recipes/deferred-mounting
+prepare().then(() => {
+    render(<App />, root);
+});
 
 // @ts-ignore
 if (window.Cypress) {
