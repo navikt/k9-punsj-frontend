@@ -134,8 +134,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const erUtgåttInntektsmelding =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
-    const skalOppretteGosysoppgaveForUtgåttInntektsmelding = () =>
-        håndterUtgåttInntektsmeldingValg === 'opprettJournalføringsoppgave' && identState.ident1;
+    const skalFeilregistrereJournalpost = () =>
+        håndterUtgåttInntektsmeldingValg === 'feilregistrerJournalpost' && identState.ident1;
 
     const skalSetteUtgåttInntektsmeldingPåVent = () =>
         håndterUtgåttInntektsmeldingValg === 'settPåVent' && identState.ident1;
@@ -351,8 +351,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     name="utgåttInntektsmelding"
                                     radios={[
                                         {
-                                            label: 'Opprett journalføringsoppgave for å feilregistrere journalpost',
-                                            value: 'opprettJournalføringsoppgave',
+                                            label: 'Feilregistrer journalpost',
+                                            value: 'feilregistrerJournalpost',
                                         },
                                         {
                                             label: 'Sett på vent',
@@ -449,21 +449,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 )}
                             </>
                         )}
-                        {skalOppretteGosysoppgaveForUtgåttInntektsmelding() && (
-                            <Hovedknapp
-                                mini
-                                onClick={() => omfordel(journalpost.journalpostId, identState.ident1, 'Annet')}
-                            >
-                                <FormattedMessage id="fordeling.sakstype.ANNET" />
+                        {skalFeilregistrereJournalpost() && (
+                            <Hovedknapp mini onClick={() => null}>
+                                Feilregistrer journalpost
                             </Hovedknapp>
                         )}
                         {skalSetteUtgåttInntektsmeldingPåVent() && (
-                            <Knapp
-                                // className={'vent-knapp'}
-                                onClick={() => setShowSettPaaVentModal(true)}
-                            >
+                            <Hovedknapp mini onClick={() => setShowSettPaaVentModal(true)}>
                                 {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                            </Knapp>
+                            </Hovedknapp>
                         )}
                         <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
