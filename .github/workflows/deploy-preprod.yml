@@ -2,6 +2,9 @@ name: Deploy til preprod
 
 on: [workflow_dispatch]
 
+env:
+  DOCKER_IMAGE: ghcr.io/${{ github.repository }}
+
 jobs:
   deploy-dev:
     name: Deploye til DEV
@@ -21,23 +24,25 @@ jobs:
         run: yarn run test
       - name: Bygge kode
         run: yarn run build
-      - name: Sette Docker-navn og -tag
-        env:
-          DOCKER_IMAGE: docker.pkg.github.com/${{ github.repository }}/k9-punsj-frontend
+
+      - uses: docker/login-action@v1.10.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.REPOSITORY_OWNER }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sett tag for docker image
         run: |
-          echo $DOCKER_IMAGE > .docker_image
-          echo "$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" > .docker_tag
-          echo "IMAGE=${IMAGE}$(cat .docker_image):$(cat .docker_tag)" >> $GITHUB_ENV
-      - name: Bygge Docker image
-        run: docker build . --pull -t $(cat .docker_image):$(cat .docker_tag)
-      - name: Laste opp Docker image
+          echo "TAG=(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Bygge & laste opp Docker image
         run: |
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker push $(cat .docker_image):$(cat .docker_tag)
-          docker tag $(cat .docker_image):$(cat .docker_tag) $(cat .docker_image):latest
-          docker push $(cat .docker_image):latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          docker build --pull -tag ${DOCKER_IMAGE}:{TAG} -tag ${DOCKER_IMAGE}:latest .
+          docker push {DOCKER_IMAGE} --all-tags
+
+      - name: Sett image for nais deploy
+        run: echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
+
       - name: Deploye til dev
         uses: nais/deploy/actions/deploy@v1
         env:
