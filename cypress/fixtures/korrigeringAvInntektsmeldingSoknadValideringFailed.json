@@ -1,0 +1,10 @@
+{
+    "søknadIdDto": "88c4c46e-5745-408c-bbcc-1e63572c8369",
+    "feil": [
+        {
+            "felt": "søknad",
+            "feilkode": "uventetMappingfeil",
+            "feilmelding": "Må ha fravær fra enten søker eller fra fraværskorrigering av inntektsmelding"
+        }
+    ]
+}
