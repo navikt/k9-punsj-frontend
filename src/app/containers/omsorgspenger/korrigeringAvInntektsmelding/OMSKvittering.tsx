@@ -76,7 +76,7 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
             )}
             {visDagerMedDelvisFravær() && (
                 <>
-                    <h3>Dager med delvis fravær arbeidsgiver krever refusjon for </h3>
+                    <h3>Refusjon av dag skal endres til timer</h3>
                     <hr className={classNames('linje')} />
                     <p>
                         {DagerMedDelvisFravær.filter(
