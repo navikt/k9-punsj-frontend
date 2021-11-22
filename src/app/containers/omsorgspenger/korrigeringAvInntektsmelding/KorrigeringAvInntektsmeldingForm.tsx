@@ -248,7 +248,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                         {visErDuSikkerModal && (
                             <ModalWrapper
                                 onRequestClose={() => {
-                                    dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
+                                    dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                                 }}
                                 contentLabel="Er du sikker?"
                                 closeButton={false}
@@ -260,7 +260,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     onSubmit={() => sendInnKorrigering(values)}
                                     submitKnappText="skjema.knapp.send"
                                     onClose={() => {
-                                        dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
+                                        dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                                     }}
                                 />
                             </ModalWrapper>

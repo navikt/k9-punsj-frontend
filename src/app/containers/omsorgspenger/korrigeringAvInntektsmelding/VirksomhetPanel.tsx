@@ -166,7 +166,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                                     return (
                                         // eslint-disable-next-line react/no-array-index-key
                                         <option key={`null-${index}`} value="null">
-                                            null
+                                            uten arbeidsforholdsID
                                         </option>
                                     );
                                 }
