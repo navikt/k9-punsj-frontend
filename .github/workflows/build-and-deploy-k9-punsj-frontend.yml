@@ -51,7 +51,7 @@ jobs:
       - name: Bygge & laste opp Docker image
         run: |
           docker build --pull --tag ${DOCKER_IMAGE}:${TAG} --tag ${DOCKER_IMAGE}:latest .
-          docker push {DOCKER_IMAGE} --all-tags
+          docker push ${DOCKER_IMAGE} --all-tags
 
       - name: Sett image for nais deploy
         run: echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
