@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
@@ -35,6 +36,7 @@ webpackConfig.plugins.push(
 );
 
 webpackConfig.plugins.push(new ReactRefreshWebpackPlugin());
+webpackConfig.plugins.push(new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }));
 
 webpackConfig.module.rules.push({
     test: /\.js$/,

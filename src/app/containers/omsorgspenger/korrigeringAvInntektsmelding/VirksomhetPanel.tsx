@@ -22,7 +22,7 @@ import {
 import './virksomhetPanel.less';
 
 interface IVirksomhetPanelProps {
-    søkerId?: string;
+    søkerId: string;
 }
 export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JSX.Element {
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
@@ -34,12 +34,16 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     const previousValgtVirksomhet = usePrevious(values.Virksomhet);
 
     useEffect(() => {
-        if (søkerId) {
-            finnArbeidsgivere(søkerId, (response, data: ArbeidsgivereResponse) => {
-                setArbeidsgivereMedNavn(data?.organisasjoner || []);
-            });
-        }
-        if (årstallForKorrigering && søkerId) {
+        if (årstallForKorrigering) {
+            finnArbeidsgivere(
+                søkerId,
+                (response, data: ArbeidsgivereResponse) => {
+                    setArbeidsgivereMedNavn(data?.organisasjoner || []);
+                },
+                `${årstallForKorrigering}-01-01`,
+                `${årstallForKorrigering}-12-31`
+            );
+
             hentArbeidsgivereMedId(søkerId, årstallForKorrigering)
                 .then((response) => response.json())
                 .then((data) => {
@@ -50,7 +54,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                     }
                 });
         }
-    }, [årstallForKorrigering, søkerId]);
+    }, [årstallForKorrigering]);
 
     useEffect(() => {
         if (previousValgtVirksomhet !== undefined && values.Virksomhet !== previousValgtVirksomhet) {
@@ -60,7 +64,15 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
 
     const finnArbeidsforholdIdForValgtArbeidsgiver = () =>
         arbeidsgivereMedId
-            ?.filter((item) => item.arbeidsforholdId?.length && item.arbeidsforholdId[0])
+            ?.filter((item) => {
+                if (!item.arbeidsforholdId?.length) {
+                    return false;
+                }
+                if (item.arbeidsforholdId?.length === 1 && item.arbeidsforholdId[0] === null) {
+                    return false;
+                }
+                return true;
+            })
             .find((item) => item.orgNummerEllerAktørID === values.Virksomhet)?.arbeidsforholdId || [];
 
     const validateArbeidsforholdId = (value: string) => {
@@ -149,11 +161,21 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             <option disabled key="default" value="" label="">
                                 Velg
                             </option>
-                            {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId) => (
-                                <option key={arbeidsforholdId} value={arbeidsforholdId}>
-                                    {arbeidsforholdId}
-                                </option>
-                            ))}
+                            {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId, index) => {
+                                if (arbeidsforholdId === null) {
+                                    return (
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        <option key={`null-${index}`} value="null">
+                                            uten arbeidsforholdsID
+                                        </option>
+                                    );
+                                }
+                                return (
+                                    <option key={arbeidsforholdId} value={arbeidsforholdId}>
+                                        {arbeidsforholdId}
+                                    </option>
+                                );
+                            })}
                         </Select>
                     )}
                 </Field>

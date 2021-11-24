@@ -42,7 +42,7 @@
     "startPage.feil.ikkeStøttet": "Journalposten er utgått, avbrutt eller feilregistrert og kan ikke sendes inn til K9.",
     "fordeling.overskrift": "Hva ønsker du å gjøre med dokumentet?",
     "fordeling.sakstype.PLEIEPENGER_SYKT_BARN": "Registrere opplysninger til K9",
-    "fordeling.sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING": "Registrere opplysninger til K9",
+    "fordeling.sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING": "Korrigere/trekke refusjonskrav omsorgspenger",
     "fordeling.sakstype.OMSORGSPENGER": "Omsorgspenger",
     "fordeling.sakstype.OMSORGSPENGER_OVERFØRING": "Omsorgsdager: overføring av omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_FORDELING": "Omsorgsdager: fordeling av omsorgsdager",
@@ -70,7 +70,7 @@
     "fordeling.omfordeling.feil": "Det oppsto en feil. Prøv igjen senere.",
     "fordeling.kanikkesendeinn": "Denne journalposten kan ikke håndteres flere ganger. Ved behov for korrigering, kopier journalposten. Det vil da opprettes en ny oppgave i Los.",
     "fordeling.ikkesaksbehandler": "Du har ikke tilgang til denne applikasjonen.",
-    "fordeling.hvaGjelderDokumentet": "Hva gjelder dokumentet?",
+    "fordeling.detteGjelder": "Dette gjelder:",
     "fordeling.kopiereJournal": "Kopier journalpost",
     "fordeling.kopiereJournal.hjelpetekst": "Bør krysses av dersom det er opplysninger i dokumentet som må legges inn i saken. Dette vil skape en ny Punsj-oppgave i K9-Los.",
     "fordeling.kategoriGosys": "Velg hva journalposten gjelder",
@@ -455,7 +455,7 @@
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
 
     "PLEIEPENGER": "Pleiepenger",
-    "KORRIGERING_IM": "Korrigering av inntektsmelding",
+    "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",
 
     "opprettGosysOppgave": "Opprett oppgave i Gosys",

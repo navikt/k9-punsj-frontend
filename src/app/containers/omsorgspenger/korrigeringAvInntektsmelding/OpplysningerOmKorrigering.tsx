@@ -20,7 +20,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
             legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>}
         >
             <Panel className="listepanel opplysningerOmKorrigering">
-                <h4 className="opplysningerOmKorrigering__subHeading">Når ble dokumentet mottatt?</h4>
+                <h4 className="opplysningerOmKorrigering__subHeading">Når tok arbeidsgiver kontakt?</h4>
                 <div className="opplysningerOmKorrigering__fields">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (

@@ -7,17 +7,19 @@ const helmet = require('helmet');
 const envVariables = require('./envVariables');
 
 const server = express();
-server.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
-            frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
-            fontSrc: ["'self'", 'data:'],
-            imgSrc: ["'self'", 'data:']
+server.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY, 'https://sentry.gc.nav.no'],
+                frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
+                fontSrc: ["'self'", 'data:'],
+                imgSrc: ["'self'", 'data:'],
+            },
         },
-    }
-}));
+    })
+);
 
 const rootPath = __dirname;
 
@@ -26,17 +28,16 @@ server.set('views', `${rootPath}/dist`);
 server.set('view engine', 'mustache');
 server.engine('html', mustacheExpress());
 
-
 const renderApp = () =>
-  new Promise((resolve, reject) => {
-      server.render('index.html', {}, (err, html) => {
-          if (err) {
-              reject(err);
-          } else {
-              resolve(html);
-          }
-      });
-  });
+    new Promise((resolve, reject) => {
+        server.render('index.html', {}, (err, html) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(html);
+            }
+        });
+    });
 
 const startServer = (html) => {
     server.get(`/getEnvVariables`, (req, res) => {
