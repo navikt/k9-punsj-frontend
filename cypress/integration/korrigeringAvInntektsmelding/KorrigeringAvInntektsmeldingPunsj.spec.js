@@ -50,7 +50,7 @@ describe('Korrigering av inntektsmelding punsj', () => {
             .select('979312059');
         cy.findByRole('button', { name: /send inn/i })
             .should('exist')
-            .click();
+            .click({ force: true });
         cy.findByText('Må ha fravær fra enten søker eller fra fraværskorrigering av inntektsmelding').should('exist');
     });
 });
