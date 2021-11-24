@@ -250,7 +250,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     label: intlHelper(intl, type),
                                     value: type,
                                 }))}
-                                legend={intlHelper(intl, 'fordeling.hvaGjelderDokumentet')}
+                                legend={intlHelper(intl, 'fordeling.detteGjelder')}
                                 checked={dokumenttype}
                                 onChange={(event) =>
                                     handleDokumenttype(
