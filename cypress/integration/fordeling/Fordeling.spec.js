@@ -2,13 +2,13 @@ describe('Fordeling', () => {
     beforeEach(() => {
         cy.visit('/journalpost/200');
     });
-    it('viser dokumentvalg', () => {
+    it.skip('viser dokumentvalg', () => {
         cy.contains(/Gjelder dokumentet Pleiepenger sykt barn?/i).should('exist');
         cy.contains('Ja').should('exist');
         cy.contains('Nei').should('exist');
     });
 
-    it('kan opprette journalføringsoppgave i Gosys', () => {
+    it.skip('kan opprette journalføringsoppgave i Gosys', () => {
         cy.intercept(
             {
                 method: 'GET',
