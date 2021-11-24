@@ -1,0 +1,44 @@
+{
+    "søknadId": "44167fe8-8137-4260-97d0-36086a4faf60",
+    "versjon": "1.0.0",
+    "mottattDato": "2021-11-08T14:00:00.000Z",
+    "søker": { "norskIdentitetsnummer": "29099000129" },
+    "ytelse": {
+        "type": "OMP_UT",
+        "fosterbarn": null,
+        "aktivitet": null,
+        "fraværsperioder": null,
+        "fraværsperioderKorrigeringIm": [
+            {
+                "periode": "2021-11-01/2021-11-01",
+                "duration": "PT0S",
+                "årsak": null,
+                "søknadÅrsak": null,
+                "aktivitetFravær": ["ARBEIDSTAKER"],
+                "arbeidsforholdId": null,
+                "arbeidsgiverOrgNr": "979312059"
+            },
+            {
+                "periode": "2021-11-02/2021-11-02",
+                "duration": "PT0S",
+                "årsak": null,
+                "søknadÅrsak": null,
+                "aktivitetFravær": ["ARBEIDSTAKER"],
+                "arbeidsforholdId": null,
+                "arbeidsgiverOrgNr": "979312059"
+            }
+        ],
+        "bosteder": null,
+        "utenlandsopphold": null
+    },
+    "språk": "nb",
+    "journalposter": [
+        {
+            "inneholderInfomasjonSomIkkeKanPunsjes": null,
+            "inneholderInformasjonSomIkkeKanPunsjes": null,
+            "inneholderMedisinskeOpplysninger": null,
+            "journalpostId": "200"
+        }
+    ],
+    "begrunnelseForInnsending": { "tekst": null }
+}

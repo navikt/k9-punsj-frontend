@@ -37,7 +37,8 @@
             align-items: stretch;
         }
 
-        .pleiepenger_punch_form {
+        .pleiepenger_punch_form,
+        .omsorgspenger_punch_form {
             margin-right: 0.5rem;
             flex-basis: 100%;
             overflow-y: auto;
@@ -117,10 +118,6 @@
 
             .punchform__paneler {
                 margin-bottom: 0.5rem;
-            }
-
-            .skjemaelement {
-                margin-bottom: 0;
             }
 
             .ident-soker-2,
@@ -409,6 +406,10 @@
                 box-shadow: 0 0 0 8px @feilbg;
             }
         }
+
+        .omsorgspenger_punch_form {
+            border: none;
+        }
     }
 
     .punch_mappetabell tbody tr:hover {
@@ -555,24 +556,22 @@
     padding-bottom: 3rem;
 }
 
-
 .validertSoknadOppsummeringContainer:first-child > div {
     border: 0;
     margin-top: 0;
     padding-top: 0rem;
 }
 
-.punchPage__knapper{
-  display: flex;
-  flex-wrap: wrap;
+.punchPage__knapper {
+    display: flex;
+    flex-wrap: wrap;
 
-  button{
-    margin: 0rem 1rem 1rem 0rem;
-  }
+    button {
+        margin: 0rem 1rem 1rem 0rem;
+    }
 }
 
 .utregnetArbeidstid__container {
     display: grid;
     grid-template-columns: repeat(2, 243px);
 }
-

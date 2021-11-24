@@ -11,7 +11,7 @@ describe('Pleiepenger punsj', () => {
     it('kan sende inn søknad om pleiepenger', () => {
         cy.soknadperioderInput('08.11.2021', '11.11.2021');
 
-        cy.sendInnPleiepengeSoknad();
+        cy.sendInnSoknad();
 
         cy.findByText(
             'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.'

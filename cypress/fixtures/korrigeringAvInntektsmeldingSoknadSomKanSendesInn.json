@@ -1,0 +1,16 @@
+{
+    "soeknadId": "44167fe8-8137-4260-97d0-36086a4faf60",
+    "soekerId": "29099000129",
+    "mottattDato": "2021-11-08",
+    "klokkeslett": "15:00",
+    "journalposter": ["200"],
+    "organisasjonsnummer": "979312059",
+    "arbeidsforholdId": null,
+    "fravaersperioder": [
+        {
+            "periode": { "fom": "2021-11-01", "tom": "2021-11-02" },
+            "faktiskTidPrDag": "0",
+            "tidPrDag": { "timer": 0, "minutter": 0 }
+        }
+    ]
+}

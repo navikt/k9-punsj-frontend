@@ -27,7 +27,6 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if ((sakstypeConfig as ISakstypePunch).punchPath) {
         const punchConfig = sakstypeConfig as ISakstypePunch;
-
         return (
             <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj"/>

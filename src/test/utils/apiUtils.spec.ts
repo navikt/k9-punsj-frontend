@@ -11,7 +11,7 @@ jest.mock('app/utils/browserUtils');
 describe('apiUrl', () => {
     it('Genererer URL med parametre', () => {
         const id = 'abc123';
-        const url = apiUrl(ApiPath.SOKNAD_GET, { id });
+        const url = apiUrl(ApiPath.PSB_SOKNAD_GET, { id });
         expect(url).toContain(id);
     });
 });
@@ -23,7 +23,7 @@ describe('get', () => {
     });
 
     it('Utfører get-spørring', async () => {
-        const path = ApiPath.SOKNAD_GET;
+        const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
         const url = apiUrl(path, { id });
 
@@ -34,7 +34,7 @@ describe('get', () => {
     });
 
     it('Videresender til innlogging dersom get-spørring responderer med status 401', async () => {
-        const path = ApiPath.SOKNAD_GET;
+        const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
         const url = apiUrl(path, { id });
         const callback = jest.fn((r: Response) => Promise.resolve(r));
@@ -47,7 +47,7 @@ describe('get', () => {
     });
 
     it('Behandler respons fra get-spørring', async () => {
-        const path = ApiPath.SOKNAD_GET;
+        const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
         const url = apiUrl(path, { id });
         const response = { status: 200 };
@@ -67,7 +67,7 @@ describe('post', () => {
     });
 
     it('Utfører post-spørring', async () => {
-        const path = ApiPath.SOKNAD_CREATE;
+        const path = ApiPath.PSB_SOKNAD_CREATE;
         const url = apiUrl(path);
         const body = { test: 'Lorem ipsum dolor sit amet.' };
 
@@ -78,7 +78,7 @@ describe('post', () => {
     });
 
     it('Videresender til innlogging dersom post-spørring responderer med status 401', async () => {
-        const path = ApiPath.SOKNAD_CREATE;
+        const path = ApiPath.PSB_SOKNAD_CREATE;
         const url = apiUrl(path);
         const callback = jest.fn((r: Response) => Promise.resolve(r));
 
@@ -93,7 +93,7 @@ describe('post', () => {
     });
 
     it('Behandler respons fra post-spørring', async () => {
-        const path = ApiPath.SOKNAD_CREATE;
+        const path = ApiPath.PSB_SOKNAD_CREATE;
         const url = apiUrl(path);
         const response = {
             status: 201,
@@ -115,7 +115,7 @@ describe('put', () => {
     });
 
     it('Utfører put-spørring', async () => {
-        const path = ApiPath.SOKNAD_UPDATE;
+        const path = ApiPath.PSB_SOKNAD_UPDATE;
         const id = 'abc123';
         const url = apiUrl(path, { id });
         const body = { test: 'Lorem ipsum dolor sit amet.' };
@@ -127,7 +127,7 @@ describe('put', () => {
     });
 
     it('Videresender til innlogging dersom put-spørring responderer med status 401', async () => {
-        const path = ApiPath.SOKNAD_UPDATE;
+        const path = ApiPath.PSB_SOKNAD_UPDATE;
         const id = 'abc123';
         const url = apiUrl(path, { id });
         const body = { test: 'Lorem ipsum dolor sit amet.' };
@@ -141,7 +141,7 @@ describe('put', () => {
     });
 
     it('Behandler respons fra put-spørring', async () => {
-        const path = ApiPath.SOKNAD_UPDATE;
+        const path = ApiPath.PSB_SOKNAD_UPDATE;
         const id = 'abc123';
         const url = apiUrl(path, { id });
         const body = { test: 'Lorem ipsum dolor sit amet.' };

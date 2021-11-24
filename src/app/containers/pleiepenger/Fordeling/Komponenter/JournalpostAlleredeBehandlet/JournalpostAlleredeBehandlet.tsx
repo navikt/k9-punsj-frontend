@@ -11,7 +11,7 @@ import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import { SokersBarn } from '../SokersBarn';
-import { skalViseFeilmelding } from '../../FordelingFeilmeldinger';
+import { erUgyldigIdent } from '../../FordelingFeilmeldinger';
 import './journalpostAlleredeBehandlet.less';
 import { getEnvironmentVariable } from '../../../../../utils';
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
@@ -57,11 +57,11 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 </>
             </div>
             <VerticalSpacer eightPx />
-            {!fellesState.kopierJournalpostSuccess && <SokersBarn sokersIdent={sokersIdent} />}
+            {!fellesState.kopierJournalpostSuccess && <SokersBarn visSokersBarn sokersIdent={sokersIdent} />}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
             {!fellesState.kopierJournalpostSuccess && (
                 <Knapp
-                    disabled={skalViseFeilmelding(identState.ident2) || !identState.ident2}
+                    disabled={erUgyldigIdent(identState.ident2) || !identState.ident2}
                     onClick={() => {
                         if (!!sokersIdent && !!identState.ident2)
                             kopiereJournalpost(

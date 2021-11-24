@@ -91,7 +91,7 @@ export function findEksisterendeSoknader(ident1: string, ident2: string | null) 
         dispatch(findEksisterendeSoknaderLoadingAction(true));
         const idents = ident2 ? `${ident1},${ident2}` : ident1;
         return get(
-            ApiPath.EKSISTERENDE_SOKNADER_FIND,
+            ApiPath.PSB_EKSISTERENDE_SOKNADER_FIND,
             undefined,
             { 'X-Nav-NorskIdent': idents },
             (response, soknader) => {
@@ -162,7 +162,7 @@ export function createSoknad(journalpostid: string, ident1: string, barnIdent: s
             barnIdent,
         };
 
-        post(ApiPath.SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
+        post(ApiPath.PSB_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
             if (response.status === 201) {
                 return dispatch(createSoknadSuccessAction(soknad.soeknadId));
             }

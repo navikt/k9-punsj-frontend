@@ -12,7 +12,7 @@ export interface IPeriodInputProps {
     periode: IPeriode;
     intl: IntlShape;
     onChange: (periode: IPeriode) => void;
-    onBlur: (periode: IPeriode) => void;
+    onBlur?: (periode: IPeriode) => void;
     onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;
@@ -27,6 +27,7 @@ export interface IPeriodInputProps {
         fom: string | undefined;
         tom: string | undefined;
     };
+    fomInputRef?: React.Ref<HTMLInputElement>;
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
@@ -45,6 +46,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         errorMessageFom,
         errorMessageTom,
         onBlur,
+        fomInputRef,
     } = props;
 
     const renderDato = (property: string) => {
@@ -61,23 +63,24 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     <DateInput
                         value={renderDato('fom')}
                         onChange={(selectedDate) => {
-                            onChange({ fom: selectedDate, tom: periode.tom });
+                            onChange({ fom: selectedDate, tom: periode?.tom || '' });
                             if (onBlur) {
-                                onBlur({ fom: selectedDate, tom: periode.tom });
+                                onBlur({ fom: selectedDate, tom: periode?.tom || '' });
                             }
                         }}
                         id={inputIdFom}
                         disabled={disabled || disabledFom}
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
+                        inputRef={fomInputRef}
                     />
                     <div className="periodInput__tom-container">
                         <DateInput
                             value={renderDato('tom')}
                             onChange={(selectedDate) => {
-                                onChange({ fom: periode.fom, tom: selectedDate });
+                                onChange({ fom: periode?.fom || '', tom: selectedDate });
                                 if (onBlur) {
-                                    onBlur({ fom: periode.fom, tom: selectedDate });
+                                    onBlur({ fom: periode?.fom || '', tom: selectedDate });
                                 }
                             }}
                             id={inputIdTom}

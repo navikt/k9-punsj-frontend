@@ -1,7 +1,7 @@
 import React from 'react';
 
 type FeilmeldingProps = {
-    feil?: string;
+    feil?: string | React.ReactNode;
 };
 
 const Feilmelding = ({ feil }: FeilmeldingProps): JSX.Element | null => {

@@ -1,12 +1,12 @@
 import React from 'react';
+import { ApiPath } from '../apiConfig';
 import { Sakstype } from '../models/enums';
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
-
-import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
-import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
-import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
-import { ApiPath } from '../apiConfig';
+import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
+import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
+import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
+import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -28,6 +28,13 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
             stepOrder: 0,
         },
     ],
+};
+
+export const KorrigeringAvInntektsmelding: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
+    punchPath: '/korrigering-av-inntektsmelding',
+    getComponent: () => <KorrigeringAvInntektsmeldingContainer />,
+    steps: [],
 };
 
 export const OmsorgspengerOverføring: ISakstypePunch = {
@@ -91,7 +98,7 @@ export const SkalIkkePUnsjes: ISakstypeOmfordeling = {
 };
 
 export const Sakstyper: ISakstyper = {
-    punchSakstyper: [Pleiepenger, OmsorgspengerFordeling, OmsorgspengerOverføring],
+    punchSakstyper: [Pleiepenger, OmsorgspengerFordeling, OmsorgspengerOverføring, KorrigeringAvInntektsmelding],
     omfordelingssakstyper: [
         OmsorgspengerUtvidetRett,
         OmsorgspengerLegeerklæring,

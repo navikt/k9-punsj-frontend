@@ -52,6 +52,7 @@
         "react/prop-types": "off",
         "no-use-before-define": "off",
         "no-shadow": "off",
+        "react/jsx-props-no-spreading": "off",
         "react/destructuring-assignment": "off"
     }
 }
