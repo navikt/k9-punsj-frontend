@@ -2,7 +2,7 @@
 
 import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPåVentKeys';
 import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
-import { FordeingSettPåVentActions } from '../actions/FordelingSettPåVentActions';
+import { FordelingSettPåVentActions } from '../actions/FordelingSettPåVentActions';
 
 const initialState: FordelingSettPåVentState = {
     settPaaVentError: undefined,
@@ -11,7 +11,7 @@ const initialState: FordelingSettPåVentState = {
 
 export function FordelingSettPåVentReducer(
     fordelingSettPåVentState: FordelingSettPåVentState = initialState,
-    action: FordeingSettPåVentActions
+    action: FordelingSettPåVentActions
 ): FordelingSettPåVentState {
     switch (action.type) {
         case FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT:
@@ -19,21 +19,21 @@ export function FordelingSettPåVentReducer(
                 ...fordelingSettPåVentState,
             };
 
-        case FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR:
+        case FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR:
             return {
                 ...fordelingSettPåVentState,
                 settPaaVentSuccess: false,
                 settPaaVentError: action.error,
             };
 
-        case FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS:
+        case FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS:
             return {
                 ...fordelingSettPåVentState,
                 settPaaVentSuccess: true,
                 settPaaVentError: undefined,
             };
 
-        case FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET:
+        case FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET:
             return {
                 ...fordelingSettPåVentState,
                 settPaaVentSuccess: false,
