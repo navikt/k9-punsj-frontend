@@ -23,7 +23,7 @@ describe('utregning av arbeidstid', () => {
         expect(screen.getByText('= 5 timer per uke')).toBeInTheDocument();
         expect(screen.queryByText('(tilsvarer ∞% arbeid)')).not.toBeInTheDocument();
     });
-    test('skjuler prosent av normal arbeidstid når utregning er ∞', () => {
+    test('skjuler prosent av normal arbeidstid når utregning er NaN', () => {
         renderWithIntl(<UtregningArbeidstid arbeidstid="0" normalArbeidstid="0" />);
 
         expect(screen.getByText('= 0 timer per uke')).toBeInTheDocument();
