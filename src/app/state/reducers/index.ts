@@ -7,3 +7,4 @@ export * from './PunchReducer';
 export * from './SignaturReducer';
 export * from './GosysOppgaveReducer';
 export * from './FordelingSettPåVentReducer';
+export * from './FordelingFeilregistrerJournalpostReducer';

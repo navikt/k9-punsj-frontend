@@ -8,15 +8,15 @@ interface ISettJournalpostPaaVentAction {
 }
 
 interface ISettJournalpostPaaVentSuccessAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS;
+    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS;
 }
 interface ISettJournalpostPaaVentErrorAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR;
+    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR;
     error: IError;
 }
 
 interface ISettJournalpostPaaVentResetAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET;
+    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET;
 }
 
 export function setJournalpostPaaVentAction(): ISettJournalpostPaaVentAction {
@@ -24,19 +24,19 @@ export function setJournalpostPaaVentAction(): ISettJournalpostPaaVentAction {
 }
 export function setJournalpostPaaVentSuccessAction(): ISettJournalpostPaaVentSuccessAction {
     return {
-        type: FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS,
+        type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS,
     };
 }
 export function setJournalpostPaaVentErrorAction(error: IError): ISettJournalpostPaaVentErrorAction {
     return {
-        type: FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR,
+        type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR,
         error,
     };
 }
 
 export function setJournalpostPaaVentResetAction(): ISettJournalpostPaaVentResetAction {
     return {
-        type: FordelingSettPåVentKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET,
+        type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET,
     };
 }
 
@@ -58,7 +58,7 @@ export function settJournalpostPaaVent(journalpostid: string) {
     };
 }
 
-export type FordeingSettPåVentActions =
+export type FordelingSettPåVentActions =
     | ISettJournalpostPaaVentAction
     | ISettJournalpostPaaVentSuccessAction
     | ISettJournalpostPaaVentErrorAction

@@ -17,6 +17,7 @@ import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overf
 import { SoknaderVisningReducer } from './reducers/SoknaderVisningReducer';
 import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
 import { IdentReducer } from './reducers/IdentReducer';
+import { FordelingFeilregistrerJournalpostReducer } from './reducers/FordelingFeilregistrerJournalpostReducer';
 
 export const rootReducer = combineReducers({
     [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -43,6 +44,7 @@ export const rootReducer = combineReducers({
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     fordelingSettPåVentState: FordelingSettPåVentReducer,
+    fordelingFeilregistrerJournalpostState: FordelingFeilregistrerJournalpostReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;
