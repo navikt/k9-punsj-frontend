@@ -5,11 +5,13 @@ Frontend for manuell "punching" av papirsøknader som kommer inn for ytelser i k
 [![](https://github.com/navikt/k9-punsj-frontend/workflows/Build%20and%20deploy%20K9-punsj-frontend/badge.svg)](https://github.com/navikt/k9-punsj-frontend/actions?query=workflow%3A%22Build+and+deploy+K9-punsj-frontend%22)
 
 ## Komme i gang
+
 For å kjøre opp applikasjonen:
-````
+
+```
 yarn install
-yarn start
-````
+yarn dev
+```
 
 ## Lokal utvikling (innlogging & k9-punsj)
 
@@ -17,39 +19,48 @@ yarn start
 2. `docker login ghcr.io -u x-access-token (GitHub personal access token med kun read-rettigheter som passord)`
 3. `docker-compose pull`
 4. `docker-compose up`
-5. Start opp klassen [K9PunsjApplicationWithMocks](https://github.com/navikt/k9-punsj/blob/master/app/src/test/kotlin/no/nav/k9punsj/K9PunsjApplicationWithMocks.kt) i [k9-punsj](https://github.com/navikt/k9-punsj) 
+5. Start opp klassen [K9PunsjApplicationWithMocks](https://github.com/navikt/k9-punsj/blob/master/app/src/test/kotlin/no/nav/k9punsj/K9PunsjApplicationWithMocks.kt) i [k9-punsj](https://github.com/navikt/k9-punsj)
     - Om du får feil lignende `Process [/var/folders/***/embedded-pg/***/bin/initdb, -A, trust, -U, postgres, -D, /var/folders/h/***, -E, UTF-8] failed` følg løsning med å sette environment variabler beskrevet i [her](https://github.com/zonkyio/embedded-postgres/issues/11#issuecomment-533468269)
 
 ### Saksnummer for lokal utvikling
-Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnummer har ulike responser. 
-````
+
+Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnummer har ulike responser.
+
+```
 - 200: Gir journalpost med PDF dokument.
 - 404: Finnes ikke
 - 403: Ikke tilgang
 - 463687943: Finns informasjon i Infotrygd.
 - 45537868838: Journalpost støttes ikke.
-````
+```
 
 ## Test
-````
+
+```
 yarn test
-````
+```
+
 Testene kjører automatisk når ny kode dyttes til [master](https://github.com/navikt/k9-punsj-frontend).
 
 ## Enhetstester
+
 Alle enhetstester er plassert i [src/test](src/test). De kan kjøres med følgende kommando:
-````
+
+```
 yarn test
-````
+```
+
 Testene kjører automatisk når ny kode dyttes til [master](https://github.com/navikt/k9-punsj-frontend).
 
 ## To do
-* Utvide for flere søkere
-* Utvide søknadsskjemaet
+
+-   Utvide for flere søkere
+-   Utvide søknadsskjemaet
 
 ## Henvendelser
+
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.
- 
+
 Interne henvendelser kan sendes via Slack i kanalen #sif_saksbehandling.
 
 ![k9-punsj-frontend](logo.png)

@@ -83,7 +83,7 @@
         "uuid": "^8.3.1"
     },
     "scripts": {
-        "start": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
+        "dev": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start:e2e": "MSW_MODE=test node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
         "build": "cross-env NODE_ENV=production node ./src/build/scripts/production-build.js",
