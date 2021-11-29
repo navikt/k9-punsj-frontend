@@ -1,6 +1,5 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype, JaNei } from 'app/models/enums';
-import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';

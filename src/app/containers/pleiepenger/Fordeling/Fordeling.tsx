@@ -2,7 +2,7 @@ import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
+import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
@@ -14,7 +14,10 @@ import {
     feilregistrerJournalpost as feilregistrerJournalpostAction,
     feilregistrerJournalpostResetAction,
 } from 'app/state/actions/FordelingFeilregistrerJournalpostActions';
-import { setJournalpostPaaVentResetAction, settJournalpostPaaVent } from 'app/state/actions/FordelingSettPåVentActions';
+import {
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
+} from 'app/state/actions/FordelingSettPaaVentActions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';

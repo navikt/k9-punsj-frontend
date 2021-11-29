@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPåVentKeys';
+import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
 

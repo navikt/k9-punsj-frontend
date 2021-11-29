@@ -18,5 +18,5 @@ export * from 'app/models/types/SelvstendigNaerinsdrivende';
 export * from 'app/models/types/SignaturState';
 export * from 'app/models/types/PSBSoknad';
 export * from 'app/models/types/Ukedag';
-export * from 'app/models/types/FordelingSettPåVentState';
+export * from 'app/models/types/FordelingSettPaaVentState';
 export * from 'app/models/types/FordelingFeilregistrerJournalpostState';

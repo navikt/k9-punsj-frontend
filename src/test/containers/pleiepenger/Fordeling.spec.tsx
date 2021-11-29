@@ -6,7 +6,7 @@ import {
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingFeilregistrerJournalpostState from 'app/models/types/FordelingFeilregistrerJournalpostState';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
+import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';

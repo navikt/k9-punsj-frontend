@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
-import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPåVentKeys';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
-import { FordelingSettPåVentActions } from '../actions/FordelingSettPåVentActions';
+import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
+import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
+import { FordelingSettPåVentActions } from '../actions/FordelingSettPaaVentActions';
 
 const initialState: FordelingSettPåVentState = {
     settPaaVentError: undefined,
