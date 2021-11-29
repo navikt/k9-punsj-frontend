@@ -306,8 +306,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         {erUtgåttInntektsmelding && (
                             <>
                                 <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
-                                    Inntektsmelding uten refusjonskrav er mottatt, uten at det er mottatt søknad for
-                                    bruker. Kontakt arbeidsgiver.
+                                    {intlHelper(intl, 'fordeling.inntektsmeldingUtenKrav')}
                                 </AlertStripeAdvarsel>
                                 <VerticalSpacer thirtyTwoPx />
                             </>
@@ -383,7 +382,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             value: 'settPåVent',
                                         },
                                     ]}
-                                    legend="Inntektsmelding uten refusjonskrav er mottatt, uten at det er mottatt søknad for bruker. Kontakt arbeidsgiver."
+                                    legend="Hva ønsker du å gjøre med dokumentet?"
                                     checked={håndterUtgåttInntektsmeldingValg}
                                     onChange={(event) =>
                                         handleUtgåttInntektsmelding((event.target as HTMLInputElement).value)
