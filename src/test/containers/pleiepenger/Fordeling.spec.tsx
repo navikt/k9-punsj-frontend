@@ -12,6 +12,8 @@ import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState';
+import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
+import FordelingFeilregistrerJournalpostState from 'app/models/types/FordelingFeilregistrerJournalpostState';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -81,6 +83,16 @@ export const setupFordeling = (
         annenSokerIdent: '',
     };
 
+    const fordelingSettPåVentState: FordelingSettPåVentState = {
+        settPaaVentError: undefined,
+        settPaaVentSuccess: false,
+    };
+
+    const fordelingFeilregistrerState: FordelingFeilregistrerJournalpostState = {
+        feilregistrerJournalpostError: undefined,
+        feilregistrerJournalpostSuccess: false,
+    };
+
     const fordelingStateProps: IFordelingStateProps = {
         journalpost,
         fordelingState,
@@ -92,6 +104,8 @@ export const setupFordeling = (
             dedupKey: '',
             kopierJournalpostSuccess: true,
         },
+        fordelingSettPåVentState,
+        fordelingFeilregistrerState,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
