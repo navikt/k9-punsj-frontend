@@ -3,17 +3,17 @@ import {
     IFordelingDispatchProps,
     IFordelingStateProps,
 } from 'app/containers/pleiepenger/Fordeling/Fordeling';
-import { JaNei, Sakstype } from 'app/models/enums';
+import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
+import FordelingFeilregistrerJournalpostState from 'app/models/types/FordelingFeilregistrerJournalpostState';
+import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
-import { IIdentState } from '../../../app/models/types/IdentState';
 import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPåVentState';
-import FordelingFeilregistrerJournalpostState from 'app/models/types/FordelingFeilregistrerJournalpostState';
+import { IIdentState } from '../../../app/models/types/IdentState';
 
 jest.mock('react-intl');
 jest.mock('react-router');
