@@ -86,14 +86,15 @@
         "dev": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start:e2e": "MSW_MODE=test node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
-        "build": "cross-env NODE_ENV=production node ./src/build/scripts/production-build.js",
+        "build": "cross-env NODE_ENV=production SENTRY_RELEASE=$(git rev-parse --short HEAD) node ./src/build/scripts/production-build.js",
         "test": "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --config ./jest.config.json",
         "lint": "eslint --quiet 'src/**/*.{ts,tsx}'",
         "eject": "react-scripts eject",
         "snyk-protect": "snyk protect",
         "prepare": "husky install",
         "cypress:headless": "cypress run",
-        "test:e2e": "start-server-and-test start:e2e http://localhost:8080 cypress:headless"
+        "test:e2e": "start-server-and-test start:e2e http://localhost:8080 cypress:headless",
+        "sentry-release": "(export SENTRY_RELEASE=$(git rev-parse --short HEAD); node ./src/build/scripts/sentry-release)"
     },
     "devDependencies": {
         "@babel/cli": "^7.16.0",
@@ -107,6 +108,7 @@
         "@babel/preset-react": "^7.16.0",
         "@babel/preset-typescript": "^7.16.0",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
+        "@sentry/cli": "^1.71.0",
         "@testing-library/jest-dom": "^5.15.1",
         "@testing-library/react": "^12.1.2",
         "@testing-library/user-event": "^13.5.0",
