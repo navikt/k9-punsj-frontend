@@ -24,10 +24,6 @@ jobs:
         run: yarn run test
       - name: Bygge kode
         run: yarn run build
-      - name: Opprett release med Sentry
-        run: yarn sentry-release
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - uses: docker/login-action@v1.10.0
         with:
