@@ -22,20 +22,18 @@ import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils'
 
 const environment = window.location.hostname;
 
-if (process.env.NODE_ENV === 'production') {
-    Sentry.init({
-        dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
-        // release: process.env.SENTRY_RELEASE || 'unknown',
-        environment,
-        integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
-        beforeSend: (event) => {
-            if (environment === 'localhost') {
-                return null;
-            }
-            return event;
-        },
-    });
-}
+Sentry.init({
+    dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
+    release: process.env.SENTRY_RELEASE || 'unknown',
+    environment,
+    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
+    beforeSend: (event) => {
+        if (environment === 'localhost') {
+            return null;
+        }
+        return event;
+    },
+});
 
 function prepare() {
     if (process.env.NODE_ENV !== 'production') {
