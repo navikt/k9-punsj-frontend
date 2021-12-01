@@ -21,8 +21,10 @@ import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 
 const environment = window.location.hostname;
+
 Sentry.init({
     dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
+    release: process.env.SENTRY_RELEASE || 'unknown',
     environment,
     integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
     beforeSend: (event) => {
@@ -47,7 +49,7 @@ const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
 // @ts-ignore
 const store = window.Cypress
     ? // @ts-ignore
-    createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
+      createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
     : createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
