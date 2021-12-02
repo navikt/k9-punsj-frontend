@@ -74,7 +74,13 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
-            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => res.json()),
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => {
+                if (!res.ok) {
+                    throw new Error(`Fetch mot ${ApiPath.JOURNALPOST_GET} feilet`);
+                } else {
+                    return res.json();
+                }
+            }),
     }));
 
     const queries = useQueries(queryObjects);
@@ -106,7 +112,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                             >
                                 {intlHelper(intl, 'tilbaketilLOS')}
                             </Hovedknapp>
-{/*                             {!!punchFormState.linkTilBehandlingIK9 && (
+                            {/*                             {!!punchFormState.linkTilBehandlingIK9 && (
                                 <Hovedknapp
                                     onClick={() => {
                                         window.location.href = punchFormState.linkTilBehandlingIK9!;
