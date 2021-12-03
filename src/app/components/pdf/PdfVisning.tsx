@@ -41,10 +41,10 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
         journalpostid,
         dokumentId: dokument.dokumentId,
     });
-    const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter.reduce(
+    const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter?.reduce(
         (prev, current) => [
             ...prev,
-            ...current.dokumenter.map((dokument) => mapDokument(dokument, current.journalpostid)),
+            ...current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)),
         ],
         []
     );

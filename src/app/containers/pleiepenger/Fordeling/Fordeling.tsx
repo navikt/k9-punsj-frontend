@@ -1,4 +1,6 @@
+import Brev from 'app/components/brev/Brev';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
+import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -10,38 +12,37 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import ModalWrapper from 'nav-frontend-modal';
+import { PopoverOrientering } from 'nav-frontend-popover';
 import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { PopoverOrientering } from 'nav-frontend-popover';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import ModalWrapper from 'nav-frontend-modal';
-import journalpostStatus from 'app/models/enums/JournalpostStatus';
-import PdfVisning from '../../../components/pdf/PdfVisning';
-import { ISakstypeDefault } from '../../../models/Sakstype';
-import { Sakstyper } from '../../SakstypeImpls';
-import './fordeling.less';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
+import PdfVisning from '../../../components/pdf/PdfVisning';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import { ISakstypeDefault } from '../../../models/Sakstype';
+import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
+import { IIdentState } from '../../../models/types/IdentState';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IIdentState } from '../../../models/types/IdentState';
-import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
-import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
+import { Sakstyper } from '../../SakstypeImpls';
+import OkGaaTilLosModal from '../OkGaaTilLosModal';
+import './fordeling.less';
 import { erUgyldigIdent } from './FordelingFeilmeldinger';
-import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
-import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
-import { SokersBarn } from './Komponenter/SokersBarn';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
+import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
+import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
+import { SokersBarn } from './Komponenter/SokersBarn';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
@@ -105,6 +106,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
 
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
+
+    const [skalViseBrev, setSkalViseBrev] = useState(false);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
@@ -440,6 +443,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     ]}
                 />
             )}
+            <button type="button" style={{ display: 'none' }} onClick={() => setSkalViseBrev(true)}>
+                Vis brev
+            </button>
+            {skalViseBrev && <Brev søkerId={sokersIdent} />}
         </div>
     );
 };
