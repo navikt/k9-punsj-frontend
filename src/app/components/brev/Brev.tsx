@@ -60,17 +60,15 @@ const Brev: React.FC<BrevProps> = ({ søkerId }) => {
         fetch('https://app-q1.adeo.no/k9/formidling/api/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ', {
             credentials: 'include',
         })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data?.status >= 400) {
-                    setHentBrevmalerError(true);
-                } else {
-                    setBrevmaler(data);
+            .then((response) => {
+                if (response.ok) {
+                    return response.json().then((data) => setBrevmaler(data));
                 }
+                return setHentBrevmalerError(true);
             })
             .catch((error) => {
+                console.log(error);
                 setHentBrevmalerError(true);
-                throw error;
             });
 
         finnArbeidsgivere(søkerId, (response, data: ArbeidsgivereResponse) => {
