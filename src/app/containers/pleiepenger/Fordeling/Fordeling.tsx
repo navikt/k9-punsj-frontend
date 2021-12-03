@@ -446,7 +446,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             <button type="button" style={{ display: 'none' }} onClick={() => setSkalViseBrev(true)}>
                 Vis brev
             </button>
-            {skalViseBrev && <Brev søkerId={sokersIdent} />}
+            {skalViseBrev && <Brev søkerId={identState.ident1} />}
         </div>
     );
 };
