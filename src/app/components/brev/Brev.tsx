@@ -1,6 +1,5 @@
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { get } from 'app/utils';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { Input, Select, Textarea } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
@@ -58,7 +57,9 @@ const Brev: React.FC<BrevProps> = ({ søkerId }) => {
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
 
     useEffect(() => {
-        get('https://app-q1.adeo.no/k9/formidling/api/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ')
+        fetch('https://app-q1.adeo.no/k9/formidling/api/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ', {
+            credentials: 'include',
+        })
             .then((response) => response.json())
             .then((data) => {
                 if (data?.status >= 400) {
