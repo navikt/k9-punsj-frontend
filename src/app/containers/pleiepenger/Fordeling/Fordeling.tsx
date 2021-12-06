@@ -427,6 +427,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             </div>
                         )}
                         {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner />}
+                        {/* {skalViseBrev &&  */}
+                        <Brev søkerId={identState.ident1} />
+                        {/* } */}
                     </div>
                 </FormPanel>
             )}
@@ -436,6 +439,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel>
                 </div>
             )}
+
             {journalpost && (
                 <PdfVisning
                     journalpostDokumenter={[
@@ -446,7 +450,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             <button type="button" style={{ display: 'none' }} onClick={() => setSkalViseBrev(true)}>
                 Vis brev
             </button>
-            {skalViseBrev && <Brev søkerId={identState.ident1} />}
         </div>
     );
 };

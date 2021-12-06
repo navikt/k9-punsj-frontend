@@ -80,7 +80,8 @@
         "start-server-and-test": "^1.14.0",
         "typescript-string-operations": "^1.4.1",
         "ulid": "^2.3.0",
-        "uuid": "^8.3.1"
+        "uuid": "^8.3.1",
+        "yup": "^0.32.11"
     },
     "scripts": {
         "dev": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
