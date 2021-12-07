@@ -55,7 +55,7 @@ spec:
       value: {{this}}
   {{/each}}
     - name: PROXY_CONFIG
-      value: 'value:{"apis":[{"path":"k9-punsj","scopes":"{{k9PunsjScopes}}","url":"http://k9-punsj.k9saksbehandling.svc.nais.local/api"},{"path":"k9-formidling","scopes":"{{k9FormidlingScopes}}","url":"http://k9-formidling.svc.nais.local/k9/formidling/api"}]}'
+      value: 'value:{"apis":[{"path":"k9-punsj","scopes":"{{k9PunsjScopes}}","url":"http://k9-punsj.k9saksbehandling.svc.nais.local/api"},{"path":"k9-formidling","scopes":"{{k9FormidlingScopes}}","url":"http://k9-formidling.k9saksbehandling.svc.nais.local/k9/formidling/api"}]}'
     - name: REDIS_HOST
       value: value:k9-punsj-oidc-auth-proxy-redis.k9saksbehandling.svc.nais.local
     - name: REDIS_PORT
