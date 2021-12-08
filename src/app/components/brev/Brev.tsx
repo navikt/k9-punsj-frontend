@@ -1,3 +1,4 @@
+import { URL_BACKEND } from 'app/apiConfig';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
@@ -97,7 +98,7 @@ const Brev: React.FC<BrevProps> = ({ søkerId }) => {
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
 
     useEffect(() => {
-        fetch('https://app-q1.adeo.no/k9/formidling/api/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ', {
+        fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {
