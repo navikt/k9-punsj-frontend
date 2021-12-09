@@ -198,7 +198,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                         setSendBrevFeilet(false);
                                     }}
                                 >
-                                    <option key="default" value="" label="">
+                                    <option disabled key="default" value="" label="">
                                         Velg
                                     </option>
                                     {brevmalkoder.map((brevmalkode) => (
