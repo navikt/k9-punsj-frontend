@@ -220,6 +220,11 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                             placeholder={intl.formatMessage({ id: 'Messages.ChooseRecipient' })}
                                             bredde="xxl"
                                             feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                            onChange={(event) => {
+                                                setFieldValue(field.name, event.target.value);
+                                                setBrevErSendt(false);
+                                                setSendBrevFeilet(false);
+                                            }}
                                         >
                                             <option disabled key="default" value="" label="">
                                                 Velg
