@@ -1,14 +1,26 @@
 /* eslint-disable import/prefer-default-export */
 
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
+import dokumentMalType from './dokumentMalType';
 
 const lagDokumentdata = (values: BrevFormValues) => {
     const felterSomSkalMed: Partial<BrevFormValues> = {};
-    Object.keys(values).forEach((key) => {
-        if (key !== 'mottaker' && key !== 'brevmalkode' && values[key]) {
-            felterSomSkalMed[key] = values[key];
-        }
-    });
+    Object.keys(values)
+        .filter((key) => key !== BrevFormKeys.mottaker && key !== BrevFormKeys.brevmalkode && values[key])
+        .forEach((key) => {
+            if (key === BrevFormKeys.fritekst) {
+                if (values.brevmalkode === dokumentMalType.INNHENT_DOK) {
+                    felterSomSkalMed[key] = values[key];
+                }
+            } else if (key === BrevFormKeys.fritekstbrev) {
+                if (values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV) {
+                    felterSomSkalMed[key] = values[key];
+                }
+            } else {
+                felterSomSkalMed[key] = values[key];
+            }
+        });
     return felterSomSkalMed;
 };
 
