@@ -465,5 +465,17 @@
     "numberinput.øk": "Øk {felt} med 1",
     "numberinput.mink": "Mink {felt} med 1",
     "check.svg.title": "Suksess",
-    "knapp.loggut": "Logg ut"
+    "knapp.loggut": "Logg ut",
+
+    "Messages.Recipient": "Mottaker",
+    "Messages.ChooseRecipient": "Velg mottaker",
+    "Messages.Fritekst": "Fritekst",
+    "Messages.FritekstTittel": "Tittel",
+    "Messages.Template": "Mal",
+    "Messages.ChooseTemplate": "Velg brev",
+    "Messages.Submit": "Send brev",
+    "Messages.Preview": "Forhåndsvis",
+    "Messages.PreviewText": "Forhåndsvis varselbrev",
+    "Messages.Beskrivelse": "Foretrukket språk",
+    "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}"
 }

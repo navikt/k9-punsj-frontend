@@ -2,7 +2,7 @@ import { getEnvironmentVariable } from 'app/utils/envUtils';
 
 const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
 const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
-const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
+export const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
 export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
 
 export enum ApiPath {
@@ -40,6 +40,7 @@ export enum ApiPath {
     OMS_SOKNAD_SUBMIT = '/omsorgspenger-soknad/send',
     OMS_SOKNAD_UPDATE = '/omsorgspenger-soknad/oppdater',
     OMS_SOKNAD_VALIDER = '/omsorgspenger-soknad/valider',
+    BREV_BESTILL = '/brev/bestill',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
