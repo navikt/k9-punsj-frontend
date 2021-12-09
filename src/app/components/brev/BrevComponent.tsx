@@ -197,8 +197,8 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                     placeholder={intl.formatMessage({ id: 'Messages.ChooseTemplate' })}
                                     bredde="xxl"
                                     feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                    onChange={(brevmal) => {
-                                        setFieldValue(field.name, brevmal);
+                                    onChange={(event) => {
+                                        setFieldValue(field.name, event.target.value);
                                         setBrevErSendt(false);
                                         setSendBrevFeilet(false);
                                     }}
