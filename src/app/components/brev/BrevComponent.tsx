@@ -5,7 +5,7 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { post } from 'app/utils';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { EtikettFokus } from 'nav-frontend-etiketter';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select, Textarea } from 'nav-frontend-skjema';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
@@ -177,7 +177,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                 }
                 const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode, journalpostId);
                 post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
-                    if (response.status === 202) {
+                    if (response.status === 200) {
                         setBrevErSendt(true);
                     } else {
                         setSendBrevFeilet(true);
