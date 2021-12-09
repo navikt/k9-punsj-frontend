@@ -1,11 +1,12 @@
 import { ApiPath, URL_BACKEND } from 'app/apiConfig';
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { post } from 'app/utils';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { EtikettFokus } from 'nav-frontend-etiketter';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import { Input, Select, Textarea } from 'nav-frontend-skjema';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
 import React, { useEffect, useState } from 'react';
@@ -45,14 +46,6 @@ import {
 // };
 
 const previewMessage = (journalpostId: string, values: BrevFormValues, søkerId: string) => {
-    // previewCallback(
-    //   overstyrtMottaker && overstyrtMottaker !== JSON.stringify(RECIPIENT)
-    //     ? safeJSONParse(overstyrtMottaker)
-    //     : undefined,
-    //   brevmalkode,
-    //   fritekst,
-    //   fritekstbrev
-    // );
     let mottaker;
     if (values.mottaker === søkerId) {
         mottaker = {
@@ -154,10 +147,10 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
     return (
         <Formik
             initialValues={{
-                brevmalkode: '',
-                mottaker: '',
-                fritekst: '',
-                fritekstbrev: {
+                [BrevFormKeys.brevmalkode]: '',
+                [BrevFormKeys.mottaker]: '',
+                [BrevFormKeys.fritekst]: '',
+                [BrevFormKeys.fritekstbrev]: {
                     overskrift: '',
                     brødtekst: '',
                 },
@@ -177,7 +170,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                 }
                 const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode, journalpostId);
                 post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
-                    if (response.status === 202) {
+                    if (response.status === 200) {
                         setBrevErSendt(true);
                     } else {
                         setSendBrevFeilet(true);
@@ -189,7 +182,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
             {({ values, isSubmitting, setFieldValue }) => (
                 <div className="brev">
                     <Form>
-                        <Field name="brevmalkode" validate={validateBrevmalkode}>
+                        <Field name={BrevFormKeys.brevmalkode} validate={validateBrevmalkode}>
                             {({ field, meta }: FieldProps) => (
                                 <Select
                                     {...field}
@@ -217,7 +210,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                         {arbeidsgivereMedNavn.length > 0 && (
                             <>
                                 <VerticalSpacer sixteenPx />
-                                <Field name="mottaker" validate={validateMottaker}>
+                                <Field name={BrevFormKeys.mottaker} validate={validateMottaker}>
                                     {({ field, meta }: FieldProps) => (
                                         <Select
                                             {...field}
@@ -246,7 +239,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                         {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                             <>
                                 <VerticalSpacer sixteenPx />
-                                <Field name="fritekst" validate={validateFritekst}>
+                                <Field name={BrevFormKeys.fritekst} validate={validateFritekst}>
                                     {({ field, meta }: FieldProps) => (
                                         <div className="textareaContainer">
                                             <Textarea
@@ -266,7 +259,10 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                         {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
                             <>
                                 <VerticalSpacer sixteenPx />
-                                <Field name="fritekstbrev.overskrift" validate={validateFritekstbrevOverskrift}>
+                                <Field
+                                    name={`${BrevFormKeys.fritekstbrev}.overskrift`}
+                                    validate={validateFritekstbrevOverskrift}
+                                >
                                     {({ field, meta }: FieldProps) => (
                                         <Input
                                             {...field}
@@ -278,7 +274,10 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                 </Field>
 
                                 <VerticalSpacer sixteenPx />
-                                <Field name="fritekstbrev.brødtekst" validate={validateFritekstbrevBrødtekst}>
+                                <Field
+                                    name={`${BrevFormKeys.fritekstbrev}.brødtekst`}
+                                    validate={validateFritekstbrevBrødtekst}
+                                >
                                     {({ field, meta }: FieldProps) => (
                                         <div className="textareaContainer">
                                             <Textarea
