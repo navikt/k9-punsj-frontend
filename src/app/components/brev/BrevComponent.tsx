@@ -175,7 +175,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                         id: values.mottaker,
                     };
                 }
-                const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode);
+                const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode, journalpostId);
                 post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
                     if (response.status === 202) {
                         setBrevErSendt(true);
