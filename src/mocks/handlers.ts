@@ -7,7 +7,7 @@ import { testHandlers } from './testHandlers';
 let handlers = [
     rest.get('/api/test', (req, res, ctx) => res(ctx.status(200), ctx.json({ name: 'Bobby Binders' }))),
     rest.get(
-        'https://app-q1.adeo.no/k9/formidling/api/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ',
+        'http://localhost:8101/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ',
         (req, res, ctx) =>
             res(
                 ctx.status(200),

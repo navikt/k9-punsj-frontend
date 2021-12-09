@@ -1,4 +1,5 @@
-import Brev from 'app/components/brev/Brev';
+import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevContainer from 'app/components/brev/BrevContainer';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -427,9 +428,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             </div>
                         )}
                         {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner />}
-                        {/* {skalViseBrev &&  */}
-                        <Brev søkerId={identState.ident1} />
-                        {/* } */}
+                        {skalViseBrev && (
+                            <BrevContainer>
+                                <BrevComponent søkerId={identState.ident1} journalpostId={journalpost?.journalpostId} />
+                            </BrevContainer>
+                        )}
                     </div>
                 </FormPanel>
             )}

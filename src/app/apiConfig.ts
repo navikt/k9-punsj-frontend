@@ -40,6 +40,7 @@ export enum ApiPath {
     OMS_SOKNAD_SUBMIT = '/omsorgspenger-soknad/send',
     OMS_SOKNAD_UPDATE = '/omsorgspenger-soknad/oppdater',
     OMS_SOKNAD_VALIDER = '/omsorgspenger-soknad/valider',
+    BREV_BESTILL = '/brev/bestill',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
