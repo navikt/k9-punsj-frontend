@@ -3,7 +3,7 @@ import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { post } from 'app/utils';
+import { get, post } from 'app/utils';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { EtikettFokus } from 'nav-frontend-etiketter';
 import { Knapp } from 'nav-frontend-knapper';
@@ -47,19 +47,11 @@ import {
 //     return mottakerId;
 // };
 
-const previewMessage = (journalpostId: string, values: BrevFormValues, søkerId: string) => {
-    let mottaker;
-    if (values.mottaker === søkerId) {
-        mottaker = {
-            type: 'AKTØRID',
-            id: values.mottaker,
-        };
-    } else {
-        mottaker = {
-            type: 'ORGNR',
-            id: values.mottaker,
-        };
-    }
+const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId: string) => {
+    const mottaker = {
+        type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
+        id: values.mottaker,
+    };
 
     const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
 
@@ -67,13 +59,13 @@ const previewMessage = (journalpostId: string, values: BrevFormValues, søkerId:
         method: 'post',
         credentials: 'include',
         body: JSON.stringify({
+            aktørId,
             eksternReferanse: journalpostId,
             ytelseType: {
                 kode: 'OMP',
                 kodeverk: 'FAGSAK_YTELSE',
             },
             saksnummer: 'GENERELL_SAK',
-            aktørId: '',
             avsenderApplikasjon: 'K9PUNSJ',
             overstyrtMottaker: mottaker,
             dokumentMal: values.brevmalkode,
@@ -111,6 +103,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
     const [brevErSendt, setBrevErSendt] = useState(false);
     const [sendBrevFeilet, setSendBrevFeilet] = useState(false);
+    const [aktørId, setAktørId] = useState('');
 
     useEffect(() => {
         fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ`, {
@@ -132,6 +125,11 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
         if (søkerId) {
             finnArbeidsgivere(søkerId, (response, data: ArbeidsgivereResponse) => {
                 setArbeidsgivereMedNavn(data?.organisasjoner || []);
+            });
+            get(ApiPath.BREV_AKTØRID, undefined, { 'X-Nav-NorskIdent': søkerId }, (response, data) => {
+                if (response.status === 200) {
+                    setAktørId(`${data}`);
+                }
             });
         }
     }, [søkerId]);
@@ -158,18 +156,10 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                 },
             }}
             onSubmit={(values, actions) => {
-                let mottaker;
-                if (values.mottaker === søkerId) {
-                    mottaker = {
-                        type: 'AKTØRID',
-                        id: values.mottaker,
-                    };
-                } else {
-                    mottaker = {
-                        type: 'ORGNR',
-                        id: values.mottaker,
-                    };
-                }
+                const mottaker = {
+                    type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
+                    id: values.mottaker,
+                };
                 const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode, journalpostId);
                 post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
                     if (response.status === 200) {
@@ -229,7 +219,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                             <option disabled key="default" value="" label="">
                                                 Velg
                                             </option>
-                                            <option value={søkerId}>{`Søker - ${søkerId}`}</option>
+                                            {aktørId && <option value={aktørId}>{`Søker - ${søkerId}`}</option>}
                                             {arbeidsgivereMedNavn.map((arbeidsgiver) => (
                                                 <option
                                                     key={arbeidsgiver.organisasjonsnummer}
@@ -310,7 +300,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                             {values.brevmalkode && (
                                 <button
                                     type="button"
-                                    onClick={() => previewMessage(journalpostId, values, søkerId)}
+                                    onClick={() => previewMessage(journalpostId, values, aktørId)}
                                     className="previewLink lenke lenke--frittstaende"
                                 >
                                     {intl.formatMessage({ id: 'Messages.Preview' })}
