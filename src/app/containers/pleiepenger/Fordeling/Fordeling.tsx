@@ -368,7 +368,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             />
 
                             <VerticalSpacer twentyPx />
-                            {erUtgåttInntektsmelding && (
+                            {erUtgåttInntektsmelding && identState.ident1 && (
                                 <RadioPanelGruppe
                                     name="utgåttInntektsmelding"
                                     radios={[
