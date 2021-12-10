@@ -12,8 +12,8 @@ import './okGaaTilLosModal.less';
 interface ISettPaaVentModalProps {
     submit: () => void;
     avbryt: () => void;
-    journalposter: IJournalpostInfo[];
-    soknadId: string;
+    journalposter?: IJournalpostInfo[];
+    soknadId?: string;
 }
 
 const pdfUrl = (journalpost: IJournalpostInfo) =>
@@ -39,7 +39,7 @@ const SettPaaVentModal = (props: WrappedComponentProps & ISettPaaVentModalProps)
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
                 </Knapp>
             </div>
-            {!!journalposter.length && (
+            {journalposter && journalposter.length > 0 && soknadId && (
                 <>
                     <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
                     <AlertStripeInfo>{intlHelper(intl, 'modal.settpaavent.info')}</AlertStripeInfo>

@@ -2,7 +2,9 @@ import BrevComponent from 'app/components/brev/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
+import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
@@ -10,6 +12,14 @@ import {
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
+import {
+    feilregistrerJournalpost as feilregistrerJournalpostAction,
+    feilregistrerJournalpostResetAction,
+} from 'app/state/actions/FordelingFeilregistrerJournalpostActions';
+import {
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
+} from 'app/state/actions/FordelingSettPaaVentActions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -19,6 +29,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -37,6 +48,8 @@ import { setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
 import { Sakstyper } from '../../SakstypeImpls';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
+import SettPaaVentErrorModal from '../SettPaaVentErrorModal';
+import SettPaaVentModal from '../SettPaaVentModal';
 import './fordeling.less';
 import { erUgyldigIdent } from './FordelingFeilmeldinger';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
@@ -47,6 +60,9 @@ import { SokersBarn } from './Komponenter/SokersBarn';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
+import FordelingFeilregistrerJournalpostState from '../../../models/types/FordelingFeilregistrerJournalpostState';
+import FeilregistrerJournalpostModal from '../FeilregistrerJournalpostModal';
+import FeilregistrerJournalpostErrorModal from '../FeilregistrerJournalpostErrorModal';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -56,6 +72,8 @@ export interface IFordelingStateProps {
     opprettIGosysState: IGosysOppgaveState;
     fellesState: IFellesState;
     dedupkey: string;
+    fordelingSettPåVentState: FordelingSettPåVentState;
+    fordelingFeilregistrerState: FordelingFeilregistrerJournalpostState;
 }
 
 export interface IFordelingDispatchProps {
@@ -68,6 +86,11 @@ export interface IFordelingDispatchProps {
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
     setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
+
+    settJournalpostPåVent: typeof settJournalpostPaaVent;
+    settPåventResetAction: typeof setJournalpostPaaVentResetAction;
+    feilregistrerJournalpost: typeof feilregistrerJournalpostAction;
+    feilregistrerJournalpostReset: typeof feilregistrerJournalpostResetAction;
 }
 
 export type IFordelingProps = WrappedComponentProps & IFordelingStateProps & IFordelingDispatchProps;
@@ -87,6 +110,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setIdentAction,
         setErIdent1Bekreftet,
         setSakstypeAction: sakstypeAction,
+        settJournalpostPåVent,
+        settPåventResetAction,
+        fordelingSettPåVentState,
+        feilregistrerJournalpost,
+        feilregistrerJournalpostReset,
+        fordelingFeilregistrerState,
     } = props;
     const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -107,6 +136,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
 
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
+    const [håndterUtgåttInntektsmeldingValg, setHåndterUtgåttInntektsmeldingValg] = useState<string>('');
+    const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
+    const [showFeilregistrerJournalpostModal, setShowFeilregistrerJournalpostModal] = useState(false);
 
     const [skalViseBrev, setSkalViseBrev] = useState(false);
 
@@ -119,6 +151,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const gjelderPleiepengerEllerOmsorgspenger =
         dokumenttype === FordelingDokumenttype.PLEIEPENGER || dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+
+    const erUtgåttInntektsmelding =
+        journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
+    const skalOppretteGosysoppgaveForUtgåttInntektsmelding = () =>
+        håndterUtgåttInntektsmeldingValg === 'opprettJournalføringsoppgave' && identState.ident1;
+    const skalFeilregistrereJournalpost = () =>
+        håndterUtgåttInntektsmeldingValg === 'feilregistrerJournalpost' && identState.ident1;
+
+    const skalSetteUtgåttInntektsmeldingPåVent = () =>
+        håndterUtgåttInntektsmeldingValg === 'settPåVent' && identState.ident1;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -188,6 +230,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setDokumenttype(type);
     };
 
+    const handleUtgåttInntektsmelding = (valgtHåndtering: string) => {
+        setHåndterUtgåttInntektsmeldingValg(valgtHåndtering);
+    };
+
+    const handleSettPaaVent = () => {
+        settJournalpostPåVent(journalpost?.journalpostId || '');
+        setShowSettPaaVentModal(false);
+    };
+
+    const handleFeilregistrerJournalpost = () => {
+        feilregistrerJournalpost(journalpost?.journalpostId || '');
+        setShowFeilregistrerJournalpostModal(false);
+    };
+
     useEffect(() => {
         const lukkEtterJournalpostSomIkkeStottesKopieres: boolean =
             skalJournalpostSomIkkeStottesKopieres &&
@@ -243,25 +299,42 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
                 <FormPanel>
                     <JournalpostPanel />
+                    {erUtgåttInntektsmelding && (
+                        <>
+                            <VerticalSpacer thirtyTwoPx />
+                            <Systemtittel>Inntektsmelding uten søknad</Systemtittel>
+                            <VerticalSpacer twentyPx />
+                        </>
+                    )}
                     <div className="fordeling-page">
                         {!!opprettIGosysState.gosysOppgaveRequestError && (
                             <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>
                         )}
+                        {erUtgåttInntektsmelding && (
+                            <>
+                                <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
+                                    {intlHelper(intl, 'fordeling.inntektsmeldingUtenKrav')}
+                                </AlertStripeAdvarsel>
+                                <VerticalSpacer thirtyTwoPx />
+                            </>
+                        )}
                         <div>
-                            <RadioPanelGruppe
-                                name="ppsjekk"
-                                radios={Object.values(FordelingDokumenttype).map((type) => ({
-                                    label: intlHelper(intl, type),
-                                    value: type,
-                                }))}
-                                legend={intlHelper(intl, 'fordeling.detteGjelder')}
-                                checked={dokumenttype}
-                                onChange={(event) =>
-                                    handleDokumenttype(
-                                        (event.target as HTMLInputElement).value as FordelingDokumenttype
-                                    )
-                                }
-                            />
+                            {!erUtgåttInntektsmelding && (
+                                <RadioPanelGruppe
+                                    name="ppsjekk"
+                                    radios={Object.values(FordelingDokumenttype).map((type) => ({
+                                        label: intlHelper(intl, type),
+                                        value: type,
+                                    }))}
+                                    legend={intlHelper(intl, 'fordeling.detteGjelder')}
+                                    checked={dokumenttype}
+                                    onChange={(event) =>
+                                        handleDokumenttype(
+                                            (event.target as HTMLInputElement).value as FordelingDokumenttype
+                                        )
+                                    }
+                                />
+                            )}
                             <InnholdForDokumenttypeAnnet
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
@@ -287,6 +360,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setErIdent1Bekreftet={setErIdent1Bekreftet}
                                 riktigIdentIJournalposten={riktigIdentIJournalposten}
                                 setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
+                                erUtgåttInntektsmelding={erUtgåttInntektsmelding}
                             />
                             <ToSoekere
                                 dokumenttype={dokumenttype}
@@ -298,6 +372,30 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             />
 
                             <VerticalSpacer twentyPx />
+                            {erUtgåttInntektsmelding && (
+                                <RadioPanelGruppe
+                                    name="utgåttInntektsmelding"
+                                    radios={[
+                                        {
+                                            label: 'Feilregistrer journalpost',
+                                            value: 'feilregistrerJournalpost',
+                                        },
+                                        {
+                                            label: 'Opprett journalføringsoppgave i Gosys',
+                                            value: 'opprettJournalføringsoppgave',
+                                        },
+                                        {
+                                            label: 'Sett på vent',
+                                            value: 'settPåVent',
+                                        },
+                                    ]}
+                                    legend="Hva ønsker du å gjøre med dokumentet?"
+                                    checked={håndterUtgåttInntektsmeldingValg}
+                                    onChange={(event) =>
+                                        handleUtgåttInntektsmelding((event.target as HTMLInputElement).value)
+                                    }
+                                />
+                            )}
                             {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
                                     <SokersBarn
@@ -381,6 +479,24 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 )}
                             </>
                         )}
+                        {skalOppretteGosysoppgaveForUtgåttInntektsmelding() && (
+                            <Hovedknapp
+                                mini
+                                onClick={() => omfordel(journalpost.journalpostId, identState.ident1, 'Annet')}
+                            >
+                                <FormattedMessage id="fordeling.sakstype.ANNET" />
+                            </Hovedknapp>
+                        )}
+                        {skalFeilregistrereJournalpost() && (
+                            <Hovedknapp mini onClick={() => setShowFeilregistrerJournalpostModal(true)}>
+                                {intlHelper(intl, 'skjema.knapp.feilregistrerJournalpost')}
+                            </Hovedknapp>
+                        )}
+                        {skalSetteUtgåttInntektsmeldingPåVent() && (
+                            <Hovedknapp mini onClick={() => setShowSettPaaVentModal(true)}>
+                                {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                            </Hovedknapp>
+                        )}
                         <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
                             <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>
@@ -453,6 +569,73 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             <button type="button" style={{ display: 'none' }} onClick={() => setSkalViseBrev(true)}>
                 Vis brev
             </button>
+            {showSettPaaVentModal && (
+                <ModalWrapper
+                    className="settpaaventmodal"
+                    onRequestClose={() => setShowSettPaaVentModal(false)}
+                    contentLabel="settpaaventmodal"
+                    isOpen
+                    closeButton={false}
+                >
+                    <SettPaaVentModal
+                        submit={() => handleSettPaaVent()}
+                        avbryt={() => setShowSettPaaVentModal(false)}
+                    />
+                </ModalWrapper>
+            )}
+            {fordelingSettPåVentState.settPaaVentSuccess && (
+                <ModalWrapper
+                    onRequestClose={() => settPåventResetAction()}
+                    contentLabel="settpaaventokmodal"
+                    closeButton={false}
+                    isOpen
+                >
+                    <OkGaaTilLosModal melding="modal.settpaavent.til" />
+                </ModalWrapper>
+            )}
+            {fordelingSettPåVentState.settPaaVentError && (
+                <ModalWrapper
+                    onRequestClose={() => settPåventResetAction()}
+                    contentLabel="settpaaventokmodal"
+                    closeButton={false}
+                    isOpen
+                >
+                    <SettPaaVentErrorModal close={() => settPåventResetAction()} />
+                </ModalWrapper>
+            )}
+            {showFeilregistrerJournalpostModal && (
+                <ModalWrapper
+                    onRequestClose={() => setShowFeilregistrerJournalpostModal(false)}
+                    contentLabel="feilregistrer journalpostmodal"
+                    closeButton={false}
+                    isOpen
+                >
+                    <FeilregistrerJournalpostModal
+                        submit={() => handleFeilregistrerJournalpost()}
+                        avbryt={() => setShowFeilregistrerJournalpostModal(false)}
+                    />
+                </ModalWrapper>
+            )}
+            {fordelingFeilregistrerState.feilregistrerJournalpostSuccess && (
+                <ModalWrapper
+                    onRequestClose={() => feilregistrerJournalpostReset()}
+                    contentLabel="feilregistrer journalpostOkModal"
+                    closeButton={false}
+                    isOpen
+                >
+                    <OkGaaTilLosModal melding="modal.feilregistrerjournalpost" />
+                </ModalWrapper>
+            )}
+            {fordelingFeilregistrerState.feilregistrerJournalpostError && (
+                <ModalWrapper
+                    onRequestClose={() => feilregistrerJournalpostReset()}
+                    contentLabel="feilregistrer journalpostFeilModal"
+                    closeButton={false}
+                    isOpen
+                >
+                    <FeilregistrerJournalpostErrorModal close={() => feilregistrerJournalpostReset()} />
+                </ModalWrapper>
+            )}
         </div>
     );
 };
@@ -464,6 +647,8 @@ const mapStateToProps = (state: RootStateType) => ({
     opprettIGosysState: state.opprettIGosys,
     fellesState: state.felles,
     dedupkey: state.felles.dedupKey,
+    fordelingSettPåVentState: state.fordelingSettPåVentState,
+    fordelingFeilregistrerState: state.fordelingFeilregistrerJournalpostState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -480,6 +665,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
+    settJournalpostPåVent: (journalpostid: string) => dispatch(settJournalpostPaaVent(journalpostid)),
+    settPåventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
+    feilregistrerJournalpost: (journalpostid: string) => dispatch(feilregistrerJournalpostAction(journalpostid)),
+    feilregistrerJournalpostReset: () => dispatch(feilregistrerJournalpostResetAction()),
 });
 
 const Fordeling = injectIntl(connect(mapStateToProps, mapDispatchToProps)(FordelingComponent));

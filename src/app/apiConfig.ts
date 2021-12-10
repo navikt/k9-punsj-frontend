@@ -23,6 +23,7 @@ export enum ApiPath {
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
     JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
     JOURNALPOST_KOPIERE = '/journalpost/kopier/{journalpostId}',
+    JOURNALPOST_UTGÅTT = '/journalpost/utgått/{journalpostId}',
     DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
     OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
     OPPRETT_GOSYS_OPPGAVE = '/gosys/opprettJournalforingsoppgave/',
