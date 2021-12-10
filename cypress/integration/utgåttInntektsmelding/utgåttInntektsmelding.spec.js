@@ -7,7 +7,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
                 window.__initialState__ = initialState;
             },
         });
-        cy.findByText('Feilregistrer journalpost').should('exist');
+        cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
     });

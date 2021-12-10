@@ -18,12 +18,12 @@ let handlers = [
                 })
             )
     ),
-    rest.get('http://localhost:8101/api/k9-punsj/journalpost/001115578', (req, res, ctx) =>
+    rest.get('http://localhost:8101/api/k9-punsj/journalpost/202', (req, res, ctx) =>
         res(
             ctx.status(200),
             ctx.json({
-                journalpostId: '001115578',
-                norskIdent: '001115578',
+                journalpostId: '202',
+                norskIdent: '29099000129',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 punsjInnsendingType: {
