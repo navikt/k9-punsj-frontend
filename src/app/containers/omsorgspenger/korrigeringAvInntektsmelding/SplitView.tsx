@@ -76,7 +76,13 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
-            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => res.json()),
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => {
+                if (!res.ok) {
+                    throw new Error(`Fetch mot ${ApiPath.JOURNALPOST_GET} feilet`);
+                } else {
+                    return res.json();
+                }
+            }),
     }));
 
     const queries = useQueries(queryObjects);
