@@ -1,5 +1,6 @@
 import { ApiPath, URL_BACKEND } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -26,26 +27,6 @@ import {
     validateFritekstbrevOverskrift,
     validateMottaker,
 } from './validationHelpers';
-
-// const lagVisningsnavnForMottaker = (
-//     mottakerId: string,
-//     personopplysninger?: Personopplysninger,
-//     arbeidsgiverOpplysningerPerId?: ArbeidsgiverOpplysningerPerId
-// ): string => {
-//     if (
-//         arbeidsgiverOpplysningerPerId &&
-//         arbeidsgiverOpplysningerPerId[mottakerId] &&
-//         arbeidsgiverOpplysningerPerId[mottakerId].navn
-//     ) {
-//         return `${arbeidsgiverOpplysningerPerId[mottakerId].navn} (${mottakerId})`;
-//     }
-
-//     if (personopplysninger && personopplysninger.aktoerId === mottakerId && personopplysninger.navn) {
-//         return `${personopplysninger.navn} (${personopplysninger.fnr || personopplysninger.nummer || mottakerId})`;
-//     }
-
-//     return mottakerId;
-// };
 
 const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId: string) => {
     const mottaker = {
@@ -106,6 +87,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
     const [sendBrevFeilet, setSendBrevFeilet] = useState(false);
     const [aktørId, setAktørId] = useState('');
     const [harSendtMinstEttBrev, setHarSendtMinstEttBrev] = useState(false);
+    const [person, setPerson] = useState<Person | undefined>(undefined);
 
     useEffect(() => {
         fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ`, {
@@ -131,6 +113,11 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
             get(ApiPath.BREV_AKTØRID, undefined, { 'X-Nav-NorskIdent': søkerId }, (response, data) => {
                 if (response.status === 200) {
                     setAktørId(`${data}`);
+                }
+            });
+            get(ApiPath.PERSON, undefined, { 'X-Nav-NorskIdent': søkerId }, (response, data: Person) => {
+                if (response.status === 200) {
+                    setPerson(data);
                 }
             });
         }
@@ -223,7 +210,11 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                                             <option disabled key="default" value="" label="">
                                                 Velg
                                             </option>
-                                            {aktørId && <option value={aktørId}>{`Søker - ${søkerId}`}</option>}
+                                            {aktørId && person && (
+                                                <option
+                                                    value={aktørId}
+                                                >{`${person.sammensattNavn} - ${person.identitetsnummer}`}</option>
+                                            )}
                                             {arbeidsgivereMedNavn.map((arbeidsgiver) => (
                                                 <option
                                                     key={arbeidsgiver.organisasjonsnummer}

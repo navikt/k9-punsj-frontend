@@ -43,6 +43,7 @@ export enum ApiPath {
     OMS_SOKNAD_VALIDER = '/omsorgspenger-soknad/valider',
     BREV_BESTILL = '/brev/bestill',
     BREV_AKTØRID = '/brev/aktorId',
+    PERSON = '/person',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

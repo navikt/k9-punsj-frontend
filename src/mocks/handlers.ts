@@ -40,6 +40,19 @@ let handlers = [
         )
     ),
     rest.post('http://localhost:8101/api/k9-punsj/brev/bestill', (req, res, ctx) => res(ctx.status(200))),
+    rest.get('http://localhost:8101/api/k9-punsj/person', (req, res, ctx) =>
+        res(
+            ctx.status(200),
+            ctx.json({
+                etternavn: 'KAKE',
+                fornavn: 'TUNGSINDIG',
+                fødselsdato: '1981-12-18',
+                identitetsnummer: '18128103429',
+                mellomnavn: null,
+                sammensattNavn: 'TUNGSINDIG KAKE',
+            })
+        )
+    ),
 ];
 
 if (process.env.MSW_MODE === 'test') {
