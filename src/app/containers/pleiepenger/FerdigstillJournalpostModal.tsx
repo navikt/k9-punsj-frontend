@@ -9,12 +9,13 @@ interface IFerdigstillJournalpostModalProps {
     avbryt: () => void;
 }
 
-const FerdigstillJournalpostModal = (props: WrappedComponentProps & IFerdigstillJournalpostModalProps) => {
-    const { intl, submit, avbryt } = props;
+const FerdigstillJournalpostModal: React.FC<WrappedComponentProps & IFerdigstillJournalpostModalProps> = (props) => {
+    const { intl, submit, avbryt, children } = props;
 
     return (
         <div className="ferdigstillJournalpost">
             <h2>{intlHelper(intl, 'skjema.knapp.ferdigstillJournalpost')}</h2>
+            {children}
             <div className="knapper">
                 <Knapp onClick={() => submit()} mini>
                     {intlHelper(intl, 'skjema.knapp.ferdigstillJournalpost')}
