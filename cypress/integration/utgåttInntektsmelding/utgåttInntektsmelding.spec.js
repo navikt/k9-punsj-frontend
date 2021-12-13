@@ -12,6 +12,9 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
+    });
+
+    it('skal vise mulighet for å sende brev', () => {
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
         cy.findByLabelText('Mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Mottaker').should('exist');
@@ -19,5 +22,14 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByLabelText('Tittel').should('not.exist');
         cy.findByLabelText('Mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
+    });
+
+    it('skal vise infoboks dersom brev er fylt ut men ikke sendt', () => {
+        cy.findByLabelText('Fritekst').type('test');
+        cy.findByText('Sett på vent').click();
+        cy.findByRole('button', { name: /Sett på vent/i })
+            .should('exist')
+            .click();
+        cy.findByText('Påbegynt brev er ikke sendt. Dersom du går videre vil ikke brev gå ut.').should('exist');
     });
 });
