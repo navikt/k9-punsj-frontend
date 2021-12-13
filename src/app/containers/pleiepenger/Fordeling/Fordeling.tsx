@@ -139,6 +139,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [håndterUtgåttInntektsmeldingValg, setHåndterUtgåttInntektsmeldingValg] = useState<string>('');
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
+    const [visBrevIkkeSendtInfoboks, setVisBrevIkkeSendtInfoboks] = useState(false);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
@@ -241,6 +242,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         ferdigstillJournalpost(journalpost?.journalpostId || '', identState.ident1);
         setShowFerdigstillJournalpostModal(false);
     };
+
+    const getBrevIkkeSendtInfoboks = () => (
+        <AlertStripeInfo className="fordeling-brevIkkeSendtinfo">
+            Påbegynt brev er ikke sendt. Dersom du går videre vil ikke brev gå ut.
+        </AlertStripeInfo>
+    );
 
     useEffect(() => {
         const lukkEtterJournalpostSomIkkeStottesKopieres: boolean =
@@ -398,6 +405,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         <BrevComponent
                                             søkerId={identState.ident1}
                                             journalpostId={journalpost?.journalpostId}
+                                            setVisBrevIkkeSendtInfoboks={setVisBrevIkkeSendtInfoboks}
                                         />
                                     </BrevContainer>
                                 </>
@@ -577,10 +585,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     isOpen
                     closeButton={false}
                 >
-                    <SettPaaVentModal
-                        submit={() => handleSettPaaVent()}
-                        avbryt={() => setShowSettPaaVentModal(false)}
-                    />
+                    <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
+                        {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
+                    </SettPaaVentModal>
                 </ModalWrapper>
             )}
             {fordelingSettPåVentState.settPaaVentSuccess && (
@@ -613,7 +620,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     <FerdigstillJournalpostModal
                         submit={() => handleFerdigstillJournalpost()}
                         avbryt={() => setShowFerdigstillJournalpostModal(false)}
-                    />
+                    >
+                        {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
+                    </FerdigstillJournalpostModal>
                 </ModalWrapper>
             )}
             {fordelingFerdigstillState.ferdigstillJournalpostSuccess && (

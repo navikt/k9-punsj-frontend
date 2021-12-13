@@ -94,9 +94,10 @@ interface Brevmal {
 interface BrevProps {
     søkerId: string;
     journalpostId: string;
+    setVisBrevIkkeSendtInfoboks: (erBrevSendt: boolean) => void;
 }
 
-const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
+const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBrevIkkeSendtInfoboks }) => {
     const intl = useIntl();
     const [brevmaler, setBrevmaler] = useState<Brevmal | undefined>(undefined);
     const [hentBrevmalerError, setHentBrevmalerError] = useState(false);
@@ -104,6 +105,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
     const [brevErSendt, setBrevErSendt] = useState(false);
     const [sendBrevFeilet, setSendBrevFeilet] = useState(false);
     const [aktørId, setAktørId] = useState('');
+    const [harSendtMinstEttBrev, setHarSendtMinstEttBrev] = useState(false);
 
     useEffect(() => {
         fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ`, {
@@ -164,6 +166,8 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                 post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
                     if (response.status === 200) {
                         setBrevErSendt(true);
+                        setHarSendtMinstEttBrev(true);
+                        setVisBrevIkkeSendtInfoboks(false);
                     } else {
                         setSendBrevFeilet(true);
                     }
@@ -241,6 +245,10 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                         <div className="textareaContainer">
                                             <Textarea
                                                 {...field}
+                                                onChange={(event) => {
+                                                    setFieldValue(field.name, event.target.value);
+                                                    setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev);
+                                                }}
                                                 label={intl.formatMessage({ id: 'Messages.Fritekst' })}
                                                 maxLength={4000}
                                                 feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
@@ -279,6 +287,10 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId }) => {
                                         <div className="textareaContainer">
                                             <Textarea
                                                 {...field}
+                                                onChange={(event) => {
+                                                    setFieldValue(field.name, event.target.value);
+                                                    setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev);
+                                                }}
                                                 label={intl.formatMessage({ id: 'Messages.Fritekst' })}
                                                 maxLength={100000}
                                                 feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}

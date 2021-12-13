@@ -39,6 +39,7 @@ let handlers = [
             })
         )
     ),
+    rest.post('http://localhost:8101/api/k9-punsj/brev/bestill', (req, res, ctx) => res(ctx.status(200))),
 ];
 
 if (process.env.MSW_MODE === 'test') {
