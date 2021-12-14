@@ -7,7 +7,7 @@ interface IDocumentTitleProps {
 
 const DocumentTitle: React.FunctionComponent<IDocumentTitleProps> = ({ title, children }) => {
     useDocumentTitle(title);
-    return { children };
+    return children;
 };
 
 export default DocumentTitle;
