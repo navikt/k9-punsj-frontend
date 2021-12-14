@@ -63,6 +63,7 @@ import ValgForDokument from './Komponenter/ValgForDokument';
 import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
 import FerdigstillJournalpostModal from '../FerdigstillJournalpostModal';
 import FerdigstillJournalpostErrorModal from '../FerdigstillJournalpostErrorModal';
+import OpprettOppgaveIGosysModal from '../OpprettOppgaveIGosysModal';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -139,6 +140,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [håndterUtgåttInntektsmeldingValg, setHåndterUtgåttInntektsmeldingValg] = useState<string>('');
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
+    const [showOpprettOppgaveIGosysModal, setShowOpprettOppgaveIGosysModal] = useState(false);
     const [visBrevIkkeSendtInfoboks, setVisBrevIkkeSendtInfoboks] = useState(false);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
@@ -244,9 +246,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     };
 
     const getBrevIkkeSendtInfoboks = () => (
-        <AlertStripeInfo className="fordeling-brevIkkeSendtinfo">
+        <AlertStripeAdvarsel className="fordeling-brevIkkeSendtinfo">
             Påbegynt brev er ikke sendt. Dersom du går videre vil ikke brev gå ut.
-        </AlertStripeInfo>
+        </AlertStripeAdvarsel>
     );
 
     useEffect(() => {
@@ -496,13 +498,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             </>
                         )}
                         {skalOppretteGosysoppgaveForUtgåttInntektsmelding() && (
-                            <Hovedknapp
-                                mini
-                                onClick={() => omfordel(journalpost.journalpostId, identState.ident1, 'Annet')}
-                            >
+                            <Hovedknapp mini onClick={() => setShowOpprettOppgaveIGosysModal(true)}>
                                 <FormattedMessage id="fordeling.sakstype.ANNET" />
                             </Hovedknapp>
                         )}
+
                         {skalFerdigstilleJournalpost() && (
                             <Hovedknapp mini onClick={() => setShowFerdigstillJournalpostModal(true)}>
                                 {intlHelper(intl, 'skjema.knapp.ferdigstillJournalpost')}
@@ -623,6 +623,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     >
                         {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
                     </FerdigstillJournalpostModal>
+                </ModalWrapper>
+            )}
+            {journalpost && showOpprettOppgaveIGosysModal && (
+                <ModalWrapper
+                    className="opprettOppgaveIGosysModal"
+                    onRequestClose={() => setShowOpprettOppgaveIGosysModal(false)}
+                    contentLabel="opprettOppgaveIGosysModal"
+                    isOpen
+                    closeButton={false}
+                >
+                    <OpprettOppgaveIGosysModal
+                        submit={() => omfordel(journalpost.journalpostId, identState.ident1, 'Annet')}
+                        avbryt={() => setShowOpprettOppgaveIGosysModal(false)}
+                    >
+                        {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
+                    </OpprettOppgaveIGosysModal>
                 </ModalWrapper>
             )}
             {fordelingFerdigstillState.ferdigstillJournalpostSuccess && (
