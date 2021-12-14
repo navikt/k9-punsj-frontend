@@ -1729,10 +1729,10 @@
     outvariant "^1.2.0"
     strict-event-emitter "^0.2.0"
 
-"@navikt/ds-icons@^0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.6.3.tgz#95dd8b7568ce770736859014cffa1571739323b7"
-  integrity sha512-sNmgP8a/V8PLccewcEc7+fy+HfA6vDf1zDbgbQ0ypW/OMf6rGsg43EoCnU/txuuh5cRWbmzbbTQnoNHHmUT58w==
+"@navikt/ds-icons@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.7.0.tgz#0ac3e539f7e3a9161cfc2e9038376abcfba3b4d9"
+  integrity sha512-i6Sdn/8iAjDx2SJRI9QpbVaMWaZzGHjxoCnnegu+gcbmKuKqIM7/HNogjKJ6prxAv6uRkc5GYev8k3pGNua1Nw==
   dependencies:
     uuid "^8.3.2"
 

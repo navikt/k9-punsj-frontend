@@ -6,7 +6,7 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "^7.16.3",
-        "@navikt/ds-icons": "^0.6.3",
+        "@navikt/ds-icons": "^0.7.0",
         "@navikt/fnrvalidator": "^1.1.4",
         "@navikt/nap-header": "^1.0.10",
         "@navikt/nap-user-panel": "^1.0.0",
