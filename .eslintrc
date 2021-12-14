@@ -54,6 +54,7 @@
         "no-shadow": "off",
         "react/jsx-props-no-spreading": "off",
         "react/destructuring-assignment": "off",
-        "default-param-last": "off"
+        "default-param-last": "off",
+        "react/function-component-definition": "off"
     }
 }
