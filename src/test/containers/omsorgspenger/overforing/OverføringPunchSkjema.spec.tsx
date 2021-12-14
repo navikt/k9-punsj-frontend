@@ -15,7 +15,7 @@ import { JaNei } from '../../../../app/models/enums';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/components/journalpost-panel/JournalpostPanel', () => ({
-    JournalpostPanel: () => <></>,
+    JournalpostPanel: () => null,
 }));
 
 describe('<OverføringPunchSkjema>', () => {
