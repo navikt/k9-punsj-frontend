@@ -202,6 +202,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
     };
 
+    private getAlleSøknadsperioder = () => {
+        const eksisterendeSøknadsperioder = this.props.punchFormState.perioder || [];
+        return [...eksisterendeSøknadsperioder, ...this.getSoknadsperiode()].filter((periode) => {
+            if (eksisterendeSøknadsperioder.length > 0) {
+                return periode.fom && periode.tom;
+            }
+            return true;
+        });
+    };
+
     private initialPeriodeMedTimer = new ArbeidstidPeriodeMedTimer({
         periode: { fom: '', tom: '' },
         faktiskArbeidTimerPerDag: '',
@@ -217,7 +227,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private initialArbeidstaker = () =>
         new Arbeidstaker({
             arbeidstidInfo: {
-                perioder: this.getSoknadsperiode().map((periode) => ({
+                perioder: this.getAlleSøknadsperioder().map((periode) => ({
                     periode,
                     faktiskArbeidTimerPerDag: '',
                     jobberNormaltTimerPerDag: '',
@@ -229,7 +239,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private initialArbeidstidInfo = () =>
         new ArbeidstidInfo({
-            perioder: this.getSoknadsperiode().map((periode) => ({
+            perioder: this.getAlleSøknadsperioder().map((periode) => ({
                 periode,
                 faktiskArbeidTimerPerDag: '',
                 jobberNormaltTimerPerDag: '',
