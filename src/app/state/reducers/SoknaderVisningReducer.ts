@@ -1,4 +1,3 @@
-import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
 import { SoknaderSokActionKeys } from '../../models/enums/SoknaderSokActionKeys';
 import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
 import { ISoknaderSokActionTypes } from '../actions/SoknaderSokActions';
@@ -11,10 +10,9 @@ export const initialState: ISoknaderVisningState = {
 
 export function SoknaderVisningReducer(
     visningState: ISoknaderVisningState = initialState,
-    action: ISoknaderSokActionTypes | LocationChangeAction
+    action: ISoknaderSokActionTypes
 ): ISoknaderVisningState {
     switch (action.type) {
-        case LOCATION_CHANGE:
         case SoknaderSokActionKeys.IDENT_SET:
             return {
                 ...visningState,

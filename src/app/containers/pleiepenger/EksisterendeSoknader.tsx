@@ -92,9 +92,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
-            <>
-                <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>
-            </>
+            <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>
         );
     }
 
@@ -112,9 +110,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
-            <>
-                <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
-            </>
+            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
         );
     }
 

@@ -51,10 +51,8 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 <b>
                     <FormattedMessage id="journalpost.norskIdent" />
                 </b>
-                <>
-                    {' '}
+                {' '}
                     {sokersIdent} <Kopier verdi={sokersIdent} />
-                </>
             </div>
             <VerticalSpacer eightPx />
             {!fellesState.kopierJournalpostSuccess && <SokersBarn visSokersBarn sokersIdent={sokersIdent} />}

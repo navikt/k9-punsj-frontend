@@ -1,7 +1,6 @@
 import { FordelingActionKeys } from 'app/models/enums';
 import { IFordelingState } from 'app/models/types';
 import { IFordelingActionTypes } from 'app/state/actions';
-import { LOCATION_CHANGE, LocationChangeAction } from 'react-router-redux';
 
 const initialState: IFordelingState = {
     sakstype: undefined,
@@ -12,18 +11,15 @@ const initialState: IFordelingState = {
     lukkOppgaveDone: false,
     skalTilK9: undefined,
     erIdent1Bekreftet: false,
-    valgtGosysKategori: ''
+    valgtGosysKategori: '',
 };
 
 // eslint-disable-next-line import/prefer-default-export
 export function FordelingReducer(
     fordelingState: IFordelingState = initialState,
-    action: IFordelingActionTypes | LocationChangeAction
+    action: IFordelingActionTypes
 ): IFordelingState {
     switch (action.type) {
-        case LOCATION_CHANGE:
-            return initialState;
-
         case FordelingActionKeys.SAKSTYPE_SET:
             return {
                 ...fordelingState,
@@ -125,28 +121,27 @@ export function FordelingReducer(
         case FordelingActionKeys.GOSYS_GJELDER_REQUEST:
             return {
                 ...fordelingState,
-                isAwaitingGosysGjelderResponse: true
+                isAwaitingGosysGjelderResponse: true,
             };
 
         case FordelingActionKeys.GOSYS_GJELDER_SUCCESS:
             return {
                 ...fordelingState,
                 isAwaitingGosysGjelderResponse: false,
-                gosysGjelderKategorier: action.gjelderKategorierFraGosys
-
+                gosysGjelderKategorier: action.gjelderKategorierFraGosys,
             };
 
         case FordelingActionKeys.GOSYS_GJELDER_ERROR:
             return {
                 ...fordelingState,
                 isAwaitingGosysGjelderResponse: false,
-                gosysGjelderKategorierError: action.error
+                gosysGjelderKategorierError: action.error,
             };
 
         case FordelingActionKeys.VALGT_GOSYS_KATEGORI:
             return {
                 ...fordelingState,
-                valgtGosysKategori: action.valgtGosysKategori
+                valgtGosysKategori: action.valgtGosysKategori,
             };
 
         default:
