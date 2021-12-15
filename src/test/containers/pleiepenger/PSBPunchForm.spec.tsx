@@ -332,7 +332,7 @@ describe('PunchForm', () => {
         expect(punchForm.find('.nattevaaksperioder')).toHaveLength(0);
     });
 
-    it('Oppdaterer søknad og felt når itilsynsordning endres', () => {
+    it('Oppdaterer søknad og felt når tilsynsordning endres', () => {
         const updateSoknad = jest.fn();
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
         punchForm.find('.tilsynsordning CheckboksPanel').simulate('change', { target: { checked: true } });
@@ -341,7 +341,7 @@ describe('PunchForm', () => {
             tilsynsordning: expect.objectContaining({
                 perioder: [
                     {
-                        periode: {},
+                        periode: { fom: '', tom: '' },
                         timer: 0,
                         minutter: 0,
                     },
