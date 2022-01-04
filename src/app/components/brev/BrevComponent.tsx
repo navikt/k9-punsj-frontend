@@ -57,10 +57,9 @@ const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId:
         .then((data) => {
             const win = window.open();
             if (win) {
+                const pdfUrl = URL.createObjectURL(data);
                 win.document.write(
-                    `<iframe style="overflow:hidden;height:100%;width:100%" height="100%" width="100%" src="${URL.createObjectURL(
-                        data
-                    )}" frameborder="0" allowfullscreen></iframe>`
+                    `<iframe type="application/pdf" style="overflow:hidden;height:100%;width:100%" height="100%" width="100%" src="${pdfUrl}" frameborder="0" allowfullscreen></iframe>`
                 );
             }
         });
