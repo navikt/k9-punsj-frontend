@@ -31,47 +31,15 @@ export const validateMottaker = (value: string) => {
     return undefined;
 };
 
-export const validateFritekst = (value: string) => {
+export const validateText = (value: string, maxLength: number) => {
     if (!value) {
         return 'Må fylles ut';
     }
     if (value.length < 3) {
         return 'Du må skrive minst 3 tegn';
     }
-    if (value.length > 4000) {
-        return 'Feltet må være mindre eller lik 4000 tegn';
-    }
-    if (hasValidText(value) !== true) {
-        return hasValidText(value);
-    }
-    return undefined;
-};
-
-export const validateFritekstbrevOverskrift = (value: string) => {
-    if (!value) {
-        return 'Må fylles ut';
-    }
-    if (value.length < 3) {
-        return 'Du må skrive minst 3 tegn';
-    }
-    if (value.length > 200) {
-        return 'Feltet må være mindre eller lik 200 tegn';
-    }
-    if (hasValidText(value) !== true) {
-        return hasValidText(value);
-    }
-    return undefined;
-};
-
-export const validateFritekstbrevBrødtekst = (value: string) => {
-    if (!value) {
-        return 'Må fylles ut';
-    }
-    if (value.length < 3) {
-        return 'Du må skrive minst 3 tegn';
-    }
-    if (value.length > 100000) {
-        return 'Feltet må være mindre eller lik 100000 tegn';
+    if (value.length > maxLength) {
+        return `Feltet må være mindre eller lik ${maxLength} tegn`;
     }
     if (hasValidText(value) !== true) {
         return hasValidText(value);

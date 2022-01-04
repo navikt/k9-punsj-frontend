@@ -1,6 +1,6 @@
+import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
 import React, { useState } from 'react';
 import './brevContainer.less';
-import ChevronIcon from './ChevronIcon';
 import SendIcon from './SendIcon';
 
 const BrevContainer: React.FC = ({ children }) => {
@@ -11,7 +11,11 @@ const BrevContainer: React.FC = ({ children }) => {
             <button className="brevContainer__button" type="button" onClick={() => setIsOpen(!isOpen)}>
                 <SendIcon />
                 Send brev til arbeidsgiver eller søker
-                <ChevronIcon className={`brevContainer__chevron ${isOpen ? 'brevContainer__chevron--open' : ''}`} />
+                {isOpen ? (
+                    <ExpandFilled className="brevContainer__chevron" fill="#0067C5" />
+                ) : (
+                    <CollapseFilled className="brevContainer__chevron" fill="#0067C5" />
+                )}
             </button>
             {isOpen ? children : null}
         </div>
