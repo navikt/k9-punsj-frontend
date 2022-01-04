@@ -13,7 +13,7 @@ server.use(
             directives: {
                 defaultSrc: ["'self'"],
                 connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY, 'https://sentry.gc.nav.no'],
-                frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY, 'blob:'],
+                frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
                 fontSrc: ["'self'", 'data:'],
                 imgSrc: ["'self'", 'data:'],
                 styleSrc: ["'self'", "'unsafe-inline'"],
