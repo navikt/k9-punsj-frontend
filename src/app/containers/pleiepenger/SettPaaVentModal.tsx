@@ -24,13 +24,14 @@ const pdfUrl = (journalpost: IJournalpostInfo) =>
 
 const urlTilNyJournalpost = (id: string, jpid: string) => `${jpid}/pleiepenger/skjema/${id}`;
 
-const SettPaaVentModal = (props: WrappedComponentProps & ISettPaaVentModalProps) => {
-    const { intl, submit, avbryt, journalposter, soknadId } = props;
+const SettPaaVentModal: React.FC<WrappedComponentProps & ISettPaaVentModalProps> = (props) => {
+    const { intl, submit, avbryt, journalposter, soknadId, children } = props;
 
     return (
         <div className="sett-paa-vent">
             <h2>{intlHelper(intl, 'skjema.knapp.settpaavent')}</h2>
             <p>{intlHelper(intl, 'skjema.settpaavent.periode')}</p>
+            {children}
             <div className="knapper">
                 <Knapp onClick={() => submit()} mini>
                     {intlHelper(intl, 'skjema.knapp.settpaavent')}

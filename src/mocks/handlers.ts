@@ -7,12 +7,23 @@ import { testHandlers } from './testHandlers';
 
 let handlers = [
     rest.get('/api/test', (req, res, ctx) => res(ctx.status(200), ctx.json({ name: 'Bobby Binders' }))),
-    rest.get('http://localhost:8101/api/k9-punsj/journalpost/001115578', (req, res, ctx) =>
+    rest.get(
+        'http://localhost:8101/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ',
+        (req, res, ctx) =>
+            res(
+                ctx.status(200),
+                ctx.json({
+                    INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
+                    GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
+                })
+            )
+    ),
+    rest.get('http://localhost:8101/api/k9-punsj/journalpost/202', (req, res, ctx) =>
         res(
             ctx.status(200),
             ctx.json({
-                journalpostId: '001115578',
-                norskIdent: '001115578',
+                journalpostId: '202',
+                norskIdent: '29099000129',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 punsjInnsendingType: {
@@ -25,6 +36,20 @@ let handlers = [
                 journalpostStatus: 'MOTTATT',
                 kanOpprettesJournalføringsoppgave: true,
                 kanKopieres: true,
+            })
+        )
+    ),
+    rest.post('http://localhost:8101/api/k9-punsj/brev/bestill', (req, res, ctx) => res(ctx.status(200))),
+    rest.get('http://localhost:8101/api/k9-punsj/person', (req, res, ctx) =>
+        res(
+            ctx.status(200),
+            ctx.json({
+                etternavn: 'KAKE',
+                fornavn: 'TUNGSINDIG',
+                fødselsdato: '1981-12-18',
+                identitetsnummer: '18128103429',
+                mellomnavn: null,
+                sammensattNavn: 'TUNGSINDIG KAKE',
             })
         )
     ),

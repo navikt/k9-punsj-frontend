@@ -5,7 +5,7 @@ import {
 } from 'app/containers/pleiepenger/Fordeling/Fordeling';
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import FordelingFeilregistrerJournalpostState from 'app/models/types/FordelingFeilregistrerJournalpostState';
+import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
 import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
@@ -88,9 +88,9 @@ export const setupFordeling = (
         settPaaVentSuccess: false,
     };
 
-    const fordelingFeilregistrerState: FordelingFeilregistrerJournalpostState = {
-        feilregistrerJournalpostError: undefined,
-        feilregistrerJournalpostSuccess: false,
+    const fordelingFerdigstillState: FordelingFerdigstillJournalpostState = {
+        ferdigstillJournalpostError: undefined,
+        ferdigstillJournalpostSuccess: false,
     };
 
     const fordelingStateProps: IFordelingStateProps = {
@@ -105,7 +105,7 @@ export const setupFordeling = (
             kopierJournalpostSuccess: true,
         },
         fordelingSettPåVentState,
-        fordelingFeilregistrerState,
+        fordelingFerdigstillState,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);

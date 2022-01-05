@@ -5,24 +5,22 @@ import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
 import intlHelper from '../../utils/intlUtils';
 import './okGaaTilLosModal.less';
 
-export interface IFeilregistrerJournalpostErrorModalProps {
+export interface IFerdigstillJournalpostErrorModalProps {
     close: () => void;
 }
 
-const FeilregistrerJournalpostErrorModal = (
-    props: WrappedComponentProps & IFeilregistrerJournalpostErrorModalProps
-) => {
+const FerdigstillJournalpostErrorModal = (props: WrappedComponentProps & IFerdigstillJournalpostErrorModalProps) => {
     const { intl, close } = props;
 
     return (
         <div>
             <FeilCircleSvg title="check" />
-            <div className="infoFeil">{intlHelper(intl, 'modal.feilregistrerjournalpost.feil')}</div>
+            <div className="infoFeil">{intlHelper(intl, 'modal.ferdigstilljournalpost.feil')}</div>
             <Knapp mini onClick={() => close()}>
-                {intlHelper(intl, 'modal.feilregistrerjournalpost.ok')}
+                {intlHelper(intl, 'modal.ferdigstilljournalpost.ok')}
             </Knapp>
         </div>
     );
 };
 
-export default injectIntl(FeilregistrerJournalpostErrorModal);
+export default injectIntl(FerdigstillJournalpostErrorModal);

@@ -4,20 +4,21 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import intlHelper from '../../utils/intlUtils';
 import './okGaaTilLosModal.less';
 
-interface IFeilregistrerJournalpostModalProps {
+interface OpprettOppgaveIGosysModal {
     submit: () => void;
     avbryt: () => void;
 }
 
-const FeilregistrerJournalpostModal = (props: WrappedComponentProps & IFeilregistrerJournalpostModalProps) => {
-    const { intl, submit, avbryt } = props;
+const OpprettOppgaveIGosysModal: React.FC<WrappedComponentProps & OpprettOppgaveIGosysModal> = (props) => {
+    const { intl, submit, avbryt, children } = props;
 
     return (
-        <div className="feilregistrerJournalpost">
-            <h2>{intlHelper(intl, 'skjema.knapp.feilregistrerJournalpost')}</h2>
+        <div className="ferdigstillJournalpost">
+            <h2>{intlHelper(intl, 'fordeling.sakstype.ANNET')}</h2>
+            {children}
             <div className="knapper">
                 <Knapp onClick={() => submit()} mini>
-                    {intlHelper(intl, 'skjema.knapp.feilregistrerJournalpost')}
+                    {intlHelper(intl, 'fordeling.sakstype.ANNET')}
                 </Knapp>
                 <Knapp onClick={() => avbryt()} mini>
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
@@ -27,4 +28,4 @@ const FeilregistrerJournalpostModal = (props: WrappedComponentProps & IFeilregis
     );
 };
 
-export default injectIntl(FeilregistrerJournalpostModal);
+export default injectIntl(OpprettOppgaveIGosysModal);
