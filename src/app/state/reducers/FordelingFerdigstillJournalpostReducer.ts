@@ -10,9 +10,12 @@ const initialState: FordelingFerdigstillJournalpostState = {
 };
 
 export function FordelingFerdigstillJournalpostReducer(
-    fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostState = initialState,
+    fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostState,
     action: FordelingFerdigstillJournalpostActions
 ): FordelingFerdigstillJournalpostState {
+    if (typeof fordelingFerdigstillJournalpostState === 'undefined') {
+        return initialState;
+    }
     switch (action.type) {
         case FordelingFerdigstillJournalpostKeys.JOURNALPOST_FERDIGSTILL:
             return {
