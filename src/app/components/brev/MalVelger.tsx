@@ -4,7 +4,7 @@ import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import Brevmal from './Brevmal';
-import { validateBrevmalkode } from './validationHelpers';
+import { requiredValue } from './validationHelpers';
 
 interface MalVelgerProps {
     resetBrevStatus: () => void;
@@ -17,7 +17,7 @@ const MalVelger: React.FC<MalVelgerProps> = ({ resetBrevStatus, brevmaler }) => 
     const brevmalkoder = Object.keys(brevmaler);
 
     return (
-        <Field name={BrevFormKeys.brevmalkode} validate={validateBrevmalkode}>
+        <Field name={BrevFormKeys.brevmalkode} validate={requiredValue}>
             {({ field, meta }: FieldProps) => (
                 <Select
                     {...field}

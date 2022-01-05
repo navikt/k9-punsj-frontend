@@ -17,14 +17,7 @@ const hasValidText = (text?: string): true | string => {
     return true;
 };
 
-export const validateBrevmalkode = (value: string) => {
-    if (!value) {
-        return 'Må fylles ut';
-    }
-    return undefined;
-};
-
-export const validateMottaker = (value: string) => {
+export const requiredValue = (value: string) => {
     if (!value) {
         return 'Må fylles ut';
     }

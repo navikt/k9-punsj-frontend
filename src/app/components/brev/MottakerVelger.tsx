@@ -6,7 +6,7 @@ import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import VerticalSpacer from '../VerticalSpacer';
-import { validateMottaker } from './validationHelpers';
+import { requiredValue } from './validationHelpers';
 
 interface MottakerVelgerProps {
     resetBrevStatus: () => void;
@@ -22,7 +22,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({ resetBrevStatus, aktør
     return (
         <>
             <VerticalSpacer sixteenPx />
-            <Field name={BrevFormKeys.mottaker} validate={validateMottaker}>
+            <Field name={BrevFormKeys.mottaker} validate={requiredValue}>
                 {({ field, meta }: FieldProps) => (
                     <Select
                         {...field}
