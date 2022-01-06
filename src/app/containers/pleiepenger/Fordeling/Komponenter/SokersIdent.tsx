@@ -22,7 +22,7 @@ interface ISokersIdentProps {
     sokersIdent: string;
     identState: IIdentState;
     riktigIdentIJournalposten?: JaNei;
-    erUtgåttInntektsmelding?: boolean;
+    erInntektsmeldingUtenKrav?: boolean;
 }
 const SokersIdent: React.FC<ISokersIdentProps> = ({
     dokumenttype,
@@ -37,12 +37,12 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     setErIdent1Bekreftet,
     setRiktigIdentIJournalposten,
     riktigIdentIJournalposten,
-    erUtgåttInntektsmelding,
+    erInntektsmeldingUtenKrav,
 }) => {
     const skalVises =
         dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
-        erUtgåttInntektsmelding;
+        erInntektsmeldingUtenKrav;
     const journalpostident = journalpost?.norskIdent;
 
     const handleIdentRadioChange = (jn: JaNei) => {
