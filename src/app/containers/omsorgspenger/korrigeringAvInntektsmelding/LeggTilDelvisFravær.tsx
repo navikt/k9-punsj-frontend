@@ -29,8 +29,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
     useFocus(currentListLength, previousListLength, datoInputRef);
 
     return (
-        <>
-            <EkspanderbartPanel
+        <EkspanderbartPanel
                 label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.checkbox')}
                 isPanelOpen={isPanelOpen}
                 togglePanel={togglePanel}
@@ -144,7 +143,6 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                     </FieldArray>
                 </Panel>
             </EkspanderbartPanel>
-        </>
     );
 };
 

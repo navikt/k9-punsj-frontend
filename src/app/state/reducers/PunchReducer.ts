@@ -1,7 +1,6 @@
 import { PunchActionKeys, PunchStep } from 'app/models/enums';
 import { IPleiepengerPunchState } from 'app/models/types';
 import { IPunchActionTypes } from 'app/state/actions';
-import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
 
 export const initialState: IPleiepengerPunchState = {
     step: PunchStep.CHOOSE_SOKNAD,
@@ -11,10 +10,9 @@ export const initialState: IPleiepengerPunchState = {
 
 export function PunchReducer(
     punchState: IPleiepengerPunchState = initialState,
-    action: IPunchActionTypes | LocationChangeAction
+    action: IPunchActionTypes
 ): IPleiepengerPunchState {
     switch (action.type) {
-        case LOCATION_CHANGE:
         case PunchActionKeys.RESET:
             return initialState;
 

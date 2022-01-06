@@ -33,16 +33,13 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
     return (
         <div className="omsKvittering">
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
-            <>
-                <h3>{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>
+            <h3>{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>
                 <hr className={classNames('linje')} />
                 <p>
                     <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                     {initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY')}
                 </p>
-            </>
-            <>
-                <h3>Virksomhet</h3>
+            <h3>Virksomhet</h3>
                 <hr className={classNames('linje')} />
                 <p>
                     <b>{`Organisasjonsnummer: `}</b>
@@ -55,7 +52,6 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
                         <p>{ArbeidsforholdId}</p>
                     </>
                 )}
-            </>
             {visTrekkperioder() && (
                 <>
                     <h3>Perioder arbeidsgiver ønsker å trekke krav om refusjon</h3>

@@ -230,8 +230,7 @@ const ArbeidsforholdPanel = ({
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
         return (
-            <>
-                <Container className="infoContainer">
+            <Container className="infoContainer">
                     <CheckboksPanelGruppe
                         className="virksomhetstypercheckbox"
                         legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
@@ -614,8 +613,7 @@ const ArbeidsforholdPanel = ({
                         )}
                     {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                         erEldreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                            <>
-                                <RadioPanelGruppe
+                            <RadioPanelGruppe
                                     className="horizontalRadios"
                                     name="varigEndringradios"
                                     radios={Object.values(JaNei).map((jn) => ({
@@ -659,7 +657,6 @@ const ArbeidsforholdPanel = ({
                                         });
                                     }}
                                 />
-                            </>
                         )}
                     {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                         <>
@@ -812,7 +809,6 @@ const ArbeidsforholdPanel = ({
                         medSlettKnapp={false}
                     />
                 </Container>
-            </>
         );
     };
 
