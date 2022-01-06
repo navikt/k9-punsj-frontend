@@ -30,6 +30,8 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByRole('button', { name: /Sett på vent/i })
             .should('exist')
             .click();
-        cy.findByText('Påbegynt brev er ikke sendt. Dersom du går videre vil ikke brev gå ut.').should('exist');
+        cy.findByText(
+            'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake å sende brevet.'
+        ).should('exist');
     });
 });
