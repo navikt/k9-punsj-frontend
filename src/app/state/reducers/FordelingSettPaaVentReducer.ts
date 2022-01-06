@@ -10,9 +10,12 @@ const initialState: FordelingSettPåVentState = {
 };
 
 export function FordelingSettPåVentReducer(
-    fordelingSettPåVentState: FordelingSettPåVentState = initialState,
+    fordelingSettPåVentState: FordelingSettPåVentState,
     action: FordelingSettPåVentActions
 ): FordelingSettPåVentState {
+    if (typeof fordelingSettPåVentState === 'undefined') {
+        return initialState;
+    }
     switch (action.type) {
         case FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT:
             return {

@@ -4,12 +4,12 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import intlHelper from '../../utils/intlUtils';
 import './okGaaTilLosModal.less';
 
-interface OpprettOppgaveIGosysModal {
+interface OpprettOppgaveIGosysModalProps {
     submit: () => void;
     avbryt: () => void;
 }
 
-const OpprettOppgaveIGosysModal: React.FC<WrappedComponentProps & OpprettOppgaveIGosysModal> = (props) => {
+const OpprettOppgaveIGosysModal: React.FC<WrappedComponentProps & OpprettOppgaveIGosysModalProps> = (props) => {
     const { intl, submit, avbryt, children } = props;
 
     return (
