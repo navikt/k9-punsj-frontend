@@ -298,7 +298,7 @@
     "skjema.signatur.bekreftelse": "Søknaden er signert",
     "skjema.melding.fyll_ut": "Fyll ut informasjon.",
     "skjema.melding.komplett": "Søknaden er fullstendig og kan sendes inn.",
-    "skjema.endringAvSøknadsperioder": "Endre/fjerne søknadsperiode [BRUKES KUN AV KJERNEGRUPPA]",
+    "skjema.endringAvSøknadsperioder": "Endre/fjerne søknadsperiode",
     "skjema.feil.ikke_funnet": "Kunne ikke finne mappe med id {id}.",
     "skjema.feil.ikketom": "Kan ikke være tom",
     "skjema.feil.ikkefremitid": "Kan ikke være frem i tid",

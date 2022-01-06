@@ -1,7 +1,6 @@
 import { SignaturActionKeys } from 'app/models/enums';
 import { ISignaturState } from 'app/models/types';
 import { SignaturActionTypes } from 'app/state/actions';
-import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
 
 const initialState: ISignaturState = {
     signert: null,
@@ -11,12 +10,9 @@ const initialState: ISignaturState = {
 // eslint-disable-next-line import/prefer-default-export
 export function SignaturReducer(
     signaturState: ISignaturState = initialState,
-    action: SignaturActionTypes | LocationChangeAction
+    action: SignaturActionTypes
 ): ISignaturState {
     switch (action.type) {
-        case LOCATION_CHANGE:
-            return initialState;
-
         case SignaturActionKeys.SET:
             return {
                 ...signaturState,

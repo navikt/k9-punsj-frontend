@@ -12,8 +12,7 @@ import { Periodepanel } from './Periodepanel';
 const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
     return (
-        <>
-            <EkspanderbartPanel
+        <EkspanderbartPanel
                 label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.checkbox')}
                 isPanelOpen={isPanelOpen}
                 togglePanel={togglePanel}
@@ -36,7 +35,6 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
                     </SkjemaGruppe>
                 </Panel>
             </EkspanderbartPanel>
-        </>
     );
 };
 

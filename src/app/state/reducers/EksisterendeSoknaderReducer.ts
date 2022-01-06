@@ -1,7 +1,6 @@
 import { EksisterendeSoknaderActionKeys } from 'app/models/enums';
 import { IEksisterendeSoknaderState } from 'app/models/types';
 import { IEksisterendeSoknaderActionTypes } from 'app/state/actions';
-import { LocationChangeAction, LOCATION_CHANGE } from 'react-router-redux';
 
 const initialState: IEksisterendeSoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -14,12 +13,9 @@ const initialState: IEksisterendeSoknaderState = {
 // eslint-disable-next-line import/prefer-default-export
 export function EksisterendeSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeSoknaderState = initialState,
-    action: IEksisterendeSoknaderActionTypes | LocationChangeAction
+    action: IEksisterendeSoknaderActionTypes
 ): IEksisterendeSoknaderState {
     switch (action.type) {
-        case LOCATION_CHANGE:
-            return initialState;
-
         case EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET:
             return {
                 ...eksisterendeSoknaderState,

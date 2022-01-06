@@ -125,8 +125,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     }
 
     return (
-        <>
-            <Formik
+        <Formik
                 initialValues={{
                     [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: { dato: '', klokkeslett: '' },
                     [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
@@ -268,7 +267,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     </>
                 )}
             </Formik>
-        </>
     );
 };
 

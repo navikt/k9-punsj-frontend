@@ -76,9 +76,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
-            <>
-                <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
-            </>
+            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
         );
     }
 

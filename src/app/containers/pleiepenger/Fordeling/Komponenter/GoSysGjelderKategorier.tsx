@@ -1,14 +1,12 @@
-import {IFordelingState} from 'app/models/types';
-import {
-    hentGjelderKategorierFraGosys, setValgtGosysKategoriAction
-} from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
+import { IFordelingState } from 'app/models/types';
+import { hentGjelderKategorierFraGosys, setValgtGosysKategoriAction } from 'app/state/actions';
+import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {Select} from 'nav-frontend-skjema';
-import React, {useEffect} from 'react';
-import {injectIntl, WrappedComponentProps,} from 'react-intl';
-import {connect} from 'react-redux';
-import VerticalSpacer from "../../../../components/VerticalSpacer";
+import { Select } from 'nav-frontend-skjema';
+import React, { useEffect } from 'react';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
+import VerticalSpacer from '../../../../components/VerticalSpacer';
 
 export interface IOwnProps {
     fordelingState: IFordelingState;
@@ -21,42 +19,40 @@ type IGosysGjelderKategorierProps = WrappedComponentProps & IOwnProps;
 const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKategorierProps> = (
     props: IGosysGjelderKategorierProps
 ) => {
-    const {
-        intl,
-        fordelingState,
-        hentGjelderKategorier,
-        setValgtGosysKategori
-    } = props;
+    const { intl, fordelingState, hentGjelderKategorier, setValgtGosysKategori } = props;
 
     useEffect(() => {
         hentGjelderKategorier();
-    }, [])
+    }, []);
 
-    const harKategorierBlivitHentet = fordelingState.isAwaitingGosysGjelderResponse === false
-        && !!fordelingState.gosysGjelderKategorier
-        && Object.keys(fordelingState.gosysGjelderKategorier).length > 0;
+    const harKategorierBlivitHentet =
+        fordelingState.isAwaitingGosysGjelderResponse === false &&
+        !!fordelingState.gosysGjelderKategorier &&
+        Object.keys(fordelingState.gosysGjelderKategorier).length > 0;
 
-    return (<>
-            {harKategorierBlivitHentet && <div>
-              <VerticalSpacer sixteenPx/>
-              <Select
+    if (!harKategorierBlivitHentet) {
+        return null;
+    }
+
+    return (
+        <div>
+            <VerticalSpacer sixteenPx />
+            <Select
                 value={fordelingState.valgtGosysKategori}
                 bredde="l"
                 label={intlHelper(intl, 'fordeling.kategoriGosys')}
                 onChange={(e) => setValgtGosysKategori(e.target.value)}
-              >
+            >
                 <option disabled value="" label=" " />
 
-                  {Object.keys(fordelingState.gosysGjelderKategorier!).map(kategori =>
-                      <option key={kategori} value={kategori}>
-                          {fordelingState.gosysGjelderKategorier![kategori]}
-                      </option>)
-                  }
-              </Select>
-              <VerticalSpacer eightPx/>
-            </div>
-            }
-        </>
+                {Object.keys(fordelingState.gosysGjelderKategorier!).map((kategori) => (
+                    <option key={kategori} value={kategori}>
+                        {fordelingState.gosysGjelderKategorier![kategori]}
+                    </option>
+                ))}
+            </Select>
+            <VerticalSpacer eightPx />
+        </div>
     );
 };
 
@@ -66,9 +62,11 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     hentGjelderKategorier: () => dispatch(hentGjelderKategorierFraGosys()),
-    setValgtGosysKategori: (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori))
+    setValgtGosysKategori: (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori)),
 });
 
-const GosysGjelderKategorier = injectIntl(connect(mapStateToProps, mapDispatchToProps)(GosysGjelderKategorierComponent));
+const GosysGjelderKategorier = injectIntl(
+    connect(mapStateToProps, mapDispatchToProps)(GosysGjelderKategorierComponent)
+);
 
-export {GosysGjelderKategorier, GosysGjelderKategorierComponent};
+export { GosysGjelderKategorier, GosysGjelderKategorierComponent };
