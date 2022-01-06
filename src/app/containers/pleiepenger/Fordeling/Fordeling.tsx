@@ -263,7 +263,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         {erInntektsmeldingUtenKrav && (
                             <>
                                 <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
-                                    {intlHelper(intl, 'fordeling.inntektsmeldingUtenKrav')}
+                                    {intlHelper(intl, 'fordeling.inntektsmeldingUtenKrav.infoboks')}
                                 </AlertStripeAdvarsel>
                                 <VerticalSpacer thirtyTwoPx />
                             </>

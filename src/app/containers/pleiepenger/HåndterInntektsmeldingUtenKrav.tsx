@@ -63,7 +63,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
 
     const getBrevIkkeSendtInfoboks = () => (
         <AlertStripeAdvarsel className="fordeling-brevIkkeSendtinfo">
-            Påbegynt brev er ikke sendt. Dersom du går videre vil ikke brev gå ut.
+            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.brevIkkeSendt" />
         </AlertStripeAdvarsel>
     );
 
