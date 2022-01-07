@@ -372,6 +372,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     updateSoknad={this.updateSoknad}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
+                    getUhaandterteFeil={this.getUhaandterteFeil}
                     soknad={soknad}
                 />
                 <VerticalSpacer sixteenPx={true} />

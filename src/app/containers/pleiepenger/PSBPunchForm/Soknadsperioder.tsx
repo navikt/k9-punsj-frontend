@@ -9,7 +9,7 @@ import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { IPeriode, IPSBSoknad } from '../../../models/types';
+import { GetUhaandterteFeil, IPeriode, IPSBSoknad } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
 import intlHelper from '../../../utils/intlUtils';
 import { Periodepaneler } from '../Periodepaneler';
@@ -21,6 +21,7 @@ interface IOwnProps {
     getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
     soknad: IPSBSoknad;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
+    getUhaandterteFeil: GetUhaandterteFeil;
 }
 
 const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
@@ -29,6 +30,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     getErrorMessage,
     soknad,
     updateSoknad,
+    getUhaandterteFeil
 }) => {
     const intl = useIntl();
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
@@ -125,6 +127,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             textFjern="skjema.perioder.fjern"
                             feilkodeprefiks="ytelse.søknadsperiode"
                             getErrorMessage={getErrorMessage}
+                            getUhaandterteFeil={getUhaandterteFeil}
                             kanHaFlere
                             onRemove={() => setHarSlettetPerioder(true)}
                         />
