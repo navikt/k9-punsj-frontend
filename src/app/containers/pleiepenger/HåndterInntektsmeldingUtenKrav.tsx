@@ -70,18 +70,18 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
     const resetSetPåVent = () => dispatch(setJournalpostPaaVentResetAction());
     const resetFerdigstillJournalpost = () => dispatch(ferdigstillJournalpostResetAction());
 
-    const handleUtgåttInntektsmelding = (valgtHåndtering: string) => {
+    const handleInntektsmeldingUtenKrav = (valgtHåndtering: string) => {
         setHåndterInntektsmeldingUtenKravValg(valgtHåndtering);
     };
 
-    const skalOppretteGosysoppgaveForUtgåttInntektsmelding = () =>
+    const skalOppretteGosysoppgaveForInntektsmeldingUtenKrav = () =>
         håndterInntektsmeldingUtenKravValg === 'opprettJournalføringsoppgave' && ident1;
     const skalFerdigstilleJournalpost = () => håndterInntektsmeldingUtenKravValg === 'ferdigstillJournalpost' && ident1;
 
-    const skalSetteUtgåttInntektsmeldingPåVent = () => håndterInntektsmeldingUtenKravValg === 'settPåVent' && ident1;
+    const skalSetteInntektsmeldingUtenKravPåVent = () => håndterInntektsmeldingUtenKravValg === 'settPåVent' && ident1;
 
     const getUtførValgKnapp = () => {
-        if (skalOppretteGosysoppgaveForUtgåttInntektsmelding()) {
+        if (skalOppretteGosysoppgaveForInntektsmeldingUtenKrav()) {
             return (
                 <Hovedknapp mini onClick={() => setShowOpprettOppgaveIGosysModal(true)}>
                     <FormattedMessage id="fordeling.sakstype.ANNET" />
@@ -97,7 +97,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
             );
         }
 
-        if (skalSetteUtgåttInntektsmeldingPåVent()) {
+        if (skalSetteInntektsmeldingUtenKravPåVent()) {
             return (
                 <Hovedknapp mini onClick={() => setShowSettPaaVentModal(true)}>
                     {intlHelper(intl, 'skjema.knapp.settpaavent')}
@@ -111,7 +111,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
         <>
             <VerticalSpacer fourtyPx />
             <RadioPanelGruppe
-                name="utgåttInntektsmelding"
+                name="inntektsmeldingUtenKrav"
                 radios={[
                     {
                         label: 'Ferdigstill journalpost',
@@ -128,7 +128,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                 ]}
                 legend="Hva ønsker du å gjøre med dokumentet?"
                 checked={håndterInntektsmeldingUtenKravValg}
-                onChange={(event) => handleUtgåttInntektsmelding((event.target as HTMLInputElement).value)}
+                onChange={(event) => handleInntektsmeldingUtenKrav((event.target as HTMLInputElement).value)}
             />
             <BrevContainer>
                 <BrevComponent

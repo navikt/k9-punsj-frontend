@@ -312,7 +312,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setErIdent1Bekreftet={setErIdent1Bekreftet}
                                 riktigIdentIJournalposten={riktigIdentIJournalposten}
                                 setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
-                                erUtgåttInntektsmelding={erInntektsmeldingUtenKrav}
+                                erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
                             />
                             <ToSoekere
                                 dokumenttype={dokumenttype}

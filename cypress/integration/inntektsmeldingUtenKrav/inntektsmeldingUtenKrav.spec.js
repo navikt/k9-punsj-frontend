@@ -31,7 +31,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
             .should('exist')
             .click();
         cy.findByText(
-            'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake å sende brevet.'
+            'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.'
         ).should('exist');
     });
 });
