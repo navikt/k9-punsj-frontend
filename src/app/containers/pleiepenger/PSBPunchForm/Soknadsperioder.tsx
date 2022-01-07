@@ -37,10 +37,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
-        !punchFormState.hentPerioderError &&
-        (typeof punchFormState.perioder === 'undefined' ||
-            punchFormState.perioder.length <= 0 ||
-            !punchFormState.perioder);
+        !punchFormState.hentPerioderError && !punchFormState?.perioder?.length ;
 
     const overlappendeSoknadsperiode = () => {
         const eksisterendePerioder = punchFormState.perioder;
