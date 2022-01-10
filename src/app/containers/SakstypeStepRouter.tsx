@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 import useRedirect from '../hooks/useRedirect';
@@ -48,12 +48,12 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
             <div className="panels-wrapper" id="panels-wrapper">
                 <FormPanel>
                     <SkjemaHeader headerTextId={`${navn}.header`} />
-                    <Switch>
+                    <Routes>
                         {steps.map(({ path, getComponent, stepName, stepOrder }) => {
                             const gåTilNesteSteg = (stegParams?: any) => {
                                 const nesteStegPath = steps.find((steg) => steg.stepOrder === stepOrder + 1)?.path;
                                 if (nesteStegPath) {
-                                    const nextPath = `${punchPath}${getPathForValues(nesteStegPath, stegParams)}`;
+                                    const nextPath = `${getPathForValues(nesteStegPath, stegParams)}`;
                                     setHash(nextPath);
                                 }
                             };
@@ -61,7 +61,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                             const gåTilForrigeSteg = (stegParams?: any) => {
                                 const forrigeStegPath = steps.find((steg) => steg.stepOrder === stepOrder - 1)?.path;
                                 if (forrigeStegPath) {
-                                    const nextPath = `${punchPath}${getPathForValues(forrigeStegPath, stegParams)}`;
+                                    const nextPath = `${getPathForValues(forrigeStegPath, stegParams)}`;
                                     setHash(nextPath);
                                 }
                             };
@@ -69,7 +69,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                             const initialValues = sakstypeState[stepName]?.skjema;
 
                             return (
-                                <Route exact key={`${navn}-${stepName}`} path={`${punchPath}${getPathForValues(path)}`}>
+                                <Route key={`${navn}-${stepName}`} path={`${getPathForValues(path)}`}>
                                     {getComponent({
                                         gåTilNesteSteg,
                                         gåTilForrigeSteg,
@@ -78,7 +78,7 @@ export const SakstypeStepRouterImpl: React.FunctionComponent<IStepRouterProps> =
                                 </Route>
                             );
                         })}
-                    </Switch>
+                    </Routes>
                 </FormPanel>
                 {journalpostid && <PdfVisning journalpostDokumenter={[{ journalpostid, dokumenter }]} />}
             </div>

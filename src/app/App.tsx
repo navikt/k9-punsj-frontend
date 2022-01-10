@@ -7,7 +7,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
 import logger from 'redux-logger';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
@@ -72,7 +72,7 @@ export const App: React.FunctionComponent = () => {
                         }}
                     >
                         <BrowserRouter>
-                            <Switch>
+                            <Routes>
                                 <Route path="/rediger/">
                                     <RedigeringRouter />
                                 </Route>
@@ -82,7 +82,7 @@ export const App: React.FunctionComponent = () => {
                                 <Route path="/">
                                     <SokIndex />
                                 </Route>
-                            </Switch>
+                            </Routes>
                         </BrowserRouter>
                     </ApplicationWrapper>
                 </QueryClientProvider>

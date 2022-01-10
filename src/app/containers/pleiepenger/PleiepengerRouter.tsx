@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import useRedirect from '../../hooks/useRedirect';
 import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
@@ -23,16 +23,16 @@ const PleiepengerRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ j
     useRedirect(pleiepengerRootPath, chooseSoknadPath);
 
     return (
-        <Switch>
+        <Routes>
             {Object.keys(PunchStep)
                 .map(Number)
                 .filter((step) => !Number.isNaN(step))
                 .map((step) => (
-                    <Route exact key={`hashroute_${step}`} path={getPath(paths, step)}>
+                    <Route key={`hashroute_${step}`} path={getPath(paths, step)}>
                         <PunchPage {...{ journalpostid, step, paths }} />
                     </Route>
                 ))}
-        </Switch>
+        </Routes>
     );
 };
 

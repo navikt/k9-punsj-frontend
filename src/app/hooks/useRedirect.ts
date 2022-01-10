@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function useRedirect(from: string, to: string): void {
-    const { location, push } = useHistory();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (location.pathname === from) {
-            push(to);
+            navigate(to);
         }
     }, [location]);
 }
