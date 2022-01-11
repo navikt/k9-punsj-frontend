@@ -7,6 +7,7 @@ import React from 'react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
