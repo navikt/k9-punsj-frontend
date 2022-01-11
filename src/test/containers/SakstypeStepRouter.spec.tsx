@@ -46,7 +46,7 @@ describe('SakstypeStepRouter', () => {
             const route = routes.get(step.stepOrder);
 
             expect(route.props.children).toEqual(step.getComponent());
-            expect(route.props.path).toEqual(`${sakstypePath}${step.path}`);
+            expect(route.props.path).toEqual(`${step.path}`);
         });
     });
 });

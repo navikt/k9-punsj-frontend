@@ -1,9 +1,8 @@
 import { render } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
 import React, { ReactNode } from 'react';
 import { IntlShape } from 'react-intl';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { createStore } from 'redux';
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { rootReducer, RootStateType } from '../app/state/RootState';
@@ -18,11 +17,11 @@ export const testIntl: IntlShape = {
 
 export const renderWithIntl = (component: ReactNode) => render(<IntlProvider locale="nb">{component}</IntlProvider>);
 
-export const renderWithRouterAndIntl = (component: ReactNode, history: any = createMemoryHistory({})) =>
+export const renderWithRouterAndIntl = (component: ReactNode) =>
     render(
-        <Router history={history}>
+        <MemoryRouter>
             <IntlProvider locale="nb">{component}</IntlProvider>
-        </Router>
+        </MemoryRouter>
     );
 
 interface IReduxTestProvider {
