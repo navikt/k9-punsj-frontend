@@ -38,7 +38,7 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
     IApplicationWrapperDispatchProps;
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
-    const { authState, locale, children} = props;
+    const { authState, locale, children } = props;
 
     if (authState.error) {
         return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
@@ -48,10 +48,9 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
         if (!authState.redirectUrl) {
             props.checkAuth();
             return null;
-        } 
-            window.location.replace(authState.redirectUrl);
-            return null;
-        
+        }
+        window.location.replace(authState.redirectUrl);
+        return null;
     }
 
     if (authState.isLoading) {
@@ -74,9 +73,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
                         <UserPanel name={authState.userName!} />
                     </Header>
                 </div>
-                <AppContainer>
-                    <Router>{children}</Router>
-                </AppContainer>
+                <AppContainer>{children}</AppContainer>
             </Normaltekst>
         </IntlProvider>
     );

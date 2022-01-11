@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HashRouter, Route, useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import JournalpostLoader from './JournalpostLoader';
 import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 import { Sakstyper } from './SakstypeImpls';
@@ -16,23 +16,30 @@ const JournalpostRouter: React.FunctionComponent = () => {
         <JournalpostLoader
             journalpostId={journalpostid}
             renderOnLoadComplete={() => (
-                <HashRouter>
-                    <Route path="/">
-                        <Fordeling journalpostId={journalpostid} />
-                    </Route>
-                    {Sakstyper.punchSakstyper.map((sakstypeConfig) => (
-                        <Route key={sakstypeConfig.navn} path={sakstypeConfig.punchPath}>
-                            {sakstypeConfig.getComponent ? (
-                                sakstypeConfig.getComponent({
-                                    journalpostid,
-                                    punchPath: sakstypeConfig.punchPath,
-                                })
-                            ) : (
-                                <SakstypeStepRouter sakstypeConfig={sakstypeConfig} journalpostid={journalpostid} />
-                            )}
-                        </Route>
-                    ))}
-                </HashRouter>
+                <>
+                    <Fordeling journalpostId={journalpostid} />
+                    <Routes>
+                        {Sakstyper.punchSakstyper.map((sakstypeConfig) => (
+                            <Route
+                                key={sakstypeConfig.navn}
+                                path={sakstypeConfig.punchPath}
+                                element={
+                                    sakstypeConfig.getComponent ? (
+                                        sakstypeConfig.getComponent({
+                                            journalpostid,
+                                            punchPath: sakstypeConfig.punchPath,
+                                        })
+                                    ) : (
+                                        <SakstypeStepRouter
+                                            sakstypeConfig={sakstypeConfig}
+                                            journalpostid={journalpostid}
+                                        />
+                                    )
+                                }
+                            />
+                        ))}
+                    </Routes>
+                </>
             )}
         />
     );

@@ -73,15 +73,9 @@ export const App: React.FunctionComponent = () => {
                     >
                         <BrowserRouter>
                             <Routes>
-                                <Route path="/rediger/">
-                                    <RedigeringRouter />
-                                </Route>
-                                <Route path="/journalpost/:journalpostid/">
-                                    <JournalpostRouter />
-                                </Route>
-                                <Route path="/">
-                                    <SokIndex />
-                                </Route>
+                                <Route path="/rediger/" element={<RedigeringRouter />} />
+                                <Route path="/journalpost/:journalpostid/" element={<JournalpostRouter />} />
+                                <Route path="/" element={<SokIndex />} />
                             </Routes>
                         </BrowserRouter>
                     </ApplicationWrapper>
