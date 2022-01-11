@@ -150,7 +150,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             identState.ident2 &&
             identState.annenSokerIdent &&
             journalpost?.journalpostId &&
-            !!journalpost?.kanKopieres
+            !!journalpost?.kanKopieres &&
+            !erInntektsmeldingUtenKrav
         ) {
             props.kopierJournalpost(
                 identState.ident1,
@@ -427,6 +428,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         onChange={(e) => {
                                             setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
                                         }}
+                                        disabled={erInntektsmeldingUtenKrav}
                                     />
                                     <Hjelpetekst
                                         className="journalikkestottetkopi-checkboks__hjelpetekst"
