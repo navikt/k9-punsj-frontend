@@ -4,6 +4,7 @@
 import * as Sentry from '@sentry/react';
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
+import { Integrations as TracingIntegrations } from '@sentry/tracing';
 import { render } from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
@@ -26,7 +27,8 @@ Sentry.init({
     dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
     release: process.env.SENTRY_RELEASE || 'unknown',
     environment,
-    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
+    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false }), new TracingIntegrations.BrowserTracing()],
+    tracesSampleRate: 1.0,
     beforeSend: (event) => {
         if (environment === 'localhost') {
             return null;

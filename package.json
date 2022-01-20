@@ -11,6 +11,7 @@
         "@navikt/nap-header": "^1.0.10",
         "@navikt/nap-user-panel": "^1.0.0",
         "@sentry/react": "^6.16.1",
+        "@sentry/tracing": "^6.16.1",
         "@testing-library/cypress": "^8.0.2",
         "@types/classnames": "^2.2.11",
         "@types/react-redux": "^7.1.21",
