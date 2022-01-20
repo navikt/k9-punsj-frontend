@@ -6,7 +6,6 @@ import {
     hentPerioderFraK9Sak,
     resetPunchFormAction,
     resetSoknadAction,
-    setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
     setStepAction,
@@ -32,8 +31,8 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import { BeredskapNattevaak } from '../../models/enums/BeredskapNattevaak';
 import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
@@ -41,6 +40,7 @@ import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
 import { RelasjonTilBarnet } from '../../models/enums/RelasjonTilBarnet';
 import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
 import { Arbeidstaker } from '../../models/types/Arbeidstaker';
+import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
@@ -53,6 +53,7 @@ import {
     Tilleggsinformasjon,
 } from '../../models/types/PSBSoknad';
 import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
+import { setIdentFellesAction } from '../../state/actions/IdentActions';
 import { RootStateType } from '../../state/RootState';
 import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from './ErDuSikkerModal';
@@ -64,12 +65,11 @@ import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { pfTimerMinutter } from './pfTimerMinutter';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
-import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
-import Feilmelding from '../../components/Feilmelding';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 
 export interface IPunchFormComponentProps {
@@ -83,13 +83,15 @@ export interface IPunchFormStateProps {
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
+    søkersIdent?: string;
+    barnsIdent?: string;
 }
 
 export interface IPunchFormDispatchProps {
     getSoknad: typeof getSoknad;
     hentPerioder: typeof hentPerioderFraK9Sak;
     resetSoknadAction: typeof resetSoknadAction;
-    setIdentAction: typeof setIdentAction;
+    setIdentAction: typeof setIdentFellesAction;
     setStepAction: typeof setStepAction;
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeSoknadAction;
     updateSoknad: typeof updateSoknad;
@@ -265,13 +267,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     });
 
     componentDidMount(): void {
-        const { id } = this.props;
+        const { id, søkersIdent, barnsIdent } = this.props;
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
-        const { ident1, ident2 } = this.props.identState;
-        if (ident1 && ident2) {
-            this.props.hentPerioder(ident1, ident2);
+
+        if (søkersIdent && barnsIdent) {
+            this.props.hentPerioder(søkersIdent, barnsIdent);
         }
     }
 
@@ -280,14 +282,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         prevState: Readonly<IPunchFormComponentState>,
         snapshot?: any
     ): void {
-        const { soknad } = this.props.punchFormState;
+        const { punchFormState, søkersIdent, barnsIdent, identState, setIdentAction, hentPerioder } = this.props;
+        const { soknad } = punchFormState;
         if (!!soknad && !this.state.isFetched) {
             this.setState({
-                soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
+                soknad: new PSBSoknad(soknad as IPSBSoknad),
                 isFetched: true,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
+                this.updateSoknad({ barn: { norskIdent: barnsIdent || '' } });
+            }
+        }
+
+        if (!prevProps.søkersIdent && !prevProps.barnsIdent && søkersIdent && barnsIdent) {
+            hentPerioder(søkersIdent, barnsIdent);
+            if (!identState.ident1 || !identState.ident2) {
+                setIdentAction(søkersIdent, barnsIdent);
             }
         }
     }
@@ -1421,18 +1431,25 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 }
 
-const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
-    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    signaturState: state.PLEIEPENGER_SYKT_BARN.signaturState,
-    journalposterState: state.journalposterPerIdentState,
-    identState: state.identState,
-});
+const mapStateToProps = (state: RootStateType): IPunchFormStateProps => {
+    const søkersIdent = state.identState.ident1 || state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.soekerId;
+    const barnsIdent = state.identState.ident2 || state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.barn?.norskIdent;
+    return {
+        punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
+        signaturState: state.PLEIEPENGER_SYKT_BARN.signaturState,
+        journalposterState: state.journalposterPerIdentState,
+        identState: state.identState,
+        søkersIdent,
+        barnsIdent,
+    };
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getSoknad(id)),
     hentPerioder: (ident1: string, ident2: string) => dispatch(hentPerioderFraK9Sak(ident1, ident2)),
     resetSoknadAction: () => dispatch(resetSoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
     updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),
