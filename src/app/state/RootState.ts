@@ -8,7 +8,7 @@ import {
     PunchFormReducer,
     PunchReducer,
     SignaturReducer,
-    FordelingSettPåVentReducer,
+    FordelingSettPaaVentReducer,
 } from './reducers';
 import FellesReducer from './reducers/FellesReducer';
 import { Sakstype } from '../models/enums';
@@ -43,7 +43,7 @@ export const rootReducer = combineReducers({
     identState: IdentReducer,
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
-    fordelingSettPåVentState: FordelingSettPåVentReducer,
+    fordelingSettPåVentState: FordelingSettPaaVentReducer,
     fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
 });
 

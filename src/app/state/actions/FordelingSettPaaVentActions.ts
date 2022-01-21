@@ -1,42 +1,42 @@
 import { ApiPath } from 'app/apiConfig';
-import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
+import FordelingSettPaaVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
 
 interface ISettJournalpostPaaVentAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT;
+    type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT;
 }
 
 interface ISettJournalpostPaaVentSuccessAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS;
+    type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS;
 }
 interface ISettJournalpostPaaVentErrorAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR;
+    type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR;
     error: IError;
 }
 
 interface ISettJournalpostPaaVentResetAction {
-    type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET;
+    type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET;
 }
 
 export function setJournalpostPaaVentAction(): ISettJournalpostPaaVentAction {
-    return { type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT };
+    return { type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT };
 }
 export function setJournalpostPaaVentSuccessAction(): ISettJournalpostPaaVentSuccessAction {
     return {
-        type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS,
+        type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT_SUCCESS,
     };
 }
 export function setJournalpostPaaVentErrorAction(error: IError): ISettJournalpostPaaVentErrorAction {
     return {
-        type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR,
+        type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT_ERROR,
         error,
     };
 }
 
 export function setJournalpostPaaVentResetAction(): ISettJournalpostPaaVentResetAction {
     return {
-        type: FordelingSettPåVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET,
+        type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT_RESET,
     };
 }
 
@@ -58,7 +58,7 @@ export function settJournalpostPaaVent(journalpostid: string) {
     };
 }
 
-export type FordelingSettPåVentActions =
+export type FordelingSettPaaVentActions =
     | ISettJournalpostPaaVentAction
     | ISettJournalpostPaaVentSuccessAction
     | ISettJournalpostPaaVentErrorAction

@@ -2,7 +2,7 @@ import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
+import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
@@ -59,7 +59,7 @@ export interface IFordelingStateProps {
     opprettIGosysState: IGosysOppgaveState;
     fellesState: IFellesState;
     dedupkey: string;
-    fordelingSettPåVentState: FordelingSettPåVentState;
+    fordelingSettPåVentState: FordelingSettPaaVentState;
     fordelingFerdigstillState: FordelingFerdigstillJournalpostState;
 }
 
