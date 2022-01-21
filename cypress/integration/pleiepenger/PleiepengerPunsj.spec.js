@@ -20,6 +20,18 @@ describe('Pleiepenger punsj', () => {
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
     });
 
+    it('skal beholde fødselsnummer i topplinje ved refresh', () => {
+        cy.findByText(/Søkers fødselsnummer:/i).should('exist');
+        cy.findByText(`29099000129`).should('exist');
+        cy.findByText(/Barnets fødselsnummer:/i).should('exist');
+        cy.findByText(`16017725002`).should('exist');
+        cy.reload();
+        cy.findByText(/Søkers fødselsnummer:/i).should('exist');
+        cy.findByText(`29099000129`).should('exist');
+        cy.findByText(/Barnets fødselsnummer:/i).should('exist');
+        cy.findByText(`16017725002`).should('exist');
+    });
+
     // sjekke at journalpostnummer fra flere saker vises
     // sjekk av validering og feilmeldinger på alle felter
     // sjekk at man ikke får sende inn dersom man har valideringsfeil
