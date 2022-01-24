@@ -10,13 +10,12 @@ import {
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
@@ -30,6 +29,9 @@ interface Props {
     ident1: string;
 }
 
+const opprettJournalføringsoppgaveValue = 'opprettJournalføringsoppgave';
+const ferdigstillJournalpostValue = 'ferdigstillJournalpost';
+const settPåVentValue = 'settPåVent';
 const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 }) => {
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
@@ -37,7 +39,6 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
     const [visBrevIkkeSendtInfoboks, setVisBrevIkkeSendtInfoboks] = useState(false);
     const [håndterInntektsmeldingUtenKravValg, setHåndterInntektsmeldingUtenKravValg] = useState<string>('');
     const dispatch = useDispatch();
-    const intl = useIntl();
     const showSettPaaVentSuccessModal = useSelector(
         (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentSuccess
     );
@@ -75,10 +76,12 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
     };
 
     const skalOppretteGosysoppgaveForInntektsmeldingUtenKrav = () =>
-        håndterInntektsmeldingUtenKravValg === 'opprettJournalføringsoppgave' && ident1;
-    const skalFerdigstilleJournalpost = () => håndterInntektsmeldingUtenKravValg === 'ferdigstillJournalpost' && ident1;
+        håndterInntektsmeldingUtenKravValg === opprettJournalføringsoppgaveValue && ident1;
+    const skalFerdigstilleJournalpost = () =>
+        håndterInntektsmeldingUtenKravValg === ferdigstillJournalpostValue && ident1;
 
-    const skalSetteInntektsmeldingUtenKravPåVent = () => håndterInntektsmeldingUtenKravValg === 'settPåVent' && ident1;
+    const skalSetteInntektsmeldingUtenKravPåVent = () =>
+        håndterInntektsmeldingUtenKravValg === settPåVentValue && ident1;
 
     const getUtførValgKnapp = () => {
         if (skalOppretteGosysoppgaveForInntektsmeldingUtenKrav()) {
@@ -92,7 +95,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
         if (skalFerdigstilleJournalpost()) {
             return (
                 <Hovedknapp mini onClick={() => setShowFerdigstillJournalpostModal(true)}>
-                    {intlHelper(intl, 'skjema.knapp.ferdigstillJournalpost')}
+                    <FormattedMessage id="skjema.knapp.ferdigstillJournalpost" />
                 </Hovedknapp>
             );
         }
@@ -100,7 +103,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
         if (skalSetteInntektsmeldingUtenKravPåVent()) {
             return (
                 <Hovedknapp mini onClick={() => setShowSettPaaVentModal(true)}>
-                    {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                    <FormattedMessage id="skjema.knapp.settpaavent" />
                 </Hovedknapp>
             );
         }
@@ -115,15 +118,15 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                 radios={[
                     {
                         label: 'Ferdigstill journalpost',
-                        value: 'ferdigstillJournalpost',
+                        value: ferdigstillJournalpostValue,
                     },
                     {
                         label: 'Opprett journalføringsoppgave i Gosys',
-                        value: 'opprettJournalføringsoppgave',
+                        value: opprettJournalføringsoppgaveValue,
                     },
                     {
                         label: 'Sett på vent',
-                        value: 'settPåVent',
+                        value: settPåVentValue,
                     },
                 ]}
                 legend="Hva ønsker du å gjøre med dokumentet?"
