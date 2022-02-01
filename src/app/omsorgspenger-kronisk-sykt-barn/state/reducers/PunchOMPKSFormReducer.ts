@@ -14,8 +14,8 @@ const initialState: IPunchOMPKSFormState = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function PunchOMPKSFormReducer(
-    action: IPunchOMPKSFormActionTypes,
-    punchFormState: IPunchOMPKSFormState = initialState
+    punchFormState: IPunchOMPKSFormState = initialState,
+    action: IPunchOMPKSFormActionTypes
 ): IPunchOMPKSFormState {
     switch (action.type) {
         case PunchFormActionKeys.RESET:
