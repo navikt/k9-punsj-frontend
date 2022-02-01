@@ -1,8 +1,8 @@
 import { IError } from 'app/models/types';
 
-interface FordelingSettPåVentState {
+interface FordelingSettPaaVentState {
     settPaaVentError?: IError;
     settPaaVentSuccess?: boolean;
 }
 
-export default FordelingSettPåVentState;
+export default FordelingSettPaaVentState;

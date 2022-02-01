@@ -266,7 +266,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         {erInntektsmeldingUtenKrav && (
                             <>
                                 <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
-                                    {intlHelper(intl, 'fordeling.inntektsmeldingUtenKrav.infoboks')}
+                                    <ul className="punkliste">
+                                        <li>
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.1" />
+                                        </li>
+                                        <li>
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.2" />
+                                        </li>
+                                        <li>
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.3" />
+                                        </li>
+                                        <li>
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.4" />
+                                        </li>
+                                    </ul>
                                 </AlertStripeAdvarsel>
                                 <VerticalSpacer thirtyTwoPx />
                             </>
@@ -412,6 +425,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 )}
                             </>
                         )}
+
                         <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
                             <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>

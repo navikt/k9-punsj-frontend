@@ -6,7 +6,7 @@ import {
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
+import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';
@@ -83,7 +83,7 @@ export const setupFordeling = (
         annenSokerIdent: '',
     };
 
-    const fordelingSettPåVentState: FordelingSettPåVentState = {
+    const fordelingSettPåVentState: FordelingSettPaaVentState = {
         settPaaVentError: undefined,
         settPaaVentSuccess: false,
     };

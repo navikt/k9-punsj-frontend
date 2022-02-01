@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
+import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPåVentKeys';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
 
@@ -58,7 +58,7 @@ export function settJournalpostPaaVent(journalpostid: string) {
     };
 }
 
-export type FordelingSettPåVentActions =
+export type FordelingSettPaaVentActions =
     | ISettJournalpostPaaVentAction
     | ISettJournalpostPaaVentSuccessAction
     | ISettJournalpostPaaVentErrorAction

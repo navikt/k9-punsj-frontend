@@ -1,18 +1,18 @@
 /* eslint-disable import/prefer-default-export */
 
-import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
-import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
-import { FordelingSettPåVentActions } from '../actions/FordelingSettPaaVentActions';
+import FordelingSettPåVentKeys from 'app/models/enums/FordelingSettPåVentKeys';
+import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
+import { FordelingSettPaaVentActions } from '../actions/FordelingSettPaaVentActions';
 
-const initialState: FordelingSettPåVentState = {
+const initialState: FordelingSettPaaVentState = {
     settPaaVentError: undefined,
     settPaaVentSuccess: undefined,
 };
 
 export function FordelingSettPåVentReducer(
-    fordelingSettPåVentState: FordelingSettPåVentState,
-    action: FordelingSettPåVentActions
-): FordelingSettPåVentState {
+    fordelingSettPåVentState: FordelingSettPaaVentState,
+    action: FordelingSettPaaVentActions
+): FordelingSettPaaVentState {
     if (typeof fordelingSettPåVentState === 'undefined') {
         return initialState;
     }
