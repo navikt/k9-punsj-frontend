@@ -5,6 +5,7 @@ import {
     IEksisterendeOMPKSSoknaderState
 } from '../../../models/types/omsorgspenger-kronisk-sykt-barn/EksisterendeOMPKSSoknaderState';
 import {EksisterendeOMPKSSoknaderActionKeys} from '../../../models/enums/EksisterendeOMPKSSoknaderActionKeys';
+import {IOMPKSSoknad} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
 
 const initialState: IEksisterendeOMPKSSoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -20,6 +21,20 @@ export function EksisterendeOMPKSSoknaderReducer(
     action: IEksisterendeOMPKSSoknaderActionTypes
 ): IEksisterendeOMPKSSoknaderState {
     if (typeof eksisterendeSoknaderState === 'undefined') return initialState;
+
+    function openOrChoose(soknadInfo: IOMPKSSoknad) {
+        return {
+            ...eksisterendeSoknaderState,
+            chosenSoknad: soknadInfo,
+        };
+    }
+
+    function undoOrClose() {
+        return {
+            ...eksisterendeSoknaderState,
+            chosenSoknad: undefined,
+        };
+    }
 
     switch (action.type) {
         case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET:
@@ -45,23 +60,17 @@ export function EksisterendeOMPKSSoknaderReducer(
                 isSoknadCreated: false,
             };
 
+        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_OPEN:
+            return openOrChoose(action.soknadInfo);
+
         case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CLOSE:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: undefined,
-            };
+            return undoOrClose();
 
         case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CHOOSE:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: action.soknadInfo,
-            };
+            return openOrChoose(action.soknadInfo);
 
         case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_UNDO_CHOICE:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: undefined,
-            };
+            return undoOrClose();
 
         case EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_REQUEST:
             return {

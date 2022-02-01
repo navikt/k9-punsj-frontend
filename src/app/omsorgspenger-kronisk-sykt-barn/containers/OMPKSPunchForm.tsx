@@ -430,7 +430,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
-        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
+        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
