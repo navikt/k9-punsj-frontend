@@ -230,9 +230,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
         dispatch(findEksisterendeOMPKSSoknader(ident1, ident2)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
-    openEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
-    closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
-    chooseEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
+    openEksisterendeOMPKSSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
+    closeEksisterendeOMPKSSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
+    chooseEksisterendeOMPKSSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
     createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
         dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
     resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
