@@ -227,14 +227,12 @@ const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateP
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-    findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
-        dispatch(findEksisterendeOMPKSSoknader(ident1, ident2)),
+    findEksisterendeSoknader: (ident1: string, ident2: string | null) => dispatch(findEksisterendeOMPKSSoknader(ident1, ident2)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
-    openEksisterendeOMPKSSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
-    closeEksisterendeOMPKSSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
-    chooseEksisterendeOMPKSSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
+    openEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
+    closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
+    chooseEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
+    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) => dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
     resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });
