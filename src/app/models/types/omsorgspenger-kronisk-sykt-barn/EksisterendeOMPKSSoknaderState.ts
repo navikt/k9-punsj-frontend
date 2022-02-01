@@ -1,6 +1,4 @@
 import { IError } from 'app/models/types/Error';
-import { IPSBSoknad } from '../PSBSoknad';
-import { ISoknadSvar } from '../SoknadSvar';
 import {IOMPKSSoknad} from './OMPKSSoknad';
 import {IOMPKSSoknadSvar} from './OMPKSSoknadSvar';
 

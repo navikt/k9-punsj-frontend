@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {JaNei, PunchStep} from 'app/models/enums';
+import {PunchStep} from 'app/models/enums';
 import {IInputError, ISignaturState} from 'app/models/types';
 import {
     resetPunchFormAction,
@@ -16,7 +16,6 @@ import {AlertStripeFeil} from 'nav-frontend-alertstriper';
 import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
 import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import {Checkbox} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
@@ -464,9 +463,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
         const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
             ?.feilmelding;
-
-        if (errorMsg) {
-        }
 
         return !!errorMsg
             ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;

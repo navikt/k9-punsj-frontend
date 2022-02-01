@@ -1,4 +1,4 @@
-import { PunchFormActionKeys } from 'app/models/enums';
+import {PunchFormActionKeys} from 'app/models/enums';
 import {IPunchOMPKSFormActionTypes} from '../actions/OMPKSPunchFormActions';
 import {IPunchOMPKSFormState} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/PunchOMPKSFormState';
 
@@ -14,8 +14,8 @@ const initialState: IPunchOMPKSFormState = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function PunchOMPKSFormReducer(
-    punchFormState: IPunchOMPKSFormState = initialState,
-    action: IPunchOMPKSFormActionTypes
+    action: IPunchOMPKSFormActionTypes,
+    punchFormState: IPunchOMPKSFormState = initialState
 ): IPunchOMPKSFormState {
     switch (action.type) {
         case PunchFormActionKeys.RESET:
@@ -117,7 +117,7 @@ export function PunchOMPKSFormReducer(
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS: {
-            const { erMellomlagring } = action;
+            const {erMellomlagring} = action;
             return {
                 ...punchFormState,
                 validertSoknad: action.validertSoknad,

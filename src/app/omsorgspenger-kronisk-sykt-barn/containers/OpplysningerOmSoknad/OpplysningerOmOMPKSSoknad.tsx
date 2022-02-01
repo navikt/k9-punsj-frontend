@@ -66,7 +66,7 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = (
                     name="kroniskEllerFunksjonshemming"
                     legend={intlHelper(intl, 'skjema.felt.kroniskEllerFunksjonshemming')}
                     checked={
-                        soknad.kroniskEllerFunksjonshemming && soknad.kroniskEllerFunksjonshemming ? JaNei.JA : JaNei.NEI
+                        soknad.kroniskEllerFunksjonshemming ? JaNei.JA : JaNei.NEI
                     }
                     {...changeAndBlurUpdatesSoknad((event: any) => {
                         const jaNei = (event.target as HTMLInputElement).value as JaNei;
