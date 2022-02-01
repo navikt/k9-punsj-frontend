@@ -5,12 +5,12 @@ import { Checkbox, Input, Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import WarningCircle from '../../../../assets/SVG/WarningCircle';
-import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { IIdentState } from '../../../../models/types/IdentState';
-import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
-import { IFellesState } from '../../../../state/reducers/FellesReducer';
-import { hentBarn } from '../../../../state/reducers/HentBarn';
+import WarningCircle from '../../../assets/SVG/WarningCircle';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import { IIdentState } from '../../../models/types/IdentState';
+import { setIdentFellesAction } from '../../../state/actions/IdentActions';
+import { IFellesState } from '../../../state/reducers/FellesReducer';
+import { hentBarn } from '../../../state/reducers/HentBarn';
 import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 export interface ISokersBarnStateProps {
