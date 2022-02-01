@@ -45,12 +45,6 @@ export function EksisterendeOMPKSSoknaderReducer(
                 isSoknadCreated: false,
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_OPEN:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: action.soknadInfo,
-            };
-
         case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CLOSE:
             return {
                 ...eksisterendeSoknaderState,
