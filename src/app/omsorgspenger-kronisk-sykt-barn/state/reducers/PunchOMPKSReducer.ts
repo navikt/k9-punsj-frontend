@@ -9,7 +9,7 @@ export const initialState: IPunchState = {
 };
 
 export function PunchOMPKSReducer(
-    punchState: IPunchState = initialState,
+    punchState: IPunchState,
     action: IPunchActionTypes
 ): IPunchState {
     if (typeof punchState === 'undefined') return initialState
