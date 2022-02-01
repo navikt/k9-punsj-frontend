@@ -2,7 +2,7 @@ import { getEnvironmentVariable } from 'app/utils/envUtils';
 
 const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
 const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
-const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
+export const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
 export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
 
 export enum ApiPath {
@@ -23,6 +23,7 @@ export enum ApiPath {
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
     JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
     JOURNALPOST_KOPIERE = '/journalpost/kopier/{journalpostId}',
+    JOURNALPOST_FERDIGSTILL = '/journalpost/ferdigstill',
     DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
     OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
     OPPRETT_GOSYS_OPPGAVE = '/gosys/opprettJournalforingsoppgave/',
@@ -45,7 +46,10 @@ export enum ApiPath {
     OMP_KS_SOKNAD_CREATE = '/omsorgspenger-kronisk-sykt-barn-soknad',
     OMP_KS_SOKNAD_UPDATE = '/omsorgspenger-kronisk-sykt-barn-soknad/oppdater',
     OMP_KS_SOKNAD_VALIDER = '/omsorgspenger-kronisk-sykt-barn-soknad/valider',
-    OMP_KS_SOKNAD_SUBMIT = '/omsorgspenger-kronisk-sykt-barn-soknad/send'
+    OMP_KS_SOKNAD_SUBMIT = '/omsorgspenger-kronisk-sykt-barn-soknad/send',
+    BREV_BESTILL = '/brev/bestill',
+    BREV_AKTØRID = '/brev/aktorId',
+    PERSON = '/person',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

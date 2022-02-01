@@ -8,6 +8,7 @@ import {
     PunchFormReducer,
     PunchReducer,
     SignaturReducer,
+    FordelingSettPaaVentReducer,
 } from './reducers';
 import FellesReducer from './reducers/FellesReducer';
 import {Sakstype} from '../models/enums';
@@ -21,6 +22,7 @@ import {
     EksisterendeOMPKSSoknaderReducer
 } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
 import {PunchOMPKSReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
+import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
 
 export const rootReducer = combineReducers({
     [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -40,7 +42,7 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
     }),
-    'SØK': combineReducers({
+    SØK: combineReducers({
         soknaderSokState: SoknaderSokReducer,
         visningState: SoknaderVisningReducer,
     }),
@@ -52,6 +54,8 @@ export const rootReducer = combineReducers({
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
+    fordelingSettPåVentState: FordelingSettPaaVentReducer,
+    fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

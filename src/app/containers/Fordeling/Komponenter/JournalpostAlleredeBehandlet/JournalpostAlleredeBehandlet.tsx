@@ -7,6 +7,7 @@ import React from 'react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../state/reducers/FellesReducer';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
@@ -35,6 +36,8 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
     props: IJournalpostAlleredeBehandletProps
 ) => {
     const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpost } = props;
+    const erInntektsmeldingUtenKrav =
+        journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
     let sokersIdent: string;
 
@@ -50,14 +53,13 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             <div>
                 <b>
                     <FormattedMessage id="journalpost.norskIdent" />
-                </b>
-                {' '}
-                    {sokersIdent} <Kopier verdi={sokersIdent} />
+                </b>{' '}
+                {sokersIdent} <Kopier verdi={sokersIdent} />
             </div>
             <VerticalSpacer eightPx />
             {!fellesState.kopierJournalpostSuccess && <SokersBarn visSokersBarn sokersIdent={sokersIdent} />}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
-            {!fellesState.kopierJournalpostSuccess && (
+            {!fellesState.kopierJournalpostSuccess && !erInntektsmeldingUtenKrav && (
                 <Knapp
                     disabled={erUgyldigIdent(identState.ident2) || !identState.ident2}
                     onClick={() => {

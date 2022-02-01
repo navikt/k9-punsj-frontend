@@ -16,6 +16,7 @@ server.use(
                 frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
                 fontSrc: ["'self'", 'data:'],
                 imgSrc: ["'self'", 'data:'],
+                styleSrc: ["'self'", "'unsafe-inline'"],
             },
         },
     })

@@ -79,6 +79,9 @@ export const testHandlers = {
     sendKorrigering: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad/send`, (req, res, ctx) =>
         res(ctx.status(202), ctx.json(korrigeringAvInntektsmeldingSoknadValidering))
     ),
+    aktørId: rest.get('http://localhost:8101/api/k9-punsj/brev/aktorId', (req, res, ctx) =>
+        res(ctx.json(200), ctx.json(81549300))
+    ),
 
     /**
      * Omsorgspenger kronisk sykt barn
