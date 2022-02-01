@@ -24,16 +24,17 @@ interface IOwnProps {
     annenSokerIdent?: string | null;
 }
 
-export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-                                                                              intl,
-                                                                              response,
-                                                                              kopierJournalpostSuccess,
-                                                                              annenSokerIdent,
-                                                                          }) => {
-    const locale = getLocaleFromSessionStorage();
+export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
+    {
+        intl,
+        response,
+        kopierJournalpostSuccess,
+        annenSokerIdent,
+    }) => {
+
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-    const {ytelse, journalposter} = response;
+    const {journalposter} = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
 
     return (

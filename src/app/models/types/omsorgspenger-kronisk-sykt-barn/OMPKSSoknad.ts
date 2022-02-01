@@ -1,7 +1,5 @@
 /* eslint-disable max-classes-per-file */
 
-import {JaNei} from '../../enums';
-
 export interface IOMPKSSoknad {
     soeknadId?: string;
     soekerId: string;

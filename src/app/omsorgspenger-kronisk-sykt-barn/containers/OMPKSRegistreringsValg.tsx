@@ -43,7 +43,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     props: IOMPKSRegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const [valgtOption, setValgtOption] = useState<string>('nysoknad');
+    const [valgtOption] = useState<string>('nysoknad');
 
     const { ident1, ident2 } = identState;
 
@@ -67,15 +67,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
         props.undoSearchForEksisterendeSoknaderAction();
     };
 
-    const redirectToNextStep = () => {
-        props.createSoknad(journalpostid, ident1, ident2);
-        setHash(
-            getPunchPath(PunchStep.FILL_FORM, {
-                id: eksisterendeSoknaderState.soknadid,
-            })
-        );
-    };
-
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
             <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
@@ -83,16 +74,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     }
 
     const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
-
-    const technicalError =
-        eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
-        ) : null;
-
-    const infoText = (journalpost: IJournalpost, index: number) => {
-        const dato = journalpost.dato ? `, dato: ${journalpost.dato}` : '';
-        return `Journalpost ${index}${dato}`;
-    };
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;

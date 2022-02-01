@@ -5,7 +5,6 @@ import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
 import { IPath } from '../../models/types';
 import { getPath } from '../../utils';
-import { PunchPage } from '../../containers/pleiepenger/PunchPage';
 import {PunchOMPKSPage} from './PunchOMPKSPage';
 
 const OMPKSRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {

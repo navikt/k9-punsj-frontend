@@ -171,15 +171,14 @@ export function updateOMPKSSoknad(soknad: Partial<IOMPKSSoknadUt>) {
     return (dispatch: any) => {
         dispatch(updateOMPKSSoknadRequestAction());
         return put(ApiPath.OMP_KS_SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, (response) => {
-            switch (response.status) {
-                case 200:
-                    return response.json().then((mappe) => {
-                        dispatch(setOMPKSSoknadAction(mappe));
-                        dispatch(updateOMPKSSoknadSuccessAction());
-                    });
-                default:
-                    return dispatch(updateOMPKSSoknadErrorAction(convertResponseToError(response)));
+            if (response.status === 200) {
+                return response.json().then((mappe) => {
+                    dispatch(setOMPKSSoknadAction(mappe));
+                    dispatch(updateOMPKSSoknadSuccessAction());
+                });
             }
+            return dispatch(updateOMPKSSoknadErrorAction(convertResponseToError(response)));
+
         });
     };
 }
