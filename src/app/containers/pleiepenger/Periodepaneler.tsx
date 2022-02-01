@@ -10,7 +10,6 @@ import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
-
 export interface IPeriodepanelerProps {
     intl: IntlShape;
     periods: IPeriode[]; // Liste over periodisert informasjon
@@ -32,7 +31,17 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const { periods, intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks, textLeggTil, getUhaandterteFeil } = props;
+    const {
+        periods,
+        intl,
+        editSoknad,
+        editSoknadState,
+        kanHaFlere,
+        getErrorMessage,
+        feilkodeprefiks,
+        textLeggTil,
+        getUhaandterteFeil,
+    } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,

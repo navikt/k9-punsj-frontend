@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import {
     AuthReducer,
     FordelingReducer,
@@ -8,10 +8,10 @@ import {
     PunchFormReducer,
     PunchReducer,
     SignaturReducer,
-    FordelingSettPaaVentReducer,
+    FordelingSettPåVentReducer,
 } from './reducers';
 import FellesReducer from './reducers/FellesReducer';
-import {Sakstype} from '../models/enums';
+import { Sakstype } from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
 import {SoknaderVisningReducer} from './reducers/SoknaderVisningReducer';
@@ -54,7 +54,7 @@ export const rootReducer = combineReducers({
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
-    fordelingSettPåVentState: FordelingSettPaaVentReducer,
+    fordelingSettPåVentState: FordelingSettPåVentReducer,
     fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
 });
 
