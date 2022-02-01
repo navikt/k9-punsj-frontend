@@ -78,26 +78,28 @@ const ValgForDokument: React.FC<IValgForDokument> = (
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
-                {(korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
-                    .map((key) => {
-                        if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                {
+                    (korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
+                        .map((key) => {
+                            if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                                return null;
+                            }
+                            if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
+                                return (
+                                    <RadioPanel
+                                        key={key}
+                                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                        value={Sakstype[key]}
+                                        onChange={() => {
+                                            setSakstypeAction(Sakstype[key]);
+                                        }}
+                                        checked={konfigForValgtSakstype?.navn === key}
+                                    />
+                                );
+                            }
                             return null;
-                        }
-                        if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
-                            return (
-                                <RadioPanel
-                                    key={key}
-                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                    value={Sakstype[key]}
-                                    onChange={() => {
-                                        setSakstypeAction(Sakstype[key]);
-                                    }}
-                                    checked={konfigForValgtSakstype?.navn === key}
-                                />
-                            );
-                        }
-                        return null;
-                    })}
+                        })
+                }
             </RadioGruppe>
             <VerticalSpacer eightPx/>
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (

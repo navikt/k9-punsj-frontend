@@ -361,33 +361,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         this.setState({showSettPaaVentModal: false});
     };
 
-    private handlePanelClick = (p: PunchFormPaneler) => {
-        const {aapnePaneler} = this.state;
-        if (aapnePaneler.some((panel) => panel === p)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(p), 1);
-        } else {
-            aapnePaneler.push(p);
-        }
-        this.forceUpdate();
-    };
-
-    private checkOpenState = (p: PunchFormPaneler): boolean => {
-        const {aapnePaneler, expandAll} = this.state;
-        if (!!this.props.punchFormState.inputErrors?.length) {
-            return true;
-        }
-        if (expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        } else if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        } else if (!expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        } else if (!expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        return false;
-    };
-
     private getSoknadFromStore = () => {
         return new OMPKSSoknadUt(this.props.punchFormState.soknad as IOMPKSSoknadUt);
     };
@@ -406,7 +379,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         const naa = new Date();
         if (
             !!mottattDato &&
-            naa.getDate() === new Date(mottattDato!).getDate() &&
+            naa.getDate() === new Date(mottattDato).getDate() &&
             initializeDate(naa).format('HH:mm') < dato
         ) {
             return true;
@@ -453,7 +426,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             }
         }
 
-        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato!)) {
+        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 

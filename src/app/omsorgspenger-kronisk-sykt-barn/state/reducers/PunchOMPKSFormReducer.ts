@@ -17,6 +17,8 @@ export function PunchOMPKSFormReducer(
     punchFormState: IPunchOMPKSFormState = initialState,
     action: IPunchOMPKSFormActionTypes
 ): IPunchOMPKSFormState {
+    if (typeof punchFormState === 'undefined') return initialState
+
     switch (action.type) {
         case PunchFormActionKeys.RESET:
             return initialState;

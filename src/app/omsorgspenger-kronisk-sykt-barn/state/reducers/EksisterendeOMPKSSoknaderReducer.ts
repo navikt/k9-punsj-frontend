@@ -16,9 +16,11 @@ const initialState: IEksisterendeOMPKSSoknaderState = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function EksisterendeOMPKSSoknaderReducer(
-    eksisterendeSoknaderState: IEksisterendeOMPKSSoknaderState = initialState,
+    eksisterendeSoknaderState: IEksisterendeOMPKSSoknaderState,
     action: IEksisterendeOMPKSSoknaderActionTypes
 ): IEksisterendeOMPKSSoknaderState {
+    if (typeof eksisterendeSoknaderState === 'undefined') return initialState;
+
     switch (action.type) {
         case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET:
             return {
