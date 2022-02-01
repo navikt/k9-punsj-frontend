@@ -1,68 +1,72 @@
-import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState, IPunchState } from 'app/models/types';
-import { IdentRules } from 'app/rules';
+import {PunchStep, TimeFormat} from 'app/models/enums';
+import {IPunchState} from 'app/models/types';
+import {IdentRules} from 'app/rules';
 import {
-    chooseEksisterendeSoknadAction,
-    closeEksisterendeSoknadAction,
-    createSoknad,
-    findEksisterendeSoknader,
-    openEksisterendeSoknadAction,
     resetPunchAction,
-    resetSoknadidAction,
     setIdentAction,
     setStepAction,
     undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
-import { datetime, setHash } from 'app/utils';
+import {RootStateType} from 'app/state/RootState';
+import {datetime, setHash} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
+import {AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
+import {Knapp} from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
-import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
-import { generateDateString } from '../../components/skjema/skjemaUtils';
-import ErDuSikkerModal from './ErDuSikkerModal';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {connect} from 'react-redux';
+import {
+    chooseEksisterendeOMPKSSoknadAction,
+    closeEksisterendeOMPKSSoknadAction,
+    createOMPKSSoknad,
+    findEksisterendeOMPKSSoknader,
+    openEksisterendeOMPKSSoknadAction,
+    resetOMPKSSoknadidAction
+} from '../state/actions/EksisterendeOMPKSSoknaderActions';
+import {IOMPKSSoknad, OMPKSSoknad} from '../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
+import {
+    IEksisterendeOMPKSSoknaderState
+} from '../../models/types/omsorgspenger-kronisk-sykt-barn/EksisterendeOMPKSSoknaderState';
+import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 
-export interface IEksisterendeSoknaderStateProps {
+export interface IEksisterendeOMPKSSoknaderStateProps {
     punchState: IPunchState;
-    eksisterendeSoknaderState: IEksisterendeSoknaderState;
+    eksisterendeOMPKSSoknaderState: IEksisterendeOMPKSSoknaderState;
 }
 
-export interface IEksisterendeSoknaderDispatchProps {
+export interface IEksisterendeOMPKSSoknaderDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
-    findEksisterendeSoknader: typeof findEksisterendeSoknader;
+    findEksisterendeSoknader: typeof findEksisterendeOMPKSSoknader;
     undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
-    openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
-    closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
-    chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
-    createSoknad: typeof createSoknad;
-    resetSoknadidAction: typeof resetSoknadidAction;
+    openEksisterendeSoknadAction: typeof openEksisterendeOMPKSSoknadAction;
+    closeEksisterendeSoknadAction: typeof closeEksisterendeOMPKSSoknadAction;
+    chooseEksisterendeSoknadAction: typeof chooseEksisterendeOMPKSSoknadAction;
+    createSoknad: typeof createOMPKSSoknad;
+    resetSoknadidAction: typeof resetOMPKSSoknadidAction;
     resetPunchAction: typeof resetPunchAction;
 }
 
-export interface IEksisterendeSoknaderComponentProps {
+export interface IEksisterendeOMPKSSoknaderComponentProps {
     journalpostid: string;
     ident1: string;
     ident2: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
-type IEksisterendeSoknaderProps = WrappedComponentProps &
-    IEksisterendeSoknaderComponentProps &
-    IEksisterendeSoknaderStateProps &
-    IEksisterendeSoknaderDispatchProps;
+type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
+    IEksisterendeOMPKSSoknaderComponentProps &
+    IEksisterendeOMPKSSoknaderStateProps &
+    IEksisterendeOMPKSSoknaderDispatchProps;
 
-export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterendeSoknaderProps> = (
-    props: IEksisterendeSoknaderProps
+export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksisterendeOMPKSSoknaderProps> = (
+    props: IEksisterendeOMPKSSoknaderProps
 ) => {
-    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, ident1, ident2 } = props;
+    const {intl, punchState, eksisterendeOMPKSSoknaderState, getPunchPath, ident1, ident2} = props;
 
-    const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+    const soknader = eksisterendeOMPKSSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
         if (IdentRules.areIdentsValid(ident1, ident2)) {
@@ -76,21 +80,21 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     }, [ident1, ident2]);
 
     React.useEffect(() => {
-        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
+        if (!!eksisterendeOMPKSSoknaderState.eksisterendeSoknaderSvar && eksisterendeOMPKSSoknaderState.isSoknadCreated) {
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
-                    id: eksisterendeSoknaderState.soknadid,
+                    id: eksisterendeOMPKSSoknaderState.soknadid,
                 })
             );
             props.resetSoknadidAction();
         }
-    }, [eksisterendeSoknaderState.soknadid]);
+    }, [eksisterendeOMPKSSoknaderState.soknadid]);
 
     if (!ident1 || ident1 === '') {
         return null;
     }
 
-    if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
+    if (eksisterendeOMPKSSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>
         );
@@ -98,30 +102,30 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
     if (
         punchState.step !== PunchStep.CHOOSE_SOKNAD ||
-        eksisterendeSoknaderState.isEksisterendeSoknaderLoading ||
-        eksisterendeSoknaderState.isAwaitingSoknadCreation
+        eksisterendeOMPKSSoknaderState.isEksisterendeSoknaderLoading ||
+        eksisterendeOMPKSSoknaderState.isAwaitingSoknadCreation
     ) {
         return (
             <div>
-                <NavFrontendSpinner />
+                <NavFrontendSpinner/>
             </div>
         );
     }
 
-    if (eksisterendeSoknaderState.createSoknadRequestError) {
+    if (eksisterendeOMPKSSoknaderState.createSoknadRequestError) {
         return (
             <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
         );
     }
 
     const technicalError =
-        eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
+        eksisterendeOMPKSSoknaderState.isSoknadCreated && !eksisterendeOMPKSSoknaderState.soknadid ? (
             <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
         ) : null;
 
-    const chooseSoknad = (soknad: IPSBSoknad) => {
+    const chooseSoknad = (soknad: IOMPKSSoknad) => {
         props.chooseEksisterendeSoknadAction(soknad);
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
+        setHash(getPunchPath(PunchStep.FILL_FORM, {id: soknad.soeknadId}));
     };
 
     function showSoknader() {
@@ -129,17 +133,17 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         const rows: Array<JSX.Element> = [];
 
         soknader?.forEach((soknadInfo) => {
-            const søknad = new PSBSoknad(soknadInfo);
+            const søknad = new OMPKSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
-            const { chosenSoknad } = props.eksisterendeSoknaderState;
+            const {chosenSoknad} = props.eksisterendeOMPKSSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 (søknad.barn.norskIdent
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
-                    '',
+                '',
                 Array.from(søknad.journalposter).join(', '),
-                generateDateString(søknad.soeknadsperiode),
+
                 <Knapp key={soknadId} mini onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Knapp>,
@@ -179,13 +183,13 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                 <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
                 <table className="tabell tabell--stripet punch_mappetabell">
                     <thead>
-                        <tr>
-                            <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
-                            <th>{intlHelper(intl, 'skjema.periode')}</th>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
-                        </tr>
+                    <tr>
+                        <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
+                        <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
+                        <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
+                        <th>{intlHelper(intl, 'skjema.periode')}</th>
+                        <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')}/>
+                    </tr>
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>
@@ -215,26 +219,26 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     );
 };
 
-const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
-    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
+const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateProps => ({
+    punchState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchState,
+    eksisterendeOMPKSSoknaderState: state.eksisterendeOMPKSSoknaderState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
-        dispatch(findEksisterendeSoknader(ident1, ident2)),
+        dispatch(findEksisterendeOMPKSSoknader(ident1, ident2)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
-    openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
-    closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
-    chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
+    openEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
+    closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
+    chooseEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
     createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createSoknad(journalpostid, ident1, ident2)),
-    resetSoknadidAction: () => dispatch(resetSoknadidAction()),
+        dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
+    resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });
 
-export const EksisterendeSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendeSoknaderComponent)
+export const EksisterendeOMPKSSoknader = injectIntl(
+    connect(mapStateToProps, mapDispatchToProps)(EksisterendeOMPKSSoknaderComponent)
 );

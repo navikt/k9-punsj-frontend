@@ -1,0 +1,28 @@
+{
+  "søknadId": "79040c7e-0e94-4164-9000-ae69a6ac8b22",
+  "versjon": "1.0.0",
+  "mottattDato": "2022-01-18T09:30:00.000Z",
+  "søker": {
+    "norskIdentitetsnummer": "13106423495"
+  },
+  "ytelse": {
+    "type": "OMP_UTV_KS",
+    "barn": {
+      "norskIdentitetsnummer": "26020676387",
+      "fødselsdato": null
+    },
+    "kroniskEllerFunksjonshemming": true
+  },
+  "språk": "nb",
+  "journalposter": [
+    {
+      "inneholderInfomasjonSomIkkeKanPunsjes": null,
+      "inneholderInformasjonSomIkkeKanPunsjes": null,
+      "inneholderMedisinskeOpplysninger": null,
+      "journalpostId": "524274422"
+    }
+  ],
+  "begrunnelseForInnsending": {
+    "tekst": null
+  }
+}

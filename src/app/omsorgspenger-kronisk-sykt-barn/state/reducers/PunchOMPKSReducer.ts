@@ -8,7 +8,7 @@ export const initialState: IPunchState = {
     ident2: null,
 };
 
-export function PunchReducer(
+export function PunchOMPKSReducer(
     punchState: IPunchState = initialState,
     action: IPunchActionTypes
 ): IPunchState {

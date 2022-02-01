@@ -46,7 +46,7 @@
     "fordeling.sakstype.OMSORGSPENGER": "Omsorgspenger",
     "fordeling.sakstype.OMSORGSPENGER_OVERFØRING": "Omsorgsdager: overføring av omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_FORDELING": "Omsorgsdager: fordeling av omsorgsdager",
-    "fordeling.sakstype.OMSORGSPENGER_UTVIDET_RETT": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
+    "fordeling.sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN": "Opprett søknad om ekstra omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_LEGEERKLÆRING": "Omsorgsdager: legeerklæring for kronisk sykt eller funksjonshemmet barn",
     "fordeling.sakstype.OMSORGSPENGER_ALENE_OM_OMSORG": "Omsorgsdager: Alene om omsorgen",
     "fordeling.sakstype.OMSORGSPENGER_SELVST_FRILANS": "Omsorgspenger: selvstendig næringsdrivende og frilanser",
@@ -432,6 +432,8 @@
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend": "Refusjon av dag skal endres til timer",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info": "Melder arbeidsgiver at krav om hel dag skal endres til krav om timer, fyll ut dato og antall timer de krever refusjon for.",
 
+    "skjema.felt.kroniskEllerFunksjonshemming": "Har barnet en kronisk sykdom eller funksjonshemming?",
+
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
     "modal.settpaavent.visjournalpost": "Vis journalpost",
@@ -455,6 +457,7 @@
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
 
     "PLEIEPENGER": "Pleiepenger",
+    "OMSORGSPENGER_KS": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",
 

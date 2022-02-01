@@ -10,6 +10,8 @@ import korrigeringAvInntektsmeldingSoknad from '../../cypress/fixtures/korrigeri
 import korrigeringAvInntektsmeldingSoknadSomKanSendesInn from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadSomKanSendesInn.json';
 import korrigeringAvInntektsmeldingSoknadValidering from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadValidering.json';
 import korrigeringAvInntektsmeldingSoknadValideringFailed from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadValideringFailed.json';
+import omsorgspengerKsSoknadSomKanSendesInn from '../../cypress/fixtures/omp_ks/soknadSomKanSendesInn.json';
+import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/soknadValidering.json';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
@@ -76,5 +78,30 @@ export const testHandlers = {
     }),
     sendKorrigering: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad/send`, (req, res, ctx) =>
         res(ctx.status(202), ctx.json(korrigeringAvInntektsmeldingSoknadValidering))
+    ),
+
+    /**
+     * Omsorgspenger kronisk sykt barn
+     */
+    hentOmsorgspengerKroniskSyktBarnMappe: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/mappe`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                søker: '29099000129',
+                fagsakTypeKode: 'OMP_KS',
+                søknader: [],
+            })
+        )
+    ),
+    oppdaterOmsorgspengerKroniskSyktBarnSøknad: rest.put(
+        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/oppdater`,
+        (req, res, ctx) => res(ctx.json(omsorgspengerKsSoknadSomKanSendesInn))
+    ),
+    validerOmsorgspengerKroniskSyktBarnSøknad: rest.post(
+        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/valider`,
+        (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
+    ),
+    sendOmsorgspengerKroniskSyktBarnSøknad: rest.post(
+        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/send`,
+        (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
     ),
 };

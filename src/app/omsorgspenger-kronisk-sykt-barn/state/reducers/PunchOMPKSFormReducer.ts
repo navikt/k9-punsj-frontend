@@ -1,8 +1,8 @@
 import { PunchFormActionKeys } from 'app/models/enums';
-import { IPunchPSBFormState } from 'app/models/types';
-import { IPunchFormActionTypes } from 'app/state/actions/PSBPunchFormActions';
+import {IPunchOMPKSFormActionTypes} from '../actions/OMPKSPunchFormActions';
+import {IPunchOMPKSFormState} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/PunchOMPKSFormState';
 
-const initialState: IPunchPSBFormState = {
+const initialState: IPunchOMPKSFormState = {
     isSoknadLoading: false,
     isComplete: false,
     isValid: false,
@@ -13,10 +13,10 @@ const initialState: IPunchPSBFormState = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export function PunchFormReducer(
-    punchFormState: IPunchPSBFormState = initialState,
-    action: IPunchFormActionTypes
-): IPunchPSBFormState {
+export function PunchOMPKSFormReducer(
+    punchFormState: IPunchOMPKSFormState = initialState,
+    action: IPunchOMPKSFormActionTypes
+): IPunchOMPKSFormState {
     switch (action.type) {
         case PunchFormActionKeys.RESET:
             return initialState;
@@ -109,57 +109,6 @@ export function PunchFormReducer(
                 submitSoknadConflict: true,
             };
 
-        case PunchFormActionKeys.HENT_PERIODER_REQUEST:
-            return {
-                ...punchFormState,
-                isPerioderLoading: true,
-                hentPerioderError: undefined,
-            };
-
-        case PunchFormActionKeys.HENT_PERIODER_ERROR:
-            return {
-                ...punchFormState,
-                isPerioderLoading: false,
-                hentPerioderError: action.error,
-            };
-
-        case PunchFormActionKeys.HENT_PERIODER_SUCCESS:
-            return {
-                ...punchFormState,
-                isPerioderLoading: false,
-                hentPerioderError: undefined,
-                perioder: action.perioder,
-            };
-
-        case PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT:
-            return {
-                ...punchFormState,
-                awaitingSettPaaVentResponse: true,
-            };
-
-        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR:
-            return {
-                ...punchFormState,
-                awaitingSettPaaVentResponse: false,
-                settPaaVentSuccess: false,
-                settPaaVentError: action.error,
-            };
-
-        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS:
-            return {
-                ...punchFormState,
-                awaitingSettPaaVentResponse: false,
-                settPaaVentSuccess: true,
-                settPaaVentError: undefined,
-            };
-
-        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET:
-            return {
-                ...punchFormState,
-                awaitingSettPaaVentResponse: false,
-                settPaaVentSuccess: false,
-                settPaaVentError: undefined,
-            };
         case PunchFormActionKeys.SOKNAD_VALIDER_REQUEST:
             return {
                 ...punchFormState,

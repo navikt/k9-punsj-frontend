@@ -4,7 +4,7 @@ import {
     IPunchFormStateProps,
     PunchFormComponent,
 } from 'app/containers/pleiepenger/PSBPunchForm';
-import { IPSBSoknad, IPunchFormState, ISignaturState } from 'app/models/types';
+import { IPSBSoknad, IPunchPSBFormState, ISignaturState } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
@@ -103,7 +103,7 @@ const validertSoknad: IPSBSoknadKvittering = {
 };
 
 const setupPunchForm = (
-    punchFormStateSetup?: Partial<IPunchFormState>,
+    punchFormStateSetup?: Partial<IPunchPSBFormState>,
     punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
@@ -128,7 +128,7 @@ const setupPunchForm = (
         ...punchFormDispatchPropsSetup,
     };
 
-    const punchFormState: IPunchFormState = {
+    const punchFormState: IPunchPSBFormState = {
         isSoknadLoading: false,
         ...punchFormStateSetup,
     };
