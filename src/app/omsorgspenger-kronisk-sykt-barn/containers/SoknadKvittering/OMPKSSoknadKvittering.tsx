@@ -11,7 +11,6 @@ import Kopier from 'app/components/kopier/Kopier';
 import {IOMPKSSoknadKvittering} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknadKvittering';
 import {
     formattereTidspunktFraUTCTilGMT,
-    getLocaleFromSessionStorage,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull
 } from '../../../utils';

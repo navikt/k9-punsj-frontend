@@ -16,7 +16,7 @@ export const Pleiepenger: ISakstypePunch = {
     getComponent: ({journalpostid, punchPath}) => (
         <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath}/>
     ),
-    steps: [], // TODO: implementert annerledes - konverter hvis nødvendig
+    steps: [],
 };
 
 export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {
@@ -25,7 +25,7 @@ export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {
     getComponent: ({journalpostid, punchPath}) => (
         <OMPKSRouter journalpostid={journalpostid} punchPath={punchPath}/>
     ),
-    steps: [], // TODO: implementert annerledes - konverter hvis nødvendig
+    steps: []
 };
 
 export const OmsorgspengerFordeling: ISakstypePunch = {

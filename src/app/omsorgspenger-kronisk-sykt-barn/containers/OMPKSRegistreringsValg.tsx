@@ -11,7 +11,7 @@ import {
 import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from '../../state/actions/JournalposterPerIdentActions';
 import {IJournalposterPerIdentState} from '../../models/types/Journalpost/JournalposterPerIdentState';
 import {IIdentState} from '../../models/types/IdentState';
-import {IEksisterendeSoknaderState, IJournalpost, IPunchState} from '../../models/types';
+import {IEksisterendeSoknaderState, IPunchState} from '../../models/types';
 import {setHash} from '../../utils';
 import {EksisterendeOMPKSSoknader} from './EksisterendeOMPKSSoknader';
 import {RootStateType} from '../../state/RootState';

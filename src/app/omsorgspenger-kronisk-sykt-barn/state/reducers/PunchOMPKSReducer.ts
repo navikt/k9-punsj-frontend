@@ -9,8 +9,8 @@ export const initialState: IPunchState = {
 };
 
 export function PunchOMPKSReducer(
+    action: IPunchActionTypes,
     punchState: IPunchState = initialState,
-    action: IPunchActionTypes
 ): IPunchState {
     switch (action.type) {
         case PunchActionKeys.RESET:
