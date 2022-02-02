@@ -119,6 +119,7 @@ const ArbeidsforholdPanel = ({
                     onChange={(event) => {
                         handleFrilanserChange((event.target as HTMLInputElement).value as JaNei);
                     }}
+
                 />
                 <VerticalSpacer eightPx />
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (

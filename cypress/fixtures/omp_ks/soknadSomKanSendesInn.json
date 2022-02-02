@@ -1,0 +1,12 @@
+{
+  "soeknadId": "988bedeb-3324-4d2c-9277-dcbb5cc26577",
+  "soekerId": "29099000129",
+  "mottattDato": "2022-01-18",
+  "klokkeslett": "10:30",
+  "barn": {
+    "norskIdent": "16017725002",
+    "foedselsdato": null
+  },
+  "kroniskEllerFunksjonshemming": true,
+  "journalposter": ["123456"]
+}

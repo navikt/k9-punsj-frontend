@@ -8,10 +8,12 @@ export const initialState: IPunchState = {
     ident2: null,
 };
 
-export function PunchReducer(
-    punchState: IPunchState = initialState,
+export function PunchOMPKSReducer(
+    punchState: IPunchState,
     action: IPunchActionTypes
 ): IPunchState {
+    if (typeof punchState === 'undefined') return initialState
+
     switch (action.type) {
         case PunchActionKeys.RESET:
             return initialState;

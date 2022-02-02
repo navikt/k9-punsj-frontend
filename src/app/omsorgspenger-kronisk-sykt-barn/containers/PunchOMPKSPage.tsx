@@ -6,10 +6,8 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
-import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
-import { IJournalpost, IPath, IPunchState, IPunchPSBFormState } from 'app/models/types';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { get, getEnvironmentVariable, getPath } from 'app/utils';
@@ -20,56 +18,58 @@ import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper'
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
+import {IIdentState} from '../../models/types/IdentState';
+import {ompKSPaths} from './OMPKSRoutes';
+import {OMPKSPunchForm} from './OMPKSPunchForm';
+import {OMPKSSoknadKvittering} from './SoknadKvittering/OMPKSSoknadKvittering';
+import {IPunchOMPKSFormState} from '../../models/types/omsorgspenger-kronisk-sykt-barn/PunchOMPKSFormState';
+import {IJournalpost, IPath, IPunchState} from '../../models/types';
+import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { peiepengerPaths } from './PeiepengerRoutes';
-import { RegistreringsValg } from './RegistreringsValg';
-import { IIdentState } from '../../models/types/IdentState';
-import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
-import { PSBPunchForm } from './PSBPunchForm';
-import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import {OMPKSRegistreringsValg} from './OMPKSRegistreringsValg';
 
-export interface IPunchPageStateProps {
+export interface IPunchOMPKSPageStateProps {
     punchState: IPunchState;
     journalpost?: IJournalpost;
     identState: IIdentState;
     forbidden: boolean | undefined;
-    punchFormState: IPunchPSBFormState;
+    punchFormState: IPunchOMPKSFormState;
 }
 
-export interface IPunchPageDispatchProps {
+export interface IPunchOMPKSPageDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
 }
 
-export interface IPunchPageQueryProps {
+export interface IPunchOMPKSPageQueryProps {
     dok?: string | null;
 }
 
-export interface IPunchPageComponentProps {
+export interface IPunchOMPKSPageComponentProps {
     match?: any;
     step: PunchStep;
     journalpostid?: string;
     paths: IPath[];
 }
 
-export interface IPunchPageComponentState {
+export interface IPunchOMPKSPageComponentState {
     ident1: string;
     ident2: string;
 }
 
-type IPunchPageProps = WrappedComponentProps &
+type IPunchOMPKSPageProps = WrappedComponentProps &
     RouteComponentProps &
-    IPunchPageComponentProps &
-    IPunchPageStateProps &
-    IPunchPageDispatchProps &
-    IPunchPageQueryProps;
+    IPunchOMPKSPageComponentProps &
+    IPunchOMPKSPageStateProps &
+    IPunchOMPKSPageDispatchProps &
+    IPunchOMPKSPageQueryProps;
 
-export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
+export const PunchOMPKSPageComponent: React.FunctionComponent<IPunchOMPKSPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(peiepengerPaths, punchStep, values, dok ? { dok } : undefined);
+        getPath(ompKSPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
@@ -95,9 +95,9 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
         // eslint-disable-next-line default-case
         switch (step) {
             case PunchStep.CHOOSE_SOKNAD:
-                return <RegistreringsValg {...commonProps} />;
+                return <OMPKSRegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
-                return <PSBPunchForm {...commonProps} id={match.params.id} />;
+                return <OMPKSPunchForm {...commonProps} id={match.params.id} />;
             case PunchStep.COMPLETED:
                 return (
                     <>
@@ -123,7 +123,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                             )} */}
                         </div>
                         {!!punchFormState.innsentSoknad && (
-                            <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
+                            <OMPKSSoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
                         )}
                     </>
                 );
@@ -159,7 +159,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
+                <Panel className="omp_ks_punch_form" border>
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {underFnr()}
                 </Panel>
@@ -178,12 +178,12 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
+    punchState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
-    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
+    punchFormState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState,
+    journalposterIAktivPunchForm: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -191,11 +191,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
-const PunchPageComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
+const PunchOMPKSPageComponentWithQuery: React.FunctionComponent<IPunchOMPKSPageProps> = (props: IPunchOMPKSPageProps) => {
     const dok = useQuery().get('dok');
-    return <PunchPageComponent {...props} dok={dok} />;
+    return <PunchOMPKSPageComponent {...props} dok={dok} />;
 };
 
-export const PunchPage = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponentWithQuery))
+export const PunchOMPKSPage = withRouter(
+    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSPageComponentWithQuery))
 );

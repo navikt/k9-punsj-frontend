@@ -1,8 +1,4 @@
-import BrevComponent from 'app/components/brev/BrevComponent';
-import BrevContainer from 'app/components/brev/BrevContainer';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
-import journalpostStatus from 'app/models/enums/JournalpostStatus';
-import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingSettPåVentState from 'app/models/types/FordelingSettPaaVentState';
 import {
@@ -12,46 +8,48 @@ import {
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
+import {RootStateType} from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
+import {Checkbox, RadioPanelGruppe} from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import FormPanel from '../../../components/FormPanel';
-import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
-import PdfVisning from '../../../components/pdf/PdfVisning';
-import VerticalSpacer from '../../../components/VerticalSpacer';
-import { ISakstypeDefault } from '../../../models/Sakstype';
-import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
-import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
-import { IIdentState } from '../../../models/types/IdentState';
+import journalpostStatus from 'app/models/enums/JournalpostStatus';
+import FormPanel from '../../components/FormPanel';
+import FordelingFerdigstillJournalpostState from '../../models/types/FordelingFerdigstillJournalpostState';
+import PdfVisning from '../../components/pdf/PdfVisning';
+import {ISakstypeDefault} from '../../models/Sakstype';
+import VerticalSpacer from '../../components/VerticalSpacer';
+import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
-} from '../../../state/actions/GosysOppgaveActions';
-import { setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
-import { Sakstyper } from '../../SakstypeImpls';
-import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
-import OkGaaTilLosModal from '../OkGaaTilLosModal';
+} from '../../state/actions/GosysOppgaveActions';
 import './fordeling.less';
-import { erUgyldigIdent } from './FordelingFeilmeldinger';
-import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
-import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
-import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
+import {setIdentFellesAction} from '../../state/actions/IdentActions';
+import {IIdentState} from '../../models/types/IdentState';
+import {IGosysOppgaveState} from '../../models/types/GosysOppgaveState';
+import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
+import {IFellesState, kopierJournalpost} from '../../state/reducers/FellesReducer';
+import {erUgyldigIdent} from './FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
-import { SokersBarn } from './Komponenter/SokersBarn';
+import {JournalpostAlleredeBehandlet} from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
+import {SokersBarn} from './Komponenter/SokersBarn';
+import {GosysGjelderKategorier} from './Komponenter/GoSysGjelderKategorier';
+import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
+import PunsjInnsendingType from '../../models/enums/PunsjInnsendingType';
+import {Sakstyper} from '../SakstypeImpls';
+import HåndterInntektsmeldingUtenKrav from '../pleiepenger/HåndterInntektsmeldingUtenKrav';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -95,14 +93,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setErIdent1Bekreftet,
         setSakstypeAction: sakstypeAction,
     } = props;
-    const { sakstype } = fordelingState;
+    const {sakstype} = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         []
     );
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
-    const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
     const [dokumenttype, setDokumenttype] = useState<FordelingDokumenttype>();
@@ -123,7 +120,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         journalpost?.journalpostStatus === journalpostStatus.FERDIGSTILT;
 
     const gjelderPleiepengerEllerOmsorgspenger =
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER || dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -351,7 +350,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         sokersIdent={identState.ident1}
                                         visSokersBarn={
                                             visSokersBarn &&
-                                            dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                            (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
                                             !erUgyldigIdent(identState.ident1)
                                         }
                                     />
@@ -360,7 +360,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
-                                                (dokumenttype === FordelingDokumenttype.PLEIEPENGER &&
+                                                ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+                                                        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
                                                     (erUgyldigIdent(identState.ident2) ||
                                                         (!identState.ident2 && !barnetHarIkkeFnr))) ||
                                                 erUgyldigIdent(identState.ident1)
@@ -378,7 +379,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             journalpost={journalpost}
                             erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
                             kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
-                            setOmsorgspengerValgt={setOmsorgspengerValgt}
                             identState={identState}
                             konfigForValgtSakstype={konfigForValgtSakstype}
                             fordelingState={fordelingState}
