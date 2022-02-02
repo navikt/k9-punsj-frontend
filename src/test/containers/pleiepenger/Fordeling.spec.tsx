@@ -2,7 +2,7 @@ import {
     FordelingComponent,
     IFordelingDispatchProps,
     IFordelingStateProps,
-} from 'app/containers/pleiepenger/Fordeling/Fordeling';
+} from 'app/containers/Fordeling/Fordeling';
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
@@ -55,7 +55,7 @@ export const setupFordeling = (
         kanSendeInn: true,
         erSaksbehandler: true,
         kanOpprettesJournalføringsoppgave: true,
-        ...journalpostPartial,
+        ...journalpostPartial
     };
 
     const opprettIGosys: IGosysOppgaveState = {

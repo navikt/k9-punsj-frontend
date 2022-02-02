@@ -6,7 +6,7 @@ import { Select } from 'nav-frontend-skjema';
 import React, { useEffect } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import VerticalSpacer from '../../../../components/VerticalSpacer';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 
 export interface IOwnProps {
     fordelingState: IFordelingState;
