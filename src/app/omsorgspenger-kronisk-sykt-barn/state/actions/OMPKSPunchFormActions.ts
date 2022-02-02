@@ -4,9 +4,9 @@ import {IError} from 'app/models/types';
 import {IInputError} from 'app/models/types/InputError';
 import {convertResponseToError, get, post, put} from 'app/utils';
 import {ISendSoknad} from '../../../models/types/SendSoknad';
-import {IOMPKSSoknad} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
-import {IOMPKSSoknadUt} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknadUt';
-import {IOMPKSSoknadKvittering} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknadKvittering';
+import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
+import {IOMPKSSoknadUt} from '../../types/OMPKSSoknadUt';
+import {IOMPKSSoknadKvittering} from '../../types/OMPKSSoknadKvittering';
 
 interface IResetPunchOMPKSFormAction {
     type: PunchFormActionKeys.RESET;

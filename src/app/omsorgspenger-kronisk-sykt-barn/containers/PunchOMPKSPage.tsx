@@ -22,7 +22,7 @@ import {IIdentState} from '../../models/types/IdentState';
 import {ompKSPaths} from './OMPKSRoutes';
 import {OMPKSPunchForm} from './OMPKSPunchForm';
 import {OMPKSSoknadKvittering} from './SoknadKvittering/OMPKSSoknadKvittering';
-import {IPunchOMPKSFormState} from '../../models/types/omsorgspenger-kronisk-sykt-barn/PunchOMPKSFormState';
+import {IPunchOMPKSFormState} from '../types/PunchOMPKSFormState';
 import {IJournalpost, IPath, IPunchState} from '../../models/types';
 import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';

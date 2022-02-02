@@ -3,8 +3,8 @@ import {IError} from 'app/models/types';
 import {convertResponseToError, get, post} from 'app/utils';
 import {IOpprettSoknad} from '../../../models/types/RequestBodies';
 import {EksisterendeOMPKSSoknaderActionKeys} from '../../../models/enums/EksisterendeOMPKSSoknaderActionKeys';
-import {IOMPKSSoknad} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
-import {IOMPKSSoknadSvar} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknadSvar';
+import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
+import {IOMPKSSoknadSvar} from '../../types/OMPKSSoknadSvar';
 
 interface ISetEksisterendeOMPKSSoknaderAction {
     type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET;

@@ -9,7 +9,7 @@ import {JaNeiIkkeRelevant} from '../../../models/enums/JaNeiIkkeRelevant';
 import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
 import './opplysningerOmOMPKSSoknad.less';
-import {OMPKSSoknad} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
+import {OMPKSSoknad} from '../../types/OMPKSSoknad';
 import {JaNei} from '../../../models/enums';
 
 interface IOwnProps {

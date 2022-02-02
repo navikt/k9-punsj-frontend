@@ -8,7 +8,7 @@ import './ompKSSoknadKvittering.less';
 import countries from 'i18n-iso-countries';
 import {RootStateType} from 'app/state/RootState';
 import Kopier from 'app/components/kopier/Kopier';
-import {IOMPKSSoknadKvittering} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknadKvittering';
+import {IOMPKSSoknadKvittering} from '../../types/OMPKSSoknadKvittering';
 import {
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
@@ -33,8 +33,10 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
 
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-    const {journalposter} = response;
+    const {ytelse, journalposter} = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+
+    const visBarn = ytelse.barn !== null;
 
     return (
         <div className={classNames('OMPKSSoknadKvitteringContainer')}>
@@ -62,6 +64,21 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
                         {`${periodToFormattedString(
                             response.mottattDato.substr(0, 10)
                         )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
+                    </p>
+                </div>
+            )}
+
+            {visBarn && (
+                <div>
+                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSNINGER_OM_BARN)}</h3>
+                    <hr className={classNames('linje')} />
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.barn.ident')} </b>
+                        {ytelse.barn.norskIdentitetsnummer}
+                    </p>
+                    <p>
+                        <b>{intlHelper(intl, 'skjema.felt.kroniskEllerFunksjonshemming')}</b>
+                        {ytelse.kroniskEllerFunksjonshemming ? 'Ja' : 'Nei'}
                     </p>
                 </div>
             )}
