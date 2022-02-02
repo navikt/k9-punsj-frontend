@@ -32,8 +32,8 @@ import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
-import {IOMPKSSoknad, OMPKSSoknad} from '../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
-import {IPunchOMPKSFormState} from '../../models/types/omsorgspenger-kronisk-sykt-barn/PunchOMPKSFormState';
+import {IOMPKSSoknad, OMPKSSoknad} from '../types/OMPKSSoknad';
+import {IPunchOMPKSFormState} from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
 import {OMPKSSoknadKvittering} from './SoknadKvittering/OMPKSSoknadKvittering';
 import {
@@ -46,7 +46,10 @@ import {
     validerOMPKSSoknadResetAction
 } from '../state/actions/OMPKSPunchFormActions';
 import {undoChoiceOfEksisterendeOMPKSSoknadAction} from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import {IOMPKSSoknadUt, OMPKSSoknadUt} from '../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknadUt';
+import {IOMPKSSoknadUt, OMPKSSoknadUt} from '../types/OMPKSSoknadUt';
+import {CheckboksPanel} from 'nav-frontend-skjema';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import {PopoverOrientering} from 'nav-frontend-popover';
 
 export interface IPunchOMPKSFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -107,7 +110,9 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 norskIdent: '',
                 foedselsdato: '',
             },
-            kroniskEllerFunksjonshemming: false
+            kroniskEllerFunksjonshemming: false,
+            harInfoSomIkkeKanPunsjes: false,
+            harMedisinskeOpplysninger: false
         },
         isFetched: false,
         showStatus: false,
@@ -118,7 +123,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         visErDuSikkerModal: false,
         errors: [],
         feilmeldingStier: new Set(),
-        harForsoektAaSendeInn: false,
+        harForsoektAaSendeInn: false
     };
 
     componentDidMount(): void {
@@ -191,7 +196,31 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     signert={signert}
                     soknad={soknad}
                 />
-
+                <VerticalSpacer twentyPx={true}/>
+                <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+                <div className={'flex-container'}>
+                    <CheckboksPanel
+                        id={'medisinskeopplysningercheckbox'}
+                        label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
+                        checked={!!soknad.harMedisinskeOpplysninger}
+                        onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
+                    />
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                        {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
+                    </Hjelpetekst>
+                </div>
+                <VerticalSpacer eightPx={true}/>
+                <div className={'flex-container'}>
+                    <CheckboksPanel
+                        id={'opplysningerikkepunsjetcheckbox'}
+                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
+                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
+                    />
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                        {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                    </Hjelpetekst>
+                </div>
                 <VerticalSpacer twentyPx={true}/>
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
@@ -361,6 +390,16 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         this.setState({showSettPaaVentModal: false});
     };
 
+    private updateMedisinskeOpplysninger(checked: boolean) {
+        this.updateSoknadState({harMedisinskeOpplysninger: checked}, true);
+        this.updateSoknad({harMedisinskeOpplysninger: checked});
+    }
+
+    private updateOpplysningerIkkeKanPunsjes(checked: boolean) {
+        this.updateSoknadState({harInfoSomIkkeKanPunsjes: checked}, true);
+        this.updateSoknad({harInfoSomIkkeKanPunsjes: checked});
+    }
+
     private getSoknadFromStore = () => {
         return new OMPKSSoknadUt(this.props.punchFormState.soknad as IOMPKSSoknadUt);
     };
@@ -467,10 +506,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         });
     };
 
-    private updateSoknadStateCallbackFunction = (soknad: Partial<IOMPKSSoknad>) => {
-        this.updateSoknadState(soknad);
-    };
-
     private updateSoknad = (soknad: Partial<IOMPKSSoknad>) => {
         this.setState({showStatus: true});
         const navarandeSoknad: OMPKSSoknadUt = this.getSoknadFromStore();
@@ -494,7 +529,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPKSSoknad>) => ({
         onChange: (event: any) => this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad(change(event)),
+        onBlur: (event: any) => this.updateSoknad(change(event))
     });
 
     private statusetikett() {

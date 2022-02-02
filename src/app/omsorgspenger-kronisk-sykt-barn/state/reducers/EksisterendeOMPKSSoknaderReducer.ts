@@ -3,9 +3,9 @@ import {
 } from '../actions/EksisterendeOMPKSSoknaderActions';
 import {
     IEksisterendeOMPKSSoknaderState
-} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/EksisterendeOMPKSSoknaderState';
+} from '../../types/EksisterendeOMPKSSoknaderState';
 import {EksisterendeOMPKSSoknaderActionKeys} from '../../../models/enums/EksisterendeOMPKSSoknaderActionKeys';
-import {IOMPKSSoknad} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
+import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
 
 const initialState: IEksisterendeOMPKSSoknaderState = {
     eksisterendeSoknaderSvar: {},

@@ -1,4 +1,4 @@
-import BegrunnelseForInnsending from '../BegrunnelseForInnsending';
+import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
 export interface IOMPKSSoknadKvitteringJournalpost {
     inneholderInfomasjonSomIkkeKanPunsjes?: boolean;
@@ -15,7 +15,7 @@ export interface IOMPKSSoknadKvittering {
             norskIdentitetsnummer: string;
             fødselsdato: string | null;
         };
-        kroniskEllerFunksjonshemming: boolean
+        kroniskEllerFunksjonshemming: boolean;
     };
     begrunnelseForInnsending: BegrunnelseForInnsending;
 }
