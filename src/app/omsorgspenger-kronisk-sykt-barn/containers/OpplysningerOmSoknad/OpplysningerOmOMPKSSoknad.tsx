@@ -31,7 +31,6 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = (
         soknad
     }) => (
     <Panel className="opplysningerOmOMPKSSoknad">
-        <h3>Omsorgspenger KS!!!!</h3>
         <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
         <AlertStripeInfo>{intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}</AlertStripeInfo>
         <SkjemaGruppe>
