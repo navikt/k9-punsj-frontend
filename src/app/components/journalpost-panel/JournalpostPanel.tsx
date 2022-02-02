@@ -20,9 +20,9 @@ interface IJournalpostComponentStateProps {
     journalposter?: string[];
 }
 
-export const JournalpostPanelComponent: React.FunctionComponent<
-    WrappedComponentProps & IJournalpostPanelStateProps & IJournalpostComponentStateProps
-> = (props) => {
+export const JournalpostPanelComponent: React.FunctionComponent<WrappedComponentProps & IJournalpostPanelStateProps & IJournalpostComponentStateProps> = (
+    props
+) => {
     const {
         intl,
         journalpost,
@@ -40,7 +40,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                     retning="horisontal"
                 />
 
-                {(fordelingState.erIdent1Bekreftet || ident1) && (
+                {fordelingState.erIdent1Bekreftet && (
                     <LabelValue
                         labelTextId="journalpost.norskIdent"
                         value={
