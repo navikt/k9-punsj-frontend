@@ -3,15 +3,15 @@ import {
     IFordelingDispatchProps,
     IFordelingStateProps,
 } from 'app/containers/Fordeling/Fordeling';
-import { JaNei, Sakstype } from 'app/models/enums';
+import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
-import { IIdentState } from '../../../app/models/types/IdentState';
 import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState';
+import { IIdentState } from '../../../app/models/types/IdentState';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -53,7 +53,7 @@ export const setupFordeling = (
         kanSendeInn: true,
         erSaksbehandler: true,
         kanOpprettesJournalføringsoppgave: true,
-        ...journalpostPartial,
+        ...journalpostPartial
     };
 
     const opprettIGosys: IGosysOppgaveState = {
@@ -81,6 +81,16 @@ export const setupFordeling = (
         annenSokerIdent: '',
     };
 
+    const fordelingSettPåVentState: FordelingSettPaaVentState = {
+        settPaaVentError: undefined,
+        settPaaVentSuccess: false,
+    };
+
+    const fordelingFerdigstillState: FordelingFerdigstillJournalpostState = {
+        ferdigstillJournalpostError: undefined,
+        ferdigstillJournalpostSuccess: false,
+    };
+
     const fordelingStateProps: IFordelingStateProps = {
         journalpost,
         fordelingState,
@@ -92,6 +102,8 @@ export const setupFordeling = (
             dedupKey: '',
             kopierJournalpostSuccess: true,
         },
+        fordelingSettPåVentState,
+        fordelingFerdigstillState,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);

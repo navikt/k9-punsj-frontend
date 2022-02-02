@@ -23,7 +23,6 @@ import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import {ISakstypeDefault} from '../../models/Sakstype';
 import {Sakstyper} from '../SakstypeImpls';
-import './fordeling.less';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import FormPanel from '../../components/FormPanel';
 import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
@@ -31,6 +30,7 @@ import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../state/actions/GosysOppgaveActions';
+import './fordeling.less';
 import {setIdentFellesAction} from '../../state/actions/IdentActions';
 import {IIdentState} from '../../models/types/IdentState';
 import {IGosysOppgaveState} from '../../models/types/GosysOppgaveState';

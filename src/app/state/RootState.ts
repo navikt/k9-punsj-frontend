@@ -13,13 +13,13 @@ import FellesReducer from './reducers/FellesReducer';
 import {Sakstype} from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import {
+    EksisterendeOMPKSSoknaderReducer
+} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
 import {SoknaderVisningReducer} from './reducers/SoknaderVisningReducer';
 import {JournalposterPerIdentReducer} from './reducers/JournalposterPerIdentReducer';
 import {IdentReducer} from './reducers/IdentReducer';
 import {PunchOMPKSFormReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer'
-import {
-    EksisterendeOMPKSSoknaderReducer
-} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
 import {PunchOMPKSReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
 
 export const rootReducer = combineReducers({
@@ -52,6 +52,7 @@ export const rootReducer = combineReducers({
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
+    fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;
