@@ -17,7 +17,7 @@ const fullResponse: IPSBSoknadKvittering = {
     journalposter: [
         {
             journalpostId: '',
-            inneholderInfomasjonSomIkkeKanPunsjes: false,
+            inneholderInformasjonSomIkkeKanPunsjes: false,
             inneholderMedisinskeOpplysninger: false,
         },
     ],
