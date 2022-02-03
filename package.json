@@ -96,7 +96,7 @@
         "sentry-release": "(export SENTRY_RELEASE=$(git rev-parse --short HEAD); node ./src/build/scripts/sentry-release)"
     },
     "devDependencies": {
-        "@babel/cli": "^7.16.7",
+        "@babel/cli": "^7.17.0",
         "@babel/core": "^7.16.7",
         "@babel/plugin-proposal-class-properties": "^7.16.7",
         "@babel/plugin-proposal-optional-chaining": "^7.16.7",
