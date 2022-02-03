@@ -1,7 +1,7 @@
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
 export interface IOMPKSSoknadKvitteringJournalpost {
-    inneholderInfomasjonSomIkkeKanPunsjes?: boolean;
+    inneholderInformasjonSomIkkeKanPunsjes?: boolean;
     inneholderMedisinskeOpplysninger?: boolean;
     journalpostId: string;
 }
