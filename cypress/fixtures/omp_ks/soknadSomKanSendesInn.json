@@ -8,5 +8,7 @@
     "foedselsdato": null
   },
   "kroniskEllerFunksjonshemming": true,
-  "journalposter": ["123456"]
+  "journalposter": ["123456"],
+  "harInfoSomIkkeKanPunsjes": false,
+  "harMedisinskeOpplysninger": false
 }

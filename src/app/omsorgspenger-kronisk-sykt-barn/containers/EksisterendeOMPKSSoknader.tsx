@@ -25,10 +25,10 @@ import {
     openEksisterendeOMPKSSoknadAction,
     resetOMPKSSoknadidAction
 } from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import {IOMPKSSoknad, OMPKSSoknad} from '../../models/types/omsorgspenger-kronisk-sykt-barn/OMPKSSoknad';
+import {IOMPKSSoknad, OMPKSSoknad} from '../types/OMPKSSoknad';
 import {
     IEksisterendeOMPKSSoknaderState
-} from '../../models/types/omsorgspenger-kronisk-sykt-barn/EksisterendeOMPKSSoknaderState';
+} from '../types/EksisterendeOMPKSSoknaderState';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 
 export interface IEksisterendeOMPKSSoknaderStateProps {

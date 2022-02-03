@@ -1,6 +1,6 @@
 import {PunchFormActionKeys} from 'app/models/enums';
 import {IPunchOMPKSFormActionTypes} from '../actions/OMPKSPunchFormActions';
-import {IPunchOMPKSFormState} from '../../../models/types/omsorgspenger-kronisk-sykt-barn/PunchOMPKSFormState';
+import {IPunchOMPKSFormState} from '../../types/PunchOMPKSFormState';
 
 const initialState: IPunchOMPKSFormState = {
     isSoknadLoading: false,
