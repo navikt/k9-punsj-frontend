@@ -4,7 +4,7 @@ import {
 import {
     IEksisterendeOMPKSSoknaderState
 } from '../../types/EksisterendeOMPKSSoknaderState';
-import {EksisterendeOMPKSSoknaderActionKeys} from '../../../models/enums/EksisterendeOMPKSSoknaderActionKeys';
+import {EksisterendeOMPKSSoknaderActionKeys} from '../../types/EksisterendeOMPKSSoknaderActionKeys';
 import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
 
 const initialState: IEksisterendeOMPKSSoknaderState = {
