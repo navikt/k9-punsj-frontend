@@ -441,7 +441,7 @@
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend": "Refusjon av dag skal endres til timer",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info": "Melder arbeidsgiver at krav om hel dag skal endres til krav om timer, fyll ut dato og antall timer de krever refusjon for.",
 
-    "skjema.felt.kroniskEllerFunksjonshemming": "Har barnet en kronisk sykdom eller funksjonshemming?",
+    "skjema.felt.kroniskEllerFunksjonshemming": "Er dette søknad om ekstra omsorgsdager?",
 
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
