@@ -7,9 +7,9 @@ export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
 
 export enum ApiPath {
     EKSISTERENDE_SOKNADER_SOK = '/mapper',
+    BARN_GET = '/barn',
     PSB_EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',
     PSB_SOKNAD_GET = '/pleiepenger-sykt-barn-soknad/mappe/{id}',
-    BARN_GET = '/barn',
     PSB_SOKNAD_CREATE = '/pleiepenger-sykt-barn-soknad',
     PSB_SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
     PSB_SOKNAD_VALIDER = '/pleiepenger-sykt-barn-soknad/valider',
@@ -48,6 +48,13 @@ export enum ApiPath {
     BREV_BESTILL = '/brev/bestill',
     BREV_AKTØRID = '/brev/aktorId',
     PERSON = '/person',
+    PLS_EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-livets-sluttfase-soknad/mappe',
+    PLS_SOKNAD_GET = '/pleiepenger-livets-sluttfase-soknad/mappe/{id}',
+    PLS_SOKNAD_CREATE = '/pleiepenger-livets-sluttfase-soknad',
+    PLS_SOKNAD_UPDATE = '/pleiepenger-livets-sluttfase-soknad/oppdater',
+    PLS_SOKNAD_VALIDER = '/pleiepenger-livets-sluttfase-soknad/valider',
+    PLS_SOKNAD_SUBMIT = '/pleiepenger-livets-sluttfase-soknad/send',
+    PLS_K9SAK_PERIODER = '/pleiepenger-livets-sluttfase-soknad/k9sak/info',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

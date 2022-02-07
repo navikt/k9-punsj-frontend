@@ -9,12 +9,22 @@ import OverføringIdentSjekkContainer from './omsorgspenger/overforing/Overføri
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
+import PLSRouter from '../pleiepenger-livets-sluttfase/containers/PLSRouter';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
     punchPath: '/pleiepenger',
     getComponent: ({journalpostid, punchPath}) => (
         <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath}/>
+    ),
+    steps: [],
+};
+
+export const PleiepengerILivetsSluttfase: ISakstypePunch = {
+    navn: Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+    punchPath: '/pleiepenger-i-livets-sluttfase',
+    getComponent: ({journalpostid, punchPath}) => (
+        <PLSRouter journalpostid={journalpostid} punchPath={punchPath}/>
     ),
     steps: [],
 };
@@ -111,6 +121,7 @@ export const SkalIkkePUnsjes: ISakstypeOmfordeling = {
 export const Sakstyper: ISakstyper = {
     punchSakstyper: [
         Pleiepenger,
+        PleiepengerILivetsSluttfase,
         OmsorgspengerFordeling,
         OmsorgspengerKroniskSyktBarnSakstypePunch,
         OmsorgspengerOverføring,

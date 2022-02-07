@@ -12,7 +12,7 @@ import {
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper,
+    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper, pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
@@ -71,6 +71,11 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
     }
 
+
+    function pleiepengerILivetsSluttfase() {
+        return dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && pleiepengerILivetsSluttfaseSakstyper;
+    }
+
     function omsorgspengerKroniskSyktBarn() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
@@ -79,7 +84,7 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
                 {
-                    (korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
+                    (korrigeringIM() || pleiepengerSyktBarn() || pleiepengerILivetsSluttfase() || omsorgspengerKroniskSyktBarn())
                         .map((key) => {
                             if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                                 return null;
