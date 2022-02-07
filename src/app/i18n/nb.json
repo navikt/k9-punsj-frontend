@@ -52,7 +52,7 @@
     "fordeling.sakstype.OMSORGSPENGER_SELVST_FRILANS": "Omsorgspenger: selvstendig næringsdrivende og frilanser",
     "fordeling.sakstype.OMSORGSPENGER_ARBEIDSGIVER_IKKE_BETALER": "Omsorgspenger: arbeidsgiver ikke betaler",
     "fordeling.sakstype.OPPLAERINGSPENGER": "Opplæringspenger",
-    "fordeling.sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
+    "fordeling.sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE": "Opprett søknad om Pleiepenger i livets sluttfase i k9-sak",
     "fordeling.sakstype.ANNET": "Opprett journalføringsoppgave i Gosys",
     "fordeling.sakstype.SKAL_IKKE_PUNSJES": "Lukk oppgave i LOS",
     "fordeling.knapp.punsj": "Bekreft",
@@ -468,6 +468,7 @@
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
 
     "PLEIEPENGER": "Pleiepenger",
+    "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
     "OMSORGSPENGER_KS": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",

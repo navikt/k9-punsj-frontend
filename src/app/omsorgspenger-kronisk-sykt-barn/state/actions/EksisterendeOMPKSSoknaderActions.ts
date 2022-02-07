@@ -2,7 +2,7 @@ import {ApiPath} from 'app/apiConfig';
 import {IError} from 'app/models/types';
 import {convertResponseToError, get, post} from 'app/utils';
 import {IOpprettSoknad} from '../../../models/types/RequestBodies';
-import {EksisterendeOMPKSSoknaderActionKeys} from '../../../models/enums/EksisterendeOMPKSSoknaderActionKeys';
+import {EksisterendeOMPKSSoknaderActionKeys} from '../../types/EksisterendeOMPKSSoknaderActionKeys';
 import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
 import {IOMPKSSoknadSvar} from '../../types/OMPKSSoknadSvar';
 
@@ -165,6 +165,7 @@ export function createOMPKSSoknad(journalpostid: string, ident1: string, barnIde
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: ident1,
+            pleietrengendeIdent: barnIdent,
             barnIdent,
         };
 
