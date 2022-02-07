@@ -17,6 +17,7 @@ export enum Sakstype {
 
 export enum TilgjengeligSakstype {
     PLEIEPENGER_SYKT_BARN = 'PLEIEPENGER_SYKT_BARN',
+    PLEIEPENGER_I_LIVETS_SLUTTFASE = 'PLEIEPENGER_I_LIVETS_SLUTTFASE',
     OMSORGSPENGER_KRONISK_SYKT_BARN = 'OMSORGSPENGER_KRONISK_SYKT_BARN',
     OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING = 'OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING',
     ANNET = 'ANNET',
@@ -31,6 +32,12 @@ export const korrigeringAvInntektsmeldingSakstyper = [
 
 export const pleiepengerSakstyper = [
     TilgjengeligSakstype.PLEIEPENGER_SYKT_BARN,
+    TilgjengeligSakstype.ANNET,
+    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+]
+
+export const pleiepengerILivetsSluttfaseSakstyper = [
+    TilgjengeligSakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
     TilgjengeligSakstype.ANNET,
     TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
 ]
