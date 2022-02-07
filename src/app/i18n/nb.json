@@ -177,6 +177,7 @@
     "skjema.opplysningerikkepunsjet.hjelpetekst": "Huk av hvis det finnes opplysninger i dokumentet som ikke er registrert i skjemaet. Dette kan for eksempel være fritekstfelter som det ikke finnes noe felt for. Saksbehandler vil da få beskjed om at det finnes uregistrerte opplysninger i behandlingen.",
     "skjema.medisinskeopplysninger": "Dokumentet inneholder medisinske opplysninger",
     "skjema.medisinskeopplysninger.hjelpetekst": "Medisinske opplysninger er opplysninger som kan påvirke den medisinske vurderingen etter § 9-10, eller dokumentasjonskravene i § 9-16",
+    "skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst": "Medisinske opplysninger er opplysninger som kan påvirke den medisinske vurderingen etter § 9-6.",
     "skjema.barn.ident": "Barnets fødselsnummer/D-nummer:",
     "skjema.barn.foedselsdato": "Barnets fødselsdato:",
     "skjema.periode": "Søknadsperiode",
