@@ -206,7 +206,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
                     <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
-                        {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
+                        {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
                 <VerticalSpacer eightPx={true}/>
