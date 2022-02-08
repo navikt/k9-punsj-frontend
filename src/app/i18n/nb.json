@@ -46,7 +46,7 @@
     "fordeling.sakstype.OMSORGSPENGER": "Omsorgspenger",
     "fordeling.sakstype.OMSORGSPENGER_OVERFØRING": "Omsorgsdager: overføring av omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_FORDELING": "Omsorgsdager: fordeling av omsorgsdager",
-    "fordeling.sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN": "Opprett søknad om ekstra omsorgsdager",
+    "fordeling.sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN": "Registrer søknad/legeerklæring - ekstra omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_LEGEERKLÆRING": "Omsorgsdager: legeerklæring for kronisk sykt eller funksjonshemmet barn",
     "fordeling.sakstype.OMSORGSPENGER_ALENE_OM_OMSORG": "Omsorgsdager: Alene om omsorgen",
     "fordeling.sakstype.OMSORGSPENGER_SELVST_FRILANS": "Omsorgspenger: selvstendig næringsdrivende og frilanser",
@@ -177,7 +177,7 @@
     "skjema.opplysningerikkepunsjet.hjelpetekst": "Huk av hvis det finnes opplysninger i dokumentet som ikke er registrert i skjemaet. Dette kan for eksempel være fritekstfelter som det ikke finnes noe felt for. Saksbehandler vil da få beskjed om at det finnes uregistrerte opplysninger i behandlingen.",
     "skjema.medisinskeopplysninger": "Dokumentet inneholder medisinske opplysninger",
     "skjema.medisinskeopplysninger.hjelpetekst": "Medisinske opplysninger er opplysninger som kan påvirke den medisinske vurderingen etter § 9-10, eller dokumentasjonskravene i § 9-16",
-    "skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst": "Medisinske opplysninger er opplysninger som kan påvirke den medisinske vurderingen etter § 9-6.",
+    "skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst": "Medisinske opplysninger som kan påvirke vurderingen etter §9-6.",
     "skjema.barn.ident": "Barnets fødselsnummer/D-nummer:",
     "skjema.barn.foedselsdato": "Barnets fødselsdato:",
     "skjema.periode": "Søknadsperiode",
@@ -440,8 +440,6 @@
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.checkbox": "Endre krav fra dag til timer",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend": "Refusjon av dag skal endres til timer",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info": "Melder arbeidsgiver at krav om hel dag skal endres til krav om timer, fyll ut dato og antall timer de krever refusjon for.",
-
-    "skjema.felt.kroniskEllerFunksjonshemming": "Er dette søknad om ekstra omsorgsdager?",
 
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
