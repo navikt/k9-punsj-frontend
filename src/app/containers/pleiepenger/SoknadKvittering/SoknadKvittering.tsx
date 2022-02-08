@@ -1,24 +1,15 @@
 /* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import React from 'react';
-import { connect } from 'react-redux';
+import Kopier from 'app/components/kopier/Kopier';
+import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import './soknadKvittering.less';
 import countries from 'i18n-iso-countries';
-import { RootStateType } from 'app/state/RootState';
-import Kopier from 'app/components/kopier/Kopier';
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import {
-    formatereTekstMedTimerOgMinutter,
-    formattereTidspunktFraUTCTilGMT,
-    getLocaleFromSessionStorage,
-    periodToFormattedString,
-    sjekkPropertyEksistererOgIkkeErNull,
-    formattereDatoIArray,
-} from '../../../utils';
-import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
+import React from 'react';
+import { IntlShape } from 'react-intl';
+import { connect } from 'react-redux';
 import { ICountry } from '../../../components/country-select/CountrySelect';
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
@@ -27,7 +18,17 @@ import {
     IPSBSoknadKvitteringTilsynsordning,
     IPSBSoknadKvitteringUtenlandsopphold,
 } from '../../../models/types/PSBSoknadKvittering';
+import {
+    formatereTekstMedTimerOgMinutter,
+    formattereDatoIArray,
+    formattereTidspunktFraUTCTilGMT,
+    getLocaleFromSessionStorage,
+    periodToFormattedString,
+    sjekkPropertyEksistererOgIkkeErNull,
+} from '../../../utils';
 import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
+import './soknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -89,6 +90,68 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         }
         return acc;
     }, {});
+
+const formaterUtenlandsopphold = (
+    perioder: IPSBSoknadKvitteringUtenlandsopphold,
+    countryList: ICountry[],
+    intl: IntlShape
+) => {
+    const årsaker = [
+        {
+            label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.norskOfftenligRegning' }),
+            value: 'barnetInnlagtIHelseinstitusjonForNorskOffentligRegning',
+        },
+        {
+            label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.trygdeavtaleMedAnnetLand' }),
+            value: 'barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd',
+        },
+        {
+            label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.søkerDekkerSelv' }),
+            value: 'barnetInnlagtIHelseinstitusjonDekketAvSøker',
+        },
+    ];
+    const perioderUtenInnleggelse = Object.keys(perioder)
+        .filter((key) => !perioder[key].årsak)
+        .reduce((obj, key) => {
+            // eslint-disable-next-line no-param-reassign
+            obj[key] = perioder[key];
+            return obj;
+        }, {});
+    const perioderMedInnleggelse = Object.keys(perioder)
+        .filter((key) => !!perioder[key].årsak)
+        .reduce((obj, key) => {
+            // eslint-disable-next-line no-param-reassign
+            obj[key] = perioder[key];
+            // eslint-disable-next-line no-param-reassign
+            obj[key].årsak = årsaker.find((årsak) => årsak.value === obj[key].årsak)?.label;
+            return obj;
+        }, {} as IPSBSoknadKvitteringUtenlandsopphold);
+
+    return (
+        <>
+            <VisningAvPerioderSoknadKvittering
+                intl={intl}
+                perioder={formattereLandTilNavnIObjekt(perioderUtenInnleggelse, countryList)}
+                tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
+                properties={['land']}
+            />
+            {Object.keys(perioderMedInnleggelse).length > 0 ? (
+                <div className={classNames('marginTop24')}>
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={formattereLandTilNavnIObjekt(perioderMedInnleggelse, countryList)}
+                        tittel={[
+                            'skjema.perioder.innleggelse.overskrift',
+                            'skjema.utenlandsopphold.land',
+                            'skjema.utenlandsopphold.årsak',
+                        ]}
+                        properties={['land', 'årsak']}
+                    />
+                </div>
+            ) : null}
+        </>
+    );
+};
 
 export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     intl,
@@ -194,12 +257,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
                     <hr className={classNames('linje')} />
-                    <VisningAvPerioderSoknadKvittering
-                        intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(ytelse.utenlandsopphold?.perioder, countryList)}
-                        tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
-                        properties={['land']}
-                    />
+                    {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, countryList, intl)}
                 </div>
             )}
 
