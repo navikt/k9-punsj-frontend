@@ -55,24 +55,6 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = (
                     feil={getErrorMessage('klokkeslett')}
                 />
             </div>
-            <div className="input-row">
-                <RadioPanelGruppe
-                    className="horizontalRadios"
-                    radios={Object.values(JaNei).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
-                    name="kroniskEllerFunksjonshemming"
-                    legend={intlHelper(intl, 'skjema.felt.kroniskEllerFunksjonshemming')}
-                    checked={
-                        soknad.kroniskEllerFunksjonshemming ? JaNei.JA : JaNei.NEI
-                    }
-                    {...changeAndBlurUpdatesSoknad((event: any) => {
-                        const jaNei = (event.target as HTMLInputElement).value as JaNei;
-                        return ({kroniskEllerFunksjonshemming: jaNei === JaNei.JA});
-                    })}
-                />
-            </div>
             <RadioPanelGruppe
                 className="horizontalRadios"
                 radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
