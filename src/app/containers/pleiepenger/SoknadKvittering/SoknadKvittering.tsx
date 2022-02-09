@@ -98,15 +98,15 @@ const formaterUtenlandsopphold = (
 ) => {
     const årsaker = [
         {
-            label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.norskOfftenligRegning' }),
+            label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.norskOfftenligRegning'),
             value: 'barnetInnlagtIHelseinstitusjonForNorskOffentligRegning',
         },
         {
-            label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.trygdeavtaleMedAnnetLand' }),
+            label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.trygdeavtaleMedAnnetLand'),
             value: 'barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd',
         },
         {
-            label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.søkerDekkerSelv' }),
+            label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.søkerDekkerSelv'),
             value: 'barnetInnlagtIHelseinstitusjonDekketAvSøker',
         },
     ];
