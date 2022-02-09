@@ -110,7 +110,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 norskIdent: '',
                 foedselsdato: '',
             },
-            kroniskEllerFunksjonshemming: false,
             harInfoSomIkkeKanPunsjes: false,
             harMedisinskeOpplysninger: false
         },
