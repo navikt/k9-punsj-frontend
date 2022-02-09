@@ -132,9 +132,22 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             const period = periods[periodeindeks];
             const { innleggelsesperioder } = period;
             if (innleggelsesperioder && innleggelsesperioder.length > 0) {
+                if (innleggelsesperioder[0].årsak === null) {
+                    return 'null';
+                }
                 return innleggelsesperioder[0].årsak;
             }
             return '';
+        };
+        const getInnleggelsesperioder = () => {
+            const innleggelsesperioder = periods[periodeindeks].innleggelsesperioder
+                ?.filter((innleggelsesperiode) => !!innleggelsesperiode.periode)
+                .map((innleggelsesperiode) => innleggelsesperiode.periode) as IPeriode[];
+
+            if (innleggelsesperioder.length > 0) {
+                return innleggelsesperioder;
+            }
+            return [{ fom: '', tom: '' }];
         };
 
         return (
@@ -193,7 +206,18 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             land,
                             'nb'
                         )}?`}
-                        onChange={(event) => setVisInnlagtPerioder((event.target as HTMLInputElement).value)}
+                        onChange={(event) => {
+                            const { value } = event.target as HTMLInputElement;
+                            setVisInnlagtPerioder(value);
+                            if (value !== jaValue) {
+                                const editedInfo = () =>
+                                    editInfo(periodeindeks, {
+                                        innleggelsesperioder: [],
+                                    });
+                                editSoknad(editedInfo());
+                                editSoknadState(editedInfo());
+                            }
+                        }}
                         checked={visInnlagtPerioder}
                     />
                 )}
@@ -203,13 +227,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         <h3>Periode(r) barnet er innlagt</h3>
                         <Periodepaneler
                             intl={intl}
-                            periods={
-                                (periods[periodeindeks].innleggelsesperioder
-                                    ?.filter((innleggelsesperiode) => !!innleggelsesperiode.periode)
-                                    .map((innleggelsesperiode) => innleggelsesperiode.periode) as IPeriode[]) || [
-                                    { fom: '', tom: '' },
-                                ]
-                            }
+                            periods={getInnleggelsesperioder()}
                             panelid={(i) => `innleggelsesperiod${i}`}
                             initialPeriode={{ fom: '', tom: '' }}
                             editSoknad={(perioder) =>
@@ -248,28 +266,31 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                 },
                                 {
                                     label: intl.formatMessage({ id: 'skjema.utenlandsopphold.årsak.søkerDekkerSelv' }),
-                                    value: 'barnetInnlagtIHelseinstitusjonDekketAvSøker',
+                                    value: 'null',
                                 },
                             ]}
                             name={`innleggelseÅrsak${periodeindeks}`}
-                            legend="Hvordan dekkes utgiftene til innleggelsen?"
+                            legend={intl.formatMessage({ id: 'skjema.utenlandsopphold.utgifterTilInnleggelse' })}
                             checked={getCheckedÅrsak()}
                             onChange={(event) => {
                                 const { value } = event.target as HTMLInputElement;
-                                editSoknad(
+                                const formattedValue = value === 'null' ? null : value;
+                                const { innleggelsesperioder } = periods[periodeindeks];
+                                const hasInnleggelsesperioder =
+                                    innleggelsesperioder && innleggelsesperioder?.length > 0;
+                                const editedInfo = () =>
                                     editInfo(periodeindeks, {
-                                        innleggelsesperioder: periods[periodeindeks].innleggelsesperioder?.map(
-                                            (innleggelsesperiode) => ({ ...innleggelsesperiode, årsak: value })
-                                        ),
-                                    })
-                                );
-                                editSoknadState(
-                                    editInfo(periodeindeks, {
-                                        innleggelsesperioder: periods[periodeindeks].innleggelsesperioder?.map(
-                                            (innleggelsesperiode) => ({ ...innleggelsesperiode, årsak: value })
-                                        ),
-                                    })
-                                );
+                                        innleggelsesperioder: hasInnleggelsesperioder
+                                            ? periods[periodeindeks].innleggelsesperioder?.map(
+                                                  (innleggelsesperiode) => ({
+                                                      ...innleggelsesperiode,
+                                                      årsak: formattedValue,
+                                                  })
+                                              )
+                                            : [{ årsak: formattedValue }],
+                                    });
+                                editSoknad(editedInfo());
+                                editSoknadState(editedInfo());
                             }}
                         />
                     </>

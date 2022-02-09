@@ -143,9 +143,10 @@ const formaterUtenlandsopphold = (
                         tittel={[
                             'skjema.perioder.innleggelse.overskrift',
                             'skjema.utenlandsopphold.land',
-                            'skjema.utenlandsopphold.årsak',
+                            'skjema.utenlandsopphold.utgifterTilInnleggelse',
                         ]}
                         properties={['land', 'årsak']}
+                        lessClassForAdjustment="widerLastCell"
                     />
                 </div>
             ) : null}

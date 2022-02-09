@@ -221,7 +221,7 @@ export interface IOppholdsLand {
 export interface IUtenlandsOpphold {
     land?: string;
 
-    innleggelsesperioder?: { periode?: IPeriode; årsak?: string }[];
+    innleggelsesperioder?: { periode?: IPeriode; årsak?: string | null }[];
 }
 
 export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>> {
@@ -229,7 +229,7 @@ export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>
 
     land: string;
 
-    innleggelsesperioder: { periode?: IPeriode; årsak?: string }[];
+    innleggelsesperioder: { periode?: IPeriode; årsak?: string | null }[];
 
     constructor(periodeinfo: Periodeinfo<IUtenlandsOpphold>) {
         this.periode = new Periode(periodeinfo.periode || {});
