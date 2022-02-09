@@ -41,6 +41,7 @@ export interface IPSBSoknadUt {
     tilsynsordning?: ITilsynsordning;
     uttak?: Periodeinfo<IUttak>[];
     utenlandsopphold?: Periodeinfo<IUtenlandsOpphold>[];
+    utenlandsoppholdV2?: Periodeinfo<IUtenlandsOpphold>[];
     lovbestemtFerie?: IPeriode[];
     lovbestemtFerieSomSkalSlettes?: IPeriode[];
     omsorg?: IOmsorg;
@@ -120,6 +121,8 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     utenlandsopphold: UtenlandsOpphold[];
 
+    utenlandsoppholdV2: UtenlandsOpphold[];
+
     lovbestemtFerie: Periode[];
 
     lovbestemtFerieSomSkalSlettes: Periode[];
@@ -153,6 +156,9 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
+        this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
+            (u) => new UtenlandsOpphold(u)
+        );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
         this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
