@@ -7,7 +7,6 @@ export interface IOMPKSSoknad {
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    kroniskEllerFunksjonshemming: boolean;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
 }
@@ -46,8 +45,6 @@ export class OMPKSSoknad implements IOMPKSSoknad {
 
     barn: Barn;
 
-    kroniskEllerFunksjonshemming: boolean
-
     harInfoSomIkkeKanPunsjes?: boolean;
 
     harMedisinskeOpplysninger?: boolean;
@@ -59,7 +56,6 @@ export class OMPKSSoknad implements IOMPKSSoknad {
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
         this.barn = new Barn(soknad.barn || {});
-        this.kroniskEllerFunksjonshemming = soknad.kroniskEllerFunksjonshemming;
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
     }
