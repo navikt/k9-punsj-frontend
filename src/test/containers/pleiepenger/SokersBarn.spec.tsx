@@ -9,7 +9,7 @@ import {
     ISokersBarnDispatchProps,
     ISokersBarnStateProps,
     SokersBarnComponent,
-} from '../../../app/containers/Fordeling/Komponenter/SokersBarn';
+} from '../../../app/containers/pleiepenger/Fordeling/Komponenter/SokersBarn';
 
 jest.mock('react-intl');
 jest.mock('react-router');

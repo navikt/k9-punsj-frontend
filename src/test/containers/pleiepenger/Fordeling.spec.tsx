@@ -2,7 +2,7 @@ import {
     FordelingComponent,
     IFordelingDispatchProps,
     IFordelingStateProps,
-} from 'app/containers/Fordeling/Fordeling';
+} from 'app/containers/pleiepenger/Fordeling/Fordeling';
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';

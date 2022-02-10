@@ -7,15 +7,15 @@ import React from 'react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
-import { IIdentState } from '../../../../models/types/IdentState';
-import { IFellesState, kopierJournalpost } from '../../../../state/reducers/FellesReducer';
+import { IIdentState } from '../../../../../models/types/IdentState';
+import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import { SokersBarn } from '../SokersBarn';
 import { erUgyldigIdent } from '../../FordelingFeilmeldinger';
 import './journalpostAlleredeBehandlet.less';
-import { getEnvironmentVariable } from '../../../../utils';
-import VerticalSpacer from '../../../../components/VerticalSpacer';
-import PunsjInnsendingType from '../../../../models/enums/PunsjInnsendingType';
+import { getEnvironmentVariable } from '../../../../../utils';
+import VerticalSpacer from '../../../../../components/VerticalSpacer';
+import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 
 export interface IJournalpostAlleredeBehandletStateProps {
     intl: IntlShape;

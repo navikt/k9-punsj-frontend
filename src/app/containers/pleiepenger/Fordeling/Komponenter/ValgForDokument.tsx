@@ -22,7 +22,7 @@ import {IFordelingState, IJournalpost} from 'app/models/types';
 import {IIdentState} from 'app/models/types/IdentState';
 import Behandlingsknapp from './Behandlingsknapp';
 import {GosysGjelderKategorier} from './GoSysGjelderKategorier';
-import {opprettGosysOppgave as omfordelAction} from '../../../state/actions/GosysOppgaveActions';
+import {opprettGosysOppgave as omfordelAction} from '../../../../state/actions/GosysOppgaveActions';
 
 interface IValgForDokument {
     dokumenttype?: FordelingDokumenttype;

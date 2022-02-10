@@ -23,22 +23,22 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import FormPanel from '../../components/FormPanel';
-import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
-import PdfVisning from '../../components/pdf/PdfVisning';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import { ISakstypeDefault } from '../../models/Sakstype';
-import FordelingFerdigstillJournalpostState from '../../models/types/FordelingFerdigstillJournalpostState';
-import { IGosysOppgaveState } from '../../models/types/GosysOppgaveState';
-import { IIdentState } from '../../models/types/IdentState';
-import {Sakstyper} from '../SakstypeImpls';
+import FormPanel from '../../../components/FormPanel';
+import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
+import PdfVisning from '../../../components/pdf/PdfVisning';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import { ISakstypeDefault } from '../../../models/Sakstype';
+import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
+import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
+import { IIdentState } from '../../../models/types/IdentState';
+import {Sakstyper} from '../../SakstypeImpls';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
-} from '../../state/actions/GosysOppgaveActions';
-import { setIdentFellesAction } from '../../state/actions/IdentActions';
-import { IFellesState, kopierJournalpost } from '../../state/reducers/FellesReducer';
-import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
+} from '../../../state/actions/GosysOppgaveActions';
+import { setIdentFellesAction } from '../../../state/actions/IdentActions';
+import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
+import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import './fordeling.less';
 import { erUgyldigIdent } from './FordelingFeilmeldinger';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
@@ -49,7 +49,7 @@ import { SokersBarn } from './Komponenter/SokersBarn';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
-import HåndterInntektsmeldingUtenKrav from '../pleiepenger/HåndterInntektsmeldingUtenKrav';
+import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
