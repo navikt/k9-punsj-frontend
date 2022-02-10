@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {AlertStripeInfo} from 'nav-frontend-alertstriper';
-import {RadioGruppe, RadioPanel} from 'nav-frontend-skjema';
-import {useIntl} from 'react-intl';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+import { useIntl } from 'react-intl';
 
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -18,11 +18,11 @@ import {
     TilgjengeligSakstype,
 } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-import {IFordelingState, IJournalpost} from 'app/models/types';
-import {IIdentState} from 'app/models/types/IdentState';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
 import Behandlingsknapp from './Behandlingsknapp';
-import {GosysGjelderKategorier} from './GoSysGjelderKategorier';
-import {opprettGosysOppgave as omfordelAction} from '../../../../state/actions/GosysOppgaveActions';
+import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
+import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 
 interface IValgForDokument {
     dokumenttype?: FordelingDokumenttype;
