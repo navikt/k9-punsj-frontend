@@ -5,6 +5,8 @@ import {
 } from 'app/containers/Fordeling/Fordeling';
 import { Sakstype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
+import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
+import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';
@@ -53,7 +55,7 @@ export const setupFordeling = (
         kanSendeInn: true,
         erSaksbehandler: true,
         kanOpprettesJournalføringsoppgave: true,
-        ...journalpostPartial
+        ...journalpostPartial,
     };
 
     const opprettIGosys: IGosysOppgaveState = {
@@ -81,6 +83,16 @@ export const setupFordeling = (
         annenSokerIdent: '',
     };
 
+    const fordelingSettPåVentState: FordelingSettPaaVentState = {
+        settPaaVentError: undefined,
+        settPaaVentSuccess: false,
+    };
+
+    const fordelingFerdigstillState: FordelingFerdigstillJournalpostState = {
+        ferdigstillJournalpostError: undefined,
+        ferdigstillJournalpostSuccess: false,
+    };
+
     const fordelingStateProps: IFordelingStateProps = {
         journalpost,
         fordelingState,
@@ -91,7 +103,9 @@ export const setupFordeling = (
         fellesState: {
             dedupKey: '',
             kopierJournalpostSuccess: true,
-        }
+        },
+        fordelingSettPåVentState,
+        fordelingFerdigstillState,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);

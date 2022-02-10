@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import {
     AuthReducer,
     FordelingReducer,
@@ -8,17 +8,19 @@ import {
     PunchFormReducer,
     PunchReducer,
     SignaturReducer,
+    FordelingSettPaaVentReducer,
 } from './reducers';
 import FellesReducer from './reducers/FellesReducer';
-import {Sakstype} from '../models/enums';
+import { Sakstype } from '../models/enums';
 import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import { SoknaderVisningReducer } from './reducers/SoknaderVisningReducer';
+import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
+import { IdentReducer } from './reducers/IdentReducer';
+import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
 import {
     EksisterendeOMPKSSoknaderReducer
 } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
-import {SoknaderVisningReducer} from './reducers/SoknaderVisningReducer';
-import {JournalposterPerIdentReducer} from './reducers/JournalposterPerIdentReducer';
-import {IdentReducer} from './reducers/IdentReducer';
 import {PunchOMPKSFormReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer'
 import {PunchOMPKSReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
 
@@ -40,7 +42,7 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
     }),
-    'SØK': combineReducers({
+    SØK: combineReducers({
         soknaderSokState: SoknaderSokReducer,
         visningState: SoknaderVisningReducer,
     }),
@@ -51,8 +53,9 @@ export const rootReducer = combineReducers({
     identState: IdentReducer,
     opprettIGosys: GosysOppgaveReducer,
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
-    eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
+    fordelingSettPåVentState: FordelingSettPaaVentReducer,
     fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
+    eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

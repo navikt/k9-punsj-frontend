@@ -1,13 +1,13 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import {FordelingDokumenttype, JaNei} from 'app/models/enums';
-import {IJournalpost} from 'app/models/types';
-import {IIdentState} from 'app/models/types/IdentState';
-import {setIdentFellesAction} from 'app/state/actions/IdentActions';
+import { FordelingDokumenttype, JaNei } from 'app/models/enums';
+import { IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
-import {Input, RadioPanelGruppe} from 'nav-frontend-skjema';
+import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {erUgyldigIdent} from '../FordelingFeilmeldinger';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 interface ISokersIdentProps {
     dokumenttype?: FordelingDokumenttype;
@@ -22,6 +22,7 @@ interface ISokersIdentProps {
     sokersIdent: string;
     identState: IIdentState;
     riktigIdentIJournalposten?: JaNei;
+    erInntektsmeldingUtenKrav?: boolean;
 }
 const SokersIdent: React.FC<ISokersIdentProps> = ({
     dokumenttype,
@@ -36,11 +37,13 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     setErIdent1Bekreftet,
     setRiktigIdentIJournalposten,
     riktigIdentIJournalposten,
+    erInntektsmeldingUtenKrav,
 }) => {
     const skalVises =
         dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM||
+        erInntektsmeldingUtenKrav;
     const journalpostident = journalpost?.norskIdent;
 
     const handleIdentRadioChange = (jn: JaNei) => {

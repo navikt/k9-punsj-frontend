@@ -12,8 +12,8 @@ import './okGaaTilLosModal.less';
 interface ISettPaaVentModalProps {
     submit: () => void;
     avbryt: () => void;
-    journalposter: IJournalpostInfo[];
-    soknadId: string;
+    journalposter?: IJournalpostInfo[];
+    soknadId?: string;
 }
 
 const pdfUrl = (journalpost: IJournalpostInfo) =>
@@ -24,13 +24,14 @@ const pdfUrl = (journalpost: IJournalpostInfo) =>
 
 const urlTilNyJournalpost = (id: string, jpid: string) => `${jpid}/pleiepenger/skjema/${id}`;
 
-const SettPaaVentModal = (props: WrappedComponentProps & ISettPaaVentModalProps) => {
-    const { intl, submit, avbryt, journalposter, soknadId } = props;
+const SettPaaVentModal: React.FC<WrappedComponentProps & ISettPaaVentModalProps> = (props) => {
+    const { intl, submit, avbryt, journalposter, soknadId, children } = props;
 
     return (
         <div className="sett-paa-vent">
             <h2>{intlHelper(intl, 'skjema.knapp.settpaavent')}</h2>
             <p>{intlHelper(intl, 'skjema.settpaavent.periode')}</p>
+            {children}
             <div className="knapper">
                 <Knapp onClick={() => submit()} mini>
                     {intlHelper(intl, 'skjema.knapp.settpaavent')}
@@ -39,7 +40,7 @@ const SettPaaVentModal = (props: WrappedComponentProps & ISettPaaVentModalProps)
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
                 </Knapp>
             </div>
-            {!!journalposter.length && (
+            {journalposter && journalposter.length > 0 && soknadId && (
                 <>
                     <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
                     <AlertStripeInfo>{intlHelper(intl, 'modal.settpaavent.info')}</AlertStripeInfo>
