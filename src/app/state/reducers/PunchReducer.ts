@@ -1,17 +1,17 @@
 import { PunchActionKeys, PunchStep } from 'app/models/enums';
-import { IPleiepengerPunchState } from 'app/models/types';
+import { IPunchState } from 'app/models/types';
 import { IPunchActionTypes } from 'app/state/actions';
 
-export const initialState: IPleiepengerPunchState = {
+export const initialState: IPunchState = {
     step: PunchStep.CHOOSE_SOKNAD,
     ident1: '',
     ident2: null,
 };
 
 export function PunchReducer(
-    punchState: IPleiepengerPunchState = initialState,
+    punchState: IPunchState = initialState,
     action: IPunchActionTypes
-): IPleiepengerPunchState {
+): IPunchState {
     switch (action.type) {
         case PunchActionKeys.RESET:
             return initialState;
