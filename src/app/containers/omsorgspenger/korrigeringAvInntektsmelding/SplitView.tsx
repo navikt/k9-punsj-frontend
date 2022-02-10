@@ -7,7 +7,7 @@ import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { IJournalpost, IPath, IPunchState, IPSBSoknad, IPunchFormState } from 'app/models/types';
+import { IJournalpost, IPath, IPunchState, IPSBSoknad, IPunchPSBFormState } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
@@ -30,7 +30,7 @@ export interface IPunchPageStateProps {
     journalpost?: IJournalpost;
     identState: IIdentState;
     forbidden: boolean | undefined;
-    punchFormState: IPunchFormState;
+    punchFormState: IPunchPSBFormState;
 }
 
 export interface IPunchPageDispatchProps {
