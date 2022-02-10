@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { PunchStep } from '../../models/enums';
-import { IEksisterendeSoknaderState, IJournalpost, IPleiepengerPunchState } from '../../models/types';
+import { IEksisterendeSoknaderState, IJournalpost, IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
@@ -27,7 +27,7 @@ export interface IRegistreringsValgDispatchProps {
 }
 
 export interface IEksisterendeSoknaderStateProps {
-    punchState: IPleiepengerPunchState;
+    punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
