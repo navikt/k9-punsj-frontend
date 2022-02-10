@@ -1,10 +1,10 @@
 import React from 'react';
-import {ApiPath} from '../apiConfig';
-import {Sakstype} from '../models/enums';
-import {ISakstypeOmfordeling, ISakstypePunch, ISakstyper} from '../models/Sakstype';
+import { ApiPath } from '../apiConfig';
+import { Sakstype } from '../models/enums';
+import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import KorrigeringAvInntektsmeldingContainer
     from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
-import {OpprettGosysOppgavePanel} from './omsorgspenger/OpprettGosysOppgave';
+import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
