@@ -72,7 +72,7 @@ const ValgForDokument: React.FC<IValgForDokument> = (
     }
 
     function omsorgspengerKroniskSyktBarn() {
-        return process.env.OMP_KS_ENABLED === "true" && dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
+        return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
 
     return (
