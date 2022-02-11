@@ -1866,10 +1866,10 @@
     outvariant "^1.2.0"
     strict-event-emitter "^0.2.0"
 
-"@navikt/ds-icons@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.7.2.tgz#cc3608d5cb0771c9f82bbfea6379b3c19c1ef86a"
-  integrity sha512-uacrYlNo5nVfu+D1ZhTnTpiYCrOIDVk792OdnrUqDSV5fyMF6HFeBi4BenmnoUjRhmQjUl0nth7G4TI+ZfwrGw==
+"@navikt/ds-icons@^0.8.4":
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.4.tgz#82ba73cbc5704132ec2dd6e6faace3a2b9d6abff"
+  integrity sha512-yIBYeJrkO3pEL2qcR5DGtQQ6mfs9Bb8iueMdmj1sa0JBPuDmPLLW5SJ/2HH4tcQciDZ3erp7k4CemJkbtob5AQ==
   dependencies:
     uuid "^8.3.2"
 
@@ -8337,12 +8337,7 @@ nano-time@1.0.0:
   dependencies:
     big-integer "^1.6.16"
 
-nanoid@^3.1.23:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
-  integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
-
-nanoid@^3.2.0:
+nanoid@^3.1.23, nanoid@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
   integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
