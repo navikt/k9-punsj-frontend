@@ -50,6 +50,7 @@ import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
+import { getEnvironmentVariable } from '../../../utils';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -246,6 +247,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         );
     }
 
+    function toggleFordelingDokumentType(type: string): boolean {
+        switch (type) {
+            case FordelingDokumenttype.OMSORGSPENGER_KS:
+                return getEnvironmentVariable('OMP_KS_ENABLED') === 'true'
+            default:
+                return true
+        }
+    }
+
     return (
         <div className="fordeling-container">
             {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
@@ -287,10 +297,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {!erInntektsmeldingUtenKrav && (
                                 <RadioPanelGruppe
                                     name="ppsjekk"
-                                    radios={Object.values(FordelingDokumenttype).map((type) => ({
-                                        label: intlHelper(intl, type),
-                                        value: type,
-                                    }))}
+                                    radios={Object.values(FordelingDokumenttype)
+                                        .filter(type => toggleFordelingDokumentType(type))
+                                        .map((type) => ({
+                                            label: intlHelper(intl, type),
+                                            value: type,
+                                        }))}
                                     legend={intlHelper(intl, 'fordeling.detteGjelder')}
                                     checked={dokumenttype}
                                     onChange={(event) =>
