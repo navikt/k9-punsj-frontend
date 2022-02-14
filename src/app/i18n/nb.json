@@ -76,7 +76,7 @@
     "fordeling.kategoriGosys": "Velg hva journalposten gjelder",
     "fordeling.kanIkkeOppretteJPIGosys.info": "Dokumentet er allerede journalført.",
     "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.1": "Det er mottatt inntektsmelding for omsorgspenger uten refusjonskrav. Det finnes ingen sak eller søknad å knytte inntektsmeldingen til.",
-    "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.2": "Kontakt arbeidsgiver og/eller søker for å avklare om inntektsmeldingen er sendt feil (f.eks sendt på feil ytelse), eller om det kommer en søknad.",
+    "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.2": "Kontakt arbeidsgiver og/eller bruker for å avklare om inntektsmeldingen er sendt feil (f.eks sendt på feil ytelse), eller om det kommer en søknad.",
     "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.3": "Sett oppgaven på vent i påvente av svar fra arbeidsgiver eller søknad fra bruker.",
     "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.4": "Er inntektsmeldingen sendt feil, skal journalposten ferdigstilles.",
     "fordeling.inntektsmeldingUtenKrav.brevIkkeSendt": "Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.",
