@@ -42,6 +42,7 @@ webpackConfig.module.rules.push({
     test: /\.js$/,
     use: 'source-map-loader',
     enforce: 'pre',
+    exclude: /@babel(?:\/|\\{1,2})runtime|@mswjs/,
 });
 
 module.exports = Object.assign(webpackConfig, {

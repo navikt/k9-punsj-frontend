@@ -12,7 +12,7 @@ import {
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper, pleiepengerILivetsSluttfaseSakstyper,
+    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
@@ -22,7 +22,7 @@ import {IFordelingState, IJournalpost} from 'app/models/types';
 import {IIdentState} from 'app/models/types/IdentState';
 import Behandlingsknapp from './Behandlingsknapp';
 import {GosysGjelderKategorier} from './GoSysGjelderKategorier';
-import {opprettGosysOppgave as omfordelAction} from '../../../state/actions/GosysOppgaveActions';
+import {opprettGosysOppgave as omfordelAction} from '../../../../state/actions/GosysOppgaveActions';
 
 interface IValgForDokument {
     dokumenttype?: FordelingDokumenttype;
@@ -71,11 +71,6 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
     }
 
-
-    function pleiepengerILivetsSluttfase() {
-        return dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && pleiepengerILivetsSluttfaseSakstyper;
-    }
-
     function omsorgspengerKroniskSyktBarn() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
@@ -84,7 +79,7 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
                 {
-                    (korrigeringIM() || pleiepengerSyktBarn() || pleiepengerILivetsSluttfase() || omsorgspengerKroniskSyktBarn())
+                    (korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
                         .map((key) => {
                             if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                                 return null;

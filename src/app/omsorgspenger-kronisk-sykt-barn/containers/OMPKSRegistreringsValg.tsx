@@ -43,7 +43,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     props: IOMPKSRegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const [valgtOption] = useState<string>('nysoknad');
 
     const { ident1, ident2 } = identState;
 
@@ -99,7 +98,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
                     Tilbake
                 </Knapp>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} mini>
+                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" mini>
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Hovedknapp>
                 )}

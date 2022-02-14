@@ -1,5 +1,5 @@
-import { IdentRules } from '../../rules';
-import intlHelper from '../../utils/intlUtils';
+import { IdentRules } from '../../../rules';
+import intlHelper from '../../../utils/intlUtils';
 
 export const erUgyldigIdent = (ident: string | null) => {
     if (!ident) return true;

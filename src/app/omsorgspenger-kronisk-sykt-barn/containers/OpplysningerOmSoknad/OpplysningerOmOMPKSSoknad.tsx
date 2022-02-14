@@ -10,7 +10,6 @@ import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
 import './opplysningerOmOMPKSSoknad.less';
 import {OMPKSSoknad} from '../../types/OMPKSSoknad';
-import {JaNei} from '../../../models/enums';
 
 interface IOwnProps {
     intl: IntlShape;

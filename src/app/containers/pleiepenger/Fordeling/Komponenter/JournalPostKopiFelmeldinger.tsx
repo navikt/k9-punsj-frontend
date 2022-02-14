@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import intlHelper from '../../../utils/intlUtils';
-import { IFellesState } from '../../../state/reducers/FellesReducer';
+import intlHelper from '../../../../utils/intlUtils';
+import { IFellesState } from '../../../../state/reducers/FellesReducer';
 
 interface IOwnProps {
     skalVisesNårJournalpostSomIkkeStottesKopieres?: boolean;
