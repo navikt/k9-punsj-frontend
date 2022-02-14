@@ -20,8 +20,6 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-    const { unselectedoption, selectedcountry } = props;
-
     const countryList: ICountry[] = [];
 
     Object.keys(countries.getAlpha3Codes()).forEach((code) =>
