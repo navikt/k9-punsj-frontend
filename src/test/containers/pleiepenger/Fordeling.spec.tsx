@@ -83,6 +83,16 @@ export const setupFordeling = (
         annenSokerIdent: '',
     };
 
+    const fordelingSettPåVentState: FordelingSettPaaVentState = {
+        settPaaVentError: undefined,
+        settPaaVentSuccess: false,
+    };
+
+    const fordelingFerdigstillState: FordelingFerdigstillJournalpostState = {
+        ferdigstillJournalpostError: undefined,
+        ferdigstillJournalpostSuccess: false,
+    };
+
     const fordelingStateProps: IFordelingStateProps = {
         journalpost,
         fordelingState,
@@ -93,7 +103,9 @@ export const setupFordeling = (
         fellesState: {
             dedupKey: '',
             kopierJournalpostSuccess: true,
-        }
+        },
+        fordelingSettPåVentState,
+        fordelingFerdigstillState
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
@@ -144,29 +156,20 @@ describe('Fordeling', () => {
         expect(fordeling.find('Input')).toHaveLength(1);
     });
 
-    it('Kaller setSakstypeAction', () => {
-        const setSakstypeAction = jest.fn();
-        const fordeling = setupFordeling(
-            { skalTilK9: true },
-            { setSakstypeAction },
-            {
-                isAwaitingGosysOppgaveRequestResponse: false,
-                gosysOppgaveRequestError: undefined,
-            }
-        );
-        const newSakstype = Sakstype.ANNET;
-        fordeling.find('RadioPanel').at(1).simulate('change');
-        expect(setSakstypeAction).toHaveBeenCalledTimes(1);
-        expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
-    });
-
-    // it('Omfordeler', () => {
-    //     const omfordel = jest.fn();
-    //     const sakstype = Sakstype.ANNET;
-    //     const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
-    //     fordeling.find('Behandlingsknapp').dive().simulate('click');
-    //     expect(omfordel).toHaveBeenCalledTimes(1);
-    //     expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901', 'Annet');
+    // it('Kaller setSakstypeAction', () => {
+    //     const setSakstypeAction = jest.fn();
+    //     const fordeling = setupFordeling(
+    //         { skalTilK9: true },
+    //         { setSakstypeAction },
+    //         {
+    //             isAwaitingGosysOppgaveRequestResponse: false,
+    //             gosysOppgaveRequestError: undefined,
+    //         }
+    //     );
+    //     const newSakstype = Sakstype.ANNET;
+    //     fordeling.find('RadioPanel').at(1).simulate('change');
+    //     expect(setSakstypeAction).toHaveBeenCalledTimes(1);
+    //     expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
     // });
 
     // it('Omfordeler', () => {

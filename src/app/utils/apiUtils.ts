@@ -4,8 +4,6 @@ import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 import { String } from 'typescript-string-operations';
 import { canStringBeParsedToJSON } from './formatUtils';
-import ResponseError from '../models/types/ResponseError';
-import { canStringBeParsedToJSON } from './formatUtils';
 
 export const apiUrl = (path: ApiPath | string, parameters?: any) =>
     URL_API + (parameters ? String.Format(path, parameters) : path);

@@ -18,17 +18,12 @@ import { SoknaderVisningReducer } from './reducers/SoknaderVisningReducer';
 import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
 import { IdentReducer } from './reducers/IdentReducer';
 import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
-import {
-    EksisterendeOMPKSSoknaderReducer
-} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
-import {PunchOMPKSFormReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer'
-import {PunchOMPKSReducer} from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
-import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
-import {PunchPLSFormReducer} from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
-import {PunchPLSReducer} from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSReducer';
-import {
-    EksisterendePLSSoknaderReducer
-} from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
+import { EksisterendeOMPKSSoknaderReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
+import { PunchOMPKSFormReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
+import { PunchOMPKSReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
+import { PunchPLSFormReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
+import { PunchPLSReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSReducer';
+import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
 
 export const rootReducer = combineReducers({
     [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({

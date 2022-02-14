@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {AlertStripeInfo} from 'nav-frontend-alertstriper';
-import {RadioGruppe, RadioPanel} from 'nav-frontend-skjema';
-import {useIntl} from 'react-intl';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+import { useIntl } from 'react-intl';
 
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -12,17 +12,19 @@ import {
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper, pleiepengerILivetsSluttfaseSakstyper,
+    korrigeringAvInntektsmeldingSakstyper,
+    omsorgspengerKroniskSyktBarnSakstyper,
+    pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
 } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-import {IFordelingState, IJournalpost} from 'app/models/types';
-import {IIdentState} from 'app/models/types/IdentState';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
 import Behandlingsknapp from './Behandlingsknapp';
-import {GosysGjelderKategorier} from './GoSysGjelderKategorier';
-import {opprettGosysOppgave as omfordelAction} from '../../../../state/actions/GosysOppgaveActions';
+import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
+import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 
 interface IValgForDokument {
     dokumenttype?: FordelingDokumenttype;
@@ -39,22 +41,20 @@ interface IValgForDokument {
     gjelderPleiepengerEllerOmsorgspenger: boolean;
 }
 
-const ValgForDokument: React.FC<IValgForDokument> = (
-    {
-        dokumenttype,
-        erJournalfoertEllerFerdigstilt,
-        kanJournalforingsoppgaveOpprettesiGosys,
-        setSakstypeAction,
-        konfigForValgtSakstype,
-        fordelingState,
-        identState,
-        omfordel,
-        journalpost,
-        lukkJournalpostOppgave,
-        gjelderPleiepengerEllerOmsorgspenger,
-        visSakstypeValg,
-    }
-) => {
+const ValgForDokument: React.FC<IValgForDokument> = ({
+    dokumenttype,
+    erJournalfoertEllerFerdigstilt,
+    kanJournalforingsoppgaveOpprettesiGosys,
+    setSakstypeAction,
+    konfigForValgtSakstype,
+    fordelingState,
+    identState,
+    omfordel,
+    journalpost,
+    lukkJournalpostOppgave,
+    gjelderPleiepengerEllerOmsorgspenger,
+    visSakstypeValg,
+}) => {
     const intl = useIntl();
 
     const vis = (!!fordelingState.skalTilK9 || visSakstypeValg) && gjelderPleiepengerEllerOmsorgspenger;
@@ -71,9 +71,11 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
     }
 
-
     function pleiepengerILivetsSluttfase() {
-        return dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && pleiepengerILivetsSluttfaseSakstyper;
+        return (
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE &&
+            pleiepengerILivetsSluttfaseSakstyper
+        );
     }
 
     function omsorgspengerKroniskSyktBarn() {
@@ -83,34 +85,36 @@ const ValgForDokument: React.FC<IValgForDokument> = (
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
-                {
-                    (korrigeringIM() || pleiepengerSyktBarn() || pleiepengerILivetsSluttfase() || omsorgspengerKroniskSyktBarn())
-                        .map((key) => {
-                            if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
-                                return null;
-                            }
-                            if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
-                                return (
-                                    <RadioPanel
-                                        key={key}
-                                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                        value={Sakstype[key]}
-                                        onChange={() => {
-                                            setSakstypeAction(Sakstype[key]);
-                                        }}
-                                        checked={konfigForValgtSakstype?.navn === key}
-                                    />
-                                );
-                            }
-                            return null;
-                        })
-                }
+                {(
+                    korrigeringIM() ||
+                    pleiepengerSyktBarn() ||
+                    pleiepengerILivetsSluttfase() ||
+                    omsorgspengerKroniskSyktBarn()
+                ).map((key) => {
+                    if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                        return null;
+                    }
+                    if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
+                        return (
+                            <RadioPanel
+                                key={key}
+                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                value={Sakstype[key]}
+                                onChange={() => {
+                                    setSakstypeAction(Sakstype[key]);
+                                }}
+                                checked={konfigForValgtSakstype?.navn === key}
+                            />
+                        );
+                    }
+                    return null;
+                })}
             </RadioGruppe>
-            <VerticalSpacer eightPx/>
+            <VerticalSpacer eightPx />
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
                     <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
-                    <GosysGjelderKategorier/>
+                    <GosysGjelderKategorier />
                 </div>
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (

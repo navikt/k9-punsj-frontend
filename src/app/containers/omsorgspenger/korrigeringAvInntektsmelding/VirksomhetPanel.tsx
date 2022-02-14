@@ -62,12 +62,6 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
         }
     }, [values.Virksomhet]);
 
-    useEffect(() => {
-        if (values.Virksomhet !== previousValgtVirksomhet) {
-            setFieldValue(KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId, '');
-        }
-    }, [values.Virksomhet]);
-
     const finnArbeidsforholdIdForValgtArbeidsgiver = () =>
         arbeidsgivereMedId
             ?.filter((item) => {
@@ -80,16 +74,6 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 return true;
             })
             .find((item) => item.orgNummerEllerAktørID === values.Virksomhet)?.arbeidsforholdId || [];
-
-    const validateArbeidsforholdId = (value: string) => {
-        if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {
-            const arbeidsforholdIDerForValgtArbeidsgiver = finnArbeidsforholdIdForValgtArbeidsgiver();
-            if (arbeidsforholdIDerForValgtArbeidsgiver.length > 0 && !value) {
-                return 'Du må velge et arbeidsforholdID';
-            }
-        }
-        return '';
-    };
 
     const validateArbeidsforholdId = (value: string) => {
         if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {

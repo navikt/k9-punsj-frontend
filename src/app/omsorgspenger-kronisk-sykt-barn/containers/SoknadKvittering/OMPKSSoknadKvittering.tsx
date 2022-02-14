@@ -33,10 +33,8 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
 
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-    const {ytelse, journalposter} = response;
+    const {journalposter} = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
-
-    const visBarn = ytelse.barn !== null;
 
     return (
         <div className={classNames('OMPKSSoknadKvitteringContainer')}>
@@ -64,21 +62,6 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
                         {`${periodToFormattedString(
                             response.mottattDato.substr(0, 10)
                         )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
-                    </p>
-                </div>
-            )}
-
-            {visBarn && (
-                <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSNINGER_OM_BARN)}</h3>
-                    <hr className={classNames('linje')} />
-                    <p>
-                        <b>{intlHelper(intl, 'skjema.barn.ident')} </b>
-                        {ytelse.barn.norskIdentitetsnummer}
-                    </p>
-                    <p>
-                        <b>{intlHelper(intl, 'skjema.felt.kroniskEllerFunksjonshemming')}</b>
-                        {ytelse.kroniskEllerFunksjonshemming ? 'Ja' : 'Nei'}
                     </p>
                 </div>
             )}

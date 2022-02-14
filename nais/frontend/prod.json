@@ -3,6 +3,7 @@
     "env": {
         "OIDC_AUTH_PROXY": "https://k9-punsj-oidc-auth-proxy.intern.nav.no",
         "K9_LOS_URL": "https://k9-los-web.nais.adeo.no/",
-        "OMP_KS_ENABLED": "false"
+        "OMP_KS_ENABLED": "false",
+        "PLS_ENABLED": "false"
     }
 }

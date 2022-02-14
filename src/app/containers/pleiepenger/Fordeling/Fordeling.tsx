@@ -1,7 +1,7 @@
-import {FordelingDokumenttype, JaNei, Sakstype} from 'app/models/enums';
+import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import {IFordelingState, IJournalpost} from 'app/models/types';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -12,17 +12,17 @@ import {
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import {Checkbox, RadioPanelGruppe} from 'nav-frontend-skjema';
+import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import {Systemtittel} from 'nav-frontend-typografi';
-import React, {useEffect, useMemo, useState} from 'react';
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import {connect} from 'react-redux';
+import { Systemtittel } from 'nav-frontend-typografi';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../../components/pdf/PdfVisning';
@@ -31,7 +31,7 @@ import { ISakstypeDefault } from '../../../models/Sakstype';
 import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
-import {Sakstyper} from '../../SakstypeImpls';
+import { Sakstyper } from '../../SakstypeImpls';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
@@ -101,7 +101,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
-    const [omsorgspengerValgt, setOmsorgspengerValgt] = useState<boolean>(false);
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
     const [dokumenttype, setDokumenttype] = useState<FordelingDokumenttype>();
@@ -252,9 +251,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     function toggleFordelingDokumentType(type: string): boolean {
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
-                return getEnvironmentVariable('OMP_KS_ENABLED') === 'true'
+                return getEnvironmentVariable('OMP_KS_ENABLED') === 'true';
+
+            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+                return getEnvironmentVariable('PLS_ENABLED') === 'true';
+
             default:
-                return true
+                return true;
         }
     }
 
@@ -364,11 +367,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         sokersIdent={identState.ident1}
                                         visSokersBarn={
                                             visSokersBarn &&
-                                            (
-                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+                                            (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
-                                            ) && !erUgyldigIdent(identState.ident1)
+                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                            !erUgyldigIdent(identState.ident1)
                                         }
                                     />
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
@@ -376,11 +378,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             mini
                                             onClick={() => handleVidereClick()}
                                             disabled={
-                                                ((
-                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+                                                ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
-                                                ) && (erUgyldigIdent(identState.ident2) || (!identState.ident2 && !barnetHarIkkeFnr))) ||
+                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                                    (erUgyldigIdent(identState.ident2) ||
+                                                        (!identState.ident2 && !barnetHarIkkeFnr))) ||
                                                 erUgyldigIdent(identState.ident1)
                                             }
                                         >
@@ -396,7 +398,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             journalpost={journalpost}
                             erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
                             kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
-                            setOmsorgspengerValgt={setOmsorgspengerValgt}
                             identState={identState}
                             konfigForValgtSakstype={konfigForValgtSakstype}
                             fordelingState={fordelingState}

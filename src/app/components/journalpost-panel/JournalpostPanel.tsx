@@ -40,7 +40,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                     retning="horisontal"
                 />
 
-                {(fordelingState.erIdent1Bekreftet || ident1) && (
+                {fordelingState.erIdent1Bekreftet && (
                     <LabelValue
                         labelTextId="journalpost.norskIdent"
                         value={

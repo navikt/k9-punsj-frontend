@@ -109,8 +109,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             {!!items &&
                 items!.map((itemInfo, itemIndex) => {
                     const panelid = props.panelid(itemIndex);
-                    const panelErrorMessage =
-                        feilkodeprefiks === 'perioder' ? undefined : getErrorMessage(`[${panelid}]`);
                     return (
                         <Panel
                             className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
