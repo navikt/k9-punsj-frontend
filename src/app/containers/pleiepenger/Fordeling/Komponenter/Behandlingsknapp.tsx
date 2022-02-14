@@ -1,9 +1,9 @@
 import React from "react";
 import {Hovedknapp} from "nav-frontend-knapper";
 import {FormattedMessage} from "react-intl";
-import {ISakstypeDefault, ISakstypePunch} from "../../../models/Sakstype";
-import {setHash} from "../../../utils";
-import {Sakstype} from "../../../models/enums";
+import {ISakstypeDefault, ISakstypePunch} from "../../../../models/Sakstype";
+import {setHash} from "../../../../utils";
+import {Sakstype} from "../../../../models/enums";
 import {IFordelingProps} from "../Fordeling";
 
 type BehandlingsknappProps = Pick<IFordelingProps,

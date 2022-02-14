@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
+import {AlertStripeInfo} from 'nav-frontend-alertstriper';
+import {RadioGruppe, RadioPanel} from 'nav-frontend-skjema';
+import {useIntl} from 'react-intl';
 
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -12,17 +12,17 @@ import {
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper,
+    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper, pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
 } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
-import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
-import { GosysGjelderKategorier } from '../../../Fordeling/Komponenter/GoSysGjelderKategorier';
-import Behandlingsknapp from '../../../Fordeling/Komponenter/Behandlingsknapp';
+import {IFordelingState, IJournalpost} from 'app/models/types';
+import {IIdentState} from 'app/models/types/IdentState';
+import Behandlingsknapp from './Behandlingsknapp';
+import {GosysGjelderKategorier} from './GoSysGjelderKategorier';
+import {opprettGosysOppgave as omfordelAction} from '../../../../state/actions/GosysOppgaveActions';
 
 interface IValgForDokument {
     dokumenttype?: FordelingDokumenttype;
@@ -71,6 +71,11 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
     }
 
+
+    function pleiepengerILivetsSluttfase() {
+        return dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && pleiepengerILivetsSluttfaseSakstyper;
+    }
+
     function omsorgspengerKroniskSyktBarn() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
@@ -79,7 +84,7 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
                 {
-                    (korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
+                    (korrigeringIM() || pleiepengerSyktBarn() || pleiepengerILivetsSluttfase() || omsorgspengerKroniskSyktBarn())
                         .map((key) => {
                             if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                                 return null;

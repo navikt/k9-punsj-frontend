@@ -16,7 +16,6 @@ import { erUgyldigIdent } from '../../FordelingFeilmeldinger';
 import './journalpostAlleredeBehandlet.less';
 import { getEnvironmentVariable } from '../../../../../utils';
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
-import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 
 export interface IJournalpostAlleredeBehandletStateProps {
     intl: IntlShape;
