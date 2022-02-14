@@ -2,19 +2,30 @@ import React from 'react';
 import { ApiPath } from '../apiConfig';
 import { Sakstype } from '../models/enums';
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
-import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
+import KorrigeringAvInntektsmeldingContainer
+    from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
+import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
     punchPath: '/pleiepenger',
-    getComponent: ({ journalpostid, punchPath }) => (
-        <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath} />
+    getComponent: ({journalpostid, punchPath}) => (
+        <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath}/>
     ),
-    steps: [], // TODO: implementert annerledes - konverter hvis nødvendig
+    steps: [],
+};
+
+export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN,
+    punchPath: '/omsorgspenger-kronisk-sykt-barn',
+    getComponent: ({journalpostid, punchPath}) => (
+        <OMPKSRouter journalpostid={journalpostid} punchPath={punchPath}/>
+    ),
+    steps: []
 };
 
 export const OmsorgspengerFordeling: ISakstypePunch = {
@@ -24,7 +35,7 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
         {
             path: '/opprett-i-gosys',
             stepName: 'opprettIGosys',
-            getComponent: () => <OpprettGosysOppgavePanel />,
+            getComponent: () => <OpprettGosysOppgavePanel/>,
             stepOrder: 0,
         },
     ],
@@ -33,7 +44,7 @@ export const OmsorgspengerFordeling: ISakstypePunch = {
 export const KorrigeringAvInntektsmelding: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
     punchPath: '/korrigering-av-inntektsmelding',
-    getComponent: () => <KorrigeringAvInntektsmeldingContainer />,
+    getComponent: () => <KorrigeringAvInntektsmeldingContainer/>,
     steps: [],
 };
 
@@ -45,8 +56,8 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
         {
             path: '/signatur',
             stepName: 'signatur',
-            getComponent: ({ gåTilNesteSteg, initialValues }) => (
-                <OverføringIdentSjekkContainer initialValues={initialValues} gåTilNesteSteg={gåTilNesteSteg} />
+            getComponent: ({gåTilNesteSteg, initialValues}) => (
+                <OverføringIdentSjekkContainer initialValues={initialValues} gåTilNesteSteg={gåTilNesteSteg}/>
             ),
             stepOrder: 0,
         },
@@ -54,15 +65,15 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
             path: '/punch/skjema',
             stepName: 'punch',
             stepOrder: 1,
-            getComponent: ({ gåTilForrigeSteg, initialValues }) => (
-                <OverføringPunchContainer initialValues={initialValues} gåTilForrigeSteg={gåTilForrigeSteg} />
+            getComponent: ({gåTilForrigeSteg, initialValues}) => (
+                <OverføringPunchContainer initialValues={initialValues} gåTilForrigeSteg={gåTilForrigeSteg}/>
             ),
         },
     ],
 };
 
-export const OmsorgspengerUtvidetRett: ISakstypeOmfordeling = {
-    navn: Sakstype.OMSORGSPENGER_UTVIDET_RETT,
+export const OmsorgspengerKroniskSyktBarnOmfordeling: ISakstypeOmfordeling = {
+    navn: Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN
 };
 
 export const OmsorgspengerLegeerklæring: ISakstypeOmfordeling = {
@@ -98,9 +109,15 @@ export const SkalIkkePUnsjes: ISakstypeOmfordeling = {
 };
 
 export const Sakstyper: ISakstyper = {
-    punchSakstyper: [Pleiepenger, OmsorgspengerFordeling, OmsorgspengerOverføring, KorrigeringAvInntektsmelding],
+    punchSakstyper: [
+        Pleiepenger,
+        OmsorgspengerFordeling,
+        OmsorgspengerKroniskSyktBarnSakstypePunch,
+        OmsorgspengerOverføring,
+        KorrigeringAvInntektsmelding
+    ],
     omfordelingssakstyper: [
-        OmsorgspengerUtvidetRett,
+        OmsorgspengerKroniskSyktBarnOmfordeling,
         OmsorgspengerLegeerklæring,
         OmsorgspengerAleneomsorg,
         OmsorgspengerSelvstendigFrilans,

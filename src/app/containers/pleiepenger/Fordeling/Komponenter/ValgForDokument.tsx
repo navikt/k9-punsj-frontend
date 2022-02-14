@@ -12,10 +12,10 @@ import {
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper,
+    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper,
     pleiepengerSakstyper,
-    TilgjengeligSakstype,
     Sakstype,
+    TilgjengeligSakstype,
 } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -29,7 +29,6 @@ interface IValgForDokument {
     journalpost: IJournalpost;
     erJournalfoertEllerFerdigstilt: boolean;
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
-    setOmsorgspengerValgt: (event: any) => void;
     identState: IIdentState;
     konfigForValgtSakstype: any;
     fordelingState: IFordelingState;
@@ -40,21 +39,22 @@ interface IValgForDokument {
     gjelderPleiepengerEllerOmsorgspenger: boolean;
 }
 
-const ValgForDokument: React.FC<IValgForDokument> = ({
-    dokumenttype,
-    erJournalfoertEllerFerdigstilt,
-    kanJournalforingsoppgaveOpprettesiGosys,
-    setSakstypeAction,
-    setOmsorgspengerValgt,
-    konfigForValgtSakstype,
-    fordelingState,
-    identState,
-    omfordel,
-    journalpost,
-    lukkJournalpostOppgave,
-    gjelderPleiepengerEllerOmsorgspenger,
-    visSakstypeValg,
-}) => {
+const ValgForDokument: React.FC<IValgForDokument> = (
+    {
+        dokumenttype,
+        erJournalfoertEllerFerdigstilt,
+        kanJournalforingsoppgaveOpprettesiGosys,
+        setSakstypeAction,
+        konfigForValgtSakstype,
+        fordelingState,
+        identState,
+        omfordel,
+        journalpost,
+        lukkJournalpostOppgave,
+        gjelderPleiepengerEllerOmsorgspenger,
+        visSakstypeValg,
+    }
+) => {
     const intl = useIntl();
 
     const vis = (!!fordelingState.skalTilK9 || visSakstypeValg) && gjelderPleiepengerEllerOmsorgspenger;
@@ -63,38 +63,49 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         return null;
     }
 
+    function korrigeringIM() {
+        return dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper;
+    }
+
+    function pleiepengerSyktBarn() {
+        return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
+    }
+
+    function omsorgspengerKroniskSyktBarn() {
+        return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
+    }
+
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
-                {(
-                    (dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper) ||
-                    pleiepengerSakstyper
-                ).map((key) => {
-                    if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
-                        return null;
-                    }
-                    if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
-                        return (
-                            <RadioPanel
-                                key={key}
-                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                value={Sakstype[key]}
-                                onChange={() => {
-                                    setSakstypeAction(Sakstype[key]);
-                                    setOmsorgspengerValgt(false);
-                                }}
-                                checked={konfigForValgtSakstype?.navn === key}
-                            />
-                        );
-                    }
-                    return null;
-                })}
+                {
+                    (korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
+                        .map((key) => {
+                            if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                                return null;
+                            }
+                            if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
+                                return (
+                                    <RadioPanel
+                                        key={key}
+                                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                        value={Sakstype[key]}
+                                        onChange={() => {
+                                            setSakstypeAction(Sakstype[key]);
+                                        }}
+                                        checked={konfigForValgtSakstype?.navn === key}
+                                    />
+                                );
+                            }
+                            return null;
+                        })
+                }
             </RadioGruppe>
-            <VerticalSpacer eightPx />
+            <VerticalSpacer eightPx/>
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
                     <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
-                    <GosysGjelderKategorier />
+                    <GosysGjelderKategorier/>
                 </div>
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
