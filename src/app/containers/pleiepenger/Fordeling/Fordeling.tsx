@@ -1,7 +1,7 @@
-import {FordelingDokumenttype, JaNei, Sakstype} from 'app/models/enums';
+import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import {IFordelingState, IJournalpost} from 'app/models/types';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -12,12 +12,12 @@ import {
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { PopoverOrientering } from 'nav-frontend-popover';
-import {Checkbox, RadioPanelGruppe} from 'nav-frontend-skjema';
+import { Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -247,9 +247,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     function toggleFordelingDokumentType(type: string): boolean {
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
-                return getEnvironmentVariable('OMP_KS_ENABLED') === 'true'
+                return getEnvironmentVariable('OMP_KS_ENABLED') === 'true';
+
+            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+                return getEnvironmentVariable('PLS_ENABLED') === 'true';
+
             default:
-                return true
+                return true;
         }
     }
 
@@ -360,7 +364,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         visSokersBarn={
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
+                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                             !erUgyldigIdent(identState.ident1)
                                         }
                                     />
@@ -370,7 +375,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             onClick={() => handleVidereClick()}
                                             disabled={
                                                 ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
+                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                                     (erUgyldigIdent(identState.ident2) ||
                                                         (!identState.ident2 && !barnetHarIkkeFnr))) ||
                                                 erUgyldigIdent(identState.ident1)

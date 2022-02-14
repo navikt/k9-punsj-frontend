@@ -48,10 +48,10 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
         if (!authState.redirectUrl) {
             props.checkAuth();
             return null;
-        } 
+        }
             window.location.replace(authState.redirectUrl);
             return null;
-        
+
     }
 
     if (authState.isLoading) {

@@ -12,7 +12,9 @@ import {
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper, omsorgspengerKroniskSyktBarnSakstyper,
+    korrigeringAvInntektsmeldingSakstyper,
+    omsorgspengerKroniskSyktBarnSakstyper,
+    pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
@@ -39,22 +41,20 @@ interface IValgForDokument {
     gjelderPleiepengerEllerOmsorgspenger: boolean;
 }
 
-const ValgForDokument: React.FC<IValgForDokument> = (
-    {
-        dokumenttype,
-        erJournalfoertEllerFerdigstilt,
-        kanJournalforingsoppgaveOpprettesiGosys,
-        setSakstypeAction,
-        konfigForValgtSakstype,
-        fordelingState,
-        identState,
-        omfordel,
-        journalpost,
-        lukkJournalpostOppgave,
-        gjelderPleiepengerEllerOmsorgspenger,
-        visSakstypeValg,
-    }
-) => {
+const ValgForDokument: React.FC<IValgForDokument> = ({
+    dokumenttype,
+    erJournalfoertEllerFerdigstilt,
+    kanJournalforingsoppgaveOpprettesiGosys,
+    setSakstypeAction,
+    konfigForValgtSakstype,
+    fordelingState,
+    identState,
+    omfordel,
+    journalpost,
+    lukkJournalpostOppgave,
+    gjelderPleiepengerEllerOmsorgspenger,
+    visSakstypeValg,
+}) => {
     const intl = useIntl();
 
     const vis = (!!fordelingState.skalTilK9 || visSakstypeValg) && gjelderPleiepengerEllerOmsorgspenger;
@@ -71,6 +71,13 @@ const ValgForDokument: React.FC<IValgForDokument> = (
         return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
     }
 
+    function pleiepengerILivetsSluttfase() {
+        return (
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE &&
+            pleiepengerILivetsSluttfaseSakstyper
+        );
+    }
+
     function omsorgspengerKroniskSyktBarn() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
@@ -78,34 +85,36 @@ const ValgForDokument: React.FC<IValgForDokument> = (
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
-                {
-                    (korrigeringIM() || pleiepengerSyktBarn() || omsorgspengerKroniskSyktBarn())
-                        .map((key) => {
-                            if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
-                                return null;
-                            }
-                            if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
-                                return (
-                                    <RadioPanel
-                                        key={key}
-                                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                        value={Sakstype[key]}
-                                        onChange={() => {
-                                            setSakstypeAction(Sakstype[key]);
-                                        }}
-                                        checked={konfigForValgtSakstype?.navn === key}
-                                    />
-                                );
-                            }
-                            return null;
-                        })
-                }
+                {(
+                    korrigeringIM() ||
+                    pleiepengerSyktBarn() ||
+                    pleiepengerILivetsSluttfase() ||
+                    omsorgspengerKroniskSyktBarn()
+                ).map((key) => {
+                    if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                        return null;
+                    }
+                    if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
+                        return (
+                            <RadioPanel
+                                key={key}
+                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                value={Sakstype[key]}
+                                onChange={() => {
+                                    setSakstypeAction(Sakstype[key]);
+                                }}
+                                checked={konfigForValgtSakstype?.navn === key}
+                            />
+                        );
+                    }
+                    return null;
+                })}
             </RadioGruppe>
-            <VerticalSpacer eightPx/>
+            <VerticalSpacer eightPx />
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
                     <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
-                    <GosysGjelderKategorier/>
+                    <GosysGjelderKategorier />
                 </div>
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (

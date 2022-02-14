@@ -105,7 +105,7 @@ export const setupFordeling = (
             kopierJournalpostSuccess: true,
         },
         fordelingSettPåVentState,
-        fordelingFerdigstillState,
+        fordelingFerdigstillState
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
