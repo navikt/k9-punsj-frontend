@@ -25,7 +25,7 @@ import {
     openEksisterendeOMPKSSoknadAction,
     resetOMPKSSoknadidAction
 } from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import {IOMPKSSoknad, OMPKSSoknad} from '../types/OMPKSSoknad';
+import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 import {
     IEksisterendeOMPKSSoknaderState
 } from '../types/EksisterendeOMPKSSoknaderState';
@@ -90,7 +90,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         }
     }, [eksisterendeOMPKSSoknaderState.soknadid]);
 
-    if (!ident1 || ident1 === '') {
+    if (!ident1) {
         return null;
     }
 
@@ -105,11 +105,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         eksisterendeOMPKSSoknaderState.isEksisterendeSoknaderLoading ||
         eksisterendeOMPKSSoknaderState.isAwaitingSoknadCreation
     ) {
-        return (
-            <div>
-                <NavFrontendSpinner/>
-            </div>
-        );
+        return (<NavFrontendSpinner/>);
     }
 
     if (eksisterendeOMPKSSoknaderState.createSoknadRequestError) {
