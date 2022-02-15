@@ -1,11 +1,11 @@
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { PunchStep } from '../../models/enums';
-import { IJournalpost, IPunchState } from '../../models/types';
+import { IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { RootStateType } from '../../state/RootState';
@@ -43,7 +43,6 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     props: IPLSRegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const [valgtOption, setValgtOption] = useState<string>('nysoknad');
 
     const { ident1, ident2 } = identState;
 
@@ -67,30 +66,11 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
         props.undoSearchForEksisterendeSoknaderAction();
     };
 
-    const redirectToNextStep = () => {
-        props.createSoknad(journalpostid, ident1, ident2);
-        setHash(
-            getPunchPath(PunchStep.FILL_FORM, {
-                id: eksisterendeSoknaderState.soknadid,
-            })
-        );
-    };
-
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
     }
 
     const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
-
-    const technicalError =
-        eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
-        ) : null;
-
-    const infoText = (journalpost: IJournalpost, index: number) => {
-        const dato = journalpost.dato ? `, dato: ${journalpost.dato}` : '';
-        return `Journalpost ${index}${dato}`;
-    };
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
@@ -116,7 +96,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                     Tilbake
                 </Knapp>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} mini>
+                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" mini>
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Hovedknapp>
                 )}

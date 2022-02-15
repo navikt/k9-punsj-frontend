@@ -1,6 +1,7 @@
 import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
 import { IEksisterendePLSSoknaderActionTypes } from '../actions/EksisterendePLSSoknaderActions';
 import { IEksisterendePLSSoknaderState } from '../../types/EksisterendePLSSoknaderState';
+import { IPLSSoknad } from '../../types/PLSSoknad';
 
 const initialState: IEksisterendePLSSoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -12,9 +13,25 @@ const initialState: IEksisterendePLSSoknaderState = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function EksisterendePLSSoknaderReducer(
-    eksisterendeSoknaderState: IEksisterendePLSSoknaderState = initialState,
+    eksisterendeSoknaderState: IEksisterendePLSSoknaderState,
     action: IEksisterendePLSSoknaderActionTypes
 ): IEksisterendePLSSoknaderState {
+    if (typeof eksisterendeSoknaderState === 'undefined') return initialState;
+
+    function openOrChoose(soknadInfo: IPLSSoknad) {
+        return {
+            ...eksisterendeSoknaderState,
+            chosenSoknad: soknadInfo,
+        };
+    }
+
+    function undoOrClose() {
+        return {
+            ...eksisterendeSoknaderState,
+            chosenSoknad: undefined,
+        };
+    }
+
     switch (action.type) {
         case EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNADER_SET:
             return {
@@ -40,28 +57,16 @@ export function EksisterendePLSSoknaderReducer(
             };
 
         case EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNAD_OPEN:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: action.soknadInfo,
-            };
+            return openOrChoose(action.soknadInfo);
 
         case EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNAD_CLOSE:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: undefined,
-            };
+            return undoOrClose();
 
         case EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNAD_CHOOSE:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: action.soknadInfo,
-            };
+            return openOrChoose(action.soknadInfo);
 
         case EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNAD_UNDO_CHOICE:
-            return {
-                ...eksisterendeSoknaderState,
-                chosenSoknad: undefined,
-            };
+            return undoOrClose();
 
         case EksisterendePLSSoknaderActionKeys.PLS_SOKNAD_CREATE_REQUEST:
             return {

@@ -48,7 +48,7 @@ import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 
 import { PeriodeinfoPaneler } from '../../containers/pleiepenger/PeriodeinfoPaneler';
 import Soknadsperioder from './Soknadsperioder';
-import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import EndringAvSoknadsperioder from './EndringAvSøknadsperioder/EndringAvSoknadsperioder';
 import { pfLand } from '../../containers/pleiepenger/pfLand';
 import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
@@ -187,27 +187,22 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
     };
 
+    private initialArbeidsInfoPeriode = {
+        perioder: this.getSoknadsperiode().map((periode) => ({
+            periode,
+            faktiskArbeidTimerPerDag: '',
+            jobberNormaltTimerPerDag: '',
+        })),
+    };
+
     private initialArbeidstaker = () =>
         new Arbeidstaker({
-            arbeidstidInfo: {
-                perioder: this.getSoknadsperiode().map((periode) => ({
-                    periode,
-                    faktiskArbeidTimerPerDag: '',
-                    jobberNormaltTimerPerDag: '',
-                })),
-            },
+            arbeidstidInfo: this.initialArbeidsInfoPeriode,
             organisasjonsnummer: '',
             norskIdent: null,
         });
 
-    private initialArbeidstidInfo = () =>
-        new ArbeidstidInfo({
-            perioder: this.getSoknadsperiode().map((periode) => ({
-                periode,
-                faktiskArbeidTimerPerDag: '',
-                jobberNormaltTimerPerDag: '',
-            })),
-        });
+    private initialArbeidstidInfo = () => new ArbeidstidInfo(this.initialArbeidsInfoPeriode);
 
     private initialFrilanser = new FrilanserOpptjening({
         jobberFortsattSomFrilans: undefined,
@@ -332,7 +327,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     }}
                 />
                 <VerticalSpacer sixteenPx={true} />
-                <EndringAvSøknadsperioder
+                <EndringAvSoknadsperioder
                     isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
                     onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
                     getErrorMessage={this.getErrorMessage}
@@ -919,7 +914,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const naa = new Date();
         if (
             !!mottattDato &&
-            naa.getDate() === new Date(mottattDato!).getDate() &&
+            naa.getDate() === new Date(mottattDato).getDate() &&
             initializeDate(naa).format('HH:mm') < dato
         ) {
             return true;
@@ -966,11 +961,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             }
         }
 
-        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato!)) {
+        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
-        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
+        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
