@@ -8,7 +8,6 @@ import {
     SelvstendigNaerinsdrivende,
 } from 'app/models/types';
 import {
-    hentPerioderFraK9Sak,
     resetPunchFormAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
@@ -63,6 +62,7 @@ import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
 import {
     getPLSSoknad,
     hentPLSPerioderFraK9Sak,
+    resetPLSPunchFormAction,
     resetPLSSoknadAction,
     submitPLSSoknad,
     updatePLSSoknad,
@@ -1090,7 +1090,7 @@ const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getPLSSoknad(id)),
-    hentPerioder: (ident1: string, ident2: string) => dispatch(hentPerioderFraK9Sak(ident1, ident2)),
+    hentPerioder: (ident1: string, ident2: string) => dispatch(hentPLSPerioderFraK9Sak(ident1, ident2)),
     updateSoknad: (soknad: Partial<IPLSSoknadUt>) => dispatch(updatePLSSoknad(soknad)),
     validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
@@ -1101,7 +1101,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),
-    resetPunchFormAction: () => dispatch(resetPunchFormAction()),
+    resetPunchFormAction: () => dispatch(resetPLSPunchFormAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
