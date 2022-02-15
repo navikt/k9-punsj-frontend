@@ -10,9 +10,9 @@ import {
     UtenlandsOpphold,
 } from './PLSSoknad';
 
-import {Arbeidstaker, IPeriode, Periode, Periodeinfo} from '../../models/types';
-import {ArbeidstidInfo} from '../../models/types/ArbeidstidInfo';
-import {FrilanserOpptjening} from '../../models/types/FrilanserOpptjening';
+import { Arbeidstaker, IPeriode, Periode, Periodeinfo } from '../../models/types';
+import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
+import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
 export interface IPLSSoknadUt {

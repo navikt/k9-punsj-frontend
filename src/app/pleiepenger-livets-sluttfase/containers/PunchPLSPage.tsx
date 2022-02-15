@@ -21,12 +21,12 @@ import 'nav-frontend-tabell-style';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import { IIdentState } from '../../models/types/IdentState';
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
-import {plsPaths} from './PLSRoutes';
-import {IJournalpost, IPath, IPunchState} from '../../models/types';
-import {IPunchPLSFormState} from '../types/PunchPLSFormState';
-import {PLSSoknadKvittering} from './SoknadKvittering/PLSSoknadKvittering';
-import {PLSRegistreringsValg} from './PLSRegistreringsValg';
-import {PLSPunchForm} from './PLSPunchForm';
+import { plsPaths } from './PLSRoutes';
+import { IJournalpost, IPath, IPunchState } from '../../models/types';
+import { IPunchPLSFormState } from '../types/PunchPLSFormState';
+import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
+import { PLSRegistreringsValg } from './PLSRegistreringsValg';
+import { PLSPunchForm } from './PLSPunchForm';
 
 export interface IPunchPLSPageStateProps {
     punchState: IPunchState;
@@ -68,7 +68,8 @@ export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> 
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
-    const getPunchPath = (punchStep: PunchStep, values?: any) => getPath(plsPaths, punchStep, values, dok ? { dok } : undefined);
+    const getPunchPath = (punchStep: PunchStep, values?: any) =>
+        getPath(plsPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],

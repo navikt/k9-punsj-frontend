@@ -1,33 +1,33 @@
-import {PunchStep, TimeFormat} from 'app/models/enums';
-import {IPunchState} from 'app/models/types';
-import {IdentRules} from 'app/rules';
+import { PunchStep, TimeFormat } from 'app/models/enums';
+import { IPunchState } from 'app/models/types';
+import { IdentRules } from 'app/rules';
 import {
     resetPunchAction,
     setIdentAction,
     setStepAction,
     undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
-import {datetime, setHash} from 'app/utils';
+import { RootStateType } from 'app/state/RootState';
+import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import {AlertStripeFeil, AlertStripeInfo} from 'nav-frontend-alertstriper';
-import {Knapp} from 'nav-frontend-knapper';
+import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
-import {connect} from 'react-redux';
-import {generateDateString} from '../../components/skjema/skjemaUtils';
-import {IEksisterendePLSSoknaderState} from '../types/EksisterendePLSSoknaderState';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
+import { generateDateString } from '../../components/skjema/skjemaUtils';
+import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
 import {
     chooseEksisterendePLSSoknadAction,
     closeEksisterendePLSSoknadAction,
     createPLSSoknad,
     findEksisterendePLSSoknader,
     openEksisterendePLSSoknadAction,
-    resetPLSSoknadidAction
+    resetPLSSoknadidAction,
 } from '../state/actions/EksisterendePLSSoknaderActions';
-import {IPLSSoknad, PLSSoknad} from '../types/PLSSoknad';
+import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 
 export interface IEksisterendePLSSoknaderStateProps {
@@ -94,9 +94,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
     }
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
-        return (
-            <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>
-        );
+        return <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>;
     }
 
     if (
@@ -112,9 +110,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
     }
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return (
-            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
-        );
+        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
     }
 
     const technicalError =
@@ -137,7 +133,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             const { chosenSoknad } = props.eksisterendeSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                (søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : ''),
+                søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Knapp key={soknadId} mini onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
@@ -223,7 +219,8 @@ const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStatePro
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-    findEksisterendeSoknader: (ident1: string, ident2: string | null) => dispatch(findEksisterendePLSSoknader(ident1, ident2)),
+    findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
+        dispatch(findEksisterendePLSSoknader(ident1, ident2)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(openEksisterendePLSSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendePLSSoknadAction()),

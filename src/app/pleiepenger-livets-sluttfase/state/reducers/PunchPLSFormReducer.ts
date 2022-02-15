@@ -1,6 +1,6 @@
-import {PunchFormActionKeys} from 'app/models/enums';
-import {IPunchPLSFormState} from '../../types/PunchPLSFormState';
-import {IPunchPLSFormActionTypes} from '../actions/PLSPunchFormActions';
+import { PunchFormActionKeys } from 'app/models/enums';
+import { IPunchPLSFormState } from '../../types/PunchPLSFormState';
+import { IPunchPLSFormActionTypes } from '../actions/PLSPunchFormActions';
 
 const initialState: IPunchPLSFormState = {
     isSoknadLoading: false,
@@ -17,7 +17,7 @@ export function PunchPLSFormReducer(
     punchFormState: IPunchPLSFormState,
     action: IPunchPLSFormActionTypes
 ): IPunchPLSFormState {
-    if (typeof punchFormState === 'undefined') return initialState
+    if (typeof punchFormState === 'undefined') return initialState;
 
     switch (action.type) {
         case PunchFormActionKeys.RESET:
@@ -141,7 +141,7 @@ export function PunchPLSFormReducer(
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS: {
-            const {erMellomlagring} = action;
+            const { erMellomlagring } = action;
             return {
                 ...punchFormState,
                 validertSoknad: action.validertSoknad,

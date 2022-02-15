@@ -9,9 +9,9 @@ import { useIntl } from 'react-intl';
 
 import CustomAlertstripeAdvarsel from './CustomAlertstripeAdvarsel';
 import './endringAvSøknadsperioder.less';
-import {IPLSSoknad, PLSSoknad} from '../../types/PLSSoknad';
-import {IPeriode, Periode} from '../../../models/types';
-import {Periodepaneler} from '../../../containers/pleiepenger/Periodepaneler';
+import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
+import { IPeriode, Periode } from '../../../models/types';
+import { Periodepaneler } from '../../../containers/pleiepenger/Periodepaneler';
 
 interface EndringAvSøknadsperioderProps {
     isOpen: boolean;

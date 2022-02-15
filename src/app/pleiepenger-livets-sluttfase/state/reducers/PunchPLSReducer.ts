@@ -8,11 +8,8 @@ export const initialState: IPunchState = {
     ident2: null,
 };
 
-export function PunchPLSReducer(
-    punchState: IPunchState,
-    action: IPunchActionTypes
-): IPunchState {
-    if (typeof punchState === 'undefined') return initialState
+export function PunchPLSReducer(punchState: IPunchState, action: IPunchActionTypes): IPunchState {
+    if (typeof punchState === 'undefined') return initialState;
     switch (action.type) {
         case PunchActionKeys.RESET:
             return initialState;

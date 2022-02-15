@@ -1,13 +1,13 @@
-import {ApiPath} from 'app/apiConfig';
-import {PunchFormActionKeys} from 'app/models/enums';
-import {IError, Periode} from 'app/models/types';
-import {IInputError} from 'app/models/types/InputError';
-import {convertResponseToError, get, post, put} from 'app/utils';
-import {IPLSSoknad} from '../../types/PLSSoknad';
-import {IPLSSoknadKvittering} from '../../types/PLSSoknadKvittering';
-import {IPLSSoknadUt} from '../../types/PLSSoknadUt';
-import {IHentPerioder} from '../../../models/types/RequestBodies';
-import {ISendSoknad} from '../../../models/types/SendSoknad';
+import { ApiPath } from 'app/apiConfig';
+import { PunchFormActionKeys } from 'app/models/enums';
+import { IError, Periode } from 'app/models/types';
+import { IInputError } from 'app/models/types/InputError';
+import { convertResponseToError, get, post, put } from 'app/utils';
+import { IPLSSoknad } from '../../types/PLSSoknad';
+import { IPLSSoknadKvittering } from '../../types/PLSSoknadKvittering';
+import { IPLSSoknadUt } from '../../types/PLSSoknadUt';
+import { IHentPerioder } from '../../../models/types/RequestBodies';
+import { ISendSoknad } from '../../../models/types/SendSoknad';
 
 interface IResetPunchPLSFormAction {
     type: PunchFormActionKeys.RESET;
@@ -119,9 +119,16 @@ export const hentPLSPerioderErrorAction = (error: IError): IHentPLSPerioderError
     error,
 });
 
-type IPLSSoknadActionTypes = IGetPLSSoknadLoadingAction | IGetPLSSoknadErrorAction | ISetPLSSoknadAction | IResetPLSSoknadAction;
+type IPLSSoknadActionTypes =
+    | IGetPLSSoknadLoadingAction
+    | IGetPLSSoknadErrorAction
+    | ISetPLSSoknadAction
+    | IResetPLSSoknadAction;
 
-type IPLSSoknadUpdateActionTypes = IUpdatePLSSoknadRequestAction | IUpdatePLSSoknadSuccessAction | IUpdatePLSSoknadErrorAction;
+type IPLSSoknadUpdateActionTypes =
+    | IUpdatePLSSoknadRequestAction
+    | IUpdatePLSSoknadSuccessAction
+    | IUpdatePLSSoknadErrorAction;
 
 type IPLSSoknadSubmitActionTypes =
     | ISubmitPLSSoknadRequestAction

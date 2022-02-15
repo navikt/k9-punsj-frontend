@@ -5,7 +5,7 @@ import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
 import { IPath } from '../../models/types';
 import { getPath } from '../../utils';
-import {PunchPLSPage} from './PunchPLSPage';
+import { PunchPLSPage } from './PunchPLSPage';
 
 const PLSRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
     const plsRootPath = punchPath;
