@@ -1,6 +1,6 @@
 import { IError } from 'app/models/types/Error';
-import {IPLSSoknad} from './PLSSoknad';
-import {IPLSSoknadSvar} from './PLSSoknadSvar';
+import { IPLSSoknad } from './PLSSoknad';
+import { IPLSSoknadSvar } from './PLSSoknadSvar';
 
 export interface IEksisterendePLSSoknaderState {
     eksisterendeSoknaderSvar: IPLSSoknadSvar;

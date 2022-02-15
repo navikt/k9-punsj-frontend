@@ -1,16 +1,18 @@
 /* eslint-disable max-classes-per-file */
-import {ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende} from 'app/models/types/SelvstendigNaerinsdrivende';
+import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 import {
     Arbeidstaker,
     IArbeidstaker,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
-    IPeriodeMedTimerMinutter, Periode,
-    Periodeinfo, PeriodeMedTimerMinutter
+    IPeriodeMedTimerMinutter,
+    Periode,
+    Periodeinfo,
+    PeriodeMedTimerMinutter,
 } from '../../models/types';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
-import {FrilanserOpptjening, IFrilanserOpptjening} from '../../models/types/FrilanserOpptjening';
-import {ArbeidstidInfo} from '../../models/types/ArbeidstidInfo';
+import { FrilanserOpptjening, IFrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
+import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 
 export interface IPLSSoknad {
     soeknadId?: string;
@@ -174,8 +176,8 @@ export class Pleietrengende implements Required<IPleietrengende> {
     }
 
     values(): Required<IPleietrengende> {
-        const {norskIdent} = this; // tslint:disable-line:no-this-assignment
-        return {norskIdent};
+        const { norskIdent } = this; // tslint:disable-line:no-this-assignment
+        return { norskIdent };
     }
 }
 
@@ -262,7 +264,6 @@ export class PLSSoknad implements IPLSSoknad {
 
     utenlandsopphold: UtenlandsOpphold[];
 
-
     harInfoSomIkkeKanPunsjes: boolean;
 
     harMedisinskeOpplysninger: boolean;
@@ -286,6 +287,6 @@ export class PLSSoknad implements IPLSSoknad {
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || {tekst: ''};
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
     }
 }

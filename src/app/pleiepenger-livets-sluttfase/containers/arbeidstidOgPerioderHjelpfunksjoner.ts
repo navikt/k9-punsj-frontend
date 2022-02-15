@@ -1,14 +1,10 @@
-import {IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo} from '../../models/types';
-import {IPunchPLSFormState} from '../types/PunchPLSFormState';
+import { IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from '../../models/types';
+import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 
 export const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (
     periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[]
 ): boolean => {
-    if (
-        periode.length > 0 &&
-        periode[0].faktiskArbeidTimerPerDag &&
-        periode[0].jobberNormaltTimerPerDag
-    ) {
+    if (periode.length > 0 && periode[0].faktiskArbeidTimerPerDag && periode[0].jobberNormaltTimerPerDag) {
         return true;
     }
     return false;

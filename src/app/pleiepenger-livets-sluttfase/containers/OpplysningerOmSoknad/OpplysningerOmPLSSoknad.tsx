@@ -6,10 +6,10 @@ import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 import './opplysningerOmPLSSoknad.less';
-import {JaNeiIkkeRelevant} from '../../../models/enums/JaNeiIkkeRelevant';
-import {PLSSoknad} from '../../types/PLSSoknad';
+import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
+import { PLSSoknad } from '../../types/PLSSoknad';
 import intlHelper from '../../../utils/intlUtils';
-import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 
 interface IOwnProps {
     intl: IntlShape;

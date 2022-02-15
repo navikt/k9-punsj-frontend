@@ -1,6 +1,6 @@
-import {EksisterendePLSSoknaderActionKeys} from '../../types/EksisterendePLSSoknaderActionKeys';
-import {IEksisterendePLSSoknaderActionTypes} from '../actions/EksisterendePLSSoknaderActions';
-import {IEksisterendePLSSoknaderState} from '../../types/EksisterendePLSSoknaderState';
+import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
+import { IEksisterendePLSSoknaderActionTypes } from '../actions/EksisterendePLSSoknaderActions';
+import { IEksisterendePLSSoknaderState } from '../../types/EksisterendePLSSoknaderState';
 
 const initialState: IEksisterendePLSSoknaderState = {
     eksisterendeSoknaderSvar: {},

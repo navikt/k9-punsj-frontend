@@ -6,15 +6,15 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import './soknadsperioder.less';
-import {GetUhaandterteFeil, IPeriode} from '../../models/types';
-import {IPLSSoknad} from '../types/PLSSoknad';
-import {RootStateType} from '../../state/RootState';
+import { GetUhaandterteFeil, IPeriode } from '../../models/types';
+import { IPLSSoknad } from '../types/PLSSoknad';
+import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
 import CalendarSvg from '../../assets/SVG/CalendarSVG';
-import {generateDateString} from '../../components/skjema/skjemaUtils';
+import { generateDateString } from '../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
-import {Periodepaneler} from '../../containers/pleiepenger/Periodepaneler';
+import { Periodepaneler } from '../../containers/pleiepenger/Periodepaneler';
 
 interface IOwnProps {
     updateSoknadState: (soknad: Partial<IPLSSoknad>) => void;
@@ -31,14 +31,14 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     getErrorMessage,
     soknad,
     updateSoknad,
-    getUhaandterteFeil
+    getUhaandterteFeil,
 }) => {
     const intl = useIntl();
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
-        !punchFormState.hentPerioderError && !punchFormState?.perioder?.length ;
+        !punchFormState.hentPerioderError && !punchFormState?.perioder?.length;
 
     const overlappendeSoknadsperiode = () => {
         const eksisterendePerioder = punchFormState.perioder;

@@ -22,9 +22,11 @@ import { ICountry } from '../../../components/country-select/CountrySelect';
 
 import VisningAvPerioderSNPLSSoknadKvittering from './Komponenter/VisningAvPerioderSNPLSSoknadKvittering';
 import {
-    IPLSSoknadKvittering, IPLSSoknadKvitteringArbeidstidInfo,
-    IPLSSoknadKvitteringBosteder, IPLSSoknadKvitteringLovbestemtFerie,
-    IPLSSoknadKvitteringUtenlandsopphold
+    IPLSSoknadKvittering,
+    IPLSSoknadKvitteringArbeidstidInfo,
+    IPLSSoknadKvitteringBosteder,
+    IPLSSoknadKvitteringLovbestemtFerie,
+    IPLSSoknadKvitteringUtenlandsopphold,
 } from '../../types/PLSSoknadKvittering';
 
 interface IOwnProps {

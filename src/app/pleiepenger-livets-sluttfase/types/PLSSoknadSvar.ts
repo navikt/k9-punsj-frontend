@@ -1,4 +1,4 @@
-import {IPLSSoknad, PLSSoknad} from './PLSSoknad';
+import { IPLSSoknad, PLSSoknad } from './PLSSoknad';
 
 export interface IPLSSoknadSvar {
     søker?: string;
