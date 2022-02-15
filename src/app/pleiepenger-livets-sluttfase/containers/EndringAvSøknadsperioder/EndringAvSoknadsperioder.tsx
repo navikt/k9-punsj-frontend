@@ -13,7 +13,7 @@ import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
 import { IPeriode, Periode } from '../../../models/types';
 import { Periodepaneler } from '../../../containers/pleiepenger/Periodepaneler';
 
-interface EndringAvSøknadsperioderProps {
+interface EndringAvSoknadsperioderProps {
     isOpen: boolean;
     onClick: () => void;
     getErrorMessage: (attribute: string, indeks?: number) => React.ReactNode;
@@ -23,7 +23,7 @@ interface EndringAvSøknadsperioderProps {
     eksisterendePerioder?: IPeriode[];
 }
 
-const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.Element | null => {
+const EndringAvSoknadsperioder = (props: EndringAvSoknadsperioderProps): JSX.Element | null => {
     const intl = useIntl();
     const { isOpen, onClick, getErrorMessage, soknad, updateSoknad, updateSoknadState, eksisterendePerioder } = props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
@@ -153,4 +153,4 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
         </EkspanderbartpanelBase>
     );
 };
-export default EndringAvSøknadsperioder;
+export default EndringAvSoknadsperioder;

@@ -201,15 +201,13 @@ export function updatePLSSoknad(soknad: Partial<IPLSSoknadUt>) {
     return (dispatch: any) => {
         dispatch(updatePLSSoknadRequestAction());
         return put(ApiPath.PLS_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, (response) => {
-            switch (response.status) {
-                case 200:
-                    return response.json().then((mappe) => {
-                        dispatch(setPLSSoknadAction(mappe));
-                        dispatch(updatePLSSoknadSuccessAction());
-                    });
-                default:
-                    return dispatch(updatePLSSoknadErrorAction(convertResponseToError(response)));
+            if (response.status === 200) {
+                return response.json().then((mappe) => {
+                    dispatch(setPLSSoknadAction(mappe));
+                    dispatch(updatePLSSoknadSuccessAction());
+                });
             }
+            return dispatch(updatePLSSoknadErrorAction(convertResponseToError(response)));
         });
     };
 }
