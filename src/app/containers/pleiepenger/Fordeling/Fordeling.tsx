@@ -38,7 +38,10 @@ import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
 import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
 import { setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { opprettGosysOppgaveResetAction, opprettGosysOppgave as omfordelAction } from '../../../state/actions/GosysOppgaveActions';
+import {
+    opprettGosysOppgaveResetAction,
+    opprettGosysOppgave as omfordelAction,
+} from '../../../state/actions/GosysOppgaveActions';
 import { ISakstypeDefault } from '../../../models/Sakstype';
 import { Sakstyper } from '../../SakstypeImpls';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
@@ -300,7 +303,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <RadioPanelGruppe
                                     name="ppsjekk"
                                     radios={Object.values(FordelingDokumenttype)
-                                        .filter(type => toggleFordelingDokumentType(type))
+                                        .filter((type) => toggleFordelingDokumentType(type))
                                         .map((type) => ({
                                             label: intlHelper(intl, type),
                                             value: type,
@@ -366,7 +369,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                                dokumenttype ===
+                                                    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                             !erUgyldigIdent(identState.ident1)
                                         }
                                     />
@@ -377,9 +381,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             disabled={
                                                 ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-                                                    (erUgyldigIdent(identState.ident2) ||
-                                                        (!identState.ident2 && !barnetHarIkkeFnr))) ||
+                                                    dokumenttype ===
+                                                        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                                    erUgyldigIdent(identState.ident2) &&
+                                                    !barnetHarIkkeFnr) ||
                                                 erUgyldigIdent(identState.ident1)
                                             }
                                         >
