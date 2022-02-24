@@ -165,6 +165,7 @@ export function createOMPKSSoknad(journalpostid: string, ident1: string, barnIde
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: ident1,
+            pleietrengendeIdent: barnIdent,
             barnIdent,
         };
 
