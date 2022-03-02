@@ -256,6 +256,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
                 return getEnvironmentVariable('PLS_ENABLED') === 'true';
 
+            case FordelingDokumenttype.OMSORGSPENGER_MA:
+                return getEnvironmentVariable('OMP_MA_FEATURE_TOGGLE') === 'true';
+
             default:
                 return true;
         }
@@ -303,7 +306,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <RadioPanelGruppe
                                     name="ppsjekk"
                                     radios={Object.values(FordelingDokumenttype)
-                                        .filter(type => toggleFordelingDokumentType(type))
+                                        .filter((type) => toggleFordelingDokumentType(type))
                                         .map((type) => ({
                                             label: intlHelper(intl, type),
                                             value: type,
@@ -369,7 +372,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                                dokumenttype ===
+                                                    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                             !erUgyldigIdent(identState.ident1)
                                         }
                                     />
@@ -380,7 +384,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             disabled={
                                                 ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                                    dokumenttype ===
+                                                        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                                     (erUgyldigIdent(identState.ident2) ||
                                                         (!identState.ident2 && !barnetHarIkkeFnr))) ||
                                                 erUgyldigIdent(identState.ident1)
