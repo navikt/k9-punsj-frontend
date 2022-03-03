@@ -5,22 +5,22 @@ import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
 import { IPath } from '../../models/types';
 import { getPath } from '../../utils';
-import {PunchOMPKSPage} from './PunchOMPKSPage';
+import {PunchOMPMAPage} from './PunchOMPMAPage';
 
-const OMPKSRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
-    const ompKSRootPath = punchPath;
+const OMPMARouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
+    const OMPMARootPath = punchPath;
 
     const paths: IPath[] = [
         {
             step: PunchStep.CHOOSE_SOKNAD,
-            path: `${ompKSRootPath}/hentsoknader`,
+            path: `${OMPMARootPath}/hentsoknader`,
         },
-        { step: PunchStep.FILL_FORM, path: `${ompKSRootPath}/skjema/{id}` },
-        { step: PunchStep.COMPLETED, path: `${ompKSRootPath}/fullfort` },
+        { step: PunchStep.FILL_FORM, path: `${OMPMARootPath}/skjema/{id}` },
+        { step: PunchStep.COMPLETED, path: `${OMPMARootPath}/fullfort` },
     ];
     const chooseSoknadPath = getPath(paths, PunchStep.CHOOSE_SOKNAD);
 
-    useRedirect(ompKSRootPath, chooseSoknadPath);
+    useRedirect(OMPMARootPath, chooseSoknadPath);
 
     return (
         <Switch>
@@ -29,11 +29,11 @@ const OMPKSRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journal
                 .filter((step) => !Number.isNaN(step))
                 .map((step) => (
                     <Route exact key={`hashroute_${step}`} path={getPath(paths, step)}>
-                        <PunchOMPKSPage {...{ journalpostid, step, paths }} />
+                        <PunchOMPMAPage {...{ journalpostid, step, paths }} />
                     </Route>
                 ))}
         </Switch>
     );
 };
 
-export default OMPKSRouter;
+export default OMPMARouter;

@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-export interface IOMPKSSoknad {
+export interface IOMPMASoknad {
     soeknadId?: string;
     soekerId: string;
     journalposter?: Set<string>;
@@ -32,7 +32,7 @@ export class Barn implements Required<IBarn> {
     }
 }
 
-export class OMPKSSoknad implements IOMPKSSoknad {
+export class OMPMASoknad implements IOMPMASoknad {
     soeknadId: string;
 
     soekerId: string;
@@ -49,7 +49,7 @@ export class OMPKSSoknad implements IOMPKSSoknad {
 
     harMedisinskeOpplysninger?: boolean;
 
-    constructor(soknad: IOMPKSSoknad) {
+    constructor(soknad: IOMPMASoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
         this.journalposter = new Set(soknad.journalposter || []);

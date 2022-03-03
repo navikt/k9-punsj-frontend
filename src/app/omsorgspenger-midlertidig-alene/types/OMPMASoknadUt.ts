@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 
-import {Barn, IBarn} from './OMPKSSoknad';
+import {Barn, IBarn} from './OMPMASoknad';
 
-export interface IOMPKSSoknadUt {
+export interface IOMPMASoknadUt {
     soeknadId?: string;
     soekerId: string;
     journalposter?: string[];
@@ -13,7 +13,7 @@ export interface IOMPKSSoknadUt {
     harMedisinskeOpplysninger?: boolean;
 }
 
-export class OMPKSSoknadUt implements IOMPKSSoknadUt {
+export class OMPMASoknadUt implements IOMPMASoknadUt {
     soeknadId: string;
 
     soekerId: string;
@@ -30,7 +30,7 @@ export class OMPKSSoknadUt implements IOMPKSSoknadUt {
 
     harMedisinskeOpplysninger: boolean;
 
-    constructor(soknad: IOMPKSSoknadUt) {
+    constructor(soknad: IOMPMASoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
         this.journalposter = soknad.journalposter || [];

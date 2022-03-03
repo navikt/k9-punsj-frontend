@@ -1,13 +1,13 @@
 import { IError } from 'app/models/types/Error';
 import { IInputError } from 'app/models/types/InputError';
-import {IOMPKSSoknad} from './OMPKSSoknad';
-import {IOMPKSSoknadKvittering} from './OMPKSSoknadKvittering';
+import {IOMPMASoknad} from './OMPMASoknad';
+import {IOMPMASoknadKvittering} from './OMPMASoknadKvittering';
 
-export interface IPunchOMPKSFormState {
-    soknad?: Partial<IOMPKSSoknad>;
-    innsentSoknad?: IOMPKSSoknadKvittering;
+export interface IPunchOMPMAFormState {
+    soknad?: Partial<IOMPMASoknad>;
+    innsentSoknad?: IOMPMASoknadKvittering;
     linkTilBehandlingIK9?: string | null;
-    validertSoknad?: IOMPKSSoknadKvittering;
+    validertSoknad?: IOMPMASoknadKvittering;
     isSoknadLoading: boolean;
     error?: IError;
     isAwaitingUpdateResponse?: boolean;

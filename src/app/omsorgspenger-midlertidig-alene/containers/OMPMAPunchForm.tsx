@@ -32,56 +32,56 @@ import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
-import {IOMPKSSoknad, OMPKSSoknad} from '../types/OMPKSSoknad';
-import {IPunchOMPKSFormState} from '../types/PunchOMPKSFormState';
-import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
-import {OMPKSSoknadKvittering} from './SoknadKvittering/OMPKSSoknadKvittering';
+import {IOMPMASoknad, OMPMASoknad} from '../types/OMPMASoknad';
+import {IPunchOMPMAFormState} from '../types/PunchOMPMAFormState';
+import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
+import {OMPMASoknadKvittering} from './SoknadKvittering/OMPMASoknadKvittering';
 import {
-    getOMPKSSoknad,
-    resetOMPKSSoknadAction,
-    resetPunchOMPKSFormAction,
-    submitOMPKSSoknad,
-    updateOMPKSSoknad,
-    validerOMPKSSoknad,
-    validerOMPKSSoknadResetAction
-} from '../state/actions/OMPKSPunchFormActions';
-import {undoChoiceOfEksisterendeOMPKSSoknadAction} from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import {IOMPKSSoknadUt, OMPKSSoknadUt} from '../types/OMPKSSoknadUt';
+    getOMPMASoknad,
+    resetOMPMASoknadAction,
+    resetPunchOMPMAFormAction,
+    submitOMPMASoknad,
+    updateOMPMASoknad,
+    validerOMPMASoknad,
+    validerOMPMASoknadResetAction
+} from '../state/actions/OMPMAPunchFormActions';
+import {undoChoiceOfEksisterendeOMPMASoknadAction} from '../state/actions/EksisterendeOMPMASoknaderActions';
+import {IOMPMASoknadUt, OMPMASoknadUt} from '../types/OMPMASoknadUt';
 import {CheckboksPanel} from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import {PopoverOrientering} from 'nav-frontend-popover';
 
-export interface IPunchOMPKSFormComponentProps {
+export interface IPunchOMPMAFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
 }
 
-export interface IPunchOMPKSFormStateProps {
-    punchFormState: IPunchOMPKSFormState;
+export interface IPunchOMPMAFormStateProps {
+    punchFormState: IPunchOMPMAFormState;
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
 }
 
-export interface IPunchOMPKSFormDispatchProps {
-    getSoknad: typeof getOMPKSSoknad;
-    resetSoknadAction: typeof resetOMPKSSoknadAction;
+export interface IPunchOMPMAFormDispatchProps {
+    getSoknad: typeof getOMPMASoknad;
+    resetSoknadAction: typeof resetOMPMASoknadAction;
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
-    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPKSSoknadAction;
-    updateSoknad: typeof updateOMPKSSoknad;
-    submitSoknad: typeof submitOMPKSSoknad;
+    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPMASoknadAction;
+    updateSoknad: typeof updateOMPMASoknad;
+    submitSoknad: typeof submitOMPMASoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
-    validateSoknad: typeof validerOMPKSSoknad;
-    validerSoknadReset: typeof validerOMPKSSoknadResetAction;
+    validateSoknad: typeof validerOMPMASoknad;
+    validerSoknadReset: typeof validerOMPMASoknadResetAction;
 }
 
-export interface IPunchOMPKSFormComponentState {
-    soknad: IOMPKSSoknad;
+export interface IPunchOMPMAFormComponentState {
+    soknad: IOMPMASoknad;
     isFetched: boolean;
     showStatus: boolean;
     faktiskeTimer: string[][];
@@ -94,13 +94,13 @@ export interface IPunchOMPKSFormComponentState {
     harForsoektAaSendeInn: boolean;
 }
 
-type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
+type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps &
     WrappedComponentProps &
-    IPunchOMPKSFormStateProps &
-    IPunchOMPKSFormDispatchProps;
+    IPunchOMPMAFormStateProps &
+    IPunchOMPMAFormDispatchProps;
 
-export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProps, IPunchOMPKSFormComponentState> {
-    state: IPunchOMPKSFormComponentState = {
+export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProps, IPunchOMPMAFormComponentState> {
+    state: IPunchOMPMAFormComponentState = {
         soknad: {
             soeknadId: '',
             soekerId: '',
@@ -133,14 +133,14 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     }
 
     componentDidUpdate(
-        prevProps: Readonly<IPunchOMPKSFormProps>,
-        prevState: Readonly<IPunchOMPKSFormComponentState>,
+        prevProps: Readonly<IPunchOMPMAFormProps>,
+        prevState: Readonly<IPunchOMPMAFormComponentState>,
         snapshot?: any
     ): void {
         const {soknad} = this.props.punchFormState;
         if (!!soknad && !this.state.isFetched) {
             this.setState({
-                soknad: new OMPKSSoknad(this.props.punchFormState.soknad as IOMPKSSoknad),
+                soknad: new OMPMASoknad(this.props.punchFormState.soknad as IOMPMASoknad),
                 isFetched: true,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
@@ -152,7 +152,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     render() {
         const {intl, punchFormState, signaturState} = this.props;
 
-        const soknad = new OMPKSSoknad(this.state.soknad);
+        const soknad = new OMPMASoknad(this.state.soknad);
         const {signert} = signaturState;
 
         if (punchFormState.isComplete) {
@@ -187,7 +187,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 <VerticalSpacer sixteenPx={true}/>
 
                 <VerticalSpacer sixteenPx={true}/>
-                <OpplysningerOmOMPKSSoknad
+                <OpplysningerOmOMPMASoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     getErrorMessage={this.getErrorMessage}
@@ -327,7 +327,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                             isOpen={!!this.props.punchFormState.isValid}
                         >
                             <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <OMPKSSoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad}/>
+                                <OMPMASoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad}/>
                             </div>
                             <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                 <Hovedknapp
@@ -374,7 +374,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     }
 
     private handleSubmit = () => {
-        let navarandeSoknad: IOMPKSSoknad = this.state.soknad;
+        let navarandeSoknad: IOMPMASoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
@@ -400,7 +400,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     }
 
     private getSoknadFromStore = () => {
-        return new OMPKSSoknadUt(this.props.punchFormState.soknad as IOMPKSSoknadUt);
+        return new OMPMASoknadUt(this.props.punchFormState.soknad as IOMPMASoknadUt);
     };
 
     private getManglerFromStore = () => {
@@ -497,7 +497,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             : undefined;
     };
 
-    private updateSoknadState = (soknad: Partial<IOMPKSSoknad>, showStatus?: boolean) => {
+    private updateSoknadState = (soknad: Partial<IOMPMASoknad>, showStatus?: boolean) => {
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
             soknad: {...this.state.soknad, ...soknad},
@@ -505,9 +505,9 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         });
     };
 
-    private updateSoknad = (soknad: Partial<IOMPKSSoknad>) => {
+    private updateSoknad = (soknad: Partial<IOMPMASoknad>) => {
         this.setState({showStatus: true});
-        const navarandeSoknad: OMPKSSoknadUt = this.getSoknadFromStore();
+        const navarandeSoknad: OMPMASoknadUt = this.getSoknadFromStore();
         const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
 
         if (!journalposter.includes(this.props.journalpostid)) {
@@ -526,7 +526,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         setHash('/');
     };
 
-    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPKSSoknad>) => ({
+    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPMASoknad>) => ({
         onChange: (event: any) => this.updateSoknadState(change(event), false),
         onBlur: (event: any) => this.updateSoknad(change(event))
     });
@@ -549,7 +549,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     }
 }
 
-const mapStateToProps = (state: RootStateType): IPunchOMPKSFormStateProps => ({
+const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
     punchFormState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState,
     signaturState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.signaturState,
     journalposterState: state.journalposterPerIdentState,
@@ -557,22 +557,22 @@ const mapStateToProps = (state: RootStateType): IPunchOMPKSFormStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getSoknad: (id: string) => dispatch(getOMPKSSoknad(id)),
-    resetSoknadAction: () => dispatch(resetOMPKSSoknadAction()),
+    getSoknad: (id: string) => dispatch(getOMPMASoknad(id)),
+    resetSoknadAction: () => dispatch(resetOMPMASoknadAction()),
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-    undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPKSSoknadAction()),
-    updateSoknad: (soknad: Partial<IOMPKSSoknadUt>) => dispatch(updateOMPKSSoknad(soknad)),
-    submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPKSSoknad(ident, soeknadid)),
-    resetPunchFormAction: () => dispatch(resetPunchOMPKSFormAction()),
+    undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPMASoknadAction()),
+    updateSoknad: (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad)),
+    submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid)),
+    resetPunchFormAction: () => dispatch(resetPunchOMPMAFormAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (soknad: IOMPKSSoknadUt, erMellomlagring: boolean) =>
-        dispatch(validerOMPKSSoknad(soknad, erMellomlagring)),
-    validerSoknadReset: () => dispatch(validerOMPKSSoknadResetAction()),
+    validateSoknad: (soknad: IOMPMASoknadUt, erMellomlagring: boolean) =>
+        dispatch(validerOMPMASoknad(soknad, erMellomlagring)),
+    validerSoknadReset: () => dispatch(validerOMPMASoknadResetAction()),
 });
 
-export const OMPKSPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent));
+export const OMPMAPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAFormComponent));
 /* eslint-enable */

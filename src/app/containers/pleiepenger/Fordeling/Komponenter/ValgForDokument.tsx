@@ -15,6 +15,7 @@ import {
     korrigeringAvInntektsmeldingSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     pleiepengerILivetsSluttfaseSakstyper,
+    omsorgspengerMidlertidigAleneSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
@@ -81,6 +82,9 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     function omsorgspengerKroniskSyktBarn() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
+    function omsorgspengerMidlertidigAlene() {
+        return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA && omsorgspengerMidlertidigAleneSakstyper;
+    }
 
     return (
         <>
@@ -89,7 +93,8 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                     korrigeringIM() ||
                     pleiepengerSyktBarn() ||
                     pleiepengerILivetsSluttfase() ||
-                    omsorgspengerKroniskSyktBarn()
+                    omsorgspengerKroniskSyktBarn() ||
+                    omsorgspengerMidlertidigAlene()
                 ).map((key) => {
                     if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                         return null;

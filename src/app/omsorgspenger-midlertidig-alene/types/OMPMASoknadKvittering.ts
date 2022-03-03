@@ -1,14 +1,14 @@
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
-export interface IOMPKSSoknadKvitteringJournalpost {
+export interface IOMPMASoknadKvitteringJournalpost {
     inneholderInformasjonSomIkkeKanPunsjes?: boolean;
     inneholderMedisinskeOpplysninger?: boolean;
     journalpostId: string;
 }
 
-export interface IOMPKSSoknadKvittering {
+export interface IOMPMASoknadKvittering {
     mottattDato: string;
-    journalposter: IOMPKSSoknadKvitteringJournalpost[];
+    journalposter: IOMPMASoknadKvitteringJournalpost[];
     ytelse: {
         type: string;
         barn: {

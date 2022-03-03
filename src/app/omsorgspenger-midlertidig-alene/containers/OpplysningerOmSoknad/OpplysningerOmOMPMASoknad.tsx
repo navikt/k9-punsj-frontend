@@ -8,8 +8,8 @@ import {IntlShape} from 'react-intl';
 import {JaNeiIkkeRelevant} from '../../../models/enums/JaNeiIkkeRelevant';
 import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
-import './opplysningerOmOMPKSSoknad.less';
-import {OMPKSSoknad} from '../../types/OMPKSSoknad';
+import './opplysningerOmOMPMASoknad.less';
+import {OMPMASoknad} from '../../types/OMPMASoknad';
 
 interface IOwnProps {
     intl: IntlShape;
@@ -17,10 +17,10 @@ interface IOwnProps {
     getErrorMessage: (attribute: string, indeks?: number) => any;
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
     signert: JaNeiIkkeRelevant | null;
-    soknad: OMPKSSoknad;
+    soknad: OMPMASoknad;
 }
 
-const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = (
+const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = (
     {
         intl,
         changeAndBlurUpdatesSoknad,
@@ -29,7 +29,7 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = (
         signert,
         soknad
     }) => (
-    <Panel className="opplysningerOmOMPKSSoknad">
+    <Panel className="opplysningerOmOMPMASoknad">
         <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
         <AlertStripeInfo>{intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}</AlertStripeInfo>
         <SkjemaGruppe>
@@ -73,4 +73,4 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = (
         </SkjemaGruppe>
     </Panel>
 );
-export default OpplysningerOmOMPKSSoknad;
+export default OpplysningerOmOMPMASoknad;

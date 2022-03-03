@@ -1,12 +1,12 @@
 import { IError } from 'app/models/types/Error';
-import {IOMPKSSoknad} from './OMPKSSoknad';
-import {IOMPKSSoknadSvar} from './OMPKSSoknadSvar';
+import {IOMPMASoknad} from './OMPMASoknad';
+import {IOMPMASoknadSvar} from './OMPMASoknadSvar';
 
-export interface IEksisterendeOMPKSSoknaderState {
-    eksisterendeSoknaderSvar: IOMPKSSoknadSvar;
+export interface IEksisterendeOMPMASoknaderState {
+    eksisterendeSoknaderSvar: IOMPMASoknadSvar;
     isEksisterendeSoknaderLoading?: boolean;
     eksisterendeSoknaderRequestError?: IError;
-    chosenSoknad?: IOMPKSSoknad;
+    chosenSoknad?: IOMPMASoknad;
     isAwaitingSoknadCreation?: boolean;
     createSoknadRequestError?: IError;
     soknadid?: string;

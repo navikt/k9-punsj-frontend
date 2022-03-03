@@ -4,11 +4,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import './ompKSSoknadKvittering.less';
+import './ompMASoknadKvittering.less';
 import countries from 'i18n-iso-countries';
 import {RootStateType} from 'app/state/RootState';
 import Kopier from 'app/components/kopier/Kopier';
-import {IOMPKSSoknadKvittering} from '../../types/OMPKSSoknadKvittering';
+import {IOMPMASoknadKvittering} from '../../types/OMPMASoknadKvittering';
 import {
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
@@ -18,12 +18,12 @@ import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
 
 interface IOwnProps {
     intl: any;
-    response: IOMPKSSoknadKvittering;
+    response: IOMPMASoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
-export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
+export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = (
     {
         intl,
         response,
@@ -37,7 +37,7 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = (
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
 
     return (
-        <div className={classNames('OMPKSSoknadKvitteringContainer')}>
+        <div className={classNames('OMPMASoknadKvitteringContainer')}>
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
             {kopierJournalpostSuccess && (
                 <div>
@@ -91,4 +91,4 @@ const mapStateToProps = (state: RootStateType) => ({
     annenSokerIdent: state.identState.annenSokerIdent,
 });
 
-export default connect(mapStateToProps)(OMPKSSoknadKvittering);
+export default connect(mapStateToProps)(OMPMASoknadKvittering);

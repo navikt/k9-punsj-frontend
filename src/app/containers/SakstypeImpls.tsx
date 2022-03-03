@@ -133,6 +133,7 @@ export const Sakstyper: ISakstyper = {
         PleiepengerILivetsSluttfase,
         OmsorgspengerFordeling,
         OmsorgspengerKroniskSyktBarnSakstypePunch,
+        OmsorgspengerMidlertidigAlene,
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding
     ],

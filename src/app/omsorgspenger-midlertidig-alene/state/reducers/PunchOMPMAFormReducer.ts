@@ -1,8 +1,8 @@
 import {PunchFormActionKeys} from 'app/models/enums';
-import {IPunchOMPKSFormActionTypes} from '../actions/OMPKSPunchFormActions';
-import {IPunchOMPKSFormState} from '../../types/PunchOMPKSFormState';
+import {IPunchOMPMAFormActionTypes} from '../actions/OMPMAPunchFormActions';
+import {IPunchOMPMAFormState} from '../../types/PunchOMPMAFormState';
 
-const initialState: IPunchOMPKSFormState = {
+const initialState: IPunchOMPMAFormState = {
     isSoknadLoading: false,
     isComplete: false,
     isValid: false,
@@ -13,10 +13,10 @@ const initialState: IPunchOMPKSFormState = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export function PunchOMPKSFormReducer(
-    punchFormState: IPunchOMPKSFormState,
-    action: IPunchOMPKSFormActionTypes
-): IPunchOMPKSFormState {
+export function PunchOMPMAFormReducer(
+    punchFormState: IPunchOMPMAFormState,
+    action: IPunchOMPMAFormActionTypes
+): IPunchOMPMAFormState {
     if (typeof punchFormState === 'undefined') return initialState
 
     switch (action.type) {

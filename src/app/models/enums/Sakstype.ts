@@ -20,6 +20,7 @@ export enum TilgjengeligSakstype {
     PLEIEPENGER_SYKT_BARN = 'PLEIEPENGER_SYKT_BARN',
     PLEIEPENGER_I_LIVETS_SLUTTFASE = 'PLEIEPENGER_I_LIVETS_SLUTTFASE',
     OMSORGSPENGER_KRONISK_SYKT_BARN = 'OMSORGSPENGER_KRONISK_SYKT_BARN',
+    OMSORGSPENGER_MIDLERTIDIG_ALENE = 'OMSORGSPENGER_MIDLERTIDIG_ALENE',
     OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING = 'OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING',
     ANNET = 'ANNET',
     SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES',
@@ -45,6 +46,12 @@ export const pleiepengerILivetsSluttfaseSakstyper = [
 
 export const omsorgspengerKroniskSyktBarnSakstyper = [
     TilgjengeligSakstype.OMSORGSPENGER_KRONISK_SYKT_BARN,
+    TilgjengeligSakstype.ANNET,
+    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+];
+
+export const omsorgspengerMidlertidigAleneSakstyper = [
+    TilgjengeligSakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE,
     TilgjengeligSakstype.ANNET,
     TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
 ];

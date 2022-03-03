@@ -6,41 +6,41 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux'
 import {PunchStep} from '../../models/enums';
 import {
-    createOMPKSSoknad, resetOMPKSSoknadidAction
-} from '../state/actions/EksisterendeOMPKSSoknaderActions';
+    createOMPMASoknad, resetOMPMASoknadidAction
+} from '../state/actions/EksisterendeOMPMASoknaderActions';
 import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from '../../state/actions/JournalposterPerIdentActions';
 import {IJournalposterPerIdentState} from '../../models/types/Journalpost/JournalposterPerIdentState';
 import {IIdentState} from '../../models/types/IdentState';
 import {IEksisterendeSoknaderState, IPunchState} from '../../models/types';
 import {setHash} from '../../utils';
-import {EksisterendeOMPKSSoknader} from './EksisterendeOMPKSSoknader';
+import {EksisterendeOMPMASoknader} from './EksisterendeOMPMASoknader';
 import {RootStateType} from '../../state/RootState';
 
-export interface IOMPKSRegistreringsValgComponentProps {
+export interface IOMPMARegistreringsValgComponentProps {
     journalpostid: string;
     getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
-export interface IOMPKSRegistreringsValgDispatchProps {
+export interface IOMPMARegistreringsValgDispatchProps {
     undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
-    createSoknad: typeof createOMPKSSoknad;
-    resetSoknadidAction: typeof resetOMPKSSoknadidAction;
+    createSoknad: typeof createOMPMASoknad;
+    resetSoknadidAction: typeof resetOMPMASoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
-export interface IEksisterendeOMPKSSoknaderStateProps {
+export interface IEksisterendeOMPMASoknaderStateProps {
     punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
 }
 
-type IOMPKSRegistreringsValgProps = IOMPKSRegistreringsValgComponentProps &
-    IOMPKSRegistreringsValgDispatchProps &
-    IEksisterendeOMPKSSoknaderStateProps;
+type IOMPMARegistreringsValgProps = IOMPMARegistreringsValgComponentProps &
+    IOMPMARegistreringsValgDispatchProps &
+    IEksisterendeOMPMASoknaderStateProps;
 
-export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistreringsValgProps> = (
-    props: IOMPKSRegistreringsValgProps
+export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistreringsValgProps> = (
+    props: IOMPMARegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
 
@@ -86,7 +86,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPKSSoknader
+            <EksisterendeOMPMASoknader
                 ident1={ident1}
                 ident2={ident2}
                 getPunchPath={getPunchPath}
@@ -108,17 +108,17 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
 };
 const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
+        dispatch(createOMPMASoknad(journalpostid, ident1, ident2)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
-    resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
+    resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 
-const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateProps => ({
+const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
     punchState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchState,
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });
 
-export const OMPKSRegistreringsValg = connect(mapStateToProps, mapDispatchToProps)(RegistreringsValgComponent);
+export const OMPMARegistreringsValg = connect(mapStateToProps, mapDispatchToProps)(RegistreringsValgComponent);

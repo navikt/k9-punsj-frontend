@@ -1,13 +1,13 @@
 import {
-    IEksisterendeOMPKSSoknaderActionTypes
-} from '../actions/EksisterendeOMPKSSoknaderActions';
+    IEksisterendeOMPMASoknaderActionTypes
+} from '../actions/EksisterendeOMPMASoknaderActions';
 import {
-    IEksisterendeOMPKSSoknaderState
-} from '../../types/EksisterendeOMPKSSoknaderState';
-import {EksisterendeOMPKSSoknaderActionKeys} from '../../types/EksisterendeOMPKSSoknaderActionKeys';
-import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
+    IEksisterendeOMPMASoknaderState
+} from '../../types/EksisterendeOMPMASoknaderState';
+import {EksisterendeOMPMASoknaderActionKeys} from '../../types/EksisterendeOMPMASoknaderActionKeys';
+import {IOMPMASoknad} from '../../types/OMPMASoknad';
 
-const initialState: IEksisterendeOMPKSSoknaderState = {
+const initialState: IEksisterendeOMPMASoknaderState = {
     eksisterendeSoknaderSvar: {},
     isEksisterendeSoknaderLoading: false,
     eksisterendeSoknaderRequestError: undefined,
@@ -16,13 +16,13 @@ const initialState: IEksisterendeOMPKSSoknaderState = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export function EksisterendeOMPKSSoknaderReducer(
-    eksisterendeSoknaderState: IEksisterendeOMPKSSoknaderState,
-    action: IEksisterendeOMPKSSoknaderActionTypes
-): IEksisterendeOMPKSSoknaderState {
+export function EksisterendeOMPMASoknaderReducer(
+    eksisterendeSoknaderState: IEksisterendeOMPMASoknaderState,
+    action: IEksisterendeOMPMASoknaderActionTypes
+): IEksisterendeOMPMASoknaderState {
     if (typeof eksisterendeSoknaderState === 'undefined') return initialState;
 
-    function openOrChoose(soknadInfo: IOMPKSSoknad) {
+    function openOrChoose(soknadInfo: IOMPMASoknad) {
         return {
             ...eksisterendeSoknaderState,
             chosenSoknad: soknadInfo,
@@ -37,22 +37,22 @@ export function EksisterendeOMPKSSoknaderReducer(
     }
 
     switch (action.type) {
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_SET:
             return {
                 ...eksisterendeSoknaderState,
-                eksisterendeSoknaderSvar: action.eksisterendeOMPKSSoknaderSvar,
+                eksisterendeSoknaderSvar: action.eksisterendeOMPMASoknaderSvar,
                 isEksisterendeSoknaderLoading: false,
                 eksisterendeSoknaderRequestError: undefined,
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_LOAD:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_LOAD:
             return {
                 ...eksisterendeSoknaderState,
                 isEksisterendeSoknaderLoading: action.isLoading,
                 eksisterendeSoknaderRequestError: undefined,
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_REQUEST_ERROR:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_REQUEST_ERROR:
             return {
                 ...eksisterendeSoknaderState,
                 isEksisterendeSoknaderLoading: false,
@@ -60,19 +60,19 @@ export function EksisterendeOMPKSSoknaderReducer(
                 isSoknadCreated: false,
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_OPEN:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNAD_OPEN:
             return openOrChoose(action.soknadInfo);
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CLOSE:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNAD_CLOSE:
             return undoOrClose();
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CHOOSE:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNAD_CHOOSE:
             return openOrChoose(action.soknadInfo);
 
-        case EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_UNDO_CHOICE:
+        case EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNAD_UNDO_CHOICE:
             return undoOrClose();
 
-        case EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_REQUEST:
+        case EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_REQUEST:
             return {
                 ...eksisterendeSoknaderState,
                 soknadid: undefined,
@@ -80,7 +80,7 @@ export function EksisterendeOMPKSSoknaderReducer(
                 createSoknadRequestError: undefined,
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_SUCCESS:
+        case EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_SUCCESS:
             return {
                 ...eksisterendeSoknaderState,
                 soknadid: action.id,
@@ -90,7 +90,7 @@ export function EksisterendeOMPKSSoknaderReducer(
                 eksisterendeSoknaderSvar: {},
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_ERROR:
+        case EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_ERROR:
             return {
                 ...eksisterendeSoknaderState,
                 soknadid: undefined,
@@ -99,7 +99,7 @@ export function EksisterendeOMPKSSoknaderReducer(
                 isSoknadCreated: false,
             };
 
-        case EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNADID_RESET:
+        case EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET:
             return {
                 ...eksisterendeSoknaderState,
                 soknadid: undefined,

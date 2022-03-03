@@ -47,6 +47,7 @@
     "fordeling.sakstype.OMSORGSPENGER_OVERFØRING": "Omsorgsdager: overføring av omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_FORDELING": "Omsorgsdager: fordeling av omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN": "Registrer søknad/legeerklæring - ekstra omsorgsdager",
+    "fordeling.sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE": "Registrer søknad - ekstra omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_LEGEERKLÆRING": "Omsorgsdager: legeerklæring for kronisk sykt eller funksjonshemmet barn",
     "fordeling.sakstype.OMSORGSPENGER_ALENE_OM_OMSORG": "Omsorgsdager: Alene om omsorgen",
     "fordeling.sakstype.OMSORGSPENGER_SELVST_FRILANS": "Omsorgspenger: selvstendig næringsdrivende og frilanser",
@@ -467,7 +468,7 @@
     "PLEIEPENGER": "Pleiepenger",
     "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
     "OMSORGSPENGER_KS": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
-    "OMSORGSPENGER_MA": "Omsorgsdager: ekstra omsorgsdager når du er alene om omsorger",
+    "OMSORGSPENGER_MA": "Omsorgsdager: ekstra omsorgsdager når du er alene om omsorgen",
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",
 

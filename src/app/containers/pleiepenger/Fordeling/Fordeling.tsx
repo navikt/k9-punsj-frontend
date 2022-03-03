@@ -124,6 +124,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
         dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
     const erInntektsmeldingUtenKrav =
@@ -372,6 +373,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
                                                 dokumenttype ===
                                                     FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                             !erUgyldigIdent(identState.ident1)
@@ -384,6 +386,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             disabled={
                                                 ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
                                                     dokumenttype ===
                                                         FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                                     (erUgyldigIdent(identState.ident2) ||

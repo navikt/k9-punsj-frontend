@@ -19,57 +19,57 @@ import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import {IIdentState} from '../../models/types/IdentState';
-import {ompKSPaths} from './OMPKSRoutes';
-import {OMPKSPunchForm} from './OMPKSPunchForm';
-import {OMPKSSoknadKvittering} from './SoknadKvittering/OMPKSSoknadKvittering';
-import {IPunchOMPKSFormState} from '../types/PunchOMPKSFormState';
+import {OMPMAPaths} from './OMPMARoutes';
+import {OMPMAPunchForm} from './OMPMAPunchForm';
+import {OMPMASoknadKvittering} from './SoknadKvittering/OMPMASoknadKvittering';
+import {IPunchOMPMAFormState} from '../types/PunchOMPMAFormState';
 import {IJournalpost, IPath, IPunchState} from '../../models/types';
 import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import {OMPKSRegistreringsValg} from './OMPKSRegistreringsValg';
+import {OMPMARegistreringsValg} from './OMPMARegistreringsValg';
 
-export interface IPunchOMPKSPageStateProps {
+export interface IPunchOMPMAPageStateProps {
     punchState: IPunchState;
     journalpost?: IJournalpost;
     identState: IIdentState;
     forbidden: boolean | undefined;
-    punchFormState: IPunchOMPKSFormState;
+    punchFormState: IPunchOMPMAFormState;
 }
 
-export interface IPunchOMPKSPageDispatchProps {
+export interface IPunchOMPMAPageDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
 }
 
-export interface IPunchOMPKSPageQueryProps {
+export interface IPunchOMPMAPageQueryProps {
     dok?: string | null;
 }
 
-export interface IPunchOMPKSPageComponentProps {
+export interface IPunchOMPMAPageComponentProps {
     match?: any;
     step: PunchStep;
     journalpostid?: string;
     paths: IPath[];
 }
 
-export interface IPunchOMPKSPageComponentState {
+export interface IPunchOMPMAPageComponentState {
     ident1: string;
     ident2: string;
 }
 
-type IPunchOMPKSPageProps = WrappedComponentProps &
+type IPunchOMPMAPageProps = WrappedComponentProps &
     RouteComponentProps &
-    IPunchOMPKSPageComponentProps &
-    IPunchOMPKSPageStateProps &
-    IPunchOMPKSPageDispatchProps &
-    IPunchOMPKSPageQueryProps;
+    IPunchOMPMAPageComponentProps &
+    IPunchOMPMAPageStateProps &
+    IPunchOMPMAPageDispatchProps &
+    IPunchOMPMAPageQueryProps;
 
-export const PunchOMPKSPageComponent: React.FunctionComponent<IPunchOMPKSPageProps> = (props) => {
+export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPageProps> = (props) => {
     const {intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState} = props;
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(ompKSPaths, punchStep, values, dok ? {dok} : undefined);
+        getPath(OMPMAPaths, punchStep, values, dok ? {dok} : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
@@ -95,9 +95,9 @@ export const PunchOMPKSPageComponent: React.FunctionComponent<IPunchOMPKSPagePro
         // eslint-disable-next-line default-case
         switch (step) {
             case PunchStep.CHOOSE_SOKNAD:
-                return <OMPKSRegistreringsValg {...commonProps} />;
+                return <OMPMARegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
-                return <OMPKSPunchForm {...commonProps} id={match.params.id}/>;
+                return <OMPMAPunchForm {...commonProps} id={match.params.id}/>;
             case PunchStep.COMPLETED:
                 return (
                     <>
@@ -114,7 +114,7 @@ export const PunchOMPKSPageComponent: React.FunctionComponent<IPunchOMPKSPagePro
                             </Hovedknapp>
                         </div>
                         {!!punchFormState.innsentSoknad && (
-                            <OMPKSSoknadKvittering response={punchFormState.innsentSoknad} intl={intl}/>
+                            <OMPMASoknadKvittering response={punchFormState.innsentSoknad} intl={intl}/>
                         )}
                     </>
                 );
@@ -150,7 +150,7 @@ export const PunchOMPKSPageComponent: React.FunctionComponent<IPunchOMPKSPagePro
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="omp_ks_punch_form" border>
+                <Panel className="OMP_MA_punch_form" border>
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)}/>
                     {underFnr()}
                 </Panel>
@@ -182,11 +182,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
-const PunchOMPKSPageComponentWithQuery: React.FunctionComponent<IPunchOMPKSPageProps> = (props: IPunchOMPKSPageProps) => {
+const PunchOMPMAPageComponentWithQuery: React.FunctionComponent<IPunchOMPMAPageProps> = (props: IPunchOMPMAPageProps) => {
     const dok = useQuery().get('dok');
-    return <PunchOMPKSPageComponent {...props} dok={dok}/>;
+    return <PunchOMPMAPageComponent {...props} dok={dok}/>;
 };
 
-export const PunchOMPKSPage = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSPageComponentWithQuery))
+export const PunchOMPMAPage = withRouter(
+    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAPageComponentWithQuery))
 );
