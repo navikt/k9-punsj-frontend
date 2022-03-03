@@ -5,8 +5,8 @@ import { PunchStep } from '../../models/enums';
 export const OMPMAPaths: IPath[] = [
     {
         step: PunchStep.CHOOSE_SOKNAD,
-        path: '/omsorgspenger-kronisk-sykt-barn/hentsoknader',
+        path: '/omsorgspenger-midlertidig-alene/hentsoknader',
     },
-    { step: PunchStep.FILL_FORM, path: '/omsorgspenger-kronisk-sykt-barn/skjema/{id}' },
-    { step: PunchStep.COMPLETED, path: '/omsorgspenger-kronisk-sykt-barn/fullfort' },
+    { step: PunchStep.FILL_FORM, path: '/omsorgspenger-midlertidig-alene/skjema/{id}' },
+    { step: PunchStep.COMPLETED, path: '/omsorgspenger-midlertidig-alene/fullfort' },
 ];
