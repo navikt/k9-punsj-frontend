@@ -53,6 +53,7 @@ let handlers = [
             })
         )
     ),
+    testHandlers.barn,
 ];
 
 if (process.env.MSW_MODE === 'test') {
