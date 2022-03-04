@@ -183,7 +183,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setVisSakstypeValg(true);
         } else {
             const fagsakYtelseType = utledFagsakYtelseType(dokumentType)
-            console.log(`Utleder dokumentType ${dokumentType} til fagsakYtelseType ${fagsakYtelseType}`)
             props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId, fagsakYtelseType);
         }
     };

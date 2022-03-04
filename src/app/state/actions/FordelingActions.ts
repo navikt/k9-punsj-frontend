@@ -165,7 +165,7 @@ export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid:
             journalpostId: jpid,
             fagsakYtelseType
         };
-        console.log("Skal til k9sak request:", requestBody)
+
         dispatch(sjekkSkalTilK9RequestAction());
         post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, svar) => {
             if (response.ok) {
