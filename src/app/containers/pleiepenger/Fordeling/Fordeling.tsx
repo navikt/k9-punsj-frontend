@@ -51,6 +51,7 @@ import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import { getEnvironmentVariable } from '../../../utils';
+import { FagsakYtelseType } from '../../../models/types/RequestBodies';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -94,7 +95,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setErIdent1Bekreftet,
         setSakstypeAction: sakstypeAction,
     } = props;
-    const { sakstype } = fordelingState;
+    const {sakstype} = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         []
@@ -145,7 +146,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setVisSokersBarn(true);
     };
 
-    const handleVidereClick = () => {
+    const utledFagsakYtelseType = (dokumentType: FordelingDokumenttype | undefined): FagsakYtelseType => {
+        switch (dokumentType) {
+            case FordelingDokumenttype.OMSORGSPENGER_KS:
+                return FagsakYtelseType.OMSORGSPENGER_KS;
+            case FordelingDokumenttype.PLEIEPENGER:
+                return FagsakYtelseType.PLEIEPENGER_SYKT_BARN;
+            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+                return FagsakYtelseType.PLEIEPENGER_NÆRSTÅENDE;
+            case FordelingDokumenttype.KORRIGERING_IM:
+                return FagsakYtelseType.OMSORGSPENGER;
+            default:
+                throw new Error(`${dokumentType} har ikke en tilsvarende FagsakYtelseType mapping.`)
+        }
+    };
+
+    const handleVidereClick = (dokumentType: FordelingDokumenttype | undefined) => {
         if (
             identState.ident1 &&
             identState.ident2 &&
@@ -166,7 +182,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (!identState.ident2 || !journalpost?.journalpostId) {
             setVisSakstypeValg(true);
         } else {
-            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId);
+            const fagsakYtelseType = utledFagsakYtelseType(dokumentType)
+            console.log(`Utleder dokumentType ${dokumentType} til fagsakYtelseType ${fagsakYtelseType}`)
+            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId, fagsakYtelseType);
         }
     };
 
@@ -213,7 +231,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
-        return <NavFrontendSpinner />;
+        return <NavFrontendSpinner/>;
     }
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone) {
@@ -225,13 +243,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 closeButton={false}
                 isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
             >
-                <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
+                <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort"/>
             </ModalWrapper>
         );
     }
 
     if (fordelingState.isAwaitingLukkOppgaveResponse) {
-        return <NavFrontendSpinner />;
+        return <NavFrontendSpinner/>;
     }
 
     if (fordelingState.lukkOppgaveDone) {
@@ -243,7 +261,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 closeButton={false}
                 isOpen={!!fordelingState.lukkOppgaveDone}
             >
-                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
+                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort"/>
             </ModalWrapper>
         );
     }
@@ -265,12 +283,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         <div className="fordeling-container">
             {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
                 <FormPanel>
-                    <JournalpostPanel />
+                    <JournalpostPanel/>
                     {erInntektsmeldingUtenKrav && (
                         <>
-                            <VerticalSpacer thirtyTwoPx />
+                            <VerticalSpacer thirtyTwoPx/>
                             <Systemtittel>Inntektsmelding uten søknad</Systemtittel>
-                            <VerticalSpacer twentyPx />
+                            <VerticalSpacer twentyPx/>
                         </>
                     )}
                     <div className="fordeling-page">
@@ -282,20 +300,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
                                     <ul className="punkliste">
                                         <li>
-                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.1" />
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.1"/>
                                         </li>
                                         <li>
-                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.2" />
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.2"/>
                                         </li>
                                         <li>
-                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.3" />
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.3"/>
                                         </li>
                                         <li>
-                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.4" />
+                                            <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.4"/>
                                         </li>
                                     </ul>
                                 </AlertStripeAdvarsel>
-                                <VerticalSpacer thirtyTwoPx />
+                                <VerticalSpacer thirtyTwoPx/>
                             </>
                         )}
                         <div>
@@ -354,9 +372,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             />
 
                             {erInntektsmeldingUtenKrav && identState.ident1 ? (
-                                <HåndterInntektsmeldingUtenKrav ident1={identState.ident1} journalpost={journalpost} />
+                                <HåndterInntektsmeldingUtenKrav ident1={identState.ident1} journalpost={journalpost}/>
                             ) : (
-                                <VerticalSpacer twentyPx />
+                                <VerticalSpacer twentyPx/>
                             )}
                             {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
@@ -376,11 +394,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                                         <Knapp
                                             mini
-                                            onClick={() => handleVidereClick()}
+                                            onClick={() => handleVidereClick(dokumenttype)}
                                             disabled={
                                                 ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                    dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+                                                        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                                     (erUgyldigIdent(identState.ident2) ||
                                                         (!identState.ident2 && !barnetHarIkkeFnr))) ||
                                                 erUgyldigIdent(identState.ident1)
@@ -392,7 +410,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </>
                             )}
                         </div>
-                        <VerticalSpacer sixteenPx />
+                        <VerticalSpacer sixteenPx/>
                         <ValgForDokument
                             dokumenttype={dokumenttype}
                             journalpost={journalpost}
@@ -416,17 +434,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
                                     <div>
                                         <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
-                                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
+                                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info"/>
                                         </AlertStripeInfo>
                                         <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
-                                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                                         </Knapp>
                                     </div>
                                 )}
 
                                 {kanJournalforingsoppgaveOpprettesiGosys && (
                                     <>
-                                        <GosysGjelderKategorier />
+                                        <GosysGjelderKategorier/>
                                         <Hovedknapp
                                             mini
                                             disabled={!fordelingState.valgtGosysKategori}
@@ -438,14 +456,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 )
                                             }
                                         >
-                                            <FormattedMessage id="fordeling.sakstype.ANNET" />
+                                            <FormattedMessage id="fordeling.sakstype.ANNET"/>
                                         </Hovedknapp>
                                     </>
                                 )}
                             </>
                         )}
 
-                        <VerticalSpacer sixteenPx />
+                        <VerticalSpacer sixteenPx/>
                         {!!fordelingState.sjekkTilK9Error && (
                             <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>
                         )}
@@ -454,7 +472,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <AlertStripeFeil>
                                     {intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}
                                 </AlertStripeFeil>
-                                <VerticalSpacer sixteenPx />
+                                <VerticalSpacer sixteenPx/>
                                 <div className="journalikkestottetkopi-checkboks">
                                     <Checkbox
                                         label={intlHelper(intl, 'fordeling.kopiereJournal')}
@@ -478,7 +496,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     fellesState={fellesState}
                                     intl={intl}
                                 />
-                                {!!fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner />}
+                                {!!fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner/>}
                                 <Knapp
                                     onClick={() => {
                                         if (skalJournalpostSomIkkeStottesKopieres) {
@@ -488,15 +506,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         }
                                     }}
                                 >
-                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES"/>
                                 </Knapp>
                             </div>
                         )}
-                        {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner />}
+                        {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner/>}
                     </div>
                 </FormPanel>
             )}
-            {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <JournalpostAlleredeBehandlet />}
+            {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <JournalpostAlleredeBehandlet/>}
             {!journalpost?.erSaksbehandler && (
                 <div>
                     <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel>
@@ -506,7 +524,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             {journalpost && (
                 <PdfVisning
                     journalpostDokumenter={[
-                        { journalpostid: journalpost?.journalpostId, dokumenter: journalpost?.dokumenter },
+                        {journalpostid: journalpost?.journalpostId, dokumenter: journalpost?.dokumenter},
                     ]}
                 />
             )}
@@ -532,8 +550,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
+    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string, fagsakYtelseType: FagsakYtelseType) =>
+        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),

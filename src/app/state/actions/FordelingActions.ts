@@ -2,7 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { FordelingActionKeys, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
-import { ISkalTilK9 } from '../../models/types/RequestBodies';
+import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
@@ -157,14 +157,15 @@ export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any)
     });
 };
 
-export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string) {
+export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string, fagsakYtelseType: FagsakYtelseType) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
             barnIdent,
             journalpostId: jpid,
+            fagsakYtelseType
         };
-
+        console.log("Skal til k9sak request:", requestBody)
         dispatch(sjekkSkalTilK9RequestAction());
         post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, svar) => {
             if (response.ok) {
