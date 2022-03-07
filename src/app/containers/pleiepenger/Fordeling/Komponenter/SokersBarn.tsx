@@ -1,3 +1,4 @@
+import Personvelger from 'app/components/person-velger/Personvelger';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -27,14 +28,24 @@ export interface ISokersBarnDispatchProps {
 export interface ISokersBarn {
     sokersIdent: string;
     barnetHarInteFnrFn?: (harBarnetFnr: boolean) => void;
+    flervalg: boolean;
     visSokersBarn?: boolean;
 }
 
 type ISokersBarnProps = WrappedComponentProps & ISokersBarnStateProps & ISokersBarnDispatchProps & ISokersBarn;
 
 const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) => {
-    const { intl, barnetHarInteFnrFn, identState, sokersIdent, fellesState, setIdentAction, henteBarn, visSokersBarn } =
-        props;
+    const {
+        intl,
+        barnetHarInteFnrFn,
+        identState,
+        sokersIdent,
+        fellesState,
+        setIdentAction,
+        henteBarn,
+        visSokersBarn,
+        flervalg,
+    } = props;
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
@@ -70,6 +81,14 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
 
     if (!visSokersBarn) {
         return null;
+    }
+
+    if (flervalg) {
+        return (
+            <div>
+                <Personvelger />
+            </div>
+        );
     }
 
     return (

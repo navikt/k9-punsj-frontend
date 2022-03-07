@@ -369,6 +369,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             setBarnetHarIkkeFnr(harBarnetFnr)
                                         }
                                         sokersIdent={identState.ident1}
+                                        flervalg={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
                                         visSokersBarn={
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
