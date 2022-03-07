@@ -2,7 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { FordelingActionKeys, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
-import { ISkalTilK9 } from '../../models/types/RequestBodies';
+import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
@@ -157,12 +157,13 @@ export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any)
     });
 };
 
-export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string) {
+export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string, fagsakYtelseType: FagsakYtelseType) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
             barnIdent,
             journalpostId: jpid,
+            fagsakYtelseType
         };
 
         dispatch(sjekkSkalTilK9RequestAction());
