@@ -19,6 +19,7 @@ import { Locale } from './models/types';
 import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
 import './styles/globalStyles.less';
+import '@navikt/ds-css';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 
 const environment = window.location.hostname;

@@ -1,3 +1,31 @@
-.root {
-    border: 2px solid red;
+.personvelger {
+    display: grid;
+    row-gap: 1rem;
+    padding: 1rem;
+    background-color: #eaeaea;
+    border: 1px solid #6a6a6a;
+    border-radius: 0.25rem;
+    margin-top: 10px;
+    font-size: 16px;
+
+    .personlinje {
+        display: grid;
+        grid-column-gap: 1rem;
+        grid-template-columns: 3fr 3fr 1fr;
+
+        .navn {
+            p:nth-of-type(2) {
+                margin-top: 10px;
+            }
+        }
+
+        .navds-checkbox {
+            align-self: end;
+            margin-bottom: 8px;
+        }
+    }
+
+    button {
+        max-width: 150px;
+    }
 }
