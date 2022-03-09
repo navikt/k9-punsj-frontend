@@ -3,16 +3,14 @@ import React from 'react';
 import { CheckboxGroup, TextField, Checkbox, BodyShort, Label, Button } from '@navikt/ds-react';
 import './personvelger.less';
 import { AddPerson } from '@navikt/ds-icons';
+import { Personvalg } from 'app/models/types/IdentState';
 
-type Person = {
-    identifikator: string;
-    navn: string;
-};
 interface OwnProps {
-    personer: Person[];
+    personer: Personvalg[];
+    onChange: (barn: Personvalg[]) => void;
 }
 
-const Personvelger = ({ personer = [1, 2] }: OwnProps) => (
+const Personvelger = ({ personer = [1, 2], onChange }: OwnProps) => (
     <>
         <Label size="small">Velg hvilke barn det gjelder </Label>
         <div className="personvelger">
@@ -23,10 +21,14 @@ const Personvelger = ({ personer = [1, 2] }: OwnProps) => (
                         <Label size="small">Navn</Label>
                         <BodyShort size="small">Bobby Binders</BodyShort>
                     </div>
-                    <Checkbox size="small">Valgt</Checkbox>
+                    <Checkbox size="small">Valgt</Checkbox> 
                 </div>
             ))}
-            <Button variant="tertiary" size="small">
+            <Button
+                variant="tertiary"
+                size="small"
+                onClick={() => {console.log('lel'); return onChange([...personer, { identifikator: '', navn: '', valgt: false }])}}
+            >
                 <AddPerson />
                 Legg til barn
             </Button>

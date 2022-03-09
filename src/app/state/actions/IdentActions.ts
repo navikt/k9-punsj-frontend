@@ -1,4 +1,4 @@
-import { Barn } from 'app/models/types/IdentState';
+import { Personvalg } from 'app/models/types/IdentState';
 
 export enum IdentActionKeys {
     IDENT_FELLES_SET = 'IDENT_SET_FELLES',
@@ -14,12 +14,12 @@ interface ISetIdentFellesAction {
 export interface ISetFlereBarnAction {
     type: IdentActionKeys.IDENT_SET_FLERE_BARN;
     ident2: null;
-    barn: Barn[];
+    barn: Personvalg[];
 }
 
 export type IIdentActions = ISetIdentFellesAction;
 
-export const setFlereBarnAction = (barn: Barn[]) => ({
+export const setFlereBarnAction = (barn: Personvalg[]) => ({
     type: IdentActionKeys.IDENT_SET_FLERE_BARN,
     barn,
 });

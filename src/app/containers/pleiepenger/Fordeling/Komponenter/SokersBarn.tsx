@@ -2,14 +2,15 @@ import Personvelger from 'app/components/person-velger/Personvelger';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Checkbox, Input, Select } from 'nav-frontend-skjema';
+import { Checkbox } from '@navikt/ds-react';
+import { Input, Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { IIdentState } from '../../../../models/types/IdentState';
-import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
+import { IIdentState, Personvalg } from '../../../../models/types/IdentState';
+import { setIdentFellesAction, setFlereBarnAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
 import { erUgyldigIdent } from '../FordelingFeilmeldinger';
@@ -23,6 +24,7 @@ export interface ISokersBarnStateProps {
 export interface ISokersBarnDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     henteBarn: typeof hentBarn;
+    setFlereBarn: typeof setFlereBarnAction;
 }
 
 export interface ISokersBarn {
@@ -45,6 +47,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
         henteBarn,
         visSokersBarn,
         flervalg,
+        setFlereBarn,
     } = props;
 
     const [barnetsIdent, setBarnetsIdent] = useState<string>('');
@@ -86,7 +89,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
     if (flervalg) {
         return (
             <div>
-                <Personvelger />
+                <Personvelger personer={identState.barn} onChange={setFlereBarn} />
             </div>
         );
     }
@@ -114,12 +117,14 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
                     </Select>
                     <VerticalSpacer eightPx />
                     <Checkbox
-                        label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                         onChange={(e) => {
                             setGjelderAnnetBarn(e.target.checked);
                             nullUtBarnetsIdent();
                         }}
-                    />
+                        checked={gjelderAnnetBarn}
+                    >
+                        {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                    </Checkbox>
                 </>
             )}
             <VerticalSpacer sixteenPx />
@@ -159,9 +164,11 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
                     {barnetHarInteFnrFn && (
                         <>
                             <Checkbox
-                                label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
                                 onChange={(e) => barnHarIkkeFnrCheckboks(e.target.checked)}
-                            />
+                                checked={barnetHarIkkeFnr}
+                            >
+                                {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
+                            </Checkbox>
                             {barnetHarIkkeFnr && (
                                 <AlertStripeInfo className="infotrygd_info">
                                     {' '}
@@ -186,6 +193,7 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
+    setFlereBarn: (barn: Personvalg[]) => dispatch(setFlereBarnAction(barn)),
     henteBarn: (ident1: string) => dispatch(hentBarn(ident1)),
 });
 
