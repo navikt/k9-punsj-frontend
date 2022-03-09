@@ -41,6 +41,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
 }) => {
     const skalVises =
         dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM||
         erInntektsmeldingUtenKrav;

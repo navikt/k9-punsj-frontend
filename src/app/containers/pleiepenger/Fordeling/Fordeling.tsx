@@ -51,6 +51,7 @@ import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import { getEnvironmentVariable } from '../../../utils';
+import { FagsakYtelseType } from '../../../models/types/RequestBodies';
 
 export interface IFordelingStateProps {
     journalpost?: IJournalpost;
@@ -122,6 +123,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const gjelderPleiepengerEllerOmsorgspenger =
         dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
@@ -144,7 +146,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setVisSokersBarn(true);
     };
 
-    const handleVidereClick = () => {
+    const utledFagsakYtelseType = (dokumentType: FordelingDokumenttype | undefined): FagsakYtelseType => {
+        switch (dokumentType) {
+            case FordelingDokumenttype.OMSORGSPENGER_KS:
+                return FagsakYtelseType.OMSORGSPENGER_KS;
+            case FordelingDokumenttype.PLEIEPENGER:
+                return FagsakYtelseType.PLEIEPENGER_SYKT_BARN;
+            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+                return FagsakYtelseType.PLEIEPENGER_NÆRSTÅENDE;
+            case FordelingDokumenttype.KORRIGERING_IM:
+                return FagsakYtelseType.OMSORGSPENGER;
+            default:
+                throw new Error(`${dokumentType} har ikke en tilsvarende FagsakYtelseType mapping.`);
+        }
+    };
+
+    const handleVidereClick = (dokumentType: FordelingDokumenttype | undefined) => {
         if (
             identState.ident1 &&
             identState.ident2 &&
@@ -165,7 +182,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (!identState.ident2 || !journalpost?.journalpostId) {
             setVisSakstypeValg(true);
         } else {
-            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId);
+            const fagsakYtelseType = utledFagsakYtelseType(dokumentType);
+            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId, fagsakYtelseType);
         }
     };
 
@@ -251,6 +269,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
                 return getEnvironmentVariable('OMP_KS_ENABLED') === 'true';
+
+            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+                return getEnvironmentVariable('PLS_ENABLED') === 'true';
+
             default:
                 return true;
         }
@@ -363,17 +385,21 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         visSokersBarn={
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
+                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                dokumenttype ===
+                                                    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                             !erUgyldigIdent(identState.ident1)
                                         }
                                     />
                                     {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
                                         <Knapp
                                             mini
-                                            onClick={() => handleVidereClick()}
+                                            onClick={() => handleVidereClick(dokumenttype)}
                                             disabled={
                                                 ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
+                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+                                                    dokumenttype ===
+                                                        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
                                                     erUgyldigIdent(identState.ident2) &&
                                                     !barnetHarIkkeFnr) ||
                                                 erUgyldigIdent(identState.ident1)
@@ -525,8 +551,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
+    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string, fagsakYtelseType: FagsakYtelseType) =>
+        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
