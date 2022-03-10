@@ -38,7 +38,6 @@ interface IValgForDokument {
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     omfordel: typeof omfordelAction;
-    visSakstypeValg: boolean;
     gjelderPleiepengerEllerOmsorgspenger: boolean;
 }
 
@@ -54,11 +53,10 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     journalpost,
     lukkJournalpostOppgave,
     gjelderPleiepengerEllerOmsorgspenger,
-    visSakstypeValg,
 }) => {
     const intl = useIntl();
 
-    const vis = (!!fordelingState.skalTilK9 || visSakstypeValg) && gjelderPleiepengerEllerOmsorgspenger;
+    const vis = fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger;
 
     if (!vis) {
         return null;

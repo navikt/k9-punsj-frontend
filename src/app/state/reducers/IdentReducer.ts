@@ -3,7 +3,7 @@ import { IdentActionKeys, IIdentActions, ISetFlereBarnAction } from '../actions/
 
 export const initialState: IIdentState = {
     ident1: '',
-    ident2: null,
+    ident2: '',
     barn: [],
     annenSokerIdent: null,
 };
@@ -23,7 +23,7 @@ export function IdentReducer(
         case IdentActionKeys.IDENT_SET_FLERE_BARN:
             return {
                 ...identState,
-                ident2: null,
+                ident2: '',
                 barn: action.barn,
             };
 

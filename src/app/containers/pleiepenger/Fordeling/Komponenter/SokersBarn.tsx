@@ -60,6 +60,18 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
         }
     }, [sokersIdent]);
 
+    useEffect(() => {
+        if (fellesState.barn) {
+            const barn = fellesState.barn.map((barnet) => ({
+                identitetsnummer: barnet.identitetsnummer,
+                navn: `${barnet.fornavn} ${barnet.etternavn}`,
+                valgt: true,
+                låsIdentitetsnummer: true,
+            }));
+            setFlereBarn(barn);
+        }
+    }, [fellesState.barn]);
+
     const barnetsIdentInputFieldOnChange = (event: any) => {
         setBarnetsIdent(event.target.value.replace(/\D+/, ''));
     };
@@ -82,16 +94,31 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
         }
     };
 
+    const barnetHarInteFnr = () => {
+        if (barnetHarInteFnrFn)
+            return (
+                <>
+                    <Checkbox onChange={(e) => barnHarIkkeFnrCheckboks(e.target.checked)} checked={barnetHarIkkeFnr}>
+                        {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
+                    </Checkbox>
+                    {barnetHarIkkeFnr && (
+                        <AlertStripeInfo className="infotrygd_info">
+                            {' '}
+                            {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}
+                        </AlertStripeInfo>
+                    )}
+                </>
+            );
+
+        return null;
+    };
+
     if (!visSokersBarn) {
         return null;
     }
 
     if (flervalg) {
-        return (
-            <div>
-                <Personvelger personer={identState.barn} onChange={setFlereBarn} />
-            </div>
-        );
+        return <Personvelger personer={identState.barn} onChange={setFlereBarn} intl={intl} />;
     }
 
     return (
@@ -161,22 +188,7 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
                         )}
                     </div>
                     <VerticalSpacer eightPx />
-                    {barnetHarInteFnrFn && (
-                        <>
-                            <Checkbox
-                                onChange={(e) => barnHarIkkeFnrCheckboks(e.target.checked)}
-                                checked={barnetHarIkkeFnr}
-                            >
-                                {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
-                            </Checkbox>
-                            {barnetHarIkkeFnr && (
-                                <AlertStripeInfo className="infotrygd_info">
-                                    {' '}
-                                    {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}
-                                </AlertStripeInfo>
-                            )}
-                        </>
-                    )}
+                    {barnetHarInteFnr()}
                     <VerticalSpacer sixteenPx />
                 </>
             )}

@@ -109,6 +109,7 @@
     "ident.usignert.sendt": "Det usignerte dokumentet er sendt videre.",
     "ident.usignert.feil.melding": "Det oppsto en feil.",
     "ident.usignert.feil.tilbake": "Tilbake",
+    "ident.feil.identitetsnummer.lengde": "Fødsels- eller D-nummer må ha 11 siffer.",
     "ident.feil.ugyldigident": "Dette er ikke et gyldig fødsels- eller D-nummer.",
     "ident.feil.annenSøkerJournalkopiSoker": "Fødselsnummeret kan ikke være søkers fødselsnummer.",
     "ident.feil.annenSøkerJournalkopiBarn": "Fødselsnummeret kan ikke være barnets fødselsnummer.",

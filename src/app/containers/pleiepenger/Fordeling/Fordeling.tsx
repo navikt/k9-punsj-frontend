@@ -53,7 +53,7 @@ import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav'
 import { getEnvironmentVariable } from '../../../utils';
 
 export interface IFordelingStateProps {
-    journalpost?: IJournalpost;
+    journalpost: IJournalpost;
     fordelingState: IFordelingState;
     journalpostId: string;
     identState: IIdentState;
@@ -104,7 +104,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
     const [dokumenttype, setDokumenttype] = useState<FordelingDokumenttype>();
-    const [visSakstypeValg, setVisSakstypeValg] = useState<boolean>(false);
 
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
@@ -129,6 +128,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
+
+    const kanGåVidereMidlertidigAlene =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
+        identState.barn.filter((barn) => barn.valgt).every((barn) => !erUgyldigIdent(barn.identitetsnummer));
+
+    const disableVidereKnapp =
+        ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+            (erUgyldigIdent(identState.ident2) || (!identState.ident2 && !barnetHarIkkeFnr))) ||
+        erUgyldigIdent(identState.ident1) ||
+        !kanGåVidereMidlertidigAlene;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -164,11 +175,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             );
         }
 
-        if (!identState.ident2 || !journalpost?.journalpostId) {
-            setVisSakstypeValg(true);
-        } else {
-            props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId);
-        }
+        const barnMidlertidigAlene = identState.barn
+            .filter((barn) => barn.valgt)
+            .map((barn) => barn.identitetsnummer);
+        props.sjekkOmSkalTilK9(
+            identState.ident1,
+            identState.ident2,
+            barnMidlertidigAlene,
+            journalpost.journalpostId
+        );
     };
 
     const kopierJournalpostOgLukkOppgave = () => {
@@ -380,21 +395,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             !erUgyldigIdent(identState.ident1)
                                         }
                                     />
-                                    {!(!!fordelingState.skalTilK9 || visSakstypeValg) && (
-                                        <Knapp
-                                            mini
-                                            onClick={() => handleVidereClick()}
-                                            disabled={
-                                                ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
-                                                    dokumenttype ===
-                                                        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-                                                    (erUgyldigIdent(identState.ident2) ||
-                                                        (!identState.ident2 && !barnetHarIkkeFnr))) ||
-                                                erUgyldigIdent(identState.ident1)
-                                            }
-                                        >
+                                    {!fordelingState.skalTilK9 && (
+                                        <Knapp mini onClick={() => handleVidereClick()} disabled={disableVidereKnapp}>
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
                                         </Knapp>
                                     )}
@@ -413,7 +415,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             setSakstypeAction={sakstypeAction}
                             lukkJournalpostOppgave={lukkJournalpostOppgave}
                             omfordel={omfordel}
-                            visSakstypeValg={visSakstypeValg}
                             gjelderPleiepengerEllerOmsorgspenger={gjelderPleiepengerEllerOmsorgspenger}
                         />
                         {fordelingState.skalTilK9 === false && (
@@ -541,8 +542,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid)),
+    sjekkOmSkalTilK9: (ident1: string, ident2: string, barn: string[], journalpostId: string) =>
+        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, barn, journalpostId)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
