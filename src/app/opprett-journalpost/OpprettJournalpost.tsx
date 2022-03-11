@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './opprettJournalpost.less';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { Field, Formik, FieldProps, ErrorMessage, Form } from 'formik';
-import { post } from 'app/utils';
+import { post, get } from 'app/utils';
 import { ApiPath } from 'app/apiConfig';
 import AlertStripe from 'nav-frontend-alertstriper';
 
@@ -18,6 +18,14 @@ enum OpprettJournalpostFormKeys {
 // eslint-disable-next-line arrow-body-style
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
+    const [fagsaker, setFagsaker] = useState([]);
+    const hentFagsaker = (søkersFødselsnummer: string) => {
+        get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, (response, data) => {
+            if (response.status === 200) {
+                setFagsaker(data);
+            }
+        });
+    };
     return (
         <div className="opprettJournalpost">
             <h1 className="heading">Opprett journalpost</h1>
@@ -39,7 +47,7 @@ const OpprettJournalpost: React.FC = () => {
                             notat: values.notat,
                         };
                         post(ApiPath.OPPRETT_NOTAT, undefined, undefined, nyJournalpost, (response) => {
-                            if (response.status === 200) {
+                            if (response.status === 201) {
                                 console.log(response);
                             } else {
                                 setOpprettJournalpostFeilet(true);
@@ -58,6 +66,13 @@ const OpprettJournalpost: React.FC = () => {
                                         bredde="L"
                                         label="Søkers fødselsnummer"
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                        onChange={(event) => {
+                                            const { value } = event.target;
+                                            setFieldValue(field.name, value);
+                                            if (value.length === 11) {
+                                                hentFagsaker(value);
+                                            }
+                                        }}
                                     />
                                 )}
                             </Field>
@@ -69,11 +84,14 @@ const OpprettJournalpost: React.FC = () => {
                                         bredde="l"
                                         label="Velg fagsak"
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                        disabled={fagsaker.length === 0}
                                     >
                                         <option value="">Velg</option>
-                                        <option value="norge">Norge</option>
-                                        <option value="sverige">Sverige</option>
-                                        <option value="danmark">Danmark</option>
+                                        {fagsaker.map((fagsak) => (
+                                            <option key={fagsak} value={fagsak}>
+                                                {fagsak}
+                                            </option>
+                                        ))}
                                     </Select>
                                 )}
                             </Field>
