@@ -10,7 +10,11 @@ const OpprettJournalpostInngang = () => (
             <Ingress>
                 Skal du punsje arbeidsforhold eller gjøre rettelser i punsj, kan du opprette ny journalpost her.
             </Ingress>
-            <Link className="linkButton knapp knapp--hoved" to="/opprett-journalpost">
+            <Link
+                className="linkButton knapp knapp--hoved"
+                to="/opprett-journalpost"
+                data-testid="opprett-journalpost-inngang"
+            >
                 Opprett journalpost
             </Link>
         </div>
