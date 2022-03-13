@@ -1,10 +1,9 @@
-import {ApiPath} from 'app/apiConfig';
-import {IError} from 'app/models/types';
-import {convertResponseToError, get, post} from 'app/utils';
-import {IOpprettSoknad} from '../../../models/types/RequestBodies';
-import {EksisterendeOMPMASoknaderActionKeys} from '../../types/EksisterendeOMPMASoknaderActionKeys';
-import {IOMPMASoknad} from '../../types/OMPMASoknad';
-import {IOMPMASoknadSvar} from '../../types/OMPMASoknadSvar';
+import { ApiPath } from 'app/apiConfig';
+import { IError } from 'app/models/types';
+import { convertResponseToError, get, post } from 'app/utils';
+import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';
+import { IOMPMASoknad } from '../../types/OMPMASoknad';
+import { IOMPMASoknadSvar } from '../../types/OMPMASoknadSvar';
 
 interface ISetEksisterendeOMPMASoknaderAction {
     type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_SET;
@@ -57,6 +56,12 @@ interface IResetOMPMASoknadidAction {
     type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET;
 }
 
+interface IOpprettMASoknad {
+    journalpostId: string;
+    norskIdent: string;
+    barn: string[];
+}
+
 type IMapperOMPMAActionTypes =
     | ISetEksisterendeOMPMASoknaderAction
     | IFindEksisterendeOMPMASoknaderErrorAction
@@ -69,7 +74,7 @@ type IOMPMASoknadinfoActionTypes =
     | IUndoChoiceOfOMPMASoknadAction;
 
 type ICreateOMPMASoknadActions =
-    ICreateOMPMASoknadRequestAction
+    | ICreateOMPMASoknadRequestAction
     | ICreateOMPMASoknadErrorAction
     | ICreateOMPMASoknadSuccessAction;
 
@@ -79,14 +84,18 @@ export type IEksisterendeOMPMASoknaderActionTypes =
     | ICreateOMPMASoknadActions
     | IResetOMPMASoknadidAction;
 
-export function setEksisterendeOMPMASoknaderAction(EksisterendeOMPMASoknaderSvar: IOMPMASoknadSvar): ISetEksisterendeOMPMASoknaderAction {
+export function setEksisterendeOMPMASoknaderAction(
+    EksisterendeOMPMASoknaderSvar: IOMPMASoknadSvar
+): ISetEksisterendeOMPMASoknaderAction {
     return {
         type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_SET,
         eksisterendeOMPMASoknaderSvar: EksisterendeOMPMASoknaderSvar,
     };
 }
 
-export function findEksisterendeOMPMASoknaderLoadingAction(isLoading: boolean): IFindEksisterendeOMPMASoknaderLoadingAction {
+export function findEksisterendeOMPMASoknaderLoadingAction(
+    isLoading: boolean
+): IFindEksisterendeOMPMASoknaderLoadingAction {
     return {
         type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_LOAD,
         isLoading,
@@ -107,7 +116,7 @@ export function findEksisterendeOMPMASoknader(ident1: string, ident2: string | n
         return get(
             ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND,
             undefined,
-            {'X-Nav-NorskIdent': idents},
+            { 'X-Nav-NorskIdent': idents },
             (response, soknader) => {
                 if (response.ok) {
                     return dispatch(setEksisterendeOMPMASoknaderAction(soknader));
@@ -126,7 +135,7 @@ export function openEksisterendeOMPMASoknadAction(soknadInfo: IOMPMASoknad): IOp
 }
 
 export function closeEksisterendeOMPMASoknadAction(): ICloseEksisterendeOMPMASoknadAction {
-    return {type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNAD_CLOSE};
+    return { type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNAD_CLOSE };
 }
 
 export function chooseEksisterendeOMPMASoknadAction(soknadInfo: IOMPMASoknad): IChooseOMPMASoknadAction {
@@ -143,30 +152,29 @@ export function undoChoiceOfEksisterendeOMPMASoknadAction(): IUndoChoiceOfOMPMAS
 }
 
 export function createOMPMASoknadRequestAction(): ICreateOMPMASoknadRequestAction {
-    return {type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_REQUEST};
+    return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_REQUEST };
 }
 
 export function createOMPMASoknadSuccessAction(id: string): ICreateOMPMASoknadSuccessAction {
-    return {type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_SUCCESS, id};
+    return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_SUCCESS, id };
 }
 
 export function createOMPMASoknadErrorAction(error: IError): ICreateOMPMASoknadErrorAction {
-    return {type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_ERROR, error};
+    return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNAD_CREATE_ERROR, error };
 }
 
 export function resetOMPMASoknadidAction(): IResetOMPMASoknadidAction {
-    return {type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET};
+    return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET };
 }
 
-export function createOMPMASoknad(journalpostid: string, ident1: string, barnIdent: string | null) {
+export function createOMPMASoknad(journalpostid: string, ident1: string, barn: string[]) {
     return (dispatch: any) => {
         dispatch(createOMPMASoknadRequestAction());
 
-        const requestBody: IOpprettSoknad = {
+        const requestBody: IOpprettMASoknad = {
             journalpostId: journalpostid,
             norskIdent: ident1,
-            pleietrengendeIdent: barnIdent,
-            barnIdent,
+            barn,
         };
 
         post(ApiPath.OMP_MA_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

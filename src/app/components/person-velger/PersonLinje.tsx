@@ -68,11 +68,7 @@ const PersonLinje = ({ person, index, onChange, personer, intl }: OwnProps) => {
                 <Label size="small">Navn</Label>
                 <BodyShort size="small">{person.navn}</BodyShort>
             </div>
-            <Checkbox
-                size="small"
-                checked={person.valgt}
-                onChange={(event) => handleCheckbox(event, personer, index, onChange)}
-            >
+            <Checkbox size="small" checked={person.valgt} onChange={(event) => handleCheckbox(event)}>
                 Valgt
             </Checkbox>
         </div>

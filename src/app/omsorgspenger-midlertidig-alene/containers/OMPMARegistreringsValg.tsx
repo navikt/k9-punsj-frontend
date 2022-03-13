@@ -41,7 +41,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     props: IOMPMARegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const { ident1, ident2 } = identState;
+    const { ident1, ident2, barn } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -67,7 +67,12 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
     }
 
-    const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
+    const newSoknad = () =>
+        props.createSoknad(
+            journalpostid,
+            ident1,
+            barn.filter((barnet) => barnet.valgt).map((barnet) => barnet.identitetsnummer)
+        );
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
@@ -102,8 +107,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createOMPMASoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, ident1: string, barn: string[]) =>
+        dispatch(createOMPMASoknad(journalpostid, ident1, barn)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

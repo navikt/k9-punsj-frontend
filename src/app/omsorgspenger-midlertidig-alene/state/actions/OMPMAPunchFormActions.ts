@@ -1,12 +1,12 @@
-import {ApiPath} from 'app/apiConfig';
-import {PunchFormActionKeys} from 'app/models/enums';
-import {IError} from 'app/models/types';
-import {IInputError} from 'app/models/types/InputError';
-import {convertResponseToError, get, post, put} from 'app/utils';
-import {ISendSoknad} from '../../../models/types/SendSoknad';
-import {IOMPMASoknad} from '../../types/OMPMASoknad';
-import {IOMPMASoknadUt} from '../../types/OMPMASoknadUt';
-import {IOMPMASoknadKvittering} from '../../types/OMPMASoknadKvittering';
+import { ApiPath } from 'app/apiConfig';
+import { PunchFormActionKeys } from 'app/models/enums';
+import { IError } from 'app/models/types';
+import { IInputError } from 'app/models/types/InputError';
+import { convertResponseToError, get, post, put } from 'app/utils';
+import { ISendSoknad } from '../../../models/types/SendSoknad';
+import { IOMPMASoknad } from '../../types/OMPMASoknad';
+import { IOMPMASoknadUt } from '../../types/OMPMASoknadUt';
+import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
 
 interface IResetPunchOMPMAFormAction {
     type: PunchFormActionKeys.RESET;
@@ -115,7 +115,7 @@ type IValiderOMPMASoknadActionTypes =
     | IValiderOMPMASoknadSuccessAction
     | IValiderOMPMASoknadErrorAction
     | IValiderOMPMASoknadResetAction
-    | IValiderOMPMASoknadUncompleteAction
+    | IValiderOMPMASoknadUncompleteAction;
 
 export type IPunchOMPMAFormActionTypes =
     | IResetPunchOMPMAFormAction
@@ -158,7 +158,7 @@ export const updateOMPMASoknadErrorAction = (error: IError): IUpdateOMPMASoknadE
 export function getOMPMASoknad(id: string) {
     return (dispatch: any) => {
         dispatch(getOMPMASoknadLoadingAction());
-        return get(ApiPath.OMP_MA_SOKNAD_GET, {id}, undefined, (response, soknad) => {
+        return get(ApiPath.OMP_MA_SOKNAD_GET, { id }, undefined, (response, soknad) => {
             if (response.ok || response.status === 400) {
                 return dispatch(setOMPMASoknadAction(soknad));
             }
@@ -170,7 +170,7 @@ export function getOMPMASoknad(id: string) {
 export function updateOMPMASoknad(soknad: Partial<IOMPMASoknadUt>) {
     return (dispatch: any) => {
         dispatch(updateOMPMASoknadRequestAction());
-        return put(ApiPath.OMP_MA_SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, (response) => {
+        return put(ApiPath.OMP_MA_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, (response) => {
             if (response.status === 200) {
                 return response.json().then((mappe) => {
                     dispatch(setOMPMASoknadAction(mappe));
@@ -178,7 +178,6 @@ export function updateOMPMASoknad(soknad: Partial<IOMPMASoknadUt>) {
                 });
             }
             return dispatch(updateOMPMASoknadErrorAction(convertResponseToError(response)));
-
         });
     };
 }
@@ -209,7 +208,7 @@ export function updateOMPMASoknader(
                 },
             },
         };
-        return put(ApiPath.OMP_MA_SOKNAD_UPDATE, {id: mappeid}, request, (response) => {
+        return put(ApiPath.OMP_MA_SOKNAD_UPDATE, { id: mappeid }, request, (response) => {
             switch (response.status) {
                 case 200:
                     return response.json().then((mappe) => {
@@ -287,8 +286,8 @@ export function submitOMPMASoknad(norskIdent: string, soeknadId: string) {
         dispatch(submitOMPMASoknadRequestAction());
         post(
             ApiPath.OMP_MA_SOKNAD_SUBMIT,
-            {id: soeknadId},
-            {'X-Nav-NorskIdent': norskIdent},
+            { id: soeknadId },
+            { 'X-Nav-NorskIdent': norskIdent },
             requestBody,
             (response, responseData) => {
                 switch (response.status) {
@@ -313,8 +312,8 @@ export function validerOMPMASoknad(soknad: IOMPMASoknadUt, erMellomlagring?: boo
         dispatch(validerOMPMASoknadRequestAction());
         post(
             ApiPath.OMP_MA_SOKNAD_VALIDER,
-            {id: soknad.soeknadId},
-            {'X-Nav-NorskIdent': norskIdent},
+            { id: soknad.soeknadId },
+            { 'X-Nav-NorskIdent': norskIdent },
             soknad,
             (response, data) => {
                 switch (response.status) {

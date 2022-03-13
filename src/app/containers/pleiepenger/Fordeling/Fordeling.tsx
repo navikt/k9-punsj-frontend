@@ -129,9 +129,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
-    const kanGåVidereMidlertidigAlene =
+    const disableVidereMidlertidigAlene =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        identState.barn.filter((barn) => barn.valgt).every((barn) => !erUgyldigIdent(barn.identitetsnummer));
+        identState.barn.filter((barn) => barn.valgt).some((barn) => erUgyldigIdent(barn.identitetsnummer));
 
     const disableVidereKnapp =
         ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
@@ -139,7 +139,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
             (erUgyldigIdent(identState.ident2) || (!identState.ident2 && !barnetHarIkkeFnr))) ||
         erUgyldigIdent(identState.ident1) ||
-        !kanGåVidereMidlertidigAlene;
+        disableVidereMidlertidigAlene;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');

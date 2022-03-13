@@ -1,15 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import DateInput from 'app/components/skjema/DateInput';
-import {AlertStripeAdvarsel, AlertStripeInfo} from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-import {Input, RadioPanelGruppe, SkjemaGruppe} from 'nav-frontend-skjema';
 import React from 'react';
-import {IntlShape} from 'react-intl';
-import {JaNeiIkkeRelevant} from '../../../models/enums/JaNeiIkkeRelevant';
-import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import Panel from 'nav-frontend-paneler';
+import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
+import { Heading, Alert } from '@navikt/ds-react';
+import DateInput from 'app/components/skjema/DateInput';
+import { IntlShape } from 'react-intl';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
+import { OMPMASoknad } from '../../types/OMPMASoknad';
 import './opplysningerOmOMPMASoknad.less';
-import {OMPMASoknad} from '../../types/OMPMASoknad';
 
 interface IOwnProps {
     intl: IntlShape;
@@ -20,19 +21,21 @@ interface IOwnProps {
     soknad: OMPMASoknad;
 }
 
-const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = (
-    {
-        intl,
-        changeAndBlurUpdatesSoknad,
-        getErrorMessage,
-        setSignaturAction,
-        signert,
-        soknad
-    }) => (
-    <Panel className="opplysningerOmOMPMASoknad">
-        <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-        <AlertStripeInfo>{intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}</AlertStripeInfo>
-        <SkjemaGruppe>
+const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
+    intl,
+    changeAndBlurUpdatesSoknad,
+    getErrorMessage,
+    setSignaturAction,
+    signert,
+    soknad,
+}) => (
+    <>
+        <Heading size="small">Omsorgsdager - Midlertidig alene om omsorgen</Heading>
+        <VerticalSpacer sixteenPx />
+        <Panel border>
+            <Alert variant="info" className="alert">
+                {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+            </Alert>
             <div className="input-row">
                 <DateInput
                     value={soknad.mottattDato}
@@ -70,7 +73,7 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = (
             {signert === JaNeiIkkeRelevant.NEI && (
                 <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
             )}
-        </SkjemaGruppe>
-    </Panel>
+        </Panel>
+    </>
 );
 export default OpplysningerOmOMPMASoknad;
