@@ -58,7 +58,7 @@ export enum ApiPath {
     PLS_SOKNAD_SUBMIT = '/pleiepenger-livets-sluttfase-soknad/send',
     PLS_K9SAK_PERIODER = '/pleiepenger-livets-sluttfase-soknad/k9sak/info',
     OPPRETT_NOTAT = '/notat/opprett',
-    HENT_FAGSAK_PÅ_IDENT = '/fagsak/ident', // TODO: Sett riktig navn og path
+    HENT_FAGSAK_PÅ_IDENT = '/saker/hent',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

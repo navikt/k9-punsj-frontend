@@ -12,7 +12,6 @@ enum OpprettJournalpostFormKeys {
     fagsakId = 'fagsakId',
     tittel = 'tittel',
     notat = 'notat',
-    inneholderNotatetSensitivePersonopplysninger = 'inneholderNotatetSensitivePersonopplysninger',
 }
 
 // eslint-disable-next-line arrow-body-style
@@ -36,7 +35,6 @@ const OpprettJournalpost: React.FC = () => {
                         [OpprettJournalpostFormKeys.fagsakId]: '',
                         [OpprettJournalpostFormKeys.tittel]: '',
                         [OpprettJournalpostFormKeys.notat]: '',
-                        [OpprettJournalpostFormKeys.inneholderNotatetSensitivePersonopplysninger]: '',
                     }}
                     onSubmit={(values, actions) => {
                         setOpprettJournalpostFeilet(false);
@@ -118,22 +116,7 @@ const OpprettJournalpost: React.FC = () => {
                                     </div>
                                 )}
                             </Field>
-                            <Field name={OpprettJournalpostFormKeys.inneholderNotatetSensitivePersonopplysninger}>
-                                {({ field, meta }: FieldProps) => (
-                                    <RadioGruppe
-                                        {...field}
-                                        className="input"
-                                        legend="Inneholder notatet sensitive personopplysninger?"
-                                        feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                            setFieldValue(field.name, event.target.value)
-                                        }
-                                    >
-                                        <Radio value="ja" label="Ja" name={field.name} />
-                                        <Radio value="nei" label="Nei" name={field.name} />
-                                    </RadioGruppe>
-                                )}
-                            </Field>
+
                             <Hovedknapp mini kompakt htmlType="submit" className="submitButton" spinner={isSubmitting}>
                                 Opprett journalpost
                             </Hovedknapp>
