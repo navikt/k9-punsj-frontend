@@ -14,20 +14,42 @@ enum OpprettJournalpostFormKeys {
     notat = 'notat',
 }
 
+interface Fagsak {
+    fagsakId: string;
+    fagsaksystem: string;
+    sakstype: string;
+    tema: string;
+}
+
+const formaterTema = (tema: string) => {
+    if (tema === 'OMS') {
+        return 'Omsorgspenger';
+    }
+    if (tema === 'PSB') {
+        return 'Pleiepenger';
+    }
+    return tema;
+};
+
 // eslint-disable-next-line arrow-body-style
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
-    const [fagsaker, setFagsaker] = useState([]);
+    const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const hentFagsaker = (søkersFødselsnummer: string) => {
         setHenteFagsakFeilet(false);
-        get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, (response, data) => {
-            if (response.status === 200) {
-                setFagsaker(data);
-            } else {
-                setHenteFagsakFeilet(true);
+        get(
+            ApiPath.HENT_FAGSAK_PÅ_IDENT,
+            undefined,
+            { 'X-Nav-NorskIdent': søkersFødselsnummer },
+            (response, data: Fagsak[]) => {
+                if (response.status === 200) {
+                    setFagsaker(data);
+                } else {
+                    setHenteFagsakFeilet(true);
+                }
             }
-        });
+        );
     };
     return (
         <div className="opprettJournalpost">
@@ -89,9 +111,9 @@ const OpprettJournalpost: React.FC = () => {
                                         disabled={fagsaker.length === 0}
                                     >
                                         <option value="">Velg</option>
-                                        {fagsaker.map((fagsak) => (
-                                            <option key={fagsak} value={fagsak}>
-                                                {fagsak}
+                                        {fagsaker.map(({ fagsakId, fagsaksystem, tema }) => (
+                                            <option key={fagsakId} value={fagsakId}>
+                                                {`${fagsakId} (${fagsaksystem} ${formaterTema(tema)})`}
                                             </option>
                                         ))}
                                     </Select>
