@@ -56,6 +56,7 @@ let handlers = [
     rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
         res(
             ctx.status(200),
+            ctx.delay('infinite'),
             ctx.json([
                 {
                     fagsakId: '1DMU93M',
