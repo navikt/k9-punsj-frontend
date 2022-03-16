@@ -53,9 +53,31 @@ let handlers = [
             })
         )
     ),
-    // rest.get('http://localhost:8101/api/k9-punsj/fagsak/ident', (req, res, ctx) =>
-    //     res(ctx.status(200), ctx.json(['5YC5Y', '5YC7C', '5YC4K']))
-    // ),
+    rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
+        res(
+            ctx.status(200),
+            ctx.json([
+                {
+                    fagsakId: '1DMU93M',
+                    fagsaksystem: 'K9',
+                    sakstype: 'FAGSAK',
+                    tema: 'OMS',
+                },
+                {
+                    fagsakId: '10695768',
+                    fagsaksystem: 'AO01',
+                    sakstype: 'FAGSAK',
+                    tema: 'OMS',
+                },
+                {
+                    fagsakId: '1DMUDF6',
+                    fagsaksystem: 'K9',
+                    sakstype: 'FAGSAK',
+                    tema: 'OMS',
+                },
+            ])
+        )
+    ),
 ];
 
 if (process.env.MSW_MODE === 'test') {
