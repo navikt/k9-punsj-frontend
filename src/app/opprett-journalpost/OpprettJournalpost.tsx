@@ -17,11 +17,15 @@ enum OpprettJournalpostFormKeys {
 // eslint-disable-next-line arrow-body-style
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
+    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [fagsaker, setFagsaker] = useState([]);
     const hentFagsaker = (søkersFødselsnummer: string) => {
+        setHenteFagsakFeilet(false);
         get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, (response, data) => {
             if (response.status === 200) {
                 setFagsaker(data);
+            } else {
+                setHenteFagsakFeilet(true);
             }
         });
     };
@@ -123,6 +127,7 @@ const OpprettJournalpost: React.FC = () => {
                             {opprettJournalpostFeilet && (
                                 <AlertStripe type="feil">Oppretting av journalpost feilet</AlertStripe>
                             )}
+                            {henteFagsakFeilet && <AlertStripe type="feil">Henting av fagsaker feilet. </AlertStripe>}
                         </Form>
                     )}
                 </Formik>
