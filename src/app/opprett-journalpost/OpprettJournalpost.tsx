@@ -1,11 +1,13 @@
-import { Input, Radio, RadioGruppe, Select, Textarea } from 'nav-frontend-skjema';
+import { ApiPath } from 'app/apiConfig';
+import { get, post } from 'app/utils';
+import { requiredValue, validateText } from 'app/utils/validationHelpers';
+import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
+import AlertStripe from 'nav-frontend-alertstriper';
+import { Hovedknapp } from 'nav-frontend-knapper';
+import { Input, Select, Textarea } from 'nav-frontend-skjema';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useState } from 'react';
 import './opprettJournalpost.less';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Field, Formik, FieldProps, ErrorMessage, Form } from 'formik';
-import { post, get } from 'app/utils';
-import { ApiPath } from 'app/apiConfig';
-import AlertStripe from 'nav-frontend-alertstriper';
 
 enum OpprettJournalpostFormKeys {
     søkersFødselsnummer = 'søkersFødselsnummer',
@@ -35,14 +37,17 @@ const formaterTema = (tema: string) => {
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const hentFagsaker = (søkersFødselsnummer: string) => {
         setHenteFagsakFeilet(false);
+        setIsLoading(true);
         get(
             ApiPath.HENT_FAGSAK_PÅ_IDENT,
             undefined,
             { 'X-Nav-NorskIdent': søkersFødselsnummer },
             (response, data: Fagsak[]) => {
+                setIsLoading(false);
                 if (response.status === 200) {
                     setFagsaker(data);
                 } else {
@@ -82,7 +87,10 @@ const OpprettJournalpost: React.FC = () => {
                 >
                     {({ isSubmitting, setFieldValue }) => (
                         <Form>
-                            <Field name={OpprettJournalpostFormKeys.søkersFødselsnummer}>
+                            <Field
+                                name={OpprettJournalpostFormKeys.søkersFødselsnummer}
+                                validate={(value: string) => validateText(value, 11, true)}
+                            >
                                 {({ field, meta }: FieldProps) => (
                                     <Input
                                         {...field}
@@ -90,6 +98,7 @@ const OpprettJournalpost: React.FC = () => {
                                         bredde="L"
                                         label="Søkers fødselsnummer"
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                        maxLength={11}
                                         onChange={(event) => {
                                             const { value } = event.target;
                                             setFieldValue(field.name, value);
@@ -100,43 +109,54 @@ const OpprettJournalpost: React.FC = () => {
                                     />
                                 )}
                             </Field>
-                            <Field name={OpprettJournalpostFormKeys.fagsakId}>
+                            <Field name={OpprettJournalpostFormKeys.fagsakId} validate={requiredValue}>
                                 {({ field, meta }: FieldProps) => (
-                                    <Select
-                                        {...field}
-                                        className="input"
-                                        bredde="l"
-                                        label="Velg fagsak"
-                                        feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                        disabled={fagsaker.length === 0}
-                                    >
-                                        <option value="">Velg</option>
-                                        {fagsaker.map(({ fagsakId, fagsaksystem, tema }) => (
-                                            <option key={fagsakId} value={fagsakId}>
-                                                {`${fagsakId} (${fagsaksystem} ${formaterTema(tema)})`}
-                                            </option>
-                                        ))}
-                                    </Select>
+                                    <div className="fagsagSelectContainer">
+                                        <Select
+                                            {...field}
+                                            className="input"
+                                            bredde="l"
+                                            label="Velg fagsak"
+                                            feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                            disabled={fagsaker.length === 0}
+                                        >
+                                            <option value="">Velg</option>
+                                            {fagsaker.map(({ fagsakId, fagsaksystem, tema }) => (
+                                                <option key={fagsakId} value={fagsakId}>
+                                                    {`${fagsakId} (${fagsaksystem} ${formaterTema(tema)})`}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        {isLoading && <NavFrontendSpinner type="XS" />}
+                                    </div>
                                 )}
                             </Field>
-                            <Field name={OpprettJournalpostFormKeys.tittel}>
+                            <Field
+                                name={OpprettJournalpostFormKeys.tittel}
+                                validate={(value: string) => validateText(value, 200)}
+                            >
                                 {({ field, meta }: FieldProps) => (
                                     <Input
                                         {...field}
                                         className="input"
                                         bredde="XXL"
                                         label="Tittel"
+                                        maxLength={200}
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                     />
                                 )}
                             </Field>
-                            <Field name={OpprettJournalpostFormKeys.notat}>
+                            <Field
+                                name={OpprettJournalpostFormKeys.notat}
+                                validate={(value: string) => validateText(value, 100000)}
+                            >
                                 {({ field, meta }: FieldProps) => (
                                     <div className="notatContainer input">
                                         <Textarea
                                             {...field}
                                             textareaClass="notat"
                                             label="Notat"
+                                            maxLength={100000}
                                             feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         />
                                     </div>
