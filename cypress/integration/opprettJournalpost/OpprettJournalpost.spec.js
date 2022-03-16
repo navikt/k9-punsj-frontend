@@ -5,7 +5,7 @@ describe('Opprett journalpost', () => {
         cy.url().should('contains', '/opprett-journalpost');
     });
 
-    it('skal kunne fylle ut skjema', () => {
+    it.skip('skal kunne fylle ut skjema', () => {
         cy.findByLabelText('Søkers fødselsnummer').type('01234567891');
         cy.findByLabelText('Velg fagsak').select('5YC5Y');
     });
