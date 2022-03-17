@@ -104,7 +104,6 @@ const OpprettJournalpost: React.FC = () => {
                                 {({ field, meta }: FieldProps) => (
                                     <Input
                                         {...field}
-                                        className="input"
                                         bredde="L"
                                         label={intl.formatMessage({ id: 'OpprettJournalpost.søkersFødselsnummer' })}
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
@@ -124,13 +123,15 @@ const OpprettJournalpost: React.FC = () => {
                                     <div className="fagsagSelectContainer">
                                         <Select
                                             {...field}
-                                            className="input"
+                                            className="input select"
                                             bredde="l"
                                             label={intl.formatMessage({ id: 'OpprettJournalpost.velgFagsak' })}
                                             feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                             disabled={fagsaker.length === 0}
                                         >
-                                            <option value="">Velg</option>
+                                            <option value="">
+                                                {intl.formatMessage({ id: 'OpprettJournalpost.velg' })}
+                                            </option>
                                             {fagsaker.map(({ fagsakId, fagsaksystem, tema }) => (
                                                 <option key={fagsakId} value={fagsakId}>
                                                     {`${fagsakId} (${fagsaksystem} ${formaterTema(tema)})`}

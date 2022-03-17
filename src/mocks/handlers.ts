@@ -65,12 +65,6 @@ let handlers = [
                     tema: 'OMS',
                 },
                 {
-                    fagsakId: '10695768',
-                    fagsaksystem: 'AO01',
-                    sakstype: 'FAGSAK',
-                    tema: 'OMS',
-                },
-                {
                     fagsakId: '1DMUDF6',
                     fagsaksystem: 'K9',
                     sakstype: 'FAGSAK',
