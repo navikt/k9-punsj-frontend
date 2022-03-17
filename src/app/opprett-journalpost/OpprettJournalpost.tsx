@@ -1,12 +1,15 @@
 import { ApiPath } from 'app/apiConfig';
+import ErrorIcon from 'app/assets/SVG/ErrorIcon';
+import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import { get, post } from 'app/utils';
 import { requiredValue, validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
-import AlertStripe from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { Input, Select, Textarea } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import './opprettJournalpost.less';
 
 enum OpprettJournalpostFormKeys {
@@ -33,21 +36,25 @@ const formaterTema = (tema: string) => {
     return tema;
 };
 
-// eslint-disable-next-line arrow-body-style
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
+    const [isSubmittingJournalpost, setIsSubmittingJournalpost] = useState(false);
+    const [submitSuccessful, setSubmitSuccessful] = useState(false);
+    const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
+    const intl = useIntl();
+
     const hentFagsaker = (søkersFødselsnummer: string) => {
         setHenteFagsakFeilet(false);
-        setIsLoading(true);
+        setIsFetchingFagsaker(true);
         get(
             ApiPath.HENT_FAGSAK_PÅ_IDENT,
             undefined,
             { 'X-Nav-NorskIdent': søkersFødselsnummer },
             (response, data: Fagsak[]) => {
-                setIsLoading(false);
+                setIsFetchingFagsaker(false);
                 if (response.status === 200) {
                     setFagsaker(data);
                 } else {
@@ -58,7 +65,7 @@ const OpprettJournalpost: React.FC = () => {
     };
     return (
         <div className="opprettJournalpost">
-            <h1 className="heading">Opprett journalpost</h1>
+            <h1 className="heading">{intl.formatMessage({ id: 'OpprettJournalpost.opprettJournalpost' })}</h1>
             <div className="formContainer">
                 <Formik
                     initialValues={{
@@ -69,15 +76,18 @@ const OpprettJournalpost: React.FC = () => {
                     }}
                     onSubmit={(values, actions) => {
                         setOpprettJournalpostFeilet(false);
+                        setIsSubmittingJournalpost(true);
                         const nyJournalpost = {
                             søkerIdentitetsnummer: values.søkersFødselsnummer,
                             fagsakId: values.fagsakId,
                             tittel: values.tittel,
                             notat: values.notat,
                         };
-                        post(ApiPath.OPPRETT_NOTAT, undefined, undefined, nyJournalpost, (response) => {
+                        post(ApiPath.OPPRETT_NOTAT, undefined, undefined, nyJournalpost, (response, data) => {
+                            setIsSubmittingJournalpost(false);
                             if (response.status === 201) {
-                                console.log(response);
+                                setSubmitSuccessful(true);
+                                setOpprettetJournalpostId(data.journalpostId);
                             } else {
                                 setOpprettJournalpostFeilet(true);
                             }
@@ -85,7 +95,7 @@ const OpprettJournalpost: React.FC = () => {
                         actions.setSubmitting(false);
                     }}
                 >
-                    {({ isSubmitting, setFieldValue }) => (
+                    {({ setFieldValue }) => (
                         <Form>
                             <Field
                                 name={OpprettJournalpostFormKeys.søkersFødselsnummer}
@@ -96,7 +106,7 @@ const OpprettJournalpost: React.FC = () => {
                                         {...field}
                                         className="input"
                                         bredde="L"
-                                        label="Søkers fødselsnummer"
+                                        label={intl.formatMessage({ id: 'OpprettJournalpost.søkersFødselsnummer' })}
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         maxLength={11}
                                         onChange={(event) => {
@@ -116,7 +126,7 @@ const OpprettJournalpost: React.FC = () => {
                                             {...field}
                                             className="input"
                                             bredde="l"
-                                            label="Velg fagsak"
+                                            label={intl.formatMessage({ id: 'OpprettJournalpost.velgFagsak' })}
                                             feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                             disabled={fagsaker.length === 0}
                                         >
@@ -127,7 +137,7 @@ const OpprettJournalpost: React.FC = () => {
                                                 </option>
                                             ))}
                                         </Select>
-                                        {isLoading && <NavFrontendSpinner type="XS" />}
+                                        {isFetchingFagsaker && <NavFrontendSpinner type="XS" />}
                                     </div>
                                 )}
                             </Field>
@@ -140,7 +150,7 @@ const OpprettJournalpost: React.FC = () => {
                                         {...field}
                                         className="input"
                                         bredde="XXL"
-                                        label="Tittel"
+                                        label={intl.formatMessage({ id: 'OpprettJournalpost.tittel' })}
                                         maxLength={200}
                                         feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                     />
@@ -155,24 +165,72 @@ const OpprettJournalpost: React.FC = () => {
                                         <Textarea
                                             {...field}
                                             textareaClass="notat"
-                                            label="Notat"
+                                            label={intl.formatMessage({ id: 'OpprettJournalpost.notat' })}
                                             maxLength={100000}
                                             feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         />
                                     </div>
                                 )}
                             </Field>
-
-                            <Hovedknapp mini kompakt htmlType="submit" className="submitButton" spinner={isSubmitting}>
-                                Opprett journalpost
-                            </Hovedknapp>
-                            {opprettJournalpostFeilet && (
-                                <AlertStripe type="feil">Oppretting av journalpost feilet</AlertStripe>
+                            {!submitSuccessful && (
+                                <Hovedknapp
+                                    mini
+                                    kompakt
+                                    htmlType="submit"
+                                    className="submitButton"
+                                    spinner={isSubmittingJournalpost}
+                                >
+                                    {intl.formatMessage({ id: 'OpprettJournalpost.opprettJournalpost' })}
+                                </Hovedknapp>
                             )}
-                            {henteFagsakFeilet && <AlertStripe type="feil">Henting av fagsaker feilet. </AlertStripe>}
+                            <div className="statusContainer">
+                                {opprettJournalpostFeilet && (
+                                    <>
+                                        <ErrorIcon />
+                                        <Element className="statusText">
+                                            {intl.formatMessage({
+                                                id: 'OpprettJournalpost.opprettingAvJournalpostFeilet',
+                                            })}
+                                        </Element>
+                                    </>
+                                )}
+                                {henteFagsakFeilet && (
+                                    <>
+                                        <ErrorIcon />
+                                        <Element className="statusText">
+                                            {intl.formatMessage({
+                                                id: 'OpprettJournalpost.hentingAvFagsakFeilet',
+                                            })}
+                                        </Element>
+                                    </>
+                                )}
+                                {submitSuccessful && (
+                                    <>
+                                        <SuccessIcon />
+                                        <Element className="statusText">
+                                            {intl.formatMessage({
+                                                id: 'OpprettJournalpost.journalpostOpprettet',
+                                            })}
+                                        </Element>
+                                    </>
+                                )}
+                            </div>
                         </Form>
                     )}
                 </Formik>
+                {submitSuccessful && (
+                    <Hovedknapp
+                        onClick={() => window.location.assign(`journalpost/${opprettetJournalpostId}`)}
+                        mini
+                        kompakt
+                        htmlType="button"
+                        className="submitButton"
+                    >
+                        {intl.formatMessage({
+                            id: 'OpprettJournalpost.gåTilJournalpost',
+                        })}
+                    </Hovedknapp>
+                )}
             </div>
         </div>
     );
