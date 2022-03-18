@@ -6,7 +6,7 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "^7.17.2",
-        "@navikt/ds-icons": "^0.7.2",
+        "@navikt/ds-icons": "^0.8.6",
         "@navikt/fnrvalidator": "^1.2.0",
         "@navikt/nap-header": "^1.0.10",
         "@navikt/nap-user-panel": "^1.0.0",
@@ -64,7 +64,7 @@
         "react-collapse": "^5.1.1",
         "react-day-picker": "^7.4.10",
         "react-dom": "^17.0.2",
-        "react-intl": "^5.24.6",
+        "react-intl": "^5.24.7",
         "react-modal": "^3.14.4",
         "react-query": "^3.34.14",
         "react-redux": "^7.2.6",
