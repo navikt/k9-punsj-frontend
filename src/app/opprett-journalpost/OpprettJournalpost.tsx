@@ -21,19 +21,12 @@ enum OpprettJournalpostFormKeys {
 
 interface Fagsak {
     fagsakId: string;
-    fagsaksystem: string;
     sakstype: string;
-    tema: string;
 }
 
-const formaterTema = (tema: string) => {
-    if (tema === 'OMS') {
-        return 'Omsorgspenger';
-    }
-    if (tema === 'PSB') {
-        return 'Pleiepenger';
-    }
-    return tema;
+const formaterSakstype = (sakstype: string) => {
+    const stringWithSpaces = sakstype.replaceAll('_', ' ');
+    return stringWithSpaces.charAt(0).toUpperCase() + stringWithSpaces.slice(1).toLowerCase();
 };
 
 const OpprettJournalpost: React.FC = () => {
@@ -132,9 +125,9 @@ const OpprettJournalpost: React.FC = () => {
                                             <option value="">
                                                 {intl.formatMessage({ id: 'OpprettJournalpost.velg' })}
                                             </option>
-                                            {fagsaker.map(({ fagsakId, fagsaksystem, tema }) => (
+                                            {fagsaker.map(({ fagsakId, sakstype }) => (
                                                 <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (${fagsaksystem} ${formaterTema(tema)})`}
+                                                    {`${fagsakId} (K9 ${formaterSakstype(sakstype)})`}
                                                 </option>
                                             ))}
                                         </Select>

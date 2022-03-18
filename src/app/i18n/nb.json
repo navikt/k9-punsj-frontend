@@ -464,6 +464,9 @@
     "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
 
+    "OpprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
+    "OpprettJournalpostInngang.link": "Opprett journalpost",
+
     "OpprettJournalpost.opprettJournalpost": "Opprett journalpost",
     "OpprettJournalpost.søkersFødselsnummer": "Søkers fødselsnummer",
     "OpprettJournalpost.velgFagsak": "Velg fagsak",

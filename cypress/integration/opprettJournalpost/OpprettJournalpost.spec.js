@@ -5,8 +5,13 @@ describe('Opprett journalpost', () => {
         cy.url().should('contains', '/opprett-journalpost');
     });
 
-    it.skip('skal kunne fylle ut skjema', () => {
+    it('skal kunne fylle ut skjema', () => {
         cy.findByLabelText('Søkers fødselsnummer').type('01234567891');
-        cy.findByLabelText('Velg fagsak').select('5YC5Y');
+        cy.findByLabelText('Velg fagsak').select('1DMU93M');
+        cy.findByLabelText('Tittel').type('Eksempel på tittel');
+        cy.findByLabelText('Notat').type('Eksempel på notat');
+        cy.findByRole('button', { name: /opprett journalpost/i }).click();
+        cy.findByRole('button', { name: /gå til journalpost/i }).click();
+        cy.url().should('contains', '/journalpost/200');
     });
 });

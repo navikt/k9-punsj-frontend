@@ -56,25 +56,21 @@ let handlers = [
     rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
         res(
             ctx.status(200),
-            ctx.delay(1000),
+            ctx.delay(500),
             ctx.json([
                 {
                     fagsakId: '1DMU93M',
-                    fagsaksystem: 'K9',
-                    sakstype: 'FAGSAK',
-                    tema: 'OMS',
+                    sakstype: 'PLEIEPENGER_SYKT_BARN',
                 },
                 {
                     fagsakId: '1DMUDF6',
-                    fagsaksystem: 'K9',
-                    sakstype: 'FAGSAK',
-                    tema: 'OMS',
+                    sakstype: 'OMSORGSPENGER',
                 },
             ])
         )
     ),
     rest.post('http://localhost:8101/api/k9-punsj/notat/opprett', (req, res, ctx) =>
-        res(ctx.status(201), ctx.delay(1000), ctx.json({ journalpostId: '200' }))
+        res(ctx.status(201), ctx.delay(500), ctx.json({ journalpostId: '200' }))
     ),
 ];
 
