@@ -60,15 +60,11 @@ let handlers = [
             ctx.json([
                 {
                     fagsakId: '1DMU93M',
-                    fagsaksystem: 'K9',
-                    sakstype: 'FAGSAK',
-                    tema: 'OMS',
+                    sakstype: 'PLEIEPENGER_SYKT_BARN',
                 },
                 {
                     fagsakId: '1DMUDF6',
-                    fagsaksystem: 'K9',
-                    sakstype: 'FAGSAK',
-                    tema: 'OMS',
+                    sakstype: 'OMSORGSPENGER',
                 },
             ])
         )
