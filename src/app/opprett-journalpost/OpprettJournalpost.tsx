@@ -24,11 +24,6 @@ interface Fagsak {
     sakstype: string;
 }
 
-const formaterSakstype = (sakstype: string) => {
-    const stringWithSpaces = sakstype.replaceAll('_', ' ');
-    return stringWithSpaces.charAt(0).toUpperCase() + stringWithSpaces.slice(1).toLowerCase();
-};
-
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
@@ -127,7 +122,7 @@ const OpprettJournalpost: React.FC = () => {
                                             </option>
                                             {fagsaker.map(({ fagsakId, sakstype }) => (
                                                 <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (K9 ${formaterSakstype(sakstype)})`}
+                                                    {`${fagsakId} (K9 ${sakstype})`}
                                                 </option>
                                             ))}
                                         </Select>
