@@ -1,8 +1,8 @@
 import { PunchFormActionKeys } from 'app/models/enums';
-import { IPunchFormState } from 'app/models/types';
+import { IPunchPSBFormState } from 'app/models/types';
 import { IPunchFormActionTypes } from 'app/state/actions/PSBPunchFormActions';
 
-const initialState: IPunchFormState = {
+const initialState: IPunchPSBFormState = {
     isSoknadLoading: false,
     isComplete: false,
     isValid: false,
@@ -14,9 +14,9 @@ const initialState: IPunchFormState = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function PunchFormReducer(
-    punchFormState: IPunchFormState = initialState,
+    punchFormState: IPunchPSBFormState = initialState,
     action: IPunchFormActionTypes
-): IPunchFormState {
+): IPunchPSBFormState {
     switch (action.type) {
         case PunchFormActionKeys.RESET:
             return initialState;

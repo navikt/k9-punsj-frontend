@@ -438,7 +438,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     </p>
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                        {`${journalposter[0].inneholderInfomasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                        {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
                     </p>
                 </div>
             )}

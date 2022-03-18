@@ -16,12 +16,12 @@ describe('forside', () => {
     });
 
     it('viser feilmelding ved forbidden', () => {
-        cy.intercept('GET', '/api/k9-punsj/journalpost/202', {
+        cy.intercept('GET', '/api/k9-punsj/journalpost/203', {
             statusCode: 403,
         });
 
         cy.visit('/');
-        cy.soekPaaJournalpost('202');
+        cy.soekPaaJournalpost('203');
         cy.contains(/Du har ikke tilgang til å slå opp denne personen/i).should('exist');
     });
 

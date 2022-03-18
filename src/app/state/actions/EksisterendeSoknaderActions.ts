@@ -159,6 +159,7 @@ export function createSoknad(journalpostid: string, ident1: string, barnIdent: s
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: ident1,
+            pleietrengendeIdent: barnIdent,
             barnIdent,
         };
 

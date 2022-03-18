@@ -1,4 +1,4 @@
-import { IArbeidstidPeriodeMedTimer, IPeriode, IPunchFormState, Periodeinfo } from '../../../models/types';
+import { IArbeidstidPeriodeMedTimer, IPeriode, IPunchPSBFormState, Periodeinfo } from '../../../models/types';
 
 export const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (
     periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[]
@@ -26,7 +26,7 @@ export const sjekkHvisPeriodeErFylltUt = (periode: IPeriode[]): boolean => {
     return false;
 };
 
-export const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchFormState) => {
+export const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchPSBFormState) => {
     let erArbeidstidAngitt = false;
     const erArbeidstidFyltUt =
         !!punchFormState.soknad?.arbeidstid?.arbeidstakerList &&

@@ -13,9 +13,11 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
     korrigeringAvInntektsmeldingSakstyper,
+    omsorgspengerKroniskSyktBarnSakstyper,
+    pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
-    TilgjengeligSakstype,
     Sakstype,
+    TilgjengeligSakstype,
 } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -29,7 +31,6 @@ interface IValgForDokument {
     journalpost: IJournalpost;
     erJournalfoertEllerFerdigstilt: boolean;
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
-    setOmsorgspengerValgt: (event: any) => void;
     identState: IIdentState;
     konfigForValgtSakstype: any;
     fordelingState: IFordelingState;
@@ -45,7 +46,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     erJournalfoertEllerFerdigstilt,
     kanJournalforingsoppgaveOpprettesiGosys,
     setSakstypeAction,
-    setOmsorgspengerValgt,
     konfigForValgtSakstype,
     fordelingState,
     identState,
@@ -63,12 +63,33 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         return null;
     }
 
+    function korrigeringIM() {
+        return dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper;
+    }
+
+    function pleiepengerSyktBarn() {
+        return dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
+    }
+
+    function pleiepengerILivetsSluttfase() {
+        return (
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE &&
+            pleiepengerILivetsSluttfaseSakstyper
+        );
+    }
+
+    function omsorgspengerKroniskSyktBarn() {
+        return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
+    }
+
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
                 {(
-                    (dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper) ||
-                    pleiepengerSakstyper
+                    korrigeringIM() ||
+                    pleiepengerSyktBarn() ||
+                    pleiepengerILivetsSluttfase() ||
+                    omsorgspengerKroniskSyktBarn()
                 ).map((key) => {
                     if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                         return null;
@@ -81,7 +102,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                                 value={Sakstype[key]}
                                 onChange={() => {
                                     setSakstypeAction(Sakstype[key]);
-                                    setOmsorgspengerValgt(false);
                                 }}
                                 checked={konfigForValgtSakstype?.navn === key}
                             />

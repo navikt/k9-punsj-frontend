@@ -79,7 +79,7 @@ export interface IPSBSoknadKvitteringFrilanser {
 }
 
 export interface IPSBSoknadKvitteringJournalpost {
-    inneholderInfomasjonSomIkkeKanPunsjes?: boolean;
+    inneholderInformasjonSomIkkeKanPunsjes?: boolean;
     inneholderMedisinskeOpplysninger?: boolean;
     journalpostId: string;
 }
