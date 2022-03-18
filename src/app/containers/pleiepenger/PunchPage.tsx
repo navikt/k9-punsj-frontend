@@ -9,7 +9,7 @@ import Page from 'app/components/page/Page';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
-import { IJournalpost, IPath, IPleiepengerPunchState, IPunchFormState } from 'app/models/types';
+import { IJournalpost, IPath, IPunchState, IPunchPSBFormState } from 'app/models/types';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { get, getEnvironmentVariable, getPath } from 'app/utils';
@@ -29,11 +29,11 @@ import { PSBPunchForm } from './PSBPunchForm';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 
 export interface IPunchPageStateProps {
-    punchState: IPleiepengerPunchState;
+    punchState: IPunchState;
     journalpost?: IJournalpost;
     identState: IIdentState;
     forbidden: boolean | undefined;
-    punchFormState: IPunchFormState;
+    punchFormState: IPunchPSBFormState;
 }
 
 export interface IPunchPageDispatchProps {

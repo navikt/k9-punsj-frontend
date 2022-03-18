@@ -1,5 +1,5 @@
 import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState, IPleiepengerPunchState } from 'app/models/types';
+import { IEksisterendeSoknaderState, IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import {
     chooseEksisterendeSoknadAction,
@@ -28,7 +28,7 @@ import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from './ErDuSikkerModal';
 
 export interface IEksisterendeSoknaderStateProps {
-    punchState: IPleiepengerPunchState;
+    punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
 }
 

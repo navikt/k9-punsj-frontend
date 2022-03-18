@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
-import { IInputError, IPunchFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
+import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
     hentPerioderFraK9Sak,
@@ -80,7 +80,7 @@ export interface IPunchFormComponentProps {
 }
 
 export interface IPunchFormStateProps {
-    punchFormState: IPunchFormState;
+    punchFormState: IPunchPSBFormState;
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;

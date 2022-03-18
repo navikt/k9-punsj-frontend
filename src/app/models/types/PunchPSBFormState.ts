@@ -4,7 +4,7 @@ import { IPSBSoknad } from './PSBSoknad';
 import { IPSBSoknadKvittering } from './PSBSoknadKvittering';
 import { IPeriode } from './Periode';
 
-export interface IPunchFormState {
+export interface IPunchPSBFormState {
     soknad?: Partial<IPSBSoknad>;
     innsentSoknad?: IPSBSoknadKvittering;
     linkTilBehandlingIK9?: string | null;
