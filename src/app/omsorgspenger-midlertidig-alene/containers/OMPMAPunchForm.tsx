@@ -107,9 +107,14 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
             soekerId: '',
             mottattDato: '',
             journalposter: new Set([]),
-            barn: {
+            annenForelder: {
                 norskIdent: '',
-                foedselsdato: '',
+                situasjonsbeskrivelse: '',
+                situasjonstype: '',
+                periode: {
+                    fom: '',
+                    tom: '',
+                },
             },
             harInfoSomIkkeKanPunsjes: false,
             harMedisinskeOpplysninger: false,
@@ -144,9 +149,6 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                 soknad: new OMPMASoknad(this.props.punchFormState.soknad as IOMPMASoknad),
                 isFetched: true,
             });
-            if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
-            }
         }
     }
 
@@ -196,7 +198,11 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                 />
                 <VerticalSpacer fourtyPx />
 
-                <AnnenForelder intl={intl} />
+                <AnnenForelder
+                    intl={intl}
+                    changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
+                    annenForelder={soknad.annenForelder}
+                />
                 <VerticalSpacer fourtyPx />
                 <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className={'flex-container'}>
@@ -382,7 +388,13 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
             ),
         };
         this.setState({ harForsoektAaSendeInn: true });
-        this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
+        this.props.validateSoknad({
+            ...navarandeSoknad,
+            ...journalposter,
+            barn: this.props.identState.barn
+                .filter((barn) => barn.valgt)
+                .map((barn) => ({ norskIdent: barn.identitetsnummer })),
+        });
     };
 
     private handleSettPaaVent = () => {
@@ -551,8 +563,8 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
 }
 
 const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
-    punchFormState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState,
-    signaturState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.signaturState,
+    punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
+    signaturState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.signaturState,
     journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });

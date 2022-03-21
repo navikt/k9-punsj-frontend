@@ -1,36 +1,24 @@
 /* eslint-disable max-classes-per-file */
 
+import { IPeriode } from 'app/models/types';
+
 export interface IOMPMASoknad {
     soeknadId?: string;
     soekerId: string;
     journalposter?: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
-    barn: IBarn;
+    annenForelder: AnnenForelderType;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
 }
 
-export interface IBarn {
-    norskIdent?: string;
-    foedselsdato?: string;
-}
-
-export class Barn implements Required<IBarn> {
+export type AnnenForelderType = {
     norskIdent: string;
-
-    foedselsdato: string;
-
-    constructor(barn: IBarn) {
-        this.norskIdent = barn.norskIdent || '';
-        this.foedselsdato = barn.foedselsdato || '';
-    }
-
-    values(): Required<IBarn> {
-        const { norskIdent, foedselsdato } = this; // tslint:disable-line:no-this-assignment
-        return { norskIdent, foedselsdato };
-    }
-}
+    situasjonstype: string;
+    situasjonsbeskrivelse: string;
+    periode: IPeriode;
+};
 
 export class OMPMASoknad implements IOMPMASoknad {
     soeknadId: string;
@@ -43,7 +31,7 @@ export class OMPMASoknad implements IOMPMASoknad {
 
     klokkeslett: string;
 
-    barn: Barn;
+    annenForelder: AnnenForelderType;
 
     harInfoSomIkkeKanPunsjes?: boolean;
 
@@ -55,7 +43,7 @@ export class OMPMASoknad implements IOMPMASoknad {
         this.journalposter = new Set(soknad.journalposter || []);
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
-        this.barn = new Barn(soknad.barn || {});
+        this.annenForelder = soknad.annenForelder || {};
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
     }

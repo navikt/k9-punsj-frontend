@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
-
-import {Barn, IBarn} from './OMPMASoknad';
+import { PersonEnkel } from 'app/models/types';
 
 export interface IOMPMASoknadUt {
     soeknadId?: string;
@@ -8,9 +7,22 @@ export interface IOMPMASoknadUt {
     journalposter?: string[];
     mottattDato?: string;
     klokkeslett?: string;
-    barn: IBarn;
+    barn: PersonEnkel[];
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
+}
+
+class Barn implements Required<PersonEnkel> {
+    norskIdent: string;
+
+    constructor(barn: PersonEnkel) {
+        this.norskIdent = barn.norskIdent || '';
+    }
+
+    values(): Required<PersonEnkel> {
+        const { norskIdent } = this; // tslint:disable-line:no-this-assignment
+        return { norskIdent };
+    }
 }
 
 export class OMPMASoknadUt implements IOMPMASoknadUt {
@@ -24,7 +36,7 @@ export class OMPMASoknadUt implements IOMPMASoknadUt {
 
     klokkeslett: string;
 
-    barn: Barn | Record<string, unknown>;
+    barn: PersonEnkel[];
 
     harInfoSomIkkeKanPunsjes: boolean;
 
@@ -36,7 +48,7 @@ export class OMPMASoknadUt implements IOMPMASoknadUt {
         this.journalposter = soknad.journalposter || [];
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
-        this.barn = soknad.barn ? new Barn(soknad.barn) : {};
+        this.barn = soknad.barn ? soknad.barn.map((barn) => new Barn(barn)) : [];
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
     }
