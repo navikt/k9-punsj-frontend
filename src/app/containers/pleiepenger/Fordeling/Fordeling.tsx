@@ -135,14 +135,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         identState.barn.filter((barn) => barn.valgt).some((barn) => erUgyldigIdent(barn.identitetsnummer));
 
     const disableVidereKnapp =
-    ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype ===
-            FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-        erUgyldigIdent(identState.ident2) &&
-        !barnetHarIkkeFnr) ||
-    erUgyldigIdent(identState.ident1) ||
-        disableVidereMidlertidigAlene
+        ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+            erUgyldigIdent(identState.ident2) &&
+            !barnetHarIkkeFnr) ||
+        erUgyldigIdent(identState.ident1) ||
+        disableVidereMidlertidigAlene;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -193,9 +192,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             );
         }
 
-        const barnMidlertidigAlene = identState.barn
-            .filter((barn) => barn.valgt)
-            .map((barn) => barn.identitetsnummer);
+        const barnMidlertidigAlene = identState.barn.filter((barn) => barn.valgt).map((barn) => barn.identitetsnummer);
 
         const fagsakYtelseType = utledFagsakYtelseType(dokumentType);
 
@@ -204,7 +201,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             identState.ident2,
             journalpost.journalpostId,
             fagsakYtelseType,
-            barnMidlertidigAlene,
+            barnMidlertidigAlene
         );
     };
 
@@ -418,7 +415,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         }
                                     />
                                     {!fordelingState.skalTilK9 && (
-                                        <Knapp mini onClick={() => handleVidereClick(dokumenttype)} disabled={disableVidereKnapp}>
+                                        <Knapp
+                                            mini
+                                            onClick={() => handleVidereClick(dokumenttype)}
+                                            disabled={disableVidereKnapp}
+                                        >
                                             {intlHelper(intl, 'fordeling.knapp.videre')}
                                         </Knapp>
                                     )}
@@ -564,8 +565,13 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string, fagsakYtelseType: FagsakYtelseType, barn: string[]) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, barn)),
+    sjekkOmSkalTilK9: (
+        ident1: string,
+        ident2: string,
+        jpid: string,
+        fagsakYtelseType: FagsakYtelseType,
+        barn: string[]
+    ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, barn)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
