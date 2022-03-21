@@ -187,22 +187,27 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
     };
 
-    private initialArbeidsInfoPeriode = {
-        perioder: this.getSoknadsperiode().map((periode) => ({
-            periode,
-            faktiskArbeidTimerPerDag: '',
-            jobberNormaltTimerPerDag: '',
-        })),
-    };
-
     private initialArbeidstaker = () =>
         new Arbeidstaker({
-            arbeidstidInfo: this.initialArbeidsInfoPeriode,
+            arbeidstidInfo: {
+                perioder: this.getSoknadsperiode().map((periode) => ({
+                    periode,
+                    faktiskArbeidTimerPerDag: '',
+                    jobberNormaltTimerPerDag: '',
+                })),
+            },
             organisasjonsnummer: '',
             norskIdent: null,
         });
 
-    private initialArbeidstidInfo = () => new ArbeidstidInfo(this.initialArbeidsInfoPeriode);
+    private initialArbeidstidInfo = () =>
+        new ArbeidstidInfo({
+            perioder: this.getSoknadsperiode().map((periode) => ({
+                periode,
+                faktiskArbeidTimerPerDag: '',
+                jobberNormaltTimerPerDag: '',
+            })),
+        });
 
     private initialFrilanser = new FrilanserOpptjening({
         jobberFortsattSomFrilans: undefined,
