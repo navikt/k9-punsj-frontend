@@ -29,7 +29,10 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     fellesState,
     setIdentAction,
 }) => {
-    const skalVises = dokumenttype === FordelingDokumenttype.PLEIEPENGER && !!journalpost?.kanKopieres;
+    const skalVises =
+        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
+        !!journalpost?.kanKopieres;
     const intl = useIntl();
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');

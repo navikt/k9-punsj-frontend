@@ -7,7 +7,7 @@
     "dependencies": {
         "@babel/runtime": "^7.17.2",
         "@navikt/ds-css": "^0.16.1",
-        "@navikt/ds-icons": "^0.7.2",
+        "@navikt/ds-icons": "^0.8.6",
         "@navikt/ds-react": "^0.17.2",
         "@navikt/fnrvalidator": "^1.2.0",
         "@navikt/nap-header": "^1.0.10",
@@ -76,7 +76,7 @@
         "react-time-picker": "^4.5.0",
         "redux": "^4.1.2",
         "redux-logger": "^3.0.6",
-        "snyk": "^1.851.0",
+        "snyk": "^1.874.0",
         "source-map-loader": "^3.0.1",
         "start-server-and-test": "^1.14.0",
         "typescript-string-operations": "^1.4.1",

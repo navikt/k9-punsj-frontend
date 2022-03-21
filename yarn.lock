@@ -1940,10 +1940,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-0.16.1.tgz#663e25828810394b44151cdcb543b0c4af6ce0f3"
   integrity sha512-yJTb9cx54Ha/k+j+A9lJTh0rQPIFlco3asiBY6DjIWUFOvZGN2h2P6iOgey3oQ/+4vudgWaJ0pgM2aVgRoaJHw==
 
-"@navikt/ds-icons@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.7.2.tgz#cc3608d5cb0771c9f82bbfea6379b3c19c1ef86a"
-  integrity sha512-uacrYlNo5nVfu+D1ZhTnTpiYCrOIDVk792OdnrUqDSV5fyMF6HFeBi4BenmnoUjRhmQjUl0nth7G4TI+ZfwrGw==
+"@navikt/ds-icons@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-icons/-/ds-icons-0.8.6.tgz#d5237b20a086c83291d5fcb02d6d5206c93bde45"
+  integrity sha512-3s3fLI2Pg3xRdeiZdIePZoOoEIK/UuMzafZQHrSg57VhupPlZmf1jLYbR+i0bXmkeRuq7kT3hKdoakRMzDEYLw==
   dependencies:
     uuid "^8.3.2"
 
@@ -6063,9 +6063,9 @@ focus-trap@^6.7.1:
     tabbable "^5.2.1"
 
 follow-redirects@^1.0.0, follow-redirects@^1.14.0:
-  version "1.14.7"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
-  integrity sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==
+  version "1.14.8"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.8.tgz#016996fb9a11a100566398b1c6839337d7bfa8fc"
+  integrity sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -11005,10 +11005,10 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snyk@^1.851.0:
-  version "1.851.0"
-  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.851.0.tgz#50b9bfa169a65e4825bd46b8528c5ec5c32e9e3d"
-  integrity sha512-kGGp9F4KLk2FLzWAz/aBDFy4i78WwIkTSm5IVm55WFjfrrmf/03xyrT9EkU4FG/YieVgvGkSB16+1wkIuaqbgg==
+snyk@^1.874.0:
+  version "1.874.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.874.0.tgz#0efdc68ad82863326fb136b0540984f9b7fff349"
+  integrity sha512-46BSe1dA2ivQTm1Wow/VlzkWjNGfEec0gDx3gEM0y+XDwasF4iuweEfnvgPV7jCVGR1sqFZK5wGwFgjkHrLy0g==
 
 sockjs@^0.3.21:
   version "0.3.21"
