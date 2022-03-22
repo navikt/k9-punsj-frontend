@@ -169,6 +169,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return FagsakYtelseType.PLEIEPENGER_NÆRSTÅENDE;
             case FordelingDokumenttype.KORRIGERING_IM:
                 return FagsakYtelseType.OMSORGSPENGER;
+            case FordelingDokumenttype.OMSORGSPENGER_MA:
+                return FagsakYtelseType.OMSORGSPENGER_MA;
             default:
                 throw new Error(`${dokumentType} har ikke en tilsvarende FagsakYtelseType mapping.`);
         }

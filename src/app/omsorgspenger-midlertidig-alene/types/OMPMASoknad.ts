@@ -15,8 +15,8 @@ export interface IOMPMASoknad {
 
 export type AnnenForelderType = {
     norskIdent: string;
-    situasjonstype: string;
-    situasjonsbeskrivelse: string;
+    situasjonType: string;
+    situasjonBeskrivelse: string;
     periode: IPeriode;
 };
 

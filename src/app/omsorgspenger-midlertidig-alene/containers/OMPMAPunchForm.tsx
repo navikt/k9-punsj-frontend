@@ -20,6 +20,7 @@ import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import { ErrorSummary } from '@navikt/ds-react';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
@@ -109,8 +110,8 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
             journalposter: new Set([]),
             annenForelder: {
                 norskIdent: '',
-                situasjonsbeskrivelse: '',
-                situasjonstype: '',
+                situasjonBeskrivelse: '',
+                situasjonType: '',
                 periode: {
                     fom: '',
                     tom: '',
@@ -201,7 +202,7 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                 <AnnenForelder
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                    annenForelder={soknad.annenForelder}
+                    soknad={soknad}
                 />
                 <VerticalSpacer fourtyPx />
                 <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
@@ -239,6 +240,15 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                     <div className={classNames('loadingSpinner')}>
                         <NavFrontendSpinner />
                     </div>
+                )}
+                {!!this.getUhaandterteFeil('')?.length && (
+                    <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn søknad.">
+                        {this.getUhaandterteFeil('')
+                            .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
+                            .map((feilmelding) => {
+                                return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
+                            })}
+                    </ErrorSummary>
                 )}
                 <div className={'submit-knapper'}>
                     <p className="sendknapp-wrapper">
