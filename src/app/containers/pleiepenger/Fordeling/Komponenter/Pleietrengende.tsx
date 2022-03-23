@@ -13,62 +13,63 @@ import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
 import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
-export interface ISokersBarnStateProps {
+export interface IPleietrengendeStateProps {
     identState: IIdentState;
     fellesState: IFellesState;
     dedupkey: string;
 }
 
-export interface ISokersBarnDispatchProps {
+export interface IPleietrengendeDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     henteBarn: typeof hentBarn;
 }
 
-export interface ISokersBarn {
+export interface IPleietrengende {
     sokersIdent: string;
-    barnetHarInteFnrFn?: (harBarnetFnr: boolean) => void;
-    visSokersBarn?: boolean;
+    pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
+    visPleietrengende?: boolean;
+    skalHenteBarn?: boolean;
 }
 
-type ISokersBarnProps = WrappedComponentProps & ISokersBarnStateProps & ISokersBarnDispatchProps & ISokersBarn;
+type IPleietrengendeProps = WrappedComponentProps & IPleietrengendeStateProps & IPleietrengendeDispatchProps & IPleietrengende;
 
-const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) => {
-    const { intl, barnetHarInteFnrFn, identState, sokersIdent, fellesState, setIdentAction, henteBarn, visSokersBarn } =
+const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (props) => {
+    const { intl, pleietrengendeHarIkkeFnrFn, identState, sokersIdent, fellesState, setIdentAction, henteBarn, visPleietrengende, skalHenteBarn } =
         props;
 
-    const [barnetsIdent, setBarnetsIdent] = useState<string>('');
-    const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
-    const [gjelderAnnetBarn, setGjelderAnnetBarn] = useState<boolean>(false);
+    const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
+    const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
+    const [gjelderAnnetPleietrengende, setGjelderAnnetPleietrengende] = useState<boolean>(false);
 
     useEffect(() => {
-        if (sokersIdent.length > 0) {
+        if (sokersIdent.length > 0 && skalHenteBarn) {
             henteBarn(sokersIdent);
         }
     }, [sokersIdent]);
 
-    const barnetsIdentInputFieldOnChange = (event: any) => {
-        setBarnetsIdent(event.target.value.replace(/\D+/, ''));
+    const pleietrengendeIdentInputFieldOnChange = (event: any) => {
+        setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
     };
 
-    const oppdaterStateMedBarnetsFnr = (event: any) => {
+    const oppdaterStateMedPleietrengendeFnr = (event: any) => {
         setIdentAction(identState.ident1, event.target.value, identState.annenSokerIdent);
     };
 
-    const nullUtBarnetsIdent = () => {
-        setBarnetsIdent('');
+    const nullUtPleietrengendeIdent = () => {
+        setPleietrengendeIdent('');
         setIdentAction(identState.ident1, '', identState.annenSokerIdent);
     };
 
-    const barnHarIkkeFnrCheckboks = (checked: boolean) => {
-        setBarnetHarIkkeFnr(checked);
-        if (barnetHarInteFnrFn) barnetHarInteFnrFn(checked);
+    const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
+        setPleietrengendeHarIkkeFnr(checked);
+        if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
-            setBarnetsIdent('');
+            setPleietrengendeIdent('');
             setIdentAction(identState.ident1, null);
         }
     };
 
-    if (!visSokersBarn) {
+    if (!visPleietrengende) {
         return null;
     }
 
@@ -77,14 +78,14 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
                 <>
                     <Select
-                        value={barnetsIdent}
+                        value={pleietrengendeIdent}
                         bredde="l"
-                        label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
+                        label={intlHelper(intl, 'ident.identifikasjon.velgPleietrengende')}
                         onChange={(e) => {
-                            barnetsIdentInputFieldOnChange(e);
-                            oppdaterStateMedBarnetsFnr(e);
+                            pleietrengendeIdentInputFieldOnChange(e);
+                            oppdaterStateMedPleietrengendeFnr(e);
                         }}
-                        disabled={gjelderAnnetBarn}
+                        disabled={gjelderAnnetPleietrengende}
                     >
                         <option key="default" value="" label=" " />)
                         {fellesState.barn.map((b) => (
@@ -95,26 +96,26 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
                     </Select>
                     <VerticalSpacer eightPx />
                     <Checkbox
-                        label={intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                        label={intlHelper(intl, 'ident.identifikasjon.annetPleietrengende')}
                         onChange={(e) => {
-                            setGjelderAnnetBarn(e.target.checked);
-                            nullUtBarnetsIdent();
+                            setGjelderAnnetPleietrengende(e.target.checked);
+                            nullUtPleietrengendeIdent();
                         }}
                     />
                 </>
             )}
             <VerticalSpacer sixteenPx />
-            {(gjelderAnnetBarn ||
+            {(gjelderAnnetPleietrengende ||
                 !!fellesState.hentBarnError ||
                 !!fellesState.hentBarnForbidden ||
                 (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
                     <div className="fyllUtIdentAnnetBarnContainer">
                         <Input
-                            label={intlHelper(intl, 'ident.identifikasjon.barn')}
-                            onChange={barnetsIdentInputFieldOnChange}
-                            onBlur={oppdaterStateMedBarnetsFnr}
-                            value={barnetsIdent}
+                            label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
+                            onChange={pleietrengendeIdentInputFieldOnChange}
+                            onBlur={oppdaterStateMedPleietrengendeFnr}
+                            value={pleietrengendeIdent}
                             className="bold-label ident-soker-2"
                             maxLength={11}
                             feil={
@@ -123,9 +124,9 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
                                     : undefined
                             }
                             bredde="M"
-                            disabled={barnetHarIkkeFnr}
+                            disabled={pleietrengendeHarIkkeFnr}
                         />
-                        {barnetsIdent.length === 11 && !erUgyldigIdent(identState.ident2) && (
+                        {pleietrengendeIdent.length === 11 && !erUgyldigIdent(identState.ident2) && (
                             <div className="dobbelSjekkIdent">
                                 <div>
                                     <WarningCircle />
@@ -137,16 +138,16 @@ const SokersBarnComponent: React.FunctionComponent<ISokersBarnProps> = (props) =
                         )}
                     </div>
                     <VerticalSpacer eightPx />
-                    {barnetHarInteFnrFn && (
+                    {pleietrengendeHarIkkeFnrFn && (
                         <>
                             <Checkbox
-                                label={intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnr')}
-                                onChange={(e) => barnHarIkkeFnrCheckboks(e.target.checked)}
+                                label={intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
+                                onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}
                             />
-                            {barnetHarIkkeFnr && (
+                            {pleietrengendeHarIkkeFnr && (
                                 <AlertStripeInfo className="infotrygd_info">
                                     {' '}
-                                    {intlHelper(intl, 'ident.identifikasjon.barnHarIkkeFnrInformasjon')}
+                                    {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
                                 </AlertStripeInfo>
                             )}
                         </>
@@ -170,6 +171,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     henteBarn: (ident1: string) => dispatch(hentBarn(ident1)),
 });
 
-const SokersBarn = injectIntl(connect(mapStateToProps, mapDispatchToProps)(SokersBarnComponent));
+const Pleietrengende = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PleietrengendeComponent));
 
-export { SokersBarn, SokersBarnComponent };
+export { Pleietrengende, PleietrengendeComponent };

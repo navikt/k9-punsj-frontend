@@ -10,7 +10,7 @@ import Kopier from 'app/components/kopier/Kopier';
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
-import { SokersBarn } from '../SokersBarn';
+import { Pleietrengende } from '../Pleietrengende';
 import { erUgyldigIdent } from '../../FordelingFeilmeldinger';
 import './journalpostAlleredeBehandlet.less';
 import { getEnvironmentVariable } from '../../../../../utils';
@@ -57,7 +57,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 {sokersIdent} <Kopier verdi={sokersIdent} />
             </div>
             <VerticalSpacer eightPx />
-            {!fellesState.kopierJournalpostSuccess && <SokersBarn visSokersBarn sokersIdent={sokersIdent} />}
+            {!fellesState.kopierJournalpostSuccess && <Pleietrengende visPleietrengende sokersIdent={sokersIdent} />}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
             {!fellesState.kopierJournalpostSuccess && !erInntektsmeldingUtenKrav && (
                 <Knapp
