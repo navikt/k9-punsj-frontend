@@ -42,7 +42,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const [gjelderAnnetPleietrengende, setGjelderAnnetPleietrengende] = useState<boolean>(false);
 
     useEffect(() => {
-        if (sokersIdent.length > 0 && skalHenteBarn) {
+        if (sokersIdent.length > 0/* && skalHenteBarn */) {
             henteBarn(sokersIdent);
         }
     }, [sokersIdent]);
@@ -86,6 +86,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
                         disabled={gjelderAnnetPleietrengende}
+                        aria-hidden={skalHenteBarn}
                     >
                         <option key="default" value="" label=" " />)
                         {fellesState.barn.map((b) => (
