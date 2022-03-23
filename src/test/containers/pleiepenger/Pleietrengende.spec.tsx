@@ -5,11 +5,11 @@ import { shallow } from 'enzyme';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import intlHelper from '../../../app/utils/intlUtils';
 import {
-    ISokersBarn,
-    ISokersBarnDispatchProps,
-    ISokersBarnStateProps,
-    SokersBarnComponent,
-} from '../../../app/containers/pleiepenger/Fordeling/Komponenter/SokersBarn';
+    IPleietrengende,
+    IPleietrengendeDispatchProps,
+    IPleietrengendeStateProps,
+    PleietrengendeComponent,
+} from '../../../app/containers/pleiepenger/Fordeling/Komponenter/Pleietrengende';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -19,15 +19,15 @@ jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
 const setupSokersBarn = (
-    sokersBarnComponentPropsPartial?: Partial<ISokersBarn>,
-    dispatchPropsPartial?: Partial<ISokersBarnDispatchProps>,
-    sokersBarnStatePropsPartial?: Partial<ISokersBarnStateProps>
+    sokersBarnComponentPropsPartial?: Partial<IPleietrengende>,
+    dispatchPropsPartial?: Partial<IPleietrengendeDispatchProps>,
+    sokersBarnStatePropsPartial?: Partial<IPleietrengendeStateProps>
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
     };
 
-    const dispatchProps: ISokersBarnDispatchProps = {
+    const dispatchProps: IPleietrengendeDispatchProps = {
         setIdentAction: jest.fn(),
         henteBarn: jest.fn(),
         ...dispatchPropsPartial,
@@ -39,7 +39,7 @@ const setupSokersBarn = (
         annenSokerIdent: '',
     };
 
-    const sokersBarnStateProps: ISokersBarnStateProps = {
+    const sokersBarnStateProps: IPleietrengendeStateProps = {
         identState,
         fellesState: {
             dedupKey: '',
@@ -48,9 +48,9 @@ const setupSokersBarn = (
         ...sokersBarnStatePropsPartial,
     };
 
-    const sokersBarnComponentProps: ISokersBarn = {
+    const sokersBarnComponentProps: IPleietrengende = {
         sokersIdent: '12345678910',
-        barnetHarInteFnrFn: jest.fn(),
+        pleietrengendeHarIkkeFnrFn: jest.fn(),
         ...sokersBarnComponentPropsPartial,
     };
 
@@ -58,7 +58,7 @@ const setupSokersBarn = (
 
     /* eslint-disable react/jsx-props-no-spreading */
     return shallow(
-        <SokersBarnComponent
+        <PleietrengendeComponent
             {...wrappedComponentProps}
             {...dispatchProps}
             {...sokersBarnStateProps}
