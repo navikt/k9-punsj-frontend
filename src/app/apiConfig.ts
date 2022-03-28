@@ -22,12 +22,14 @@ export enum ApiPath {
     JOURNALPOST_LUKK_OPPGAVE = '/journalpost/lukk/{journalpostId}',
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
     JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
-    JOURNALPOST_KOPIERE = '/journalpost/kopier/{journalpostId}',JOURNALPOST_FERDIGSTILL = '/journalpost/ferdigstill',
+    JOURNALPOST_KOPIERE = '/journalpost/kopier/{journalpostId}',
+    JOURNALPOST_FERDIGSTILL = '/journalpost/ferdigstill',
     DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
     OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
     OPPRETT_GOSYS_OPPGAVE = '/gosys/opprettJournalforingsoppgave/',
     PSB_MAPPE_SOK = '/k9-sak/pleiepenger-sykt-barn-soknad',
-    K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',GOSYS_GJELDER = '/gosys/gjelder',
+    K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
+    GOSYS_GJELDER = '/gosys/gjelder',
     FINN_ARBEIDSGIVERE = '/arbeidsgivere',
     OMS_FINN_ARBEIDSFORHOLD = '/omsorgspenger-soknad/k9sak/arbeidsforholdIder',
     SØK_ORGNUMMER = '/arbeidsgiver',
@@ -55,6 +57,8 @@ export enum ApiPath {
     PLS_SOKNAD_VALIDER = '/pleiepenger-livets-sluttfase-soknad/valider',
     PLS_SOKNAD_SUBMIT = '/pleiepenger-livets-sluttfase-soknad/send',
     PLS_K9SAK_PERIODER = '/pleiepenger-livets-sluttfase-soknad/k9sak/info',
+    OPPRETT_NOTAT = '/notat/opprett',
+    HENT_FAGSAK_PÅ_IDENT = '/saker/hent',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

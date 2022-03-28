@@ -1,60 +1,72 @@
 @import (reference) '@{coreModulePath}nav-frontend-core/less/_variabler';
 
 .sok-container {
-  padding-top: 20px;
-  text-align: center;
+    padding: 8.625rem 0;
+    text-align: center;
 
-  .input-rad {
-    display: inline-flex;
-  }
+    .input-rad {
+        display: inline-flex;
+        align-items: center;
 
-  .alertstripe{
-    width: 25rem;
-    margin: 0 auto;
-  }
+        label {
+            text-align: left;
+        }
 
-  .venstreKnapp {
-    background-color: @white;
-    border: 1px solid @navBla;
-    border-radius: 4px 0 0 4px;
-    box-shadow: none;
-    color: @navMorkGra;
-    font-family: "Source Sans Pro", Arial, sans-serif;
-    font-size: 1rem;
-    font-weight: bold;
-    height: 40px;
-    text-transform: none;
-    cursor: pointer;
-
-    &:focus {
-      background-color: #cce1f3;
-      outline: none;
+        input {
+            width: 17.5rem;
+        }
     }
 
-    &:disabled {
-      background-color: #cce1f3;
-      outline: none;
+    .alertstripe {
+        width: 25rem;
+        margin: 0 auto;
     }
-  }
 
-  .venstreKnappAktiv {
-    .venstreKnapp();
+    .venstreKnapp {
+        background-color: @white;
+        border: 1px solid @navBla;
+        border-radius: 4px 0 0 4px;
+        box-shadow: none;
+        color: @navMorkGra;
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-size: 1rem;
+        font-weight: bold;
+        height: 40px;
+        text-transform: none;
+        cursor: pointer;
 
-    background-color: #cce1f3;
-  }
+        &:focus {
+            background-color: #cce1f3;
+            outline: none;
+        }
 
-  .hoyreKnapp {
-    .venstreKnapp();
+        &:disabled {
+            background-color: #cce1f3;
+            outline: none;
+        }
+    }
 
-    border-radius: 0 4px 4px 0;
-  }
+    .venstreKnappAktiv {
+        .venstreKnapp();
 
-  .hoyreKnappAktiv {
-    .hoyreKnapp();
+        background-color: #cce1f3;
+    }
 
-    background-color: #cce1f3;
-  }
+    .hoyreKnapp {
+        .venstreKnapp();
 
+        border-radius: 0 4px 4px 0;
+    }
 
+    .hoyreKnappAktiv {
+        .hoyreKnapp();
 
+        background-color: #cce1f3;
+    }
+
+    .sok-heading {
+        font-size: 2.5rem;
+        line-height: 3.25rem;
+        margin: 0 0 2.625rem;
+    }
 }
