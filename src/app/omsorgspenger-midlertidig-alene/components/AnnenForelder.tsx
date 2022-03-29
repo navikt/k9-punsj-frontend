@@ -15,9 +15,11 @@ type OwnProps = {
     soknad: IOMPMASoknad;
     changeAndBlurUpdatesSoknad: (event: any) => any;
     intl: IntlShape;
+    getErrorMessage: (path: string) => string | undefined;
+    visFeil: boolean;
 };
 
-const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad }: OwnProps) => (
+const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad, getErrorMessage, visFeil }: OwnProps) => (
     <Panel border>
         <Heading size="xsmall" spacing>
             Annen forelder
@@ -26,6 +28,7 @@ const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad }: OwnProps) =
         <TextField
             label="Identifikasjonsnummer"
             size="small"
+            error={visFeil && getErrorMessage('identifikasjonsnummer')}
             value={soknad.annenForelder.norskIdent}
             {...changeAndBlurUpdatesSoknad((e) => ({
                 ...soknad,
@@ -36,6 +39,7 @@ const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad }: OwnProps) =
         <Select
             size="small"
             label="Hva er situasjonen til den andre forelderen?"
+            error={visFeil && getErrorMessage('situasjonstype')}
             value={soknad.annenForelder.situasjonType}
             {...changeAndBlurUpdatesSoknad((e) => ({
                 ...soknad,
@@ -53,6 +57,7 @@ const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad }: OwnProps) =
         <Textarea
             size="small"
             label="Beskrivelse av situasjonen"
+            error={visFeil && getErrorMessage('situasjonsbeskrivelse')}
             value={soknad.annenForelder.situasjonBeskrivelse}
             {...changeAndBlurUpdatesSoknad((e) => ({
                 ...soknad,
@@ -63,6 +68,9 @@ const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad }: OwnProps) =
         <PeriodInput
             intl={intl}
             periode={soknad.annenForelder.periode}
+            error={visFeil && getErrorMessage('periode')}
+            errorFom={visFeil && getErrorMessage('periodeFom')}
+            errorTom={visFeil && getErrorMessage('periodeTom')}
             {...changeAndBlurUpdatesSoknad((periode) => ({
                 ...soknad,
                 annenForelder: { ...soknad.annenForelder, periode },

@@ -15,10 +15,11 @@ import './opplysningerOmOMPMASoknad.less';
 interface IOwnProps {
     intl: IntlShape;
     changeAndBlurUpdatesSoknad: (event: any) => any;
-    getErrorMessage: (attribute: string, indeks?: number) => any;
+    getErrorMessage: (attribute: string) => any;
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
     signert: JaNeiIkkeRelevant | null;
     soknad: OMPMASoknad;
+    visFeil: boolean;
 }
 
 const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
@@ -28,6 +29,7 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
     setSignaturAction,
     signert,
     soknad,
+    visFeil,
 }) => (
     <>
         <Heading size="small">Omsorgsdager - Midlertidig alene om omsorgen</Heading>
@@ -40,21 +42,22 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
                 <DateInput
                     value={soknad.mottattDato}
                     id="soknad-dato"
-                    errorMessage={getErrorMessage('mottattDato')}
                     label={intlHelper(intl, 'skjema.mottakelsesdato')}
                     {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                         mottattDato: selectedDate,
                     }))}
+                    errorMessage={visFeil && getErrorMessage('mottattDato')}
                 />
                 <Input
                     value={soknad.klokkeslett || ''}
+                    id="klokkeslett"
                     type="time"
                     className="klokkeslett"
                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                     {...changeAndBlurUpdatesSoknad((event: any) => ({
                         klokkeslett: event.target.value,
                     }))}
-                    feil={getErrorMessage('klokkeslett')}
+                    feil={visFeil && getErrorMessage('klokkeslett')}
                 />
             </div>
             <RadioPanelGruppe

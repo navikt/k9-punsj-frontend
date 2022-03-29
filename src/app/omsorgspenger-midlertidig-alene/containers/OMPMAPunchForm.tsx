@@ -9,9 +9,10 @@ import {
     setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
-import { nummerPrefiks, setHash } from 'app/utils';
+import { nummerPrefiks, setHash, capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
+import * as yup from 'yup';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
@@ -32,7 +33,6 @@ import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
-import Feilmelding from '../../components/Feilmelding';
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
@@ -52,6 +52,7 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import AnnenForelder from '../components/AnnenForelder';
+import { string } from 'prop-types';
 
 export interface IPunchOMPMAFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -101,12 +102,80 @@ type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps &
     IPunchOMPMAFormStateProps &
     IPunchOMPMAFormDispatchProps;
 
+function erIkkeFremITid(dato: string) {
+    const naa = new Date();
+    return naa > new Date(dato);
+}
+
+const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
+    const naa = new Date();
+    if (mottattDato && klokkeslett && new Date(mottattDato).getDate() === naa.getDate()) {
+        return initializeDate(naa).format('HH:mm') < klokkeslett;
+    }
+    return false;
+};
+
+yup.setLocale({
+    mixed: {
+        required: '${path} er et påkrevd felt.',
+    },
+    string: {
+        min: '${path} må være minst ${min} tegn',
+        max: '${path} må være mest ${max} tegn',
+    },
+});
+
+const schema = yup.object({
+    mottattDato: yup.string().required().test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' }),
+    klokkeslett: yup
+        .string()
+        .required()
+        .when('mottattDato', (mottattDato, schema) => {
+            return schema.test({
+                test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
+                message: 'Klokkeslett kan ikke være frem i tid',
+            });
+        }),
+    identifikasjonsnummer: yup.string().required(),
+    situasjonstype: yup.string().required(),
+    situasjonsbeskrivelse: yup.string().required().min(5),
+    periode: yup.string(),
+    periodeFom: yup.string().required(),
+    periodeTom: yup.string().required(),
+});
+
+const mapSoknadTilYupFormat = (soknad: Partial<IOMPMASoknad>) => ({
+    mottattDato: soknad.mottattDato,
+    klokkeslett: soknad.klokkeslett,
+    identifikasjonsnummer: soknad.annenForelder?.norskIdent,
+    situasjonstype: soknad.annenForelder?.situasjonType,
+    situasjonsbeskrivelse: soknad.annenForelder?.situasjonBeskrivelse,
+    periodeFom: soknad.annenForelder?.periode?.fom,
+    periodeTom: soknad.annenForelder?.periode?.tom,
+});
+
+const feilFraYup = (schema: any, soknad: IOMPMASoknad) => {
+    try {
+        const isValid = schema.validateSync(mapSoknadTilYupFormat(soknad), { abortEarly: false });
+        if (isValid) return [];
+    } catch (error) {
+        const errors = error.inner.map(
+            ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
+                message: capitalize(message),
+                path,
+            })
+        );
+        return errors;
+    }
+};
+
 export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProps, IPunchOMPMAFormComponentState> {
     state: IPunchOMPMAFormComponentState = {
         soknad: {
             soeknadId: '',
             soekerId: '',
             mottattDato: '',
+            klokkeslett: '',
             journalposter: new Set([]),
             annenForelder: {
                 norskIdent: '',
@@ -159,6 +228,14 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
         const soknad = new OMPMASoknad(this.state.soknad);
         const { signert } = signaturState;
 
+        const harFeilISkjema = !![...this.getUhaandterteFeil(''), ...feilFraYup(schema, this.state.soknad)].length;
+        const yupErrors = feilFraYup(schema, this.state.soknad);
+        const getErrorMessage = (path: string) =>
+            yupErrors.find((error: { path: string; message: string }) => error.path === path)?.message;
+        console.log(yupErrors);
+        const visFeil = this.state.harForsoektAaSendeInn;
+        const visFeilOppsummering = visFeil && harFeilISkjema;
+
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
             return null;
@@ -192,10 +269,11 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                 <OpplysningerOmOMPMASoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                    getErrorMessage={this.getErrorMessage}
+                    getErrorMessage={getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}
                     signert={signert}
                     soknad={soknad}
+                    visFeil={visFeil}
                 />
                 <VerticalSpacer fourtyPx />
 
@@ -203,6 +281,8 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     soknad={soknad}
+                    getErrorMessage={getErrorMessage}
+                    visFeil={visFeil}
                 />
                 <VerticalSpacer fourtyPx />
                 <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
@@ -230,24 +310,21 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                     </Hjelpetekst>
                 </div>
                 <VerticalSpacer twentyPx={true} />
-                {this.getUhaandterteFeil('')
-                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                    .map((feilmelding) => {
-                        return <Feilmelding key={feilmelding} feil={feilmelding} />;
-                    })}
-
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className={classNames('loadingSpinner')}>
                         <NavFrontendSpinner />
                     </div>
                 )}
-                {!!this.getUhaandterteFeil('')?.length && (
-                    <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn søknad.">
+                {visFeilOppsummering && (
+                    <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                         {this.getUhaandterteFeil('')
                             .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                             .map((feilmelding) => {
                                 return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
                             })}
+                        {feilFraYup(schema, this.state.soknad).map((error: { message: string; path: string }) => (
+                            <ErrorSummary.Item key={error.path}>{error.message}</ErrorSummary.Item>
+                        ))}
                     </ErrorSummary>
                 )}
                 <div className={'submit-knapper'}>
@@ -430,24 +507,6 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
         return this.props.punchFormState.inputErrors;
     };
 
-    private erFremITid(dato: string) {
-        const naa = new Date();
-        return naa < new Date(dato);
-    }
-
-    private erFremITidKlokkeslett(dato: string) {
-        const { mottattDato } = this.state.soknad;
-        const naa = new Date();
-        if (
-            !!mottattDato &&
-            naa.getDate() === new Date(mottattDato).getDate() &&
-            initializeDate(naa).format('HH:mm') < dato
-        ) {
-            return true;
-        }
-        return false;
-    }
-
     getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!this.state.feilmeldingStier.has(attribute)) {
             this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
@@ -473,51 +532,6 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
             return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
         }
         return [];
-    };
-
-    private getErrorMessage = (attribute: string, indeks?: number) => {
-        const { mottattDato, klokkeslett } = this.state.soknad;
-        if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
-        }
-
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
-        }
-
-        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
-            ?.feilmelding;
-
-        return !!errorMsg
-            ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
-
-              intlHelper(
-                  this.props.intl,
-                  `skjema.feil.${attribute}.${errorMsg}`
-                      .replace(/\[\d+]/g, '[]')
-                      .replace(
-                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
-                      )
-                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                      .replace(
-                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
-                      )
-                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
-              )
-            : undefined;
     };
 
     private updateSoknadState = (soknad: Partial<IOMPMASoknad>, showStatus?: boolean) => {
