@@ -53,6 +53,7 @@ import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import AnnenForelder from '../components/AnnenForelder';
 import { string } from 'prop-types';
+import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
 
 export interface IPunchOMPMAFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -122,6 +123,7 @@ yup.setLocale({
     string: {
         min: '${path} må være minst ${min} tegn',
         max: '${path} må være mest ${max} tegn',
+        length: '${path} må være nøyaktig ${length} tegn',
     },
 });
 
@@ -136,7 +138,15 @@ const schema = yup.object({
                 message: 'Klokkeslett kan ikke være frem i tid',
             });
         }),
-    identifikasjonsnummer: yup.string().required().nullable(true),
+    identifikasjonsnummer: yup
+        .string()
+        .required()
+        .nullable(true)
+        .length(11)
+        .test({
+            test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
+            message: 'Ugyldig identifikasjonsnummer',
+        }),
     situasjonstype: yup.string().required().nullable(true),
     situasjonsbeskrivelse: yup.string().required().min(5).nullable(true),
     periode: yup.string().nullable(true),

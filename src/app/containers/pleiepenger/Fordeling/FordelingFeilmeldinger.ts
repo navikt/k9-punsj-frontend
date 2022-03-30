@@ -1,7 +1,7 @@
 import { IdentRules } from '../../../rules';
 import intlHelper from '../../../utils/intlUtils';
 
-export const erUgyldigIdent = (ident: string | null) => {
+export const erUgyldigIdent = (ident: string | null | undefined) => {
     if (!ident) return true;
     if (!ident.length) return true;
     return !IdentRules.isIdentValid(ident);
