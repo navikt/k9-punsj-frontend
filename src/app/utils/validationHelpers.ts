@@ -24,9 +24,12 @@ export const requiredValue = (value: string) => {
     return undefined;
 };
 
-export const validateText = (value: string, maxLength: number) => {
+export const validateText = (value: string, maxLength: number, exactLength?: boolean) => {
     if (!value) {
         return 'Må fylles ut';
+    }
+    if (exactLength && value.length !== maxLength) {
+        return `Feltet må være ${maxLength} tegn`;
     }
     if (value.length < 3) {
         return 'Du må skrive minst 3 tegn';

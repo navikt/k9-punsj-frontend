@@ -471,6 +471,20 @@
     "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
 
+    "OpprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
+    "OpprettJournalpostInngang.link": "Opprett journalpost",
+
+    "OpprettJournalpost.opprettJournalpost": "Opprett journalpost",
+    "OpprettJournalpost.søkersFødselsnummer": "Søkers fødselsnummer",
+    "OpprettJournalpost.velgFagsak": "Velg fagsak",
+    "OpprettJournalpost.velg": "Velg",
+    "OpprettJournalpost.tittel": "Tittel",
+    "OpprettJournalpost.notat": "Notat",
+    "OpprettJournalpost.opprettingAvJournalpostFeilet": "Oppretting av journalpost feilet.",
+    "OpprettJournalpost.journalpostOpprettet": "Journalpost opprettet.",
+    "OpprettJournalpost.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
+    "OpprettJournalpost.gåTilJournalpost": "Gå til journalpost",
+
     "PLEIEPENGER": "Pleiepenger",
     "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
     "OMSORGSPENGER_KS": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
