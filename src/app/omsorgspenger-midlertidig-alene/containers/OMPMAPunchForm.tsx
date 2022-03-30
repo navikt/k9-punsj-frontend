@@ -136,10 +136,10 @@ const schema = yup.object({
                 message: 'Klokkeslett kan ikke være frem i tid',
             });
         }),
-    identifikasjonsnummer: yup.string().required(),
-    situasjonstype: yup.string().required(),
-    situasjonsbeskrivelse: yup.string().required().min(5),
-    periode: yup.string(),
+    identifikasjonsnummer: yup.string().required().nullable(true),
+    situasjonstype: yup.string().required().nullable(true),
+    situasjonsbeskrivelse: yup.string().required().min(5).nullable(true),
+    periode: yup.string().nullable(true),
     periodeFom: yup.string().required(),
     periodeTom: yup.string().required(),
 });
@@ -147,9 +147,9 @@ const schema = yup.object({
 const mapSoknadTilYupFormat = (soknad: Partial<IOMPMASoknad>) => ({
     mottattDato: soknad.mottattDato,
     klokkeslett: soknad.klokkeslett,
-    identifikasjonsnummer: soknad.annenForelder?.norskIdent || undefined,
-    situasjonstype: soknad.annenForelder?.situasjonType || undefined,
-    situasjonsbeskrivelse: soknad.annenForelder?.situasjonBeskrivelse || undefined,
+    identifikasjonsnummer: soknad.annenForelder?.norskIdent,
+    situasjonstype: soknad.annenForelder?.situasjonType,
+    situasjonsbeskrivelse: soknad.annenForelder?.situasjonBeskrivelse,
     periodeFom: soknad.annenForelder?.periode?.fom,
     periodeTom: soknad.annenForelder?.periode?.tom,
 });
