@@ -7,73 +7,76 @@ import intlHelper from 'app/utils/intlUtils';
 
 import './annenForelder.less';
 import { IntlShape } from 'react-intl';
+import { Field } from 'formik';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 
 const situasjonstyper = ['INNLAGT_I_HELSEINSTITUSJON', 'UTØVER_VERNEPLIKT', 'FENGSEL', 'SYKDOM', 'ANNET'];
 
 type OwnProps = {
-    soknad: IOMPMASoknad;
+    values: IOMPMASoknad;
     changeAndBlurUpdatesSoknad: (event: any) => any;
     intl: IntlShape;
     getErrorMessage: (path: string) => string | undefined;
     visFeil: boolean;
 };
 
-const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, soknad, getErrorMessage, visFeil }: OwnProps) => (
+const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, values, getErrorMessage, visFeil }: OwnProps) => (
     <Panel border>
         <Heading size="xsmall" spacing>
             Annen forelder
         </Heading>
         <VerticalSpacer twentyPx />
-        <TextField
-            label="Identifikasjonsnummer"
-            size="small"
-            error={visFeil && getErrorMessage('identifikasjonsnummer')}
-            value={soknad.annenForelder.norskIdent}
-            {...changeAndBlurUpdatesSoknad((e) => ({
-                ...soknad,
-                annenForelder: { ...soknad.annenForelder, norskIdent: e.target.value },
-            }))}
-        />
+        <Field name="annenForelder.identifikasjonsnummer">
+            {({ field, meta }) => (
+                <TextField
+                    label="Identifikasjonsnummer"
+                    size="small"
+                    error={meta.touched && meta.error}
+                    value={values.annenForelder.norskIdent}
+                    {...field}
+                />
+            )}
+        </Field>
+
         <VerticalSpacer twentyPx />
-        <Select
-            size="small"
-            label="Hva er situasjonen til den andre forelderen?"
-            error={visFeil && getErrorMessage('situasjonstype')}
-            value={soknad.annenForelder.situasjonType}
-            {...changeAndBlurUpdatesSoknad((e) => ({
-                ...soknad,
-                annenForelder: { ...soknad.annenForelder, situasjonType: e.target.value },
-            }))}
-        >
-            <option value="">Velg situasjon</option>
-            {situasjonstyper.map((situasjonstype) => (
-                <option value={situasjonstype}>
-                    {intlHelper(intl, `omsorgspenger.midlertidigAlene.situasjonstyper.${situasjonstype}`)}
-                </option>
-            ))}
-        </Select>
+        <Field name="annenForelder.situasjonType">
+            {({ field, meta }) => (
+                <Select
+                    size="small"
+                    label="Hva er situasjonen til den andre forelderen?"
+                    error={meta.touched && meta.error}
+                    {...field}
+                >
+                    <option value="">Velg situasjon</option>
+                    {situasjonstyper.map((situasjonstype) => (
+                        <option value={situasjonstype}>
+                            {intlHelper(intl, `omsorgspenger.midlertidigAlene.situasjonstyper.${situasjonstype}`)}
+                        </option>
+                    ))}
+                </Select>
+            )}
+        </Field>
         <VerticalSpacer twentyPx />
-        <Textarea
-            size="small"
-            label="Beskrivelse av situasjonen"
-            error={visFeil && getErrorMessage('situasjonsbeskrivelse')}
-            value={soknad.annenForelder.situasjonBeskrivelse}
-            {...changeAndBlurUpdatesSoknad((e) => ({
-                ...soknad,
-                annenForelder: { ...soknad.annenForelder, situasjonBeskrivelse: e.target.value },
-            }))}
-        />
+        <Field name="annenForelder.situasjonBeskrivelse">
+            {({ field, meta }) => (
+                <Textarea
+                    size="small"
+                    label="Beskrivelse av situasjonen"
+                    error={meta.touched && meta.error}
+                    {...field}
+                />
+            )}
+        </Field>
         <VerticalSpacer twentyPx />
         <PeriodInput
             intl={intl}
-            periode={soknad.annenForelder.periode}
+            periode={values.annenForelder.periode}
             error={visFeil && getErrorMessage('periode')}
             errorFom={visFeil && getErrorMessage('periodeFom')}
             errorTom={visFeil && getErrorMessage('periodeTom')}
             {...changeAndBlurUpdatesSoknad((periode) => ({
-                ...soknad,
-                annenForelder: { ...soknad.annenForelder, periode },
+                ...values,
+                annenForelder: { ...values.annenForelder, periode },
             }))}
         />
     </Panel>

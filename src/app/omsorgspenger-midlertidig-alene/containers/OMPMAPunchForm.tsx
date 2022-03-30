@@ -52,8 +52,8 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
 import AnnenForelder from '../components/AnnenForelder';
-import { string } from 'prop-types';
 import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
+import { Formik } from 'formik';
 
 export interface IPunchOMPMAFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -138,20 +138,23 @@ const schema = yup.object({
                 message: 'Klokkeslett kan ikke være frem i tid',
             });
         }),
-    identifikasjonsnummer: yup
-        .string()
-        .required()
-        .nullable(true)
-        .length(11)
-        .test({
-            test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
-            message: 'Ugyldig identifikasjonsnummer',
-        }),
-    situasjonstype: yup.string().required().nullable(true),
-    situasjonsbeskrivelse: yup.string().required().min(5).nullable(true),
-    periode: yup.string().nullable(true),
-    periodeFom: yup.string().required(),
-    periodeTom: yup.string().required(),
+    annenForelder: yup.object().shape({
+        identifikasjonsnummer: yup
+            .string()
+            .required()
+            .nullable(true)
+            .length(11)
+            .test({
+                test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
+                message: 'Ugyldig identifikasjonsnummer',
+            })
+            .label('Identifikasjonsnummer'),
+        situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
+        situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
+        periode: yup.string().nullable(true),
+        periodeFom: yup.string().required(),
+        periodeTom: yup.string().required(),
+    }),
 });
 
 const mapSoknadTilYupFormat = (soknad: Partial<IOMPMASoknad>) => ({
@@ -242,7 +245,6 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
         const yupErrors = feilFraYup(schema, this.state.soknad);
         const getErrorMessage = (path: string) =>
             yupErrors.find((error: { path: string; message: string }) => error.path === path)?.message;
-        console.log(yupErrors);
         const visFeil = this.state.harForsoektAaSendeInn;
         const visFeilOppsummering = visFeil && harFeilISkjema;
 
@@ -273,207 +275,234 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
         }
 
         return (
-            <>
-                {this.statusetikett()}
-                <VerticalSpacer sixteenPx />
-                <OpplysningerOmOMPMASoknad
-                    intl={intl}
-                    changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                    getErrorMessage={getErrorMessage}
-                    setSignaturAction={this.props.setSignaturAction}
-                    signert={signert}
-                    soknad={soknad}
-                    visFeil={visFeil}
-                />
-                <VerticalSpacer fourtyPx />
-
-                <AnnenForelder
-                    intl={intl}
-                    changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                    soknad={soknad}
-                    getErrorMessage={getErrorMessage}
-                    visFeil={visFeil}
-                />
-                <VerticalSpacer fourtyPx />
-                <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
-                <div className={'flex-container'}>
-                    <CheckboksPanel
-                        id={'medisinskeopplysningercheckbox'}
-                        label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                        checked={!!soknad.harMedisinskeOpplysninger}
-                        onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
-                    />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
-                        {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
-                    </Hjelpetekst>
-                </div>
-                <VerticalSpacer eightPx={true} />
-                <div className={'flex-container'}>
-                    <CheckboksPanel
-                        id={'opplysningerikkepunsjetcheckbox'}
-                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
-                        onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
-                    />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
-                        {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                    </Hjelpetekst>
-                </div>
-                <VerticalSpacer twentyPx={true} />
-                {punchFormState.isAwaitingValidateResponse && (
-                    <div className={classNames('loadingSpinner')}>
-                        <NavFrontendSpinner />
-                    </div>
-                )}
-                {visFeilOppsummering && (
-                    <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                        {this.getUhaandterteFeil('')
-                            .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                            .map((feilmelding) => {
-                                return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
-                            })}
-                        {feilFraYup(schema, this.state.soknad).map((error: { message: string; path: string }) => (
-                            <ErrorSummary.Item key={error.path}>{error.message}</ErrorSummary.Item>
-                        ))}
-                    </ErrorSummary>
-                )}
-                <div className={'submit-knapper'}>
-                    <p className="sendknapp-wrapper">
-                        <Knapp className={'send-knapp'} onClick={() => this.handleSubmit()} disabled={false}>
-                            {intlHelper(intl, 'skjema.knapp.send')}
-                        </Knapp>
-
-                        <Knapp
-                            className={'vent-knapp'}
-                            onClick={() => this.setState({ showSettPaaVentModal: true })}
-                            disabled={false}
-                        >
-                            {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                        </Knapp>
-                    </p>
-                </div>
-
-                <VerticalSpacer sixteenPx={true} />
-
-                {!!punchFormState.updateSoknadError && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
-                )}
-                {!!punchFormState.inputErrors?.length && (
-                    <AlertStripeFeil className={'valideringstripefeil'}>
-                        {intlHelper(intl, 'skjema.feil.validering')}
-                    </AlertStripeFeil>
-                )}
-                {!!punchFormState.submitSoknadError && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
-                )}
-                {!!punchFormState.submitSoknadConflict && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
-                )}
-
-                {this.state.showSettPaaVentModal && (
-                    <ModalWrapper
-                        key={'settpaaventmodal'}
-                        className={'settpaaventmodal'}
-                        onRequestClose={() => this.setState({ showSettPaaVentModal: false })}
-                        contentLabel={'settpaaventmodal'}
-                        isOpen={this.state.showSettPaaVentModal}
-                        closeButton={false}
-                    >
-                        <div className="">
-                            <SettPaaVentModal
-                                journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid
-                                )}
-                                soknadId={soknad.soeknadId}
-                                submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.setState({ showSettPaaVentModal: false })}
-                            />
-                        </div>
-                    </ModalWrapper>
-                )}
-
-                {punchFormState.settPaaVentSuccess && (
-                    <ModalWrapper
-                        key={'settpaaventokmodal'}
-                        onRequestClose={() => this.props.settPaaventResetAction()}
-                        contentLabel={'settpaaventokmodal'}
-                        closeButton={false}
-                        isOpen={punchFormState.settPaaVentSuccess}
-                    >
-                        <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
-                    </ModalWrapper>
-                )}
-
-                {!!punchFormState.settPaaVentError && (
-                    <ModalWrapper
-                        key={'settpaaventerrormodal'}
-                        onRequestClose={() => this.props.settPaaventResetAction()}
-                        contentLabel={'settpaaventokmodal'}
-                        closeButton={false}
-                        isOpen={!!punchFormState.settPaaVentError}
-                    >
-                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </ModalWrapper>
-                )}
-
-                {this.props.punchFormState.isValid &&
-                    !this.state.visErDuSikkerModal &&
-                    this.props.punchFormState.validertSoknad && (
-                        <ModalWrapper
-                            key={'validertSoknadModal'}
-                            className={'validertSoknadModal'}
-                            onRequestClose={() => this.props.validerSoknadReset()}
-                            contentLabel={'validertSoknadModal'}
-                            closeButton={false}
-                            isOpen={!!this.props.punchFormState.isValid}
-                        >
-                            <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <OMPMASoknadKvittering
-                                    intl={intl}
-                                    response={this.props.punchFormState.validertSoknad}
-                                />
-                            </div>
-                            <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                <Hovedknapp
-                                    mini={true}
-                                    className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                >
-                                    {intlHelper(intl, 'fordeling.knapp.videre')}
-                                </Hovedknapp>
-                                <Knapp
-                                    mini={true}
-                                    className="validertSoknadOppsummeringContainer_knappTilbake"
-                                    onClick={() => this.props.validerSoknadReset()}
-                                >
-                                    {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                </Knapp>
-                            </div>
-                        </ModalWrapper>
-                    )}
-
-                {this.state.visErDuSikkerModal && (
-                    <ModalWrapper
-                        key={'erdusikkermodal'}
-                        className={'erdusikkermodal'}
-                        onRequestClose={() => this.props.validerSoknadReset()}
-                        contentLabel={'erdusikkermodal'}
-                        closeButton={false}
-                        isOpen={this.state.visErDuSikkerModal}
-                    >
-                        <ErDuSikkerModal
-                            melding={'modal.erdusikker.sendinn'}
-                            extraInfo={'modal.erdusikker.sendinn.extrainfo'}
-                            onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
-                            submitKnappText={'skjema.knapp.send'}
-                            onClose={() => {
-                                this.props.validerSoknadReset();
-                                this.setState({ visErDuSikkerModal: false });
-                            }}
+            <Formik
+                initialValues={{
+                    soeknadId: '',
+                    soekerId: '',
+                    mottattDato: '',
+                    journalposter: new Set([]),
+                    klokkeslett: '',
+                    annenForelder: {
+                        norskIdent: '',
+                        situasjonBeskrivelse: '',
+                        situasjonType: '',
+                        periode: {
+                            fom: '',
+                            tom: '',
+                        },
+                    },
+                    harInfoSomIkkeKanPunsjes: false,
+                    harMedisinskeOpplysninger: false,
+                }}
+                validationSchema={schema}
+                onSubmit={this.handleSubmit}
+            >
+                {({ setFieldValue, values }) => (
+                    <>
+                        {this.statusetikett()}
+                        <VerticalSpacer sixteenPx />
+                        <OpplysningerOmOMPMASoknad
+                            intl={intl}
+                            changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
+                            getErrorMessage={getErrorMessage}
+                            setSignaturAction={this.props.setSignaturAction}
+                            signert={signert}
+                            values={values}
+                            visFeil={visFeil}
                         />
-                    </ModalWrapper>
+                        <VerticalSpacer fourtyPx />
+
+                        <AnnenForelder
+                            intl={intl}
+                            changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
+                            values={values}
+                            getErrorMessage={getErrorMessage}
+                            visFeil={visFeil}
+                        />
+                        <VerticalSpacer fourtyPx />
+                        <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+                        <div className={'flex-container'}>
+                            <CheckboksPanel
+                                id={'medisinskeopplysningercheckbox'}
+                                label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
+                                checked={!!soknad.harMedisinskeOpplysninger}
+                                onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
+                            />
+                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                                {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
+                            </Hjelpetekst>
+                        </div>
+                        <VerticalSpacer eightPx={true} />
+                        <div className={'flex-container'}>
+                            <CheckboksPanel
+                                id={'opplysningerikkepunsjetcheckbox'}
+                                label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                                checked={!!soknad.harInfoSomIkkeKanPunsjes}
+                                onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
+                            />
+                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                                {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                            </Hjelpetekst>
+                        </div>
+                        <VerticalSpacer twentyPx={true} />
+                        {punchFormState.isAwaitingValidateResponse && (
+                            <div className={classNames('loadingSpinner')}>
+                                <NavFrontendSpinner />
+                            </div>
+                        )}
+                        {visFeilOppsummering && (
+                            <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
+                                {this.getUhaandterteFeil('')
+                                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
+                                    .map((feilmelding) => {
+                                        return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
+                                    })}
+                                {feilFraYup(schema, this.state.soknad).map(
+                                    (error: { message: string; path: string }) => (
+                                        <ErrorSummary.Item key={error.path}>{error.message}</ErrorSummary.Item>
+                                    )
+                                )}
+                            </ErrorSummary>
+                        )}
+                        <div className={'submit-knapper'}>
+                            <p className="sendknapp-wrapper">
+                                <Knapp className={'send-knapp'} onClick={() => this.handleSubmit()} disabled={false}>
+                                    {intlHelper(intl, 'skjema.knapp.send')}
+                                </Knapp>
+
+                                <Knapp
+                                    className={'vent-knapp'}
+                                    onClick={() => this.setState({ showSettPaaVentModal: true })}
+                                    disabled={false}
+                                >
+                                    {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                                </Knapp>
+                            </p>
+                        </div>
+
+                        <VerticalSpacer sixteenPx={true} />
+
+                        {!!punchFormState.updateSoknadError && (
+                            <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
+                        )}
+                        {!!punchFormState.inputErrors?.length && (
+                            <AlertStripeFeil className={'valideringstripefeil'}>
+                                {intlHelper(intl, 'skjema.feil.validering')}
+                            </AlertStripeFeil>
+                        )}
+                        {!!punchFormState.submitSoknadError && (
+                            <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
+                        )}
+                        {!!punchFormState.submitSoknadConflict && (
+                            <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
+                        )}
+
+                        {this.state.showSettPaaVentModal && (
+                            <ModalWrapper
+                                key={'settpaaventmodal'}
+                                className={'settpaaventmodal'}
+                                onRequestClose={() => this.setState({ showSettPaaVentModal: false })}
+                                contentLabel={'settpaaventmodal'}
+                                isOpen={this.state.showSettPaaVentModal}
+                                closeButton={false}
+                            >
+                                <div className="">
+                                    <SettPaaVentModal
+                                        journalposter={this.props.journalposterState.journalposter.filter(
+                                            (jp) => jp.journalpostId !== this.props.journalpostid
+                                        )}
+                                        soknadId={soknad.soeknadId}
+                                        submit={() => this.handleSettPaaVent()}
+                                        avbryt={() => this.setState({ showSettPaaVentModal: false })}
+                                    />
+                                </div>
+                            </ModalWrapper>
+                        )}
+
+                        {punchFormState.settPaaVentSuccess && (
+                            <ModalWrapper
+                                key={'settpaaventokmodal'}
+                                onRequestClose={() => this.props.settPaaventResetAction()}
+                                contentLabel={'settpaaventokmodal'}
+                                closeButton={false}
+                                isOpen={punchFormState.settPaaVentSuccess}
+                            >
+                                <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
+                            </ModalWrapper>
+                        )}
+
+                        {!!punchFormState.settPaaVentError && (
+                            <ModalWrapper
+                                key={'settpaaventerrormodal'}
+                                onRequestClose={() => this.props.settPaaventResetAction()}
+                                contentLabel={'settpaaventokmodal'}
+                                closeButton={false}
+                                isOpen={!!punchFormState.settPaaVentError}
+                            >
+                                <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
+                            </ModalWrapper>
+                        )}
+
+                        {this.props.punchFormState.isValid &&
+                            !this.state.visErDuSikkerModal &&
+                            this.props.punchFormState.validertSoknad && (
+                                <ModalWrapper
+                                    key={'validertSoknadModal'}
+                                    className={'validertSoknadModal'}
+                                    onRequestClose={() => this.props.validerSoknadReset()}
+                                    contentLabel={'validertSoknadModal'}
+                                    closeButton={false}
+                                    isOpen={!!this.props.punchFormState.isValid}
+                                >
+                                    <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                        <OMPMASoknadKvittering
+                                            intl={intl}
+                                            response={this.props.punchFormState.validertSoknad}
+                                        />
+                                    </div>
+                                    <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                                        <Hovedknapp
+                                            mini={true}
+                                            className="validertSoknadOppsummeringContainer_knappVidere"
+                                            onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                        >
+                                            {intlHelper(intl, 'fordeling.knapp.videre')}
+                                        </Hovedknapp>
+                                        <Knapp
+                                            mini={true}
+                                            className="validertSoknadOppsummeringContainer_knappTilbake"
+                                            onClick={() => this.props.validerSoknadReset()}
+                                        >
+                                            {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                        </Knapp>
+                                    </div>
+                                </ModalWrapper>
+                            )}
+
+                        {this.state.visErDuSikkerModal && (
+                            <ModalWrapper
+                                key={'erdusikkermodal'}
+                                className={'erdusikkermodal'}
+                                onRequestClose={() => this.props.validerSoknadReset()}
+                                contentLabel={'erdusikkermodal'}
+                                closeButton={false}
+                                isOpen={this.state.visErDuSikkerModal}
+                            >
+                                <ErDuSikkerModal
+                                    melding={'modal.erdusikker.sendinn'}
+                                    extraInfo={'modal.erdusikker.sendinn.extrainfo'}
+                                    onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
+                                    submitKnappText={'skjema.knapp.send'}
+                                    onClose={() => {
+                                        this.props.validerSoknadReset();
+                                        this.setState({ visErDuSikkerModal: false });
+                                    }}
+                                />
+                            </ModalWrapper>
+                        )}
+                    </>
                 )}
-            </>
+            </Formik>
         );
     }
 

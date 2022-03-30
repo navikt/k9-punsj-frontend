@@ -18,7 +18,7 @@ interface IOwnProps {
     getErrorMessage: (attribute: string) => any;
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
     signert: JaNeiIkkeRelevant | null;
-    soknad: OMPMASoknad;
+    values: OMPMASoknad;
     visFeil: boolean;
 }
 
@@ -28,7 +28,7 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
     getErrorMessage,
     setSignaturAction,
     signert,
-    soknad,
+    values,
     visFeil,
 }) => (
     <>
@@ -40,7 +40,7 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
             </Alert>
             <div className="input-row">
                 <DateInput
-                    value={soknad.mottattDato}
+                    value={values.mottattDato}
                     id="soknad-dato"
                     label={intlHelper(intl, 'skjema.mottakelsesdato')}
                     {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
@@ -49,7 +49,7 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
                     errorMessage={visFeil && getErrorMessage('mottattDato')}
                 />
                 <Input
-                    value={soknad.klokkeslett || ''}
+                    value={values.klokkeslett || ''}
                     id="klokkeslett"
                     type="time"
                     className="klokkeslett"
