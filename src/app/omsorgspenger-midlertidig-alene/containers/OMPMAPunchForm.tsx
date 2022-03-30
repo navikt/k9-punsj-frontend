@@ -147,9 +147,9 @@ const schema = yup.object({
 const mapSoknadTilYupFormat = (soknad: Partial<IOMPMASoknad>) => ({
     mottattDato: soknad.mottattDato,
     klokkeslett: soknad.klokkeslett,
-    identifikasjonsnummer: soknad.annenForelder?.norskIdent,
-    situasjonstype: soknad.annenForelder?.situasjonType,
-    situasjonsbeskrivelse: soknad.annenForelder?.situasjonBeskrivelse,
+    identifikasjonsnummer: soknad.annenForelder?.norskIdent || undefined,
+    situasjonstype: soknad.annenForelder?.situasjonType || undefined,
+    situasjonsbeskrivelse: soknad.annenForelder?.situasjonBeskrivelse || undefined,
     periodeFom: soknad.annenForelder?.periode?.fom,
     periodeTom: soknad.annenForelder?.periode?.tom,
 });
