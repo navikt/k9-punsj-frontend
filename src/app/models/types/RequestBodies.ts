@@ -33,7 +33,7 @@ export interface ISkalTilK9 {
 
 export enum FagsakYtelseType {
     PLEIEPENGER_SYKT_BARN = "PSB",
-    PLEIEPENGER_NÆRSTÅENDE = "PN",
+    PLEIEPENGER_NÆRSTÅENDE = "PPN",
     OMSORGSPENGER = "OMP",
     OMSORGSPENGER_KS = "OMP_KS",
     OMSORGSPENGER_MA = "OMP_MA",
