@@ -15,6 +15,7 @@ import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reduc
 import { RootStateType } from '../../state/RootState';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import './sok.less';
+import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
@@ -98,42 +99,57 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
         }
 
         return (
-            <div className="sok-container">
-                <h1>
-                    <FormattedMessage id="søk.overskrift" />
-                </h1>
-                <SkjemaGruppe>
-                    <div className="input-rad">
-                        <Input
-                            value={journalpostid}
-                            bredde="L"
-                            onChange={(e) => this.setState({ journalpostid: e.target.value })}
-                            label={<FormattedMessage id="søk.label.jpid" />}
-                            onKeyDown={this.handleKeydown}
-                        />
-                        <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
-                        <VerticalSpacer sixteenPx />
-                    </div>
+            <>
+                <div className="sok-container">
+                    <h1 className="sok-heading">
+                        <FormattedMessage id="søk.overskrift" />
+                    </h1>
+                    <SkjemaGruppe>
+                        <div className="input-rad">
+                            <Input
+                                value={journalpostid}
+                                bredde="L"
+                                onChange={(e) => this.setState({ journalpostid: e.target.value })}
+                                label={<FormattedMessage id="søk.label.jpid" />}
+                                onKeyDown={this.handleKeydown}
+                            />
+                            <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                            <VerticalSpacer sixteenPx />
+                        </div>
 
-                    {!!notFound && (
-                        <AlertStripeInfo>
-                            <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
-                        </AlertStripeInfo>
-                    )}
+                        {!!notFound && (
+                            <AlertStripeInfo>
+                                <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
+                            </AlertStripeInfo>
+                        )}
 
-                    {!!forbidden && (
-                        <AlertStripeAdvarsel>
-                            <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                        </AlertStripeAdvarsel>
-                    )}
+                        {!!forbidden && (
+                            <AlertStripeAdvarsel>
+                                <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                            </AlertStripeAdvarsel>
+                        )}
 
-                    {conflict &&
-                        journalpostConflictError &&
-                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                        {conflict &&
+                            journalpostConflictError &&
+                            journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                                <>
+                                    <AlertStripeAdvarsel>
+                                        <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                    </AlertStripeAdvarsel>
+                                    <VerticalSpacer eightPx />
+                                    <Knapp
+                                        onClick={() => {
+                                            if (journalpostid) lukkJournalpostOppgave(journalpostid);
+                                        }}
+                                    >
+                                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
+                                    </Knapp>
+                                </>
+                            )}
+
+                        {journalpostRequestError?.message && (
                             <>
-                                <AlertStripeAdvarsel>
-                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                </AlertStripeAdvarsel>
+                                <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
                                 <VerticalSpacer eightPx />
                                 <Knapp
                                     onClick={() => {
@@ -145,27 +161,15 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                             </>
                         )}
 
-                    {journalpostRequestError?.message && (
-                        <>
-                            <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
-                            <VerticalSpacer eightPx />
-                            <Knapp
-                                onClick={() => {
-                                    if (journalpostid) lukkJournalpostOppgave(journalpostid);
-                                }}
-                            >
-                                <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                            </Knapp>
-                        </>
-                    )}
-
-                    {!!journalpost && !journalpost?.kanSendeInn && (
-                        <AlertStripeAdvarsel>
-                            <FormattedMessage id="fordeling.kanikkesendeinn" />
-                        </AlertStripeAdvarsel>
-                    )}
-                </SkjemaGruppe>
-            </div>
+                        {!!journalpost && !journalpost?.kanSendeInn && (
+                            <AlertStripeAdvarsel>
+                                <FormattedMessage id="fordeling.kanikkesendeinn" />
+                            </AlertStripeAdvarsel>
+                        )}
+                    </SkjemaGruppe>
+                </div>
+                <OpprettJournalpostInngang />
+            </>
         );
     }
 }

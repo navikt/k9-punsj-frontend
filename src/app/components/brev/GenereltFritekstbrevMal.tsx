@@ -1,11 +1,11 @@
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import { EtikettFokus } from 'nav-frontend-etiketter';
 import { Input, Textarea } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import VerticalSpacer from '../VerticalSpacer';
-import { validateText } from './validationHelpers';
 
 interface GenereltFritekstbrevMalProps {
     setVisBrevIkkeSendtInfoboks: () => void;

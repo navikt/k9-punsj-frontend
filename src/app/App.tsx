@@ -19,6 +19,7 @@ import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
 import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
+import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 
 const environment = window.location.hostname;
 
@@ -78,6 +79,9 @@ export const App: React.FunctionComponent = () => {
                                 </Route>
                                 <Route path="/journalpost/:journalpostid/">
                                     <JournalpostRouter />
+                                </Route>
+                                <Route path="/opprett-journalpost">
+                                    <OpprettJournalpost />
                                 </Route>
                                 <Route path="/">
                                     <SokIndex />
