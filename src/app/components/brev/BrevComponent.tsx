@@ -159,7 +159,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                             }}
                             brevmaler={brevmaler}
                         />
-                        {arbeidsgivereMedNavn.length > 0 && (
+                        {(arbeidsgivereMedNavn.length > 0 || person) && (
                             <MottakerVelger
                                 resetBrevStatus={() => {
                                     setBrevErSendt(false);
