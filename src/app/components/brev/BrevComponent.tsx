@@ -159,17 +159,17 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                             }}
                             brevmaler={brevmaler}
                         />
-                        {(arbeidsgivereMedNavn.length > 0 || person) && (
-                            <MottakerVelger
-                                resetBrevStatus={() => {
-                                    setBrevErSendt(false);
-                                    setSendBrevFeilet(false);
-                                }}
-                                aktørId={aktørId}
-                                person={person}
-                                arbeidsgivereMedNavn={arbeidsgivereMedNavn}
-                            />
-                        )}
+
+                        <MottakerVelger
+                            resetBrevStatus={() => {
+                                setBrevErSendt(false);
+                                setSendBrevFeilet(false);
+                            }}
+                            aktørId={aktørId}
+                            person={person}
+                            arbeidsgivereMedNavn={arbeidsgivereMedNavn}
+                        />
+
                         {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                             <InnhentDokumentasjonMal
                                 setVisBrevIkkeSendtInfoboks={() => setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)}
