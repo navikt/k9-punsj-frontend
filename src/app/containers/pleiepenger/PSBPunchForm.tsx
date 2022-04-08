@@ -71,6 +71,7 @@ import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import { Utenlandsopphold } from './Utenlandsopphold';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -315,7 +316,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
-        const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
+        const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 
         const beredskapperioder = () => {
             return (
@@ -424,17 +425,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             !!this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet
                         }
                     />
-                    {!!soknad.utenlandsopphold.length && (
-                        <PeriodeinfoPaneler
+                    {(!!soknad.utenlandsopphold.length || !!soknad.utenlandsoppholdV2.length) && (
+                        <Utenlandsopphold
                             intl={intl}
-                            periods={soknad.utenlandsopphold}
+                            periods={
+                                soknad.utenlandsoppholdV2.length > 0
+                                    ? soknad.utenlandsoppholdV2
+                                    : soknad.utenlandsopphold
+                            }
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(perioder) => this.updateSoknad({ utenlandsopphold: perioder })}
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState({ utenlandsopphold: perioder }, showStatus)
-                            }
+                            editSoknad={(perioder) => {
+                                this.updateSoknad({ utenlandsopphold: perioder, utenlandsoppholdV2: perioder });
+                            }}
+                            editSoknadState={(perioder, showStatus) => {
+                                this.updateSoknadState(
+                                    { utenlandsopphold: perioder, utenlandsoppholdV2: perioder },
+                                    showStatus
+                                );
+                            }}
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
                             className="utenlandsopphold"
