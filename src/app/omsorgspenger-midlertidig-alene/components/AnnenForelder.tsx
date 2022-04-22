@@ -1,4 +1,6 @@
 import React from 'react';
+import { IntlShape } from 'react-intl';
+import { Field } from 'formik';
 import { Heading, Select, Textarea, TextField } from '@navikt/ds-react';
 import Panel from 'nav-frontend-paneler';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
@@ -6,21 +8,16 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 
 import './annenForelder.less';
-import { IntlShape } from 'react-intl';
-import { Field } from 'formik';
-import { IOMPMASoknad } from '../types/OMPMASoknad';
+import { OMPMASoknad } from '../types/OMPMASoknad';
 
 const situasjonstyper = ['INNLAGT_I_HELSEINSTITUSJON', 'UTØVER_VERNEPLIKT', 'FENGSEL', 'SYKDOM', 'ANNET'];
 
 type OwnProps = {
-    values: IOMPMASoknad;
-    changeAndBlurUpdatesSoknad: (event: any) => any;
     intl: IntlShape;
-    getErrorMessage: (path: string) => string | undefined;
-    visFeil: boolean;
+    updateSoknad: (soknad: OMPMASoknad) => void;
 };
 
-const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, values, getErrorMessage, visFeil }: OwnProps) => (
+const AnnenForelder = ({ intl }: OwnProps) => (
     <Panel border>
         <Heading size="xsmall" spacing>
             Annen forelder
@@ -28,13 +25,7 @@ const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, values, getErrorMessa
         <VerticalSpacer twentyPx />
         <Field name="annenForelder.identifikasjonsnummer">
             {({ field, meta }) => (
-                <TextField
-                    label="Identifikasjonsnummer"
-                    size="small"
-                    error={meta.touched && meta.error}
-                    value={values.annenForelder.norskIdent}
-                    {...field}
-                />
+                <TextField label="Identifikasjonsnummer" size="small" error={meta.touched && meta.error} {...field} />
             )}
         </Field>
 
@@ -68,17 +59,25 @@ const AnnenForelder = ({ intl, changeAndBlurUpdatesSoknad, values, getErrorMessa
             )}
         </Field>
         <VerticalSpacer twentyPx />
-        <PeriodInput
-            intl={intl}
-            periode={values.annenForelder.periode}
-            error={visFeil && getErrorMessage('periode')}
-            errorFom={visFeil && getErrorMessage('periodeFom')}
-            errorTom={visFeil && getErrorMessage('periodeTom')}
-            {...changeAndBlurUpdatesSoknad((periode) => ({
-                ...values,
-                annenForelder: { ...values.annenForelder, periode },
-            }))}
-        />
+        <Field name="annenForelder.periode">
+            {({ form }) => (
+                <PeriodInput
+                    intl={intl}
+                    periode={form.values.annenForelder?.periode}
+                    errorMessageFom={
+                        form.touched?.annenForelder?.periode?.fom && form.errors?.annenForelder?.periode?.fom
+                    }
+                    errorMessageTom={
+                        form.touched?.annenForelder?.periode?.tom && form.errors?.annenForelder?.periode?.tom
+                    }
+                    onBlur={() => {
+                        form.setFieldTouched('annenForelder.periode.fom');
+                        form.setFieldTouched('annenForelder.periode.tom');
+                    }}
+                    onChange={(value) => form.setFieldValue('annenForelder.periode', value)}
+                />
+            )}
+        </Field>
     </Panel>
 );
 

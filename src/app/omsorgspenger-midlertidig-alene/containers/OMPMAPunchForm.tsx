@@ -1,4 +1,18 @@
 /* eslint-disable */
+import * as React from 'react';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
+import * as yup from 'yup';
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import ModalWrapper from 'nav-frontend-modal';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import { ErrorSummary } from '@navikt/ds-react';
+import { CheckboksPanel } from 'nav-frontend-skjema';
+import Hjelpetekst from 'nav-frontend-hjelpetekst';
+import { PopoverOrientering } from 'nav-frontend-popover';
 import { PunchStep } from 'app/models/enums';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
@@ -11,17 +25,7 @@ import {
 } from 'app/state/actions';
 import { nummerPrefiks, setHash, capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import * as yup from 'yup';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
-import { ErrorSummary } from '@navikt/ds-react';
+
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
@@ -48,12 +52,9 @@ import {
 } from '../state/actions/OMPMAPunchFormActions';
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import { IOMPMASoknadUt, OMPMASoknadUt } from '../types/OMPMASoknadUt';
-import { CheckboksPanel } from 'nav-frontend-skjema';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import AnnenForelder from '../components/AnnenForelder';
 import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
-import { Formik } from 'formik';
+import { Formik, FormikValues } from 'formik';
 
 export interface IPunchOMPMAFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -128,7 +129,11 @@ yup.setLocale({
 });
 
 const schema = yup.object({
-    mottattDato: yup.string().required().test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' }),
+    mottattDato: yup
+        .string()
+        .required()
+        .test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' })
+        .label('Mottatt dato'),
     klokkeslett: yup
         .string()
         .required()
@@ -137,7 +142,8 @@ const schema = yup.object({
                 test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
                 message: 'Klokkeslett kan ikke være frem i tid',
             });
-        }),
+        })
+        .label('Klokkeslett'),
     annenForelder: yup.object().shape({
         identifikasjonsnummer: yup
             .string()
@@ -151,9 +157,10 @@ const schema = yup.object({
             .label('Identifikasjonsnummer'),
         situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
         situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
-        periode: yup.string().nullable(true),
-        periodeFom: yup.string().required(),
-        periodeTom: yup.string().required(),
+        periode: yup.object().shape({
+            fom: yup.string().required().label('Fra og med'),
+            tom: yup.string().required().label('Til og med'),
+        }),
     }),
 });
 
@@ -181,6 +188,25 @@ const feilFraYup = (schema: any, soknad: IOMPMASoknad) => {
         return errors;
     }
 };
+
+const initialValues = (soknad: Partial<IOMPMASoknad> | undefined) => ({
+    soeknadId: soknad?.soeknadId || '',
+    soekerId: soknad?.soekerId || '',
+    mottattDato: soknad?.mottattDato || '',
+    journalposter: soknad?.journalposter || new Set([]),
+    klokkeslett: soknad?.klokkeslett || '',
+    annenForelder: {
+        norskIdent: soknad?.annenForelder?.norskIdent || '',
+        situasjonBeskrivelse: soknad?.annenForelder?.situasjonBeskrivelse || '',
+        situasjonType: soknad?.annenForelder?.situasjonType || '',
+        periode: {
+            fom: soknad?.annenForelder?.periode?.fom || '',
+            tom: soknad?.annenForelder?.periode?.tom || '',
+        },
+    },
+    harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
+    harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
+});
 
 export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProps, IPunchOMPMAFormComponentState> {
     state: IPunchOMPMAFormComponentState = {
@@ -248,6 +274,11 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
         const visFeil = this.state.harForsoektAaSendeInn;
         const visFeilOppsummering = visFeil && harFeilISkjema;
 
+        const handleBlur = (callback: () => void, values: FormikValues) => {
+            callback();
+            this.updateSoknad(values);
+        };
+
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
             return null;
@@ -276,24 +307,7 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
 
         return (
             <Formik
-                initialValues={{
-                    soeknadId: '',
-                    soekerId: '',
-                    mottattDato: '',
-                    journalposter: new Set([]),
-                    klokkeslett: '',
-                    annenForelder: {
-                        norskIdent: '',
-                        situasjonBeskrivelse: '',
-                        situasjonType: '',
-                        periode: {
-                            fom: '',
-                            tom: '',
-                        },
-                    },
-                    harInfoSomIkkeKanPunsjes: false,
-                    harMedisinskeOpplysninger: false,
-                }}
+                initialValues={initialValues(this.props.punchFormState.soknad)}
                 validationSchema={schema}
                 onSubmit={this.handleSubmit}
             >
@@ -303,22 +317,13 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                         <VerticalSpacer sixteenPx />
                         <OpplysningerOmOMPMASoknad
                             intl={intl}
-                            changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                            getErrorMessage={getErrorMessage}
                             setSignaturAction={this.props.setSignaturAction}
                             signert={signert}
-                            values={values}
-                            visFeil={visFeil}
+                            handleBlur={handleBlur}
                         />
                         <VerticalSpacer fourtyPx />
 
-                        <AnnenForelder
-                            intl={intl}
-                            changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
-                            values={values}
-                            getErrorMessage={getErrorMessage}
-                            visFeil={visFeil}
-                        />
+                        <AnnenForelder intl={intl} updateSoknad={this.updateSoknad} />
                         <VerticalSpacer fourtyPx />
                         <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                         <div className={'flex-container'}>
@@ -352,15 +357,17 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
                         )}
                         {visFeilOppsummering && (
                             <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                                {this.getUhaandterteFeil('')
-                                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                                    .map((feilmelding) => {
-                                        return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
-                                    })}
+                                {this.getUhaandterteFeil('').map((feilmelding) => {
+                                    return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
+                                })}
                                 {feilFraYup(schema, this.state.soknad).map(
-                                    (error: { message: string; path: string }) => (
-                                        <ErrorSummary.Item key={error.path}>{error.message}</ErrorSummary.Item>
-                                    )
+                                    (error: { message: string; path: string }) => {
+                                        return (
+                                            <ErrorSummary.Item key={`${error.path}-${error.message}`}>
+                                                {error.message}
+                                            </ErrorSummary.Item>
+                                        );
+                                    }
                                 )}
                             </ErrorSummary>
                         )}
@@ -583,29 +590,24 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
 
     private updateSoknad = (soknad: Partial<IOMPMASoknad>) => {
         this.setState({ showStatus: true });
-        const navarandeSoknad: OMPMASoknadUt = this.getSoknadFromStore();
-        const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
+        const { barn } = this.props.identState;
+        const journalposter = Array.from(soknad?.journalposter || []);
 
         if (!journalposter.includes(this.props.journalpostid)) {
             journalposter.push(this.props.journalpostid);
         }
 
         if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter }, true);
+            this.props.validateSoknad({ ...soknad, barn, journalposter: journalposter }, true);
         }
 
-        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter });
+        return this.props.updateSoknad({ ...soknad, barn, journalposter: journalposter });
     };
 
     private handleStartButtonClick = () => {
         this.props.resetPunchFormAction();
         setHash('/');
     };
-
-    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPMASoknad>) => ({
-        onChange: (event: any) => this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad(change(event)),
-    });
 
     private statusetikett() {
         if (!this.state.showStatus) {
