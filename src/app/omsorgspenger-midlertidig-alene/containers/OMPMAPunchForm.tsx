@@ -524,9 +524,7 @@ export class PunchOMPMAFormComponent extends React.Component<IPunchOMPMAFormProp
         this.props.validateSoknad({
             ...navarandeSoknad,
             ...journalposter,
-            barn: this.props.identState.barn
-                .filter((barn) => barn.valgt)
-                .map((barn) => ({ norskIdent: barn.identitetsnummer })),
+            barn: this.props.identState.barn.map((barn) => ({ norskIdent: barn.identitetsnummer })),
         });
     };
 

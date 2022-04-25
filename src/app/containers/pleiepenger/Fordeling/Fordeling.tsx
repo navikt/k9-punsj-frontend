@@ -132,7 +132,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const disableVidereMidlertidigAlene =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        identState.barn.filter((barn) => barn.valgt).some((barn) => erUgyldigIdent(barn.identitetsnummer));
+        (identState.barn.some((barn) => erUgyldigIdent(barn.identitetsnummer)) || identState.barn.length <= 0);
 
     const disableVidereKnapp =
         ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
@@ -194,7 +194,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             );
         }
 
-        const barnMidlertidigAlene = identState.barn.filter((barn) => barn.valgt).map((barn) => barn.identitetsnummer);
+        const barnMidlertidigAlene = identState.barn.map((barn) => barn.identitetsnummer);
 
         const fagsakYtelseType = utledFagsakYtelseType(dokumentType);
 

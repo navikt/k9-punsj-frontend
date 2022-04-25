@@ -71,7 +71,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         props.createSoknad(
             journalpostid,
             ident1,
-            barn.filter((barnet) => barnet.valgt).map((barnet) => barnet.identitetsnummer)
+            barn.map((barnet) => barnet.identitetsnummer)
         );
 
     const kanStarteNyRegistrering = () => {

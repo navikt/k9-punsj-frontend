@@ -17,7 +17,15 @@ const Personvelger = ({ personer, onChange, intl }: OwnProps) => (
         <Label size="small">Velg hvilke barn det gjelder </Label>
         <div className="personvelger">
             {personer.map((person, index) => (
-                <PersonLinje person={person} index={index} onChange={onChange} personer={personer} intl={intl} />
+                <PersonLinje
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
+                    person={person}
+                    index={index}
+                    onChange={onChange}
+                    personer={personer}
+                    intl={intl}
+                />
             ))}
             <Button
                 variant="tertiary"

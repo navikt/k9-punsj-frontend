@@ -1,4 +1,5 @@
-import { TextField, BodyShort, Label, Checkbox } from '@navikt/ds-react';
+import { AddPerson, Delete } from '@navikt/ds-icons';
+import { TextField, BodyShort, Label, Checkbox, Button } from '@navikt/ds-react';
 import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
 import { Personvalg } from 'app/models/types/IdentState';
 import intlHelper from 'app/utils/intlUtils';
@@ -39,13 +40,6 @@ const PersonLinje = ({ person, index, onChange, personer, intl }: OwnProps) => {
         onChange(personerEndret);
     };
 
-    const handleCheckbox = (event: any) => {
-        const personerEndret = personer.map((personObj: Personvalg, personIndex: number) =>
-            personIndex === index ? { ...personObj, valgt: event.target.checked } : personObj
-        );
-        onChange(personerEndret);
-    };
-
     const handleBlur = () => {
         if (person.identitetsnummer.length) {
             setVisFeil(true);
@@ -68,9 +62,18 @@ const PersonLinje = ({ person, index, onChange, personer, intl }: OwnProps) => {
                 <Label size="small">Navn</Label>
                 <BodyShort size="small">{person.navn}</BodyShort>
             </div>
-            <Checkbox size="small" checked={person.valgt} onChange={(event) => handleCheckbox(event)}>
-                Valgt
-            </Checkbox>
+
+            <Button
+                className="slett"
+                variant="tertiary"
+                size="small"
+                onClick={() =>
+                    onChange(personer.filter((personObj) => personObj.identitetsnummer !== person.identitetsnummer))
+                }
+            >
+                <Delete />
+                Slett
+            </Button>
         </div>
     );
 };
