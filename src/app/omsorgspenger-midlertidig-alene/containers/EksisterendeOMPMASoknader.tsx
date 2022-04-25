@@ -126,7 +126,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         const rows: Array<JSX.Element> = [];
 
         soknader?.forEach((soknadInfo) => {
-            console.log(soknadInfo);
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const { chosenSoknad } = props.eksisterendeOMPMASoknaderState;
