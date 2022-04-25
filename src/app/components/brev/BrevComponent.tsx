@@ -16,13 +16,13 @@ import { Brev } from './Brev';
 import './brev.less';
 import Brevmal from './Brevmal';
 import dokumentMalType from './dokumentMalType';
-import ErrorIcon from './ErrorIcon';
+import ErrorIcon from '../../assets/SVG/ErrorIcon';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
-import SuccessIcon from './SuccessIcon';
+import SuccessIcon from '../../assets/SVG/SuccessIcon';
 
 const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId: string) => {
     const mottaker = {
@@ -159,17 +159,17 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                             }}
                             brevmaler={brevmaler}
                         />
-                        {arbeidsgivereMedNavn.length > 0 && (
-                            <MottakerVelger
-                                resetBrevStatus={() => {
-                                    setBrevErSendt(false);
-                                    setSendBrevFeilet(false);
-                                }}
-                                aktørId={aktørId}
-                                person={person}
-                                arbeidsgivereMedNavn={arbeidsgivereMedNavn}
-                            />
-                        )}
+
+                        <MottakerVelger
+                            resetBrevStatus={() => {
+                                setBrevErSendt(false);
+                                setSendBrevFeilet(false);
+                            }}
+                            aktørId={aktørId}
+                            person={person}
+                            arbeidsgivereMedNavn={arbeidsgivereMedNavn}
+                        />
+
                         {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                             <InnhentDokumentasjonMal
                                 setVisBrevIkkeSendtInfoboks={() => setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)}

@@ -84,7 +84,7 @@ export interface IPunchPLSFormStateProps {
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
     søkersIdent?: string;
-    barnsIdent?: string;
+    pleietrengendeIdent?: string;
 }
 
 export interface IPunchPLSFormDispatchProps {
@@ -144,7 +144,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             mottattDato: '',
             journalposter: new Set([]),
             pleietrengende: {
-                norskIdent: '',
+                norskIdent: ''
             },
             opptjeningAktivitet: {},
             arbeidstid: {},
@@ -187,22 +187,27 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
     };
 
-    private initialArbeidsInfoPeriode = {
-        perioder: this.getSoknadsperiode().map((periode) => ({
-            periode,
-            faktiskArbeidTimerPerDag: '',
-            jobberNormaltTimerPerDag: '',
-        })),
-    };
-
     private initialArbeidstaker = () =>
         new Arbeidstaker({
-            arbeidstidInfo: this.initialArbeidsInfoPeriode,
+            arbeidstidInfo: {
+                perioder: this.getSoknadsperiode().map((periode) => ({
+                    periode,
+                    faktiskArbeidTimerPerDag: '',
+                    jobberNormaltTimerPerDag: '',
+                })),
+            },
             organisasjonsnummer: '',
             norskIdent: null,
         });
 
-    private initialArbeidstidInfo = () => new ArbeidstidInfo(this.initialArbeidsInfoPeriode);
+    private initialArbeidstidInfo = () =>
+        new ArbeidstidInfo({
+            perioder: this.getSoknadsperiode().map((periode) => ({
+                periode,
+                faktiskArbeidTimerPerDag: '',
+                jobberNormaltTimerPerDag: '',
+            })),
+        });
 
     private initialFrilanser = new FrilanserOpptjening({
         jobberFortsattSomFrilans: undefined,
@@ -223,13 +228,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     });
 
     componentDidMount(): void {
-        const { id, søkersIdent, barnsIdent } = this.props;
+        const { id, søkersIdent, pleietrengendeIdent } = this.props;
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
 
-        if (søkersIdent && barnsIdent) {
-            this.props.hentPerioder(søkersIdent, barnsIdent);
+        if (søkersIdent && pleietrengendeIdent) {
+            this.props.hentPerioder(søkersIdent, pleietrengendeIdent);
         }
     }
 
@@ -238,7 +243,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         prevState: Readonly<IPunchPLSFormComponentState>,
         snapshot?: any
     ): void {
-        const { punchFormState, søkersIdent, barnsIdent, identState, setIdentAction, hentPerioder } = this.props;
+        const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } = this.props;
         const { soknad } = punchFormState;
         if (!!soknad && !this.state.isFetched) {
             this.setState({
@@ -250,14 +255,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 !soknad.pleietrengende.norskIdent ||
                 soknad.pleietrengende.norskIdent === ''
             ) {
-                this.updateSoknad({ pleietrengende: { norskIdent: barnsIdent || '' } });
+                this.updateSoknad({ pleietrengende: { norskIdent: pleietrengendeIdent || '' } });
             }
         }
-
-        if (!prevProps.søkersIdent && !prevProps.barnsIdent && søkersIdent && barnsIdent) {
-            hentPerioder(søkersIdent, barnsIdent);
+        if (!prevProps.søkersIdent && !prevProps.pleietrengendeIdent && søkersIdent && pleietrengendeIdent) {
+            hentPerioder(søkersIdent, pleietrengendeIdent);
             if (!identState.ident1 || !identState.ident2) {
-                setIdentAction(søkersIdent, barnsIdent);
+                setIdentAction(søkersIdent, pleietrengendeIdent);
             }
         }
     }
@@ -1070,16 +1074,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
 const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
     const søkersIdent = state.identState.ident1 || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.soekerId;
-    const barnsIdent =
-        state.identState.ident2 ||
-        state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
+    const pleietrengendeIdent = state.identState.ident2 || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
     return {
         punchFormState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState,
         signaturState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.signaturState,
         journalposterState: state.journalposterPerIdentState,
         identState: state.identState,
         søkersIdent,
-        barnsIdent,
+        pleietrengendeIdent: pleietrengendeIdent
     };
 };
 
