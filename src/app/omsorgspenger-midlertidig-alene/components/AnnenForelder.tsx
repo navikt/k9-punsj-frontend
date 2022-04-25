@@ -25,7 +25,13 @@ const AnnenForelder = ({ intl }: OwnProps) => (
         <VerticalSpacer twentyPx />
         <Field name="annenForelder.identifikasjonsnummer">
             {({ field, meta }) => (
-                <TextField label="Identifikasjonsnummer" size="small" error={meta.touched && meta.error} {...field} />
+                <TextField
+                    label="Identifikasjonsnummer"
+                    size="small"
+                    type="number"
+                    error={meta.touched && meta.error}
+                    {...field}
+                />
             )}
         </Field>
 
