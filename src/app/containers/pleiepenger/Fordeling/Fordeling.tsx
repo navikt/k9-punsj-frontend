@@ -45,7 +45,7 @@ import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
-import { SokersBarn } from './Komponenter/SokersBarn';
+import { Pleietrengende } from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
@@ -400,13 +400,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
-                                    <SokersBarn
-                                        barnetHarInteFnrFn={(harBarnetFnr: boolean) =>
+                                    <Pleietrengende
+                                        pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
                                             setBarnetHarIkkeFnr(harBarnetFnr)
                                         }
                                         sokersIdent={identState.ident1}
+                                        skalHenteBarn={
+                                            dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+                                        }
                                         flervalg={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
-                                        visSokersBarn={
+                                        visPleietrengende={
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
                                                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
