@@ -360,6 +360,7 @@
     "journalpost.id": "Journalpostnummer:",
     "journalpost.norskIdent": "Søkers fødselsnummer:",
     "journalpost.ident2": "Barnets fødselsnummer:",
+    "journalpost.barn": "Pleietrengendes fødselsnummer:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
 
     "registrering.nysoknad": "Ny søknad",
