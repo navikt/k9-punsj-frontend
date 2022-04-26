@@ -1,32 +1,32 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {useQueries} from 'react-query';
-import {connect} from 'react-redux';
-import {RouteComponentProps, withRouter} from 'react-router';
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import {Hovedknapp} from 'nav-frontend-knapper';
+import { useQueries } from 'react-query';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
 import useQuery from 'app/hooks/useQuery';
-import {PunchStep} from 'app/models/enums';
-import {setIdentAction, setStepAction} from 'app/state/actions';
-import {RootStateType} from 'app/state/RootState';
-import {get, getEnvironmentVariable, getPath} from 'app/utils';
+import { PunchStep } from 'app/models/enums';
+import { setIdentAction, setStepAction } from 'app/state/actions';
+import { RootStateType } from 'app/state/RootState';
+import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import {ApiPath} from 'app/apiConfig';
-import {IJournalpostDokumenter} from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import {AlertStripeAdvarsel, AlertStripeInfo} from 'nav-frontend-alertstriper';
+import { ApiPath } from 'app/apiConfig';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
-import {IIdentState} from '../../models/types/IdentState';
-import {OMPMAPaths} from './OMPMARoutes';
-import {OMPMAPunchForm} from './OMPMAPunchForm';
-import {OMPMASoknadKvittering} from './SoknadKvittering/OMPMASoknadKvittering';
-import {IPunchOMPMAFormState} from '../types/PunchOMPMAFormState';
-import {IJournalpost, IPath, IPunchState} from '../../models/types';
-import {JournalpostPanel} from '../../components/journalpost-panel/JournalpostPanel';
+import { IIdentState } from '../../models/types/IdentState';
+import { OMPMAPaths } from './OMPMARoutes';
+import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
+import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
+import { IJournalpost, IPath, IPunchState } from '../../models/types';
+import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import {OMPMARegistreringsValg} from './OMPMARegistreringsValg';
+import { OMPMARegistreringsValg } from './OMPMARegistreringsValg';
+import OMPMAPunchFormContainer from './OMPMAPunchFormContainer';
 
 export interface IPunchOMPMAPageStateProps {
     punchState: IPunchState;
@@ -65,16 +65,16 @@ type IPunchOMPMAPageProps = WrappedComponentProps &
     IPunchOMPMAPageQueryProps;
 
 export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPageProps> = (props) => {
-    const {intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState} = props;
+    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(OMPMAPaths, punchStep, values, dok ? {dok} : undefined);
+        getPath(OMPMAPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
-            get(ApiPath.JOURNALPOST_GET, {journalpostId: journalpostidentifikator}).then((res) => {
+            get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => {
                 if (!res.ok) {
                     throw new Error(`Fetch mot ${ApiPath.JOURNALPOST_GET} feilet`);
                 } else {
@@ -97,12 +97,12 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
             case PunchStep.CHOOSE_SOKNAD:
                 return <OMPMARegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
-                return <OMPMAPunchForm {...commonProps} id={match.params.id}/>;
+                return <OMPMAPunchFormContainer {...commonProps} id={match.params.id} />;
             case PunchStep.COMPLETED:
                 return (
                     <>
                         <AlertStripeInfo className="fullfortmelding">
-                            <FormattedMessage id="skjema.sentInn"/>
+                            <FormattedMessage id="skjema.sentInn" />
                         </AlertStripeInfo>
                         <div className="punchPage__knapper">
                             <Hovedknapp
@@ -114,7 +114,7 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
                             </Hovedknapp>
                         </div>
                         {!!punchFormState.innsentSoknad && (
-                            <OMPMASoknadKvittering response={punchFormState.innsentSoknad} intl={intl}/>
+                            <OMPMASoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
                         )}
                     </>
                 );
@@ -125,7 +125,7 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
         if (forbidden) {
             return (
                 <AlertStripeAdvarsel>
-                    <FormattedMessage id="søk.jp.forbidden" values={{jpid: journalpostid}}/>
+                    <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                 </AlertStripeAdvarsel>
             );
         }
@@ -135,7 +135,7 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
                 queries.map((query) => {
                     const data: any = query?.data;
 
-                    return {journalpostid: data?.journalpostId, dokumenter: data?.dokumenter};
+                    return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
                 })) ||
             [];
         if (
@@ -151,10 +151,10 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
         return (
             <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="pleiepenger_punch_form" border>
-                    <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)}/>
+                    <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {underFnr()}
                 </Panel>
-                {!!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter}/>}
+                {!!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
             </div>
         );
     };
@@ -182,9 +182,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
-const PunchOMPMAPageComponentWithQuery: React.FunctionComponent<IPunchOMPMAPageProps> = (props: IPunchOMPMAPageProps) => {
+const PunchOMPMAPageComponentWithQuery: React.FunctionComponent<IPunchOMPMAPageProps> = (
+    props: IPunchOMPMAPageProps
+) => {
     const dok = useQuery().get('dok');
-    return <PunchOMPMAPageComponent {...props} dok={dok}/>;
+    return <PunchOMPMAPageComponent {...props} dok={dok} />;
 };
 
 export const PunchOMPMAPage = withRouter(

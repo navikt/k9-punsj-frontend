@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { IError } from 'app/models/types';
+import { IError, PersonEnkel } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
 import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';
 import { IOMPMASoknad } from '../../types/OMPMASoknad';
@@ -59,7 +59,7 @@ interface IResetOMPMASoknadidAction {
 interface IOpprettMASoknad {
     journalpostId: string;
     norskIdent: string;
-    barn: string[];
+    barn: PersonEnkel[];
 }
 
 type IMapperOMPMAActionTypes =
@@ -167,7 +167,7 @@ export function resetOMPMASoknadidAction(): IResetOMPMASoknadidAction {
     return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET };
 }
 
-export function createOMPMASoknad(journalpostid: string, ident1: string, barn: string[]) {
+export function createOMPMASoknad(journalpostid: string, ident1: string, barn: PersonEnkel[]) {
     return (dispatch: any) => {
         dispatch(createOMPMASoknadRequestAction());
 

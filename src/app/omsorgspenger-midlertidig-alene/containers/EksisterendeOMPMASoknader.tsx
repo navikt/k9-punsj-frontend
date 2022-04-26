@@ -131,10 +131,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
             const { chosenSoknad } = props.eksisterendeOMPMASoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                (søknad.barn.norskIdent
-                    ? søknad.barn.norskIdent
-                    : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
-                    '',
+                søknad.barn?.map((barn) => barn.norskIdent).join(', '),
                 Array.from(søknad.journalposter).join(', '),
 
                 <Knapp key={soknadId} mini onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
