@@ -2,7 +2,7 @@
 import { PersonEnkel } from 'app/models/types';
 
 export interface IOMPMASoknadUt {
-    soeknadId?: string;
+    soeknadId: string;
     soekerId: string;
     journalposter?: string[];
     mottattDato?: string;

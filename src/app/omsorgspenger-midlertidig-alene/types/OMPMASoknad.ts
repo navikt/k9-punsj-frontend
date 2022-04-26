@@ -3,7 +3,7 @@
 import { IPeriode } from 'app/models/types';
 
 export interface IOMPMASoknad {
-    soeknadId?: string;
+    soeknadId: string;
     soekerId: string;
     journalposter?: Set<string>;
     mottattDato?: string;

@@ -14,22 +14,23 @@ const situasjonstyper = ['INNLAGT_I_HELSEINSTITUSJON', 'UTØVER_VERNEPLIKT', 'FE
 
 type OwnProps = {
     intl: IntlShape;
-    updateSoknad: (soknad: OMPMASoknad) => void;
+    handleBlur: (callback: () => void, soknad: OMPMASoknad) => void;
 };
 
-const AnnenForelder = ({ intl }: OwnProps) => (
+const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
     <Panel border>
         <Heading size="xsmall" spacing>
             Annen forelder
         </Heading>
         <VerticalSpacer twentyPx />
-        <Field name="annenForelder.identifikasjonsnummer">
-            {({ field, meta }) => (
+        <Field name="annenForelder.norskIdent">
+            {({ field, meta, form }) => (
                 <TextField
                     label="Identifikasjonsnummer"
                     size="small"
                     type="number"
                     error={meta.touched && meta.error}
+                    onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                     {...field}
                 />
             )}
@@ -37,11 +38,12 @@ const AnnenForelder = ({ intl }: OwnProps) => (
 
         <VerticalSpacer twentyPx />
         <Field name="annenForelder.situasjonType">
-            {({ field, meta }) => (
+            {({ field, meta, form }) => (
                 <Select
                     size="small"
                     label="Hva er situasjonen til den andre forelderen?"
                     error={meta.touched && meta.error}
+                    onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                     {...field}
                 >
                     <option value="">Velg situasjon</option>
@@ -55,11 +57,12 @@ const AnnenForelder = ({ intl }: OwnProps) => (
         </Field>
         <VerticalSpacer twentyPx />
         <Field name="annenForelder.situasjonBeskrivelse">
-            {({ field, meta }) => (
+            {({ field, meta, form }) => (
                 <Textarea
                     size="small"
                     label="Beskrivelse av situasjonen"
                     error={meta.touched && meta.error}
+                    onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                     {...field}
                 />
             )}
@@ -77,8 +80,11 @@ const AnnenForelder = ({ intl }: OwnProps) => (
                         form.touched?.annenForelder?.periode?.tom && form.errors?.annenForelder?.periode?.tom
                     }
                     onBlur={() => {
-                        form.setFieldTouched('annenForelder.periode.fom');
-                        form.setFieldTouched('annenForelder.periode.tom');
+                        const setTouched = () => {
+                            form.setFieldTouched('annenForelder.periode.fom');
+                            form.setFieldTouched('annenForelder.periode.tom');
+                        };
+                        return () => handleBlur(() => setTouched(), form.values);
                     }}
                     onChange={(value) => form.setFieldValue('annenForelder.periode', value)}
                 />

@@ -67,12 +67,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
     }
 
-    const newSoknad = () =>
+    const newSoknad = () => {
         props.createSoknad(
             journalpostid,
             ident1,
             barn.map((barnet) => barnet.identitetsnummer)
         );
+    };
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;

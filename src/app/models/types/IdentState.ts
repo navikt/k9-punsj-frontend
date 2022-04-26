@@ -1,7 +1,6 @@
 export type Personvalg = {
     navn: string;
     identitetsnummer: string;
-    valgt: boolean;
     låsIdentitetsnummer?: boolean;
 };
 
