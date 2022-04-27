@@ -1,9 +1,12 @@
 /* eslint-disable */
 import * as React from 'react';
+import { useState } from 'react';
+import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import * as yup from 'yup';
+
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
@@ -13,6 +16,7 @@ import { ErrorSummary } from '@navikt/ds-react';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
+
 import { PunchStep } from 'app/models/enums';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
@@ -23,7 +27,7 @@ import {
     setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
-import { setHash, capitalize } from 'app/utils';
+import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
@@ -51,14 +55,14 @@ import {
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import AnnenForelder from '../components/AnnenForelder';
-import { Field, FormikErrors, FormikProps, FormikValues } from 'formik';
-import { useEffect, useState } from 'react';
+import schema from '../schema';
 
 export interface IPunchOMPMAFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
     formik: FormikProps<FormikValues>;
+    schema: yup.InferType<typeof schema>;
 }
 
 export interface IPunchOMPMAFormStateProps {
@@ -117,8 +121,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         schema,
         formik: { values, handleSubmit, errors, isValidating },
     } = props;
-
-
 
     const { signert } = signaturState;
 
@@ -216,13 +218,14 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
             <div className={'flex-container'}>
                 <Field name="harMedisinskeOpplysninger">
-                    {({ field, meta }) => (
+                    {({ field }: FieldProps<FormikValues>) => (
                         <>
                             <CheckboksPanel
                                 id={'medisinskeopplysningercheckbox'}
                                 label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                                 checked={!!values.harMedisinskeOpplysninger}
-                                {...field}
+                                onChange={field.onChange}
+                                onBlur={field.onBlur}
                             />
                             <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
                                 {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
@@ -234,13 +237,14 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             <VerticalSpacer eightPx={true} />
             <div className={'flex-container'}>
                 <Field name="harInfoSomIkkeKanPunsjes">
-                    {({ field, meta }) => (
+                    {({ field }: FieldProps<FormikValues>) => (
                         <>
                             <CheckboksPanel
                                 id={'opplysningerikkepunsjetcheckbox'}
                                 label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                                 checked={!!values.harInfoSomIkkeKanPunsjes}
-                                {...field}
+                                onChange={field.onChange}
+                                onBlur={field.onBlur}
                             />
                             <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
                                 {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}

@@ -1,36 +1,22 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useEffect } from 'react';
 import { Formik, FormikValues } from 'formik';
-import * as yup from 'yup';
 import { connect } from 'react-redux';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
-import { initializeDate } from 'app/utils/timeUtils';
 import { RootStateType } from 'app/state/RootState';
 import { setHash } from 'app/utils';
 import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { setStepAction } from 'app/state/actions';
+import { Personvalg } from 'app/models/types/IdentState';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IPunchOMPMAFormStateProps, OMPMAPunchForm } from './OMPMAPunchForm';
 import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-
-function erIkkeFremITid(dato: string) {
-    const naa = new Date();
-    return naa > new Date(dato);
-}
-
-const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
-    const naa = new Date();
-    if (mottattDato && klokkeslett && new Date(mottattDato).getDate() === naa.getDate()) {
-        return initializeDate(naa).format('HH:mm') < klokkeslett;
-    }
-    return false;
-};
+import schema from '../schema';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
@@ -51,53 +37,6 @@ const initialValues = (soknad: Partial<IOMPMASoknad> | undefined) => ({
     harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
 });
 
-const yupSchema = yup.object({
-    mottattDato: yup
-        .string()
-        .required()
-        .test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' })
-        .label('Mottatt dato'),
-    klokkeslett: yup
-        .string()
-        .required()
-        .when('mottattDato', (mottattDato, schema) =>
-            schema.test({
-                test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
-                message: 'Klokkeslett kan ikke være frem i tid',
-            })
-        )
-        .label('Klokkeslett'),
-    annenForelder: yup.object().shape({
-        norskIdent: yup
-            .string()
-            .required()
-            .nullable(true)
-            .length(11)
-            .test({
-                test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
-                message: 'Ugyldig identifikasjonsnummer',
-            })
-            .label('Identifikasjonsnummer'),
-        situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
-        situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
-        periode: yup.object().shape({
-            fom: yup.string().required().label('Fra og med'),
-            tom: yup.string().required().label('Til og med'),
-        }),
-    }),
-});
-
-yup.setLocale({
-    mixed: {
-        required: '${path} er et påkrevd felt.',
-    },
-    string: {
-        min: '${path} må være minst ${min} tegn',
-        max: '${path} må være mest ${max} tegn',
-        length: '${path} må være nøyaktig ${length} tegn',
-    },
-});
-
 const OMPMAPunchFormContainer = (props) => {
     const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState } = props;
 
@@ -115,7 +54,7 @@ const OMPMAPunchFormContainer = (props) => {
         props.validateSoknad({
             ...soknad,
             ...journalposter,
-            barn: identState.barn.map((barn) => ({ norskIdent: barn.identitetsnummer })),
+            barn: identState.barn.map((barn: Personvalg) => ({ norskIdent: barn.identitetsnummer })),
         });
     };
 
@@ -147,10 +86,10 @@ const OMPMAPunchFormContainer = (props) => {
     return (
         <Formik
             initialValues={initialValues(props.punchFormState.soknad)}
-            validationSchema={yupSchema}
+            validationSchema={schema}
             onSubmit={(values) => handleSubmit(values)}
         >
-            {(formik) => <OMPMAPunchForm formik={formik} schema={yupSchema} {...props} />}
+            {(formik) => <OMPMAPunchForm formik={formik} schema={schema} {...props} />}
         </Formik>
     );
 };
