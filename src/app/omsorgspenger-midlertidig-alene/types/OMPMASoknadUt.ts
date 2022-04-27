@@ -12,19 +12,6 @@ export interface IOMPMASoknadUt {
     harMedisinskeOpplysninger?: boolean;
 }
 
-class Barn implements Required<PersonEnkel> {
-    norskIdent: string;
-
-    constructor(barn: PersonEnkel) {
-        this.norskIdent = barn.norskIdent || '';
-    }
-
-    values(): Required<PersonEnkel> {
-        const { norskIdent } = this; // tslint:disable-line:no-this-assignment
-        return { norskIdent };
-    }
-}
-
 export class OMPMASoknadUt implements IOMPMASoknadUt {
     soeknadId: string;
 

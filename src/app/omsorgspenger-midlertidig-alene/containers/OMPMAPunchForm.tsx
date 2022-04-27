@@ -118,11 +118,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         formik: { values, handleSubmit, errors, isValidating },
     } = props;
 
-    useEffect(() => {
-        const { id } = props;
-        props.getSoknad(id);
-        props.setStepAction(PunchStep.FILL_FORM);
-    }, []);
+
 
     const { signert } = signaturState;
 
@@ -179,11 +175,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         return props.updateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter });
     };
 
-    const handleStartButtonClick = () => {
-        props.resetPunchFormAction();
-        setHash('/');
-    };
-
     const statusetikett = () => {
         if (!showStatus) {
             return null;
@@ -207,26 +198,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         callback();
         updateSoknad(values);
     };
-
-    if (punchFormState.isComplete) {
-        setHash(props.getPunchPath(PunchStep.COMPLETED));
-        return null;
-    }
-
-    if (punchFormState.isSoknadLoading) {
-        return <NavFrontendSpinner />;
-    }
-
-    if (!!punchFormState.error) {
-        return (
-            <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}</AlertStripeFeil>
-                <p>
-                    <Knapp onClick={handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
-                </p>
-            </>
-        );
-    }
 
     return (
         <>
@@ -454,10 +425,8 @@ const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getSoknad: (id: string) => dispatch(getOMPMASoknad(id)),
     resetSoknadAction: () => dispatch(resetOMPMASoknadAction()),
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPMASoknadAction()),
     updateSoknad: (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid)),

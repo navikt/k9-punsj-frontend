@@ -1,6 +1,6 @@
 export type PersonEnkel = {
     norskIdent: string;
-    foedselsdato: string;
+    foedselsdato?: string;
 };
 
 export interface Person {

@@ -97,7 +97,7 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
             case PunchStep.CHOOSE_SOKNAD:
                 return <OMPMARegistreringsValg {...commonProps} />;
             case PunchStep.FILL_FORM:
-                return <OMPMAPunchFormContainer {...commonProps} id={match.params.id} />;
+                return <OMPMAPunchFormContainer {...commonProps} intl={intl} id={match.params.id} />;
             case PunchStep.COMPLETED:
                 return (
                     <>

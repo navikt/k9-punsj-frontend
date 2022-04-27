@@ -1,15 +1,22 @@
 /* eslint-disable no-template-curly-in-string */
-import React from 'react';
-import { Formik } from 'formik';
+import React, { useEffect } from 'react';
+import { Formik, FormikValues } from 'formik';
 import * as yup from 'yup';
 import { connect } from 'react-redux';
 
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
 import { initializeDate } from 'app/utils/timeUtils';
 import { RootStateType } from 'app/state/RootState';
+import { setHash } from 'app/utils';
+import { PunchStep } from 'app/models/enums';
+import intlHelper from 'app/utils/intlUtils';
+import { setStepAction } from 'app/state/actions';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IPunchOMPMAFormStateProps, OMPMAPunchForm } from './OMPMAPunchForm';
-import { validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
+import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 
 function erIkkeFremITid(dato: string) {
@@ -92,7 +99,15 @@ yup.setLocale({
 });
 
 const OMPMAPunchFormContainer = (props) => {
-    const handleSubmit = async (soknad: IOMPMASoknad) => {
+    const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState } = props;
+
+    useEffect(() => {
+        const { id } = props;
+        props.getSoknad(id);
+        props.setStepAction(PunchStep.FILL_FORM);
+    }, []);
+
+    const handleSubmit = async (soknad: FormikValues) => {
         const journalposter = {
             journalposter: Array.from(soknad && soknad.journalposter ? soknad?.journalposter : []),
         };
@@ -100,9 +115,35 @@ const OMPMAPunchFormContainer = (props) => {
         props.validateSoknad({
             ...soknad,
             ...journalposter,
-            barn: props.identState.barn.map((barn) => ({ norskIdent: barn.identitetsnummer })),
+            barn: identState.barn.map((barn) => ({ norskIdent: barn.identitetsnummer })),
         });
     };
+
+    const handleStartButtonClick = () => {
+        resetPunchFormAction();
+        setHash('/');
+    };
+
+    if (punchFormState.isComplete) {
+        setHash(getPunchPath(PunchStep.COMPLETED));
+        return null;
+    }
+
+    if (punchFormState.isSoknadLoading) {
+        return <NavFrontendSpinner />;
+    }
+
+    if (punchFormState.error) {
+        return (
+            <>
+                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}</AlertStripeFeil>
+                <p>
+                    <Knapp onClick={handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
+                </p>
+            </>
+        );
+    }
+
     return (
         <Formik
             initialValues={initialValues(props.punchFormState.soknad)}
@@ -122,6 +163,9 @@ const mapStateToProps = (state: RootStateType): Partial<IPunchOMPMAFormStateProp
 const mapDispatchToProps = (dispatch: any) => ({
     validateSoknad: (soknad: IOMPMASoknadUt, erMellomlagring: boolean) =>
         dispatch(validerOMPMASoknad(soknad, erMellomlagring)),
+    resetPunchFormAction: () => dispatch(resetPunchOMPMAFormAction()),
+    getSoknad: (id: string) => dispatch(getOMPMASoknad(id)),
+    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OMPMAPunchFormContainer);
