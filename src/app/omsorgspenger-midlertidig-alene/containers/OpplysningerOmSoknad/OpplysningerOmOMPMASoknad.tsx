@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Field, FormikValues } from 'formik';
+import { Field, FieldProps, FormikValues } from 'formik';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
@@ -34,20 +34,19 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
             </Alert>
             <div className="input-row">
                 <Field name="mottattDato">
-                    {({ field, meta, form }) => (
+                    {({ field, meta, form }: FieldProps<string, FormikValues>) => (
                         <DateInput
                             id="soknad-dato"
                             label={intlHelper(intl, 'skjema.mottakelsesdato')}
                             errorMessage={meta.touched && meta.error}
                             value={field.value}
-                            {...field}
-                            onBlur={(e) => handleBlur(() => form.setTouched('mottattDato'), form.values)}
+                            onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                             onChange={(value) => form.setFieldValue('mottattDato', value)}
                         />
                     )}
                 </Field>
                 <Field name="klokkeslett">
-                    {({ field, meta, form }) => (
+                    {({ field, meta, form }: FieldProps<string, FormikValues>) => (
                         <Input
                             id="klokkeslett"
                             type="time"
@@ -56,15 +55,13 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
                             feil={meta.touched && meta.error}
                             {...field}
                             onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
-                            onBlur={(e) => {
-                                handleBlur(() => () => form.setTouched('klokkeslett'), form.values);
-                            }}
+                            onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                         />
                     )}
                 </Field>
             </div>
             <Field>
-                {({ field }) => (
+                {({ field }: FieldProps<FormikValues>) => (
                     <RadioPanelGruppe
                         className="horizontalRadios"
                         radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({

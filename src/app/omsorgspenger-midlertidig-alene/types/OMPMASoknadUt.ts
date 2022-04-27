@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { PersonEnkel } from 'app/models/types';
+import { Personvalg } from 'app/models/types/IdentState';
 
 export interface IOMPMASoknadUt {
     soeknadId: string;
@@ -11,7 +12,6 @@ export interface IOMPMASoknadUt {
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
 }
-
 export class OMPMASoknadUt implements IOMPMASoknadUt {
     soeknadId: string;
 
@@ -29,13 +29,13 @@ export class OMPMASoknadUt implements IOMPMASoknadUt {
 
     harMedisinskeOpplysninger: boolean;
 
-    constructor(soknad: IOMPMASoknadUt) {
+    constructor(soknad: Omit<IOMPMASoknadUt, 'barn'> & { barn: Personvalg[] }) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
         this.journalposter = soknad.journalposter || [];
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
-        this.barn = soknad.barn ? soknad.barn.map((barn) => new Barn(barn)) : [];
+        this.barn = soknad.barn ? soknad.barn.map((barn) => ({ norskIdent: barn.identitetsnummer })) : [];
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
     }

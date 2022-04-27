@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -58,7 +58,6 @@ import AnnenForelder from '../components/AnnenForelder';
 import schema from '../schema';
 
 export interface IPunchOMPMAFormComponentProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
     formik: FormikProps<FormikValues>;
@@ -121,7 +120,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         schema,
         formik: { values, handleSubmit, errors, isValidating },
     } = props;
-
+    console.log(errors);
     const { signert } = signaturState;
 
     const handleSettPaaVent = () => {
@@ -194,7 +193,8 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
     };
 
-    const harFeilISkjema = (errors: FormikErrors<IOMPMASoknad>) => !![...getUhaandterteFeil(''), errors].length;
+    const harFeilISkjema = (errors: FormikErrors<IOMPMASoknad>) =>
+        !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
     const handleBlur = (callback: () => void, values: IOMPMASoknad) => {
         callback();
@@ -212,7 +212,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                 handleBlur={handleBlur}
             />
             <VerticalSpacer fourtyPx />
-
             <AnnenForelder intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
             <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
@@ -279,18 +278,9 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                         className={'send-knapp'}
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
-                                props.validateSoknad(
-                                    {
-                                        ...values.soknad,
-                                        ...values.journalposter,
-                                        barn: props.identState.barn.map((barn) => ({
-                                            norskIdent: barn.identitetsnummer,
-                                        })),
-                                    },
-                                    true
-                                );
+                                setHarForsoektAaSendeInn(true);
                             }
-                            handleSubmit(values.soknad);
+                            handleSubmit();
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
@@ -301,9 +291,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     </Knapp>
                 </p>
             </div>
-
             <VerticalSpacer sixteenPx={true} />
-
             {!!punchFormState.updateSoknadError && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
             )}
@@ -318,7 +306,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             {!!punchFormState.submitSoknadConflict && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
             )}
-
             {showSettPaaVentModal && (
                 <ModalWrapper
                     key={'settpaaventmodal'}
@@ -340,7 +327,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     </div>
                 </ModalWrapper>
             )}
-
             {punchFormState.settPaaVentSuccess && (
                 <ModalWrapper
                     key={'settpaaventokmodal'}
@@ -352,7 +338,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
                 </ModalWrapper>
             )}
-
             {!!punchFormState.settPaaVentError && (
                 <ModalWrapper
                     key={'settpaaventerrormodal'}
@@ -364,7 +349,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
                 </ModalWrapper>
             )}
-
             {props.punchFormState.isValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
                 <ModalWrapper
                     key={'validertSoknadModal'}
@@ -395,7 +379,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     </div>
                 </ModalWrapper>
             )}
-
             {visErDuSikkerModal && (
                 <ModalWrapper
                     key={'erdusikkermodal'}

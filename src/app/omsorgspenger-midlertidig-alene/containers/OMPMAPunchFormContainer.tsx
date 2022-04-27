@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Formik, FormikValues } from 'formik';
 import { connect } from 'react-redux';
+import { WrappedComponentProps } from 'react-intl';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -10,13 +11,14 @@ import { RootStateType } from 'app/state/RootState';
 import { setHash } from 'app/utils';
 import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-import { setStepAction } from 'app/state/actions';
-import { Personvalg } from 'app/models/types/IdentState';
+import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
+import { IIdentState, Personvalg } from 'app/models/types/IdentState';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
-import { IPunchOMPMAFormStateProps, OMPMAPunchForm } from './OMPMAPunchForm';
+import { OMPMAPunchForm } from './OMPMAPunchForm';
 import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import schema from '../schema';
+import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
@@ -37,7 +39,25 @@ const initialValues = (soknad: Partial<IOMPMASoknad> | undefined) => ({
     harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
 });
 
-const OMPMAPunchFormContainer = (props) => {
+interface OwnProps {
+    getPunchPath: (step: PunchStep, values?: any) => string;
+    id: string;
+}
+export interface IPunchOMPMAFormStateProps {
+    punchFormState: IPunchOMPMAFormState;
+    identState: IIdentState;
+}
+
+export interface IPunchOMPMAFormDispatchProps {
+    getSoknad: typeof getOMPMASoknad;
+    setStepAction: typeof setStepAction;
+    validateSoknad: typeof validerOMPMASoknad;
+    resetPunchFormAction: typeof resetPunchAction;
+}
+
+type IPunchOMPMAFormProps = OwnProps & WrappedComponentProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
+
+const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState } = props;
 
     useEffect(() => {
@@ -47,13 +67,8 @@ const OMPMAPunchFormContainer = (props) => {
     }, []);
 
     const handleSubmit = async (soknad: FormikValues) => {
-        const journalposter = {
-            journalposter: Array.from(soknad && soknad.journalposter ? soknad?.journalposter : []),
-        };
-
         props.validateSoknad({
             ...soknad,
-            ...journalposter,
             barn: identState.barn.map((barn: Personvalg) => ({ norskIdent: barn.identitetsnummer })),
         });
     };
