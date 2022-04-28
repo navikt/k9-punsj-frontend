@@ -17,7 +17,6 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
 
-import { PunchStep } from 'app/models/enums';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
     resetPunchFormAction,
@@ -55,13 +54,12 @@ import {
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import AnnenForelder from '../components/AnnenForelder';
-import schema from '../schema';
 
 export interface IPunchOMPMAFormComponentProps {
     journalpostid: string;
     id: string;
     formik: FormikProps<FormikValues>;
-    schema: yup.InferType<typeof schema>;
+    schema: yup.AnyObjectSchema;
 }
 
 export interface IPunchOMPMAFormStateProps {
@@ -92,7 +90,7 @@ type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps &
     IPunchOMPMAFormStateProps &
     IPunchOMPMAFormDispatchProps;
 
-const feilFraYup = (schema: any, soknad: FormikValues) => {
+const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     try {
         const isValid = schema.validateSync(soknad, { abortEarly: false });
         if (isValid) return [];
@@ -118,10 +116,15 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         punchFormState,
         signaturState,
         schema,
-        formik: { values, handleSubmit, errors, isValidating },
+        formik: { values, handleSubmit, errors },
     } = props;
-    console.log(errors);
     const { signert } = signaturState;
+
+    useEffect(() => {
+        if (showStatus) {
+            setTimeout(() => setShowStatus(false), 5000);
+        }
+    }, [showStatus]);
 
     const handleSettPaaVent = () => {
         props.settJournalpostPaaVent(props.journalpostid, values.soeknadId!);
@@ -365,7 +368,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                         <Hovedknapp
                             mini={true}
                             className="validertSoknadOppsummeringContainer_knappVidere"
-                            onClick={() => setVisErDuSikkerModal(false)}
+                            onClick={() => setVisErDuSikkerModal(true)}
                         >
                             {intlHelper(intl, 'fordeling.knapp.videre')}
                         </Hovedknapp>
