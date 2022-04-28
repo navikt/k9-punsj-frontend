@@ -199,7 +199,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
     const harFeilISkjema = (errors: FormikErrors<IOMPMASoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
-    const handleBlur = (callback: () => void, values: IOMPMASoknad) => {
+    const handleBlur = (callback: () => void) => {
         callback();
         updateSoknad(values);
     };
@@ -227,6 +227,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                                 checked={!!values.harMedisinskeOpplysninger}
                                 {...field}
+                                onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
                             <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
@@ -246,6 +247,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                                 checked={!!values.harInfoSomIkkeKanPunsjes}
                                 {...field}
+                                onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
                             <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>

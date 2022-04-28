@@ -12,7 +12,7 @@ const situasjonstyper = ['INNLAGT_I_HELSEINSTITUSJON', 'UTØVER_VERNEPLIKT', 'FE
 
 type OwnProps = {
     intl: IntlShape;
-    handleBlur: (callback: () => void, soknad: FormikValues) => void;
+    handleBlur: (callback: () => void) => void;
 };
 
 const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
@@ -23,27 +23,27 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
             </Heading>
             <VerticalSpacer twentyPx />
             <Field name="annenForelder.norskIdent">
-                {({ field, meta, form }: FieldProps<string>) => (
+                {({ field, meta }: FieldProps<string>) => (
                     <TextField
                         label="Identifikasjonsnummer"
                         size="small"
                         type="number"
                         error={meta.touched && meta.error}
                         {...field}
-                        onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
+                        onBlur={(e) => handleBlur(() => field.onBlur(e))}
                     />
                 )}
             </Field>
 
             <VerticalSpacer twentyPx />
             <Field name="annenForelder.situasjonType">
-                {({ field, meta, form }: FieldProps<string>) => (
+                {({ field, meta }: FieldProps<string>) => (
                     <Select
                         size="small"
                         label="Hva er situasjonen til den andre forelderen?"
                         error={meta.touched && meta.error}
                         {...field}
-                        onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
+                        onBlur={(e) => handleBlur(() => field.onBlur(e))}
                     >
                         <option value="">Velg situasjon</option>
                         {situasjonstyper.map((situasjonstype) => (
@@ -56,13 +56,13 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
             </Field>
             <VerticalSpacer twentyPx />
             <Field name="annenForelder.situasjonBeskrivelse">
-                {({ field, meta, form }: FieldProps<string, FormikValues>) => (
+                {({ field, meta }: FieldProps<string, FormikValues>) => (
                     <Textarea
                         size="small"
                         label="Beskrivelse av situasjonen"
                         error={meta.touched && meta.error}
                         {...field}
-                        onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
+                        onBlur={(e) => handleBlur(() => field.onBlur(e))}
                     />
                 )}
             </Field>
@@ -83,7 +83,7 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
                                 form.setFieldTouched('annenForelder.periode.fom');
                                 form.setFieldTouched('annenForelder.periode.tom');
                             };
-                            return handleBlur(() => setTouched(), form.values);
+                            return handleBlur(() => setTouched());
                         }}
                         onChange={(value) => form.setFieldValue('annenForelder.periode', value)}
                     />

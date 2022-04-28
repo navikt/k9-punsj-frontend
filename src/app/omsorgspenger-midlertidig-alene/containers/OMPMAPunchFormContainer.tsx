@@ -42,6 +42,7 @@ const initialValues = (soknad: Partial<IOMPMASoknad> | undefined) => ({
 interface OwnProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
     id: string;
+    journalpostid: string;
 }
 export interface IPunchOMPMAFormStateProps {
     punchFormState: IPunchOMPMAFormState;

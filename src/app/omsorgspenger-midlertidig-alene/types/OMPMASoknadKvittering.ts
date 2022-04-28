@@ -1,4 +1,6 @@
+import { PersonEnkel } from 'app/models/types';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
+import { AnnenForelderType } from './OMPMASoknad';
 
 export interface IOMPMASoknadKvitteringJournalpost {
     inneholderInformasjonSomIkkeKanPunsjes?: boolean;
@@ -11,11 +13,12 @@ export interface IOMPMASoknadKvittering {
     journalposter: IOMPMASoknadKvitteringJournalpost[];
     ytelse: {
         type: string;
-        barn: {
+        barn: PersonEnkel[];
+        annenForelder: Pick<AnnenForelderType, 'situasjonBeskrivelse'> & {
             norskIdentitetsnummer: string;
-            fødselsdato: string | null;
+            situasjon: string;
+            periode: string;
         };
-        kroniskEllerFunksjonshemming: boolean;
     };
     begrunnelseForInnsending: BegrunnelseForInnsending;
 }

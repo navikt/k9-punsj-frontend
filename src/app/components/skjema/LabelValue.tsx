@@ -6,15 +6,15 @@ import intlHelper from '../../utils/intlUtils';
 import './labelValue.less';
 import Kopier from '../kopier/Kopier';
 
-interface ILabelValueProps {
-    labelTextId: string;
+type ILabelValueProps = {
     value: string | undefined;
     retning?: 'vertikal' | 'horisontal';
     visKopier?: boolean;
-}
+} & ({ text: string; labelTextId?: string } | { labelTextId: string; text?: string });
 
 const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
     labelTextId,
+    text,
     value,
     retning = 'vertikal',
     visKopier,
@@ -27,8 +27,10 @@ const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
                 'horisontal-label': retning === 'horisontal',
             })}
         >
-            <Label htmlFor={`journalpostpanel.${labelTextId}.label`}>{intlHelper(intl, labelTextId)}</Label>
-            <div id={`journalpostpanel.${labelTextId}.value`}>{value}</div>
+            <Label htmlFor={`journalpostpanel.${text || labelTextId}.label`}>
+                {text || intlHelper(intl, labelTextId || '')}
+            </Label>
+            <div id={`journalpostpanel.${text || labelTextId}.value`}>{value}</div>
             {visKopier && <Kopier verdi={value} />}
         </div>
     );

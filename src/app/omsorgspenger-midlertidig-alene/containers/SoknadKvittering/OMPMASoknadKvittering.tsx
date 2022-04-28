@@ -1,20 +1,21 @@
 /* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import './ompMASoknadKvittering.less';
 import countries from 'i18n-iso-countries';
-import {RootStateType} from 'app/state/RootState';
+import { RootStateType } from 'app/state/RootState';
 import Kopier from 'app/components/kopier/Kopier';
-import {IOMPMASoknadKvittering} from '../../types/OMPMASoknadKvittering';
+import LabelValue from 'app/components/skjema/LabelValue';
+import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
 import {
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
-    sjekkPropertyEksistererOgIkkeErNull
+    sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
-import {PunchFormPaneler} from '../../../models/enums/PunchFormPaneler';
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 
 interface IOwnProps {
     intl: any;
@@ -23,17 +24,15 @@ interface IOwnProps {
     annenSokerIdent?: string | null;
 }
 
-export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = (
-    {
-        intl,
-        response,
-        kopierJournalpostSuccess,
-        annenSokerIdent,
-    }) => {
-
+export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
+    intl,
+    response,
+    kopierJournalpostSuccess,
+    annenSokerIdent,
+}) => {
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-    const {journalposter} = response;
+    const { journalposter, ytelse } = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
 
     return (
@@ -42,12 +41,12 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = (
             {kopierJournalpostSuccess && (
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
                     {annenSokerIdent && (
                         <p>
                             {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent}/>
+                            <Kopier verdi={annenSokerIdent} />
                         </p>
                     )}
                 </div>
@@ -56,7 +55,7 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = (
             {visOpplysningerOmSoknad && (
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <hr className={classNames('linje')}/>
+                    <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${periodToFormattedString(
@@ -65,12 +64,46 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = (
                     </p>
                 </div>
             )}
-
+            <div>
+                <h3>{intlHelper(intl, PunchFormPaneler.ANNEN_FORELDER)}</h3>
+                <hr className={classNames('linje')} />
+                <p>
+                    <LabelValue
+                        text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
+                        value={ytelse.annenForelder.norskIdentitetsnummer}
+                        retning="horisontal"
+                    />
+                </p>
+                <p>
+                    <LabelValue
+                        text={`${intlHelper(intl, 'skjema.annenForelder.situasjonstype')}:`}
+                        value={intlHelper(
+                            intl,
+                            `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`
+                        )}
+                        retning="horisontal"
+                    />
+                </p>
+                <p>
+                    <LabelValue
+                        text={`${intlHelper(intl, 'skjema.annenForelder.situasjonsbeskrivelse')}:`}
+                        value={ytelse.annenForelder.situasjonBeskrivelse}
+                        retning="horisontal"
+                    />
+                </p>
+                <p>
+                    <LabelValue
+                        text={`${intlHelper(intl, 'skjema.annenForelder.periode')}:`}
+                        value={periodToFormattedString(ytelse.annenForelder.periode)}
+                        retning="horisontal"
+                    />
+                </p>
+            </div>
             <div>
                 {!!journalposter && journalposter.length > 0 && (
                     <div>
                         <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                        <hr className={classNames('linje')}/>
+                        <hr className={classNames('linje')} />
                         <p>
                             <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
                             {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
@@ -83,7 +116,7 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = (
                 )}
             </div>
         </div>
-    )
+    );
 };
 
 const mapStateToProps = (state: RootStateType) => ({
