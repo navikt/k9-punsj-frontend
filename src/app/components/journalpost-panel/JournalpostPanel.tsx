@@ -27,7 +27,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
         intl,
         journalpost,
         fordelingState,
-        identState: { ident1, ident2 },
+        identState: { ident1, ident2, barn },
         journalposter,
     } = props;
 
@@ -55,6 +55,12 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                         labelTextId="journalpost.ident2"
                         value={ident2 || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                         retning="horisontal"
+                    />
+                )}
+                {!!barn.length && (
+                    <LabelValue
+                        labelTextId="journalpost.barn"
+                        value={barn.map((personvalg) => personvalg.identitetsnummer).join(', ')}
                     />
                 )}
             </FlexRow>

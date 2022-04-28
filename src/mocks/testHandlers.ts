@@ -86,14 +86,16 @@ export const testHandlers = {
     /**
      * Omsorgspenger kronisk sykt barn
      */
-    hentOmsorgspengerKroniskSyktBarnMappe: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/mappe`, (req, res, ctx) =>
-        res(
-            ctx.json({
-                søker: '29099000129',
-                fagsakTypeKode: 'OMP_KS',
-                søknader: [],
-            })
-        )
+    hentOmsorgspengerKroniskSyktBarnMappe: rest.get(
+        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/mappe`,
+        (req, res, ctx) =>
+            res(
+                ctx.json({
+                    søker: '29099000129',
+                    fagsakTypeKode: 'OMP_KS',
+                    søknader: [],
+                })
+            )
     ),
     oppdaterOmsorgspengerKroniskSyktBarnSøknad: rest.put(
         `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/oppdater`,
@@ -106,5 +108,17 @@ export const testHandlers = {
     sendOmsorgspengerKroniskSyktBarnSøknad: rest.post(
         `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/send`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
+    ),
+    barn: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/barn`, (req, res, ctx) =>
+        res(
+            ctx.status(200),
+            ctx.json({
+                barn: [
+                    { fornavn: 'Preben', etternavn: 'Figenschou Ferd', identitetsnummer: '02021477330' },
+                    { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
+                    { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
+                ],
+            })
+        )
     ),
 };

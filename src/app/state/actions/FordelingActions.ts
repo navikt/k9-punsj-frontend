@@ -157,11 +157,12 @@ export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any)
     });
 };
 
-export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string, fagsakYtelseType: FagsakYtelseType) {
+export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string, fagsakYtelseType: FagsakYtelseType, barn: string[]) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
             barnIdent,
+            barn,
             journalpostId: jpid,
             fagsakYtelseType
         };

@@ -6,10 +6,13 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "^7.17.2",
+        "@navikt/ds-css": "^0.16.1",
         "@navikt/ds-icons": "^0.8.6",
+        "@navikt/ds-react": "^0.17.2",
         "@navikt/fnrvalidator": "^1.2.0",
         "@navikt/nap-header": "^1.0.10",
         "@navikt/nap-user-panel": "^1.0.0",
+        "@redux-devtools/extension": "^3.2.2",
         "@sentry/react": "^6.17.6",
         "@testing-library/cypress": "^8.0.2",
         "@types/classnames": "^2.2.11",
@@ -72,14 +75,14 @@
         "react-router-dom": "^5.3.0",
         "react-time-picker": "^4.5.0",
         "redux": "^4.1.2",
-        "redux-devtools-extension": "^2.13.9",
         "redux-logger": "^3.0.6",
         "snyk": "^1.874.0",
         "source-map-loader": "^3.0.1",
         "start-server-and-test": "^1.14.0",
         "typescript-string-operations": "^1.4.1",
         "ulid": "^2.3.0",
-        "uuid": "^8.3.1"
+        "uuid": "^8.3.1",
+        "yup": "^0.32.11"
     },
     "scripts": {
         "dev": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",

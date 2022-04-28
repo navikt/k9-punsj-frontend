@@ -1,3 +1,8 @@
+export type PersonEnkel = {
+    norskIdent: string;
+    foedselsdato?: string;
+};
+
 export interface Person {
     etternavn: string;
     fornavn: string;
