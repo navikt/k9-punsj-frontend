@@ -57,7 +57,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                         retning="horisontal"
                     />
                 )}
-                {barn && (
+                {!!barn.length && (
                     <LabelValue
                         labelTextId="journalpost.barn"
                         value={barn.map((personvalg) => personvalg.identitetsnummer).join(', ')}

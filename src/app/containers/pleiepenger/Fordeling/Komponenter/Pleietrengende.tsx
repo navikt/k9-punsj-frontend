@@ -73,7 +73,9 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 valgt: true,
                 låsIdentitetsnummer: true,
             }));
-            setFlereBarn(barn);
+            if (flervalg) {
+                setFlereBarn(barn);
+            }
         }
     }, [fellesState.barn]);
 

@@ -226,8 +226,8 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 id={'medisinskeopplysningercheckbox'}
                                 label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                                 checked={!!values.harMedisinskeOpplysninger}
-                                onChange={field.onChange}
-                                onBlur={field.onBlur}
+                                {...field}
+                                value=""
                             />
                             <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
                                 {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
@@ -245,8 +245,8 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 id={'opplysningerikkepunsjetcheckbox'}
                                 label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                                 checked={!!values.harInfoSomIkkeKanPunsjes}
-                                onChange={field.onChange}
-                                onBlur={field.onBlur}
+                                {...field}
+                                value=""
                             />
                             <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
                                 {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}

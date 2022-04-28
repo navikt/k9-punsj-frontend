@@ -2,6 +2,7 @@ import { Personvalg } from 'app/models/types/IdentState';
 
 export enum IdentActionKeys {
     IDENT_FELLES_SET = 'IDENT_SET_FELLES',
+    IDENT_RESET = 'IDENT_RESET',
     IDENT_SET_FLERE_BARN = 'IDENT_SET_FLERE_BARN',
 }
 
@@ -18,11 +19,17 @@ export interface ISetFlereBarnAction {
 }
 
 export type IIdentActions = ISetIdentFellesAction;
-
+export type IIdentReset = {
+    type: IdentActionKeys.IDENT_RESET;
+};
 export const setFlereBarnAction = (barn: Personvalg[]) => ({
     type: IdentActionKeys.IDENT_SET_FLERE_BARN,
     ident2: '',
     barn,
+});
+
+export const resetIdentState = () => ({
+    type: IdentActionKeys.IDENT_RESET,
 });
 
 export function setIdentFellesAction(

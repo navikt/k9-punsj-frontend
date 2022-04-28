@@ -36,7 +36,7 @@ import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
-import { setIdentFellesAction } from '../../../state/actions/IdentActions';
+import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import './fordeling.less';
@@ -75,6 +75,7 @@ export interface IFordelingDispatchProps {
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
     setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
+    resetIdentStateAction: typeof resetIdentState;
 }
 
 export type IFordelingProps = WrappedComponentProps & IFordelingStateProps & IFordelingDispatchProps;
@@ -94,6 +95,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setIdentAction,
         setErIdent1Bekreftet,
         setSakstypeAction: sakstypeAction,
+        resetIdentStateAction,
     } = props;
     const { sakstype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -350,11 +352,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         }))}
                                     legend={intlHelper(intl, 'fordeling.detteGjelder')}
                                     checked={dokumenttype}
-                                    onChange={(event) =>
+                                    onChange={(event) => {
                                         handleDokumenttype(
                                             (event.target as HTMLInputElement).value as FordelingDokumenttype
-                                        )
-                                    }
+                                        );
+                                        resetIdentStateAction();
+                                    }}
                                 />
                             )}
                             <InnholdForDokumenttypeAnnet
@@ -582,6 +585,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
+    resetIdentStateAction: () => dispatch(resetIdentState()),
 });
 
 const Fordeling = injectIntl(connect(mapStateToProps, mapDispatchToProps)(FordelingComponent));
