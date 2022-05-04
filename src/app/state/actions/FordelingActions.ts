@@ -196,7 +196,7 @@ export function sjekkOmSkalTilK9Sak(
             Promise.all(promises).then((responseList) => {
                 if (responseList.every((res) => res.response.ok)) {
                     const kanIkkeGaaTilK9 = responseList.filter((res) => !res.k9sak).map((res) => res.barn);
-                    return dispatch(kanIkkeGaaTilK9.length === 0, kanIkkeGaaTilK9);
+                    return dispatch(sjekkSkalTilK9SuccessAction(kanIkkeGaaTilK9.length === 0, kanIkkeGaaTilK9));
                 }
 
                 if (responseList.some((res) => res.response.status === 409)) {
@@ -207,7 +207,7 @@ export function sjekkOmSkalTilK9Sak(
         } else {
             post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (res, svar) => {
                 if (res.ok) {
-                    return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, []));
+                    return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, svar.k9sak ? [] : [barnIdent]));
                 }
                 if (res.status === 409) {
                     return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
