@@ -196,7 +196,12 @@ export function sjekkOmSkalTilK9Sak(
             Promise.all(promises).then((responseList) => {
                 if (responseList.every((res) => res.response.ok)) {
                     const kanIkkeGaaTilK9 = responseList.filter((res) => !res.k9sak).map((res) => res.barn);
-                    return dispatch(kanIkkeGaaTilK9.length === 0, kanIkkeGaaTilK9);
+                    return dispatch(
+                        sjekkSkalTilK9SuccessAction(
+                            false,
+                            responseList.map((v) => v.barn)
+                        )
+                    );
                 }
 
                 if (responseList.some((res) => res.response.status === 409)) {
