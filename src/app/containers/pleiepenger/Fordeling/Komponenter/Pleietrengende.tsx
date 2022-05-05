@@ -49,7 +49,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         fellesState,
         setIdentAction,
         henteBarn,
-        visPleietrengende,
         skalHenteBarn,
         flervalg,
         setFlereBarn,
@@ -100,10 +99,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.ident1, null);
         }
     };
-
-    if (!visPleietrengende) {
-        return null;
-    }
 
     if (flervalg) {
         return <Personvelger personer={identState.barn} onChange={setFlereBarn} intl={intl} />;

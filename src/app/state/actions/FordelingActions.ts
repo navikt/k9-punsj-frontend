@@ -205,15 +205,21 @@ export function sjekkOmSkalTilK9Sak(
                 return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(responseList[0].response)));
             });
         } else {
-            post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (res, svar) => {
-                if (res.ok) {
-                    return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, svar.k9sak ? [] : [barnIdent]));
+            post(
+                ApiPath.SJEKK_OM_SKAL_TIL_K9SAK,
+                {},
+                { 'X-Nav-NorskIdent': norskIdent },
+                requestBody,
+                (res, svar: { k9sak: boolean }) => {
+                    if (res.ok) {
+                        return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, svar.k9sak ? [] : [barnIdent]));
+                    }
+                    if (res.status === 409) {
+                        return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
+                    }
+                    return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
                 }
-                if (res.status === 409) {
-                    return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
-                }
-                return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
-            });
+            );
         }
     };
 }

@@ -129,6 +129,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
+    const visPleietrengende =
+        visSokersBarn &&
+        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+        !erUgyldigIdent(identState.ident1);
+
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -401,7 +409,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             ) : (
                                 <VerticalSpacer twentyPx />
                             )}
-                            {gjelderPleiepengerEllerOmsorgspenger && (
+                            {visPleietrengende && (
                                 <>
                                     <Pleietrengende
                                         pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
@@ -412,15 +420,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                         }
                                         flervalg={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
-                                        visPleietrengende={
-                                            visSokersBarn &&
-                                            (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-                                                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
-                                                dokumenttype ===
-                                                    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-                                            !erUgyldigIdent(identState.ident1)
-                                        }
                                     />
                                     {!fordelingState.skalTilK9 && (
                                         <Knapp
