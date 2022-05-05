@@ -19,6 +19,7 @@ import {
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
+    omsorgspengerUtbetalingSakstyper,
 } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -83,6 +84,8 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     function omsorgspengerMidlertidigAlene() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA && omsorgspengerMidlertidigAleneSakstyper;
     }
+    const omsorgspengerUtbetaling = () =>
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
     return (
         <>
@@ -92,7 +95,8 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                     pleiepengerSyktBarn() ||
                     pleiepengerILivetsSluttfase() ||
                     omsorgspengerKroniskSyktBarn() ||
-                    omsorgspengerMidlertidigAlene()
+                    omsorgspengerMidlertidigAlene() ||
+                    omsorgspengerUtbetaling()
                 ).map((key) => {
                     if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                         return null;

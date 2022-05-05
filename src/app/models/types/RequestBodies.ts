@@ -29,17 +29,18 @@ export interface ISkalTilK9 {
     barnIdent: string;
     barn: string[];
     journalpostId: string;
-    fagsakYtelseType: FagsakYtelseType|undefined
+    fagsakYtelseType: FagsakYtelseType | undefined;
 }
 
 export enum FagsakYtelseType {
-    PLEIEPENGER_SYKT_BARN = "PSB",
-    PLEIEPENGER_NÆRSTÅENDE = "PPN",
-    OMSORGSPENGER = "OMP",
-    OMSORGSPENGER_KS = "OMP_KS",
-    OMSORGSPENGER_MA = "OMP_MA",
-    OMSORGSPENGER_AO = "OMP_AO",
-    OPPLÆRINGSPENGER = "OLP",
+    PLEIEPENGER_SYKT_BARN = 'PSB',
+    PLEIEPENGER_NÆRSTÅENDE = 'PPN',
+    OMSORGSPENGER = 'OMP',
+    OMSORGSPENGER_KS = 'OMP_KS',
+    OMSORGSPENGER_MA = 'OMP_MA',
+    OMSORGSPENGER_AO = 'OMP_AO',
+    OMSORGSPENGER_UT = 'OMP_UT',
+    OPPLÆRINGSPENGER = 'OLP',
 }
 
 export interface IOpprettSoknad {

@@ -41,6 +41,13 @@ export const OmsorgspengerMidlertidigAlene: ISakstypePunch = {
     steps: [],
 };
 
+export const OmsorgspengerUtbetaling: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_UTBETALING,
+    punchPath: '/omsorgspengerutbetaling',
+    getComponent: ({ journalpostid, punchPath }) => <OMPMARouter journalpostid={journalpostid} punchPath={punchPath} />,
+    steps: [],
+};
+
 export const OmsorgspengerFordeling: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_FORDELING,
     punchPath: '/fordeling-omsorgsdager',
@@ -128,6 +135,7 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerFordeling,
         OmsorgspengerKroniskSyktBarnSakstypePunch,
         OmsorgspengerMidlertidigAlene,
+        OmsorgspengerUtbetaling,
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding,
     ],
