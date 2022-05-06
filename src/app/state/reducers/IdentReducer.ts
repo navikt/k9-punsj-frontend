@@ -1,17 +1,14 @@
 import { IIdentState } from '../../models/types/IdentState';
-import { IdentActionKeys, IIdentActions, ISetFlereBarnAction, IIdentReset } from '../actions/IdentActions';
+import { IdentActionKeys, IIdentActions } from '../actions/IdentActions';
 
 export const initialState: IIdentState = {
     ident1: '',
     ident2: '',
-    barn: [],
+    annenPart: '',
     annenSokerIdent: null,
 };
 
-export function IdentReducer(
-    identState: IIdentState = initialState,
-    action: IIdentActions | ISetFlereBarnAction | IIdentReset
-): IIdentState {
+export function IdentReducer(identState: IIdentState = initialState, action: IIdentActions): IIdentState {
     switch (action.type) {
         case IdentActionKeys.IDENT_FELLES_SET:
             return {
@@ -20,11 +17,11 @@ export function IdentReducer(
                 ident2: action.ident2,
                 annenSokerIdent: action.annenSokerIdent,
             };
-        case IdentActionKeys.IDENT_SET_FLERE_BARN:
+
+        case IdentActionKeys.IDENT_SET_ANNEN_PART:
             return {
                 ...identState,
-                ident2: '',
-                barn: action.barn,
+                annenPart: action.annenPart,
             };
 
         case IdentActionKeys.IDENT_RESET:
@@ -32,7 +29,6 @@ export function IdentReducer(
                 ...identState,
                 ident2: '',
                 annenSokerIdent: '',
-                barn: [],
             };
 
         default:

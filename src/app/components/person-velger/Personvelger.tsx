@@ -30,7 +30,7 @@ const Personvelger = ({ personer, onChange, intl }: OwnProps) => (
             <Button
                 variant="tertiary"
                 size="small"
-                onClick={() => onChange([...personer, { identitetsnummer: '', navn: '', valgt: false }])}
+                onClick={() => onChange([...personer, { identitetsnummer: '', navn: '' }])}
             >
                 <AddPerson />
                 Legg til barn

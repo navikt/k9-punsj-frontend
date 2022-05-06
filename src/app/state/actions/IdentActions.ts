@@ -1,9 +1,7 @@
-import { Personvalg } from 'app/models/types/IdentState';
-
 export enum IdentActionKeys {
     IDENT_FELLES_SET = 'IDENT_SET_FELLES',
     IDENT_RESET = 'IDENT_RESET',
-    IDENT_SET_FLERE_BARN = 'IDENT_SET_FLERE_BARN',
+    IDENT_SET_ANNEN_PART = 'IDENT_SET_ANNEN_PART',
 }
 
 interface ISetIdentFellesAction {
@@ -12,25 +10,22 @@ interface ISetIdentFellesAction {
     ident2: string;
     annenSokerIdent: string | null;
 }
-export interface ISetFlereBarnAction {
-    type: IdentActionKeys.IDENT_SET_FLERE_BARN;
-    ident2: string;
-    barn: Personvalg[];
-}
 
-export type IIdentActions = ISetIdentFellesAction;
 export type IIdentReset = {
     type: IdentActionKeys.IDENT_RESET;
 };
-export const setFlereBarnAction = (barn: Personvalg[]) => ({
-    type: IdentActionKeys.IDENT_SET_FLERE_BARN,
-    ident2: '',
-    barn,
-});
+export type IIdentSetAnnenPart = {
+    type: IdentActionKeys.IDENT_SET_ANNEN_PART;
+    annenPart: string;
+};
+
+export type IIdentActions = ISetIdentFellesAction | IIdentReset | IIdentSetAnnenPart;
 
 export const resetIdentState = () => ({
     type: IdentActionKeys.IDENT_RESET,
 });
+
+export const setAnnenPartAction = (annenPart: string) => ({ type: IdentActionKeys.IDENT_SET_ANNEN_PART, annenPart });
 
 export function setIdentFellesAction(
     ident1: string,

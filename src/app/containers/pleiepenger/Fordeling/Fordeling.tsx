@@ -52,6 +52,7 @@ import ValgForDokument from './Komponenter/ValgForDokument';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import { getEnvironmentVariable } from '../../../utils';
 import { FagsakYtelseType } from '../../../models/types/RequestBodies';
+import AnnenPart from './Komponenter/AnnenPart';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -133,7 +134,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         visSokersBarn &&
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
         !erUgyldigIdent(identState.ident1);
 
@@ -142,7 +142,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const disableVidereMidlertidigAlene =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (identState.barn.some((barn) => erUgyldigIdent(barn.identitetsnummer)) || identState.barn.length <= 0);
+        (!identState.annenPart || !!(identState.annenPart && erUgyldigIdent(identState.annenPart)));
 
     const disableVidereKnapp =
         ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
@@ -204,17 +204,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             );
         }
 
-        const barnMidlertidigAlene = identState.barn.map((barn) => barn.identitetsnummer);
-
         const fagsakYtelseType = utledFagsakYtelseType(dokumentType);
 
-        props.sjekkOmSkalTilK9(
-            identState.ident1,
-            identState.ident2,
-            journalpost.journalpostId,
-            fagsakYtelseType,
-            barnMidlertidigAlene
-        );
+        props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId, fagsakYtelseType);
     };
 
     const kopierJournalpostOgLukkOppgave = () => {
@@ -395,6 +387,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                                 erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
                             />
+                            <AnnenPart intl={intl} vis={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA} />
                             <ToSoekere
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
@@ -419,7 +412,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         skalHenteBarn={
                                             dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                         }
-                                        flervalg={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
                                     />
                                     {!fordelingState.skalTilK9 && (
                                         <Knapp
@@ -574,13 +566,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (
-        ident1: string,
-        ident2: string,
-        jpid: string,
-        fagsakYtelseType: FagsakYtelseType,
-        barn: string[]
-    ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, barn)),
+    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string, fagsakYtelseType: FagsakYtelseType) =>
+        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),

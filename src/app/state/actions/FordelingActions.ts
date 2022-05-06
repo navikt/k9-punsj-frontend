@@ -165,62 +165,33 @@ export function sjekkOmSkalTilK9Sak(
     norskIdent: string,
     barnIdent: string,
     jpid: string,
-    fagsakYtelseType: FagsakYtelseType,
-    barn: string[]
+    fagsakYtelseType: FagsakYtelseType
 ) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
             barnIdent,
-            barn,
             journalpostId: jpid,
             fagsakYtelseType,
         };
 
         dispatch(sjekkSkalTilK9RequestAction());
 
-        if (barn.length) {
-            const promises = barn.map((identifikator) =>
-                post(
-                    ApiPath.SJEKK_OM_SKAL_TIL_K9SAK,
-                    {},
-                    { 'X-Nav-NorskIdent': norskIdent },
-                    { brukerIdent: norskIdent, barnIdent: identifikator, journalpostId: jpid, fagsakYtelseType }
-                ).then((res) =>
-                    res
-                        .json()
-                        .then((skalTilK9Sak) => ({ response: res, k9sak: skalTilK9Sak.k9sak, barn: identifikator }))
-                )
-            );
-
-            Promise.all(promises).then((responseList) => {
-                if (responseList.every((res) => res.response.ok)) {
-                    const kanIkkeGaaTilK9 = responseList.filter((res) => !res.k9sak).map((res) => res.barn);
-                    return dispatch(sjekkSkalTilK9SuccessAction(kanIkkeGaaTilK9.length === 0, kanIkkeGaaTilK9));
+        post(
+            ApiPath.SJEKK_OM_SKAL_TIL_K9SAK,
+            {},
+            { 'X-Nav-NorskIdent': norskIdent },
+            requestBody,
+            (res, svar: { k9sak: boolean }) => {
+                if (res.ok) {
+                    return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, svar.k9sak ? [] : [barnIdent]));
                 }
-
-                if (responseList.some((res) => res.response.status === 409)) {
+                if (res.status === 409) {
                     return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
                 }
-                return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(responseList[0].response)));
-            });
-        } else {
-            post(
-                ApiPath.SJEKK_OM_SKAL_TIL_K9SAK,
-                {},
-                { 'X-Nav-NorskIdent': norskIdent },
-                requestBody,
-                (res, svar: { k9sak: boolean }) => {
-                    if (res.ok) {
-                        return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, svar.k9sak ? [] : [barnIdent]));
-                    }
-                    if (res.status === 409) {
-                        return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
-                    }
-                    return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
-                }
-            );
-        }
+                return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
+            }
+        );
     };
 }
 
