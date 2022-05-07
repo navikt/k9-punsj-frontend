@@ -29,7 +29,6 @@ const AnnenPart = ({ vis, intl, annenPart, setAnnenPart }: ownProps): JSX.Elemen
         }
     };
     const validators = [identifikator];
-    console.log(visFeil && getValidationErrors(validators, annenPart));
     const handleIdentAnnenSokerBlur = () => setVisFeil(true);
     return (
         <TextField
