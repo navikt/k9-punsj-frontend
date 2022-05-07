@@ -1,5 +1,7 @@
 import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
+import * as yup from 'yup';
+
 import { IdentRules } from './IdentRules';
 import intlHelper from '../utils/intlUtils';
 
@@ -27,15 +29,14 @@ export function validerSkjema<SkjemaType>(feltvalidatorer: IFeltValidator<any, S
                     }
                     return tmp;
                 }, tempErrors);
-            } 
-                const feltError = validatorer
-                    .map((validator) => validator(getIn(skjema, feltPath), skjema))
-                    .find((error) => error);
-                if (feltError) {
-                    return setIn(tempErrors, feltPath, intlHelper(intl, feltError));
-                }
-                return tempErrors;
-            
+            }
+            const feltError = validatorer
+                .map((validator) => validator(getIn(skjema, feltPath), skjema))
+                .find((error) => error);
+            if (feltError) {
+                return setIn(tempErrors, feltPath, intlHelper(intl, feltError));
+            }
+            return tempErrors;
         }, {});
 }
 
@@ -66,3 +67,38 @@ export function gyldigFødselsdato(verdi: string) {
     const dagsDato = new Date();
     return new Date(verdi) < dagsDato ? undefined : 'skjema.validering.ugyldigfødselsdato';
 }
+
+export const erUgyldigIdent = (ident: string | null | undefined) => {
+    if (!ident) return true;
+    if (!ident.length) return true;
+    return !IdentRules.isIdentValid(ident);
+};
+
+export const identifikator = yup
+    .string()
+    .required()
+    .nullable(true)
+    .length(11)
+    .test({
+        test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
+        message: 'Ugyldig identifikasjonsnummer',
+    })
+    .label('Identifikasjonsnummer');
+
+export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
+    try {
+        validator.validateSync(value);
+
+        return false;
+    } catch (e) {
+        return e.errors[0];
+    }
+};
+
+export const getValidationErrors = (validators: any, value: any): string | boolean => {
+    const errorMessages = validators.map((validator: yup.AnySchema) => validate(validator, value)).filter(Boolean);
+    if (errorMessages.length) {
+        return errorMessages;
+    }
+    return false;
+};

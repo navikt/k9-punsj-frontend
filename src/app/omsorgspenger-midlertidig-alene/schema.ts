@@ -1,8 +1,8 @@
 /* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
 
-import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
 import { initializeDate } from 'app/utils/timeUtils';
+import { erUgyldigIdent } from 'app/rules/valideringer';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();

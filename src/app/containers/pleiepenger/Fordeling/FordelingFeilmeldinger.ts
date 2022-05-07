@@ -1,12 +1,7 @@
-import { IdentRules } from '../../../rules';
+import { erUgyldigIdent } from 'app/rules/valideringer';
 import intlHelper from '../../../utils/intlUtils';
 
-export const erUgyldigIdent = (ident: string | null | undefined) => {
-    if (!ident) return true;
-    if (!ident.length) return true;
-    return !IdentRules.isIdentValid(ident);
-};
-
+// eslint-disable-next-line import/prefer-default-export
 export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     annenIdent: string | null,
     sokerIdent: string | null,

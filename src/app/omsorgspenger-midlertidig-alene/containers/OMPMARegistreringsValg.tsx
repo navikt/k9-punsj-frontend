@@ -41,7 +41,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     props: IOMPMARegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const { ident1, ident2, barn } = identState;
+    const { ident1, ident2, annenPart } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -68,11 +68,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     }
 
     const newSoknad = () => {
-        props.createSoknad(
-            journalpostid,
-            ident1,
-            barn.map((barnet) => ({ norskIdent: barnet.identitetsnummer, foedselsdato: '' }))
-        );
+        props.createSoknad(journalpostid, ident1, annenPart);
     };
 
     const kanStarteNyRegistrering = () => {
@@ -108,8 +104,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, barn: string[]) =>
-        dispatch(createOMPMASoknad(journalpostid, ident1, barn)),
+    createSoknad: (journalpostid: string, ident1: string, annenPart: string) =>
+        dispatch(createOMPMASoknad(journalpostid, ident1, annenPart)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import { IIdentState } from 'app/models/types/IdentState';
+import { getValidationErrors, identifikator } from 'app/rules/valideringer';
 import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
@@ -11,10 +11,10 @@ import { Dispatch } from 'redux';
 type ownProps = {
     vis: boolean;
     intl: IntlShape;
-    identState: IIdentState;
+    annenPart: string;
     setAnnenPart: (annenPart: string) => void;
 };
-const AnnenPart = ({ vis, intl, identState, setAnnenPart }: ownProps): JSX.Element | null => {
+const AnnenPart = ({ vis, intl, annenPart, setAnnenPart }: ownProps): JSX.Element | null => {
     if (!vis) {
         return null;
     }
@@ -23,20 +23,21 @@ const AnnenPart = ({ vis, intl, identState, setAnnenPart }: ownProps): JSX.Eleme
 
     const [visFeil, setVisFeil] = useState<boolean>(false);
     const onChangeHandler = (e) => {
-        const identifikator = e.target.value.replace(/\D+/, '');
-        if (identifikator.length < 12) {
-            setAnnenPart(identifikator);
+        const identifikatorUtenWhitespace = e.target.value.replace(/\D+/, '');
+        if (identifikatorUtenWhitespace.length < 12) {
+            setAnnenPart(identifikatorUtenWhitespace);
         }
     };
-
+    const validators = [identifikator];
+    console.log(visFeil && getValidationErrors(validators, annenPart));
     const handleIdentAnnenSokerBlur = () => setVisFeil(true);
-
     return (
         <TextField
             label={intlHelper(intl, 'ident.identifikasjon.annenPart')}
             onChange={onChangeHandler}
             onBlur={handleIdentAnnenSokerBlur}
-            value={identState.annenPart}
+            value={annenPart}
+            error={visFeil && getValidationErrors(validators, annenPart)}
             className="bold-label"
             maxLength={11}
             size="small"
@@ -46,7 +47,7 @@ const AnnenPart = ({ vis, intl, identState, setAnnenPart }: ownProps): JSX.Eleme
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    identState: state.identState,
+    annenPart: state.identState.annenPart,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

@@ -6,13 +6,13 @@ import { Input, Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import { erUgyldigIdent } from 'app/rules/valideringer';
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
-import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
@@ -46,8 +46,13 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         fellesState,
         setIdentAction,
         henteBarn,
+        visPleietrengende,
         skalHenteBarn,
     } = props;
+
+    if (!visPleietrengende) {
+        return null;
+    }
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);

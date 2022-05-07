@@ -59,7 +59,8 @@ interface IResetOMPMASoknadidAction {
 interface IOpprettMASoknad {
     journalpostId: string;
     norskIdent: string;
-    barn: PersonEnkel[];
+    annenPart: string;
+    barn: string[];
 }
 
 type IMapperOMPMAActionTypes =
@@ -167,14 +168,16 @@ export function resetOMPMASoknadidAction(): IResetOMPMASoknadidAction {
     return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET };
 }
 
-export function createOMPMASoknad(journalpostid: string, ident1: string, barn: PersonEnkel[]) {
+export function createOMPMASoknad(journalpostid: string, ident1: string, annenPart: string) {
     return (dispatch: any) => {
         dispatch(createOMPMASoknadRequestAction());
 
         const requestBody: IOpprettMASoknad = {
             journalpostId: journalpostid,
             norskIdent: ident1,
-            barn,
+            annenPart,
+            // 07.05.2022 barn kan fjernes etter backend tillater opprettelse av søknad uten 
+            barn: [],
         };
 
         post(ApiPath.OMP_MA_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

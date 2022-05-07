@@ -9,9 +9,9 @@ import { IFordelingState, IJournalpost } from 'app/models/types';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import { Input } from 'nav-frontend-skjema';
+import { erUgyldigIdent } from 'app/rules/valideringer';
 import { IIdentState } from 'app/models/types/IdentState';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
-import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 interface IInnholdForDokumenttypeAnnetProps {
     dokumenttype?: FordelingDokumenttype;

@@ -23,6 +23,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import { erUgyldigIdent } from 'app/rules/valideringer';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../../components/pdf/PdfVisning';
@@ -40,7 +41,6 @@ import { resetIdentState, setIdentFellesAction } from '../../../state/actions/Id
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import './fordeling.less';
-import { erUgyldigIdent } from './FordelingFeilmeldinger';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
@@ -103,6 +103,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         []
     );
+
+
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
@@ -129,13 +131,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
-
-    const visPleietrengende =
-        visSokersBarn &&
-        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-        !erUgyldigIdent(identState.ident1);
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -168,6 +163,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setErIdent1Bekreftet(true);
         setVisSokersBarn(true);
     };
+
+    const visPleietrengende =
+        visSokersBarn &&
+        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+        !erUgyldigIdent(identState.ident1);
 
     const utledFagsakYtelseType = (dokumentType: FordelingDokumenttype | undefined): FagsakYtelseType => {
         switch (dokumentType) {
@@ -254,6 +256,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
     }
+    
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone) {
         return (
@@ -402,7 +405,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             ) : (
                                 <VerticalSpacer twentyPx />
                             )}
-                            {visPleietrengende && (
+                            {gjelderPleiepengerEllerOmsorgspenger && (
                                 <>
                                     <Pleietrengende
                                         pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
@@ -412,6 +415,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         skalHenteBarn={
                                             dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                         }
+                                        visPleietrengende={visPleietrengende}
                                     />
                                     {!fordelingState.skalTilK9 && (
                                         <Knapp
