@@ -24,7 +24,7 @@ import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import schema from '../schema';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 
-const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[]) => ({
+const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
     soekerId: soknad?.soekerId || '',
     mottattDato: soknad?.mottattDato || '',
@@ -49,7 +49,7 @@ interface OwnProps {
     id: string;
     journalpostid: string;
     identState: IIdentState;
-    barn: IBarn[];
+    barn?: IBarn[];
 }
 export interface IPunchOMPMAFormStateProps {
     punchFormState: IPunchOMPMAFormState;
@@ -129,7 +129,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     );
 };
 
-const mapStateToProps = (state: RootStateType): OwnProps & IPunchOMPMAFormStateProps => ({
+const mapStateToProps = (state: RootStateType): Pick<OwnProps, 'identState' | 'barn'> & IPunchOMPMAFormStateProps => ({
     identState: state.identState,
     barn: state.felles.barn,
     punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
