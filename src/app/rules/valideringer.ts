@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
 import * as yup from 'yup';
@@ -6,6 +7,17 @@ import { IdentRules } from './IdentRules';
 import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
+
+export const yupLocale = {
+    mixed: {
+        required: '${path} er et påkrevd felt.',
+    },
+    string: {
+        min: '${path} må være minst ${min} tegn',
+        max: '${path} må være mest ${max} tegn',
+        length: '${path} må være nøyaktig ${length} tegn',
+    },
+};
 
 export interface IFeltValidator<FeltType, SkjemaType> {
     feltPath: string;
@@ -73,6 +85,8 @@ export const erUgyldigIdent = (ident: string | null | undefined) => {
     if (!ident.length) return true;
     return !IdentRules.isIdentValid(ident);
 };
+
+yup.setLocale(yupLocale);
 
 export const identifikator = yup
     .string()

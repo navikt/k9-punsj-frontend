@@ -2,7 +2,7 @@
 import * as yup from 'yup';
 
 import { initializeDate } from 'app/utils/timeUtils';
-import { erUgyldigIdent } from 'app/rules/valideringer';
+import { identifikator, yupLocale } from 'app/rules/valideringer';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();
@@ -17,16 +17,7 @@ const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
     return false;
 };
 
-yup.setLocale({
-    mixed: {
-        required: '${path} er et påkrevd felt.',
-    },
-    string: {
-        min: '${path} må være minst ${min} tegn',
-        max: '${path} må være mest ${max} tegn',
-        length: '${path} må være nøyaktig ${length} tegn',
-    },
-});
+yup.setLocale(yupLocale);
 
 const OMPMASchema = yup.object({
     mottattDato: yup
@@ -44,17 +35,13 @@ const OMPMASchema = yup.object({
             })
         )
         .label('Klokkeslett'),
+    barn: yup.array().of(
+        yup.object().shape({
+            norskIdent: identifikator,
+        })
+    ),
     annenForelder: yup.object().shape({
-        norskIdent: yup
-            .string()
-            .required()
-            .nullable(true)
-            .length(11)
-            .test({
-                test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
-                message: 'Ugyldig identifikasjonsnummer',
-            })
-            .label('Identifikasjonsnummer'),
+        norskIdent: identifikator,
         situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
         situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
         periode: yup.object().shape({

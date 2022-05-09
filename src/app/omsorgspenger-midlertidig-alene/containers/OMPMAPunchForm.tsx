@@ -54,6 +54,7 @@ import {
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import AnnenForelder from '../components/AnnenForelder';
+import Personvelger from 'app/components/person-velger/Personvelger';
 
 export interface IPunchOMPMAFormComponentProps {
     journalpostid: string;
@@ -164,8 +165,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
 
     const updateSoknad = (soknad: IOMPMASoknad) => {
         setShowStatus(true);
-        const { barn } = props.identState;
-        const barnMappet = barn.map((barn) => ({ norskIdent: barn.identitetsnummer }));
+        const barnMappet = soknad.barn.map((barn) => ({ norskIdent: barn.norskIdent, foedselsdato: '' }));
         const journalposter = Array.from(soknad?.journalposter || []);
 
         if (!journalposter.includes(props.journalpostid)) {
@@ -215,6 +215,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                 handleBlur={handleBlur}
             />
             <VerticalSpacer fourtyPx />
+            <Personvelger handleBlur={handleBlur} intl={intl} />
             <AnnenForelder intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
             <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
