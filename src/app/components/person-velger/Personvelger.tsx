@@ -1,40 +1,49 @@
 import React from 'react';
+import { Field, FieldProps, FormikValues } from 'formik';
+import { Personvalg } from 'app/models/types/Personvalg';
 
 import { Label, Button } from '@navikt/ds-react';
 import { AddPerson } from '@navikt/ds-icons';
-import { Personvalg } from 'app/models/types/IdentState';
-import './personvelger.less';
 import { WrappedComponentProps } from 'react-intl';
 import PersonLinje from './PersonLinje';
+import './personvelger.less';
 
 interface OwnProps extends WrappedComponentProps {
-    personer: Personvalg[];
-    onChange: (barn: Personvalg[]) => void;
+    handleBlur: (callback: () => any) => void;
 }
 
-const Personvelger = ({ personer, onChange, intl }: OwnProps) => (
+const Personvelger = ({ intl, handleBlur }: OwnProps) => (
     <>
         <Label size="small">Velg hvilke barn det gjelder </Label>
         <div className="personvelger">
-            {personer.map((person, index) => (
-                <PersonLinje
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={index}
-                    person={person}
-                    index={index}
-                    onChange={onChange}
-                    personer={personer}
-                    intl={intl}
-                />
-            ))}
-            <Button
-                variant="tertiary"
-                size="small"
-                onClick={() => onChange([...personer, { identitetsnummer: '', navn: '', valgt: false }])}
-            >
-                <AddPerson />
-                Legg til barn
-            </Button>
+            <Field name="barn">
+                {({ field, form, meta }: FieldProps<Personvalg[], FormikValues>) => (
+                    <>
+                        {field.value.map((person, index) => (
+                            <PersonLinje
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={index}
+                                person={person}
+                                index={index}
+                                handleBlur={(e) => handleBlur(() => field.onBlur(e))}
+                                onChange={(barn) => form.setFieldValue('barn', barn)}
+                                error={meta.touched && meta.error?.[index]?.norskIdent}
+                                personer={field.value}
+                                intl={intl}
+                            />
+                        ))}
+
+                        <Button
+                            variant="tertiary"
+                            size="small"
+                            onClick={() => form.setFieldValue('barn', [...field.value, { norskIdent: '', navn: '' }])}
+                        >
+                            <AddPerson />
+                            Legg til barn
+                        </Button>
+                    </>
+                )}
+            </Field>
         </div>
     </>
 );

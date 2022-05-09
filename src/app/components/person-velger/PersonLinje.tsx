@@ -1,9 +1,7 @@
-import { AddPerson, Delete } from '@navikt/ds-icons';
-import { TextField, BodyShort, Label, Checkbox, Button } from '@navikt/ds-react';
-import { erUgyldigIdent } from 'app/containers/pleiepenger/Fordeling/FordelingFeilmeldinger';
-import { Personvalg } from 'app/models/types/IdentState';
-import intlHelper from 'app/utils/intlUtils';
-import React, { useState } from 'react';
+import { Delete } from '@navikt/ds-icons';
+import { TextField, BodyShort, Label, Button } from '@navikt/ds-react';
+import { Personvalg } from 'app/models/types/Personvalg';
+import React from 'react';
 import { WrappedComponentProps } from 'react-intl';
 
 type onChange = (barn: Personvalg[]) => void;
@@ -12,50 +10,27 @@ interface OwnProps extends WrappedComponentProps {
     person: Personvalg;
     index: number;
     onChange: onChange;
+    handleBlur: any;
     personer: Personvalg[];
+    error?: string;
 }
 
-const errors = (person: Personvalg, intl: any) => {
-    const { identitetsnummer } = person;
-
-    if (identitetsnummer.length !== 11) {
-        return intlHelper(intl, 'ident.feil.identitetsnummer.lengde');
-    }
-    if (erUgyldigIdent(identitetsnummer)) {
-        return intlHelper(intl, 'ident.feil.ugyldigident');
-    }
-
-    return null;
-};
-
-const PersonLinje = ({ person, index, onChange, personer, intl }: OwnProps) => {
-    const [visFeil, setVisFeil] = useState(false);
-
+const PersonLinje = ({ person, index, onChange, personer, handleBlur, error }: OwnProps) => {
     const handleIdentitetsnummer = (event: any) => {
         const personerEndret = personer.map((personObj: Personvalg, personIndex: number) =>
-            personIndex === index
-                ? { ...personObj, identitetsnummer: event.target.value.replace(/\D+/, '') }
-                : personObj
+            personIndex === index ? { ...personObj, norskIdent: event.target.value.replace(/\D+/, '') } : personObj
         );
         onChange(personerEndret);
-    };
-
-    const handleBlur = () => {
-        if (person.identitetsnummer.length) {
-            setVisFeil(true);
-            return;
-        }
-        setVisFeil(false);
     };
     return (
         <div className="personlinje">
             <TextField
                 label="Identitetsnummer"
-                value={person.identitetsnummer}
+                value={person.norskIdent}
                 size="small"
                 onChange={(event) => handleIdentitetsnummer(event)}
-                error={visFeil && errors(person, intl)}
                 onBlur={handleBlur}
+                error={error}
                 disabled={person.låsIdentitetsnummer}
             />
             <div className="navn">
@@ -67,9 +42,7 @@ const PersonLinje = ({ person, index, onChange, personer, intl }: OwnProps) => {
                 className="slett"
                 variant="tertiary"
                 size="small"
-                onClick={() =>
-                    onChange(personer.filter((personObj) => personObj.identitetsnummer !== person.identitetsnummer))
-                }
+                onClick={() => onChange(personer.filter((_, i) => i !== index))}
             >
                 <Delete />
                 Slett
