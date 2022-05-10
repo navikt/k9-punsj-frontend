@@ -106,7 +106,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         return null;
     }
 
-    if (punchFormState.isSoknadLoading || harHentBarnResponse) {
+    if (punchFormState.isSoknadLoading || !harHentBarnResponse) {
         return <NavFrontendSpinner />;
     }
 
