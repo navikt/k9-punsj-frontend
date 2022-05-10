@@ -2,7 +2,7 @@ import React from 'react';
 import { Field, FieldProps, FormikValues } from 'formik';
 import { Personvalg } from 'app/models/types/Personvalg';
 
-import { Label, Button } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { AddPerson } from '@navikt/ds-icons';
 import { WrappedComponentProps } from 'react-intl';
 import PersonLinje from './PersonLinje';
@@ -14,10 +14,12 @@ interface OwnProps extends WrappedComponentProps {
 
 const Personvelger = ({ intl, handleBlur }: OwnProps) => (
     <>
-        <Label size="small">Velg hvilke barn det gjelder </Label>
+        <Heading size="xsmall" spacing>
+            Annen forelder
+        </Heading>
         <div className="personvelger">
             <Field name="barn">
-                {({ field, form, meta }: FieldProps<Personvalg[], FormikValues>) => (
+                {({ field, form }: FieldProps<Personvalg[], FormikValues>) => (
                     <>
                         {field.value.map((person, index) => (
                             <PersonLinje
@@ -25,9 +27,7 @@ const Personvelger = ({ intl, handleBlur }: OwnProps) => (
                                 key={index}
                                 person={person}
                                 index={index}
-                                handleBlur={(e) => handleBlur(() => field.onBlur(e))}
-                                onChange={(barn) => form.setFieldValue('barn', barn)}
-                                error={meta.touched && meta.error?.[index]?.norskIdent}
+                                handleBlur={handleBlur}
                                 personer={field.value}
                                 intl={intl}
                             />

@@ -121,6 +121,21 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
     } = props;
     const { signert } = signaturState;
 
+    const updateSoknad = (soknad: IOMPMASoknad) => {
+        setShowStatus(true);
+        const barnMappet = soknad.barn.map((barn) => ({ norskIdent: barn.norskIdent, foedselsdato: '' }));
+        const journalposter = Array.from(soknad?.journalposter || []);
+
+        if (!journalposter.includes(props.journalpostid)) {
+            journalposter.push(props.journalpostid);
+        }
+        if (harForsoektAaSendeInn) {
+            props.validateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter }, true);
+        }
+
+        return props.updateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter });
+    };
+
     useEffect(() => {
         if (showStatus) {
             setTimeout(() => setShowStatus(false), 5000);
@@ -163,22 +178,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         return [];
     };
 
-    const updateSoknad = (soknad: IOMPMASoknad) => {
-        setShowStatus(true);
-        const barnMappet = soknad.barn.map((barn) => ({ norskIdent: barn.norskIdent, foedselsdato: '' }));
-        const journalposter = Array.from(soknad?.journalposter || []);
-
-        if (!journalposter.includes(props.journalpostid)) {
-            journalposter.push(props.journalpostid);
-        }
-
-        if (harForsoektAaSendeInn) {
-            props.validateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter }, true);
-        }
-
-        return props.updateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter });
-    };
-
     const statusetikett = () => {
         if (!showStatus) {
             return null;
@@ -199,7 +198,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
     const harFeilISkjema = (errors: FormikErrors<IOMPMASoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
-    const handleBlur = (callback: () => void) => {
+    const handleBlur = (callback: () => void = () => {}) => {
         callback();
         updateSoknad(values);
     };
@@ -216,6 +215,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             />
             <VerticalSpacer fourtyPx />
             <Personvelger handleBlur={handleBlur} intl={intl} />
+            <VerticalSpacer fourtyPx />
             <AnnenForelder intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
             <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
