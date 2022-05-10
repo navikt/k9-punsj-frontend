@@ -50,6 +50,8 @@ interface OwnProps {
     journalpostid: string;
     identState: IIdentState;
     barn?: IBarn[];
+    lasterBarn: boolean | undefined;
+
 }
 export interface IPunchOMPMAFormStateProps {
     punchFormState: IPunchOMPMAFormState;
@@ -66,7 +68,8 @@ export interface IPunchOMPMAFormDispatchProps {
 type IPunchOMPMAFormProps = OwnProps & WrappedComponentProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
-    const { intl, getPunchPath, punchFormState, resetPunchFormAction, barn, henteBarn, identState } = props;
+    const { intl, getPunchPath, punchFormState, resetPunchFormAction, barn, henteBarn, identState, lasterBarn } = props;
+
     const { soknad } = punchFormState;
     useEffect(() => {
         const { id } = props;
@@ -96,7 +99,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         return null;
     }
 
-    if (punchFormState.isSoknadLoading) {
+    if (punchFormState.isSoknadLoading || lasterBarn) {
         return <NavFrontendSpinner />;
     }
 
@@ -129,9 +132,17 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     );
 };
 
+const mapStateToProps = (
+    state: RootStateType
+): Pick<OwnProps, 'identState' | 'barn' | 'lasterBarn'> & IPunchOMPMAFormStateProps => ({
+    identState: state.identState,
+    barn: state.felles.barn,
+    lasterBarn: state.felles.isAwaitingHentBarnResponse,
+
 const mapStateToProps = (state: RootStateType): Pick<OwnProps, 'identState' | 'barn'> & IPunchOMPMAFormStateProps => ({
     identState: state.identState,
     barn: state.felles.barn,
+
     punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
 });
 
