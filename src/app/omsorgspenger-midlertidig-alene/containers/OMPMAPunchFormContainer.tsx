@@ -51,6 +51,7 @@ interface OwnProps {
     identState: IIdentState;
     barn?: IBarn[];
     lasterBarn: boolean | undefined;
+
 }
 export interface IPunchOMPMAFormStateProps {
     punchFormState: IPunchOMPMAFormState;
@@ -68,6 +69,7 @@ type IPunchOMPMAFormProps = OwnProps & WrappedComponentProps & IPunchOMPMAFormSt
 
 const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     const { intl, getPunchPath, punchFormState, resetPunchFormAction, barn, henteBarn, identState, lasterBarn } = props;
+
     const { soknad } = punchFormState;
     useEffect(() => {
         const { id } = props;
@@ -136,6 +138,11 @@ const mapStateToProps = (
     identState: state.identState,
     barn: state.felles.barn,
     lasterBarn: state.felles.isAwaitingHentBarnResponse,
+
+const mapStateToProps = (state: RootStateType): Pick<OwnProps, 'identState' | 'barn'> & IPunchOMPMAFormStateProps => ({
+    identState: state.identState,
+    barn: state.felles.barn,
+
     punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
 });
 
