@@ -34,7 +34,6 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
                     />
                 )}
             </Field>
-
             <VerticalSpacer twentyPx />
             <Field name="annenForelder.situasjonType">
                 {({ field, meta }: FieldProps<string>) => (
