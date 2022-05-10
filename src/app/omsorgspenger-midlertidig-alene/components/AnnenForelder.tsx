@@ -22,12 +22,12 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
                 Annen forelder
             </Heading>
             <VerticalSpacer twentyPx />
+
             <Field name="annenForelder.norskIdent">
                 {({ field, meta }: FieldProps<string>) => (
                     <TextField
                         label="Identifikasjonsnummer"
                         size="small"
-                        type="number"
                         error={meta.touched && meta.error}
                         {...field}
                         onBlur={(e) => handleBlur(() => field.onBlur(e))}
