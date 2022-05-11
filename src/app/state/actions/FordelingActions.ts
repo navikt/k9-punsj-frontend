@@ -35,7 +35,6 @@ interface ISjekkOmSkalTilK9ErrorAction {
 interface ISjekkOmSkalTilK9SuccessAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS;
     k9sak: boolean;
-    kanIkkeGaaTilK9: string[];
 }
 interface ISjekkOmSkalTilK9JournalpostStottesIkkeAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE;
@@ -134,13 +133,9 @@ export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction =>
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
 });
 
-export const sjekkSkalTilK9SuccessAction = (
-    k9sak: boolean,
-    kanIkkeGaaTilK9: string[]
-): ISjekkOmSkalTilK9SuccessAction => ({
+export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS,
     k9sak,
-    kanIkkeGaaTilK9,
 });
 export const sjekkSkalTilK9ErrorAction = (error: IError): ISjekkOmSkalTilK9ErrorAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR,
@@ -177,21 +172,15 @@ export function sjekkOmSkalTilK9Sak(
 
         dispatch(sjekkSkalTilK9RequestAction());
 
-        post(
-            ApiPath.SJEKK_OM_SKAL_TIL_K9SAK,
-            {},
-            { 'X-Nav-NorskIdent': norskIdent },
-            requestBody,
-            (res, svar: { k9sak: boolean }) => {
-                if (res.ok) {
-                    return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak, svar.k9sak ? [] : [barnIdent]));
-                }
-                if (res.status === 409) {
-                    return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
-                }
-                return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
+        post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (res, svar) => {
+            if (res.ok) {
+                return dispatch(sjekkSkalTilK9SuccessAction(svar.skalTilK9));
             }
-        );
+            if (res.status === 409) {
+                return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
+            }
+            return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
+        });
     };
 }
 

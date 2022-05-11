@@ -56,7 +56,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     gjelderPleiepengerEllerOmsorgspenger,
 }) => {
     const intl = useIntl();
-
     const vis = fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger;
 
     if (!vis) {
