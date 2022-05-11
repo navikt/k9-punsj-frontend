@@ -59,7 +59,6 @@ interface IResetOMPUTSoknadidAction {
 interface IOpprettOMPUTSoknad {
     journalpostId: string;
     norskIdent: string;
-    barn: PersonEnkel[];
 }
 
 type IMapperOMPUTActionTypes =
@@ -167,14 +166,13 @@ export function resetOMPUTSoknadidAction(): IResetOMPUTSoknadidAction {
     return { type: EksisterendeOMPUTSoknaderActionKeys.OMP_UT_SOKNADID_RESET };
 }
 
-export function createOMPUTSoknad(journalpostid: string, ident1: string, barn: PersonEnkel[]) {
+export function createOMPUTSoknad(journalpostid: string, ident1: string) {
     return (dispatch: any) => {
         dispatch(createOMPUTSoknadRequestAction());
 
         const requestBody: IOpprettOMPUTSoknad = {
             journalpostId: journalpostid,
             norskIdent: ident1,
-            barn,
         };
 
         post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
