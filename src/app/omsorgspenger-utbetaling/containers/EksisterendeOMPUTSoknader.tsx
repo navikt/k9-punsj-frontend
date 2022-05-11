@@ -223,8 +223,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     openEksisterendeSoknadAction: (info: IOMPUTSoknad) => dispatch(openEksisterendeOMPUTSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPUTSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IOMPUTSoknad) => dispatch(chooseEksisterendeOMPUTSoknadAction(info)),
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createOMPUTSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, ident1: string) => dispatch(createOMPUTSoknad(journalpostid, ident1)),
     resetSoknadidAction: () => dispatch(resetOMPUTSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });
