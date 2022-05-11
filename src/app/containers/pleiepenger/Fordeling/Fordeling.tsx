@@ -104,7 +104,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         []
     );
 
-
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
@@ -256,7 +255,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
     }
-    
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone) {
         return (
