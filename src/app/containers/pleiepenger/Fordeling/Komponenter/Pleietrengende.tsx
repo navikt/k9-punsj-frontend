@@ -1,4 +1,3 @@
-import Personvelger from 'app/components/person-velger/Personvelger';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -7,13 +6,13 @@ import { Input, Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import { erUgyldigIdent } from 'app/rules/valideringer';
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { IIdentState, Personvalg } from '../../../../models/types/IdentState';
-import { setIdentFellesAction, setFlereBarnAction } from '../../../../state/actions/IdentActions';
+import { IIdentState } from '../../../../models/types/IdentState';
+import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
-import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
@@ -24,13 +23,11 @@ export interface IPleietrengendeStateProps {
 export interface IPleietrengendeDispatchProps {
     setIdentAction: typeof setIdentFellesAction;
     henteBarn: typeof hentBarn;
-    setFlereBarn: typeof setFlereBarnAction;
 }
 
 export interface IPleietrengende {
     sokersIdent: string;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
-    flervalg: boolean;
     visPleietrengende?: boolean;
     skalHenteBarn?: boolean;
 }
@@ -51,9 +48,11 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         henteBarn,
         visPleietrengende,
         skalHenteBarn,
-        flervalg,
-        setFlereBarn,
     } = props;
+
+    if (!visPleietrengende) {
+        return null;
+    }
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
@@ -64,20 +63,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             henteBarn(sokersIdent);
         }
     }, [sokersIdent]);
-
-    useEffect(() => {
-        if (fellesState.barn) {
-            const barn = fellesState.barn.map((barnet) => ({
-                identitetsnummer: barnet.identitetsnummer,
-                navn: `${barnet.fornavn} ${barnet.etternavn}`,
-                valgt: true,
-                låsIdentitetsnummer: true,
-            }));
-            if (flervalg) {
-                setFlereBarn(barn);
-            }
-        }
-    }, [fellesState.barn]);
 
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
@@ -100,14 +85,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.ident1, null);
         }
     };
-
-    if (!visPleietrengende) {
-        return null;
-    }
-
-    if (flervalg) {
-        return <Personvelger personer={identState.barn} onChange={setFlereBarn} intl={intl} />;
-    }
 
     return (
         <div className="sokersBarn">
@@ -206,7 +183,6 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
-    setFlereBarn: (barn: Personvalg[]) => dispatch(setFlereBarnAction(barn)),
     henteBarn: (ident1: string) => dispatch(hentBarn(ident1)),
 });
 

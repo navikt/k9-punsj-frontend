@@ -65,6 +65,19 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 </div>
             )}
             <div>
+                <h3>{intlHelper(intl, 'skjema.kvittering.barn')}</h3>
+                <hr className={classNames('linje')} />
+                {ytelse.barn.map((barn) => (
+                    <p key={barn.norskIdentitetsnummer}>
+                        <LabelValue
+                            text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
+                            value={barn.norskIdentitetsnummer}
+                            retning="horisontal"
+                        />
+                    </p>
+                ))}
+            </div>
+            <div>
                 <h3>{intlHelper(intl, PunchFormPaneler.ANNEN_FORELDER)}</h3>
                 <hr className={classNames('linje')} />
                 <p>

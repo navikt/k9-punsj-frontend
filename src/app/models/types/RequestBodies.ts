@@ -27,7 +27,6 @@ export interface IHentPerioder {
 export interface ISkalTilK9 {
     brukerIdent: string;
     barnIdent: string;
-    barn: string[];
     journalpostId: string;
     fagsakYtelseType: FagsakYtelseType | undefined;
 }
