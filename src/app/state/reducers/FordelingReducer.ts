@@ -71,7 +71,6 @@ export function FordelingReducer(
                 isAwaitingSjekkTilK9Response: false,
                 sjekkTilK9Error: undefined,
                 skalTilK9: action.k9sak,
-                kanIkkeGaaTilK9: action.kanIkkeGaaTilK9,
             };
 
         case FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE:
