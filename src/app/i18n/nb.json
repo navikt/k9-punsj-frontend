@@ -367,8 +367,7 @@
     "skjema.sentInn": "Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.",
     "journalpost.id": "Journalpostnummer:",
     "journalpost.norskIdent": "Søkers fødselsnummer:",
-    "journalpost.ident2": "Barnets fødselsnummer:",
-    "journalpost.barn": "Pleietrengendes fødselsnummer:",
+    "journalpost.ident2": "Pleietrengendes fødselsnummer:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
 
     "registrering.nysoknad": "Ny søknad",
