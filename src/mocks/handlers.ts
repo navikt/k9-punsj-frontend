@@ -74,9 +74,6 @@ let handlers = [
     rest.post('http://localhost:8101/api/k9-punsj/notat/opprett', (req, res, ctx) =>
         res(ctx.status(201), ctx.delay(500), ctx.json({ journalpostId: '200' }))
     ),
-    rest.post(`http://localhost:8101/api/k9-punsj${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
-        res(ctx.status(200), ctx.json({ skalTilK9: true }))
-    ),
 ];
 
 if (process.env.MSW_MODE === 'test') {
