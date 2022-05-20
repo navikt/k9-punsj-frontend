@@ -5,9 +5,9 @@ import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
 import { IPath } from '../../models/types';
 import { getPath } from '../../utils';
-import {PunchOMPMAPage} from './PunchOMPUTPage';
+import { PunchOMPUTPage } from './PunchOMPUTPage';
 
-const OMPMARouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
+const OMPUTRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
     const OMPMARootPath = punchPath;
 
     const paths: IPath[] = [
@@ -29,11 +29,11 @@ const OMPMARouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journal
                 .filter((step) => !Number.isNaN(step))
                 .map((step) => (
                     <Route exact key={`hashroute_${step}`} path={getPath(paths, step)}>
-                        <PunchOMPMAPage {...{ journalpostid, step, paths }} />
+                        <PunchOMPUTPage {...{ journalpostid, step, paths }} />
                     </Route>
                 ))}
         </Switch>
     );
 };
 
-export default OMPMARouter;
+export default OMPUTRouter;

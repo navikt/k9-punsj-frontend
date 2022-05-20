@@ -18,6 +18,7 @@ import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper'
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
+import { FagsakYtelseType } from 'app/models/types/RequestBodies';
 import { IIdentState } from '../../models/types/IdentState';
 import { OMPUTPaths } from './OMPUTRoutes';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
@@ -71,6 +72,8 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(OMPUTPaths, punchStep, values, dok ? { dok } : undefined);
 
+    
+
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
@@ -95,7 +98,7 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
         // eslint-disable-next-line default-case
         switch (step) {
             case PunchStep.CHOOSE_SOKNAD:
-                return <OMPUTRegistreringsValg {...commonProps} />;
+                return <OMPUTRegistreringsValg {...commonProps} sakstype={FagsakYtelseType.OMSORGSPENGER_UT} />;
             case PunchStep.FILL_FORM:
                 return <OMPUTPunchFormContainer {...commonProps} intl={intl} id={match.params.id} />;
             case PunchStep.COMPLETED:

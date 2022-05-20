@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
+import { ApiPath } from 'app/apiConfig';
 import { BACKEND_BASE_URL } from './konstanter';
 import journalpost from '../../cypress/fixtures/journalpost.json';
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
@@ -122,6 +123,6 @@ export const testHandlers = {
         )
     ),
     sjekkSkalTilK9: rest.post(`http://localhost:8101/api/k9-punsj${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
-        res(ctx.status(200), ctx.json({ skalTilK9: true }))
+        res(ctx.status(200), ctx.json({ k9sak: true }))
     ),
 };

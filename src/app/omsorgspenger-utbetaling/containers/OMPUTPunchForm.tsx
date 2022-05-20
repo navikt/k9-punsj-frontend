@@ -51,7 +51,6 @@ import {
     validerOMPUTSoknad,
     validerOMPUTSoknadResetAction,
 } from '../state/actions/OMPUTPunchFormActions';
-import { undoChoiceOfEksisterendeOMPUTSoknadAction } from '../state/actions/EksisterendeOMPUTSoknaderActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 
 export interface IPunchOMPUTFormComponentProps {
@@ -73,7 +72,6 @@ export interface IPunchOMPUTFormDispatchProps {
     resetSoknadAction: typeof resetOMPUTSoknadAction;
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
-    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPUTSoknadAction;
     updateSoknad: typeof updateOMPUTSoknad;
     submitSoknad: typeof submitOMPUTSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;

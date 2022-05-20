@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { EksisterendeOMPUTSoknaderReducer } from 'app/omsorgspenger-utbetaling/state/reducers/EksisterendeOMPUTSoknaderReducer';
 import {
     AuthReducer,
     FordelingReducer,
@@ -80,7 +79,6 @@ export const rootReducer = combineReducers({
     eksisterendePLSSoknaderState: EksisterendePLSSoknaderReducer,
     eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
     eksisterendeOMPMASoknaderState: EksisterendeOMPMASoknaderReducer,
-    eksisterendeOMPUTSoknaderState: EksisterendeOMPUTSoknaderReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;
