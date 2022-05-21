@@ -15,7 +15,7 @@ interface OwnProps extends WrappedComponentProps {
 const Personvelger = ({ intl, handleBlur }: OwnProps) => (
     <>
         <Heading size="xsmall" spacing>
-            Annen forelder
+            Barn
         </Heading>
         <div className="personvelger">
             <Field name="barn">
