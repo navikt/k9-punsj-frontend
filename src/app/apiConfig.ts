@@ -76,6 +76,7 @@ export enum ApiPath {
 export const OMP_UT_API_PATHS = {
     eksisterendeSoeknader: ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND,
     createSoeknad: ApiPath.OMP_UT_SOKNAD_CREATE,
+    hentSoeknad: ApiPath.OMP_UT_SOKNAD_GET
 };
 
 export const SAKSTYPE_API_PATHS = {

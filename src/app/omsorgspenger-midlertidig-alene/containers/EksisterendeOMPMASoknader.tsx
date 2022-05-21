@@ -210,7 +210,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
 };
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
-    punchState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchState,
+    punchState: state.OMSORGSPENGER_UTBETALING.punchState,
     eksisterendeOMPMASoknaderState: state.eksisterendeOMPMASoknaderState,
 });
 

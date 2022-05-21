@@ -72,8 +72,6 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(OMPUTPaths, punchStep, values, dok ? { dok } : undefined);
 
-    
-
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
@@ -94,7 +92,6 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
             journalpostid: journalpostid || '',
             getPunchPath,
         };
-
         // eslint-disable-next-line default-case
         switch (step) {
             case PunchStep.CHOOSE_SOKNAD:
@@ -172,7 +169,7 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.OMSORGSPENGER_FORDELING.punchState,
+    punchState: state.OMSORGSPENGER_UTBETALING.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,

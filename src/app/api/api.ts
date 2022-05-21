@@ -30,6 +30,14 @@ export const eksisterendeSoeknaderQuery = ({ path, ident }: { path: ApiPath; ide
         return response.json();
     });
 
+export const hentSoknadQuery = ({ path, ident, soeknadId }: { path: ApiPath; ident: string; soeknadId: string }) =>
+    get(path, { id: soeknadId }, { 'X-Nav-NorskIdent': ident }).then((response) => {
+        if (!response.ok) {
+            throw Error('Kunne ikke hente søknad.');
+        }
+        return response.json();
+    });
+
 export const createSoeknadMutation = ({
     path,
     journalpostId,

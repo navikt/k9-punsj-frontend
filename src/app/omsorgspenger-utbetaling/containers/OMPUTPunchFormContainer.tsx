@@ -13,6 +13,9 @@ import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
 import { IIdentState, Personvalg } from 'app/models/types/IdentState';
+import { useQuery } from 'react-query';
+import { OMP_UT_API_PATHS } from 'app/apiConfig';
+import { hentSoknadQuery } from 'app/api/api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import { getOMPUTSoknad, resetPunchOMPUTFormAction, validerOMPUTSoknad } from '../state/actions/OMPUTPunchFormActions';
@@ -26,15 +29,6 @@ const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     mottattDato: soknad?.mottattDato || '',
     journalposter: soknad?.journalposter || new Set([]),
     klokkeslett: soknad?.klokkeslett || '',
-    annenForelder: {
-        norskIdent: soknad?.annenForelder?.norskIdent || '',
-        situasjonBeskrivelse: soknad?.annenForelder?.situasjonBeskrivelse || '',
-        situasjonType: soknad?.annenForelder?.situasjonType || '',
-        periode: {
-            fom: soknad?.annenForelder?.periode?.fom || '',
-            tom: soknad?.annenForelder?.periode?.tom || '',
-        },
-    },
     harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
     harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
 });
@@ -59,13 +53,16 @@ export interface IPunchOMPUTFormDispatchProps {
 type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormStateProps & IPunchOMPUTFormDispatchProps;
 
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
-    const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState } = props;
+    const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState, id } = props;
 
     useEffect(() => {
-        const { id } = props;
-        props.getSoknad(id);
         props.setStepAction(PunchStep.FILL_FORM);
     }, []);
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: id,
+        queryFn: () => hentSoknadQuery({ path: OMP_UT_API_PATHS.hentSoeknad, ident: identState.ident1, soeknadId: id }),
+    });
 
     const handleSubmit = async (soknad: FormikValues) => {
         props.validateSoknad({
@@ -84,11 +81,11 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         return null;
     }
 
-    if (punchFormState.isSoknadLoading) {
+    if (isLoading) {
         return <NavFrontendSpinner />;
     }
 
-    if (punchFormState.error) {
+    if (error) {
         return (
             <>
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}</AlertStripeFeil>
@@ -101,7 +98,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
 
     return (
         <Formik
-            initialValues={initialValues(props.punchFormState.soknad)}
+            initialValues={initialValues(data)}
             validationSchema={schema}
             onSubmit={(values) => handleSubmit(values)}
         >
@@ -112,7 +109,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
 
 const mapStateToProps = (state: RootStateType): Partial<IPunchOMPUTFormStateProps> => ({
     identState: state.identState,
-    punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
+    punchFormState: state.OMSORGSPENGER_UTBETALING.punchFormState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

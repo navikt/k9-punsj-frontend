@@ -123,6 +123,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [showStatus]);
 
+    console.log(values)
+
     const handleSettPaaVent = () => {
         props.settJournalpostPaaVent(props.journalpostid, values.soeknadId!);
         setShowSettPaaVentModal(false);

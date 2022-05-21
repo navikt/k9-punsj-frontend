@@ -26,7 +26,7 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = ({
     handleBlur,
 }) => (
     <>
-        <Heading size="small">Omsorgsdager - Midlertidig alene om omsorgen</Heading>
+        <Heading size="small">Omsorgspengeutbetaling</Heading>
         <VerticalSpacer sixteenPx />
         <Panel border>
             <Alert variant="info" className="alert">

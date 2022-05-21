@@ -2,11 +2,7 @@ import { useState } from 'react';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
-import {
-    resetPunchAction,
-    setIdentAction,
-    setStepAction,
-} from 'app/state/actions';
+import { resetPunchAction, setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';

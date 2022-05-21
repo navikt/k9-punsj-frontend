@@ -44,7 +44,7 @@ export const OmsorgspengerMidlertidigAlene: ISakstypePunch = {
 
 export const OmsorgspengerUtbetaling: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_UTBETALING,
-    punchPath: '/omsorgspengerutbetaling',
+    punchPath: '/omsorgspenger-utbetaling',
     getComponent: ({ journalpostid, punchPath }) => <OMPUTRouter journalpostid={journalpostid} punchPath={punchPath} />,
     steps: [],
 };
