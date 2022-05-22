@@ -52,6 +52,9 @@ import {
     validerOMPUTSoknadResetAction,
 } from '../state/actions/OMPUTPunchFormActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
+import { OMP_UT_API_PATHS } from 'app/apiConfig';
+import { validerSoeknadMutation } from 'app/api/api';
+import { useMutation } from 'react-query';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -113,6 +116,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         punchFormState,
         signaturState,
         schema,
+        identState,
+        soeknadIsValid,
         formik: { values, handleSubmit, errors },
     } = props;
     const { signert } = signaturState;
@@ -123,15 +128,21 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [showStatus]);
 
-    console.log(values)
+    const {
+        data: valideringK9Format,
+        isLoading: validerer,
+        mutate,
+    } = useMutation(() =>
+        validerSoeknadMutation({
+            path: OMP_UT_API_PATHS.validerSoeknad,
+            soeknad: { ...values },
+            ident: identState.ident1,
+        })
+    );
 
     const handleSettPaaVent = () => {
         props.settJournalpostPaaVent(props.journalpostid, values.soeknadId!);
         setShowSettPaaVentModal(false);
-    };
-
-    const getManglerFromStore = () => {
-        return props.punchFormState.inputErrors;
     };
 
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
@@ -139,7 +150,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             setFeilmeldingStier(feilmeldingStier.add(attribute));
         }
 
-        const uhaandterteFeilmeldinger = getManglerFromStore()?.filter((m: IInputError) => {
+        const uhaandterteFeilmeldinger = valideringK9Format?.feil?.filter((m: IInputError) => {
             const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
                 const felt = felter.slice(0, index + 1).join('.');
@@ -163,19 +174,15 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     const updateSoknad = (soknad: IOMPUTSoknad) => {
         setShowStatus(true);
-        const { barn } = props.identState;
-        const barnMappet = barn.map((barn) => ({ norskIdent: barn.identitetsnummer }));
         const journalposter = Array.from(soknad?.journalposter || []);
 
         if (!journalposter.includes(props.journalpostid)) {
             journalposter.push(props.journalpostid);
         }
+        // legg inn journalposter som mangler
+        mutate();
 
-        if (harForsoektAaSendeInn) {
-            props.validateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter }, true);
-        }
-
-        return props.updateSoknad({ ...soknad, barn: barnMappet, journalposter: journalposter });
+        return props.updateSoknad({ ...soknad, journalposter: journalposter });
     };
 
     const statusetikett = () => {
@@ -256,7 +263,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 </Field>
             </div>
             <VerticalSpacer twentyPx={true} />
-            {punchFormState.isAwaitingValidateResponse && (
+            {validerer && (
                 <div className={classNames('loadingSpinner')}>
                     <NavFrontendSpinner />
                 </div>
@@ -352,7 +359,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
                 </ModalWrapper>
             )}
-            {props.punchFormState.isValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
+            {soeknadIsValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
                 <ModalWrapper
                     key={'validertSoknadModal'}
                     className={'validertSoknadModal'}

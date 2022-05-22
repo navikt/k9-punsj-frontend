@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, FormikValues } from 'formik';
 import { connect } from 'react-redux';
 import { WrappedComponentProps } from 'react-intl';
@@ -13,9 +13,9 @@ import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
 import { IIdentState, Personvalg } from 'app/models/types/IdentState';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { OMP_UT_API_PATHS } from 'app/apiConfig';
-import { hentSoknadQuery } from 'app/api/api';
+import { hentSoknadQuery, validerSoeknadMutation } from 'app/api/api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import { getOMPUTSoknad, resetPunchOMPUTFormAction, validerOMPUTSoknad } from '../state/actions/OMPUTPunchFormActions';
@@ -59,16 +59,33 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         props.setStepAction(PunchStep.FILL_FORM);
     }, []);
 
+    const [soeknadIsValid, setSoeknadIsValid] = useState(false);
+
     const { data, isLoading, error } = useQuery({
         queryKey: id,
         queryFn: () => hentSoknadQuery({ path: OMP_UT_API_PATHS.hentSoeknad, ident: identState.ident1, soeknadId: id }),
     });
 
+    const {
+        data: valideringK9Format,
+        isLoading: validerer,
+        mutate,
+    } = useMutation(
+        (soeknad) =>
+            validerSoeknadMutation({
+                path: OMP_UT_API_PATHS.validerSoeknad,
+                soeknad,
+                ident: identState.ident1,
+            }),
+        {
+            onSuccess: () => {
+                setSoeknadIsValid(true);
+            },
+        }
+    );
+
     const handleSubmit = async (soknad: FormikValues) => {
-        props.validateSoknad({
-            ...soknad,
-            barn: identState.barn.map((barn: Personvalg) => ({ norskIdent: barn.identitetsnummer })),
-        });
+        mutate(soknad);
     };
 
     const handleStartButtonClick = () => {
@@ -102,7 +119,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             validationSchema={schema}
             onSubmit={(values) => handleSubmit(values)}
         >
-            {(formik) => <OMPUTPunchForm formik={formik} schema={schema} {...props} />}
+            {(formik) => <OMPUTPunchForm formik={formik} schema={schema} soeknadIsValid={soeknadIsValid} {...props} />}
         </Formik>
     );
 };

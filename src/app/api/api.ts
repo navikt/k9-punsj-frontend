@@ -56,3 +56,9 @@ export const createSoeknadMutation = ({
         }
         return response.json();
     });
+
+export const validerSoeknadMutation = ({ path, soeknad, ident }: { path: ApiPath; soeknad: any; ident: string }) =>
+    post(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then(response => {
+        console.log(response)
+        return response.json()
+    });
