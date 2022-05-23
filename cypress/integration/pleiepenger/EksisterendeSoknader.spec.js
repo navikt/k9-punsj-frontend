@@ -14,7 +14,7 @@ describe('Eksisterende søknader pleiepenger', () => {
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Journalpostnummer/i).should('exist');
             cy.findByText(/Søkers fødselsnummer/i).should('exist');
-            cy.findByText(/Barnets fødselsnummer/i).should('exist');
+            cy.findByText(/Pleietrengendes fødselsnummer/i).should('exist');
 
             cy.findByText(/200/i).should('exist');
             cy.findByText(/29099000129/i).should('exist');
