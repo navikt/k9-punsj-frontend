@@ -160,7 +160,8 @@ export function sjekkOmSkalTilK9Sak(
     norskIdent: string,
     barnIdent: string,
     jpid: string,
-    fagsakYtelseType: FagsakYtelseType
+    fagsakYtelseType: FagsakYtelseType,
+    annenPart: string
 ) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
@@ -168,6 +169,7 @@ export function sjekkOmSkalTilK9Sak(
             barnIdent: barnIdent || null,
             journalpostId: jpid,
             fagsakYtelseType,
+            annenPart: annenPart || null,
         };
 
         dispatch(sjekkSkalTilK9RequestAction());

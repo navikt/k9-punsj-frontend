@@ -207,7 +207,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
         const fagsakYtelseType = utledFagsakYtelseType(dokumentType);
 
-        props.sjekkOmSkalTilK9(identState.ident1, identState.ident2, journalpost.journalpostId, fagsakYtelseType);
+        props.sjekkOmSkalTilK9(
+            identState.ident1,
+            identState.ident2,
+            journalpost.journalpostId,
+            fagsakYtelseType,
+            identState.annenPart
+        );
     };
 
     const kopierJournalpostOgLukkOppgave = () => {
@@ -446,7 +452,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <AlertStripeInfo className="infotrygd_info">
                                     <FormattedMessage
                                         id="fordeling.infotrygd"
-                                        values={{ identifikator: fordelingState.kanIkkeGaaTilK9.join(', ') }}
+                                        values={{ identifikator: identState.ident2 ? `(${identState.ident2})` : '' }}
                                     />
                                 </AlertStripeInfo>
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
@@ -568,8 +574,13 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
     setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (ident1: string, ident2: string, jpid: string, fagsakYtelseType: FagsakYtelseType) =>
-        dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType)),
+    sjekkOmSkalTilK9: (
+        ident1: string,
+        ident2: string,
+        jpid: string,
+        fagsakYtelseType: FagsakYtelseType,
+        annenPart: string
+    ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, annenPart)),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
