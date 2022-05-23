@@ -165,7 +165,7 @@ export function sjekkOmSkalTilK9Sak(
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
-            barnIdent,
+            barnIdent: barnIdent || null,
             journalpostId: jpid,
             fagsakYtelseType,
         };
