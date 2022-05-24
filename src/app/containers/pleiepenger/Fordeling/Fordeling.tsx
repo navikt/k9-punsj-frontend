@@ -127,6 +127,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
+    const stoppInnsendingAvPLS =
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && fordelingState.skalTilK9;
+
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -382,7 +385,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             setBarnetHarIkkeFnr(harBarnetFnr)
                                         }
                                         sokersIdent={identState.ident1}
-                                        skalHenteBarn={dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                                        skalHenteBarn={
+                                            dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+                                        }
                                         visPleietrengende={
                                             visSokersBarn &&
                                             (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
@@ -412,25 +417,32 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </>
                             )}
                         </div>
+                        {stoppInnsendingAvPLS && (
+                            <AlertStripeAdvarsel>
+                                Søknader på Pleiepenger i livets sluttfase kan ikke behandles i K9 før 2. juni. Søknaden
+                                må ligge på benken din til den kan behandles.
+                            </AlertStripeAdvarsel>
+                        )}
                         <VerticalSpacer sixteenPx />
-                        <ValgForDokument
-                            dokumenttype={dokumenttype}
-                            journalpost={journalpost}
-                            erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
-                            kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
-                            identState={identState}
-                            konfigForValgtSakstype={konfigForValgtSakstype}
-                            fordelingState={fordelingState}
-                            setSakstypeAction={sakstypeAction}
-                            lukkJournalpostOppgave={lukkJournalpostOppgave}
-                            omfordel={omfordel}
-                            visSakstypeValg={visSakstypeValg}
-                            gjelderPleiepengerEllerOmsorgspenger={gjelderPleiepengerEllerOmsorgspenger}
-                        />
+                        {!stoppInnsendingAvPLS && (
+                            <ValgForDokument
+                                dokumenttype={dokumenttype}
+                                journalpost={journalpost}
+                                erJournalfoertEllerFerdigstilt={erJournalfoertEllerFerdigstilt}
+                                kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
+                                identState={identState}
+                                konfigForValgtSakstype={konfigForValgtSakstype}
+                                fordelingState={fordelingState}
+                                setSakstypeAction={sakstypeAction}
+                                lukkJournalpostOppgave={lukkJournalpostOppgave}
+                                omfordel={omfordel}
+                                visSakstypeValg={visSakstypeValg}
+                                gjelderPleiepengerEllerOmsorgspenger={gjelderPleiepengerEllerOmsorgspenger}
+                            />
+                        )}
                         {fordelingState.skalTilK9 === false && (
                             <>
                                 <AlertStripeInfo className="infotrygd_info">
-                                    {' '}
                                     {intlHelper(intl, 'fordeling.infotrygd')}
                                 </AlertStripeInfo>
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
