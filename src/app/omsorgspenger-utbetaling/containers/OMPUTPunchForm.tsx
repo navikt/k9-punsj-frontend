@@ -53,7 +53,7 @@ import {
 } from '../state/actions/OMPUTPunchFormActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { OMP_UT_API_PATHS } from 'app/apiConfig';
-import { validerSoeknadMutation } from 'app/api/api';
+import { oppdaterSoeknadMutation, validerSoeknadMutation } from 'app/api/api';
 import { useMutation } from 'react-query';
 
 export interface IPunchOMPUTFormComponentProps {
@@ -68,6 +68,7 @@ export interface IPunchOMPUTFormStateProps {
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
+    soeknadIsValid: boolean;
 }
 
 export interface IPunchOMPUTFormDispatchProps {
@@ -123,6 +124,11 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const { signert } = signaturState;
 
     useEffect(() => {
+        console.log(values.soekerId)
+        setIdentAction(values.soekerId);
+    }, [values.soekerId]);
+
+    useEffect(() => {
         if (showStatus) {
             setTimeout(() => setShowStatus(false), 5000);
         }
@@ -131,10 +137,22 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const {
         data: valideringK9Format,
         isLoading: validerer,
-        mutate,
+        mutate: validerSoeknad,
     } = useMutation(() =>
         validerSoeknadMutation({
             path: OMP_UT_API_PATHS.validerSoeknad,
+            soeknad: { ...values },
+            ident: identState.ident1,
+        })
+    );
+
+    const {
+        data: mellomlagretSoeknad,
+        isLoading: mellomlagrer,
+        mutate: mellomlagreSoeknad,
+    } = useMutation(() =>
+        oppdaterSoeknadMutation({
+            path: OMP_UT_API_PATHS.oppdaterSoeknad,
             soeknad: { ...values },
             ident: identState.ident1,
         })
@@ -180,9 +198,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             journalposter.push(props.journalpostid);
         }
         // legg inn journalposter som mangler
-        mutate();
+        validerSoeknad();
 
-        return props.updateSoknad({ ...soknad, journalposter: journalposter });
+        return mellomlagreSoeknad();
     };
 
     const statusetikett = () => {
@@ -422,12 +440,8 @@ const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    resetSoknadAction: () => dispatch(resetOMPUTSoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
-    undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPUTSoknadAction()),
     updateSoknad: (soknad: Partial<IOMPUTSoknadUt>) => dispatch(updateOMPUTSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPUTSoknad(ident, soeknadid)),
-    resetPunchFormAction: () => dispatch(resetPunchOMPUTFormAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
@@ -435,6 +449,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     validateSoknad: (soknad: IOMPUTSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerOMPUTSoknad(soknad, erMellomlagring)),
     validerSoknadReset: () => dispatch(validerOMPUTSoknadResetAction()),
+
 });
 
 export const OMPUTPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTFormComponent));

@@ -12,7 +12,7 @@ import { setHash } from 'app/utils';
 import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
-import { IIdentState, Personvalg } from 'app/models/types/IdentState';
+import { IIdentState } from 'app/models/types/IdentState';
 import { useMutation, useQuery } from 'react-query';
 import { OMP_UT_API_PATHS } from 'app/apiConfig';
 import { hentSoknadQuery, validerSoeknadMutation } from 'app/api/api';
@@ -66,11 +66,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         queryFn: () => hentSoknadQuery({ path: OMP_UT_API_PATHS.hentSoeknad, ident: identState.ident1, soeknadId: id }),
     });
 
-    const {
-        data: valideringK9Format,
-        isLoading: validerer,
-        mutate,
-    } = useMutation(
+    const { mutate } = useMutation(
         (soeknad) =>
             validerSoeknadMutation({
                 path: OMP_UT_API_PATHS.validerSoeknad,
@@ -114,11 +110,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     }
 
     return (
-        <Formik
-            initialValues={initialValues(data)}
-            validationSchema={schema}
-            onSubmit={(values) => handleSubmit(values)}
-        >
+        <Formik initialValues={initialValues(data)} onSubmit={(values) => handleSubmit(values)}>
             {(formik) => <OMPUTPunchForm formik={formik} schema={schema} soeknadIsValid={soeknadIsValid} {...props} />}
         </Formik>
     );

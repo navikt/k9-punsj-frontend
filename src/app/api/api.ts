@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { ApiPath } from 'app/apiConfig';
-import { get, post } from 'app/utils';
+import { get, post, put } from 'app/utils';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
@@ -58,7 +58,17 @@ export const createSoeknadMutation = ({
     });
 
 export const validerSoeknadMutation = ({ path, soeknad, ident }: { path: ApiPath; soeknad: any; ident: string }) =>
-    post(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then(response => {
-        console.log(response)
-        return response.json()
+    post(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then((response) => {
+        if (!response.ok) {
+            throw Error('Valideringsfeil');
+        }
+        return response.json();
+    });
+
+export const oppdaterSoeknadMutation = ({ path, soeknad, ident }: { path: ApiPath; soeknad: any; ident: string }) =>
+    put(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then((response) => {
+        if (!response.ok) {
+            throw Error('Valideringsfeil');
+        }
+        return response.json();
     });
