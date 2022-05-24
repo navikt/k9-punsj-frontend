@@ -65,8 +65,8 @@ export const validerSoeknadMutation = ({ path, soeknad, ident }: { path: ApiPath
         return response.json();
     });
 
-export const oppdaterSoeknadMutation = ({ path, soeknad, ident }: { path: ApiPath; soeknad: any; ident: string }) =>
-    put(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then((response) => {
+export const oppdaterSoeknadMutation = ({ path, soeknad }: { path: ApiPath; soeknad: any }) =>
+    put(path, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
         if (!response.ok) {
             throw Error('Valideringsfeil');
         }

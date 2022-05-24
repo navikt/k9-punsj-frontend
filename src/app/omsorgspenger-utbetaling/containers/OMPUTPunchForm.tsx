@@ -124,7 +124,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const { signert } = signaturState;
 
     useEffect(() => {
-        console.log(values.soekerId)
+        console.log(values.soekerId);
         setIdentAction(values.soekerId);
     }, [values.soekerId]);
 
@@ -203,23 +203,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         return mellomlagreSoeknad();
     };
 
-    const statusetikett = () => {
-        if (!showStatus) {
-            return null;
-        }
-
-        const { punchFormState } = props;
-        const className = 'statusetikett';
-
-        if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
-        }
-        if (!!punchFormState.updateSoknadError) {
-            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
-        }
-        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
-    };
-
     const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
@@ -230,7 +213,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
-            {statusetikett()}
+            <MellomlagringEtikett />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad
                 intl={intl}
@@ -449,7 +432,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     validateSoknad: (soknad: IOMPUTSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerOMPUTSoknad(soknad, erMellomlagring)),
     validerSoknadReset: () => dispatch(validerOMPUTSoknadResetAction()),
-
 });
 
 export const OMPUTPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTFormComponent));
