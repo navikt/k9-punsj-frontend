@@ -1,5 +1,5 @@
 import Feilmelding from 'app/components/Feilmelding';
-import { ValiderOMSKorrigeringResponse } from 'app/models/types/ValiderOMSKorrigeringResponse';
+import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
     submitOMSKorrigering,
     updateOMSKorrigering,
@@ -143,7 +143,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
                     return validerOMSKorrigering(korrigering)
                         .then((response) => response.json())
-                        .then((data: ValiderOMSKorrigeringResponse) => {
+                        .then((data: ValideringResponse) => {
                             const errors = getFormErrors(values, data);
                             const globalFormError = data?.feil?.find(
                                 (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'

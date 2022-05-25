@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { useQueries } from 'react-query';
+import { useQueries, useQuery as useReactQuery } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
@@ -12,10 +12,11 @@ import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { ApiPath } from 'app/apiConfig';
+import { ApiPath, OMP_UT_API_PATHS } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
+import { hentSoknadQuery } from 'app/api/api';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import { FagsakYtelseType } from 'app/models/types/RequestBodies';
@@ -66,8 +67,15 @@ type IPunchOMPUTPageProps = WrappedComponentProps &
     IPunchOMPUTPageQueryProps;
 
 export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
-    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
-    const journalposterFraSoknad = punchFormState.soknad?.journalposter;
+    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState, identState } = props;
+
+    const { id } = match.params;
+
+    const { data: soeknad } = useReactQuery({
+        queryKey: id,
+        queryFn: () => hentSoknadQuery({ path: OMP_UT_API_PATHS.hentSoeknad, ident: identState.ident1, soeknadId: id }),
+    });
+    const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(OMPUTPaths, punchStep, values, dok ? { dok } : undefined);
@@ -169,12 +177,9 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.OMSORGSPENGER_UTBETALING.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
-    punchFormState: state.OMSORGSPENGER_UTBETALING.punchFormState,
-    journalposterIAktivPunchForm: state.OMSORGSPENGER_UTBETALING.punchFormState.soknad?.journalposter,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

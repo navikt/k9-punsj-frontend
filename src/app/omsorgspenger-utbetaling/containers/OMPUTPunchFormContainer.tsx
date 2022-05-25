@@ -16,6 +16,7 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { useMutation, useQuery } from 'react-query';
 import { OMP_UT_API_PATHS } from 'app/apiConfig';
 import { hentSoknadQuery, validerSoeknadMutation } from 'app/api/api';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import { getOMPUTSoknad, resetPunchOMPUTFormAction, validerOMPUTSoknad } from '../state/actions/OMPUTPunchFormActions';
@@ -55,29 +56,36 @@ type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormSt
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState, id } = props;
 
+    const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
+
     useEffect(() => {
         props.setStepAction(PunchStep.FILL_FORM);
     }, []);
 
     const [soeknadIsValid, setSoeknadIsValid] = useState(false);
 
-    const { data, isLoading, error } = useQuery({
+    const {
+        data: soeknadRespons,
+        isLoading,
+        error,
+    } = useQuery({
         queryKey: id,
         queryFn: () => hentSoknadQuery({ path: OMP_UT_API_PATHS.hentSoeknad, ident: identState.ident1, soeknadId: id }),
     });
 
-    const { mutate } = useMutation(
-        (soeknad) =>
-            validerSoeknadMutation({
-                path: OMP_UT_API_PATHS.validerSoeknad,
-                soeknad,
-                ident: identState.ident1,
-            }),
-        {
-            onSuccess: () => {
-                setSoeknadIsValid(true);
+    const { data: soeknadTilForhaandsvisning, mutate } = useMutation(
+        validerSoeknadMutation({
+            path: OMP_UT_API_PATHS.validerSoeknad,
+            soeknad: { ...soeknadRespons },
+            ident: identState.ident1,
+            options: {
+                onSuccess: (data: ValideringResponse) => {
+                    if (!data?.feil?.length) setSoeknadIsValid(true);
+
+                    if (data?.feil?.length) setK9FormatErrors(data.feil);
+                },
             },
-        }
+        })
     );
 
     const handleSubmit = async (soknad: FormikValues) => {
@@ -110,8 +118,18 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     }
 
     return (
-        <Formik initialValues={initialValues(data)} onSubmit={(values) => handleSubmit(values)}>
-            {(formik) => <OMPUTPunchForm formik={formik} schema={schema} soeknadIsValid={soeknadIsValid} {...props} />}
+        <Formik initialValues={initialValues(soeknadRespons)} onSubmit={(values) => handleSubmit(values)}>
+            {(formik) => (
+                <OMPUTPunchForm
+                    formik={formik}
+                    schema={schema}
+                    soeknadIsValid={soeknadIsValid}
+                    soeknadTilForhaandsvisning={soeknadTilForhaandsvisning}
+                    k9FormatErrors={k9FormatErrors}
+                    setK9FormatErrors={setK9FormatErrors}
+                    {...props}
+                />
+            )}
         </Formik>
     );
 };

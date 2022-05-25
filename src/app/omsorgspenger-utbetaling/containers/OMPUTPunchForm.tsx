@@ -45,7 +45,6 @@ import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering'
 import {
     getOMPUTSoknad,
     resetOMPUTSoknadAction,
-    resetPunchOMPUTFormAction,
     submitOMPUTSoknad,
     updateOMPUTSoknad,
     validerOMPUTSoknad,
@@ -55,12 +54,18 @@ import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { OMP_UT_API_PATHS } from 'app/apiConfig';
 import { oppdaterSoeknadMutation, validerSoeknadMutation } from 'app/api/api';
 import { useMutation } from 'react-query';
+import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
     id: string;
     formik: FormikProps<FormikValues>;
     schema: yup.AnyObjectSchema;
+    soeknadIsValid: boolean;
+    soeknadTilForhaandsvisning: any;
+    k9FormatErrors: Feil[];
+    setK9FormatErrors: (feil: Feil[]) => void;
 }
 
 export interface IPunchOMPUTFormStateProps {
@@ -68,7 +73,6 @@ export interface IPunchOMPUTFormStateProps {
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
-    soeknadIsValid: boolean;
 }
 
 export interface IPunchOMPUTFormDispatchProps {
@@ -107,55 +111,67 @@ const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
 };
 
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
-    const [showStatus, setShowStatus] = useState(false);
+    const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const {
         intl,
-        punchFormState,
         signaturState,
         schema,
         identState,
         soeknadIsValid,
+        punchFormState,
+        id,
+        soeknadTilForhaandsvisning,
+        k9FormatErrors,
+        setK9FormatErrors,
         formik: { values, handleSubmit, errors },
     } = props;
     const { signert } = signaturState;
 
     useEffect(() => {
-        console.log(values.soekerId);
         setIdentAction(values.soekerId);
     }, [values.soekerId]);
 
     useEffect(() => {
-        if (showStatus) {
-            setTimeout(() => setShowStatus(false), 5000);
+        if (harMellomlagret) {
+            setTimeout(() => setHarMellomlagret(false), 5000);
         }
-    }, [showStatus]);
+    }, [harMellomlagret]);
 
-    const {
-        data: valideringK9Format,
-        isLoading: validerer,
-        mutate: validerSoeknad,
-    } = useMutation(() =>
+    const { isLoading: validerer, mutate: validerSoeknad } = useMutation(
         validerSoeknadMutation({
             path: OMP_UT_API_PATHS.validerSoeknad,
             soeknad: { ...values },
             ident: identState.ident1,
+            options: {
+                onSuccess: (data: ValideringResponse) => {
+                    if (data?.feil?.length) setK9FormatErrors(data.feil);
+                },
+            },
         })
     );
 
+    console.log('validering', k9FormatErrors);
+
     const {
-        data: mellomlagretSoeknad,
         isLoading: mellomlagrer,
+        error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(() =>
-        oppdaterSoeknadMutation({
-            path: OMP_UT_API_PATHS.oppdaterSoeknad,
-            soeknad: { ...values },
-            ident: identState.ident1,
-        })
+    } = useMutation(
+        id,
+        () =>
+            oppdaterSoeknadMutation({
+                path: OMP_UT_API_PATHS.oppdaterSoeknad,
+                soeknad: { ...values },
+            }),
+        {
+            onSuccess: () => {
+                setHarMellomlagret(true);
+            },
+        }
     );
 
     const handleSettPaaVent = () => {
@@ -168,7 +184,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             setFeilmeldingStier(feilmeldingStier.add(attribute));
         }
 
-        const uhaandterteFeilmeldinger = valideringK9Format?.feil?.filter((m: IInputError) => {
+        const uhaandterteFeilmeldinger = k9FormatErrors?.filter((m: IInputError) => {
             const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
                 const felt = felter.slice(0, index + 1).join('.');
@@ -191,7 +207,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     };
 
     const updateSoknad = (soknad: IOMPUTSoknad) => {
-        setShowStatus(true);
         const journalposter = Array.from(soknad?.journalposter || []);
 
         if (!journalposter.includes(props.journalpostid)) {
@@ -213,7 +228,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
-            <MellomlagringEtikett />
+            <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad
                 intl={intl}
@@ -360,17 +375,17 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
                 </ModalWrapper>
             )}
-            {soeknadIsValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
+            {soeknadIsValid && !visErDuSikkerModal && !!soeknadTilForhaandsvisning && (
                 <ModalWrapper
                     key={'validertSoknadModal'}
                     className={'validertSoknadModal'}
                     onRequestClose={() => props.validerSoknadReset()}
                     contentLabel={'validertSoknadModal'}
                     closeButton={false}
-                    isOpen={!!props.punchFormState.isValid}
+                    isOpen={soeknadIsValid}
                 >
                     <div className={classNames('validertSoknadOppsummeringContainer')}>
-                        <OMPUTSoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
+                        <OMPUTSoknadKvittering intl={intl} response={soeknadTilForhaandsvisning} />
                     </div>
                     <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                         <Hovedknapp

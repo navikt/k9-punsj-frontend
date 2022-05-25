@@ -63,6 +63,8 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         }
     }, [ident1, ident2]);
 
+    
+
     const {
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
@@ -71,6 +73,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         queryKey: ['eksisterendeSoknader_', sakstype],
         queryFn: () => eksisterendeSoeknaderQuery({ path: apiPaths.eksisterendeSoeknader, ident: ident1 }),
     });
+    console.log(eksisterendeSoeknader)
 
     if (!ident1) {
         return null;

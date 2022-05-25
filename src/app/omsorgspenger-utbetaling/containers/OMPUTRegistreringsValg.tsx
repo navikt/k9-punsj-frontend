@@ -57,6 +57,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         queryFn: () => eksisterendeSoeknaderQuery({ path: apiPaths.eksisterendeSoeknader, ident: ident1 }),
     });
 
+    console.log(eksisterendeSoeknader)
+
     const redirectToPreviousStep = () => {
         setHash('/');
     };

@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { IPeriode } from 'app/models/types';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
-import { ValiderOMSKorrigeringResponse } from 'app/models/types/ValiderOMSKorrigeringResponse';
+import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { initializeDate } from 'app/utils';
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
@@ -25,7 +25,7 @@ const getPeriodRange = (fom: string, tom: string) => {
     return dager;
 };
 
-const getPeriodeFeil = (value: IPeriode, response: ValiderOMSKorrigeringResponse) => {
+const getPeriodeFeil = (value: IPeriode, response: ValideringResponse) => {
     const fom = initializeDate(value.fom).format('YYYY-MM-DD');
     const tom = initializeDate(value.tom).format('YYYY-MM-DD');
     const dagerIPeriode = getPeriodRange(fom, tom);
@@ -49,7 +49,7 @@ const harFormFeil = (errors: FormErrors) =>
     errors.DagerMedDelvisFravær.some((error) => !!error.dato || !!error.timer) ||
     errors.Virksomhet;
 
-export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, data: ValiderOMSKorrigeringResponse) => {
+export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, data: ValideringResponse) => {
     const valideringIBackendFeilet = !!data.feil;
     const errors: FormErrors = {
         OpplysningerOmKorrigering: '',

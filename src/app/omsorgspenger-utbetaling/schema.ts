@@ -44,24 +44,6 @@ const OMPUTSchema = yup.object({
             })
         )
         .label('Klokkeslett'),
-    annenForelder: yup.object().shape({
-        norskIdent: yup
-            .string()
-            .required()
-            .nullable(true)
-            .length(11)
-            .test({
-                test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
-                message: 'Ugyldig identifikasjonsnummer',
-            })
-            .label('Identifikasjonsnummer'),
-        situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
-        situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
-        periode: yup.object().shape({
-            fom: yup.string().required().label('Fra og med'),
-            tom: yup.string().required().label('Til og med'),
-        }),
-    }),
 });
 
 export default OMPUTSchema;

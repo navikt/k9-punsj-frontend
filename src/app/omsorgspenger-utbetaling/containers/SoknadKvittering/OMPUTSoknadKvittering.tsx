@@ -65,41 +65,6 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 </div>
             )}
             <div>
-                <h3>{intlHelper(intl, PunchFormPaneler.ANNEN_FORELDER)}</h3>
-                <hr className={classNames('linje')} />
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
-                        value={ytelse.annenForelder.norskIdentitetsnummer}
-                        retning="horisontal"
-                    />
-                </p>
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.annenForelder.situasjonstype')}:`}
-                        value={intlHelper(
-                            intl,
-                            `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`
-                        )}
-                        retning="horisontal"
-                    />
-                </p>
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.annenForelder.situasjonsbeskrivelse')}:`}
-                        value={ytelse.annenForelder.situasjonBeskrivelse}
-                        retning="horisontal"
-                    />
-                </p>
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.annenForelder.periode')}:`}
-                        value={periodToFormattedString(ytelse.annenForelder.periode)}
-                        retning="horisontal"
-                    />
-                </p>
-            </div>
-            <div>
                 {!!journalposter && journalposter.length > 0 && (
                     <div>
                         <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>

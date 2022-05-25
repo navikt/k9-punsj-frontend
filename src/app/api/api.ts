@@ -2,6 +2,7 @@
 
 import { ApiPath } from 'app/apiConfig';
 import { get, post, put } from 'app/utils';
+import { MutateOptions, MutationObserver } from 'react-query';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
@@ -57,18 +58,29 @@ export const createSoeknadMutation = ({
         return response.json();
     });
 
-export const validerSoeknadMutation = ({ path, soeknad, ident }: { path: ApiPath; soeknad: any; ident: string }) =>
-    post(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then((response) => {
-        if (!response.ok) {
-            throw Error('Valideringsfeil');
-        }
-        return response.json();
-    });
+export const validerSoeknadMutation = ({
+    path,
+    soeknad,
+    ident,
+    options,
+}: {
+    path: ApiPath;
+    soeknad: any;
+    ident: string;
+    options: MutateOptions;
+}) => ({
+    mutationKey: path,
+    mutationFn: () =>
+        post(path, { id: soeknad.soeknadId }, { 'X-Nav-NorskIdent': ident }, soeknad).then((response) =>
+            response.json()
+        ),
+    ...options,
+});
 
 export const oppdaterSoeknadMutation = ({ path, soeknad }: { path: ApiPath; soeknad: any }) =>
     put(path, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
         if (!response.ok) {
-            throw Error('Valideringsfeil');
+            throw Error('Det oppstod en feil under lagring.');
         }
         return response.json();
     });
