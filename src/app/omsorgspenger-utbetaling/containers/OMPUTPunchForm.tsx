@@ -34,9 +34,6 @@ import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
-import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { IPunchOMPUTFormState } from '../types/PunchOMPUTFormState';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
@@ -55,7 +52,7 @@ import MellomlagringEtikett from 'app/components/mellomlagringEtikett/Mellomlagr
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
-import { instanceOf } from 'prop-types';
+import VentModal from 'app/components/ventModal/VentModal';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -97,7 +94,7 @@ type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
 
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
     const [harMellomlagret, setHarMellomlagret] = useState(false);
-    const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
+    const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
@@ -112,6 +109,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         soeknadTilForhaandsvisning,
         k9FormatErrors,
         setK9FormatErrors,
+        journalpostid,
         formik: { values, handleSubmit, errors },
     } = props;
     const { signert } = signaturState;
@@ -137,11 +135,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
     } = useMutation(() => oppdaterSoeknad(values));
-
-    const handleSettPaaVent = () => {
-        props.settJournalpostPaaVent(props.journalpostid, values.soeknadId!);
-        setShowSettPaaVentModal(false);
-    };
 
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!feilmeldingStier.has(attribute)) {
@@ -276,7 +269,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         {intlHelper(intl, 'skjema.knapp.send')}
                     </Knapp>
 
-                    <Knapp className={'vent-knapp'} onClick={() => setShowSettPaaVentModal(true)} disabled={false}>
+                    <Knapp className={'vent-knapp'} onClick={() => setVisVentModal(true)} disabled={false}>
                         {intlHelper(intl, 'skjema.knapp.settpaavent')}
                     </Knapp>
                 </p>
@@ -291,49 +284,14 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             {!!punchFormState.submitSoknadConflict && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
             )}
-            {showSettPaaVentModal && (
-                <ModalWrapper
-                    key={'settpaaventmodal'}
-                    className={'settpaaventmodal'}
-                    onRequestClose={() => setShowSettPaaVentModal(false)}
-                    contentLabel={'settpaaventmodal'}
-                    isOpen={showSettPaaVentModal}
-                    closeButton={false}
-                >
-                    <div className="">
-                        <SettPaaVentModal
-                            journalposter={props.journalposterState.journalposter.filter(
-                                (jp) => jp.journalpostId !== props.journalpostid
-                            )}
-                            soknadId={values.soeknadId}
-                            submit={() => handleSettPaaVent()}
-                            avbryt={() => setShowSettPaaVentModal(false)}
-                        />
-                    </div>
-                </ModalWrapper>
+            {visVentModal && (
+                <VentModal
+                    journalpostId={journalpostid}
+                    soeknadId={values.soeknadId}
+                    setVisVentModal={setVisVentModal}
+                />
             )}
-            {punchFormState.settPaaVentSuccess && (
-                <ModalWrapper
-                    key={'settpaaventokmodal'}
-                    onRequestClose={() => props.settPaaventResetAction()}
-                    contentLabel={'settpaaventokmodal'}
-                    closeButton={false}
-                    isOpen={punchFormState.settPaaVentSuccess}
-                >
-                    <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
-                </ModalWrapper>
-            )}
-            {!!punchFormState.settPaaVentError && (
-                <ModalWrapper
-                    key={'settpaaventerrormodal'}
-                    onRequestClose={() => props.settPaaventResetAction()}
-                    contentLabel={'settpaaventokmodal'}
-                    closeButton={false}
-                    isOpen={!!punchFormState.settPaaVentError}
-                >
-                    <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
-                </ModalWrapper>
-            )}
+
             {soeknadIsValid && !visErDuSikkerModal && !!soeknadTilForhaandsvisning && (
                 <ModalWrapper
                     key={'validertSoknadModal'}

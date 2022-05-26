@@ -25,7 +25,7 @@ export const validerSoeknad = async (
     ident: string
 ): Promise<IOMPUTSoknad | ValideringResponse> => {
     const response = await post(
-        ApiPath.OMP_UT_SOKNAD_UPDATE,
+        ApiPath.OMP_UT_SOKNAD_VALIDER,
         { id: soeknad.soeknadId },
         { 'X-Nav-NorskIdent': ident },
         soeknad
@@ -34,7 +34,7 @@ export const validerSoeknad = async (
 };
 
 export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOMPUTSoknad> =>
-    post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {
+    post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {                                                                                       
         journalpostId,
         norskIdent: ident,
     }).then((response) => {
