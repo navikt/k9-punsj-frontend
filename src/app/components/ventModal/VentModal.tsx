@@ -20,9 +20,11 @@ const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
 
     const { mutate: settPaaVent } = useMutation(() => settJournalpostPaaVent(journalpostId, soeknadId), {
         onError: () => {
+            setVisHovedmodal(false);
             setVisErrormodal(true);
         },
         onSuccess: () => {
+            setVisHovedmodal(false);
             setVisSuccessModal(true);
         },
     });
@@ -45,7 +47,9 @@ const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
         return (
             <ModalWrapper
                 key="settpaaventokmodal"
-                onRequestClose={() => setVisSuccessModal(false)}
+                onRequestClose={() => {
+                    setVisVentModal(false);
+                }}
                 contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen
@@ -59,12 +63,12 @@ const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
         return (
             <ModalWrapper
                 key="settpaaventerrormodal"
-                onRequestClose={() => setVisErrormodal(false)}
+                onRequestClose={() => setVisVentModal(false)}
                 contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen
             >
-                <SettPaaVentErrorModal close={() => setVisErrormodal(false)} />
+                <SettPaaVentErrorModal close={() => setVisVentModal(false)} />
             </ModalWrapper>
         );
     }
