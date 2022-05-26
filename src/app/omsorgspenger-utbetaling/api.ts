@@ -34,7 +34,7 @@ export const validerSoeknad = async (
 };
 
 export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOMPUTSoknad> =>
-    post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {                                                                                       
+    post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
     }).then((response) => {
