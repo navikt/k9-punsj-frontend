@@ -62,7 +62,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         props.setStepAction(PunchStep.FILL_FORM);
     }, []);
 
-    const [soeknadIsValid, setSoeknadIsValid] = useState(false);
+    const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
 
     const { data: soeknadRespons, isLoading, error } = useQuery(id, () => hentSoeknad(identState.ident1, id));
 
@@ -70,7 +70,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         (values: IOMPUTSoknad) => validerSoeknad(values, identState.ident1),
         {
             onSuccess: (data: ValideringResponse) => {
-                if (!data?.feil?.length) setSoeknadIsValid(true);
+                if (!data?.feil?.length) setVisForhaandsvisModal(true);
 
                 if (data?.feil?.length) setK9FormatErrors(data.feil);
             },
@@ -78,6 +78,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     );
 
     const handleSubmit = (soknad: IOMPUTSoknad) => {
+        // TODO: Denne bør bruker i "er du sikker"-modalen og gå mot /send
         valider(soknad);
     };
 
@@ -112,7 +113,8 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                 <OMPUTPunchForm
                     formik={formik}
                     schema={schema}
-                    soeknadIsValid={soeknadIsValid}
+                    visForhaandsvisModal={visForhaandsvisModal}
+                    setVisForhaandsvisModal={setVisForhaandsvisModal}
                     soeknadTilForhaandsvisning={soeknadTilForhaandsvisning}
                     k9FormatErrors={k9FormatErrors}
                     setK9FormatErrors={setK9FormatErrors}

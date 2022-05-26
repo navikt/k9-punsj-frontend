@@ -10,10 +10,10 @@ import { useMutation } from 'react-query';
 type OwnProps = {
     journalpostId: string;
     soeknadId: string;
-    setVisVentModal: (vis: boolean) => void;
+    visModalFn: (vis: boolean) => void;
 };
 
-const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
+const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
     const [visHovedmodal, setVisHovedmodal] = useState(true);
     const [visErrorModal, setVisErrormodal] = useState(false);
     const [visSuccessModal, setVisSuccessModal] = useState(false);
@@ -39,7 +39,7 @@ const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
                 isOpen
                 closeButton={false}
             >
-                <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => setVisVentModal(false)} />
+                <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => visModalFn(false)} />
             </ModalWrapper>
         );
     }
@@ -48,7 +48,7 @@ const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
             <ModalWrapper
                 key="settpaaventokmodal"
                 onRequestClose={() => {
-                    setVisVentModal(false);
+                    visModalFn(false);
                 }}
                 contentLabel="settpaaventokmodal"
                 closeButton={false}
@@ -63,12 +63,12 @@ const VentModal = ({ journalpostId, soeknadId, setVisVentModal }: OwnProps) => {
         return (
             <ModalWrapper
                 key="settpaaventerrormodal"
-                onRequestClose={() => setVisVentModal(false)}
+                onRequestClose={() => visModalFn(false)}
                 contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen
             >
-                <SettPaaVentErrorModal close={() => setVisVentModal(false)} />
+                <SettPaaVentErrorModal close={() => visModalFn(false)} />
             </ModalWrapper>
         );
     }

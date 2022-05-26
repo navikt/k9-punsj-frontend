@@ -53,13 +53,15 @@ import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import VentModal from 'app/components/ventModal/VentModal';
+import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
     id: string;
     formik: FormikProps<IOMPUTSoknad>;
     schema: yup.AnyObjectSchema;
-    soeknadIsValid: boolean;
+    visForhaandsvisModal: boolean;
+    setVisForhaandsvisModal: (vis: boolean) => void;
     soeknadTilForhaandsvisning: any;
     k9FormatErrors: Feil[];
     setK9FormatErrors: (feil: Feil[]) => void;
@@ -103,9 +105,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         signaturState,
         schema,
         identState,
-        soeknadIsValid,
+        visForhaandsvisModal,
+        setVisForhaandsvisModal,
         punchFormState,
-        id,
         soeknadTilForhaandsvisning,
         k9FormatErrors,
         setK9FormatErrors,
@@ -263,6 +265,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             if (!harForsoektAaSendeInn) {
                                 setHarForsoektAaSendeInn(true);
                             }
+
                             handleSubmit();
                         }}
                     >
@@ -285,48 +288,26 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
             )}
             {visVentModal && (
-                <VentModal
-                    journalpostId={journalpostid}
-                    soeknadId={values.soeknadId}
-                    setVisVentModal={setVisVentModal}
-                />
+                <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
+            )}
+            {visForhaandsvisModal && (
+                <ForhaandsvisSoeknadModal
+                    avbryt={() => setVisForhaandsvisModal(false)}
+                    videre={() => {
+                        setVisForhaandsvisModal(false);
+                        setVisErDuSikkerModal(true);
+                    }}
+                    intl={intl}
+                >
+                    <OMPUTSoknadKvittering intl={intl} response={soeknadTilForhaandsvisning} />
+                </ForhaandsvisSoeknadModal>
             )}
 
-            {soeknadIsValid && !visErDuSikkerModal && !!soeknadTilForhaandsvisning && (
-                <ModalWrapper
-                    key={'validertSoknadModal'}
-                    className={'validertSoknadModal'}
-                    onRequestClose={() => props.validerSoknadReset()}
-                    contentLabel={'validertSoknadModal'}
-                    closeButton={false}
-                    isOpen={soeknadIsValid && visErDuSikkerModal}
-                >
-                    <div className={classNames('validertSoknadOppsummeringContainer')}>
-                        <OMPUTSoknadKvittering intl={intl} response={soeknadTilForhaandsvisning} />
-                    </div>
-                    <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                        <Hovedknapp
-                            mini={true}
-                            className="validertSoknadOppsummeringContainer_knappVidere"
-                            onClick={() => setVisErDuSikkerModal(true)}
-                        >
-                            {intlHelper(intl, 'fordeling.knapp.videre')}
-                        </Hovedknapp>
-                        <Knapp
-                            mini={true}
-                            className="validertSoknadOppsummeringContainer_knappTilbake"
-                            onClick={() => props.validerSoknadReset()}
-                        >
-                            {intlHelper(intl, 'skjema.knapp.avbryt')}
-                        </Knapp>
-                    </div>
-                </ModalWrapper>
-            )}
             {visErDuSikkerModal && (
                 <ModalWrapper
                     key={'erdusikkermodal'}
                     className={'erdusikkermodal'}
-                    onRequestClose={() => props.validerSoknadReset()}
+                    onRequestClose={() => setVisErDuSikkerModal(false)}
                     contentLabel={'erdusikkermodal'}
                     closeButton={false}
                     isOpen={visErDuSikkerModal}
@@ -334,10 +315,11 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     <ErDuSikkerModal
                         melding={'modal.erdusikker.sendinn'}
                         extraInfo={'modal.erdusikker.sendinn.extrainfo'}
-                        onSubmit={() => props.submitSoknad(values.soekerId, props.id)}
+                        onSubmit={() => {
+                            throw Error('vennligst implementer meg. hilsen onSubmit');
+                        }}
                         submitKnappText={'skjema.knapp.send'}
                         onClose={() => {
-                            props.validerSoknadReset();
                             setVisErDuSikkerModal(false);
                         }}
                     />
