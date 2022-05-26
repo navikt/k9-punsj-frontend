@@ -40,7 +40,6 @@ const AnnenPart = ({ vis, intl, annenPart, setAnnenPart }: ownProps): JSX.Elemen
             className="bold-label"
             maxLength={11}
             size="small"
-            type="number"
         />
     );
 };
