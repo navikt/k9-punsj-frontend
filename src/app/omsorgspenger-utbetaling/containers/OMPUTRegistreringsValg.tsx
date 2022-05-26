@@ -3,17 +3,15 @@ import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Loader } from '@navikt/ds-react';
-import { SAKSTYPE_API_PATHS } from 'app/apiConfig';
-import { createSoeknadMutation, eksisterendeSoeknaderQuery } from 'app/api/api';
 import { PunchStep } from '../../models/enums';
 import { IIdentState } from '../../models/types/IdentState';
 import { IPunchState } from '../../models/types';
 import { setHash } from '../../utils';
 import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 import { RootStateType } from '../../state/RootState';
-import { IOMPUTSoknadSvar } from '../types/OMPUTSoknadSvar';
+import api, { hentEksisterendeSoeknader } from '../api';
 
 export interface IOMPUTRegistreringsValgComponentProps {
     journalpostid: string;
@@ -33,38 +31,28 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     const { journalpostid, identState, getPunchPath, sakstype } = props;
     const { ident1, ident2 } = identState;
 
-    const apiPaths = SAKSTYPE_API_PATHS[sakstype];
-
     const {
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    }: UseMutationResult<any, Error> = useMutation(
-        () => createSoeknadMutation({ path: apiPaths.createSoeknad, journalpostId: journalpostid, ident: ident1 }),
-        {
-            onSuccess: (soeknad) => {
-                setHash(
-                    getPunchPath(PunchStep.FILL_FORM, {
-                        id: soeknad.soeknadId,
-                    })
-                );
-            },
-        }
-    );
-
-    const { data: eksisterendeSoeknader }: UseQueryResult<IOMPUTSoknadSvar, Error> = useQuery({
-        queryKey: ['eksisterendeSoknader_', sakstype],
-        queryFn: () => eksisterendeSoeknaderQuery({ path: apiPaths.eksisterendeSoeknader, ident: ident1 }),
+    } = useMutation(() => api.opprettSoeknad(journalpostid, ident1), {
+        onSuccess: (soeknad) => {
+            setHash(
+                getPunchPath(PunchStep.FILL_FORM, {
+                    id: soeknad.soeknadId,
+                })
+            );
+        },
     });
 
-    console.log(eksisterendeSoeknader)
+    const { data: eksisterendeSoeknader } = useQuery(sakstype, () => hentEksisterendeSoeknader(ident1));
 
     const redirectToPreviousStep = () => {
         setHash('/');
     };
 
-    if (opprettSoknadError) {
-        return <AlertStripeFeil>{opprettSoknadError}</AlertStripeFeil>;
+    if (opprettSoknadError instanceof Error) {
+        return <AlertStripeFeil>{opprettSoknadError.message}</AlertStripeFeil>;
     }
 
     const kanStarteNyRegistrering = () => {
@@ -84,7 +72,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
                 ident2={ident2}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
-                apiPaths={apiPaths}
                 sakstype={sakstype}
             />
 
@@ -93,7 +80,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
                     Tilbake
                 </Knapp>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={opprettSoknad} className="knapp knapp2" mini>
+                    <Hovedknapp onClick={() => opprettSoknad()} className="knapp knapp2" mini>
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
                     </Hovedknapp>
                 )}

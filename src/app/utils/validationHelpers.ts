@@ -1,3 +1,8 @@
+import { FormikValues } from 'formik';
+import yup from 'yup';
+
+import { capitalize } from './utils';
+
 /* eslint-disable import/prefer-default-export */
 const invalidTextMessage = (text: string) => `Feltet inneholder ugyldige tegn: ${text}`;
 
@@ -41,4 +46,19 @@ export const validateText = (value: string, maxLength: number, exactLength?: boo
         return hasValidText(value);
     }
     return undefined;
+};
+
+export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
+    try {
+        schema.validateSync(soknad, { abortEarly: false });
+        return [];
+    } catch (error) {
+        const errors = error.inner.map(
+            ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
+                message: capitalize(message),
+                path,
+            })
+        );
+        return errors;
+    }
 };

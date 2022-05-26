@@ -12,13 +12,11 @@ import ModalWrapper from 'nav-frontend-modal';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { useQuery, UseQueryResult } from 'react-query';
+import { useQuery } from 'react-query';
 import { Loader } from '@navikt/ds-react';
-import { ApiPath } from 'app/apiConfig';
-import { eksisterendeSoeknaderQuery } from 'app/api/api';
-import { IOMPUTSoknad, OMPUTSoknad } from '../types/OMPUTSoknad';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
-import { IOMPUTSoknadSvar } from '../types/OMPUTSoknadSvar';
+import { hentEksisterendeSoeknader } from '../api';
 
 export interface IEksisterendeOMPUTSoknaderStateProps {
     punchState: IPunchState;
@@ -35,9 +33,6 @@ export interface IEksisterendeOMPUTSoknaderComponentProps {
     ident1: string;
     ident2: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
-    apiPaths: {
-        eksisterendeSoeknader: ApiPath;
-    };
     sakstype: string;
 }
 
@@ -49,7 +44,7 @@ type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps &
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
     props: IEksisterendeOMPUTSoknaderProps
 ) => {
-    const { intl, punchState, getPunchPath, ident1, ident2, apiPaths, sakstype } = props;
+    const { intl, punchState, getPunchPath, ident1, ident2, sakstype } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
 
@@ -63,17 +58,11 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         }
     }, [ident1, ident2]);
 
-    
-
     const {
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    }: UseQueryResult<IOMPUTSoknadSvar, Error> = useQuery({
-        queryKey: ['eksisterendeSoknader_', sakstype],
-        queryFn: () => eksisterendeSoeknaderQuery({ path: apiPaths.eksisterendeSoeknader, ident: ident1 }),
-    });
-    console.log(eksisterendeSoeknader)
+    } = useQuery(sakstype, () => hentEksisterendeSoeknader(ident1));
 
     if (!ident1) {
         return null;
@@ -83,7 +72,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         return <Loader />;
     }
 
-    if (eksisterendeSoeknaderError) {
+    if (eksisterendeSoeknaderError instanceof Error) {
         return <AlertStripeFeil>{eksisterendeSoeknaderError.message}</AlertStripeFeil>;
     }
 
@@ -95,15 +84,14 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        eksisterendeSoeknader?.søknader?.forEach((soknadInfo: IOMPUTSoknad) => {
-            const søknad = new OMPUTSoknad(soknadInfo);
+        eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPUTSoknad) => {
             const soknadId = søknad.soeknadId;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.barn?.map((barn) => barn.norskIdent).join(', '),
                 Array.from(søknad.journalposter).join(', '),
 
-                <Knapp key={soknadId} mini onClick={() => setValgtSoeknad(soknadInfo)}>
+                <Knapp key={soknadId} mini onClick={() => setValgtSoeknad(søknad)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Knapp>,
             ];

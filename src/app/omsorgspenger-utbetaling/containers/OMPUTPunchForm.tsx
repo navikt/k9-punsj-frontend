@@ -26,7 +26,6 @@ import {
     setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
-import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
@@ -51,16 +50,17 @@ import {
     validerOMPUTSoknadResetAction,
 } from '../state/actions/OMPUTPunchFormActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
-import { OMP_UT_API_PATHS } from 'app/apiConfig';
-import { oppdaterSoeknadMutation, validerSoeknadMutation } from 'app/api/api';
 import { useMutation } from 'react-query';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
+import { feilFraYup } from 'app/utils/validationHelpers';
+import { oppdaterSoeknad, validerSoeknad } from '../api';
+import { instanceOf } from 'prop-types';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
     id: string;
-    formik: FormikProps<FormikValues>;
+    formik: FormikProps<IOMPUTSoknad>;
     schema: yup.AnyObjectSchema;
     soeknadIsValid: boolean;
     soeknadTilForhaandsvisning: any;
@@ -95,21 +95,6 @@ type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
     IPunchOMPUTFormStateProps &
     IPunchOMPUTFormDispatchProps;
 
-const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
-    try {
-        const isValid = schema.validateSync(soknad, { abortEarly: false });
-        if (isValid) return [];
-    } catch (error) {
-        const errors = error.inner.map(
-            ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
-                message: capitalize(message),
-                path,
-            })
-        );
-        return errors;
-    }
-};
-
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
@@ -141,38 +126,17 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [harMellomlagret]);
 
-    const { isLoading: validerer, mutate: validerSoeknad } = useMutation(
-        validerSoeknadMutation({
-            path: OMP_UT_API_PATHS.validerSoeknad,
-            soeknad: { ...values },
-            ident: identState.ident1,
-            options: {
-                onSuccess: (data: ValideringResponse) => {
-                    if (data?.feil?.length) setK9FormatErrors(data.feil);
-                },
-            },
-        })
-    );
-
-    console.log('validering', k9FormatErrors);
+    const { isLoading: validerer, mutate: valider } = useMutation(() => validerSoeknad(values, identState.ident1), {
+        onSuccess: (data: ValideringResponse | IOMPUTSoknad) => {
+            if (data?.feil?.length) setK9FormatErrors(data?.feil);
+        },
+    });
 
     const {
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(
-        id,
-        () =>
-            oppdaterSoeknadMutation({
-                path: OMP_UT_API_PATHS.oppdaterSoeknad,
-                soeknad: { ...values },
-            }),
-        {
-            onSuccess: () => {
-                setHarMellomlagret(true);
-            },
-        }
-    );
+    } = useMutation(() => oppdaterSoeknad(values));
 
     const handleSettPaaVent = () => {
         props.settJournalpostPaaVent(props.journalpostid, values.soeknadId!);
@@ -213,7 +177,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             journalposter.push(props.journalpostid);
         }
         // legg inn journalposter som mangler
-        validerSoeknad();
+        valider();
 
         return mellomlagreSoeknad();
     };
@@ -321,11 +285,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             {!!punchFormState.updateSoknadError && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
             )}
-            {!!punchFormState.inputErrors?.length && (
-                <AlertStripeFeil className={'valideringstripefeil'}>
-                    {intlHelper(intl, 'skjema.feil.validering')}
-                </AlertStripeFeil>
-            )}
             {!!punchFormState.submitSoknadError && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
             )}
@@ -382,7 +341,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     onRequestClose={() => props.validerSoknadReset()}
                     contentLabel={'validertSoknadModal'}
                     closeButton={false}
-                    isOpen={soeknadIsValid}
+                    isOpen={soeknadIsValid && visErDuSikkerModal}
                 >
                     <div className={classNames('validertSoknadOppsummeringContainer')}>
                         <OMPUTSoknadKvittering intl={intl} response={soeknadTilForhaandsvisning} />

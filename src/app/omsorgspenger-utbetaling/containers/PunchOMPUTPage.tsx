@@ -12,11 +12,10 @@ import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { ApiPath, OMP_UT_API_PATHS } from 'app/apiConfig';
+import { ApiPath } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
-import { hentSoknadQuery } from 'app/api/api';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import { FagsakYtelseType } from 'app/models/types/RequestBodies';
@@ -29,6 +28,8 @@ import { JournalpostPanel } from '../../components/journalpost-panel/Journalpost
 import PdfVisning from '../../components/pdf/PdfVisning';
 import { OMPUTRegistreringsValg } from './OMPUTRegistreringsValg';
 import OMPUTPunchFormContainer from './OMPUTPunchFormContainer';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { hentSoeknad } from '../api';
 
 export interface IPunchOMPUTPageStateProps {
     punchState: IPunchState;
@@ -71,16 +72,13 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
 
     const { id } = match.params;
 
-    const { data: soeknad } = useReactQuery({
-        queryKey: id,
-        queryFn: () => hentSoknadQuery({ path: OMP_UT_API_PATHS.hentSoeknad, ident: identState.ident1, soeknadId: id }),
-    });
+    const { data: soeknad } = useReactQuery<IOMPUTSoknad>(id, () => hentSoeknad(identState.ident1, id));
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
     const getPunchPath = (punchStep: PunchStep, values?: any) =>
         getPath(OMPUTPaths, punchStep, values, dok ? { dok } : undefined);
 
-    const queryObjects = journalposter.map((journalpostidentifikator) => ({
+    const queryObjects = journalposter.map((journalpostidentifikator: string) => ({
         queryKey: ['journalpost', journalpostidentifikator],
         queryFn: () =>
             get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => {
