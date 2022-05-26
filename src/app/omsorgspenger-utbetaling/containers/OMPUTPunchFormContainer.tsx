@@ -79,7 +79,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
 
     const handleSubmit = (soknad: IOMPUTSoknad) => {
         // TODO: Denne bør bruker i "er du sikker"-modalen og gå mot /send
-        valider(soknad);
+        throw Error('implementer meg');
     };
 
     const handleStartButtonClick = () => {

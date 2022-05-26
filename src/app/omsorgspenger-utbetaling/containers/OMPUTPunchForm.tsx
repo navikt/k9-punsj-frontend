@@ -54,6 +54,7 @@ import { feilFraYup } from 'app/utils/validationHelpers';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
+import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -112,7 +113,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         k9FormatErrors,
         setK9FormatErrors,
         journalpostid,
-        formik: { values, handleSubmit, errors },
+        formik: { values, errors },
     } = props;
     const { signert } = signaturState;
 
@@ -172,7 +173,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             journalposter.push(props.journalpostid);
         }
         // legg inn journalposter som mangler
-        valider();
+        if (harForsoektAaSendeInn) {
+            valider();
+        }
 
         return mellomlagreSoeknad();
     };
@@ -197,52 +200,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             />
             <VerticalSpacer fourtyPx />
             <VerticalSpacer fourtyPx />
-            <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
-            <div className={'flex-container'}>
-                <Field name="harMedisinskeOpplysninger">
-                    {({ field }: FieldProps<FormikValues>) => (
-                        <>
-                            <CheckboksPanel
-                                id={'medisinskeopplysningercheckbox'}
-                                label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                                checked={!!values.harMedisinskeOpplysninger}
-                                {...field}
-                                onChange={(e) => handleBlur(() => field.onChange(e))}
-                                value=""
-                            />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
-                                {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
-                            </Hjelpetekst>
-                        </>
-                    )}
-                </Field>
-            </div>
-            <VerticalSpacer eightPx={true} />
-            <div className={'flex-container'}>
-                <Field name="harInfoSomIkkeKanPunsjes">
-                    {({ field }: FieldProps<FormikValues>) => (
-                        <>
-                            <CheckboksPanel
-                                id={'opplysningerikkepunsjetcheckbox'}
-                                label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                                checked={!!values.harInfoSomIkkeKanPunsjes}
-                                {...field}
-                                onChange={(e) => handleBlur(() => field.onChange(e))}
-                                value=""
-                            />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
-                                {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                            </Hjelpetekst>
-                        </>
-                    )}
-                </Field>
-            </div>
+            <IkkeRegistrerteOpplysninger intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer twentyPx={true} />
-            {validerer && (
-                <div className={classNames('loadingSpinner')}>
-                    <NavFrontendSpinner />
-                </div>
-            )}
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                     {getUhaandterteFeil('').map((feilmelding) => {
@@ -266,7 +225,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                                 setHarForsoektAaSendeInn(true);
                             }
 
-                            handleSubmit();
+                            valider();
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
