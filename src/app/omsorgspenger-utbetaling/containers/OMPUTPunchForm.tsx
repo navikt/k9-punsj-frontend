@@ -12,7 +12,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import { ErrorSummary } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
-import { resetPunchFormAction, setIdentAction, setSignaturAction, setStepAction } from 'app/state/actions';
+import { setIdentAction, setSignaturAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
@@ -23,12 +23,6 @@ import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
-import {
-    getOMPUTSoknad,
-    resetOMPUTSoknadAction,
-    submitOMPUTSoknad,
-    updateOMPUTSoknad,
-} from '../state/actions/OMPUTPunchFormActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { useMutation } from 'react-query';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
@@ -58,9 +52,7 @@ export interface IPunchOMPUTFormStateProps {
 }
 
 export interface IPunchOMPUTFormDispatchProps {
-    getSoknad: typeof getOMPUTSoknad;
     setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     setSignaturAction: typeof setSignaturAction;
 }
 
@@ -273,8 +265,6 @@ const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    updateSoknad: (soknad: Partial<IOMPUTSoknadUt>) => dispatch(updateOMPUTSoknad(soknad)),
-    submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPUTSoknad(ident, soeknadid)),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
 });
