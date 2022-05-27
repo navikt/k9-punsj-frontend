@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import './ompUtSoknadKvittering.less';
+import { Alert } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
 import { RootStateType } from 'app/state/RootState';
 import Kopier from 'app/components/kopier/Kopier';
@@ -16,10 +16,11 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import './ompUtSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
-    response: IOMPUTSoknadKvittering;
+    response?: IOMPUTSoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
@@ -32,8 +33,12 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 }) => {
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
-    const { journalposter, ytelse } = response;
+    const { journalposter } = response || {};
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+
+    if (!response) {
+        return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
+    }
 
     return (
         <div className={classNames('OMPUTSoknadKvitteringContainer')}>

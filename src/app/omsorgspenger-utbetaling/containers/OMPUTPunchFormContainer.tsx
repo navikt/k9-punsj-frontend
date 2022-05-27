@@ -14,14 +14,14 @@ import intlHelper from 'app/utils/intlUtils';
 import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
 import { IIdentState } from 'app/models/types/IdentState';
 import { useMutation, useQuery } from 'react-query';
-import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
+import { Feil } from 'app/models/types/ValideringResponse';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import { getOMPUTSoknad, resetPunchOMPUTFormAction, validerOMPUTSoknad } from '../state/actions/OMPUTPunchFormActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import schema from '../schema';
 import { IPunchOMPUTFormState } from '../types/PunchOMPUTFormState';
-import { hentSoeknad, validerSoeknad } from '../api';
+import { hentSoeknad, sendSoeknad } from '../api';
 
 const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     barn: soknad?.barn || [],
@@ -56,30 +56,19 @@ type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormSt
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { intl, getPunchPath, punchFormState, resetPunchFormAction, identState, id } = props;
 
-    const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
-
     useEffect(() => {
         props.setStepAction(PunchStep.FILL_FORM);
     }, []);
 
+    const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
-
     const { data: soeknadRespons, isLoading, error } = useQuery(id, () => hentSoeknad(identState.ident1, id));
-
-    const { data: soeknadTilForhaandsvisning, mutate: valider } = useMutation(
-        (values: IOMPUTSoknad) => validerSoeknad(values, identState.ident1),
-        {
-            onSuccess: (data: ValideringResponse) => {
-                if (!data?.feil?.length) setVisForhaandsvisModal(true);
-
-                if (data?.feil?.length) setK9FormatErrors(data.feil);
-            },
-        }
+    const { error: submitError, mutate: submit } = useMutation((soeknad: IOMPUTSoknad) =>
+        sendSoeknad(soeknad, identState.ident1)
     );
 
     const handleSubmit = (soknad: IOMPUTSoknad) => {
-        // TODO: Denne bør bruker i "er du sikker"-modalen og gå mot /send
-        throw Error('implementer meg');
+        submit(soknad);
     };
 
     const handleStartButtonClick = () => {
@@ -115,9 +104,9 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                     schema={schema}
                     visForhaandsvisModal={visForhaandsvisModal}
                     setVisForhaandsvisModal={setVisForhaandsvisModal}
-                    soeknadTilForhaandsvisning={soeknadTilForhaandsvisning}
                     k9FormatErrors={k9FormatErrors}
                     setK9FormatErrors={setK9FormatErrors}
+                    submitError={submitError}
                     {...props}
                 />
             )}

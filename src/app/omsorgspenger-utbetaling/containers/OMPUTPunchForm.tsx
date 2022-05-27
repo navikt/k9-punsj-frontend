@@ -1,41 +1,26 @@
 /* eslint-disable */
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'formik';
+import { FormikErrors, FormikProps } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import * as yup from 'yup';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import { ErrorSummary } from '@navikt/ds-react';
-import { CheckboksPanel } from 'nav-frontend-skjema';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { PopoverOrientering } from 'nav-frontend-popover';
 
 import { IInputError, ISignaturState } from 'app/models/types';
-import {
-    resetPunchFormAction,
-    setIdentAction,
-    setJournalpostPaaVentResetAction,
-    setSignaturAction,
-    setStepAction,
-    settJournalpostPaaVent,
-} from 'app/state/actions';
+import { resetPunchFormAction, setIdentAction, setSignaturAction, setStepAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
-import { IPunchOMPUTFormState } from '../types/PunchOMPUTFormState';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 import {
@@ -43,8 +28,6 @@ import {
     resetOMPUTSoknadAction,
     submitOMPUTSoknad,
     updateOMPUTSoknad,
-    validerOMPUTSoknad,
-    validerOMPUTSoknadResetAction,
 } from '../state/actions/OMPUTPunchFormActions';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { useMutation } from 'react-query';
@@ -55,6 +38,7 @@ import { oppdaterSoeknad, validerSoeknad } from '../api';
 import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
+import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -63,31 +47,21 @@ export interface IPunchOMPUTFormComponentProps {
     schema: yup.AnyObjectSchema;
     visForhaandsvisModal: boolean;
     setVisForhaandsvisModal: (vis: boolean) => void;
-    soeknadTilForhaandsvisning: any;
     k9FormatErrors: Feil[];
     setK9FormatErrors: (feil: Feil[]) => void;
+    submitError: unknown;
 }
 
 export interface IPunchOMPUTFormStateProps {
-    punchFormState: IPunchOMPUTFormState;
     signaturState: ISignaturState;
-    journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
 }
 
 export interface IPunchOMPUTFormDispatchProps {
     getSoknad: typeof getOMPUTSoknad;
-    resetSoknadAction: typeof resetOMPUTSoknadAction;
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
-    updateSoknad: typeof updateOMPUTSoknad;
-    submitSoknad: typeof submitOMPUTSoknad;
-    resetPunchFormAction: typeof resetPunchFormAction;
     setSignaturAction: typeof setSignaturAction;
-    settJournalpostPaaVent: typeof settJournalpostPaaVent;
-    settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
-    validateSoknad: typeof validerOMPUTSoknad;
-    validerSoknadReset: typeof validerOMPUTSoknadResetAction;
 }
 
 type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
@@ -101,6 +75,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
+    const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
     const {
         intl,
         signaturState,
@@ -108,11 +83,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         identState,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
-        punchFormState,
-        soeknadTilForhaandsvisning,
         k9FormatErrors,
         setK9FormatErrors,
         journalpostid,
+        submitError,
         formik: { values, errors },
     } = props;
     const { signert } = signaturState;
@@ -127,11 +101,22 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [harMellomlagret]);
 
-    const { isLoading: validerer, mutate: valider } = useMutation(() => validerSoeknad(values, identState.ident1), {
-        onSuccess: (data: ValideringResponse | IOMPUTSoknad) => {
-            if (data?.feil?.length) setK9FormatErrors(data?.feil);
-        },
-    });
+    const { mutate: valider } = useMutation(
+        (skalForhaandsviseSoeknad?: boolean) => validerSoeknad(values, identState.ident1),
+        {
+            onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, skalForhaandsviseSoeknad) => {
+                if (data['ytelse'] && skalForhaandsviseSoeknad) {
+                    const kvitteringResponse = data as IOMPUTSoknadKvittering;
+                    setVisForhaandsvisModal(true);
+                    setKvittering(kvitteringResponse);
+                }
+                if (data['feil']?.length) {
+                    setK9FormatErrors(data['feil']);
+                    setKvittering(undefined);
+                }
+            },
+        }
+    );
 
     const {
         isLoading: mellomlagrer,
@@ -172,9 +157,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         if (!journalposter.includes(props.journalpostid)) {
             journalposter.push(props.journalpostid);
         }
-        // legg inn journalposter som mangler
+        //TODO: legg inn journalposter som mangler
         if (harForsoektAaSendeInn) {
-            valider();
+            valider(false);
         }
 
         return mellomlagreSoeknad();
@@ -224,8 +209,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             if (!harForsoektAaSendeInn) {
                                 setHarForsoektAaSendeInn(true);
                             }
-
-                            valider();
+                            valider(true);
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
@@ -237,15 +221,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 </p>
             </div>
             <VerticalSpacer sixteenPx={true} />
-            {!!punchFormState.updateSoknadError && (
+            {mellomlagringError instanceof Error && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
             )}
-            {!!punchFormState.submitSoknadError && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
-            )}
-            {!!punchFormState.submitSoknadConflict && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
-            )}
+            {submitError instanceof Error && <AlertStripeFeil>{intlHelper(intl, submitError.message)}</AlertStripeFeil>}
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
@@ -258,7 +237,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     }}
                     intl={intl}
                 >
-                    <OMPUTSoknadKvittering intl={intl} response={soeknadTilForhaandsvisning} />
+                    <OMPUTSoknadKvittering intl={intl} response={kvittering} />
                 </ForhaandsvisSoeknadModal>
             )}
 
@@ -289,9 +268,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 };
 
 const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
-    punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
     signaturState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.signaturState,
-    journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });
 
@@ -299,12 +276,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     updateSoknad: (soknad: Partial<IOMPUTSoknadUt>) => dispatch(updateOMPUTSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPUTSoknad(ident, soeknadid)),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
-    settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
-        dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
-    settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (soknad: IOMPUTSoknadUt, erMellomlagring: boolean) =>
-        dispatch(validerOMPUTSoknad(soknad, erMellomlagring)),
-    validerSoknadReset: () => dispatch(validerOMPUTSoknadResetAction()),
+    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
 });
 
 export const OMPUTPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTFormComponent));

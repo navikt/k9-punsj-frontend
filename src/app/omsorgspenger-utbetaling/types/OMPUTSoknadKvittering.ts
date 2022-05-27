@@ -1,4 +1,4 @@
-import { PersonEnkel } from 'app/models/types';
+import Kvittering from 'app/models/forms/soeknader/Kvittering';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
 export interface IOMPUTSoknadKvitteringJournalpost {
@@ -7,12 +7,11 @@ export interface IOMPUTSoknadKvitteringJournalpost {
     journalpostId: string;
 }
 
-export interface IOMPUTSoknadKvittering {
+export interface IOMPUTSoknadKvittering extends Kvittering {
     mottattDato: string;
     journalposter: IOMPUTSoknadKvitteringJournalpost[];
     ytelse: {
         type: string;
-        barn: PersonEnkel[];
     };
     begrunnelseForInnsending: BegrunnelseForInnsending;
 }

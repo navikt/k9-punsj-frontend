@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
+import { IOMPUTSoknadKvittering } from './types/OMPUTSoknadKvittering';
 import { IOMPUTSoknadSvar } from './types/OMPUTSoknadSvar';
 
 export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPUTSoknad> =>
@@ -23,13 +24,22 @@ export const oppdaterSoeknad = (soeknad: IOMPUTSoknad): Promise<IOMPUTSoknad> =>
 export const validerSoeknad = async (
     soeknad: IOMPUTSoknad,
     ident: string
-): Promise<IOMPUTSoknad | ValideringResponse> => {
-    const response = await post(
-        ApiPath.OMP_UT_SOKNAD_VALIDER,
-        { id: soeknad.soeknadId },
-        { 'X-Nav-NorskIdent': ident },
-        soeknad
-    );
+): Promise<IOMPUTSoknadKvittering | ValideringResponse> => {
+    const response = await post(ApiPath.OMP_UT_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
+    return response.json();
+};
+
+export const sendSoeknad = async (soeknad: IOMPUTSoknad, ident: string): Promise<IOMPUTSoknad | ValideringResponse> => {
+    const response = await post(ApiPath.OMP_UT_SOKNAD_SUBMIT, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
+    if (!response.ok) {
+        if (response.status === 400) {
+            throw Error('skjema.feil.ikke_sendt');
+        }
+
+        if (response.status === 409) {
+            throw Error('skjema.feil.konflikt');
+        }
+    }
     return response.json();
 };
 
