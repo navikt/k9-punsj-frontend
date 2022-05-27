@@ -4,53 +4,36 @@ import { useQueries, useQuery as useReactQuery } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Hovedknapp } from 'nav-frontend-knapper';
 import Page from 'app/components/page/Page';
-import useQuery from 'app/hooks/useQuery';
-import { PunchStep } from 'app/models/enums';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import { get, getEnvironmentVariable, getPath } from 'app/utils';
+import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ApiPath } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
-import { FagsakYtelseType } from 'app/models/types/RequestBodies';
 import { IIdentState } from '../../models/types/IdentState';
-import { OMPUTPaths } from './OMPUTRoutes';
-import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
-import { IPunchOMPUTFormState } from '../types/PunchOMPUTFormState';
-import { IJournalpost, IPath, IPunchState } from '../../models/types';
+import { IJournalpost, IPath } from '../../models/types';
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { OMPUTRegistreringsValg } from './OMPUTRegistreringsValg';
-import OMPUTPunchFormContainer from './OMPUTPunchFormContainer';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { hentSoeknad } from '../api';
 
 export interface IPunchOMPUTPageStateProps {
-    punchState: IPunchState;
     journalpost?: IJournalpost;
     identState: IIdentState;
     forbidden: boolean | undefined;
-    punchFormState: IPunchOMPUTFormState;
+    children: JSX.Element;
 }
 
 export interface IPunchOMPUTPageDispatchProps {
     setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
 }
-
-export interface IPunchOMPUTPageQueryProps {
-    dok?: string | null;
-}
-
 export interface IPunchOMPUTPageComponentProps {
     match?: any;
-    step: PunchStep;
     journalpostid?: string;
     paths: IPath[];
 }
@@ -64,19 +47,15 @@ type IPunchOMPUTPageProps = WrappedComponentProps &
     RouteComponentProps &
     IPunchOMPUTPageComponentProps &
     IPunchOMPUTPageStateProps &
-    IPunchOMPUTPageDispatchProps &
-    IPunchOMPUTPageQueryProps;
+    IPunchOMPUTPageDispatchProps;
 
-export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
-    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState, identState } = props;
-
+const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
+    const { intl, journalpostid, journalpost, forbidden, match, identState, children } = props;
     const { id } = match.params;
 
     const { data: soeknad } = useReactQuery<IOMPUTSoknad>(id, () => hentSoeknad(identState.ident1, id));
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
-    const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(OMPUTPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator: string) => ({
         queryKey: ['journalpost', journalpostidentifikator],
@@ -91,41 +70,6 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
     }));
 
     const queries = useQueries(queryObjects);
-
-    // eslint-disable-next-line consistent-return
-    const underFnr = () => {
-        const commonProps = {
-            journalpostid: journalpostid || '',
-            getPunchPath,
-        };
-        // eslint-disable-next-line default-case
-        switch (step) {
-            case PunchStep.CHOOSE_SOKNAD:
-                return <OMPUTRegistreringsValg {...commonProps} sakstype={FagsakYtelseType.OMSORGSPENGER_UT} />;
-            case PunchStep.FILL_FORM:
-                return <OMPUTPunchFormContainer {...commonProps} intl={intl} id={match.params.id} />;
-            case PunchStep.COMPLETED:
-                return (
-                    <>
-                        <AlertStripeInfo className="fullfortmelding">
-                            <FormattedMessage id="skjema.sentInn" />
-                        </AlertStripeInfo>
-                        <div className="punchPage__knapper">
-                            <Hovedknapp
-                                onClick={() => {
-                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                                }}
-                            >
-                                {intlHelper(intl, 'tilbaketilLOS')}
-                            </Hovedknapp>
-                        </div>
-                        {!!punchFormState.innsentSoknad && (
-                            <OMPUTSoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
-                        )}
-                    </>
-                );
-        }
-    };
 
     const content = () => {
         if (forbidden) {
@@ -158,7 +102,7 @@ export const PunchOMPUTPageComponent: React.FunctionComponent<IPunchOMPUTPagePro
             <div className="panels-wrapper" id="panels-wrapper">
                 <Panel className="pleiepenger_punch_form" border>
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
-                    {underFnr()}
+                    {children}
                 </Panel>
                 {!!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />}
             </div>
@@ -181,17 +125,7 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
-const PunchOMPUTPageComponentWithQuery: React.FunctionComponent<IPunchOMPUTPageProps> = (
-    props: IPunchOMPUTPageProps
-) => {
-    const dok = useQuery().get('dok');
-    return <PunchOMPUTPageComponent {...props} dok={dok} />;
-};
-
-export const PunchOMPUTPage = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTPageComponentWithQuery))
-);
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTPage)));

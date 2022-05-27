@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
-import { resetPunchAction, setIdentAction, setStepAction } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
+import { setIdentAction, setStepAction } from 'app/state/actions';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -25,14 +25,12 @@ export interface IEksisterendeOMPUTSoknaderStateProps {
 export interface IEksisterendeOMPUTSoknaderDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
-    resetPunchAction: typeof resetPunchAction;
 }
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;
     ident1: string;
     ident2: string | null;
-    getPunchPath: (step: PunchStep, values?: any) => string;
     sakstype: string;
 }
 
@@ -44,16 +42,15 @@ type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps &
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
     props: IEksisterendeOMPUTSoknaderProps
 ) => {
-    const { intl, punchState, getPunchPath, ident1, ident2, sakstype } = props;
+    const { intl, ident1, ident2 } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
+    const routingPaths = React.useContext(RoutingPathsContext);
 
     React.useEffect(() => {
         if (IdentRules.areIdentsValid(ident1, ident2)) {
             props.setIdentAction(ident1, ident2);
-            props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            props.resetPunchAction();
             setHash('/');
         }
     }, [ident1, ident2]);
@@ -62,13 +59,13 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery(sakstype, () => hentEksisterendeSoeknader(ident1));
+    } = useQuery('hentSoeknader', () => hentEksisterendeSoeknader(ident1));
 
     if (!ident1) {
         return null;
     }
 
-    if (lasterSoeknader || punchState.step !== PunchStep.CHOOSE_SOKNAD) {
+    if (lasterSoeknader) {
         return <Loader />;
     }
 
@@ -77,7 +74,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     }
 
     const gaaVidereMedSoeknad = (soknad: IOMPUTSoknad) => {
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
+        setHash(`${routingPaths.skjema}${soknad.soeknadId}`);
     };
 
     function showSoknader() {
@@ -158,16 +155,10 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     );
 };
 
-const mapStateToProps = (state: RootStateType): IEksisterendeOMPUTSoknaderStateProps => ({
-    punchState: state.OMSORGSPENGER_UTBETALING.punchState,
-});
-
 const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-    resetPunchAction: () => dispatch(resetPunchAction()),
 });
 
 export const EksisterendeOMPUTSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendeOMPUTSoknaderComponent)
+    connect(null, mapDispatchToProps)(EksisterendeOMPUTSoknaderComponent)
 );

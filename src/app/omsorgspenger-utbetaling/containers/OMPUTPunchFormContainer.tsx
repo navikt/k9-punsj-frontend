@@ -1,20 +1,20 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import { connect } from 'react-redux';
-import { WrappedComponentProps } from 'react-intl';
+import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { RootStateType } from 'app/state/RootState';
-import { setHash } from 'app/utils';
 import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
 import { IIdentState } from 'app/models/types/IdentState';
 import { useMutation, useQuery } from 'react-query';
 import { Feil } from 'app/models/types/ValideringResponse';
+import { useParams } from 'react-router';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
@@ -32,27 +32,20 @@ const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
 });
 
 interface OwnProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
-    id: string;
     journalpostid: string;
+    match: any;
 }
 export interface IPunchOMPUTFormStateProps {
     identState: IIdentState;
 }
 
-export interface IPunchOMPUTFormDispatchProps {
-    setStepAction: typeof setStepAction;
-    resetPunchFormAction: typeof resetPunchAction;
-}
-
-type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormStateProps & IPunchOMPUTFormDispatchProps;
+type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormStateProps;
 
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
-    const { intl, getPunchPath, resetPunchFormAction, identState, id } = props;
+    const { identState } = props;
+    const { id } = useParams();
 
-    useEffect(() => {
-        props.setStepAction(PunchStep.FILL_FORM);
-    }, []);
+    const intl = useIntl();
 
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
@@ -61,7 +54,8 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         (soeknad: IOMPUTSoknad) => sendSoeknad(soeknad, identState.ident1),
         {
             onSuccess: () => {
-                setHash(getPunchPath(PunchStep.COMPLETED));
+                throw Error('legg inn url for kvittering');
+                setHash('kvittering');
             },
         }
     );
@@ -71,7 +65,6 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     };
 
     const handleStartButtonClick = () => {
-        resetPunchFormAction();
         setHash('/');
     };
 
@@ -82,7 +75,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     if (error) {
         return (
             <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}</AlertStripeFeil>
+                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}</AlertStripeFeil>
                 <p>
                     <Knapp onClick={handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
                 </p>
@@ -112,8 +105,4 @@ const mapStateToProps = (state: RootStateType): Partial<IPunchOMPUTFormStateProp
     identState: state.identState,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OMPUTPunchFormContainer);
+export default injectIntl(connect(mapStateToProps)(OMPUTPunchFormContainer));

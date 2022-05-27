@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Sakstype } from './enums';
 import { ApiPath } from '../apiConfig';
 
@@ -6,10 +6,10 @@ export interface ISakstypeDefault {
     navn: Sakstype;
 }
 
-export type ISakstypeOmfordeling = ISakstypeDefault
+export type ISakstypeOmfordeling = ISakstypeDefault;
 
 export interface ISakstypeComponentProps {
-    journalpostid?: string;
+    journalpostid: string;
     punchPath: string;
 }
 

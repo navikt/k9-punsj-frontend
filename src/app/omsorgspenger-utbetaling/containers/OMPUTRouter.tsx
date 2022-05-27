@@ -1,38 +1,41 @@
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import useRedirect from '../../hooks/useRedirect';
-import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
-import { IPath } from '../../models/types';
-import { getPath } from '../../utils';
-import { PunchOMPUTPage } from './PunchOMPUTPage';
+import OMPUTPunchFormContainer from './OMPUTPunchFormContainer';
+import { OMPUTRegistreringsValg } from './OMPUTRegistreringsValg';
+import PunchOMPUTPage from './PunchOMPUTPage';
 
 const OMPUTRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
-    const OMPMARootPath = punchPath;
+    const OMPUTRootPath = punchPath;
 
-    const paths: IPath[] = [
-        {
-            step: PunchStep.CHOOSE_SOKNAD,
-            path: `${OMPMARootPath}/hentsoknader`,
-        },
-        { step: PunchStep.FILL_FORM, path: `${OMPMARootPath}/skjema/{id}` },
-        { step: PunchStep.COMPLETED, path: `${OMPMARootPath}/fullfort` },
-    ];
-    const chooseSoknadPath = getPath(paths, PunchStep.CHOOSE_SOKNAD);
+    const routingPaths = React.useMemo(
+        () => ({
+            soeknader: `${OMPUTRootPath}/soeknader`,
+            skjema: `${OMPUTRootPath}/skjema/`,
+            kvittering: `${OMPUTRootPath}/fullfort/`,
+        }),
+        []
+    );
 
-    useRedirect(OMPMARootPath, chooseSoknadPath);
-
+    useRedirect(OMPUTRootPath, routingPaths.soeknader);
     return (
-        <Switch>
-            {Object.keys(PunchStep)
-                .map(Number)
-                .filter((step) => !Number.isNaN(step))
-                .map((step) => (
-                    <Route exact key={`hashroute_${step}`} path={getPath(paths, step)}>
-                        <PunchOMPUTPage {...{ journalpostid, step, paths }} />
+        <RoutingPathsContext.Provider value={routingPaths}>
+            <PunchOMPUTPage journalpostid={journalpostid}>
+                <Switch>
+                    <Route exact path={routingPaths.soeknader}>
+                        <OMPUTRegistreringsValg journalpostid={journalpostid} />
                     </Route>
-                ))}
-        </Switch>
+                    <Route path={`${routingPaths.skjema}:id`}>
+                        <OMPUTPunchFormContainer journalpostid={journalpostid} />
+                    </Route>
+                    <Route path={routingPaths.kvittering}>
+                        <PunchOMPUTPage journalpostid={journalpostid} />
+                    </Route>
+                </Switch>
+            </PunchOMPUTPage>
+        </RoutingPathsContext.Provider>
     );
 };
 

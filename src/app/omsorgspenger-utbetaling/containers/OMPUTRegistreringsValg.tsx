@@ -1,9 +1,10 @@
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import React from 'react';
+import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useMutation, useQuery } from 'react-query';
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Loader } from '@navikt/ds-react';
 import { PunchStep } from '../../models/enums';
 import { IIdentState } from '../../models/types/IdentState';
@@ -28,7 +29,8 @@ type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEks
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistreringsValgProps> = (
     props: IOMPUTRegistreringsValgProps
 ) => {
-    const { journalpostid, identState, getPunchPath, sakstype } = props;
+    const { journalpostid, identState, sakstype } = props;
+    const routingPaths = useContext(RoutingPathsContext);
     const { ident1, ident2 } = identState;
 
     const {
@@ -37,11 +39,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         mutate: opprettSoknad,
     } = useMutation(() => api.opprettSoeknad(journalpostid, ident1), {
         onSuccess: (soeknad) => {
-            setHash(
-                getPunchPath(PunchStep.FILL_FORM, {
-                    id: soeknad.soeknadId,
-                })
-            );
+            setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
         },
     });
 
@@ -67,13 +65,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPUTSoknader
-                ident1={ident1}
-                ident2={ident2}
-                getPunchPath={getPunchPath}
-                journalpostid={journalpostid}
-                sakstype={sakstype}
-            />
+            <EksisterendeOMPUTSoknader ident1={ident1} ident2={ident2} journalpostid={journalpostid} />
 
             <div className="knapperad">
                 <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>

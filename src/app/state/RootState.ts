@@ -24,8 +24,6 @@ import { PunchOMPKSReducer } from '../omsorgspenger-kronisk-sykt-barn/state/redu
 import { EksisterendeOMPMASoknaderReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
 import { PunchOMPMAFormReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
 import { PunchOMPMAReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAReducer';
-import { PunchOMPUTFormReducer } from '../omsorgspenger-utbetaling/state/reducers/PunchOMPUTFormReducer';
-import { PunchOMPUTReducer } from '../omsorgspenger-utbetaling/state/reducers/PunchOMPUTReducer';
 import { PunchPLSFormReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
 import { PunchPLSReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSReducer';
 import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
@@ -52,8 +50,6 @@ export const rootReducer = combineReducers({
         signaturState: SignaturReducer,
     }),
     [Sakstype.OMSORGSPENGER_UTBETALING]: combineReducers({
-        punchFormState: PunchOMPUTFormReducer,
-        punchState: PunchOMPUTReducer,
         signaturState: SignaturReducer,
     }),
     [Sakstype.OMSORGSPENGER_OVERFØRING]: combineReducers({
