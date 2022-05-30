@@ -20,7 +20,6 @@ export interface IOMPUTRegistreringsValgComponentProps {
     sakstype: string;
 }
 export interface IEksisterendeOMPUTSoknaderStateProps {
-    punchState: IPunchState;
     identState: IIdentState;
 }
 
@@ -81,7 +80,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     );
 };
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPUTSoknaderStateProps => ({
-    punchState: state.OMSORGSPENGER_UTBETALING.punchState,
     identState: state.identState,
 });
 

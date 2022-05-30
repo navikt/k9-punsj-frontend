@@ -1,20 +1,20 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Formik } from 'formik';
 import { connect } from 'react-redux';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
+
 import { RootStateType } from 'app/state/RootState';
-import { PunchStep } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { IIdentState } from 'app/models/types/IdentState';
-import { useMutation, useQuery } from 'react-query';
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Feil } from 'app/models/types/ValideringResponse';
-import { useParams } from 'react-router';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
@@ -44,6 +44,8 @@ type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormSt
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { identState } = props;
     const { id } = useParams();
+    const history = useHistory();
+    const routingPaths = useContext(RoutingPathsContext);
 
     const intl = useIntl();
 
@@ -54,8 +56,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         (soeknad: IOMPUTSoknad) => sendSoeknad(soeknad, identState.ident1),
         {
             onSuccess: () => {
-                throw Error('legg inn url for kvittering');
-                setHash('kvittering');
+                history.push(`${routingPaths.kvittering}/${id}`);
             },
         }
     );
@@ -65,7 +66,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     };
 
     const handleStartButtonClick = () => {
-        setHash('/');
+        history.push('/');
     };
 
     if (isLoading) {

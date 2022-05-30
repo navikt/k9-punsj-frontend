@@ -1,23 +1,12 @@
 /* eslint-disable no-template-curly-in-string */
 import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
-import * as yup from 'yup';
 
+import { initializeDate } from 'app/utils';
 import { IdentRules } from './IdentRules';
 import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
-
-export const yupLocale = {
-    mixed: {
-        required: '${path} er et påkrevd felt.',
-    },
-    string: {
-        min: '${path} må være minst ${min} tegn',
-        max: '${path} må være mest ${max} tegn',
-        length: '${path} må være nøyaktig ${length} tegn',
-    },
-};
 
 export interface IFeltValidator<FeltType, SkjemaType> {
     feltPath: string;
@@ -86,33 +75,15 @@ export const erUgyldigIdent = (ident: string | null | undefined) => {
     return !IdentRules.isIdentValid(ident);
 };
 
-yup.setLocale(yupLocale);
+export function erIkkeFremITid(dato: string) {
+    const naa = new Date();
+    return naa > new Date(dato);
+}
 
-export const identifikator = yup
-    .string()
-    .required()
-    .nullable(true)
-    .length(11)
-    .test({
-        test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
-        message: 'Ugyldig identifikasjonsnummer',
-    })
-    .label('Identifikasjonsnummer');
-
-export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
-    try {
-        validator.validateSync(value);
-
-        return false;
-    } catch (e) {
-        return e.errors[0];
-    }
-};
-
-export const getValidationErrors = (validators: any, value: any): string | boolean => {
-    const errorMessages = validators.map((validator: yup.AnySchema) => validate(validator, value)).filter(Boolean);
-    if (errorMessages.length) {
-        return errorMessages;
+export const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
+    const naa = new Date();
+    if (mottattDato && klokkeslett && new Date(mottattDato).getDate() === naa.getDate()) {
+        return initializeDate(naa).format('HH:mm') < klokkeslett;
     }
     return false;
 };

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import Page from 'app/components/page/Page';
-import { setIdentAction, setStepAction } from 'app/state/actions';
+import { setIdentAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -16,7 +16,7 @@ import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import { IIdentState } from '../../models/types/IdentState';
-import { IJournalpost, IPath } from '../../models/types';
+import { IJournalpost } from '../../models/types';
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -35,7 +35,6 @@ export interface IPunchOMPUTPageDispatchProps {
 export interface IPunchOMPUTPageComponentProps {
     match?: any;
     journalpostid?: string;
-    paths: IPath[];
 }
 
 export interface IPunchOMPUTPageComponentState {
@@ -124,8 +123,4 @@ const mapStateToProps = (state: RootStateType) => ({
     forbidden: state.felles.journalpostForbidden,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-    setStepAction: (step: number) => dispatch(setStepAction(step)),
-});
-
-export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTPage)));
+export default withRouter(injectIntl(connect(mapStateToProps)(PunchOMPUTPage)));

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IPunchState } from 'app/models/types';
+import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { setIdentAction, setStepAction } from 'app/state/actions';
+import { setIdentAction } from 'app/state/actions';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -18,25 +17,18 @@ import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 
-export interface IEksisterendeOMPUTSoknaderStateProps {
-    punchState: IPunchState;
-}
-
 export interface IEksisterendeOMPUTSoknaderDispatchProps {
     setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
 }
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;
     ident1: string;
     ident2: string | null;
-    sakstype: string;
 }
 
 type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps &
     IEksisterendeOMPUTSoknaderComponentProps &
-    IEksisterendeOMPUTSoknaderStateProps &
     IEksisterendeOMPUTSoknaderDispatchProps;
 
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
