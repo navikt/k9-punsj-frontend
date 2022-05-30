@@ -5,6 +5,7 @@
         "K9_LOS_URL": "https://k9-los-web.nais.adeo.no/",
         "OMP_KS_ENABLED": "true",
         "PLS_ENABLED": "false",
-        "OMP_MA_FEATURE_TOGGLE": "false"
+        "OMP_MA_FEATURE_TOGGLE": "false",
+        "PLS_FORHINDRE_INNSENDING_TIL_K9": "true"
     }
 }
