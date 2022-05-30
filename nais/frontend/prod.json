@@ -6,6 +6,6 @@
         "OMP_KS_ENABLED": "true",
         "PLS_ENABLED": "false",
         "OMP_MA_FEATURE_TOGGLE": "false",
-        "PLS_FORHINDRE_INNSENDING_TIL_K9": "false"
+        "PLS_FORHINDRE_INNSENDING_TIL_K9": "true"
     }
 }

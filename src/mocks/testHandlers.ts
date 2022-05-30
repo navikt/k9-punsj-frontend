@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
-import { BACKEND_BASE_URL } from './konstanter';
+import { ApiPath } from 'app/apiConfig';
+import { BACKEND_BASE_URL, LOCAL_API_URL } from './konstanter';
 import journalpost from '../../cypress/fixtures/journalpost.json';
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
@@ -18,17 +19,17 @@ export const testHandlers = {
     me: rest.get(`${BACKEND_BASE_URL}/me`, (req, res, ctx) =>
         res(ctx.status(200), ctx.json({ name: 'Bobby Binders' }))
     ),
-    hentJournalpost: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/journalpost/200`, (req, res, ctx) =>
+    hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/200`, (req, res, ctx) =>
         res(ctx.json(journalpost))
     ),
     opprettePleiepengesoknad: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad`,
+        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`,
         (req, res, ctx) => res(ctx.status(201), ctx.json(pleiepengerSoknad))
     ),
-    hentSoknader: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/journalpost/hent`, (req, res, ctx) =>
+    hentSoknader: rest.post(`${LOCAL_API_URL}/journalpost/hent`, (req, res, ctx) =>
         res(ctx.json({ poster: [] }))
     ),
-    hentMappe: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
+    hentMappe: rest.get(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
         res(
             ctx.json({
                 søker: '29099000129',
@@ -38,45 +39,45 @@ export const testHandlers = {
         )
     ),
     infoPleiepenger: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/k9sak/info`,
+        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/k9sak/info`,
         (req, res, ctx) => res(ctx.json([]))
     ),
     eksisterendePleiepengesoknad: rest.get(
-        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe`,
+        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe`,
         (req, res, ctx) => res(ctx.json(journalpost))
     ),
     oppdaterPleiepengesoknad: rest.put(
-        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/oppdater`,
+        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/oppdater`,
         (req, res, ctx) => res(ctx.json(pleiepengerSoknadSomKanSendesInn))
     ),
     validerPleiepengesoknad: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/valider`,
+        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/valider`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
     ),
     sendPleiepengesoknad: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/send`,
+        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/send`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
     ),
-    hentArbeidsgivere: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/arbeidsgivere`, (req, res, ctx) =>
+    hentArbeidsgivere: rest.get(`${LOCAL_API_URL}/arbeidsgivere`, (req, res, ctx) =>
         res(ctx.status(202), ctx.json(arbeidsgivere))
     ),
     hentArbeidsforholdMedIDer: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad/k9sak/arbeidsforholdIder`,
+        `${LOCAL_API_URL}/omsorgspenger-soknad/k9sak/arbeidsforholdIder`,
         (req, res, ctx) => res(ctx.status(202), ctx.json([]))
     ),
-    oppretteKorrigering: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad`, (req, res, ctx) =>
+    oppretteKorrigering: rest.post(`${LOCAL_API_URL}/omsorgspenger-soknad`, (req, res, ctx) =>
         res(ctx.status(201), ctx.json(korrigeringAvInntektsmeldingSoknad))
     ),
-    oppdaterKorrigering: rest.put(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad/oppdater`, (req, res, ctx) =>
+    oppdaterKorrigering: rest.put(`${LOCAL_API_URL}/omsorgspenger-soknad/oppdater`, (req, res, ctx) =>
         res(ctx.json(korrigeringAvInntektsmeldingSoknadSomKanSendesInn))
     ),
-    validerKorrigering: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad/valider`, (req, res, ctx) => {
+    validerKorrigering: rest.post(`${LOCAL_API_URL}/omsorgspenger-soknad/valider`, (req, res, ctx) => {
         if (req?.body && typeof req.body === 'object' && req.body.fravaersperioder?.length === 0) {
             return res(ctx.status(400), ctx.json(korrigeringAvInntektsmeldingSoknadValideringFailed));
         }
         return res(ctx.status(202), ctx.json(korrigeringAvInntektsmeldingSoknadValidering));
     }),
-    sendKorrigering: rest.post(`${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-soknad/send`, (req, res, ctx) =>
+    sendKorrigering: rest.post(`${LOCAL_API_URL}/omsorgspenger-soknad/send`, (req, res, ctx) =>
         res(ctx.status(202), ctx.json(korrigeringAvInntektsmeldingSoknadValidering))
     ),
     aktørId: rest.get('http://localhost:8101/api/k9-punsj/brev/aktorId', (req, res, ctx) =>
@@ -87,7 +88,7 @@ export const testHandlers = {
      * Omsorgspenger kronisk sykt barn
      */
     hentOmsorgspengerKroniskSyktBarnMappe: rest.get(
-        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/mappe`,
+        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/mappe`,
         (req, res, ctx) =>
             res(
                 ctx.json({
@@ -98,18 +99,18 @@ export const testHandlers = {
             )
     ),
     oppdaterOmsorgspengerKroniskSyktBarnSøknad: rest.put(
-        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/oppdater`,
+        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/oppdater`,
         (req, res, ctx) => res(ctx.json(omsorgspengerKsSoknadSomKanSendesInn))
     ),
     validerOmsorgspengerKroniskSyktBarnSøknad: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/valider`,
+        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/valider`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
     ),
     sendOmsorgspengerKroniskSyktBarnSøknad: rest.post(
-        `${BACKEND_BASE_URL}/api/k9-punsj/omsorgspenger-kronisk-sykt-barn-soknad/send`,
+        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/send`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
     ),
-    barn: rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/barn`, (req, res, ctx) =>
+    barn: rest.get(`${LOCAL_API_URL}/barn`, (req, res, ctx) =>
         res(
             ctx.status(200),
             ctx.json({
@@ -118,6 +119,26 @@ export const testHandlers = {
                     { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
                     { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
                 ],
+            })
+        )
+    ),
+    gosysKategorier: rest.get(`${LOCAL_API_URL}/gosys/gjelder`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                Anke: 'Anke',
+                Annet: 'Gjelder noe annet, må velges i Gosys',
+                Klage: 'Klage',
+                Omsorgspenger: 'Omsorgspenger',
+                Opplæringspenger: 'Opplæringspenger',
+                PleiepengerPårørende: 'Pleiepenger pårørende',
+                PleiepengerSyktBarn: 'Pleiepenger ny ordning',
+            })
+        )
+    ),
+    skalTilK9Sak: rest.post(`${LOCAL_API_URL}${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                k9sak: true,
             })
         )
     ),
