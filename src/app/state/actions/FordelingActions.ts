@@ -28,6 +28,9 @@ export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({
 interface ISjekkOmSkalTilK9LoadingAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST;
 }
+interface ISjekkOmSkalTilK9ResetAction {
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET;
+}
 interface ISjekkOmSkalTilK9ErrorAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR;
     error: IError;
@@ -127,10 +130,14 @@ export type IFordelingActionTypes =
     | IGosysGjelderSuccessAction
     | IGosysGjelderErrorAction
     | ISetErIdent1BekreftetAction
-    | ISetValgtGosysKategori;
+    | ISetValgtGosysKategori
+    | ISjekkOmSkalTilK9ResetAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
+});
+export const sjekkSkalTilK9ResetAction = (): ISjekkOmSkalTilK9ResetAction => ({
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET,
 });
 
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
@@ -185,6 +192,10 @@ export function sjekkOmSkalTilK9Sak(
         });
     };
 }
+
+export const resetSkalTilK9 = () => (dispatch: any) => {
+    dispatch(sjekkSkalTilK9ResetAction());
+};
 
 export function hentGjelderKategorierFraGosys() {
     return (dispatch: any) => {

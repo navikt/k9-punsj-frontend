@@ -34,6 +34,7 @@ interface IValgForDokument {
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
     identState: IIdentState;
     konfigForValgtSakstype: any;
+    visValgForDokument: boolean;
     fordelingState: IFordelingState;
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
@@ -53,9 +54,12 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     journalpost,
     lukkJournalpostOppgave,
     gjelderPleiepengerEllerOmsorgspenger,
+    visValgForDokument,
 }) => {
     const intl = useIntl();
-    const vis = fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger;
+    const vis =
+        ((fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger) || visValgForDokument) &&
+        dokumenttype !== FordelingDokumenttype.ANNET;
 
     if (!vis) {
         return null;

@@ -13,24 +13,16 @@ describe('Fordeling', () => {
     });
 
     it('kan opprette journalføringsoppgave i Gosys', () => {
-        cy.intercept(
-            {
-                method: 'GET',
-                url: '/api/k9-punsj/gosys/gjelder',
-            },
-            { fixture: 'gosysKategorier.json' }
-        ).as('gosysKategorier');
         cy.contains('Annet').click();
-        cy.wait('@gosysKategorier');
-        const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
-        identifikatorInput.clear().type('13337');
+        cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
+        cy.findByLabelText(/Velg hva journalposten gjelder/i).should('exist');
     });
     it('kan korrigere inntektsmelding uten at sjekkSkalTilK9 kjøres', () => {
         cy.window().then((window) => {
             const { worker, rest } = window.msw;
             worker.use(
-                rest.get(`${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
-                    res(
+                rest.post(`${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
+                    res.once(
                         ctx.json({
                             k9sak: false,
                         })
@@ -45,5 +37,15 @@ describe('Fordeling', () => {
         cy.findByText('Korrigere/trekke refusjonskrav omsorgspenger').click();
         cy.findByRole('button', { name: /bekreft/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/korrigering-av-inntektsmelding');
+    });
+
+    it('Midlertidig alene - kan navigere til eksisterende søknader', () => {
+        cy.findByText(/Omsorgsdager: ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
+        cy.findByText(/Ja/i).click();
+        cy.findByLabelText(/Fødselsnummer annen part/i).type(29099000129);
+        cy.findByRole('button', { name: /Videre/i }).click();
+        cy.findByText(/Registrer søknad - ekstra omsorgsdager/i).click();
+        cy.findByRole('button', { name: /bekreft/i }).click();
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentsoknader');
     });
 });
