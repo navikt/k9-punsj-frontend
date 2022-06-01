@@ -455,6 +455,10 @@
     "omsorgspenger.midlertidigAlene.situasjonstyper.FENGSEL": "Fengsel",
     "omsorgspenger.midlertidigAlene.situasjonstyper.SYKDOM": "Sykdom",
     "omsorgspenger.midlertidigAlene.situasjonstyper.ANNET": "Annet",
+
+    "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
+    "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",
+    "omsorgspenger.utbetaling.skjematyper.SN/FL": "Selvstendig næringsdrivende/frilanser",
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
     "modal.settpaavent.visjournalpost": "Vis journalpost",
@@ -521,5 +525,8 @@
     "Messages.Preview": "Forhåndsvis",
     "Messages.PreviewText": "Forhåndsvis varselbrev",
     "Messages.Beskrivelse": "Foretrukket språk",
-    "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}"
+    "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}",
+
+    "AT": "Arbeidstaker",
+    "SN/FL": "Selvstendig næringsdrivende/frilanser"
 }

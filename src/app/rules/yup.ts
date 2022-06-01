@@ -42,7 +42,11 @@ export const identifikator = yup
     })
     .label('Identifikasjonsnummer');
 
-
+export const barn = yup.array().of(
+    yup.object().shape({
+        norskIdent: identifikator,
+    })
+);
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
     try {

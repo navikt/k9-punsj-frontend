@@ -27,6 +27,7 @@ const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     mottattDato: soknad?.mottattDato || '',
     journalposter: soknad?.journalposter || new Set([]),
     klokkeslett: soknad?.klokkeslett || '',
+    skjematype: '',
     harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
     harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
 });

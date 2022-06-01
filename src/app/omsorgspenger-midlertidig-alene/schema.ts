@@ -1,8 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
-import * as yup from 'yup';
-
 import { initializeDate } from 'app/utils/timeUtils';
-import { identifikator, yupLocale } from 'app/rules/valideringer';
+import yup, { identifikator } from 'app/rules/yup';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();
@@ -16,8 +14,6 @@ const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
     }
     return false;
 };
-
-yup.setLocale(yupLocale);
 
 const OMPMASchema = yup.object({
     mottattDato: yup

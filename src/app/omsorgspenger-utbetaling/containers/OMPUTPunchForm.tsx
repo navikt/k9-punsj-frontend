@@ -33,6 +33,7 @@ import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
+import SkjematypeVelger from './SkjematypeVelger';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -160,8 +161,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
-    const handleBlur = (callback: () => void) => {
-        callback();
+    const handleBlur = (callback?: () => void) => {
+        if (callback) {
+            callback();
+        }
         updateSoknad(values);
     };
 
@@ -175,6 +178,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 signert={signert}
                 handleBlur={handleBlur}
             />
+            <SkjematypeVelger handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} handleBlur={handleBlur} />
