@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { initializeDate } from 'app/utils/timeUtils';
-import yup, { identifikator } from 'app/rules/yup';
+import yup, { identifikator, periode } from 'app/rules/yup';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();
@@ -40,10 +40,7 @@ const OMPMASchema = yup.object({
         norskIdent: identifikator,
         situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
         situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
-        periode: yup.object().shape({
-            fom: yup.string().required().label('Fra og med'),
-            tom: yup.string().required().label('Til og med'),
-        }),
+        periode,
     }),
 });
 

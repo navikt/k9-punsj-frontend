@@ -19,22 +19,10 @@ import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
 import { hentSoeknad, sendSoeknad } from '../api';
-
-const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
-    barn: soknad?.barn || [],
-    soeknadId: soknad?.soeknadId || '',
-    soekerId: soknad?.soekerId || '',
-    mottattDato: soknad?.mottattDato || '',
-    journalposter: soknad?.journalposter || new Set([]),
-    klokkeslett: soknad?.klokkeslett || '',
-    skjematype: '',
-    harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
-    harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
-});
+import { initialValues } from '../initialValues';
 
 interface OwnProps {
     journalpostid: string;
-    match: any;
 }
 export interface IPunchOMPUTFormStateProps {
     identState: IIdentState;
@@ -86,11 +74,14 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     }
 
     return (
-        <Formik initialValues={initialValues(soeknadRespons)} onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}>
+        <Formik
+            initialValues={initialValues(soeknadRespons)}
+            validationSchema={schema}
+            onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}
+        >
             {(formik) => (
                 <OMPUTPunchForm
                     formik={formik}
-                    schema={schema}
                     visForhaandsvisModal={visForhaandsvisModal}
                     setVisForhaandsvisModal={setVisForhaandsvisModal}
                     k9FormatErrors={k9FormatErrors}

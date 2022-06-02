@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import { ErrorSummary } from '@navikt/ds-react';
+import { ErrorSummary, Panel } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setIdentAction, setSignaturAction } from 'app/state/actions';
@@ -34,6 +34,8 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import SkjematypeVelger from './SkjematypeVelger';
+import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
+import ATEllerSNFL from './ATEllerSNFL';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -83,6 +85,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         formik: { values, errors },
     } = props;
     const { signert } = signaturState;
+
+    console.log(values);
 
     useEffect(() => {
         setIdentAction(values.soekerId);
@@ -178,8 +182,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 signert={signert}
                 handleBlur={handleBlur}
             />
-            <SkjematypeVelger handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
+            <Panel border>
+                <SkjematypeVelger handleBlur={handleBlur} />
+                <VerticalSpacer sixteenPx />
+                <ATEllerSNFL skjematype={values.skjematype} handleBlur={handleBlur} />
+            </Panel>
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer twentyPx={true} />
