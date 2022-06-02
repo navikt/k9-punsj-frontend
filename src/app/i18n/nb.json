@@ -461,6 +461,8 @@
     "modal.settpaavent.registrer": "Registrer informasjon",
     "modal.erdusikker.info": "Er du sikker på at du vil fortsette på denne søknaden?",
     "modal.erdusikker.sendinn": "Er du sikker på at du vil sende inn?",
+    "modal.erdusikker.sendebrev": "Er du sikker på at du vil sende brevet?",
+    "modal.erdusikker.fortsett": "Fortsett",
     "modal.erdusikker.sendinn.extrainfo": "Det er ikke mulig å gjøre endringer etter at opplysningene er sendt inn til K9-sak.",
     "modal.okgaatillos.ok": "OK",
     "modal.settpaavent.til": "Saken er satt på vent til {dato}.",
