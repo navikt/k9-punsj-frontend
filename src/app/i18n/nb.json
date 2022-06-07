@@ -456,6 +456,15 @@
     "omsorgspenger.midlertidigAlene.situasjonstyper.SYKDOM": "Sykdom",
     "omsorgspenger.midlertidigAlene.situasjonstyper.ANNET": "Annet",
 
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.velgÅrsak": "Velg fraværsårsak",
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.STENGT_SKOLE_ELLER_BARNEHAGE": "Stengt skole eller barnehage",
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.SMITTEVERNHENSYN": "Smittevernhensyn",
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.ORDINÆRT_FRAVÆR": "Ordinært fravær",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.velgÅrsak": "Velg søknadsårsak",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.NYOPPSTARTET_HOS_ARBEIDSGIVER": "Nyoppstartet hos arbeidsgiver",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.ARBEIDSGIVER_KONKURS": "Arbeidsgiver er konkurs",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER": "Konflikt med arbeidsgiver",
+
     "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
     "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",
     "omsorgspenger.utbetaling.skjematyper.SN/FL": "Selvstendig næringsdrivende/frilanser",

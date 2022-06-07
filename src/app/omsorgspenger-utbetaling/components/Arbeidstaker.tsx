@@ -1,46 +1,49 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import DatoInput from 'app/components/formikInput/DatoInput';
+import { Button, Panel } from '@navikt/ds-react';
 import TextField from 'app/components/formikInput/TextField';
-import { FieldArrayRenderProps, useFormikContext } from 'formik';
+import { ArrayHelpers, Field, FieldArray, FieldProps } from 'formik';
 import React from 'react';
 import { fravaersperiodeInitialValue } from '../initialValues';
-import { aktivitetsFravær } from '../types/OMPUTSoknad';
+import { aktivitetsFravær } from '../konstanter';
+import { Arbeidstaker as ArbeidstakerType } from '../types/OMPUTSoknad';
+import Fravaersperiode from './Fravaersperiode';
 
 interface OwnProps {
     index: number;
-    arrayHelpers: FieldArrayRenderProps;
+    arrayHelpers: ArrayHelpers;
 }
 
-const Arbeidstaker = ({ index, arrayHelpers }: OwnProps) => {
-    const { values } = useFormikContext();
-    return (
-        <>
-            <TextField
-                label="Organisasjonsnummer"
-                type="number"
-                name={`fravaersperioder[${index}].organisasjonsnummer`}
-            />
-            <DatoInput label="Fra og med" name={`fravaersperioder[${index}].periode.fom`} />
-            <DatoInput label="Til og med" name={`fravaersperioder[${index}].periode.tom`} />
-            <TextField label="Faktisk arbeidet timer" size="small" name={`fravaersperiode[${index}].faktiskTidPrDag`} />
-            <div>
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    onClick={() =>
-                        arrayHelpers.push({
-                            ...fravaersperiodeInitialValue,
-                            aktivitetsFravær: aktivitetsFravær.AT,
-                        })
-                    }
-                >
-                    <AddCircle />
-                    Legg til periode
-                </Button>
-            </div>
-        </>
-    );
-};
+const Arbeidstaker = ({ index: arbeidstakerIndex, arrayHelpers: arbeidstakerArrayHelpers }: OwnProps) => (
+    <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
+        {({ field: { value, name } }: FieldProps<ArbeidstakerType>) => (
+            <Panel border>
+                <TextField label="Organisasjonsnummer" type="number" name={`${name}.organisasjonsnummer`} />
+                <FieldArray
+                    name={`${name}.fravaersperioder`}
+                    render={(arrayHelpers) => (
+                        <>
+                            {value.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
+                                <Fravaersperiode name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`} />
+                            ))}
+                            <Button
+                                variant="tertiary"
+                                size="small"
+                                onClick={() =>
+                                    arrayHelpers.push({
+                                        ...fravaersperiodeInitialValue,
+                                        aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
+                                    })
+                                }
+                            >
+                                <AddCircle />
+                                Legg til periode
+                            </Button>
+                        </>
+                    )}
+                />
+            </Panel>
+        )}
+    </Field>
+);
 
 export default Arbeidstaker;

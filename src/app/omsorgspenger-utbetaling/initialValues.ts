@@ -1,7 +1,8 @@
+import { aktivitetsFravær } from './konstanter';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
 
 export const fravaersperiodeInitialValue = {
-    aktivtetsFravær: '',
+    aktivitetsFravær: '',
     organisasjonsnummer: '',
     fraværÅrsak: '',
     søknadÅrsak: '',
@@ -10,6 +11,11 @@ export const fravaersperiodeInitialValue = {
         tom: '',
     },
     faktiskTidPrDag: '',
+};
+
+export const arbeidstakerInitialValue = {
+    organisasjonsnummer: '',
+    fravaersperiodeInitialValue: [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER }],
 };
 
 export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
@@ -26,7 +32,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
         },
     ],
     opptjeningAktivitet: {
-        arbeidstaker: [],
+        arbeidstaker: [{ ...arbeidstakerInitialValue }],
     },
     harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
     harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
