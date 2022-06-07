@@ -1,5 +1,6 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype, JaNei } from 'app/models/enums';
+import validator from '@navikt/fnrvalidator';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { erUgyldigIdent } from 'app/rules/valideringer';
@@ -67,6 +68,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     if (!skalVises) {
         return null;
     }
+
     return (
         <>
             <VerticalSpacer sixteenPx />
@@ -100,10 +102,9 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
                         maxLength={11}
-                        feil={
-                            identState.ident1 && erUgyldigIdent(identState.ident1)
-                                ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                : undefined
+                        feil={identState.ident1 && erUgyldigIdent(identState.ident1)
+                            ? intlHelper(intl, 'ident.feil.ugyldigident')
+                            : undefined
                         }
                         bredde="M"
                     />
