@@ -430,7 +430,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         {fordelingState.skalTilK9 === false && (
                             <>
                                 <AlertStripeInfo className="infotrygd_info">
-                                    {' '}
                                     {intlHelper(intl, 'fordeling.infotrygd')}
                                 </AlertStripeInfo>
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
