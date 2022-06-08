@@ -10,12 +10,18 @@ type Fravaersperiode = {
     periode: Periode;
     faktiskTidPrDag: string;
 };
+
+export type Arbeidsforhold = {
+    arbeidstaker: boolean;
+    selvstendigNæringsdrivende: boolean;
+    frilanser: boolean;
+};
 interface IOpptjeningAktivitet {
     arbeidstaker: Arbeidstaker[];
 }
 
 export interface IOMPUTSoknad extends SoeknadType {
-    skjematype: string;
+    arbeidsforhold: Arbeidsforhold;
     opptjeningAktivitet: IOpptjeningAktivitet;
     barn: PersonEnkel[];
 }

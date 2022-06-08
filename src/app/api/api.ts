@@ -4,20 +4,19 @@ import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
     søkerId: string,
-    callback: (response: Response, data: ArbeidsgivereResponse) => void,
+    callback?: (response: Response, data: ArbeidsgivereResponse) => void,
     fom?: string,
     tom?: string
-): void => {
+): Promise<Response> => {
     if (fom && tom) {
-        get(
+        return get(
             `${ApiPath.FINN_ARBEIDSGIVERE}?fom=${fom}&tom=${tom}`,
             { norskIdent: søkerId },
             { 'X-Nav-NorskIdent': søkerId },
             callback
         );
-    } else {
-        get(ApiPath.FINN_ARBEIDSGIVERE, { norskIdent: søkerId }, { 'X-Nav-NorskIdent': søkerId }, callback);
     }
+    return get(ApiPath.FINN_ARBEIDSGIVERE, { norskIdent: søkerId }, { 'X-Nav-NorskIdent': søkerId }, callback);
 };
 
 export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string): Promise<Error | void> =>

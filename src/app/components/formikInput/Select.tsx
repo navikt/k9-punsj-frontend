@@ -17,9 +17,7 @@ const Select = ({ label, name, options, ...props }: OwnProps) => {
     const [field, meta] = useField(name);
     return (
         <NavSelect label={label} error={meta.touched && meta.error} {...field} {...props}>
-            {options.map((option) => (
-                <option value={option.value}>{option.label}</option>
-            ))}
+            {options.length ? options.map((option) => <option value={option.value}>{option.label}</option>) : null}
         </NavSelect>
     );
 };

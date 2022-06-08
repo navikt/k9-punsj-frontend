@@ -33,9 +33,9 @@ import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
-import SkjematypeVelger from './SkjematypeVelger';
+import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
-import ATEllerSNFL from './ATEllerSNFL';
+import ArbeidsforholdContainer from './ArbeidsforholdContainer';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -183,11 +183,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 handleBlur={handleBlur}
             />
             <VerticalSpacer fourtyPx />
-            <Panel border>
-                <SkjematypeVelger handleBlur={handleBlur} />
-                <VerticalSpacer sixteenPx />
-                <ATEllerSNFL skjematype={values.skjematype} handleBlur={handleBlur} />
-            </Panel>
+            <ArbeidsforholdVelger handleBlur={handleBlur} />
+            <VerticalSpacer sixteenPx />
+            <ArbeidsforholdContainer arbeidsforhold={values.arbeidsforhold} handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer twentyPx={true} />

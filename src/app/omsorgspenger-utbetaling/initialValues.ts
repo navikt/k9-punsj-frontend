@@ -15,7 +15,7 @@ export const fravaersperiodeInitialValue = {
 
 export const arbeidstakerInitialValue = {
     organisasjonsnummer: '',
-    fravaersperiodeInitialValue: [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER }],
+    fravaersperioder: [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER }],
 };
 
 export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
@@ -25,12 +25,11 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     mottattDato: soknad?.mottattDato || '',
     journalposter: soknad?.journalposter || new Set([]),
     klokkeslett: soknad?.klokkeslett || '',
-    skjematype: '',
-    fravaersperioder: [
-        {
-            ...fravaersperiodeInitialValue,
-        },
-    ],
+    arbeidsforhold: {
+        arbeidstaker: false,
+        selvstendigNæringsdrivende: false,
+        frilanser: false,
+    },
     opptjeningAktivitet: {
         arbeidstaker: [{ ...arbeidstakerInitialValue }],
     },
