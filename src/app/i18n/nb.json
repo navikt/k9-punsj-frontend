@@ -478,9 +478,10 @@
     "OpprettJournalpost.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
     "OpprettJournalpost.gåTilJournalpost": "Gå til journalpost",
 
-    "PLEIEPENGER": "Pleiepenger",
+    "PLEIEPENGER": "Pleiepenger sykt barn",
     "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
-    "OMSORGSPENGER_KS": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
+    "OMSORGSPENGER": "Omsorgspenger/omsorgsdager",
+    "OMSORGSPENGER_KS": "Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",
 
