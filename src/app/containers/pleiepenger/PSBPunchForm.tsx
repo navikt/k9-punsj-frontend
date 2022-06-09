@@ -1239,13 +1239,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return naa < new Date(dato);
     }
 
-    private erFremITidKlokkeslett(dato: string) {
+    private erFremITidKlokkeslett(klokkeslett: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
+
         if (
             !!mottattDato &&
-            naa.getDate() === new Date(mottattDato!).getDate() &&
-            initializeDate(naa).format('HH:mm') < dato
+            naa.toDateString() === new Date(mottattDato!).toDateString() &&
+            initializeDate(naa).format('HH:mm') < klokkeslett
         ) {
             return true;
         }
