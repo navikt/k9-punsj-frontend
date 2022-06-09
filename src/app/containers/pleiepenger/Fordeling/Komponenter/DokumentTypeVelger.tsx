@@ -1,5 +1,5 @@
 import React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { RadioPanel } from 'nav-frontend-skjema';
 import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
 import intlHelper from '../../../../utils/intlUtils';
@@ -7,16 +7,15 @@ import { getEnvironmentVariable } from '../../../../utils';
 import './DokumentTypeVelger.less';
 
 interface OwnProps {
-    intl: IntlShape;
     handleDokumenttype: (type: FordelingDokumenttype) => void;
     valgtDokumentType: string;
 }
 
 const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
-    intl,
     handleDokumenttype,
     valgtDokumentType,
 }) => {
+    const intl = useIntl();
     const toggleFordelingDokumentType = (type: string): boolean => {
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
@@ -86,4 +85,4 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
     )
 };
 
-export default injectIntl(DokumentTypeVelger);
+export default DokumentTypeVelger;
