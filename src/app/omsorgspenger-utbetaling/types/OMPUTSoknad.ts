@@ -1,4 +1,4 @@
-import { Periode, PersonEnkel } from 'app/models/types';
+import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
 import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
 
 export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: Fravaersperiode[] };
@@ -18,6 +18,31 @@ export type Arbeidsforhold = {
 };
 interface IOpptjeningAktivitet {
     arbeidstaker: Arbeidstaker[];
+    selvstendigNæringsdrivende: {
+        virksomhetNavn: string;
+        organisasjonsnummer: string;
+        info: {
+            periode: IPeriode;
+            virksomhetstyper: string[];
+            landkode: string;
+            regnskapsførerNavn: string;
+            regnskapsførerTlf: string;
+            registrertIUtlandet: boolean;
+            bruttoInntekt: string;
+            erNyoppstartet: boolean;
+            erVarigEndring: boolean;
+            endringInntekt: string;
+            endringDato: string;
+            endringBegrunnelse: string;
+        };
+        fravaersperioder: Fravaersperiode[];
+    };
+    frilanser: {
+        startdato: string;
+        sluttdato: string | undefined;
+        jobberFortsattSomFrilans: boolean;
+        fravaersperioder: Fravaersperiode[];
+    };
 }
 
 export interface IOMPUTSoknad extends SoeknadType {

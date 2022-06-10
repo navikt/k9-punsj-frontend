@@ -1,15 +1,17 @@
 import { aktivitetsFravær } from './konstanter';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
 
+export const periodeInitialValue = {
+    fom: '',
+    tom: '',
+};
+
 export const fravaersperiodeInitialValue = {
     aktivitetsFravær: '',
     organisasjonsnummer: '',
     fraværÅrsak: '',
     søknadÅrsak: '',
-    periode: {
-        fom: '',
-        tom: '',
-    },
+    periode: periodeInitialValue,
     faktiskTidPrDag: '',
 };
 
@@ -31,6 +33,29 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
         frilanser: false,
     },
     opptjeningAktivitet: {
+        selvstendigNæringsdrivende: {
+            virksomhetNavn: '',
+            organisasjonsnummer: '',
+            info: {
+                periode: periodeInitialValue,
+                virksomhetstyper: [],
+                landkode: '',
+                regnskapsførerNavn: '',
+                regnskapsførerTlf: '',
+                registrertIUtlandet: false,
+                bruttoInntekt: '',
+                erNyoppstartet: false,
+                erVarigEndring: true,
+                endringInntekt: '',
+                endringDato: '',
+                endringBegrunnelse: '',
+            },
+        },
+        frilanser: {
+            startdato: '',
+            sluttdato: '',
+            jobberFortsattSomFrilans: false,
+        },
         arbeidstaker: [{ ...arbeidstakerInitialValue }],
     },
     harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
