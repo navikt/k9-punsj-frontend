@@ -1,14 +1,24 @@
-import { Panel } from '@navikt/ds-react';
+import React from 'react';
+import { Delete } from '@navikt/ds-icons';
+import { Button, Panel } from '@navikt/ds-react';
 import DatoInput from 'app/components/formikInput/DatoInput';
 import Select from 'app/components/formikInput/Select';
 import TextField from 'app/components/formikInput/TextField';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
-import React from 'react';
 import { useIntl } from 'react-intl';
 import { fraværÅrsak, søknadÅrsak } from '../konstanter';
+import './fravaersperiode.less';
 
-const Fravaersperiode = ({ name }: { name: string }) => {
+interface OwnProps {
+    antallFravaersperioder: number;
+    name: string;
+    slettPeriode: () => void;
+}
+
+const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProps) => {
     const intl = useIntl();
+    const minstToPerioder = antallFravaersperioder > 1;
     const fraværÅrsakOptions = [
         {
             value: '',
@@ -50,11 +60,29 @@ const Fravaersperiode = ({ name }: { name: string }) => {
     ];
     return (
         <Panel border>
-            <Select label="Fraværsårsak" size="small" name={`${name}.fraværÅrsak`} options={fraværÅrsakOptions} />
-            <Select label="Søknadsårsak" size="small" name={`${name}.søknadÅrsak`} options={søknadÅrsakOptions} />
-            <DatoInput label="Fra og med" name={`${name}.periode.fom`} />
-            <DatoInput label="Til og med" name={`${name}.periode.tom`} />
-            <TextField label="Timer arbeidet" size="small" name={`${name}.faktiskTidPrDag`} />
+            <div className="aarsak-rad">
+                <Select label="Fraværsårsak" size="small" name={`${name}.fraværÅrsak`} options={fraværÅrsakOptions} />
+                <Select label="Søknadsårsak" size="small" name={`${name}.søknadÅrsak`} options={søknadÅrsakOptions} />
+                {minstToPerioder && (
+                    <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode}>
+                        <Delete />
+                        Fjern arbeidsforhold
+                    </Button>
+                )}
+            </div>
+            <VerticalSpacer twentyPx />
+            <VerticalSpacer twentyPx />
+            <div className="fom-tom-rad">
+                <DatoInput label="Fra og med" name={`${name}.periode.fom`} />
+                <DatoInput label="Til og med" name={`${name}.periode.tom`} />
+                <TextField
+                    className="timer-arbeidet"
+                    label="Timer arbeidet"
+                    size="small"
+                    name={`${name}.faktiskTidPrDag`}
+                />
+            </div>
+            <VerticalSpacer twentyPx />
         </Panel>
     );
 };

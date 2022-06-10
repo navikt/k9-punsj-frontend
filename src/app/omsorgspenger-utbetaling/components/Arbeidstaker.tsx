@@ -1,42 +1,69 @@
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Checkbox, Panel, Select } from '@navikt/ds-react';
+import { Delete, AddCircle } from '@navikt/ds-icons';
+import { Button, Checkbox, Panel } from '@navikt/ds-react';
 import TextField from 'app/components/formikInput/TextField';
 import Organisasjonsvelger from 'app/components/organisasjonsvelger/Organisasjonvelger';
-import { ArrayHelpers, Field, FieldArray, FieldProps } from 'formik';
+import { Field, FieldArray, FieldProps, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
-import { Arbeidstaker as ArbeidstakerType } from '../types/OMPUTSoknad';
+import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
+import './arbeidstaker.less';
 
 interface OwnProps {
     index: number;
-    arrayHelpers: ArrayHelpers;
+    slettArbeidsforhold: () => void;
+    antallArbeidsforhold: number;
 }
 
-const Arbeidstaker = ({ index: arbeidstakerIndex, arrayHelpers: arbeidstakerArrayHelpers }: OwnProps) => {
+const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArbeidsforhold }: OwnProps) => {
     const [gjelderAnnenOrganisasjon, setGjelderAnnenOrganisasjon] = useState(false);
+
+    const harMinstToArbeidsforhold = antallArbeidsforhold > 1;
+
+    const toggleGjelderAnnenOrganisasjon = (form: FormikProps<IOMPUTSoknad>) => {
+        setGjelderAnnenOrganisasjon(!gjelderAnnenOrganisasjon);
+        form.setFieldValue(`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`, '');
+    };
     return (
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
                 <Panel border>
-                    <Organisasjonsvelger
-                        name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
-                        soeker={form.values.soekerId}
-                        disabled={gjelderAnnenOrganisasjon}
-                    />
-                    <Checkbox onChange={() => setGjelderAnnenOrganisasjon(!gjelderAnnenOrganisasjon)}>
-                        Gjelder annen organisasjon
-                    </Checkbox>
-                    {gjelderAnnenOrganisasjon && (
-                        <TextField label="Organisasjonsnummer" type="number" name={`${name}.organisasjonsnummer`} />
-                    )}
+                    <div>
+                        <Organisasjonsvelger
+                            name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
+                            soeker={form.values.soekerId}
+                            disabled={gjelderAnnenOrganisasjon}
+                            className="inline-block"
+                        />
+                        {harMinstToArbeidsforhold && (
+                            <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
+                                <Delete />
+                                Fjern arbeidsforhold
+                            </Button>
+                        )}
+                        <Checkbox onChange={() => toggleGjelderAnnenOrganisasjon(form)}>
+                            Gjelder annen organisasjon
+                        </Checkbox>
+                        {gjelderAnnenOrganisasjon && (
+                            <TextField
+                                size="small"
+                                label="Organisasjonsnummer"
+                                type="number"
+                                name={`${name}.organisasjonsnummer`}
+                            />
+                        )}
+                    </div>
                     <FieldArray
                         name={`${name}.fravaersperioder`}
                         render={(arrayHelpers) => (
                             <>
                                 {value.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
-                                    <Fravaersperiode name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`} />
+                                    <Fravaersperiode
+                                        name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
+                                        antallFravaersperioder={value.fravaersperioder?.length}
+                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                    />
                                 ))}
                                 <Button
                                     variant="tertiary"

@@ -18,7 +18,11 @@ const ArbeidstakerContainer = () => {
             render={(arrayHelpers) => (
                 <div>
                     {arbeidstaker.map((v, index) => (
-                        <Arbeidstaker index={index} arrayHelpers={arrayHelpers} />
+                        <Arbeidstaker
+                            index={index}
+                            antallArbeidsforhold={arbeidstaker.length}
+                            slettArbeidsforhold={() => arrayHelpers.remove(index)}
+                        />
                     ))}
                     <Button
                         variant="tertiary"

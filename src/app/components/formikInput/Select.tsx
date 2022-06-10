@@ -7,13 +7,13 @@ type Option = {
     value: string;
 };
 
-interface OwnProps extends Partial<SelectProps> {
+export interface FormikSelectProps extends Partial<SelectProps> {
     label: string;
     name: string;
     options: Option[];
 }
 
-const Select = ({ label, name, options, ...props }: OwnProps) => {
+const Select = ({ label, name, options, ...props }: FormikSelectProps) => {
     const [field, meta] = useField(name);
     return (
         <NavSelect label={label} error={meta.touched && meta.error} {...field} {...props}>
