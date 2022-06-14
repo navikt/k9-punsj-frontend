@@ -120,7 +120,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         resetSjekkSkalTilK9();
         setVisValgForDokument(false);
-    }, [dokumenttype]);
+    }, [dokumenttype, identState.ident1, identState.ident2, identState.annenPart]);
 
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
 
