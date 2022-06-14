@@ -80,12 +80,6 @@ export function gyldigFødselsdato(verdi: string) {
     return new Date(verdi) < dagsDato ? undefined : 'skjema.validering.ugyldigfødselsdato';
 }
 
-export const erUgyldigIdent = (ident: string | null | undefined) => {
-    if (!ident) return true;
-    if (!ident.length) return true;
-    return !IdentRules.isIdentValid(ident);
-};
-
 yup.setLocale(yupLocale);
 
 export const identifikator = yup
@@ -94,7 +88,7 @@ export const identifikator = yup
     .nullable(true)
     .length(11)
     .test({
-        test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
+        test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
         message: 'Ugyldig identifikasjonsnummer',
     })
     .label('Identifikasjonsnummer');

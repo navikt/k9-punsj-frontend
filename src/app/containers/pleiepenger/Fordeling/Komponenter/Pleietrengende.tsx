@@ -6,7 +6,7 @@ import { Input, Select } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { erUgyldigIdent } from 'app/rules/valideringer';
+import { IdentRules } from 'app/rules';
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { IIdentState } from '../../../../models/types/IdentState';
@@ -135,14 +135,14 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             className="bold-label ident-soker-2"
                             maxLength={11}
                             feil={
-                                identState.ident2 && erUgyldigIdent(identState.ident2)
+                                identState.ident2 && IdentRules.erUgyldigIdent(identState.ident2)
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }
                             bredde="M"
                             disabled={pleietrengendeHarIkkeFnr}
                         />
-                        {pleietrengendeIdent.length === 11 && !erUgyldigIdent(identState.ident2) && (
+                        {pleietrengendeIdent.length === 11 && !IdentRules.erUgyldigIdent(identState.ident2) && (
                             <div className="dobbelSjekkIdent">
                                 <div>
                                     <WarningCircle />

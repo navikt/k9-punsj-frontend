@@ -24,7 +24,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { erUgyldigIdent } from 'app/rules/valideringer';
+import { IdentRules } from 'app/rules';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../../components/pdf/PdfVisning';
@@ -145,15 +145,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const disableVidereMidlertidigAlene =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (!identState.annenPart || !!(identState.annenPart && erUgyldigIdent(identState.annenPart)));
+        (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
 
     const disableVidereKnapp =
         ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-            erUgyldigIdent(identState.ident2) &&
+            IdentRules.erUgyldigIdent(identState.ident2) &&
             !barnetHarIkkeFnr) ||
-        erUgyldigIdent(identState.ident1) ||
+        IdentRules.erUgyldigIdent(identState.ident1) ||
         disableVidereMidlertidigAlene;
 
     const handleIdent1Change = (event: any) => {
@@ -179,7 +179,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-        !erUgyldigIdent(identState.ident1);
+        !IdentRules.erUgyldigIdent(identState.ident1);
 
     const utledFagsakYtelseType = (dokumentType: FordelingDokumenttype | undefined): FagsakYtelseType => {
         switch (dokumentType) {
