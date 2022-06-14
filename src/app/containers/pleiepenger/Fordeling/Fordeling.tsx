@@ -140,11 +140,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
-    const stoppInnsendingAvPLS =
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE &&
-        fordelingState.skalTilK9 &&
-        getEnvironmentVariable('PLS_FORHINDRE_INNSENDING_TIL_K9') === 'true';
-
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -453,12 +448,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </>
                             )}
                         </div>
-                        {stoppInnsendingAvPLS && (
-                            <AlertStripeAdvarsel>
-                                Søknader på Pleiepenger i livets sluttfase kan ikke behandles i K9 før 2. juni. Søknaden
-                                må ligge på benken din til den kan behandles.
-                            </AlertStripeAdvarsel>
-                        )}
                         <VerticalSpacer sixteenPx />
                         <ValgForDokument
                             dokumenttype={dokumenttype}
@@ -516,7 +505,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
-                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>
+                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.error')}</AlertStripeFeil>
                         )}
                         {!!fordelingState.sjekkTilK9JournalpostStottesIkke && (
                             <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">
