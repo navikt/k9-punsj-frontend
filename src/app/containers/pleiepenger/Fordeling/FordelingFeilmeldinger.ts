@@ -1,7 +1,13 @@
-import { erUgyldigIdent } from 'app/rules/valideringer';
+import validator from '@navikt/fnrvalidator';
 import intlHelper from '../../../utils/intlUtils';
 
-// eslint-disable-next-line import/prefer-default-export
+export const erUgyldigIdent = (ident: string | null): boolean => {
+    if (!ident || !ident.length) return true;
+    const { status } = validator.idnr(ident);
+
+    return status === 'invalid';
+};
+
 export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     annenIdent: string | null,
     sokerIdent: string | null,
