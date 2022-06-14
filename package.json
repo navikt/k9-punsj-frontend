@@ -85,7 +85,7 @@
         "yup": "^0.32.11"
     },
     "scripts": {
-        "dev": "node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
+        "dev": "dev-env-variables node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
