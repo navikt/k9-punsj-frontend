@@ -447,10 +447,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         {fordelingState.skalTilK9 === false && (
                             <>
                                 <AlertStripeInfo className="infotrygd_info">
-                                    <FormattedMessage
-                                        id="fordeling.infotrygd"
-                                        values={{ identifikator: fordelingState.kanIkkeGaaTilK9.join(', ') }}
-                                    />
+                                    {intlHelper(intl, 'fordeling.infotrygd')}
                                 </AlertStripeInfo>
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
                                     <div>
@@ -486,7 +483,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
-                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.infortygd.error')}</AlertStripeFeil>
+                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.error')}</AlertStripeFeil>
                         )}
                         {!!fordelingState.sjekkTilK9JournalpostStottesIkke && (
                             <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">

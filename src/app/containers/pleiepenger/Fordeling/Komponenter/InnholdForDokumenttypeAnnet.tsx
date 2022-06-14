@@ -66,7 +66,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                 className="bold-label ident-soker-1"
                 maxLength={11}
                 feil={
-                    erUgyldigIdent(identState.ident1) || identState.ident1.length <= 0
+                    erUgyldigIdent(identState.ident1)
                         ? intlHelper(intl, 'ident.feil.ugyldigident')
                         : undefined
                 }
@@ -76,11 +76,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
             <GosysGjelderKategorier />
             <Hovedknapp
                 mini
-                disabled={
-                    !identState.ident1 ||
-                    (!!identState.ident1 && !!erUgyldigIdent(identState.ident1)) ||
-                    !fordelingState.valgtGosysKategori
-                }
+                disabled={erUgyldigIdent(identState.ident1) || !fordelingState.valgtGosysKategori}
                 onClick={() =>
                     omfordel(journalpost?.journalpostId, identState.ident1, fordelingState.valgtGosysKategori)
                 }

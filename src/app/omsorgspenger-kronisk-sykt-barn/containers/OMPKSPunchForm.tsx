@@ -1,6 +1,6 @@
 /* eslint-disable */
-import {PunchStep} from 'app/models/enums';
-import {IInputError, ISignaturState} from 'app/models/types';
+import { PunchStep } from 'app/models/enums';
+import { IInputError, ISignaturState } from 'app/models/types';
 import {
     resetPunchFormAction,
     setIdentAction,
@@ -9,33 +9,33 @@ import {
     setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
-import {nummerPrefiks, setHash} from 'app/utils';
+import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import {AlertStripeFeil} from 'nav-frontend-alertstriper';
-import {EtikettAdvarsel, EtikettFokus, EtikettSuksess} from 'nav-frontend-etiketter';
-import {Hovedknapp, Knapp} from 'nav-frontend-knapper';
+import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
+import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
-import {connect} from 'react-redux';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
 import VerticalSpacer from '../../components/VerticalSpacer';
-import {JaNeiIkkeRelevant} from '../../models/enums/JaNeiIkkeRelevant';
-import {PunchFormPaneler} from '../../models/enums/PunchFormPaneler';
-import {IIdentState} from '../../models/types/IdentState';
-import {IJournalposterPerIdentState} from '../../models/types/Journalpost/JournalposterPerIdentState';
-import {RootStateType} from '../../state/RootState';
-import {initializeDate} from '../../utils/timeUtils';
+import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
+import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
+import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { RootStateType } from '../../state/RootState';
+import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
-import {IOMPKSSoknad, OMPKSSoknad} from '../types/OMPKSSoknad';
-import {IPunchOMPKSFormState} from '../types/PunchOMPKSFormState';
+import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
+import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
-import {OMPKSSoknadKvittering} from './SoknadKvittering/OMPKSSoknadKvittering';
+import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
 import {
     getOMPKSSoknad,
     resetOMPKSSoknadAction,
@@ -43,13 +43,13 @@ import {
     submitOMPKSSoknad,
     updateOMPKSSoknad,
     validerOMPKSSoknad,
-    validerOMPKSSoknadResetAction
+    validerOMPKSSoknadResetAction,
 } from '../state/actions/OMPKSPunchFormActions';
-import {undoChoiceOfEksisterendeOMPKSSoknadAction} from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import {IOMPKSSoknadUt, OMPKSSoknadUt} from '../types/OMPKSSoknadUt';
-import {CheckboksPanel} from 'nav-frontend-skjema';
+import { undoChoiceOfEksisterendeOMPKSSoknadAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
+import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';
+import { CheckboksPanel } from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import {PopoverOrientering} from 'nav-frontend-popover';
+import { PopoverOrientering } from 'nav-frontend-popover';
 
 export interface IPunchOMPKSFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -111,7 +111,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 foedselsdato: '',
             },
             harInfoSomIkkeKanPunsjes: false,
-            harMedisinskeOpplysninger: false
+            harMedisinskeOpplysninger: false,
         },
         isFetched: false,
         showStatus: false,
@@ -122,11 +122,11 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         visErDuSikkerModal: false,
         errors: [],
         feilmeldingStier: new Set(),
-        harForsoektAaSendeInn: false
+        harForsoektAaSendeInn: false,
     };
 
     componentDidMount(): void {
-        const {id} = this.props;
+        const { id } = this.props;
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
@@ -137,23 +137,23 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         prevState: Readonly<IPunchOMPKSFormComponentState>,
         snapshot?: any
     ): void {
-        const {soknad} = this.props.punchFormState;
+        const { soknad } = this.props.punchFormState;
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new OMPKSSoknad(this.props.punchFormState.soknad as IOMPKSSoknad),
                 isFetched: true,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({barn: {norskIdent: this.props.identState.ident2 || ''}});
+                this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
             }
         }
     }
 
     render() {
-        const {intl, punchFormState, signaturState} = this.props;
+        const { intl, punchFormState, signaturState } = this.props;
 
         const soknad = new OMPKSSoknad(this.state.soknad);
-        const {signert} = signaturState;
+        const { signert } = signaturState;
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -161,14 +161,14 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         }
 
         if (punchFormState.isSoknadLoading) {
-            return <NavFrontendSpinner/>;
+            return <NavFrontendSpinner />;
         }
 
         if (!!punchFormState.error) {
             return (
                 <>
                     <AlertStripeFeil>
-                        {intlHelper(intl, 'skjema.feil.ikke_funnet', {id: this.props.id})}
+                        {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}
                     </AlertStripeFeil>
                     <p>
                         <Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
@@ -184,9 +184,9 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         return (
             <>
                 {this.statusetikett()}
-                <VerticalSpacer sixteenPx={true}/>
+                <VerticalSpacer sixteenPx={true} />
 
-                <VerticalSpacer sixteenPx={true}/>
+                <VerticalSpacer sixteenPx={true} />
                 <OpplysningerOmOMPKSSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -195,7 +195,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     signert={signert}
                     soknad={soknad}
                 />
-                <VerticalSpacer twentyPx={true}/>
+                <VerticalSpacer twentyPx={true} />
                 <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className={'flex-container'}>
                     <CheckboksPanel
@@ -208,7 +208,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
-                <VerticalSpacer eightPx={true}/>
+                <VerticalSpacer eightPx={true} />
                 <div className={'flex-container'}>
                     <CheckboksPanel
                         id={'opplysningerikkepunsjetcheckbox'}
@@ -220,31 +220,27 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
-                <VerticalSpacer twentyPx={true}/>
+                <VerticalSpacer twentyPx={true} />
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => {
-                        return <Feilmelding key={feilmelding} feil={feilmelding}/>;
+                        return <Feilmelding key={feilmelding} feil={feilmelding} />;
                     })}
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className={classNames('loadingSpinner')}>
-                        <NavFrontendSpinner/>
+                        <NavFrontendSpinner />
                     </div>
                 )}
                 <div className={'submit-knapper'}>
                     <p className="sendknapp-wrapper">
-                        <Knapp
-                            className={'send-knapp'}
-                            onClick={() => this.handleSubmit()}
-                            disabled={false}
-                        >
+                        <Knapp className={'send-knapp'} onClick={() => this.handleSubmit()} disabled={false}>
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Knapp>
 
                         <Knapp
                             className={'vent-knapp'}
-                            onClick={() => this.setState({showSettPaaVentModal: true})}
+                            onClick={() => this.setState({ showSettPaaVentModal: true })}
                             disabled={false}
                         >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
@@ -252,7 +248,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     </p>
                 </div>
 
-                <VerticalSpacer sixteenPx={true}/>
+                <VerticalSpacer sixteenPx={true} />
 
                 {!!punchFormState.updateSoknadError && (
                     <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
@@ -273,7 +269,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     <ModalWrapper
                         key={'settpaaventmodal'}
                         className={'settpaaventmodal'}
-                        onRequestClose={() => this.setState({showSettPaaVentModal: false})}
+                        onRequestClose={() => this.setState({ showSettPaaVentModal: false })}
                         contentLabel={'settpaaventmodal'}
                         isOpen={this.state.showSettPaaVentModal}
                         closeButton={false}
@@ -285,7 +281,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                                 )}
                                 soknadId={soknad.soeknadId}
                                 submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.setState({showSettPaaVentModal: false})}
+                                avbryt={() => this.setState({ showSettPaaVentModal: false })}
                             />
                         </div>
                     </ModalWrapper>
@@ -299,7 +295,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         closeButton={false}
                         isOpen={punchFormState.settPaaVentSuccess}
                     >
-                        <OkGaaTilLosModal melding={'modal.settpaavent.til'}/>
+                        <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
                     </ModalWrapper>
                 )}
 
@@ -311,7 +307,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         closeButton={false}
                         isOpen={!!punchFormState.settPaaVentError}
                     >
-                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()}/>
+                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
                     </ModalWrapper>
                 )}
 
@@ -327,13 +323,16 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                             isOpen={!!this.props.punchFormState.isValid}
                         >
                             <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <OMPKSSoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad}/>
+                                <OMPKSSoknadKvittering
+                                    intl={intl}
+                                    response={this.props.punchFormState.validertSoknad}
+                                />
                             </div>
                             <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                 <Hovedknapp
                                     mini={true}
                                     className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({visErDuSikkerModal: true})}
+                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
                                 >
                                     {intlHelper(intl, 'fordeling.knapp.videre')}
                                 </Hovedknapp>
@@ -364,7 +363,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                             submitKnappText={'skjema.knapp.send'}
                             onClose={() => {
                                 this.props.validerSoknadReset();
-                                this.setState({visErDuSikkerModal: false});
+                                this.setState({ visErDuSikkerModal: false });
                             }}
                         />
                     </ModalWrapper>
@@ -380,23 +379,23 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
             ),
         };
-        this.setState({harForsoektAaSendeInn: true});
-        this.props.validateSoknad({...navarandeSoknad, ...journalposter});
+        this.setState({ harForsoektAaSendeInn: true });
+        this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
     };
 
     private handleSettPaaVent = () => {
         this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
-        this.setState({showSettPaaVentModal: false});
+        this.setState({ showSettPaaVentModal: false });
     };
 
     private updateMedisinskeOpplysninger(checked: boolean) {
-        this.updateSoknadState({harMedisinskeOpplysninger: checked}, true);
-        this.updateSoknad({harMedisinskeOpplysninger: checked});
+        this.updateSoknadState({ harMedisinskeOpplysninger: checked }, true);
+        this.updateSoknad({ harMedisinskeOpplysninger: checked });
     }
 
     private updateOpplysningerIkkeKanPunsjes(checked: boolean) {
-        this.updateSoknadState({harInfoSomIkkeKanPunsjes: checked}, true);
-        this.updateSoknad({harInfoSomIkkeKanPunsjes: checked});
+        this.updateSoknadState({ harInfoSomIkkeKanPunsjes: checked }, true);
+        this.updateSoknad({ harInfoSomIkkeKanPunsjes: checked });
     }
 
     private getSoknadFromStore = () => {
@@ -412,13 +411,14 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         return naa < new Date(dato);
     }
 
-    private erFremITidKlokkeslett(dato: string) {
-        const {mottattDato} = this.state.soknad;
+    private erFremITidKlokkeslett(klokkeslett: string) {
+        const { mottattDato } = this.state.soknad;
         const naa = new Date();
+
         if (
             !!mottattDato &&
-            naa.getDate() === new Date(mottattDato).getDate() &&
-            initializeDate(naa).format('HH:mm') < dato
+            naa.toDateString() === new Date(mottattDato!).toDateString() &&
+            initializeDate(naa).format('HH:mm') < klokkeslett
         ) {
             return true;
         }
@@ -427,7 +427,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
     getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)});
+            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
         }
 
         const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
@@ -453,9 +453,9 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     };
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
-        const {mottattDato, klokkeslett} = this.state.soknad;
+        const { mottattDato, klokkeslett } = this.state.soknad;
         if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({feilmeldingStier: this.state.feilmeldingStier.add(attribute)});
+            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
         }
 
         if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
@@ -478,35 +478,35 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         return !!errorMsg
             ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
 
-            intlHelper(
-                this.props.intl,
-                `skjema.feil.${attribute}.${errorMsg}`
-                    .replace(/\[\d+]/g, '[]')
-                    .replace(
-                        /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                        'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
-                    )
-                    .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                    .replace(
-                        /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                        'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
-                    )
-                    .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                    .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
-            )
+              intlHelper(
+                  this.props.intl,
+                  `skjema.feil.${attribute}.${errorMsg}`
+                      .replace(/\[\d+]/g, '[]')
+                      .replace(
+                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
+                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+                      )
+                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
+                      .replace(
+                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
+                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+                      )
+                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
+                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
+              )
             : undefined;
     };
 
     private updateSoknadState = (soknad: Partial<IOMPKSSoknad>, showStatus?: boolean) => {
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState({
-            soknad: {...this.state.soknad, ...soknad},
+            soknad: { ...this.state.soknad, ...soknad },
             showStatus: !!showStatus,
         });
     };
 
     private updateSoknad = (soknad: Partial<IOMPKSSoknad>) => {
-        this.setState({showStatus: true});
+        this.setState({ showStatus: true });
         const navarandeSoknad: OMPKSSoknadUt = this.getSoknadFromStore();
         const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
 
@@ -515,10 +515,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         }
 
         if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({...this.getSoknadFromStore(), ...soknad, journalposter: journalposter}, true);
+            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter }, true);
         }
 
-        return this.props.updateSoknad({...this.getSoknadFromStore(), ...soknad, journalposter: journalposter});
+        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter });
     };
 
     private handleStartButtonClick = () => {
@@ -528,7 +528,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPKSSoknad>) => ({
         onChange: (event: any) => this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad(change(event))
+        onBlur: (event: any) => this.updateSoknad(change(event)),
     });
 
     private statusetikett() {
@@ -536,16 +536,16 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             return null;
         }
 
-        const {punchFormState} = this.props;
+        const { punchFormState } = this.props;
         const className = 'statusetikett';
 
         if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{className}}>Lagrer …</EtikettFokus>;
+            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
         }
         if (!!punchFormState.updateSoknadError) {
-            return <EtikettAdvarsel {...{className}}>Lagring feilet</EtikettAdvarsel>;
+            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
         }
-        return <EtikettSuksess {...{className}}>Lagret</EtikettSuksess>;
+        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
     }
 }
 
