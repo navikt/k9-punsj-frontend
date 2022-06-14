@@ -72,7 +72,7 @@ export function gyldigFødselsdato(verdi: string) {
 export const erUgyldigIdent = (ident: string | null | undefined) => {
     if (!ident) return true;
     if (!ident.length) return true;
-    return !IdentRules.isIdentValid(ident);
+    return IdentRules.erUgyldigIdent(ident);
 };
 
 export function erIkkeFremITid(dato: string) {

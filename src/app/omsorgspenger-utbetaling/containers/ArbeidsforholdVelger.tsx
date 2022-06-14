@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldProps, useField } from 'formik';
 import { CheckboxGroup, Panel } from '@navikt/ds-react';
-import Checkbox from 'app/components/formikInput/Checkbox';
+import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 
 interface OwnProps {
     handleBlur: () => void;
@@ -14,10 +14,10 @@ const ArbeidsforholdVelger = ({ handleBlur }: OwnProps) => {
     const [field, meta] = useField('arbeidsforhold');
     return (
         <Panel border>
-            <CheckboxGroup legend="Arbeidsforhold" error={meta.touched && meta.error}>
-                <Checkbox name="arbeidsforhold.arbeidstaker">Arbeidstaker</Checkbox>
-                <Checkbox name="arbeidsforhold.selvstendigNæringsdrivende">Selvstendig næringsdrivende</Checkbox>
-                <Checkbox name="arbeidsforhold.frilanser">Frilanser</Checkbox>
+            <CheckboxGroup legend="Arbeidsforhold" size="small" error={meta.touched && meta.error}>
+                <CheckboxFormik name="arbeidsforhold.arbeidstaker">Arbeidstaker</CheckboxFormik>
+                <CheckboxFormik name="arbeidsforhold.selvstendigNæringsdrivende">Selvstendig næringsdrivende</CheckboxFormik>
+                <CheckboxFormik name="arbeidsforhold.frilanser">Frilanser</CheckboxFormik>
             </CheckboxGroup>
         </Panel>
     );

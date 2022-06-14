@@ -7,7 +7,7 @@ interface OwnProps extends Partial<DateInputProps> {
     name: string;
 }
 
-const DatoInput = ({ label, name, ...props }: OwnProps) => {
+const DatoInputFormik = ({ label, name, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     return (
         <DateInput
@@ -22,4 +22,4 @@ const DatoInput = ({ label, name, ...props }: OwnProps) => {
     );
 };
 
-export default DatoInput;
+export default DatoInputFormik;

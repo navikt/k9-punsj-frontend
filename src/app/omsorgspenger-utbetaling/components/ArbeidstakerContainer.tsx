@@ -1,5 +1,5 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Heading, Panel } from '@navikt/ds-react';
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
 import { arbeidstakerInitialValue } from '../initialValues';
@@ -16,7 +16,10 @@ const ArbeidstakerContainer = () => {
         <FieldArray
             name="opptjeningAktivitet.arbeidstaker"
             render={(arrayHelpers) => (
-                <div>
+                <Panel>
+                    <Heading size="xsmall" level="6">
+                        Arbeidstaker
+                    </Heading>
                     {arbeidstaker.map((v, index) => (
                         <Arbeidstaker
                             index={index}
@@ -36,7 +39,7 @@ const ArbeidstakerContainer = () => {
                         <AddCircle />
                         Legg til arbeidsforhold
                     </Button>
-                </div>
+                </Panel>
             )}
         />
     );

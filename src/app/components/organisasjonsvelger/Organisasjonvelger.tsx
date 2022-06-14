@@ -3,7 +3,7 @@ import { finnArbeidsgivere } from 'app/api/api';
 import { useQuery } from 'react-query';
 
 import Organisasjon from 'app/models/types/Organisasjon';
-import Select, { FormikSelectProps } from '../formikInput/Select';
+import SelectFormik, { FormikSelectProps } from '../formikInput/SelectFormik';
 
 interface OwnProps extends Partial<FormikSelectProps> {
     name: string;
@@ -28,7 +28,7 @@ const Organisasjonsvelger = ({ name, soeker, disabled, className }: OwnProps) =>
 
     const options = [{ label: 'Velg organisasjon', value: '' }, ...organisasjonOptions];
     return (
-        <Select
+        <SelectFormik
             className={className}
             name={name}
             label="Organisasjon"

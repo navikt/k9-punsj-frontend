@@ -1,9 +1,9 @@
 import React from 'react';
 import { Delete } from '@navikt/ds-icons';
 import { Button, Panel } from '@navikt/ds-react';
-import DatoInput from 'app/components/formikInput/DatoInput';
-import Select from 'app/components/formikInput/Select';
-import TextField from 'app/components/formikInput/TextField';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import SelectFormik from 'app/components/formikInput/SelectFormik';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import { useIntl } from 'react-intl';
@@ -61,21 +61,21 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProp
     return (
         <Panel border>
             <div className="aarsak-rad">
-                <Select label="Fraværsårsak" size="small" name={`${name}.fraværÅrsak`} options={fraværÅrsakOptions} />
-                <Select label="Søknadsårsak" size="small" name={`${name}.søknadÅrsak`} options={søknadÅrsakOptions} />
+                <SelectFormik label="Fraværsårsak" size="small" name={`${name}.fraværÅrsak`} options={fraværÅrsakOptions} />
+                <SelectFormik label="Søknadsårsak" size="small" name={`${name}.søknadÅrsak`} options={søknadÅrsakOptions} />
                 {minstToPerioder && (
                     <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode}>
                         <Delete />
-                        Fjern arbeidsforhold
+                        Fjern periode
                     </Button>
                 )}
             </div>
             <VerticalSpacer twentyPx />
             <VerticalSpacer twentyPx />
             <div className="fom-tom-rad">
-                <DatoInput label="Fra og med" name={`${name}.periode.fom`} />
-                <DatoInput label="Til og med" name={`${name}.periode.tom`} />
-                <TextField
+                <DatoInputFormik label="Fra og med" name={`${name}.periode.fom`} />
+                <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
+                <TextFieldFormik
                     className="timer-arbeidet"
                     label="Timer arbeidet"
                     size="small"

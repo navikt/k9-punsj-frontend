@@ -10,16 +10,11 @@ import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
 import { useQuery } from 'react-query';
 import { Loader } from '@navikt/ds-react';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
-
-export interface IEksisterendeOMPUTSoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
-}
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;
@@ -27,9 +22,7 @@ export interface IEksisterendeOMPUTSoknaderComponentProps {
     ident2: string | null;
 }
 
-type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps &
-    IEksisterendeOMPUTSoknaderComponentProps &
-    IEksisterendeOMPUTSoknaderDispatchProps;
+type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPUTSoknaderComponentProps;
 
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
     props: IEksisterendeOMPUTSoknaderProps
@@ -40,9 +33,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     const routingPaths = React.useContext(RoutingPathsContext);
 
     React.useEffect(() => {
-        if (IdentRules.areIdentsValid(ident1, ident2)) {
-            props.setIdentAction(ident1, ident2);
-        } else {
+        if (!IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
             setHash('/');
         }
     }, [ident1, ident2]);
@@ -147,10 +138,4 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     );
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
-});
-
-export const EksisterendeOMPUTSoknader = injectIntl(
-    connect(null, mapDispatchToProps)(EksisterendeOMPUTSoknaderComponent)
-);
+export const EksisterendeOMPUTSoknader = injectIntl(EksisterendeOMPUTSoknaderComponent);
