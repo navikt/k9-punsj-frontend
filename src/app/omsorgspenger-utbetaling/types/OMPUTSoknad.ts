@@ -27,7 +27,8 @@ interface IOpptjeningAktivitet {
             landkode: string;
             regnskapsførerNavn: string;
             regnskapsførerTlf: string;
-            registrertIUtlandet: boolean;
+            harSøkerRegnskapsfører: string;
+            registrertIUtlandet: string;
             bruttoInntekt: string;
             erNyoppstartet: boolean;
             erVarigEndring: boolean;

@@ -1,6 +1,7 @@
-import { CheckboxGroup, Heading, Panel } from '@navikt/ds-react';
+import { CheckboxGroup, Heading, Panel, RadioGroup } from '@navikt/ds-react';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
-import SelectFormik from 'app/components/formikInput/SelectFormik';
+import RadioFormik from 'app/components/formikInput/RadioFormik';
+import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
@@ -11,7 +12,7 @@ const SelvstendigNaeringsdrivende = () => {
     const {
         opptjeningAktivitet: { selvstendigNæringsdrivende },
     } = values;
-
+    console.log(values);
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
 
     return (
@@ -39,7 +40,57 @@ const SelvstendigNaeringsdrivende = () => {
                 label="Virksomhetsnavn"
                 size="small"
             />
-            {/* radio */}
+            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet">
+                {({ field }: FieldProps<string>) => (
+                    <RadioGroupFormik
+                        legend="Er virksomheten registrert i Norge?"
+                        size="small"
+                        options={[
+                            { label: 'Ja', value: 'ja' },
+                            { label: 'Nei', value: 'nei' },
+                        ]}
+                        defaultValue={field.value}
+                        name={field.name}
+                    />
+                )}
+            </Field>
+            {values.opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet === 'ja' ? (
+                <div>Landvelger</div>
+            ) : (
+                <TextFieldFormik
+                    size="small"
+                    label="Organisasjonsnummer"
+                    name="opptjeningAktivitet.selvstendigNæringsdrivende.organisasjonsnummer"
+                />
+            )}
+            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
+                {({ field }: FieldProps<string>) => (
+                    <RadioGroupFormik
+                        legend="Har søker regnskapsfører?"
+                        size="small"
+                        defaultValue={field.value}
+                        name={field.name}
+                        options={[
+                            { label: 'Ja', value: 'ja' },
+                            { label: 'Nei', value: 'nei' },
+                        ]}
+                    />
+                )}
+            </Field>
+            {values.opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører === 'ja' && (
+                <>
+                    <TextFieldFormik
+                        size="small"
+                        label="Navn på regnskapsfører"
+                        name="opptjeningAktivitet.selvstendigNæringsdrivende.info.regnskapsførerNavn"
+                    />
+                    <TextFieldFormik
+                        size="small"
+                        label="Telefonnummer til regnskapsfører "
+                        name="opptjeningAktivitet.selvstendigNæringsdrivende.info.regnskapsførerTlf"
+                    />
+                </>
+            )}
         </Panel>
     );
 };
