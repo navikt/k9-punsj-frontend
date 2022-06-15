@@ -50,7 +50,7 @@ const OMPMASchema = yup.object({
                 .string()
                 .when('tilOgMedErIkkeOppgitt', { is: false, then: yup.string().required() })
                 .label('Til og med'),
-            tilOgMedErIkkeOppgitt: yup.string(),
+            tilOgMedErIkkeOppgitt: yup.bool(),
         }),
     }),
 });

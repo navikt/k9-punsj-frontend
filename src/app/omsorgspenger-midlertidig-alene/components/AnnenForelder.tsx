@@ -1,7 +1,7 @@
 import React from 'react';
 import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { Heading, Select, Textarea, TextField } from '@navikt/ds-react';
+import { Heading, Label, Select, Textarea, BodyShort } from '@navikt/ds-react';
 import Panel from 'nav-frontend-paneler';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
@@ -19,7 +19,6 @@ type OwnProps = {
 
 const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
     const { values } = useFormikContext<OMPMASoknad>();
-
     return (
         <>
             <Heading size="xsmall" spacing>
@@ -27,19 +26,8 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
             </Heading>
             <Panel border>
                 <div className="annen-forelder-container">
-                    <VerticalSpacer twentyPx />
-
-                    <Field name="annenForelder.norskIdent">
-                        {({ field, meta }: FieldProps<string>) => (
-                            <TextField
-                                label="Identifikasjonsnummer"
-                                size="small"
-                                error={meta.touched && meta.error}
-                                {...field}
-                                onBlur={(e) => handleBlur(() => field.onBlur(e))}
-                            />
-                        )}
-                    </Field>
+                    <Label size="small">Identifikasjonsnummer</Label>
+                    <BodyShort>{values.annenForelder.norskIdent}</BodyShort>
                     <VerticalSpacer twentyPx />
                     <Field name="annenForelder.situasjonType">
                         {({ field, meta }: FieldProps<string>) => (
@@ -75,13 +63,16 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                         )}
                     </Field>
                     <VerticalSpacer twentyPx />
-                    <DatoInputFormik label="Fra og med" name="annenForelder.periode.fom" />
-                    <DatoInputFormik
-                        label="Til og med"
-                        name="annenForelder.periode.tom"
-                        disabled={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
-                    />
-                    <CheckboxFormik name="annenForelder.tilOgMedErIkkeOppgitt" size="small">
+                    <div className="fom-tom-rad">
+                        <DatoInputFormik label="Fra og med" name="annenForelder.periode.fom" handleBlur={handleBlur} />
+                        <DatoInputFormik
+                            label="Til og med"
+                            name="annenForelder.periode.tom"
+                            disabled={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
+                            handleBlur={handleBlur}
+                        />
+                    </div>
+                    <CheckboxFormik name="annenForelder.periode.tilOgMedErIkkeOppgitt" size="small">
                         Til og med er ikke oppgitt
                     </CheckboxFormik>
                 </div>
