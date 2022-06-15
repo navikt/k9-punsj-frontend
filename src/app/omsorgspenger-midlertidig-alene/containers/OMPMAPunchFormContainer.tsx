@@ -38,6 +38,7 @@ const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personva
         periode: {
             fom: soknad?.annenForelder?.periode?.fom || '',
             tom: soknad?.annenForelder?.periode?.tom || '',
+            tilOgMedErIkkeOppgitt: false,
         },
     },
     harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,

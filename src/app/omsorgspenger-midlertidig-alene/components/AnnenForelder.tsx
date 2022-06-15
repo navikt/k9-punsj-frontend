@@ -7,6 +7,7 @@ import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import './annenForelder.less';
+import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 
 const situasjonstyper = ['INNLAGT_I_HELSEINSTITUSJON', 'UTØVER_VERNEPLIKT', 'FENGSEL', 'SYKDOM', 'ANNET'];
 
@@ -71,10 +72,10 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
                 </Field>
                 <VerticalSpacer twentyPx />
                 <Field name="annenForelder.periode">
-                    {({ form }: FieldProps) => (
+                    {({ field, form }: FieldProps) => (
                         <PeriodInput
                             intl={intl}
-                            periode={form.values.annenForelder?.periode}
+                            periode={field.value}
                             errorMessageFom={
                                 form.touched?.annenForelder?.periode?.fom && form.errors?.annenForelder?.periode?.fom
                             }
@@ -89,9 +90,13 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => (
                                 return handleBlur(() => setTouched());
                             }}
                             onChange={(value) => form.setFieldValue('annenForelder.periode', value)}
+                            disabledTom={form.values.annenForelder.tilOgMedErIkkeOppgitt}
                         />
                     )}
                 </Field>
+                <CheckboxFormik name="annenForelder.tilOgMedErIkkeOppgitt" size="small">
+                    Til og med er ikke oppgitt
+                </CheckboxFormik>
             </div>
         </Panel>
     </>

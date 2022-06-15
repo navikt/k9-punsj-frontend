@@ -18,7 +18,7 @@ export type AnnenForelderType = {
     norskIdent: string;
     situasjonType: string;
     situasjonBeskrivelse: string;
-    periode: IPeriode;
+    periode: IPeriode & { tilOgMedErIkkeOppgitt: boolean };
 };
 
 export class OMPMASoknad implements IOMPMASoknad {
