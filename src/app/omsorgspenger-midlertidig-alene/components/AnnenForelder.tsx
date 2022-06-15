@@ -79,7 +79,7 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                     <DatoInputFormik
                         label="Til og med"
                         name="annenForelder.periode.tom"
-                        disabled={values.annenForelder.tilOgMedErIkkeOppgitt}
+                        disabled={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
                     />
                     <CheckboxFormik name="annenForelder.tilOgMedErIkkeOppgitt" size="small">
                         Til og med er ikke oppgitt
