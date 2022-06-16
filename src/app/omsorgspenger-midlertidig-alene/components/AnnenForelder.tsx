@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { Heading, Label, Select, Textarea, BodyShort } from '@navikt/ds-react';
@@ -10,7 +10,13 @@ import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import { OMPMASoknad } from '../types/OMPMASoknad';
 
-const situasjonstyper = ['INNLAGT_I_HELSEINSTITUSJON', 'UTØVER_VERNEPLIKT', 'FENGSEL', 'SYKDOM', 'ANNET'];
+const situasjonstyper = {
+    INNLAGT_I_HELSEINSTITUSJON: 'INNLAGT_I_HELSEINSTITUSJON',
+    UTØVER_VERNEPLIKT: 'UTØVER_VERNEPLIKT',
+    FENGSEL: 'FENGSEL',
+    SYKDOM: 'SYKDOM',
+    ANNET: 'ANNET',
+};
 
 type OwnProps = {
     intl: IntlShape;
@@ -18,7 +24,18 @@ type OwnProps = {
 };
 
 const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
-    const { values } = useFormikContext<OMPMASoknad>();
+    const { values, setFieldValue } = useFormikContext<OMPMASoknad>();
+
+    const situasjonstype = values.annenForelder.situasjonType;
+    const { tilOgMedErIkkeOppgitt } = values.annenForelder.periode;
+    const situasjonstypeErFengselEllerVerneplikt =
+        situasjonstype === situasjonstyper.FENGSEL || situasjonstype === situasjonstyper.UTØVER_VERNEPLIKT;
+
+    useEffect(() => {
+        if (situasjonstypeErFengselEllerVerneplikt && tilOgMedErIkkeOppgitt) {
+            setFieldValue('annenForelder.periode.tilOgMedErIkkeOppgitt', false);
+        }
+    }, [situasjonstypeErFengselEllerVerneplikt, tilOgMedErIkkeOppgitt]);
     return (
         <>
             <Heading size="xsmall" spacing>
@@ -39,12 +56,9 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                                 onBlur={(e) => handleBlur(() => field.onBlur(e))}
                             >
                                 <option value="">Velg situasjon</option>
-                                {situasjonstyper.map((situasjonstype) => (
-                                    <option value={situasjonstype}>
-                                        {intlHelper(
-                                            intl,
-                                            `omsorgspenger.midlertidigAlene.situasjonstyper.${situasjonstype}`
-                                        )}
+                                {Object.values(situasjonstyper).map((v) => (
+                                    <option value={v}>
+                                        {intlHelper(intl, `omsorgspenger.midlertidigAlene.situasjonstyper.${v}`)}
                                     </option>
                                 ))}
                             </Select>
@@ -72,9 +86,11 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                             handleBlur={handleBlur}
                         />
                     </div>
-                    <CheckboxFormik name="annenForelder.periode.tilOgMedErIkkeOppgitt" size="small">
-                        Til og med er ikke oppgitt
-                    </CheckboxFormik>
+                    {!situasjonstypeErFengselEllerVerneplikt && (
+                        <CheckboxFormik name="annenForelder.periode.tilOgMedErIkkeOppgitt" size="small">
+                            Til og med er ikke oppgitt
+                        </CheckboxFormik>
+                    )}
                 </div>
             </Panel>
         </>
