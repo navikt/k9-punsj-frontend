@@ -43,7 +43,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
                 regnskapsførerNavn: '',
                 regnskapsførerTlf: '',
                 harSøkerRegnskapsfører: 'nei',
-                registrertIUtlandet: 'nei',
+                registrertIUtlandet: false,
                 bruttoInntekt: '',
                 erNyoppstartet: false,
                 erVarigEndring: true,

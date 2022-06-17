@@ -3,16 +3,24 @@ import { RadioGroup, RadioGroupProps } from '@navikt/ds-react';
 import { useField } from 'formik';
 import RadioFormik from './RadioFormik';
 
-interface OwnProps extends Omit<RadioGroupProps, 'children'> {
+interface OwnProps extends Partial<RadioGroupProps> {
     name: string;
-    options: { label: string; value: string }[];
+    options?: { label: string; value: string }[];
 }
 
-const RadioGroupFormik = ({ name, options, legend, ...props }: OwnProps) => {
+const RadioGroupFormik = ({ name, options, legend, children, ...props }: OwnProps) => {
     const [field, meta] = useField(name);
+
+    if (children) {
+        return (
+            <RadioGroup legend={legend} error={meta.touched && meta.error} {...field} {...props}>
+                {children}
+            </RadioGroup>
+        );
+    }
     return (
         <RadioGroup legend={legend} error={meta.touched && meta.error} {...field} {...props}>
-            {options.map((option) => (
+            {options?.map((option) => (
                 <RadioFormik name={field.name} value={option.value}>
                     {option.label}
                 </RadioFormik>

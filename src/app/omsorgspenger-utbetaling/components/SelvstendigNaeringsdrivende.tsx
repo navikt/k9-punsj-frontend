@@ -1,4 +1,5 @@
 import { CheckboxGroup, Heading, Panel, RadioGroup } from '@navikt/ds-react';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
@@ -41,21 +42,35 @@ const SelvstendigNaeringsdrivende = () => {
                 size="small"
             />
             <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet">
-                {({ field }: FieldProps<string>) => (
+                {({ field, form }: FieldProps<boolean>) => (
                     <RadioGroupFormik
                         legend="Er virksomheten registrert i Norge?"
                         size="small"
-                        options={[
-                            { label: 'Ja', value: 'ja' },
-                            { label: 'Nei', value: 'nei' },
-                        ]}
-                        defaultValue={field.value}
                         name={field.name}
-                    />
+                        value={field.value ? 'nei' : 'ja'}
+                    >
+                        <RadioFormik
+                            name={field.name}
+                            value="ja"
+                            onChange={(value) => form.setFieldValue(field.name, false)}
+                        >
+                            Ja
+                        </RadioFormik>
+                        <RadioFormik
+                            name={field.name}
+                            value="nei"
+                            onChange={(value) => form.setFieldValue(field.name, true)}
+                            checked
+                        >
+                            Nei
+                        </RadioFormik>
+                    </RadioGroupFormik>
                 )}
             </Field>
-            {values.opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet === 'ja' ? (
-                <div>Landvelger</div>
+            {values.opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet ? (
+                <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.landkode">
+                    {({ field }: FieldProps<string>) => <CountrySelect selectedcountry={field.value} {...field} />}
+                </Field>
             ) : (
                 <TextFieldFormik
                     size="small"
@@ -63,7 +78,7 @@ const SelvstendigNaeringsdrivende = () => {
                     name="opptjeningAktivitet.selvstendigNæringsdrivende.organisasjonsnummer"
                 />
             )}
-            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
+                    <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
                 {({ field }: FieldProps<string>) => (
                     <RadioGroupFormik
                         legend="Har søker regnskapsfører?"
