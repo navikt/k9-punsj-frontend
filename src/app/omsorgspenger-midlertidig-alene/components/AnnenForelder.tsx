@@ -34,9 +34,14 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
     useEffect(() => {
         if (situasjonstypeErFengselEllerVerneplikt && tilOgMedErIkkeOppgitt) {
             setFieldValue('annenForelder.periode.tilOgMedErIkkeOppgitt', false);
-            setFieldValue('annenForelder.periode.tom', '');
         }
     }, [situasjonstypeErFengselEllerVerneplikt, tilOgMedErIkkeOppgitt]);
+
+    useEffect(() => {
+        if (tilOgMedErIkkeOppgitt) {
+            setFieldValue('annenForelder.periode.tom', '');
+        }
+    }, [tilOgMedErIkkeOppgitt]);
     return (
         <>
             <Heading size="xsmall" spacing>
