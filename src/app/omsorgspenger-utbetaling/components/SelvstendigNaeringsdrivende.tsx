@@ -1,19 +1,23 @@
-import { CheckboxGroup, Heading, Panel, RadioGroup } from '@navikt/ds-react';
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, CheckboxGroup, Heading, Label, Panel, RadioGroup } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import { Field, FieldProps, useFormikContext } from 'formik';
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { fravaersperiodeInitialValue } from '../initialValues';
+import { aktivitetsFravær } from '../konstanter';
+import { FravaersperiodeType, IOMPUTSoknad } from '../types/OMPUTSoknad';
+import Fravaersperiode from './Fravaersperiode';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
     const {
         opptjeningAktivitet: { selvstendigNæringsdrivende },
     } = values;
-    console.log(values);
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
 
     return (
@@ -52,14 +56,14 @@ const SelvstendigNaeringsdrivende = () => {
                         <RadioFormik
                             name={field.name}
                             value="ja"
-                            onChange={(value) => form.setFieldValue(field.name, false)}
+                            onChange={() => form.setFieldValue(field.name, false)}
                         >
                             Ja
                         </RadioFormik>
                         <RadioFormik
                             name={field.name}
                             value="nei"
-                            onChange={(value) => form.setFieldValue(field.name, true)}
+                            onChange={() => form.setFieldValue(field.name, true)}
                             checked
                         >
                             Nei
@@ -67,7 +71,7 @@ const SelvstendigNaeringsdrivende = () => {
                     </RadioGroupFormik>
                 )}
             </Field>
-            {values.opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet ? (
+            {selvstendigNæringsdrivende.info.registrertIUtlandet ? (
                 <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.landkode">
                     {({ field }: FieldProps<string>) => <CountrySelect selectedcountry={field.value} {...field} />}
                 </Field>
@@ -78,21 +82,29 @@ const SelvstendigNaeringsdrivende = () => {
                     name="opptjeningAktivitet.selvstendigNæringsdrivende.organisasjonsnummer"
                 />
             )}
-                    <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
-                {({ field }: FieldProps<string>) => (
+            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
+                {({ field, form }: FieldProps<string>) => (
                     <RadioGroupFormik
                         legend="Har søker regnskapsfører?"
                         size="small"
-                        defaultValue={field.value}
                         name={field.name}
-                        options={[
-                            { label: 'Ja', value: 'ja' },
-                            { label: 'Nei', value: 'nei' },
-                        ]}
-                    />
+                        value={field.value ? 'ja' : 'nei'}
+                    >
+                        <RadioFormik name={field.name} value="ja" onChange={() => form.setFieldValue(field.name, true)}>
+                            Ja
+                        </RadioFormik>
+                        <RadioFormik
+                            name={field.name}
+                            value="nei"
+                            onChange={() => form.setFieldValue(field.name, false)}
+                            checked
+                        >
+                            Nei
+                        </RadioFormik>
+                    </RadioGroupFormik>
                 )}
             </Field>
-            {values.opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører === 'ja' && (
+            {selvstendigNæringsdrivende.info.harSøkerRegnskapsfører && (
                 <>
                     <TextFieldFormik
                         size="small"
@@ -106,6 +118,53 @@ const SelvstendigNaeringsdrivende = () => {
                     />
                 </>
             )}
+            <Label size="small">Når startet virksomheten?</Label>
+            <DatoInputFormik
+                name="values.opptjeningAktivitet.selvstendigNæringsdrivende.info.periode.fom"
+                label="Startdato"
+            />
+            <DatoInputFormik
+                name="values.opptjeningAktivitet.selvstendigNæringsdrivende.info.periode.tom"
+                label="Eventuell sluttdato"
+            />
+            <TextFieldFormik
+                size="small"
+                label="Næringsresultat før skatt de siste 12 månedene"
+                name="values.opptjeningAktivitet.selvstendigNæringsdrivende.info.periode.tom"
+            />
+            <FieldArray
+                name="opptjeningAktivitet.selvstendigNæringsdrivende.fravaersperioder"
+                render={(arrayHelpers) => (
+                    <>
+                        {selvstendigNæringsdrivende.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
+                            <Field
+                                name={`opptjeningAktivitet.selvstendigNæringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
+                            >
+                                {({ field }: FieldProps<FravaersperiodeType>) => (
+                                    <Fravaersperiode
+                                        name={field.name}
+                                        antallFravaersperioder={selvstendigNæringsdrivende.fravaersperioder?.length}
+                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                    />
+                                )}
+                            </Field>
+                        ))}
+                        <Button
+                            variant="tertiary"
+                            size="small"
+                            onClick={() =>
+                                arrayHelpers.push({
+                                    ...fravaersperiodeInitialValue,
+                                    aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
+                                })
+                            }
+                        >
+                            <AddCircle />
+                            Legg til periode
+                        </Button>
+                    </>
+                )}
+            />
         </Panel>
     );
 };

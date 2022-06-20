@@ -42,7 +42,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
                 landkode: '',
                 regnskapsførerNavn: '',
                 regnskapsførerTlf: '',
-                harSøkerRegnskapsfører: 'nei',
+                harSøkerRegnskapsfører: false,
                 registrertIUtlandet: false,
                 bruttoInntekt: '',
                 erNyoppstartet: false,
@@ -51,6 +51,9 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
                 endringDato: '',
                 endringBegrunnelse: '',
             },
+            fravaersperioder: [
+                { ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE },
+            ],
         },
         frilanser: {
             startdato: '',

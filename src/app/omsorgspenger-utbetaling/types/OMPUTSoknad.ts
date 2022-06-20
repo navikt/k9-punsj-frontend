@@ -1,9 +1,9 @@
 import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
 import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
 
-export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: Fravaersperiode[] };
+export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: FravaersperiodeType[] };
 
-type Fravaersperiode = {
+export type FravaersperiodeType = {
     aktivitetsFravær: string;
     fraværÅrsak: string;
     søknadÅrsak: string;
@@ -36,13 +36,13 @@ interface IOpptjeningAktivitet {
             endringDato: string;
             endringBegrunnelse: string;
         };
-        fravaersperioder: Fravaersperiode[];
+        fravaersperioder: FravaersperiodeType[];
     };
     frilanser: {
         startdato: string;
         sluttdato: string | undefined;
         jobberFortsattSomFrilans: boolean;
-        fravaersperioder: Fravaersperiode[];
+        fravaersperioder: FravaersperiodeType[];
     };
 }
 
@@ -53,5 +53,5 @@ export interface IOMPUTSoknad extends SoeknadType {
 }
 
 export interface IOMPUTSoknadBackend extends IOMPUTSoknad {
-    fravaersperioder: Fravaersperiode[];
+    fravaersperioder: FravaersperiodeType[];
 }
