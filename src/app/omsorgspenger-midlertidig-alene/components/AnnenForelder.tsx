@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { Heading, Label, Select, Textarea, BodyShort } from '@navikt/ds-react';
+import { set } from 'lodash';
 import Panel from 'nav-frontend-paneler';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
@@ -20,11 +21,11 @@ const situasjonstyper = {
 
 type OwnProps = {
     intl: IntlShape;
-    handleBlur: (callback: () => void) => void;
+    handleBlur: (callback: () => void, values?: FormikValues) => void;
 };
 
 const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
-    const { values, setFieldValue } = useFormikContext<OMPMASoknad>();
+    const { values, setFieldValue, setFieldTouched } = useFormikContext<OMPMASoknad>();
 
     const situasjonstype = values.annenForelder.situasjonType;
     const { tilOgMedErIkkeOppgitt } = values.annenForelder.periode;
@@ -38,10 +39,14 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
     }, [situasjonstypeErFengselEllerVerneplikt, tilOgMedErIkkeOppgitt]);
 
     useEffect(() => {
-        if (tilOgMedErIkkeOppgitt) {
+        if (tilOgMedErIkkeOppgitt && values.annenForelder.periode.tom) {
             setFieldValue('annenForelder.periode.tom', '');
+            handleBlur(
+                () => setFieldTouched('annenForelder.periode.tom'),
+                set({ ...values }, 'annenForelder.periode.tom', '')
+            );
         }
-    }, [tilOgMedErIkkeOppgitt]);
+    }, [tilOgMedErIkkeOppgitt, values.annenForelder.periode.tom]);
     return (
         <>
             <Heading size="xsmall" spacing>
