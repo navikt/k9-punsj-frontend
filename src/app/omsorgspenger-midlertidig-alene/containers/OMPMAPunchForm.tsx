@@ -232,7 +232,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                                 {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
                             </Hjelpetekst>
                         </>
@@ -252,7 +252,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                                 {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                             </Hjelpetekst>
                         </>

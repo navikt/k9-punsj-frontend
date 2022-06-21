@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { Heading, Label, Select, Textarea, BodyShort } from '@navikt/ds-react';
-import { set } from 'lodash';
+import set from 'lodash/set';
 import Panel from 'nav-frontend-paneler';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
@@ -60,15 +60,15 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                     <Field name="annenForelder.situasjonType">
                         {({ field, meta }: FieldProps<string>) => (
                             <Select
+                                {...field}
                                 size="small"
                                 label="Hva er situasjonen til den andre forelderen?"
                                 error={meta.touched && meta.error}
-                                {...field}
                                 onBlur={(e) => handleBlur(() => field.onBlur(e))}
                             >
                                 <option value="">Velg situasjon</option>
                                 {Object.values(situasjonstyper).map((v) => (
-                                    <option value={v}>
+                                    <option value={v} key={v}>
                                         {intlHelper(intl, `omsorgspenger.midlertidigAlene.situasjonstyper.${v}`)}
                                     </option>
                                 ))}
@@ -79,10 +79,10 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                     <Field name="annenForelder.situasjonBeskrivelse">
                         {({ field, meta }: FieldProps<string, FormikValues>) => (
                             <Textarea
+                                {...field}
                                 size="small"
                                 label="Beskrivelse av situasjonen"
                                 error={meta.touched && meta.error}
-                                {...field}
                                 onBlur={(e) => handleBlur(() => field.onBlur(e))}
                             />
                         )}

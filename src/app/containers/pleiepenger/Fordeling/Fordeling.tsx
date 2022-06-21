@@ -409,7 +409,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                                 erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
                             />
-                            <AnnenPart intl={intl} vis={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA} />
+                            <AnnenPart vis={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA} />
                             <ToSoekere
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
