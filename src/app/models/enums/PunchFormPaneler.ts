@@ -10,4 +10,5 @@ export enum PunchFormPaneler {
     OMSORGSTILBUD = 'skjema.omsorgstilbud.overskrift',
     BEREDSKAPNATTEVAAK = 'skjema.beredskapognattevaak.overskrift',
     ENDRING_AV_SØKNADSPERIODER = 'skjema.endringAvSøknadsperioder',
+    ANNEN_FORELDER = 'skjema.annenForelder'
 }

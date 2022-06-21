@@ -1,14 +1,13 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype, JaNei } from 'app/models/enums';
-import validator from '@navikt/fnrvalidator';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
+import { IdentRules } from 'app/rules';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 interface ISokersIdentProps {
     dokumenttype?: FordelingDokumenttype;
@@ -44,7 +43,8 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
         dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
         erInntektsmeldingUtenKrav;
     const journalpostident = journalpost?.norskIdent;
 
@@ -101,9 +101,10 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
                         maxLength={11}
-                        feil={identState.ident1 && erUgyldigIdent(identState.ident1)
-                            ? intlHelper(intl, 'ident.feil.ugyldigident')
-                            : undefined
+                        feil={
+                            identState.ident1 && IdentRules.erUgyldigIdent(identState.ident1)
+                                ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                : undefined
                         }
                         bredde="M"
                     />

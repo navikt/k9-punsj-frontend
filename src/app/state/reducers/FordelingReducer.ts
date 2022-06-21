@@ -12,6 +12,7 @@ const initialState: IFordelingState = {
     skalTilK9: undefined,
     erIdent1Bekreftet: false,
     valgtGosysKategori: '',
+    kanIkkeGaaTilK9: [],
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -78,6 +79,14 @@ export function FordelingReducer(
                 isAwaitingSjekkTilK9Response: false,
                 sjekkTilK9Error: undefined,
                 sjekkTilK9JournalpostStottesIkke: true,
+            };
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                skalTilK9: undefined,
+                sjekkTilK9Error: undefined,
+                sjekkTilK9JournalpostStottesIkke: undefined,
             };
 
         case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:

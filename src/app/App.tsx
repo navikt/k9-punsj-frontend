@@ -7,8 +7,9 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import logger from 'redux-logger';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
@@ -18,6 +19,7 @@ import { Locale } from './models/types';
 import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
 import './styles/globalStyles.less';
+import '@navikt/ds-css';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 
@@ -44,14 +46,11 @@ function prepare() {
     return Promise.resolve();
 }
 
-const reduxDevtools = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
-const composeEnhancers = (window[reduxDevtools] as typeof compose) || compose;
-
 // @ts-ignore
 const store = window.Cypress
     ? // @ts-ignore
-      createStore(rootReducer, window.__initialState__, composeEnhancers(applyMiddleware(logger, thunk)))
-    : createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
+      createStore(rootReducer, window.__initialState__, composeWithDevTools(applyMiddleware(logger, thunk)))
+    : createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)));
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
 

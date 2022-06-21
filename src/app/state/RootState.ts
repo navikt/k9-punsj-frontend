@@ -21,6 +21,9 @@ import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerd
 import { EksisterendeOMPKSSoknaderReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
 import { PunchOMPKSFormReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
 import { PunchOMPKSReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
+import { EksisterendeOMPMASoknaderReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
+import { PunchOMPMAFormReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
+import { PunchOMPMAReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAReducer';
 import { PunchPLSFormReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
 import { PunchPLSReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSReducer';
 import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
@@ -39,6 +42,11 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN]: combineReducers({
         punchFormState: PunchOMPKSFormReducer,
         punchState: PunchOMPKSReducer,
+        signaturState: SignaturReducer,
+    }),
+    [Sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE]: combineReducers({
+        punchFormState: PunchOMPMAFormReducer,
+        punchState: PunchOMPMAReducer,
         signaturState: SignaturReducer,
     }),
     [Sakstype.OMSORGSPENGER_OVERFØRING]: combineReducers({
@@ -63,6 +71,7 @@ export const rootReducer = combineReducers({
     fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
     eksisterendePLSSoknaderState: EksisterendePLSSoknaderReducer,
     eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
+    eksisterendeOMPMASoknaderState: EksisterendeOMPMASoknaderReducer,
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

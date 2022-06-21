@@ -14,6 +14,7 @@ export interface IFordelingState {
     lukkOppgaveError?: IError;
     lukkOppgaveDone: boolean;
     skalTilK9?: boolean;
+    kanIkkeGaaTilK9: string[];
     isAwaitingGosysGjelderResponse?: boolean;
     gosysGjelderKategorier?: any[];
     gosysGjelderKategorierError?: IError;

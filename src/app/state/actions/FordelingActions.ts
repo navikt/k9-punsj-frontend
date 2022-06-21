@@ -28,6 +28,9 @@ export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({
 interface ISjekkOmSkalTilK9LoadingAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST;
 }
+interface ISjekkOmSkalTilK9ResetAction {
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET;
+}
 interface ISjekkOmSkalTilK9ErrorAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR;
     error: IError;
@@ -65,7 +68,6 @@ interface IGosysGjelderErrorAction {
     type: FordelingActionKeys.GOSYS_GJELDER_ERROR;
     error: IError;
 }
-
 interface ISetErIdent1BekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
     erIdent1Bekreftet: boolean;
@@ -128,10 +130,14 @@ export type IFordelingActionTypes =
     | IGosysGjelderSuccessAction
     | IGosysGjelderErrorAction
     | ISetErIdent1BekreftetAction
-    | ISetValgtGosysKategori;
+    | ISetValgtGosysKategori
+    | ISjekkOmSkalTilK9ResetAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
+});
+export const sjekkSkalTilK9ResetAction = (): ISjekkOmSkalTilK9ResetAction => ({
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET,
 });
 
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
@@ -157,27 +163,39 @@ export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any)
     });
 };
 
-export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string, fagsakYtelseType: FagsakYtelseType) {
+export function sjekkOmSkalTilK9Sak(
+    norskIdent: string,
+    barnIdent: string,
+    jpid: string,
+    fagsakYtelseType: FagsakYtelseType,
+    annenPart: string
+) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
-            barnIdent,
+            barnIdent: barnIdent || null,
             journalpostId: jpid,
-            fagsakYtelseType
+            fagsakYtelseType,
+            annenPart: annenPart || null,
         };
 
         dispatch(sjekkSkalTilK9RequestAction());
-        post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, svar) => {
-            if (response.ok) {
+
+        post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (res, svar) => {
+            if (res.ok) {
                 return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak));
             }
-            if (response.status === 409) {
+            if (res.status === 409) {
                 return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
             }
-            return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(response)));
+            return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
         });
     };
 }
+
+export const resetSkalTilK9 = () => (dispatch: any) => {
+    dispatch(sjekkSkalTilK9ResetAction());
+};
 
 export function hentGjelderKategorierFraGosys() {
     return (dispatch: any) => {

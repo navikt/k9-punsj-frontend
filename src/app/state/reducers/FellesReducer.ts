@@ -31,6 +31,7 @@ export interface IFellesState {
     hentBarnForbidden?: boolean;
     hentBarnError?: boolean;
     hentBarnSuccess?: boolean;
+    harHentBarnResponse?: boolean;
     barn?: IBarn[];
 }
 
@@ -335,6 +336,7 @@ export default function FellesReducer(
                 isAwaitingHentBarnResponse: false,
                 hentBarnSuccess: false,
                 hentBarnForbidden: true,
+                harHentBarnResponse: true,
             };
 
         case ActiontypesHentBarn.HENTBARN_SUCCESS:
@@ -343,6 +345,7 @@ export default function FellesReducer(
                 barn: action.barn,
                 isAwaitingHentBarnResponse: false,
                 hentBarnSuccess: true,
+                harHentBarnResponse: true,
             };
 
         case ActiontypesHentBarn.HENTBARN_ERROR:
@@ -351,6 +354,7 @@ export default function FellesReducer(
                 isAwaitingHentBarnResponse: false,
                 hentBarnSuccess: false,
                 hentBarnError: true,
+                harHentBarnResponse: true,
             };
 
         default:
