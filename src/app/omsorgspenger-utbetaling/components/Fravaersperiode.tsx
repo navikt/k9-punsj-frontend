@@ -61,8 +61,18 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProp
     return (
         <Panel border>
             <div className="aarsak-rad">
-                <SelectFormik label="Fraværsårsak" size="small" name={`${name}.fraværÅrsak`} options={fraværÅrsakOptions} />
-                <SelectFormik label="Søknadsårsak" size="small" name={`${name}.søknadÅrsak`} options={søknadÅrsakOptions} />
+                <SelectFormik
+                    label="Fraværsårsak"
+                    size="small"
+                    name={`${name}.fraværÅrsak`}
+                    options={fraværÅrsakOptions}
+                />
+                <SelectFormik
+                    label="Søknadsårsak"
+                    size="small"
+                    name={`${name}.søknadÅrsak`}
+                    options={søknadÅrsakOptions}
+                />
                 {minstToPerioder && (
                     <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode}>
                         <Delete />

@@ -1,8 +1,8 @@
 import React from 'react';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
-import { skjematyperOmsorgspengeutbetaling } from '../konstanter';
 import { Arbeidsforhold } from '../types/OMPUTSoknad';
+import Frilanser from './Frilanser';
 
 interface OwnProps {
     arbeidsforhold: Arbeidsforhold;
@@ -14,6 +14,7 @@ const ArbeidsforholdContainer = ({
     <>
         {arbeidstaker && <ArbeidstakerContainer />}
         {selvstendigNæringsdrivende && <SelvstendigNaeringsdrivende />}
+        {frilanser && <Frilanser />}
     </>
 );
 

@@ -1,5 +1,5 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, CheckboxGroup, Heading, Label, Panel, RadioGroup } from '@navikt/ds-react';
+import { Button, CheckboxGroup, Heading, Label, Panel } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
@@ -82,7 +82,7 @@ const SelvstendigNaeringsdrivende = () => {
                     name="opptjeningAktivitet.selvstendigNæringsdrivende.organisasjonsnummer"
                 />
             )}
-            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
+            <Field name="opptjeningAktivitet.frilanser.info.harSøkerRegnskapsfører">
                 {({ field, form }: FieldProps<string>) => (
                     <RadioGroupFormik
                         legend="Har søker regnskapsfører?"

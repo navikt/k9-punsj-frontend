@@ -59,6 +59,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
             startdato: '',
             sluttdato: '',
             jobberFortsattSomFrilans: false,
+            fravaersperioder: [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.FRILANSER }],
         },
         arbeidstaker: [{ ...arbeidstakerInitialValue }],
     },
