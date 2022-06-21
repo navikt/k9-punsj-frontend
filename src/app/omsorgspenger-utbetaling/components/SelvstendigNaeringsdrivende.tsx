@@ -5,8 +5,13 @@ import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import RadioInput from 'app/components/skjema/RadioInput';
+import { JaNei } from 'app/models/enums';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { capitalize } from 'lodash';
+import { RadioPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
@@ -47,28 +52,13 @@ const SelvstendigNaeringsdrivende = () => {
             />
             <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet">
                 {({ field, form }: FieldProps<boolean>) => (
-                    <RadioGroupFormik
+                    <RadioPanelGruppeFormik
                         legend="Er virksomheten registrert i Norge?"
-                        size="small"
+                        checked={field.value ? 'nei' : 'ja'}
                         name={field.name}
-                        value={field.value ? 'nei' : 'ja'}
-                    >
-                        <RadioFormik
-                            name={field.name}
-                            value="ja"
-                            onChange={() => form.setFieldValue(field.name, false)}
-                        >
-                            Ja
-                        </RadioFormik>
-                        <RadioFormik
-                            name={field.name}
-                            value="nei"
-                            onChange={() => form.setFieldValue(field.name, true)}
-                            checked
-                        >
-                            Nei
-                        </RadioFormik>
-                    </RadioGroupFormik>
+                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                        onChange={(e, value) => form.setFieldValue(field.name, value === 'nei')}
+                    />
                 )}
             </Field>
             {selvstendigNæringsdrivende.info.registrertIUtlandet ? (
@@ -82,26 +72,15 @@ const SelvstendigNaeringsdrivende = () => {
                     name="opptjeningAktivitet.selvstendigNæringsdrivende.organisasjonsnummer"
                 />
             )}
-            <Field name="opptjeningAktivitet.frilanser.info.harSøkerRegnskapsfører">
-                {({ field, form }: FieldProps<string>) => (
-                    <RadioGroupFormik
+            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
+                {({ field, form }: FieldProps<boolean>) => (
+                    <RadioPanelGruppeFormik
                         legend="Har søker regnskapsfører?"
-                        size="small"
+                        checked={field.value ? 'ja' : 'nei'}
                         name={field.name}
-                        value={field.value ? 'ja' : 'nei'}
-                    >
-                        <RadioFormik name={field.name} value="ja" onChange={() => form.setFieldValue(field.name, true)}>
-                            Ja
-                        </RadioFormik>
-                        <RadioFormik
-                            name={field.name}
-                            value="nei"
-                            onChange={() => form.setFieldValue(field.name, false)}
-                            checked
-                        >
-                            Nei
-                        </RadioFormik>
-                    </RadioGroupFormik>
+                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                        onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                    />
                 )}
             </Field>
             {selvstendigNæringsdrivende.info.harSøkerRegnskapsfører && (
