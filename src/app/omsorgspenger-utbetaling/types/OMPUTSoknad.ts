@@ -41,7 +41,7 @@ interface IOpptjeningAktivitet {
     frilanser: {
         startdato: string;
         sluttdato: string | undefined;
-        jobberFortsattSomFrilanser: boolean;
+        jobberFortsattSomFrilans: boolean;
         fravaersperioder: FravaersperiodeType[];
     };
 }

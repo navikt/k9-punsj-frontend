@@ -21,7 +21,7 @@ export default function Frilanser() {
                 Frilanser
             </Heading>
             <DatoInputFormik label="Når startet søker som frilanser?" name="opptjeningAktivitet.frilanser.startdato" />
-            <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilanser">
+            <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
                 {({ field, form }: FieldProps<string>) => (
                     <RadioGroupFormik
                         legend="Jobber søker fortsatt som frilanser?"
@@ -43,7 +43,7 @@ export default function Frilanser() {
                     </RadioGroupFormik>
                 )}
             </Field>
-            {!frilanser.jobberFortsattSomFrilanser && (
+            {!frilanser.jobberFortsattSomFrilans && (
                 <DatoInputFormik
                     label="Når sluttet søker som frilanser?"
                     name="opptjeningAktivitet.frilanser.sluttdato"
