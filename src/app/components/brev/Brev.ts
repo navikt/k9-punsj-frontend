@@ -38,7 +38,9 @@ export class Brev {
 
     dokumentdata: Partial<BrevFormValues>;
 
-    journalpostId: string;
+    journalpostId?: string;
+
+    fagsakId?: string;
 
     constructor(
         values: BrevFormValues,
@@ -49,7 +51,8 @@ export class Brev {
         },
         fagsakYtelseType: string,
         dokumentMal: string,
-        journalpostId: string
+        journalpostId?: string,
+        fagsakId?: string
     ) {
         this.soekerId = søkerId;
         this.mottaker = mottaker;
@@ -57,5 +60,6 @@ export class Brev {
         this.dokumentMal = dokumentMal;
         this.dokumentdata = lagDokumentdata(values);
         this.journalpostId = journalpostId;
+        this.fagsakId = fagsakId;
     }
 }

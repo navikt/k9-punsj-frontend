@@ -482,6 +482,14 @@
     "OpprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
     "OpprettJournalpostInngang.link": "Opprett journalpost",
 
+    "SendBrevIAvsluttetSakInngang.heading": "Send brev i avsluttet sak",
+    "SendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet, kan du sende brev her.",
+    "SendBrevIAvsluttetSakInngang.link": "Send brev",
+    "SendBrevIAvsluttetSak.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
+    "SendBrevIAvsluttetSak.søkersFødselsnummer": "Søkers fødselsnummer",
+    "SendBrevIAvsluttetSak.velgFagsak": "Velg fagsak",
+    "SendBrevIAvsluttetSak.velg": "Velg",
+
     "OpprettJournalpost.opprettJournalpost": "Opprett journalpost",
     "OpprettJournalpost.søkersFødselsnummer": "Søkers fødselsnummer",
     "OpprettJournalpost.velgFagsak": "Velg fagsak",
