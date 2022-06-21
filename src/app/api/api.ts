@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+import { Person } from 'app/models/types';
 import { get, post } from 'app/utils';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
@@ -27,3 +28,6 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             }
         }
     );
+
+export const hentBarn = (norskIdent: string): Promise<Error | Response> =>
+    get(ApiPath.BARN_GET, { norskIdent }, { 'X-Nav-NorskIdent': norskIdent });

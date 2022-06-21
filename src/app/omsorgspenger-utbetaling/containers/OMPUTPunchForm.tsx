@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import { ErrorSummary, Panel } from '@navikt/ds-react';
+import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setIdentAction, setSignaturAction } from 'app/state/actions';
@@ -36,6 +36,7 @@ import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import ArbeidsforholdContainer from './ArbeidsforholdContainer';
+import Personvelger from 'app/components/person-velger/Personvelger';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -181,6 +182,17 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 setSignaturAction={props.setSignaturAction}
                 signert={signert}
                 handleBlur={handleBlur}
+            />
+            <VerticalSpacer sixteenPx />
+            <Heading size="xsmall" spacing>
+                Barn
+            </Heading>
+            <Personvelger
+                name="barn"
+                handleBlur={handleBlur}
+                intl={intl}
+                sokersIdent={values.soekerId}
+                populerMedBarn={!values.barn.length}
             />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger handleBlur={handleBlur} />

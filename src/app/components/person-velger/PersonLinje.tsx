@@ -1,42 +1,38 @@
 import { Delete } from '@navikt/ds-icons';
-import { TextField, BodyShort, Label, Button } from '@navikt/ds-react';
+import { BodyShort, Label, Button } from '@navikt/ds-react';
 import { Personvalg } from 'app/models/types/Personvalg';
-import { Field, FieldProps, FormikValues } from 'formik';
+import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
+import { get, set } from 'lodash';
 import React from 'react';
 import { WrappedComponentProps } from 'react-intl';
+import TextFieldFormik from '../formikInput/TextFieldFormik';
 
-interface OwnProps extends WrappedComponentProps {
-    person: Personvalg;
+interface OwnProps {
     index: number;
     handleBlur: any;
-    personer: Personvalg[];
+    name: string;
+    slett: () => void;
 }
 
-const PersonLinje = ({ person, index, personer, handleBlur }: OwnProps) => {
-    const handleIdentitetsnummer = (event: any, onChange: (value: Personvalg[]) => void) => {
-        const personerEndret = personer.map((personObj: Personvalg, personIndex: number) =>
-            personIndex === index ? { ...personObj, norskIdent: event.target.value.replace(/\D+/, '') } : personObj
-        );
-        onChange(personerEndret);
-    };
+const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
+    const { values } = useFormikContext<any>();
+    const indexName = `${name}.[${index}]`;
     return (
-        <Field name="barn">
-            {({ form, meta }: FieldProps<Personvalg[], FormikValues>) => (
+        <Field name={indexName}>
+            {({ field, form }: FieldProps<Personvalg, FormikValues>) => (
                 <div className="personlinje">
-                    <TextField
+                    <TextFieldFormik
                         label="Identitetsnummer"
-                        value={person.norskIdent}
+                        name={`${indexName}.norskIdent`}
                         size="small"
                         onChange={(event) =>
-                            handleIdentitetsnummer(event, (value) => form.setFieldValue('barn', value))
+                            form.setFieldValue(`${indexName}.norskIdent`, event.target.value.replace(/\D+/, ''))
                         }
-                        onBlur={(e) => handleBlur(() => form.setFieldTouched('barn'))}
-                        error={meta.touched && meta.error?.[index]?.norskIdent}
-                        disabled={person.låsIdentitetsnummer}
+                        disabled={field.value.låsIdentitetsnummer}
                     />
                     <div className="navn">
                         <Label size="small">Navn</Label>
-                        <BodyShort size="small">{person.navn}</BodyShort>
+                        <BodyShort size="small">{field.value.navn}</BodyShort>
                     </div>
 
                     <Button
@@ -44,11 +40,17 @@ const PersonLinje = ({ person, index, personer, handleBlur }: OwnProps) => {
                         variant="tertiary"
                         size="small"
                         onClick={() => {
-                            form.setFieldValue(
-                                'barn',
-                                personer.filter((_, i) => i !== index)
+                            slett();
+                            handleBlur(
+                                undefined,
+                                set(
+                                    values,
+                                    name,
+                                    get(values, name).filter(
+                                        (barn: Personvalg, barnIndex: number) => barnIndex !== index
+                                    )
+                                )
                             );
-                            handleBlur();
                         }}
                     >
                         <Delete />
