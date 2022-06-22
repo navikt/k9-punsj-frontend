@@ -1,7 +1,6 @@
 import React from 'react';
 import { useField } from 'formik';
-import { Collapse, UnmountClosed } from 'react-collapse';
-import { CheckboksPanelGruppe } from 'nav-frontend-skjema';
+import { Collapse } from 'react-collapse';
 import { CheckboxGroup, Panel } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
@@ -9,11 +8,7 @@ import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
 import Frilanser from './Frilanser';
 
-interface OwnProps {
-    handleBlur: () => void;
-}
-
-const ArbeidsforholdVelger = ({ handleBlur }: OwnProps) => {
+const ArbeidsforholdVelger = () => {
     const [field, meta] = useField('metadata.arbeidsforhold');
     return (
         <Panel border>

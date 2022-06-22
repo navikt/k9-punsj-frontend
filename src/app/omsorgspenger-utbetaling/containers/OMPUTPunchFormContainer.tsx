@@ -79,9 +79,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             validationSchema={schema}
             onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}
         >
-            {(formik) => (
                 <OMPUTPunchForm
-                    formik={formik}
                     visForhaandsvisModal={visForhaandsvisModal}
                     setVisForhaandsvisModal={setVisForhaandsvisModal}
                     k9FormatErrors={k9FormatErrors}
@@ -89,7 +87,6 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                     submitError={submitError}
                     {...props}
                 />
-            )}
         </Formik>
     );
 };

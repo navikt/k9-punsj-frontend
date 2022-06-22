@@ -1,10 +1,9 @@
 /* eslint-disable */
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { FormikErrors, FormikProps } from 'formik';
+import { FormikErrors, FormikProps, useFormik, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import * as yup from 'yup';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -25,7 +24,7 @@ import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPU
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { useMutation } from 'react-query';
-import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
+import Mellomlagring from 'app/components/mellomlagring/Mellomlagring';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
@@ -35,12 +34,10 @@ import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysning
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import Personvelger from 'app/components/person-velger/Personvelger';
+import schema from '../schema';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
-    id: string;
-    formik: FormikProps<IOMPUTSoknad>;
-    schema: yup.AnyObjectSchema;
     visForhaandsvisModal: boolean;
     setVisForhaandsvisModal: (vis: boolean) => void;
     k9FormatErrors: Feil[];
@@ -70,10 +67,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
+    const { values, errors } = useFormikContext<IOMPUTSoknad>();
     const {
         intl,
         signaturState,
-        schema,
         identState,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
@@ -81,11 +78,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         setK9FormatErrors,
         journalpostid,
         submitError,
-        formik: { values, errors },
     } = props;
     const { signert } = signaturState;
 
-    console.log(values);
+    useEffect(() => {});
 
     useEffect(() => {
         setIdentAction(values.soekerId);
@@ -118,7 +114,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(() => oppdaterSoeknad(values), {onSuccess: () => setHarMellomlagret(true)});
+    } = useMutation(() => oppdaterSoeknad(values), { onSuccess: () => setHarMellomlagret(true) });
 
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!feilmeldingStier.has(attribute)) {
@@ -173,7 +169,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
-            <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
+            <Mellomlagring
+                lagrer={mellomlagrer}
+                lagret={harMellomlagret}
+                error={!!mellomlagringError}
+                mellomlagre={() => updateSoknad(values)}
+            />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad
                 intl={intl}
@@ -188,14 +189,13 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <Personvelger
                 name="barn"
                 handleBlur={handleBlur}
-                intl={intl}
                 sokersIdent={values.soekerId}
                 populerMedBarn={!values.barn.length}
             />
             <VerticalSpacer fourtyPx />
-            <ArbeidsforholdVelger handleBlur={handleBlur} />
+            <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
-            <IkkeRegistrerteOpplysninger intl={intl} handleBlur={handleBlur} />
+            <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx={true} />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
