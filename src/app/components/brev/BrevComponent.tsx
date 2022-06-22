@@ -48,7 +48,7 @@ const previewMessage = (
                 kode: sakstype,
                 kodeverk: 'FAGSAK_YTELSE',
             },
-            saksnummer: 'GENERELL_SAK',
+            saksnummer: fagsakId || 'GENERELL_SAK',
             avsenderApplikasjon: 'K9PUNSJ',
             overstyrtMottaker: mottaker,
             dokumentMal: values.brevmalkode,

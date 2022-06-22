@@ -7,16 +7,16 @@ import { useIntl } from 'react-intl';
 import './sendBrevIAvsluttetSak.less';
 
 const formatSakstype = (sakstype?: string) => {
-    if (sakstype === 'OMSORGSPENGER') {
+    if (sakstype === 'Omsorgspenger') {
         return 'OMP';
     }
-    if (sakstype === 'PLEIEPENGER_SYKT_BARN') {
+    if (sakstype === 'Pleiepenger sykt barn') {
         return 'PSB';
     }
-    if (sakstype === 'PLEIEPENGER_SLUTTFASE') {
+    if (sakstype === 'Pleiepenger livets sluttfase') {
         return 'PPN';
     }
-    return '';
+    return sakstype || '';
 };
 
 const SendBrevIAvsluttetSak = () => {
