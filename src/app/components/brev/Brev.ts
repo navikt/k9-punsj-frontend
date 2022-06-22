@@ -40,7 +40,7 @@ export class Brev {
 
     journalpostId?: string;
 
-    fagsakId?: string;
+    saksnummer?: string;
 
     constructor(
         values: BrevFormValues,
@@ -60,6 +60,6 @@ export class Brev {
         this.dokumentMal = dokumentMal;
         this.dokumentdata = lagDokumentdata(values);
         this.journalpostId = journalpostId;
-        this.fagsakId = fagsakId;
+        this.saksnummer = fagsakId;
     }
 }
