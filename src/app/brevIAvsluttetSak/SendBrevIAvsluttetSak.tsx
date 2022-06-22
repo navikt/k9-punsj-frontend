@@ -2,22 +2,10 @@ import { ErrorMessage, Heading, Loader, Select, TextField } from '@navikt/ds-rea
 import { finnFagsaker } from 'app/api/api';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import Fagsak from 'app/types/Fagsak';
+import { finnVisningsnavnForSakstype } from 'app/utils';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import './sendBrevIAvsluttetSak.less';
-
-const formatSakstype = (sakstype?: string) => {
-    if (sakstype === 'Omsorgspenger') {
-        return 'OMP';
-    }
-    if (sakstype === 'Pleiepenger sykt barn') {
-        return 'PSB';
-    }
-    if (sakstype === 'Pleiepenger livets sluttfase') {
-        return 'PPN';
-    }
-    return sakstype || '';
-};
 
 const SendBrevIAvsluttetSak = () => {
     const [søkerId, setSøkerId] = useState('');
@@ -40,9 +28,13 @@ const SendBrevIAvsluttetSak = () => {
         });
     };
 
-    const sakstypeForValgtFagsak = formatSakstype(
-        fagsaker?.length > 0 && valgtFagsak ? fagsaker.find((fagsak) => fagsak.fagsakId === valgtFagsak)?.sakstype : ''
-    );
+    const sakstypeForValgtFagsak = () => {
+        if (fagsaker?.length > 0 && valgtFagsak) {
+            const fagsak = fagsaker.find((fsak) => fsak.fagsakId === valgtFagsak);
+            return fagsak?.sakstype || '';
+        }
+        return '';
+    };
 
     return (
         <div className="sendBrevIAvsluttetSak">
@@ -53,7 +45,6 @@ const SendBrevIAvsluttetSak = () => {
             <TextField
                 className="fnrInput"
                 label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
-                // error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                 maxLength={11}
                 onChange={(event) => {
                     const { value } = event.target;
@@ -74,21 +65,21 @@ const SendBrevIAvsluttetSak = () => {
                     <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
                     {fagsaker.map(({ fagsakId, sakstype }) => (
                         <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${sakstype})`}
+                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
                         </option>
                     ))}
                 </Select>
                 {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
-                {henteFagsakFeilet && (
-                    <ErrorMessage>
-                        {intl.formatMessage({
-                            id: 'SendBrevIAvsluttetSak.hentingAvFagsakFeilet',
-                        })}
-                    </ErrorMessage>
-                )}
             </div>
+            {henteFagsakFeilet && (
+                <ErrorMessage>
+                    {intl.formatMessage({
+                        id: 'SendBrevIAvsluttetSak.hentingAvFagsakFeilet',
+                    })}
+                </ErrorMessage>
+            )}
             {valgtFagsak && (
-                <BrevComponent søkerId={søkerId} fagsakId={valgtFagsak} sakstype={sakstypeForValgtFagsak} />
+                <BrevComponent søkerId={søkerId} fagsakId={valgtFagsak} sakstype={sakstypeForValgtFagsak()} />
             )}
         </div>
     );

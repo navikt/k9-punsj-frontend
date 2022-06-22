@@ -26,3 +26,33 @@ export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]
 
 export const nummerPrefiks = (tekst: string, number: number) => `${number}. ${tekst}`;
 export const capitalize = (tekst: string) => (tekst ? tekst[0].toUpperCase() + tekst.substring(1) : tekst);
+
+export const finnVisningsnavnForSakstype = (kode: string) => {
+    const sakstyper = [
+        {
+            kode: 'PSB',
+            navn: 'Pleiepenger sykt barn',
+        },
+        {
+            kode: 'PPN',
+            navn: 'Pleiepenger i livets sluttfase',
+        },
+        {
+            kode: 'OMP',
+            navn: 'Omsorgspenger',
+        },
+        {
+            kode: 'OMP_KS',
+            navn: 'Omsorgspenger kronisk sykt barn',
+        },
+        {
+            kode: 'OMP_MA',
+            navn: 'Ekstra omsorgsdager midlertidig alene',
+        },
+        {
+            kode: 'OMP_AO',
+            navn: 'Alene om omsorgen',
+        },
+    ];
+    return sakstyper.find((st) => st.kode === kode)?.navn || kode;
+};
