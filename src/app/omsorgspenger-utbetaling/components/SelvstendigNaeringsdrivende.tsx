@@ -35,7 +35,7 @@ const SelvstendigNaeringsdrivende = () => {
                     <CheckboxGroup legend="Type virksomhet" size="small" error={meta.touched && meta.error}>
                         {virksomhetstyper.map((virksomhetstype) => (
                             <CheckboxFormik
-                                type="checkbox"
+                                key={virksomhetstype}
                                 name="opptjeningAktivitet.selvstendigNæringsdrivende.info.virksomhetstyper"
                                 value={virksomhetstype}
                             >

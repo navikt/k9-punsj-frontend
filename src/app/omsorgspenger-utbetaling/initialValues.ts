@@ -21,17 +21,20 @@ export const arbeidstakerInitialValue = {
 };
 
 export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
+    metadata: {
+        arbeidsforhold: {
+            arbeidstaker: false,
+            selvstendigNæringsdrivende: false,
+            frilanser: false,
+            ...soknad?.metadata?.arbeidsforhold,
+        },
+    },
     barn: soknad?.barn || [],
     soeknadId: soknad?.soeknadId || '',
     soekerId: soknad?.soekerId || '',
     mottattDato: soknad?.mottattDato || '',
     journalposter: soknad?.journalposter || new Set([]),
     klokkeslett: soknad?.klokkeslett || '',
-    arbeidsforhold: {
-        arbeidstaker: false,
-        selvstendigNæringsdrivende: false,
-        frilanser: false,
-    },
     opptjeningAktivitet: {
         selvstendigNæringsdrivende: {
             virksomhetNavn: '',

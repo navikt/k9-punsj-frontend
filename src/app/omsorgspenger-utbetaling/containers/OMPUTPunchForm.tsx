@@ -34,8 +34,6 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
-import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
-import ArbeidsforholdContainer from './ArbeidsforholdContainer';
 import Personvelger from 'app/components/person-velger/Personvelger';
 
 export interface IPunchOMPUTFormComponentProps {
@@ -95,7 +93,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     useEffect(() => {
         if (harMellomlagret) {
-            setTimeout(() => setHarMellomlagret(false), 5000);
+            setTimeout(() => setHarMellomlagret(false), 3000);
         }
     }, [harMellomlagret]);
 
@@ -120,7 +118,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(() => oppdaterSoeknad(values));
+    } = useMutation(() => oppdaterSoeknad(values), {onSuccess: () => setHarMellomlagret(true)});
 
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!feilmeldingStier.has(attribute)) {
@@ -196,8 +194,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger handleBlur={handleBlur} />
-            <VerticalSpacer sixteenPx />
-            <ArbeidsforholdContainer arbeidsforhold={values.arbeidsforhold} handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer twentyPx={true} />

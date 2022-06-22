@@ -47,7 +47,7 @@ interface IOpptjeningAktivitet {
 }
 
 export interface IOMPUTSoknad extends SoeknadType {
-    arbeidsforhold: Arbeidsforhold;
+    metadata: { arbeidsforhold: Arbeidsforhold };
     opptjeningAktivitet: IOpptjeningAktivitet;
     barn: PersonEnkel[];
 }

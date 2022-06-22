@@ -1,23 +1,42 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
-import intlHelper from 'app/utils/intlUtils';
-import { Field, FieldProps, useField } from 'formik';
+import { useField } from 'formik';
+import { Collapse, UnmountClosed } from 'react-collapse';
+import { CheckboksPanelGruppe } from 'nav-frontend-skjema';
 import { CheckboxGroup, Panel } from '@navikt/ds-react';
-import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
+import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
+import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
+import Frilanser from './Frilanser';
 
 interface OwnProps {
     handleBlur: () => void;
 }
 
 const ArbeidsforholdVelger = ({ handleBlur }: OwnProps) => {
-    const intl = useIntl();
-    const [field, meta] = useField('arbeidsforhold');
+    const [field, meta] = useField('metadata.arbeidsforhold');
     return (
         <Panel border>
-            <CheckboxGroup legend="Arbeidsforhold" size="small" error={meta.touched && meta.error}>
-                <CheckboxFormik name="arbeidsforhold.arbeidstaker">Arbeidstaker</CheckboxFormik>
-                <CheckboxFormik name="arbeidsforhold.selvstendigNæringsdrivende">Selvstendig næringsdrivende</CheckboxFormik>
-                <CheckboxFormik name="arbeidsforhold.frilanser">Frilanser</CheckboxFormik>
+            <CheckboxGroup legend="Arbeidsforhold" error={meta.touched && meta.error}>
+                <CheckboksPanelFormik name="metadata.arbeidsforhold.arbeidstaker" label="Arbeidstaker" valueIsBoolean />
+                <VerticalSpacer eightPx />
+                <Collapse isOpened={field.value.arbeidstaker}>
+                    <ArbeidstakerContainer />
+                </Collapse>
+                <CheckboksPanelFormik
+                    name="metadata.arbeidsforhold.selvstendigNæringsdrivende"
+                    label="Selvstendig næringsdrivende"
+                    valueIsBoolean
+                />
+                <VerticalSpacer eightPx />
+                <Collapse isOpened={field.value.selvstendigNæringsdrivende}>
+                    <SelvstendigNaeringsdrivende />
+                </Collapse>
+                <CheckboksPanelFormik name="metadata.arbeidsforhold.frilanser" label="Frilanser" valueIsBoolean />
+                <VerticalSpacer eightPx />
+                <Collapse isOpened={field.value.frilanser}>
+                    <Frilanser />
+                </Collapse>
             </CheckboxGroup>
         </Panel>
     );
