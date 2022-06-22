@@ -24,7 +24,7 @@ const OMPUTSchema = yup.object({
                 fravaersperioder: fravaersperioder({ organisasjonsnummerErPaakrevd: true }),
             })
         ),
-        selvstendigNæringsdrivende: yup.object({
+        selvstendigNaeringsdrivende: yup.object({
             virksomhetNavn: yup.string().required(),
             organisasjonsnummer: yup.string().required(),
             info: yup.object({
@@ -37,7 +37,7 @@ const OMPUTSchema = yup.object({
                     .label('Regnskapsførernavn'),
                 regnskapsførerTlf: yup
                     .string()
-                    .when('harSøkerRegnskapsfører', { is: true, then: yup.string().required() })
+                    .when('harSøkerRegnskapsfører', { is: true, then: (schema) => schema.required() })
                     .label('Regnskapsførers telefonnummer'),
                 harSøkerRegnskapsfører: yup.boolean(),
                 registrertIUtlandet: yup.boolean(),

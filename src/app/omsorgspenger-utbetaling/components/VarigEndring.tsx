@@ -3,6 +3,7 @@ import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeF
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
+import { kunTall } from 'app/utils/patterns';
 import { Field, FieldProps } from 'formik';
 import { capitalize } from 'lodash';
 import React from 'react';
@@ -29,6 +30,7 @@ export default function VarigEndring() {
                             size="small"
                             label="Årsinntekt etter endring"
                             name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
+                            filterPattern={kunTall}
                         />
                         <TextAreaFormik
                             size="small"

@@ -4,12 +4,11 @@ import { Personvalg } from 'app/models/types/Personvalg';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { get, set } from 'lodash';
 import React from 'react';
-import { WrappedComponentProps } from 'react-intl';
 import TextFieldFormik from '../formikInput/TextFieldFormik';
 
 interface OwnProps {
     index: number;
-    handleBlur: any;
+    handleBlur?: any;
     name: string;
     slett: () => void;
 }
@@ -17,6 +16,19 @@ interface OwnProps {
 const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
     const { values } = useFormikContext<any>();
     const indexName = `${name}.[${index}]`;
+    const slettHandler = () => {
+        slett();
+        if (handleBlur) {
+            handleBlur(
+                undefined,
+                set(
+                    values,
+                    name,
+                    get(values, name).filter((barn: Personvalg, barnIndex: number) => barnIndex !== index)
+                )
+            );
+        }
+    };
     return (
         <Field name={indexName}>
             {({ field, form }: FieldProps<Personvalg, FormikValues>) => (
@@ -35,24 +47,7 @@ const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
                         <BodyShort size="small">{field.value.navn}</BodyShort>
                     </div>
 
-                    <Button
-                        className="slett"
-                        variant="tertiary"
-                        size="small"
-                        onClick={() => {
-                            slett();
-                            handleBlur(
-                                undefined,
-                                set(
-                                    values,
-                                    name,
-                                    get(values, name).filter(
-                                        (barn: Personvalg, barnIndex: number) => barnIndex !== index
-                                    )
-                                )
-                            );
-                        }}
-                    >
+                    <Button className="slett" variant="tertiary" size="small" onClick={slettHandler}>
                         <Delete />
                         Slett
                     </Button>

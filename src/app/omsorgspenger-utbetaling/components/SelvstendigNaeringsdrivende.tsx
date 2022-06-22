@@ -3,16 +3,13 @@ import { Button, CheckboxGroup, Heading, Label, Panel } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import RadioFormik from 'app/components/formikInput/RadioFormik';
-import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import RadioInput from 'app/components/skjema/RadioInput';
 import { JaNei } from 'app/models/enums';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
+import { kunTall } from 'app/utils/patterns';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize, get } from 'lodash';
-import { RadioPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { Collapse } from 'react-collapse';
 import { fravaersperiodeInitialValue } from '../initialValues';
@@ -22,12 +19,11 @@ import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
 
 const SelvstendigNaeringsdrivende = () => {
-    const { values } = useFormikContext<IOMPUTSoknad>();
+    const { values, } = useFormikContext<IOMPUTSoknad>();
     const {
         opptjeningAktivitet: { selvstendigNaeringsdrivende },
     } = values;
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
-
     return (
         <Panel border>
             <Heading size="small" level="5">
@@ -72,6 +68,7 @@ const SelvstendigNaeringsdrivende = () => {
                 <TextFieldFormik
                     size="small"
                     label="Organisasjonsnummer"
+                    filterPattern={kunTall}
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
                 />
             )}
@@ -101,22 +98,30 @@ const SelvstendigNaeringsdrivende = () => {
                 </>
             )}
             <Label size="small">Når startet virksomheten?</Label>
-            <DatoInputFormik name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom" label="Startdato" />
+            <DatoInputFormik
+                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
+                label="Startdato"
+            />
             <DatoInputFormik
                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                 label="Eventuell sluttdato"
             />
             <Collapse
-                isOpened={erYngreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'))}
+                isOpened={erYngreEnn4år(
+                    get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                )}
             >
                 <TextFieldFormik
                     size="small"
                     label="Næringsresultat før skatt de siste 12 månedene"
                     name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                    filterPattern={kunTall}
                 />
             </Collapse>
             <Collapse
-                isOpened={erEldreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'))}
+                isOpened={erEldreEnn4år(
+                    get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                )}
             >
                 <VarigEndring />
             </Collapse>

@@ -10,7 +10,7 @@ import { Person } from 'app/models/types';
 import PersonLinje from './PersonLinje';
 
 interface OwnProps {
-    handleBlur: (callback: () => any) => void;
+    handleBlur?: (callback: () => any) => void;
     name: string;
     sokersIdent?: string;
     populerMedBarn?: boolean;

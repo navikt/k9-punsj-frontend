@@ -16,15 +16,9 @@ interface IOwnProps {
     intl: IntlShape;
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
     signert: JaNeiIkkeRelevant | null;
-    handleBlur: (e: any, values: FormikValues) => void;
 }
 
-const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    setSignaturAction,
-    signert,
-    handleBlur,
-}) => (
+const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = ({ intl, setSignaturAction, signert }) => (
     <>
         <Heading size="small">Omsorgspengeutbetaling</Heading>
         <VerticalSpacer sixteenPx />
@@ -40,7 +34,6 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = ({
                             label={intlHelper(intl, 'skjema.mottakelsesdato')}
                             errorMessage={meta.touched && meta.error}
                             value={field.value}
-                            onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                             onChange={(value) => form.setFieldValue('mottattDato', value)}
                         />
                     )}
@@ -55,28 +48,23 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = ({
                             feil={meta.touched && meta.error}
                             {...field}
                             onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
-                            onBlur={(e) => handleBlur(() => field.onBlur(e), form.values)}
                         />
                     )}
                 </Field>
             </div>
-            <Field>
-                {({ field }: FieldProps<FormikValues>) => (
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                            label: intlHelper(intl, jn),
-                            value: jn,
-                        }))}
-                        name="signatur"
-                        legend={intlHelper(intl, 'ident.signatur.etikett')}
-                        checked={signert || undefined}
-                        onChange={(event) =>
-                            setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
-                        }
-                    />
-                )}
-            </Field>
+            <RadioPanelGruppe
+                className="horizontalRadios"
+                radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
+                    label: intlHelper(intl, jn),
+                    value: jn,
+                }))}
+                name="signatur"
+                legend={intlHelper(intl, 'ident.signatur.etikett')}
+                checked={signert || undefined}
+                onChange={(event) =>
+                    setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
+                }
+            />
             {signert === JaNeiIkkeRelevant.NEI && (
                 <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
             )}

@@ -1,7 +1,7 @@
 import { Delete, AddCircle } from '@navikt/ds-icons';
 import { Button, Checkbox, Panel } from '@navikt/ds-react';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import Organisasjonsvelger from 'app/components/organisasjonsvelger/Organisasjonvelger';
+import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
 import { Field, FieldArray, FieldProps, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import { fravaersperiodeInitialValue } from '../initialValues';
@@ -49,7 +49,6 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                             <TextFieldFormik
                                 size="small"
                                 label="Organisasjonsnummer"
-                                type="number"
                                 name={`${name}.organisasjonsnummer`}
                             />
                         )}
