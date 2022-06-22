@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FormikErrors, FormikProps, useFormik, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
+import { ErrorSummary, Heading } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setIdentAction, setSignaturAction } from 'app/state/actions';
@@ -24,7 +24,7 @@ import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPU
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { useMutation } from 'react-query';
-import Mellomlagring from 'app/components/mellomlagring/Mellomlagring';
+import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
@@ -35,6 +35,7 @@ import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
+import { debounce } from 'lodash';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -81,18 +82,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     } = props;
     const { signert } = signaturState;
 
-    useEffect(() => {});
-
-    useEffect(() => {
-        setIdentAction(values.soekerId);
-    }, [values.soekerId]);
-
-    useEffect(() => {
-        if (harMellomlagret) {
-            setTimeout(() => setHarMellomlagret(false), 3000);
-        }
-    }, [harMellomlagret]);
-
     const { mutate: valider } = useMutation(
         (skalForhaandsviseSoeknad?: boolean) => validerSoeknad(values, identState.ident1),
         {
@@ -115,6 +104,21 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
     } = useMutation(() => oppdaterSoeknad(values), { onSuccess: () => setHarMellomlagret(true) });
+
+    useEffect(() => {
+        setIdentAction(values.soekerId);
+    }, [values.soekerId]);
+
+    const debounceCallback = useCallback(debounce(mellomlagreSoeknad, 3000), []);
+    useEffect(() => {
+        debounceCallback();
+    }, [values]);
+
+    useEffect(() => {
+        if (harMellomlagret) {
+            setTimeout(() => setHarMellomlagret(false), 3000);
+        }
+    }, [harMellomlagret]);
 
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!feilmeldingStier.has(attribute)) {
@@ -169,12 +173,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
-            <Mellomlagring
-                lagrer={mellomlagrer}
-                lagret={harMellomlagret}
-                error={!!mellomlagringError}
-                mellomlagre={() => updateSoknad(values)}
-            />
+            <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad
                 intl={intl}

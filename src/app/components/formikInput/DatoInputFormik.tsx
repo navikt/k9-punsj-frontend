@@ -6,7 +6,7 @@ import DateInput, { DateInputProps } from '../skjema/DateInput';
 interface OwnProps extends Omit<DateInputProps, 'value' | 'onChange'> {
     label: string;
     name: string;
-    handleBlur: (callback: () => void, values: any) => void;
+    handleBlur?: (callback: () => void, values: any) => void;
 }
 
 const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
@@ -21,7 +21,11 @@ const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
                 helper.setValue(selectedDate);
             }}
             onBlur={(selectedDate) => {
-                handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
+                if (handleBlur) {
+                    handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
+                } else {
+                    field.onBlur(selectedDate);
+                }
             }}
             errorMessage={meta.touched && meta.error}
         />

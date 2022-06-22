@@ -9,19 +9,22 @@ import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeF
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import RadioInput from 'app/components/skjema/RadioInput';
 import { JaNei } from 'app/models/enums';
+import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { capitalize } from 'lodash';
+import { capitalize, get } from 'lodash';
 import { RadioPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
+import { Collapse } from 'react-collapse';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { FravaersperiodeType, IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
+import VarigEndring from './VarigEndring';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
     const {
-        opptjeningAktivitet: { selvstendigNæringsdrivende },
+        opptjeningAktivitet: { selvstendigNaeringsdrivende },
     } = values;
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
 
@@ -30,13 +33,13 @@ const SelvstendigNaeringsdrivende = () => {
             <Heading size="small" level="5">
                 Selvstendig næringsdrivende
             </Heading>
-            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.virksomhetstyper">
+            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
                 {({ meta }: FieldProps<string[]>) => (
                     <CheckboxGroup legend="Type virksomhet" size="small" error={meta.touched && meta.error}>
                         {virksomhetstyper.map((virksomhetstype) => (
                             <CheckboxFormik
                                 key={virksomhetstype}
-                                name="opptjeningAktivitet.selvstendigNæringsdrivende.info.virksomhetstyper"
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
                                 value={virksomhetstype}
                             >
                                 {virksomhetstype}
@@ -46,11 +49,11 @@ const SelvstendigNaeringsdrivende = () => {
                 )}
             </Field>
             <TextFieldFormik
-                name="opptjeningAktivitet.selvstendigNæringsdrivende.virksomhetNavn"
+                name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
                 label="Virksomhetsnavn"
                 size="small"
             />
-            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.registrertIUtlandet">
+            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                 {({ field, form }: FieldProps<boolean>) => (
                     <RadioPanelGruppeFormik
                         legend="Er virksomheten registrert i Norge?"
@@ -61,18 +64,18 @@ const SelvstendigNaeringsdrivende = () => {
                     />
                 )}
             </Field>
-            {selvstendigNæringsdrivende.info.registrertIUtlandet ? (
-                <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.landkode">
+            {selvstendigNaeringsdrivende.info.registrertIUtlandet ? (
+                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
                     {({ field }: FieldProps<string>) => <CountrySelect selectedcountry={field.value} {...field} />}
                 </Field>
             ) : (
                 <TextFieldFormik
                     size="small"
                     label="Organisasjonsnummer"
-                    name="opptjeningAktivitet.selvstendigNæringsdrivende.organisasjonsnummer"
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
                 />
             )}
-            <Field name="opptjeningAktivitet.selvstendigNæringsdrivende.info.harSøkerRegnskapsfører">
+            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører">
                 {({ field, form }: FieldProps<boolean>) => (
                     <RadioPanelGruppeFormik
                         legend="Har søker regnskapsfører?"
@@ -83,46 +86,52 @@ const SelvstendigNaeringsdrivende = () => {
                     />
                 )}
             </Field>
-            {selvstendigNæringsdrivende.info.harSøkerRegnskapsfører && (
+            {selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører && (
                 <>
                     <TextFieldFormik
                         size="small"
                         label="Navn på regnskapsfører"
-                        name="opptjeningAktivitet.selvstendigNæringsdrivende.info.regnskapsførerNavn"
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
                     />
                     <TextFieldFormik
                         size="small"
                         label="Telefonnummer til regnskapsfører "
-                        name="opptjeningAktivitet.selvstendigNæringsdrivende.info.regnskapsførerTlf"
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
                     />
                 </>
             )}
             <Label size="small">Når startet virksomheten?</Label>
+            <DatoInputFormik name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom" label="Startdato" />
             <DatoInputFormik
-                name="values.opptjeningAktivitet.selvstendigNæringsdrivende.info.periode.fom"
-                label="Startdato"
-            />
-            <DatoInputFormik
-                name="values.opptjeningAktivitet.selvstendigNæringsdrivende.info.periode.tom"
+                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                 label="Eventuell sluttdato"
             />
-            <TextFieldFormik
-                size="small"
-                label="Næringsresultat før skatt de siste 12 månedene"
-                name="values.opptjeningAktivitet.selvstendigNæringsdrivende.info.periode.tom"
-            />
+            <Collapse
+                isOpened={erYngreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'))}
+            >
+                <TextFieldFormik
+                    size="small"
+                    label="Næringsresultat før skatt de siste 12 månedene"
+                    name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                />
+            </Collapse>
+            <Collapse
+                isOpened={erEldreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'))}
+            >
+                <VarigEndring />
+            </Collapse>
             <FieldArray
-                name="opptjeningAktivitet.selvstendigNæringsdrivende.fravaersperioder"
+                name="opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder"
                 render={(arrayHelpers) => (
                     <>
-                        {selvstendigNæringsdrivende.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
+                        {selvstendigNaeringsdrivende.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
                             <Field
-                                name={`opptjeningAktivitet.selvstendigNæringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
+                                name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
                             >
                                 {({ field }: FieldProps<FravaersperiodeType>) => (
                                     <Fravaersperiode
                                         name={field.name}
-                                        antallFravaersperioder={selvstendigNæringsdrivende.fravaersperioder?.length}
+                                        antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}
                                         slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
                                     />
                                 )}

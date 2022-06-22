@@ -26,3 +26,14 @@ export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]
 
 export const nummerPrefiks = (tekst: string, number: number) => `${number}. ${tekst}`;
 export const capitalize = (tekst: string) => (tekst ? tekst[0].toUpperCase() + tekst.substring(1) : tekst);
+export const erYngreEnn4år = (dato: string) => {
+    const fireAarSiden = new Date();
+    fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+    return new Date(dato) > fireAarSiden;
+};
+
+export const erEldreEnn4år = (dato: string) => {
+    const fireAarSiden = new Date();
+    fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
+    return new Date(dato) < fireAarSiden;
+};

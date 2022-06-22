@@ -13,12 +13,12 @@ export type FravaersperiodeType = {
 
 export type Arbeidsforhold = {
     arbeidstaker: boolean;
-    selvstendigNæringsdrivende: boolean;
+    selvstendigNaeringsdrivende: boolean;
     frilanser: boolean;
 };
 interface IOpptjeningAktivitet {
     arbeidstaker: Arbeidstaker[];
-    selvstendigNæringsdrivende: {
+    selvstendigNaeringsdrivende: {
         virksomhetNavn: string;
         organisasjonsnummer: string;
         info: {

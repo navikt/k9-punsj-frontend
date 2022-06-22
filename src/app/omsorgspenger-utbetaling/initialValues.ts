@@ -24,7 +24,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     metadata: {
         arbeidsforhold: {
             arbeidstaker: false,
-            selvstendigNæringsdrivende: false,
+            selvstendigNaeringsdrivende: false,
             frilanser: false,
             ...soknad?.metadata?.arbeidsforhold,
         },
@@ -36,7 +36,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     journalposter: soknad?.journalposter || new Set([]),
     klokkeslett: soknad?.klokkeslett || '',
     opptjeningAktivitet: {
-        selvstendigNæringsdrivende: {
+        selvstendigNaeringsdrivende: {
             virksomhetNavn: '',
             organisasjonsnummer: '',
             info: {
@@ -49,7 +49,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
                 registrertIUtlandet: false,
                 bruttoInntekt: '',
                 erNyoppstartet: false,
-                erVarigEndring: true,
+                erVarigEndring: false,
                 endringInntekt: '',
                 endringDato: '',
                 endringBegrunnelse: '',
