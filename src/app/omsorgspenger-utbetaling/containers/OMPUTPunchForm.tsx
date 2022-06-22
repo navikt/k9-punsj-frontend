@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { FormikErrors, FormikProps, useFormik, useFormikContext } from 'formik';
+import { FormikErrors, FormikProps, setNestedObjectValues, useFormik, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -62,13 +62,6 @@ type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
     IPunchOMPUTFormDispatchProps;
 
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
-    const [harMellomlagret, setHarMellomlagret] = useState(false);
-    const [visVentModal, setVisVentModal] = useState(false);
-    const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
-    const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
-    const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
-    const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
-    const { values, errors } = useFormikContext<IOMPUTSoknad>();
     const {
         intl,
         signaturState,
@@ -81,11 +74,20 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         submitError,
     } = props;
     const { signert } = signaturState;
+    const [harMellomlagret, setHarMellomlagret] = useState(false);
+    const [visVentModal, setVisVentModal] = useState(false);
+    const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
+    const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
+    const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
+    const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
+    const { values, errors, setTouched } = useFormikContext<IOMPUTSoknad>();
 
+    // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
-        (skalForhaandsviseSoeknad?: boolean) => validerSoeknad(values, identState.ident1),
+        ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
+            validerSoeknad(values, identState.ident1),
         {
-            onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, skalForhaandsviseSoeknad) => {
+            onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
                 if (data['ytelse'] && skalForhaandsviseSoeknad) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
@@ -105,11 +107,28 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         mutate: mellomlagreSoeknad,
     } = useMutation(() => oppdaterSoeknad(values), { onSuccess: () => setHarMellomlagret(true) });
 
+    const updateSoknad = (soknad: IOMPUTSoknad) => {
+        const journalposter = Array.from(soknad?.journalposter || []);
+
+        if (!journalposter.includes(props.journalpostid)) {
+            journalposter.push(props.journalpostid);
+        }
+        //TODO: legg inn journalposter som mangler
+        if (harForsoektAaSendeInn) {
+            valider({ skalForhaandsviseSoeknad: false });
+        }
+
+        return mellomlagreSoeknad();
+    };
+
     useEffect(() => {
         setIdentAction(values.soekerId);
     }, [values.soekerId]);
 
-    const debounceCallback = useCallback(debounce(mellomlagreSoeknad, 3000), []);
+    const debounceCallback = useCallback(
+        debounce(() => updateSoknad(values), 3000),
+        []
+    );
     useEffect(() => {
         debounceCallback();
     }, [values]);
@@ -147,20 +166,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         return [];
     };
 
-    const updateSoknad = (soknad: IOMPUTSoknad) => {
-        const journalposter = Array.from(soknad?.journalposter || []);
-
-        if (!journalposter.includes(props.journalpostid)) {
-            journalposter.push(props.journalpostid);
-        }
-        //TODO: legg inn journalposter som mangler
-        if (harForsoektAaSendeInn) {
-            valider(false);
-        }
-
-        return mellomlagreSoeknad();
-    };
-
     const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
@@ -175,22 +180,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
-            <OpplysningerOmOMPUTSoknad
-                intl={intl}
-                setSignaturAction={props.setSignaturAction}
-                signert={signert}
-                handleBlur={handleBlur}
-            />
+            <OpplysningerOmOMPUTSoknad intl={intl} setSignaturAction={props.setSignaturAction} signert={signert} />
             <VerticalSpacer sixteenPx />
             <Heading size="xsmall" spacing>
                 Barn
             </Heading>
-            <Personvelger
-                name="barn"
-                handleBlur={handleBlur}
-                sokersIdent={values.soekerId}
-                populerMedBarn={!values.barn.length}
-            />
+            <Personvelger name="barn" sokersIdent={values.soekerId} populerMedBarn={!values.barn.length} />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
@@ -217,8 +212,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
                                 setHarForsoektAaSendeInn(true);
+                                setTouched(setNestedObjectValues(values, true));
                             }
-                            valider(true);
+                            valider({ skalForhaandsviseSoeknad: true });
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
