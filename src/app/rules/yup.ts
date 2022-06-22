@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
-import { erIkkeFremITid, erUgyldigIdent, klokkeslettErFremITid } from './valideringer';
+import { IdentRules } from './IdentRules';
+import { erIkkeFremITid, klokkeslettErFremITid } from './valideringer';
 
 const yupLocale = {
     mixed: {
@@ -37,7 +38,7 @@ export const identifikator = yup
     .nullable(true)
     .length(11)
     .test({
-        test: (identifikasjonsnummer: string) => !erUgyldigIdent(identifikasjonsnummer),
+        test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
         message: 'Ugyldig identifikasjonsnummer',
     })
     .label('Identifikasjonsnummer');

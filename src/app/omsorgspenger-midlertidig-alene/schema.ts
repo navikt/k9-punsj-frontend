@@ -40,7 +40,14 @@ const OMPMASchema = yup.object({
         norskIdent: identifikator,
         situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
         situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
-        periode,
+        periode: yup.object().shape({
+            fom: yup.string().required().label('Fra og med'),
+            tom: yup
+                .string()
+                .when('tilOgMedErIkkeOppgitt', { is: false, then: yup.string().required() })
+                .label('Til og med'),
+            tilOgMedErIkkeOppgitt: yup.bool(),
+        }),
     }),
 });
 

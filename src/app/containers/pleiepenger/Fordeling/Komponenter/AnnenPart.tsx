@@ -4,20 +4,20 @@ import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import React, { useEffect, useState } from 'react';
-import { IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 type ownProps = {
     vis: boolean;
-    intl: IntlShape;
     annenPart: string;
     setAnnenPart: (annenPart: string) => void;
 };
-const AnnenPart = ({ vis, intl, annenPart, setAnnenPart }: ownProps): JSX.Element | null => {
+const AnnenPart = ({ vis, annenPart, setAnnenPart }: ownProps): JSX.Element | null => {
     if (!vis) {
         return null;
     }
+    const intl = useIntl();
 
     useEffect(() => setAnnenPart(''), []);
 
@@ -40,7 +40,6 @@ const AnnenPart = ({ vis, intl, annenPart, setAnnenPart }: ownProps): JSX.Elemen
             className="bold-label"
             maxLength={11}
             size="small"
-            type="number"
         />
     );
 };

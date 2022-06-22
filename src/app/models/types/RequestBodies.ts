@@ -26,9 +26,10 @@ export interface IHentPerioder {
 
 export interface ISkalTilK9 {
     brukerIdent: string;
-    barnIdent: string;
+    barnIdent: string | null;
     journalpostId: string;
     fagsakYtelseType: FagsakYtelseType | undefined;
+    annenPart: string | null;
 }
 
 export enum FagsakYtelseType {

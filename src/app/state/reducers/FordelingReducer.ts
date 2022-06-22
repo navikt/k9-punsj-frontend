@@ -80,6 +80,14 @@ export function FordelingReducer(
                 sjekkTilK9Error: undefined,
                 sjekkTilK9JournalpostStottesIkke: true,
             };
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                skalTilK9: undefined,
+                sjekkTilK9Error: undefined,
+                sjekkTilK9JournalpostStottesIkke: undefined,
+            };
 
         case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:
             return {

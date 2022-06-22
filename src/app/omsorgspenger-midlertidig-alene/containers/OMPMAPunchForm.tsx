@@ -38,7 +38,7 @@ import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
-import { IOMPMASoknad } from '../types/OMPMASoknad';
+import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
 import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
@@ -198,9 +198,10 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
     const harFeilISkjema = (errors: FormikErrors<IOMPMASoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
-    const handleBlur = (callback: () => void = () => {}) => {
+    // valuesFromOnBlur er nødvendig på grunn av DateInput, hvor variabelen i formik ikke oppdateres før onBlur kalles
+    const handleBlur = (callback: () => void = () => {}, valuesFromOnBlur: Partial<OMPMASoknad> = {}) => {
         callback();
-        updateSoknad(values);
+        updateSoknad({ ...values, ...valuesFromOnBlur });
     };
 
     return (
@@ -239,7 +240,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                                 {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
                             </Hjelpetekst>
                         </>
@@ -259,7 +260,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                                 {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                             </Hjelpetekst>
                         </>

@@ -159,7 +159,7 @@ export function getOMPMASoknad(id: string) {
     return (dispatch: any) => {
         dispatch(getOMPMASoknadLoadingAction());
         return get(ApiPath.OMP_MA_SOKNAD_GET, { id }, undefined, (response, soknad) => {
-            if (response.ok || response.status === 400) {
+            if (response.ok) {
                 return dispatch(setOMPMASoknadAction(soknad));
             }
             return dispatch(getOMPMASoknadErrorAction(convertResponseToError(response)));

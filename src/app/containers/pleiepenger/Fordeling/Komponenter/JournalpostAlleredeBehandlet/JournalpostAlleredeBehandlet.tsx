@@ -7,7 +7,7 @@ import React from 'react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
-import { erUgyldigIdent } from 'app/rules/valideringer';
+import { IdentRules } from 'app/rules';
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
@@ -57,11 +57,13 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 {sokersIdent} <Kopier verdi={sokersIdent} />
             </div>
             <VerticalSpacer eightPx />
-            {!fellesState.kopierJournalpostSuccess && <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />}
+            {!fellesState.kopierJournalpostSuccess && (
+                <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />
+            )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
             {!fellesState.kopierJournalpostSuccess && !erInntektsmeldingUtenKrav && (
                 <Knapp
-                    disabled={erUgyldigIdent(identState.ident2)}
+                    disabled={IdentRules.erUgyldigIdent(identState.ident2)}
                     onClick={() => {
                         if (!!sokersIdent && !!identState.ident2)
                             kopiereJournalpost(
