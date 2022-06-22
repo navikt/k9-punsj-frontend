@@ -78,7 +78,7 @@ const SendBrevIAvsluttetSak = () => {
                         </option>
                     ))}
                 </Select>
-                {isFetchingFagsaker && <Loader variant="neutral" size="xsmall" title="venter..." />}
+                {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
                 {henteFagsakFeilet && (
                     <ErrorMessage>
                         {intl.formatMessage({
