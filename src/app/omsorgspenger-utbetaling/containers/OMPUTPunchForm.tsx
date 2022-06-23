@@ -116,6 +116,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         //TODO: legg inn journalposter som mangler
         if (harForsoektAaSendeInn) {
             valider({ skalForhaandsviseSoeknad: false });
+            setTouched(setNestedObjectValues(values, true));
         }
 
         return mellomlagreSoeknad();

@@ -43,7 +43,7 @@ export const identifikator = yup
     })
     .label('Identifikasjonsnummer');
 
-export const periode = yup.object().shape({
+export const periode = () => yup.object().shape({
     fom: yup.string().required().label('Fra og med'),
     tom: yup.string().required().label('Til og med'),
 });

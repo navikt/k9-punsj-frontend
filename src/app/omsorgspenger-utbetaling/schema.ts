@@ -6,11 +6,11 @@ const fravaersperioder = ({ organisasjonsnummerErPaakrevd }: { organisasjonsnumm
     yup.array().of(
         yup.object({
             aktivitetsfravær: yup.string(),
-            organisasjonsnummer: yup.string(),
+            organisasjonsnummer: organisasjonsnummerErPaakrevd ? yup.string().required() : yup.string(),
             fraværÅrsak: yup.string().required(),
             søknadÅrsak: yup.string().required(),
-            periode,
-            faktiskTidPrDag: organisasjonsnummerErPaakrevd ? yup.string().required() : yup.string(),
+            periode: periode(),
+            faktiskTidPrDag: yup.string().required(),
         })
     );
 
@@ -28,7 +28,10 @@ const OMPUTSchema = yup.object({
             virksomhetNavn: yup.string().required(),
             organisasjonsnummer: yup.string().required(),
             info: yup.object({
-                periode,
+                periode: yup.object({
+                    fom: yup.string().required(),
+                    tom: yup.string(),
+                }),
                 virksomhetstyper: yup.array().min(1),
                 landkode: yup.string().required(),
                 regnskapsførerNavn: yup
@@ -42,12 +45,12 @@ const OMPUTSchema = yup.object({
                 harSøkerRegnskapsfører: yup.boolean(),
                 registrertIUtlandet: yup.boolean(),
                 bruttoInntekt: yup.string().required(),
-                erNyoppstartet: yup.boolean(),
                 erVarigEndring: yup.boolean().when('erNyoppstartet', { is: true, then: yup.boolean().required() }),
                 endringInntekt: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
                 endringDato: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
                 endringBegrunnelse: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
             }),
+            fravaersperioder: fravaersperioder({ organisasjonsnummerErPaakrevd: false }),
         }),
     }),
     barn,
