@@ -1,7 +1,9 @@
+import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
-import { get, post } from 'app/utils';
+import Fagsak from 'app/types/Fagsak';
+import { finnVisningsnavnForSakstype, get, post } from 'app/utils';
 import { requiredValue, validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { Hovedknapp } from 'nav-frontend-knapper';
@@ -19,11 +21,6 @@ enum OpprettJournalpostFormKeys {
     notat = 'notat',
 }
 
-interface Fagsak {
-    fagsakId: string;
-    sakstype: string;
-}
-
 const OpprettJournalpost: React.FC = () => {
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
@@ -37,19 +34,14 @@ const OpprettJournalpost: React.FC = () => {
     const hentFagsaker = (søkersFødselsnummer: string) => {
         setHenteFagsakFeilet(false);
         setIsFetchingFagsaker(true);
-        get(
-            ApiPath.HENT_FAGSAK_PÅ_IDENT,
-            undefined,
-            { 'X-Nav-NorskIdent': søkersFødselsnummer },
-            (response, data: Fagsak[]) => {
-                setIsFetchingFagsaker(false);
-                if (response.status === 200) {
-                    setFagsaker(data);
-                } else {
-                    setHenteFagsakFeilet(true);
-                }
+        finnFagsaker(søkersFødselsnummer, (response, data: Fagsak[]) => {
+            setIsFetchingFagsaker(false);
+            if (response.status === 200) {
+                setFagsaker(data);
+            } else {
+                setHenteFagsakFeilet(true);
             }
-        );
+        });
     };
     return (
         <div className="opprettJournalpost">
@@ -122,7 +114,7 @@ const OpprettJournalpost: React.FC = () => {
                                             </option>
                                             {fagsaker.map(({ fagsakId, sakstype }) => (
                                                 <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (K9 ${sakstype})`}
+                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
                                                 </option>
                                             ))}
                                         </Select>

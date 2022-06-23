@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { ApiPath } from 'app/apiConfig';
+import Fagsak from 'app/types/Fagsak';
 import { get } from 'app/utils';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
@@ -21,3 +22,6 @@ export const finnArbeidsgivere = (
         get(ApiPath.FINN_ARBEIDSGIVERE, { norskIdent: søkerId }, { 'X-Nav-NorskIdent': søkerId }, callback);
     }
 };
+
+export const finnFagsaker = (søkersFødselsnummer: string, callback: (response: Response, data: Fagsak[]) => void) =>
+    get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);
