@@ -53,6 +53,7 @@ let handlers = [
             })
         )
     ),
+    testHandlers.barn,
     rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
         res(
             ctx.status(200),

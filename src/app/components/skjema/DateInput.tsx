@@ -4,7 +4,7 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-interface DateInputProps {
+export interface DateInputProps {
     value: string;
     onChange: (value: string) => void;
     id?: string;

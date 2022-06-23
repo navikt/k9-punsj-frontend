@@ -3,7 +3,8 @@ import { IdentActionKeys, IIdentActions } from '../actions/IdentActions';
 
 export const initialState: IIdentState = {
     ident1: '',
-    ident2: null,
+    ident2: '',
+    annenPart: '',
     annenSokerIdent: null,
 };
 
@@ -15,6 +16,19 @@ export function IdentReducer(identState: IIdentState = initialState, action: IId
                 ident1: action.ident1,
                 ident2: action.ident2,
                 annenSokerIdent: action.annenSokerIdent,
+            };
+
+        case IdentActionKeys.IDENT_SET_ANNEN_PART:
+            return {
+                ...identState,
+                annenPart: action.annenPart,
+            };
+
+        case IdentActionKeys.IDENT_RESET:
+            return {
+                ...identState,
+                ident2: '',
+                annenSokerIdent: '',
             };
 
         default:

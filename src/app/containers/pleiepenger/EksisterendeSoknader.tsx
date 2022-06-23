@@ -65,7 +65,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
-        if (IdentRules.areIdentsValid(ident1, ident2)) {
+        if (IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
             props.setIdentAction(ident1, ident2);
             props.findEksisterendeSoknader(ident1, null);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);

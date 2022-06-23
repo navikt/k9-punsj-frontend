@@ -1,9 +1,23 @@
+/* eslint-disable no-template-curly-in-string */
 import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
+import * as yup from 'yup';
+
 import { IdentRules } from './IdentRules';
 import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
+
+export const yupLocale = {
+    mixed: {
+        required: '${path} er et påkrevd felt.',
+    },
+    string: {
+        min: '${path} må være minst ${min} tegn',
+        max: '${path} må være mest ${max} tegn',
+        length: '${path} må være nøyaktig ${length} tegn',
+    },
+};
 
 export interface IFeltValidator<FeltType, SkjemaType> {
     feltPath: string;
@@ -27,15 +41,14 @@ export function validerSkjema<SkjemaType>(feltvalidatorer: IFeltValidator<any, S
                     }
                     return tmp;
                 }, tempErrors);
-            } 
-                const feltError = validatorer
-                    .map((validator) => validator(getIn(skjema, feltPath), skjema))
-                    .find((error) => error);
-                if (feltError) {
-                    return setIn(tempErrors, feltPath, intlHelper(intl, feltError));
-                }
-                return tempErrors;
-            
+            }
+            const feltError = validatorer
+                .map((validator) => validator(getIn(skjema, feltPath), skjema))
+                .find((error) => error);
+            if (feltError) {
+                return setIn(tempErrors, feltPath, intlHelper(intl, feltError));
+            }
+            return tempErrors;
         }, {});
 }
 
@@ -44,7 +57,7 @@ export function påkrevd<VerdiType>(verdi: VerdiType) {
 }
 
 export function fødselsnummervalidator(verdi: string) {
-    return IdentRules.hasIdent11Digits(verdi) ? undefined : 'skjema.validering.11siffer';
+    return IdentRules.harFnr11Siffrer(verdi) ? undefined : 'skjema.validering.11siffer';
 }
 
 export function minstEn<VerdiType>(verdi: VerdiType) {
@@ -66,3 +79,34 @@ export function gyldigFødselsdato(verdi: string) {
     const dagsDato = new Date();
     return new Date(verdi) < dagsDato ? undefined : 'skjema.validering.ugyldigfødselsdato';
 }
+
+yup.setLocale(yupLocale);
+
+export const identifikator = yup
+    .string()
+    .required()
+    .nullable(true)
+    .length(11)
+    .test({
+        test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
+        message: 'Ugyldig identifikasjonsnummer',
+    })
+    .label('Identifikasjonsnummer');
+
+export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
+    try {
+        validator.validateSync(value);
+
+        return false;
+    } catch (e) {
+        return e.errors[0];
+    }
+};
+
+export const getValidationErrors = (validators: any, value: any): string | boolean => {
+    const errorMessages = validators.map((validator: yup.AnySchema) => validate(validator, value)).filter(Boolean);
+    if (errorMessages.length) {
+        return errorMessages;
+    }
+    return false;
+};

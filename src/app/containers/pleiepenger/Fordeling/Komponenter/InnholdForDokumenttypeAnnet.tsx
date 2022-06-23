@@ -9,9 +9,9 @@ import { IFordelingState, IJournalpost } from 'app/models/types';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import { Input } from 'nav-frontend-skjema';
+import { IdentRules } from 'app/rules';
 import { IIdentState } from 'app/models/types/IdentState';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
-import { erUgyldigIdent } from '../FordelingFeilmeldinger';
 
 interface IInnholdForDokumenttypeAnnetProps {
     dokumenttype?: FordelingDokumenttype;
@@ -66,7 +66,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                 className="bold-label ident-soker-1"
                 maxLength={11}
                 feil={
-                    erUgyldigIdent(identState.ident1) || identState.ident1.length <= 0
+                    IdentRules.erUgyldigIdent(identState.ident1)
                         ? intlHelper(intl, 'ident.feil.ugyldigident')
                         : undefined
                 }
@@ -76,11 +76,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
             <GosysGjelderKategorier />
             <Hovedknapp
                 mini
-                disabled={
-                    !identState.ident1 ||
-                    (!!identState.ident1 && !!erUgyldigIdent(identState.ident1)) ||
-                    !fordelingState.valgtGosysKategori
-                }
+                disabled={IdentRules.erUgyldigIdent(identState.ident1) || !fordelingState.valgtGosysKategori}
                 onClick={() =>
                     omfordel(journalpost?.journalpostId, identState.ident1, fordelingState.valgtGosysKategori)
                 }

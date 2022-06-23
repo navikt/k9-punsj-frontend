@@ -15,6 +15,7 @@ import {
     korrigeringAvInntektsmeldingSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     pleiepengerILivetsSluttfaseSakstyper,
+    omsorgspengerMidlertidigAleneSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
@@ -33,11 +34,11 @@ interface IValgForDokument {
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
     identState: IIdentState;
     konfigForValgtSakstype: any;
+    visValgForDokument: boolean;
     fordelingState: IFordelingState;
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     omfordel: typeof omfordelAction;
-    visSakstypeValg: boolean;
     gjelderPleiepengerEllerOmsorgspenger: boolean;
 }
 
@@ -53,11 +54,12 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     journalpost,
     lukkJournalpostOppgave,
     gjelderPleiepengerEllerOmsorgspenger,
-    visSakstypeValg,
+    visValgForDokument,
 }) => {
     const intl = useIntl();
-
-    const vis = (!!fordelingState.skalTilK9 || visSakstypeValg) && gjelderPleiepengerEllerOmsorgspenger;
+    const vis =
+        ((fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger) || visValgForDokument) &&
+        dokumenttype !== FordelingDokumenttype.ANNET;
 
     if (!vis) {
         return null;
@@ -81,6 +83,9 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     function omsorgspengerKroniskSyktBarn() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS && omsorgspengerKroniskSyktBarnSakstyper;
     }
+    function omsorgspengerMidlertidigAlene() {
+        return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA && omsorgspengerMidlertidigAleneSakstyper;
+    }
 
     return (
         <>
@@ -89,7 +94,8 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                     korrigeringIM() ||
                     pleiepengerSyktBarn() ||
                     pleiepengerILivetsSluttfase() ||
-                    omsorgspengerKroniskSyktBarn()
+                    omsorgspengerKroniskSyktBarn() ||
+                    omsorgspengerMidlertidigAlene()
                 ).map((key) => {
                     if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                         return null;

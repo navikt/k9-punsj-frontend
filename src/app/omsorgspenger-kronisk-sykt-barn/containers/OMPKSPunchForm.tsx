@@ -204,7 +204,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
@@ -216,7 +216,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
