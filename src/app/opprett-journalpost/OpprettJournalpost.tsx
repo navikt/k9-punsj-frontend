@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
-import { get, post } from 'app/utils';
+import { finnVisningsnavnForSakstype, get, post } from 'app/utils';
 import { requiredValue, validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { Hovedknapp } from 'nav-frontend-knapper';
@@ -122,7 +122,7 @@ const OpprettJournalpost: React.FC = () => {
                                             </option>
                                             {fagsaker.map(({ fagsakId, sakstype }) => (
                                                 <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (K9 ${sakstype})`}
+                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
                                                 </option>
                                             ))}
                                         </Select>
