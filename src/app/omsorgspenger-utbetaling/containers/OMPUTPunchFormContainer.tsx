@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useContext, useState } from 'react';
-import { Formik } from 'formik';
+import { Formik, yupToFormErrors } from 'formik';
 import { connect } from 'react-redux';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
@@ -15,6 +15,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { IIdentState } from 'app/models/types/IdentState';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Feil } from 'app/models/types/ValideringResponse';
+import { printAndReturnValue } from 'app/utils';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
@@ -73,20 +74,26 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         );
     }
 
+    // validering fra k9Format (valider i OMPUTPunchForm) bør også håndteres i validate
     return (
         <Formik
             initialValues={initialValues(soeknadRespons)}
-            validationSchema={schema}
+            validate={(values) => {
+                schema
+                    .validate(values, { abortEarly: false, context: values.metadata.arbeidsforhold })
+                    .catch((err) => yupToFormErrors(err));
+                return {};
+            }}
             onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}
         >
-                <OMPUTPunchForm
-                    visForhaandsvisModal={visForhaandsvisModal}
-                    setVisForhaandsvisModal={setVisForhaandsvisModal}
-                    k9FormatErrors={k9FormatErrors}
-                    setK9FormatErrors={setK9FormatErrors}
-                    submitError={submitError}
-                    {...props}
-                />
+            <OMPUTPunchForm
+                visForhaandsvisModal={visForhaandsvisModal}
+                setVisForhaandsvisModal={setVisForhaandsvisModal}
+                k9FormatErrors={k9FormatErrors}
+                setK9FormatErrors={setK9FormatErrors}
+                submitError={submitError}
+                {...props}
+            />
         </Formik>
     );
 };

@@ -16,7 +16,9 @@ const TextFieldFormik = ({ label, name, filterPattern, ...props }: FormikTextFie
             error={meta.touched && meta.error}
             {...field}
             {...props}
-            onChange={filterPattern ? (e) => helpers.setValue(e.target.value.replace(filterPattern, '')) : field.onChange}
+            onChange={
+                filterPattern ? (e) => helpers.setValue(e.target.value.replace(filterPattern, '')) : field.onChange
+            }
         />
     );
 };

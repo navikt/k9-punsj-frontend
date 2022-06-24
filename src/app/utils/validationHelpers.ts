@@ -48,9 +48,9 @@ export const validateText = (value: string, maxLength: number, exactLength?: boo
     return undefined;
 };
 
-export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
+export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, context?: any) => {
     try {
-        schema.validateSync(soknad, { abortEarly: false });
+        schema.validateSync(soknad, { abortEarly: false, context });
         return [];
     } catch (error) {
         const errors = error.inner.map(

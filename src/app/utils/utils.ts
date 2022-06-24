@@ -37,3 +37,8 @@ export const erEldreEnn4år = (dato: string) => {
     fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
     return new Date(dato) < fireAarSiden;
 };
+
+export const printAndReturnValue = (value: any) => {
+    console.log(value);
+    return value;
+};

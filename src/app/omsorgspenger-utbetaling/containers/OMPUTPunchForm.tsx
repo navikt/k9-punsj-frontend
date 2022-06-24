@@ -80,8 +80,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
-    const { values, errors, setTouched } = useFormikContext<IOMPUTSoknad>();
-
+    const { values, errors, touched, setTouched } = useFormikContext<IOMPUTSoknad>();
+    console.log(touched);
+    console.log(errors);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
@@ -140,6 +141,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [harMellomlagret]);
 
+    //TODO: bør flytttes
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!feilmeldingStier.has(attribute)) {
             setFeilmeldingStier(feilmeldingStier.add(attribute));
@@ -170,13 +172,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
-    const handleBlur = (callback?: () => void) => {
-        if (callback) {
-            callback();
-        }
-        updateSoknad(values);
-    };
-
     return (
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
@@ -197,13 +192,16 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     {getUhaandterteFeil('').map((feilmelding) => {
                         return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
                     })}
-                    {feilFraYup(schema, values).map((error: { message: string; path: string }) => {
-                        return (
-                            <ErrorSummary.Item key={`${error.path}-${error.message}`}>
-                                {error.message}
-                            </ErrorSummary.Item>
-                        );
-                    })}
+                    {/* Denne bør byttes ut med errors fra formik*/}
+                    {feilFraYup(schema, values, values.metadata.arbeidsforhold).map(
+                        (error: { message: string; path: string }) => {
+                            return (
+                                <ErrorSummary.Item key={`${error.path}-${error.message}`}>
+                                    {error.message}
+                                </ErrorSummary.Item>
+                            );
+                        }
+                    )}
                 </ErrorSummary>
             )}
             <div className={'submit-knapper'}>
