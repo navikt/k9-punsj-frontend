@@ -19,7 +19,7 @@ import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
 
 const SelvstendigNaeringsdrivende = () => {
-    const { values, } = useFormikContext<IOMPUTSoknad>();
+    const { values } = useFormikContext<IOMPUTSoknad>();
     const {
         opptjeningAktivitet: { selvstendigNaeringsdrivende },
     } = values;
@@ -114,7 +114,7 @@ const SelvstendigNaeringsdrivende = () => {
                 <TextFieldFormik
                     size="small"
                     label="Næringsresultat før skatt de siste 12 månedene"
-                    name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.bruttoInntekt"
                     filterPattern={kunTall}
                 />
             </Collapse>

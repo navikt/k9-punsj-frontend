@@ -36,6 +36,7 @@ import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
 import { debounce } from 'lodash';
+import { frontendTilBackendMapping } from '../utils';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -81,12 +82,11 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
     const { values, errors, touched, setTouched } = useFormikContext<IOMPUTSoknad>();
-    console.log(touched);
-    console.log(errors);
+    console.log(values);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
-            validerSoeknad(values, identState.ident1),
+            validerSoeknad(frontendTilBackendMapping(values), identState.ident1),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
                 if (data['ytelse'] && skalForhaandsviseSoeknad) {
@@ -106,7 +106,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(() => oppdaterSoeknad(values), { onSuccess: () => setHarMellomlagret(true) });
+    } = useMutation(() => oppdaterSoeknad(frontendTilBackendMapping(values)), {
+        onSuccess: () => setHarMellomlagret(true),
+    });
 
     const updateSoknad = (soknad: IOMPUTSoknad) => {
         const journalposter = Array.from(soknad?.journalposter || []);
