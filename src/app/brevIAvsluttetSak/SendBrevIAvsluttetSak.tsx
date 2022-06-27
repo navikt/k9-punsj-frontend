@@ -20,6 +20,7 @@ const SendBrevIAvsluttetSak = () => {
     const [valgtFagsak, setValgtFagsak] = useState('');
     const [visLosModal, setVisLosModal] = useState(false);
     const [fødselsnummerError, setFødselsnummerError] = useState(false);
+    const gyldigLengdePåSøkerId = søkerId.length === 11;
     const intl = useIntl();
 
     useEffect(() => {
@@ -64,13 +65,13 @@ const SendBrevIAvsluttetSak = () => {
                     type="number"
                     onChange={(event) => {
                         const { value } = event.target;
+                        setSøkerId(value);
                         if (value.length >= 11) {
                             if (IdentRules.erUgyldigIdent(value)) {
                                 setFødselsnummerError(true);
                             } else {
                                 setFødselsnummerError(false);
                                 hentFagsaker(value);
-                                setSøkerId(value);
                             }
                         }
                     }}
@@ -83,36 +84,40 @@ const SendBrevIAvsluttetSak = () => {
                         })}
                     </ErrorMessage>
                 )}
-                <div className="fagsagSelectContainer">
-                    <Select
-                        className="fagsakSelect"
-                        label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velgFagsak' })}
-                        disabled={fagsaker.length === 0}
-                        onChange={(event) => setValgtFagsak(event.target.value)}
-                    >
-                        <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
-                        {fagsaker.map(({ fagsakId, sakstype }) => (
-                            <option key={fagsakId} value={fagsakId}>
-                                {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
-                            </option>
-                        ))}
-                    </Select>
-                    {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
-                </div>
-                {henteFagsakFeilet && (
-                    <ErrorMessage>
-                        {intl.formatMessage({
-                            id: 'SendBrevIAvsluttetSak.hentingAvFagsakFeilet',
-                        })}
-                    </ErrorMessage>
-                )}
-                {valgtFagsak && (
-                    <BrevComponent
-                        søkerId={søkerId}
-                        fagsakId={valgtFagsak}
-                        sakstype={sakstypeForValgtFagsak()}
-                        brevSendtCallback={() => setVisLosModal(true)}
-                    />
+                {!fødselsnummerError && gyldigLengdePåSøkerId && (
+                    <>
+                        <div className="fagsagSelectContainer">
+                            <Select
+                                className="fagsakSelect"
+                                label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velgFagsak' })}
+                                disabled={fagsaker.length === 0}
+                                onChange={(event) => setValgtFagsak(event.target.value)}
+                            >
+                                <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
+                                {fagsaker.map(({ fagsakId, sakstype }) => (
+                                    <option key={fagsakId} value={fagsakId}>
+                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
+                                    </option>
+                                ))}
+                            </Select>
+                            {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
+                        </div>
+                        {henteFagsakFeilet && (
+                            <ErrorMessage>
+                                {intl.formatMessage({
+                                    id: 'SendBrevIAvsluttetSak.hentingAvFagsakFeilet',
+                                })}
+                            </ErrorMessage>
+                        )}
+                        {valgtFagsak && (
+                            <BrevComponent
+                                søkerId={søkerId}
+                                fagsakId={valgtFagsak}
+                                sakstype={sakstypeForValgtFagsak()}
+                                brevSendtCallback={() => setVisLosModal(true)}
+                            />
+                        )}
+                    </>
                 )}
             </div>
             {visLosModal && (
