@@ -161,7 +161,7 @@
         "jest-css-modules": "^2.1.0",
         "less": "^4.1.2",
         "less-loader": "^10.2.0",
-        "lint-staged": ">=12.3.3",
+        "lint-staged": "^13.0.3",
         "msw": "^0.36.8",
         "nav-frontend-alertstriper-style": "^3.0.1",
         "nav-frontend-chevron-style": "^1.0.4",
@@ -178,7 +178,7 @@
         "nav-frontend-tabell-style": "^2.1.1",
         "nav-frontend-typografi-style": "^2.0.1",
         "postcss-loader": "^6.2.1",
-        "prettier": "^2.5.1",
+        "prettier": "^2.7.1",
         "react-refresh": "^0.11.0",
         "react-test-renderer": "^17.0.2",
         "redux-mock-store": "^1.5.4",
@@ -201,7 +201,8 @@
     ],
     "snyk": false,
     "lint-staged": {
-        "src/app/**/*.ts?(x)": "eslint --cache --fix"
+        "src/app/**/*.ts?(x)": "eslint --cache --fix",
+        "src/app/**/*.{ts,tsx,js,jsx,css}": "prettier --write"
     },
     "msw": {
         "workerDirectory": "dist"
