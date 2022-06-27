@@ -66,6 +66,7 @@ const SendBrevIAvsluttetSak = () => {
                     onChange={(event) => {
                         const { value } = event.target;
                         setSøkerId(value);
+                        setValgtFagsak('');
                         if (value.length >= 11) {
                             if (IdentRules.erUgyldigIdent(value)) {
                                 setFødselsnummerError(true);
