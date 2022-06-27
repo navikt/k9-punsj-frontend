@@ -73,6 +73,7 @@ interface BrevProps {
     fagsakId?: string;
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     sakstype: string;
+    brevSendtCallback?: () => void;
 }
 
 const BrevComponent: React.FC<BrevProps> = ({
@@ -81,6 +82,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     fagsakId,
     setVisBrevIkkeSendtInfoboks,
     sakstype,
+    brevSendtCallback,
 }) => {
     const intl = useIntl();
     const [brevmaler, setBrevmaler] = useState<Brevmal | undefined>(undefined);
@@ -155,6 +157,9 @@ const BrevComponent: React.FC<BrevProps> = ({
                     if (response.status === 200) {
                         setBrevErSendt(true);
                         setHarSendtMinstEttBrev(true);
+                        if (brevSendtCallback) {
+                            brevSendtCallback();
+                        }
                         if (setVisBrevIkkeSendtInfoboks) {
                             setVisBrevIkkeSendtInfoboks(false);
                         }

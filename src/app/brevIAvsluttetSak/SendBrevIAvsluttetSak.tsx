@@ -1,19 +1,32 @@
-import { ErrorMessage, Heading, Loader, Select, TextField } from '@navikt/ds-react';
+import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
 import { finnFagsaker } from 'app/api/api';
+import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import Fagsak from 'app/types/Fagsak';
-import { finnVisningsnavnForSakstype } from 'app/utils';
-import React, { useState } from 'react';
+import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import './sendBrevIAvsluttetSak.less';
 
 const SendBrevIAvsluttetSak = () => {
+    if (Modal?.setAppElement) {
+        Modal.setAppElement(document.body);
+    }
     const [søkerId, setSøkerId] = useState('');
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [valgtFagsak, setValgtFagsak] = useState('');
+    const [visLosModal, setVisLosModal] = useState(false);
     const intl = useIntl();
+
+    useEffect(() => {
+        if (visLosModal) {
+            setTimeout(() => {
+                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+            }, 3000);
+        }
+    }, [visLosModal]);
 
     const hentFagsaker = (søkersFødselsnummer: string) => {
         setHenteFagsakFeilet(false);
@@ -37,51 +50,68 @@ const SendBrevIAvsluttetSak = () => {
     };
 
     return (
-        <div className="sendBrevIAvsluttetSak">
-            <Heading size="small" level="1">
-                Send brev i avsluttet sak
-            </Heading>
+        <>
+            <div className="sendBrevIAvsluttetSak">
+                <Heading size="small" level="1">
+                    Send brev i avsluttet sak
+                </Heading>
 
-            <TextField
-                className="fnrInput"
-                label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
-                maxLength={11}
-                onChange={(event) => {
-                    const { value } = event.target;
-                    if (value.length === 11) {
-                        hentFagsaker(value);
-                        setSøkerId(value);
-                    }
-                }}
-                size="medium"
-            />
-            <div className="fagsagSelectContainer">
-                <Select
-                    className="fagsakSelect"
-                    label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velgFagsak' })}
-                    disabled={fagsaker.length === 0}
-                    onChange={(event) => setValgtFagsak(event.target.value)}
-                >
-                    <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
-                    {fagsaker.map(({ fagsakId, sakstype }) => (
-                        <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
-                        </option>
-                    ))}
-                </Select>
-                {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
+                <TextField
+                    className="fnrInput"
+                    label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
+                    maxLength={11}
+                    onChange={(event) => {
+                        const { value } = event.target;
+                        if (value.length === 11) {
+                            hentFagsaker(value);
+                            setSøkerId(value);
+                        }
+                    }}
+                    size="medium"
+                />
+                <div className="fagsagSelectContainer">
+                    <Select
+                        className="fagsakSelect"
+                        label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velgFagsak' })}
+                        disabled={fagsaker.length === 0}
+                        onChange={(event) => setValgtFagsak(event.target.value)}
+                    >
+                        <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
+                        {fagsaker.map(({ fagsakId, sakstype }) => (
+                            <option key={fagsakId} value={fagsakId}>
+                                {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
+                            </option>
+                        ))}
+                    </Select>
+                    {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
+                </div>
+                {henteFagsakFeilet && (
+                    <ErrorMessage>
+                        {intl.formatMessage({
+                            id: 'SendBrevIAvsluttetSak.hentingAvFagsakFeilet',
+                        })}
+                    </ErrorMessage>
+                )}
+                {valgtFagsak && (
+                    <BrevComponent
+                        søkerId={søkerId}
+                        fagsakId={valgtFagsak}
+                        sakstype={sakstypeForValgtFagsak()}
+                        brevSendtCallback={() => setVisLosModal(true)}
+                    />
+                )}
             </div>
-            {henteFagsakFeilet && (
-                <ErrorMessage>
-                    {intl.formatMessage({
-                        id: 'SendBrevIAvsluttetSak.hentingAvFagsakFeilet',
-                    })}
-                </ErrorMessage>
+            {visLosModal && (
+                <Modal closeButton={false} open aria-label="Gå til LOS-modal" className="losModal" onClose={() => null}>
+                    <div className="modalContent">
+                        <SuccessIcon />
+                        <Heading spacing size="xsmall" level="3">
+                            Brevet er sendt. Du blir nå tatt til LOS.
+                        </Heading>
+                    </div>
+                </Modal>
             )}
-            {valgtFagsak && (
-                <BrevComponent søkerId={søkerId} fagsakId={valgtFagsak} sakstype={sakstypeForValgtFagsak()} />
-            )}
-        </div>
+        </>
     );
 };
 
