@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
 import { IdentRules } from './IdentRules';
-import { erIkkeFremITid, klokkeslettErFremITid } from './valideringer';
+import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
 
 const yupLocale = {
     mixed: {
@@ -43,10 +43,17 @@ export const identifikator = yup
     })
     .label('Identifikasjonsnummer');
 
-export const periode = () => yup.object().shape({
-    fom: yup.string().required().label('Fra og med'),
-    tom: yup.string().required().label('Til og med'),
-});
+export const dato = () =>
+    yup.string().test({
+        test: (v) => !!gyldigDato(v),
+        message: 'Må ha en gyldig dato',
+    });
+
+export const periode = () =>
+    yup.object().shape({
+        fom: yup.string().required().label('Fra og med'),
+        tom: yup.string().required().label('Til og med'),
+    });
 
 export const barn = yup.array().of(
     yup.object().shape({

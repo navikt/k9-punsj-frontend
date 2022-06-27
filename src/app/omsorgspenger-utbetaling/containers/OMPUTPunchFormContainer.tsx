@@ -78,12 +78,9 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     return (
         <Formik
             initialValues={initialValues(soeknadRespons)}
-            validate={(values) => {
-                schema
+            validate={(values) => schema
                     .validate(values, { abortEarly: false, context: values.metadata.arbeidsforhold })
-                    .catch((err) => yupToFormErrors(err));
-                return {};
-            }}
+                    .catch((err) => yupToFormErrors(err))}
             onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}
         >
             <OMPUTPunchForm

@@ -1,9 +1,10 @@
+import React, { useState } from 'react';
 import { Delete, AddCircle } from '@navikt/ds-icons';
-import { Button, Checkbox, Panel } from '@navikt/ds-react';
+import { Button, Checkbox, Panel, Heading } from '@navikt/ds-react';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
 import { Field, FieldArray, FieldProps, FormikProps } from 'formik';
-import React, { useState } from 'react';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -30,6 +31,12 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
                 <Panel border>
                     <div>
+                        {harMinstToArbeidsforhold && (
+                            <>
+                                <Heading size="xsmall" level="5">{`Arbeidsforhold ${arbeidstakerIndex + 1}`}</Heading>
+                                <VerticalSpacer twentyPx />
+                            </>
+                        )}
                         <Organisasjonsvelger
                             name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
                             soeker={form.values.soekerId}

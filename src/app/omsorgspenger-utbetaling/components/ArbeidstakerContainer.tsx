@@ -17,7 +17,7 @@ const ArbeidstakerContainer = () => {
             name="opptjeningAktivitet.arbeidstaker"
             render={(arrayHelpers) => (
                 <Panel>
-                    <Heading size="xsmall" level="6">
+                    <Heading size="small" level="5">
                         Arbeidstaker
                     </Heading>
                     {arbeidstaker.map((v, index) => (

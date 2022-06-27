@@ -10,10 +10,14 @@ import Frilanser from './Frilanser';
 
 const ArbeidsforholdVelger = () => {
     const [field, meta] = useField('metadata.arbeidsforhold');
-    const { errors } = useFormikContext();
     return (
         <Panel border>
-            <CheckboxGroup legend="Arbeidsforhold" error={meta.touched && errors?.arbeidsforhold}>
+            <CheckboxGroup
+                legend="Arbeidsforhold"
+                error={
+                    meta.touched && Object.values(field.value).every((v) => !v) && 'Må velge minst ett arbeidsforhold'
+                }
+            >
                 <CheckboksPanelFormik name="metadata.arbeidsforhold.arbeidstaker" label="Arbeidstaker" valueIsBoolean />
                 <VerticalSpacer eightPx />
                 <Collapse isOpened={field.value.arbeidstaker}>
