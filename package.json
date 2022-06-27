@@ -73,7 +73,7 @@
         "react-query": "^3.34.14",
         "react-redux": "^7.2.6",
         "react-router": "^5.2.1",
-        "react-router-dom": "^5.3.0",
+        "react-router-dom": "^6.3.0",
         "react-time-picker": "^4.5.0",
         "redux": "^4.1.2",
         "redux-logger": "^3.0.6",
