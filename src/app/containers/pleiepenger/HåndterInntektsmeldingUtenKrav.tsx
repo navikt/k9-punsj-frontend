@@ -138,6 +138,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     søkerId={ident1}
                     journalpostId={journalpost?.journalpostId || ''}
                     setVisBrevIkkeSendtInfoboks={setVisBrevIkkeSendtInfoboks}
+                    sakstype="OMP"
                 />
             </BrevContainer>
 
