@@ -486,6 +486,7 @@
     "SendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet, kan du sende brev her.",
     "SendBrevIAvsluttetSakInngang.link": "Send brev",
     "SendBrevIAvsluttetSak.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
+    "SendBrevIAvsluttetSak.UgyldigFødselsnummer": "Fødselsnummeret er ugyldig",
     "SendBrevIAvsluttetSak.søkersFødselsnummer": "Søkers fødselsnummer",
     "SendBrevIAvsluttetSak.velgFagsak": "Velg fagsak",
     "SendBrevIAvsluttetSak.velg": "Velg",

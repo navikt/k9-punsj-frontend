@@ -7,6 +7,7 @@ import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import './sendBrevIAvsluttetSak.less';
+import { IdentRules } from 'app/rules';
 
 const SendBrevIAvsluttetSak = () => {
     if (Modal?.setAppElement) {
@@ -18,6 +19,7 @@ const SendBrevIAvsluttetSak = () => {
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [valgtFagsak, setValgtFagsak] = useState('');
     const [visLosModal, setVisLosModal] = useState(false);
+    const [fødselsnummerError, setFødselsnummerError] = useState(false);
     const intl = useIntl();
 
     useEffect(() => {
@@ -59,16 +61,28 @@ const SendBrevIAvsluttetSak = () => {
                 <TextField
                     className="fnrInput"
                     label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
-                    maxLength={11}
+                    type="number"
                     onChange={(event) => {
                         const { value } = event.target;
-                        if (value.length === 11) {
-                            hentFagsaker(value);
-                            setSøkerId(value);
+                        if (value.length >= 11) {
+                            if (IdentRules.erUgyldigIdent(value)) {
+                                setFødselsnummerError(true);
+                            } else {
+                                setFødselsnummerError(false);
+                                hentFagsaker(value);
+                                setSøkerId(value);
+                            }
                         }
                     }}
                     size="medium"
                 />
+                {fødselsnummerError && (
+                    <ErrorMessage>
+                        {intl.formatMessage({
+                            id: 'SendBrevIAvsluttetSak.UgyldigFødselsnummer',
+                        })}
+                    </ErrorMessage>
+                )}
                 <div className="fagsagSelectContainer">
                     <Select
                         className="fagsakSelect"
