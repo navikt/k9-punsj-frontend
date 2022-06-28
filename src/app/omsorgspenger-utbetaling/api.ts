@@ -1,11 +1,11 @@
 import { ApiPath } from 'app/apiConfig';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
-import { IOMPUTSoknad } from './types/OMPUTSoknad';
+import { IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 import { IOMPUTSoknadKvittering } from './types/OMPUTSoknadKvittering';
 import { IOMPUTSoknadSvar } from './types/OMPUTSoknadSvar';
 
-export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPUTSoknad> =>
+export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPUTSoknadBackend> =>
     get(ApiPath.OMP_UT_SOKNAD_GET, { id: soeknadId }, { 'X-Nav-NorskIdent': ident }).then((response) => {
         if (!response.ok) {
             throw Error('Kunne ikke hente søknad.');
@@ -13,7 +13,7 @@ export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPUTSok
         return response.json();
     });
 
-export const oppdaterSoeknad = (soeknad: IOMPUTSoknad): Promise<IOMPUTSoknad> =>
+export const oppdaterSoeknad = (soeknad: IOMPUTSoknadBackend): Promise<IOMPUTSoknadBackend> =>
     put(ApiPath.OMP_UT_SOKNAD_UPDATE, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under lagring.');
@@ -22,7 +22,7 @@ export const oppdaterSoeknad = (soeknad: IOMPUTSoknad): Promise<IOMPUTSoknad> =>
     });
 
 export const validerSoeknad = async (
-    soeknad: IOMPUTSoknad,
+    soeknad: IOMPUTSoknadBackend,
     ident: string
 ): Promise<IOMPUTSoknadKvittering | ValideringResponse> => {
     const response = await post(ApiPath.OMP_UT_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
@@ -43,7 +43,7 @@ export const sendSoeknad = async (soeknad: IOMPUTSoknad, ident: string): Promise
     return response.json();
 };
 
-export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOMPUTSoknad> =>
+export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOMPUTSoknadBackend> =>
     post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,

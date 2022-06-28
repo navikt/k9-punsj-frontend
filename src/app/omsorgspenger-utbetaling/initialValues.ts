@@ -33,20 +33,30 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
     soekerId: soknad?.soekerId || '',
     mottattDato: soknad?.mottattDato || '',
-    journalposter: soknad?.journalposter || new Set([]),
+    journalposter: soknad?.journalposter || [],
     klokkeslett: soknad?.klokkeslett || '',
     opptjeningAktivitet: {
         selvstendigNaeringsdrivende: {
-            virksomhetNavn: '',
-            organisasjonsnummer: '',
+            virksomhetNavn: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende.virksomhetNavn || '',
+            organisasjonsnummer: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende.virksomhetNavn || '',
             info: {
-                periode: periodeInitialValue,
-                virksomhetstyper: [],
-                landkode: '',
-                regnskapsførerNavn: '',
-                regnskapsførerTlf: '',
-                harSøkerRegnskapsfører: false,
-                registrertIUtlandet: false,
+                periode: {
+                    fom: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode?.fom || '',
+                    tom: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode?.tom || '',
+                },
+                virksomhetstyper: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper
+                    ?.length
+                    ? soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper
+                    : [],
+                landkode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode || '',
+                regnskapsførerNavn:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || '',
+                regnskapsførerTlf:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || '',
+                harSøkerRegnskapsfører:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.harSøkerRegnskapsfører || false,
+                registrertIUtlandet:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet || false,
                 bruttoInntekt: '',
                 erNyoppstartet: false,
                 erVarigEndring: false,

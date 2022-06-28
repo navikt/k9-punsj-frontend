@@ -81,8 +81,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
-    const { values, errors, touched, setTouched } = useFormikContext<IOMPUTSoknad>();
-    console.log(values);
+    const { values, errors, setTouched } = useFormikContext<IOMPUTSoknad>();
+    console.log(values)
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
@@ -121,6 +121,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             valider({ skalForhaandsviseSoeknad: false });
             setTouched(setNestedObjectValues(values, true));
         }
+        console.log('lættis');
 
         return mellomlagreSoeknad();
     };
@@ -176,6 +177,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
+        {console.log(mellomlagringError)}
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad intl={intl} setSignaturAction={props.setSignaturAction} signert={signert} />

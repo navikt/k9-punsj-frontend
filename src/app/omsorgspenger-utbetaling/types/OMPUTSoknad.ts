@@ -2,9 +2,36 @@ import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
 import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
 
 export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: FravaersperiodeType[] };
+export type SelvstendigNaeringsdrivende = {
+    virksomhetNavn: string;
+    organisasjonsnummer: string;
+    info: {
+        periode: IPeriode;
+        virksomhetstyper: string[];
+        landkode: string;
+        regnskapsførerNavn: string;
+        regnskapsførerTlf: string;
+        harSøkerRegnskapsfører: string;
+        registrertIUtlandet: string;
+        bruttoInntekt: string;
+        erNyoppstartet: boolean;
+        erVarigEndring: boolean;
+        endringInntekt: string;
+        endringDato: string;
+        endringBegrunnelse: string;
+    };
+    fravaersperioder: FravaersperiodeType[];
+};
 
+export type Frilanser = {
+    startdato: string;
+    sluttdato: string | undefined;
+    jobberFortsattSomFrilans: boolean;
+    fravaersperioder: FravaersperiodeType[];
+};
 export type FravaersperiodeType = {
     aktivitetsFravær: string;
+    organisasjonsnummer: string;
     fraværÅrsak: string;
     søknadÅrsak: string;
     periode: Periode;
@@ -18,32 +45,8 @@ export type Arbeidsforhold = {
 };
 interface IOpptjeningAktivitet {
     arbeidstaker: Arbeidstaker[];
-    selvstendigNaeringsdrivende: {
-        virksomhetNavn: string;
-        organisasjonsnummer: string;
-        info: {
-            periode: IPeriode;
-            virksomhetstyper: string[];
-            landkode: string;
-            regnskapsførerNavn: string;
-            regnskapsførerTlf: string;
-            harSøkerRegnskapsfører: string;
-            registrertIUtlandet: string;
-            bruttoInntekt: string;
-            erNyoppstartet: boolean;
-            erVarigEndring: boolean;
-            endringInntekt: string;
-            endringDato: string;
-            endringBegrunnelse: string;
-        };
-        fravaersperioder: FravaersperiodeType[];
-    };
-    frilanser: {
-        startdato: string;
-        sluttdato: string | undefined;
-        jobberFortsattSomFrilans: boolean;
-        fravaersperioder: FravaersperiodeType[];
-    };
+    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivende;
+    frilanser: Frilanser;
 }
 
 export interface IOMPUTSoknad extends SoeknadType {
@@ -52,6 +55,11 @@ export interface IOMPUTSoknad extends SoeknadType {
     barn: PersonEnkel[];
 }
 
-export interface IOMPUTSoknadBackend extends IOMPUTSoknad {
+export interface IOMPUTSoknadBackend extends Omit<IOMPUTSoknad, 'opptjeningAktivitet'> {
     fravaersperioder: FravaersperiodeType[];
+    opptjeningAktivitet: {
+        arbeidstaker: Omit<Arbeidstaker, 'fravaersperioder'>[];
+        selvstendigNaeringsdrivende: Omit<SelvstendigNaeringsdrivende, 'fravaersperioder'>;
+        frilanser: Omit<Frilanser, 'fravaersperioder'>;
+    };
 }

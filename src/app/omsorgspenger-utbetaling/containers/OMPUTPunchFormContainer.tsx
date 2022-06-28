@@ -21,6 +21,7 @@ import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
 import { hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
+import { backendTilFrontendMapping } from '../utils';
 
 interface OwnProps {
     journalpostid: string;
@@ -77,10 +78,12 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     // validering fra k9Format (valider i OMPUTPunchForm) bør også håndteres i validate
     return (
         <Formik
-            initialValues={initialValues(soeknadRespons)}
-            validate={(values) => schema
+            initialValues={initialValues(backendTilFrontendMapping(soeknadRespons))}
+            validate={(values) =>
+                schema
                     .validate(values, { abortEarly: false, context: values.metadata.arbeidsforhold })
-                    .catch((err) => yupToFormErrors(err))}
+                    .catch((err) => yupToFormErrors(err))
+            }
             onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}
         >
             <OMPUTPunchForm
