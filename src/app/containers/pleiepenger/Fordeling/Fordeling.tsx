@@ -312,7 +312,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 }
             });
         }
-    }, [identState, dokumenttype, gjelderPleiepengerEllerOmsorgspenger]);
+    }, [identState.ident1, dokumenttype, gjelderPleiepengerEllerOmsorgspenger]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
