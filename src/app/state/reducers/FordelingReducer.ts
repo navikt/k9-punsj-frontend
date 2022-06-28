@@ -13,6 +13,7 @@ const initialState: IFordelingState = {
     erIdent1Bekreftet: false,
     valgtGosysKategori: '',
     kanIkkeGaaTilK9: [],
+    fagsak: undefined,
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -25,6 +26,12 @@ export function FordelingReducer(
             return {
                 ...fordelingState,
                 sakstype: action.sakstype,
+            };
+
+        case FordelingActionKeys.FAGSAK_SET:
+            return {
+                ...fordelingState,
+                fagsak: action.fagsak,
             };
 
         case FordelingActionKeys.OMFORDELING_REQUEST:

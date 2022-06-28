@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/prefer-default-export
 export enum FordelingActionKeys {
     SAKSTYPE_SET = 'FORDELING_SAKSTYPE_SET',
+    FAGSAK_SET = 'FAGSAK_SET',
 
     OMFORDELING_REQUEST = 'FORDELING_OMFORDELING_REQUEST',
     OMFORDELING_SUCCESS = 'FORDELING_OMFORDELING_SUCCESS',

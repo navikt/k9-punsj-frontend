@@ -11,15 +11,15 @@ interface OwnProps {
     valgtDokumentType: string;
 }
 
-const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
-    handleDokumenttype,
-    valgtDokumentType,
-}) => {
+const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumenttype, valgtDokumentType }) => {
     const intl = useIntl();
     const toggleFordelingDokumentType = (type: string): boolean => {
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
                 return getEnvironmentVariable('OMP_KS_ENABLED') === 'true';
+
+            case FordelingDokumenttype.OMSORGSPENGER_MA:
+                return getEnvironmentVariable('OMP_MA_FEATURE_TOGGLE') === 'true';
 
             case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
                 return getEnvironmentVariable('PLS_ENABLED') === 'true';
@@ -27,7 +27,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
             default:
                 return true;
         }
-    }
+    };
 
     const OmsorgspengerSubRadioPaneler = Object.values(FordelingOmsorgspengerSubMenyValg)
         .filter((type) => toggleFordelingDokumentType(type))
@@ -36,12 +36,17 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
             value: type,
         }));
 
-    const erDokumenttypeOmsorgspenger = valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER
-        || valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS
-        || valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
+    const erDokumenttypeOmsorgspenger =
+        valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER ||
+        valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS ||
+        valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_MA ||
+        valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
 
-    return (<div className="dokumentTypeVelgerContainer">
-            <legend><b>{intlHelper(intl, 'fordeling.detteGjelder')}</b></legend>
+    return (
+        <div className="dokumentTypeVelgerContainer">
+            <legend>
+                <b>{intlHelper(intl, 'fordeling.detteGjelder')}</b>
+            </legend>
             <RadioPanel
                 label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER)}
                 value={FordelingDokumenttype.PLEIEPENGER}
@@ -56,24 +61,27 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
             />
 
-            {erDokumenttypeOmsorgspenger && OmsorgspengerSubRadioPaneler.map((a) =>
-                <div className="dokumentTypeVelgerSubkategori">
-                    <RadioPanel
-                        label={a.label}
-                        key={a.value}
-                        value={a.value}
-                        checked={valgtDokumentType === a.value}
-                        onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    />
-                </div>)
-            }
+            {erDokumenttypeOmsorgspenger &&
+                OmsorgspengerSubRadioPaneler.map((a) => (
+                    <div className="dokumentTypeVelgerSubkategori">
+                        <RadioPanel
+                            label={a.label}
+                            key={a.value}
+                            value={a.value}
+                            checked={valgtDokumentType === a.value}
+                            onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                        />
+                    </div>
+                ))}
 
-        {toggleFordelingDokumentType(FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) && <RadioPanel
-                label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE)}
-                value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
-                checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
-                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-            />}
+            {toggleFordelingDokumentType(FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) && (
+                <RadioPanel
+                    label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE)}
+                    value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                    checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                    onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                />
+            )}
 
             <RadioPanel
                 label={intlHelper(intl, FordelingDokumenttype.ANNET)}
@@ -82,7 +90,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
             />
         </div>
-    )
+    );
 };
 
 export default DokumentTypeVelger;

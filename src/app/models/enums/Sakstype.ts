@@ -14,6 +14,7 @@ export enum Sakstype {
     PLEIEPENGER_I_LIVETS_SLUTTFASE = 'PLEIEPENGER_I_LIVETS_SLUTTFASE',
     ANNET = 'ANNET',
     SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES',
+    SEND_BREV = 'SEND_BREV',
 }
 
 export enum TilgjengeligSakstype {
@@ -24,34 +25,33 @@ export enum TilgjengeligSakstype {
     OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING = 'OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING',
     ANNET = 'ANNET',
     SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES',
+    SEND_BREV = 'SEND_BREV',
 }
+
+const fellesSakstyper = [
+    TilgjengeligSakstype.SEND_BREV,
+    TilgjengeligSakstype.ANNET,
+    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+];
 
 export const korrigeringAvInntektsmeldingSakstyper = [
     TilgjengeligSakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
-    TilgjengeligSakstype.ANNET,
-    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+    ...fellesSakstyper,
 ];
 
-export const pleiepengerSakstyper = [
-    TilgjengeligSakstype.PLEIEPENGER_SYKT_BARN,
-    TilgjengeligSakstype.ANNET,
-    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
-];
+export const pleiepengerSakstyper = [TilgjengeligSakstype.PLEIEPENGER_SYKT_BARN, ...fellesSakstyper];
 
 export const pleiepengerILivetsSluttfaseSakstyper = [
     TilgjengeligSakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
-    TilgjengeligSakstype.ANNET,
-    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+    ...fellesSakstyper,
 ];
 
 export const omsorgspengerKroniskSyktBarnSakstyper = [
     TilgjengeligSakstype.OMSORGSPENGER_KRONISK_SYKT_BARN,
-    TilgjengeligSakstype.ANNET,
-    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+    ...fellesSakstyper,
 ];
 
 export const omsorgspengerMidlertidigAleneSakstyper = [
     TilgjengeligSakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE,
-    TilgjengeligSakstype.ANNET,
-    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
+    ...fellesSakstyper,
 ];

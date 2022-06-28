@@ -1,5 +1,6 @@
 import { Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types/Error';
+import Fagsak from 'app/types/Fagsak';
 
 export interface IFordelingState {
     sakstype?: Sakstype;
@@ -19,4 +20,5 @@ export interface IFordelingState {
     gosysGjelderKategorier?: any[];
     gosysGjelderKategorierError?: IError;
     valgtGosysKategori: string;
+    fagsak?: Fagsak;
 }

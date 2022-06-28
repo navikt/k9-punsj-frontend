@@ -56,6 +56,7 @@
     "fordeling.sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE": "Registrere opplysninger til k9-sak",
     "fordeling.sakstype.ANNET": "Opprett journalføringsoppgave i Gosys",
     "fordeling.sakstype.SKAL_IKKE_PUNSJES": "Lukk oppgave i LOS",
+    "fordeling.sakstype.SEND_BREV": "Send brev og lukk oppgave i LOS",
     "fordeling.knapp.punsj": "Bekreft",
     "fordeling.knapp.lukk": "Lukk oppgave",
     "fordeling.knapp.videre": "Videre",
@@ -505,8 +506,8 @@
     "PLEIEPENGER": "Pleiepenger sykt barn",
     "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
     "OMSORGSPENGER": "Omsorgspenger/omsorgsdager",
-    "OMSORGSPENGER_KS": "Omsorgsdager: ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
-    "OMSORGSPENGER_MA": "Omsorgsdager: ekstra omsorgsdager når du er midlertidig alene om omsorgen",
+    "OMSORGSPENGER_KS": "Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
+    "OMSORGSPENGER_MA": "Ekstra omsorgsdager når du er midlertidig alene om omsorgen",
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",
 

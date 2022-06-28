@@ -5,12 +5,8 @@ import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
-import { PunchStep } from 'app/models/enums';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { IJournalpost, IPath, IPunchState, IPSBSoknad, IPunchPSBFormState } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
-import { setIdentAction, setStepAction } from 'app/state/actions';
-import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
+import { IJournalpost, IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -18,24 +14,15 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
-import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
 export interface IPunchPageStateProps {
-    punchState: IPunchState;
     journalpost?: IJournalpost;
-    identState: IIdentState;
     forbidden: boolean | undefined;
-    punchFormState: IPunchPSBFormState;
-}
-
-export interface IPunchPageDispatchProps {
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
 }
 
 export interface IPunchPageQueryProps {
@@ -43,10 +30,8 @@ export interface IPunchPageQueryProps {
 }
 
 export interface IPunchPageComponentProps {
-    match?: any;
-    step: PunchStep;
     journalpostid?: string;
-    paths: IPath[];
+    soknad?: Partial<IPSBSoknad>;
 }
 
 export interface IPunchPageComponentState {
@@ -58,18 +43,10 @@ type IPunchPageProps = WrappedComponentProps &
     RouteComponentProps &
     IPunchPageComponentProps &
     IPunchPageStateProps &
-    IPunchPageDispatchProps &
     IPunchPageQueryProps;
 
-export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
-    const { intl, journalpostid, journalpost, forbidden, identState } = props;
-    const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
-    const { ident1 } = identState;
-    useEffect(() => {
-        createOMSKorrigering(ident1, journalpost?.journalpostId || '', (response, data) => {
-            setSoknad(data);
-        });
-    }, [ident1, journalpost]);
+export const SplitViewComponent: React.FC<IPunchPageProps> = (props) => {
+    const { intl, journalpostid, journalpost, forbidden, soknad, children } = props;
     const journalposterFraSoknad = soknad?.journalposter || [];
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
 
@@ -90,11 +67,7 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const leftSide = ({ journalpostDokumenter }: { journalpostDokumenter: IJournalpostDokumenter[] }) => (
         <Panel className="omsorgspenger_punch_form" border>
             <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
-            <KorrigeringAvInntektsmeldingForm
-                søkerId={ident1}
-                søknadId={soknad?.soeknadId || ''}
-                journalposter={journalposterFraSoknad}
-            />
+            {children}
         </Panel>
     );
 
@@ -110,7 +83,7 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
         const journalpostDokumenter: IJournalpostDokumenter[] =
             (queries.every((query) => query.isSuccess) &&
                 queries.map((query) => {
-                    const data: any = query?.data;
+                    const data = query?.data;
 
                     return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
                 })) ||
@@ -143,16 +116,8 @@ export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (pro
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     journalpost: state.felles.journalpost,
-    identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
-    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
 const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
@@ -160,6 +125,4 @@ const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (p
     return <SplitViewComponent {...props} dok={dok} />;
 };
 
-export const SplitView = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(SplitViewComponentWithQuery))
-);
+export const SplitView = withRouter(injectIntl(connect(mapStateToProps)(SplitViewComponentWithQuery)));

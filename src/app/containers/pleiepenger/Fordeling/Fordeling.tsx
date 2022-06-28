@@ -1,8 +1,11 @@
+import { ErrorMessage, Loader, Select } from '@navikt/ds-react';
+import { finnFagsaker } from 'app/api/api';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
+import { IdentRules } from 'app/rules';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
@@ -12,6 +15,7 @@ import {
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
+import Fagsak from 'app/types/Fagsak';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
@@ -24,7 +28,6 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { IdentRules } from 'app/rules';
 import FormPanel from '../../../components/FormPanel';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../../components/pdf/PdfVisning';
@@ -33,15 +36,21 @@ import { ISakstypeDefault } from '../../../models/Sakstype';
 import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
-import { Sakstyper } from '../../SakstypeImpls';
+import { FagsakYtelseType } from '../../../models/types/RequestBodies';
+import { setFagsakAction } from '../../../state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
+import { finnVisningsnavnForSakstype } from '../../../utils';
+import { Sakstyper } from '../../SakstypeImpls';
+import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import './fordeling.less';
+import AnnenPart from './Komponenter/AnnenPart';
+import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
@@ -50,11 +59,6 @@ import { Pleietrengende } from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
-import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
-import { getEnvironmentVariable } from '../../../utils';
-import { FagsakYtelseType } from '../../../models/types/RequestBodies';
-import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
-import AnnenPart from './Komponenter/AnnenPart';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -70,6 +74,7 @@ export interface IFordelingStateProps {
 
 export interface IFordelingDispatchProps {
     setSakstypeAction: typeof setSakstypeAction;
+    setFagsakAction: typeof setFagsakAction;
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
@@ -99,10 +104,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setIdentAction,
         setErIdent1Bekreftet,
         setSakstypeAction: sakstypeAction,
+        setFagsakAction: setFagsak,
         resetIdentStateAction,
         resetSjekkSkalTilK9,
     } = props;
-    const { sakstype } = fordelingState;
+    const { sakstype, fagsak: valgtFagsak } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         []
@@ -127,6 +133,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
+    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
+    const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
+    const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
+    const harFagsaker = fagsaker?.length > 0;
+
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
 
@@ -141,6 +152,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
+    const visPleietrengendeComponent = gjelderPleiepengerEllerOmsorgspenger && !harFagsaker && !isFetchingFagsaker;
+    const visFagsakSelect = gjelderPleiepengerEllerOmsorgspenger && harFagsaker && identState.ident1.length === 11;
+
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -148,16 +162,26 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
         (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
 
-    const disableVidereKnapp =
-        ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+    const disableVidereKnapp = () => {
+        if (
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-            IdentRules.erUgyldigIdent(identState.ident2) &&
-            !barnetHarIkkeFnr) ||
-        IdentRules.erUgyldigIdent(identState.ident1) ||
-        disableVidereMidlertidigAlene;
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+        ) {
+            if (harFagsaker) {
+                return !valgtFagsak;
+            }
+            if (IdentRules.erUgyldigIdent(identState.ident2) && !barnetHarIkkeFnr) {
+                return true;
+            }
+        }
+        if (dokumenttype === FordelingDokumenttype.KORRIGERING_IM && harFagsaker) {
+            return !valgtFagsak;
+        }
+        return IdentRules.erUgyldigIdent(identState.ident1) || disableVidereMidlertidigAlene;
+    };
 
-    const handleIdent1Change = (event: any) => {
+    const handleIdent1Change = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
         setSokersIdent(ident);
         if (ident.length === 11) {
@@ -167,7 +191,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    const handleIdent1Blur = (event: any) => {
+    const handleIdent1Blur = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIdentAction(event.target.value, identState.ident2);
         setErIdent1Bekreftet(true);
         setVisSokersBarn(true);
@@ -270,9 +294,25 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             (lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess) &&
             journalpost
         ) {
-            lukkJournalpostOppgave(journalpost.journalpostId!);
+            lukkJournalpostOppgave(journalpost.journalpostId);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
+
+    useEffect(() => {
+        if (identState.ident1 && dokumenttype && gjelderPleiepengerEllerOmsorgspenger) {
+            setHenteFagsakFeilet(false);
+            setIsFetchingFagsaker(true);
+            setFagsak(undefined);
+            finnFagsaker(identState.ident1, (response, data: Fagsak[]) => {
+                setIsFetchingFagsaker(false);
+                if (response.status === 200) {
+                    setFagsaker(data);
+                } else {
+                    setHenteFagsakFeilet(true);
+                }
+            });
+        }
+    }, [identState, dokumenttype, gjelderPleiepengerEllerOmsorgspenger]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <NavFrontendSpinner />;
@@ -310,21 +350,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         );
     }
 
-    function toggleFordelingDokumentType(type: string): boolean {
-        switch (type) {
-            case FordelingDokumenttype.OMSORGSPENGER_KS:
-                return getEnvironmentVariable('OMP_KS_ENABLED') === 'true';
-
-            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
-                return getEnvironmentVariable('PLS_ENABLED') === 'true';
-
-            case FordelingDokumenttype.OMSORGSPENGER_MA:
-                return getEnvironmentVariable('OMP_MA_FEATURE_TOGGLE') === 'true';
-
-            default:
-                return true;
-        }
-    }
+    const setValgtFagsak = (fagsakId: string) => {
+        setFagsak(fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId));
+    };
 
     return (
         <div className="fordeling-container">
@@ -418,29 +446,43 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             ) : (
                                 <VerticalSpacer twentyPx />
                             )}
-
-                            {gjelderPleiepengerEllerOmsorgspenger && (
-                                <>
-                                    <Pleietrengende
-                                        pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
-                                            setBarnetHarIkkeFnr(harBarnetFnr)
-                                        }
-                                        sokersIdent={identState.ident1}
-                                        skalHenteBarn={
-                                            dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
-                                        }
-                                        visPleietrengende={visPleietrengende}
-                                    />
-                                    {!fordelingState.skalTilK9 && (
-                                        <Knapp
-                                            mini
-                                            onClick={() => handleVidereClick(dokumenttype)}
-                                            disabled={disableVidereKnapp}
-                                        >
-                                            {intlHelper(intl, 'fordeling.knapp.videre')}
-                                        </Knapp>
-                                    )}
-                                </>
+                            {visFagsakSelect && (
+                                <Select
+                                    className="fagsakSelect"
+                                    label="Velg fagsak"
+                                    disabled={fagsaker.length === 0}
+                                    onChange={(event) => setValgtFagsak(event.target.value)}
+                                >
+                                    <option value="">Velg</option>
+                                    {fagsaker.map(({ fagsakId, sakstype: stype }) => (
+                                        <option key={fagsakId} value={fagsakId}>
+                                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
+                                        </option>
+                                    ))}
+                                </Select>
+                            )}
+                            {henteFagsakFeilet && <ErrorMessage>Henting av fagsak feilet</ErrorMessage>}
+                            {isFetchingFagsaker && <Loader />}
+                            {visPleietrengendeComponent && (
+                                <Pleietrengende
+                                    pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
+                                        setBarnetHarIkkeFnr(harBarnetFnr)
+                                    }
+                                    sokersIdent={identState.ident1}
+                                    skalHenteBarn={
+                                        dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+                                    }
+                                    visPleietrengende={visPleietrengende}
+                                />
+                            )}
+                            {gjelderPleiepengerEllerOmsorgspenger && !isFetchingFagsaker && !fordelingState.skalTilK9 && (
+                                <Knapp
+                                    mini
+                                    onClick={() => handleVidereClick(dokumenttype)}
+                                    disabled={disableVidereKnapp()}
+                                >
+                                    {intlHelper(intl, 'fordeling.knapp.videre')}
+                                </Knapp>
                             )}
                         </div>
                         <VerticalSpacer sixteenPx />
@@ -580,6 +622,7 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstypeAction(sakstype)),
+    setFagsakAction: (fagsak: Fagsak) => dispatch(setFagsakAction(fagsak)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
         dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
     setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
