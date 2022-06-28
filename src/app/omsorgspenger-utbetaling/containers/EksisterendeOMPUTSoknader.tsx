@@ -42,7 +42,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknader', () => hentEksisterendeSoeknader(ident1));
+    } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(ident1));
 
     if (!ident1) {
         return null;

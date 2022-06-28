@@ -114,7 +114,7 @@ const SelvstendigNaeringsdrivende = () => {
                 <TextFieldFormik
                     size="small"
                     label="Næringsresultat før skatt de siste 12 månedene"
-                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.bruttoInntekt"
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
                     filterPattern={kunTall}
                 />
             </Collapse>

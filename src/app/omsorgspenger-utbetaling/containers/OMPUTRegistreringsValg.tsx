@@ -28,7 +28,7 @@ type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEks
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistreringsValgProps> = (
     props: IOMPUTRegistreringsValgProps
 ) => {
-    const { journalpostid, identState, sakstype } = props;
+    const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
     const { ident1, ident2 } = identState;
 
@@ -42,7 +42,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         },
     });
 
-    const { data: eksisterendeSoeknader } = useQuery(sakstype, () => hentEksisterendeSoeknader(ident1));
+    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(ident1));
 
     const redirectToPreviousStep = () => {
         setHash('/');
