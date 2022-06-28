@@ -80,8 +80,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
-    const { values, errors, setTouched, handleSubmit, isValid} = useFormikContext<IOMPUTSoknad>();
-    console.log(errors)
+    const { values, errors, setTouched, handleSubmit, isValid, validateForm } = useFormikContext<IOMPUTSoknad>();
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
@@ -224,7 +223,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                                 setHarForsoektAaSendeInn(true);
                                 setTouched(setNestedObjectValues(values, true));
                             }
-                            valider({ skalForhaandsviseSoeknad: true });
+                            validateForm(values).then(() => valider({ skalForhaandsviseSoeknad: true }));
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
