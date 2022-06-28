@@ -1,5 +1,5 @@
 import { aktivitetsFravær } from './konstanter';
-import { IOMPUTSoknad } from './types/OMPUTSoknad';
+import { FravaersperiodeType, IOMPUTSoknad } from './types/OMPUTSoknad';
 
 export const periodeInitialValue = {
     fom: '',
@@ -19,6 +19,18 @@ export const arbeidstakerInitialValue = {
     organisasjonsnummer: '',
     fravaersperioder: [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER }],
 };
+
+const mapFravaersperiode = (periode: FravaersperiodeType) => ({
+    aktivitetsFravær: periode.aktivitetsFravær || '',
+    faktiskTidPrDag: periode.faktiskTidPrDag || '',
+    fraværÅrsak: periode.fraværÅrsak || '',
+    organisasjonsnummer: periode.organisasjonsnummer || '',
+    periode: {
+        fom: periode.periode.fom || '',
+        tom: periode.periode.tom || '',
+    },
+    søknadÅrsak: periode.søknadÅrsak || '',
+});
 
 export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
     metadata: {
@@ -66,7 +78,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
                     soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.endringBegrunnelse || '',
             },
             fravaersperioder: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.fravaersperioder?.length
-                ? soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.fravaersperioder
+                ? soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.fravaersperioder.map(mapFravaersperiode)
                 : [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE }],
         },
         frilanser: {
@@ -74,11 +86,16 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined) => ({
             sluttdato: soknad?.opptjeningAktivitet?.frilanser?.sluttdato || '',
             jobberFortsattSomFrilans: soknad?.opptjeningAktivitet?.frilanser?.jobberFortsattSomFrilans || false,
             fravaersperioder: soknad?.opptjeningAktivitet?.frilanser?.fravaersperioder?.length
-                ? soknad?.opptjeningAktivitet?.frilanser?.fravaersperioder
+                ? soknad?.opptjeningAktivitet?.frilanser?.fravaersperioder.map(mapFravaersperiode)
                 : [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.FRILANSER }],
         },
         arbeidstaker: soknad?.opptjeningAktivitet?.arbeidstaker?.length
-            ? soknad?.opptjeningAktivitet?.arbeidstaker
+            ? soknad?.opptjeningAktivitet?.arbeidstaker.map((arbeidstaker) => ({
+                  organisasjonsnummer: arbeidstaker.organisasjonsnummer || '',
+                  fravaersperioder: arbeidstaker?.fravaersperioder?.length
+                      ? arbeidstaker.fravaersperioder.map(mapFravaersperiode)
+                      : [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER }],
+              }))
             : [{ ...arbeidstakerInitialValue }],
     },
     harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,

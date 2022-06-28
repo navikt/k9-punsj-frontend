@@ -6,9 +6,7 @@ import { connect } from 'react-redux';
 import { useMutation, useQuery } from 'react-query';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Loader } from '@navikt/ds-react';
-import { PunchStep } from '../../models/enums';
 import { IIdentState } from '../../models/types/IdentState';
-import { IPunchState } from '../../models/types';
 import { setHash } from '../../utils';
 import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 import { RootStateType } from '../../state/RootState';
@@ -16,8 +14,6 @@ import api, { hentEksisterendeSoeknader } from '../api';
 
 export interface IOMPUTRegistreringsValgComponentProps {
     journalpostid: string;
-    getPunchPath: (step: PunchStep, values?: any) => string;
-    sakstype: string;
 }
 export interface IEksisterendeOMPUTSoknaderStateProps {
     identState: IIdentState;

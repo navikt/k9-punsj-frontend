@@ -19,7 +19,6 @@ import { IIdentState } from '../../models/types/IdentState';
 import { IJournalpost } from '../../models/types';
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { hentSoeknad } from '../api';
 
 export interface IPunchOMPUTPageStateProps {
@@ -52,7 +51,7 @@ const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) =>
     const { intl, journalpostid, journalpost, forbidden, match, identState, children } = props;
     const { id } = match.params;
 
-    const { data: soeknad } = useReactQuery<IOMPUTSoknad>(id, () => hentSoeknad(identState.ident1, id));
+    const { data: soeknad } = useReactQuery(id, () => hentSoeknad(identState.ident1, id));
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
 

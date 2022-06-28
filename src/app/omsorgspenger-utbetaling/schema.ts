@@ -1,13 +1,12 @@
 /* eslint-disable no-template-curly-in-string */
 
 import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode } from 'app/rules/yup';
-import { gyldigDato } from '../rules/valideringer';
 
-const fravaersperioder = ({ organisasjonsnummerErPaakrevd }: { organisasjonsnummerErPaakrevd: boolean }) =>
+const fravaersperioder = () =>
     yup.array().of(
         yup.object({
             aktivitetsfravær: yup.string(),
-            organisasjonsnummer: organisasjonsnummerErPaakrevd ? yup.string().required() : yup.string(),
+            organisasjonsnummer: yup.string(),
             fraværÅrsak: yup.string().required(),
             søknadÅrsak: yup.string().required(),
             periode: periode(),
@@ -17,7 +16,7 @@ const fravaersperioder = ({ organisasjonsnummerErPaakrevd }: { organisasjonsnumm
 const arbeidstaker = () =>
     yup.object({
         organisasjonsnummer: yup.string().required(),
-        fravaersperioder: fravaersperioder({ organisasjonsnummerErPaakrevd: true }),
+        fravaersperioder: fravaersperioder(),
     });
 const selvstendigNaeringsdrivende = () =>
     yup.object({
@@ -46,19 +45,18 @@ const selvstendigNaeringsdrivende = () =>
             endringDato: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
             endringBegrunnelse: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
         }),
-        fravaersperioder: fravaersperioder({ organisasjonsnummerErPaakrevd: false }),
+        fravaersperioder: fravaersperioder(),
     });
 
 const frilanser = () =>
     yup.object({
         startdato: yup.string().required(),
-        sluttdato: yup.string().when('jobberFortsattSomFrilans', { is: false, then: yup.string().required() }),
-        jobberFortsattSomFrilans: yup.boolean().when('sluttdato', (sluttdato, schema) =>
-            schema.test({
-                test: () => !gyldigDato(sluttdato),
-                messsage: 'Må fylle inn gyldig sluttdato eller velge at personen fortsatt jobber som frilans',
-            })
-        ),
+        sluttdato: yup.string().when('jobberFortsattSomFrilans', {
+            is: false,
+            then: yup.string().required(),
+        }),
+        jobberFortsattSomFrilans: yup.boolean(),
+        fravaersperioder: fravaersperioder(),
     });
 
 const OMPUTSchema = yup.object({

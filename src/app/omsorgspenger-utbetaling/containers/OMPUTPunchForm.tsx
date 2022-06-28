@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { FormikErrors, FormikProps, setNestedObjectValues, useFormik, useFormikContext } from 'formik';
+import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -22,7 +22,6 @@ import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
-import { IOMPUTSoknadUt } from '../types/OMPUTSoknadUt';
 import { useMutation } from 'react-query';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -36,7 +35,7 @@ import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
 import { debounce } from 'lodash';
-import { frontendTilBackendMapping } from '../utils';
+import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -81,15 +80,15 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
-    const { values, errors, setTouched } = useFormikContext<IOMPUTSoknad>();
-    console.log(values)
+    const { values, errors, setTouched, handleSubmit, isValid} = useFormikContext<IOMPUTSoknad>();
+    console.log(errors)
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
-            validerSoeknad(frontendTilBackendMapping(values), identState.ident1),
+            validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
-                if (data['ytelse'] && skalForhaandsviseSoeknad) {
+                if (data['ytelse'] && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
                     setKvittering(kvitteringResponse);
@@ -106,12 +105,23 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(() => oppdaterSoeknad(frontendTilBackendMapping(values)), {
-        onSuccess: () => setHarMellomlagret(true),
-    });
+    } = useMutation(
+        ({ submitSoknad }: { submitSoknad: boolean }) =>
+            submitSoknad
+                ? oppdaterSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
+                : oppdaterSoeknad(frontendTilBackendMapping(values)),
+        {
+            onSuccess: (data, { submitSoknad }) => {
+                setHarMellomlagret(true);
+                if (submitSoknad) {
+                    handleSubmit();
+                }
+            },
+        }
+    );
 
-    const updateSoknad = (soknad: IOMPUTSoknad) => {
-        const journalposter = Array.from(soknad?.journalposter || []);
+    const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
+        const journalposter = Array.from(values?.journalposter || []);
 
         if (!journalposter.includes(props.journalpostid)) {
             journalposter.push(props.journalpostid);
@@ -121,9 +131,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             valider({ skalForhaandsviseSoeknad: false });
             setTouched(setNestedObjectValues(values, true));
         }
-        console.log('lættis');
-
-        return mellomlagreSoeknad();
+        return mellomlagreSoeknad({ submitSoknad });
     };
 
     useEffect(() => {
@@ -131,7 +139,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     }, [values.soekerId]);
 
     const debounceCallback = useCallback(
-        debounce(() => updateSoknad(values), 3000),
+        debounce(() => updateSoknad({ submitSoknad: false }), 3000),
         []
     );
     useEffect(() => {
@@ -177,7 +185,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
-        {console.log(mellomlagringError)}
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad intl={intl} setSignaturAction={props.setSignaturAction} signert={signert} />
@@ -197,7 +204,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
                     })}
                     {/* Denne bør byttes ut med errors fra formik*/}
-                    {feilFraYup(schema, values, values.metadata.arbeidsforhold).map(
+                    {feilFraYup(schema, values, values.metadata.arbeidsforhold)?.map(
                         (error: { message: string; path: string }) => {
                             return (
                                 <ErrorSummary.Item key={`${error.path}-${error.message}`}>
@@ -262,7 +269,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         melding={'modal.erdusikker.sendinn'}
                         extraInfo={'modal.erdusikker.sendinn.extrainfo'}
                         onSubmit={() => {
-                            throw Error('vennligst implementer meg. hilsen onSubmit');
+                            updateSoknad({ submitSoknad: true });
                         }}
                         submitKnappText={'skjema.knapp.send'}
                         onClose={() => {

@@ -15,8 +15,6 @@ import intlHelper from 'app/utils/intlUtils';
 import { IIdentState } from 'app/models/types/IdentState';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Feil } from 'app/models/types/ValideringResponse';
-import { printAndReturnValue } from 'app/utils';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
 import { hentSoeknad, sendSoeknad } from '../api';
@@ -43,18 +41,11 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const { data: soeknadRespons, isLoading, error } = useQuery(id, () => hentSoeknad(identState.ident1, id));
-    const { error: submitError, mutate: submit } = useMutation(
-        (soeknad: IOMPUTSoknad) => sendSoeknad(soeknad, identState.ident1),
-        {
-            onSuccess: () => {
-                history.push(`${routingPaths.kvittering}/${id}`);
-            },
-        }
-    );
-
-    const handleSubmit = (soknad: IOMPUTSoknad) => {
-        submit(soknad);
-    };
+    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.ident1), {
+        onSuccess: () => {
+            history.push(`${routingPaths.kvittering}${id}`);
+        },
+    });
 
     const handleStartButtonClick = () => {
         history.push('/');
@@ -82,9 +73,10 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             validate={(values) =>
                 schema
                     .validate(values, { abortEarly: false, context: values.metadata.arbeidsforhold })
+                    .then(() => ({}))
                     .catch((err) => yupToFormErrors(err))
             }
-            onSubmit={(values: IOMPUTSoknad) => handleSubmit(values)}
+            onSubmit={() => submit()}
         >
             <OMPUTPunchForm
                 visForhaandsvisModal={visForhaandsvisModal}

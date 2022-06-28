@@ -29,8 +29,13 @@ export const validerSoeknad = async (
     return response.json();
 };
 
-export const sendSoeknad = async (soeknad: IOMPUTSoknad, ident: string): Promise<IOMPUTSoknad | ValideringResponse> => {
-    const response = await post(ApiPath.OMP_UT_SOKNAD_SUBMIT, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
+export const sendSoeknad = async (soeknadId: string, ident: string): Promise<IOMPUTSoknad | ValideringResponse> => {
+    const response = await post(
+        ApiPath.OMP_UT_SOKNAD_SUBMIT,
+        undefined,
+        { 'X-Nav-NorskIdent': ident },
+        { norskIdent: ident, soeknadId }
+    );
     if (!response.ok) {
         if (response.status === 400) {
             throw Error('skjema.feil.ikke_sendt');
