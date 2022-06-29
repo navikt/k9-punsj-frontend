@@ -44,7 +44,7 @@ import {
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
-import { finnVisningsnavnForSakstype } from '../../../utils';
+import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype } from '../../../utils';
 import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
@@ -306,7 +306,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             finnFagsaker(identState.ident1, (response, data: Fagsak[]) => {
                 setIsFetchingFagsaker(false);
                 if (response.status === 200) {
-                    setFagsaker(data);
+                    const dokumenttypeForkortelse = finnForkortelseForDokumenttype(dokumenttype);
+                    const filtrerteFagsaker = data.filter(
+                        (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse
+                    );
+                    setFagsaker(filtrerteFagsaker);
                 } else {
                     setHenteFagsakFeilet(true);
                 }
@@ -351,7 +355,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }
 
     const setValgtFagsak = (fagsakId: string) => {
-        setFagsak(fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId));
+        const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
+        setIdentAction(identState.ident1, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
+        setFagsak(nyValgtFagsak);
     };
 
     return (
