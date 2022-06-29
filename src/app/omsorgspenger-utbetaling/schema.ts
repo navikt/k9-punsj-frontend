@@ -21,14 +21,19 @@ const arbeidstaker = () =>
 const selvstendigNaeringsdrivende = () =>
     yup.object({
         virksomhetNavn: yup.string().required(),
-        organisasjonsnummer: yup.string().required(),
+        organisasjonsnummer: yup
+            .string()
+            .when('$registrertIUtlandet', { is: false, then: yup.string().required(), otherwise: yup.string() }),
         info: yup.object({
             periode: yup.object({
                 fom: yup.string().required(),
                 tom: yup.string(),
             }),
             virksomhetstyper: yup.array().min(1),
-            landkode: yup.string().required(),
+            landkode: yup
+                .string()
+                .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() }),
+
             regnskapsførerNavn: yup
                 .string()
                 .when('harSøkerRegnskapsfører', { is: true, then: yup.string().required() })

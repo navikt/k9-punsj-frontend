@@ -4,11 +4,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
+import { useIntl } from 'react-intl';
 import { Alert } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
 import { RootStateType } from 'app/state/RootState';
 import Kopier from 'app/components/kopier/Kopier';
-import LabelValue from 'app/components/skjema/LabelValue';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
 import {
     formattereTidspunktFraUTCTilGMT,
@@ -19,24 +19,23 @@ import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import './ompUtSoknadKvittering.less';
 
 interface IOwnProps {
-    intl: any;
-    response?: IOMPUTSoknadKvittering;
+    kvittering?: IOMPUTSoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
 export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    response,
+    kvittering,
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+    const intl = useIntl();
 
-    const { journalposter } = response || {};
-    const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+    const { journalposter } = kvittering || {};
+    const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', kvittering);
 
-    if (!response) {
+    if (!kvittering) {
         return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
     }
 
@@ -64,8 +63,8 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${periodToFormattedString(
-                            response.mottattDato.substr(0, 10)
-                        )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
+                            kvittering.mottattDato.substr(0, 10)
+                        )}  ${formattereTidspunktFraUTCTilGMT(kvittering.mottattDato)}`}
                     </p>
                 </div>
             )}

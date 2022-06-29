@@ -36,6 +36,7 @@ import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
 import { debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
+import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -79,8 +80,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
-    const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
     const { values, errors, setTouched, handleSubmit, isValid, validateForm } = useFormikContext<IOMPUTSoknad>();
+    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
@@ -251,7 +252,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     }}
                     intl={intl}
                 >
-                    <OMPUTSoknadKvittering intl={intl} response={kvittering} />
+                    <OMPUTSoknadKvittering intl={intl} kvittering={kvittering} />
                 </ForhaandsvisSoeknadModal>
             )}
 

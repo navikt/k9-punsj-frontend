@@ -72,7 +72,14 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             initialValues={initialValues(backendTilFrontendMapping(soeknadRespons))}
             validate={(values) =>
                 schema
-                    .validate(values, { abortEarly: false, context: values.metadata.arbeidsforhold })
+                    .validate(values, {
+                        abortEarly: false,
+                        context: {
+                            ...values.metadata.arbeidsforhold,
+                            registrertIUtlandet:
+                                values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
+                        },
+                    })
                     .then(() => ({}))
                     .catch((err) => yupToFormErrors(err))
             }

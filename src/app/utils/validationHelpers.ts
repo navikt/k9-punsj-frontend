@@ -53,7 +53,11 @@ export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, co
         schema.validateSync(soknad, { abortEarly: false, context });
         return [];
     } catch (error) {
-        const errors = error.inner.map(
+        if (!error.inner) {
+            console.log(error);
+            return [];
+        }
+        const errors = error.inner?.map(
             ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
                 message: capitalize(message),
                 path,

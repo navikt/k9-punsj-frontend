@@ -17,7 +17,13 @@ const SelectFormik = ({ label, name, options, ...props }: FormikSelectProps) => 
     const [field, meta] = useField(name);
     return (
         <Select label={label} error={meta.touched && meta.error} {...field} {...props}>
-            {options.length ? options.map((option) => <option value={option.value}>{option.label}</option>) : null}
+            {options.length
+                ? options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                          {option.label}
+                      </option>
+                  ))
+                : null}
         </Select>
     );
 };
