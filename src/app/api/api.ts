@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { Person } from 'app/models/types';
+import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
@@ -31,3 +31,5 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
 
 export const hentBarn = (norskIdent: string): Promise<Error | Response> =>
     get(ApiPath.BARN_GET, { norskIdent }, { 'X-Nav-NorskIdent': norskIdent });
+export const finnFagsaker = (søkersFødselsnummer: string, callback: (response: Response, data: Fagsak[]) => void) =>
+    get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);

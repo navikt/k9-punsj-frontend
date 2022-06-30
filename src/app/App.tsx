@@ -22,6 +22,7 @@ import './styles/globalStyles.less';
 import '@navikt/ds-css';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
+import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 
 const environment = window.location.hostname;
 
@@ -87,6 +88,9 @@ export const App: React.FunctionComponent = () => {
                                 </Route>
                                 <Route path="/opprett-journalpost">
                                     <OpprettJournalpost />
+                                </Route>
+                                <Route path="/brev-avsluttet-sak">
+                                    <SendBrevIAvsluttetSak />
                                 </Route>
                                 <Route path="/">
                                     <SokIndex />

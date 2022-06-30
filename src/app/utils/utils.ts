@@ -42,3 +42,33 @@ export const printAndReturnValue = (value: any) => {
     console.log(value);
     return value;
 };
+
+export const finnVisningsnavnForSakstype = (kode: string) => {
+    const sakstyper = [
+        {
+            kode: 'PSB',
+            navn: 'Pleiepenger sykt barn',
+        },
+        {
+            kode: 'PPN',
+            navn: 'Pleiepenger i livets sluttfase',
+        },
+        {
+            kode: 'OMP',
+            navn: 'Omsorgspenger',
+        },
+        {
+            kode: 'OMP_KS',
+            navn: 'Omsorgspenger kronisk sykt barn',
+        },
+        {
+            kode: 'OMP_MA',
+            navn: 'Ekstra omsorgsdager midlertidig alene',
+        },
+        {
+            kode: 'OMP_AO',
+            navn: 'Alene om omsorgen',
+        },
+    ];
+    return sakstyper.find((st) => st.kode === kode)?.navn || kode;
+};

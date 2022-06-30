@@ -16,6 +16,7 @@ import { RootStateType } from '../../state/RootState';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import './sok.less';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
+import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
@@ -168,7 +169,10 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         )}
                     </SkjemaGruppe>
                 </div>
-                <OpprettJournalpostInngang />
+                <div className="inngangContainer">
+                    <OpprettJournalpostInngang />
+                    <SendBrevIAvsluttetSakInngang />
+                </div>
             </>
         );
     }

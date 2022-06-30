@@ -24,7 +24,13 @@ import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
 import SuccessIcon from '../../assets/SVG/SuccessIcon';
 
-const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId: string) => {
+const previewMessage = (
+    values: BrevFormValues,
+    aktørId: string,
+    sakstype: string,
+    journalpostId?: string,
+    fagsakId?: string
+) => {
     const mottaker = {
         type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
         id: values.mottaker,
@@ -37,12 +43,12 @@ const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId:
         credentials: 'include',
         body: JSON.stringify({
             aktørId,
-            eksternReferanse: journalpostId,
+            eksternReferanse: journalpostId || fagsakId,
             ytelseType: {
-                kode: 'OMP',
+                kode: sakstype,
                 kodeverk: 'FAGSAK_YTELSE',
             },
-            saksnummer: 'GENERELL_SAK',
+            saksnummer: fagsakId || 'GENERELL_SAK',
             avsenderApplikasjon: 'K9PUNSJ',
             overstyrtMottaker: mottaker,
             dokumentMal: values.brevmalkode,
@@ -63,11 +69,21 @@ const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId:
 
 interface BrevProps {
     søkerId: string;
-    journalpostId: string;
-    setVisBrevIkkeSendtInfoboks: (erBrevSendt: boolean) => void;
+    journalpostId?: string;
+    fagsakId?: string;
+    setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
+    sakstype: string;
+    brevSendtCallback?: () => void;
 }
 
-const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBrevIkkeSendtInfoboks }) => {
+const BrevComponent: React.FC<BrevProps> = ({
+    søkerId,
+    journalpostId,
+    fagsakId,
+    setVisBrevIkkeSendtInfoboks,
+    sakstype,
+    brevSendtCallback,
+}) => {
     const intl = useIntl();
     const [brevmaler, setBrevmaler] = useState<Brevmal | undefined>(undefined);
     const [hentBrevmalerError, setHentBrevmalerError] = useState(false);
@@ -79,7 +95,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
     const [person, setPerson] = useState<Person | undefined>(undefined);
 
     useEffect(() => {
-        fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ`, {
+        fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {
@@ -136,12 +152,17 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                     type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
                     id: values.mottaker,
                 };
-                const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode, journalpostId);
+                const brev = new Brev(values, søkerId, mottaker, sakstype, values.brevmalkode, journalpostId, fagsakId);
                 post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
                     if (response.status === 200) {
                         setBrevErSendt(true);
                         setHarSendtMinstEttBrev(true);
-                        setVisBrevIkkeSendtInfoboks(false);
+                        if (brevSendtCallback) {
+                            brevSendtCallback();
+                        }
+                        if (setVisBrevIkkeSendtInfoboks) {
+                            setVisBrevIkkeSendtInfoboks(false);
+                        }
                     } else {
                         setSendBrevFeilet(true);
                     }
@@ -172,12 +193,16 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
 
                         {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                             <InnhentDokumentasjonMal
-                                setVisBrevIkkeSendtInfoboks={() => setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)}
+                                setVisBrevIkkeSendtInfoboks={() =>
+                                    setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                }
                             />
                         )}
                         {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
                             <GenereltFritekstbrevMal
-                                setVisBrevIkkeSendtInfoboks={() => setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)}
+                                setVisBrevIkkeSendtInfoboks={() =>
+                                    setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                }
                             />
                         )}
                         <VerticalSpacer sixteenPx />
@@ -189,7 +214,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                             {values.brevmalkode && (
                                 <button
                                     type="button"
-                                    onClick={() => previewMessage(journalpostId, values, aktørId)}
+                                    onClick={() => previewMessage(values, aktørId, sakstype, journalpostId, fagsakId)}
                                     className="previewLink lenke lenke--frittstaende"
                                 >
                                     {intl.formatMessage({ id: 'Messages.Preview' })}
