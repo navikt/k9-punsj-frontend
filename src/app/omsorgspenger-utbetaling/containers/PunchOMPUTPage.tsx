@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { useQueries, useQuery as useReactQuery } from 'react-query';
+import { useQueries, useQuery } from 'react-query';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { RouteComponentProps, useHistory, withRouter } from 'react-router';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import Page from 'app/components/page/Page';
 import { setIdentAction } from 'app/state/actions';
@@ -13,6 +13,7 @@ import { ApiPath } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
+import { useParams } from 'react-router-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import { IIdentState } from '../../models/types/IdentState';
@@ -32,7 +33,6 @@ export interface IPunchOMPUTPageDispatchProps {
     setIdentAction: typeof setIdentAction;
 }
 export interface IPunchOMPUTPageComponentProps {
-    match?: any;
     journalpostid?: string;
 }
 
@@ -48,10 +48,9 @@ type IPunchOMPUTPageProps = WrappedComponentProps &
     IPunchOMPUTPageDispatchProps;
 
 const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
-    const { intl, journalpostid, journalpost, forbidden, match, identState, children } = props;
-    const { id } = match.params;
-
-    const { data: soeknad } = useReactQuery(id, () => hentSoeknad(identState.ident1, id));
+    const { intl, journalpostid, journalpost, forbidden, identState, children } = props;
+    const id = useHistory().location.pathname.split('skjema/')[1];
+    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.ident1, id));
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
 

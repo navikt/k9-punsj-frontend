@@ -155,8 +155,9 @@ const SelvstendigNaeringsdrivende = () => {
                     render={(arrayHelpers) => (
                         <>
                             {selvstendigNaeringsdrivende.fravaersperioder?.map(
-                                (_fravaersperiode, fravaersperiodeIndex) => (
+                                (fravaersperiode, fravaersperiodeIndex) => (
                                     <Field
+                                        key={JSON.stringify(fravaersperiode)}
                                         name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
                                     >
                                         {({ field }: FieldProps<FravaersperiodeType>) => (

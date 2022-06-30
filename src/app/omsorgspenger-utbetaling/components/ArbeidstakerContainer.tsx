@@ -16,12 +16,13 @@ const ArbeidstakerContainer = () => {
         <FieldArray
             name="opptjeningAktivitet.arbeidstaker"
             render={(arrayHelpers) => (
-                <Panel style={{backgroundColor: '#eaeaea'}}>
+                <Panel style={{ backgroundColor: '#eaeaea' }}>
                     <Heading size="small" level="5">
                         Arbeidstaker
                     </Heading>
                     {arbeidstaker.map((v, index) => (
                         <Arbeidstaker
+                            key={JSON.stringify(v)}
                             index={index}
                             antallArbeidsforhold={arbeidstaker.length}
                             slettArbeidsforhold={() => arrayHelpers.remove(index)}

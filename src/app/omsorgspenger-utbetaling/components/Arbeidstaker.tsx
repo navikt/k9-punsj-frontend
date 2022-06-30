@@ -69,8 +69,9 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                             name={`${name}.fravaersperioder`}
                             render={(arrayHelpers) => (
                                 <>
-                                    {value.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
+                                    {value.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                         <Fravaersperiode
+                                            key={JSON.stringify(fravaersperiode)}
                                             name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
                                             antallFravaersperioder={value.fravaersperioder?.length}
                                             slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}

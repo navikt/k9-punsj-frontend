@@ -74,10 +74,11 @@ export default function Frilanser() {
                     name="opptjeningAktivitet.frilanser.fravaersperioder"
                     render={(arrayHelpers) => (
                         <>
-                            {frilanser.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
+                            {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                 <Field name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}>
                                     {({ field }: FieldProps<FravaersperiodeType>) => (
                                         <Fravaersperiode
+                                            key={JSON.stringify(fravaersperiode)}
                                             name={field.name}
                                             antallFravaersperioder={frilanser.fravaersperioder?.length}
                                             slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
