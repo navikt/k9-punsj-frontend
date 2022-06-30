@@ -83,6 +83,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
+    console.log(values);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
@@ -122,9 +123,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     );
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
-        if (!values.journalposter.includes(props.journalpostid)) {
-            setFieldValue('journalposter', [...values.journalposter, props.journalpostid]);
-        }
         if (harForsoektAaSendeInn) {
             valider({ skalForhaandsviseSoeknad: false });
             setTouched(setNestedObjectValues(values, true));
@@ -132,6 +130,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         return mellomlagreSoeknad({ submitSoknad });
     };
 
+
+    useEffect(() => {
+        if (!values.journalposter.includes(props.journalpostid)) {
+            setFieldValue('journalposter', [...values.journalposter, props.journalpostid], false);
+        }
+    }, [])
     useEffect(() => {
         setIdentAction(values.soekerId);
     }, [values.soekerId]);

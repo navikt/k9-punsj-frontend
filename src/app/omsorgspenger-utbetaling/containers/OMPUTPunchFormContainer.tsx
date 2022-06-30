@@ -66,7 +66,6 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         );
     }
 
-    // validering fra k9Format (valider i OMPUTPunchForm) bør også håndteres i validate
     return (
         <Formik
             initialValues={initialValues(backendTilFrontendMapping(soeknadRespons))}
