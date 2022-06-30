@@ -252,7 +252,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     }}
                     intl={intl}
                 >
-                    <OMPUTSoknadKvittering intl={intl} kvittering={kvittering} />
+                    <OMPUTSoknadKvittering kvittering={kvittering} />
                 </ForhaandsvisSoeknadModal>
             )}
 

@@ -32,7 +32,7 @@ type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormSt
 
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { identState } = props;
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const history = useHistory();
     const routingPaths = useContext(RoutingPathsContext);
 
@@ -55,7 +55,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         return <NavFrontendSpinner />;
     }
 
-    if (error) {
+    if (error || !soeknadRespons) {
         return (
             <>
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}</AlertStripeFeil>

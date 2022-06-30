@@ -13,7 +13,7 @@ export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPUTSok
         return response.json();
     });
 
-export const oppdaterSoeknad = (soeknad: IOMPUTSoknadBackend): Promise<IOMPUTSoknadBackend> =>
+export const oppdaterSoeknad = (soeknad: Partial<IOMPUTSoknadBackend>): Promise<Partial<IOMPUTSoknadBackend>> =>
     put(ApiPath.OMP_UT_SOKNAD_UPDATE, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under lagring.');
