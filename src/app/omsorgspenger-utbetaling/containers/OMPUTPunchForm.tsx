@@ -80,7 +80,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
-    const { values, errors, setTouched, handleSubmit, isValid, validateForm } = useFormikContext<IOMPUTSoknad>();
+    const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
+        useFormikContext<IOMPUTSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
@@ -121,12 +122,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     );
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
-        const journalposter = Array.from(values?.journalposter || []);
-
-        if (!journalposter.includes(props.journalpostid)) {
-            journalposter.push(props.journalpostid);
+        if (!values.journalposter.includes(props.journalpostid)) {
+            setFieldValue('journalposter', [...values.journalposter, props.journalpostid]);
         }
-        //TODO: legg inn journalposter som mangler
         if (harForsoektAaSendeInn) {
             valider({ skalForhaandsviseSoeknad: false });
             setTouched(setNestedObjectValues(values, true));
