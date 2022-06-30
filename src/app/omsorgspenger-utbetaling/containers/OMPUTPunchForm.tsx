@@ -83,7 +83,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
-    console.log(values);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
@@ -130,23 +129,24 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         return mellomlagreSoeknad({ submitSoknad });
     };
 
+    const debounceCallback = useCallback(
+        debounce(() => updateSoknad({ submitSoknad: false }), 3000),
+        []
+    );
+
+    useEffect(() => {
+        debounceCallback();
+    }, [values]);
 
     useEffect(() => {
         if (!values.journalposter.includes(props.journalpostid)) {
             setFieldValue('journalposter', [...values.journalposter, props.journalpostid], false);
         }
-    }, [])
+    }, []);
+
     useEffect(() => {
         setIdentAction(values.soekerId);
     }, [values.soekerId]);
-
-    const debounceCallback = useCallback(
-        debounce(() => updateSoknad({ submitSoknad: false }), 3000),
-        []
-    );
-    useEffect(() => {
-        debounceCallback();
-    }, [values]);
 
     useEffect(() => {
         if (harMellomlagret) {
