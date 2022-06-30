@@ -4,14 +4,14 @@ import './visningAvPerioderSoknadKvittering.less';
 import {v4 as uuidv4} from 'uuid';
 import {periodToFormattedString, formattereDatoIArray, sjekkPropertyEksistererOgIkkeErNull, formattereLandTilNavn} from "../../../../utils";
 import { 
-    IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode,
+    KvitteringSelvstendigNaeringsdrivendePeriode,
 } from "../../../../models/types/PSBSoknadKvittering";
 import {ICountry} from "../../../../components/country-select/CountrySelect";
 import {Virksomhetstyper} from "../../../../models/enums/Virksomhetstyper";
 
 interface IOwnProps {
     intl: any;
-    perioder: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
+    perioder: KvitteringSelvstendigNaeringsdrivendePeriode[];
     countryList: ICountry[];
 }
 

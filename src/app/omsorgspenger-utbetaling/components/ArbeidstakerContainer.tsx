@@ -16,7 +16,7 @@ const ArbeidstakerContainer = () => {
         <FieldArray
             name="opptjeningAktivitet.arbeidstaker"
             render={(arrayHelpers) => (
-                <Panel>
+                <Panel style={{backgroundColor: '#eaeaea'}}>
                     <Heading size="small" level="5">
                         Arbeidstaker
                     </Heading>

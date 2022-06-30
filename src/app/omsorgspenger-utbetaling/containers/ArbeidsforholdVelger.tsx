@@ -6,7 +6,7 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
-import Frilanser from './Frilanser';
+import Frilanser from '../components/Frilanser';
 
 const ArbeidsforholdVelger = () => {
     const [field, meta] = useField('metadata.arbeidsforhold');

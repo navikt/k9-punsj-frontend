@@ -1,17 +1,15 @@
 import Kvittering from 'app/models/forms/soeknader/Kvittering';
+import { Fravaersperiode, FrilanserAktivitet, SelvstendigNaeringsdrivendeAktivitet } from 'app/models/types/KvitteringTyper';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
-export interface IOMPUTSoknadKvitteringJournalpost {
-    inneholderInformasjonSomIkkeKanPunsjes?: boolean;
-    inneholderMedisinskeOpplysninger?: boolean;
-    journalpostId: string;
-}
-
 export interface IOMPUTSoknadKvittering extends Kvittering {
-    mottattDato: string;
-    journalposter: IOMPUTSoknadKvitteringJournalpost[];
     ytelse: {
         type: string;
+        aktivitet: {
+            frilanser?: FrilanserAktivitet;
+            selvstendigNæringsdrivende: SelvstendigNaeringsdrivendeAktivitet;
+        };
+        fraværsperioder: Fravaersperiode[];
     };
     begrunnelseForInnsending: BegrunnelseForInnsending;
 }

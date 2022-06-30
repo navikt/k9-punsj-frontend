@@ -9,7 +9,7 @@ import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
-import './arbeidstaker.less';
+import './arbeidsforhold.less';
 
 interface OwnProps {
     index: number;
@@ -29,65 +29,71 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
     return (
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
-                <Panel border>
-                    <div>
-                        {harMinstToArbeidsforhold && (
-                            <>
-                                <Heading size="xsmall" level="5">{`Arbeidsforhold ${arbeidstakerIndex + 1}`}</Heading>
-                                <VerticalSpacer twentyPx />
-                            </>
-                        )}
-                        <Organisasjonsvelger
-                            name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
-                            soeker={form.values.soekerId}
-                            disabled={gjelderAnnenOrganisasjon}
-                            className="inline-block"
-                        />
-                        {harMinstToArbeidsforhold && (
-                            <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
-                                <Delete />
-                                Fjern arbeidsforhold
-                            </Button>
-                        )}
-                        <Checkbox onChange={() => toggleGjelderAnnenOrganisasjon(form)}>
-                            Gjelder annen organisasjon
-                        </Checkbox>
-                        {gjelderAnnenOrganisasjon && (
-                            <TextFieldFormik
-                                size="small"
-                                label="Organisasjonsnummer"
-                                name={`${name}.organisasjonsnummer`}
+                <div className="arbeidsforhold-container">
+                    <Panel className="container">
+                        <div>
+                            {harMinstToArbeidsforhold && (
+                                <>
+                                    <Heading size="xsmall" level="5">{`Arbeidsforhold ${
+                                        arbeidstakerIndex + 1
+                                    }`}</Heading>
+                                    <VerticalSpacer twentyPx />
+                                </>
+                            )}
+                            <Organisasjonsvelger
+                                name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
+                                soeker={form.values.soekerId}
+                                disabled={gjelderAnnenOrganisasjon}
+                                className="inline-block"
                             />
-                        )}
-                    </div>
-                    <FieldArray
-                        name={`${name}.fravaersperioder`}
-                        render={(arrayHelpers) => (
-                            <>
-                                {value.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
-                                    <Fravaersperiode
-                                        name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
-                                        antallFravaersperioder={value.fravaersperioder?.length}
-                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
-                                    />
-                                ))}
-                                <Button
-                                    variant="tertiary"
-                                    size="small"
-                                    onClick={() =>
-                                        arrayHelpers.push({
-                                            ...fravaersperiodeInitialValue,
-                                            aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
-                                        })
-                                    }
-                                >
-                                    <AddCircle />
-                                    Legg til periode
+                            {harMinstToArbeidsforhold && (
+                                <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
+                                    <Delete />
+                                    Fjern arbeidsforhold
                                 </Button>
-                            </>
-                        )}
-                    />
-                </Panel>
+                            )}
+                            <Checkbox onChange={() => toggleGjelderAnnenOrganisasjon(form)}>
+                                Gjelder annen organisasjon
+                            </Checkbox>
+                            {gjelderAnnenOrganisasjon && (
+                                <TextFieldFormik
+                                    size="small"
+                                    label="Organisasjonsnummer"
+                                    name={`${name}.organisasjonsnummer`}
+                                />
+                            )}
+                        </div>
+                        <hr />
+                        <Heading size="small">Informasjon om fraværsperioder</Heading>
+                        <FieldArray
+                            name={`${name}.fravaersperioder`}
+                            render={(arrayHelpers) => (
+                                <>
+                                    {value.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
+                                        <Fravaersperiode
+                                            name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
+                                            antallFravaersperioder={value.fravaersperioder?.length}
+                                            slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                        />
+                                    ))}
+                                    <Button
+                                        variant="tertiary"
+                                        size="small"
+                                        onClick={() =>
+                                            arrayHelpers.push({
+                                                ...fravaersperiodeInitialValue,
+                                                aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
+                                            })
+                                        }
+                                    >
+                                        <AddCircle />
+                                        Legg til periode
+                                    </Button>
+                                </>
+                            )}
+                        />
+                    </Panel>
+                </div>
             )}
         </Field>
     );

@@ -12,11 +12,13 @@ import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize, get } from 'lodash';
 import React from 'react';
 import { Collapse } from 'react-collapse';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { FravaersperiodeType, IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
+import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
@@ -25,140 +27,167 @@ const SelvstendigNaeringsdrivende = () => {
     } = values;
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
     return (
-        <Panel border>
-            <Heading size="small" level="5">
-                Selvstendig næringsdrivende
-            </Heading>
-            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
-                {({ meta }: FieldProps<string[]>) => (
-                    <CheckboxGroup legend="Type virksomhet" size="small" error={meta.touched && meta.error}>
-                        {virksomhetstyper.map((virksomhetstype) => (
-                            <CheckboxFormik
-                                key={virksomhetstype}
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
-                                value={virksomhetstype}
-                            >
-                                {virksomhetstype}
-                            </CheckboxFormik>
-                        ))}
-                    </CheckboxGroup>
-                )}
-            </Field>
-            <TextFieldFormik
-                name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
-                label="Virksomhetsnavn"
-                size="small"
-            />
-            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
-                {({ field, form }: FieldProps<boolean>) => (
-                    <RadioPanelGruppeFormik
-                        legend="Er virksomheten registrert i Norge?"
-                        checked={field.value ? 'nei' : 'ja'}
-                        name={field.name}
-                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                        onChange={(e, value) => form.setFieldValue(field.name, value === 'nei')}
-                    />
-                )}
-            </Field>
-            {selvstendigNaeringsdrivende.info.registrertIUtlandet ? (
-                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
-                    {({ field }: FieldProps<string>) => <CountrySelect selectedcountry={field.value} {...field} />}
+        <div className="arbeidsforhold-container">
+            <Panel>
+                <Heading size="small" level="5">
+                    Selvstendig næringsdrivende
+                </Heading>
+                <VerticalSpacer twentyPx />
+                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
+                    {({ meta }: FieldProps<string[]>) => (
+                        <CheckboxGroup legend="Type virksomhet" size="small" error={meta.touched && meta.error}>
+                            {virksomhetstyper.map((virksomhetstype) => (
+                                <CheckboxFormik
+                                    key={virksomhetstype}
+                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
+                                    value={virksomhetstype}
+                                >
+                                    {virksomhetstype}
+                                </CheckboxFormik>
+                            ))}
+                        </CheckboxGroup>
+                    )}
                 </Field>
-            ) : (
+                <VerticalSpacer twentyPx />
+
                 <TextFieldFormik
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
+                    label="Virksomhetsnavn"
                     size="small"
-                    label="Organisasjonsnummer"
-                    filterPattern={kunTall}
-                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
                 />
-            )}
-            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører">
-                {({ field, form }: FieldProps<boolean>) => (
-                    <RadioPanelGruppeFormik
-                        legend="Har søker regnskapsfører?"
-                        checked={field.value ? 'ja' : 'nei'}
-                        name={field.name}
-                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                        onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
-                    />
-                )}
-            </Field>
-            {selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører && (
-                <>
+                <VerticalSpacer twentyPx />
+
+                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <RadioPanelGruppeFormik
+                            legend="Er virksomheten registrert i Norge?"
+                            checked={field.value ? 'nei' : 'ja'}
+                            name={field.name}
+                            options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === 'nei')}
+                        />
+                    )}
+                </Field>
+                <VerticalSpacer twentyPx />
+
+                {selvstendigNaeringsdrivende.info.registrertIUtlandet ? (
+                    <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
+                        {({ field }: FieldProps<string>) => <CountrySelect selectedcountry={field.value} {...field} />}
+                    </Field>
+                ) : (
                     <TextFieldFormik
                         size="small"
-                        label="Navn på regnskapsfører"
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
+                        label="Organisasjonsnummer"
+                        filterPattern={kunTall}
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
                     />
-                    <TextFieldFormik
-                        size="small"
-                        label="Telefonnummer til regnskapsfører "
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
-                    />
-                </>
-            )}
-            <Label size="small">Når startet virksomheten?</Label>
-            <DatoInputFormik
-                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                label="Startdato"
-            />
-            <DatoInputFormik
-                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                label="Eventuell sluttdato"
-            />
-            <Collapse
-                isOpened={erYngreEnn4år(
-                    get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
                 )}
-            >
-                <TextFieldFormik
-                    size="small"
-                    label="Næringsresultat før skatt de siste 12 månedene"
-                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
-                    filterPattern={kunTall}
-                />
-            </Collapse>
-            <Collapse
-                isOpened={erEldreEnn4år(
-                    get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
-                )}
-            >
-                <VarigEndring />
-            </Collapse>
-            <FieldArray
-                name="opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder"
-                render={(arrayHelpers) => (
+                <VerticalSpacer twentyPx />
+
+                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører">
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <RadioPanelGruppeFormik
+                            legend="Har søker regnskapsfører?"
+                            checked={field.value ? 'ja' : 'nei'}
+                            name={field.name}
+                            options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                        />
+                    )}
+                </Field>
+                <VerticalSpacer twentyPx />
+
+                {selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører && (
                     <>
-                        {selvstendigNaeringsdrivende.fravaersperioder?.map((_fravaersperiode, fravaersperiodeIndex) => (
-                            <Field
-                                name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
-                            >
-                                {({ field }: FieldProps<FravaersperiodeType>) => (
-                                    <Fravaersperiode
-                                        name={field.name}
-                                        antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}
-                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
-                                    />
-                                )}
-                            </Field>
-                        ))}
-                        <Button
-                            variant="tertiary"
+                        <TextFieldFormik
                             size="small"
-                            onClick={() =>
-                                arrayHelpers.push({
-                                    ...fravaersperiodeInitialValue,
-                                    aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
-                                })
-                            }
-                        >
-                            <AddCircle />
-                            Legg til periode
-                        </Button>
+                            label="Navn på regnskapsfører"
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
+                        />
+                        <VerticalSpacer twentyPx />
+
+                        <TextFieldFormik
+                            size="small"
+                            label="Telefonnummer til regnskapsfører "
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
+                        />
                     </>
                 )}
-            />
-        </Panel>
+                <VerticalSpacer twentyPx />
+
+                <Label size="small">Når startet virksomheten?</Label>
+                <div className="fom-tom-rad">
+                    <DatoInputFormik
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
+                        label="Startdato"
+                    />
+                    <DatoInputFormik
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                        label="Eventuell sluttdato"
+                    />
+                </div>
+                <VerticalSpacer twentyPx />
+                <Collapse
+                    isOpened={erYngreEnn4år(
+                        get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                    )}
+                >
+                    <TextFieldFormik
+                        size="small"
+                        label="Næringsresultat før skatt de siste 12 månedene"
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
+                        filterPattern={kunTall}
+                    />
+                </Collapse>
+                <Collapse
+                    isOpened={erEldreEnn4år(
+                        get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                    )}
+                >
+                    <VarigEndring />
+                </Collapse>
+                <VerticalSpacer fourtyPx />
+                <hr />
+                <Heading size="small">Informasjon om fraværsperioder</Heading>
+                <FieldArray
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder"
+                    render={(arrayHelpers) => (
+                        <>
+                            {selvstendigNaeringsdrivende.fravaersperioder?.map(
+                                (_fravaersperiode, fravaersperiodeIndex) => (
+                                    <Field
+                                        name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
+                                    >
+                                        {({ field }: FieldProps<FravaersperiodeType>) => (
+                                            <Fravaersperiode
+                                                name={field.name}
+                                                antallFravaersperioder={
+                                                    selvstendigNaeringsdrivende.fravaersperioder?.length
+                                                }
+                                                slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                            />
+                                        )}
+                                    </Field>
+                                )
+                            )}
+                            <Button
+                                variant="tertiary"
+                                size="small"
+                                onClick={() =>
+                                    arrayHelpers.push({
+                                        ...fravaersperiodeInitialValue,
+                                        aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
+                                    })
+                                }
+                            >
+                                <AddCircle />
+                                Legg til periode
+                            </Button>
+                        </>
+                    )}
+                />
+            </Panel>
+        </div>
     );
 };
 

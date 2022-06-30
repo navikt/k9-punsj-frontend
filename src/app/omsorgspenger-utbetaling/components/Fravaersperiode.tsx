@@ -59,7 +59,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProp
         },
     ];
     return (
-        <Panel border>
+        <Panel className="container">
             <div className="aarsak-rad">
                 <SelectFormik
                     label="Fraværsårsak"
@@ -85,13 +85,14 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProp
             <div className="fom-tom-rad">
                 <DatoInputFormik label="Fra og med" name={`${name}.periode.fom`} />
                 <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
-                <TextFieldFormik
-                    className="timer-arbeidet"
-                    label="Timer arbeidet"
-                    size="small"
-                    name={`${name}.faktiskTidPrDag`}
-                />
             </div>
+            <VerticalSpacer twentyPx />
+            <TextFieldFormik
+                className="timer-arbeidet"
+                label="Timer arbeidet"
+                size="small"
+                name={`${name}.faktiskTidPrDag`}
+            />
             <VerticalSpacer twentyPx />
         </Panel>
     );

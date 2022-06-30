@@ -91,11 +91,11 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 if (data['ytelse'] && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
-                    setKvittering(kvitteringResponse);
+                    setKvittering && setKvittering(kvitteringResponse);
                 }
                 if (data['feil']?.length) {
                     setK9FormatErrors(data['feil']);
-                    setKvittering(undefined);
+                    setKvittering && setKvittering(undefined);
                 }
             },
         }

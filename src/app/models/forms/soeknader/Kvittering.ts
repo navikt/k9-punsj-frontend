@@ -1,9 +1,14 @@
 import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
-import { IOMPUTSoknadKvitteringJournalpost } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
+
+export interface Journalpost {
+    inneholderInformasjonSomIkkeKanPunsjes?: boolean;
+    inneholderMedisinskeOpplysninger?: boolean;
+    journalpostId: string;
+}
 
 type Kvittering = {
     mottattDato: string;
-    journalposter: IOMPUTSoknadKvitteringJournalpost[];
+    journalposter: Journalpost[];
     begrunnelseForInnsending: BegrunnelseForInnsending;
     språk: string;
     søker: {

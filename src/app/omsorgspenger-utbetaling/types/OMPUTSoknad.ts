@@ -1,4 +1,4 @@
-import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
+import { IPeriode, PersonEnkel } from 'app/models/types';
 import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
 
 export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: FravaersperiodeType[] };
@@ -11,8 +11,8 @@ export type SelvstendigNaeringsdrivende = {
         landkode: string;
         regnskapsførerNavn: string;
         regnskapsførerTlf: string;
-        harSøkerRegnskapsfører: string;
-        registrertIUtlandet: string;
+        harSøkerRegnskapsfører: boolean;
+        registrertIUtlandet: boolean;
         bruttoInntekt: string;
         erNyoppstartet: boolean;
         erVarigEndring: boolean;
@@ -34,7 +34,7 @@ export type FravaersperiodeType = {
     organisasjonsnummer: string;
     fraværÅrsak: string;
     søknadÅrsak: string;
-    periode: Periode;
+    periode: IPeriode;
     faktiskTidPrDag: string;
 };
 

@@ -41,9 +41,6 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
 };
 
 export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<IOMPUTSoknad> => {
-    if (soknad.opptjeningAktivitet === null) {
-        return omit(soknad, 'fravaersperioder');
-    }
     const fraevaersperioderSelvstendigNaeringsdrivende = soknad.fravaersperioder?.filter(
         (periode) => periode.aktivitetsFravær === aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE
     );
@@ -62,17 +59,19 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
     }));
 
     const selvstendigNaeringsdrivende = {
-        ...soknad.opptjeningAktivitet.selvstendigNaeringsdrivende,
+        ...soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende,
         fravaersperioder: fraevaersperioderSelvstendigNaeringsdrivende,
     };
-    const frilanser = { ...soknad.opptjeningAktivitet.frilanser, fravaersperioder: fravaersperioderFrilanser };
+    const frilanser = { ...soknad.opptjeningAktivitet?.frilanser, fravaersperioder: fravaersperioderFrilanser };
     return {
         ...omit(soknad, 'fravaersperioder'),
-        opptjeningAktivitet: {
-            selvstendigNaeringsdrivende,
-            frilanser,
-            arbeidstaker,
-        },
+        opptjeningAktivitet: soknad.opptjeningAktivitet
+            ? {
+                  selvstendigNaeringsdrivende,
+                  frilanser,
+                  arbeidstaker,
+              }
+            : undefined,
     };
 };
 
