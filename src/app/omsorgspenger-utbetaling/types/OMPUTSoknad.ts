@@ -13,10 +13,10 @@ export type SelvstendigNaeringsdrivende = {
         regnskapsførerTlf: string;
         harSøkerRegnskapsfører: boolean;
         registrertIUtlandet: boolean;
-        bruttoInntekt: string;
+        bruttoInntekt: number;
         erNyoppstartet: boolean;
         erVarigEndring: boolean;
-        endringInntekt: string;
+        endringInntekt: number;
         endringDato: string;
         endringBegrunnelse: string;
     };

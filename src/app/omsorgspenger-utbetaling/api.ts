@@ -22,7 +22,7 @@ export const oppdaterSoeknad = (soeknad: IOMPUTSoknadBackend): Promise<IOMPUTSok
     });
 
 export const validerSoeknad = async (
-    soeknad: IOMPUTSoknadBackend,
+    soeknad: Partial<IOMPUTSoknadBackend>,
     ident: string
 ): Promise<IOMPUTSoknadKvittering | ValideringResponse> => {
     const response = await post(ApiPath.OMP_UT_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);

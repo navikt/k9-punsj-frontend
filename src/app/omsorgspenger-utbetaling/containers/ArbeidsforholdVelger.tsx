@@ -1,5 +1,5 @@
 import React from 'react';
-import { useField, useFormikContext } from 'formik';
+import { useField } from 'formik';
 import { Collapse } from 'react-collapse';
 import { CheckboxGroup, Panel } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';

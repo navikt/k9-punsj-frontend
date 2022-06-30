@@ -36,6 +36,7 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
     return {
         ...soknad,
         opptjeningAktivitet: opptjeningAktivitetUtenFravaersperioder,
+        barn: soknad.barn?.map((barn) => ({ foedselsdato: barn.foedselsdato, norskIdent: barn.norskIdent })),
         fravaersperioder: fravaersperioderMappet,
     };
 };
@@ -75,7 +76,7 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
     };
 };
 
-export const filtrerVerdierFoerInnsending = (soknad: IOMPUTSoknad) => {
+export const filtrerVerdierFoerInnsending = (soknad: IOMPUTSoknad): Partial<IOMPUTSoknad> => {
     const { opptjeningAktivitet } = soknad;
     const { arbeidsforhold } = soknad.metadata;
     const filtrertOpptjeningAktivitet = pick(

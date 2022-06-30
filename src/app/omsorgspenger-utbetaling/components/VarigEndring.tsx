@@ -31,6 +31,7 @@ export default function VarigEndring() {
                         <VerticalSpacer twentyPx />
                         <TextFieldFormik
                             size="small"
+                            type="number"
                             label="Årsinntekt etter endring"
                             name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
                             filterPattern={kunTall}
