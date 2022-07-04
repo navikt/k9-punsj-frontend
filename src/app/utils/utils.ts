@@ -78,15 +78,15 @@ export const finnForkortelseForDokumenttype = (dokumenttype: string) => {
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_KS,
-            forkortelse: DokumenttypeForkortelse.OMP,
+            forkortelse: DokumenttypeForkortelse.OMP_KS,
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_MA,
-            forkortelse: DokumenttypeForkortelse.OMP,
+            forkortelse: DokumenttypeForkortelse.OMP_MA,
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_AO,
-            forkortelse: DokumenttypeForkortelse.OMP,
+            forkortelse: DokumenttypeForkortelse.OMP_AO,
         },
     ];
     return dokumenttyper.find((dt) => dt.navn === dokumenttype)?.forkortelse;

@@ -136,6 +136,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
+    const [brukEksisterendeFagsak, setBrukEksisterendeFagsak] = useState(false);
     const harFagsaker = fagsaker?.length > 0;
 
     const kanJournalforingsoppgaveOpprettesiGosys =
@@ -152,7 +153,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
-    const visPleietrengendeComponent = gjelderPleiepengerEllerOmsorgspenger && !harFagsaker && !isFetchingFagsaker;
+    const visPleietrengendeComponent =
+        gjelderPleiepengerEllerOmsorgspenger && !isFetchingFagsaker && !brukEksisterendeFagsak;
     const visFagsakSelect = gjelderPleiepengerEllerOmsorgspenger && harFagsaker && identState.ident1.length === 11;
 
     const erInntektsmeldingUtenKrav =
@@ -168,7 +170,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
         ) {
-            if (harFagsaker) {
+            if (harFagsaker && brukEksisterendeFagsak) {
                 return !valgtFagsak;
             }
             if (IdentRules.erUgyldigIdent(identState.ident2) && !barnetHarIkkeFnr) {
@@ -311,6 +313,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse
                     );
                     setFagsaker(filtrerteFagsaker);
+                    if (filtrerteFagsaker.length > 0) {
+                        setBrukEksisterendeFagsak(true);
+                    }
                 } else {
                     setHenteFagsakFeilet(true);
                 }
@@ -453,19 +458,31 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <VerticalSpacer twentyPx />
                             )}
                             {visFagsakSelect && (
-                                <Select
-                                    className="fagsakSelect"
-                                    label="Velg fagsak"
-                                    disabled={fagsaker.length === 0}
-                                    onChange={(event) => setValgtFagsak(event.target.value)}
-                                >
-                                    <option value="">Velg</option>
-                                    {fagsaker.map(({ fagsakId, sakstype: stype }) => (
-                                        <option key={fagsakId} value={fagsakId}>
-                                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
-                                        </option>
-                                    ))}
-                                </Select>
+                                <>
+                                    <Select
+                                        className="fagsakSelect"
+                                        label="Velg fagsak"
+                                        disabled={fagsaker.length === 0 || !brukEksisterendeFagsak}
+                                        onChange={(event) => setValgtFagsak(event.target.value)}
+                                    >
+                                        <option value="">Velg</option>
+                                        {brukEksisterendeFagsak &&
+                                            fagsaker.map(({ fagsakId, sakstype: stype }) => (
+                                                <option key={fagsakId} value={fagsakId}>
+                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
+                                                </option>
+                                            ))}
+                                    </Select>
+                                    <Checkbox
+                                        label="Har ikke tilhørende fagsak"
+                                        onChange={() => {
+                                            setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
+                                            setValgtFagsak('');
+                                            setIdentAction(identState.ident1, '', identState.annenSokerIdent);
+                                        }}
+                                    />
+                                    <VerticalSpacer twentyPx />
+                                </>
                             )}
                             {henteFagsakFeilet && <ErrorMessage>Henting av fagsak feilet</ErrorMessage>}
                             {isFetchingFagsaker && <Loader />}
