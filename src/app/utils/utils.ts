@@ -58,7 +58,10 @@ export const finnVisningsnavnForSakstype = (kode: string) => {
     return sakstyper.find((st) => st.kode === kode)?.navn || kode;
 };
 
-export const finnForkortelseForDokumenttype = (dokumenttype: string) => {
+export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumenttype) => {
+    if (!dokumenttype) {
+        return undefined;
+    }
     const dokumenttyper = [
         {
             navn: FordelingDokumenttype.PLEIEPENGER,

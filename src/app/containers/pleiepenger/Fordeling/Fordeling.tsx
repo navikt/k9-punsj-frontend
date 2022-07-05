@@ -37,7 +37,7 @@ import FordelingFerdigstillJournalpostState from '../../../models/types/Fordelin
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
 import { FagsakYtelseType } from '../../../models/types/RequestBodies';
-import { setFagsakAction } from '../../../state/actions/FordelingActions';
+import { setFagsakAction, setDokumenttypeAction } from '../../../state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
@@ -74,6 +74,7 @@ export interface IFordelingStateProps {
 
 export interface IFordelingDispatchProps {
     setSakstypeAction: typeof setSakstypeAction;
+    setDokumenttype: typeof setDokumenttypeAction;
     setFagsakAction: typeof setFagsakAction;
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
@@ -107,8 +108,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setFagsakAction: setFagsak,
         resetIdentStateAction,
         resetSjekkSkalTilK9,
+        setDokumenttype,
     } = props;
-    const { sakstype, fagsak: valgtFagsak } = fordelingState;
+    const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         []
@@ -117,8 +119,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
-
-    const [dokumenttype, setDokumenttype] = useState<FordelingDokumenttype>();
 
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
@@ -645,6 +645,7 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstypeAction(sakstype)),
+    setDokumenttype: (dokumenttype: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype)),
     setFagsakAction: (fagsak: Fagsak) => dispatch(setFagsakAction(fagsak)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
         dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),

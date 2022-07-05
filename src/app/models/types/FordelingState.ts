@@ -1,9 +1,10 @@
-import { Sakstype } from 'app/models/enums';
+import { Sakstype, FordelingDokumenttype } from 'app/models/enums';
 import { IError } from 'app/models/types/Error';
 import Fagsak from 'app/types/Fagsak';
 
 export interface IFordelingState {
     sakstype?: Sakstype;
+    dokumenttype?: FordelingDokumenttype;
     erIdent1Bekreftet: boolean;
     omfordelingDone: boolean;
     isAwaitingOmfordelingResponse: boolean;

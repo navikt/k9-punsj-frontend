@@ -1,9 +1,11 @@
 import { Button, Heading } from '@navikt/ds-react';
 import { SplitView } from 'app/components/SplitView';
+import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
+import { finnForkortelseForDokumenttype } from 'app/utils';
 import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -14,6 +16,7 @@ interface StateProps {
     fagsak?: Fagsak;
     søkerId?: string;
     journalpost?: IJournalpost;
+    dokumenttype?: FordelingDokumenttype;
 }
 
 interface DispatchProps {
@@ -25,12 +28,15 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     søkerId,
     journalpost,
     lukkJournalpostOppgave,
+    dokumenttype,
 }) => {
     const history = useHistory();
-    if (!fagsak || !søkerId || !journalpost) {
+    if (!søkerId || !journalpost) {
         history.goBack();
         return null;
     }
+
+    const sakstype = fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype) || '';
 
     return (
         <SplitView>
@@ -38,7 +44,12 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
                 <Heading size="small" level="1">
                     Send brev og lukk oppgave i LOS
                 </Heading>
-                <BrevComponent søkerId={søkerId} sakstype={fagsak.sakstype} fagsakId={fagsak.fagsakId} />
+                <BrevComponent
+                    søkerId={søkerId}
+                    sakstype={sakstype}
+                    fagsakId={fagsak?.fagsakId}
+                    journalpostId={journalpost?.journalpostId}
+                />
                 <Button
                     className="submitButton"
                     size="small"
@@ -54,6 +65,7 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
 const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     fagsak: state.fordelingState.fagsak,
+    dokumenttype: state.fordelingState.dokumenttype,
     søkerId: state.identState.ident1,
 });
 const mapDispatchToProps = (dispatch) => ({

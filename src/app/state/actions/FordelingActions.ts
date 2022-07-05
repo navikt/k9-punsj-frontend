@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { FordelingActionKeys, Sakstype } from 'app/models/enums';
+import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
@@ -8,6 +8,11 @@ import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
     sakstype?: Sakstype;
+}
+
+interface ISetDokumenttypeAction {
+    type: FordelingActionKeys.DOKUMENTTYPE_SET;
+    dokumenttype?: FordelingDokumenttype;
 }
 
 interface ISetFagsakAction {
@@ -29,6 +34,11 @@ interface IOmfordelingErrorAction {
 export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({
     type: FordelingActionKeys.SAKSTYPE_SET,
     sakstype,
+});
+
+export const setDokumenttypeAction = (dokumenttype?: FordelingDokumenttype): ISetDokumenttypeAction => ({
+    type: FordelingActionKeys.DOKUMENTTYPE_SET,
+    dokumenttype,
 });
 
 export const setFagsakAction = (fagsak?: Fagsak): ISetFagsakAction => ({
@@ -143,7 +153,8 @@ export type IFordelingActionTypes =
     | IGosysGjelderErrorAction
     | ISetErIdent1BekreftetAction
     | ISetValgtGosysKategori
-    | ISjekkOmSkalTilK9ResetAction;
+    | ISjekkOmSkalTilK9ResetAction
+    | ISetDokumenttypeAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
