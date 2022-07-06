@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@navikt/ds-react';
 import { ApiPath, URL_BACKEND } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
@@ -8,21 +9,22 @@ import { get, post } from 'app/utils';
 import { Form, Formik } from 'formik';
 import { Knapp } from 'nav-frontend-knapper';
 import { Element, Feilmelding } from 'nav-frontend-typografi';
+import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { finnArbeidsgivere } from '../../api/api';
+import ErrorIcon from '../../assets/SVG/ErrorIcon';
+import SuccessIcon from '../../assets/SVG/SuccessIcon';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
 import './brev.less';
 import Brevmal from './Brevmal';
 import dokumentMalType from './dokumentMalType';
-import ErrorIcon from '../../assets/SVG/ErrorIcon';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
-import SuccessIcon from '../../assets/SVG/SuccessIcon';
 
 const previewMessage = (
     values: BrevFormValues,
@@ -93,6 +95,8 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [aktørId, setAktørId] = useState('');
     const [harSendtMinstEttBrev, setHarSendtMinstEttBrev] = useState(false);
     const [person, setPerson] = useState<Person | undefined>(undefined);
+    const [forrigeSendteBrevHash, setForrigeSendteBrevHash] = useState('');
+    const [visSammeBrevError, setVisSammeBrevError] = useState(false);
 
     useEffect(() => {
         fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
@@ -148,25 +152,33 @@ const BrevComponent: React.FC<BrevProps> = ({
                 },
             }}
             onSubmit={(values, actions) => {
+                setBrevErSendt(false);
                 const mottaker = {
                     type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
                     id: values.mottaker,
                 };
                 const brev = new Brev(values, søkerId, mottaker, sakstype, values.brevmalkode, journalpostId, fagsakId);
-                post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
-                    if (response.status === 200) {
-                        setBrevErSendt(true);
-                        setHarSendtMinstEttBrev(true);
-                        if (brevSendtCallback) {
-                            brevSendtCallback();
+                const brevHash = hash(brev);
+                if (brevHash !== forrigeSendteBrevHash) {
+                    setVisSammeBrevError(false);
+                    post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
+                        if (response.status === 200) {
+                            setForrigeSendteBrevHash(brevHash);
+                            setBrevErSendt(true);
+                            setHarSendtMinstEttBrev(true);
+                            if (brevSendtCallback) {
+                                brevSendtCallback();
+                            }
+                            if (setVisBrevIkkeSendtInfoboks) {
+                                setVisBrevIkkeSendtInfoboks(false);
+                            }
+                        } else {
+                            setSendBrevFeilet(true);
                         }
-                        if (setVisBrevIkkeSendtInfoboks) {
-                            setVisBrevIkkeSendtInfoboks(false);
-                        }
-                    } else {
-                        setSendBrevFeilet(true);
-                    }
-                });
+                    });
+                } else {
+                    setVisSammeBrevError(true);
+                }
                 actions.setSubmitting(false);
             }}
         >
@@ -240,6 +252,11 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 )}
                             </div>
                         ) : null}
+                        {visSammeBrevError && (
+                            <ErrorMessage className="sammeBrevError">
+                                Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
+                            </ErrorMessage>
+                        )}
                     </Form>
                 </div>
             )}
