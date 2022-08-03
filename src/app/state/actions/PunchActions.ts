@@ -26,8 +26,8 @@ type INavigationTypes = ISetStepAction | IBackFromFormAction | IBackFromMapperOg
 
 export type IPunchActionTypes = IIdentActionTypes | INavigationTypes | IResetAction;
 
-export function setIdentAction(ident1: string, ident2?: string | null, barn): ISetIdentAction {
-    return { type: PunchActionKeys.IDENT_SET, ident1, ident2: ident2 || null, barn };
+export function setIdentAction(ident1: string, ident2?: string | null): ISetIdentAction {
+    return { type: PunchActionKeys.IDENT_SET, ident1, ident2: ident2 || null };
 }
 
 export function setStepAction(step: PunchStep): ISetStepAction {
