@@ -5,7 +5,8 @@ export const initialState: IIdentState = {
     ident1: '',
     ident2: '',
     annenPart: '',
-    annenSokerIdent: null,
+    annenSokerIdent: '',
+    barn: [],
 };
 
 export function IdentReducer(identState: IIdentState = initialState, action: IIdentActions): IIdentState {
@@ -23,12 +24,19 @@ export function IdentReducer(identState: IIdentState = initialState, action: IId
                 ...identState,
                 annenPart: action.annenPart,
             };
+        case IdentActionKeys.IDENT_SET_BARN:
+            return {
+                ...identState,
+                barn: action.barn,
+            };
 
         case IdentActionKeys.IDENT_RESET:
             return {
                 ...identState,
                 ident2: '',
                 annenSokerIdent: '',
+                annenPart: '',
+                barn: [],
             };
 
         default:

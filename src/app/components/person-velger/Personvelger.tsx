@@ -9,14 +9,14 @@ import { hentBarn } from 'app/api/api';
 import { Person } from 'app/models/types';
 import PersonLinje from './PersonLinje';
 
-interface OwnProps {
+export interface PersonvelgerProps {
     handleBlur?: (callback: () => any) => void;
     name: string;
     sokersIdent?: string;
     populerMedBarn?: boolean;
 }
 
-const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProps) => {
+const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: PersonvelgerProps) => {
     const { setFieldValue } = useFormikContext();
     const [field] = useField<Personvalg[]>(name);
 
@@ -39,7 +39,7 @@ const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProp
                 }
             });
         }
-    }, []);
+    }, [sokersIdent]);
 
     return (
         <div className="personvelger">
