@@ -2,40 +2,41 @@ import { useState } from 'react';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
+import { setIdentAction } from 'app/state/actions';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import * as React from 'react';
-import { useIntl } from 'react-intl';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useQuery } from 'react-query';
 import { Loader } from '@navikt/ds-react';
-import { IIdentState } from 'app/models/types/IdentState';
-import { RootStateType } from 'app/state/RootState';
-import { connect } from 'react-redux';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 
-export interface OwnProps {
+export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;
-    identState: IIdentState;
+    ident1: string;
+    ident2: string | null;
 }
 
-export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<OwnProps> = (props) => {
-    const { identState } = props;
-    const { ident1, barn } = identState;
-    const intl = useIntl();
+type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPUTSoknaderComponentProps;
+
+export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
+    props: IEksisterendeOMPUTSoknaderProps
+) => {
+    const { intl, ident1, ident2 } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
     const routingPaths = React.useContext(RoutingPathsContext);
 
     React.useEffect(() => {
-        if (IdentRules.erUgyldigIdent(ident1) || barn.some((barnet) => IdentRules.erUgyldigIdent(barnet))) {
+        if (!IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
             setHash('/');
         }
-    }, [ident1, barn]);
+    }, [ident1, ident2]);
 
     const {
         data: eksisterendeSoeknader,
@@ -67,7 +68,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<OwnProp
             const soknadId = søknad.soeknadId;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                søknad.barn?.map((barnet) => barnet.norskIdent).join(', '),
+                søknad.barn?.map((barn) => barn.norskIdent).join(', '),
                 Array.from(søknad.journalposter).join(', '),
 
                 <Knapp key={soknadId} mini onClick={() => setValgtSoeknad(søknad)}>
@@ -131,14 +132,10 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<OwnProp
     return (
         <AlertStripeInfo>
             {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: '1',
+                antallSokere: ident2 ? '2' : '1',
             })}
         </AlertStripeInfo>
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    identState: state.identState,
-});
-
-export const EksisterendeOMPUTSoknader = connect(mapStateToProps)(EksisterendeOMPUTSoknaderComponent);
+export const EksisterendeOMPUTSoknader = injectIntl(EksisterendeOMPUTSoknaderComponent);

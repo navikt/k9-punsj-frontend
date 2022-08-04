@@ -26,13 +26,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 ) => {
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
-    const { ident1, barn } = identState;
+    const { ident1, ident2 } = identState;
 
     const {
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, ident1, barn), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, ident1), {
         onSuccess: (soeknad) => {
             setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
         },
@@ -60,7 +60,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPUTSoknader journalpostid={journalpostid} />
+            <EksisterendeOMPUTSoknader ident1={ident1} ident2={ident2} journalpostid={journalpostid} />
 
             <div className="knapperad">
                 <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
