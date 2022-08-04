@@ -22,7 +22,7 @@ const AnnenPart = ({ vis, annenPart, setAnnenPart }: ownProps): JSX.Element | nu
     useEffect(() => setAnnenPart(''), []);
 
     const [visFeil, setVisFeil] = useState<boolean>(false);
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (e) => {
         const identifikatorUtenWhitespace = e.target.value.replace(/\D+/, '');
         if (identifikatorUtenWhitespace.length < 12) {
             setAnnenPart(identifikatorUtenWhitespace);
