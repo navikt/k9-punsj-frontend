@@ -32,7 +32,6 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
-import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
 import { debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
@@ -184,7 +183,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
-
+    console.log(values);
     return (
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
