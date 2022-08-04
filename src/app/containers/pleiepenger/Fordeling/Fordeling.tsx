@@ -10,7 +10,6 @@ import {
     setErIdent1BekreftetAction,
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
-    sjekkOmSkalTilK9SakFlereBarn,
 } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
@@ -55,7 +54,6 @@ import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav'
 import { getEnvironmentVariable } from '../../../utils';
 import { FagsakYtelseType } from '../../../models/types/RequestBodies';
 import AnnenPart from './Komponenter/AnnenPart';
-import PersonvelgerWrapper from './Komponenter/PersonvelgerWrapper';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -74,7 +72,6 @@ export interface IFordelingDispatchProps {
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
     sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
-    sjekkOmSkalTilK9FlereBarn: typeof sjekkOmSkalTilK9SakFlereBarn;
     kopierJournalpost: typeof kopierJournalpost;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
@@ -123,7 +120,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         resetSjekkSkalTilK9();
         setVisValgForDokument(false);
-    }, [dokumenttype, identState.ident1, identState.ident2, identState.annenPart, identState.barn]);
+    }, [dokumenttype, identState.ident1, identState.ident2, identState.annenPart]);
 
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
 
@@ -151,10 +148,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
         (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
 
-    const disableVidereOmsorgspengeutbetaling =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT &&
-        (!identState.barn || !!(identState.barn && identState.barn.some((barn) => IdentRules.erUgyldigIdent(barn))));
-
     const disableVidereKnapp =
         ((dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
@@ -162,8 +155,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             IdentRules.erUgyldigIdent(identState.ident2) &&
             !barnetHarIkkeFnr) ||
         IdentRules.erUgyldigIdent(identState.ident1) ||
-        disableVidereMidlertidigAlene ||
-        disableVidereOmsorgspengeutbetaling;
+        disableVidereMidlertidigAlene;
 
     const handleIdent1Change = (event: any) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -231,13 +223,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
         if (ikkeSjekkSkalTilK9Dokumenttype.includes(dokumentType)) {
             setVisValgForDokument(true);
-        } else if (dokumentType === FordelingDokumenttype.OMSORGSPENGER_UT) {
-            props.sjekkOmSkalTilK9FlereBarn(
-                identState.ident1,
-                journalpost.journalpostId,
-                fagsakYtelseType,
-                identState.barn
-            );
         } else {
             props.sjekkOmSkalTilK9(
                 identState.ident1,
@@ -428,9 +413,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
                             />
                             <AnnenPart vis={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA} />
-                            {dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && (
-                                <PersonvelgerWrapper sokersIdent={identState.ident1} />
-                            )}
                             <ToSoekere
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
@@ -618,8 +600,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         fagsakYtelseType: FagsakYtelseType,
         annenPart: string
     ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, annenPart)),
-    sjekkOmSkalTilK9FlereBarn: (ident1: string, jpid: string, fagsakYtelseType: FagsakYtelseType, barn: string[]) =>
-        dispatch(sjekkOmSkalTilK9SakFlereBarn(ident1, jpid, fagsakYtelseType, barn)),
     resetSjekkSkalTilK9: () => dispatch(resetSkalTilK9()),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),

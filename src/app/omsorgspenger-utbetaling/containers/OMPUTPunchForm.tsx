@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import { BodyShort, ErrorSummary, Heading, Label, Panel } from '@navikt/ds-react';
+import { ErrorSummary, Heading } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setIdentAction, setSignaturAction } from 'app/state/actions';
@@ -191,18 +191,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad intl={intl} setSignaturAction={props.setSignaturAction} signert={signert} />
             <VerticalSpacer sixteenPx />
-            <Panel border>
-                <Heading size="xsmall" spacing>
-                    Barn
-                </Heading>
-                {values.barn.map((barn) => (
-                    <>
-                        <Label size="small">Identifikasjonsnummer</Label>
-                        <BodyShort>{barn.norskIdent}</BodyShort>
-                        <VerticalSpacer eightPx />
-                    </>
-                ))}
-            </Panel>
+            <Heading size="xsmall" spacing>
+                Barn
+            </Heading>
+            <Personvelger name="barn" sokersIdent={values.soekerId} populerMedBarn={!values.barn.length} />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />

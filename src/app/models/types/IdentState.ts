@@ -3,5 +3,4 @@ export interface IIdentState {
     ident2: string;
     annenSokerIdent: string | null;
     annenPart: string;
-    barn: string[];
 }
