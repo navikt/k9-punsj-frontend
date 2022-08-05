@@ -6,6 +6,11 @@ export const periodeInitialValue = {
     tom: '',
 };
 
+export const utenlandsoppholdInitialValue = {
+    periode: periodeInitialValue,
+    land: '',
+};
+
 export const fravaersperiodeInitialValue = {
     aktivitetsFravær: '',
     organisasjonsnummer: '',
@@ -44,6 +49,8 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                 frilanser: false,
                 ...soknad?.metadata?.arbeidsforhold,
             },
+            medlemsskap: soknad?.metadata?.medlemsskap || '',
+            utenlandsopphold: soknad?.metadata?.utenlandsopphold || '',
         },
         barn: soknad?.barn || [],
         soeknadId: soknad?.soeknadId || '',
@@ -111,6 +118,8 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                   }))
                 : [{ ...arbeidstakerInitialValue }],
         },
+        bosteder: soknad?.bosteder?.length ? soknad.bosteder : [],
+        utenlandsopphold: soknad?.utenlandsopphold?.length ? soknad.utenlandsopphold : [],
         harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
         harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
     };

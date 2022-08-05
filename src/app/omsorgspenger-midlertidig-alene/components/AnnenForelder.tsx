@@ -88,7 +88,7 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                         )}
                     </Field>
                     <VerticalSpacer twentyPx />
-                    <div className="fom-tom-rad">
+                    <div className="fom-tom">
                         <DatoInputFormik label="Fra og med" name="annenForelder.periode.fom" handleBlur={handleBlur} />
                         <DatoInputFormik
                             label="Til og med"

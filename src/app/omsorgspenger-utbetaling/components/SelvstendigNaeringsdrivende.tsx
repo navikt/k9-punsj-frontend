@@ -72,7 +72,9 @@ const SelvstendigNaeringsdrivende = () => {
 
                 {selvstendigNaeringsdrivende.info.registrertIUtlandet ? (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
-                        {({ field }: FieldProps<string>) => <CountrySelect selectedcountry={field.value} {...field} />}
+                        {({ field }: FieldProps<string>) => (
+                            <CountrySelect selectedcountry={field.value} unselectedoption="Velg land" {...field} />
+                        )}
                     </Field>
                 ) : (
                     <TextFieldFormik

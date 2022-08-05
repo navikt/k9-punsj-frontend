@@ -78,7 +78,6 @@ export default function Frilanser() {
                                 <Field name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}>
                                     {({ field }: FieldProps<FravaersperiodeType>) => (
                                         <Fravaersperiode
-                                            key={JSON.stringify(fravaersperiode)}
                                             name={field.name}
                                             antallFravaersperioder={frilanser.fravaersperioder?.length}
                                             slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}

@@ -13,10 +13,10 @@ export type SelvstendigNaeringsdrivende = {
         regnskapsførerTlf: string;
         harSøkerRegnskapsfører: boolean;
         registrertIUtlandet: boolean;
-        bruttoInntekt: number;
+        bruttoInntekt: string;
         erNyoppstartet: boolean;
         erVarigEndring: boolean;
-        endringInntekt: number;
+        endringInntekt: string;
         endringDato: string;
         endringBegrunnelse: string;
     };
@@ -38,6 +38,11 @@ export type FravaersperiodeType = {
     faktiskTidPrDag: string;
 };
 
+export type PeriodeMedUtenlandsopphold = {
+    periode: IPeriode;
+    land: string;
+};
+
 export type Arbeidsforhold = {
     arbeidstaker: boolean;
     selvstendigNaeringsdrivende: boolean;
@@ -50,8 +55,10 @@ interface IOpptjeningAktivitet {
 }
 
 export interface IOMPUTSoknad extends SoeknadType {
-    metadata: { arbeidsforhold: Arbeidsforhold };
+    metadata: { arbeidsforhold: Arbeidsforhold; medlemsskap: string; utenlandsopphold: string };
     opptjeningAktivitet: IOpptjeningAktivitet;
+    bosteder: PeriodeMedUtenlandsopphold[];
+    utenlandsopphold: PeriodeMedUtenlandsopphold[];
     barn: PersonEnkel[];
 }
 

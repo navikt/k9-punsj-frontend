@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
-import { ErrorSummary, Heading } from '@navikt/ds-react';
+import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setIdentAction, setSignaturAction } from 'app/state/actions';
@@ -37,6 +37,7 @@ import schema from '../schema';
 import { debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
+import Medlemsskap from '../components/Medlemsskap';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -191,13 +192,16 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad intl={intl} setSignaturAction={props.setSignaturAction} signert={signert} />
             <VerticalSpacer sixteenPx />
-            <Heading size="xsmall" spacing>
-                Barn
-            </Heading>
-            <Personvelger name="barn" sokersIdent={values.soekerId} populerMedBarn={!values.barn.length} />
+            <Panel border>
+                <Heading size="xsmall" spacing>
+                    Barn
+                </Heading>
+                <Personvelger name="barn" sokersIdent={values.soekerId} populerMedBarn={!values.barn.length} />
+            </Panel>
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
+            <Medlemsskap />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx={true} />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (

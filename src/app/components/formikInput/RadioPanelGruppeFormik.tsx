@@ -23,6 +23,7 @@ const RadioPanelGruppeFormik = ({ name, options, legend, retning = 'horisontal',
                 legend={legend}
                 feil={meta.touched && meta.error}
                 radios={options}
+                checked={field.value}
                 {...field}
                 {...props}
             />
