@@ -55,7 +55,7 @@ interface IOpptjeningAktivitet {
 }
 
 export interface IOMPUTSoknad extends SoeknadType {
-    metadata: { arbeidsforhold: Arbeidsforhold; medlemsskap: string; utenlandsopphold: string };
+    metadata: { arbeidsforhold: Arbeidsforhold; medlemskap: string; utenlandsopphold: string };
     opptjeningAktivitet: IOpptjeningAktivitet;
     bosteder: PeriodeMedUtenlandsopphold[];
     utenlandsopphold: PeriodeMedUtenlandsopphold[];

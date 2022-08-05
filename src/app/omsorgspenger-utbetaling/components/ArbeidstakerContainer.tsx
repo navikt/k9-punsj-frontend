@@ -22,7 +22,8 @@ const ArbeidstakerContainer = () => {
                     </Heading>
                     {arbeidstaker.map((v, index) => (
                         <Arbeidstaker
-                            key={JSON.stringify(v)}
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={index}
                             index={index}
                             antallArbeidsforhold={arbeidstaker.length}
                             slettArbeidsforhold={() => arrayHelpers.remove(index)}

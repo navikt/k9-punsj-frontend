@@ -18,30 +18,30 @@ const options = [
     { value: 'ikke opplyst', label: 'Ikke opplyst' },
 ];
 
-const Medlemsskap = () => {
+const Medlemskap = () => {
     const intl = useIntl();
     const { values, setFieldValue } = useFormikContext<IOMPUTSoknad>();
 
     useEffect(() => {
-        if (values.bosteder.length && values.metadata.medlemsskap !== 'ja') {
+        if (values.bosteder.length && values.metadata.medlemskap !== 'ja') {
             setFieldValue('bosteder', []);
         }
-        if (!values.bosteder.length && values.metadata.medlemsskap === 'ja') {
+        if (!values.bosteder.length && values.metadata.medlemskap === 'ja') {
             setFieldValue('bosteder', [utenlandsoppholdInitialValue]);
         }
-    }, [values.metadata.medlemsskap]);
+    }, [values.metadata.medlemskap]);
 
     return (
         <Panel border>
             <Heading size="small" level="5">
-                Medlemsskap
+                Medlemskap
             </Heading>
             <RadioPanelGruppeFormik
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                name="metadata.medlemsskap"
+                name="metadata.medlemskap"
                 options={options}
             />
-            <Collapse isOpened={values.metadata.medlemsskap === 'ja'}>
+            <Collapse isOpened={values.metadata.medlemskap === 'ja'}>
                 <FieldArray
                     name="bosteder"
                     render={(arrayHelpers) => (
@@ -102,4 +102,4 @@ const Medlemsskap = () => {
     );
 };
 
-export default Medlemsskap;
+export default Medlemskap;

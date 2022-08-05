@@ -49,7 +49,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                 frilanser: false,
                 ...soknad?.metadata?.arbeidsforhold,
             },
-            medlemsskap: soknad?.metadata?.medlemsskap || '',
+            medlemskap: soknad?.metadata?.medlemskap || '',
             utenlandsopphold: soknad?.metadata?.utenlandsopphold || '',
         },
         barn: soknad?.barn || [],

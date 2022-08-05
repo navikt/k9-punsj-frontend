@@ -7,6 +7,7 @@ import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import { useIntl } from 'react-intl';
+import { kunTall } from 'app/utils/patterns';
 import { fraværÅrsak, søknadÅrsak } from '../konstanter';
 import './fravaersperiode.less';
 
@@ -92,6 +93,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProp
                 label="Timer arbeidet"
                 size="small"
                 name={`${name}.faktiskTidPrDag`}
+                filterPattern={kunTall}
             />
             <VerticalSpacer twentyPx />
         </Panel>

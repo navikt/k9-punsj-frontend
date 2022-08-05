@@ -37,7 +37,7 @@ import schema from '../schema';
 import { debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
-import Medlemsskap from '../components/Medlemsskap';
+import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
 
 export interface IPunchOMPUTFormComponentProps {
@@ -202,7 +202,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
-            <Medlemsskap />
+            <Medlemskap />
             <VerticalSpacer fourtyPx />
             <Utenlandsopphold />
             <IkkeRegistrerteOpplysninger intl={intl} />

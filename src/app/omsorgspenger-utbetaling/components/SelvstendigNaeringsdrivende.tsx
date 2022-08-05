@@ -15,7 +15,7 @@ import { Collapse } from 'react-collapse';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
-import { FravaersperiodeType, IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
 import './arbeidsforhold.less';
@@ -158,20 +158,13 @@ const SelvstendigNaeringsdrivende = () => {
                         <>
                             {selvstendigNaeringsdrivende.fravaersperioder?.map(
                                 (fravaersperiode, fravaersperiodeIndex) => (
-                                    <Field
-                                        key={JSON.stringify(fravaersperiode)}
+                                    <Fravaersperiode
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={fravaersperiodeIndex}
                                         name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
-                                    >
-                                        {({ field }: FieldProps<FravaersperiodeType>) => (
-                                            <Fravaersperiode
-                                                name={field.name}
-                                                antallFravaersperioder={
-                                                    selvstendigNaeringsdrivende.fravaersperioder?.length
-                                                }
-                                                slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
-                                            />
-                                        )}
-                                    </Field>
+                                        antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}
+                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                    />
                                 )
                             )}
                             <Button

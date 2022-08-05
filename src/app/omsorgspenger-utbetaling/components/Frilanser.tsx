@@ -9,7 +9,7 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import Fravaersperiode from './Fravaersperiode';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
-import { FravaersperiodeType, IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import './arbeidsforhold.less';
 
 export default function Frilanser() {
@@ -75,15 +75,13 @@ export default function Frilanser() {
                     render={(arrayHelpers) => (
                         <>
                             {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
-                                <Field name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}>
-                                    {({ field }: FieldProps<FravaersperiodeType>) => (
-                                        <Fravaersperiode
-                                            name={field.name}
-                                            antallFravaersperioder={frilanser.fravaersperioder?.length}
-                                            slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
-                                        />
-                                    )}
-                                </Field>
+                                <Fravaersperiode
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={fravaersperiodeIndex}
+                                    name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}
+                                    antallFravaersperioder={frilanser.fravaersperioder?.length}
+                                    slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                />
                             ))}
                             <Button
                                 variant="tertiary"

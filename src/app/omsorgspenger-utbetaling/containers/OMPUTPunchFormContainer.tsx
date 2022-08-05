@@ -77,7 +77,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                             ...values.metadata.arbeidsforhold,
                             registrertIUtlandet:
                                 values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
-                            medlemsskap: values.metadata.medlemsskap,
+                            medlemskap: values.metadata.medlemskap,
                             utenlandsopphold: values.metadata.utenlandsopphold,
                         },
                     })
