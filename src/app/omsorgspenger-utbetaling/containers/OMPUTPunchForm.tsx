@@ -38,6 +38,7 @@ import { debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemsskap from '../components/Medlemsskap';
+import Utenlandsopphold from '../components/Utenlandsopphold';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -202,6 +203,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
             <Medlemsskap />
+            <VerticalSpacer fourtyPx />
+            <Utenlandsopphold />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx={true} />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
