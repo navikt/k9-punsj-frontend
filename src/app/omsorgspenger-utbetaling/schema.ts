@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 
-import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode } from 'app/rules/yup';
+import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsopphold } from 'app/rules/yup';
 
 const fravaersperioder = () =>
     yup.array().of(
@@ -80,6 +80,8 @@ const OMPUTSchema = yup.object({
             .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
         frilanser: yup.object().when('$frilanser', { is: true, then: frilanser, otherwise: yup.object() }),
     }),
+    medlemsskap: yup.array().when('$medlemsskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
+    utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
     barn,
 });
 export default OMPUTSchema;

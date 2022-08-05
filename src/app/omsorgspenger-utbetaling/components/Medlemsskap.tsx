@@ -73,10 +73,11 @@ const Medlemsskap = () => {
                                     <VerticalSpacer sixteenPx />
                                     <div style={{ maxWidth: '25%' }}>
                                         <Field name={`bosteder[${bostedIndex}].land`}>
-                                            {({ field }: FieldProps<string>) => (
+                                            {({ field, meta }: FieldProps<string>) => (
                                                 <CountrySelect
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
+                                                    feil={meta.touched && meta.error}
                                                     {...field}
                                                 />
                                             )}

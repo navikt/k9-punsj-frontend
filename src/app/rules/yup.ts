@@ -45,7 +45,7 @@ export const identifikator = yup
 
 export const dato = () =>
     yup.string().test({
-        test: (v) => !!gyldigDato(v),
+        test: (v) => !!gyldigDato(v || ''),
         message: 'Må ha en gyldig dato',
     });
 
@@ -54,6 +54,11 @@ export const periode = () =>
         fom: yup.string().required().label('Fra og med'),
         tom: yup.string().required().label('Til og med'),
     });
+
+export const utenlandsopphold = yup.object().shape({
+    periode: periode(),
+    land: yup.string().required().label('Land'),
+});
 
 export const barn = yup.array().of(
     yup.object().shape({
