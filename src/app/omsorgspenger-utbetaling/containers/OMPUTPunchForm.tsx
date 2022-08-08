@@ -195,9 +195,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer sixteenPx />
             <Panel border>
                 <Heading size="xsmall" spacing>
-                    Barn
+                    Fosterbarn
                 </Heading>
-                <Personvelger name="barn" sokersIdent={values.soekerId} populerMedBarn={!values.barn.length} />
+                <Personvelger name="barn" />
             </Panel>
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
