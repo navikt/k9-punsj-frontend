@@ -1,4 +1,4 @@
-import { ErrorMessage } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import { ApiPath, URL_BACKEND } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
@@ -8,13 +8,11 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
 import { Form, Formik } from 'formik';
 import { Knapp } from 'nav-frontend-knapper';
-import { Element, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding } from 'nav-frontend-typografi';
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { finnArbeidsgivere } from '../../api/api';
-import ErrorIcon from '../../assets/SVG/ErrorIcon';
-import SuccessIcon from '../../assets/SVG/SuccessIcon';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
 import './brev.less';
@@ -234,29 +232,23 @@ const BrevComponent: React.FC<BrevProps> = ({
                             )}
                         </div>
 
-                        {brevErSendt || sendBrevFeilet ? (
-                            <div className="brevSendtContainer">
-                                {brevErSendt && (
-                                    <>
-                                        <SuccessIcon />
-                                        <Element className="brevSendtText">
-                                            Brev sendt! Du kan nå sende nytt brev til annen mottaker.
-                                        </Element>
-                                    </>
-                                )}
-                                {sendBrevFeilet && (
-                                    <>
-                                        <ErrorIcon />
-                                        <Element className="brevSendtText">Sending av brev feilet.</Element>
-                                    </>
-                                )}
-                            </div>
-                        ) : null}
-                        {visSammeBrevError && (
-                            <ErrorMessage className="sammeBrevError">
-                                Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
-                            </ErrorMessage>
-                        )}
+                        <div className="brevStatusContainer">
+                            {brevErSendt && (
+                                <Alert variant="success" size="medium" fullWidth inline>
+                                    Brev sendt! Du kan nå sende nytt brev til annen mottaker.
+                                </Alert>
+                            )}
+                            {sendBrevFeilet && (
+                                <Alert variant="error" size="medium" fullWidth inline>
+                                    Sending av brev feilet.
+                                </Alert>
+                            )}
+                            {visSammeBrevError && (
+                                <Alert variant="error" size="medium" fullWidth inline>
+                                    Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
+                                </Alert>
+                            )}
+                        </div>
                     </Form>
                 </div>
             )}
