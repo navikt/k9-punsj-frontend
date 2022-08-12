@@ -43,7 +43,7 @@ import {
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
+import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state/reducers/FellesReducer';
 import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype } from '../../../utils';
 import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
@@ -86,6 +86,7 @@ export interface IFordelingDispatchProps {
     setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
     resetSjekkSkalTilK9: typeof resetSkalTilK9;
+    resetBarn: typeof resetBarnAction;
 }
 
 export type IFordelingProps = WrappedComponentProps & IFordelingStateProps & IFordelingDispatchProps;
@@ -109,6 +110,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetIdentStateAction,
         resetSjekkSkalTilK9,
         setDokumenttype,
+        resetBarn,
     } = props;
     const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
@@ -408,6 +410,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     handleDokumenttype={(type: FordelingDokumenttype) => {
                                         handleDokumenttype(type);
                                         resetIdentStateAction();
+                                        resetBarn();
                                     }}
                                     valgtDokumentType={dokumenttype as string}
                                 />
@@ -666,6 +669,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
     resetIdentStateAction: () => dispatch(resetIdentState()),
+    resetBarn: () => dispatch(resetBarnAction()),
 });
 
 const Fordeling = injectIntl(connect(mapStateToProps, mapDispatchToProps)(FordelingComponent));

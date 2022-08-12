@@ -63,10 +63,9 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
 
             {erDokumenttypeOmsorgspenger &&
                 OmsorgspengerSubRadioPaneler.map((a) => (
-                    <div className="dokumentTypeVelgerSubkategori">
+                    <div key={a.value} className="dokumentTypeVelgerSubkategori">
                         <RadioPanel
                             label={a.label}
-                            key={a.value}
                             value={a.value}
                             checked={valgtDokumentType === a.value}
                             onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}

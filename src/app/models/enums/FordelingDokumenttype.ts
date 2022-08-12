@@ -7,6 +7,7 @@ export enum FordelingDokumenttype {
     OMSORGSPENGER = 'OMSORGSPENGER',
     OMSORGSPENGER_MA = 'OMSORGSPENGER_MA',
     OMSORGSPENGER_AO = 'OMSORGSPENGER_AO',
+    OMSORGSPENGER_UT = 'OMSORGSPENGER_UT',
     ANNET = 'ANNET',
 }
 
@@ -17,6 +18,7 @@ export enum DokumenttypeForkortelse {
     OMP_KS = 'OMP_KS',
     OMP_MA = 'OMP_MA',
     OMP_AO = 'OMP_AO',
+    OMP_UT = 'OMP_UT',
 }
 
 export enum FordelingOmsorgspengerSubMenyValg {

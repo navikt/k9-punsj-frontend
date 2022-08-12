@@ -54,6 +54,10 @@ export const finnVisningsnavnForSakstype = (kode: string) => {
             kode: DokumenttypeForkortelse.OMP_AO,
             navn: 'Alene om omsorgen',
         },
+        {
+            kode: DokumenttypeForkortelse.OMP_UT,
+            navn: 'Direkte utbetaling av omsorgspenger',
+        },
     ];
     return sakstyper.find((st) => st.kode === kode)?.navn || kode;
 };
@@ -78,6 +82,10 @@ export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumentt
         {
             navn: FordelingDokumenttype.OMSORGSPENGER,
             forkortelse: DokumenttypeForkortelse.OMP,
+        },
+        {
+            navn: FordelingDokumenttype.OMSORGSPENGER_UT,
+            forkortelse: DokumenttypeForkortelse.OMP_UT,
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_KS,
