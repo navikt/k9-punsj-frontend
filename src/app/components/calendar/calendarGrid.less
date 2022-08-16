@@ -138,6 +138,10 @@
     }
 }
 
+.selected() {
+    outline: 2px solid @navDypBla;
+}
+
 .calendarGrid {
     &__allWeekDisabledContent {
         display: none;
@@ -157,6 +161,9 @@
         &--disabled {
             .disabledDay();
         }
+        &--selected {
+            .selected();
+        }
         &--button {
             .knappflat-mixin(@navBla, @white, @navDypBla);
             background-color: white;
@@ -166,7 +173,7 @@
             border-width: 1px !important;
             cursor: pointer;
             &:hover {
-                outline: 2px solid @navDypBla;
+                .selected();
             }
         }
     }
@@ -215,8 +222,4 @@
     .dagContent {
         font-weight: bold;
     }
-}
-
-.sr-only {
-    display: hidden;
 }

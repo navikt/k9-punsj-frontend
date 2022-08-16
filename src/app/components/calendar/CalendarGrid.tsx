@@ -24,6 +24,7 @@ interface Props {
     };
     renderAsList?: boolean;
     disabledDates?: Date[];
+    selectedDates?: Date[];
     disabledDateInfo?: string;
     hideEmptyContentInListMode?: boolean;
     hideWeeksWithOnlyDisabledContent?: boolean;
@@ -70,9 +71,9 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
     renderAsList,
     hideEmptyContentInListMode,
     hideWeeksWithOnlyDisabledContent,
+    selectedDates,
     onDateClick,
     dateContentRenderer,
-    dateRendererShort = (date) => dayjs(date).format('DD.MM.YYYY'),
     allDaysInWeekDisabledContentRenderer,
 }) => {
     const weekdatesInMonth = getDatesInMonth(month.fom, true);
@@ -82,7 +83,8 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
         const dateKey = date.toDateString();
         const dateIsDisabled = isDateInDates(date, disabledDates);
         const renderAsButton = onDateClick !== undefined && dateIsDisabled === false;
-
+        const dateIsSelected = selectedDates?.find((v) => dayjs(v).isSame(date));
+        console.log(selectedDates);
         const ButtonOrDivComponent = renderAsButton ? 'button' : 'div';
         return dayjs(date).isSame(month.fom, 'month') === false ? (
             <div key={dateKey} className="calendarGrid__day calendarGrid__day--outsideMonth" aria-hidden />
@@ -106,10 +108,10 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
                     calendarGrid__day: true,
                     'calendarGrid__day--disabled': dateIsDisabled,
                     'calendarGrid__day--button': renderAsButton,
+                    'calendarGrid__day--selected': dateIsSelected,
                 })}
             >
-                {console.log(date)}
-                <CalendarGridDate date={date} dateRendererShort={dateRendererShort} />
+                <CalendarGridDate date={date} />
                 <div className="calendarGrid__day__content">{dateContentRenderer(date, dateIsDisabled)}</div>
             </ButtonOrDivComponent>
         );
