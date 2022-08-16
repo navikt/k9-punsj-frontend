@@ -1,12 +1,13 @@
-import { TimeFormat } from 'app/models/enums';
-import { Ukedag, UkedagNumber } from 'app/models/types';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
 import { IntlShape } from 'react-intl';
+import { TimeFormat } from '../models/enums';
+import { Ukedag, UkedagNumber } from '../models/types';
+import DateRange from '../models/types/DateRange';
 import { IPeriode } from '../models/types/Periode';
 import intlHelper from './intlUtils';
 
@@ -109,3 +110,57 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     });
     return datoTilGMT.substr(0, 5);
 };
+
+export const isDateInDates = (date: Date, dates?: Date[]): boolean => {
+    if (!dates) {
+        return false;
+    }
+    return dates.some((d) => dayjs(date).isSame(d, 'day'));
+};
+
+export const isDateWeekDay = (date: Date): boolean => dayjs(date).isoWeekday() <= 5;
+
+export const getDatesInDateRange = (dateRange: DateRange, onlyWeekDays = false): Date[] => {
+    const dates: Date[] = [];
+    let current = dayjs(dateRange.fom);
+    do {
+        const date = current.toDate();
+        if (onlyWeekDays === false || isDateWeekDay(date)) {
+            dates.push(date);
+        }
+        current = current.add(1, 'day');
+    } while (current.isSameOrBefore(dateRange.tom, 'day'));
+    return dates;
+};
+
+export const getFirstWeekDayInMonth = (month: Date): Date => {
+    const firstDay = dayjs(month).startOf('month');
+    if (firstDay.isoWeekday() > 5) {
+        return firstDay.add(8 - firstDay.isoWeekday(), 'days').toDate();
+    }
+    return firstDay.toDate();
+};
+
+export const getLastWeekdayOnOrBeforeDate = (date: Date): Date => {
+    const isoWeekDay = dayjs(date).isoWeekday();
+    return isoWeekDay <= 5 ? date : dayjs(date).startOf('isoWeek').add(4, 'days').toDate();
+};
+
+export const getLastWeekDayInMonth = (month: Date): Date =>
+    getLastWeekdayOnOrBeforeDate(dayjs(month).endOf('month').toDate());
+
+/**
+ * Returns a DateRange for the month which date is a part of.
+ * @param date
+ * @param onlyWeekDays Exclude saturday and sunday from dateRange
+ * @returns DateRange
+ */
+export const getMonthDateRange = (date: Date, onlyWeekDays = false): DateRange => ({
+    fom: onlyWeekDays ? getFirstWeekDayInMonth(date) : dayjs(date).startOf('month').toDate(),
+    tom: onlyWeekDays ? getLastWeekDayInMonth(date) : dayjs(date).endOf('month').toDate(),
+});
+
+export const getDatesInMonth = (month: Date, onlyWeekDays = false): Date[] =>
+    getDatesInDateRange(getMonthDateRange(month, onlyWeekDays), onlyWeekDays);
+
+export const dateToISODate = (date: Date): string => dayjs(date).format('YYYY-MM-DD');
