@@ -1,4 +1,4 @@
-import { ErrorMessage, Loader, Select } from '@navikt/ds-react';
+import { BodyShort, ErrorMessage, Loader, Select } from '@navikt/ds-react';
 import { finnFagsaker } from 'app/api/api';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
@@ -462,20 +462,30 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {visFagsakSelect && (
                                 <>
-                                    <Select
-                                        className="fagsakSelect"
-                                        label="Velg fagsak"
-                                        disabled={fagsaker.length === 0 || !brukEksisterendeFagsak}
-                                        onChange={(event) => setValgtFagsak(event.target.value)}
-                                    >
-                                        <option value="">Velg</option>
-                                        {brukEksisterendeFagsak &&
-                                            fagsaker.map(({ fagsakId, sakstype: stype }) => (
-                                                <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
-                                                </option>
-                                            ))}
-                                    </Select>
+                                    <div className="fagsakSelectContainer">
+                                        <Select
+                                            className="fagsakSelect"
+                                            label="Velg fagsak"
+                                            disabled={fagsaker.length === 0 || !brukEksisterendeFagsak}
+                                            onChange={(event) => setValgtFagsak(event.target.value)}
+                                        >
+                                            <option value="">Velg</option>
+                                            {brukEksisterendeFagsak &&
+                                                fagsaker.map(({ fagsakId, sakstype: stype }) => (
+                                                    <option key={fagsakId} value={fagsakId}>
+                                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
+                                                    </option>
+                                                ))}
+                                        </Select>
+                                        {valgtFagsak && (
+                                            <div className="fagsakSelectedInfo">
+                                                <BodyShort as="p">
+                                                    Fødselsnummer: {valgtFagsak.pleietrengendeIdent}
+                                                </BodyShort>
+                                                <BodyShort as="p">Periode: {valgtFagsak.periode}</BodyShort>
+                                            </div>
+                                        )}
+                                    </div>
                                     <Checkbox
                                         label="Har ikke tilhørende fagsak"
                                         onChange={() => {

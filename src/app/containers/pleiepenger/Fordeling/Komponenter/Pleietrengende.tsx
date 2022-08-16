@@ -1,8 +1,8 @@
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Checkbox } from '@navikt/ds-react';
-import { Input, Select } from 'nav-frontend-skjema';
+import { Checkbox, Select } from '@navikt/ds-react';
+import { Input } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -87,12 +87,10 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     };
 
     return (
-        <div className="sokersBarn">
+        <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
                 <>
                     <Select
-                        value={pleietrengendeIdent}
-                        bredde="l"
                         label={intlHelper(intl, 'ident.identifikasjon.velgPleietrengende')}
                         onChange={(e) => {
                             pleietrengendeIdentInputFieldOnChange(e);
