@@ -4,8 +4,8 @@ describe('Send brev på fagsak', () => {
     });
 
     it('skal navigere til visning', () => {
-        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
-        cy.contains('Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn').should('exist').click();
+        cy.contains('Pleiepenger sykt barn').should('exist').click();
+        cy.findByText(/ja/i).click();
         cy.findByLabelText(/Velg fagsak/i).select('1DMU93M (K9 Pleiepenger sykt barn)');
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Send brev og lukk oppgave i LOS/i).click();

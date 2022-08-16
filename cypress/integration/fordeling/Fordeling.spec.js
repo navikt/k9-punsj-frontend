@@ -47,7 +47,7 @@ describe('Fordeling', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Korrigering av inntektsmelding omsorgspenger AG/i).click();
         cy.findByText('Ja').click();
-        cy.findByLabelText(/Velg fagsak/i).select('1DMU93M (K9 Pleiepenger sykt barn)');
+        cy.findByLabelText(/Velg fagsak/i).select('1DMUDF6 (K9 Omsorgspenger)');
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText('Korrigere/trekke refusjonskrav omsorgspenger').click();
         cy.findByRole('button', { name: /bekreft/i }).click();
