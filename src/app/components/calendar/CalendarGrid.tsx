@@ -84,7 +84,7 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
         const dateIsDisabled = isDateInDates(date, disabledDates);
         const renderAsButton = onDateClick !== undefined && dateIsDisabled === false;
         const dateIsSelected = selectedDates?.find((v) => dayjs(v).isSame(date));
-        console.log(selectedDates);
+
         const ButtonOrDivComponent = renderAsButton ? 'button' : 'div';
         return dayjs(date).isSame(month.fom, 'month') === false ? (
             <div key={dateKey} className="calendarGrid__day calendarGrid__day--outsideMonth" aria-hidden />

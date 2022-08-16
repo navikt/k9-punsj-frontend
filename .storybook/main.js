@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -12,7 +13,7 @@ module.exports = {
         config.module.rules.push({
             test: /\.less$/,
             use: ['style-loader', 'css-loader', 'less-loader'],
-            include: path.resolve(__dirname, '../'),
+            include: [path.resolve(__dirname, '../')],
         });
         return config;
     },
