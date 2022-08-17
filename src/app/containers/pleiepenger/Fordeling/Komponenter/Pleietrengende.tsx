@@ -13,6 +13,7 @@ import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
+import './pleietrengende.less';
 
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
@@ -91,6 +92,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
                 <>
                     <Select
+                        className="pleietrengendeSelect"
                         label={intlHelper(intl, 'ident.identifikasjon.velgPleietrengende')}
                         onChange={(e) => {
                             pleietrengendeIdentInputFieldOnChange(e);

@@ -1,4 +1,5 @@
 import { BodyShort, ErrorMessage, Loader, Select } from '@navikt/ds-react';
+import { Period } from '@navikt/k9-period-utils';
 import { finnFagsaker } from 'app/api/api';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
@@ -37,7 +38,7 @@ import FordelingFerdigstillJournalpostState from '../../../models/types/Fordelin
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
 import { FagsakYtelseType } from '../../../models/types/RequestBodies';
-import { setFagsakAction, setDokumenttypeAction } from '../../../state/actions/FordelingActions';
+import { setDokumenttypeAction, setFagsakAction } from '../../../state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
@@ -482,7 +483,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 <BodyShort as="p">
                                                     Fødselsnummer: {valgtFagsak.pleietrengendeIdent}
                                                 </BodyShort>
-                                                <BodyShort as="p">Periode: {valgtFagsak.periode}</BodyShort>
+                                                {valgtFagsak.gyldigPeriode?.fom && (
+                                                    <BodyShort as="p">
+                                                        Periode:{' '}
+                                                        {new Period(
+                                                            valgtFagsak.gyldigPeriode.fom,
+                                                            valgtFagsak.gyldigPeriode.tom
+                                                        ).prettifyPeriod()}
+                                                    </BodyShort>
+                                                )}
                                             </div>
                                         )}
                                     </div>
