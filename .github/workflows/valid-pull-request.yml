@@ -18,6 +18,8 @@ jobs:
                   cache: 'yarn'
             - name: Installerer moduler
               run: yarn install
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Bygge kode
               run: yarn build
             - name: Sjekke opp mot Lint-regler
