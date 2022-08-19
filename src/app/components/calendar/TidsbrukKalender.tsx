@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
+import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
+import { getMonthAndYear } from 'app/utils';
 import CalendarGrid from './CalendarGrid';
 
 import DateRange from '../../models/types/DateRange';
 
 interface OwnProps {
-    periode: DateRange;
+    gyldigPeriode: DateRange;
+    ModalContent: React.ReactElement;
+    dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
+    tittelRenderer?: () => string | React.FunctionComponent;
 }
 
-export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({ periode }) => {
+export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
+    gyldigPeriode,
+    ModalContent,
+    dateContentRenderer = () => 'lel',
+    tittelRenderer = getMonthAndYear,
+}) => {
     const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+    const [visKalender, setVisKalender] = useState<boolean>(false);
     const [visModal, setVisModal] = useState<boolean>(false);
 
+    const toggleKalender = () => setVisKalender(!visKalender);
     const toggleModal = () => setVisModal(!visModal);
     const toggleDay = (date: Date) =>
         selectedDates.some((v) => dayjs(v).isSame(date))
@@ -20,20 +32,20 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({ periode })
             : setSelectedDates([...selectedDates, date]);
 
     return (
-        <div>
-            <CalendarGrid
-                onDateClick={(date) => toggleDay(date)}
-                month={periode}
-                dateContentRenderer={() => 'lel'}
-                selectedDates={selectedDates}
-            />
-            <Button onClick={toggleModal}>Knapp Knappesen</Button>
-            <Modal open={visModal} onClose={toggleModal} closeButton>
-                <Modal.Content>
-                    <Heading>Modal Modalsen</Heading>
-                </Modal.Content>
-            </Modal>
-        </div>
+        <EkspanderbartPanel tittel={tittelRenderer(gyldigPeriode.fom)} apen={visKalender} onClick={toggleKalender}>
+            <div>
+                <CalendarGrid
+                    onDateClick={(date) => toggleDay(date)}
+                    month={gyldigPeriode}
+                    dateContentRenderer={dateContentRenderer}
+                    selectedDates={selectedDates}
+                />
+                <Button onClick={toggleModal}>Knapp Knappesen</Button>
+                <Modal open={visModal} onClose={toggleModal} closeButton>
+                    <Modal.Content>{React.cloneElement(ModalContent, { selectedDates })}</Modal.Content>
+                </Modal>
+            </div>
+        </EkspanderbartPanel>
     );
 };
 

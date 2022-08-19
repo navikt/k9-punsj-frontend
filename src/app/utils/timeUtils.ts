@@ -4,7 +4,9 @@ import duration from 'dayjs/plugin/duration';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
+import 'dayjs/locale/nb';
 import { IntlShape } from 'react-intl';
+import { capitalize } from 'lodash';
 import { TimeFormat } from '../models/enums';
 import { Ukedag, UkedagNumber } from '../models/types';
 import DateRange from '../models/types/DateRange';
@@ -16,6 +18,7 @@ dayjs.extend(duration);
 dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
+dayjs.locale('nb');
 
 export const initializeDate = (date?: string | Date | null, format?: string | string[]): dayjs.Dayjs => {
     if (date) {
@@ -164,3 +167,26 @@ export const getDatesInMonth = (month: Date, onlyWeekDays = false): Date[] =>
     getDatesInDateRange(getMonthDateRange(month, onlyWeekDays), onlyWeekDays);
 
 export const dateToISODate = (date: Date): string => dayjs(date).format('YYYY-MM-DD');
+
+/**
+ * Returns array of DateRange representing the months in @dateRange.
+ * @param dateRange
+ * @param returnFullMonths Set to return full months, not cap the months by @dateRange
+ * @returns array of DateRange
+ */
+export const getMonthsInDateRange = (dateRange: DateRange, returnFullMonths = false): DateRange[] => {
+    const months: DateRange[] = [];
+    let current = dayjs(dateRange.fom);
+    do {
+        const fom: Date = returnFullMonths ? current.startOf('month').toDate() : current.toDate();
+        const endOfMonth = dayjs(fom).endOf('month').toDate();
+        const tom =
+            dayjs(endOfMonth).isAfter(dateRange.tom, 'day') && returnFullMonths === false ? dateRange.tom : endOfMonth;
+
+        months.push({ fom, tom });
+        current = current.add(1, 'month').startOf('month');
+    } while (current.isSameOrBefore(dateRange.tom, 'day'));
+    return months;
+};
+
+export const getMonthAndYear = (date: Date) => `${capitalize(dayjs(date).format('MMMM'))} ${date.getFullYear()}`;

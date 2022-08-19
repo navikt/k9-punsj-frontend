@@ -1,5 +1,7 @@
 import IntlProvider from '../src/app/components/intl-provider/IntlProvider';
 
+window.appSettings = { OIDC_AUTH_PROXY: 'undefined', K9_LOS_URL: 'undefined' };
+
 import '@navikt/ds-css';
 
 export const parameters = {

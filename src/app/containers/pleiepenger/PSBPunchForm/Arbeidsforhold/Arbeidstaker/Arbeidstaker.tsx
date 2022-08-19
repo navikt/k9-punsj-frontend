@@ -9,7 +9,8 @@ import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-fro
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import { GetErrorMessage } from 'app/models/types';
+import { GetErrorMessage, IPeriode } from 'app/models/types';
+import TidsbrukKalender from 'app/components/calendar/TidsbrukKalender';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
@@ -31,6 +32,7 @@ interface ArbeidstakerComponentProps {
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
+    gyldigePerioder?: IPeriode[];
 }
 
 const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
@@ -45,6 +47,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     intl,
     arbeidsgivere,
     harDuplikatOrgnr,
+    gyldigePerioder,
 }): JSX.Element => {
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
@@ -116,10 +119,44 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
 
     const selectedType: OrgOrPers = orgOrPers();
 
+    const modalContent = () => (
+        <PeriodeinfoPaneler
+            periods={arbeidstidInfo.perioder}
+            panelid={(i) => `arbeidstakerpanel_${listeelementindex}_${i}`}
+            initialPeriodeinfo={{
+                faktiskArbeidTimerPerDag: '',
+                periode: { fom: '', tom: '' },
+            }}
+            editSoknad={(periodeinfo) =>
+                updateListeinfoInSoknad({
+                    arbeidstidInfo: {
+                        ...arbeidstaker.arbeidstidInfo,
+                        perioder: periodeinfo,
+                    },
+                })
+            }
+            editSoknadState={(periodeinfo) =>
+                updateListeinfoInSoknadState({
+                    arbeidstidInfo: {
+                        ...arbeidstaker.arbeidstidInfo,
+                        perioder: periodeinfo,
+                    },
+                })
+            }
+            component={pfArbeidstider()}
+            minstEn
+            textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
+            getErrorMessage={getErrorMessage}
+            getUhaandterteFeil={getUhaandterteFeil}
+            feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
+            periodeFeilkode={feilkodeprefiks}
+            kanHaFlere
+            medSlettKnapp={false}
+        />
+    );
+
     return (
-        <SkjemaGruppe
-            className="arbeidstaker-panel"
-        >
+        <SkjemaGruppe className="arbeidstaker-panel">
             <Container>
                 <Row noGutters>
                     <RadioPanelGruppe
@@ -273,41 +310,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </div>
                 </Row>
-                {arbeidstidInformasjon(intl)}
-                <PeriodeinfoPaneler
-                    intl={intl}
-                    periods={arbeidstidInfo.perioder}
-                    panelid={(i) => `arbeidstakerpanel_${listeelementindex}_${i}`}
-                    initialPeriodeinfo={{
-                        faktiskArbeidTimerPerDag: '',
-                        periode: { fom: '', tom: '' },
-                    }}
-                    editSoknad={(periodeinfo) =>
-                        updateListeinfoInSoknad({
-                            arbeidstidInfo: {
-                                ...arbeidstaker.arbeidstidInfo,
-                                perioder: periodeinfo,
-                            },
-                        })
-                    }
-                    editSoknadState={(periodeinfo) =>
-                        updateListeinfoInSoknadState({
-                            arbeidstidInfo: {
-                                ...arbeidstaker.arbeidstidInfo,
-                                perioder: periodeinfo,
-                            },
-                        })
-                    }
-                    component={pfArbeidstider()}
-                    minstEn
-                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-                    getErrorMessage={getErrorMessage}
-                    getUhaandterteFeil={getUhaandterteFeil}
-                    feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
-                    periodeFeilkode={feilkodeprefiks}
-                    kanHaFlere
-                    medSlettKnapp={false}
-                />
+                <TidsbrukKalender perioder={gyldigePerioder} ModalContent={modalContent} />
             </Container>
         </SkjemaGruppe>
     );

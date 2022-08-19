@@ -5,7 +5,7 @@ import {
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 import * as React from 'react';
-import { IntlShape } from 'react-intl';
+import { IntlShape, useIntl } from 'react-intl';
 import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
 import { PopoverOrientering } from 'nav-frontend-popover';
@@ -24,9 +24,9 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstidPeriodeMedTimer>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IArbeidstidPeriodeMedTimer>,
         feilprefiks: string,
-        getErrorMessage: GetErrorMessage,
-        intl: IntlShape
+        getErrorMessage: GetErrorMessage
     ) => {
+        const intl = useIntl();
         const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag, periode } = periodeinfo;
         const feltindeks = periodeSpenn(periode);
         return (
