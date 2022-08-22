@@ -11,7 +11,7 @@
         "@navikt/ds-react": "^0.19.14",
         "@navikt/fnrvalidator": "^1.3.0",
         "@navikt/ft-plattform-komponenter": "^1.0.30",
-        "@navikt/k9-period-utils": "0.0.11",
+        "@navikt/k9-period-utils": "0.0.12",
         "@redux-devtools/extension": "^3.2.2",
         "@sentry/react": "^6.17.6",
         "@testing-library/cypress": "^8.0.2",

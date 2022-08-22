@@ -489,7 +489,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                         {new Period(
                                                             valgtFagsak.gyldigPeriode.fom,
                                                             valgtFagsak.gyldigPeriode.tom
-                                                        ).prettifyPeriod()}
+                                                        ).prettifyPeriodYears()}
                                                     </BodyShort>
                                                 )}
                                             </div>
