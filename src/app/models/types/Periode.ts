@@ -4,6 +4,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 import { Periodeinfo } from './Periodeinfo';
 import { initializeDate, datetime } from '../../utils/timeUtils';
+import DateRange from './DateRange';
 
 export interface IPeriode {
     fom?: string | null;
@@ -83,6 +84,13 @@ export class Periode implements Required<IPeriode> {
             (dateInQuestion.isSame(fomDayjs) || dateInQuestion.isAfter(fomDayjs)) &&
             (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
         );
+    }
+
+    tilDateRange(): DateRange {
+        return {
+            fom: new Date(this.fom),
+            tom: new Date(this.tom),
+        };
     }
 }
 

@@ -11,6 +11,7 @@ import { ArbeidstidPeriodeMedTimer } from 'app/models/types';
 import TidsbrukKalender from 'app/components/calendar/TidsbrukKalender';
 import dayjs from 'dayjs';
 import { verdiOgTekstHvisVerdi } from 'app/utils';
+import { KalenderDag } from 'app/models/KalenderDag';
 
 export default {
     component: TidsbrukKalender,
@@ -35,7 +36,7 @@ const ExampleModalContent = (props: { selectedDates: Date[] }) => {
             <Row noGutters>
                 <div className="input-row">
                     <Input
-                        label="normalt"
+                        label="normalt timer"
                         bredde="XS"
                         value={normaltTimer}
                         onChange={(event) => {
@@ -43,11 +44,27 @@ const ExampleModalContent = (props: { selectedDates: Date[] }) => {
                         }}
                     />
                     <Input
-                        label="faktisk"
+                        label="normalt minutter"
+                        bredde="XS"
+                        value={normaltMinutter}
+                        onChange={(event) => {
+                            setNormaltMinutter(event.target.value.replace(/\s/g, ''));
+                        }}
+                    />
+                    <Input
+                        label="faktisk timer"
                         bredde="XS"
                         value={faktiskTimer}
                         onChange={(event) => {
                             setFaktiskTimer(event.target.value.replace(/\s/g, ''));
+                        }}
+                    />
+                    <Input
+                        label="faktisk minutter"
+                        bredde="XS"
+                        value={faktiskMinutter}
+                        onChange={(event) => {
+                            setFaktiskMinutter(event.target.value.replace(/\s/g, ''));
                         }}
                     />
                     <Button onClick={lagre}>lagre</Button>
@@ -57,18 +74,7 @@ const ExampleModalContent = (props: { selectedDates: Date[] }) => {
     );
 };
 
-export interface InputTime {
-    timer: string;
-    minutter: string;
-}
-
-type KalenderDag = {
-    date: Date;
-    tid?: Partial<InputTime>;
-    tidOpprinnelig?: Partial<InputTime>;
-};
-
-const dateContent = (dager: KalenderDag[]) => (date: Date, isDisabled: boolean) => {
+const dateContent = (dager: KalenderDag[]) => (date: Date) => {
     const kalenderdag = dager.find((dag) => dayjs(dag.date).isSame(dayjs(date), 'date'));
 
     if (kalenderdag)
@@ -84,14 +90,11 @@ const dateContent = (dager: KalenderDag[]) => (date: Date, isDisabled: boolean) 
                 </div>
             </>
         );
+    return '';
 };
 
 const Template: ComponentStory<typeof TidsbrukKalender> = (args) => (
-    <TidsbrukKalender
-        {...args}
-        ModalContent={<ExampleModalContent />}
-        dateContentRenderer={dateContent(args.kalenderdager)}
-    />
+    <TidsbrukKalender {...args} ModalContent={<ExampleModalContent />} dateContentRenderer={dateContent} />
 );
 
 export const multiSelect = Template.bind({});

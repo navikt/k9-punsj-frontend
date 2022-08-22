@@ -1,18 +1,8 @@
+import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
 import { getMonthsInDateRange } from 'app/utils';
 import React from 'react';
 import TidsbrukKalender from './TidsbrukKalender';
-
-export interface InputTime {
-    timer: string;
-    minutter: string;
-}
-
-type KalenderDag = {
-    date: Date;
-    tid?: Partial<InputTime>;
-    tidOpprinnelig?: Partial<InputTime>;
-};
 
 interface OwnProps {
     gyldigePerioder: IPeriode[];
@@ -26,11 +16,11 @@ const TidsbrukKalenderContainer = ({ gyldigePerioder, kalenderdager, ModalConten
         .filter((periode) => periode.fom && periode.tom)
         .map((periode) => ({ fom: new Date(periode.fom), tom: new Date(periode.tom) }));
     const months = dateRanges.map((dateRange) => getMonthsInDateRange(dateRange)).flat();
-
     return (
         <div style={{ maxWidth: '1000px' }}>
             {months.map((month) => (
                 <TidsbrukKalender
+                    key={month.fom.toString()}
                     gyldigPeriode={month}
                     kalenderdager={kalenderdager}
                     ModalContent={ModalContent}
