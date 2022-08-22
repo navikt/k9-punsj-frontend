@@ -10,7 +10,8 @@ import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 import { GetErrorMessage, IPeriode } from 'app/models/types';
-import TidsbrukKalender from 'app/components/calendar/TidsbrukKalender';
+import TidsbrukKalenderContainer from 'app/components/calendar/TidsbrukKalenderContainer';
+import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
@@ -310,7 +311,13 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </div>
                 </Row>
-                <TidsbrukKalender perioder={gyldigePerioder} ModalContent={modalContent} />
+                <TidsbrukKalenderContainer
+                    perioder={gyldigePerioder}
+                    ModalContent={pfArbeidstider()()}
+                    kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
+                        arbeidstidPeriodeTilKalenderdag(periode)
+                    )}
+                />
             </Container>
         </SkjemaGruppe>
     );
