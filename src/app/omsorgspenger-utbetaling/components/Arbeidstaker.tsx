@@ -76,6 +76,7 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                             name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
                                             antallFravaersperioder={value.fravaersperioder?.length}
                                             slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                            visSoknadAarsak
                                         />
                                     ))}
                                     <Button

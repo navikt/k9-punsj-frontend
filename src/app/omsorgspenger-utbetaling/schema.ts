@@ -2,13 +2,13 @@
 
 import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsopphold } from 'app/rules/yup';
 
-const fravaersperioder = () =>
+const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(
         yup.object({
             aktivitetsfravær: yup.string(),
             organisasjonsnummer: yup.string(),
             fraværÅrsak: yup.string().required(),
-            søknadÅrsak: yup.string().required(),
+            søknadÅrsak: medSoknadAarsak ? yup.string().required() : yup.string().nullable(),
             periode: periode(),
             faktiskTidPrDag: yup.string().required(),
         })
@@ -16,7 +16,7 @@ const fravaersperioder = () =>
 const arbeidstaker = () =>
     yup.object({
         organisasjonsnummer: yup.string().required(),
-        fravaersperioder: fravaersperioder(),
+        fravaersperioder: fravaersperioder({ medSoknadAarsak: true }),
     });
 const selvstendigNaeringsdrivende = () =>
     yup.object({
@@ -50,7 +50,7 @@ const selvstendigNaeringsdrivende = () =>
             endringDato: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
             endringBegrunnelse: yup.string().when('erVarigEndring', { is: true, then: yup.string().required() }),
         }),
-        fravaersperioder: fravaersperioder(),
+        fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
 
 const frilanser = () =>
@@ -61,7 +61,7 @@ const frilanser = () =>
             then: yup.string().required(),
         }),
         jobberFortsattSomFrilans: yup.boolean(),
-        fravaersperioder: fravaersperioder(),
+        fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
 
 const OMPUTSchema = yup.object({

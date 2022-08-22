@@ -14,9 +14,10 @@ interface OwnProps {
     antallFravaersperioder: number;
     name: string;
     slettPeriode: () => void;
+    visSoknadAarsak: boolean;
 }
 
-const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProps) => {
+const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknadAarsak }: OwnProps) => {
     const intl = useIntl();
     const minstToPerioder = antallFravaersperioder > 1;
     const fraværÅrsakOptions = [
@@ -67,12 +68,14 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode }: OwnProp
                     name={`${name}.fraværÅrsak`}
                     options={fraværÅrsakOptions}
                 />
-                <SelectFormik
-                    label="Søknadsårsak"
-                    size="small"
-                    name={`${name}.søknadÅrsak`}
-                    options={søknadÅrsakOptions}
-                />
+                {visSoknadAarsak && (
+                    <SelectFormik
+                        label="Søknadsårsak"
+                        size="small"
+                        name={`${name}.søknadÅrsak`}
+                        options={søknadÅrsakOptions}
+                    />
+                )}
                 {minstToPerioder && (
                     <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode}>
                         <Delete />
