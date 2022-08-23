@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
+import { get } from 'lodash';
 
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
+import { erYngreEnn4år } from 'app/utils';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { IIdentState } from 'app/models/types/IdentState';
@@ -79,6 +81,9 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                                 values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
                             medlemskap: values.metadata.medlemskap,
                             utenlandsopphold: values.metadata.utenlandsopphold,
+                            erNyoppstartet: !!erYngreEnn4år(
+                                get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                            ),
                         },
                     })
                     .then(() => ({}))

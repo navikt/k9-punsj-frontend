@@ -33,14 +33,14 @@ export default function VarigEndring() {
                             size="small"
                             type="number"
                             label="Årsinntekt etter endring"
-                            name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
                             filterPattern={kunTall}
                         />
                         <VerticalSpacer twentyPx />
                         <TextAreaFormik
                             size="small"
                             label="Begrunnelse for endring"
-                            name="values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
                         />
                     </Collapse>
                 </>

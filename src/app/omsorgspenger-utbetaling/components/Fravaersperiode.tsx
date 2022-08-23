@@ -17,7 +17,7 @@ interface OwnProps {
     visSoknadAarsak: boolean;
 }
 
-const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknadAarsak }: OwnProps) => {
+const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknadAarsak = false }: OwnProps) => {
     const intl = useIntl();
     const minstToPerioder = antallFravaersperioder > 1;
     const fraværÅrsakOptions = [
