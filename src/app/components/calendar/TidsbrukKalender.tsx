@@ -5,26 +5,20 @@ import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import { getMonthAndYear } from 'app/utils';
 import { InputTime } from 'app/models/types/InputTime';
 import CalendarGrid from './CalendarGrid';
+import './tidsbrukKalender.less';
 
 import DateRange from '../../models/types/DateRange';
 
-type KalenderDag = {
-    date: Date;
-    tid?: Partial<InputTime>;
-    tidOpprinnelig?: Partial<InputTime>;
-};
 interface OwnProps {
     gyldigPeriode: DateRange;
     ModalContent: React.ReactElement;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
-    kalenderdager: KalenderDag[];
     tittelRenderer?: () => string | React.FunctionComponent;
 }
 
 export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
     gyldigPeriode,
     ModalContent,
-    kalenderdager,
     dateContentRenderer = () => 'lel',
     tittelRenderer = getMonthAndYear,
 }) => {
@@ -50,11 +44,11 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
                 <CalendarGrid
                     onDateClick={(date) => toggleDay(date)}
                     month={gyldigPeriode}
-                    dateContentRenderer={dateContentRenderer(kalenderdager)}
+                    dateContentRenderer={dateContentRenderer}
                     selectedDates={selectedDates}
                 />
                 <Button onClick={toggleModal}>Knapp Knappesen</Button>
-                <Modal open={visModal} onClose={toggleModal} closeButton>
+                <Modal className="modalsen" open={visModal} onClose={toggleModal} closeButton>
                     <Modal.Content>{React.cloneElement(ModalContent, { selectedDates })}</Modal.Content>
                 </Modal>
             </div>

@@ -3,19 +3,21 @@ import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/conta
 import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { get } from 'app/utils';
+import { formats, get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import { GetErrorMessage, IPeriode } from 'app/models/types';
+import { GetErrorMessage, IPeriode, Periode } from 'app/models/types';
+import TimerOgMinutter from 'app/components/timefoering/FaktiskOgNormalTid';
+import dayjs from 'dayjs';
 import TidsbrukKalenderContainer from 'app/components/calendar/TidsbrukKalenderContainer';
+import DateContent from 'app/components/calendar/DateContent';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
-import { arbeidstidInformasjon } from '../../../ArbeidstidInfo';
 import { pfArbeidstider } from '../../../pfArbeidstider';
 import ActionType from './actionTypes';
 import './arbeidstaker.less';
@@ -117,44 +119,45 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     };
 
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
-
+    const { perioder } = arbeidstidInfo;
+    const lagreTimer = ({
+        faktiskTimer,
+        faktiskMinutter,
+        normaltTimer,
+        normaltMinutter,
+        selectedDates,
+    }: {
+        faktiskTimer: string;
+        faktiskMinutter: string;
+        normaltTimer: string;
+        normaltMinutter: string;
+        selectedDates: Date[];
+    }) => {
+        const utenDagerSomAlleredeFinnes = selectedDates.filter(
+            (day) => !arbeidstidInfo.perioder.some((periode) => periode.periode.includesDate(day))
+        );
+        console.log(selectedDates);
+        const payload = utenDagerSomAlleredeFinnes.map((day) => ({
+            periode: new Periode({
+                fom: dayjs(day).format(formats.YYYYMMDD),
+                tom: dayjs(day).format(formats.YYYYMMDD),
+            }),
+            faktiskArbeidTimerPerDag: faktiskTimer,
+            jobberNormaltTimerPerDag: normaltTimer,
+        }));
+        console.log(payload);
+        updateListeinfoInSoknad({
+            arbeidstidInfo: {
+                perioder: [...perioder, ...payload],
+            },
+        });
+        updateListeinfoInSoknadState({
+            arbeidstidInfo: {
+                perioder: [...perioder, ...payload],
+            },
+        });
+    };
     const selectedType: OrgOrPers = orgOrPers();
-
-    const modalContent = () => (
-        <PeriodeinfoPaneler
-            periods={arbeidstidInfo.perioder}
-            panelid={(i) => `arbeidstakerpanel_${listeelementindex}_${i}`}
-            initialPeriodeinfo={{
-                faktiskArbeidTimerPerDag: '',
-                periode: { fom: '', tom: '' },
-            }}
-            editSoknad={(periodeinfo) =>
-                updateListeinfoInSoknad({
-                    arbeidstidInfo: {
-                        ...arbeidstaker.arbeidstidInfo,
-                        perioder: periodeinfo,
-                    },
-                })
-            }
-            editSoknadState={(periodeinfo) =>
-                updateListeinfoInSoknadState({
-                    arbeidstidInfo: {
-                        ...arbeidstaker.arbeidstidInfo,
-                        perioder: periodeinfo,
-                    },
-                })
-            }
-            component={pfArbeidstider()}
-            minstEn
-            textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-            getErrorMessage={getErrorMessage}
-            getUhaandterteFeil={getUhaandterteFeil}
-            feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
-            periodeFeilkode={feilkodeprefiks}
-            kanHaFlere
-            medSlettKnapp={false}
-        />
-    );
 
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
@@ -312,11 +315,12 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     </div>
                 </Row>
                 <TidsbrukKalenderContainer
-                    perioder={gyldigePerioder}
-                    ModalContent={pfArbeidstider()()}
+                    gyldigePerioder={gyldigePerioder}
+                    ModalContent={<TimerOgMinutter lagre={lagreTimer} />}
                     kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
                         arbeidstidPeriodeTilKalenderdag(periode)
                     )}
+                    dateContentRenderer={DateContent}
                 />
             </Container>
         </SkjemaGruppe>

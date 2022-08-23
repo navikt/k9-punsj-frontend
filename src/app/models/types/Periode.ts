@@ -76,7 +76,7 @@ export class Periode implements Required<IPeriode> {
         return periodFom.isBefore(dateInQuestion);
     }
 
-    includesDate(dateString: string) {
+    includesDate(dateString: string | Date) {
         const dateInQuestion = initializeDate(dateString);
         const fomDayjs = initializeDate(this.fom);
         const tomDayjs = initializeDate(this.tom);

@@ -14,7 +14,7 @@ import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
-import UtregningArbeidstid from './UtregningArbeidstid';
+import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstid';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {

@@ -8,7 +8,7 @@ interface OwnProps {
     gyldigePerioder: IPeriode[];
     kalenderdager: KalenderDag[];
     ModalContent: React.ReactElement;
-    dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
+    dateContentRenderer: (kalenderdager: KalenderDag[]) => (date: Date, isDisabled?: boolean) => React.ReactNode;
 }
 
 const TidsbrukKalenderContainer = ({ gyldigePerioder, kalenderdager, ModalContent, dateContentRenderer }: OwnProps) => {
@@ -22,9 +22,8 @@ const TidsbrukKalenderContainer = ({ gyldigePerioder, kalenderdager, ModalConten
                 <TidsbrukKalender
                     key={month.fom.toString()}
                     gyldigPeriode={month}
-                    kalenderdager={kalenderdager}
                     ModalContent={ModalContent}
-                    dateContentRenderer={dateContentRenderer}
+                    dateContentRenderer={dateContentRenderer(kalenderdager)}
                 />
             ))}
         </div>
