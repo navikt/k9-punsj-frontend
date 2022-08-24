@@ -229,6 +229,7 @@
     "skjema.arbeid.arbeidstaker.pers": "Person",
     "skjema.arbeid.arbeidstaker.orgnr": "Organisasjonsnummer",
     "skjema.arbeid.arbeidstaker.ident": "Fødselsnummer til arbeidsgiver",
+    "skjema.arbeid.registrerLengrePeriode": "Registrer arbeidstid for en lengre periode",
     "skjema.arbeid.sn.virksomhetsnavn": "Hva heter virksomheten?",
     "skjema.sn.info": "Dersom søker etterrapporterer opplysninger om arbeidstid skal du kun fylle ut organisasjonsnummer og informasjon om arbeidstid.",
     "skjema.sn.registrertINorge": "Er virksomheten registrert i Norge?",

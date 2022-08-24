@@ -3,14 +3,13 @@ import classNames from 'classnames';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { IntlShape } from 'react-intl';
+import { IntlShape, useIntl } from 'react-intl';
 import { IPeriode } from '../../models/types/Periode';
 import DateInput from '../skjema/DateInput';
 import './periodInput.less';
 
 export interface IPeriodInputProps {
     periode: IPeriode;
-    intl: IntlShape;
     onChange: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
     onFocus?: () => any;
@@ -33,7 +32,6 @@ export interface IPeriodInputProps {
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
     const {
         periode,
-        intl,
         onChange,
         disabled,
         initialValues,
@@ -48,6 +46,8 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         onBlur,
         fomInputRef,
     } = props;
+
+    const intl = useIntl();
 
     const renderDato = (property: string) => {
         if (periode?.[property] && periode?.[property].length) return periode?.[property];

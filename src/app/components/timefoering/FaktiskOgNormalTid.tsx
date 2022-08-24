@@ -7,10 +7,11 @@ import TimerOgMinutter from './TimerOgMinutter';
 
 interface OwnProps {
     lagre: (params: any) => void;
-    selectedDates: Date[];
+    selectedDates?: Date[];
+    label?: string;
 }
 
-const FaktiskOgNormalTid = ({ lagre, selectedDates }: OwnProps) => {
+const FaktiskOgNormalTid = ({ lagre, label, selectedDates }: OwnProps) => {
     const [normaltTimer, setNormaltTimer] = useState('0');
     const [normaltMinutter, setNormaltMinutter] = useState('0');
     const [faktiskTimer, setFaktiskTimer] = useState('0');
@@ -19,7 +20,7 @@ const FaktiskOgNormalTid = ({ lagre, selectedDates }: OwnProps) => {
     const payload = { normaltTimer, normaltMinutter, faktiskTimer, faktiskMinutter, selectedDates };
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
-            <Heading size="medium">Registrer arbeidstid</Heading>
+            {label && <Heading size="medium">{label}</Heading>}
             <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
                 <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
                     <TimerOgMinutter
@@ -46,14 +47,16 @@ const FaktiskOgNormalTid = ({ lagre, selectedDates }: OwnProps) => {
                     </div>
                 </div>
             </div>
-            <div style={{ display: 'flex' }}>
-                <Button style={{ flexGrow: 1 }} onClick={() => lagre(payload)}>
-                    Lagre
-                </Button>
-                <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={() => new Error('Implementer meg')}>
-                    Avbryt
-                </Button>
-            </div>
+            {lagre && (
+                <div style={{ display: 'flex' }}>
+                    <Button style={{ flexGrow: 1 }} onClick={() => lagre(payload)}>
+                        Lagre
+                    </Button>
+                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={() => new Error('Implementer meg')}>
+                        Avbryt
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };

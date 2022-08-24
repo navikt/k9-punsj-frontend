@@ -1,19 +1,21 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
+import { Button, Modal } from '@navikt/ds-react';
 import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { formats, get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 import { GetErrorMessage, IPeriode, Periode } from 'app/models/types';
-import TimerOgMinutter from 'app/components/timefoering/FaktiskOgNormalTid';
+import FaktiskOgNormalTid from 'app/components/timefoering/FaktiskOgNormalTid';
 import dayjs from 'dayjs';
 import TidsbrukKalenderContainer from 'app/components/calendar/TidsbrukKalenderContainer';
 import DateContent from 'app/components/calendar/DateContent';
+import ArbeidstidPeriode from 'app/components/timefoering/ArbeidstidPeriode';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
@@ -54,6 +56,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
 }): JSX.Element => {
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
+    const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
+    const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
         // eslint-disable-next-line react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
@@ -117,8 +121,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         updateListeinfoInSoknadState({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
         updateListeinfoInSoknad({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
     };
-
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
+
     const { perioder } = arbeidstidInfo;
     const lagreTimer = ({
         faktiskTimer,
@@ -136,7 +140,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         const utenDagerSomAlleredeFinnes = selectedDates.filter(
             (day) => !arbeidstidInfo.perioder.some((periode) => periode.periode.includesDate(day))
         );
-        console.log(selectedDates);
         const payload = utenDagerSomAlleredeFinnes.map((day) => ({
             periode: new Periode({
                 fom: dayjs(day).format(formats.YYYYMMDD),
@@ -145,7 +148,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
             faktiskArbeidTimerPerDag: faktiskTimer,
             jobberNormaltTimerPerDag: normaltTimer,
         }));
-        console.log(payload);
         updateListeinfoInSoknad({
             arbeidstidInfo: {
                 perioder: [...perioder, ...payload],
@@ -157,6 +159,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
             },
         });
     };
+
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
@@ -314,14 +317,42 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </div>
                 </Row>
-                <TidsbrukKalenderContainer
-                    gyldigePerioder={gyldigePerioder}
-                    ModalContent={<TimerOgMinutter lagre={lagreTimer} />}
-                    kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
-                        arbeidstidPeriodeTilKalenderdag(periode)
-                    )}
-                    dateContentRenderer={DateContent}
-                />
+                <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>
+                    {intlHelper(intl, 'skjema.arbeid.registrerLengrePeriode')}
+                </Button>
+                <VerticalSpacer twentyPx />
+                <Modal open={visArbeidstidLengrePerioder} onClose={toggleVisArbeidstidLengrePerioder}>
+                    <Modal.Content>
+                        <ArbeidstidPeriode
+                            label="Periode med jobb"
+                            lagre={(periodeInfo) => {
+                                updateListeinfoInSoknad({
+                                    arbeidstidInfo: {
+                                        ...arbeidstaker.arbeidstidInfo,
+                                        perioder: periodeInfo,
+                                    },
+                                });
+                                updateListeinfoInSoknadState({
+                                    arbeidstidInfo: {
+                                        ...arbeidstaker.arbeidstidInfo,
+                                        perioder: periodeInfo,
+                                    },
+                                });
+                            }}
+                        />
+                    </Modal.Content>
+                </Modal>
+
+                {gyldigePerioder && (
+                    <TidsbrukKalenderContainer
+                        gyldigePerioder={gyldigePerioder}
+                        ModalContent={<FaktiskOgNormalTid lagre={lagreTimer} />}
+                        kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
+                            arbeidstidPeriodeTilKalenderdag(periode)
+                        )}
+                        dateContentRenderer={DateContent}
+                    />
+                )}
             </Container>
         </SkjemaGruppe>
     );

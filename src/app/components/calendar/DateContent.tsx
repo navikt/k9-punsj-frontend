@@ -17,12 +17,12 @@ const DateContent = (kalenderdager: KalenderDag[]) => (date: Date, isDisabled: b
     return (
         <>
             <div>
-                {verdiOgTekstHvisVerdi(kalenderdag?.tid?.timer, 'timer ')}
-                {verdiOgTekstHvisVerdi(kalenderdag?.tid?.minutter, 'minutter')}
+                {verdiOgTekstHvisVerdi(kalenderdag?.tid?.timer, 't ')}
+                {verdiOgTekstHvisVerdi(kalenderdag?.tid?.minutter, 'min')}
             </div>
             <div style={{ fontWeight: 'bold' }}>
-                {verdiOgTekstHvisVerdi(kalenderdag?.tidOpprinnelig?.timer, 'timer ')}
-                {verdiOgTekstHvisVerdi(kalenderdag?.tidOpprinnelig?.minutter, 'minutter')}
+                {verdiOgTekstHvisVerdi(kalenderdag?.tidOpprinnelig?.timer, 't ')}
+                {verdiOgTekstHvisVerdi(kalenderdag?.tidOpprinnelig?.minutter, 'min')}
             </div>
         </>
     );

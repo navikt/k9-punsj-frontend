@@ -9,14 +9,14 @@ import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-fro
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import {Arbeidstaker, GetErrorMessage, IArbeidstaker, OrgOrPers} from 'app/models/types';
+import { Arbeidstaker, GetErrorMessage, IArbeidstaker, OrgOrPers } from 'app/models/types';
 import ActionType from '../types/actionTypes';
 import './arbeidstakerComponent.less';
 import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
-import {ApiPath} from '../../apiConfig';
+import { ApiPath } from '../../apiConfig';
 import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
-import {arbeidstidInformasjon} from '../../containers/pleiepenger/ArbeidstidInfo';
-import {pfArbeidstider} from '../../containers/pleiepenger/pfArbeidstider';
+import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
+import { pfArbeidstider } from '../../containers/pleiepenger/pfArbeidstider';
 
 interface ArbeidstakerComponentProps {
     søkerId: string;
@@ -116,9 +116,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
-        <SkjemaGruppe
-            className="arbeidstaker-panel"
-        >
+        <SkjemaGruppe className="arbeidstaker-panel">
             <Container>
                 <Row noGutters>
                     <RadioPanelGruppe
