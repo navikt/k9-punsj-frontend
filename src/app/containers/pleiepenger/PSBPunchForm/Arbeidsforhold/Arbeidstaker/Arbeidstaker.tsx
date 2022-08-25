@@ -1,11 +1,11 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
 import { Button, Modal } from '@navikt/ds-react';
-import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { formats, get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import ArbeidstidPeriodeListe from 'app/components/timefoering/ArbeidstidPeriodeListe';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
@@ -20,7 +20,6 @@ import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
-import { pfArbeidstider } from '../../../pfArbeidstider';
 import ActionType from './actionTypes';
 import './arbeidstaker.less';
 import pfArbeidstakerReducer from './pfArbeidstakerReducer';
@@ -321,10 +320,15 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     {intlHelper(intl, 'skjema.arbeid.registrerLengrePeriode')}
                 </Button>
                 <VerticalSpacer twentyPx />
-                <Modal open={visArbeidstidLengrePerioder} onClose={toggleVisArbeidstidLengrePerioder}>
+                <Modal
+                    open={visArbeidstidLengrePerioder}
+                    onClose={toggleVisArbeidstidLengrePerioder}
+                    className="lengre-periode-modal"
+                >
                     <Modal.Content>
-                        <ArbeidstidPeriode
-                            label="Periode med jobb"
+                        <ArbeidstidPeriodeListe
+                            heading="Periode med jobb"
+                            arbeidstidPerioder={arbeidstaker.arbeidstidInfo.perioder}
                             lagre={(periodeInfo) => {
                                 updateListeinfoInSoknad({
                                     arbeidstidInfo: {
@@ -338,7 +342,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                         perioder: periodeInfo,
                                     },
                                 });
+                                toggleVisArbeidstidLengrePerioder();
                             }}
+                            avbryt={toggleVisArbeidstidLengrePerioder}
                         />
                     </Modal.Content>
                 </Modal>
