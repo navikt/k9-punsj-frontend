@@ -217,11 +217,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private initialArbeidstaker = () =>
         new Arbeidstaker({
             arbeidstidInfo: {
-                perioder: this.getSoknadsperiode().map((periode) => ({
-                    periode,
-                    faktiskArbeidTimerPerDag: '',
-                    jobberNormaltTimerPerDag: '',
-                })),
+                perioder: [],
             },
             organisasjonsnummer: '',
             norskIdent: null,

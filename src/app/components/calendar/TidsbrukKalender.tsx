@@ -3,12 +3,11 @@ import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import { getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
-import { InputTime } from 'app/models/types/InputTime';
 import CalendarGrid from './CalendarGrid';
 import './tidsbrukKalender.less';
 
 import DateRange from '../../models/types/DateRange';
-import VerticalSpacer from '../VerticalSpacer';
+import Slett from '../buttons/Slett';
 
 interface OwnProps {
     gyldigPeriode: DateRange;
@@ -20,7 +19,8 @@ interface OwnProps {
 export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
     gyldigPeriode,
     ModalContent,
-    dateContentRenderer = () => 'lel',
+    slettPeriode,
+    dateContentRenderer,
     tittelRenderer = getMonthAndYear,
 }) => {
     const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -56,9 +56,14 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
                     dateContentRenderer={dateContentRenderer}
                     selectedDates={selectedDates}
                 />
-                <Button variant="secondary" onClick={toggleModal} style={{ marginTop: '1.875rem' }}>
-                    Registrer tid
-                </Button>
+                <div style={{ marginTop: '1.875rem' }}>
+                    <Button variant="primary" onClick={toggleModal}>
+                        Registrer tid
+                    </Button>
+                    {selectedDates.length > 0 && (
+                        <Slett onClick={() => slettPeriode(selectedDates)}>Slett registrert tid</Slett>
+                    )}
+                </div>
                 <Modal className="modal" open={visModal} onClose={toggleModal} closeButton>
                     <Modal.Content>{React.cloneElement(ModalContent, { selectedDates })}</Modal.Content>
                 </Modal>

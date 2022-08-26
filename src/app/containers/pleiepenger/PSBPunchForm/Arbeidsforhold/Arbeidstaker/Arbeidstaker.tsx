@@ -3,14 +3,29 @@ import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/conta
 import { Button, Modal } from '@navikt/ds-react';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { formats, get } from 'app/utils';
+import {
+    countDatesInDateRange,
+    findDateIntervalsFromDates,
+    formats,
+    get,
+    getDatesInDateRange,
+    removeDatesFromDateRange,
+    removeDatesFromPeriods,
+} from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ArbeidstidPeriodeListe from 'app/components/timefoering/ArbeidstidPeriodeListe';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import { GetErrorMessage, IPeriode, Periode } from 'app/models/types';
+import {
+    ArbeidstidPeriodeMedTimer,
+    GetErrorMessage,
+    IArbeidstidPeriodeMedTimer,
+    IPeriode,
+    Periode,
+    Periodeinfo,
+} from 'app/models/types';
 import FaktiskOgNormalTid from 'app/components/timefoering/FaktiskOgNormalTid';
 import dayjs from 'dayjs';
 import TidsbrukKalenderContainer from 'app/components/calendar/TidsbrukKalenderContainer';
@@ -122,7 +137,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     };
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
 
-    const { perioder } = arbeidstidInfo;
     const lagreTimer = ({
         faktiskTimer,
         faktiskMinutter,
@@ -149,12 +163,27 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         }));
         updateListeinfoInSoknad({
             arbeidstidInfo: {
-                perioder: [...perioder, ...payload],
+                perioder: [...arbeidstidInfo.perioder, ...payload],
             },
         });
         updateListeinfoInSoknadState({
             arbeidstidInfo: {
-                perioder: [...perioder, ...payload],
+                perioder: [...arbeidstidInfo.perioder, ...payload],
+            },
+        });
+    };
+
+    const slettDager = (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates: Date[]) => {
+        const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates);
+
+        updateListeinfoInSoknad({
+            arbeidstidInfo: {
+                perioder: perioderFiltert,
+            },
+        });
+        updateListeinfoInSoknadState({
+            arbeidstidInfo: {
+                perioder: perioderFiltert,
             },
         });
     };
@@ -329,6 +358,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         <ArbeidstidPeriodeListe
                             heading="Periode med jobb"
                             arbeidstidPerioder={arbeidstaker.arbeidstidInfo.perioder}
+                            gyldigePerioder={gyldigePerioder}
                             lagre={(periodeInfo) => {
                                 updateListeinfoInSoknad({
                                     arbeidstidInfo: {
@@ -356,6 +386,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
                             arbeidstidPeriodeTilKalenderdag(periode)
                         )}
+                        slettPeriode={slettDager(arbeidstaker.arbeidstidInfo.perioder)}
                         dateContentRenderer={DateContent}
                     />
                 )}

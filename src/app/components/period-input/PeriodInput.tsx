@@ -5,10 +5,10 @@ import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape, useIntl } from 'react-intl';
 import { IPeriode } from '../../models/types/Periode';
-import DateInput from '../skjema/DateInput';
+import DateInput, { DateInputProps } from '../skjema/DateInput';
 import './periodInput.less';
 
-export interface IPeriodInputProps {
+export interface IPeriodInputProps extends Partial<Omit<DateInputProps, 'onChange' | 'onBlur'>> {
     periode: IPeriode;
     onChange: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
@@ -45,6 +45,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         errorMessageTom,
         onBlur,
         fomInputRef,
+        limitations,
     } = props;
 
     const intl = useIntl();
@@ -73,6 +74,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         inputRef={fomInputRef}
+                        limitations={limitations}
                     />
                     <div className="periodInput__tom-container">
                         <DateInput
@@ -86,6 +88,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                             id={inputIdTom}
                             disabled={disabled || disabledTom}
                             errorMessage={errorMessageTom}
+                            limitations={limitations}
                             label={intlHelper(intl, 'skjema.perioder.tom')}
                         />
                     </div>

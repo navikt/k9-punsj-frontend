@@ -9,9 +9,16 @@ interface OwnProps {
     kalenderdager: KalenderDag[];
     ModalContent: React.ReactElement;
     dateContentRenderer: (kalenderdager: KalenderDag[]) => (date: Date, isDisabled?: boolean) => React.ReactNode;
+    slettPeriode: (kalenderdager: KalenderDag[]) => void;
 }
 
-const TidsbrukKalenderContainer = ({ gyldigePerioder, kalenderdager, ModalContent, dateContentRenderer }: OwnProps) => {
+const TidsbrukKalenderContainer = ({
+    gyldigePerioder,
+    kalenderdager,
+    ModalContent,
+    dateContentRenderer,
+    slettPeriode,
+}: OwnProps) => {
     const dateRanges = gyldigePerioder
         .filter((periode) => periode.fom && periode.tom)
         .map((periode) => ({ fom: new Date(periode.fom), tom: new Date(periode.tom) }));
@@ -24,6 +31,7 @@ const TidsbrukKalenderContainer = ({ gyldigePerioder, kalenderdager, ModalConten
                     gyldigPeriode={month}
                     ModalContent={ModalContent}
                     dateContentRenderer={dateContentRenderer(kalenderdager)}
+                    slettPeriode={slettPeriode(kalenderdager)}
                 />
             ))}
         </div>

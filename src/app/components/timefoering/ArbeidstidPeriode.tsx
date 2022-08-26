@@ -3,6 +3,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import React, { useEffect, useState } from 'react';
+import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
@@ -14,10 +15,10 @@ interface OwnProps {
 }
 
 const ArbeidstidPeriode = ({ initialPeriode, onChange, remove }: OwnProps) => {
-    const [normaltTimer, setNormaltTimer] = useState(initialPeriode?.jobberNormaltTimerPerDag || '0');
-    const [normaltMinutter, setNormaltMinutter] = useState('0');
-    const [faktiskTimer, setFaktiskTimer] = useState(initialPeriode?.faktiskArbeidTimerPerDag || '0');
-    const [faktiskMinutter, setFaktiskMinutter] = useState('0');
+    const [normaltTimer, setNormaltTimer] = useState(initialPeriode?.jobberNormaltTimerPerDag || '');
+    const [normaltMinutter, setNormaltMinutter] = useState('');
+    const [faktiskTimer, setFaktiskTimer] = useState(initialPeriode?.faktiskArbeidTimerPerDag || '');
+    const [faktiskMinutter, setFaktiskMinutter] = useState('');
     const [periode, setPeriode] = useState<IPeriode>({
         fom: initialPeriode?.periode?.fom || '',
         tom: initialPeriode?.periode?.tom || '',
@@ -42,9 +43,7 @@ const ArbeidstidPeriode = ({ initialPeriode, onChange, remove }: OwnProps) => {
                         setPeriode(v);
                     }}
                 />
-                <Button onClick={remove} variant="tertiary" style={{ marginTop: '1.5rem', paddingLeft: '0.3125rem' }}>
-                    <Delete fontSize={23} style={{ color: 'red' }} />
-                </Button>
+                <Slett style={{ marginTop: '1.5rem', paddingLeft: '0.3125rem' }} onClick={remove} />
             </div>
             <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
                 <div style={{ margin: '0 4.5rem 1.075rem 0' }}>

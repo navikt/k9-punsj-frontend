@@ -8,10 +8,11 @@ import 'dayjs/locale/nb';
 import { IntlShape } from 'react-intl';
 import { capitalize } from 'lodash';
 import { TimeFormat } from '../models/enums';
-import { Ukedag, UkedagNumber } from '../models/types';
+import { Periodeinfo, Ukedag, UkedagNumber } from '../models/types';
 import DateRange from '../models/types/DateRange';
-import { IPeriode } from '../models/types/Periode';
+import { IArbeidstidPeriodeMedTimer, IPeriode, Periode } from '../models/types/Periode';
 import intlHelper from './intlUtils';
+import { formats } from './formatUtils';
 
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -134,6 +135,39 @@ export const getDatesInDateRange = (dateRange: DateRange, onlyWeekDays = false):
         current = current.add(1, 'day');
     } while (current.isSameOrBefore(dateRange.tom, 'day'));
     return dates;
+};
+
+export const countDatesInDateRange = (dateRange: DateRange) => getDatesInDateRange(dateRange).length;
+export const removeDatesFromDateRange = (dateRange: DateRange, listOfDatesToRemove: Date[]) => {
+    const datesInDateRange = getDatesInDateRange(dateRange);
+    return datesInDateRange.filter(
+        (date) => !listOfDatesToRemove.some((dateToRemove) => dayjs(date).isSame(dateToRemove, 'day'))
+    );
+};
+
+export const findDateIntervalsFromDates = (dates: Date[]) => {
+    const reducer = (accumulator: Date[][], currentDate: Date) => {
+        let dateToAdd;
+        const indexOfArrayToUpdate = accumulator.findIndex((dateArray: Date[]) =>
+            dateArray.some((date: Date) => {
+                const isSameDay = dayjs(date).add(1, 'day').isSame(dayjs(currentDate), 'day');
+                if (isSameDay) {
+                    dateToAdd = currentDate;
+                }
+                return isSameDay;
+            })
+        );
+        if (indexOfArrayToUpdate > -1 && dateToAdd) {
+            const originalArray = accumulator[indexOfArrayToUpdate];
+            const mutableAccumulator = accumulator;
+            mutableAccumulator[indexOfArrayToUpdate] = [...originalArray, dateToAdd];
+            return mutableAccumulator;
+        }
+
+        return [...accumulator, [currentDate]];
+    };
+
+    return dates.reduce(reducer, []);
 };
 
 export const getFirstWeekDayInMonth = (month: Date): Date => {

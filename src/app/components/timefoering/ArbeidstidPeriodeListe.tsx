@@ -1,11 +1,12 @@
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
+import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
 import React, { useState } from 'react';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
 export default function ArbeidstidPeriodeListe({
     arbeidstidPerioder,
+    gyldigePerioder,
     lagre,
     heading,
     avbryt,
@@ -27,7 +28,11 @@ export default function ArbeidstidPeriodeListe({
     const add = () => {
         setPerioder([
             ...perioder,
-            { periode: { fom: '', tom: '' }, faktiskArbeidTimerPerDag: '', jobberNormaltTimerPerDag: '' },
+            new ArbeidstidPeriodeMedTimer({
+                periode: { fom: '', tom: '' },
+                faktiskArbeidTimerPerDag: '',
+                jobberNormaltTimerPerDag: '',
+            }),
         ]);
     };
 
@@ -52,7 +57,7 @@ export default function ArbeidstidPeriodeListe({
                 <AddCircle /> Legg til periode
             </Button>
             <div style={{ display: 'flex' }}>
-                <Button style={{ flexGrow: 1, marginRight: '0.9375' }} onClick={() => lagre(perioder)}>
+                <Button style={{ flexGrow: 1, marginRight: '0.9375rem' }} onClick={() => lagre(perioder)}>
                     Lagre
                 </Button>
 
