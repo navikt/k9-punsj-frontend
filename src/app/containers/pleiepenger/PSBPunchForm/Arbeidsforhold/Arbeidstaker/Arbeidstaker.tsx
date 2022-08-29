@@ -173,20 +173,25 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         });
     };
 
-    const slettDager = (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates: Date[]) => {
-        const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates);
+    const slettDager =
+        (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {
+            if (!selectedDates) {
+                return;
+            }
 
-        updateListeinfoInSoknad({
-            arbeidstidInfo: {
-                perioder: perioderFiltert,
-            },
-        });
-        updateListeinfoInSoknadState({
-            arbeidstidInfo: {
-                perioder: perioderFiltert,
-            },
-        });
-    };
+            const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates);
+
+            updateListeinfoInSoknad({
+                arbeidstidInfo: {
+                    perioder: perioderFiltert as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
+                },
+            });
+            updateListeinfoInSoknadState({
+                arbeidstidInfo: {
+                    perioder: perioderFiltert as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
+                },
+            });
+        };
 
     const selectedType: OrgOrPers = orgOrPers();
 

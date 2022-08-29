@@ -9,7 +9,7 @@ interface OwnProps {
     kalenderdager: KalenderDag[];
     ModalContent: React.ReactElement;
     dateContentRenderer: (kalenderdager: KalenderDag[]) => (date: Date, isDisabled?: boolean) => React.ReactNode;
-    slettPeriode: (kalenderdager: KalenderDag[]) => void;
+    slettPeriode: (dates?: Date[]) => void;
 }
 
 const TidsbrukKalenderContainer = ({
@@ -31,7 +31,7 @@ const TidsbrukKalenderContainer = ({
                     gyldigPeriode={month}
                     ModalContent={ModalContent}
                     dateContentRenderer={dateContentRenderer(kalenderdager)}
-                    slettPeriode={slettPeriode(kalenderdager)}
+                    slettPeriode={slettPeriode}
                 />
             ))}
         </div>

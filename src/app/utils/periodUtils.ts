@@ -1,6 +1,6 @@
 import { Periodeinfo } from 'app/models/types';
 import dayjs from 'dayjs';
-import { IArbeidstidPeriodeMedTimer, Periode } from '../models/types/Periode';
+import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periode } from '../models/types/Periode';
 import { formats } from './formatUtils';
 import {
     countDatesInDateRange,
@@ -124,10 +124,13 @@ export const removeDatesFromPeriods = (periods: Periodeinfo<IArbeidstidPeriodeMe
                     fom: dayjs(dateArray[0]).format(formats.YYYYMMDD),
                     tom: dayjs(dateArray[dateArray.length - 1]).format(formats.YYYYMMDD),
                 }));
-                const perioderMedArbeidstid = nyePerioder.map((nyPeriode) => ({
-                    ...periodeMedTimer,
-                    periode: nyPeriode,
-                }));
+                const perioderMedArbeidstid = nyePerioder.map(
+                    (nyPeriode) =>
+                        new ArbeidstidPeriodeMedTimer({
+                            ...periodeMedTimer,
+                            periode: nyPeriode,
+                        })
+                );
 
                 return perioderMedArbeidstid;
             }

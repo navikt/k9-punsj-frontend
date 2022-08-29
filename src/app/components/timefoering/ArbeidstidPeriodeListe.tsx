@@ -6,7 +6,6 @@ import ArbeidstidPeriode from './ArbeidstidPeriode';
 
 export default function ArbeidstidPeriodeListe({
     arbeidstidPerioder,
-    gyldigePerioder,
     lagre,
     heading,
     avbryt,

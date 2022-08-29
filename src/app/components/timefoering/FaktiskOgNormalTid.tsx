@@ -1,17 +1,16 @@
-import { Button, Detail, Heading, Label } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
-import { Input } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
-import { Row } from 'react-bootstrap';
 import TimerOgMinutter from './TimerOgMinutter';
 
 interface OwnProps {
     lagre: (params: any) => void;
+    toggleModal: () => void;
     selectedDates?: Date[];
     label?: string;
 }
 
-const FaktiskOgNormalTid = ({ lagre, label, selectedDates }: OwnProps) => {
+const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnProps) => {
     const [normaltTimer, setNormaltTimer] = useState('0');
     const [normaltMinutter, setNormaltMinutter] = useState('0');
     const [faktiskTimer, setFaktiskTimer] = useState('0');
@@ -49,10 +48,16 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates }: OwnProps) => {
             </div>
             {lagre && (
                 <div style={{ display: 'flex' }}>
-                    <Button style={{ flexGrow: 1 }} onClick={() => lagre(payload)}>
+                    <Button
+                        style={{ flexGrow: 1 }}
+                        onClick={() => {
+                            lagre(payload);
+                            toggleModal();
+                        }}
+                    >
                         Lagre
                     </Button>
-                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={() => new Error('Implementer meg')}>
+                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={toggleModal}>
                         Avbryt
                     </Button>
                 </div>

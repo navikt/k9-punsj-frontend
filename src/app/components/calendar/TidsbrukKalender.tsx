@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { LegacyRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
+import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
 import CalendarGrid from './CalendarGrid';
 import './tidsbrukKalender.less';
@@ -12,6 +13,7 @@ import Slett from '../buttons/Slett';
 interface OwnProps {
     gyldigPeriode: DateRange;
     ModalContent: React.ReactElement;
+    slettPeriode: (dates?: Date[]) => void;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
     tittelRenderer?: () => string | React.FunctionComponent;
 }
@@ -26,7 +28,9 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
     const [selectedDates, setSelectedDates] = useState<Date[]>([]);
     const [visKalender, setVisKalender] = useState<boolean>(false);
     const [visModal, setVisModal] = useState<boolean>(false);
-
+    const ref = React.useRef<HTMLElement>();
+    const clearSelectedDates = () => setSelectedDates([]);
+    useOnClickOutside(ref, clearSelectedDates);
     const toggleKalender = () => {
         setVisKalender(!visKalender);
         if (selectedDates.length) {
@@ -48,11 +52,11 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
         .filter((v) => v instanceof Date);
     return (
         <EkspanderbartPanel tittel={tittelRenderer(gyldigPeriode.fom)} apen={visKalender} onClick={toggleKalender}>
-            <div>
+            <div ref={ref as LegacyRef<HTMLDivElement>}>
                 <CalendarGrid
                     onDateClick={(date) => toggleDay(date)}
                     month={gyldigPeriode}
-                    disabledDates={disabledDates}
+                    disabledDates={disabledDates as Date[]}
                     dateContentRenderer={dateContentRenderer}
                     selectedDates={selectedDates}
                 />
@@ -65,7 +69,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = ({
                     )}
                 </div>
                 <Modal className="modal" open={visModal} onClose={toggleModal} closeButton>
-                    <Modal.Content>{React.cloneElement(ModalContent, { selectedDates })}</Modal.Content>
+                    <Modal.Content>{React.cloneElement(ModalContent, { selectedDates, toggleModal })}</Modal.Content>
                 </Modal>
             </div>
         </EkspanderbartPanel>
