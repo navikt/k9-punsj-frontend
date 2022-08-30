@@ -92,6 +92,16 @@ export const identifikator = yup
         message: 'Ugyldig identifikasjonsnummer',
     })
     .label('Identifikasjonsnummer');
+export const yupTimer = yup.number().min(0).max(24).label('Timer');
+export const normalArbeidstid = yup.number().min(1).max(24).label('Timer');
+export const arbeidstider = yup.object({
+    periode: yup.object({
+        fom: yup.string().required(),
+        tom: yup.string().required(),
+    }),
+    faktiskArbeidTimerPerDag: yupTimer.required(),
+    jobberNormaltTimerPerDag: yupTimer.required(),
+});
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
     try {

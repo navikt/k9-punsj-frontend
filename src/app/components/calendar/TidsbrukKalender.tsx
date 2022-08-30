@@ -55,9 +55,11 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                         selectedDates={selectedDates}
                     />
                     <div style={{ marginTop: '1.875rem' }}>
-                        <Button variant="primary" onClick={toggleModal}>
-                            Registrer tid
-                        </Button>
+                        {!!selectedDates.length && (
+                            <Button variant="primary" onClick={toggleModal}>
+                                Registrer tid
+                            </Button>
+                        )}
                         {selectedDates.length > 0 && (
                             <Slett onClick={() => slettPeriode(selectedDates)}>Slett registrert tid</Slett>
                         )}

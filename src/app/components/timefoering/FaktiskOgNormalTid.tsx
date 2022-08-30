@@ -1,6 +1,7 @@
 import { Button, Heading } from '@navikt/ds-react';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
-import React, { useState } from 'react';
+import { normalArbeidstid, yupTimer } from 'app/rules/valideringer';
+import React, { useState, useEffect } from 'react';
 import TimerOgMinutter from './TimerOgMinutter';
 
 interface OwnProps {
@@ -13,10 +14,33 @@ interface OwnProps {
 const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnProps) => {
     const [normaltTimer, setNormaltTimer] = useState('0');
     const [normaltMinutter, setNormaltMinutter] = useState('0');
+    const [normaltError, setNormaltError] = useState('');
+    const [visNormaltError, setVisNormaltError] = useState(false);
+
     const [faktiskTimer, setFaktiskTimer] = useState('0');
     const [faktiskMinutter, setFaktiskMinutter] = useState('0');
+    const [faktiskError, setFaktiskError] = useState('');
+    const [visFaktiskError, setVisFaktiskError] = useState(false);
 
     const payload = { normaltTimer, normaltMinutter, faktiskTimer, faktiskMinutter, selectedDates };
+
+    useEffect(() => {
+        normalArbeidstid
+            .required()
+            .validate(Number(normaltTimer))
+            .then(() => setNormaltError(''))
+            .catch((e) => {
+                setNormaltError(e.message);
+            });
+        yupTimer
+            .required()
+            .validate(Number(faktiskTimer))
+            .then(() => setFaktiskError(''))
+            .catch((e) => {
+                setFaktiskError(e.message);
+            });
+    }, [normaltTimer, faktiskTimer]);
+
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
             {label && <Heading size="medium">{label}</Heading>}
@@ -26,10 +50,12 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
                         label="Normal arbeidstid"
                         onChangeTimer={setNormaltTimer}
                         onChangeMinutter={setNormaltMinutter}
+                        onBlur={() => setVisNormaltError(true)}
                         timer={normaltTimer}
                         minutter={normaltMinutter}
+                        error={visNormaltError ? normaltError : undefined}
                     />
-                    <div style={{ marginTop: '1.0625rem', marginBottom: '3.5625rem' }}>
+                    <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
                         <UtregningArbeidstid arbeidstid={normaltTimer} />
                     </div>
                 </div>
@@ -38,8 +64,10 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
                         label="Faktisk arbeidstid"
                         onChangeTimer={setFaktiskTimer}
                         onChangeMinutter={setFaktiskMinutter}
+                        onBlur={() => setVisFaktiskError(true)}
                         timer={faktiskTimer}
                         minutter={faktiskMinutter}
+                        error={visFaktiskError ? faktiskError : undefined}
                     />
                     <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
                         <UtregningArbeidstid arbeidstid={faktiskTimer} normalArbeidstid={normaltTimer} />
@@ -51,8 +79,12 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
                     <Button
                         style={{ flexGrow: 1 }}
                         onClick={() => {
-                            lagre(payload);
-                            toggleModal();
+                            setVisFaktiskError(true);
+                            setVisNormaltError(true);
+                            if (!faktiskError && !normaltError) {
+                                lagre(payload);
+                                toggleModal();
+                            }
                         }}
                     >
                         Lagre

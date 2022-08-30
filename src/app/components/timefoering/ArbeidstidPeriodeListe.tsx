@@ -16,7 +16,6 @@ export default function ArbeidstidPeriodeListe({
     avbryt: () => void;
 }) {
     const [perioder, setPerioder] = useState(arbeidstidPerioder || []);
-    const [errors, setErrors] = useState([]);
 
     const update = (periode, index, periodeArray) => {
         const p = [...periodeArray];

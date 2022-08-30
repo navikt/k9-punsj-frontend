@@ -1,18 +1,19 @@
-import { Button, Detail, Label } from '@navikt/ds-react';
+import { Detail, Label, ErrorMessage } from '@navikt/ds-react';
 import { Input } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
-import { Row } from 'react-bootstrap';
+import React from 'react';
 import './timerOgMinutter.less';
 
 interface OwnProps {
     label: string;
     onChangeTimer: (value: string) => void;
     onChangeMinutter: (value: string) => void;
+    onBlur: () => void;
     timer: string;
     minutter: string;
+    error?: string;
 }
 
-const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, timer, minutter }: OwnProps) => (
+const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer, minutter, error }: OwnProps) => (
     <>
         <div>
             <Label>{label}</Label>
@@ -27,6 +28,8 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, timer, minutt
                     onChange={(event) => {
                         onChangeTimer(event.target.value.replace(/\s/g, ''));
                     }}
+                    onBlur={onBlur}
+                    feil={!!error}
                 />
                 <div>
                     <Detail>Timer</Detail>
@@ -41,13 +44,15 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, timer, minutt
                     onChange={(event) => {
                         onChangeMinutter(event.target.value.replace(/\s/g, ''));
                     }}
+                    onBlur={onBlur}
+                    feil={!!error}
                 />
                 <div>
                     <Detail>Minutter</Detail>
                 </div>
             </div>
         </div>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
     </>
 );
-
 export default TimerOgMinutter;
