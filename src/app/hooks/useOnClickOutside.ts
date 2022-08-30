@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 
 const useOnClickOutside = (ref: MutableRefObject<any>, onClick: () => void) => {
     const handleClickOutside = (event: any) => {

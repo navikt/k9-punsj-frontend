@@ -113,7 +113,6 @@ const periodeToDaysWithTime = (arbeidstid: ArbeidstidPeriodeMedTimer): KalenderD
 };
 
 const perioderMappet = perioder.perioder.map((periode) => periodeToDaysWithTime(periode)).flat();
-console.log(perioderMappet);
 
 const Template: ComponentStory<typeof TidsbrukKalenderContainer> = (args) => (
     <TidsbrukKalenderContainer
