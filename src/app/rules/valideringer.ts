@@ -94,13 +94,13 @@ export const identifikator = yup
     .label('Identifikasjonsnummer');
 export const yupTimer = yup.number().min(0).max(24).label('Timer');
 export const normalArbeidstid = yup.number().min(1).max(24).label('Timer');
-export const arbeidstider = yup.object({
+export const arbeidstimerPeriode = yup.object({
     periode: yup.object({
-        fom: yup.string().required(),
-        tom: yup.string().required(),
+        fom: yup.string().required().label('Fra og med'),
+        tom: yup.string().required().label('Til og med'),
     }),
     faktiskArbeidTimerPerDag: yupTimer.required(),
-    jobberNormaltTimerPerDag: yupTimer.required(),
+    jobberNormaltTimerPerDag: normalArbeidstid.required(),
 });
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {

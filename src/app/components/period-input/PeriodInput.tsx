@@ -62,6 +62,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
             <Container>
                 <Row noGutters>
                     <DateInput
+                        className="periodInput__fom-container"
                         value={renderDato('fom')}
                         onChange={(selectedDate) => {
                             onChange({ fom: selectedDate, tom: periode?.tom || '' });
