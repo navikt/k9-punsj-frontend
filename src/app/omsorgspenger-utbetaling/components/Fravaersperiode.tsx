@@ -14,7 +14,7 @@ interface OwnProps {
     antallFravaersperioder: number;
     name: string;
     slettPeriode: () => void;
-    visSoknadAarsak: boolean;
+    visSoknadAarsak?: boolean;
 }
 
 const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknadAarsak = false }: OwnProps) => {
