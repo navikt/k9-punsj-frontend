@@ -179,6 +179,7 @@
         "nav-frontend-spinner-style": "^1.0.2",
         "nav-frontend-tabell-style": "^2.1.1",
         "nav-frontend-typografi-style": "^2.0.1",
+        "postcss-less": "^6.0.0",
         "postcss-loader": "^6.2.1",
         "prettier": "^2.7.1",
         "react-refresh": "^0.11.0",
@@ -186,6 +187,9 @@
         "redux-mock-store": "^1.5.4",
         "regenerator-runtime": "^0.13.7",
         "style-loader": "^3.3.1",
+        "stylelint": "^14.11.0",
+        "stylelint-config-prettier": "^9.0.3",
+        "stylelint-config-standard": "^28.0.0",
         "svg-sprite-loader": "^6.0.11",
         "terser-webpack-plugin": "^5.3.1",
         "ts-jest": "^27.1.3",
@@ -204,7 +208,8 @@
     "snyk": false,
     "lint-staged": {
         "src/app/**/*.ts?(x)": "eslint --cache --fix",
-        "src/app/**/*.{ts,tsx,js,jsx,css}": "prettier --write"
+        "*.(le|c)ss": "stylelint --fix",
+        "src/app/**/*.{ts,tsx,js,jsx,css,less}": "prettier --write"
     },
     "msw": {
         "workerDirectory": "dist"
