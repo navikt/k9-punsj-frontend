@@ -92,8 +92,8 @@ export const identifikator = yup
         message: 'Ugyldig identifikasjonsnummer',
     })
     .label('Identifikasjonsnummer');
-export const yupTimer = yup.number().min(0).max(24).label('Timer');
-export const normalArbeidstid = yup.number().min(1).max(24).label('Timer');
+export const yupTimer = yup.string().label('Timer');
+export const normalArbeidstid = yup.string().label('Timer');
 export const arbeidstimerPeriode = yup.object({
     periode: yup.object({
         fom: yup.string().required().label('Fra og med'),

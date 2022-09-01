@@ -5,7 +5,7 @@ import {
     IArbeidstaker,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
-    IPeriodeMedTimerMinutter,
+    ITimerOgMinutter,
     Periode,
     Periodeinfo,
     PeriodeMedTimerMinutter,
@@ -117,7 +117,7 @@ export class SoknadsInfo implements ISoknadsInfo {
 }
 
 export interface ITilsynsordning {
-    perioder?: Periodeinfo<IPeriodeMedTimerMinutter>[];
+    perioder?: Periodeinfo<ITimerOgMinutter>[];
 }
 
 export class Tilsynsordning implements Required<ITilsynsordning> {
@@ -127,7 +127,7 @@ export class Tilsynsordning implements Required<ITilsynsordning> {
         this.perioder = (t.perioder || []).map((p) => new PeriodeMedTimerMinutter(p));
     }
 
-    values(): Required<IPeriodeMedTimerMinutter>[] {
+    values(): Required<ITimerOgMinutter>[] {
         return this.perioder.map((p) => p.values());
     }
 }

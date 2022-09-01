@@ -22,7 +22,11 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
     const [faktiskError, setFaktiskError] = useState('');
     const [visFaktiskError, setVisFaktiskError] = useState(false);
 
-    const payload = { normaltTimer, normaltMinutter, faktiskTimer, faktiskMinutter, selectedDates };
+    const payload = {
+        faktiskArbeidPerDag: { timer: faktiskTimer, minutter: faktiskMinutter },
+        jobberNormaltPerDag: { timer: normaltTimer, minutter: normaltMinutter },
+        selectedDates,
+    };
 
     useEffect(() => {
         normalArbeidstid
@@ -56,7 +60,7 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
                         error={visNormaltError ? normaltError : undefined}
                     />
                     <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
-                        <UtregningArbeidstid arbeidstid={normaltTimer} />
+                        <UtregningArbeidstid arbeidstid={{ timer: normaltTimer, minutter: normaltMinutter }} />
                     </div>
                 </div>
                 <div>
@@ -70,7 +74,10 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
                         error={visFaktiskError ? faktiskError : undefined}
                     />
                     <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
-                        <UtregningArbeidstid arbeidstid={faktiskTimer} normalArbeidstid={normaltTimer} />
+                        <UtregningArbeidstid
+                            arbeidstid={{ timer: faktiskTimer, minutter: faktiskMinutter }}
+                            normalArbeidstid={{ timer: normaltTimer, minutter: normaltMinutter }}
+                        />
                     </div>
                 </div>
             </div>

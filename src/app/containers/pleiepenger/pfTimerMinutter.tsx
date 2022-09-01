@@ -10,16 +10,16 @@ import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
 import { GetErrorMessage } from 'app/models/types';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
-import { IPeriodeMedTimerMinutter } from '../../models/types/Periode';
+import { ITimerOgMinutter } from '../../models/types/Periode';
 import { stringToNumber } from '../../utils';
 
 // eslint-disable-next-line import/prefer-default-export
-export function pfTimerMinutter(): PeriodeinfoComponent<IPeriodeMedTimerMinutter> {
+export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
     return (
-        periodeinfo: Periodeinfo<IPeriodeMedTimerMinutter>,
+        periodeinfo: Periodeinfo<ITimerOgMinutter>,
         periodeindex: number,
-        updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IPeriodeMedTimerMinutter>,
-        updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IPeriodeMedTimerMinutter>,
+        updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITimerOgMinutter>,
+        updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITimerOgMinutter>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
         intl: IntlShape

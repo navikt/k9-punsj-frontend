@@ -104,6 +104,10 @@ export interface IArbeidstidPeriodeMedTimer {
     periode?: IPeriode;
     faktiskArbeidTimerPerDag?: string;
     jobberNormaltTimerPerDag?: string;
+    faktiskArbeidMinutterPerDag?: string;
+    jobberNormaltMinutterPerDag?: string;
+    jobberNormaltPerDag?: ITimerOgMinutter;
+    faktiskArbeidPerDag?: ITimerOgMinutter;
 }
 
 export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidstidPeriodeMedTimer>> {
@@ -111,12 +115,30 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
     faktiskArbeidTimerPerDag: string;
 
+    faktiskArbeidMinutterPerDag: string;
+
     jobberNormaltTimerPerDag: string;
+
+    jobberNormaltMinutterPerDag: string;
+
+    jobberNormaltPerDag: ITimerOgMinutter;
+
+    faktiskArbeidPerDag: ITimerOgMinutter;
 
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
         this.periode = new Periode(pmf.periode || {});
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
+        this.faktiskArbeidMinutterPerDag = pmf.faktiskArbeidMinutterPerDag || '';
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
+        this.jobberNormaltMinutterPerDag = pmf.jobberNormaltMinutterPerDag || '';
+        this.jobberNormaltPerDag = pmf.jobberNormaltPerDag || {
+            timer: 0,
+            minutter: 0,
+        };
+        this.faktiskArbeidPerDag = pmf.faktiskArbeidPerDag || {
+            timer: 0,
+            minutter: 0,
+        };
     }
 
     fomTekstKort(intl: IntlShape) {
@@ -147,25 +169,25 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
     }
 }
 
-export interface IPeriodeMedTimerMinutter {
+export interface ITimerOgMinutter {
     timer?: number;
     minutter?: number;
 }
 
-export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMedTimerMinutter>> {
+export class PeriodeMedTimerMinutter implements Required<Periodeinfo<ITimerOgMinutter>> {
     periode: Periode;
 
     timer: number;
 
     minutter: number;
 
-    constructor(pmf: Periodeinfo<IPeriodeMedTimerMinutter>) {
+    constructor(pmf: Periodeinfo<ITimerOgMinutter>) {
         this.periode = new Periode(pmf.periode || {});
         this.timer = pmf.timer || 0;
         this.minutter = pmf.minutter || 0;
     }
 
-    values(): Required<Periodeinfo<IPeriodeMedTimerMinutter>> {
+    values(): Required<Periodeinfo<ITimerOgMinutter>> {
         return {
             periode: this.periode.values(),
             timer: this.timer,

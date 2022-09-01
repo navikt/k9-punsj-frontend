@@ -3,15 +3,7 @@ import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/conta
 import { Button, Modal } from '@navikt/ds-react';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
-import {
-    countDatesInDateRange,
-    findDateIntervalsFromDates,
-    formats,
-    get,
-    getDatesInDateRange,
-    removeDatesFromDateRange,
-    removeDatesFromPeriods,
-} from 'app/utils';
+import { formats, get, removeDatesFromPeriods } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ArbeidstidPeriodeListe from 'app/components/timefoering/ArbeidstidPeriodeListe';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
@@ -19,10 +11,10 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 import {
-    ArbeidstidPeriodeMedTimer,
     GetErrorMessage,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
+    ITimerOgMinutter,
     Periode,
     Periodeinfo,
 } from 'app/models/types';
@@ -30,7 +22,6 @@ import FaktiskOgNormalTid from 'app/components/timefoering/FaktiskOgNormalTid';
 import dayjs from 'dayjs';
 import TidsbrukKalenderContainer from 'app/components/calendar/TidsbrukKalenderContainer';
 import DateContent from 'app/components/calendar/DateContent';
-import ArbeidstidPeriode from 'app/components/timefoering/ArbeidstidPeriode';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
@@ -138,16 +129,12 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
 
     const lagreTimer = ({
-        faktiskTimer,
-        faktiskMinutter,
-        normaltTimer,
-        normaltMinutter,
+        faktiskArbeidPerDag,
+        jobberNormaltPerDag,
         selectedDates,
     }: {
-        faktiskTimer: string;
-        faktiskMinutter: string;
-        normaltTimer: string;
-        normaltMinutter: string;
+        faktiskArbeidPerDag: ITimerOgMinutter;
+        jobberNormaltPerDag: ITimerOgMinutter;
         selectedDates: Date[];
     }) => {
         const utenDagerSomAlleredeFinnes = selectedDates.filter(
@@ -158,9 +145,10 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                 fom: dayjs(day).format(formats.YYYYMMDD),
                 tom: dayjs(day).format(formats.YYYYMMDD),
             }),
-            faktiskArbeidTimerPerDag: faktiskTimer,
-            jobberNormaltTimerPerDag: normaltTimer,
+            faktiskArbeidPerDag,
+            jobberNormaltPerDag,
         }));
+        console.log(payload);
         updateListeinfoInSoknad({
             arbeidstidInfo: {
                 perioder: [...arbeidstidInfo.perioder, ...payload],

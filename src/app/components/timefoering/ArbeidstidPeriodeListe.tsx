@@ -38,21 +38,13 @@ export default function ArbeidstidPeriodeListe({
                                     <ArbeidstidPeriode
                                         // eslint-disable-next-line react/no-array-index-key
                                         key={index}
-                                        name={`perioder.[${index}]`}
+                                        name={`perioder.${index}`}
                                         remove={() => arrayHelpers.remove(index)}
                                     />
                                 ))}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() =>
-                                        arrayHelpers.push(
-                                            new ArbeidstidPeriodeMedTimer({
-                                                periode: { fom: '', tom: '' },
-                                                faktiskArbeidTimerPerDag: '',
-                                                jobberNormaltTimerPerDag: '',
-                                            })
-                                        )
-                                    }
+                                    onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
                                 >
                                     <AddCircle /> Legg til periode
                                 </Button>
