@@ -15,6 +15,7 @@ import {
     IArbeidstidPeriodeMedTimer,
     IPeriode,
     ITimerOgMinutter,
+    ITimerOgMinutterString,
     Periode,
     Periodeinfo,
 } from 'app/models/types';
@@ -38,11 +39,10 @@ interface ArbeidstakerComponentProps {
     updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>;
     feilkodeprefiks: string;
     getErrorMessage: GetErrorMessage;
-    getUhaandterteFeil: (kode: string) => (string | undefined)[];
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
-    gyldigePerioder?: IPeriode[];
+    soknadsperioder: IPeriode[];
 }
 
 const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
@@ -52,12 +52,11 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     updateListeinfoInSoknad,
     updateListeinfoInSoknadState,
     feilkodeprefiks,
-    getUhaandterteFeil,
     getErrorMessage,
     intl,
     arbeidsgivere,
     harDuplikatOrgnr,
-    gyldigePerioder,
+    soknadsperioder,
 }): JSX.Element => {
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
@@ -133,8 +132,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         jobberNormaltPerDag,
         selectedDates,
     }: {
-        faktiskArbeidPerDag: ITimerOgMinutter;
-        jobberNormaltPerDag: ITimerOgMinutter;
+        faktiskArbeidPerDag: ITimerOgMinutterString;
+        jobberNormaltPerDag: ITimerOgMinutterString;
         selectedDates: Date[];
     }) => {
         const utenDagerSomAlleredeFinnes = selectedDates.filter(
@@ -351,7 +350,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         <ArbeidstidPeriodeListe
                             heading="Periode med jobb"
                             arbeidstidPerioder={arbeidstaker.arbeidstidInfo.perioder}
-                            gyldigePerioder={gyldigePerioder}
+                            soknadsperioder={soknadsperioder}
                             lagre={(periodeInfo) => {
                                 updateListeinfoInSoknad({
                                     arbeidstidInfo: {
@@ -372,9 +371,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     </Modal.Content>
                 </Modal>
 
-                {gyldigePerioder && (
+                {soknadsperioder && (
                     <TidsbrukKalenderContainer
-                        gyldigePerioder={gyldigePerioder}
+                        gyldigePerioder={soknadsperioder}
                         ModalContent={<FaktiskOgNormalTid lagre={lagreTimer} />}
                         kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
                             arbeidstidPeriodeTilKalenderdag(periode)

@@ -106,8 +106,8 @@ export interface IArbeidstidPeriodeMedTimer {
     jobberNormaltTimerPerDag?: string;
     faktiskArbeidMinutterPerDag?: string;
     jobberNormaltMinutterPerDag?: string;
-    jobberNormaltPerDag?: ITimerOgMinutter;
-    faktiskArbeidPerDag?: ITimerOgMinutter;
+    jobberNormaltPerDag?: ITimerOgMinutterString;
+    faktiskArbeidPerDag?: ITimerOgMinutterString;
 }
 
 export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidstidPeriodeMedTimer>> {
@@ -121,9 +121,9 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
     jobberNormaltMinutterPerDag: string;
 
-    jobberNormaltPerDag: ITimerOgMinutter;
+    jobberNormaltPerDag: ITimerOgMinutterString;
 
-    faktiskArbeidPerDag: ITimerOgMinutter;
+    faktiskArbeidPerDag: ITimerOgMinutterString;
 
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
         this.periode = new Periode(pmf.periode || {});
@@ -132,12 +132,12 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
         this.jobberNormaltMinutterPerDag = pmf.jobberNormaltMinutterPerDag || '';
         this.jobberNormaltPerDag = pmf.jobberNormaltPerDag || {
-            timer: 0,
-            minutter: 0,
+            timer: '',
+            minutter: '',
         };
         this.faktiskArbeidPerDag = pmf.faktiskArbeidPerDag || {
-            timer: 0,
-            minutter: 0,
+            timer: '',
+            minutter: '',
         };
     }
 
@@ -172,6 +172,10 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 export interface ITimerOgMinutter {
     timer?: number;
     minutter?: number;
+}
+export interface ITimerOgMinutterString {
+    timer?: string;
+    minutter?: string;
 }
 
 export class PeriodeMedTimerMinutter implements Required<Periodeinfo<ITimerOgMinutter>> {

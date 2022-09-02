@@ -159,7 +159,7 @@ const Arbeidstakerperioder = ({
                                 intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                                gyldigePerioder={soknad.soeknadsperiode}
+                                soknadsperioder={soknad.soeknadsperiode}
                             />
                             <UhaanderteFeilmeldinger
                                 getFeilmeldinger={() =>

@@ -1,7 +1,9 @@
-import { ArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
+import { Checkbox } from '@navikt/ds-react';
+import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
 import Slett from '../buttons/Slett';
+import CheckboxFormik from '../formikInput/CheckboxFormik';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
@@ -9,13 +11,20 @@ import UtregningArbeidstid from './UtregningArbeidstid';
 interface OwnProps {
     name: string;
     remove: () => void;
+    soknadsperioder: IPeriode[];
 }
 
-const ArbeidstidPeriode = ({ name, remove }: OwnProps) => {
+const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const formik = useFormikContext();
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltPerDag.timer`);
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag.timer`);
     const [periodeFomField, periodeFomMeta] = useField(`${name}.periode.fom`);
+
+    const velgSoknadsperiode = (periode: IPeriode) => {
+        formik.setFieldValue(`${name}.periode`, periode);
+    };
+
+    const nullstillPeriode = () => formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
     return (
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => (
@@ -35,6 +44,17 @@ const ArbeidstidPeriode = ({ name, remove }: OwnProps) => {
                         />
                         <Slett style={{ marginTop: '1.5rem', paddingLeft: '0.3125rem' }} onClick={remove} />
                     </div>
+                    {soknadsperioder.length === 1 && (
+                        <Checkbox
+                            onClick={(event) =>
+                                (event.target as HTMLInputElement).checked
+                                    ? velgSoknadsperiode(soknadsperioder[0])
+                                    : nullstillPeriode()
+                            }
+                        >
+                            Velg hele søknadsperioden
+                        </Checkbox>
+                    )}
                     <div style={{ display: 'flex', marginTop: '1.5625rem', maxWidth: '9rem' }}>
                         <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
                             <TimerOgMinutter

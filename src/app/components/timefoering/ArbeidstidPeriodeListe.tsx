@@ -1,6 +1,6 @@
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
+import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
 import { arbeidstimerPeriode } from 'app/rules/valideringer';
@@ -16,11 +16,13 @@ export default function ArbeidstidPeriodeListe({
     lagre,
     heading,
     avbryt,
+    soknadsperioder,
 }: {
     arbeidstidPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
     heading: string;
     lagre: (arbeidstidInfo: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => void;
     avbryt: () => void;
+    soknadsperioder: IPeriode[];
 }) {
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
         perioder: [...arbeidstidPerioder],
@@ -39,6 +41,7 @@ export default function ArbeidstidPeriodeListe({
                                         // eslint-disable-next-line react/no-array-index-key
                                         key={index}
                                         name={`perioder.${index}`}
+                                        soknadsperioder={soknadsperioder}
                                         remove={() => arrayHelpers.remove(index)}
                                     />
                                 ))}
@@ -49,7 +52,11 @@ export default function ArbeidstidPeriodeListe({
                                     <AddCircle /> Legg til periode
                                 </Button>
                                 <div style={{ display: 'flex' }}>
-                                    <Button style={{ flexGrow: 1, marginRight: '0.9375rem' }} onClick={handleSubmit}>
+                                    <Button
+                                        style={{ flexGrow: 1, marginRight: '0.9375rem' }}
+                                        type="submit"
+                                        onClick={() => handleSubmit()}
+                                    >
                                         Lagre
                                     </Button>
 

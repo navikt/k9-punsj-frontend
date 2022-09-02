@@ -15,7 +15,7 @@ export interface IPSBSoknad {
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    soeknadsperiode?: IPeriode[] | null;
+    soeknadsperiode: IPeriode[];
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
     beredskap?: Periodeinfo<ITilleggsinformasjon>[];
