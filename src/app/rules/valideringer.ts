@@ -92,15 +92,33 @@ export const identifikator = yup
         message: 'Ugyldig identifikasjonsnummer',
     })
     .label('Identifikasjonsnummer');
-export const yupTimer = yup.string().label('Timer');
-export const normalArbeidstid = yup.string().label('Timer');
+export const timer = yup
+    .number()
+    .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
+    .min(0)
+    .max(23)
+    .label('Timer');
+export const minutter = yup
+    .number()
+    .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
+    .min(0)
+    .max(59)
+    .label('Minutter');
+
+export const timerOgMinutter = yup.object({
+    timer: timer.required(),
+    minutter: minutter.required(),
+});
 export const arbeidstimerPeriode = yup.object({
     periode: yup.object({
         fom: yup.string().required().label('Fra og med'),
         tom: yup.string().required().label('Til og med'),
     }),
-    faktiskArbeidTimerPerDag: yupTimer.required(),
-    jobberNormaltTimerPerDag: normalArbeidstid.required(),
+    faktiskArbeidPerDag: timerOgMinutter,
+    jobberNormaltPerDag: yup.object({
+        timer: timer.required(),
+        minutter,
+    }),
 });
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {

@@ -44,12 +44,16 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeids
     const timer = arbeidstidDuration.get('hours') + arbeidstidDuration.get('days') * 24;
     const minutter = arbeidstidDuration.get('minutes');
 
-    const tekstForTimerOgMinutter = [verdiOgTekstHvisVerdi(timer, 'timer'), verdiOgTekstHvisVerdi(minutter, 'minutter')]
+    const tekstForTimerOgMinutter = [
+        verdiOgTekstHvisVerdi(String(timer), 'timer'),
+        verdiOgTekstHvisVerdi(String(minutter), 'minutter'),
+    ]
         .filter(Boolean)
         .join(' og ');
+
     return (
         <div>
-            {(!!timer || !!minutter) && (
+            {typeof timer === 'number' && typeof minutter === 'number' && (
                 <div>{`= ${tekstForTimerOgMinutter} ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.peruke')}`}</div>
             )}
             {skalViseProsent && (

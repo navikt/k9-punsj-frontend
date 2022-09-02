@@ -1,6 +1,6 @@
 import { Button, Heading } from '@navikt/ds-react';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
-import { normalArbeidstid, yupTimer } from 'app/rules/valideringer';
+import { timerOgMinutter } from 'app/rules/valideringer';
 import React, { useState, useEffect } from 'react';
 import TimerOgMinutter from './TimerOgMinutter';
 
@@ -12,13 +12,13 @@ interface OwnProps {
 }
 
 const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnProps) => {
-    const [normaltTimer, setNormaltTimer] = useState('0');
-    const [normaltMinutter, setNormaltMinutter] = useState('0');
+    const [normaltTimer, setNormaltTimer] = useState('');
+    const [normaltMinutter, setNormaltMinutter] = useState('');
     const [normaltError, setNormaltError] = useState('');
     const [visNormaltError, setVisNormaltError] = useState(false);
 
-    const [faktiskTimer, setFaktiskTimer] = useState('0');
-    const [faktiskMinutter, setFaktiskMinutter] = useState('0');
+    const [faktiskTimer, setFaktiskTimer] = useState('');
+    const [faktiskMinutter, setFaktiskMinutter] = useState('');
     const [faktiskError, setFaktiskError] = useState('');
     const [visFaktiskError, setVisFaktiskError] = useState(false);
 
@@ -29,21 +29,21 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
     };
 
     useEffect(() => {
-        normalArbeidstid
+        timerOgMinutter
             .required()
-            .validate(Number(normaltTimer))
+            .validate({ timer: normaltTimer, minutter: normaltMinutter })
             .then(() => setNormaltError(''))
             .catch((e) => {
                 setNormaltError(e.message);
             });
-        yupTimer
+        timerOgMinutter
             .required()
-            .validate(Number(faktiskTimer))
+            .validate({ timer: faktiskTimer, minutter: faktiskMinutter })
             .then(() => setFaktiskError(''))
             .catch((e) => {
                 setFaktiskError(e.message);
             });
-    }, [normaltTimer, faktiskTimer]);
+    }, [normaltTimer, faktiskTimer, faktiskMinutter, normaltMinutter]);
 
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>

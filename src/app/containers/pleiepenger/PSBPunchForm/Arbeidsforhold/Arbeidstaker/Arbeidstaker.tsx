@@ -148,7 +148,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
             faktiskArbeidPerDag,
             jobberNormaltPerDag,
         }));
-        console.log(payload);
+
         updateListeinfoInSoknad({
             arbeidstidInfo: {
                 perioder: [...arbeidstidInfo.perioder, ...payload],

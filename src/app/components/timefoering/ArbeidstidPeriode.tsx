@@ -47,7 +47,8 @@ const ArbeidstidPeriode = ({ name, remove }: OwnProps) => {
                                 minutter={String(field.value.jobberNormaltPerDag.minutter)}
                                 error={
                                     jobberNormaltPerDagMeta.touched &&
-                                    (meta.error?.jobberNormaltPerDag.timer || meta.error?.jobberNormaltPerDag.minutter)
+                                    (meta.error?.jobberNormaltPerDag?.timer ||
+                                        meta.error?.jobberNormaltPerDag?.minutter)
                                 }
                                 onBlur={() => {
                                     formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`);
@@ -69,7 +70,8 @@ const ArbeidstidPeriode = ({ name, remove }: OwnProps) => {
                                 minutter={String(field.value.faktiskArbeidPerDag.minutter)}
                                 error={
                                     faktiskPerDagMeta.touched &&
-                                    (meta.error?.faktiskArbeidPerDag.timer || meta.error?.faktiskArbeidPerDag.minutter)
+                                    (meta.error?.faktiskArbeidPerDag?.timer ||
+                                        meta.error?.faktiskArbeidPerDag?.minutter)
                                 }
                                 onBlur={() => {
                                     formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`);
