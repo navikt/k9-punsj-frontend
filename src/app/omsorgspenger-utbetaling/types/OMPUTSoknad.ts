@@ -36,6 +36,7 @@ export type FravaersperiodeType = {
     søknadÅrsak: string;
     periode: IPeriode;
     faktiskTidPrDag: string;
+    normalArbeidstidPrDag: string;
 };
 
 export type PeriodeMedUtenlandsopphold = {

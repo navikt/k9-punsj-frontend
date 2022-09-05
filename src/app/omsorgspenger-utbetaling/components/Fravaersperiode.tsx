@@ -90,12 +90,20 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                 <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
             </div>
             <VerticalSpacer twentyPx />
-            <TextFieldFormik
-                className="timer-arbeidet"
-                label="Timer arbeidet"
-                size="small"
-                name={`${name}.faktiskTidPrDag`}
-            />
+            <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                <TextFieldFormik
+                    className="timer-arbeidet"
+                    label="Arbeider normalt"
+                    size="small"
+                    name={`${name}.normalArbeidstidPrDag`}
+                />
+                <TextFieldFormik
+                    className="timer-arbeidet"
+                    label="Timer faktisk arbeidet"
+                    size="small"
+                    name={`${name}.faktiskTidPrDag`}
+                />
+            </div>
             <VerticalSpacer twentyPx />
         </Panel>
     );

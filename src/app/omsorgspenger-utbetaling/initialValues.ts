@@ -18,6 +18,7 @@ export const fravaersperiodeInitialValue = {
     søknadÅrsak: '',
     periode: periodeInitialValue,
     faktiskTidPrDag: '',
+    normalArbeidstidPrDag: '',
 };
 
 export const arbeidstakerInitialValue = {
@@ -28,6 +29,7 @@ export const arbeidstakerInitialValue = {
 const mapFravaersperiode = (periode: FravaersperiodeType): FravaersperiodeType => ({
     aktivitetsFravær: periode.aktivitetsFravær || '',
     faktiskTidPrDag: periode.faktiskTidPrDag || '',
+    normalArbeidstidPrDag: periode.normalArbeidstidPrDag || '',
     fraværÅrsak: periode.fraværÅrsak || '',
     organisasjonsnummer: periode.organisasjonsnummer || '',
     periode: {
