@@ -11,6 +11,7 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             søknadÅrsak: medSoknadAarsak ? yup.string().required() : yup.string().nullable(),
             periode: periode(),
             faktiskTidPrDag: yup.string().required(),
+            normalArbeidstidPrDag: yup.string().required(),
         })
     );
 const arbeidstaker = () =>
