@@ -124,7 +124,14 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                 </div>
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
-                <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>
+                <>
+                    <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>
+                    {journalpost.gosysoppgaveId && (
+                        <AlertStripeInfo>
+                            {intlHelper(intl, 'fordeling.infobox.lukkoppgave.gosysoppgaveId')}
+                        </AlertStripeInfo>
+                    )}
+                </>
             )}
             <Behandlingsknapp
                 norskIdent={identState.ident1}
