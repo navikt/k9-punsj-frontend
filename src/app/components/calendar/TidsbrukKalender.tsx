@@ -4,6 +4,7 @@ import { Button, Modal } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
+import { KalenderDag } from 'app/models/KalenderDag';
 import CalendarGrid from './CalendarGrid';
 import './tidsbrukKalender.less';
 
@@ -16,6 +17,7 @@ interface OwnProps {
     slettPeriode: (dates?: Date[]) => void;
     disableWeekends?: boolean;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
+    kalenderdager?: KalenderDag[];
     tittelRenderer?: () => string | React.FunctionComponent;
 }
 
@@ -26,6 +28,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             ModalContent,
             slettPeriode,
             dateContentRenderer,
+            kalenderdager,
             disableWeekends = false,
             tittelRenderer = getMonthAndYear,
         },
@@ -58,18 +61,18 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 return false;
             })
             .filter((v) => v instanceof Date) as Date[];
-
+        const someSelectedDaysHaveContent = kalenderdager
+            ?.map((kalenderdag) => dayjs(kalenderdag.date).format(formats.DDMMYYYY))
+            .some((date) =>
+                selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date)
+            );
         const hasSelectedDisabledDate = disabledDates
             .map((date) => dayjs(date).format(formats.DDMMYYYY))
             .some((date) =>
-                selectedDates
-                    .map((selectedDate) => {
-                        const lel = dayjs(selectedDate).format(formats.DDMMYYYY);
-                        return lel;
-                    })
-                    .includes(date)
+                selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date)
             );
-        const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate;
+        const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
+        const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
         return (
             <EkspanderbartPanel tittel={tittelRenderer(gyldigPeriode.fom)} apen={visKalender} onClick={toggleKalender}>
                 <div>
@@ -87,7 +90,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                                 Registrer tid
                             </Button>
                         )}
-                        {selectedDates.length > 0 && (
+                        {kanSletteTid && (
                             <Slett
                                 onClick={() => {
                                     slettPeriode(selectedDates);

@@ -38,6 +38,7 @@ const TidsbrukKalenderContainer = ({
                     gyldigPeriode={month}
                     ModalContent={ModalContent}
                     dateContentRenderer={dateContentRenderer(kalenderdager)}
+                    kalenderdager={kalenderdager}
                     slettPeriode={slettPeriode}
                 />
             ))}
