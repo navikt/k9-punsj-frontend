@@ -1,10 +1,11 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
 import { KalenderDag } from 'app/models/KalenderDag';
+import { uniq } from 'lodash';
 import CalendarGrid from './CalendarGrid';
 import './tidsbrukKalender.less';
 
@@ -29,15 +30,37 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             slettPeriode,
             dateContentRenderer,
             kalenderdager,
-            disableWeekends = false,
+            disableWeekends = true,
             tittelRenderer = getMonthAndYear,
         },
         ref
     ) => {
+        const [shiftKeydown, setShiftKeydown] = useState(false);
+        const [previouslySelectedDate, setPreviouslySelectedDate] = useState<Date | null>(null);
+        useEffect(() => {
+            const onKeyDown = (event: KeyboardEvent) => {
+                if (event.key === 'Shift') {
+                    setShiftKeydown(true);
+                }
+            };
+            const onKeyUp = (event: KeyboardEvent) => {
+                if (event.key === 'Shift') {
+                    setShiftKeydown(false);
+                    setPreviouslySelectedDate(null);
+                }
+            };
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+            return () => {
+                document.removeEventListener('keydown', onKeyDown);
+                document.removeEventListener('keyup', onKeyUp);
+            };
+        }, []);
         const [selectedDates, setSelectedDates] = useState<Date[]>([]);
         const [visKalender, setVisKalender] = useState<boolean>(false);
         const [visModal, setVisModal] = useState<boolean>(false);
         const clearSelectedDates = () => setSelectedDates([]);
+
         useOnClickOutside(ref, clearSelectedDates);
         const toggleKalender = () => {
             setVisKalender(!visKalender);
@@ -46,10 +69,26 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             }
         };
         const toggleModal = () => setVisModal(!visModal);
-        const toggleDay = (date: Date) =>
-            selectedDates.some((v) => dayjs(v).isSame(date))
-                ? setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)))
-                : setSelectedDates([...selectedDates, date]);
+        const toggleDay = (date: Date) => {
+            if (selectedDates.some((v) => dayjs(v).isSame(date))) {
+                setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)));
+            } else {
+                setSelectedDates([...selectedDates, date]);
+            }
+            setPreviouslySelectedDate(date);
+        };
+
+        const selectDates = (dates: Date[]) => {
+            setSelectedDates(uniq([...selectedDates, ...dates]));
+        };
+        const selectRange = (date: Date): void => {
+            if (!previouslySelectedDate) {
+                toggleDay(date);
+                return;
+            }
+            const dates = [previouslySelectedDate, date].sort((a, b) => a - b);
+            selectDates(getDatesInDateRange({ fom: dates[0], tom: dates[1] }));
+        };
         const disabledDates = getDatesInMonth(gyldigPeriode.fom)
             .map((date) => {
                 const dateIsWeekend = [0, 6].includes(date.getDay());
@@ -77,7 +116,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             <EkspanderbartPanel tittel={tittelRenderer(gyldigPeriode.fom)} apen={visKalender} onClick={toggleKalender}>
                 <div>
                     <CalendarGrid
-                        onDateClick={(date) => toggleDay(date)}
+                        onDateClick={(date) => (shiftKeydown ? selectRange(date) : toggleDay(date))}
                         month={gyldigPeriode}
                         disabledDates={disabledDates as Date[]}
                         disableWeekends={disableWeekends}
