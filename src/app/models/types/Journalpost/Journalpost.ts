@@ -1,4 +1,4 @@
-import journalpostStatus from 'app/models/enums/JournalpostStatus';
+import journalpostStatus from "app/models/enums/JournalpostStatus";
 
 export interface IJournalpost {
     journalpostId: string;
@@ -10,7 +10,6 @@ export interface IJournalpost {
         navn: string;
         erScanning: boolean;
     };
-    gosysoppgaveId?: string;
     journalpostStatus: journalpostStatus;
     kanKopieres?: boolean;
     kanOpprettesJournalføringsoppgave?: boolean;
