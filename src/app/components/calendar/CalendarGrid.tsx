@@ -26,6 +26,7 @@ interface Props {
     disabledDates?: Date[];
     selectedDates?: Date[];
     disabledDateInfo?: string;
+    disableWeekends?: boolean;
     hideEmptyContentInListMode?: boolean;
     hideWeeksWithOnlyDisabledContent?: boolean;
     onDateClick?: (date: Date) => void;
@@ -71,18 +72,20 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
     renderAsList,
     hideEmptyContentInListMode,
     hideWeeksWithOnlyDisabledContent,
+    disableWeekends,
     selectedDates,
     onDateClick,
     dateContentRenderer,
     allDaysInWeekDisabledContentRenderer,
 }) => {
-    const weekdatesInMonth = getDatesInMonth(month.fom, true);
+    const weekdatesInMonth = getDatesInMonth(month.fom);
     const weeks = getWeeks(weekdatesInMonth, month.fom);
 
     const renderDate = (date: Date) => {
         const dateKey = date.toDateString();
-        const dateIsDisabled = isDateInDates(date, disabledDates);
-        const renderAsButton = onDateClick !== undefined && dateIsDisabled === false;
+        const dateIsWeekend = [0, 6].includes(date.getDay());
+        const dateIsDisabled = isDateInDates(date, disabledDates) || (disableWeekends && dateIsWeekend);
+        const renderAsButton = onDateClick !== undefined;
         const dateIsSelected = selectedDates?.find((v) => dayjs(v).isSame(date));
 
         const ButtonOrDivComponent = renderAsButton ? 'button' : 'div';
@@ -106,8 +109,8 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
                 aria-hidden={dateIsDisabled}
                 className={classNames({
                     calendarGrid__day: true,
-                    'calendarGrid__day--disabled': dateIsDisabled,
                     'calendarGrid__day--button': renderAsButton,
+                    'calendarGrid__day--disabled': dateIsDisabled,
                     'calendarGrid__day--selected': dateIsSelected,
                 })}
             >
@@ -173,6 +176,12 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
             </span>
             <span aria-hidden className="calendarGrid__dayHeader">
                 <FormattedMessage id="Ukedag.4" />
+            </span>
+            <span aria-hidden className="calendarGrid__dayHeader">
+                <FormattedMessage id="Ukedag.5" />
+            </span>
+            <span aria-hidden className="calendarGrid__dayHeader">
+                <FormattedMessage id="Ukedag.6" />
             </span>
             {weeks.map(renderWeek)}
         </div>

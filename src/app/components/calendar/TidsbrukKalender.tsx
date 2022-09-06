@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
-import { getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
+import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
 import CalendarGrid from './CalendarGrid';
 import './tidsbrukKalender.less';
 
@@ -14,12 +14,23 @@ interface OwnProps {
     gyldigPeriode: DateRange;
     ModalContent: React.ReactElement;
     slettPeriode: (dates?: Date[]) => void;
+    disableWeekends?: boolean;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
     tittelRenderer?: () => string | React.FunctionComponent;
 }
 
 export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
-    ({ gyldigPeriode, ModalContent, slettPeriode, dateContentRenderer, tittelRenderer = getMonthAndYear }, ref) => {
+    (
+        {
+            gyldigPeriode,
+            ModalContent,
+            slettPeriode,
+            dateContentRenderer,
+            disableWeekends = false,
+            tittelRenderer = getMonthAndYear,
+        },
+        ref
+    ) => {
         const [selectedDates, setSelectedDates] = useState<Date[]>([]);
         const [visKalender, setVisKalender] = useState<boolean>(false);
         const [visModal, setVisModal] = useState<boolean>(false);
@@ -38,12 +49,27 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 : setSelectedDates([...selectedDates, date]);
         const disabledDates = getDatesInMonth(gyldigPeriode.fom)
             .map((date) => {
-                if (!isDateInDates(date, getDatesInDateRange(gyldigPeriode))) {
+                const dateIsWeekend = [0, 6].includes(date.getDay());
+
+                if (!isDateInDates(date, getDatesInDateRange(gyldigPeriode)) || (disableWeekends && dateIsWeekend)) {
                     return date;
                 }
+
                 return false;
             })
-            .filter((v) => v instanceof Date);
+            .filter((v) => v instanceof Date) as Date[];
+
+        const hasSelectedDisabledDate = disabledDates
+            .map((date) => dayjs(date).format(formats.DDMMYYYY))
+            .some((date) =>
+                selectedDates
+                    .map((selectedDate) => {
+                        const lel = dayjs(selectedDate).format(formats.DDMMYYYY);
+                        return lel;
+                    })
+                    .includes(date)
+            );
+        const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate;
         return (
             <EkspanderbartPanel tittel={tittelRenderer(gyldigPeriode.fom)} apen={visKalender} onClick={toggleKalender}>
                 <div>
@@ -51,17 +77,25 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                         onDateClick={(date) => toggleDay(date)}
                         month={gyldigPeriode}
                         disabledDates={disabledDates as Date[]}
+                        disableWeekends={disableWeekends}
                         dateContentRenderer={dateContentRenderer}
                         selectedDates={selectedDates}
                     />
                     <div style={{ marginTop: '1.875rem' }}>
-                        {!!selectedDates.length && (
+                        {!!kanRegistrereTid && (
                             <Button variant="primary" onClick={toggleModal}>
                                 Registrer tid
                             </Button>
                         )}
                         {selectedDates.length > 0 && (
-                            <Slett onClick={() => slettPeriode(selectedDates)}>Slett registrert tid</Slett>
+                            <Slett
+                                onClick={() => {
+                                    slettPeriode(selectedDates);
+                                    clearSelectedDates();
+                                }}
+                            >
+                                Slett registrert tid
+                            </Slett>
                         )}
                     </div>
                     <Modal

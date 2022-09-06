@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
 import isoWeek from 'dayjs/plugin/isoWeek';
@@ -8,11 +8,10 @@ import 'dayjs/locale/nb';
 import { IntlShape } from 'react-intl';
 import { capitalize } from 'lodash';
 import { TimeFormat } from '../models/enums';
-import { Periodeinfo, Ukedag, UkedagNumber } from '../models/types';
+import { Ukedag, UkedagNumber } from '../models/types';
 import DateRange from '../models/types/DateRange';
-import { IArbeidstidPeriodeMedTimer, IPeriode, Periode } from '../models/types/Periode';
+import { IPeriode } from '../models/types/Periode';
 import intlHelper from './intlUtils';
-import { formats } from './formatUtils';
 
 dayjs.extend(utc);
 dayjs.extend(duration);
