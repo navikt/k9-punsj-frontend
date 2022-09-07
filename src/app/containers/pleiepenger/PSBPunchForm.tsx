@@ -339,7 +339,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const nattevaakperioder = () => {
             return (
                 <PeriodeinfoPaneler
-                    intl={intl}
                     periods={soknad.nattevaak}
                     panelid={(i) => `nattevaakspanel_${i}`}
                     initialPeriodeinfo={this.initialTillegsinfo()}
@@ -422,7 +421,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />
                     {!!soknad.utenlandsopphold.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.utenlandsopphold}
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
@@ -523,6 +521,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     getUhaandterteFeil={this.getUhaandterteFeil}
                     handleFrilanserChange={this.handleFrilanserChange}
                     updateVirksomhetstyper={this.updateVirksomhetstyper}
+                    eksisterendePerioder={eksisterendePerioder}
                 />
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}

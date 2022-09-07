@@ -2,6 +2,7 @@
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
@@ -19,6 +20,7 @@ type ItemInfo = any;
 
 interface ArbeidstakerperioderProps {
     soknad: IPSBSoknad;
+    eksisterendePerioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
@@ -29,6 +31,7 @@ interface ArbeidstakerperioderProps {
 const Arbeidstakerperioder = ({
     soknad,
     initialArbeidstaker,
+    eksisterendePerioder,
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
@@ -36,7 +39,7 @@ const Arbeidstakerperioder = ({
 }: ArbeidstakerperioderProps): JSX.Element => {
     const intl = useIntl();
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
-    const { arbeidstid, soekerId } = soknad;
+    const { arbeidstid, soekerId, soeknadsperiode } = soknad;
 
     useEffect(() => {
         if (soekerId) {
@@ -144,7 +147,7 @@ const Arbeidstakerperioder = ({
                                 </div>
                             )}
                             <ArbeidstakerComponent
-                                søkerId={soknad.soekerId}
+                                søkerId={soekerId}
                                 arbeidstaker={currentItem as Arbeidstaker}
                                 listeelementindex={currentItemIndex}
                                 updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
@@ -159,7 +162,7 @@ const Arbeidstakerperioder = ({
                                 intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                                soknadsperioder={soknad.soeknadsperiode}
+                                soknadsperioder={soeknadsperiode.concat(eksisterendePerioder).filter(Boolean)}
                             />
                             <UhaanderteFeilmeldinger
                                 getFeilmeldinger={() =>

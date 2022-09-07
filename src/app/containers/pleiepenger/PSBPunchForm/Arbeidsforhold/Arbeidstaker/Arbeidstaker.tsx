@@ -14,7 +14,6 @@ import {
     GetErrorMessage,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
-    ITimerOgMinutter,
     ITimerOgMinutterString,
     Periode,
     Periodeinfo,
@@ -370,7 +369,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         />
                     </Modal.Content>
                 </Modal>
-
                 {soknadsperioder && (
                     <TidsbrukKalenderContainer
                         gyldigePerioder={soknadsperioder}
