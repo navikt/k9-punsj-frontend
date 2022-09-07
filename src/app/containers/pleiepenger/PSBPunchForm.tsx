@@ -202,11 +202,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
     };
 
-    private initialPeriodeMedTimer = new ArbeidstidPeriodeMedTimer({
-        periode: { fom: '', tom: '' },
-        faktiskArbeidTimerPerDag: '',
-    });
-
     private initialTillegsinfo = () => {
         const periode = this.getSoknadsperiode()[0];
         return new Tilleggsinformasjon({
@@ -221,15 +216,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             },
             organisasjonsnummer: '',
             norskIdent: null,
-        });
-
-    private initialArbeidstidInfo = () =>
-        new ArbeidstidInfo({
-            perioder: this.getSoknadsperiode().map((periode) => ({
-                periode,
-                faktiskArbeidTimerPerDag: '',
-                jobberNormaltTimerPerDag: '',
-            })),
         });
 
     private initialFrilanser = new FrilanserOpptjening({
@@ -931,7 +917,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         this.updateSoknadState({
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                                frilanserArbeidstidInfo: new ArbeidstidInfo({}),
                             },
                             opptjeningAktivitet: {
                                 ...this.state.soknad.opptjeningAktivitet,
@@ -976,7 +962,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             },
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo(),
+                                selvstendigNæringsdrivendeArbeidstidInfo: new ArbeidstidInfo({}),
                             },
                         });
                     }
@@ -1085,7 +1071,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.updateSoknadState({
                 arbeidstid: {
                     ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                    frilanserArbeidstidInfo: new ArbeidstidInfo({}),
                 },
                 opptjeningAktivitet: {
                     ...this.state.soknad.opptjeningAktivitet,

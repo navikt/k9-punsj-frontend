@@ -1,34 +1,21 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
-import { Button, Modal } from '@navikt/ds-react';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { formats, get, removeDatesFromPeriods } from 'app/utils';
+import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import ArbeidstidPeriodeListe from 'app/components/timefoering/ArbeidstidPeriodeListe';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import {
-    GetErrorMessage,
-    IArbeidstidPeriodeMedTimer,
-    IPeriode,
-    ITimerOgMinutterString,
-    Periode,
-    Periodeinfo,
-} from 'app/models/types';
-import FaktiskOgNormalTid from 'app/components/timefoering/FaktiskOgNormalTid';
-import dayjs from 'dayjs';
-import TidsbrukKalenderContainer from 'app/components/calendar/TidsbrukKalenderContainer';
-import DateContent from 'app/components/calendar/DateContent';
-import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
+import { GetErrorMessage, IPeriode } from 'app/models/types';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { ApiPath } from '../../../../../apiConfig';
 import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
 import ActionType from './actionTypes';
-import './arbeidstaker.less';
 import pfArbeidstakerReducer from './pfArbeidstakerReducer';
+import './arbeidstaker.less';
 
 interface ArbeidstakerComponentProps {
     søkerId: string;
@@ -59,8 +46,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
 }): JSX.Element => {
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
-    const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
-    const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
         // eslint-disable-next-line react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
@@ -125,59 +110,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         updateListeinfoInSoknad({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
     };
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
-
-    const lagreTimer = ({
-        faktiskArbeidPerDag,
-        jobberNormaltPerDag,
-        selectedDates,
-    }: {
-        faktiskArbeidPerDag: ITimerOgMinutterString;
-        jobberNormaltPerDag: ITimerOgMinutterString;
-        selectedDates: Date[];
-    }) => {
-        const utenDagerSomAlleredeFinnes = selectedDates.filter(
-            (day) => !arbeidstidInfo.perioder.some((periode) => periode.periode.includesDate(day))
-        );
-        const payload = utenDagerSomAlleredeFinnes.map((day) => ({
-            periode: new Periode({
-                fom: dayjs(day).format(formats.YYYYMMDD),
-                tom: dayjs(day).format(formats.YYYYMMDD),
-            }),
-            faktiskArbeidPerDag,
-            jobberNormaltPerDag,
-        }));
-
-        updateListeinfoInSoknad({
-            arbeidstidInfo: {
-                perioder: [...arbeidstidInfo.perioder, ...payload],
-            },
-        });
-        updateListeinfoInSoknadState({
-            arbeidstidInfo: {
-                perioder: [...arbeidstidInfo.perioder, ...payload],
-            },
-        });
-    };
-
-    const slettDager =
-        (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {
-            if (!selectedDates) {
-                return;
-            }
-
-            const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates);
-
-            updateListeinfoInSoknad({
-                arbeidstidInfo: {
-                    perioder: perioderFiltert as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
-                },
-            });
-            updateListeinfoInSoknadState({
-                arbeidstidInfo: {
-                    perioder: perioderFiltert as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
-                },
-            });
-        };
 
     const selectedType: OrgOrPers = orgOrPers();
 
@@ -336,50 +268,24 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </div>
                 </Row>
-                <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>
-                    {intlHelper(intl, 'skjema.arbeid.registrerLengrePeriode')}
-                </Button>
-                <VerticalSpacer twentyPx />
-                <Modal
-                    open={visArbeidstidLengrePerioder}
-                    onClose={toggleVisArbeidstidLengrePerioder}
-                    className="lengre-periode-modal"
-                >
-                    <Modal.Content>
-                        <ArbeidstidPeriodeListe
-                            heading="Periode med jobb"
-                            arbeidstidPerioder={arbeidstaker.arbeidstidInfo.perioder}
-                            soknadsperioder={soknadsperioder}
-                            lagre={(periodeInfo) => {
-                                updateListeinfoInSoknad({
-                                    arbeidstidInfo: {
-                                        ...arbeidstaker.arbeidstidInfo,
-                                        perioder: periodeInfo,
-                                    },
-                                });
-                                updateListeinfoInSoknadState({
-                                    arbeidstidInfo: {
-                                        ...arbeidstaker.arbeidstidInfo,
-                                        perioder: periodeInfo,
-                                    },
-                                });
-                                toggleVisArbeidstidLengrePerioder();
-                            }}
-                            avbryt={toggleVisArbeidstidLengrePerioder}
-                        />
-                    </Modal.Content>
-                </Modal>
-                {soknadsperioder && (
-                    <TidsbrukKalenderContainer
-                        gyldigePerioder={soknadsperioder}
-                        ModalContent={<FaktiskOgNormalTid lagre={lagreTimer} />}
-                        kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
-                            arbeidstidPeriodeTilKalenderdag(periode)
-                        )}
-                        slettPeriode={slettDager(arbeidstaker.arbeidstidInfo.perioder)}
-                        dateContentRenderer={DateContent}
-                    />
-                )}
+                <ArbeidstidKalender
+                    soknadsperioder={soknadsperioder}
+                    updateSoknad={(perioder) =>
+                        updateListeinfoInSoknad({
+                            arbeidstidInfo: {
+                                perioder,
+                            },
+                        })
+                    }
+                    updateSoknadState={(perioder) =>
+                        updateListeinfoInSoknadState({
+                            arbeidstidInfo: {
+                                perioder,
+                            },
+                        })
+                    }
+                    arbeidstidInfo={arbeidstidInfo}
+                />
             </Container>
         </SkjemaGruppe>
     );

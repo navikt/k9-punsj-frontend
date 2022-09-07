@@ -258,7 +258,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     barn: Barn;
 
-    soeknadsperiode: Periode[] | null;
+    soeknadsperiode: Periode[];
 
     opptjeningAktivitet: OpptjeningAktivitet;
 
