@@ -50,8 +50,6 @@ export default function ArbeidstidKalender({
             faktiskArbeidPerDag,
             jobberNormaltPerDag,
         }));
-        console.log(arbeidstidInfo);
-        console.log(payload);
         updateSoknad([...arbeidstidInfo.perioder, ...payload]);
         updateSoknadState([...arbeidstidInfo.perioder, ...payload]);
     };
@@ -70,7 +68,7 @@ export default function ArbeidstidKalender({
     return (
         <>
             <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>
-                {intlHelper(intl, 'skjema.arbeid.registrerLengrePeriode')}
+                {intlHelper(intl, 'skjema.arbeid.registrerArbeidstidLengrePeriode')}
             </Button>
             <VerticalSpacer twentyPx />
             <Modal
@@ -95,7 +93,7 @@ export default function ArbeidstidKalender({
             {soknadsperioder && (
                 <TidsbrukKalenderContainer
                     gyldigePerioder={soknadsperioder}
-                    ModalContent={<FaktiskOgNormalTid lagre={lagreTimer} />}
+                    ModalContent={<FaktiskOgNormalTid heading="Registrer arbeidstid" lagre={lagreTimer} />}
                     kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
                         arbeidstidPeriodeTilKalenderdag(periode)
                     )}

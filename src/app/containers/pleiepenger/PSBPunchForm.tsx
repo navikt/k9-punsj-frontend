@@ -61,7 +61,6 @@ import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
-import { pfTimerMinutter } from './pfTimerMinutter';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
@@ -71,6 +70,8 @@ import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
+import { set } from 'lodash';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -269,7 +270,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const soknad = new PSBSoknad(this.state.soknad);
         const { signert } = signaturState;
-        const eksisterendePerioder = punchFormState.perioder;
+        const eksisterendePerioder = punchFormState.perioder || [];
+        const soknadsperioder = [...soknad.soeknadsperiode, ...eksisterendePerioder];
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -302,7 +304,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const beredskapperioder = () => {
             return (
                 <PeriodeinfoPaneler
-                    intl={intl}
                     periods={soknad.beredskap}
                     panelid={(i) => `beredskapspanel_${i}`}
                     initialPeriodeinfo={this.initialTillegsinfo()}
@@ -550,47 +551,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
                         value={'skjema.omsorgstilbud.checkboks'}
                         onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
-                        checked={!!soknad.tilsynsordning.perioder.length}
+                        checked={this.state.iTilsynsordning}
                     />
-                    {!!soknad.tilsynsordning.perioder.length && (
-                        <PeriodeinfoPaneler
-                            intl={intl}
-                            periods={
-                                soknad.tilsynsordning.perioder.length
-                                    ? soknad.tilsynsordning.perioder
-                                    : [this.initialPeriodeTimerMinutter()]
-                            }
-                            component={pfTimerMinutter()}
-                            panelid={(i) => `tilsynsordningpanel_${i}`}
-                            initialPeriodeinfo={this.initialPeriodeTimerMinutter()}
-                            editSoknad={(perioder) =>
-                                this.updateSoknad({
-                                    tilsynsordning: {
-                                        ...this.state.soknad.tilsynsordning,
-                                        perioder,
-                                    },
-                                })
-                            }
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState(
-                                    {
-                                        tilsynsordning: {
-                                            ...this.state.soknad.tilsynsordning,
-                                            perioder,
-                                        },
-                                    },
-                                    showStatus
-                                )
-                            }
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            panelClassName="tilsynsordningpanel"
-                            getErrorMessage={this.getErrorMessage}
-                            getUhaandterteFeil={this.getUhaandterteFeil}
-                            feilkodeprefiks={'ytelse.tilsynsordning'}
-                            kanHaFlere={true}
-                            medSlettKnapp={false}
-                        />
+                    {this.state.iTilsynsordning && (
+                        <>
+                            <VerticalSpacer twentyPx />
+                            <TilsynKalender
+                                soknadsperioder={soknadsperioder}
+                                updateSoknad={(perioder) => {
+                                    this.updateSoknad({
+                                        tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                    });
+                                }}
+                                updateSoknadState={(perioder) =>
+                                    this.updateSoknadState({
+                                        tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                    })
+                                }
+                                perioderMedTimer={soknad.tilsynsordning.perioder}
+                            />
+                        </>
                     )}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
@@ -640,7 +620,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />
                     {!!soknad.bosteder.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.bosteder}
                             component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
@@ -1183,13 +1162,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState({
             iTilsynsordning: checked,
         });
-
-        if (
-            !!checked &&
-            (!this.state.soknad.tilsynsordning || this.state.soknad.tilsynsordning?.perioder?.length === 0)
-        ) {
-            this.addOmsorgstilbud();
-        }
 
         if (!checked) {
             this.updateSoknadState({ tilsynsordning: undefined }, true);

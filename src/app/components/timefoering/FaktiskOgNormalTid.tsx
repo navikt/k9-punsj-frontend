@@ -8,10 +8,10 @@ interface OwnProps {
     lagre: (params: any) => void;
     toggleModal: () => void;
     selectedDates?: Date[];
-    label?: string;
+    heading?: string;
 }
 
-const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnProps) => {
+const FaktiskOgNormalTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => {
     const [normaltTimer, setNormaltTimer] = useState('');
     const [normaltMinutter, setNormaltMinutter] = useState('');
     const [normaltError, setNormaltError] = useState('');
@@ -47,7 +47,7 @@ const FaktiskOgNormalTid = ({ lagre, label, selectedDates, toggleModal }: OwnPro
 
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
-            {label && <Heading size="medium">{label}</Heading>}
+            {heading && <Heading size="medium">{heading}</Heading>}
             <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
                 <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
                     <TimerOgMinutter

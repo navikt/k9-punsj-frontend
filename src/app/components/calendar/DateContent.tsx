@@ -3,7 +3,7 @@ import { verdiOgTekstHvisVerdi } from 'app/utils';
 import dayjs from 'dayjs';
 import React from 'react';
 
-const DateContent = (kalenderdager: KalenderDag[]) => (date: Date, isDisabled: boolean) => {
+const DateContent = (kalenderdager: KalenderDag[]) => (date: Date) => {
     if (kalenderdager.length === 0) {
         return null;
     }
