@@ -1,6 +1,6 @@
 import { Periodeinfo } from 'app/models/types';
 import dayjs from 'dayjs';
-import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periode } from '../models/types/Periode';
+import { IArbeidstidPeriodeMedTimer, ITimerOgMinutter, Periode } from '../models/types/Periode';
 import { formats } from './formatUtils';
 import {
     countDatesInDateRange,
@@ -111,7 +111,10 @@ export const slåSammenSammenhengendePerioder = (periods: Periode[]): Periode[] 
     return combinedPeriods;
 };
 
-export const removeDatesFromPeriods = (periods: Periodeinfo<IArbeidstidPeriodeMedTimer>[], datesToBeRemoved: Date[]) =>
+export const removeDatesFromPeriods = (
+    periods: Periodeinfo<IArbeidstidPeriodeMedTimer | ITimerOgMinutter>[],
+    datesToBeRemoved: Date[]
+) =>
     periods
         .map((periodeMedTimer) => {
             const periode = new Periode(periodeMedTimer?.periode || {});
@@ -124,13 +127,10 @@ export const removeDatesFromPeriods = (periods: Periodeinfo<IArbeidstidPeriodeMe
                     fom: dayjs(dateArray[0]).format(formats.YYYYMMDD),
                     tom: dayjs(dateArray[dateArray.length - 1]).format(formats.YYYYMMDD),
                 }));
-                const perioderMedArbeidstid = nyePerioder.map(
-                    (nyPeriode) =>
-                        new ArbeidstidPeriodeMedTimer({
-                            ...periodeMedTimer,
-                            periode: nyPeriode,
-                        })
-                );
+                const perioderMedArbeidstid = nyePerioder.map((nyPeriode) => ({
+                    ...periodeMedTimer,
+                    periode: nyPeriode,
+                }));
 
                 return perioderMedArbeidstid;
             }

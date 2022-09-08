@@ -1,7 +1,14 @@
 import intlHelper from 'app/utils/intlUtils';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import React, { useState } from 'react';
-import { ITimerOgMinutterString, Periode, Periodeinfo, IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types';
+import {
+    ITimerOgMinutterString,
+    Periode,
+    Periodeinfo,
+    IArbeidstidPeriodeMedTimer,
+    IPeriode,
+    ArbeidstidPeriodeMedTimer,
+} from 'app/models/types';
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
@@ -60,10 +67,12 @@ export default function ArbeidstidKalender({
                 return;
             }
 
-            const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates);
+            const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates).map(
+                (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v)
+            );
 
-            updateSoknad(perioderFiltert as IArbeidstidPeriodeMedTimer[]);
-            updateSoknadState(perioderFiltert as IArbeidstidPeriodeMedTimer[]);
+            updateSoknad(perioderFiltert);
+            updateSoknadState(perioderFiltert);
         };
     return (
         <>

@@ -1,7 +1,7 @@
 import intlHelper from 'app/utils/intlUtils';
 import { periodeMedTimerTilKalenderdag } from 'app/utils/mappingUtils';
 import React, { useState } from 'react';
-import { Periode, Periodeinfo, IPeriode, ITimerOgMinutter } from 'app/models/types';
+import { Periode, Periodeinfo, IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter } from 'app/models/types';
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
@@ -58,10 +58,12 @@ export default function TilsynKalender({
             return;
         }
 
-        const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates);
+        const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates).map(
+            (v: Periodeinfo<ITimerOgMinutter>) => new PeriodeMedTimerMinutter(v)
+        );
 
-        updateSoknad(perioderFiltert as Periodeinfo<ITimerOgMinutter>[]);
-        updateSoknadState(perioderFiltert as Periodeinfo<ITimerOgMinutter>[]);
+        updateSoknad(perioderFiltert);
+        updateSoknadState(perioderFiltert);
     };
     return (
         <>

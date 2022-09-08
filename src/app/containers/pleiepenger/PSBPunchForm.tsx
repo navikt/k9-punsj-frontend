@@ -258,6 +258,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
+                iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
