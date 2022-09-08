@@ -556,20 +556,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     {this.state.iTilsynsordning && (
                         <>
                             <VerticalSpacer twentyPx />
-                            <TilsynKalender
-                                soknadsperioder={soknadsperioder}
-                                updateSoknad={(perioder) => {
-                                    this.updateSoknad({
-                                        tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
-                                    });
-                                }}
-                                updateSoknadState={(perioder) =>
-                                    this.updateSoknadState({
-                                        tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
-                                    })
-                                }
-                                perioderMedTimer={soknad.tilsynsordning.perioder}
-                            />
+                            <div className="listepanel">
+                                <TilsynKalender
+                                    soknadsperioder={soknadsperioder}
+                                    updateSoknad={(perioder) => {
+                                        console.log(perioder);
+                                        this.updateSoknad({
+                                            tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                        });
+                                    }}
+                                    updateSoknadState={(perioder) =>
+                                        this.updateSoknadState(
+                                            {
+                                                tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                            },
+                                            true
+                                        )
+                                    }
+                                    perioderMedTimer={soknad.tilsynsordning.perioder}
+                                />
+                            </div>
                         </>
                     )}
                 </EkspanderbartpanelBase>

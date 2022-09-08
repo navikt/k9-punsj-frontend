@@ -109,6 +109,15 @@ export const timerOgMinutter = yup.object({
     timer: timer.required(),
     minutter: minutter.required(),
 });
+
+export const periodeMedTimerOgMinutter = yup.object({
+    periode: yup.object({
+        fom: yup.string().required().label('Fra og med'),
+        tom: yup.string().required().label('Til og med'),
+    }),
+    timer: timer.required(),
+    minutter: minutter.required(),
+});
 export const arbeidstimerPeriode = yup.object({
     periode: yup.object({
         fom: yup.string().required().label('Fra og med'),

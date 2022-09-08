@@ -3,13 +3,13 @@ import { Button, Heading } from '@navikt/ds-react';
 import { IPeriode, ITimerOgMinutter, Periodeinfo, PeriodeMedTimerMinutter } from 'app/models/types';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
-import { arbeidstimerPeriode } from 'app/rules/valideringer';
+import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/valideringer';
 import * as yup from 'yup';
 import TilsynPeriode from './TilsynPeriode';
 import VerticalSpacer from '../VerticalSpacer';
 
 const schema = yup.object({
-    perioder: yup.array().of(arbeidstimerPeriode),
+    perioder: yup.array().of(periodeMedTimerOgMinutterSchema),
 });
 
 export default function TilsynPeriodeListe({
@@ -33,6 +33,7 @@ export default function TilsynPeriodeListe({
             {({ handleSubmit, values }) => (
                 <>
                     {heading && <Heading size="small">{heading}</Heading>}
+                    {console.log(values.perioder)}
                     <FieldArray
                         name="perioder"
                         render={(arrayHelpers) => (
