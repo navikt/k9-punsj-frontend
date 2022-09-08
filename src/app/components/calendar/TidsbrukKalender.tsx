@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
@@ -112,8 +112,19 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             );
         const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
         const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
+
+        const tittel = (
+            <>
+                {tittelRenderer(gyldigPeriode.fom)}
+                {kalenderdager?.length ? (
+                    <BodyShort>{`${kalenderdager?.length} dager registrert`}</BodyShort>
+                ) : (
+                    <BodyShort>Ingen dager registrert</BodyShort>
+                )}
+            </>
+        );
         return (
-            <EkspanderbartPanel tittel={tittelRenderer(gyldigPeriode.fom)} apen={visKalender} onClick={toggleKalender}>
+            <EkspanderbartPanel tittel={tittel} apen={visKalender} onClick={toggleKalender}>
                 <div>
                     <CalendarGrid
                         onDateClick={(date) => (shiftKeydown ? selectRange(date) : toggleDay(date))}
