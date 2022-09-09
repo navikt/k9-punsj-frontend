@@ -75,7 +75,7 @@ const ExampleModalContent = (props: { selectedDates: Date[] }) => {
 const dateContent = (dager: KalenderDag[]) => (date: Date, isDisabled: boolean) => {
     const kalenderdag = dager.find((dag) => dayjs(dag.date).isSame(dayjs(date), 'date'));
 
-    if (kalenderdag)
+    if (kalenderdag) {
         return (
             <>
                 <div>
@@ -88,6 +88,8 @@ const dateContent = (dager: KalenderDag[]) => (date: Date, isDisabled: boolean) 
                 </div>
             </>
         );
+    }
+    return nulll;
 };
 
 const perioder = {
