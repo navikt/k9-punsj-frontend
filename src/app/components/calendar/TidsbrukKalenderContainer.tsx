@@ -1,6 +1,8 @@
 import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
+import DateRange from 'app/models/types/DateRange';
 import { getMonthsInDateRange } from 'app/utils';
+import dayjs from 'dayjs';
 import { uniqueId } from 'lodash';
 import React, { useRef } from 'react';
 import TidsbrukKalender from './TidsbrukKalender';
@@ -28,14 +30,28 @@ const TidsbrukKalenderContainer = ({
         .map((dateRange) => getMonthsInDateRange(dateRange))
         .flat()
         .sort((a, b) => (a.fom > b.fom ? 1 : -1));
+
+    const reducer = (acc: DateRange[][], currentDateRange: DateRange) => {
+        const indexOfArrayToInsertInto = acc.findIndex((dateRangeArr: DateRange[]) =>
+            dateRangeArr.some((dateRange) => dayjs(dateRange.fom).isSame(currentDateRange.fom, 'month'))
+        );
+        if (indexOfArrayToInsertInto > -1 && currentDateRange) {
+            const originalArray = acc[indexOfArrayToInsertInto];
+            const mutableAccumulator = acc;
+            mutableAccumulator[indexOfArrayToInsertInto] = [...originalArray, currentDateRange];
+            return mutableAccumulator;
+        }
+        return [...acc, [currentDateRange]];
+    };
+    const gyldigePerioderPerMåned = months.reduce(reducer, []);
     const id = uniqueId('tidsbrukKalender');
     return (
         <div style={{ maxWidth: '1000px' }} id={id} ref={ref}>
-            {months.map((month) => (
+            {gyldigePerioderPerMåned.map((perioder) => (
                 <TidsbrukKalender
                     ref={ref}
-                    key={month.fom.toString()}
-                    gyldigPeriode={month}
+                    key={perioder[0].fom.toString()}
+                    gyldigePerioder={perioder}
                     ModalContent={ModalContent}
                     dateContentRenderer={dateContentRenderer(kalenderdager)}
                     kalenderdager={kalenderdager}

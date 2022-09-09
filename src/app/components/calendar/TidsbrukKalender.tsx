@@ -13,7 +13,7 @@ import DateRange from '../../models/types/DateRange';
 import Slett from '../buttons/Slett';
 
 interface OwnProps {
-    gyldigPeriode: DateRange;
+    gyldigePerioder: DateRange[];
     ModalContent: React.ReactElement;
     slettPeriode: (dates?: Date[]) => void;
     disableWeekends?: boolean;
@@ -25,7 +25,7 @@ interface OwnProps {
 export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
     (
         {
-            gyldigPeriode,
+            gyldigePerioder,
             ModalContent,
             slettPeriode,
             dateContentRenderer,
@@ -89,11 +89,13 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             const dates = [previouslySelectedDate, date].sort((a, b) => a - b);
             selectDates(getDatesInDateRange({ fom: dates[0], tom: dates[1] }));
         };
-        const disabledDates = getDatesInMonth(gyldigPeriode.fom)
+
+        const datoerIGyldigePerioder = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
+        const disabledDates = getDatesInMonth(gyldigePerioder[0].fom)
             .map((date) => {
                 const dateIsWeekend = [0, 6].includes(date.getDay());
 
-                if (!isDateInDates(date, getDatesInDateRange(gyldigPeriode)) || (disableWeekends && dateIsWeekend)) {
+                if (!isDateInDates(date, datoerIGyldigePerioder) || (disableWeekends && dateIsWeekend)) {
                     return date;
                 }
 
@@ -112,10 +114,9 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             );
         const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
         const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
-
         const tittel = (
             <>
-                {tittelRenderer(gyldigPeriode.fom)}
+                {tittelRenderer(gyldigePerioder[0].fom)}
                 {kalenderdager?.length ? (
                     <BodyShort>{`${kalenderdager?.length} dager registrert`}</BodyShort>
                 ) : (
@@ -128,7 +129,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 <div>
                     <CalendarGrid
                         onDateClick={(date) => (shiftKeydown ? selectRange(date) : toggleDay(date))}
-                        month={gyldigPeriode}
+                        month={gyldigePerioder[0]}
                         disabledDates={disabledDates as Date[]}
                         disableWeekends={disableWeekends}
                         dateContentRenderer={dateContentRenderer}
