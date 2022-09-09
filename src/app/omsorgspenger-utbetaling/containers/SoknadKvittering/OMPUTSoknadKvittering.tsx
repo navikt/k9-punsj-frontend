@@ -5,16 +5,12 @@ import { connect } from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import { useIntl } from 'react-intl';
-import { Alert, BodyShort, Detail, Heading, Label } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
 import { RootStateType } from 'app/state/RootState';
 import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
-import {
-    formatereTekstMedTimerOgMinutter,
-    formattereTidspunktFraUTCTilGMT,
-    periodToFormattedString,
-} from '../../../utils';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import './ompUtSoknadKvittering.less';
 import FravaersperiodeKvittering from './FravaersperiodeKvittering';

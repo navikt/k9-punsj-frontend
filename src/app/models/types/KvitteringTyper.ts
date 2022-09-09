@@ -24,10 +24,14 @@ export interface FrilanserAktivitet {
 }
 
 export interface Fravaersperiode {
-    aktivitetFravær: string[]
+    aktivitetFravær: string[];
     arbeidsforholdId?: string;
     arbeidsgiverOrgNr?: string;
     duration: string;
+    delvisFravær: {
+        fravær: string;
+        normalarbeidstid: string;
+    };
     periode: string;
     søknadÅrsak: string;
     årsak: string;
