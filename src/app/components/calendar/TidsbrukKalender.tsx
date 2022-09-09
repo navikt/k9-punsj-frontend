@@ -112,13 +112,17 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             .some((date) =>
                 selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date)
             );
+        const kalenderdagerIGyldigePerioder = kalenderdager
+            ?.map((kalenderdag) => kalenderdag.date)
+            .map((date) => isDateInDates(date, datoerIGyldigePerioder))
+            .filter(Boolean);
         const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
         const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
         const tittel = (
             <>
                 {tittelRenderer(gyldigePerioder[0].fom)}
-                {kalenderdager?.length ? (
-                    <BodyShort>{`${kalenderdager?.length} dager registrert`}</BodyShort>
+                {kalenderdagerIGyldigePerioder?.length ? (
+                    <BodyShort>{`${kalenderdagerIGyldigePerioder?.length} dager registrert`}</BodyShort>
                 ) : (
                     <BodyShort>Ingen dager registrert</BodyShort>
                 )}
