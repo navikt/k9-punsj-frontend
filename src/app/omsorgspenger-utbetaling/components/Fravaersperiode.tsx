@@ -93,13 +93,13 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
             <div style={{ display: 'flex', alignItems: 'baseline' }}>
                 <TextFieldFormik
                     className="timer-arbeidet"
-                    label="Arbeider normalt"
+                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}
                     size="small"
                     name={`${name}.normalArbeidstidPrDag`}
                 />
                 <TextFieldFormik
                     className="timer-arbeidet"
-                    label="Timer faktisk arbeidet"
+                    label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.fraværPerDag')}
                     size="small"
                     name={`${name}.faktiskTidPrDag`}
                 />

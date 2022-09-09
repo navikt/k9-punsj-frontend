@@ -10,8 +10,8 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             fraværÅrsak: yup.string().required(),
             søknadÅrsak: medSoknadAarsak ? yup.string().required() : yup.string().nullable(),
             periode: periode(),
-            faktiskTidPrDag: yup.string().required(),
-            normalArbeidstidPrDag: yup.string().required(),
+            faktiskTidPrDag: yup.string().required().label('Timer fravær per dag'),
+            normalArbeidstidPrDag: yup.string().required().label('Normal arbeidstid per dag'),
         })
     );
 const arbeidstaker = () =>

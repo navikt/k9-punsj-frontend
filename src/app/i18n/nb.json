@@ -207,6 +207,7 @@
     "skjema.arbeid.arbeidstaker.fjernperiode": "Fjern periode",
     "skjema.arbeid.arbeidstaker.fjernarbeidsgiver": "Fjern arbeidsforhold",
     "skjema.arbeid.arbeidstaker.timernormalt": "Normal arbeidstid per dag",
+    "skjema.arbeid.arbeidstaker.fraværPerDag": "Timer fravær per dag",
     "skjema.arbeid.arbeidstaker.timerfaktisk": "Faktisk arbeidstid per dag",
     "skjema.arbeid.arbeidstaker.timerperuke": "timer per uke",
     "skjema.arbeid.arbeidstaker.tilsvarer": "tilsvarer",
