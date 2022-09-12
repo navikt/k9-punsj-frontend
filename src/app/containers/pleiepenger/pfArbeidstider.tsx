@@ -5,7 +5,7 @@ import {
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 import * as React from 'react';
-import { IntlShape, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Input } from 'nav-frontend-skjema';
 import { Row } from 'react-bootstrap';
 import { PopoverOrientering } from 'nav-frontend-popover';
@@ -14,7 +14,7 @@ import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
-import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstid';
+import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstidDesimaler';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {

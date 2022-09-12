@@ -290,13 +290,11 @@ describe('PunchForm', () => {
 
         const punchForm = setupPunchForm({ soknad });
         expect(punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')).toBeTruthy();
-        expect(punchForm.find('.tilsynsordning PeriodeinfoPaneler')).toHaveLength(1);
     });
 
     it('Viser ikke perioder når tilsyn er undefined', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad });
         expect(punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')).toEqual(false);
-        expect(punchForm.find('.tilsynsordning PeriodeinfoPaneler')).toHaveLength(0);
     });
 
     it('Viser beredskap og nattevåk når det er registrert fra før', () => {
@@ -332,24 +330,35 @@ describe('PunchForm', () => {
         expect(punchForm.find('.nattevaaksperioder')).toHaveLength(0);
     });
 
-    it('Oppdaterer søknad og felt når tilsynsordning endres', () => {
+    it('Fjerner tilsynsordning når avhuking på tilsyn fjernes', () => {
         const updateSoknad = jest.fn();
-        const punchForm = setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
-        punchForm.find('.tilsynsordning CheckboksPanel').simulate('change', { target: { checked: true } });
+        const punchForm = setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    tilsynsordning: {
+                        perioder: [
+                            {
+                                periode: {
+                                    fom: '2020-12-06',
+                                    tom: '2021-01-15',
+                                },
+                                timer: 5,
+                                minutter: 0,
+                            },
+                        ],
+                    },
+                },
+            },
+            { updateSoknad }
+        );
+        punchForm.find('.tilsynsordning CheckboksPanel').simulate('change', { target: { checked: false } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
-            tilsynsordning: expect.objectContaining({
-                perioder: [
-                    {
-                        periode: { fom: '', tom: '' },
-                        timer: 0,
-                        minutter: 0,
-                    },
-                ],
-            }),
+            tilsynsordning: undefined,
         });
         expect(updateSoknad).toHaveBeenCalledWith(expectedUpdatedSoknad);
-        expect(punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')).toBeTruthy();
+        expect(punchForm.find('.tilsynsordning CheckboksPanel').prop('checked')).toBeFalsy();
     });
 
     it('Validerer søknad når saksbehandler trykker på "Send inn"', () => {

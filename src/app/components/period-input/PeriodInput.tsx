@@ -3,16 +3,16 @@ import classNames from 'classnames';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { IntlShape, useIntl } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import { IPeriode } from '../../models/types/Periode';
 import DateInput, { DateInputProps } from '../skjema/DateInput';
 import './periodInput.less';
 
 export interface IPeriodInputProps extends Partial<Omit<DateInputProps, 'onChange' | 'onBlur'>> {
+    intl: IntlShape;
     periode: IPeriode;
     onChange: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
-    onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;
     errorMessageTom?: React.ReactNode | boolean;
@@ -31,6 +31,7 @@ export interface IPeriodInputProps extends Partial<Omit<DateInputProps, 'onChang
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
     const {
+        intl,
         periode,
         onChange,
         disabled,
@@ -47,8 +48,6 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         fomInputRef,
         limitations,
     } = props;
-
-    const intl = useIntl();
 
     const renderDato = (property: string) => {
         if (periode?.[property] && periode?.[property].length) return periode?.[property];

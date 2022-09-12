@@ -219,6 +219,7 @@
     "skjema.arbeid.arbeidstaker.leggtilarbeidsgiver": "Legg til arbeidsgiver",
     "skjema.arbeid.arbeidstaker.fjernperiode": "Fjern periode",
     "skjema.arbeid.arbeidstaker.fjernarbeidsgiver": "Fjern arbeidsforhold",
+    "skjema.arbeid.arbeidstaker.timerperuke": "timer per uke",
     "skjema.arbeid.arbeidstaker.timernormalt": "Normal arbeidstid per dag",
     "skjema.arbeid.arbeidstaker.timerfaktisk": "Faktisk arbeidstid per dag",
     "skjema.arbeid.arbeidstaker.peruke": "per uke",
