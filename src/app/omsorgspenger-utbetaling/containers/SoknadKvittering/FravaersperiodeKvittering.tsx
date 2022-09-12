@@ -21,7 +21,7 @@ export default function FravaersperiodeKvittering({ periode }: { periode: Fravae
             </div>
             <div>
                 <Label>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.fraværPerDag')}:</Label>
-                <BodyShort>{formatereTekstMedTimerOgMinutter(periode.duration)}</BodyShort>
+                <BodyShort>{formatereTekstMedTimerOgMinutter(periode.delvisFravær.fravær)}</BodyShort>
             </div>
             <div>
                 <Label>Søknadsårsak:</Label>
