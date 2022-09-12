@@ -63,8 +63,6 @@ export interface IFordelingStateProps {
     opprettIGosysState: IGosysOppgaveState;
     fellesState: IFellesState;
     dedupkey: string;
-    fordelingSettPåVentState: FordelingSettPaaVentState;
-    fordelingFerdigstillState: FordelingFerdigstillJournalpostState;
 }
 
 export interface IFordelingDispatchProps {
@@ -579,8 +577,6 @@ const mapStateToProps = (state: RootStateType) => ({
     opprettIGosysState: state.opprettIGosys,
     fellesState: state.felles,
     dedupkey: state.felles.dedupKey,
-    fordelingSettPåVentState: state.fordelingSettPåVentState,
-    fordelingFerdigstillState: state.fordelingFerdigstillJournalpostState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

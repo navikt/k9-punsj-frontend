@@ -193,7 +193,3 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         />
     );
 };
-
-PeriodeinfoPaneler.defaultProps = {
-    periods: [],
-};

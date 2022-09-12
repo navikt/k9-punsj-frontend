@@ -37,7 +37,6 @@ export interface IListepanelerProps<T> {
     getErrorMessage?: GetErrorMessage;
     getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
-    minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;

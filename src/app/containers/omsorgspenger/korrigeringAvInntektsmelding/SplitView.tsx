@@ -38,10 +38,6 @@ export interface IPunchPageDispatchProps {
     setStepAction: typeof setStepAction;
 }
 
-export interface IPunchPageQueryProps {
-    dok?: string | null;
-}
-
 export interface IPunchPageComponentProps {
     match?: any;
     step: PunchStep;
@@ -58,8 +54,7 @@ type IPunchPageProps = WrappedComponentProps &
     RouteComponentProps &
     IPunchPageComponentProps &
     IPunchPageStateProps &
-    IPunchPageDispatchProps &
-    IPunchPageQueryProps;
+    IPunchPageDispatchProps;
 
 export const SplitViewComponent: React.FunctionComponent<IPunchPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, identState } = props;
@@ -155,10 +150,9 @@ const mapDispatchToProps = (dispatch: any) => ({
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 
-const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
-    const dok = useQuery().get('dok');
-    return <SplitViewComponent {...props} dok={dok} />;
-};
+const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => (
+    <SplitViewComponent {...props} />
+);
 
 export const SplitView = withRouter(
     injectIntl(connect(mapStateToProps, mapDispatchToProps)(SplitViewComponentWithQuery))
