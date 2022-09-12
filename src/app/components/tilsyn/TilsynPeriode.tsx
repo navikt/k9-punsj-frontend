@@ -2,6 +2,7 @@ import { Checkbox } from '@navikt/ds-react';
 import { IPeriode, ITimerOgMinutter, Periodeinfo } from 'app/models/types';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
@@ -17,6 +18,8 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const [_, tidMeta] = useField(`${name}.timer`);
     const [__, periodeFomMeta] = useField(`${name}.periode.fom`);
 
+    const intl = useIntl();
+
     const velgSoknadsperiode = (periode: IPeriode) => {
         formik.setFieldValue(`${name}.periode`, periode);
     };
@@ -29,6 +32,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     <div style={{ display: 'flex' }}>
                         <PeriodInput
                             periode={field.value.periode || {}}
+                            intl={intl}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.periode`, v);
                             }}

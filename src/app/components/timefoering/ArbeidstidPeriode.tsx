@@ -2,6 +2,7 @@ import { Checkbox } from '@navikt/ds-react';
 import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import Slett from '../buttons/Slett';
 import CheckboxFormik from '../formikInput/CheckboxFormik';
 import { PeriodInput } from '../period-input/PeriodInput';
@@ -20,6 +21,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag.timer`);
     const [periodeFomField, periodeFomMeta] = useField(`${name}.periode.fom`);
 
+    const intl = useIntl();
     const velgSoknadsperiode = (periode: IPeriode) => {
         formik.setFieldValue(`${name}.periode`, periode);
     };
@@ -32,6 +34,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     <div style={{ display: 'flex' }}>
                         <PeriodInput
                             periode={field.value.periode || {}}
+                            intl={intl}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.periode`, v);
                             }}
