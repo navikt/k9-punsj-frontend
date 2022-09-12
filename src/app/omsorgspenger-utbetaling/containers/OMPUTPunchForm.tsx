@@ -99,6 +99,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 if (data['feil']?.length) {
                     setK9FormatErrors(data['feil']);
                     setKvittering && setKvittering(undefined);
+                } else {
+                    setK9FormatErrors([]);
                 }
             },
         }
