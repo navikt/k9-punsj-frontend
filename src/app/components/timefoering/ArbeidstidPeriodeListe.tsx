@@ -6,6 +6,7 @@ import React from 'react';
 import { arbeidstimerPeriode } from 'app/rules/valideringer';
 import * as yup from 'yup';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
+import VerticalSpacer from '../VerticalSpacer';
 
 const schema = yup.object({
     perioder: yup.array().of(arbeidstimerPeriode),
@@ -51,6 +52,7 @@ export default function ArbeidstidPeriodeListe({
                                 >
                                     <AddCircle /> Legg til periode
                                 </Button>
+                                <VerticalSpacer eightPx />
                                 <div style={{ display: 'flex' }}>
                                     <Button
                                         style={{ flexGrow: 1, marginRight: '0.9375rem' }}
