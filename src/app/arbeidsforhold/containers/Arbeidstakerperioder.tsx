@@ -10,15 +10,16 @@ import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import {IPLSSoknad} from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
-import {Arbeidstaker} from '../../models/types';
-import {finnArbeidsgivere} from '../../api/api';
+import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { Arbeidstaker, IPeriode } from '../../models/types';
+import { finnArbeidsgivere } from '../../api/api';
 import ArbeidstakerComponent from './ArbeidstakerComponent';
 
 type ItemInfo = any;
 
 interface ArbeidstakerperioderProps {
     soknad: IPLSSoknad;
+    soknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPLSSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPLSSoknad>, showStatus?: boolean) => void;
@@ -28,6 +29,7 @@ interface ArbeidstakerperioderProps {
 
 const Arbeidstakerperioder = ({
     soknad,
+    soknadsperioder,
     initialArbeidstaker,
     updateSoknad,
     updateSoknadState,
@@ -147,6 +149,7 @@ const Arbeidstakerperioder = ({
                                 søkerId={soknad.soekerId}
                                 arbeidstaker={currentItem as Arbeidstaker}
                                 listeelementindex={currentItemIndex}
+                                soknadsperioder={soknadsperioder}
                                 updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
                                     editSoknad(editItem(currentItemIndex, info))
                                 }

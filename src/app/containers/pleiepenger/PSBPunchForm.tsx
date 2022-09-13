@@ -44,7 +44,7 @@ import { Arbeidstaker } from '../../models/types/Arbeidstaker';
 import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { ArbeidstidPeriodeMedTimer, IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
+import { IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
 import {
     IPSBSoknad,
     IUtenlandsOpphold,
