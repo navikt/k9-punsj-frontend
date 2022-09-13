@@ -132,12 +132,12 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
         this.jobberNormaltMinutterPerDag = pmf.jobberNormaltMinutterPerDag || '';
         this.jobberNormaltPerDag = pmf.jobberNormaltPerDag || {
-            timer: '',
-            minutter: '',
+            timer: '0',
+            minutter: '0',
         };
         this.faktiskArbeidPerDag = pmf.faktiskArbeidPerDag || {
-            timer: '',
-            minutter: '',
+            timer: '0',
+            minutter: '0',
         };
     }
 
