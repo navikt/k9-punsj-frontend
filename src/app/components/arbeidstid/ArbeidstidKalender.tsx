@@ -37,30 +37,6 @@ export default function ArbeidstidKalender({
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
     const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
 
-    const lagreTimer = ({
-        faktiskArbeidPerDag,
-        jobberNormaltPerDag,
-        selectedDates,
-    }: {
-        faktiskArbeidPerDag: ITimerOgMinutterString;
-        jobberNormaltPerDag: ITimerOgMinutterString;
-        selectedDates: Date[];
-    }) => {
-        const utenDagerSomAlleredeFinnes = selectedDates.filter(
-            (day) => !arbeidstidInfo.perioder.some((periode) => periode.periode.includesDate(day))
-        );
-        const payload = utenDagerSomAlleredeFinnes.map((day) => ({
-            periode: new Periode({
-                fom: dayjs(day).format(formats.YYYYMMDD),
-                tom: dayjs(day).format(formats.YYYYMMDD),
-            }),
-            faktiskArbeidPerDag,
-            jobberNormaltPerDag,
-        }));
-        updateSoknad([...arbeidstidInfo.perioder, ...payload]);
-        updateSoknadState([...arbeidstidInfo.perioder, ...payload]);
-    };
-
     const slettDager =
         (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {
             if (!selectedDates) {
@@ -74,6 +50,33 @@ export default function ArbeidstidKalender({
             updateSoknad(perioderFiltert);
             updateSoknadState(perioderFiltert);
         };
+
+    const lagreTimer = ({
+        faktiskArbeidPerDag,
+        jobberNormaltPerDag,
+        selectedDates,
+    }: {
+        faktiskArbeidPerDag: ITimerOgMinutterString;
+        jobberNormaltPerDag: ITimerOgMinutterString;
+        selectedDates: Date[];
+    }) => {
+        const eksisterendePerioderUtenSelectedDates = removeDatesFromPeriods(
+            arbeidstidInfo.perioder,
+            selectedDates
+        ).map((v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v));
+
+        const payload = selectedDates.map((day) => ({
+            periode: new Periode({
+                fom: dayjs(day).format(formats.YYYYMMDD),
+                tom: dayjs(day).format(formats.YYYYMMDD),
+            }),
+            faktiskArbeidPerDag,
+            jobberNormaltPerDag,
+        }));
+        updateSoknad([...eksisterendePerioderUtenSelectedDates, ...payload]);
+        updateSoknadState([...eksisterendePerioderUtenSelectedDates, ...payload]);
+    };
+
     return (
         <>
             <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>

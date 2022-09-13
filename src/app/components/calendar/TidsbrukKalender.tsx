@@ -116,7 +116,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             ?.map((kalenderdag) => kalenderdag.date)
             .map((date) => isDateInDates(date, datoerIGyldigePerioder))
             .filter(Boolean);
-        const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
+        const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate;
         const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
         const tittel = (
             <>
