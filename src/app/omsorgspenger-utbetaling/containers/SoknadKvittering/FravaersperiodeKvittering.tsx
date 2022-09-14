@@ -17,11 +17,13 @@ export default function FravaersperiodeKvittering({ periode }: { periode: Fravae
             </div>
             <div>
                 <Label>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}:</Label>
-                <BodyShort>{formatereTekstMedTimerOgMinutter(periode.delvisFravær.normalarbeidstid)}</BodyShort>
+                <BodyShort>
+                    {formatereTekstMedTimerOgMinutter(periode?.delvisFravær?.normalarbeidstid) || '0'}
+                </BodyShort>
             </div>
             <div>
                 <Label>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.fraværPerDag')}:</Label>
-                <BodyShort>{formatereTekstMedTimerOgMinutter(periode.delvisFravær.fravær)}</BodyShort>
+                <BodyShort>{formatereTekstMedTimerOgMinutter(periode?.delvisFravær?.fravær) || '0'}</BodyShort>
             </div>
             <div>
                 <Label>Søknadsårsak:</Label>
