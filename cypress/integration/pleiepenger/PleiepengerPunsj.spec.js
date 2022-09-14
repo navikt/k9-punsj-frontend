@@ -20,6 +20,25 @@ describe('Pleiepenger punsj', () => {
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
     });
 
+    it('kan fylle inn lengre periode i arbeidstid', () => {
+        cy.soknadperioderInput('08.11.2021', '11.11.2021');
+
+        cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+        cy.findByText(/Arbeidstaker/i).click();
+        cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
+        cy.findByRole('button', { name: /Legg til periode/i }).click();
+
+        cy.get('.ReactModalPortal').within(() => {
+            cy.findByLabelText(/Fra og med/i)
+                .should('exist')
+                .type('08.11.2021');
+            cy.findByLabelText(/Til og med/i)
+                .should('exist')
+                .type('11.11.2021');
+            cy.findAllByLabelText('minutter')[0].type('30');
+        });
+    });
+
     // sjekke at journalpostnummer fra flere saker vises
     // sjekk av validering og feilmeldinger på alle felter
     // sjekk at man ikke får sende inn dersom man har valideringsfeil
