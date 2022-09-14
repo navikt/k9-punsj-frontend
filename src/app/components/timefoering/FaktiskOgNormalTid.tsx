@@ -12,13 +12,13 @@ interface OwnProps {
 }
 
 const FaktiskOgNormalTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => {
-    const [normaltTimer, setNormaltTimer] = useState('');
-    const [normaltMinutter, setNormaltMinutter] = useState('');
+    const [normaltTimer, setNormaltTimer] = useState('0');
+    const [normaltMinutter, setNormaltMinutter] = useState('0');
     const [normaltError, setNormaltError] = useState('');
     const [visNormaltError, setVisNormaltError] = useState(false);
 
-    const [faktiskTimer, setFaktiskTimer] = useState('');
-    const [faktiskMinutter, setFaktiskMinutter] = useState('');
+    const [faktiskTimer, setFaktiskTimer] = useState('0');
+    const [faktiskMinutter, setFaktiskMinutter] = useState('0');
     const [faktiskError, setFaktiskError] = useState('');
     const [visFaktiskError, setVisFaktiskError] = useState(false);
 
