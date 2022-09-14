@@ -25,12 +25,14 @@ export default function FravaersperiodeKvittering({ periode }: { periode: Fravae
                 <Label>{intlHelper(intl, 'skjema.arbeid.arbeidstaker.fraværPerDag')}:</Label>
                 <BodyShort>{formatereTekstMedTimerOgMinutter(periode?.delvisFravær?.fravær) || '0'}</BodyShort>
             </div>
-            <div>
-                <Label>Søknadsårsak:</Label>
-                <BodyShort>
-                    {intlHelper(intl, `omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.${periode.søknadÅrsak}`)}
-                </BodyShort>
-            </div>
+            {periode.søknadÅrsak && (
+                <div>
+                    <Label>Søknadsårsak:</Label>
+                    <BodyShort>
+                        {intlHelper(intl, `omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.${periode.søknadÅrsak}`)}
+                    </BodyShort>
+                </div>
+            )}
             <div>
                 <Label>Fraværsårsak:</Label>
                 <BodyShort>
