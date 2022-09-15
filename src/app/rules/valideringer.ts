@@ -125,14 +125,7 @@ export const arbeidstimerPeriode = yup.object().shape({
     }),
     faktiskArbeidPerDag: timerOgMinutter,
     jobberNormaltPerDag: yup.object({
-        timer: timer.test(
-            'harTimerEllerMinutter',
-            () => 'Timer eller minutter må fylles inn',
-            function (timerVerdi) {
-                const { minutter: v } = this.parent;
-                return timerVerdi || v;
-            }
-        ),
+        timer,
         minutter,
     }),
 });
