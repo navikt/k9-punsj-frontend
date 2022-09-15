@@ -22,7 +22,7 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
     const minutterId = `minutter-${id}`;
 
     return (
-        <>
+        <div className="timer-og-minutter">
             <div>
                 <Label>{label}</Label>
             </div>
@@ -75,7 +75,7 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                 </div>
                 {error && <ErrorMessage size="small">{error}</ErrorMessage>}
             </div>
-        </>
+        </div>
     );
 };
 export default TimerOgMinutter;
