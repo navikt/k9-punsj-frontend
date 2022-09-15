@@ -185,7 +185,7 @@ export const lukkJournalpostOppgave =
             undefined,
             {
                 norskIdent: soekersIdent,
-                sak: fagsak || { sakstype: 'GENERELL_SAK' },
+                sak: fagsak ? { fagsakId: fagsak.fagsakId, sakstype: fagsak.sakstype } : { sakstype: 'GENERELL_SAK' },
             },
             (response) => {
                 if (response.status === 200) {

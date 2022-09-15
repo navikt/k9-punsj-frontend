@@ -134,33 +134,13 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         {conflict &&
                             journalpostConflictError &&
                             journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <>
-                                    <AlertStripeAdvarsel>
-                                        <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                    </AlertStripeAdvarsel>
-                                    <VerticalSpacer eightPx />
-                                    <Knapp
-                                        onClick={() => {
-                                            if (journalpostid) lukkJournalpostOppgave(journalpostid);
-                                        }}
-                                    >
-                                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                    </Knapp>
-                                </>
+                                <AlertStripeAdvarsel>
+                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                </AlertStripeAdvarsel>
                             )}
 
                         {journalpostRequestError?.message && (
-                            <>
-                                <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
-                                <VerticalSpacer eightPx />
-                                <Knapp
-                                    onClick={() => {
-                                        if (journalpostid) lukkJournalpostOppgave(journalpostid);
-                                    }}
-                                >
-                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                </Knapp>
-                            </>
+                            <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
                         )}
 
                         {!!journalpost && !journalpost?.kanSendeInn && (

@@ -105,11 +105,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
             <>
                 <FeilmeldingPanel messageId="startPage.feil.ikkeStøttet" />
                 <VerticalSpacer eightPx />
-                <div className="journalpostloader-conflict__container">
-                    <Knapp onClick={() => lukkJournalpostOppgave(journalpostId)}>
-                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                    </Knapp>
-                </div>
             </>
         );
     }
