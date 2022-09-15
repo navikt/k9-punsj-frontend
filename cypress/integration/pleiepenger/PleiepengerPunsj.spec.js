@@ -20,7 +20,7 @@ describe('Pleiepenger punsj', () => {
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
     });
 
-    it('kan fylle inn lengre periode i arbeidstid', () => {
+    it.skip('kan fylle inn lengre periode i arbeidstid', () => {
         cy.soknadperioderInput('08.11.2021', '11.11.2021');
 
         cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
