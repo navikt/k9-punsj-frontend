@@ -15,6 +15,7 @@ import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     setSakstypeAction as setSakstype,
 } from 'app/state/actions';
+import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
@@ -91,11 +92,17 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         omsorgspengerKroniskSyktBarn() ||
         omsorgspengerMidlertidigAlene();
 
+    const keys = sakstypekeys.filter((key) => {
+        if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {
+            return key !== TilgjengeligSakstype.SEND_BREV;
+        }
+        return true;
+    });
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
-                {sakstypekeys &&
-                    sakstypekeys.map((key) => {
+                {keys &&
+                    keys.map((key) => {
                         if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                             return null;
                         }

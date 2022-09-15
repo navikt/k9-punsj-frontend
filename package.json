@@ -88,7 +88,7 @@
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
-        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true",
+        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
         "build": "cross-env NODE_ENV=production SENTRY_RELEASE=$(git rev-parse --short HEAD) node ./src/build/scripts/production-build.js",
