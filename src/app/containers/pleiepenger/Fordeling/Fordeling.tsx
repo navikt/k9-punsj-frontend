@@ -5,7 +5,6 @@ import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import { IdentRules } from 'app/rules';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -34,7 +33,6 @@ import { JournalpostPanel } from '../../../components/journalpost-panel/Journalp
 import PdfVisning from '../../../components/pdf/PdfVisning';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { ISakstypeDefault } from '../../../models/Sakstype';
-import FordelingFerdigstillJournalpostState from '../../../models/types/FordelingFerdigstillJournalpostState';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
 import { FagsakYtelseType } from '../../../models/types/RequestBodies';
@@ -69,8 +67,6 @@ export interface IFordelingStateProps {
     opprettIGosysState: IGosysOppgaveState;
     fellesState: IFellesState;
     dedupkey: string;
-    fordelingSettPåVentState: FordelingSettPaaVentState;
-    fordelingFerdigstillState: FordelingFerdigstillJournalpostState;
 }
 
 export interface IFordelingDispatchProps {
@@ -299,7 +295,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             (lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess) &&
             journalpost
         ) {
-            lukkJournalpostOppgave(journalpost.journalpostId);
+            lukkJournalpostOppgave(journalpost.journalpostId, identState.ident1, valgtFagsak);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
@@ -558,7 +554,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
                                             <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
                                         </AlertStripeInfo>
-                                        <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                                        <Knapp
+                                            onClick={() =>
+                                                lukkJournalpostOppgave(
+                                                    journalpost?.journalpostId,
+                                                    identState.ident1,
+                                                    valgtFagsak
+                                                )
+                                            }
+                                        >
                                             <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
                                         </Knapp>
                                     </div>
@@ -624,7 +628,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         if (skalJournalpostSomIkkeStottesKopieres) {
                                             kopierJournalpostOgLukkOppgave();
                                         } else {
-                                            lukkJournalpostOppgave(journalpost?.journalpostId);
+                                            lukkJournalpostOppgave(
+                                                journalpost?.journalpostId,
+                                                identState.ident1,
+                                                valgtFagsak
+                                            );
                                         }
                                     }}
                                 >
@@ -684,7 +692,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetSjekkSkalTilK9: () => dispatch(resetSkalTilK9()),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
-    lukkJournalpostOppgave: (jpid: string) => dispatch(lukkJournalpostOppgaveAction(jpid)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
     resetIdentStateAction: () => dispatch(resetIdentState()),

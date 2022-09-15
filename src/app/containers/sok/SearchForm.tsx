@@ -5,6 +5,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { connect } from 'react-redux';
+import Fagsak from 'app/types/Fagsak';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
@@ -190,7 +191,8 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
-    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
 

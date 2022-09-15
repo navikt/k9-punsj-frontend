@@ -53,7 +53,7 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
                 <Button
                     className="submitButton"
                     size="small"
-                    onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}
+                    onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, søkerId, fagsak)}
                 >
                     Lukk oppgave
                 </Button>
@@ -69,7 +69,8 @@ const mapStateToProps = (state: RootStateType) => ({
     søkerId: state.identState.ident1,
 });
 const mapDispatchToProps = (dispatch) => ({
-    lukkJournalpostOppgave: (journalpostId: string) => dispatch(lukkJournalpostOppgaveAction(journalpostId)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(SendBrevPåFagsak);

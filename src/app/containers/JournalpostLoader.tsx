@@ -1,3 +1,4 @@
+import Fagsak from 'app/types/Fagsak';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
@@ -141,7 +142,8 @@ const mapStateToProps = ({ felles, fordelingState }: RootStateType): IJournaPost
 
 const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (id: string) => dispatch(getJournalpostAction(id)),
-    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Hovedknapp } from 'nav-frontend-knapper';
+import { useSelector } from 'react-redux';
+import { RootStateType } from 'app/state/RootState';
 import { FormattedMessage } from 'react-intl';
 import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
 import { setHash } from '../../../../utils';
@@ -20,6 +22,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     sakstypeConfig,
     gosysKategoriJournalforing,
 }) => {
+    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     if (!sakstypeConfig || !journalpost) {
         return null;
     }
@@ -35,7 +38,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
         return (
-            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost.journalpostId)}>
+            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost.journalpostId, norskIdent, fagsak)}>
                 <FormattedMessage id="fordeling.knapp.bekreft" />
             </Hovedknapp>
         );
