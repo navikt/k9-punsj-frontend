@@ -26,7 +26,9 @@ export default function ArbeidstidPeriodeListe({
     soknadsperioder: IPeriode[];
 }) {
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
-        perioder: [...arbeidstidPerioder],
+        perioder: arbeidstidPerioder.length
+            ? [...arbeidstidPerioder]
+            : soknadsperioder.map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
     return (
         <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
