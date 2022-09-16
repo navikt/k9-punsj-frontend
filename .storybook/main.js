@@ -2,6 +2,7 @@ const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
+    typescript: { reactDocgen: false },
     stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
     addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions'],
 
@@ -15,6 +16,9 @@ module.exports = {
             use: ['style-loader', 'css-loader', 'less-loader'],
             include: [path.resolve(__dirname, '../')],
         });
+        config.resolve.alias = {
+            app: path.resolve(__dirname, '../src/app'),
+        };
         config.resolve.plugins = [
             ...(config.resolve.plugins || []),
             new TsconfigPathsPlugin({
