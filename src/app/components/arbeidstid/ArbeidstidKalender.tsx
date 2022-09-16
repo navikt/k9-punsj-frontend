@@ -20,7 +20,7 @@ import ArbeidstidPeriodeListe from '../timefoering/ArbeidstidPeriodeListe';
 import FaktiskOgNormalTid from '../timefoering/FaktiskOgNormalTid';
 import VerticalSpacer from '../VerticalSpacer';
 
-interface OwnProps {
+export interface ArbeidstidKalenderProps {
     arbeidstidInfo: ArbeidstidInfo;
     updateSoknad: (v: IArbeidstidPeriodeMedTimer[]) => void;
     updateSoknadState: (v: IArbeidstidPeriodeMedTimer[]) => void;
@@ -32,7 +32,7 @@ export default function ArbeidstidKalender({
     updateSoknad,
     updateSoknadState,
     soknadsperioder,
-}: OwnProps) {
+}: ArbeidstidKalenderProps) {
     const intl = useIntl();
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
     const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);

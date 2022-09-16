@@ -101,7 +101,7 @@ export const App: React.FunctionComponent = () => {
 
 const root = document.getElementById('app');
 Modal.setAppElement('#app');
-DsModal.setAppElement('#app');
+DsModal?.setAppElement('#app');
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting
