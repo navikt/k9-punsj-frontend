@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+import sakstyper from 'app/constants/sakstyper';
 import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
@@ -185,7 +186,9 @@ export const lukkJournalpostOppgave =
             undefined,
             {
                 norskIdent: soekersIdent,
-                sak: fagsak ? { fagsakId: fagsak.fagsakId, sakstype: fagsak.sakstype } : { sakstype: 'GENERELL_SAK' },
+                sak: fagsak?.fagsakId
+                    ? { fagsakId: fagsak.fagsakId, sakstype: sakstyper.FAGSAK }
+                    : { sakstype: sakstyper.GENERELL_SAK },
             },
             (response) => {
                 if (response.status === 200) {
