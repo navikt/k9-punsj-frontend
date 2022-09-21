@@ -13,6 +13,8 @@ import { capitalize, get } from 'lodash';
 import React from 'react';
 import { Collapse } from 'react-collapse';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { useIntl } from 'react-intl';
+import intlHelper from 'app/utils/intlUtils';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -22,6 +24,7 @@ import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
+    const intl = useIntl();
     const {
         opptjeningAktivitet: { selvstendigNaeringsdrivende },
     } = values;
@@ -52,7 +55,7 @@ const SelvstendigNaeringsdrivende = () => {
 
                 <TextFieldFormik
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
-                    label="Virksomhetsnavn"
+                    label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
                     size="small"
                 />
                 <VerticalSpacer twentyPx />
@@ -60,7 +63,7 @@ const SelvstendigNaeringsdrivende = () => {
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
-                            legend="Er virksomheten registrert i Norge?"
+                            legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
                             checked={field.value ? 'nei' : 'ja'}
                             name={field.name}
                             options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
@@ -89,7 +92,7 @@ const SelvstendigNaeringsdrivende = () => {
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
-                            legend="Har søker regnskapsfører?"
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
                             checked={field.value ? 'ja' : 'nei'}
                             name={field.name}
                             options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
@@ -103,14 +106,14 @@ const SelvstendigNaeringsdrivende = () => {
                     <>
                         <TextFieldFormik
                             size="small"
-                            label="Navn på regnskapsfører"
+                            label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
                         />
                         <VerticalSpacer twentyPx />
 
                         <TextFieldFormik
                             size="small"
-                            label="Telefonnummer til regnskapsfører "
+                            label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
                         />
                     </>
@@ -121,11 +124,11 @@ const SelvstendigNaeringsdrivende = () => {
                 <div className="fom-tom-rad">
                     <DatoInputFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                        label="Startdato"
+                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                     />
                     <DatoInputFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                        label="Eventuell sluttdato"
+                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                     />
                 </div>
                 <VerticalSpacer twentyPx />
@@ -137,7 +140,7 @@ const SelvstendigNaeringsdrivende = () => {
                     <TextFieldFormik
                         size="small"
                         type="number"
-                        label="Næringsresultat før skatt de siste 12 månedene"
+                        label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
                         filterPattern={kunTall}
                     />
