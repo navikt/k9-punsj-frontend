@@ -102,7 +102,7 @@ const OMPUTSchema = yup.object({
             .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
         frilanser: yup.object().when('$frilanser', { is: true, then: frilanser, otherwise: yup.object() }),
     }),
-    medlemskap: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
+    bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
     utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
     barn,
 });
