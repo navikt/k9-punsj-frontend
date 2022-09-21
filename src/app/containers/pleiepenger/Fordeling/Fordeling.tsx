@@ -323,6 +323,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             case FordelingDokumenttype.OMSORGSPENGER_MA:
                 return getEnvironmentVariable('OMP_MA_FEATURE_TOGGLE') === 'true';
 
+            case FordelingDokumenttype.OMSORGSPENGER_UT:
+                return getEnvironmentVariable('OMP_UT_FEATURE_TOGGLE') === 'true';
+
             default:
                 return true;
         }
