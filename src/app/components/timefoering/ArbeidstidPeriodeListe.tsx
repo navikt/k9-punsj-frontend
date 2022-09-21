@@ -18,17 +18,19 @@ export default function ArbeidstidPeriodeListe({
     heading,
     avbryt,
     soknadsperioder,
+    nyeSoknadsperioder,
 }: {
     arbeidstidPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
     heading: string;
     lagre: (arbeidstidInfo: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => void;
     avbryt: () => void;
     soknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[];
 }) {
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
         perioder: arbeidstidPerioder.length
             ? [...arbeidstidPerioder]
-            : soknadsperioder.map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
+            : nyeSoknadsperioder.map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
     return (
         <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>

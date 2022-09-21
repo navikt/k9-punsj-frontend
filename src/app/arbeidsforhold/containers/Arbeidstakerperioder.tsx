@@ -19,7 +19,7 @@ type ItemInfo = any;
 
 interface ArbeidstakerperioderProps {
     soknad: IPLSSoknad;
-    soknadsperioder: IPeriode[];
+    eksisterendeSoknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPLSSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPLSSoknad>, showStatus?: boolean) => void;
@@ -29,7 +29,7 @@ interface ArbeidstakerperioderProps {
 
 const Arbeidstakerperioder = ({
     soknad,
-    soknadsperioder,
+    eksisterendeSoknadsperioder,
     initialArbeidstaker,
     updateSoknad,
     updateSoknadState,
@@ -149,7 +149,8 @@ const Arbeidstakerperioder = ({
                                 søkerId={soknad.soekerId}
                                 arbeidstaker={currentItem as Arbeidstaker}
                                 listeelementindex={currentItemIndex}
-                                soknadsperioder={soknadsperioder}
+                                nyeSoknadsperioder={soknad.soeknadsperiode || []}
+                                eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
                                 updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
                                     editSoknad(editItem(currentItemIndex, info))
                                 }

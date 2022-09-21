@@ -18,22 +18,25 @@ export default function TilsynPeriodeListe({
     heading,
     avbryt,
     soknadsperioder,
+    nyeSoknadsperioder,
 }: {
     perioder: Periodeinfo<ITimerOgMinutter>[];
     heading: string;
     lagre: (arbeidstidInfo: Periodeinfo<ITimerOgMinutter>[]) => void;
     avbryt: () => void;
     soknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[];
 }) {
     const initialValues: { perioder: Periodeinfo<ITimerOgMinutter>[] } = {
-        perioder,
+        perioder: perioder.length
+            ? perioder
+            : nyeSoknadsperioder.map((periode) => new PeriodeMedTimerMinutter({ periode })),
     };
     return (
         <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
             {({ handleSubmit, values }) => (
                 <>
                     {heading && <Heading size="small">{heading}</Heading>}
-                    {console.log(values.perioder)}
                     <FieldArray
                         name="perioder"
                         render={(arrayHelpers) => (

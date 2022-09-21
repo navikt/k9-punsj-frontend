@@ -66,7 +66,6 @@ const ArbeidsforholdPanel = ({
     const intl = useIntl();
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
     const soeknadsperiode = soknad?.soeknadsperiode || [];
-    const soknadsperioder = [...soeknadsperiode, ...eksisterendePerioder].filter(Boolean);
 
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
@@ -155,7 +154,8 @@ const ArbeidsforholdPanel = ({
                     <>
                         {arbeidstidInformasjon(intl)}
                         <ArbeidstidKalender
-                            soknadsperioder={soknadsperioder}
+                            nyeSoknadsperioder={soeknadsperiode}
+                            eksisterendeSoknadsperioder={eksisterendePerioder}
                             updateSoknad={(perioder) => {
                                 updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
                             }}
@@ -748,7 +748,8 @@ const ArbeidsforholdPanel = ({
                 <VerticalSpacer eightPx />
                 {arbeidstidInformasjon(intl)}
                 <ArbeidstidKalender
-                    soknadsperioder={soknadsperioder}
+                    nyeSoknadsperioder={soeknadsperiode}
+                    eksisterendeSoknadsperioder={eksisterendePerioder}
                     updateSoknad={(perioder) => {
                         updateSoknad({
                             arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
@@ -782,7 +783,7 @@ const ArbeidsforholdPanel = ({
             {!!soknad.arbeidstid?.arbeidstakerList?.length && (
                 <Arbeidstakerperioder
                     soknad={soknad}
-                    soknadsperioder={soknadsperioder}
+                    eksisterendeSoknadsperioder={eksisterendePerioder}
                     initialArbeidstaker={initialArbeidstaker}
                     updateSoknad={updateSoknad}
                     updateSoknadState={updateSoknadState}

@@ -16,18 +16,21 @@ interface OwnProps {
     perioderMedTimer: Periodeinfo<ITimerOgMinutter>[];
     updateSoknad: (v: Periodeinfo<ITimerOgMinutter>[]) => void;
     updateSoknadState: (v: Periodeinfo<ITimerOgMinutter>[]) => void;
-    soknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[];
+    eksisterendeSoknadsperioder: IPeriode[];
 }
 
 export default function TilsynKalender({
     perioderMedTimer,
     updateSoknad,
     updateSoknadState,
-    soknadsperioder,
+    nyeSoknadsperioder = [],
+    eksisterendeSoknadsperioder = [],
 }: OwnProps) {
     const intl = useIntl();
     const [visLengrePerioder, setVisLengrePerioder] = useState(false);
     const toggleVisLengrePerioder = () => setVisLengrePerioder(!visLengrePerioder);
+    const gyldigePerioder = [...nyeSoknadsperioder, ...eksisterendeSoknadsperioder];
 
     const lagreTimer = ({
         timer,
@@ -76,7 +79,8 @@ export default function TilsynKalender({
                     <TilsynPeriodeListe
                         heading="Periode med tilsyn"
                         perioder={perioderMedTimer}
-                        soknadsperioder={soknadsperioder}
+                        soknadsperioder={gyldigePerioder}
+                        nyeSoknadsperioder={nyeSoknadsperioder}
                         lagre={(periodeInfo) => {
                             updateSoknad(periodeInfo);
                             updateSoknadState(periodeInfo);
@@ -86,9 +90,9 @@ export default function TilsynKalender({
                     />
                 </Modal.Content>
             </Modal>
-            {soknadsperioder && (
+            {gyldigePerioder && (
                 <TidsbrukKalenderContainer
-                    gyldigePerioder={soknadsperioder}
+                    gyldigePerioder={gyldigePerioder}
                     ModalContent={<TilsynTid heading="Registrer omsorgstilbud" lagre={lagreTimer} />}
                     kalenderdager={perioderMedTimer.flatMap((periode) => periodeMedTimerTilKalenderdag(periode))}
                     slettPeriode={slettDager(perioderMedTimer)}

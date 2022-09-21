@@ -29,7 +29,8 @@ interface ArbeidstakerComponentProps {
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
-    soknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[];
+    eksisterendeSoknadsperioder: IPeriode[];
 }
 
 const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
@@ -39,7 +40,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     updateListeinfoInSoknad,
     updateListeinfoInSoknadState,
     feilkodeprefiks,
-    soknadsperioder,
+    nyeSoknadsperioder,
+    eksisterendeSoknadsperioder,
     getErrorMessage,
     intl,
     arbeidsgivere,
@@ -272,7 +274,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                 </Row>
                 {arbeidstidInformasjon(intl)}
                 <ArbeidstidKalender
-                    soknadsperioder={soknadsperioder}
+                    nyeSoknadsperioder={nyeSoknadsperioder}
+                    eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
                     updateSoknad={(perioder) =>
                         updateListeinfoInSoknad({
                             arbeidstidInfo: {

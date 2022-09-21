@@ -162,7 +162,8 @@ const Arbeidstakerperioder = ({
                                 intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                                soknadsperioder={soeknadsperiode.concat(eksisterendePerioder).filter(Boolean)}
+                                nyeSoknadsperioder={soeknadsperiode}
+                                eksisterendeSoknadsperioder={eksisterendePerioder}
                             />
                             <UhaanderteFeilmeldinger
                                 getFeilmeldinger={() =>

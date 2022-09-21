@@ -24,18 +24,22 @@ export interface ArbeidstidKalenderProps {
     arbeidstidInfo: ArbeidstidInfo;
     updateSoknad: (v: IArbeidstidPeriodeMedTimer[]) => void;
     updateSoknadState: (v: IArbeidstidPeriodeMedTimer[]) => void;
-    soknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[];
+    eksisterendeSoknadsperioder: IPeriode[];
 }
 
 export default function ArbeidstidKalender({
     arbeidstidInfo,
     updateSoknad,
     updateSoknadState,
-    soknadsperioder,
+    nyeSoknadsperioder = [],
+    eksisterendeSoknadsperioder = [],
 }: ArbeidstidKalenderProps) {
     const intl = useIntl();
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
     const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
+
+    const gyldigePerioder = [...nyeSoknadsperioder, ...eksisterendeSoknadsperioder].filter(Boolean);
 
     const slettDager =
         (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {
@@ -92,7 +96,8 @@ export default function ArbeidstidKalender({
                     <ArbeidstidPeriodeListe
                         heading="Periode med jobb"
                         arbeidstidPerioder={arbeidstidInfo.perioder}
-                        soknadsperioder={soknadsperioder}
+                        soknadsperioder={gyldigePerioder}
+                        nyeSoknadsperioder={nyeSoknadsperioder}
                         lagre={(periodeInfo) => {
                             updateSoknad(periodeInfo);
                             updateSoknadState(periodeInfo);
@@ -102,9 +107,9 @@ export default function ArbeidstidKalender({
                     />
                 </Modal.Content>
             </Modal>
-            {soknadsperioder && (
+            {gyldigePerioder && (
                 <TidsbrukKalenderContainer
-                    gyldigePerioder={soknadsperioder}
+                    gyldigePerioder={gyldigePerioder}
                     ModalContent={<FaktiskOgNormalTid heading="Registrer arbeidstid" lagre={lagreTimer} />}
                     kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
                         arbeidstidPeriodeTilKalenderdag(periode)

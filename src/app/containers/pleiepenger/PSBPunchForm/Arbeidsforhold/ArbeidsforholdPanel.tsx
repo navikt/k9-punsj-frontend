@@ -70,7 +70,6 @@ const ArbeidsforholdPanel = ({
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
         const opptjening = soknad.opptjeningAktivitet;
-        const soknadsperioder = [...soknad.soeknadsperiode, ...eksisterendePerioder].filter(Boolean);
 
         return (
             <>
@@ -155,7 +154,8 @@ const ArbeidsforholdPanel = ({
                     <>
                         {arbeidstidInformasjon(intl)}
                         <ArbeidstidKalender
-                            soknadsperioder={soknadsperioder}
+                            nyeSoknadsperioder={soknad.soeknadsperiode}
+                            eksisterendeSoknadsperioder={eksisterendePerioder}
                             updateSoknad={(perioder) => {
                                 updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
                             }}
@@ -750,7 +750,8 @@ const ArbeidsforholdPanel = ({
                 <VerticalSpacer eightPx />
                 {arbeidstidInformasjon(intl)}
                 <ArbeidstidKalender
-                    soknadsperioder={soknadsperioder}
+                    nyeSoknadsperioder={soknad.soeknadsperiode}
+                    eksisterendeSoknadsperioder={eksisterendePerioder}
                     updateSoknad={(perioder) => {
                         updateSoknad({
                             arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),

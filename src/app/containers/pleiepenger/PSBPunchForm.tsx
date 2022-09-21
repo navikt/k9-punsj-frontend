@@ -272,7 +272,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const soknad = new PSBSoknad(this.state.soknad);
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
-        const soknadsperioder = [...soknad.soeknadsperiode, ...eksisterendePerioder];
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -559,7 +558,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             <VerticalSpacer twentyPx />
                             <div className="listepanel">
                                 <TilsynKalender
-                                    soknadsperioder={soknadsperioder}
+                                    nyeSoknadsperioder={soknad.soeknadsperiode}
+                                    eksisterendeSoknadsperioder={eksisterendePerioder}
                                     updateSoknad={(perioder) => {
                                         console.log(perioder);
                                         this.updateSoknad({
