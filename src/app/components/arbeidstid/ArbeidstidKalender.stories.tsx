@@ -3,7 +3,7 @@ import { Meta, Story } from '@storybook/react';
 import { ArbeidstidPeriodeMedTimer } from 'app/models/types';
 import ArbeidstidKalender, { ArbeidstidKalenderProps } from './ArbeidstidKalender';
 
-const soknadsperioder = [
+const nyeSoknadsperioder = [
     {
         fom: '2022-09-05',
         tom: '2022-09-09',
@@ -16,7 +16,7 @@ const soknadsperioder = [
 const arbeidstidInfo = { perioder: [] };
 
 const props = {
-    soknadsperioder,
+    nyeSoknadsperioder,
     arbeidstidInfo,
 };
 export default {
