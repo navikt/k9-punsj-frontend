@@ -94,13 +94,16 @@ const OMPUTSchema = yup.object({
             test: (arbeidsforhold) => Object.values(arbeidsforhold).some((v) => v),
             message: 'Må velge minst ett arbeidsforhold',
         }),
+        medlemskap: yup.string().required().label('Medlemskap'),
+        utenlandsopphold: yup.string().required().label('Utenlandsopphold'),
+        signatur: yup.string().required().label('Signatur'),
     }),
     opptjeningAktivitet: yup.object({
         arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
         selvstendigNaeringsdrivende: yup
             .object()
             .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
-        frilanser: yup.object().when('$frilanser', { is: true, then: frilanser, otherwise: yup.object() }),
+        frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
     }),
     bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
     utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),

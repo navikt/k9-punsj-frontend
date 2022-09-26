@@ -53,6 +53,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
             },
             medlemskap: soknad?.metadata?.medlemskap || '',
             utenlandsopphold: soknad?.metadata?.utenlandsopphold || '',
+            signatur: soknad?.metadata?.signatur || '',
         },
         barn: soknad?.barn || [],
         soeknadId: soknad?.soeknadId || '',
@@ -120,8 +121,18 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                   }))
                 : [{ ...arbeidstakerInitialValue }],
         },
-        bosteder: soknad?.bosteder?.length ? soknad.bosteder : [],
-        utenlandsopphold: soknad?.utenlandsopphold?.length ? soknad.utenlandsopphold : [],
+        bosteder: soknad?.bosteder?.length
+            ? soknad?.bosteder.map((bosted) => ({
+                  land: bosted.land,
+                  periode: { fom: bosted?.periode.fom || '', tom: bosted?.periode.tom || '' },
+              }))
+            : [],
+        utenlandsopphold: soknad?.utenlandsopphold?.length
+            ? soknad?.utenlandsopphold.map((utenlandsopphold) => ({
+                  land: utenlandsopphold.land,
+                  periode: { fom: utenlandsopphold?.periode.fom || '', tom: utenlandsopphold?.periode.tom || '' },
+              }))
+            : [],
         harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
         harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
     };

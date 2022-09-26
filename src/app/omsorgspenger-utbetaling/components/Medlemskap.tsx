@@ -21,7 +21,6 @@ const options = [
 const Medlemskap = () => {
     const intl = useIntl();
     const { values, setFieldValue } = useFormikContext<IOMPUTSoknad>();
-
     useEffect(() => {
         if (values.bosteder.length && values.metadata.medlemskap !== 'ja') {
             setFieldValue('bosteder', []);

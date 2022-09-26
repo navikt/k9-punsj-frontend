@@ -67,25 +67,27 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             </>
         );
     }
-
     return (
         <Formik
             initialValues={initialValues(backendTilFrontendMapping(soeknadRespons))}
             validate={(values) =>
                 schema
-                    .validate(values, {
-                        abortEarly: false,
-                        context: {
-                            ...values.metadata.arbeidsforhold,
-                            registrertIUtlandet:
-                                values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
-                            medlemskap: values.metadata.medlemskap,
-                            utenlandsopphold: values.metadata.utenlandsopphold,
-                            erNyoppstartet: !!erYngreEnn4år(
-                                get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
-                            ),
-                        },
-                    })
+                    .validate(
+                        { ...values },
+                        {
+                            abortEarly: false,
+                            context: {
+                                ...values.metadata.arbeidsforhold,
+                                registrertIUtlandet:
+                                    values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
+                                medlemskap: values?.metadata?.medlemskap,
+                                utenlandsopphold: values?.metadata?.utenlandsopphold,
+                                erNyoppstartet: !!erYngreEnn4år(
+                                    get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                                ),
+                            },
+                        }
+                    )
                     .then(() => ({}))
                     .catch((err) => yupToFormErrors(err))
             }

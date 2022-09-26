@@ -1,7 +1,7 @@
 import React from 'react';
 import { useField } from 'formik';
 import { Collapse } from 'react-collapse';
-import { CheckboxGroup, ErrorMessage, Heading, Panel } from '@navikt/ds-react';
+import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
