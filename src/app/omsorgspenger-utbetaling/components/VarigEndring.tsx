@@ -42,7 +42,7 @@ export default function VarigEndring() {
                         <VerticalSpacer twentyPx />
                         <TextAreaFormik
                             size="small"
-                            label={intlHelper(intl, 'skjema.sn.endringBegrunnelse')}
+                            label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
                         />
                     </Collapse>

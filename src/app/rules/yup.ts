@@ -12,6 +12,9 @@ const yupLocale = {
         max: '${path} må være mest ${max} tegn',
         length: '${path} må være nøyaktig ${length} tegn',
     },
+    array: {
+        min: '${path} - Må velge minst ${min}',
+    },
 };
 
 yup.setLocale(yupLocale);

@@ -36,7 +36,7 @@ const selvstendigNaeringsdrivende = () =>
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
-                .label('Landkode'),
+                .label('Land'),
 
             regnskapsførerNavn: yup
                 .string()
