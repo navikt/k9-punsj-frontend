@@ -76,13 +76,14 @@ const SelvstendigNaeringsdrivende = () => {
                 {selvstendigNaeringsdrivende.info.registrertIUtlandet ? (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
                         {({ field, meta }: FieldProps<string>) => (
-                            <CountrySelect
-                                style={{ maxWidth: '25%' }}
-                                selectedcountry={field.value}
-                                feil={meta.touched && meta.error}
-                                unselectedoption="Velg land"
-                                {...field}
-                            />
+                            <div style={{ maxWidth: '25%' }}>
+                                <CountrySelect
+                                    selectedcountry={field.value}
+                                    feil={meta.touched && meta.error}
+                                    unselectedoption="Velg land"
+                                    {...field}
+                                />
+                            </div>
                         )}
                     </Field>
                 ) : (
