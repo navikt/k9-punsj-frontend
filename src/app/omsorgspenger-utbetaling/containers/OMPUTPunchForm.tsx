@@ -193,7 +193,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
-            <OpplysningerOmOMPUTSoknad intl={intl} setSignaturAction={props.setSignaturAction} signert={signert} />
+            <OpplysningerOmOMPUTSoknad />
             <VerticalSpacer sixteenPx />
             <Panel border>
                 <Heading size="xsmall" spacing>

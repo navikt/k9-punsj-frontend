@@ -48,22 +48,13 @@ const SelvstendigNaeringsdrivende = () => {
                     )}
                 </Field>
                 <VerticalSpacer sixteenPx />
-                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
-                    {({ meta }: FieldProps<string[]>) => (
-                        <CheckboxGroup legend="Type virksomhet" size="small" error={meta.touched && meta.error}>
-                            {virksomhetstyper.map((virksomhetstype) => (
-                                <CheckboxFormik
-                                    key={virksomhetstype}
-                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
-                                    value={virksomhetstype}
-                                >
-                                    {virksomhetstype}
-                                </CheckboxFormik>
-                            ))}
-                        </CheckboxGroup>
-                    )}
-                </Field>
-                <VerticalSpacer twentyPx />
+                <RadioPanelGruppeFormik
+                    legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
+                    options={virksomhetstyper.map((v) => ({ value: v, label: capitalize(v) }))}
+                    retning="vertikal"
+                />
+                <VerticalSpacer sixteenPx />
 
                 <TextFieldFormik
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"

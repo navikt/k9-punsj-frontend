@@ -34,7 +34,7 @@ export default {
                     fom: '2022-06-01',
                     tom: '2022-06-23',
                 },
-                virksomhetstyper: ['Fiske'],
+                virksomhetstyper: 'Fiske',
                 landkode: '',
                 regnskapsførerNavn: 'hallo hansen',
                 regnskapsførerTlf: '93247666',

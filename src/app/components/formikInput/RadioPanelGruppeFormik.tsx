@@ -16,6 +16,7 @@ const RadioPanelGruppeFormik = ({ name, options, legend, retning = 'horisontal',
         <div
             className={classNames('radioinput--container', {
                 'radioinput--horisontal': retning === 'horisontal',
+                'radioinput--vertikal': retning === 'vertikal',
             })}
         >
             <RadioPanelGruppe

@@ -33,7 +33,7 @@ const selvstendigNaeringsdrivende = () =>
                 fom: yup.string().required().label('Fra og med'),
                 tom: yup.string().label('Til og med'),
             }),
-            virksomhetstyper: yup.array().min(1).label('Virksomhetstype'),
+            virksomhetstyper: yup.string().required().label('Virksomhetstype'),
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })

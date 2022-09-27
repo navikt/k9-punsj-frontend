@@ -8,17 +8,6 @@ import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
 
-export const yupLocale = {
-    mixed: {
-        required: '${path} er et påkrevd felt.',
-    },
-    string: {
-        min: '${path} må være minst ${min} tegn',
-        max: '${path} må være mest ${max} tegn',
-        length: '${path} må være nøyaktig ${length} tegn',
-    },
-};
-
 export interface IFeltValidator<FeltType, SkjemaType> {
     feltPath: string;
     validatorer: Validator<FeltType, SkjemaType>[];

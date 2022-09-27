@@ -1,4 +1,4 @@
-import { omit, pick } from 'lodash';
+import { get, omit, pick, set } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
 import { IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 
@@ -24,13 +24,21 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
         ...fravaersperioderFrilanser,
         ...fravaersperioderArbeidstaker,
     ];
-
     const opptjeningAktivitetUtenFravaersperioder = {
         arbeidstaker: (arbeidstaker && arbeidstaker.map((at) => omit(at, ['fravaersperioder']))) || null,
         frilanser: frilanser && Object.keys(frilanser).length ? omit(frilanser, ['fravaersperioder']) : null,
         selvstendigNaeringsdrivende:
             selvstendigNaeringsdrivende && Object.keys(selvstendigNaeringsdrivende).length
-                ? omit(selvstendigNaeringsdrivende, ['fravaersperioder'])
+                ? {
+                      ...selvstendigNaeringsdrivende,
+                      fravaersperioder: undefined,
+                      info: {
+                          ...selvstendigNaeringsdrivende.info,
+                          virksomhetstyper: selvstendigNaeringsdrivende.info.virksomhetstyper.length
+                              ? [selvstendigNaeringsdrivende.info.virksomhetstyper]
+                              : [],
+                      },
+                  }
                 : null,
     };
     return {
@@ -61,6 +69,14 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
 
     const selvstendigNaeringsdrivende = {
         ...soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende,
+        info: {
+            ...soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info,
+            virksomhetstyper: get(
+                soknad,
+                'opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper',
+                []
+            )[0],
+        },
         fravaersperioder: fraevaersperioderSelvstendigNaeringsdrivende,
     };
     const frilanser = { ...soknad.opptjeningAktivitet?.frilanser, fravaersperioder: fravaersperioderFrilanser };

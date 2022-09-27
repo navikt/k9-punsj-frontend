@@ -6,7 +6,7 @@ import Panel from 'nav-frontend-paneler';
 import { Input } from 'nav-frontend-skjema';
 import { Heading, Alert } from '@navikt/ds-react';
 import DateInput from 'app/components/skjema/DateInput';
-import { IntlShape, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { IOMPUTSoknad } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknad';
@@ -14,12 +14,7 @@ import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
 import './opplysningerOmOMPUTSoknad.less';
 
-interface IOwnProps {
-    intl: IntlShape;
-    signert: JaNeiIkkeRelevant | null;
-}
-
-const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = () => {
+const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
     const intl = useIntl();
 
@@ -39,7 +34,7 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent<IOwnProps> = () => {
                                 label={intlHelper(intl, 'skjema.mottakelsesdato')}
                                 errorMessage={meta.touched && meta.error}
                                 value={field.value}
-                                onChange={(value) => form.setFieldValue('mottattDato', value)}
+                                onChange={(value: string) => form.setFieldValue('mottattDato', value)}
                             />
                         )}
                     </Field>

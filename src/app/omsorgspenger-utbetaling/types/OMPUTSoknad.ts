@@ -7,7 +7,7 @@ export type SelvstendigNaeringsdrivende = {
     organisasjonsnummer: string;
     info: {
         periode: IPeriode;
-        virksomhetstyper: string[];
+        virksomhetstyper: string;
         landkode: string;
         regnskapsførerNavn: string;
         regnskapsførerTlf: string;

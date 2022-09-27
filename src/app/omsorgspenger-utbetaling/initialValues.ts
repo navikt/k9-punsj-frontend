@@ -72,10 +72,8 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                         fom: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode?.fom || '',
                         tom: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode?.tom || '',
                     },
-                    virksomhetstyper: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper
-                        ?.length
-                        ? soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper
-                        : [],
+                    virksomhetstyper:
+                        soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper || '',
                     landkode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode || '',
                     regnskapsførerNavn:
                         soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || '',
