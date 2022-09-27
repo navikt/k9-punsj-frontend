@@ -12,7 +12,6 @@ interface OwnProps extends Partial<RadioPanelGruppeProps> {
 
 const RadioPanelGruppeFormik = ({ name, options, legend, retning = 'horisontal', ...props }: OwnProps) => {
     const [field, meta] = useField(name);
-
     return (
         <div
             className={classNames('radioinput--container', {

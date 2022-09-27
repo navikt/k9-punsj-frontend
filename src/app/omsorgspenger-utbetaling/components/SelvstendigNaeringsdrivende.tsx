@@ -1,5 +1,5 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, CheckboxGroup, Heading, Label, Panel } from '@navikt/ds-react';
+import { Button, CheckboxGroup, Heading, HelpText, Label, Panel } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
@@ -36,6 +36,18 @@ const SelvstendigNaeringsdrivende = () => {
                     Selvstendig næringsdrivende
                 </Heading>
                 <VerticalSpacer twentyPx />
+                <Field name="metadata.harSoekerDekketOmsorgsdager">
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <RadioPanelGruppeFormik
+                            legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
+                            description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
+                            name={field.name}
+                            options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                            onChange={(e, value) => form.setFieldValue(field.name, value)}
+                        />
+                    )}
+                </Field>
+                <VerticalSpacer sixteenPx />
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
                     {({ meta }: FieldProps<string[]>) => (
                         <CheckboxGroup legend="Type virksomhet" size="small" error={meta.touched && meta.error}>

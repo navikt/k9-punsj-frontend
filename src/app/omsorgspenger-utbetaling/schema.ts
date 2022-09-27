@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 
 import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsopphold } from 'app/rules/yup';
+import { string } from 'prop-types';
 import nb from '../i18n/nb.json';
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
@@ -97,6 +98,20 @@ const OMPUTSchema = yup.object({
         medlemskap: yup.string().required().label('Medlemskap'),
         utenlandsopphold: yup.string().required().label('Utenlandsopphold'),
         signatur: yup.string().required().label('Signatur'),
+        harSoekerDekketOmsorgsdager: yup
+            .string()
+            .when(['$selvstendigNaeringsdrivende', '$frilanser'], {
+                is: (sn: boolean, fl: boolean) => sn || fl,
+                then: yup
+                    .string()
+                    .required()
+                    .test(
+                        'maa-velge-ja',
+                        '${path} - dersom bruker ikke har dekket 10 omsorgsdager kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
+                        (v) => v === 'ja'
+                    ),
+            })
+            .label('Har dekket omsorgsdager'),
     }),
     opptjeningAktivitet: yup.object({
         arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),

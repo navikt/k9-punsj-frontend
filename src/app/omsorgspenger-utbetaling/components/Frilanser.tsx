@@ -6,6 +6,11 @@ import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import intlHelper from 'app/utils/intlUtils';
+import { useIntl } from 'react-intl';
+import { JaNei } from 'app/models/enums';
+import { capitalize } from 'lodash';
 import Fravaersperiode from './Fravaersperiode';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
@@ -14,6 +19,7 @@ import './arbeidsforhold.less';
 
 export default function Frilanser() {
     const { values } = useFormikContext<IOMPUTSoknad>();
+    const intl = useIntl();
     const {
         opptjeningAktivitet: { frilanser },
     } = values;
@@ -24,7 +30,18 @@ export default function Frilanser() {
                     Frilanser
                 </Heading>
                 <VerticalSpacer twentyPx />
-
+                <Field name="metadata.harSoekerDekketOmsorgsdager">
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <RadioPanelGruppeFormik
+                            legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
+                            description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
+                            name={field.name}
+                            options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                            onChange={(e, value) => form.setFieldValue(field.name, value)}
+                        />
+                    )}
+                </Field>
+                <VerticalSpacer sixteenPx />
                 <DatoInputFormik
                     label="Når startet søker som frilanser?"
                     name="opptjeningAktivitet.frilanser.startdato"
