@@ -24,6 +24,7 @@ import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
+    const virksomhetstype = values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper;
     const intl = useIntl();
     const {
         opptjeningAktivitet: { selvstendigNaeringsdrivende },
@@ -48,14 +49,41 @@ const SelvstendigNaeringsdrivende = () => {
                     )}
                 </Field>
                 <VerticalSpacer sixteenPx />
-                <RadioPanelGruppeFormik
-                    legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
-                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
-                    options={virksomhetstyper.map((v) => ({ value: v, label: capitalize(v) }))}
-                    retning="vertikal"
-                />
+                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <RadioPanelGruppeFormik
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
+                            options={virksomhetstyper.map((v) => ({ value: v, label: capitalize(v) }))}
+                            onChange={(e, value) => {
+                                form.setFieldValue(field.name, value);
+                                if (value !== 'Fiske') {
+                                    form.setFieldValue(
+                                        'opptjeningAktivitet.selvstendigNaeringsdrivende.info.fiskerBladB',
+                                        false
+                                    );
+                                }
+                            }}
+                            retning="vertikal"
+                        />
+                    )}
+                </Field>
                 <VerticalSpacer sixteenPx />
 
+                <Collapse isOpened={virksomhetstype === 'Fiske'}>
+                    <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.fiskerBladB">
+                        {({ field, form }: FieldProps<boolean>) => (
+                            <RadioPanelGruppeFormik
+                                legend={intlHelper(intl, 'skjema.arbeid.sn.virksomhetstype.fiskerBladB')}
+                                name={field.name}
+                                options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                                checked={field.value ? 'ja' : 'nei'}
+                                onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                            />
+                        )}
+                    </Field>
+                    <VerticalSpacer twentyPx />
+                </Collapse>
                 <TextFieldFormik
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
                     label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
