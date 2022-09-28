@@ -107,7 +107,7 @@ const OMPUTSchema = yup.object({
                     .required()
                     .test(
                         'maa-velge-ja',
-                        '${path} - dersom bruker ikke har dekket 10 omsorgsdager kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
+                        '${path} - fordi bruker ikke har dekket 10 omsorgsdager selv, kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
                         (v) => v === 'ja'
                     ),
             })
