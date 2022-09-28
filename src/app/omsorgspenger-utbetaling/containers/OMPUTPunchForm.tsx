@@ -214,16 +214,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     {getUhaandterteFeil('').map((feilmelding) => {
                         return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
                     })}
-                    {/* Denne bør byttes ut med errors fra formik*/}
-                    {feilFraYup(schema, values, values.metadata.arbeidsforhold)?.map(
-                        (error: { message: string; path: string }) => {
-                            return (
-                                <ErrorSummary.Item key={`${error.path}-${error.message}`}>
-                                    {error.message}
-                                </ErrorSummary.Item>
-                            );
-                        }
-                    )}
                 </ErrorSummary>
             )}
             <div className={'submit-knapper'}>
@@ -235,7 +225,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                                 setHarForsoektAaSendeInn(true);
                                 setTouched(setNestedObjectValues(values, true));
                             }
-                            validateForm(values).then(() => valider({ skalForhaandsviseSoeknad: true }));
+                            valider({ skalForhaandsviseSoeknad: true });
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
