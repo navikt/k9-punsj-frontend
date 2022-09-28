@@ -34,7 +34,9 @@ const selvstendigNaeringsdrivende = () =>
                 tom: yup.string().label('Til og med'),
             }),
             virksomhetstyper: yup.string().required().label('Virksomhetstype'),
-            fiskerBladB: yup.string().when('virksomhetstyper', { is: 'Fisker', then: (schema) => schema.required() }),
+            erFiskerPåBladB: yup
+                .string()
+                .when('virksomhetstyper', { is: 'Fisker', then: (schema) => schema.required() }),
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })

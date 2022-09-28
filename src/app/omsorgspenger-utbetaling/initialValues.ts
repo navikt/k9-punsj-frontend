@@ -74,7 +74,8 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                     },
                     virksomhetstyper:
                         soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper || '',
-                    fiskerBladB: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.fiskerBladB || false,
+                    erFiskerPåBladB:
+                        soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.erFiskerPåBladB || false,
                     landkode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode || '',
                     regnskapsførerNavn:
                         soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || '',

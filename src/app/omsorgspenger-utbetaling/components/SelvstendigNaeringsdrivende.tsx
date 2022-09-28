@@ -59,7 +59,7 @@ const SelvstendigNaeringsdrivende = () => {
                                 form.setFieldValue(field.name, value);
                                 if (value !== 'Fiske') {
                                     form.setFieldValue(
-                                        'opptjeningAktivitet.selvstendigNaeringsdrivende.info.fiskerBladB',
+                                        'opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB',
                                         false
                                     );
                                 }
@@ -71,10 +71,10 @@ const SelvstendigNaeringsdrivende = () => {
                 <VerticalSpacer sixteenPx />
 
                 <Collapse isOpened={virksomhetstype === 'Fiske'}>
-                    <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.fiskerBladB">
+                    <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB">
                         {({ field, form }: FieldProps<boolean>) => (
                             <RadioPanelGruppeFormik
-                                legend={intlHelper(intl, 'skjema.arbeid.sn.virksomhetstype.fiskerBladB')}
+                                legend={intlHelper(intl, 'skjema.arbeid.sn.virksomhetstype.erFiskerPåBladB')}
                                 name={field.name}
                                 options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                                 checked={field.value ? 'ja' : 'nei'}

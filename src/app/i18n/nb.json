@@ -230,7 +230,7 @@
     "skjema.sn.varigendringdato": "Dato for endringen",
     "skjema.arbeid.sn.fjernvirksomhet": "Fjern virksomhet",
     "skjema.arbeid.sn.type": "Type virksomhet",
-    "skjema.arbeid.sn.virksomhetstype.fiskerBladB": "Er søker fisker på blad B?",
+    "skjema.arbeid.sn.virksomhetstype.erFiskerPåBladB": "Er søker fisker på blad B?",
     "skjema.arbeid.sn.når": "Når startet virksomheten?",
     "skjema.arbeid.sn.startdato": "Startdato",
     "skjema.arbeid.sn.sluttdato": "Eventuell sluttdato",
