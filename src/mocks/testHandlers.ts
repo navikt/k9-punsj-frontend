@@ -138,14 +138,28 @@ export const testHandlers = {
         `${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`,
         (req, res, ctx) =>
             res(
-                ctx.json({
-                    perioder: [
-                        {
-                            fom: '2022-09-01',
-                            tom: '2022-09-23',
-                        },
-                    ],
-                })
+                ctx.json([
+                    {
+                        fom: '2022-09-01',
+                        tom: '2022-09-02',
+                    },
+                    {
+                        fom: '2022-09-05',
+                        tom: '2022-09-09',
+                    },
+                    {
+                        fom: '2022-09-12',
+                        tom: '2022-09-16',
+                    },
+                    {
+                        fom: '2022-09-19',
+                        tom: '2022-09-23',
+                    },
+                    {
+                        fom: '2022-09-26',
+                        tom: '2022-09-29',
+                    },
+                ])
             )
     ),
 };

@@ -43,7 +43,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const routingPaths = useContext(RoutingPathsContext);
 
     const { mutate: hentPerioderK9 } = useMutation(() => hentEksisterendePerioder(identState.ident1), {
-        onSuccess: (data) => setEksisterendePerioder(data.perioder),
+        onSuccess: (data) => setEksisterendePerioder(data),
     });
     const { data: soeknadRespons, isLoading, error } = useQuery(id, () => hentSoeknad(identState.ident1, id));
     const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.ident1), {
