@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Formik, yupToFormErrors } from 'formik';
 import { connect } from 'react-redux';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
@@ -17,9 +17,10 @@ import intlHelper from 'app/utils/intlUtils';
 import { IIdentState } from 'app/models/types/IdentState';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Feil } from 'app/models/types/ValideringResponse';
+import { Periode } from 'app/models/types';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
-import { hentSoeknad, sendSoeknad } from '../api';
+import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import { backendTilFrontendMapping } from '../utils';
 
@@ -36,18 +37,25 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { identState } = props;
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
-    const routingPaths = useContext(RoutingPathsContext);
-
-    const intl = useIntl();
-
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
+    const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
+    const routingPaths = useContext(RoutingPathsContext);
+
+    const { mutate: hentPerioderK9 } = useMutation(() => hentEksisterendePerioder(identState.ident1), {
+        onSuccess: (data) => setEksisterendePerioder(data.perioder),
+    });
     const { data: soeknadRespons, isLoading, error } = useQuery(id, () => hentSoeknad(identState.ident1, id));
     const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.ident1), {
         onSuccess: () => {
             history.push(`${routingPaths.kvittering}${id}`);
         },
     });
+    useEffect(() => {
+        hentPerioderK9();
+    }, []);
+
+    const intl = useIntl();
 
     const handleStartButtonClick = () => {
         history.push('/');
@@ -73,6 +81,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                 visForhaandsvisModal={visForhaandsvisModal}
                 setVisForhaandsvisModal={setVisForhaandsvisModal}
                 k9FormatErrors={k9FormatErrors}
+                eksisterendePerioder={eksisterendePerioder}
                 setK9FormatErrors={setK9FormatErrors}
                 submitError={submitError}
                 {...props}

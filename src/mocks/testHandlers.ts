@@ -19,16 +19,11 @@ export const testHandlers = {
     me: rest.get(`${BACKEND_BASE_URL}/me`, (req, res, ctx) =>
         res(ctx.status(200), ctx.json({ name: 'Bobby Binders' }))
     ),
-    hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/200`, (req, res, ctx) =>
-        res(ctx.json(journalpost))
+    hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/200`, (req, res, ctx) => res(ctx.json(journalpost))),
+    opprettePleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`, (req, res, ctx) =>
+        res(ctx.status(201), ctx.json(pleiepengerSoknad))
     ),
-    opprettePleiepengesoknad: rest.post(
-        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`,
-        (req, res, ctx) => res(ctx.status(201), ctx.json(pleiepengerSoknad))
-    ),
-    hentSoknader: rest.post(`${LOCAL_API_URL}/journalpost/hent`, (req, res, ctx) =>
-        res(ctx.json({ poster: [] }))
-    ),
+    hentSoknader: rest.post(`${LOCAL_API_URL}/journalpost/hent`, (req, res, ctx) => res(ctx.json({ poster: [] }))),
     hentMappe: rest.get(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
         res(
             ctx.json({
@@ -38,25 +33,21 @@ export const testHandlers = {
             })
         )
     ),
-    infoPleiepenger: rest.post(
-        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/k9sak/info`,
-        (req, res, ctx) => res(ctx.json([]))
+    infoPleiepenger: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/k9sak/info`, (req, res, ctx) =>
+        res(ctx.json([]))
     ),
     eksisterendePleiepengesoknad: rest.get(
         `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe`,
         (req, res, ctx) => res(ctx.json(journalpost))
     ),
-    oppdaterPleiepengesoknad: rest.put(
-        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/oppdater`,
-        (req, res, ctx) => res(ctx.json(pleiepengerSoknadSomKanSendesInn))
+    oppdaterPleiepengesoknad: rest.put(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/oppdater`, (req, res, ctx) =>
+        res(ctx.json(pleiepengerSoknadSomKanSendesInn))
     ),
-    validerPleiepengesoknad: rest.post(
-        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/valider`,
-        (req, res, ctx) => res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
+    validerPleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/valider`, (req, res, ctx) =>
+        res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
     ),
-    sendPleiepengesoknad: rest.post(
-        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/send`,
-        (req, res, ctx) => res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
+    sendPleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/send`, (req, res, ctx) =>
+        res(ctx.status(202), ctx.json(pleiepengerSoknadValidering))
     ),
     hentArbeidsgivere: rest.get(`${LOCAL_API_URL}/arbeidsgivere`, (req, res, ctx) =>
         res(ctx.status(202), ctx.json(arbeidsgivere))
@@ -110,6 +101,7 @@ export const testHandlers = {
         `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/send`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
     ),
+
     barn: rest.get(`${LOCAL_API_URL}/barn`, (req, res, ctx) =>
         res(
             ctx.status(200),
@@ -118,7 +110,6 @@ export const testHandlers = {
                     { fornavn: 'Geir-Paco', etternavn: 'Gundersen', identitetsnummer: '02021477330' },
                     { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
                     { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
-                    
                 ],
             })
         )
@@ -142,5 +133,19 @@ export const testHandlers = {
                 k9sak: true,
             })
         )
+    ),
+    eksisterendePerioderOmsorgspengeutbetaling: rest.post(
+        `${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`,
+        (req, res, ctx) =>
+            res(
+                ctx.json({
+                    perioder: [
+                        {
+                            fom: '2022-09-01',
+                            tom: '2022-09-23',
+                        },
+                    ],
+                })
+            )
     ),
 };

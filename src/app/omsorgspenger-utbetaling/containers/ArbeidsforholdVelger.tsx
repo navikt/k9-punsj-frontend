@@ -1,5 +1,5 @@
 import React from 'react';
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import { Collapse } from 'react-collapse';
 import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -7,12 +7,14 @@ import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormi
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
 import Frilanser from '../components/Frilanser';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
 const ArbeidsforholdVelger = () => {
     const [field, meta] = useField('metadata.arbeidsforhold');
+    const { values } = useFormikContext<IOMPUTSoknad>();
     return (
         <Panel border>
-            <Heading size="small">Arbeidsforhold</Heading>
+            <Heading size="small">{!values.erKorrigering ? 'Arbeidsforhold' : 'Arbeidsforhold - korrigering'}</Heading>
             <VerticalSpacer eightPx />
             <CheckboksPanelFormik name="metadata.arbeidsforhold.arbeidstaker" label="Arbeidstaker" valueIsBoolean />
             <VerticalSpacer eightPx />

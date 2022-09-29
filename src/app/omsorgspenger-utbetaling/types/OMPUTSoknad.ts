@@ -67,6 +67,7 @@ export interface IOMPUTSoknad extends SoeknadType {
     opptjeningAktivitet: IOpptjeningAktivitet;
     bosteder: PeriodeMedUtenlandsopphold[];
     utenlandsopphold: PeriodeMedUtenlandsopphold[];
+    erKorrigering: boolean;
     barn: PersonEnkel[];
 }
 

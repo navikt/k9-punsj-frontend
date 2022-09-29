@@ -59,6 +59,7 @@ export enum ApiPath {
     OMP_UT_SOKNAD_UPDATE = '/omsorgspengerutbetaling-soknad/oppdater',
     OMP_UT_SOKNAD_VALIDER = '/omsorgspengerutbetaling-soknad/valider',
     OMP_UT_SOKNAD_SUBMIT = '/omsorgspengerutbetaling-soknad/send',
+    OMP_UT_K9_PERIODER = '/omsorgspengerutbetaling-soknad/k9sak/info',
     BREV_BESTILL = '/brev/bestill',
     BREV_AKTØRID = '/brev/aktorId',
     PERSON = '/person',
@@ -79,8 +80,7 @@ export const OMP_UT_API_PATHS = {
     hentSoeknad: ApiPath.OMP_UT_SOKNAD_GET,
     validerSoeknad: ApiPath.OMP_UT_SOKNAD_VALIDER,
     oppdaterSoeknad: ApiPath.OMP_UT_SOKNAD_UPDATE,
-    sendInnSoeknad: ApiPath.OMP_UT_SOKNAD_SUBMIT
-
+    sendInnSoeknad: ApiPath.OMP_UT_SOKNAD_SUBMIT,
 };
 
 export const SAKSTYPE_API_PATHS = {

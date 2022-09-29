@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
+import { Field, FieldProps, FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -10,7 +10,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
 
-import { IInputError, ISignaturState } from 'app/models/types';
+import { IInputError, ISignaturState, Periode } from 'app/models/types';
 import { setIdentAction, setSignaturAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -26,7 +26,7 @@ import { useMutation } from 'react-query';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { feilFraYup } from 'app/utils/validationHelpers';
-import { oppdaterSoeknad, validerSoeknad } from '../api';
+import { hentEksisterendePerioder, oppdaterSoeknad, validerSoeknad } from '../api';
 import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
@@ -34,11 +34,15 @@ import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
-import { debounce } from 'lodash';
+import { capitalize, debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
+import Periodevisning from 'app/components/periodevisning/Periodevisning';
+import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import { JaNei } from 'app/models/enums';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -47,6 +51,7 @@ export interface IPunchOMPUTFormComponentProps {
     k9FormatErrors: Feil[];
     setK9FormatErrors: (feil: Feil[]) => void;
     submitError: unknown;
+    eksisterendePerioder: Periode[];
 }
 
 export interface IPunchOMPUTFormStateProps {
@@ -75,8 +80,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         setK9FormatErrors,
         journalpostid,
         submitError,
+        eksisterendePerioder,
     } = props;
-    const { signert } = signaturState;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
@@ -189,6 +194,34 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
 
+    const EksisterendePerioder = () => {
+        if (eksisterendePerioder.length) {
+            return (
+                <>
+                    <VerticalSpacer fourtyPx />
+                    <Panel border>
+                        <Heading size="small">Eksisterende perioder</Heading>
+                        {eksisterendePerioder.map((periode) => (
+                            <Periodevisning periode={periode} />
+                        ))}
+                        <VerticalSpacer sixteenPx />
+                        <Field name="erKorrigering">
+                            {({ field, form }: FieldProps<boolean>) => (
+                                <RadioPanelGruppeFormik
+                                    legend={'Jeg ønsker å korrigere eksisterende fraværsperioder.'}
+                                    name={field.name}
+                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                                    checked={field.value ? 'ja' : 'nei'}
+                                    onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                                />
+                            )}
+                        </Field>
+                    </Panel>
+                </>
+            );
+        }
+        return null;
+    };
     return (
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
@@ -196,11 +229,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <OpplysningerOmOMPUTSoknad />
             <VerticalSpacer sixteenPx />
             <Panel border>
-                <Heading size="xsmall" spacing>
+                <Heading size="small" spacing>
                     Fosterbarn
                 </Heading>
                 <Personvelger name="barn" />
             </Panel>
+            <EksisterendePerioder />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />

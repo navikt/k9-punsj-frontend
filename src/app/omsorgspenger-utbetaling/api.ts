@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+import { Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
 import { IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
@@ -26,6 +27,14 @@ export const validerSoeknad = async (
     ident: string
 ): Promise<IOMPUTSoknadKvittering | ValideringResponse> => {
     const response = await post(ApiPath.OMP_UT_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
+    return response.json();
+};
+
+export const hentEksisterendePerioder = async (ident: string): Promise<{ perioder: Periode[] }> => {
+    const response = await post(ApiPath.OMP_UT_K9_PERIODER, {}, { 'X-Nav-NorskIdent': ident }, { brukerIdent: ident });
+    if (!response.ok) {
+        throw Error('Kunne ikke hente eksisterende perioder');
+    }
     return response.json();
 };
 
