@@ -41,7 +41,7 @@ const getFullWeeksForDates = (dates: Date[], month: Date): Date[] => {
     const firstDateInWeek = dayjs(dates[0]).startOf('isoWeek').toDate();
     if (dayOfWeek > 0 && dayjs(firstDateInWeek).isSame(month, 'month') === false) {
         return [
-            ...getDatesInDateRange({ fom: firstDateInWeek, tom: dayjs(dates[0]).subtract(1, 'day').toDate() }, true),
+            ...getDatesInDateRange({ fom: firstDateInWeek, tom: dayjs(dates[0]).subtract(1, 'day').toDate() }, false),
             ...dates,
         ];
     }
