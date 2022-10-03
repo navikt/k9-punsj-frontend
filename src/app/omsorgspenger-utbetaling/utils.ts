@@ -102,3 +102,6 @@ export const filtrerVerdierFoerInnsending = (soknad: IOMPUTSoknad): Partial<IOMP
 
     return { ...soknad, opptjeningAktivitet: filtrertOpptjeningAktivitet };
 };
+
+export const utenOpptjeningAktivitet = (soknad: Partial<IOMPUTSoknadBackend>): Partial<IOMPUTSoknadBackend> =>
+    omit(soknad, 'opptjeningAktivitet');

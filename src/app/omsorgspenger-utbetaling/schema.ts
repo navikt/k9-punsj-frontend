@@ -101,11 +101,11 @@ const OMPUTSchema = yup.object({
         signatur: yup.string().required().label('Signatur'),
         harSoekerDekketOmsorgsdager: yup
             .string()
-            .when(['$selvstendigNaeringsdrivende', '$frilanser'], {
-                is: (sn: boolean, fl: boolean) => sn || fl,
+            .when(['$selvstendigNaeringsdrivende', '$frilanser', '$erKorrigering'], {
+                is: (sn: boolean, fl: boolean, erKorrigering: boolean) =>
+                    (sn || fl) === true && erKorrigering === false,
                 then: yup
                     .string()
-                    .required()
                     .test(
                         'maa-velge-ja',
                         '${path} - fordi bruker ikke har dekket 10 omsorgsdager selv, kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
@@ -114,12 +114,26 @@ const OMPUTSchema = yup.object({
             })
             .label('Har dekket omsorgsdager'),
     }),
-    opptjeningAktivitet: yup.object({
-        arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
-        selvstendigNaeringsdrivende: yup
-            .object()
-            .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
-        frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
+    opptjeningAktivitet: yup.object().when('$erKorrigering', {
+        is: false,
+        then: yup.object({
+            arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
+            selvstendigNaeringsdrivende: yup
+                .object()
+                .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
+            frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
+        }),
+        otherwise: yup.object({
+            arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
+            selvstendigNaeringsdrivende: yup.object().when('$selvstendigNaeringsdrivende', {
+                is: true,
+                then: yup.object({ fravaersperioder: fravaersperioder({ medSoknadAarsak: false }) }),
+            }),
+            frilanser: yup.object().when('$frilanser', {
+                is: true,
+                then: yup.object({ fravaersperioder: fravaersperioder({ medSoknadAarsak: false }) }),
+            }),
+        }),
     }),
     bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
     utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),

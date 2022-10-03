@@ -35,7 +35,7 @@ import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
 import { capitalize, debounce } from 'lodash';
-import { frontendTilBackendMapping, filtrerVerdierFoerInnsending } from '../utils';
+import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, utenOpptjeningAktivitet } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
@@ -93,7 +93,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
-            validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
+            values.erKorrigering
+                ? validerSoeknad(
+                      utenOpptjeningAktivitet(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
+                      identState.ident1
+                  )
+                : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
                 if (data['ytelse'] && skalForhaandsviseSoeknad && isValid) {
@@ -116,10 +121,19 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
     } = useMutation(
-        ({ submitSoknad }: { submitSoknad: boolean }) =>
-            submitSoknad
+        ({ submitSoknad }: { submitSoknad: boolean }) => {
+            if (values.erKorrigering) {
+                return submitSoknad
+                    ? oppdaterSoeknad(
+                          utenOpptjeningAktivitet(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
+                      )
+                    : oppdaterSoeknad(utenOpptjeningAktivitet(frontendTilBackendMapping(values)));
+            }
+
+            return submitSoknad
                 ? oppdaterSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
-                : oppdaterSoeknad(frontendTilBackendMapping(values)),
+                : oppdaterSoeknad(frontendTilBackendMapping(values));
+        },
         {
             onSuccess: (data, { submitSoknad }) => {
                 setHarMellomlagret(true);
@@ -198,30 +212,43 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         if (eksisterendePerioder.length) {
             return (
                 <>
-                    <VerticalSpacer fourtyPx />
+                    <VerticalSpacer sixteenPx />
                     <Panel border>
                         <Heading size="small">Eksisterende perioder</Heading>
                         {eksisterendePerioder.map((periode) => (
                             <Periodevisning periode={periode} />
                         ))}
-                        <VerticalSpacer sixteenPx />
-                        <Field name="erKorrigering">
-                            {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
-                                    legend={'Jeg ønsker å korrigere eksisterende fraværsperioder.'}
-                                    name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                    checked={field.value ? 'ja' : 'nei'}
-                                    onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
-                                />
-                            )}
-                        </Field>
                     </Panel>
                 </>
             );
         }
         return null;
     };
+
+    const NySoeknadEllerKorrigering = () => {
+        if (eksisterendePerioder.length) {
+            return (
+                <Panel border>
+                    <Field name="erKorrigering">
+                        {({ field, form }: FieldProps<boolean>) => (
+                            <RadioPanelGruppeFormik
+                                legend={'Er dette en ny søknad eller en korrigering?'}
+                                name={field.name}
+                                options={[
+                                    { value: 'nySoeknad', label: 'Ny søknad' },
+                                    { value: 'korrigering', label: 'Korrigering' },
+                                ]}
+                                checked={field.value ? 'korrigering' : 'nySoeknad'}
+                                onChange={(e, value) => form.setFieldValue(field.name, value === 'korrigering')}
+                            />
+                        )}
+                    </Field>
+                </Panel>
+            );
+        }
+        return null;
+    };
+
     return (
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
@@ -235,6 +262,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 <Personvelger name="barn" />
             </Panel>
             <EksisterendePerioder />
+            <VerticalSpacer sixteenPx />
+            <NySoeknadEllerKorrigering />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />

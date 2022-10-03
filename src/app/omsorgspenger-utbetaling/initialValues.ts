@@ -62,7 +62,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
         mottattDato: soknad?.mottattDato || '',
         journalposter: soknad?.journalposter,
         klokkeslett: soknad?.klokkeslett || '',
-        erKorrigering: false,
+        erKorrigering: soknad?.erKorrigering || false,
         opptjeningAktivitet: {
             selvstendigNaeringsdrivende: {
                 virksomhetNavn: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.virksomhetNavn || '',
