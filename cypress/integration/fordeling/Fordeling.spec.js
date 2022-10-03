@@ -58,7 +58,7 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
     });
 
-    it('validering av fødselsnummer', () => {
+    it('validering av fødselsnummer virker', () => {
         cy.contains('Pleiepenger').click();
         cy.contains('Nei').click();
 
@@ -67,5 +67,16 @@ describe('Fordeling', () => {
         identifikatorInput.clear().type('28887298663');
 
         cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should('not.exist');
+    });
+
+    it('validering av fødselsnummer IKKE virker', () => {
+        cy.contains('Pleiepenger').click();
+        cy.contains('Nei').click();
+
+        const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer:/i).should('exist');
+
+        identifikatorInput.clear().type('2888729866').blur();
+
+        cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should('exist');
     });
 });
