@@ -1,7 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 
 import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsopphold } from 'app/rules/yup';
-import { string } from 'prop-types';
 import nb from '../i18n/nb.json';
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>

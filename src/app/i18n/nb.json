@@ -124,6 +124,8 @@
     "tabell.mottakelsesdato": "Mottakelsesdato",
     "tabell.typeinnsdending": "Type innsending",
     "tabell.søknadtype": "Søknadtype",
+
+    "tabell.soekersFoedselsnummer": "Søkers fødselsnummer",
     "tabell.barnetsfnrellerfdato": "Pleietrengendes fødselsnummer",
     "tabell.fnrellerdato": "Fødsels-/D-nr. eller fødselsdato",
     "tabell.fraogmed": "Fra og med",

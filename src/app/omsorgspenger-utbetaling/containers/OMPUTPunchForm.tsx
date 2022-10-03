@@ -164,7 +164,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     }, [harMellomlagret]);
 
     //TODO: bør flytttes
-    const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
+    const getUhaandterteFeil = (attribute: string): Feil[] => {
         if (!feilmeldingStier.has(attribute)) {
             setFeilmeldingStier(feilmeldingStier.add(attribute));
         }
@@ -186,7 +186,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         });
 
         if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
+            return uhaandterteFeilmeldinger.map((error) => error).filter(Boolean);
         }
         return [];
     };
@@ -245,8 +245,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer twentyPx={true} />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {getUhaandterteFeil('').map((feilmelding) => {
-                        return <ErrorSummary.Item key={feilmelding}>{feilmelding}</ErrorSummary.Item>;
+                    {getUhaandterteFeil('').map((feil) => {
+                        return (
+                            <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
+                        );
                     })}
                     {/* Denne bør byttes ut med errors fra formik*/}
                     {feilFraYup(schema, values, values.metadata.arbeidsforhold)?.map(

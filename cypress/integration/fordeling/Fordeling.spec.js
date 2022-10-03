@@ -49,30 +49,34 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentsoknader');
     });
 
+    it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
+        cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
+        cy.findByText(/Ja/i).click();
+        cy.findByRole('button', { name: /Videre/i }).click();
+        cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
+        cy.findByRole('button', { name: /bekreft/i }).click();
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
+    });
+
     it('validering av fødselsnummer virker', () => {
         cy.contains('Pleiepenger').click();
         cy.contains('Nei').click();
 
-        const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer:/i)
-          .should('exist');
+        const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer:/i).should('exist');
 
-        identifikatorInput.clear()
-          .type('28887298663');
+        identifikatorInput.clear().type('28887298663');
 
-        cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should("not.exist");
-    })
+        cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should('not.exist');
+    });
 
     it('validering av fødselsnummer IKKE virker', () => {
         cy.contains('Pleiepenger').click();
         cy.contains('Nei').click();
 
-        const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer:/i)
-          .should('exist');
+        const identifikatorInput = cy.findByLabelText(/Søkers fødselsnummer eller D-nummer:/i).should('exist');
 
-        identifikatorInput.clear()
-          .type('2888729866')
-          .blur();
+        identifikatorInput.clear().type('2888729866').blur();
 
-        cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should("exist");
-    })
+        cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should('exist');
+    });
 });

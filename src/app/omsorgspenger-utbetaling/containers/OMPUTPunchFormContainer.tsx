@@ -93,6 +93,8 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                                 erNyoppstartet: !!erYngreEnn4år(
                                     get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
                                 ),
+                                erKorringering: values?.erKorrigering,
+                                eksisterendePerioder,
                             },
                         }
                     )

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { setIdentAction } from 'app/state/actions';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -68,7 +67,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
             const soknadId = søknad.soeknadId;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                søknad.barn?.map((barn) => barn.norskIdent).join(', '),
+                søknad.soekerId,
                 Array.from(søknad.journalposter).join(', '),
 
                 <Knapp key={soknadId} mini onClick={() => setValgtSoeknad(søknad)}>
@@ -112,7 +111,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                     <thead>
                         <tr>
                             <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
+                            <th>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</th>
                             <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
                             <th>{intlHelper(intl, 'skjema.periode')}</th>
                             <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
