@@ -92,9 +92,13 @@ const OMPUTSchema = yup.object({
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaDato,
     metadata: yup.object({
-        arbeidsforhold: yup.object().test({
-            test: (arbeidsforhold) => Object.values(arbeidsforhold).some((v) => v),
-            message: 'Må velge minst ett arbeidsforhold',
+        arbeidsforhold: yup.object().when('$erKorrigering', {
+            is: false,
+            then: yup.object().test({
+                test: (arbeidsforhold) => Object.values(arbeidsforhold).some((v) => v),
+                message: 'Må velge minst ett arbeidsforhold',
+            }),
+            otherwise: yup.object(),
         }),
         medlemskap: yup.string().required().label('Medlemskap'),
         utenlandsopphold: yup.string().required().label('Utenlandsopphold'),

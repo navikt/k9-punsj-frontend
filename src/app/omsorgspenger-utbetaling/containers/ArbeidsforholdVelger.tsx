@@ -12,6 +12,7 @@ import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 const ArbeidsforholdVelger = () => {
     const [field, meta] = useField('metadata.arbeidsforhold');
     const { values } = useFormikContext<IOMPUTSoknad>();
+    console.log(meta);
     return (
         <Panel border>
             <Heading size="small">{!values.erKorrigering ? 'Arbeidsforhold' : 'Arbeidsforhold - korrigering'}</Heading>
@@ -35,7 +36,7 @@ const ArbeidsforholdVelger = () => {
             <Collapse isOpened={field.value.frilanser}>
                 <Frilanser />
             </Collapse>
-            {meta.touched && Object.values(field.value).every((v) => !v) && (
+            {meta.touched && !values.erKorrigering && Object.values(field.value).every((v) => !v) && (
                 <ErrorMessage>Må velge minst ett arbeidsforhold</ErrorMessage>
             )}
         </Panel>
