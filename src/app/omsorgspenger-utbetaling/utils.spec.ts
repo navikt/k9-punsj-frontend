@@ -23,8 +23,6 @@ describe('Mapping av omsorgspengeutbetaling', () => {
     });
     test('mapper fra frontend til backend ', () => {
         const backendMapping = frontendTilBackendMapping(frontendSoknad);
-        console.log(backendMapping);
-        console.log(backendSoknad);
 
         expect(backendMapping).toEqual(backendSoknad);
     });
