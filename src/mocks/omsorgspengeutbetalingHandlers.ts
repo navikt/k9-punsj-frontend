@@ -125,6 +125,25 @@ const omsorgspengerutbetalingHandlers = {
             })
         )
     ),
+    nySoeknad: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                soeknadId: 'bc12baac-0f0c-427e-a059-b9fbf9a3adff',
+                soekerId: '29099000129',
+                mottattDato: null,
+                klokkeslett: null,
+                barn: [],
+                journalposter: ['200'],
+                bosteder: null,
+                utenlandsopphold: [],
+                opptjeningAktivitet: null,
+                fravaersperioder: null,
+                harInfoSomIkkeKanPunsjes: null,
+                harMedisinskeOpplysninger: null,
+                metadata: null,
+            })
+        )
+    ),
 };
 
 export default omsorgspengerutbetalingHandlers;

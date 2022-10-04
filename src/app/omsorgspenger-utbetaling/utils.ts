@@ -20,9 +20,9 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
             ?.flat() || [];
 
     const fravaersperioderMappet = [
+        ...fravaersperioderArbeidstaker,
         ...fraevaersperioderSelvstendigNaeringsdrivende,
         ...fravaersperioderFrilanser,
-        ...fravaersperioderArbeidstaker,
     ];
     const opptjeningAktivitetUtenFravaersperioder = {
         arbeidstaker: (arbeidstaker && arbeidstaker.map((at) => omit(at, ['fravaersperioder']))) || null,

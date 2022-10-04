@@ -3,7 +3,7 @@ import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
 import pleiepengerSoknadSomKanSendesInn from '../../fixtures/pleiepengerSoknadSomKanSendesInn';
 import omsorgspengerutbetalingHandlers from 'mocks/omsorgspengeutbetalingHandlers';
 
-describe('Eksisterende søknader pleiepenger', () => {
+describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     beforeEach(() => {
         cy.visit('/journalpost/200#/omsorgspenger-utbetaling/soeknader', {
             onBeforeLoad: (window) => {
@@ -31,7 +31,7 @@ describe('Eksisterende søknader pleiepenger', () => {
         );
     });
 
-    it('viser eksisterende søknader om de finnes', () => {
+    it('kan fortsette på eksisterende soknader', () => {
         cy.window().then((window) => {
             const { worker, rest } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
@@ -42,6 +42,16 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.findByText(/JournalpostID/i).should('exist');
             cy.findByText(/03.10.2022/i).should('exist');
             cy.findByText(/201/i).should('exist');
+            cy.findByRole('button', { name: /fortsett/i }).click();
+        });
+
+        cy.get('.modal_content').within(() => {
+            cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
+            cy.findByRole('button', { name: /fortsett/i }).click();
+            cy.url().should(
+                'eq',
+                'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/4e177e4d-922d-4205-a3e9-d3278da2abf7'
+            );
         });
     });
 
@@ -50,44 +60,26 @@ describe('Eksisterende søknader pleiepenger', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
     });
 
-    it.skip('kan starte ny registrering av pleiepengeskjema', () => {
+    it('kan starte ny registrering av pleiepengeskjema', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(omsorgspengerutbetalingHandlers.nySoeknad);
+        });
         cy.findByRole('button', { name: /start ny registrering/i }).click();
+
         cy.url().should(
             'eq',
-            'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
+            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
         );
     });
 
-    it.skip('kan fortsette på eksisterende sak', () => {
+    it('kan ikke start ny registrering når søknad allerede finnes for journalpost', () => {
         cy.window().then((window) => {
             const { worker, rest } = window.msw;
-            worker.use(
-                rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
-                    res(
-                        ctx.json({
-                            søker: '29099000129',
-                            fagsakTypeKode: 'PSB',
-                            søknader: [pleiepengerSoknadSomKanSendesInn],
-                        })
-                    )
-                )
-            );
+            worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
+            worker.use(omsorgspengerutbetalingHandlers.nySoeknad);
         });
 
-        cy.get('.punch_mappetabell').within(() => {
-            cy.findByText('12.10.2020').should('exist');
-            cy.findByText('16017725002').should('exist');
-            cy.findByText('200').should('exist');
-            cy.findByText('08.11.2021 - 11.11.2021').should('exist');
-        });
-
-        cy.findByRole('button', { name: /fortsett/i }).click();
-        cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
-        cy.findByRole('button', { name: /fortsett/i }).click();
-
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
-        );
+        cy.findByRole('button', { name: /start ny registrering/i }).should('not.exist');
     });
 });
