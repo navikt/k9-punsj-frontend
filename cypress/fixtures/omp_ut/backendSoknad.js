@@ -63,6 +63,17 @@ export default {
     harMedisinskeOpplysninger: true,
     fravaersperioder: [
         {
+            aktivitetsFravær: 'ARBEIDSTAKER',
+            faktiskTidPrDag: '7,5',
+            fraværÅrsak: 'ORDINÆRT_FRAVÆR',
+            organisasjonsnummer: '979312059',
+            periode: {
+                fom: '2022-06-01',
+                tom: '2022-06-23',
+            },
+            søknadÅrsak: 'NYOPPSTARTET_HOS_ARBEIDSGIVER',
+        },
+        {
             aktivitetsFravær: 'SELVSTENDIG_VIRKSOMHET',
             faktiskTidPrDag: '1',
             fraværÅrsak: 'STENGT_SKOLE_ELLER_BARNEHAGE',
@@ -83,17 +94,6 @@ export default {
                 tom: '2022-06-23',
             },
             søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
-        },
-        {
-            aktivitetsFravær: 'ARBEIDSTAKER',
-            faktiskTidPrDag: '37,5',
-            fraværÅrsak: 'ORDINÆRT_FRAVÆR',
-            organisasjonsnummer: '979312059',
-            periode: {
-                fom: '2022-06-01',
-                tom: '2022-06-23',
-            },
-            søknadÅrsak: 'NYOPPSTARTET_HOS_ARBEIDSGIVER',
         },
     ],
 };

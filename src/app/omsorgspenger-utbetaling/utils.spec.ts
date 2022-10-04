@@ -21,8 +21,10 @@ describe('Mapping av omsorgspengeutbetaling', () => {
         expect(new Set(fraværsperioderFrontend)).toEqual(new Set(backendSoknad.fravaersperioder));
         expect(frontendMapping).toEqual(frontendSoknad);
     });
-    test('mapper fra frontend til frontend ', () => {
+    test('mapper fra frontend til backend ', () => {
         const backendMapping = frontendTilBackendMapping(frontendSoknad);
+        console.log(backendMapping);
+        console.log(backendSoknad);
 
         expect(backendMapping).toEqual(backendSoknad);
     });

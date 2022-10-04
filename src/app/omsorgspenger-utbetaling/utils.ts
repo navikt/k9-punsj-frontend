@@ -30,8 +30,7 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
         selvstendigNaeringsdrivende:
             selvstendigNaeringsdrivende && Object.keys(selvstendigNaeringsdrivende).length
                 ? {
-                      ...selvstendigNaeringsdrivende,
-                      fravaersperioder: undefined,
+                      ...omit(selvstendigNaeringsdrivende, 'fravaersperioder'),
                       info: {
                           ...selvstendigNaeringsdrivende.info,
                           virksomhetstyper: selvstendigNaeringsdrivende.info.virksomhetstyper.length

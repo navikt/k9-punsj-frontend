@@ -85,7 +85,7 @@ export default {
                 fravaersperioder: [
                     {
                         aktivitetsFravær: 'ARBEIDSTAKER',
-                        faktiskTidPrDag: '37,5',
+                        faktiskTidPrDag: '7,5',
                         fraværÅrsak: 'ORDINÆRT_FRAVÆR',
                         organisasjonsnummer: '979312059',
                         periode: {
