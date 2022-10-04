@@ -144,7 +144,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             mottattDato: '',
             journalposter: new Set([]),
             pleietrengende: {
-                norskIdent: ''
+                norskIdent: '',
             },
             opptjeningAktivitet: {},
             arbeidstid: {},
@@ -243,7 +243,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         prevState: Readonly<IPunchPLSFormComponentState>,
         snapshot?: any
     ): void {
-        const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } = this.props;
+        const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } =
+            this.props;
         const { soknad } = punchFormState;
         if (!!soknad && !this.state.isFetched) {
             this.setState({
@@ -448,7 +449,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
@@ -460,7 +461,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
@@ -913,13 +914,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         return naa < new Date(dato);
     }
 
-    private erFremITidKlokkeslett(dato: string) {
+    private erFremITidKlokkeslett(klokkeslett: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
+
         if (
             !!mottattDato &&
-            naa.getDate() === new Date(mottattDato).getDate() &&
-            initializeDate(naa).format('HH:mm') < dato
+            naa.toDateString() === new Date(mottattDato!).toDateString() &&
+            initializeDate(naa).format('HH:mm') < klokkeslett
         ) {
             return true;
         }
@@ -1074,14 +1076,16 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
 const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
     const søkersIdent = state.identState.ident1 || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.soekerId;
-    const pleietrengendeIdent = state.identState.ident2 || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
+    const pleietrengendeIdent =
+        state.identState.ident2 ||
+        state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
     return {
         punchFormState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState,
         signaturState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.signaturState,
         journalposterState: state.journalposterPerIdentState,
         identState: state.identState,
         søkersIdent,
-        pleietrengendeIdent: pleietrengendeIdent
+        pleietrengendeIdent: pleietrengendeIdent,
     };
 };
 

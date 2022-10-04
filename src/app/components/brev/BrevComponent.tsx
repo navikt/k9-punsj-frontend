@@ -1,3 +1,4 @@
+import { Alert } from '@navikt/ds-react';
 import { ApiPath, URL_BACKEND } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
@@ -7,7 +8,8 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
 import { Form, Formik } from 'formik';
 import { Knapp } from 'nav-frontend-knapper';
-import { Element, Feilmelding } from 'nav-frontend-typografi';
+import { Feilmelding } from 'nav-frontend-typografi';
+import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { finnArbeidsgivere } from '../../api/api';
@@ -16,15 +18,19 @@ import { Brev } from './Brev';
 import './brev.less';
 import Brevmal from './Brevmal';
 import dokumentMalType from './dokumentMalType';
-import ErrorIcon from '../../assets/SVG/ErrorIcon';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
-import SuccessIcon from '../../assets/SVG/SuccessIcon';
 
-const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId: string) => {
+const previewMessage = (
+    values: BrevFormValues,
+    aktørId: string,
+    sakstype: string,
+    journalpostId?: string,
+    fagsakId?: string
+) => {
     const mottaker = {
         type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
         id: values.mottaker,
@@ -37,12 +43,12 @@ const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId:
         credentials: 'include',
         body: JSON.stringify({
             aktørId,
-            eksternReferanse: journalpostId,
+            eksternReferanse: journalpostId || fagsakId,
             ytelseType: {
-                kode: 'OMP',
+                kode: sakstype,
                 kodeverk: 'FAGSAK_YTELSE',
             },
-            saksnummer: 'GENERELL_SAK',
+            saksnummer: fagsakId || 'GENERELL_SAK',
             avsenderApplikasjon: 'K9PUNSJ',
             overstyrtMottaker: mottaker,
             dokumentMal: values.brevmalkode,
@@ -63,11 +69,21 @@ const previewMessage = (journalpostId: string, values: BrevFormValues, aktørId:
 
 interface BrevProps {
     søkerId: string;
-    journalpostId: string;
-    setVisBrevIkkeSendtInfoboks: (erBrevSendt: boolean) => void;
+    journalpostId?: string;
+    fagsakId?: string;
+    setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
+    sakstype: string;
+    brevSendtCallback?: () => void;
 }
 
-const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBrevIkkeSendtInfoboks }) => {
+const BrevComponent: React.FC<BrevProps> = ({
+    søkerId,
+    journalpostId,
+    fagsakId,
+    setVisBrevIkkeSendtInfoboks,
+    sakstype,
+    brevSendtCallback,
+}) => {
     const intl = useIntl();
     const [brevmaler, setBrevmaler] = useState<Brevmal | undefined>(undefined);
     const [hentBrevmalerError, setHentBrevmalerError] = useState(false);
@@ -77,9 +93,11 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
     const [aktørId, setAktørId] = useState('');
     const [harSendtMinstEttBrev, setHarSendtMinstEttBrev] = useState(false);
     const [person, setPerson] = useState<Person | undefined>(undefined);
+    const [forrigeSendteBrevHash, setForrigeSendteBrevHash] = useState('');
+    const [visSammeBrevError, setVisSammeBrevError] = useState(false);
 
     useEffect(() => {
-        fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ`, {
+        fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {
@@ -132,20 +150,33 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                 },
             }}
             onSubmit={(values, actions) => {
+                setBrevErSendt(false);
                 const mottaker = {
                     type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
                     id: values.mottaker,
                 };
-                const brev = new Brev(values, søkerId, mottaker, 'OMP', values.brevmalkode, journalpostId);
-                post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
-                    if (response.status === 200) {
-                        setBrevErSendt(true);
-                        setHarSendtMinstEttBrev(true);
-                        setVisBrevIkkeSendtInfoboks(false);
-                    } else {
-                        setSendBrevFeilet(true);
-                    }
-                });
+                const brev = new Brev(values, søkerId, mottaker, sakstype, values.brevmalkode, journalpostId, fagsakId);
+                const brevHash = hash(brev);
+                if (brevHash !== forrigeSendteBrevHash) {
+                    setVisSammeBrevError(false);
+                    post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
+                        if (response.status === 200) {
+                            setForrigeSendteBrevHash(brevHash);
+                            setBrevErSendt(true);
+                            setHarSendtMinstEttBrev(true);
+                            if (brevSendtCallback) {
+                                brevSendtCallback();
+                            }
+                            if (setVisBrevIkkeSendtInfoboks) {
+                                setVisBrevIkkeSendtInfoboks(false);
+                            }
+                        } else {
+                            setSendBrevFeilet(true);
+                        }
+                    });
+                } else {
+                    setVisSammeBrevError(true);
+                }
                 actions.setSubmitting(false);
             }}
         >
@@ -172,12 +203,16 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
 
                         {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                             <InnhentDokumentasjonMal
-                                setVisBrevIkkeSendtInfoboks={() => setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)}
+                                setVisBrevIkkeSendtInfoboks={() =>
+                                    setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                }
                             />
                         )}
                         {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
                             <GenereltFritekstbrevMal
-                                setVisBrevIkkeSendtInfoboks={() => setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)}
+                                setVisBrevIkkeSendtInfoboks={() =>
+                                    setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                }
                             />
                         )}
                         <VerticalSpacer sixteenPx />
@@ -189,7 +224,7 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                             {values.brevmalkode && (
                                 <button
                                     type="button"
-                                    onClick={() => previewMessage(journalpostId, values, aktørId)}
+                                    onClick={() => previewMessage(values, aktørId, sakstype, journalpostId, fagsakId)}
                                     className="previewLink lenke lenke--frittstaende"
                                 >
                                     {intl.formatMessage({ id: 'Messages.Preview' })}
@@ -197,24 +232,23 @@ const BrevComponent: React.FC<BrevProps> = ({ søkerId, journalpostId, setVisBre
                             )}
                         </div>
 
-                        {brevErSendt || sendBrevFeilet ? (
-                            <div className="brevSendtContainer">
-                                {brevErSendt && (
-                                    <>
-                                        <SuccessIcon />
-                                        <Element className="brevSendtText">
-                                            Brev sendt! Du kan nå sende nytt brev til annen mottaker.
-                                        </Element>
-                                    </>
-                                )}
-                                {sendBrevFeilet && (
-                                    <>
-                                        <ErrorIcon />
-                                        <Element className="brevSendtText">Sending av brev feilet.</Element>
-                                    </>
-                                )}
-                            </div>
-                        ) : null}
+                        <div className="brevStatusContainer">
+                            {brevErSendt && (
+                                <Alert variant="success" size="medium" fullWidth inline>
+                                    Brev sendt! Du kan nå sende nytt brev til annen mottaker.
+                                </Alert>
+                            )}
+                            {sendBrevFeilet && (
+                                <Alert variant="error" size="medium" fullWidth inline>
+                                    Sending av brev feilet.
+                                </Alert>
+                            )}
+                            {visSammeBrevError && (
+                                <Alert variant="error" size="medium" fullWidth inline>
+                                    Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
+                                </Alert>
+                            )}
+                        </div>
                     </Form>
                 </div>
             )}

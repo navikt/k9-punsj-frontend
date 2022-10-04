@@ -116,6 +116,7 @@ const EksisterendeSoknaderInitialState = {
     identState: {
         ident1: '29099000129',
         ident2: '16017725002',
+        barn: [],
         annenSokerIdent: null,
     },
     opprettIGosys: {

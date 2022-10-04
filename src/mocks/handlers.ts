@@ -53,6 +53,7 @@ let handlers = [
             })
         )
     ),
+    testHandlers.barn,
     rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
         res(
             ctx.status(200),
@@ -60,11 +61,11 @@ let handlers = [
             ctx.json([
                 {
                     fagsakId: '1DMU93M',
-                    sakstype: 'PLEIEPENGER_SYKT_BARN',
+                    sakstype: 'PSB',
                 },
                 {
                     fagsakId: '1DMUDF6',
-                    sakstype: 'OMSORGSPENGER',
+                    sakstype: 'OMP',
                 },
             ])
         )
