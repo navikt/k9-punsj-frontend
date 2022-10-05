@@ -1,9 +1,11 @@
-import { IArbeidstaker } from 'app/models/types';
 import { get, omit, pick } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
-import { Arbeidstaker, FravaersperiodeType, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
+import { Arbeidstaker, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 
 export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partial<IOMPUTSoknadBackend> => {
+    const harValgtFrilanser = soknad.metadata?.arbeidsforhold.frilanser;
+    const harValgtArbeidstaker = soknad.metadata?.arbeidsforhold.arbeidstaker;
+    const harValgtSelvstendigNaeringsdrivende = soknad.metadata?.arbeidsforhold.selvstendigNaeringsdrivende;
     const frilanser = soknad?.opptjeningAktivitet?.frilanser;
     const selvstendigNaeringsdrivende = soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende;
     const arbeidstaker = soknad?.opptjeningAktivitet?.arbeidstaker;
@@ -26,10 +28,16 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
         ...fravaersperioderFrilanser,
     ];
     const opptjeningAktivitetUtenFravaersperioder = {
-        arbeidstaker: (arbeidstaker && arbeidstaker.map((at) => omit(at, ['fravaersperioder']))) || null,
-        frilanser: frilanser && Object.keys(frilanser).length ? omit(frilanser, ['fravaersperioder']) : null,
+        arbeidstaker:
+            (harValgtArbeidstaker && arbeidstaker && arbeidstaker.map((at) => omit(at, ['fravaersperioder']))) || null,
+        frilanser:
+            harValgtFrilanser && frilanser && Object.keys(frilanser).length
+                ? omit(frilanser, ['fravaersperioder'])
+                : null,
         selvstendigNaeringsdrivende:
-            selvstendigNaeringsdrivende && Object.keys(selvstendigNaeringsdrivende).length
+            harValgtSelvstendigNaeringsdrivende &&
+            selvstendigNaeringsdrivende &&
+            Object.keys(selvstendigNaeringsdrivende).length
                 ? {
                       ...omit(selvstendigNaeringsdrivende, 'fravaersperioder'),
                       info: {

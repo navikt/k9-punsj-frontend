@@ -35,13 +35,8 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
             }),
         {
             onSuccess: (data) => {
-                if (
-                    data.some(
-                        (org) =>
-                            org.organisasjonsnummer !==
-                            values.opptjeningAktivitet.arbeidstaker[arbeidstakerIndex].organisasjonsnummer
-                    )
-                ) {
+                const orgnr = values.opptjeningAktivitet.arbeidstaker[arbeidstakerIndex].organisasjonsnummer;
+                if (orgnr && data.some((org) => org.organisasjonsnummer !== orgnr)) {
                     setGjelderAnnenOrganisasjon(true);
                 }
             },
