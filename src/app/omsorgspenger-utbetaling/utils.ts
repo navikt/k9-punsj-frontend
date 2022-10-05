@@ -1,3 +1,4 @@
+import { OpptjeningAktivitet } from 'app/models/types';
 import { get, omit, pick, set } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
 import { IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
@@ -58,7 +59,6 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
     const fravaersperioderArbeidstaker = soknad.fravaersperioder?.filter(
         (periode) => periode.aktivitetsFravær === aktivitetsFravær.ARBEIDSTAKER
     );
-
     const arbeidstaker = soknad.opptjeningAktivitet?.arbeidstaker?.map((at) => ({
         ...at,
         fravaersperioder: fravaersperioderArbeidstaker.filter(
