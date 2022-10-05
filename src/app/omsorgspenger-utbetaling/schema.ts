@@ -100,9 +100,15 @@ const OMPUTSchema = yup.object({
             }),
             otherwise: yup.object(),
         }),
-        medlemskap: yup.string().required().label('Medlemskap'),
-        utenlandsopphold: yup.string().required().label('Utenlandsopphold'),
-        signatur: yup.string().required().label('Signatur'),
+        medlemskap: yup
+            .string()
+            .when('$erKorrigering', { is: false, then: yup.string().required() })
+            .label('Medlemskap'),
+        utenlandsopphold: yup
+            .string()
+            .when('$erKorrigering', { is: false, then: yup.string().required() })
+            .label('Utenlandsopphold'),
+        signatur: yup.string().when('$erKorrigering', { is: false, then: yup.string().required() }).label('Signatur'),
         harSoekerDekketOmsorgsdager: yup
             .string()
             .when(['$selvstendigNaeringsdrivende', '$frilanser', '$erKorrigering'], {
