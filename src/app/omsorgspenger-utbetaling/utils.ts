@@ -1,3 +1,4 @@
+import { utenlandsopphold } from 'app/rules/yup';
 import { get, omit, pick } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
 import { Arbeidstaker, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
@@ -54,6 +55,8 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
         opptjeningAktivitet: opptjeningAktivitetUtenFravaersperioder,
         barn: soknad.barn?.map((barn) => ({ foedselsdato: barn.foedselsdato, norskIdent: barn.norskIdent })),
         fravaersperioder: fravaersperioderMappet,
+        bosteder: !soknad.erKorrigering ? soknad.bosteder : undefined,
+        utenlandsopphold: !soknad.erKorrigering ? soknad.utenlandsopphold : undefined,
     };
 };
 

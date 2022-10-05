@@ -9,40 +9,38 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
+import { Collapse } from 'react-collapse';
+import { useMutation } from 'react-query';
+import { debounce } from 'lodash';
 
-import { IInputError, ISignaturState, Periode } from 'app/models/types';
-import { setIdentAction, setSignaturAction } from 'app/state/actions';
+import { IInputError, Periode } from 'app/models/types';
+import { setIdentAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
+import VentModal from 'app/components/ventModal/VentModal';
+import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
+import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
+import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
+import { feilFraYup } from 'app/utils/validationHelpers';
+import Personvelger from 'app/components/person-velger/Personvelger';
+import Periodevisning from 'app/components/periodevisning/Periodevisning';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
-import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
-import { useMutation } from 'react-query';
-import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
-import { feilFraYup } from 'app/utils/validationHelpers';
-import { hentEksisterendePerioder, oppdaterSoeknad, validerSoeknad } from '../api';
-import VentModal from 'app/components/ventModal/VentModal';
-import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
-import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
+import { oppdaterSoeknad, validerSoeknad } from '../api';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
-import Personvelger from 'app/components/person-velger/Personvelger';
 import schema from '../schema';
-import { capitalize, debounce } from 'lodash';
 import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, utenOpptjeningAktivitet } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
-import Periodevisning from 'app/components/periodevisning/Periodevisning';
-import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import { JaNei } from 'app/models/enums';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -55,13 +53,11 @@ export interface IPunchOMPUTFormComponentProps {
 }
 
 export interface IPunchOMPUTFormStateProps {
-    signaturState: ISignaturState;
     identState: IIdentState;
 }
 
 export interface IPunchOMPUTFormDispatchProps {
     setIdentAction: typeof setIdentAction;
-    setSignaturAction: typeof setSignaturAction;
 }
 
 type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
@@ -72,7 +68,6 @@ type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
     const {
         intl,
-        signaturState,
         identState,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
@@ -101,12 +96,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
-                if (data['ytelse'] && skalForhaandsviseSoeknad && isValid) {
+                if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
                     setKvittering && setKvittering(kvitteringResponse);
                 }
-                if (data['feil']?.length) {
+                if (data?.feil?.length) {
                     setK9FormatErrors(data['feil']);
                     setKvittering && setKvittering(undefined);
                 } else {
@@ -177,7 +172,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [harMellomlagret]);
 
-    //TODO: bør flytttes
+    // TODO: bør flytttes
     const getUhaandterteFeil = (attribute: string): Feil[] => {
         if (!feilmeldingStier.has(attribute)) {
             setFeilmeldingStier(feilmeldingStier.add(attribute));
@@ -232,7 +227,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     <Field name="erKorrigering">
                         {({ field, form }: FieldProps<boolean>) => (
                             <RadioPanelGruppeFormik
-                                legend={'Er dette en ny søknad eller en korrigering?'}
+                                legend="Er dette en ny søknad eller en korrigering?"
                                 name={field.name}
                                 options={[
                                     { value: 'nySoeknad', label: 'Ny søknad' },
@@ -267,34 +262,34 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
-            <Medlemskap />
-            <VerticalSpacer fourtyPx />
-            <Utenlandsopphold />
+            <Collapse isOpened={!values.erKorrigering}>
+                <>
+                    <Medlemskap />
+                    <VerticalSpacer fourtyPx />
+                    <Utenlandsopphold />
+                </>
+            </Collapse>
             <IkkeRegistrerteOpplysninger intl={intl} />
-            <VerticalSpacer twentyPx={true} />
+            <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {getUhaandterteFeil('').map((feil) => {
-                        return (
-                            <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
-                        );
-                    })}
-                    {/* Denne bør byttes ut med errors fra formik*/}
+                    {getUhaandterteFeil('').map((feil) => (
+                        <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
+                    ))}
+                    {/* Denne bør byttes ut med errors fra formik */}
                     {feilFraYup(schema, values, values.metadata.arbeidsforhold)?.map(
-                        (error: { message: string; path: string }) => {
-                            return (
-                                <ErrorSummary.Item key={`${error.path}-${error.message}`}>
-                                    {error.message}
-                                </ErrorSummary.Item>
-                            );
-                        }
+                        (error: { message: string; path: string }) => (
+                            <ErrorSummary.Item key={`${error.path}-${error.message}`}>
+                                {error.message}
+                            </ErrorSummary.Item>
+                        )
                     )}
                 </ErrorSummary>
             )}
-            <div className={'submit-knapper'}>
+            <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Knapp
-                        className={'send-knapp'}
+                        className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
                                 setHarForsoektAaSendeInn(true);
@@ -306,12 +301,12 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         {intlHelper(intl, 'skjema.knapp.send')}
                     </Knapp>
 
-                    <Knapp className={'vent-knapp'} onClick={() => setVisVentModal(true)} disabled={false}>
+                    <Knapp className="vent-knapp" onClick={() => setVisVentModal(true)} disabled={false}>
                         {intlHelper(intl, 'skjema.knapp.settpaavent')}
                     </Knapp>
                 </p>
             </div>
-            <VerticalSpacer sixteenPx={true} />
+            <VerticalSpacer sixteenPx />
             {mellomlagringError instanceof Error && (
                 <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
             )}
@@ -334,20 +329,20 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
             {visErDuSikkerModal && (
                 <ModalWrapper
-                    key={'erdusikkermodal'}
-                    className={'erdusikkermodal'}
+                    key="erdusikkermodal"
+                    className="erdusikkermodal"
                     onRequestClose={() => setVisErDuSikkerModal(false)}
-                    contentLabel={'erdusikkermodal'}
+                    contentLabel="erdusikkermodal"
                     closeButton={false}
                     isOpen={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
-                        melding={'modal.erdusikker.sendinn'}
-                        extraInfo={'modal.erdusikker.sendinn.extrainfo'}
+                        melding="modal.erdusikker.sendinn"
+                        extraInfo="modal.erdusikker.sendinn.extrainfo"
                         onSubmit={() => {
                             updateSoknad({ submitSoknad: true });
                         }}
-                        submitKnappText={'skjema.knapp.send'}
+                        submitKnappText="skjema.knapp.send"
                         onClose={() => {
                             setVisErDuSikkerModal(false);
                         }}
@@ -359,12 +354,10 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 };
 
 const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
-    signaturState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.signaturState,
     identState: state.identState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
 });
 

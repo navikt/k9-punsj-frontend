@@ -71,11 +71,14 @@ export interface IOMPUTSoknad extends SoeknadType {
     barn: PersonEnkel[];
 }
 
-export interface IOMPUTSoknadBackend extends Omit<IOMPUTSoknad, 'opptjeningAktivitet'> {
+export interface IOMPUTSoknadBackend
+    extends Omit<IOMPUTSoknad, 'opptjeningAktivitet' | 'bosteder' | 'utenlandsopphold'> {
     fravaersperioder: FravaersperiodeType[];
     opptjeningAktivitet: {
         arbeidstaker: Omit<Arbeidstaker, 'fravaersperioder'>[];
         selvstendigNaeringsdrivende: Omit<SelvstendigNaeringsdrivende, 'fravaersperioder'>;
         frilanser: Omit<Frilanser, 'fravaersperioder'>;
     };
+    bosteder?: PeriodeMedUtenlandsopphold[];
+    utenlandsopphold?: PeriodeMedUtenlandsopphold[];
 }
