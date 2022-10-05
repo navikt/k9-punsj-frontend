@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Delete, AddCircle } from '@navikt/ds-icons';
+import { useQuery } from 'react-query';
 import { Button, Checkbox, Panel, Heading } from '@navikt/ds-react';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
-import { Field, FieldArray, FieldProps, FormikProps } from 'formik';
+import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import Organisasjon from 'app/models/types/Organisasjon';
+import { finnArbeidsgivere } from 'app/api/api';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -19,6 +22,31 @@ interface OwnProps {
 
 const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArbeidsforhold }: OwnProps) => {
     const [gjelderAnnenOrganisasjon, setGjelderAnnenOrganisasjon] = useState(false);
+    const { values } = useFormikContext<IOMPUTSoknad>();
+
+    const { data: organisasjoner } = useQuery<Organisasjon[]>(
+        'organisasjoner',
+        () =>
+            finnArbeidsgivere(values.soekerId).then((response) => {
+                if (response.ok) {
+                    return response.json().then((json) => json.organisasjoner);
+                }
+                return [];
+            }),
+        {
+            onSuccess: (data) => {
+                if (
+                    data.some(
+                        (org) =>
+                            org.organisasjonsnummer !==
+                            values.opptjeningAktivitet.arbeidstaker[arbeidstakerIndex].organisasjonsnummer
+                    )
+                ) {
+                    setGjelderAnnenOrganisasjon(true);
+                }
+            },
+        }
+    );
 
     const harMinstToArbeidsforhold = antallArbeidsforhold > 1;
 
@@ -42,9 +70,9 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                             )}
                             <Organisasjonsvelger
                                 name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
-                                soeker={form.values.soekerId}
                                 disabled={gjelderAnnenOrganisasjon}
                                 className="inline-block"
+                                organisasjoner={organisasjoner}
                             />
                             {harMinstToArbeidsforhold && (
                                 <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
@@ -52,7 +80,10 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                     Fjern arbeidsforhold
                                 </Button>
                             )}
-                            <Checkbox onChange={() => toggleGjelderAnnenOrganisasjon(form)}>
+                            <Checkbox
+                                onChange={() => toggleGjelderAnnenOrganisasjon(form)}
+                                checked={gjelderAnnenOrganisasjon}
+                            >
                                 Gjelder annen organisasjon
                             </Checkbox>
                             {gjelderAnnenOrganisasjon && (

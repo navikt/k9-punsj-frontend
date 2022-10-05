@@ -1,7 +1,7 @@
-import { OpptjeningAktivitet } from 'app/models/types';
-import { get, omit, pick, set } from 'lodash';
+import { IArbeidstaker } from 'app/models/types';
+import { get, omit, pick } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
-import { IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
+import { Arbeidstaker, FravaersperiodeType, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 
 export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partial<IOMPUTSoknadBackend> => {
     const frilanser = soknad?.opptjeningAktivitet?.frilanser;
@@ -59,6 +59,22 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
     const fravaersperioderArbeidstaker = soknad.fravaersperioder?.filter(
         (periode) => periode.aktivitetsFravær === aktivitetsFravær.ARBEIDSTAKER
     );
+
+    const korrigeringArbeidstaker: Arbeidstaker[] = [];
+    fravaersperioderArbeidstaker.forEach((fravaersperiode) => {
+        const index = korrigeringArbeidstaker.findIndex(
+            (arbeidstaker: Arbeidstaker) => arbeidstaker.organisasjonsnummer === fravaersperiode.organisasjonsnummer
+        );
+        if (index !== -1) {
+            korrigeringArbeidstaker[index].fravaersperioder.push(fravaersperiode);
+        }
+
+        korrigeringArbeidstaker.push({
+            organisasjonsnummer: fravaersperiode.organisasjonsnummer,
+            fravaersperioder: [fravaersperiode],
+        });
+    });
+
     const arbeidstaker = soknad.opptjeningAktivitet?.arbeidstaker?.map((at) => ({
         ...at,
         fravaersperioder: fravaersperioderArbeidstaker.filter(
@@ -87,7 +103,11 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
                   frilanser,
                   arbeidstaker,
               }
-            : undefined,
+            : {
+                  selvstendigNaeringsdrivende: { fravaersperioder: fraevaersperioderSelvstendigNaeringsdrivende },
+                  frilanser: { fravaersperioder: fravaersperioderFrilanser },
+                  arbeidstaker: korrigeringArbeidstaker,
+              },
     };
 };
 
