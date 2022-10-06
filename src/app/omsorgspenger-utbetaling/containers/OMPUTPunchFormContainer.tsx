@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Formik, yupToFormErrors } from 'formik';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { IIdentState } from 'app/models/types/IdentState';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { Periode } from 'app/models/types';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
 import schema from '../schema';
 import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
@@ -41,19 +42,26 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
     const routingPaths = useContext(RoutingPathsContext);
+    const dispatch = useDispatch();
 
-    const { mutate: hentPerioderK9 } = useMutation(() => hentEksisterendePerioder(identState.ident1), {
+    const { mutate: hentPerioderK9 } = useMutation((ident: string) => hentEksisterendePerioder(ident), {
         onSuccess: (data) => setEksisterendePerioder(data),
     });
-    const { data: soeknadRespons, isLoading, error } = useQuery(id, () => hentSoeknad(identState.ident1, id));
+    const {
+        data: soeknadRespons,
+        isLoading,
+        error,
+    } = useQuery(id, () => hentSoeknad(identState.ident1, id), {
+        onSuccess: (data) => {
+            dispatch(setIdentFellesAction(data.soekerId));
+            hentPerioderK9(data.soekerId);
+        },
+    });
     const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.ident1), {
         onSuccess: () => {
             history.push(`${routingPaths.kvittering}${id}`);
         },
     });
-    useEffect(() => {
-        hentPerioderK9();
-    }, []);
 
     const intl = useIntl();
 
