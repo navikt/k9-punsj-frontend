@@ -5,6 +5,7 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import Panel from 'nav-frontend-paneler';
 import { Input } from 'nav-frontend-skjema';
 import { Heading, Alert } from '@navikt/ds-react';
+import { Collapse } from 'react-collapse';
 import DateInput from 'app/components/skjema/DateInput';
 import { useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -52,14 +53,16 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                         )}
                     </Field>
                 </div>
-                <RadioPanelGruppeFormik
-                    legend={intlHelper(intl, 'ident.signatur.etikett')}
-                    name="metadata.signatur"
-                    options={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
-                />
+                <Collapse isOpened={!values.erKorrigering}>
+                    <RadioPanelGruppeFormik
+                        legend={intlHelper(intl, 'ident.signatur.etikett')}
+                        name="metadata.signatur"
+                        options={Object.values(JaNeiIkkeRelevant).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                    />
+                </Collapse>
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
                     <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
                 )}

@@ -53,6 +53,7 @@ export const sendSoeknad = async (soeknadId: string, ident: string): Promise<IOM
         if (response.status === 409) {
             throw Error('skjema.feil.konflikt');
         }
+        throw Error('skjema.feil.ikke_sendt');
     }
     return response.json();
 };

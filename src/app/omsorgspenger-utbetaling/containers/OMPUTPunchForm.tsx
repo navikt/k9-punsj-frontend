@@ -11,7 +11,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
 import { Collapse } from 'react-collapse';
 import { useMutation } from 'react-query';
-import { debounce } from 'lodash';
+import { debounce, get } from 'lodash';
 
 import { IInputError, Periode } from 'app/models/types';
 import { setIdentAction } from 'app/state/actions';
@@ -41,6 +41,7 @@ import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, utenOpptjening
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
+import { erYngreEnn4år } from 'app/utils';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -277,13 +278,20 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}
-                    {feilFraYup(schema, values, values.metadata.arbeidsforhold)?.map(
-                        (error: { message: string; path: string }) => (
-                            <ErrorSummary.Item key={`${error.path}-${error.message}`}>
-                                {error.message}
-                            </ErrorSummary.Item>
-                        )
-                    )}
+                    {feilFraYup(schema, values, {
+                        ...values.metadata.arbeidsforhold,
+                        registrertIUtlandet:
+                            values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
+                        medlemskap: values?.metadata?.medlemskap,
+                        utenlandsopphold: values?.metadata?.utenlandsopphold,
+                        erNyoppstartet: !!erYngreEnn4år(
+                            get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
+                        ),
+                        erKorrigering: values?.erKorrigering,
+                        eksisterendePerioder,
+                    })?.map((error: { message: string; path: string }) => (
+                        <ErrorSummary.Item key={`${error.path}-${error.message}`}>{error.message}</ErrorSummary.Item>
+                    ))}
                 </ErrorSummary>
             )}
             <div className="submit-knapper">
