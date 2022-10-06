@@ -1,4 +1,3 @@
-import { utenlandsopphold } from 'app/rules/yup';
 import { get, omit, pick } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
 import { Arbeidstaker, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
@@ -72,7 +71,7 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
     );
 
     const korrigeringArbeidstaker: Arbeidstaker[] = [];
-    fravaersperioderArbeidstaker.forEach((fravaersperiode) => {
+    fravaersperioderArbeidstaker?.forEach((fravaersperiode) => {
         const index = korrigeringArbeidstaker.findIndex(
             (arbeidstaker: Arbeidstaker) => arbeidstaker.organisasjonsnummer === fravaersperiode.organisasjonsnummer
         );
