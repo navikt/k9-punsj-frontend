@@ -11,7 +11,6 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
-import { erYngreEnn4år } from 'app/utils';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { IIdentState } from 'app/models/types/IdentState';
@@ -20,7 +19,7 @@ import { Feil } from 'app/models/types/ValideringResponse';
 import { Periode } from 'app/models/types';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
-import schema from '../schema';
+import schema, { getSchemaContext } from '../schema';
 import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import { backendTilFrontendMapping } from '../utils';
@@ -92,18 +91,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                         { ...values },
                         {
                             abortEarly: false,
-                            context: {
-                                ...values.metadata.arbeidsforhold,
-                                registrertIUtlandet:
-                                    values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
-                                medlemskap: values?.metadata?.medlemskap,
-                                utenlandsopphold: values?.metadata?.utenlandsopphold,
-                                erNyoppstartet: !!erYngreEnn4år(
-                                    get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
-                                ),
-                                erKorrigering: values?.erKorrigering,
-                                eksisterendePerioder,
-                            },
+                            context: getSchemaContext(values, eksisterendePerioder),
                         }
                     )
                     .then(() => ({}))

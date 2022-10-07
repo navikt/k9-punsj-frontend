@@ -18,23 +18,17 @@ const ArbeidsforholdVelger = () => {
             <VerticalSpacer eightPx />
             <CheckboksPanelFormik name="metadata.arbeidsforhold.arbeidstaker" label="Arbeidstaker" valueIsBoolean />
             <VerticalSpacer eightPx />
-            <Collapse isOpened={field.value.arbeidstaker}>
-                <ArbeidstakerContainer />
-            </Collapse>
+            {field.value.arbeidstaker && <ArbeidstakerContainer />}
             <CheckboksPanelFormik
                 name="metadata.arbeidsforhold.selvstendigNaeringsdrivende"
                 label="Selvstendig næringsdrivende"
                 valueIsBoolean
             />
             <VerticalSpacer eightPx />
-            <Collapse isOpened={field.value.selvstendigNaeringsdrivende}>
-                <SelvstendigNaeringsdrivende />
-            </Collapse>
+            {field.value.selvstendigNaeringsdrivende && <SelvstendigNaeringsdrivende />}
             <CheckboksPanelFormik name="metadata.arbeidsforhold.frilanser" label="Frilanser" valueIsBoolean />
             <VerticalSpacer eightPx />
-            <Collapse isOpened={field.value.frilanser}>
-                <Frilanser />
-            </Collapse>
+            {field.value.frilanser && <Frilanser />}
             {meta.touched && !values.erKorrigering && Object.values(field.value).every((v) => !v) && (
                 <ErrorMessage>Må velge minst ett arbeidsforhold</ErrorMessage>
             )}

@@ -53,7 +53,7 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                         )}
                     </Field>
                 </div>
-                <Collapse isOpened={!values.erKorrigering}>
+                {!values.erKorrigering && (
                     <RadioPanelGruppeFormik
                         legend={intlHelper(intl, 'ident.signatur.etikett')}
                         name="metadata.signatur"
@@ -62,7 +62,7 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                             value: jn,
                         }))}
                     />
-                </Collapse>
+                )}
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
                     <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
                 )}

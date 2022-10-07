@@ -132,5 +132,17 @@ export const filtrerVerdierFoerInnsending = (soknad: IOMPUTSoknad): Partial<IOMP
     return { ...soknad, opptjeningAktivitet: filtrertOpptjeningAktivitet };
 };
 
-export const utenOpptjeningAktivitet = (soknad: Partial<IOMPUTSoknadBackend>): Partial<IOMPUTSoknadBackend> =>
-    omit(soknad, 'opptjeningAktivitet');
+export const korrigeringFilter = (soknad: Partial<IOMPUTSoknadBackend>): Partial<IOMPUTSoknadBackend> => ({
+    ...soknad,
+    opptjeningAktivitet: {
+        ...soknad.opptjeningAktivitet,
+        selvstendigNaeringsdrivende: {
+            organisasjonsnummer: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.organisasjonsnummer || '',
+            info: {
+                erRegistrertIUtlandet:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
+                lankode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode,
+            },
+        },
+    },
+});

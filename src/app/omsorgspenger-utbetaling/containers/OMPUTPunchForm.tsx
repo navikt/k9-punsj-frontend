@@ -36,8 +36,8 @@ import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering'
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
-import schema from '../schema';
-import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, utenOpptjeningAktivitet } from '../utils';
+import schema, { getSchemaContext } from '../schema';
+import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, korrigeringFilter } from '../utils';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
@@ -91,7 +91,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             values.erKorrigering
                 ? validerSoeknad(
-                      utenOpptjeningAktivitet(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
+                      korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
                       identState.ident1
                   )
                 : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
@@ -121,9 +121,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             if (values.erKorrigering) {
                 return submitSoknad
                     ? oppdaterSoeknad(
-                          utenOpptjeningAktivitet(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
+                          korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
                       )
-                    : oppdaterSoeknad(utenOpptjeningAktivitet(frontendTilBackendMapping(values)));
+                    : oppdaterSoeknad(korrigeringFilter(frontendTilBackendMapping(values)));
             }
 
             return submitSoknad
@@ -263,13 +263,13 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
-            <Collapse isOpened={!values.erKorrigering}>
+            {!values.erKorrigering && (
                 <>
                     <Medlemskap />
                     <VerticalSpacer fourtyPx />
                     <Utenlandsopphold />
                 </>
-            </Collapse>
+            )}
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
@@ -278,20 +278,13 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}
-                    {feilFraYup(schema, values, {
-                        ...values.metadata.arbeidsforhold,
-                        registrertIUtlandet:
-                            values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
-                        medlemskap: values?.metadata?.medlemskap,
-                        utenlandsopphold: values?.metadata?.utenlandsopphold,
-                        erNyoppstartet: !!erYngreEnn4år(
-                            get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')
-                        ),
-                        erKorrigering: values?.erKorrigering,
-                        eksisterendePerioder,
-                    })?.map((error: { message: string; path: string }) => (
-                        <ErrorSummary.Item key={`${error.path}-${error.message}`}>{error.message}</ErrorSummary.Item>
-                    ))}
+                    {feilFraYup(schema, values, getSchemaContext(values, eksisterendePerioder))?.map(
+                        (error: { message: string; path: string }) => (
+                            <ErrorSummary.Item key={`${error.path}-${error.message}`}>
+                                {error.message}
+                            </ErrorSummary.Item>
+                        )
+                    )}
                 </ErrorSummary>
             )}
             <div className="submit-knapper">

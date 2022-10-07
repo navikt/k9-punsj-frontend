@@ -1,7 +1,21 @@
 /* eslint-disable no-template-curly-in-string */
 
+import { IPeriode } from 'app/models/types';
 import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsopphold } from 'app/rules/yup';
+import { erYngreEnn4år } from 'app/utils';
+import { get } from 'lodash';
 import nb from '../i18n/nb.json';
+import { IOMPUTSoknad } from './types/OMPUTSoknad';
+
+export const getSchemaContext = (soknad: IOMPUTSoknad, eksisterendePerioder: IPeriode[]) => ({
+    ...soknad.metadata.arbeidsforhold,
+    registrertIUtlandet: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
+    medlemskap: soknad?.metadata?.medlemskap,
+    utenlandsopphold: soknad?.metadata?.utenlandsopphold,
+    erNyoppstartet: !!erYngreEnn4år(get(soknad, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')),
+    erKorrigering: soknad?.erKorrigering,
+    eksisterendePerioder,
+});
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(
@@ -74,6 +88,22 @@ const selvstendigNaeringsdrivende = () =>
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
 
+const selvstendigNaeringsdrivendeKorrigering = () =>
+    yup.object({
+        organisasjonsnummer: yup
+            .string()
+            .when('$registrertIUtlandet', { is: false, then: yup.string().required(), otherwise: yup.string() })
+            .label('Organisasjonsnummer'),
+        info: yup.object({
+            landkode: yup
+                .string()
+                .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
+                .label('Land'),
+            registrertIUtlandet: yup.boolean(),
+        }),
+        fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
+    });
+
 const frilanser = () =>
     yup.object({
         startdato: yup.string().required().label('Startdato'),
@@ -133,12 +163,9 @@ const OMPUTSchema = yup.object({
             arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
             selvstendigNaeringsdrivende: yup.object().when('$selvstendigNaeringsdrivende', {
                 is: true,
-                then: yup.object({ fravaersperioder: fravaersperioder({ medSoknadAarsak: false }) }),
+                then: selvstendigNaeringsdrivendeKorrigering(),
             }),
-            frilanser: yup.object().when('$frilanser', {
-                is: true,
-                then: yup.object({ fravaersperioder: fravaersperioder({ medSoknadAarsak: false }) }),
-            }),
+            frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
         }),
     }),
     bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),

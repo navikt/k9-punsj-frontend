@@ -9,7 +9,6 @@ import { kunTall } from 'app/utils/patterns';
 import { Field, FieldProps } from 'formik';
 import { capitalize } from 'lodash';
 import React from 'react';
-import { Collapse } from 'react-collapse';
 import { useIntl } from 'react-intl';
 
 export default function VarigEndring() {
@@ -25,27 +24,29 @@ export default function VarigEndring() {
                         options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                         onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
                     />
-                    <Collapse isOpened={field.value}>
-                        <VerticalSpacer twentyPx />
-                        <DatoInputFormik
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
-                            label={intlHelper(intl, 'skjema.sn.varigendringdato')}
-                        />
-                        <VerticalSpacer twentyPx />
-                        <TextFieldFormik
-                            size="small"
-                            type="number"
-                            label={intlHelper(intl, 'skjema.sn.endringinntekt')}
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
-                            filterPattern={kunTall}
-                        />
-                        <VerticalSpacer twentyPx />
-                        <TextAreaFormik
-                            size="small"
-                            label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
-                        />
-                    </Collapse>
+                    {field.value && (
+                        <>
+                            <VerticalSpacer twentyPx />
+                            <DatoInputFormik
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
+                                label={intlHelper(intl, 'skjema.sn.varigendringdato')}
+                            />
+                            <VerticalSpacer twentyPx />
+                            <TextFieldFormik
+                                size="small"
+                                type="number"
+                                label={intlHelper(intl, 'skjema.sn.endringinntekt')}
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
+                                filterPattern={kunTall}
+                            />
+                            <VerticalSpacer twentyPx />
+                            <TextAreaFormik
+                                size="small"
+                                label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
+                            />
+                        </>
+                    )}
                 </>
             )}
         </Field>

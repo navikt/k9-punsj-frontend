@@ -41,7 +41,7 @@ const Utenlandsopphold = () => {
                 name="metadata.utenlandsopphold"
                 options={options}
             />
-            <Collapse isOpened={values.metadata.utenlandsopphold === 'ja'}>
+            {values.metadata.utenlandsopphold === 'ja' && (
                 <FieldArray
                     name="utenlandsopphold"
                     render={(arrayHelpers) => (
@@ -97,7 +97,7 @@ const Utenlandsopphold = () => {
                         </>
                     )}
                 />
-            </Collapse>
+            )}
         </Panel>
     );
 };

@@ -40,7 +40,7 @@ const Medlemskap = () => {
                 name="metadata.medlemskap"
                 options={options}
             />
-            <Collapse isOpened={values.metadata.medlemskap === 'ja'}>
+            {values.metadata.medlemskap === 'ja' && (
                 <FieldArray
                     name="bosteder"
                     render={(arrayHelpers) => (
@@ -96,7 +96,7 @@ const Medlemskap = () => {
                         </>
                     )}
                 />
-            </Collapse>
+            )}
         </Panel>
     );
 };

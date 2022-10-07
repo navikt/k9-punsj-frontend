@@ -32,64 +32,66 @@ export default function Frilanser() {
                     Frilanser
                 </Heading>
                 <VerticalSpacer twentyPx />
-                <Collapse isOpened={!values.erKorrigering}>
-                    <Field name="metadata.harSoekerDekketOmsorgsdager">
-                        {({ field, form }: FieldProps<boolean>) => (
-                            <RadioPanelGruppeFormik
-                                legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
-                                description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
-                                name={field.name}
-                                options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                onChange={(e, value) => form.setFieldValue(field.name, value)}
-                            />
-                        )}
-                    </Field>
-                    <VerticalSpacer sixteenPx />
-                    <DatoInputFormik
-                        label="Når startet søker som frilanser?"
-                        name="opptjeningAktivitet.frilanser.startdato"
-                    />
-                    <VerticalSpacer twentyPx />
+                {!values.erKorrigering && (
+                    <>
+                        <Field name="metadata.harSoekerDekketOmsorgsdager">
+                            {({ field, form }: FieldProps<boolean>) => (
+                                <RadioPanelGruppeFormik
+                                    legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
+                                    description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
+                                    name={field.name}
+                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                                    onChange={(e, value) => form.setFieldValue(field.name, value)}
+                                />
+                            )}
+                        </Field>
+                        <VerticalSpacer sixteenPx />
+                    </>
+                )}
+                <DatoInputFormik
+                    label="Når startet søker som frilanser?"
+                    name="opptjeningAktivitet.frilanser.startdato"
+                />
+                <VerticalSpacer twentyPx />
 
-                    <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
-                        {({ field, form }: FieldProps<string>) => (
-                            <RadioGroupFormik
-                                legend="Jobber søker fortsatt som frilanser?"
-                                size="small"
+                <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
+                    {({ field, form }: FieldProps<string>) => (
+                        <RadioGroupFormik
+                            legend="Jobber søker fortsatt som frilanser?"
+                            size="small"
+                            name={field.name}
+                            value={field.value ? 'ja' : 'nei'}
+                        >
+                            <RadioFormik
                                 name={field.name}
-                                value={field.value ? 'ja' : 'nei'}
+                                value="ja"
+                                onChange={() => form.setFieldValue(field.name, true)}
                             >
-                                <RadioFormik
-                                    name={field.name}
-                                    value="ja"
-                                    onChange={() => form.setFieldValue(field.name, true)}
-                                >
-                                    Ja
-                                </RadioFormik>
-                                <RadioFormik
-                                    name={field.name}
-                                    value="nei"
-                                    onChange={() => form.setFieldValue(field.name, false)}
-                                    checked
-                                >
-                                    Nei
-                                </RadioFormik>
-                            </RadioGroupFormik>
-                        )}
-                    </Field>
-                    <VerticalSpacer twentyPx />
-
-                    {!frilanser.jobberFortsattSomFrilans && (
-                        <>
-                            <DatoInputFormik
-                                label="Når sluttet søker som frilanser?"
-                                name="opptjeningAktivitet.frilanser.sluttdato"
-                            />
-                            <VerticalSpacer twentyPx />
-                        </>
+                                Ja
+                            </RadioFormik>
+                            <RadioFormik
+                                name={field.name}
+                                value="nei"
+                                onChange={() => form.setFieldValue(field.name, false)}
+                                checked
+                            >
+                                Nei
+                            </RadioFormik>
+                        </RadioGroupFormik>
                     )}
-                    <hr />
-                </Collapse>
+                </Field>
+                <VerticalSpacer twentyPx />
+
+                {!frilanser.jobberFortsattSomFrilans && (
+                    <>
+                        <DatoInputFormik
+                            label="Når sluttet søker som frilanser?"
+                            name="opptjeningAktivitet.frilanser.sluttdato"
+                        />
+                        <VerticalSpacer twentyPx />
+                    </>
+                )}
+                <hr />
                 <Heading size="small">Informasjon om fraværsperioder</Heading>
                 <FieldArray
                     name="opptjeningAktivitet.frilanser.fravaersperioder"
