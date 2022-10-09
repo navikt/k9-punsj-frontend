@@ -9219,10 +9219,10 @@ nav-frontend-tabell-style@^2.1.1:
   resolved "https://registry.yarnpkg.com/nav-frontend-tabell-style/-/nav-frontend-tabell-style-2.1.1.tgz#b0c364ee9626f471978f0eb51b2aee14f9d166d5"
   integrity sha512-aoMw6g+vh5uZTBJFQBGfQILZfo1cdWBlKiZLiKdgbg6b5t2A93JeYjjAUYERGkcHvJODJFbroqqll1jTIZeTAQ==
 
-nav-frontend-toggle-style@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/nav-frontend-toggle-style/-/nav-frontend-toggle-style-2.1.1.tgz#ee19a0e4d4033c9e2586543197115d1466e69b40"
-  integrity sha512-OUX3yeMCUu79KHgPY7JwGbIUb7qG+AA48bgEfqfqhbluH+nU9+C5eqi13jVmp5ymhvU8XSBanY8fwyYXnRv1YQ==
+nav-frontend-toggle-style@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/nav-frontend-toggle-style/-/nav-frontend-toggle-style-2.1.2.tgz#bd08bf0643bc305865a93dd09d0c729e0a68eb98"
+  integrity sha512-o+8lv1LEr5/hv0X1SHLuF/sQJaiFXiP2/c1gN+oU/wx38JVWwn/Fr7UZbSDsOMxQegjBhyQr/2gaYECIqmiJqA==
 
 nav-frontend-toggle@^2.1.2:
   version "2.1.2"
