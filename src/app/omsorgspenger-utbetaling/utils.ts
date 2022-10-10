@@ -100,7 +100,7 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
                 soknad,
                 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper',
                 []
-            )[0],
+            )?.[0],
         },
         fravaersperioder: fraevaersperioderSelvstendigNaeringsdrivende,
     };
