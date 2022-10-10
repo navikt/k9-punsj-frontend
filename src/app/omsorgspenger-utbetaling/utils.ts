@@ -143,13 +143,15 @@ export const korrigeringFilter = (soknad: Partial<IOMPUTSoknadBackend>): Partial
         selvstendigNaeringsdrivende: {
             organisasjonsnummer: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.organisasjonsnummer || '',
             info: {
-                erRegistrertIUtlandet:
-                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
-                lankode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode,
+                registrertIUtlandet:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet || false,
+                landkode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode || '',
                 periode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode || {
                     fom: '',
                     tom: '',
                 },
+                virksomhetstyper:
+                    soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper || [],
             },
         },
     },

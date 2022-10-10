@@ -1,7 +1,6 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, CheckboxGroup, Heading, HelpText, Label, Panel } from '@navikt/ds-react';
+import { Button, Heading, Label, Panel } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
@@ -11,7 +10,6 @@ import { kunTall } from 'app/utils/patterns';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize, get } from 'lodash';
 import React from 'react';
-import { Collapse } from 'react-collapse';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { useIntl } from 'react-intl';
 import intlHelper from 'app/utils/intlUtils';
@@ -23,8 +21,7 @@ import VarigEndring from './VarigEndring';
 import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
-    const { values, errors } = useFormikContext<IOMPUTSoknad>();
-    console.log(errors);
+    const { values } = useFormikContext<IOMPUTSoknad>();
     const virksomhetstype = values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper;
     const intl = useIntl();
     const {
@@ -55,27 +52,30 @@ const SelvstendigNaeringsdrivende = () => {
                             )}
                         </Field>
                         <VerticalSpacer sixteenPx />
-                        <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
-                            {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
-                                    legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
-                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
-                                    options={virksomhetstyper.map((v) => ({ value: v, label: capitalize(v) }))}
-                                    onChange={(e, value) => {
-                                        form.setFieldValue(field.name, value);
-                                        if (value !== 'Fiske') {
-                                            form.setFieldValue(
-                                                'opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB',
-                                                false
-                                            );
-                                        }
-                                    }}
-                                    retning="vertikal"
-                                />
-                            )}
-                        </Field>
-                        <VerticalSpacer sixteenPx />
-
+                    </>
+                )}
+                <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <RadioPanelGruppeFormik
+                            legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
+                            options={virksomhetstyper.map((v) => ({ value: v, label: capitalize(v) }))}
+                            onChange={(e, value) => {
+                                form.setFieldValue(field.name, value);
+                                if (value !== 'Fiske') {
+                                    form.setFieldValue(
+                                        'opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB',
+                                        false
+                                    );
+                                }
+                            }}
+                            retning="vertikal"
+                        />
+                    )}
+                </Field>
+                <VerticalSpacer sixteenPx />
+                {!values.erKorrigering && (
+                    <>
                         {virksomhetstype === 'Fiske' && (
                             <>
                                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB">

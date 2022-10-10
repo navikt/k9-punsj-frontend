@@ -95,6 +95,7 @@ const selvstendigNaeringsdrivendeKorrigering = () =>
             .when('$registrertIUtlandet', { is: false, then: yup.string().required(), otherwise: yup.string() })
             .label('Organisasjonsnummer'),
         info: yup.object({
+            virksomhetstyper: yup.string().required().label('Virksomhetstype'),
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
