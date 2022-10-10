@@ -11,6 +11,10 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
     const arbeidstaker = soknad?.opptjeningAktivitet?.arbeidstaker;
     const fraevaersperioderSelvstendigNaeringsdrivende =
         soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.fravaersperioder || [];
+    const fravaersperioderSNMappet = fraevaersperioderSelvstendigNaeringsdrivende.map((fravaersperiode) => ({
+        ...fravaersperiode,
+        organisasjonsnummer: selvstendigNaeringsdrivende?.organisasjonsnummer || '',
+    }));
     const fravaersperioderFrilanser = frilanser?.fravaersperioder || [];
     const fravaersperioderArbeidstaker =
         arbeidstaker
@@ -24,7 +28,7 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
 
     const fravaersperioderMappet = [
         ...fravaersperioderArbeidstaker,
-        ...fraevaersperioderSelvstendigNaeringsdrivende,
+        ...fravaersperioderSNMappet,
         ...fravaersperioderFrilanser,
     ];
     const opptjeningAktivitetUtenFravaersperioder = {
