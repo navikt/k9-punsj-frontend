@@ -17,7 +17,7 @@ import {
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
@@ -71,6 +71,7 @@ import {
 } from '../state/actions/PLSPunchFormActions';
 import { undoChoiceOfEksisterendePLSSoknadAction } from '../state/actions/EksisterendePLSSoknaderActions';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
 
 export interface IPunchPLSFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -226,6 +227,56 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         organisasjonsnummer: '',
         info: this.initialSelvstedigNæringsdrivende,
     });
+
+    private updateSkalHaFerie(checked: boolean) {
+        if (!this.state.soknad.lovbestemtFerie) {
+            this.state.soknad = { ...this.state.soknad, lovbestemtFerie: [{}] };
+        }
+        if (!!checked && this.state.soknad.lovbestemtFerie?.length === 0) {
+            this.addSkalHaFerie();
+        } else {
+            this.updateSoknadState({ lovbestemtFerie: [] }, true);
+            this.updateSoknad({ lovbestemtFerie: [] });
+        }
+    }
+
+    private updateIkkeSkalHaFerie(checked: boolean) {
+        const { aapnePaneler } = this.state;
+        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
+            this.state.soknad = { ...this.state.soknad, lovbestemtFerieSomSkalSlettes: [{}] };
+        }
+
+        if (!!checked && !aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
+            aapnePaneler.push(PunchFormPaneler.ARBEID);
+        } else if (!checked && aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
+            aapnePaneler.splice(aapnePaneler.indexOf(PunchFormPaneler.ARBEID), 1);
+        }
+
+        if (!!checked && this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
+            this.addIkkeSkalHaFerie();
+        } else {
+            this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
+            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
+        }
+    }
+
+    private addSkalHaFerie = () => {
+        if (!this.state.soknad.lovbestemtFerie) {
+            this.state.soknad = { ...this.state.soknad, lovbestemtFerie: [{}] };
+        }
+        this.state.soknad.lovbestemtFerie!.push({ fom: '', tom: '' });
+        this.forceUpdate();
+        this.updateSoknad({ lovbestemtFerie: this.state.soknad.lovbestemtFerie });
+    };
+
+    private addIkkeSkalHaFerie = () => {
+        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
+            this.state.soknad = { ...this.state.soknad, lovbestemtFerieSomSkalSlettes: [{}] };
+        }
+        this.state.soknad.lovbestemtFerieSomSkalSlettes!.push({ fom: '', tom: '' });
+        this.forceUpdate();
+        this.updateSoknad({ lovbestemtFerieSomSkalSlettes: this.state.soknad.lovbestemtFerieSomSkalSlettes });
+    };
 
     componentDidMount(): void {
         const { id, søkersIdent, pleietrengendeIdent } = this.props;
@@ -384,6 +435,73 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             kanHaFlere={true}
                             medSlettKnapp={false}
                         />
+                    )}
+                </EkspanderbartpanelBase>
+                <EkspanderbartpanelBase
+                    apen={this.checkOpenState(PunchFormPaneler.FERIE)}
+                    className={classNames('punchform__paneler', 'feriepanel')}
+                    tittel={intlHelper(intl, PunchFormPaneler.FERIE)}
+                    onClick={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
+                >
+                    <VerticalSpacer eightPx={true} />
+                    <CheckboksPanel
+                        label={intlHelper(intl, 'skjema.ferie.leggtil')}
+                        value={'skjema.ferie.leggtil'}
+                        onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
+                        checked={!!soknad.lovbestemtFerie.length}
+                    />
+                    {!!soknad.lovbestemtFerie.length && (
+                        <Periodepaneler
+                            intl={intl}
+                            periods={soknad.lovbestemtFerie}
+                            panelid={(i) => `ferieperiodepanel_${i}`}
+                            initialPeriode={this.initialPeriode}
+                            editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
+                            editSoknadState={(perioder, showStatus) =>
+                                this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
+                            }
+                            getErrorMessage={this.getErrorMessage}
+                            getUhaandterteFeil={this.getUhaandterteFeil}
+                            feilkodeprefiks={'ytelse.lovbestemtFerie'}
+                            minstEn={false}
+                            kanHaFlere={true}
+                        />
+                    )}
+                    <VerticalSpacer eightPx={true} />
+                    {eksisterendePerioder && eksisterendePerioder?.length > 0 && !punchFormState.hentPerioderError && (
+                        <>
+                            <CheckboksPanel
+                                label={intlHelper(intl, 'skjema.ferie.fjern')}
+                                value={'skjema.ferie.fjern'}
+                                onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
+                                checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
+                            />
+                            {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
+                                <>
+                                    <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
+                                    <Periodepaneler
+                                        intl={intl}
+                                        periods={soknad.lovbestemtFerieSomSkalSlettes}
+                                        panelid={(i) => `ferieperiodepanel_${i}`}
+                                        initialPeriode={this.initialPeriode}
+                                        editSoknad={(perioder) =>
+                                            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
+                                        }
+                                        editSoknadState={(perioder, showStatus) =>
+                                            this.updateSoknadState(
+                                                { lovbestemtFerieSomSkalSlettes: perioder },
+                                                showStatus
+                                            )
+                                        }
+                                        getErrorMessage={() => undefined}
+                                        getUhaandterteFeil={this.getUhaandterteFeil}
+                                        feilkodeprefiks={'ytelse.lovbestemtFerie'}
+                                        minstEn={false}
+                                        kanHaFlere={true}
+                                    />
+                                </>
+                            )}
+                        </>
                     )}
                 </EkspanderbartpanelBase>
                 <ArbeidsforholdPanel
