@@ -172,20 +172,24 @@ const SelvstendigNaeringsdrivende = () => {
                                 />
                             </>
                         )}
-                        <VerticalSpacer twentyPx />
+                    </>
+                )}
+                <VerticalSpacer twentyPx />
 
-                        <Label size="small">Når startet virksomheten?</Label>
-                        <div className="fom-tom-rad">
-                            <DatoInputFormik
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                                label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                            />
-                            <DatoInputFormik
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                                label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                            />
-                        </div>
-                        <VerticalSpacer twentyPx />
+                <Label size="small">Når startet virksomheten?</Label>
+                <div className="fom-tom-rad">
+                    <DatoInputFormik
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
+                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                    />
+                    <DatoInputFormik
+                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                    />
+                </div>
+                <VerticalSpacer twentyPx />
+                {!values.erKorrigering && (
+                    <>
                         {yngreEnn4År && (
                             <TextFieldFormik
                                 size="small"

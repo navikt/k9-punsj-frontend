@@ -100,6 +100,10 @@ const selvstendigNaeringsdrivendeKorrigering = () =>
                 .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
                 .label('Land'),
             registrertIUtlandet: yup.boolean(),
+            periode: yup.object({
+                fom: yup.string().required().label('Fra og med'),
+                tom: yup.string().label('Til og med'),
+            }),
         }),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
