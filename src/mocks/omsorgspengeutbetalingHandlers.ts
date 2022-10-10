@@ -1,6 +1,6 @@
-import { rest } from 'msw';
 import { ApiPath } from 'app/apiConfig';
-import { BACKEND_BASE_URL, LOCAL_API_URL } from './konstanter';
+import { rest } from 'msw';
+import { LOCAL_API_URL } from './konstanter';
 
 const omsorgspengerutbetalingHandlers = {
     tomMappe: rest.get(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe`, (req, res, ctx) =>
@@ -144,6 +144,62 @@ const omsorgspengerutbetalingHandlers = {
             })
         )
     ),
+    soknad: rest.get(
+        `${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe/bc12baac-0f0c-427e-a059-b9fbf9a3adff`,
+        (req, res, ctx) =>
+            res(
+                ctx.json({
+                    soeknadId: 'a71cdd21-b84c-4fa1-92ae-3ccb45821e5b',
+                    soekerId: '29099000129',
+                    mottattDato: '2020-10-12',
+                    klokkeslett: '12:53',
+                    barn: [],
+                    journalposter: ['200'],
+                    bosteder: null,
+                    utenlandsopphold: [],
+                    opptjeningAktivitet: null,
+                    fravaersperioder: null,
+                    harInfoSomIkkeKanPunsjes: null,
+                    harMedisinskeOpplysninger: null,
+                    metadata: null,
+                })
+            )
+    ),
+    oppdater: rest.put(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/oppdater`, (req, res, ctx) =>
+        res(ctx.json({}))
+    ),
+    ingenEksisterendePerioder: rest.post(`${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`, (req, res, ctx) =>
+        res(ctx.json([]))
+    ),
+    eksisterendePerioderOmsorgspengeutbetaling: rest.post(
+        `${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`,
+        (req, res, ctx) =>
+            res(
+                ctx.json([
+                    {
+                        fom: '2022-09-01',
+                        tom: '2022-09-02',
+                    },
+                    {
+                        fom: '2022-09-05',
+                        tom: '2022-09-09',
+                    },
+                    {
+                        fom: '2022-09-12',
+                        tom: '2022-09-16',
+                    },
+                    {
+                        fom: '2022-09-19',
+                        tom: '2022-09-23',
+                    },
+                    {
+                        fom: '2022-09-26',
+                        tom: '2022-09-29',
+                    },
+                ])
+            )
+    ),
+    sendInn: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/send`, (req, res, ctx) => res(ctx.status(40))),
 };
 
 export default omsorgspengerutbetalingHandlers;

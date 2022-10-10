@@ -23,7 +23,8 @@ import VarigEndring from './VarigEndring';
 import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
-    const { values } = useFormikContext<IOMPUTSoknad>();
+    const { values, errors } = useFormikContext<IOMPUTSoknad>();
+    console.log(errors);
     const virksomhetstype = values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper;
     const intl = useIntl();
     const {

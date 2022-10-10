@@ -25,6 +25,7 @@ const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
                 if (handleBlur) {
                     handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
                 } else {
+                    helper.setValue(selectedDate);
                     field.onBlur(selectedDate);
                 }
             }}

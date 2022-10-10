@@ -146,6 +146,10 @@ export const korrigeringFilter = (soknad: Partial<IOMPUTSoknadBackend>): Partial
                 erRegistrertIUtlandet:
                     soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
                 lankode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.landkode,
+                periode: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode || {
+                    fom: '',
+                    tom: '',
+                },
             },
         },
     },

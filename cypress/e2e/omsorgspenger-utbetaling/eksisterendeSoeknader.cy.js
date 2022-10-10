@@ -33,7 +33,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
 
     it('kan fortsette på eksisterende soknader', () => {
         cy.window().then((window) => {
-            const { worker, rest } = window.msw;
+            const { worker } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
         });
 

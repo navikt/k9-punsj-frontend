@@ -1,9 +1,9 @@
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/prefer-default-export */
-import { ApiPath } from 'app/apiConfig';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { rest } from 'msw';
+import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 import { testHandlers } from './testHandlers';
 
 let handlers = [
@@ -77,7 +77,9 @@ let handlers = [
 ];
 
 if (process.env.MSW_MODE === 'test') {
-    handlers = handlers.concat(Object.values(testHandlers));
+    handlers = handlers
+        .concat(Object.values(testHandlers))
+        .concat([omsorgspengerutbetalingHandlers.eksisterendePerioderOmsorgspengeutbetaling]);
 }
 
 export { handlers };

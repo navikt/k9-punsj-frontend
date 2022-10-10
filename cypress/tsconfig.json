@@ -3,5 +3,5 @@
     "compilerOptions": {
         "types": ["cypress", "@testing-library/cypress"]
     },
-    "include": ["**/*.ts","**.spec.ts"]
+    "include": ["../src/**/*", "../cypress"]
 }
