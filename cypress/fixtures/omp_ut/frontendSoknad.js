@@ -52,7 +52,7 @@ export default {
                     aktivitetsFravær: 'SELVSTENDIG_VIRKSOMHET',
                     faktiskTidPrDag: '1',
                     fraværÅrsak: 'STENGT_SKOLE_ELLER_BARNEHAGE',
-                    organisasjonsnummer: '',
+                    organisasjonsnummer: '979312059',
                     periode: {
                         fom: '2022-06-06',
                         tom: '2022-06-16',
