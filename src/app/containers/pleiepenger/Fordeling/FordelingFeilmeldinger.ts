@@ -1,10 +1,11 @@
-import { IdentRules } from '../../../rules';
+import validator from '@navikt/fnrvalidator';
 import intlHelper from '../../../utils/intlUtils';
 
-export const erUgyldigIdent = (ident: string | null) => {
-    if (!ident) return true;
-    if (!ident.length) return true;
-    return !IdentRules.isIdentValid(ident);
+export const erUgyldigIdent = (ident: string | null): boolean => {
+    if (!ident || !ident.length) return true;
+    const { status } = validator.idnr(ident);
+
+    return status === 'invalid';
 };
 
 export const visFeilmeldingForAnnenIdentVidJournalKopi = (

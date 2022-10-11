@@ -12,6 +12,9 @@ const initialState: IFordelingState = {
     skalTilK9: undefined,
     erIdent1Bekreftet: false,
     valgtGosysKategori: '',
+    kanIkkeGaaTilK9: [],
+    fagsak: undefined,
+    dokumenttype: undefined,
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -24,6 +27,17 @@ export function FordelingReducer(
             return {
                 ...fordelingState,
                 sakstype: action.sakstype,
+            };
+        case FordelingActionKeys.DOKUMENTTYPE_SET:
+            return {
+                ...fordelingState,
+                dokumenttype: action.dokumenttype,
+            };
+
+        case FordelingActionKeys.FAGSAK_SET:
+            return {
+                ...fordelingState,
+                fagsak: action.fagsak,
             };
 
         case FordelingActionKeys.OMFORDELING_REQUEST:
@@ -78,6 +92,14 @@ export function FordelingReducer(
                 isAwaitingSjekkTilK9Response: false,
                 sjekkTilK9Error: undefined,
                 sjekkTilK9JournalpostStottesIkke: true,
+            };
+        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET:
+            return {
+                ...fordelingState,
+                isAwaitingSjekkTilK9Response: false,
+                skalTilK9: undefined,
+                sjekkTilK9Error: undefined,
+                sjekkTilK9JournalpostStottesIkke: undefined,
             };
 
         case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:

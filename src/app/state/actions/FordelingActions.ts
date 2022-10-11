@@ -1,12 +1,24 @@
 import { ApiPath } from 'app/apiConfig';
-import { FordelingActionKeys, Sakstype } from 'app/models/enums';
+import sakstyper from 'app/constants/sakstyper';
+import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
+import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
 import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
     sakstype?: Sakstype;
+}
+
+interface ISetDokumenttypeAction {
+    type: FordelingActionKeys.DOKUMENTTYPE_SET;
+    dokumenttype?: FordelingDokumenttype;
+}
+
+interface ISetFagsakAction {
+    type: FordelingActionKeys.FAGSAK_SET;
+    fagsak?: Fagsak;
 }
 
 interface IOmfordelingRequestAction {
@@ -25,8 +37,21 @@ export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({
     sakstype,
 });
 
+export const setDokumenttypeAction = (dokumenttype?: FordelingDokumenttype): ISetDokumenttypeAction => ({
+    type: FordelingActionKeys.DOKUMENTTYPE_SET,
+    dokumenttype,
+});
+
+export const setFagsakAction = (fagsak?: Fagsak): ISetFagsakAction => ({
+    type: FordelingActionKeys.FAGSAK_SET,
+    fagsak,
+});
+
 interface ISjekkOmSkalTilK9LoadingAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST;
+}
+interface ISjekkOmSkalTilK9ResetAction {
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET;
 }
 interface ISjekkOmSkalTilK9ErrorAction {
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR;
@@ -65,7 +90,6 @@ interface IGosysGjelderErrorAction {
     type: FordelingActionKeys.GOSYS_GJELDER_ERROR;
     error: IError;
 }
-
 interface ISetErIdent1BekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
     erIdent1Bekreftet: boolean;
@@ -113,6 +137,7 @@ export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetVal
 
 export type IFordelingActionTypes =
     | ISetSakstypeAction
+    | ISetFagsakAction
     | IOmfordelingRequestAction
     | IOmfordelingSuccessAction
     | IOmfordelingErrorAction
@@ -128,10 +153,15 @@ export type IFordelingActionTypes =
     | IGosysGjelderSuccessAction
     | IGosysGjelderErrorAction
     | ISetErIdent1BekreftetAction
-    | ISetValgtGosysKategori;
+    | ISetValgtGosysKategori
+    | ISjekkOmSkalTilK9ResetAction
+    | ISetDokumenttypeAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
+});
+export const sjekkSkalTilK9ResetAction = (): ISjekkOmSkalTilK9ResetAction => ({
+    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET,
 });
 
 export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
@@ -147,37 +177,61 @@ export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9J
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE,
 });
 
-export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any) => {
-    dispatch(lukkOppgaveRequestAction());
-    post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, undefined, (response) => {
-        if (response.status === 200) {
-            return dispatch(lukkOppgaveSuccessAction());
-        }
-        return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
-    });
-};
+export const lukkJournalpostOppgave =
+    (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) => (dispatch: any) => {
+        dispatch(lukkOppgaveRequestAction());
+        post(
+            ApiPath.JOURNALPOST_LUKK_OPPGAVE,
+            { journalpostId: journalpostid },
+            undefined,
+            {
+                norskIdent: soekersIdent,
+                sak: fagsak?.fagsakId
+                    ? { fagsakId: fagsak.fagsakId, sakstype: sakstyper.FAGSAK }
+                    : { sakstype: sakstyper.GENERELL_SAK },
+            },
+            (response) => {
+                if (response.status === 200) {
+                    return dispatch(lukkOppgaveSuccessAction());
+                }
+                return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
+            }
+        );
+    };
 
-export function sjekkOmSkalTilK9Sak(norskIdent: string, barnIdent: string, jpid: string, fagsakYtelseType: FagsakYtelseType) {
+export function sjekkOmSkalTilK9Sak(
+    norskIdent: string,
+    barnIdent: string,
+    jpid: string,
+    fagsakYtelseType: FagsakYtelseType,
+    annenPart: string
+) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
             brukerIdent: norskIdent,
-            barnIdent,
+            barnIdent: barnIdent || null,
             journalpostId: jpid,
-            fagsakYtelseType
+            fagsakYtelseType,
+            annenPart: annenPart || null,
         };
 
         dispatch(sjekkSkalTilK9RequestAction());
-        post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, svar) => {
-            if (response.ok) {
+
+        post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (res, svar) => {
+            if (res.ok) {
                 return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak));
             }
-            if (response.status === 409) {
+            if (res.status === 409) {
                 return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
             }
-            return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(response)));
+            return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
         });
     };
 }
+
+export const resetSkalTilK9 = () => (dispatch: any) => {
+    dispatch(sjekkSkalTilK9ResetAction());
+};
 
 export function hentGjelderKategorierFraGosys() {
     return (dispatch: any) => {

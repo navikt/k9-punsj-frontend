@@ -71,6 +71,7 @@ import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import { Utenlandsopphold } from './Utenlandsopphold';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -325,7 +326,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
-        const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
+        const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 
         const beredskapperioder = () => {
             return (
@@ -434,17 +435,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             !!this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet
                         }
                     />
-                    {!!soknad.utenlandsopphold.length && (
-                        <PeriodeinfoPaneler
+                    {(!!soknad.utenlandsopphold.length || !!soknad.utenlandsoppholdV2.length) && (
+                        <Utenlandsopphold
                             intl={intl}
-                            periods={soknad.utenlandsopphold}
+                            periods={
+                                soknad.utenlandsoppholdV2.length > 0
+                                    ? soknad.utenlandsoppholdV2
+                                    : soknad.utenlandsopphold
+                            }
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(perioder) => this.updateSoknad({ utenlandsopphold: perioder })}
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState({ utenlandsopphold: perioder }, showStatus)
-                            }
+                            editSoknad={(perioder) => {
+                                this.updateSoknad({ utenlandsopphold: perioder, utenlandsoppholdV2: perioder });
+                            }}
+                            editSoknadState={(perioder, showStatus) => {
+                                this.updateSoknadState(
+                                    { utenlandsopphold: perioder, utenlandsoppholdV2: perioder },
+                                    showStatus
+                                );
+                            }}
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
                             className="utenlandsopphold"
@@ -697,7 +707,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
@@ -709,7 +719,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre} tabIndex={-1}>
+                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                     </Hjelpetekst>
                 </div>
@@ -1249,13 +1259,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return naa < new Date(dato);
     }
 
-    private erFremITidKlokkeslett(dato: string) {
+    private erFremITidKlokkeslett(klokkeslett: string) {
         const { mottattDato } = this.state.soknad;
         const naa = new Date();
+
         if (
             !!mottattDato &&
-            naa.getDate() === new Date(mottattDato!).getDate() &&
-            initializeDate(naa).format('HH:mm') < dato
+            naa.toDateString() === new Date(mottattDato!).toDateString() &&
+            initializeDate(naa).format('HH:mm') < klokkeslett
         ) {
             return true;
         }
