@@ -134,7 +134,7 @@
         "@types/react-test-renderer": "^17.0.1",
         "@types/react-time-picker": "4.0.2",
         "@types/redux-mock-store": "^1.0.2",
-        "@typescript-eslint/eslint-plugin": "^5.11.0",
+        "@typescript-eslint/eslint-plugin": "^5.40.0",
         "@typescript-eslint/parser": "^5.11.0",
         "autoprefixer": "^10.4.2",
         "babel-jest": "^27.5.1",
