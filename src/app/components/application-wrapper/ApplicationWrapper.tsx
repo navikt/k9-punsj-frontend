@@ -10,6 +10,7 @@ import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
 import AppContainer from '../../containers/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
