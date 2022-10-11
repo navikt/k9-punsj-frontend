@@ -1,3 +1,4 @@
+import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
 import { ICountry } from '../components/country-select/CountrySelect';
 
 export const formattereDatoIArray = (dato: number[]) => {
@@ -30,29 +31,74 @@ export const capitalize = (tekst: string) => (tekst ? tekst[0].toUpperCase() + t
 export const finnVisningsnavnForSakstype = (kode: string) => {
     const sakstyper = [
         {
-            kode: 'PSB',
+            kode: DokumenttypeForkortelse.PSB,
             navn: 'Pleiepenger sykt barn',
         },
         {
-            kode: 'PPN',
+            kode: DokumenttypeForkortelse.PPN,
             navn: 'Pleiepenger i livets sluttfase',
         },
         {
-            kode: 'OMP',
+            kode: DokumenttypeForkortelse.OMP,
             navn: 'Omsorgspenger',
         },
         {
-            kode: 'OMP_KS',
+            kode: DokumenttypeForkortelse.OMP_KS,
             navn: 'Omsorgspenger kronisk sykt barn',
         },
         {
-            kode: 'OMP_MA',
+            kode: DokumenttypeForkortelse.OMP_MA,
             navn: 'Ekstra omsorgsdager midlertidig alene',
         },
         {
-            kode: 'OMP_AO',
+            kode: DokumenttypeForkortelse.OMP_AO,
             navn: 'Alene om omsorgen',
+        },
+        {
+            kode: DokumenttypeForkortelse.OMP_UT,
+            navn: 'Direkte utbetaling av omsorgspenger',
         },
     ];
     return sakstyper.find((st) => st.kode === kode)?.navn || kode;
+};
+
+export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumenttype) => {
+    if (!dokumenttype) {
+        return undefined;
+    }
+    const dokumenttyper = [
+        {
+            navn: FordelingDokumenttype.PLEIEPENGER,
+            forkortelse: DokumenttypeForkortelse.PSB,
+        },
+        {
+            navn: FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+            forkortelse: DokumenttypeForkortelse.PPN,
+        },
+        {
+            navn: FordelingDokumenttype.KORRIGERING_IM,
+            forkortelse: DokumenttypeForkortelse.OMP,
+        },
+        {
+            navn: FordelingDokumenttype.OMSORGSPENGER,
+            forkortelse: DokumenttypeForkortelse.OMP,
+        },
+        {
+            navn: FordelingDokumenttype.OMSORGSPENGER_UT,
+            forkortelse: DokumenttypeForkortelse.OMP_UT,
+        },
+        {
+            navn: FordelingDokumenttype.OMSORGSPENGER_KS,
+            forkortelse: DokumenttypeForkortelse.OMP_KS,
+        },
+        {
+            navn: FordelingDokumenttype.OMSORGSPENGER_MA,
+            forkortelse: DokumenttypeForkortelse.OMP_MA,
+        },
+        {
+            navn: FordelingDokumenttype.OMSORGSPENGER_AO,
+            forkortelse: DokumenttypeForkortelse.OMP_AO,
+        },
+    ];
+    return dokumenttyper.find((dt) => dt.navn === dokumenttype)?.forkortelse;
 };

@@ -2190,6 +2190,24 @@
     dayjs "1.11.5"
     react-intl "6.1.2"
 
+"@navikt/k9-array-utils@^0.0.1":
+  version "0.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-array-utils/0.0.1/98bc78a50527f6c229ca570b290fa3f05392dcaed647dabda3954f75fef2805e#5f1fd9b78afcc5fe1d73b67d93fc1d5c4377d9d1"
+  integrity sha512-43FAkBgT/LB4MgU5s18pe+4svmxXojKu5ypyNdxIPSCY+4y80ZZ58/yZTgmQw3XZxLACHMePRdP6PRkTrk9j2g==
+
+"@navikt/k9-date-utils@^0.0.8":
+  version "0.0.8"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-date-utils/0.0.8/853f1aecd15b45b4982708babfac49868671f2797814e0d2d80d4fe0efa50871#06cfdda433652b39c1c4f2457463fc91dabd0d58"
+  integrity sha512-k6kJtGyReu3ZAUwi5/8eNQyQHQgPyHYO1fuOuvsrcXv4KoU33d2tO/+QHvMyVW3qKyTJGURKT1tN8mqpAAajsQ==
+
+"@navikt/k9-period-utils@0.0.12":
+  version "0.0.12"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-period-utils/0.0.12/7aa06fb7d7a9d60e4c8387ad85bfac9c8ed6f8edf6944ee84dbde935d80e21af#202131c700503cfa3cab8e9be348cf10d60d5349"
+  integrity sha512-OVqWK2XVnuVFOM/wiz4diIV2tiSonXRyXCJlywe18oMhwDUyIFn+nayUdEGORJ8tf90MB+3oBWyGc1gdCq+reQ==
+  dependencies:
+    "@navikt/k9-array-utils" "^0.0.1"
+    "@navikt/k9-date-utils" "^0.0.8"
+
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.3.tgz#323d72dd25103d0c4fbdce89dadf574a787b1f9b"

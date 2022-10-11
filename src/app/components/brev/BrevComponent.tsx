@@ -12,6 +12,7 @@ import { Feilmelding } from 'nav-frontend-typografi';
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import ModalWrapper from 'nav-frontend-modal';
 import { finnArbeidsgivere } from '../../api/api';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
@@ -23,6 +24,7 @@ import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
+import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 
 const previewMessage = (
     values: BrevFormValues,
@@ -95,6 +97,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [person, setPerson] = useState<Person | undefined>(undefined);
     const [forrigeSendteBrevHash, setForrigeSendteBrevHash] = useState('');
     const [visSammeBrevError, setVisSammeBrevError] = useState(false);
+    const [visErDuSikkerModal, setVisErDuSikkerModal] = useState<boolean>(false);
 
     useEffect(() => {
         fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
@@ -180,8 +183,26 @@ const BrevComponent: React.FC<BrevProps> = ({
                 actions.setSubmitting(false);
             }}
         >
-            {({ values, isSubmitting }) => (
+            {({ values, isSubmitting, handleSubmit }) => (
                 <div className="brev">
+                    <ModalWrapper
+                        className="modalContainer"
+                        key="erdusikkerpåatsendebrevmodal"
+                        onRequestClose={() => setVisErDuSikkerModal(false)}
+                        contentLabel="erdusikkerpåatsendebrevmodal"
+                        closeButton={false}
+                        isOpen={visErDuSikkerModal}
+                    >
+                        <ErDuSikkerModal
+                            submitKnappText="modal.erdusikker.fortsett"
+                            melding="modal.erdusikker.sendebrev"
+                            onSubmit={() => {
+                                setVisErDuSikkerModal(false);
+                                handleSubmit();
+                            }}
+                            onClose={() => setVisErDuSikkerModal(false)}
+                        />
+                    </ModalWrapper>
                     <Form>
                         <MalVelger
                             resetBrevStatus={() => {
@@ -217,7 +238,14 @@ const BrevComponent: React.FC<BrevProps> = ({
                         )}
                         <VerticalSpacer sixteenPx />
                         <div className="buttonRow">
-                            <Knapp className="sendBrevButton" mini spinner={isSubmitting} disabled={isSubmitting}>
+                            <Knapp
+                                className="sendBrevButton"
+                                onClick={() => setVisErDuSikkerModal(true)}
+                                mini
+                                spinner={isSubmitting}
+                                disabled={isSubmitting}
+                                htmlType="button"
+                            >
                                 <SendIcon />
                                 {intl.formatMessage({ id: 'Messages.Submit' })}
                             </Knapp>

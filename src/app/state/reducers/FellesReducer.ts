@@ -48,6 +48,7 @@ enum Actiontypes {
     JOURNALPOST_KOPIERE_SUCCESS = 'FELLES/JOURNALPOST_KOPIERE_SUCCESS',
     JOURNALPOST_KOPIERE_REQUEST = 'FELLES/JOURNALPOST_KOPIERE_REQUEST',
     JOURNALPOST_KOPIERE_ERROR = 'FELLES/JOURNALPOST_KOPIERE_ERROR',
+    RESET_BARN = 'FELLES/RESET_BARN',
 }
 
 interface IResetDedupKeyAction {
@@ -101,6 +102,10 @@ interface IJournalpostKopiereErrorAction {
     type: Actiontypes.JOURNALPOST_KOPIERE_ERROR;
 }
 
+interface IResetBarnAction {
+    type: Actiontypes.RESET_BARN;
+}
+
 export const resetDedupKey = (): IResetDedupKeyAction => ({
     type: Actiontypes.RESET_DEDUP_KEY,
 });
@@ -126,6 +131,10 @@ export function getJournalpostForbiddenAction(): IGetJournalpostForbiddenAction 
 
 export function getJournalpostConflictAction(response: IJournalpostConflictResponse): IGetJournalpostConflictAction {
     return { type: Actiontypes.JOURNALPOST_CONFLICT, response };
+}
+
+export function resetBarnAction(): IResetBarnAction {
+    return { type: Actiontypes.RESET_BARN };
 }
 
 export function getJournalpost(journalpostid: string) {
@@ -186,7 +195,8 @@ type IJournalpostActionTypes =
     | IHentBarnForbiddenAction
     | IHentBarnRequestAction
     | IHentBarnSuccessAction
-    | IHentBarnErrorAction;
+    | IHentBarnErrorAction
+    | IResetBarnAction;
 
 export function kopierJournalpost(
     kopierFraIdent: string,
@@ -355,6 +365,15 @@ export default function FellesReducer(
                 hentBarnSuccess: false,
                 hentBarnError: true,
                 harHentBarnResponse: true,
+            };
+
+        case Actiontypes.RESET_BARN:
+            return {
+                ...state,
+                barn: undefined,
+                isAwaitingHentBarnResponse: undefined,
+                hentBarnSuccess: undefined,
+                harHentBarnResponse: undefined,
             };
 
         default:

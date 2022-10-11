@@ -45,6 +45,8 @@ webpackConfig.module.rules.push({
     exclude: /@babel(?:\/|\\{1,2})runtime|@mswjs/,
 });
 
+webpackConfig.ignoreWarnings = [/Failed to parse source map/];
+
 module.exports = Object.assign(webpackConfig, {
     devtool: 'eval-cheap-module-source-map',
 });

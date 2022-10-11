@@ -10,6 +10,7 @@ import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
 import PLSRouter from '../pleiepenger-livets-sluttfase/containers/PLSRouter';
 import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
+import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -58,6 +59,13 @@ export const KorrigeringAvInntektsmelding: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
     punchPath: '/korrigering-av-inntektsmelding',
     getComponent: () => <KorrigeringAvInntektsmeldingContainer />,
+    steps: [],
+};
+
+export const SendBrevPåEksisterendeFagsak: ISakstypePunch = {
+    navn: Sakstype.SEND_BREV,
+    punchPath: '/send-brev-fagsak',
+    getComponent: () => <SendBrevPåFagsak />,
     steps: [],
 };
 
@@ -117,7 +125,7 @@ export const Annet: ISakstypeOmfordeling = {
     navn: Sakstype.ANNET,
 };
 
-export const SkalIkkePUnsjes: ISakstypeOmfordeling = {
+export const SkalIkkePunsjes: ISakstypeOmfordeling = {
     navn: Sakstype.SKAL_IKKE_PUNSJES,
 };
 
@@ -130,6 +138,7 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerMidlertidigAlene,
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding,
+        SendBrevPåEksisterendeFagsak,
     ],
     omfordelingssakstyper: [
         OmsorgspengerKroniskSyktBarnOmfordeling,
@@ -140,6 +149,6 @@ export const Sakstyper: ISakstyper = {
         Opplæringspenger,
         PleiepengerLivetsSluttfase,
         Annet,
-        SkalIkkePUnsjes,
+        SkalIkkePunsjes,
     ],
 };
