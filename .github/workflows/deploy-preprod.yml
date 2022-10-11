@@ -19,6 +19,8 @@ jobs:
                   cache: 'yarn'
             - name: Installere moduler
               run: yarn install
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Sjekke opp mot Lint-regler
               run: yarn run lint
             - name: Kjøre tester
