@@ -25,7 +25,7 @@
         {
             "files": ["*.spec.ts", "*.spec.tsx"],
             "rules": {
-                "@typescript-eslint/no-explicit-any": 0,
+                "@typescript-eslint/no-explicit-any": "off",
                 "@typescript-eslint/ban-ts-comment": 0
             }
         }
@@ -55,6 +55,7 @@
         "react/jsx-props-no-spreading": "off",
         "react/destructuring-assignment": "off",
         "default-param-last": "off",
-        "react/function-component-definition": "off"
+        "react/function-component-definition": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     }
 }

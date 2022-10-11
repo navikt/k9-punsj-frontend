@@ -61,7 +61,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />
             )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
-            {!fellesState.kopierJournalpostSuccess && !erInntektsmeldingUtenKrav && (
+            {!fellesState.kopierJournalpostSuccess && journalpost.kanKopieres && !erInntektsmeldingUtenKrav && (
                 <Knapp
                     disabled={IdentRules.erUgyldigIdent(identState.ident2)}
                     onClick={() => {
