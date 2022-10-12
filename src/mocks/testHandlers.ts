@@ -13,7 +13,6 @@ import korrigeringAvInntektsmeldingSoknadValidering from '../../cypress/fixtures
 import korrigeringAvInntektsmeldingSoknadValideringFailed from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadValideringFailed.json';
 import omsorgspengerKsSoknadSomKanSendesInn from '../../cypress/fixtures/omp_ks/soknadSomKanSendesInn.json';
 import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/soknadValidering.json';
-import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
