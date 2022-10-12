@@ -43,6 +43,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
         valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_MA ||
+        valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
 
     return (
