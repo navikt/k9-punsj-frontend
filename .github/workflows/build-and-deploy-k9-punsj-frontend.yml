@@ -38,7 +38,7 @@ jobs:
             - name: Kjøre tester
               run: yarn test --maxWorkers=2
             - name: Kjør E2E-tester
-              uses: cypress-io/github-action@v2
+              uses: cypress-io/github-action@v4
               with:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'
