@@ -499,6 +499,9 @@ const ArbeidsforholdPanel = ({
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                        errorMessage={getErrorMessage(
+                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
+                        )}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
