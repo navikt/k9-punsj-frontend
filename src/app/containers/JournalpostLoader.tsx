@@ -1,3 +1,4 @@
+import Fagsak from 'app/types/Fagsak';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
@@ -103,11 +104,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
             <>
                 <FeilmeldingPanel messageId="startPage.feil.ikkeStøttet" />
                 <VerticalSpacer eightPx />
-                <div className="journalpostloader-conflict__container">
-                    <Knapp onClick={() => lukkJournalpostOppgave(journalpostId)}>
-                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                    </Knapp>
-                </div>
             </>
         );
     }
@@ -139,7 +135,8 @@ const mapStateToProps = ({ felles, fordelingState }: RootStateType): IJournaPost
 
 const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (id: string) => dispatch(getJournalpostAction(id)),
-    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
 

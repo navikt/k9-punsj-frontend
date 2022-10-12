@@ -23,6 +23,7 @@ export interface IPSBSoknad {
     tilsynsordning?: ITilsynsordning;
     uttak?: Periodeinfo<IUttak>[];
     utenlandsopphold?: Periodeinfo<IUtenlandsOpphold>[];
+    utenlandsoppholdV2?: Periodeinfo<IUtenlandsOpphold>[];
     lovbestemtFerie?: IPeriode[];
     lovbestemtFerieSomSkalSlettes?: IPeriode[];
     omsorg?: IOmsorg;
@@ -213,7 +214,8 @@ export interface IOppholdsLand {
 
 export interface IUtenlandsOpphold {
     land?: string;
-    årsak?: string;
+
+    innleggelsesperioder?: { periode?: IPeriode; årsak?: string | null }[];
 }
 
 export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>> {
@@ -221,19 +223,19 @@ export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>
 
     land: string;
 
-    årsak: string;
+    innleggelsesperioder: { periode?: IPeriode; årsak?: string | null }[];
 
     constructor(periodeinfo: Periodeinfo<IUtenlandsOpphold>) {
         this.periode = new Periode(periodeinfo.periode || {});
         this.land = periodeinfo.land || '';
-        this.årsak = periodeinfo.årsak || '';
+        this.innleggelsesperioder = periodeinfo.innleggelsesperioder || [];
     }
 
     values(): Required<Periodeinfo<IUtenlandsOpphold>> {
         return {
             periode: this.periode.values(),
             land: this.land,
-            årsak: this.årsak,
+            innleggelsesperioder: this.innleggelsesperioder,
         };
     }
 }
@@ -274,6 +276,8 @@ export class PSBSoknad implements IPSBSoknad {
 
     utenlandsopphold: UtenlandsOpphold[];
 
+    utenlandsoppholdV2: UtenlandsOpphold[];
+
     lovbestemtFerie: Periode[];
 
     lovbestemtFerieSomSkalSlettes: Periode[];
@@ -307,6 +311,9 @@ export class PSBSoknad implements IPSBSoknad {
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
+        this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
+            (u) => new UtenlandsOpphold(u)
+        );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
         this.omsorg = new Omsorg(soknad.omsorg || {});

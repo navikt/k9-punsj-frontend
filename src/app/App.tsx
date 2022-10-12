@@ -20,6 +20,7 @@ import { Locale } from './models/types';
 import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
 import './styles/globalStyles.less';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
 import '@navikt/ds-css';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';

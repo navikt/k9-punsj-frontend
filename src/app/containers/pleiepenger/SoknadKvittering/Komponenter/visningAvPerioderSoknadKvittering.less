@@ -1,24 +1,36 @@
 @import (reference) '@{coreModulePath}nav-frontend-core/less/_variabler';
 
-.visningAvPerioderSoknadKvitteringContainer{
-  display: flex;
-  align-items: center;
-  h4,p {
-    width: 15rem;
-    margin-bottom: 0.5rem;
-    margin-top: 0rem;
-  }
-  p{
-    padding-right: 1rem;
-  }
+.visningAvPerioderSoknadKvitteringContainer {
+    display: flex;
+    align-items: center;
+
+    h4,
+    p {
+        width: 15rem;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+    }
+
+    p {
+        padding-right: 1rem;
+    }
 }
 
-.visningAvPerioderSoknadBeredskap{
-  :nth-child(2){ flex-grow: 1; overflow: visible; word-wrap: break-word;}
+.visningAvPerioderSoknadBeredskap {
+    :nth-child(2) {
+        flex-grow: 1;
+        overflow: visible;
+        word-wrap: break-word;
+    }
 }
 
-.visningAvPerioderOmsorgstilbud{
-  :nth-child(2){
-    width: 30rem;
-  }
+.visningAvPerioderOmsorgstilbud {
+    :nth-child(2) {
+        width: 30rem;
+    }
+}
+
+.widerLastCell p:last-of-type,
+h4:last-of-type {
+    width: auto;
 }

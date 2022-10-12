@@ -144,9 +144,6 @@ describe('JournalpostLoader', () => {
         const felmelding = journalpost.find('FeilmeldingPanel');
         expect(felmelding).toHaveLength(1);
         expect(felmelding.prop('messageId')).toEqual('startPage.feil.ikkeStøttet');
-        const knappGåTilLos = journalpost.find('Knapp');
-        expect(knappGåTilLos).toHaveLength(1);
-        expect(knappGåTilLos.find('Memo(FormattedMessage)').prop('id')).toEqual('fordeling.sakstype.SKAL_IKKE_PUNSJES');
     });
 
     it('Viser feilmelding når SB ikke har tillgang att se journalposten', () => {

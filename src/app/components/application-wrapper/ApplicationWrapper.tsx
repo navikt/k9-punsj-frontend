@@ -1,5 +1,4 @@
-import Header from '@navikt/nap-header';
-import UserPanel from '@navikt/nap-user-panel';
+import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
@@ -11,6 +10,7 @@ import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
 import AppContainer from '../../containers/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
@@ -38,7 +38,7 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
     IApplicationWrapperDispatchProps;
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
-    const { authState, locale, children} = props;
+    const { authState, locale, children } = props;
 
     if (authState.error) {
         return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
@@ -49,9 +49,8 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
             props.checkAuth();
             return null;
         }
-            window.location.replace(authState.redirectUrl);
-            return null;
-
+        window.location.replace(authState.redirectUrl);
+        return null;
     }
 
     if (authState.isLoading) {
