@@ -66,6 +66,7 @@ describe('Fordeling', () => {
     });
 
     it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
+        cy.findByText('Omsorgspenger/omsorgsdager').click();
         cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
         cy.findByText(/Ja/i).click();
         cy.findByRole('button', { name: /Videre/i }).click();
