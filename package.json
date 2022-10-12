@@ -10,8 +10,8 @@
         "@navikt/ds-icons": "^0.8.6",
         "@navikt/ds-react": "^0.19.14",
         "@navikt/fnrvalidator": "^1.3.0",
-        "@navikt/nap-header": "^1.0.10",
-        "@navikt/nap-user-panel": "^1.0.0",
+        "@navikt/k9-period-utils": "0.0.12",
+        "@navikt/ft-plattform-komponenter": "^1.2.3",
         "@redux-devtools/extension": "^3.2.2",
         "@sentry/react": "^6.17.6",
         "@testing-library/cypress": "^8.0.2",
@@ -78,7 +78,7 @@
         "react-time-picker": "^4.5.0",
         "redux": "^4.1.2",
         "redux-logger": "^3.0.6",
-        "snyk": "^1.874.0",
+        "snyk": "^1.1025.0",
         "source-map-loader": "^3.0.1",
         "start-server-and-test": "^1.14.0",
         "typescript-string-operations": "^1.4.1",
@@ -88,7 +88,7 @@
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
-        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true",
+        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
         "build": "cross-env NODE_ENV=production SENTRY_RELEASE=$(git rev-parse --short HEAD) node ./src/build/scripts/production-build.js",
@@ -99,7 +99,9 @@
         "prepare": "husky install",
         "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test start:e2e http://localhost:8080 cypress:headless",
-        "sentry-release": "(export SENTRY_RELEASE=$(git rev-parse --short HEAD); node ./src/build/scripts/sentry-release)"
+        "sentry-release": "(export SENTRY_RELEASE=$(git rev-parse --short HEAD); node ./src/build/scripts/sentry-release)",
+        "docker-up": "docker-compose -f dev/docker-compose.yml up -d",
+        "docker-down": "docker-compose -f dev/docker-compose.yml down"
     },
     "devDependencies": {
         "@babel/cli": "^7.17.0",
@@ -179,6 +181,7 @@
         "nav-frontend-spinner-style": "^1.0.2",
         "nav-frontend-tabell-style": "^2.1.1",
         "nav-frontend-typografi-style": "^2.0.1",
+        "postcss-less": "^6.0.0",
         "postcss-loader": "^6.2.1",
         "prettier": "^2.7.1",
         "react-refresh": "^0.11.0",
@@ -186,6 +189,9 @@
         "redux-mock-store": "^1.5.4",
         "regenerator-runtime": "^0.13.7",
         "style-loader": "^3.3.1",
+        "stylelint": "^14.11.0",
+        "stylelint-config-prettier": "^9.0.3",
+        "stylelint-config-standard": "^28.0.0",
         "svg-sprite-loader": "^6.0.11",
         "terser-webpack-plugin": "^5.3.1",
         "ts-jest": "^27.1.3",
@@ -204,7 +210,8 @@
     "snyk": false,
     "lint-staged": {
         "src/app/**/*.ts?(x)": "eslint --cache --fix",
-        "src/app/**/*.{ts,tsx,js,jsx,css}": "prettier --write"
+        "*.(le|c)ss": "stylelint --fix",
+        "src/app/**/*.{ts,tsx,js,jsx,css,less}": "prettier --write"
     },
     "msw": {
         "workerDirectory": "dist"

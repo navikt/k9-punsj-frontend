@@ -15,10 +15,14 @@ jobs:
             - name: Sette opp Node
               uses: actions/setup-node@v3
               with:
-                  node-version: 16
+                  node-version: 16.x
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@navikt'
                   cache: 'yarn'
             - name: Installere moduler
               run: yarn install
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Sjekke opp mot Lint-regler
               run: yarn run lint
             - name: Kjøre tester

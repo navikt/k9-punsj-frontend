@@ -1,32 +1,30 @@
-import React from 'react';
-
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
-
-import {
-    lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
-    setSakstypeAction as setSakstype,
-} from 'app/state/actions';
-
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
     korrigeringAvInntektsmeldingSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
-    pleiepengerILivetsSluttfaseSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
+    pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
     omsorgspengerUtbetalingSakstyper,
 } from 'app/models/enums';
-import intlHelper from 'app/utils/intlUtils';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
+import {
+    lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
+    setSakstypeAction as setSakstype,
+} from 'app/state/actions';
+import { getEnvironmentVariable } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
-import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 
 interface IValgForDokument {
     dokumenttype?: FordelingDokumenttype;
@@ -90,35 +88,43 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     const omsorgspengerUtbetaling = () =>
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
+    const sakstypekeys =
+        korrigeringIM() ||
+        pleiepengerSyktBarn() ||
+        pleiepengerILivetsSluttfase() ||
+        omsorgspengerKroniskSyktBarn() ||
+        omsorgspengerMidlertidigAlene() ||
+        omsorgspengerUtbetaling();
+
+    const keys = sakstypekeys.filter((key) => {
+        if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {
+            return key !== TilgjengeligSakstype.SEND_BREV;
+        }
+        return true;
+    });
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
-                {(
-                    korrigeringIM() ||
-                    pleiepengerSyktBarn() ||
-                    pleiepengerILivetsSluttfase() ||
-                    omsorgspengerKroniskSyktBarn() ||
-                    omsorgspengerMidlertidigAlene() ||
-                    omsorgspengerUtbetaling()
-                ).map((key) => {
-                    if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                {keys &&
+                    keys.map((key) => {
+                        if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                            return null;
+                        }
+                        if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
+                            return (
+                                <RadioPanel
+                                    key={key}
+                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                    value={Sakstype[key]}
+                                    onChange={() => {
+                                        setSakstypeAction(Sakstype[key]);
+                                    }}
+                                    checked={konfigForValgtSakstype?.navn === key}
+                                />
+                            );
+                        }
                         return null;
-                    }
-                    if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
-                        return (
-                            <RadioPanel
-                                key={key}
-                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                value={Sakstype[key]}
-                                onChange={() => {
-                                    setSakstypeAction(Sakstype[key]);
-                                }}
-                                checked={konfigForValgtSakstype?.navn === key}
-                            />
-                        );
-                    }
-                    return null;
-                })}
+                    })}
             </RadioGruppe>
             <VerticalSpacer eightPx />
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (

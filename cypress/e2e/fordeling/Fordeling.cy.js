@@ -5,11 +5,24 @@ describe('Fordeling', () => {
     beforeEach(() => {
         cy.visit('/journalpost/200');
     });
+
     it('viser dokumentvalg', () => {
         cy.contains(/Dette gjelder:?/i).should('exist');
         cy.contains('Pleiepenger').should('exist');
-        cy.contains('Korrigering av inntektsmelding omsorgspenger AG').should('exist');
+        cy.contains('Omsorgspenger/omsorgsdager').should('exist');
+        cy.contains('Pleiepenger i livets sluttfase').should('exist');
         cy.contains('Annet').should('exist');
+    });
+
+    it('viser subdokumentvalg omsorgspenger', () => {
+        cy.contains('Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn').should('not.exist');
+        cy.contains('Korrigering av inntektsmelding omsorgspenger AG').should('not.exist');
+        cy.contains('Ekstra omsorgsdager når du er midlertidig alene om omsorgen').should('not.exist');
+
+        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
+        cy.contains('Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn').should('exist');
+        cy.contains('Ekstra omsorgsdager når du er midlertidig alene om omsorgen').should('exist');
+        cy.contains('Korrigering av inntektsmelding omsorgspenger AG').should('exist').click();
     });
 
     it('kan opprette journalføringsoppgave i Gosys', () => {
@@ -31,8 +44,10 @@ describe('Fordeling', () => {
             );
         });
 
+        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Korrigering av inntektsmelding omsorgspenger AG/i).click();
         cy.findByText('Ja').click();
+        cy.findByLabelText(/Velg fagsak/i).select('1DMUDF6 (K9 Omsorgspenger)');
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText('Korrigere/trekke refusjonskrav omsorgspenger').click();
         cy.findByRole('button', { name: /bekreft/i }).click();
@@ -40,7 +55,8 @@ describe('Fordeling', () => {
     });
 
     it('Midlertidig alene - kan navigere til eksisterende søknader', () => {
-        cy.findByText(/Omsorgsdager: ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
+        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
+        cy.findByText(/Ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();
         cy.findByLabelText(/Fødselsnummer annen part/i).type(29099000129);
         cy.findByRole('button', { name: /Videre/i }).click();

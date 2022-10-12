@@ -1,12 +1,24 @@
 import { ApiPath } from 'app/apiConfig';
-import { FordelingActionKeys, Sakstype } from 'app/models/enums';
+import sakstyper from 'app/constants/sakstyper';
+import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types';
+import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
 import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
     sakstype?: Sakstype;
+}
+
+interface ISetDokumenttypeAction {
+    type: FordelingActionKeys.DOKUMENTTYPE_SET;
+    dokumenttype?: FordelingDokumenttype;
+}
+
+interface ISetFagsakAction {
+    type: FordelingActionKeys.FAGSAK_SET;
+    fagsak?: Fagsak;
 }
 
 interface IOmfordelingRequestAction {
@@ -23,6 +35,16 @@ interface IOmfordelingErrorAction {
 export const setSakstypeAction = (sakstype?: Sakstype): ISetSakstypeAction => ({
     type: FordelingActionKeys.SAKSTYPE_SET,
     sakstype,
+});
+
+export const setDokumenttypeAction = (dokumenttype?: FordelingDokumenttype): ISetDokumenttypeAction => ({
+    type: FordelingActionKeys.DOKUMENTTYPE_SET,
+    dokumenttype,
+});
+
+export const setFagsakAction = (fagsak?: Fagsak): ISetFagsakAction => ({
+    type: FordelingActionKeys.FAGSAK_SET,
+    fagsak,
 });
 
 interface ISjekkOmSkalTilK9LoadingAction {
@@ -115,6 +137,7 @@ export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetVal
 
 export type IFordelingActionTypes =
     | ISetSakstypeAction
+    | ISetFagsakAction
     | IOmfordelingRequestAction
     | IOmfordelingSuccessAction
     | IOmfordelingErrorAction
@@ -131,7 +154,8 @@ export type IFordelingActionTypes =
     | IGosysGjelderErrorAction
     | ISetErIdent1BekreftetAction
     | ISetValgtGosysKategori
-    | ISjekkOmSkalTilK9ResetAction;
+    | ISjekkOmSkalTilK9ResetAction
+    | ISetDokumenttypeAction;
 
 export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
@@ -153,15 +177,27 @@ export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9J
     type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE,
 });
 
-export const lukkJournalpostOppgave = (journalpostid: string) => (dispatch: any) => {
-    dispatch(lukkOppgaveRequestAction());
-    post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, undefined, (response) => {
-        if (response.status === 200) {
-            return dispatch(lukkOppgaveSuccessAction());
-        }
-        return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
-    });
-};
+export const lukkJournalpostOppgave =
+    (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) => (dispatch: any) => {
+        dispatch(lukkOppgaveRequestAction());
+        post(
+            ApiPath.JOURNALPOST_LUKK_OPPGAVE,
+            { journalpostId: journalpostid },
+            undefined,
+            {
+                norskIdent: soekersIdent,
+                sak: fagsak?.fagsakId
+                    ? { fagsakId: fagsak.fagsakId, sakstype: sakstyper.FAGSAK }
+                    : { sakstype: sakstyper.GENERELL_SAK },
+            },
+            (response) => {
+                if (response.status === 200) {
+                    return dispatch(lukkOppgaveSuccessAction());
+                }
+                return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
+            }
+        );
+    };
 
 export function sjekkOmSkalTilK9Sak(
     norskIdent: string,

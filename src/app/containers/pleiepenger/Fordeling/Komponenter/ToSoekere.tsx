@@ -31,7 +31,8 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
 }) => {
     const skalVises =
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS) &&
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
         !!journalpost?.kanKopieres;
     const intl = useIntl();
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
