@@ -60,4 +60,3 @@ jobs:
           CLUSTER: dev-fss
           RESOURCE: nais/frontend/k9-punsj-frontend.yml
           VARS: nais/frontend/dev.json
-leie
