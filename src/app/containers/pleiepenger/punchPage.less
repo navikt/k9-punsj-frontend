@@ -16,7 +16,7 @@
     .input-row {
         display: inline-flex;
         width: 100%;
-        margin: 0.5rem 0 1rem 0;
+        margin: 0.5rem 0 1rem;
 
         .right {
             margin-left: 30px;
@@ -49,9 +49,6 @@
                 padding-top: 0;
                 padding-left: 0;
                 margin-left: 0;
-            }
-
-            .skjemaelement__feilmelding {
             }
 
             &::-webkit-scrollbar {
@@ -104,6 +101,7 @@
 
             .arbeidstider {
                 margin-top: 1rem;
+
                 .arbeidstid-hjelpetext {
                     margin-left: 0.5rem;
                 }
@@ -156,7 +154,7 @@
 
             .frilanserpanel {
                 background-color: #eaeaea;
-                margin: 1rem 0 1rem 0;
+                margin: 1rem 0;
 
                 .listepanel {
                     margin: 0.5rem 0 0 -1rem;
@@ -165,6 +163,7 @@
                 .frilanser-startdato {
                     margin-bottom: 20px;
                 }
+
                 .frilanser-info {
                     margin-top: 20px;
                     font-weight: bold;
@@ -178,12 +177,12 @@
 
             .selvstendigpanel {
                 .infoContainer {
-                    padding: 1rem 0 0 0;
+                    padding: 1rem 0 0;
                 }
 
                 background-color: #eaeaea;
                 padding-top: 0;
-                margin: 1rem 0 1rem 0;
+                margin: 1rem 0;
 
                 .generelleopplysiniger {
                     margin-top: 0.5rem;
@@ -201,7 +200,7 @@
                 }
 
                 .endringinntekt {
-                    margin: 0.5rem 0 0.5rem 0;
+                    margin: 0.5rem 0;
                 }
 
                 .listepanel {
@@ -210,7 +209,7 @@
 
                 .sn-startdatocontainer {
                     display: flex;
-                    margin: 20px 0 10px 0;
+                    margin: 20px 0 10px;
 
                     .tom {
                         margin-left: 1rem;
@@ -224,7 +223,7 @@
             }
 
             .listepaneler {
-                margin: 1rem 0 1rem 0;
+                margin: 1rem 0;
                 border-radius: 5px;
 
                 .leggtillisteelementknapp {
@@ -236,10 +235,11 @@
                     border: none;
                     padding: 0;
                     display: inline-flex;
-                    margin: 1rem 0 0 0;
+                    margin: 1rem 0 0;
                     color: #0067c5;
                     text-decoration: underline;
                     cursor: pointer;
+
                     .leggtilperiodeIcon {
                         margin-right: 0.5rem;
                     }
@@ -248,7 +248,7 @@
 
             .periodepanel {
                 background-color: #eaeaea;
-                margin: 1rem 0 1rem 0;
+                margin: 1rem 0;
 
                 .periodepanel-input {
                     display: flex;
@@ -265,6 +265,7 @@
                         text-decoration-line: underline;
                         margin: 40px 0 0.3rem auto;
                         cursor: pointer;
+
                         .slettIcon {
                             margin-right: 0.5rem;
                         }
@@ -272,6 +273,7 @@
 
                     .fjern-feil {
                         .fjern();
+
                         margin: auto 0 2.2rem -1.6rem;
                     }
                 }
@@ -285,10 +287,11 @@
                     border: none;
                     padding: 0;
                     display: inline-flex;
-                    margin: 1rem 0 0 0;
+                    margin: 1rem 0 0;
                     color: #0067c5;
                     text-decoration: underline;
                     cursor: pointer;
+
                     .leggtilperiodeIcon {
                         margin-right: 0.5rem;
                     }
@@ -322,6 +325,7 @@
                         text-decoration-line: underline;
                         cursor: pointer;
                     }
+
                     .slettIcon {
                         margin-right: 0.5rem;
                     }
@@ -329,6 +333,7 @@
 
                 .listepanelbunn_perioder {
                     .listepanelbunn();
+
                     margin-top: 2rem;
                 }
 
@@ -363,7 +368,7 @@
                     }
 
                     .leggtillisteelementknapp {
-                        margin: 0 1rem 1rem 1rem;
+                        margin: 0 1rem 1rem;
                     }
 
                     .listepaneler {
@@ -389,12 +394,13 @@
             }
 
             .fullfortmelding {
-                margin-left: 0rem;
+                margin-left: 0;
                 margin-top: 1rem;
             }
 
             .skjema__feilomrade--harFeil {
                 @feilbg: fadeout(@pinkErrorBg, 40%);
+
                 background-color: @feilbg;
                 box-shadow: 0 0 0 8px @feilbg;
             }
@@ -444,12 +450,15 @@
 .flex-container {
     display: inline-flex;
     width: 100%;
+
     .hjelpetext {
         margin: 1rem;
+
         :last-child {
             max-width: 30rem;
         }
     }
+
     .inputPanel {
         width: 100%;
     }
@@ -488,10 +497,12 @@
 
     .col:first-child {
         padding-right: 0.5rem;
+        padding-left: 0;
+        margin: 0;
     }
 
     .alertstripe {
-        margin: 0 0 1rem 0;
+        margin: 0 0 1rem;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
 
@@ -502,11 +513,6 @@
 
     .col {
         margin: 0 0.5rem;
-    }
-
-    .col:first-child {
-        padding-left: 0;
-        margin: 0;
     }
 
     .col:last-child {
@@ -536,8 +542,9 @@
 
     .validertSoknadOppsummeringContainer_knappVidere,
     .validertSoknadOppsummeringContainer_knappTilbake {
-        margin: 1rem 0.5rem 0 0.5rem;
+        margin: 1rem 0.5rem 0;
     }
+
     .validertSoknadOppsummeringContainer_knappTilbake {
         margin-top: 0.9rem;
     }
@@ -552,7 +559,7 @@
 .validertSoknadOppsummeringContainer:first-child > div {
     border: 0;
     margin-top: 0;
-    padding-top: 0rem;
+    padding-top: 0;
 }
 
 .punchPage__knapper {
@@ -560,7 +567,7 @@
     flex-wrap: wrap;
 
     button {
-        margin: 0rem 1rem 1rem 0rem;
+        margin: 0 1rem 1rem 0;
     }
 }
 
