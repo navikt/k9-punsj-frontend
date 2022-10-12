@@ -45,6 +45,7 @@
                 "tsx": "never"
             }
         ],
+        "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
         "react/require-default-props": "off",
         "react/prop-types": "off",
         "no-use-before-define": "off",

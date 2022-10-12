@@ -1,7 +1,6 @@
-/* eslint-disable */
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { Field, FieldProps, FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
+import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -9,9 +8,8 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
-import { Collapse } from 'react-collapse';
 import { useMutation } from 'react-query';
-import { debounce, get } from 'lodash';
+import { debounce } from 'lodash';
 
 import { IInputError, Periode } from 'app/models/types';
 import { setIdentAction } from 'app/state/actions';
@@ -23,8 +21,6 @@ import MellomlagringEtikett from 'app/components/mellomlagringEtikett/Mellomlagr
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import Personvelger from 'app/components/person-velger/Personvelger';
-import Periodevisning from 'app/components/periodevisning/Periodevisning';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { IIdentState } from '../../models/types/IdentState';
@@ -41,7 +37,8 @@ import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, korrigeringFil
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import Medlemskap from '../components/Medlemskap';
 import Utenlandsopphold from '../components/Utenlandsopphold';
-import { erYngreEnn4år } from 'app/utils';
+import EksisterendePerioder from '../components/EksisterendePerioder';
+import NySoeknadEllerKorrigering from '../components/NySoeknadEllerKorrigering';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -57,14 +54,7 @@ export interface IPunchOMPUTFormStateProps {
     identState: IIdentState;
 }
 
-export interface IPunchOMPUTFormDispatchProps {
-    setIdentAction: typeof setIdentAction;
-}
-
-type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps &
-    WrappedComponentProps &
-    IPunchOMPUTFormStateProps &
-    IPunchOMPUTFormDispatchProps;
+type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps & WrappedComponentProps & IPunchOMPUTFormStateProps;
 
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
     const {
@@ -88,6 +78,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             values.erKorrigering
                 ? validerSoeknad(
@@ -100,11 +91,19 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
-                    setKvittering && setKvittering(kvitteringResponse);
+                    if (setKvittering) {
+                        setKvittering(kvitteringResponse);
+                    } else {
+                        throw Error('Kvittering-context er ikke satt');
+                    }
                 }
                 if (data?.feil?.length) {
-                    setK9FormatErrors(data['feil']);
-                    setKvittering && setKvittering(undefined);
+                    setK9FormatErrors(data.feil);
+                    if (setKvittering) {
+                        setKvittering(undefined);
+                    } else {
+                        throw Error('Kvittering-context er ikke satt');
+                    }
                 } else {
                     setK9FormatErrors([]);
                 }
@@ -164,10 +163,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     }, []);
 
     useEffect(() => {
-        setIdentAction(values.soekerId);
-    }, [values.soekerId]);
-
-    useEffect(() => {
         if (harMellomlagret) {
             setTimeout(() => setHarMellomlagret(false), 3000);
         }
@@ -201,49 +196,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         return [];
     };
 
-    const harFeilISkjema = (errors: FormikErrors<IOMPUTSoknad>) =>
-        !![...getUhaandterteFeil(''), ...Object.keys(errors)].length;
-
-    const EksisterendePerioder = () => {
-        if (eksisterendePerioder.length) {
-            return (
-                <>
-                    <VerticalSpacer sixteenPx />
-                    <Panel border>
-                        <Heading size="small">Eksisterende perioder</Heading>
-                        {eksisterendePerioder.map((periode) => (
-                            <Periodevisning periode={periode} />
-                        ))}
-                    </Panel>
-                </>
-            );
-        }
-        return null;
-    };
-
-    const NySoeknadEllerKorrigering = () => {
-        if (eksisterendePerioder.length) {
-            return (
-                <Panel border>
-                    <Field name="erKorrigering">
-                        {({ field, form }: FieldProps<boolean>) => (
-                            <RadioPanelGruppeFormik
-                                legend="Er dette en ny søknad eller en korrigering?"
-                                name={field.name}
-                                options={[
-                                    { value: 'nySoeknad', label: 'Ny søknad' },
-                                    { value: 'korrigering', label: 'Korrigering' },
-                                ]}
-                                checked={field.value ? 'korrigering' : 'nySoeknad'}
-                                onChange={(e, value) => form.setFieldValue(field.name, value === 'korrigering')}
-                            />
-                        )}
-                    </Field>
-                </Panel>
-            );
-        }
-        return null;
-    };
+    const harFeilISkjema = (errorList: FormikErrors<IOMPUTSoknad>) =>
+        !![...getUhaandterteFeil(''), ...Object.keys(errorList)].length;
 
     return (
         <>
@@ -257,9 +211,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 </Heading>
                 <Personvelger name="barn" />
             </Panel>
-            <EksisterendePerioder />
+            <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
             <VerticalSpacer sixteenPx />
-            <NySoeknadEllerKorrigering />
+            <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
@@ -356,10 +310,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
 const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
     identState: state.identState,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
 });
 
 export const OMPUTPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTFormComponent));
