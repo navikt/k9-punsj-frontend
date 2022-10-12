@@ -312,5 +312,5 @@ const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
     identState: state.identState,
 });
 
-export const OMPUTPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPUTFormComponent));
+export const OMPUTPunchForm = injectIntl(connect(mapStateToProps)(PunchOMPUTFormComponent));
 /* eslint-enable */
