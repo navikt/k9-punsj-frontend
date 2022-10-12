@@ -1,10 +1,7 @@
 name: Deploy til preprod
-
 on: [workflow_dispatch]
-
 env:
     DOCKER_IMAGE: ghcr.io/${{ github.repository }}
-
 jobs:
     deploy-dev:
         name: Deploye til DEV
