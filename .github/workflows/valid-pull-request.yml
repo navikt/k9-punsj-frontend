@@ -7,7 +7,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: ./setup.yml
+      - uses: .github/workflows/setup.yml@main
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
   test:
@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: ./.github/workflows/setup.yml@main
+        uses: .github/workflows/setup.yml@main
       - name: Kjøre tester
         run: yarn test --maxWorkers=2
   test-cypress:
     name: Cypress-tester
     runs-on: ubuntu-latest
     steps:
-      - uses: ./setup.yml@main
+      - uses: .github/workflows/setup.yml@main
       - name: Kjør E2E-tester
         uses: cypress-io/github-action@v4
         with:
