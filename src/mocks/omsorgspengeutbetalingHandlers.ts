@@ -199,7 +199,100 @@ const omsorgspengerutbetalingHandlers = {
                 ])
             )
     ),
-    sendInn: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/send`, (req, res, ctx) => res(ctx.status(40))),
+    sendInn: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/send`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
+                versjon: '1.1.0',
+                mottattDato: '2020-10-12T10:53:00.000Z',
+                søker: {
+                    norskIdentitetsnummer: '29099000129',
+                },
+                ytelse: {
+                    type: 'OMP_UT',
+                    fosterbarn: [],
+                    aktivitet: {},
+                    fraværsperioder: [
+                        {
+                            periode: '2022-10-01/2022-10-10',
+                            duration: 'PT7H30M',
+                            delvisFravær: {
+                                normalarbeidstid: 'PT7H',
+                                fravær: 'PT7H',
+                            },
+                            årsak: 'ORDINÆRT_FRAVÆR',
+                            søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
+                            aktivitetFravær: ['ARBEIDSTAKER'],
+                            arbeidsforholdId: null,
+                            arbeidsgiverOrgNr: '979312059',
+                        },
+                    ],
+                    fraværsperioderKorrigeringIm: null,
+                    bosteder: null,
+                    utenlandsopphold: null,
+                },
+                språk: 'nb',
+                journalposter: [
+                    {
+                        inneholderInfomasjonSomIkkeKanPunsjes: null,
+                        inneholderInformasjonSomIkkeKanPunsjes: false,
+                        inneholderMedisinskeOpplysninger: false,
+                        journalpostId: '05060',
+                    },
+                ],
+                begrunnelseForInnsending: {
+                    tekst: null,
+                },
+            })
+        )
+    ),
+    valider: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/valider`, (req, res, ctx) =>
+        res(
+            ctx.json({
+                søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
+                versjon: '1.1.0',
+                mottattDato: '2020-10-12T10:53:00.000Z',
+                søker: {
+                    norskIdentitetsnummer: '29099000129',
+                },
+                ytelse: {
+                    type: 'OMP_UT',
+                    fosterbarn: [],
+                    aktivitet: {},
+                    fraværsperioder: [
+                        {
+                            periode: '2022-10-01/2022-10-10',
+                            duration: 'PT7H30M',
+                            delvisFravær: {
+                                normalarbeidstid: 'PT7H',
+                                fravær: 'PT7H',
+                            },
+                            årsak: 'ORDINÆRT_FRAVÆR',
+                            søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
+                            aktivitetFravær: ['ARBEIDSTAKER'],
+                            arbeidsforholdId: null,
+                            arbeidsgiverOrgNr: '979312059',
+                        },
+                    ],
+                    fraværsperioderKorrigeringIm: null,
+                    bosteder: null,
+                    utenlandsopphold: null,
+                },
+                språk: 'nb',
+                journalposter: [
+                    {
+                        inneholderInfomasjonSomIkkeKanPunsjes: null,
+                        inneholderInformasjonSomIkkeKanPunsjes: false,
+                        inneholderMedisinskeOpplysninger: false,
+                        journalpostId: '05060',
+                    },
+                ],
+                begrunnelseForInnsending: {
+                    tekst: null,
+                },
+            })
+        )
+    ),
 };
 
 export default omsorgspengerutbetalingHandlers;
