@@ -5,9 +5,9 @@ on:
 jobs:
   lint:
     name: Lint
+    uses: ./.github/workflows/setup.yml@main
     runs-on: ubuntu-latest
     steps:
-      - uses: .github/workflows/setup.yml@main
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
   test:
