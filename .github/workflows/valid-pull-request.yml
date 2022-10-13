@@ -14,8 +14,9 @@ jobs:
     name: Tester
     runs-on: ubuntu-latest
     steps:
-      - name: Kjøre tester
+      - name: Setup
         uses: ./.github/workflows/setup.yml
+      - name: Kjøre tester
         run: yarn test --maxWorkers=2
   test-cypress:
     name: Cypress-tester
