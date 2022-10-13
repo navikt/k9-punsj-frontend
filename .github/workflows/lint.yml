@@ -7,6 +7,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/setup
+      - name: setup
+        uses: ./.github/workflows/setup.yml
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
