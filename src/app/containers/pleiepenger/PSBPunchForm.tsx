@@ -769,7 +769,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         isOpen={this.state.showSettPaaVentModal}
                         closeButton={false}
                     >
-                        <div className="">
+                        <div>
                             <SettPaaVentModal
                                 journalposter={this.props.journalposterState.journalposter.filter(
                                     (jp) => jp.journalpostId !== this.props.journalpostid
