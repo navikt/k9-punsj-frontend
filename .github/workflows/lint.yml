@@ -4,11 +4,9 @@ on:
   workflow_call:
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
   lint:
-    name: Lint
     runs-on: ubuntu-latest
     steps:
+      - uses: ./.github/workflows/setup.yml
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
