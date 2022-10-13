@@ -4,12 +4,7 @@ on:
     types: [opened, synchronize]
 jobs:
   lint:
-    name: Lint
-    uses: ./.github/workflows/setup.yml
-    runs-on: ubuntu-latest
-    steps:
-      - name: Sjekke opp mot Lint-regler
-        run: yarn run lint
+    uses: ./.github/workflows/lint.yml
   test:
     name: Tester
     runs-on: ubuntu-latest
