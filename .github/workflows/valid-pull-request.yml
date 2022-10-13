@@ -10,9 +10,4 @@ jobs:
   test-cypress:
     uses: ./.github/workflows/cypress-tester.yml
   build:
-    name: Bygge kode
-    needs: [lint, test, test-cypress]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Bygge kode
-        run: yarn build
+    uses: ./.github/workflows/build.yml
