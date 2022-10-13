@@ -7,15 +7,15 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: ./setup.yml@main
+      - uses: ./setup.yml
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
   test:
     name: Tester
     runs-on: ubuntu-latest
     steps:
-      - uses: ./setup.yml@main
       - name: Kjøre tester
+        uses: ./.github/workflows/setup.yml
         run: yarn test --maxWorkers=2
   test-cypress:
     name: Cypress-tester
