@@ -1,8 +1,12 @@
+import dayjs from 'dayjs';
 import { Datepicker } from 'nav-datovelger';
 import { Label } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 export interface DateInputProps {
     value: string;
@@ -16,6 +20,8 @@ export interface DateInputProps {
     inputRef?: React.Ref<HTMLInputElement>;
 }
 
+const isValidDate = (dateString: string) => dayjs(dateString, 'YYYY-MM-DD').isValid();
+
 const DateInput: React.FC<DateInputProps> = ({
     value,
     onChange,
@@ -28,6 +34,8 @@ const DateInput: React.FC<DateInputProps> = ({
     inputRef,
 }) => {
     const datepickerId = id || uuidv4();
+    const [isInvalidDate, setIsInvalidDate] = useState(false);
+    const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
     return (
         <div className={className || ''}>
             <Label htmlFor={datepickerId}>{label}</Label>
@@ -37,6 +45,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 value={value}
                 onChange={(v) => {
                     onChange(v);
+                    setIsInvalidDate(v.length < 6 || !isValidDate(v));
                     if (onBlur) {
                         onBlur(v);
                     }
@@ -46,7 +55,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 disabled={disabled}
                 inputProps={{ inputRef }}
             />
-            {errorMessage && <Feilmelding>{errorMessage}</Feilmelding>}
+            {error && <Feilmelding>{error}</Feilmelding>}
         </div>
     );
 };
