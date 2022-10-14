@@ -44,10 +44,14 @@ const DateInput: React.FC<DateInputProps> = ({
                 inputId={datepickerId}
                 value={value}
                 onChange={(v) => {
-                    onChange(v);
-                    setIsInvalidDate(v.length < 6 || !isValidDate(v));
-                    if (onBlur) {
-                        onBlur(v);
+                    if (v.length < 6 || !isValidDate(v)) {
+                        setIsInvalidDate(true);
+                    } else {
+                        onChange(v);
+                        setIsInvalidDate(false);
+                        if (onBlur) {
+                            onBlur(v);
+                        }
                     }
                 }}
                 calendarSettings={{ showWeekNumbers: true }}
