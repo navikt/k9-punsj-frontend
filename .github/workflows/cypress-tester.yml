@@ -32,4 +32,4 @@ jobs:
           start: yarn start:e2e
           wait-on: "http://localhost:8080"
           wait-on-timeout: 60
-          command: node ./split.js | xargs yarn cypress run --spec
+          command: node split.js | xargs yarn cypress run --spec
