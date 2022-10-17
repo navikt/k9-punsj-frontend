@@ -59,11 +59,11 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         // cy.findByRole('button', { name: 'Videre' }).click();
         // cy.findByRole('button', { name: 'Send inn' }).click();
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
-        cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
+        // cy.url().should(
+        //     'eq',
+        //     'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
+        // );
+        // cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 
     // sjekke at journalpostnummer fra flere saker vises
