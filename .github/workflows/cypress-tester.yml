@@ -26,10 +26,11 @@ jobs:
         uses: cypress-io/github-action@v4
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-          CI_TOTAL: ${{ matrix.ci_total }}
-          CI_INDEX: ${{ matrix.ci_index }}
         with:
           start: yarn start:e2e
           wait-on: "http://localhost:8080"
           wait-on-timeout: 60
-          command: node split.js | xargs yarn cypress run --spec
+      - run: node split.js | xargs yarn cypress run --spec
+        env:          
+          CI_TOTAL: ${{ matrix.ci_total }}
+          CI_INDEX: ${{ matrix.ci_index }}
