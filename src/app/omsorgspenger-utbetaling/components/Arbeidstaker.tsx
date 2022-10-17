@@ -25,7 +25,7 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
     const { values } = useFormikContext<IOMPUTSoknad>();
 
     const { data: organisasjoner } = useQuery<Organisasjon[]>(
-        'organisasjoner',
+        ['organisasjoner'],
         () =>
             finnArbeidsgivere(values.soekerId).then((response) => {
                 if (response.ok) {
@@ -36,10 +36,11 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
         {
             onSuccess: (data) => {
                 const orgnr = values.opptjeningAktivitet.arbeidstaker[arbeidstakerIndex].organisasjonsnummer;
-                if (orgnr && data.some((org) => org.organisasjonsnummer !== orgnr)) {
+                if (orgnr && !data.some((org) => org.organisasjonsnummer === orgnr)) {
                     setGjelderAnnenOrganisasjon(true);
                 }
             },
+            staleTime: 1000 * 60 * 5,
         }
     );
 
