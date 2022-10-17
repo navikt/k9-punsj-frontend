@@ -30,7 +30,8 @@ jobs:
           start: yarn start:e2e
           wait-on: "http://localhost:8080"
           wait-on-timeout: 60
+          tests: false
       - run: node split.js | xargs yarn cypress run --spec
-        env:          
+        env:
           CI_TOTAL: ${{ matrix.ci_total }}
           CI_INDEX: ${{ matrix.ci_index }}
