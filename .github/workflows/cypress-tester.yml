@@ -17,12 +17,10 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@navikt"
           cache: "yarn"
-      - name: Installere moduler
-        run: yarn install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - name: Kjør E2E-tester
         uses: cypress-io/github-action@v4
+        env:
+            NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         with:
           start: yarn start:e2e
           wait-on: "http://localhost:8080"
