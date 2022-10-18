@@ -1,10 +1,10 @@
-name: Lint
+name: Yarn install
 
 on:
   workflow_call:
 
 jobs:
-  lint:
+  install:
     runs-on: ubuntu-latest
     steps:
       - name: Hente kode
@@ -16,9 +16,11 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@navikt"
           cache: "yarn"
-      - uses: actions/download-artifact@v3
+      - name: Installere moduler
+        run: yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - uses: actions/upload-artifact@v3
         with:
           name: node_modules
-          path: ./node_modules
-      - name: Sjekke opp mot Lint-regler
-        run: yarn run lint
+          path: node_modules/

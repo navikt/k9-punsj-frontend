@@ -3,7 +3,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
+  yarn:
+    uses: ./.github/workflows/yarn-install.yml
   lint:
+    needs: [yarn]
     uses: ./.github/workflows/lint.yml
   test:
     uses: ./.github/workflows/test.yml
