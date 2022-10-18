@@ -2,6 +2,10 @@ name: Lint
 
 on:
   workflow_call:
+    secrets: 
+      READER_TOKEN:
+        required: true
+      
 
 jobs:
   lint:
