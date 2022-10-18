@@ -97,7 +97,7 @@
         "eject": "react-scripts eject",
         "snyk-protect": "snyk protect",
         "prepare": "husky install",
-        "cypress:headless": "cypress run --record --parallel",
+        "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test start:e2e http://localhost:8080 cypress:headless",
         "sentry-release": "(export SENTRY_RELEASE=$(git rev-parse --short HEAD); node ./src/build/scripts/sentry-release)",
         "docker-up": "docker-compose -f dev/docker-compose.yml up -d",
