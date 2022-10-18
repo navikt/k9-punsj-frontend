@@ -129,6 +129,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }, [dokumenttype, identState.ident1, identState.ident2, identState.annenPart]);
 
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+    const [visGaaTilLos, setVisGaaTilLos] = useState(false);
 
     const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
 
@@ -289,13 +290,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         const lukkEtterJournalpostSomIkkeStottesKopieres: boolean =
             skalJournalpostSomIkkeStottesKopieres &&
             !fellesState.isAwaitingKopierJournalPostResponse &&
-            !!fellesState.kopierJournalpostSuccess;
+            !!fellesState.kopierJournalpostSuccess &&
+            !!opprettIGosysState.gosysOppgaveRequestSuccess;
 
-        if (
-            (lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess) &&
-            journalpost
-        ) {
+        if (lukkEtterJournalpostSomIkkeStottesKopieres && journalpost) {
             lukkJournalpostOppgave(journalpost.journalpostId, identState.ident1, valgtFagsak);
+        } else if (opprettIGosysState.gosysOppgaveRequestSuccess) {
+            setVisGaaTilLos(true);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
@@ -326,11 +327,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return <NavFrontendSpinner />;
     }
 
-    if (!!opprettIGosysState.gosysOppgaveRequestSuccess && !!fordelingState.lukkOppgaveDone) {
+    if (!!opprettIGosysState.gosysOppgaveRequestSuccess && visGaaTilLos) {
         return (
             <ModalWrapper
                 key="opprettigosysokmodal"
-                onRequestClose={() => resetOmfordelAction()}
+                onRequestClose={() => {
+                    resetOmfordelAction();
+                    setVisGaaTilLos(false);
+                }}
                 contentLabel="settpaaventokmodal"
                 closeButton={false}
                 isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
