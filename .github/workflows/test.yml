@@ -17,9 +17,9 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@navikt"
           cache: "yarn"
-      - uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: .
+      - name: Installere moduler
+        run: yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - name: Kjøre tester
         run: yarn test --maxWorkers=2
