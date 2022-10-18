@@ -9,6 +9,7 @@ jobs:
     needs: [yarn]
     uses: ./.github/workflows/lint.yml
   test:
+    needs: [yarn]
     uses: ./.github/workflows/test.yml
   test-cypress:
     uses: ./.github/workflows/cypress-tester.yml
