@@ -20,7 +20,9 @@ jobs:
         run: yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - name: Zip node_modules
+        run: tar -czvf node_modules.tar.gz node_modules/ 
       - uses: actions/upload-artifact@v3
         with:
           name: node_modules
-          path: node_modules/
+          path: node_modules.tar.gz

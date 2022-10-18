@@ -19,6 +19,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: node_modules
-          path: ./node_modules
+          path: .
+      - name: Unzip node_modules
+        run: tar -xvzf node_modules.tar.gz
       - name: Sjekke opp mot Lint-regler
         run: yarn run lint
