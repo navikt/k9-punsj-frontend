@@ -30,7 +30,7 @@ function splitChunks(items, total) {
     return chunks;
 }
 
-const files = glob.sync('cypress/integration/**/*.js');
+const files = glob.sync('cypress/e2e/**/*.js');
 const chunks = splitChunks(files, process.env.CI_TOTAL);
 
 if (chunks[process.env.CI_INDEX]) {
