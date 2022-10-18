@@ -289,12 +289,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         const lukkEtterJournalpostSomIkkeStottesKopieres: boolean =
             skalJournalpostSomIkkeStottesKopieres &&
             !fellesState.isAwaitingKopierJournalPostResponse &&
-            !!fellesState.kopierJournalpostSuccess;
+            !!fellesState.kopierJournalpostSuccess &&
+            !!opprettIGosysState.gosysOppgaveRequestSuccess;
 
-        if (
-            (lukkEtterJournalpostSomIkkeStottesKopieres || !!opprettIGosysState.gosysOppgaveRequestSuccess) &&
-            journalpost
-        ) {
+        if (lukkEtterJournalpostSomIkkeStottesKopieres && journalpost) {
             lukkJournalpostOppgave(journalpost.journalpostId, identState.ident1, valgtFagsak);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
