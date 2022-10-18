@@ -1,4 +1,4 @@
-name: Lint
+name: Cypres-tester
 
 on:
   workflow_call:
