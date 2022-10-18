@@ -22,7 +22,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@navikt"
           cache: "yarn"
-      - name: Start E2E-server
+      - name: Kjør E2E-tester
         uses: cypress-io/github-action@v4
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
