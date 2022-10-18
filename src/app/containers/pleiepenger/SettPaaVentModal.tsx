@@ -1,7 +1,7 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { ApiPath } from '../../apiConfig';
 import VisSvg from '../../assets/SVG/VisSVG';
 import { IJournalpostInfo } from '../../models/types';
@@ -24,8 +24,9 @@ const pdfUrl = (journalpost: IJournalpostInfo) =>
 
 const urlTilNyJournalpost = (id: string, jpid: string) => `${jpid}/pleiepenger/skjema/${id}`;
 
-const SettPaaVentModal: React.FC<WrappedComponentProps & ISettPaaVentModalProps> = (props) => {
-    const { intl, submit, avbryt, journalposter, soknadId, children } = props;
+const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
+    const { submit, avbryt, journalposter, soknadId, children } = props;
+    const intl = useIntl();
 
     return (
         <div className="sett-paa-vent">
@@ -90,4 +91,4 @@ const SettPaaVentModal: React.FC<WrappedComponentProps & ISettPaaVentModalProps>
     );
 };
 
-export default injectIntl(SettPaaVentModal);
+export default SettPaaVentModal;
