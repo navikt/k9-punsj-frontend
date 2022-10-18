@@ -27,6 +27,15 @@ jobs:
       runs-on: ubuntu-latest
       needs: [lint, test, test-cypress, build]
       steps:
+          - name: Hente kode
+            uses: actions/checkout@v3.0.2
+          - name: Sette opp Node
+            uses: actions/setup-node@v3
+            with:
+                node-version: 16.x
+                registry-url: https://npm.pkg.github.com/
+                scope: '@navikt'
+                cache: 'yarn'
           - uses: actions/download-artifact@v3
             with:
               name: dist
