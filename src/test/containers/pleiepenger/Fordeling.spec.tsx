@@ -187,14 +187,6 @@ describe('Fordeling', () => {
         expect(fordeling.find('NavFrontendSpinner')).toHaveLength(1);
     });
 
-    it('Viser suksessmelding når omfordeling er utført', () => {
-        const fordeling = setupFordeling({ lukkOppgaveDone: true }, undefined, {
-            gosysOppgaveRequestSuccess: true,
-        });
-        const wrapper = fordeling.find('ModalWrapper');
-        expect(wrapper.children().prop('melding')).toEqual('fordeling.opprettigosys.utfort');
-    });
-
     it('Viser feilmelding for omfordeling', () => {
         const fordeling = setupFordeling(undefined, undefined, {
             gosysOppgaveRequestError: { status: 404 },

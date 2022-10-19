@@ -3,12 +3,30 @@ on: [workflow_dispatch]
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.repository }}
 jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  test-cypress:
+    uses: ./.github/workflows/cypress-tester.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
   deploy-dev:
     name: Deploye til DEV
     runs-on: ubuntu-latest
+    needs: [lint, test, test-cypress, build]
     steps:
       - name: Hente kode
         uses: actions/checkout@v3.0.2
+
       - name: Sette opp Node
         uses: actions/setup-node@v3
         with:
@@ -16,22 +34,16 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@navikt"
           cache: "yarn"
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: ./dist
+
       - name: Installere moduler
         run: yarn install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-      - name: Sjekke opp mot Lint-regler
-        run: yarn run lint
-      - name: Kjøre tester
-        run: yarn test --maxWorkers=2
-      - name: Kjør E2E-tester
-        uses: cypress-io/github-action@v4
-        with:
-          start: yarn start:e2e
-          wait-on: "http://localhost:8080"
-          wait-on-timeout: 60
-      - name: Bygge kode
-        run: yarn run build
 
       - uses: docker/login-action@v1.14.1
         with:
