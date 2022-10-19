@@ -293,6 +293,21 @@ const omsorgspengerutbetalingHandlers = {
             })
         )
     ),
+    validerFeil: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/valider`, (req, res, ctx) =>
+        res(
+            ctx.status(400),
+            ctx.json({
+                feil: [
+                    {
+                        felt: 'feil',
+                        feilkode: 'generiskFeil',
+                        feilmelding: 'Hei, det har oppstått en helt generisk feil. Med vennlig hilsen backend',
+                    },
+                ],
+                søknadIdDto: '27b0ffe6-26b3-4381-94f4-574ce4022b08',
+            })
+        )
+    ),
 };
 
 export default omsorgspengerutbetalingHandlers;
