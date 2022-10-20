@@ -6,9 +6,9 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "^7.17.2",
-        "@navikt/ds-css": "^0.18.16",
-        "@navikt/ds-icons": "^0.8.6",
-        "@navikt/ds-react": "^0.19.14",
+        "@navikt/ds-css": "^1.3.24",
+        "@navikt/ds-icons": "^1.3.24",
+        "@navikt/ds-react": "^1.3.24",
         "@navikt/fnrvalidator": "^1.3.0",
         "@navikt/ft-plattform-komponenter": "^1.2.3",
         "@navikt/k9-period-utils": "0.0.12",
@@ -71,6 +71,7 @@
         "react-dom": "^17.0.2",
         "react-intl": "^5.24.6",
         "react-modal": "^3.14.4",
+        "react-popper": "^2.3.0",
         "react-query": "^3.34.14",
         "react-redux": "^7.2.6",
         "react-router": "^5.2.1",
@@ -215,5 +216,6 @@
     },
     "msw": {
         "workerDirectory": "dist"
-    }
+    },
+    "peerDependencies": {}
 }

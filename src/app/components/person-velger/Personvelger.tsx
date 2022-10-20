@@ -36,9 +36,10 @@ const Personvelger = ({ intl, handleBlur }: OwnProps) => (
                         <Button
                             variant="tertiary"
                             size="small"
+                            icon={<AddPerson />}
+                            iconPosition="left"
                             onClick={() => form.setFieldValue('barn', [...field.value, { norskIdent: '', navn: '' }])}
                         >
-                            <AddPerson />
                             Legg til barn
                         </Button>
                     </>

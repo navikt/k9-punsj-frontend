@@ -38,11 +38,12 @@ const PersonLinje = ({ person, index, personer, handleBlur }: OwnProps) => {
                         <Label size="small">Navn</Label>
                         <BodyShort size="small">{person.navn}</BodyShort>
                     </div>
-
                     <Button
                         className="slett"
                         variant="tertiary"
                         size="small"
+                        iconPosition="left"
+                        icon={<Delete />}
                         onClick={() => {
                             form.setFieldValue(
                                 'barn',
@@ -51,7 +52,6 @@ const PersonLinje = ({ person, index, personer, handleBlur }: OwnProps) => {
                             handleBlur();
                         }}
                     >
-                        <Delete />
                         Slett
                     </Button>
                 </div>
