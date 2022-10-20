@@ -9,6 +9,7 @@
 
 .fordeling-page {
     max-width: 500px;
+
     & button {
         margin-top: 0.5rem;
     }
@@ -17,6 +18,7 @@
         & > label {
             margin-bottom: 0.5em;
         }
+
         legend {
             margin-bottom: 0.5rem !important;
         }
@@ -29,19 +31,28 @@
             }
         }
     }
+
     .infotrygd_info,
     .fordeling-page__kanIkkeOppretteJPIGosys {
         width: fit-content;
-        margin: 1rem 0 1rem 0;
+        margin: 1rem 0;
     }
 
     .fordeling-page__to-sokere-i-journalpost > * {
         margin-bottom: 1rem;
     }
 
+    .alertstripe {
+        margin: 1rem;
+
+        .alertstripe__tekst {
+            max-width: unset;
+        }
+    }
+
     .fordeling-page__sjekk-til-K9-journalpost-stottes-ikke {
         .alertstripe {
-            margin-left: 0rem;
+            margin-left: 0;
         }
     }
 
@@ -55,7 +66,7 @@
     }
 
     .fagsakSelect {
-        margin: 1.25rem 0 1.25rem;
+        margin: 1.25rem 0;
         width: 15.625rem;
     }
 
@@ -80,19 +91,14 @@
 
     .journalikkestottetkopi-checkboks__hjelpetekst {
         margin-left: 0.5rem;
+
         :last-child {
             max-width: 30rem;
         }
-        button {
-            margin-top: 0rem;
-        }
-    }
-}
 
-.alertstripe {
-    margin: 1rem;
-    .alertstripe__tekst {
-        max-width: unset;
+        button {
+            margin-top: 0;
+        }
     }
 }
 
@@ -106,10 +112,12 @@
         word-wrap: break-word;
         padding-left: 1rem;
         margin-top: 1.75rem;
+
         :first-child {
             width: 24px;
             height: 28px;
         }
+
         p {
             padding-left: 0.5rem;
         }
