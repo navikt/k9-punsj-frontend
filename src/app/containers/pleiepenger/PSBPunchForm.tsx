@@ -20,7 +20,8 @@ import {
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
@@ -71,6 +72,7 @@ import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import { Utenlandsopphold } from './Utenlandsopphold';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -301,9 +303,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (!!punchFormState.error) {
             return (
                 <>
-                    <AlertStripeFeil>
-                        {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}
-                    </AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
                     <p>
                         <Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
                     </p>
@@ -315,7 +315,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return null;
         }
 
-        const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
+        const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 
         const beredskapperioder = () => {
             return (
@@ -424,17 +424,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             !!this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet
                         }
                     />
-                    {!!soknad.utenlandsopphold.length && (
-                        <PeriodeinfoPaneler
+                    {(!!soknad.utenlandsopphold.length || !!soknad.utenlandsoppholdV2.length) && (
+                        <Utenlandsopphold
                             intl={intl}
-                            periods={soknad.utenlandsopphold}
+                            periods={
+                                soknad.utenlandsoppholdV2.length > 0
+                                    ? soknad.utenlandsoppholdV2
+                                    : soknad.utenlandsopphold
+                            }
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
                             initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(perioder) => this.updateSoknad({ utenlandsopphold: perioder })}
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState({ utenlandsopphold: perioder }, showStatus)
-                            }
+                            editSoknad={(perioder) => {
+                                this.updateSoknad({ utenlandsopphold: perioder, utenlandsoppholdV2: perioder });
+                            }}
+                            editSoknadState={(perioder, showStatus) => {
+                                this.updateSoknadState(
+                                    { utenlandsopphold: perioder, utenlandsoppholdV2: perioder },
+                                    showStatus
+                                );
+                            }}
                             textLeggTil="skjema.perioder.legg_til"
                             textFjern="skjema.perioder.fjern"
                             className="utenlandsopphold"
@@ -736,21 +745,19 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 </div>
                 <VerticalSpacer sixteenPx={true} />
                 {!!punchFormState.updateSoknadError && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_lagret')}</Alert>
                 )}
                 {!!punchFormState.inputErrors?.length && (
-                    <AlertStripeFeil className={'valideringstripefeil'}>
-                        {intlHelper(intl, 'skjema.feil.validering')}
-                    </AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.validering')}</Alert>
                 )}
                 {!!punchFormState.submitSoknadError && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</Alert>
                 )}
                 {!!punchFormState.submitSoknadConflict && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.konflikt')}</Alert>
                 )}
                 {!sjekkHvisArbeidstidErAngitt(this.props.punchFormState) && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</Alert>
                 )}
 
                 {this.state.showSettPaaVentModal && (
@@ -762,7 +769,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         isOpen={this.state.showSettPaaVentModal}
                         closeButton={false}
                     >
-                        <div className="">
+                        <div>
                             <SettPaaVentModal
                                 journalposter={this.props.journalposterState.journalposter.filter(
                                     (jp) => jp.journalpostId !== this.props.journalpostid
@@ -1275,7 +1282,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
 
         if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
+            return uhaandterteFeilmeldinger.map((error) => `${error.felt}: ${error.feilmelding}`).filter(Boolean);
         }
         return [];
     };

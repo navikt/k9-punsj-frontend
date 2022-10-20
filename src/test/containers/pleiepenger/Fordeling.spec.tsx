@@ -125,13 +125,13 @@ export const setupFordeling = (
 describe('Fordeling', () => {
     it('Viser radiopanel for identsjekk', () => {
         const fordeling = setupFordeling();
-        expect(fordeling.find('RadioPanelGruppe')).toHaveLength(1);
+        expect(fordeling.find('DokumentTypeVelger')).toHaveLength(1);
     });
 
     it.skip('Viser radiopanel for identsjekk når bruker velger pleiepenger', () => {
         const fordeling = setupFordeling();
         fordeling
-            .find('RadioPanelGruppe')
+            .find('DokumentTypeVelger')
             .dive()
             .find('RadioPanel')
             .at(0)
@@ -139,7 +139,7 @@ describe('Fordeling', () => {
         expect(fordeling.find('Hovedknapp')).toHaveLength(1);
 
         fordeling
-            .find('RadioPanelGruppe')
+            .find('DokumentTypeVelger')
             .dive()
             .find('RadioPanel')
             .at(0)
@@ -147,7 +147,7 @@ describe('Fordeling', () => {
         expect(fordeling.find('RadioPanelGruppe')).toHaveLength(2);
 
         fordeling
-            .find('RadioPanelGruppe')
+            .find('DokumentTypeVelger')
             .at(1)
             .dive()
             .find('RadioPanel')
@@ -185,14 +185,6 @@ describe('Fordeling', () => {
         const omfordel = jest.fn();
         const fordeling = setupFordeling(undefined, { omfordel }, { isAwaitingGosysOppgaveRequestResponse: true });
         expect(fordeling.find('NavFrontendSpinner')).toHaveLength(1);
-    });
-
-    it('Viser suksessmelding når omfordeling er utført', () => {
-        const fordeling = setupFordeling({ lukkOppgaveDone: true }, undefined, {
-            gosysOppgaveRequestSuccess: true,
-        });
-        const wrapper = fordeling.find('ModalWrapper');
-        expect(wrapper.children().prop('melding')).toEqual('fordeling.opprettigosys.utfort');
     });
 
     it('Viser feilmelding for omfordeling', () => {

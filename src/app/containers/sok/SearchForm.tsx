@@ -5,6 +5,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { connect } from 'react-redux';
+import Fagsak from 'app/types/Fagsak';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
@@ -133,33 +134,13 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         {conflict &&
                             journalpostConflictError &&
                             journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <>
-                                    <AlertStripeAdvarsel>
-                                        <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                    </AlertStripeAdvarsel>
-                                    <VerticalSpacer eightPx />
-                                    <Knapp
-                                        onClick={() => {
-                                            if (journalpostid) lukkJournalpostOppgave(journalpostid);
-                                        }}
-                                    >
-                                        <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                    </Knapp>
-                                </>
+                                <AlertStripeAdvarsel>
+                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                </AlertStripeAdvarsel>
                             )}
 
                         {journalpostRequestError?.message && (
-                            <>
-                                <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
-                                <VerticalSpacer eightPx />
-                                <Knapp
-                                    onClick={() => {
-                                        if (journalpostid) lukkJournalpostOppgave(journalpostid);
-                                    }}
-                                >
-                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                </Knapp>
-                            </>
+                            <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
                         )}
 
                         {!!journalpost && !journalpost?.kanSendeInn && (
@@ -190,7 +171,8 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
-    lukkJournalpostOppgave: (journalpostid: string) => dispatch(lukkJournalpostOppgaveAction(journalpostid)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
 });
 

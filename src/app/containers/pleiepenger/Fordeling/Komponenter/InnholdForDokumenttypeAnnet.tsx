@@ -11,6 +11,8 @@ import intlHelper from 'app/utils/intlUtils';
 import { Input } from 'nav-frontend-skjema';
 import { IdentRules } from 'app/rules';
 import { IIdentState } from 'app/models/types/IdentState';
+import { useSelector } from 'react-redux';
+import { RootStateType } from 'app/state/RootState';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
 
 interface IInnholdForDokumenttypeAnnetProps {
@@ -39,6 +41,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
     omfordel,
 }): JSX.Element | null => {
     const intl = useIntl();
+    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     if (dokumenttype !== FordelingDokumenttype.ANNET) {
         return null;
     }
@@ -49,7 +52,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                 <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
                     <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
                 </AlertStripeInfo>
-                <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId)}>
+                <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, sokersIdent, fagsak)}>
                     <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
                 </Knapp>
             </div>

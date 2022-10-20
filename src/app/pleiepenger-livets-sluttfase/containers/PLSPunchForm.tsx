@@ -17,7 +17,8 @@ import {
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
@@ -337,9 +338,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         if (!!punchFormState.error) {
             return (
                 <>
-                    <AlertStripeFeil>
-                        {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}
-                    </AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
                     <p>
                         <Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
                     </p>
@@ -616,21 +615,19 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 </div>
                 <VerticalSpacer sixteenPx={true} />
                 {!!punchFormState.updateSoknadError && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_lagret')}</Alert>
                 )}
                 {!!punchFormState.inputErrors?.length && (
-                    <AlertStripeFeil className={'valideringstripefeil'}>
-                        {intlHelper(intl, 'skjema.feil.validering')}
-                    </AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.validering')}</Alert>
                 )}
                 {!!punchFormState.submitSoknadError && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</Alert>
                 )}
                 {!!punchFormState.submitSoknadConflict && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.konflikt')}</Alert>
                 )}
                 {!sjekkHvisArbeidstidErAngitt(this.props.punchFormState) && (
-                    <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</AlertStripeFeil>
+                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</Alert>
                 )}
 
                 {this.state.showSettPaaVentModal && (
@@ -1068,7 +1065,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         });
 
         if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
+            return uhaandterteFeilmeldinger.map((error) => `${error.felt}: ${error.feilmelding}`).filter(Boolean);
         }
         return [];
     };
