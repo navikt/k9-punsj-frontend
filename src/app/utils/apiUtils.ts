@@ -1,4 +1,4 @@
-import { Headers } from 'fetch-headers';
+import Headers from 'fetch-headers';
 import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
