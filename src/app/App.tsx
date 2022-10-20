@@ -4,7 +4,7 @@
 import * as Sentry from '@sentry/react';
 import Modal from 'nav-frontend-modal';
 import * as React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
@@ -99,13 +99,14 @@ export const App: React.FunctionComponent = () => {
     );
 };
 
-const root = document.getElementById('app');
+const container = document.getElementById('app');
+const root = createRoot(container!);
 Modal.setAppElement('#app');
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting
 prepare().then(() => {
-    render(<App />, root);
+    root.render(<App />);
 });
 
 // @ts-ignore

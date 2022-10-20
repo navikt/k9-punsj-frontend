@@ -14,14 +14,14 @@ type ownProps = {
     setAnnenPart: (annenPart: string) => void;
 };
 const AnnenPart = ({ vis, annenPart, setAnnenPart }: ownProps): JSX.Element | null => {
+    useEffect(() => () => setAnnenPart(''), []);
+    const intl = useIntl();
+    const [visFeil, setVisFeil] = useState<boolean>(false);
+
     if (!vis) {
         return null;
     }
-    const intl = useIntl();
 
-    useEffect(() => setAnnenPart(''), []);
-
-    const [visFeil, setVisFeil] = useState<boolean>(false);
     const onChangeHandler = (e) => {
         const identifikatorUtenWhitespace = e.target.value.replace(/\D+/, '');
         if (identifikatorUtenWhitespace.length < 12) {

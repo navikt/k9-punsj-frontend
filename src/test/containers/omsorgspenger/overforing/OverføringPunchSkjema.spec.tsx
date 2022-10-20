@@ -38,7 +38,7 @@ describe('<OverføringPunchSkjema>', () => {
 
         const sendInnKnapp = screen.getByRole('button', { name: /send inn/i });
 
-        userEvent.click(sendInnKnapp);
+        await userEvent.click(sendInnKnapp);
 
         const påkrevdeFelter = await screen.findAllByText(/påkrevd felt/i);
         const antallPåkrevdeFelter = 7;
@@ -95,7 +95,7 @@ describe('<OverføringPunchSkjema>', () => {
 
         const sendInnKnapp = screen.getByRole('button', { name: /send inn/i });
 
-        userEvent.click(sendInnKnapp);
+        await userEvent.click(sendInnKnapp);
 
         await screen.findAllByRole('button'); // wait for hook callbacks
 
@@ -117,14 +117,14 @@ describe('<OverføringPunchSkjema>', () => {
         );
 
         const barnISkjemaet = () => screen.findAllByRole('group', { name: /barn nummer/i });
-
+        
         expect(await barnISkjemaet()).toHaveLength(1);
 
         const leggTilBarnKnapp = screen.getByRole('button', {
             name: /legg til flere barn/i,
         });
 
-        userEvent.click(leggTilBarnKnapp);
+        await userEvent.click(leggTilBarnKnapp);
 
         expect(await barnISkjemaet()).toHaveLength(2);
     });

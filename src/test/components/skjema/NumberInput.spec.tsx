@@ -17,7 +17,7 @@ describe('<NumberInput>', () => {
             </TestSkjema>
         );
 
-    test('plussknapp øker verdi med 1', () => {
+    test('plussknapp øker verdi med 1', async () => {
         const { getByLabelText, getAllByRole } = renderInputFelt();
         const inputfelt = getByLabelText(/alder/i);
         expect(inputfelt.getAttribute('value')).toEqual(`${initAlder}`);
@@ -27,13 +27,12 @@ describe('<NumberInput>', () => {
         const plussknapp = knapper.find((knapp) => knapp.innerHTML.match(/øk/i));
         expect(plussknapp).toBeDefined();
 
-        // @ts-ignore
-        userEvent.click(plussknapp);
+        await userEvent.click(plussknapp);
 
         expect(inputfelt.getAttribute('value')).toEqual(`${initAlder + 1}`);
     });
 
-    test('minusknapp minsker verdi med 1', () => {
+    test('minusknapp minsker verdi med 1', async () => {
         const { getByLabelText, getAllByRole } = renderInputFelt();
         const inputfelt = getByLabelText(/alder/i);
         expect(inputfelt.getAttribute('value')).toEqual(`${initAlder}`);
@@ -43,8 +42,7 @@ describe('<NumberInput>', () => {
         const minusknapp = knapper.find((knapp) => knapp.innerHTML.match(/mink/i));
         expect(minusknapp).toBeDefined();
 
-        // @ts-ignore
-        userEvent.click(minusknapp);
+        await userEvent.click(minusknapp);
 
         expect(inputfelt.getAttribute('value')).toEqual(`${initAlder - 1}`);
     });

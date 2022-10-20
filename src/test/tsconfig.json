@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "jsx": "react",
+        "esModuleInterop": true
+    },
+    "exclude": ["../../cypress.config.ts"],
+    "include": ["../../src/**/*", "../test/testConfig.js"]
+}

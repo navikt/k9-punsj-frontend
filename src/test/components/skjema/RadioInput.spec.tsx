@@ -5,7 +5,7 @@ import { By, TestSkjema } from './testskjema';
 import RadioInput from '../../../app/components/skjema/RadioInput';
 
 describe('<RadioInput>', () => {
-    test('rendrer radios for options', () => {
+    test('rendrer radios for options', async () => {
         render(
             <TestSkjema initialValues={{ favorittby: null }}>
                 <RadioInput feltnavn="favorittby" optionValues={Object.values(By)} />
@@ -20,7 +20,7 @@ describe('<RadioInput>', () => {
         expect(barcaRadio).not.toBeChecked();
         expect(newRadio).not.toBeChecked();
 
-        userEvent.click(barcaRadio);
+        await userEvent.click(barcaRadio);
 
         expect(barcaRadio).toBeChecked();
     });
