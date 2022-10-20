@@ -25,7 +25,7 @@
         "cypress": "^10.10.0",
         "dayjs": "^1.10.7",
         "dotenv": "^16.0.3",
-        "fetch-headers": "^3.0.1",
+        "fetch-headers": "^2.0.0",
         "formik": "^2.2.9",
         "full-icu": "^1.4.0",
         "helmet": "^6.0.0",
