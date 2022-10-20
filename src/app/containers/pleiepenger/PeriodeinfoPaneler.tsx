@@ -9,7 +9,13 @@ import * as React from 'react';
 import { IntlShape } from 'react-intl';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
-import { GetErrorMessage, GetUhaandterteFeil, IPeriodeinfoExtension, IPeriodeinfo, Periodeinfo } from 'app/models/types';
+import {
+    GetErrorMessage,
+    GetUhaandterteFeil,
+    IPeriodeinfoExtension,
+    IPeriodeinfo,
+    Periodeinfo,
+} from 'app/models/types';
 import { IPeriode } from '../../models/types/Periode';
 import BinSvg from '../../assets/SVG/BinSVG';
 import intlHelper from '../../utils/intlUtils';
@@ -188,5 +194,6 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
 };
 
 PeriodeinfoPaneler.defaultProps = {
+    // eslint-disable-next-line react/default-props-match-prop-types
     periods: [],
 };

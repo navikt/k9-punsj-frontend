@@ -13,7 +13,6 @@ export interface IPeriodInputProps {
     intl: IntlShape;
     onChange: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
-    onFocus?: () => any;
     errorMessage?: React.ReactNode | boolean;
     errorMessageFom?: React.ReactNode | boolean;
     errorMessageTom?: React.ReactNode | boolean;

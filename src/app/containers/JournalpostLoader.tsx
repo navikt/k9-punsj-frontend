@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import VerticalSpacer from '../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
-import { IError, IJournalpost } from '../models/types';
+import { IJournalpost } from '../models/types';
 import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
@@ -21,7 +21,6 @@ import OkGaaTilLosModal from './pleiepenger/OkGaaTilLosModal';
 interface IJournaPostStateProps {
     journalpost?: IJournalpost;
     isJournalpostLoading?: boolean;
-    journalpostRequestError?: IError;
     journalpostConflictError?: IJournalpostConflictResponse;
     forbidden?: boolean;
     conflict?: boolean;

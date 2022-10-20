@@ -24,11 +24,6 @@ export interface IPunchPageStateProps {
     journalpost?: IJournalpost;
     forbidden: boolean | undefined;
 }
-
-export interface IPunchPageQueryProps {
-    dok?: string | null;
-}
-
 export interface IPunchPageComponentProps {
     journalpostid?: string;
     soknad?: Partial<IPSBSoknad>;
@@ -39,11 +34,7 @@ export interface IPunchPageComponentState {
     ident2: string;
 }
 
-type IPunchPageProps = WrappedComponentProps &
-    RouteComponentProps &
-    IPunchPageComponentProps &
-    IPunchPageStateProps &
-    IPunchPageQueryProps;
+type IPunchPageProps = WrappedComponentProps & RouteComponentProps & IPunchPageComponentProps & IPunchPageStateProps;
 
 export const SplitViewComponent: React.FC<IPunchPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, soknad, children } = props;
@@ -120,9 +111,4 @@ const mapStateToProps = (state: RootStateType) => ({
     forbidden: state.felles.journalpostForbidden,
 });
 
-const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
-    const dok = useQuery().get('dok');
-    return <SplitViewComponent {...props} dok={dok} />;
-};
-
-export const SplitView = withRouter(injectIntl(connect(mapStateToProps)(SplitViewComponentWithQuery)));
+export const SplitView = withRouter(injectIntl(connect(mapStateToProps)(SplitViewComponent)));
