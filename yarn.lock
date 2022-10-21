@@ -5867,10 +5867,10 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
-fetch-headers@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/fetch-headers/-/fetch-headers-3.0.1.tgz#3609148b601f36613b108f449cc3e03a77917b5f"
-  integrity sha512-Kq+NyED/wLgT29St7aW47gAWg8EmmE5QmhwQ5RmPRULYLqpglA7Kc/ZnbqXu2vhH6mw1koikew2g94WiHLPmpA==
+fetch-headers@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/fetch-headers/-/fetch-headers-2.0.0.tgz#bab7531c39b3d72d21ac189f179756f08541cf55"
+  integrity sha512-DUYUraWcka+q5RUZCtU6kyCKwVBHOztyXKYejPtU7xk+aBeU5XjjYHyrJ0VU5DMqsggE3ZWHyMLKmh4ogiqO1Q==
 
 fetch-mock@^9.10.7:
   version "9.11.0"
