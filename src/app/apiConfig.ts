@@ -74,18 +74,5 @@ export enum ApiPath {
     HENT_FAGSAK_PÅ_IDENT = '/saker/hent',
 }
 
-export const OMP_UT_API_PATHS = {
-    eksisterendeSoeknader: ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND,
-    createSoeknad: ApiPath.OMP_UT_SOKNAD_CREATE,
-    hentSoeknad: ApiPath.OMP_UT_SOKNAD_GET,
-    validerSoeknad: ApiPath.OMP_UT_SOKNAD_VALIDER,
-    oppdaterSoeknad: ApiPath.OMP_UT_SOKNAD_UPDATE,
-    sendInnSoeknad: ApiPath.OMP_UT_SOKNAD_SUBMIT,
-};
-
-export const SAKSTYPE_API_PATHS = {
-    OMP: OMP_UT_API_PATHS,
-};
-
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
 export const URL_AUTH_LOGIN = `${URL_BACKEND}/login?redirect_uri={uri}`;
