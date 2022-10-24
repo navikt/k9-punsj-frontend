@@ -11,7 +11,6 @@ import intlHelper from 'app/utils/intlUtils';
 import { useIntl } from 'react-intl';
 import { JaNei } from 'app/models/enums';
 import { capitalize } from 'lodash';
-import { Collapse } from 'react-collapse';
 import Fravaersperiode from './Fravaersperiode';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
@@ -73,7 +72,6 @@ export default function Frilanser() {
                                 name={field.name}
                                 value="nei"
                                 onChange={() => form.setFieldValue(field.name, false)}
-                                checked
                             >
                                 Nei
                             </RadioFormik>

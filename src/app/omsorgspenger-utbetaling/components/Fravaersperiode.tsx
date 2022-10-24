@@ -60,7 +60,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
         },
     ];
     return (
-        <Panel className="container">
+        <Panel className="fravaersperiode-container ">
             <div className="aarsak-rad">
                 <SelectFormik
                     label="Fraværsårsak"
@@ -90,7 +90,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                 <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
             </div>
             <VerticalSpacer twentyPx />
-            <div style={{ display: 'flex', alignItems: 'baseline' }}>
+            <div className="timer-container">
                 <TextFieldFormik
                     className="timer-arbeidet"
                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}

@@ -60,7 +60,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     <>
                         <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
                         {arbeidstakerFravaersperioder.map((periode) => (
-                            <FravaersperiodeKvittering periode={periode} />
+                            <FravaersperiodeKvittering key={periode.periode} periode={periode} />
                         ))}
                     </>
                 )}
@@ -68,7 +68,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     <>
                         <h3>{intlHelper(intl, 'frilanser')}</h3>
                         {frilanserFravaersperioder.map((periode) => (
-                            <FravaersperiodeKvittering periode={periode} />
+                            <FravaersperiodeKvittering key={periode.periode} periode={periode} />
                         ))}
                     </>
                 )}
@@ -76,7 +76,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     <>
                         <h3>{intlHelper(intl, 'selvstendig')}</h3>
                         {selvstendigNaeringsdrivendeFravaersperioder.map((periode) => (
-                            <FravaersperiodeKvittering periode={periode} />
+                            <FravaersperiodeKvittering key={periode.periode} periode={periode} />
                         ))}
                     </>
                 )}

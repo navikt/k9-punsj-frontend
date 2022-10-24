@@ -7,7 +7,6 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
-import { Collapse } from 'react-collapse';
 import { useIntl } from 'react-intl';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -47,7 +46,8 @@ const Utenlandsopphold = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.utenlandsopphold?.map((_, index, array) => (
-                                <div>
+                                // eslint-disable-next-line react/no-array-index-key
+                                <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">
                                         <DatoInputFormik

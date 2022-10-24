@@ -8,9 +8,8 @@ interface OwnProps extends RadioProps {
 
 const RadioFormik = ({ children, name, value, ...props }: OwnProps) => {
     const [field] = useField({ name, type: 'radio', value });
-    const { checked, ...rest } = field;
     return (
-        <Radio {...rest} {...props} checked>
+        <Radio {...field} {...props}>
             {children}
         </Radio>
     );

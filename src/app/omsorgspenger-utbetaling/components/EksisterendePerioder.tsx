@@ -16,7 +16,7 @@ export default function EksisterendePerioder({ eksisterendePerioder }: OwnProps)
                 <Panel border>
                     <Heading size="small">Eksisterende perioder</Heading>
                     {eksisterendePerioder.map((periode) => (
-                        <Periodevisning periode={periode} />
+                        <Periodevisning key={periode.fom} periode={periode} />
                     ))}
                 </Panel>
             </>
