@@ -49,7 +49,8 @@
     "fordeling.sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE": "Registrer søknad - ekstra omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN": "Registrer søknad - ekstra omsorgsdager",
     "fordeling.sakstype.OMSORGSPENGER_LEGEERKLÆRING": "Omsorgsdager: legeerklæring for kronisk sykt eller funksjonshemmet barn",
-    "fordeling.sakstype.OMSORGSPENGER_ALENE_OM_OMSORG": "Omsorgsdager: Alene om omsorgen",
+    "fordeling.sakstype.OMSORGSPENGER_ALENE_OM_OMSORG": "Registrer søknad - midlertidig alene om omsorgen",
+    "fordeling.sakstype.OMSORGSPENGER_UTBETALING": "Registrer søknad - direkte utbetaling omsorgspenger",
     "fordeling.sakstype.OMSORGSPENGER_SELVST_FRILANS": "Omsorgspenger: selvstendig næringsdrivende og frilanser",
     "fordeling.sakstype.OMSORGSPENGER_ARBEIDSGIVER_IKKE_BETALER": "Omsorgspenger: arbeidsgiver ikke betaler",
     "fordeling.sakstype.OPPLAERINGSPENGER": "Opplæringspenger",
@@ -124,6 +125,8 @@
     "tabell.mottakelsesdato": "Mottakelsesdato",
     "tabell.typeinnsdending": "Type innsending",
     "tabell.søknadtype": "Søknadtype",
+
+    "tabell.soekersFoedselsnummer": "Søkers fødselsnummer",
     "tabell.barnetsfnrellerfdato": "Pleietrengendes fødselsnummer",
     "tabell.fnrellerdato": "Fødsels-/D-nr. eller fødselsdato",
     "tabell.fraogmed": "Fra og med",
@@ -207,6 +210,7 @@
     "skjema.arbeid.arbeidstaker.fjernperiode": "Fjern periode",
     "skjema.arbeid.arbeidstaker.fjernarbeidsgiver": "Fjern arbeidsforhold",
     "skjema.arbeid.arbeidstaker.timernormalt": "Normal arbeidstid per dag",
+    "skjema.arbeid.arbeidstaker.fraværPerDag": "Timer fravær per dag",
     "skjema.arbeid.arbeidstaker.timerfaktisk": "Faktisk arbeidstid per dag",
     "skjema.arbeid.arbeidstaker.timerperuke": "timer per uke",
     "skjema.arbeid.arbeidstaker.tilsvarer": "tilsvarer",
@@ -218,6 +222,8 @@
     "skjema.arbeid.arbeidstaker.ident": "Fødselsnummer til arbeidsgiver",
     "skjema.arbeid.sn.virksomhetsnavn": "Hva heter virksomheten?",
     "skjema.sn.info": "Dersom søker etterrapporterer opplysninger om arbeidstid skal du kun fylle ut organisasjonsnummer og informasjon om arbeidstid.",
+    "skjema.harSoekerDekketOmsorgsdager": "Har søker dekket 10 omsorgsdager?",
+    "skjema.harSoekerDekketOmsorgsdager.hjelp": "Når søker har barn som har fylt 12 år i år, eller er yngre, må søker dekke de 10 første omsorgsdagene hvert kalenderår.",
     "skjema.sn.registrertINorge": "Er virksomheten registrert i Norge?",
     "skjema.sn.registrertLand": "I hvilket land er virksomheten registrert?",
     "skjema.sn.bruttoinntekt": "Næringsresultat før skatt de siste 12 månedene",
@@ -227,6 +233,7 @@
     "skjema.sn.varigendringdato": "Dato for endringen",
     "skjema.arbeid.sn.fjernvirksomhet": "Fjern virksomhet",
     "skjema.arbeid.sn.type": "Type virksomhet",
+    "skjema.arbeid.sn.virksomhetstype.erFiskerPåBladB": "Er søker fisker på blad B?",
     "skjema.arbeid.sn.når": "Når startet virksomheten?",
     "skjema.arbeid.sn.startdato": "Startdato",
     "skjema.arbeid.sn.sluttdato": "Eventuell sluttdato",
@@ -461,6 +468,19 @@
     "omsorgspenger.midlertidigAlene.situasjonstyper.FENGSEL": "Fengsel",
     "omsorgspenger.midlertidigAlene.situasjonstyper.SYKDOM": "Sykdom",
     "omsorgspenger.midlertidigAlene.situasjonstyper.ANNET": "Annet",
+
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.velgÅrsak": "Velg fraværsårsak",
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.STENGT_SKOLE_ELLER_BARNEHAGE": "Stengt skole eller barnehage",
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.SMITTEVERNHENSYN": "Smittevernhensyn",
+    "omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.ORDINÆRT_FRAVÆR": "Ordinært fravær",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.velgÅrsak": "Velg søknadsårsak",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.NYOPPSTARTET_HOS_ARBEIDSGIVER": "Nyoppstartet hos arbeidsgiver",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.ARBEIDSGIVER_KONKURS": "Arbeidsgiver er konkurs",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER": "Konflikt med arbeidsgiver",
+
+    "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
+    "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",
+    "omsorgspenger.utbetaling.skjematyper.SN/FL": "Selvstendig næringsdrivende/frilanser",
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
     "modal.settpaavent.visjournalpost": "Vis journalpost",
@@ -516,6 +536,8 @@
     "OMSORGSPENGER": "Omsorgspenger/omsorgsdager",
     "OMSORGSPENGER_KS": "Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
     "OMSORGSPENGER_MA": "Ekstra omsorgsdager når du er midlertidig alene om omsorgen",
+    "OMSORGSPENGER_UT": "Omsorgspenger: direkte utbetaling av omsorgspenger",
+
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",
 
@@ -538,5 +560,8 @@
     "Messages.Preview": "Forhåndsvis",
     "Messages.PreviewText": "Forhåndsvis varselbrev",
     "Messages.Beskrivelse": "Foretrukket språk",
-    "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}"
+    "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}",
+
+    "AT": "Arbeidstaker",
+    "SN/FL": "Selvstendig næringsdrivende/frilanser"
 }

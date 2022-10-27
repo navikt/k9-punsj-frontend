@@ -1,4 +1,5 @@
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+import { FrilanserAktivitet, SelvstendigNaeringsdrivendeAktivitet } from './KvitteringTyper';
 
 export interface IPSBSoknadKvitteringBosteder {
     [key: string]: { land: string };
@@ -53,31 +54,6 @@ export interface IPSBSoknadKvitteringArbeidstid {
     };
 }
 
-export interface IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode {
-    perioder: {
-        [key: string]: {
-            virksomhetstyper: string[];
-            regnskapsførerNavn: string;
-            regnskapsførerTlf: string;
-            erVarigEndring: boolean;
-            endringDato: number[];
-            endringBegrunnelse: string;
-            bruttoInntekt: number;
-            erNyoppstartet: boolean;
-            registrertIUtlandet: boolean;
-            landkode: string | null;
-        };
-    };
-    organisasjonsnummer: string;
-    virksomhetNavn: string;
-}
-
-export interface IPSBSoknadKvitteringFrilanser {
-    startdato: number[] | null;
-    sluttdato: number[] | null;
-    jobberFortsattSomFrilans: boolean;
-}
-
 export interface IPSBSoknadKvitteringJournalpost {
     inneholderInformasjonSomIkkeKanPunsjes?: boolean;
     inneholderMedisinskeOpplysninger?: boolean;
@@ -104,8 +80,8 @@ export interface IPSBSoknadKvittering {
         uttak: { perioder: IPSBSoknadKvitteringUttak };
         omsorg: IPSBSoknadKvitteringOmsorg;
         opptjeningAktivitet: {
-            selvstendigNæringsdrivende?: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
-            frilanser?: IPSBSoknadKvitteringFrilanser;
+            selvstendigNæringsdrivende?: SelvstendigNaeringsdrivendeAktivitet[];
+            frilanser?: FrilanserAktivitet;
         };
         trekkKravPerioder: string[];
     };

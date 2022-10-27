@@ -39,6 +39,7 @@ export enum FagsakYtelseType {
     OMSORGSPENGER_KS = 'OMP_KS',
     OMSORGSPENGER_MA = 'OMP_MA',
     OMSORGSPENGER_AO = 'OMP_AO',
+    OMSORGSPENGER_UT = 'OMP',
     OPPLÆRINGSPENGER = 'OLP',
 }
 

@@ -49,6 +49,9 @@ export const rootReducer = combineReducers({
         punchState: PunchOMPMAReducer,
         signaturState: SignaturReducer,
     }),
+    [Sakstype.OMSORGSPENGER_UTBETALING]: combineReducers({
+        signaturState: SignaturReducer,
+    }),
     [Sakstype.OMSORGSPENGER_OVERFØRING]: combineReducers({
         signatur: overføringSignaturReducer,
         punch: overføringPunchReducer,

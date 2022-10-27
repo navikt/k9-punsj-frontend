@@ -101,12 +101,17 @@ export const testHandlers = {
         `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/send`,
         (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering))
     ),
+
+    /*
+        Omsorgspenger - utbetaling
+    */
+
     barn: rest.get(`${LOCAL_API_URL}/barn`, (req, res, ctx) =>
         res(
             ctx.status(200),
             ctx.json({
                 barn: [
-                    { fornavn: 'Preben', etternavn: 'Figenschou Ferd', identitetsnummer: '02021477330' },
+                    { fornavn: 'Geir-Paco', etternavn: 'Gundersen', identitetsnummer: '02021477330' },
                     { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
                     { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
                 ],

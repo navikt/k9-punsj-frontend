@@ -12,7 +12,7 @@ import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etik
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import ModalWrapper from 'nav-frontend-modal';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import { ErrorSummary } from '@navikt/ds-react';
+import { ErrorSummary, Heading } from '@navikt/ds-react';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import Hjelpetekst from 'nav-frontend-hjelpetekst';
 import { PopoverOrientering } from 'nav-frontend-popover';
@@ -215,7 +215,15 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                 handleBlur={handleBlur}
             />
             <VerticalSpacer fourtyPx />
-            <Personvelger handleBlur={handleBlur} intl={intl} />
+            <Heading size="xsmall" spacing>
+                Barn
+            </Heading>
+            <Personvelger
+                name="barn"
+                handleBlur={handleBlur}
+                sokersIdent={values.soekerId}
+                populerMedBarn={!values.barn.length}
+            />
             <VerticalSpacer fourtyPx />
             <AnnenForelder intl={intl} handleBlur={handleBlur} />
             <VerticalSpacer fourtyPx />

@@ -1,56 +1,45 @@
 import React from 'react';
 import { useField } from 'formik';
 import { Radio, RadioPanel, SkjemaGruppe } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
 import classNames from 'classnames';
-import intlHelper from '../../utils/intlUtils';
 import './radioInput.less';
-import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface IRadioInputProps {
-    label?: React.ReactNode;
-    feltnavn: string;
-    optionValues: any[];
+    legend: React.ReactNode;
+    name: string;
+    options: { label: string; value: string }[];
     retning?: 'vertikal' | 'horisontal';
     styling?: 'medPanel' | 'utenPanel';
     disabled?: boolean;
 }
 
 const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
-    label,
-    feltnavn,
-    optionValues,
+    legend,
+    options,
+    name,
     retning = 'horisontal',
     styling = 'utenPanel',
     disabled = false,
 }) => {
-    const [{ name, value, onBlur, onChange }, { error, touched }] = useField(feltnavn);
-    const intl = useIntl();
+    const [{ value, onBlur, onChange }, { error, touched }] = useField(name);
 
     const RadioComponent = styling === 'utenPanel' ? Radio : RadioPanel;
 
     return (
-        <SkjemaGruppe
-            legend={
-                <div className="radio-legend">
-                    {label || intlHelper(intl, `skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`)}
-                </div>
-            }
-            feil={touched && error}
-        >
+        <SkjemaGruppe legend={<div className="radio-legend">{legend}</div>} feil={touched && error}>
             <div
                 className={classNames('radioinput--radios', {
                     'radioinput--horisontal': retning === 'horisontal',
                     'radioinput--vertikal': retning === 'vertikal',
                 })}
             >
-                {optionValues.map((optionValue) => (
+                {options.map((option) => (
                     <RadioComponent
-                        label={intlHelper(intl, `skjema.felt.${feltnavn}.${optionValue}`)}
-                        key={optionValue}
+                        label={option.label}
+                        key={option.value}
                         name={name}
-                        value={optionValue}
-                        checked={optionValue === value}
+                        value={option.value}
+                        checked={option.value === value}
                         onBlur={onBlur}
                         onChange={onChange}
                         disabled={disabled}

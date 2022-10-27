@@ -6,6 +6,7 @@
         "OMP_KS_ENABLED": "true",
         "PLS_ENABLED": "true",
         "OMP_MA_FEATURE_TOGGLE": "true",
+        "OMP_UT_FEATURE_TOGGLE": "false",
         "SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE": "true"
     }
 }

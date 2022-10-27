@@ -1,1 +1,6 @@
-{ "organisasjoner": [{ "organisasjonsnummer": "979312059", "navn": "NAV AS" }] }
+{
+    "organisasjoner": [
+        { "organisasjonsnummer": "979312059", "navn": "NAV AS" },
+        { "organisasjonsnummer": "974761076", "navn": "Skatteetaten" }
+    ]
+}

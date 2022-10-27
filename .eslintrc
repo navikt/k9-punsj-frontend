@@ -33,11 +33,8 @@
     "rules": {
         "@typescript-eslint/no-use-before-define": ["error"],
         "@typescript-eslint/no-shadow": "error",
+        "import/no-extraneous-dependencies": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-        "import/no-extraneous-dependencies": [
-            "error",
-            { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"] }
-        ],
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -48,6 +45,7 @@
                 "tsx": "never"
             }
         ],
+        "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
         "react/require-default-props": "off",
         "react/prop-types": "off",
         "no-use-before-define": "off",
