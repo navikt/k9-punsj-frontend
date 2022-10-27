@@ -90,6 +90,8 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
     const { ytelse, journalposter } = response;
+    const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
+    const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
     const visTrukkedePerioder =
@@ -99,6 +101,9 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
         response.begrunnelseForInnsending.tekst;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
+    const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
+    const visFerieSomSkalSlettes =
+        sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalIkkeHaFerieListe).length > 0;
     const visArbeidsforhold =
         sjekkPropertyEksistererOgIkkeErNull('arbeidstakerList', ytelse.arbeidstid) &&
         ytelse.arbeidstid?.arbeidstakerList.length > 0;
@@ -180,6 +185,30 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                         perioder={formattereLandTilNavnIObjekt(ytelse.utenlandsopphold?.perioder, countryList)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
+                    />
+                </div>
+            )}
+
+            {visFerie && (
+                <div>
+                    <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
+                    <hr className={classNames('linje')} />
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={skalHaferieListe}
+                        tittel={['skjema.periode.overskrift']}
+                    />
+                </div>
+            )}
+
+            {visFerieSomSkalSlettes && (
+                <div>
+                    <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
+                    <hr className={classNames('linje')} />
+                    <VisningAvPerioderSoknadKvittering
+                        intl={intl}
+                        perioder={skalIkkeHaFerieListe}
+                        tittel={['skjema.periode.overskrift']}
                     />
                 </div>
             )}
