@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import { getValidationErrors, identifikator } from 'app/rules/valideringer';
+import { getValidationErrors, identifikator } from 'app/rules/yup';
 import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';

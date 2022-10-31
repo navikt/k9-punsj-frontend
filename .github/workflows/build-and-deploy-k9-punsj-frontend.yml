@@ -1,74 +1,87 @@
 name: Build and deploy to prod
 on:
-    push:
-        paths-ignore:
-            - '**.md'
-            - '.gitignore'
-            - 'LICENCE'
-            - 'CODEOWNERS'
-            - 'nais/proxy/*'
-        branches:
-            - master
+  push:
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
+      - "LICENCE"
+      - "CODEOWNERS"
+      - "nais/proxy/*"
+    branches:
+      - master
 
 env:
-    DOCKER_IMAGE: ghcr.io/${{ github.repository }}
+  DOCKER_IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
-    deploy:
-        name: Deploye til PROD
-        runs-on: ubuntu-latest
-        steps:
-            - name: Hente kode
-              uses: actions/checkout@v3.0.2
-            - name: Sette opp Node
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 16.x
-                  registry-url: https://npm.pkg.github.com/
-                  scope: '@navikt'
-                  cache: 'yarn'
-            - name: Installerer moduler
-              run: yarn install
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-            - name: Bygge kode
-              run: yarn build
-            - name: Sjekke opp mot Lint-regler
-              run: yarn run lint
-            - name: Kjøre tester
-              run: yarn test --maxWorkers=2
-            - name: Kjør E2E-tester
-              uses: cypress-io/github-action@v2
-              with:
-                  start: yarn start:e2e
-                  wait-on: 'http://localhost:8080'
-                  wait-on-timeout: 60
-            - name: Opprett release med Sentry
-              run: yarn sentry-release
-              env:
-                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  lint:
+    uses: ./.github/workflows/lint.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  test-cypress:
+    uses: ./.github/workflows/cypress-tester.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  deploy:
+    name: Deploye til PROD
+    runs-on: ubuntu-latest
+    needs: [lint, test, test-cypress, build]
+    steps:
+      - name: Hente kode
+        uses: actions/checkout@v3.0.2
 
-            - uses: docker/login-action@v1.14.1
-              with:
-                  registry: ghcr.io
-                  username: ${{ github.REPOSITORY_OWNER }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sette opp Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: "@navikt"
+          cache: "yarn"
 
-            - name: Sett tag for docker image
-              run: echo "TAG=$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: ./dist
 
-            - name: Bygge & laste opp Docker image
-              run: |
-                  docker build --pull --tag ${DOCKER_IMAGE}:${TAG} --tag ${DOCKER_IMAGE}:latest .
-                  docker push ${DOCKER_IMAGE} --all-tags
+      - name: Installere moduler
+        run: yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-            - name: Sett image for nais deploy
-              run: echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
+      - name: Opprett release med Sentry
+        run: yarn sentry-release
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-            - name: Deploye til prod
-              uses: nais/deploy/actions/deploy@v1
-              env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-                  CLUSTER: prod-fss
-                  RESOURCE: nais/frontend/k9-punsj-frontend.yml
-                  VARS: nais/frontend/prod.json
+      - uses: docker/login-action@v1.14.1
+        with:
+          registry: ghcr.io
+          username: ${{ github.REPOSITORY_OWNER }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sett tag for docker image
+        run: echo "TAG=$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Bygge & laste opp Docker image
+        run: |
+          docker build --pull --tag ${DOCKER_IMAGE}:${TAG} --tag ${DOCKER_IMAGE}:latest .
+          docker push ${DOCKER_IMAGE} --all-tags
+
+      - name: Sett image for nais deploy
+        run: echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
+
+      - name: Deploye til prod
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-fss
+          RESOURCE: nais/frontend/k9-punsj-frontend.yml
+          VARS: nais/frontend/prod.json

@@ -1,9 +1,13 @@
+import dayjs from 'dayjs';
 import { Datepicker } from 'nav-datovelger';
 import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 export interface DateInputProps extends DatepickerProps {
     value: string;
@@ -16,6 +20,8 @@ export interface DateInputProps extends DatepickerProps {
     className?: string;
     inputRef?: React.Ref<HTMLInputElement>;
 }
+
+const isValidDate = (dateString: string) => dayjs(dateString, 'YYYY-MM-DD').isValid();
 
 const DateInput: React.FC<DateInputProps> = ({
     value,
@@ -30,6 +36,8 @@ const DateInput: React.FC<DateInputProps> = ({
     limitations,
 }) => {
     const datepickerId = id || uuidv4();
+    const [isInvalidDate, setIsInvalidDate] = useState(false);
+    const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
     return (
         <div className={className || ''}>
             <Label htmlFor={datepickerId}>{label}</Label>
@@ -38,9 +46,14 @@ const DateInput: React.FC<DateInputProps> = ({
                 inputId={datepickerId}
                 value={value}
                 onChange={(v) => {
-                    onChange(v);
-                    if (onBlur) {
-                        onBlur(v);
+                    if (v.length < 6 || !isValidDate(v)) {
+                        setIsInvalidDate(true);
+                    } else {
+                        onChange(v);
+                        setIsInvalidDate(false);
+                        if (onBlur) {
+                            onBlur(v);
+                        }
                     }
                 }}
                 calendarSettings={{ showWeekNumbers: true }}
@@ -49,7 +62,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 inputProps={{ inputRef }}
                 limitations={limitations}
             />
-            {errorMessage && <Feilmelding>{errorMessage}</Feilmelding>}
+            {error && <Feilmelding>{error}</Feilmelding>}
         </div>
     );
 };

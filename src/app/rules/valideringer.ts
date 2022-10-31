@@ -1,23 +1,12 @@
 /* eslint-disable no-template-curly-in-string */
 import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
-import * as yup from 'yup';
 
+import { initializeDate } from 'app/utils';
 import { IdentRules } from './IdentRules';
 import intlHelper from '../utils/intlUtils';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
-
-export const yupLocale = {
-    mixed: {
-        required: '${path} er et påkrevd felt.',
-    },
-    string: {
-        min: '${path} må være minst ${min} tegn',
-        max: '${path} må være mest ${max} tegn',
-        length: '${path} må være nøyaktig ${length} tegn',
-    },
-};
 
 export interface IFeltValidator<FeltType, SkjemaType> {
     feltPath: string;
@@ -80,70 +69,21 @@ export function gyldigFødselsdato(verdi: string) {
     return new Date(verdi) < dagsDato ? undefined : 'skjema.validering.ugyldigfødselsdato';
 }
 
-yup.setLocale(yupLocale);
-
-export const identifikator = yup
-    .string()
-    .required()
-    .nullable(true)
-    .length(11)
-    .test({
-        test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
-        message: 'Ugyldig identifikasjonsnummer',
-    })
-    .label('Identifikasjonsnummer');
-export const timer = yup
-    .number()
-    .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
-    .min(0)
-    .max(23)
-    .label('Timer');
-export const minutter = yup
-    .number()
-    .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
-    .min(0)
-    .max(59)
-    .label('Minutter');
-
-export const timerOgMinutter = yup.object({
-    timer: timer.required(),
-    minutter: minutter.required(),
-});
-
-export const periodeMedTimerOgMinutter = yup.object({
-    periode: yup.object({
-        fom: yup.string().required().label('Fra og med'),
-        tom: yup.string().required().label('Til og med'),
-    }),
-    timer: timer.required(),
-    minutter: minutter.required(),
-});
-export const arbeidstimerPeriode = yup.object().shape({
-    periode: yup.object({
-        fom: yup.string().required().label('Fra og med'),
-        tom: yup.string().required().label('Til og med'),
-    }),
-    faktiskArbeidPerDag: timerOgMinutter,
-    jobberNormaltPerDag: yup.object({
-        timer,
-        minutter,
-    }),
-});
-
-export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
-    try {
-        validator.validateSync(value);
-
-        return false;
-    } catch (e) {
-        return e.errors[0];
-    }
+export const erUgyldigIdent = (ident: string | null | undefined) => {
+    if (!ident) return true;
+    if (!ident.length) return true;
+    return IdentRules.erUgyldigIdent(ident);
 };
 
-export const getValidationErrors = (validators: any, value: any): string | boolean => {
-    const errorMessages = validators.map((validator: yup.AnySchema) => validate(validator, value)).filter(Boolean);
-    if (errorMessages.length) {
-        return errorMessages;
+export function erIkkeFremITid(dato: string) {
+    const naa = new Date();
+    return naa > new Date(dato);
+}
+
+export const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
+    const naa = new Date();
+    if (mottattDato && klokkeslett && new Date(mottattDato).getDate() === naa.getDate()) {
+        return initializeDate(naa).format('HH:mm') < klokkeslett;
     }
     return false;
 };

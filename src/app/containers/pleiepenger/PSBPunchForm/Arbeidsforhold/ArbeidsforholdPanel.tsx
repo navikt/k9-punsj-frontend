@@ -13,6 +13,7 @@ import { Container, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { set } from 'lodash';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
@@ -222,6 +223,11 @@ const ArbeidsforholdPanel = ({
                         onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
                         checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
                     }))}
+                    feil={getErrorMessage(
+                        `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                            opptjening?.selvstendigNaeringsdrivende?.info?.periode
+                        )}].virksomhetstyper`
+                    )}
                     onChange={() => undefined}
                 />
                 <div className="generelleopplysiniger">
@@ -304,6 +310,9 @@ const ArbeidsforholdPanel = ({
                             bredde="M"
                             value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
                             className="sn-organisasjonsnummer"
+                            feil={getErrorMessage(
+                                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid'
+                            )}
                             onChange={(event: any) =>
                                 updateSoknadState(
                                     {
@@ -472,6 +481,9 @@ const ArbeidsforholdPanel = ({
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                        errorMessage={getErrorMessage(
+                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
+                        )}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
@@ -763,6 +775,11 @@ const ArbeidsforholdPanel = ({
                         })
                     }
                     arbeidstidInfo={soknad.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
+                />
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() =>
+                        getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
+                    }
                 />
             </Container>
         );

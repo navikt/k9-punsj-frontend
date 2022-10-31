@@ -10,7 +10,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import * as reactRedux from 'react-redux';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import OpplysningerOmSoknad from '../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
@@ -229,8 +229,8 @@ describe('PunchForm', () => {
 
     it('Viser feilmelding når søknaden ikke er funnet', () => {
         const punchForm = setupPunchForm({ error: { status: 404 } });
-        expect(punchForm.find('AlertStripeFeil')).toHaveLength(1);
-        expect(punchForm.find('AlertStripeFeil').prop('children')).toEqual('skjema.feil.ikke_funnet');
+        expect(punchForm.find('ForwardRef')).toHaveLength(1);
+        expect(punchForm.find('ForwardRef').prop('children')).toEqual('skjema.feil.ikke_funnet');
     });
 
     it('Oppdaterer søknad når mottakelsesdato endres', () => {
@@ -385,8 +385,8 @@ describe('PunchForm', () => {
         );
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
-        expect(punchForm.find('.valideringstripefeil')).toHaveLength(1);
-        expect(punchForm.find('.valideringstripefeil').childAt(0).text()).toEqual('skjema.feil.validering');
+        expect(punchForm.find('ForwardRef')).toHaveLength(1);
+        expect(punchForm.find('ForwardRef').childAt(0).text()).toEqual('skjema.feil.validering');
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', () => {
@@ -486,7 +486,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('AlertStripeFeil')).toHaveLength(1);
+        expect(punchForm.find('ForwardRef')).toHaveLength(1);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(true);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(true);
     });
@@ -520,7 +520,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('AlertStripeFeil')).toHaveLength(0);
+        expect(punchForm.find('ForwardRef')).toHaveLength(0);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
     });
@@ -548,7 +548,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('AlertStripeFeil')).toHaveLength(0);
+        expect(punchForm.find('ForwardRef')).toHaveLength(0);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
     });
@@ -576,7 +576,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('AlertStripeFeil')).toHaveLength(0);
+        expect(punchForm.find('ForwardRef')).toHaveLength(0);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
     });

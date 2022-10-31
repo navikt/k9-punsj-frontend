@@ -7,8 +7,8 @@ interface OwnProps extends CheckboxProps {
     name: string;
 }
 
-const CheckboxFormik = ({ children, name, type, value, ...props }: OwnProps) => {
-    const [field] = useField({ name, type, value });
+const CheckboxFormik = ({ children, name, value, ...props }: OwnProps) => {
+    const [field] = useField({ name, type: 'checkbox', value });
     return (
         <Checkbox {...props} {...field}>
             {children}
