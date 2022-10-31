@@ -89,6 +89,7 @@ export interface IPLSSoknadKvittering {
             selvstendigNæringsdrivende?: IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
             frilanser?: IPLSSoknadKvitteringFrilanser;
         };
+        lovbestemtFerie: { perioder: IPLSSoknadKvitteringLovbestemtFerie };
         bosteder: { perioder: IPLSSoknadKvitteringBosteder };
         utenlandsopphold: { perioder: IPLSSoknadKvitteringUtenlandsopphold };
         trekkKravPerioder: string[];

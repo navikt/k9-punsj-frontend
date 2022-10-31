@@ -8,6 +8,7 @@ import {
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
+    omsorgspengerUtbetalingSakstyper,
 } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
@@ -84,13 +85,16 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     function omsorgspengerMidlertidigAlene() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA && omsorgspengerMidlertidigAleneSakstyper;
     }
+    const omsorgspengerUtbetaling = () =>
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
     const sakstypekeys =
         korrigeringIM() ||
         pleiepengerSyktBarn() ||
         pleiepengerILivetsSluttfase() ||
         omsorgspengerKroniskSyktBarn() ||
-        omsorgspengerMidlertidigAlene();
+        omsorgspengerMidlertidigAlene() ||
+        omsorgspengerUtbetaling();
 
     const keys = sakstypekeys.filter((key) => {
         if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {

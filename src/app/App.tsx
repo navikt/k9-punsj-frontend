@@ -58,6 +58,12 @@ const localeFromSessionStorage = getLocaleFromSessionStorage();
 
 const queryClient = new QueryClient();
 
+queryClient.setDefaultOptions({
+    queries: {
+        refetchOnWindowFocus: false,
+    },
+});
+
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);

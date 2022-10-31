@@ -1,24 +1,27 @@
 .radioinput--radios {
-  &.radioinput--horisontal {
-    display: flex;
-    > * {
-      width: 10em;
-      margin-right: 1em;
-    }
-  }
+    min-width: 500px;
 
-  &.radioinput--vertikal {
-    > :not(:last-child) {
-      margin-bottom: 1em;
+    &.radioinput--horisontal {
+        display: flex;
+
+        > * {
+            width: 10em;
+            margin-right: 1em;
+        }
     }
-  }
+
+    &.radioinput--vertikal {
+        > :not(:last-child) {
+            margin-bottom: 1em;
+        }
+    }
 }
 
 .radio-legend {
-  font-family: 'Source Sans Pro', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  display: block;
-  line-height: 1.4;
-  margin-bottom: -0.5em;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    display: block;
+    line-height: 1.4;
+    margin-bottom: -0.5em;
 }

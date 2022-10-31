@@ -65,6 +65,16 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentsoknader');
     });
 
+    it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
+        cy.findByText('Omsorgspenger/omsorgsdager').click();
+        cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
+        cy.findByText(/Ja/i).click();
+        cy.findByRole('button', { name: /Videre/i }).click();
+        cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
+        cy.findByRole('button', { name: /bekreft/i }).click();
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
+    });
+
     it('validering av fødselsnummer virker', () => {
         cy.contains('Pleiepenger').click();
         cy.contains('Nei').click();

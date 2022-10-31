@@ -26,6 +26,8 @@ export interface IPLSSoknad {
     opptjeningAktivitet: IOpptjeningAktivitet;
     bosteder?: Periodeinfo<IUtenlandsOpphold>[];
     utenlandsopphold?: Periodeinfo<IUtenlandsOpphold>[];
+    lovbestemtFerie?: IPeriode[];
+    lovbestemtFerieSomSkalSlettes?: IPeriode[];
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
@@ -264,6 +266,10 @@ export class PLSSoknad implements IPLSSoknad {
 
     utenlandsopphold: UtenlandsOpphold[];
 
+    lovbestemtFerie: Periode[];
+
+    lovbestemtFerieSomSkalSlettes: Periode[];
+
     harInfoSomIkkeKanPunsjes: boolean;
 
     harMedisinskeOpplysninger: boolean;
@@ -283,6 +289,8 @@ export class PLSSoknad implements IPLSSoknad {
         this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
+        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
+        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
         this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;

@@ -10,6 +10,7 @@ import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
 import PLSRouter from '../pleiepenger-livets-sluttfase/containers/PLSRouter';
 import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
+import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 
 export const Pleiepenger: ISakstypePunch = {
@@ -39,6 +40,13 @@ export const OmsorgspengerMidlertidigAlene: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE,
     punchPath: '/omsorgspenger-midlertidig-alene',
     getComponent: ({ journalpostid, punchPath }) => <OMPMARouter journalpostid={journalpostid} punchPath={punchPath} />,
+    steps: [],
+};
+
+export const OmsorgspengerUtbetaling: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_UTBETALING,
+    punchPath: '/omsorgspenger-utbetaling',
+    getComponent: ({ journalpostid, punchPath }) => <OMPUTRouter journalpostid={journalpostid} punchPath={punchPath} />,
     steps: [],
 };
 
@@ -136,6 +144,7 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerFordeling,
         OmsorgspengerKroniskSyktBarnSakstypePunch,
         OmsorgspengerMidlertidigAlene,
+        OmsorgspengerUtbetaling,
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding,
         SendBrevPåEksisterendeFagsak,

@@ -1,5 +1,5 @@
 import Feilmelding from 'app/components/Feilmelding';
-import { ValiderOMSKorrigeringResponse } from 'app/models/types/ValiderOMSKorrigeringResponse';
+import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
     submitOMSKorrigering,
     updateOMSKorrigering,
@@ -126,67 +126,67 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
 
     return (
         <Formik
-                initialValues={{
-                    [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: { dato: '', klokkeslett: '' },
-                    [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
-                    [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
-                    [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getInitialPeriode()],
-                    [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getInitialPeriode()],
-                    [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
-                }}
-                onSubmit={(values, actions) => {
-                    validerKorrigering(values);
-                    actions.setSubmitting(false);
-                }}
-                validate={(values) => {
-                    oppdaterKorrigering(values);
-                    const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
-                    return validerOMSKorrigering(korrigering)
-                        .then((response) => response.json())
-                        .then((data: ValiderOMSKorrigeringResponse) => {
-                            const errors = getFormErrors(values, data);
-                            const globalFormError = data?.feil?.find(
-                                (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'
-                            );
-                            dispatch({
-                                type: ActionType.SET_FORM_ERROR,
-                                formError: globalFormError?.feilmelding || '',
-                            });
-                            return errors;
+            initialValues={{
+                [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: { dato: '', klokkeslett: '' },
+                [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
+                [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
+                [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getInitialPeriode()],
+                [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getInitialPeriode()],
+                [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
+            }}
+            onSubmit={(values, actions) => {
+                validerKorrigering(values);
+                actions.setSubmitting(false);
+            }}
+            validate={(values) => {
+                oppdaterKorrigering(values);
+                const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+                return validerOMSKorrigering(korrigering)
+                    .then((response) => response.json())
+                    .then((data: ValideringResponse) => {
+                        const errors = getFormErrors(values, data);
+                        const globalFormError = data?.feil?.find(
+                            (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'
+                        );
+                        dispatch({
+                            type: ActionType.SET_FORM_ERROR,
+                            formError: globalFormError?.feilmelding || '',
                         });
-                }}
-            >
-                {({ setFieldValue, values }) => (
-                    <>
-                        <Form className="korrigering">
-                            <Panel border>
-                                <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
-                                <AlertStripeInfo className="korrigering__headerInfo">
-                                    Korrigering av inntektsmelding skal benyttes til å:
-                                    <ul>
-                                        <li> Slette dager/timer arbeidsgiver melder fra de har fått for mye</li>
-                                        <li>Endre dager til timer, når arbeidsgiver melder de har fått for mye</li>
-                                    </ul>
-                                </AlertStripeInfo>
-                                <div className="korrigering__opplysningerOmKorrigeringContainer">
-                                    <OpplysningerOmKorrigering />
-                                </div>
-                                <div className="korrigering__virksomhetpanelContainer">
-                                    <VirksomhetPanel søkerId={søkerId} />
-                                </div>
-                                <TrekkPerioder
-                                    isPanelOpen={åpnePaneler.trekkperioderPanel}
-                                    togglePanel={() => {
-                                        const toggledPanel = !åpnePaneler.trekkperioderPanel;
-                                        togglePaneler({ trekkperioderPanel: toggledPanel });
-                                        if (!toggledPanel) {
-                                            setFieldValue(KorrigeringAvInntektsmeldingFormFields.Trekkperioder, [
-                                                getInitialPeriode(),
-                                            ]);
-                                        }
-                                    }}
-                                />
-                                {/* <LeggTilHelePerioder
+                        return errors;
+                    });
+            }}
+        >
+            {({ setFieldValue, values }) => (
+                <>
+                    <Form className="korrigering">
+                        <Panel border>
+                            <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
+                            <AlertStripeInfo className="korrigering__headerInfo">
+                                Korrigering av inntektsmelding skal benyttes til å:
+                                <ul>
+                                    <li> Slette dager/timer arbeidsgiver melder fra de har fått for mye</li>
+                                    <li>Endre dager til timer, når arbeidsgiver melder de har fått for mye</li>
+                                </ul>
+                            </AlertStripeInfo>
+                            <div className="korrigering__opplysningerOmKorrigeringContainer">
+                                <OpplysningerOmKorrigering />
+                            </div>
+                            <div className="korrigering__virksomhetpanelContainer">
+                                <VirksomhetPanel søkerId={søkerId} />
+                            </div>
+                            <TrekkPerioder
+                                isPanelOpen={åpnePaneler.trekkperioderPanel}
+                                togglePanel={() => {
+                                    const toggledPanel = !åpnePaneler.trekkperioderPanel;
+                                    togglePaneler({ trekkperioderPanel: toggledPanel });
+                                    if (!toggledPanel) {
+                                        setFieldValue(KorrigeringAvInntektsmeldingFormFields.Trekkperioder, [
+                                            getInitialPeriode(),
+                                        ]);
+                                    }
+                                }}
+                            />
+                            {/* <LeggTilHelePerioder
                                     isPanelOpen={åpnePaneler.leggTilHelePerioderPanel}
                                     togglePanel={() => {
                                         const toggledPanel = !åpnePaneler.leggTilHelePerioderPanel;
@@ -199,74 +199,74 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         }
                                     }}
                                 /> */}
-                                <LeggTilDelvisFravær
-                                    isPanelOpen={åpnePaneler.leggTilDelvisFravær}
-                                    togglePanel={() => {
-                                        const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
-                                        togglePaneler({ leggTilDelvisFravær: toggledPanel });
-                                        if (!toggledPanel) {
-                                            setFieldValue(KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær, [
-                                                {
-                                                    dato: '',
-                                                    timer: '',
-                                                },
-                                            ]);
-                                        }
-                                    }}
-                                />
-                                {formError && hasSubmitted && (
-                                    <div className="korrigering__feilmelding">
-                                        <Feilmelding feil={formError} />
-                                    </div>
-                                )}
-                            </Panel>
-                            <div className="korrigering__buttonContainer">
-                                <Hovedknapp>Send inn</Hovedknapp>
-                            </div>
-                        </Form>
-                        {visBekreftelsemodal && (
-                            <ModalWrapper
-                                onRequestClose={() => {
+                            <LeggTilDelvisFravær
+                                isPanelOpen={åpnePaneler.leggTilDelvisFravær}
+                                togglePanel={() => {
+                                    const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
+                                    togglePaneler({ leggTilDelvisFravær: toggledPanel });
+                                    if (!toggledPanel) {
+                                        setFieldValue(KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær, [
+                                            {
+                                                dato: '',
+                                                timer: '',
+                                            },
+                                        ]);
+                                    }
+                                }}
+                            />
+                            {formError && hasSubmitted && (
+                                <div className="korrigering__feilmelding">
+                                    <Feilmelding feil={formError} />
+                                </div>
+                            )}
+                        </Panel>
+                        <div className="korrigering__buttonContainer">
+                            <Hovedknapp>Send inn</Hovedknapp>
+                        </div>
+                    </Form>
+                    {visBekreftelsemodal && (
+                        <ModalWrapper
+                            onRequestClose={() => {
+                                dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
+                            }}
+                            contentLabel="Er du sikker?"
+                            closeButton={false}
+                            isOpen={visBekreftelsemodal}
+                        >
+                            <BekreftInnsendingModal
+                                feltverdier={values}
+                                lukkModal={() => {
                                     dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
                                 }}
-                                contentLabel="Er du sikker?"
-                                closeButton={false}
-                                isOpen={visBekreftelsemodal}
-                            >
-                                <BekreftInnsendingModal
-                                    feltverdier={values}
-                                    lukkModal={() => {
-                                        dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
-                                    }}
-                                    handleVidere={() => {
-                                        dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL });
-                                    }}
-                                />
-                            </ModalWrapper>
-                        )}
-                        {visErDuSikkerModal && (
-                            <ModalWrapper
-                                onRequestClose={() => {
+                                handleVidere={() => {
+                                    dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL });
+                                }}
+                            />
+                        </ModalWrapper>
+                    )}
+                    {visErDuSikkerModal && (
+                        <ModalWrapper
+                            onRequestClose={() => {
+                                dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
+                            }}
+                            contentLabel="Er du sikker?"
+                            closeButton={false}
+                            isOpen
+                        >
+                            <ErDuSikkerModal
+                                melding="modal.erdusikker.sendinn"
+                                extraInfo="modal.erdusikker.sendinn.extrainfo"
+                                onSubmit={() => sendInnKorrigering(values)}
+                                submitKnappText="skjema.knapp.send"
+                                onClose={() => {
                                     dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                                 }}
-                                contentLabel="Er du sikker?"
-                                closeButton={false}
-                                isOpen
-                            >
-                                <ErDuSikkerModal
-                                    melding="modal.erdusikker.sendinn"
-                                    extraInfo="modal.erdusikker.sendinn.extrainfo"
-                                    onSubmit={() => sendInnKorrigering(values)}
-                                    submitKnappText="skjema.knapp.send"
-                                    onClose={() => {
-                                        dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
-                                    }}
-                                />
-                            </ModalWrapper>
-                        )}
-                    </>
-                )}
-            </Formik>
+                            />
+                        </ModalWrapper>
+                    )}
+                </>
+            )}
+        </Formik>
     );
 };
 

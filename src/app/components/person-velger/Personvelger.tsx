@@ -1,52 +1,76 @@
-import React from 'react';
-import { Field, FieldProps, FormikValues } from 'formik';
+import React, { useEffect } from 'react';
+import { FieldArray, useField, useFormikContext } from 'formik';
 import { Personvalg } from 'app/models/types/Personvalg';
 
-import { Button, Heading } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { AddPerson } from '@navikt/ds-icons';
-import { WrappedComponentProps } from 'react-intl';
-import PersonLinje from './PersonLinje';
 import './personvelger.less';
+import { hentBarn } from 'app/api/api';
+import { Person } from 'app/models/types';
+import PersonLinje from './PersonLinje';
 
-interface OwnProps extends WrappedComponentProps {
-    handleBlur: (callback: () => any) => void;
+interface OwnProps {
+    handleBlur?: (callback: () => any) => void;
+    name: string;
+    sokersIdent?: string;
+    populerMedBarn?: boolean;
 }
 
-const Personvelger = ({ intl, handleBlur }: OwnProps) => (
-    <>
-        <Heading size="xsmall" spacing>
-            Barn
-        </Heading>
+const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProps) => {
+    const { setFieldValue } = useFormikContext();
+    const [field] = useField<Personvalg[]>(name);
+
+    useEffect(() => {
+        if (populerMedBarn && sokersIdent) {
+            hentBarn(sokersIdent).then((response: Response) => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        if (data.barn?.length) {
+                            const barn = data.barn.map(
+                                (barnet: Person): Personvalg => ({
+                                    norskIdent: barnet.identitetsnummer,
+                                    navn: `${barnet.fornavn} ${barnet.etternavn}`,
+                                    låsIdentitetsnummer: true,
+                                })
+                            );
+                            setFieldValue(name, barn);
+                        }
+                    });
+                }
+            });
+        }
+    }, []);
+
+    return (
         <div className="personvelger">
-            <Field name="barn">
-                {({ field, form }: FieldProps<Personvalg[], FormikValues>) => (
+            <FieldArray
+                name={name}
+                render={(arrayHelpers) => (
                     <>
-                        {field.value.map((person, index) => (
+                        {field.value.map((_, index) => (
                             <PersonLinje
                                 // eslint-disable-next-line react/no-array-index-key
                                 key={index}
-                                person={person}
                                 index={index}
                                 handleBlur={handleBlur}
-                                personer={field.value}
-                                intl={intl}
+                                slett={() => arrayHelpers.remove(index)}
+                                name={name}
                             />
                         ))}
-
                         <Button
                             variant="tertiary"
                             size="small"
                             icon={<AddPerson />}
                             iconPosition="left"
-                            onClick={() => form.setFieldValue('barn', [...field.value, { norskIdent: '', navn: '' }])}
+                            onClick={() => arrayHelpers.push({ norskIdent: '', navn: '' })}
                         >
-                            Legg til barn
+                            Legg til person
                         </Button>
                     </>
                 )}
-            </Field>
+            />
         </div>
-    </>
-);
+    );
+};
 
 export default Personvelger;
