@@ -63,6 +63,44 @@ export const utenlandsopphold = yup.object().shape({
     land: yup.string().required().label('Land'),
 });
 
+export const timer = yup
+    .number()
+    .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
+    .min(0)
+    .max(23)
+    .label('Timer');
+export const minutter = yup
+    .number()
+    .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
+    .min(0)
+    .max(59)
+    .label('Minutter');
+
+export const timerOgMinutter = yup.object({
+    timer: timer.required(),
+    minutter: minutter.required(),
+});
+
+export const periodeMedTimerOgMinutter = yup.object({
+    periode: yup.object({
+        fom: yup.string().required().label('Fra og med'),
+        tom: yup.string().required().label('Til og med'),
+    }),
+    timer: timer.required(),
+    minutter: minutter.required(),
+});
+export const arbeidstimerPeriode = yup.object().shape({
+    periode: yup.object({
+        fom: yup.string().required().label('Fra og med'),
+        tom: yup.string().required().label('Til og med'),
+    }),
+    faktiskArbeidPerDag: timerOgMinutter,
+    jobberNormaltPerDag: yup.object({
+        timer,
+        minutter,
+    }),
+});
+
 export const barn = yup.array().of(
     yup.object().shape({
         norskIdent: identifikator,

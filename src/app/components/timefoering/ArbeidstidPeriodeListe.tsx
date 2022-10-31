@@ -3,7 +3,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
-import { arbeidstimerPeriode } from 'app/rules/valideringer';
+import { arbeidstimerPeriode } from 'app/rules/yup';
 import * as yup from 'yup';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 import VerticalSpacer from '../VerticalSpacer';

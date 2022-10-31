@@ -1,5 +1,5 @@
 import { Button, Heading } from '@navikt/ds-react';
-import { timerOgMinutter } from 'app/rules/valideringer';
+import { timerOgMinutter } from 'app/rules/yup';
 import React, { useState, useEffect } from 'react';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
