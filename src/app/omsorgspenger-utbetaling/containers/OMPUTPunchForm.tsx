@@ -250,7 +250,14 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                                 setHarForsoektAaSendeInn(true);
                                 setTouched(setNestedObjectValues(values, true));
                             }
-                            validateForm(values).then(() => valider({ skalForhaandsviseSoeknad: true }));
+                            validateForm(values).then((v) => {
+                                if (Object.keys(v).length) {
+                                    valider({ skalForhaandsviseSoeknad: false });
+                                    return;
+                                }
+
+                                valider({ skalForhaandsviseSoeknad: true });
+                            });
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
