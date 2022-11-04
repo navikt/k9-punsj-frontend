@@ -11,7 +11,7 @@ export default function Slett(props: OwnProps) {
     const { onClick, children } = props;
     return (
         <Button size="small" variant="tertiary" className="slett" {...props} onClick={onClick}>
-            <Delete style={{ color: 'red' }} />
+            <Delete />
             {children}
         </Button>
     );

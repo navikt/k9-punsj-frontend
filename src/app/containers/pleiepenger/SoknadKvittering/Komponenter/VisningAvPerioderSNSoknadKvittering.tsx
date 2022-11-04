@@ -36,7 +36,7 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
     <div>
         {perioder.map((SN) =>
             Object.keys(SN.perioder).map((periode) => (
-                <div key={uuidv4()}>
+                <div key={periode}>
                     {sjekkPropertyEksistererOgIkkeErNull('organisasjonsnummer', SN) && (
                         <p>
                             <b>{`${intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}: `}</b>

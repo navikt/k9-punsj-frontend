@@ -43,7 +43,7 @@ const VisningAvPerioderPLSSoknadKvittering: React.FunctionComponent<IOwnProps> =
         </div>
         {Object.keys(perioder).map((periode) => (
             <div
-                key={uuidv4()}
+                key={periode}
                 className={classNames(
                     'visningAvPerioderSoknadKvitteringContainer',
                     typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
