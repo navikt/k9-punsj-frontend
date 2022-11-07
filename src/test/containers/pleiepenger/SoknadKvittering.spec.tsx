@@ -204,6 +204,7 @@ describe('SoknadKvittering', () => {
     });
 
     it('Viser opplysninger om mottatt dato', () => {
+        console.log(soknadKvitteringFull.text())
         expect(soknadKvitteringFull.text().includes('skjema.opplysningeromsoknad')).toBe(true);
         expect(soknadKvitteringFull.text().includes('skjema.mottakelsesdato:')).toBe(true);
         expect(soknadKvitteringFull.text().includes('12.10.2020')).toBe(true);

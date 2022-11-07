@@ -99,7 +99,7 @@ export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
 };
 
 export const formattereDatoFraUTCTilGMT = (dato: string) => {
-    const formattedDate = new Date(dato).toLocaleDateString([], {
+    const formattedDate = new Date(dato).toLocaleDateString(['nb-NO'], {
         timeZone: 'Europe/Oslo',
         hour12: false,
         year: 'numeric',
