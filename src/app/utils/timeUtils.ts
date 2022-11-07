@@ -98,6 +98,16 @@ export const formatereTekstMedTimerOgMinutter = (tekst: string) => {
     return `${timerTekst} og ${minutterTekst}`;
 };
 
+export const formattereDatoFraUTCTilGMT = (dato: string) => {
+    const formattedDate = new Date(dato).toLocaleDateString([], {
+        timeZone: 'Europe/Oslo',
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
+    return formattedDate;
+};
 export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     const datoTmp = new Date(dato);
     if (Number.isNaN(datoTmp.getTime())) {
