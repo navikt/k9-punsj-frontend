@@ -16,6 +16,7 @@ import {
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
     formattereDatoIArray,
+    formattereDatoFraUTCTilGMT,
 } from '../../../utils';
 import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderPLSSoknadKvittering';
 import { ICountry } from '../../../components/country-select/CountrySelect';
@@ -157,9 +158,9 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                        {`${periodToFormattedString(
-                            response.mottattDato.substr(0, 10)
-                        )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
+                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+                            response.mottattDato
+                        )}`}
                     </p>
                     {visTrukkedePerioder && (
                         <p>

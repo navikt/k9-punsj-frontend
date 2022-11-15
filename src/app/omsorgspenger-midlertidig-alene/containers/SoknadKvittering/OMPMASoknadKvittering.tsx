@@ -11,6 +11,7 @@ import Kopier from 'app/components/kopier/Kopier';
 import LabelValue from 'app/components/skjema/LabelValue';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
 import {
+    formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
@@ -58,9 +59,9 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                        {`${periodToFormattedString(
-                            response.mottattDato.substr(0, 10)
-                        )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
+                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+                            response.mottattDato
+                        )}`}
                     </p>
                 </div>
             )}
