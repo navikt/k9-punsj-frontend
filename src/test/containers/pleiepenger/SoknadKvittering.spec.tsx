@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'ts-jest/utils';
-import {SoknadKvittering} from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { SoknadKvittering } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 
@@ -204,7 +204,6 @@ describe('SoknadKvittering', () => {
     });
 
     it('Viser opplysninger om mottatt dato', () => {
-        console.log(soknadKvitteringFull.text())
         expect(soknadKvitteringFull.text().includes('skjema.opplysningeromsoknad')).toBe(true);
         expect(soknadKvitteringFull.text().includes('skjema.mottakelsesdato:')).toBe(true);
         expect(soknadKvitteringFull.text().includes('12.10.2020')).toBe(true);
