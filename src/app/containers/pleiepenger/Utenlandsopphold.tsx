@@ -68,7 +68,6 @@ export interface IUtenlandsoppholdProps {
 const jaValue = 'ja';
 export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> = (props: IUtenlandsoppholdProps) => {
     const {
-        periods,
         medSlettKnapp,
         textLeggTil,
         textFjern,
@@ -83,6 +82,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         onAdd,
         onRemove,
         panelClassName,
+        periods = [],
     } = props;
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
     const [visInnlagtPerioder, setVisInnlagtPerioder] = useState(

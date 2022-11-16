@@ -7,7 +7,10 @@ interface IUtregningArbeidstidProps {
     normalArbeidstid?: string;
 }
 
-const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeidstidProps): JSX.Element | null => {
+const UtregningArbeidstidDesimaler = ({
+    arbeidstid,
+    normalArbeidstid,
+}: IUtregningArbeidstidProps): JSX.Element | null => {
     const intl = useIntl();
     const convert = (tid: string) => Number(tid.replace(',', '.'));
     const regnUt = (tid: string, tidTilDeling: string) => (convert(tid) / convert(tidTilDeling)) * 100;
@@ -36,4 +39,4 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeids
     );
 };
 
-export default UtregningArbeidstid;
+export default UtregningArbeidstidDesimaler;

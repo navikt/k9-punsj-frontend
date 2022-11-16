@@ -45,7 +45,7 @@ import { Arbeidstaker } from '../../models/types/Arbeidstaker';
 import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { ArbeidstidPeriodeMedTimer, IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
+import { IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
 import {
     IPSBSoknad,
     IUtenlandsOpphold,
@@ -62,7 +62,6 @@ import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
-import { pfTimerMinutter } from './pfTimerMinutter';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
@@ -72,6 +71,8 @@ import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import Feilmelding from '../../components/Feilmelding';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
+import { set } from 'lodash';
 import { Utenlandsopphold } from './Utenlandsopphold';
 
 export interface IPunchFormComponentProps {
@@ -204,11 +205,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
     };
 
-    private initialPeriodeMedTimer = new ArbeidstidPeriodeMedTimer({
-        periode: { fom: '', tom: '' },
-        faktiskArbeidTimerPerDag: '',
-    });
-
     private initialTillegsinfo = () => {
         const periode = this.getSoknadsperiode()[0];
         return new Tilleggsinformasjon({
@@ -219,23 +215,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private initialArbeidstaker = () =>
         new Arbeidstaker({
             arbeidstidInfo: {
-                perioder: this.getSoknadsperiode().map((periode) => ({
-                    periode,
-                    faktiskArbeidTimerPerDag: '',
-                    jobberNormaltTimerPerDag: '',
-                })),
+                perioder: [],
             },
             organisasjonsnummer: '',
             norskIdent: null,
-        });
-
-    private initialArbeidstidInfo = () =>
-        new ArbeidstidInfo({
-            perioder: this.getSoknadsperiode().map((periode) => ({
-                periode,
-                faktiskArbeidTimerPerDag: '',
-                jobberNormaltTimerPerDag: '',
-            })),
         });
 
     private initialFrilanser = new FrilanserOpptjening({
@@ -277,6 +260,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
+                iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
@@ -289,7 +273,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         const soknad = new PSBSoknad(this.state.soknad);
         const { signert } = signaturState;
-        const eksisterendePerioder = punchFormState.perioder;
+        const eksisterendePerioder = punchFormState.perioder || [];
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -320,7 +304,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const beredskapperioder = () => {
             return (
                 <PeriodeinfoPaneler
-                    intl={intl}
                     periods={soknad.beredskap}
                     panelid={(i) => `beredskapspanel_${i}`}
                     initialPeriodeinfo={this.initialTillegsinfo()}
@@ -343,7 +326,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const nattevaakperioder = () => {
             return (
                 <PeriodeinfoPaneler
-                    intl={intl}
                     periods={soknad.nattevaak}
                     panelid={(i) => `nattevaakspanel_${i}`}
                     initialPeriodeinfo={this.initialTillegsinfo()}
@@ -536,6 +518,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     getUhaandterteFeil={this.getUhaandterteFeil}
                     handleFrilanserChange={this.handleFrilanserChange}
                     updateVirksomhetstyper={this.updateVirksomhetstyper}
+                    eksisterendePerioder={eksisterendePerioder}
                 />
                 <EkspanderbartpanelBase
                     apen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
@@ -578,47 +561,33 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
                         value={'skjema.omsorgstilbud.checkboks'}
                         onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
-                        checked={!!soknad.tilsynsordning.perioder.length}
+                        checked={this.state.iTilsynsordning}
                     />
-                    {!!soknad.tilsynsordning.perioder.length && (
-                        <PeriodeinfoPaneler
-                            intl={intl}
-                            periods={
-                                soknad.tilsynsordning.perioder.length
-                                    ? soknad.tilsynsordning.perioder
-                                    : [this.initialPeriodeTimerMinutter()]
-                            }
-                            component={pfTimerMinutter()}
-                            panelid={(i) => `tilsynsordningpanel_${i}`}
-                            initialPeriodeinfo={this.initialPeriodeTimerMinutter()}
-                            editSoknad={(perioder) =>
-                                this.updateSoknad({
-                                    tilsynsordning: {
-                                        ...this.state.soknad.tilsynsordning,
-                                        perioder,
-                                    },
-                                })
-                            }
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState(
-                                    {
-                                        tilsynsordning: {
-                                            ...this.state.soknad.tilsynsordning,
-                                            perioder,
-                                        },
-                                    },
-                                    showStatus
-                                )
-                            }
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            panelClassName="tilsynsordningpanel"
-                            getErrorMessage={this.getErrorMessage}
-                            getUhaandterteFeil={this.getUhaandterteFeil}
-                            feilkodeprefiks={'ytelse.tilsynsordning'}
-                            kanHaFlere={true}
-                            medSlettKnapp={false}
-                        />
+                    {this.state.iTilsynsordning && (
+                        <>
+                            <VerticalSpacer twentyPx />
+                            <div className="listepanel">
+                                <TilsynKalender
+                                    nyeSoknadsperioder={soknad.soeknadsperiode}
+                                    eksisterendeSoknadsperioder={eksisterendePerioder}
+                                    updateSoknad={(perioder) => {
+                                        console.log(perioder);
+                                        this.updateSoknad({
+                                            tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                        });
+                                    }}
+                                    updateSoknadState={(perioder) =>
+                                        this.updateSoknadState(
+                                            {
+                                                tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                            },
+                                            true
+                                        )
+                                    }
+                                    perioderMedTimer={soknad.tilsynsordning.perioder}
+                                />
+                            </div>
+                        </>
                     )}
                 </EkspanderbartpanelBase>
                 <EkspanderbartpanelBase
@@ -668,7 +637,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />
                     {!!soknad.bosteder.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.bosteder}
                             component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
@@ -943,7 +911,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         this.updateSoknadState({
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                                frilanserArbeidstidInfo: new ArbeidstidInfo({}),
                             },
                             opptjeningAktivitet: {
                                 ...this.state.soknad.opptjeningAktivitet,
@@ -988,7 +956,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             },
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo(),
+                                selvstendigNæringsdrivendeArbeidstidInfo: new ArbeidstidInfo({}),
                             },
                         });
                     }
@@ -1097,7 +1065,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.updateSoknadState({
                 arbeidstid: {
                     ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                    frilanserArbeidstidInfo: new ArbeidstidInfo({}),
                 },
                 opptjeningAktivitet: {
                     ...this.state.soknad.opptjeningAktivitet,
@@ -1209,13 +1177,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.setState({
             iTilsynsordning: checked,
         });
-
-        if (
-            !!checked &&
-            (!this.state.soknad.tilsynsordning || this.state.soknad.tilsynsordning?.perioder?.length === 0)
-        ) {
-            this.addOmsorgstilbud();
-        }
 
         if (!checked) {
             this.updateSoknadState({ tilsynsordning: undefined }, true);

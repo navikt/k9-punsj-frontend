@@ -26,6 +26,7 @@ export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]
 };
 
 export const nummerPrefiks = (tekst: string, number: number) => `${number}. ${tekst}`;
+export const verdiOgTekstHvisVerdi = (verdi: any, tekst: string) => (verdi ? `${verdi} ${tekst}` : '');
 export const capitalize = (tekst: string) => (tekst ? tekst[0].toUpperCase() + tekst.substring(1) : tekst);
 export const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();

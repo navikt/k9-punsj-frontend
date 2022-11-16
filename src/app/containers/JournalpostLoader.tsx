@@ -125,7 +125,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
 const mapStateToProps = ({ felles, fordelingState }: RootStateType): IJournaPostStateProps => ({
     journalpost: felles.journalpost,
-    journalpostRequestError: felles.journalpostRequestError,
     isJournalpostLoading: felles.isJournalpostLoading,
     forbidden: felles.journalpostForbidden,
     conflict: felles.journalpostConflict,

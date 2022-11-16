@@ -6,7 +6,7 @@ import {
     UpdateListeinfoInSoknadState,
 } from 'app/containers/pleiepenger/Listepaneler';
 import * as React from 'react';
-import { IntlShape } from 'react-intl';
+import { IntlShape, useIntl } from 'react-intl';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
@@ -35,7 +35,6 @@ export type PeriodeinfoComponent<T> = (
 ) => React.ReactElement;
 
 export interface IPeriodeinfopanelerProps {
-    intl: IntlShape;
     periods: IPeriodeinfo[]; // Liste over periodisert informasjon
     component?: PeriodeinfoComponent<IPeriodeinfoExtension>; // Skal returnere et React-element for en gitt periode i lista
     panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
@@ -82,7 +81,9 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         panelClassName,
     } = props;
 
-    const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
+    const { component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
+
+    const intl = useIntl();
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (
         index: number,

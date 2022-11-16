@@ -5,12 +5,12 @@ import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 import { IPeriode } from '../../models/types/Periode';
-import DateInput from '../skjema/DateInput';
+import DateInput, { DateInputProps } from '../skjema/DateInput';
 import './periodInput.less';
 
-export interface IPeriodInputProps {
-    periode: IPeriode;
+export interface IPeriodInputProps extends Partial<Omit<DateInputProps, 'onChange' | 'onBlur'>> {
     intl: IntlShape;
+    periode: IPeriode;
     onChange: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
     errorMessage?: React.ReactNode | boolean;
@@ -31,8 +31,8 @@ export interface IPeriodInputProps {
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
     const {
-        periode,
         intl,
+        periode,
         onChange,
         disabled,
         initialValues,
@@ -46,6 +46,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         errorMessageTom,
         onBlur,
         fomInputRef,
+        limitations,
     } = props;
 
     const renderDato = (property: string) => {
@@ -60,6 +61,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
             <Container>
                 <Row noGutters>
                     <DateInput
+                        className="periodInput__fom-container"
                         value={renderDato('fom')}
                         onChange={(selectedDate) => {
                             onChange({ fom: selectedDate, tom: periode?.tom || '' });
@@ -72,6 +74,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         inputRef={fomInputRef}
+                        limitations={limitations}
                     />
                     <div className="periodInput__tom-container">
                         <DateInput
@@ -85,6 +88,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                             id={inputIdTom}
                             disabled={disabled || disabledTom}
                             errorMessage={errorMessageTom}
+                            limitations={limitations}
                             label={intlHelper(intl, 'skjema.perioder.tom')}
                         />
                     </div>
