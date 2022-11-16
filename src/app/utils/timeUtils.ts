@@ -1,12 +1,15 @@
-import { TimeFormat } from 'app/models/enums';
-import { Ukedag, UkedagNumber } from 'app/models/types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
+import 'dayjs/locale/nb';
 import { IntlShape } from 'react-intl';
+import { capitalize } from 'lodash';
+import { TimeFormat } from '../models/enums';
+import { Ukedag, UkedagNumber } from '../models/types';
+import DateRange from '../models/types/DateRange';
 import { IPeriode } from '../models/types/Periode';
 import intlHelper from './intlUtils';
 
@@ -15,6 +18,7 @@ dayjs.extend(duration);
 dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
+dayjs.locale('nb');
 
 export const initializeDate = (date?: string | Date | null, format?: string | string[]): dayjs.Dayjs => {
     if (date) {
@@ -119,3 +123,113 @@ export const formattereTidspunktFraUTCTilGMT = (dato: string): string => {
     });
     return datoTilGMT.substr(0, 5);
 };
+
+export const isDateInDates = (date: Date, dates?: Date[]): boolean => {
+    if (!dates) {
+        return false;
+    }
+    return dates.some((d) => dayjs(date).isSame(d, 'day'));
+};
+
+export const isDateWeekDay = (date: Date): boolean => dayjs(date).isoWeekday() <= 5;
+
+export const getDatesInDateRange = (dateRange: DateRange, onlyWeekDays = false): Date[] => {
+    const dates: Date[] = [];
+    let current = dayjs(dateRange.fom);
+    do {
+        const date = current.toDate();
+        if (onlyWeekDays === false || isDateWeekDay(date)) {
+            dates.push(date);
+        }
+        current = current.add(1, 'day');
+    } while (current.isSameOrBefore(dateRange.tom, 'day'));
+    return dates;
+};
+
+export const countDatesInDateRange = (dateRange: DateRange) => getDatesInDateRange(dateRange).length;
+export const removeDatesFromDateRange = (dateRange: DateRange, listOfDatesToRemove: Date[]) => {
+    const datesInDateRange = getDatesInDateRange(dateRange);
+    return datesInDateRange.filter(
+        (date) => !listOfDatesToRemove.some((dateToRemove) => dayjs(date).isSame(dateToRemove, 'day'))
+    );
+};
+
+export const findDateIntervalsFromDates = (dates: Date[]) => {
+    const reducer = (accumulator: Date[][], currentDate: Date) => {
+        let dateToAdd;
+        const indexOfArrayToUpdate = accumulator.findIndex((dateArray: Date[]) =>
+            dateArray.some((date: Date) => {
+                const isSameDay = dayjs(date).add(1, 'day').isSame(dayjs(currentDate), 'day');
+                if (isSameDay) {
+                    dateToAdd = currentDate;
+                }
+                return isSameDay;
+            })
+        );
+        if (indexOfArrayToUpdate > -1 && dateToAdd) {
+            const originalArray = accumulator[indexOfArrayToUpdate];
+            const mutableAccumulator = accumulator;
+            mutableAccumulator[indexOfArrayToUpdate] = [...originalArray, dateToAdd];
+            return mutableAccumulator;
+        }
+
+        return [...accumulator, [currentDate]];
+    };
+
+    return dates.reduce(reducer, []);
+};
+
+export const getFirstWeekDayInMonth = (month: Date): Date => {
+    const firstDay = dayjs(month).startOf('month');
+    if (firstDay.isoWeekday() > 5) {
+        return firstDay.add(8 - firstDay.isoWeekday(), 'days').toDate();
+    }
+    return firstDay.toDate();
+};
+
+export const getLastWeekdayOnOrBeforeDate = (date: Date): Date => {
+    const isoWeekDay = dayjs(date).isoWeekday();
+    return isoWeekDay <= 5 ? date : dayjs(date).startOf('isoWeek').add(4, 'days').toDate();
+};
+
+export const getLastWeekDayInMonth = (month: Date): Date =>
+    getLastWeekdayOnOrBeforeDate(dayjs(month).endOf('month').toDate());
+
+/**
+ * Returns a DateRange for the month which date is a part of.
+ * @param date
+ * @param onlyWeekDays Exclude saturday and sunday from dateRange
+ * @returns DateRange
+ */
+export const getMonthDateRange = (date: Date, onlyWeekDays = false): DateRange => ({
+    fom: onlyWeekDays ? getFirstWeekDayInMonth(date) : dayjs(date).startOf('month').toDate(),
+    tom: onlyWeekDays ? getLastWeekDayInMonth(date) : dayjs(date).endOf('month').toDate(),
+});
+
+export const getDatesInMonth = (month: Date, onlyWeekDays = false): Date[] =>
+    getDatesInDateRange(getMonthDateRange(month, onlyWeekDays), onlyWeekDays);
+
+export const dateToISODate = (date: Date): string => dayjs(date).format('YYYY-MM-DD');
+
+/**
+ * Returns array of DateRange representing the months in @dateRange.
+ * @param dateRange
+ * @param returnFullMonths Set to return full months, not cap the months by @dateRange
+ * @returns array of DateRange
+ */
+export const getMonthsInDateRange = (dateRange: DateRange, returnFullMonths = false): DateRange[] => {
+    const months: DateRange[] = [];
+    let current = dayjs(dateRange.fom);
+    do {
+        const fom: Date = returnFullMonths ? current.startOf('month').toDate() : current.toDate();
+        const endOfMonth = dayjs(fom).endOf('month').toDate();
+        const tom =
+            dayjs(endOfMonth).isAfter(dateRange.tom, 'day') && returnFullMonths === false ? dateRange.tom : endOfMonth;
+
+        months.push({ fom, tom });
+        current = current.add(1, 'month').startOf('month');
+    } while (current.isSameOrBefore(dateRange.tom, 'day'));
+    return months;
+};
+
+export const getMonthAndYear = (date: Date) => `${capitalize(dayjs(date).format('MMMM'))} ${date.getFullYear()}`;

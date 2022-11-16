@@ -3,6 +3,7 @@
 
 import * as Sentry from '@sentry/react';
 import Modal from 'nav-frontend-modal';
+import { Modal as DsModal } from '@navikt/ds-react';
 import * as React from 'react';
 import { render } from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -107,6 +108,7 @@ export const App: React.FunctionComponent = () => {
 
 const root = document.getElementById('app');
 Modal.setAppElement('#app');
+DsModal?.setAppElement('#app');
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting

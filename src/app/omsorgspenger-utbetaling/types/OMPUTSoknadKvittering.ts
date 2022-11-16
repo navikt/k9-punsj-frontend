@@ -1,5 +1,9 @@
 import Kvittering from 'app/models/forms/soeknader/Kvittering';
-import { Fravaersperiode, FrilanserAktivitet, SelvstendigNaeringsdrivendeAktivitet } from 'app/models/types/KvitteringTyper';
+import {
+    Fravaersperiode,
+    FrilanserAktivitet,
+    SelvstendigNaeringsdrivendeAktivitet,
+} from 'app/models/types/KvitteringTyper';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
 export interface IOMPUTSoknadKvittering extends Kvittering {

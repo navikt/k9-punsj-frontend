@@ -1,4 +1,4 @@
-import {IOMPUTSoknad, OMPUTSoknad} from './OMPUTSoknad';
+import { IOMPUTSoknad, OMPUTSoknad } from './OMPUTSoknad';
 
 export interface IOMPUTSoknadSvar {
     søker?: string;

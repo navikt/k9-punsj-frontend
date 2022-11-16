@@ -1,6 +1,5 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
-import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
@@ -9,14 +8,14 @@ import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-fro
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import {Arbeidstaker, GetErrorMessage, IArbeidstaker, OrgOrPers} from 'app/models/types';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import { Arbeidstaker, GetErrorMessage, IArbeidstaker, OrgOrPers, IPeriode } from 'app/models/types';
 import ActionType from '../types/actionTypes';
-import './arbeidstakerComponent.less';
 import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
-import {ApiPath} from '../../apiConfig';
+import { ApiPath } from '../../apiConfig';
 import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
-import {arbeidstidInformasjon} from '../../containers/pleiepenger/ArbeidstidInfo';
-import {pfArbeidstider} from '../../containers/pleiepenger/pfArbeidstider';
+import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
+import './arbeidstakerComponent.less';
 
 interface ArbeidstakerComponentProps {
     søkerId: string;
@@ -30,6 +29,8 @@ interface ArbeidstakerComponentProps {
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
+    nyeSoknadsperioder: IPeriode[];
+    eksisterendeSoknadsperioder: IPeriode[];
 }
 
 const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
@@ -39,7 +40,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     updateListeinfoInSoknad,
     updateListeinfoInSoknadState,
     feilkodeprefiks,
-    getUhaandterteFeil,
+    nyeSoknadsperioder,
+    eksisterendeSoknadsperioder,
     getErrorMessage,
     intl,
     arbeidsgivere,
@@ -116,9 +118,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
-        <SkjemaGruppe
-            className="arbeidstaker-panel"
-        >
+        <SkjemaGruppe className="arbeidstaker-panel">
             <Container>
                 <Row noGutters>
                     <RadioPanelGruppe
@@ -273,39 +273,24 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     </div>
                 </Row>
                 {arbeidstidInformasjon(intl)}
-                <PeriodeinfoPaneler
-                    intl={intl}
-                    periods={arbeidstidInfo.perioder}
-                    panelid={(i) => `arbeidstakerpanel_${listeelementindex}_${i}`}
-                    initialPeriodeinfo={{
-                        faktiskArbeidTimerPerDag: '',
-                        periode: { fom: '', tom: '' },
-                    }}
-                    editSoknad={(periodeinfo) =>
+                <ArbeidstidKalender
+                    nyeSoknadsperioder={nyeSoknadsperioder}
+                    eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
+                    updateSoknad={(perioder) =>
                         updateListeinfoInSoknad({
                             arbeidstidInfo: {
-                                ...arbeidstaker.arbeidstidInfo,
-                                perioder: periodeinfo,
+                                perioder,
                             },
                         })
                     }
-                    editSoknadState={(periodeinfo) =>
+                    updateSoknadState={(perioder) =>
                         updateListeinfoInSoknadState({
                             arbeidstidInfo: {
-                                ...arbeidstaker.arbeidstidInfo,
-                                perioder: periodeinfo,
+                                perioder,
                             },
                         })
                     }
-                    component={pfArbeidstider()}
-                    minstEn
-                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-                    getErrorMessage={getErrorMessage}
-                    getUhaandterteFeil={getUhaandterteFeil}
-                    feilkodeprefiks={`${feilkodeprefiks}.arbeidstidInfo`}
-                    periodeFeilkode={feilkodeprefiks}
-                    kanHaFlere
-                    medSlettKnapp={false}
+                    arbeidstidInfo={arbeidstidInfo}
                 />
             </Container>
         </SkjemaGruppe>

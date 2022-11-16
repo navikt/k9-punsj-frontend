@@ -11,15 +11,17 @@ import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import { set } from 'lodash';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
-import Arbeidstakerperioder from './Arbeidstakerperioder';
-import { Arbeidstaker, ArbeidstidPeriodeMedTimer } from '../../models/types';
+import { Arbeidstaker, IPeriode } from '../../models/types';
 import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
 import { PeriodeinfoPaneler } from '../../containers/pleiepenger/PeriodeinfoPaneler';
 import { pfArbeidstider } from '../../containers/pleiepenger/pfArbeidstider';
 import { CountrySelect } from '../../components/country-select/CountrySelect';
+import Arbeidstakerperioder from './Arbeidstakerperioder';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -39,6 +41,7 @@ interface ArbeidsforholdPanelProps {
     handleArbeidsforholdChange: (af: Arbeidsforhold, checked: boolean) => void;
     getCheckedValueArbeid: (af: Arbeidsforhold) => boolean;
     soknad: IPLSSoknad;
+    eksisterendePerioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPLSSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPLSSoknad>, showStatus?: boolean) => void;
@@ -54,6 +57,7 @@ const ArbeidsforholdPanel = ({
     handleArbeidsforholdChange,
     getCheckedValueArbeid,
     soknad,
+    eksisterendePerioder,
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
@@ -64,10 +68,7 @@ const ArbeidsforholdPanel = ({
 }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
-    const initialPeriodeMedTimer = new ArbeidstidPeriodeMedTimer({
-        periode: { fom: '', tom: '' },
-        faktiskArbeidTimerPerDag: '',
-    });
+    const soeknadsperiode = soknad?.soeknadsperiode || [];
 
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
@@ -155,36 +156,18 @@ const ArbeidsforholdPanel = ({
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                     <>
                         {arbeidstidInformasjon(intl)}
-                        <PeriodeinfoPaneler
-                            intl={intl}
-                            periods={arbeid?.frilanserArbeidstidInfo?.perioder || []}
-                            panelid={(i) => `frilanserpanel_${i}`}
-                            initialPeriodeinfo={initialPeriodeMedTimer}
-                            editSoknad={(perioder) =>
-                                updateSoknad({
-                                    arbeidstid: { ...arbeid, frilanserArbeidstidInfo: { perioder } },
+                        <ArbeidstidKalender
+                            nyeSoknadsperioder={soeknadsperiode}
+                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            updateSoknad={(perioder) => {
+                                updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
+                            }}
+                            updateSoknadState={(perioder) =>
+                                updateSoknadState({
+                                    arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder),
                                 })
                             }
-                            editSoknadState={(perioder, showStatus) =>
-                                updateSoknadState(
-                                    {
-                                        arbeidstid: {
-                                            ...arbeid,
-                                            frilanserArbeidstidInfo: { perioder },
-                                        },
-                                    },
-                                    showStatus
-                                )
-                            }
-                            component={pfArbeidstider()}
-                            minstEn
-                            textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-                            kanHaFlere
-                            getErrorMessage={getErrorMessage}
-                            getUhaandterteFeil={getUhaandterteFeil}
-                            feilkodeprefiks="ytelse.arbeidstid.frilanserArbeidstidInfo"
-                            periodeFeilkode="ytelse.arbeidstid.frilanser"
-                            medSlettKnapp={false}
+                            arbeidstidInfo={arbeid?.frilanserArbeidstidInfo}
                         />
                     </>
                 )}
@@ -778,36 +761,20 @@ const ArbeidsforholdPanel = ({
                 )}
                 <VerticalSpacer eightPx />
                 {arbeidstidInformasjon(intl)}
-                <PeriodeinfoPaneler
-                    intl={intl}
-                    periods={arbeid?.selvstendigNæringsdrivendeArbeidstidInfo?.perioder || []}
-                    panelid={(i) => `snpanel_${i}`}
-                    initialPeriodeinfo={initialPeriodeMedTimer}
-                    editSoknad={(perioder) =>
+                <ArbeidstidKalender
+                    nyeSoknadsperioder={soeknadsperiode}
+                    eksisterendeSoknadsperioder={eksisterendePerioder}
+                    updateSoknad={(perioder) => {
                         updateSoknad({
-                            arbeidstid: { ...arbeid, selvstendigNæringsdrivendeArbeidstidInfo: { perioder } },
+                            arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
+                        });
+                    }}
+                    updateSoknadState={(perioder) =>
+                        updateSoknadState({
+                            arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
                         })
                     }
-                    editSoknadState={(perioder, showStatus) =>
-                        updateSoknadState(
-                            {
-                                arbeidstid: {
-                                    ...arbeid,
-                                    selvstendigNæringsdrivendeArbeidstidInfo: { perioder },
-                                },
-                            },
-                            showStatus
-                        )
-                    }
-                    component={pfArbeidstider()}
-                    getErrorMessage={getErrorMessage}
-                    getUhaandterteFeil={getUhaandterteFeil}
-                    feilkodeprefiks="ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo"
-                    periodeFeilkode="ytelse.arbeidstid.selvstendigNæringsdrivende"
-                    minstEn
-                    textFjern="skjema.arbeid.arbeidstaker.fjernperiode"
-                    kanHaFlere
-                    medSlettKnapp={false}
+                    arbeidstidInfo={arbeid?.selvstendigNæringsdrivendeArbeidstidInfo}
                 />
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>
@@ -835,6 +802,7 @@ const ArbeidsforholdPanel = ({
             {!!soknad.arbeidstid?.arbeidstakerList?.length && (
                 <Arbeidstakerperioder
                     soknad={soknad}
+                    eksisterendeSoknadsperioder={eksisterendePerioder}
                     initialArbeidstaker={initialArbeidstaker}
                     updateSoknad={updateSoknad}
                     updateSoknadState={updateSoknadState}

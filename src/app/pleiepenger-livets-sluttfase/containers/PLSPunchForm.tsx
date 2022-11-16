@@ -192,11 +192,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     private initialArbeidstaker = () =>
         new Arbeidstaker({
             arbeidstidInfo: {
-                perioder: this.getSoknadsperiode().map((periode) => ({
-                    periode,
-                    faktiskArbeidTimerPerDag: '',
-                    jobberNormaltTimerPerDag: '',
-                })),
+                perioder: [],
             },
             organisasjonsnummer: '',
             norskIdent: null,
@@ -324,7 +320,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
         const soknad = new PLSSoknad(this.state.soknad);
         const { signert } = signaturState;
-        const eksisterendePerioder = punchFormState.perioder;
+        const eksisterendePerioder = punchFormState.perioder || [];
 
         if (punchFormState.isComplete) {
             setHash(this.props.getPunchPath(PunchStep.COMPLETED));
@@ -509,6 +505,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     handleArbeidsforholdChange={this.handleArbeidsforholdChange}
                     getCheckedValueArbeid={this.getCheckedValueArbeid}
                     soknad={soknad}
+                    eksisterendePerioder={eksisterendePerioder}
                     initialArbeidstaker={this.initialArbeidstaker()}
                     updateSoknad={this.updateSoknad}
                     updateSoknadState={this.updateSoknadState}
@@ -813,7 +810,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         this.updateSoknadState({
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                                frilanserArbeidstidInfo: new ArbeidstidInfo({}),
                             },
                             opptjeningAktivitet: {
                                 ...this.state.soknad.opptjeningAktivitet,
@@ -858,7 +855,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             },
                             arbeidstid: {
                                 ...this.state.soknad.arbeidstid,
-                                selvstendigNæringsdrivendeArbeidstidInfo: this.initialArbeidstidInfo(),
+                                selvstendigNæringsdrivendeArbeidstidInfo: new ArbeidstidInfo({}),
                             },
                         });
                     }
@@ -948,7 +945,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.updateSoknadState({
                 arbeidstid: {
                     ...this.state.soknad.arbeidstid,
-                    frilanserArbeidstidInfo: this.initialArbeidstidInfo(),
+                    frilanserArbeidstidInfo: new ArbeidstidInfo({}),
                 },
                 opptjeningAktivitet: {
                     ...this.state.soknad.opptjeningAktivitet,

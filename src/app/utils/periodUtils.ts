@@ -1,5 +1,13 @@
-import { Periode } from '../models/types/Periode';
-import { initializeDate } from './timeUtils';
+import { Periodeinfo } from 'app/models/types';
+import dayjs from 'dayjs';
+import { IArbeidstidPeriodeMedTimer, ITimerOgMinutter, Periode } from '../models/types/Periode';
+import { formats } from './formatUtils';
+import {
+    countDatesInDateRange,
+    findDateIntervalsFromDates,
+    initializeDate,
+    removeDatesFromDateRange,
+} from './timeUtils';
 
 /* eslint-disable import/prefer-default-export */
 const sortPeriodsByFomDate = (period1: Periode, period2: Periode): number => {
@@ -102,3 +110,31 @@ export const slåSammenSammenhengendePerioder = (periods: Periode[]): Periode[] 
     });
     return combinedPeriods;
 };
+
+export const removeDatesFromPeriods = (
+    periods: Periodeinfo<IArbeidstidPeriodeMedTimer | ITimerOgMinutter>[],
+    datesToBeRemoved: Date[]
+) =>
+    periods
+        .map((periodeMedTimer) => {
+            const periode = new Periode(periodeMedTimer?.periode || {});
+            const dateRange = periode.tilDateRange();
+            if (countDatesInDateRange(dateRange) > 1) {
+                const filteredDates = removeDatesFromDateRange(dateRange, datesToBeRemoved);
+                const dateIntervals = findDateIntervalsFromDates(filteredDates);
+
+                const nyePerioder = dateIntervals.map((dateArray) => ({
+                    fom: dayjs(dateArray[0]).format(formats.YYYYMMDD),
+                    tom: dayjs(dateArray[dateArray.length - 1]).format(formats.YYYYMMDD),
+                }));
+                const perioderMedArbeidstid = nyePerioder.map((nyPeriode) => ({
+                    ...periodeMedTimer,
+                    periode: nyPeriode,
+                }));
+
+                return perioderMedArbeidstid;
+            }
+            return datesToBeRemoved.some((date) => periode.includesDate(date)) ? false : periodeMedTimer;
+        })
+        .filter(Boolean)
+        .flat();

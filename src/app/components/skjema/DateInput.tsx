@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { Datepicker } from 'nav-datovelger';
+import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
 import { Feilmelding } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
@@ -8,7 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
 
-export interface DateInputProps {
+export interface DateInputProps extends DatepickerProps {
     value: string;
     onChange: (value: string) => void;
     id?: string;
@@ -32,6 +33,7 @@ const DateInput: React.FC<DateInputProps> = ({
     label,
     className,
     inputRef,
+    limitations,
 }) => {
     const datepickerId = id || uuidv4();
     const [isInvalidDate, setIsInvalidDate] = useState(false);
@@ -58,6 +60,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 showYearSelector
                 disabled={disabled}
                 inputProps={{ inputRef }}
+                limitations={limitations}
             />
             {error && <Feilmelding>{error}</Feilmelding>}
         </div>

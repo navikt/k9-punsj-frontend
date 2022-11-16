@@ -30,30 +30,31 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     perioder,
     lessClassForAdjustment,
 }) => (
-        <div>
+    <div>
+        <div
+            className={classNames(
+                'visningAvPerioderSoknadKvitteringContainer',
+                typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
+            )}
+        >
+            {tittel.map((t) => (
+                <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>
+            ))}
+        </div>
+        {Object.keys(perioder).map((periode) => (
             <div
+                key={periode}
                 className={classNames(
                     'visningAvPerioderSoknadKvitteringContainer',
                     typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
                 )}
             >
-                {tittel.map((t) => <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>)}
-            </div>
-            {Object.keys(perioder).map((periode) => (
-                    <div
-                        key={uuidv4()}
-                        className={classNames(
-                            'visningAvPerioderSoknadKvitteringContainer',
-                            typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
-                        )}
-                    >
-                        <p>{periodToFormattedString(periode)}</p>
+                <p>{periodToFormattedString(periode)}</p>
 
-                        {properties &&
-                            properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
-                    </div>
-                ))}
-        </div>
-    );
+                {properties && properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
+            </div>
+        ))}
+    </div>
+);
 
 export default VisningAvPerioderSoknadKvittering;

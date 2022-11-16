@@ -3,6 +3,7 @@ import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
+import { IPunchPageDispatchProps, IPunchPageQueryProps } from 'app/containers/pleiepenger/PunchPage';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
@@ -25,10 +26,6 @@ export interface IPunchPageStateProps {
     forbidden: boolean | undefined;
 }
 
-export interface IPunchPageQueryProps {
-    dok?: string | null;
-}
-
 export interface IPunchPageComponentProps {
     journalpostid?: string;
     soknad?: Partial<IPSBSoknad>;
@@ -43,6 +40,7 @@ type IPunchPageProps = WrappedComponentProps &
     RouteComponentProps &
     IPunchPageComponentProps &
     IPunchPageStateProps &
+    IPunchPageDispatchProps &
     IPunchPageQueryProps;
 
 export const SplitViewComponent: React.FC<IPunchPageProps> = (props) => {
@@ -120,9 +118,8 @@ const mapStateToProps = (state: RootStateType) => ({
     forbidden: state.felles.journalpostForbidden,
 });
 
-const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => {
-    const dok = useQuery().get('dok');
-    return <SplitViewComponent {...props} dok={dok} />;
-};
+const SplitViewComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (props: IPunchPageProps) => (
+    <SplitViewComponent {...props} />
+);
 
 export const SplitView = withRouter(injectIntl(connect(mapStateToProps)(SplitViewComponentWithQuery)));

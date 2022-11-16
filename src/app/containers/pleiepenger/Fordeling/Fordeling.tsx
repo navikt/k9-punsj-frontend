@@ -676,8 +676,6 @@ const mapStateToProps = (state: RootStateType) => ({
     opprettIGosysState: state.opprettIGosys,
     fellesState: state.felles,
     dedupkey: state.felles.dedupKey,
-    fordelingSettPåVentState: state.fordelingSettPåVentState,
-    fordelingFerdigstillState: state.fordelingFerdigstillJournalpostState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

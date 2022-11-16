@@ -4,6 +4,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 import { Periodeinfo } from './Periodeinfo';
 import { initializeDate, datetime } from '../../utils/timeUtils';
+import DateRange from './DateRange';
 
 export interface IPeriode {
     fom?: string | null;
@@ -75,7 +76,7 @@ export class Periode implements Required<IPeriode> {
         return periodFom.isBefore(dateInQuestion);
     }
 
-    includesDate(dateString: string) {
+    includesDate(dateString: string | Date) {
         const dateInQuestion = initializeDate(dateString);
         const fomDayjs = initializeDate(this.fom);
         const tomDayjs = initializeDate(this.tom);
@@ -83,6 +84,13 @@ export class Periode implements Required<IPeriode> {
             (dateInQuestion.isSame(fomDayjs) || dateInQuestion.isAfter(fomDayjs)) &&
             (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
         );
+    }
+
+    tilDateRange(): DateRange {
+        return {
+            fom: new Date(this.fom),
+            tom: new Date(this.tom),
+        };
     }
 }
 
@@ -96,6 +104,10 @@ export interface IArbeidstidPeriodeMedTimer {
     periode?: IPeriode;
     faktiskArbeidTimerPerDag?: string;
     jobberNormaltTimerPerDag?: string;
+    faktiskArbeidMinutterPerDag?: string;
+    jobberNormaltMinutterPerDag?: string;
+    jobberNormaltPerDag?: ITimerOgMinutterString;
+    faktiskArbeidPerDag?: ITimerOgMinutterString;
 }
 
 export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidstidPeriodeMedTimer>> {
@@ -103,12 +115,30 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
     faktiskArbeidTimerPerDag: string;
 
+    faktiskArbeidMinutterPerDag: string;
+
     jobberNormaltTimerPerDag: string;
+
+    jobberNormaltMinutterPerDag: string;
+
+    jobberNormaltPerDag: ITimerOgMinutterString;
+
+    faktiskArbeidPerDag: ITimerOgMinutterString;
 
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
         this.periode = new Periode(pmf.periode || {});
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
+        this.faktiskArbeidMinutterPerDag = pmf.faktiskArbeidMinutterPerDag || '';
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
+        this.jobberNormaltMinutterPerDag = pmf.jobberNormaltMinutterPerDag || '';
+        this.jobberNormaltPerDag = pmf.jobberNormaltPerDag || {
+            timer: '0',
+            minutter: '0',
+        };
+        this.faktiskArbeidPerDag = pmf.faktiskArbeidPerDag || {
+            timer: '0',
+            minutter: '0',
+        };
     }
 
     fomTekstKort(intl: IntlShape) {
@@ -139,25 +169,29 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
     }
 }
 
-export interface IPeriodeMedTimerMinutter {
+export interface ITimerOgMinutter {
     timer?: number;
     minutter?: number;
 }
+export interface ITimerOgMinutterString {
+    timer?: string;
+    minutter?: string;
+}
 
-export class PeriodeMedTimerMinutter implements Required<Periodeinfo<IPeriodeMedTimerMinutter>> {
+export class PeriodeMedTimerMinutter implements Required<Periodeinfo<ITimerOgMinutter>> {
     periode: Periode;
 
     timer: number;
 
     minutter: number;
 
-    constructor(pmf: Periodeinfo<IPeriodeMedTimerMinutter>) {
+    constructor(pmf: Periodeinfo<ITimerOgMinutter>) {
         this.periode = new Periode(pmf.periode || {});
         this.timer = pmf.timer || 0;
         this.minutter = pmf.minutter || 0;
     }
 
-    values(): Required<Periodeinfo<IPeriodeMedTimerMinutter>> {
+    values(): Required<Periodeinfo<ITimerOgMinutter>> {
         return {
             periode: this.periode.values(),
             timer: this.timer,
