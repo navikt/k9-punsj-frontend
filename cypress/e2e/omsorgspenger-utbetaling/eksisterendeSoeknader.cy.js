@@ -65,6 +65,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             const { worker } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.nySoeknad);
         });
+        cy.contains(/start ny registrering/i)
         cy.findByRole('button', { name: /start ny registrering/i }).click();
 
         cy.url().should(

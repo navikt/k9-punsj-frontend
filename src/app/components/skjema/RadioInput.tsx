@@ -7,7 +7,7 @@ import './radioInput.less';
 interface IRadioInputProps {
     legend: React.ReactNode;
     name: string;
-    options: { label: string; value: string }[];
+    optionValues: { label: string; value: string }[];
     retning?: 'vertikal' | 'horisontal';
     styling?: 'medPanel' | 'utenPanel';
     disabled?: boolean;
@@ -15,7 +15,7 @@ interface IRadioInputProps {
 
 const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
     legend,
-    options,
+    optionValues,
     name,
     retning = 'horisontal',
     styling = 'utenPanel',
@@ -33,7 +33,7 @@ const RadioInput: React.FunctionComponent<IRadioInputProps> = ({
                     'radioinput--vertikal': retning === 'vertikal',
                 })}
             >
-                {options.map((option) => (
+                {optionValues.map((option) => (
                     <RadioComponent
                         label={option.label}
                         key={option.value}

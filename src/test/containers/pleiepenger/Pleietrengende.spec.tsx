@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { shallow } from 'enzyme';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import intlHelper from '../../../app/utils/intlUtils';

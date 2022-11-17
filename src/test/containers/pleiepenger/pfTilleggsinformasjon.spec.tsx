@@ -6,7 +6,7 @@ import { pfTilleggsinformasjon } from 'app/containers/pleiepenger/pfTilleggsinfo
 import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import { createIntl, IntlShape } from 'react-intl';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { GetErrorMessage } from 'app/models/types';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';

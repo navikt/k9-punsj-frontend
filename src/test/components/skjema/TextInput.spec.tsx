@@ -5,7 +5,7 @@ import TextInput from '../../../app/components/skjema/TextInput';
 import { TestSkjema } from './testskjema';
 
 describe('TextInput', () => {
-    test('oppdaterer felt ved inntasting', () => {
+    test('oppdaterer felt ved inntasting', async () => {
         const { getByLabelText } = render(
             <TestSkjema
                 initialValues={{
@@ -21,7 +21,7 @@ describe('TextInput', () => {
         expect(inputfelt.getAttribute('value')).toEqual('');
 
         const fnrValue = '12312312312';
-        userEvent.type(inputfelt, fnrValue);
+        await userEvent.type(inputfelt, fnrValue);
         expect(inputfelt.getAttribute('value')).toEqual(fnrValue);
     });
 });

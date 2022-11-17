@@ -8,13 +8,13 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
     formattereLandTilNavn,
 } from '../../../../utils';
-import { KvitteringSelvstendigNaeringsdrivendePeriode } from '../../../../models/types/PSBSoknadKvittering';
+import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../../models/types/PSBSoknadKvittering';
 import { ICountry } from '../../../../components/country-select/CountrySelect';
 import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
 
 interface IOwnProps {
     intl: any;
-    perioder: KvitteringSelvstendigNaeringsdrivendePeriode[];
+    perioder: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
     countryList: ICountry[];
 }
 

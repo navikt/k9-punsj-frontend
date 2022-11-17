@@ -193,3 +193,8 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         />
     );
 };
+
+PeriodeinfoPaneler.defaultProps = {
+    // eslint-disable-next-line react/default-props-match-prop-types
+    periods: [],
+};

@@ -34,7 +34,9 @@ describe('Eksisterende søknader pleiepenger', () => {
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
-        cy.findByRole('button', { name: /start ny registrering/i }).click();
+        cy.contains(/start ny registrering/i)
+            .should('be.visible')
+            .click();
         cy.url().should(
             'eq',
             'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
