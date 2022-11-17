@@ -9,12 +9,12 @@ const { Default, MedArbeidstidperiode } = composeStories(stories) as {
     [key: string]: Story<Partial<typeof ArbeidstidKalender>>;
 };
 describe('ArbeidstidKalender', () => {
-    test('oppretter arbeidstidperioder for hver søknadsperiode som finnes', () => {
+    test('oppretter arbeidstidperioder for hver søknadsperiode som finnes', async () => {
         // Arrange
         render(<Default />);
 
         // Act
-        userEvent.click(screen.getByText(/registrer arbeidstid for en lengre periode/i));
+        await userEvent.click(screen.getByText(/registrer arbeidstid for en lengre periode/i));
 
         // Assert
         expect(
@@ -25,12 +25,12 @@ describe('ArbeidstidKalender', () => {
         expect(screen.getAllByText(/normal arbeidstid/i)).toHaveLength(2);
     });
 
-    test('oppretter ikke arbeidstidperioder fra søknadsperioder hvis det finnes arbeidstidperioder fra før av', () => {
+    test('oppretter ikke arbeidstidperioder fra søknadsperioder hvis det finnes arbeidstidperioder fra før av', async () => {
         // Arrange
         render(<MedArbeidstidperiode />);
 
         // Act
-        userEvent.click(screen.getByText(/registrer arbeidstid for en lengre periode/i));
+        await userEvent.click(screen.getByText(/registrer arbeidstid for en lengre periode/i));
 
         // Assert
         expect(
@@ -44,17 +44,11 @@ describe('ArbeidstidKalender', () => {
     test('Viser hele arbeidstidperioden i kalenderkomponenten', async () => {
         render(<MedArbeidstidperiode />);
 
-        userEvent.click(
+        await userEvent.click(
             screen.getByRole('button', {
                 name: /september 2022 5 dager registrert/i,
             })
         );
-
-        expect(
-            screen.getAllByRole('button', {
-                name: /8 t 0 min/i,
-                exact: false,
-            })
-        ).toHaveLength(5);
+        expect(screen.getAllByText(/8 t 0 min/i)).toHaveLength(5);
     });
 });
