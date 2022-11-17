@@ -183,7 +183,7 @@
         "less": "^4.1.2",
         "less-loader": "^11.1.0",
         "lint-staged": "^13.0.3",
-        "msw": "^0.47.4",
+        "msw": "^0.48.3",
         "nav-frontend-alertstriper-style": "^3.0.1",
         "nav-frontend-chevron-style": "^1.0.4",
         "nav-frontend-ekspanderbartpanel-style": "^2.0.1",
