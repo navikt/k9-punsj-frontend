@@ -69,6 +69,11 @@ queryClient.setDefaultOptions({
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
+    React.useEffect(() => {
+        Modal.setAppElement('#app');
+        DsModal?.setAppElement('#app');
+    }, []);
+
     return (
         <Sentry.ErrorBoundary>
             <Provider store={store}>
@@ -108,8 +113,6 @@ export const App: React.FunctionComponent = () => {
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
-Modal.setAppElement('#app');
-DsModal?.setAppElement('#app');
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting
