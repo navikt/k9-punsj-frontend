@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Form, useFormikContext } from 'formik';
-import { Nesteknapp, Tilbakeknapp } from 'nav-frontend-ikonknapper';
+import { Back, Next } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { JaNei } from '../../../models/enums';
-import TextInput from '../../../components/skjema/TextInput';
-import { setHash } from '../../../utils';
+import { Form, useFormikContext } from 'formik';
 import Knapper from '../../../components/knapp/Knapper';
 import RadioInput from '../../../components/skjema/RadioInput';
+import TextInput from '../../../components/skjema/TextInput';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import { JaNei } from '../../../models/enums';
 import { ISignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
+import { setHash } from '../../../utils';
 
 interface IOverføringIdentSjekk {
     journalpostensRegistrertePersonident?: string;
@@ -73,13 +73,13 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
             )}
             <VerticalSpacer thirtyTwoPx />
             <Knapper>
-                <Tilbakeknapp htmlType="button" onClick={() => setHash('/')}>
+                <Button variant="tertiary" icon={<Back aria-hidden />} type="button" onClick={() => setHash('/')}>
                     <FormattedMessage id="ident.knapp.forrigesteg" />
-                </Tilbakeknapp>
+                </Button>
                 {erSignert && (
-                    <Nesteknapp htmlType="submit">
+                    <Button variant="tertiary" icon={<Next aria-hidden />} type="submit" iconPosition="right">
                         <FormattedMessage id="ident.knapp.nestesteg" />
-                    </Nesteknapp>
+                    </Button>
                 )}
                 {signert === JaNei.NEI && (
                     <Button variant="secondary" onClick={() => undefined}>

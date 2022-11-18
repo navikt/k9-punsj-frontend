@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl';
 
 import { FieldArray, Form } from 'formik';
 
+import { Back, Close } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { Tilbakeknapp, Xknapp } from 'nav-frontend-ikonknapper';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import FlexRow from '../../../components/flexgrid/FlexRow';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
@@ -132,11 +132,14 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                                         <TextInput feltnavn={`barn[${index}].norskIdent`} bredde="M" />
                                         <OverføringDateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
                                         {values.barn.length > 1 && (
-                                            <Xknapp
-                                                htmlType="button"
+                                            <Button
+                                                icon={<Close aria-hidden />}
+                                                type="button"
                                                 onClick={() => remove(index)}
                                                 className="alignMedInputFelt"
-                                            />
+                                            >
+                                                <span className="sr-only">Lukk</span>
+                                            </Button>
                                         )}
                                     </FlexRow>
                                 </SkjemaGruppe>
@@ -171,9 +174,15 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 )}
                 <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
                 <Knapper>
-                    <Tilbakeknapp htmlType="button" onClick={gåTilForrigeSteg} disabled={disabled}>
+                    <Button
+                        variant="tertiary"
+                        icon={<Back aria-hidden />}
+                        type="button"
+                        onClick={gåTilForrigeSteg}
+                        disabled={disabled}
+                    >
                         <FormattedMessage id="ident.knapp.forrigesteg" />
-                    </Tilbakeknapp>
+                    </Button>
                     <Button
                         variant="secondary"
                         type="submit"
