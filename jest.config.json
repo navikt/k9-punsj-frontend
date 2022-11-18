@@ -3,13 +3,16 @@
     "moduleNameMapper": {
         "\\.(css|jpg|png|svg|less)$": "<rootDir>/node_modules/jest-css-modules",
         "nav-(.*)-style": "<rootDir>/node_modules/jest-css-modules",
+        "@navikt/ds-css": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/userContent": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/systemsStyles": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/header": "<rootDir>/node_modules/jest-css-modules",
-        "^app/(.*)": "<rootDir>/src/app/$1"
+        "^app/(.*)": "<rootDir>/src/app/$1",
+        "uuid": "<rootDir>/node_modules/uuid"
     },
+    "setupFiles": ["<rootDir>/testSetup.js"],
     "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
-    "testEnvironment": "jsdom",
+    "testEnvironment": "jest-environment-jsdom",
     "testRegex": "(<rootDir>/test/.*|(\\.|/)(spec))\\.tsx?$",
     "transform": {
         "^.+\\.[t|j]sx?$": "babel-jest"

@@ -18,7 +18,6 @@ import './pleietrengende.less';
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
     fellesState: IFellesState;
-    dedupkey: string;
 }
 
 export interface IPleietrengendeDispatchProps {

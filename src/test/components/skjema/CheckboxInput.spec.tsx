@@ -5,7 +5,7 @@ import { TestSkjema } from './testskjema';
 import CheckboxInput from '../../../app/components/skjema/CheckboxInput';
 
 describe('<CheckboxInput>', () => {
-    test('rendrer checkbox', () => {
+    test('rendrer checkbox', async () => {
         render(
             <TestSkjema
                 initialValues={{
@@ -22,7 +22,7 @@ describe('<CheckboxInput>', () => {
         const checkbox = screen.getByLabelText(/blond/i);
         expect(checkbox).not.toBeChecked();
 
-        userEvent.click(checkbox);
+        await userEvent.click(checkbox);
 
         expect(checkbox).toBeChecked();
     });

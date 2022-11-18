@@ -54,7 +54,7 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/korrigering-av-inntektsmelding');
     });
 
-    it('Midlertidig alene - kan navigere til eksisterende søknader', () => {
+    it('Midlertidig alene - kan navigere til eksisterende søknader', async () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();

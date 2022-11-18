@@ -1,5 +1,10 @@
 import { IntlShape } from 'react-intl';
 
+export const formats = {
+    DDMMYYYY: 'DD-MM-YYYY',
+    YYYYMMDD: 'YYYY-MM-DD',
+};
+
 export function numberToString(intl: IntlShape, num: number, numberOfFractionDigits?: number) {
     return intl.formatNumber(num, {
         style: 'decimal',

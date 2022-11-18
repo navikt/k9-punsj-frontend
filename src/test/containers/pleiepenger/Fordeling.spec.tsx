@@ -11,7 +11,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState';
 import { IIdentState } from '../../../app/models/types/IdentState';
 

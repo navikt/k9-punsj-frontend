@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { createIntl, IntlShape } from 'react-intl';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');

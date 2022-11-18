@@ -31,10 +31,15 @@
         }
     ],
     "rules": {
+        "react/no-unused-prop-types": "warn",
+        "react/forbid-prop-types": 0,
         "@typescript-eslint/no-use-before-define": ["error"],
         "@typescript-eslint/no-shadow": "error",
-        "import/no-extraneous-dependencies": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "import/no-extraneous-dependencies": [
+            "warn",
+            { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"] }
+        ],
         "import/extensions": [
             "error",
             "ignorePackages",

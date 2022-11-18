@@ -36,17 +36,14 @@ export interface IEksisterendeSoknaderDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
     findEksisterendeSoknader: typeof findEksisterendeSoknader;
-    undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
-    createSoknad: typeof createSoknad;
     resetSoknadidAction: typeof resetSoknadidAction;
     resetPunchAction: typeof resetPunchAction;
 }
 
 export interface IEksisterendeSoknaderComponentProps {
-    journalpostid: string;
     ident1: string;
     ident2: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -91,9 +88,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     }
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
-        return (
-            <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>
-        );
+        return <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>;
     }
 
     if (
@@ -109,9 +104,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     }
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return (
-            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
-        );
+        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
     }
 
     const technicalError =

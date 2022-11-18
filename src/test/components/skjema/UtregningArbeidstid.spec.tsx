@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import UtregningArbeidstid from 'app/containers/pleiepenger/UtregningArbeidstid';
+import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstidDesimaler';
 import { renderWithIntl } from '../../testUtils';
 
 jest.mock('app/utils/envUtils');

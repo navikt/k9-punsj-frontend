@@ -54,6 +54,25 @@ export interface IPSBSoknadKvitteringArbeidstid {
     };
 }
 
+export interface IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode {
+    perioder: {
+        [key: string]: {
+            virksomhetstyper: string[];
+            regnskapsførerNavn: string;
+            regnskapsførerTlf: string;
+            erVarigEndring: boolean;
+            endringDato: number[];
+            endringBegrunnelse: string;
+            bruttoInntekt: number;
+            erNyoppstartet: boolean;
+            registrertIUtlandet: boolean;
+            landkode: string | null;
+        };
+    };
+    organisasjonsnummer: string;
+    virksomhetNavn: string;
+}
+
 export interface IPSBSoknadKvitteringJournalpost {
     inneholderInformasjonSomIkkeKanPunsjes?: boolean;
     inneholderMedisinskeOpplysninger?: boolean;

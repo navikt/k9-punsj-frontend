@@ -9,6 +9,8 @@ import { get, post } from 'app/utils';
 import { Form, Formik } from 'formik';
 import { Knapp } from 'nav-frontend-knapper';
 import { Feilmelding } from 'nav-frontend-typografi';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';

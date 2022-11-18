@@ -20,6 +20,39 @@ describe('Pleiepenger punsj', () => {
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
     });
 
+    it('kan fylle inn lengre perioder i arbeidstid', () => {
+        cy.get('.soknadsperiodecontainer').within(() => {
+            cy.findByLabelText(/Fra og med/i)
+                .should('exist')
+                .type('08.11.2021');
+            cy.findByLabelText(/Til og med/i)
+                .should('exist')
+                .type('11.11.2021');
+            cy.findByRole('button', { name: /Legg til ny periode/i }).click();
+            cy.findAllByLabelText(/Fra og med/i)
+                .eq(1)
+                .should('exist')
+                .type('20.11.2021');
+            cy.findAllByLabelText(/Til og med/i)
+                .eq(1)
+                .should('exist')
+                .type('25.11.2021');
+        });
+
+        cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+        cy.findByText(/Arbeidstaker/i).click();
+        cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
+
+        cy.get('.ReactModalPortal').within(() => {
+            cy.findAllByLabelText('Timer').eq(0).clear().type(7);
+            cy.findAllByLabelText('Timer').eq(1).clear().type(2);
+            cy.findAllByLabelText('Timer').eq(3).clear().type(7);
+            cy.findByRole('button', { name: /Lagre/i }).click();
+        });
+
+        cy.findByText(/10 dager registrert/i).should('exist');
+    });
+
     // sjekke at journalpostnummer fra flere saker vises
     // sjekk av validering og feilmeldinger på alle felter
     // sjekk at man ikke får sende inn dersom man har valideringsfeil

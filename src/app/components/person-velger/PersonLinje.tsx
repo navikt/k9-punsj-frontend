@@ -46,9 +46,14 @@ const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
                         <Label size="small">Navn</Label>
                         <BodyShort size="small">{field.value.navn}</BodyShort>
                     </div>
-
-                    <Button className="slett" variant="tertiary" size="small" onClick={slettHandler}>
-                        <Delete />
+                    <Button
+                        className="slett"
+                        variant="tertiary"
+                        size="small"
+                        iconPosition="left"
+                        icon={<Delete />}
+                        onClick={slettHandler}
+                    >
                         Slett
                     </Button>
                 </div>

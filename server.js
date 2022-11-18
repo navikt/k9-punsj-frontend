@@ -9,6 +9,8 @@ const envVariables = require('./envVariables');
 const server = express();
 server.use(
     helmet({
+        crossOriginResourcePolicy: false,
+        crossOriginEmbedderPolicy: false,
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],

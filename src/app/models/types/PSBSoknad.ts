@@ -2,13 +2,7 @@
 import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 import { Arbeidstaker, IArbeidstaker } from './Arbeidstaker';
 import { FrilanserOpptjening, IFrilanserOpptjening } from './FrilanserOpptjening';
-import {
-    IArbeidstidPeriodeMedTimer,
-    IPeriode,
-    IPeriodeMedTimerMinutter,
-    Periode,
-    PeriodeMedTimerMinutter,
-} from './Periode';
+import { IArbeidstidPeriodeMedTimer, IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 import { ArbeidstidInfo } from './ArbeidstidInfo';
 
@@ -21,7 +15,7 @@ export interface IPSBSoknad {
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    soeknadsperiode?: IPeriode[] | null;
+    soeknadsperiode: IPeriode[];
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
     beredskap?: Periodeinfo<ITilleggsinformasjon>[];
@@ -124,7 +118,7 @@ export class SoknadsInfo implements ISoknadsInfo {
 }
 
 export interface ITilsynsordning {
-    perioder?: Periodeinfo<IPeriodeMedTimerMinutter>[];
+    perioder?: Periodeinfo<ITimerOgMinutter>[];
 }
 
 export class Tilsynsordning implements Required<ITilsynsordning> {
@@ -134,7 +128,7 @@ export class Tilsynsordning implements Required<ITilsynsordning> {
         this.perioder = (t.perioder || []).map((p) => new PeriodeMedTimerMinutter(p));
     }
 
-    values(): Required<IPeriodeMedTimerMinutter>[] {
+    values(): Required<ITimerOgMinutter>[] {
         return this.perioder.map((p) => p.values());
     }
 }
@@ -266,7 +260,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     barn: Barn;
 
-    soeknadsperiode: Periode[] | null;
+    soeknadsperiode: Periode[];
 
     opptjeningAktivitet: OpptjeningAktivitet;
 

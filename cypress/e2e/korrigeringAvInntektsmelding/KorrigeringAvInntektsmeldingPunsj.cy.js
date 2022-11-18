@@ -26,7 +26,7 @@ describe('Korrigering av inntektsmelding punsj', () => {
             .type('01112021');
         cy.findByLabelText(/Til og med/i)
             .should('exist')
-            .type('02112021');
+            .type('02112021').blur();
 
         cy.sendInnSoknad();
 

@@ -20,6 +20,7 @@ import {
 } from '../../../models/types/PSBSoknadKvittering';
 import {
     formatereTekstMedTimerOgMinutter,
+    formattereDatoFraUTCTilGMT,
     formattereDatoIArray,
     formattereTidspunktFraUTCTilGMT,
     getLocaleFromSessionStorage,
@@ -235,9 +236,9 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                        {`${periodToFormattedString(
-                            response.mottattDato.substr(0, 10)
-                        )}  ${formattereTidspunktFraUTCTilGMT(response.mottattDato)}`}
+                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+                            response.mottattDato
+                        )}`}
                     </p>
                     {visTrukkedePerioder && (
                         <p>
