@@ -154,7 +154,7 @@
         "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
         "autoprefixer": "^10.4.2",
         "babel-jest": "^29.2.1",
-        "babel-loader": "^8.2.3",
+        "babel-loader": "^9.1.0",
         "case-sensitive-paths-webpack-plugin": "^2.3.0",
         "circular-dependency-plugin": "^5.2.2",
         "copy-webpack-plugin": "^11.0.0",
