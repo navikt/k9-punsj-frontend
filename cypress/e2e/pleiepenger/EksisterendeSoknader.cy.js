@@ -66,7 +66,7 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.findByText('08.11.2021 - 11.11.2021').should('exist');
         });
 
-        cy.findByRole('button', { name: /fortsett/i }).click();
+        cy.findByRole('button', { name: /fortsett/i }).click({ force: true });
         cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
         cy.findByRole('button', { name: /fortsett/i }).click();
 
