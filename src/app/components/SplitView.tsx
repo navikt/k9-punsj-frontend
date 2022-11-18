@@ -11,8 +11,7 @@ import { IJournalpost, IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import { Alert, Button , Panel } from '@navikt/ds-react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import React from 'react';
@@ -72,9 +71,9 @@ export const SplitViewComponent: React.FC<IPunchPageProps> = (props) => {
     const content = () => {
         if (forbidden) {
             return (
-                <AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
                     <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
+                </Alert>
             );
         }
 

@@ -1,16 +1,15 @@
+import { BodyShort, Loader } from '@navikt/ds-react';
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
 import { checkAuth } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import { Normaltekst } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import '@navikt/ft-plattform-komponenter/dist/style.css';
 import AppContainer from '../../containers/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
@@ -58,7 +57,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
             <Container>
                 <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
                     <Col xs="auto">
-                        <NavFrontendSpinner />
+                        <Loader size="large" />
                     </Col>
                 </Row>
             </Container>
@@ -67,7 +66,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
 
     return (
         <IntlProvider {...{ locale }}>
-            <Normaltekst tag="div" className="fit-window-height">
+            <BodyShort size="small" as="div" className="fit-window-height">
                 <div className={isDev ? 'headercontainer' : ''}>
                     <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
                         <UserPanel name={authState.userName!} />
@@ -76,7 +75,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
                 <AppContainer>
                     <Router>{children}</Router>
                 </AppContainer>
-            </Normaltekst>
+            </BodyShort>
         </IntlProvider>
     );
 };

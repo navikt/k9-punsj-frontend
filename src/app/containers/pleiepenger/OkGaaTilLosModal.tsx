@@ -1,4 +1,4 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
@@ -34,15 +34,15 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
                     <FormattedMessage id="modal.okgaatillos.tillos" />
                 </Row>
             </div>
-            <Hovedknapp
+            <Button
                 className="okknapp"
-                mini
+                size="small"
                 onClick={() => {
                     window.location.href = getEnvironmentVariable('K9_LOS_URL');
                 }}
             >
                 {intlHelper(intl, 'modal.okgaatillos.ok')}
-            </Hovedknapp>
+            </Button>
         </div>
     );
 };

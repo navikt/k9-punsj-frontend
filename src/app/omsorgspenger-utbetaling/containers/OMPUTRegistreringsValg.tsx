@@ -1,11 +1,10 @@
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Alert, Button , Loader, Button } from '@navikt/ds-react';
+
 import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useMutation, useQuery } from 'react-query';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { Loader } from '@navikt/ds-react';
 import { IIdentState } from '../../models/types/IdentState';
 import { setHash } from '../../utils';
 import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
@@ -45,7 +44,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     };
 
     if (opprettSoknadError instanceof Error) {
-        return <AlertStripeFeil>{opprettSoknadError.message}</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                {opprettSoknadError.message}
+            </Alert>
+        );
     }
 
     const kanStarteNyRegistrering = () => {
@@ -63,13 +66,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
             <EksisterendeOMPUTSoknader ident1={ident1} ident2={ident2} journalpostid={journalpostid} />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
+                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
-                </Knapp>
+                </Button>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={() => opprettSoknad()} className="knapp knapp2" mini>
+                    <Button onClick={() => opprettSoknad()} className="knapp knapp2" size="small">
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import OkGaaTilLosModal from 'app/containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from 'app/containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/containers/pleiepenger/SettPaaVentModal';
-import ModalWrapper from 'nav-frontend-modal';
+import { Modal, Button } from '@navikt/ds-react';
 import { settJournalpostPaaVent } from 'app/api/api';
 import { useMutation } from 'react-query';
 
@@ -31,45 +31,45 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
 
     if (visHovedmodal) {
         return (
-            <ModalWrapper
+            <Modal
                 key="settpaaventmodal"
                 className="settpaaventmodal"
-                onRequestClose={() => setVisHovedmodal(false)}
-                contentLabel="settpaaventmodal"
-                isOpen
+                onClose={() => setVisHovedmodal(false)}
+                aria-label="settpaaventmodal"
+                open
                 closeButton={false}
             >
                 <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => visModalFn(false)} />
-            </ModalWrapper>
+            </Modal>
         );
     }
     if (visSuccessModal) {
         return (
-            <ModalWrapper
+            <Modal
                 key="settpaaventokmodal"
-                onRequestClose={() => {
+                onClose={() => {
                     visModalFn(false);
                 }}
-                contentLabel="settpaaventokmodal"
+                aria-label="settpaaventokmodal"
                 closeButton={false}
-                isOpen
+                open
             >
                 <OkGaaTilLosModal melding="modal.settpaavent.til" />
-            </ModalWrapper>
+            </Modal>
         );
     }
 
     if (visErrorModal) {
         return (
-            <ModalWrapper
+            <Modal
                 key="settpaaventerrormodal"
-                onRequestClose={() => visModalFn(false)}
-                contentLabel="settpaaventokmodal"
+                onClose={() => visModalFn(false)}
+                aria-label="settpaaventokmodal"
                 closeButton={false}
-                isOpen
+                open
             >
                 <SettPaaVentErrorModal close={() => visModalFn(false)} />
-            </ModalWrapper>
+            </Modal>
         );
     }
 

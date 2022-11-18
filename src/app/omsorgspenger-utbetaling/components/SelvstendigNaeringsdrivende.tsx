@@ -1,5 +1,5 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Label, Panel } from '@navikt/ds-react';
+import { Button, Heading, Label, Panel, Button } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';

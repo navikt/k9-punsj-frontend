@@ -1,5 +1,5 @@
 import React from 'react';
-import { RadioGroup, RadioGroupProps } from '@navikt/ds-react';
+import { RadioGroup, RadioGroupProps, Button } from '@navikt/ds-react';
 import { useField } from 'formik';
 import RadioFormik from './RadioFormik';
 

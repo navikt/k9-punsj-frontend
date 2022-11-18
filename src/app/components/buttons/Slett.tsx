@@ -1,5 +1,5 @@
 import { Delete } from '@navikt/ds-icons';
-import { Button, ButtonProps } from '@navikt/ds-react';
+import { Button, ButtonProps, Button } from '@navikt/ds-react';
 import React from 'react';
 import './buttons.less';
 

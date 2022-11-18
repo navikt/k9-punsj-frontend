@@ -189,7 +189,7 @@ describe('JournalpostLoader', () => {
             />
         );
 
-        const Modal = journalpost.find('ModalWrapper');
+        const Modal = journalpost.find('Modal');
         expect(Modal).toHaveLength(1);
     });
 });

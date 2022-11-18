@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, SelectProps } from '@navikt/ds-react';
+import { Select, SelectProps, Button } from '@navikt/ds-react';
 import { useField } from 'formik';
 
 type Option = {

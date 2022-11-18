@@ -10,10 +10,8 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Alert, Button , Modal, Button , Loader } from '@navikt/ds-react';
+
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -96,7 +94,11 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
     }
 
     if (eksisterendeOMPMASoknaderState.eksisterendeSoknaderRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil i henting av mapper.
+            </Alert>
+        );
     }
 
     if (
@@ -104,16 +106,22 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         eksisterendeOMPMASoknaderState.isEksisterendeSoknaderLoading ||
         eksisterendeOMPMASoknaderState.isAwaitingSoknadCreation
     ) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (eksisterendeOMPMASoknaderState.createSoknadRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
+        );
     }
 
     const technicalError =
         eksisterendeOMPMASoknaderState.isSoknadCreated && !eksisterendeOMPMASoknaderState.soknadid ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
+            <Alert size="small" variant="error">
+                Teknisk feil.
+            </Alert>
         ) : null;
 
     const chooseSoknad = (soknad: IOMPMASoknad) => {
@@ -134,9 +142,14 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                 søknad.barn?.map((barn) => barn.norskIdent).join(', '),
                 Array.from(søknad.journalposter).join(', '),
 
-                <Knapp key={soknadId} mini onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
+                <Button
+                    variant="secondary"
+                    key={soknadId}
+                    size="small"
+                    onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
+                >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                </Knapp>,
+                </Button>,
             ];
             rows.push(
                 <tr key={soknadId}>
@@ -151,11 +164,11 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                 </tr>
             );
             modaler.push(
-                <ModalWrapper
+                <Modal
                     key={soknadId}
-                    onRequestClose={props.closeEksisterendeSoknadAction}
-                    contentLabel={soknadId}
-                    isOpen={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
+                    onClose={props.closeEksisterendeSoknadAction}
+                    aria-label={soknadId}
+                    open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                     closeButton={false}
                 >
                     <ErDuSikkerModal
@@ -164,7 +177,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
-                </ModalWrapper>
+                </Modal>
             );
         });
 
@@ -200,11 +213,11 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
     return (
         <>
             {technicalError}
-            <AlertStripeInfo>
+            <Alert size="small" variant="info">
                 {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
                     antallSokere: ident2 ? '2' : '1',
                 })}
-            </AlertStripeInfo>
+            </Alert>
         </>
     );
 };

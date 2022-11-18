@@ -7,9 +7,8 @@ import { useMutation, useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
 import { get } from 'lodash';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Alert, Button , Loader } from '@navikt/ds-react';
+
 
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
@@ -69,15 +68,19 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     };
 
     if (isLoading) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (error || !soeknadRespons) {
         return (
             <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}
+                </Alert>
                 <p>
-                    <Knapp onClick={handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
+                    <Button variant="secondary" onClick={handleStartButtonClick}>
+                        {intlHelper(intl, 'skjema.knapp.tilstart')}
+                    </Button>
                 </p>
             </>
         );

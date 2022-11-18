@@ -1,5 +1,5 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Button, Heading, Panel, Button } from '@navikt/ds-react';
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
 import { arbeidstakerInitialValue } from '../initialValues';

@@ -10,11 +10,7 @@ Modal.setAppElement(document.createElement('div'));
 describe('<InnsendingModal>', () => {
     test('Viser spinner når den laster', () => {
         const { getByRole } = renderWithIntl(
-            <InnsendingModal
-                innsendingsstatus={Innsendingsstatus.SenderInn}
-                vis
-                onRequestClose={() => undefined}
-            />
+            <InnsendingModal innsendingsstatus={Innsendingsstatus.SenderInn} vis onClose={() => undefined} />
         );
 
         const spinner = getByRole('status');

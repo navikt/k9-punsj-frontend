@@ -4,9 +4,8 @@ import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert, Button , Panel } from '@navikt/ds-react';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import Panel from 'nav-frontend-paneler';
 import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
@@ -826,7 +825,9 @@ const ArbeidsforholdPanel = ({
             />
             {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
                 <>
-                    <AlertStripeInfo className="sn-alertstripe">{intlHelper(intl, 'skjema.sn.info')}</AlertStripeInfo>
+                    <Alert size="small" variant="info" className="sn-alertstripe">
+                        {intlHelper(intl, 'skjema.sn.info')}
+                    </Alert>
                     <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
                 </>
             )}

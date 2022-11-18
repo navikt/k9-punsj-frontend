@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio, RadioProps } from '@navikt/ds-react';
+import { Radio, RadioProps, Button } from '@navikt/ds-react';
 import { useField } from 'formik';
 
 interface OwnProps extends RadioProps {

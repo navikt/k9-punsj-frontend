@@ -1,4 +1,4 @@
-import { TextField } from '@navikt/ds-react';
+import { TextField, Button } from '@navikt/ds-react';
 import { getValidationErrors, identifikator } from 'app/rules/yup';
 import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import { RootStateType } from 'app/state/RootState';

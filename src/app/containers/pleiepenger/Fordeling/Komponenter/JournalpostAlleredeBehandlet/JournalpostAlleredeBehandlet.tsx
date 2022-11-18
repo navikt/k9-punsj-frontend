@@ -1,8 +1,8 @@
 import { IJournalpost } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Alert, Button } from '@navikt/ds-react';
+
 import React from 'react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
@@ -44,12 +44,18 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
     if (journalpost?.norskIdent) {
         sokersIdent = journalpost?.norskIdent;
     } else {
-        return <AlertStripeAdvarsel>{intlHelper(intl, 'ident.usignert.feil.melding')}</AlertStripeAdvarsel>;
+        return (
+            <Alert size="small" variant="warning">
+                {intlHelper(intl, 'ident.usignert.feil.melding')}
+            </Alert>
+        );
     }
 
     return (
         <div className="journalpostAlleredeBehandlet__container">
-            <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
+            <Alert size="small" variant="warning">
+                {intlHelper(intl, 'fordeling.kanikkesendeinn')}
+            </Alert>
             <div>
                 <b>
                     <FormattedMessage id="journalpost.norskIdent" />
@@ -62,7 +68,8 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
             {!fellesState.kopierJournalpostSuccess && journalpost.kanKopieres && !erInntektsmeldingUtenKrav && (
-                <Knapp
+                <Button
+                    variant="secondary"
                     disabled={IdentRules.erUgyldigIdent(identState.ident2)}
                     onClick={() => {
                         if (!!sokersIdent && !!identState.ident2)
@@ -76,16 +83,16 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                     }}
                 >
                     <FormattedMessage id="fordeling.kopiereJournal" />
-                </Knapp>
+                </Button>
             )}
             {!!fellesState.kopierJournalpostSuccess && (
-                <Hovedknapp
+                <Button
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
                     }}
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}
-                </Hovedknapp>
+                </Button>
             )}
         </div>
     );

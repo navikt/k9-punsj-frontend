@@ -1,12 +1,11 @@
+import { Alert, Button, Loader } from '@navikt/ds-react';
+
 import React from 'react';
-import { connect, useSelector } from 'react-redux';
-import { Knapp } from 'nav-frontend-knapper';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { AlertStripeFeil, AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { connect, useSelector } from 'react-redux';
+import { IJournalpost } from '../../models/types';
 import { opprettGosysOppgave as opprettGosysOppgaveAction } from '../../state/actions/GosysOppgaveActions';
 import { RootStateType } from '../../state/RootState';
-import { IJournalpost } from '../../models/types';
 import intlHelper from '../../utils/intlUtils';
 
 export interface IOpprettOppgaveStateProps {
@@ -24,19 +23,15 @@ type OpprettGosysOppgaveKnappProps = Pick<IOpprettOppgaveProps, 'opprettGosysOpp
 const OpprettGosysOppgaveKnapp: React.FunctionComponent<OpprettGosysOppgaveKnappProps> = ({
     opprettGosysOppgave,
     journalpost,
-}) => 
+}) => (
     // TODO ta en runda på journalpost og optional så det ikke er !.
-     (
-        <Knapp
-            htmlType="button"
-            type="hoved"
-            onClick={() => opprettGosysOppgave(journalpost!.journalpostId, journalpost!.norskIdent!, '')}
-        >
-            <FormattedMessage id="opprettGosysOppgave" />
-        </Knapp>
-    )
-;
-
+    <Button
+        variant="secondary"
+        onClick={() => opprettGosysOppgave(journalpost!.journalpostId, journalpost!.norskIdent!, '')}
+    >
+        <FormattedMessage id="opprettGosysOppgave" />
+    </Button>
+);
 const OpprettGosysOppgaveComponent: React.FunctionComponent<IOpprettOppgaveProps> = (props: IOpprettOppgaveProps) => {
     const { intl, opprettGosysOppgave, journalpost } = props;
     const { gosysOppgaveOprettet, gosysOppgaveFeil, gosysOppgaveAwaiting } = useSelector((state: RootStateType) => {
@@ -49,15 +44,23 @@ const OpprettGosysOppgaveComponent: React.FunctionComponent<IOpprettOppgaveProps
     });
 
     if (gosysOppgaveAwaiting) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (gosysOppgaveFeil) {
-        return <AlertStripeFeil>{intlHelper(intl, 'gosysOppgave.feilet')}</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                {intlHelper(intl, 'gosysOppgave.feilet')}
+            </Alert>
+        );
     }
 
     if (gosysOppgaveOprettet) {
-        return <AlertStripeSuksess>{intlHelper(intl, 'gosysOppgave.opprettet')}</AlertStripeSuksess>;
+        return (
+            <Alert size="small" variant="success">
+                {intlHelper(intl, 'gosysOppgave.opprettet')}
+            </Alert>
+        );
     }
 
     return <OpprettGosysOppgaveKnapp opprettGosysOppgave={opprettGosysOppgave} journalpost={journalpost} />;

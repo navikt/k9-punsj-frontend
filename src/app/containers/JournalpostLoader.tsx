@@ -1,8 +1,6 @@
 import Fagsak from 'app/types/Fagsak';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+
+import { Alert, Loader, Modal } from '@navikt/ds-react';
 import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
@@ -66,7 +64,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
             <Container style={{ height: '100%' }}>
                 <Row className="justify-content-center align-items-center" style={{ height: '100%' }}>
                     <Col xs="auto">
-                        <NavFrontendSpinner />
+                        <Loader size="large" />
                     </Col>
                 </Row>
             </Container>
@@ -83,15 +81,15 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (lukkOppgaveDone) {
         return (
-            <ModalWrapper
+            <Modal
                 key="lukkoppgaveokmodal"
-                onRequestClose={() => lukkOppgaveReset()}
-                contentLabel="settpaaventokmodal"
+                onClose={() => lukkOppgaveReset()}
+                aria-label="settpaaventokmodal"
                 closeButton={false}
-                isOpen
+                open
             >
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </ModalWrapper>
+            </Modal>
         );
     }
 
@@ -114,9 +112,9 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (!journalpost.dokumenter.length) {
         return (
-            <AlertStripeFeil>
+            <Alert size="small" variant="error">
                 <FormattedMessage id="startPage.feil.ingendokumenter" />
-            </AlertStripeFeil>
+            </Alert>
         );
     }
 

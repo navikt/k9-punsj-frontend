@@ -1,4 +1,4 @@
-import { Knapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import intlHelper from '../../utils/intlUtils';
@@ -17,12 +17,12 @@ const FerdigstillJournalpostModal: React.FC<WrappedComponentProps & IFerdigstill
             <h2>{intlHelper(intl, 'skjema.knapp.ferdigstillJournalpost')}</h2>
             {children}
             <div className="knapper">
-                <Knapp onClick={() => submit()} mini>
+                <Button variant="secondary" onClick={() => submit()} size="small">
                     {intlHelper(intl, 'skjema.knapp.ferdigstillJournalpost')}
-                </Knapp>
-                <Knapp onClick={() => avbryt()} mini>
+                </Button>
+                <Button variant="secondary" onClick={() => avbryt()} size="small">
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
-                </Knapp>
+                </Button>
             </div>
         </div>
     );

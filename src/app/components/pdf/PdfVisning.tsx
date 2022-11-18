@@ -1,12 +1,11 @@
+import { Back, Next } from '@navikt/ds-icons';
+import { Button, Panel } from '@navikt/ds-react';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import classNames from 'classnames';
-import { HoyreChevron, VenstreChevron } from 'nav-frontend-chevron';
-import { Flatknapp } from 'nav-frontend-knapper';
-import Panel from 'nav-frontend-paneler';
+import { ToggleGruppe } from 'nav-frontend-toggle';
 import { Resizable } from 're-resizable';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ToggleGruppe } from 'nav-frontend-toggle';
-import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
@@ -114,17 +113,17 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                 )}
                 <iframe title="pdf" src={pdfUrl} />
                 <div className="knapperad">
-                    <Flatknapp onClick={togglePdf} className="knapp1">
+                    <Button variant="tertiary" onClick={togglePdf} className="knapp1">
                         <FormattedMessage id="dokument.skjul" />
-                        <HoyreChevron />
-                    </Flatknapp>
-                    <Flatknapp onClick={openPdfWindow} className="knapp2">
+                        <Next />
+                    </Button>
+                    <Button variant="tertiary" onClick={openPdfWindow} className="knapp2">
                         <FormattedMessage id="dokument.nyttvindu" />
-                    </Flatknapp>
+                    </Button>
                 </div>
-                <Flatknapp onClick={togglePdf} className="button_open">
-                    <VenstreChevron />
-                </Flatknapp>
+                <Button variant="tertiary" onClick={togglePdf} className="button_open">
+                    <Back />
+                </Button>
             </Panel>
         </Resizable>
     );

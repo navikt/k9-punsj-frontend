@@ -1,5 +1,5 @@
 import React from 'react';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import './formPanel.less';
 
 const FormPanel: React.FunctionComponent = ({ children }) => (

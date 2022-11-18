@@ -1,5 +1,5 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Button, Heading, Button } from '@navikt/ds-react';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';

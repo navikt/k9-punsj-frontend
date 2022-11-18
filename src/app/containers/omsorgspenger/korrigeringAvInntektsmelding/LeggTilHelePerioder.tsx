@@ -1,7 +1,6 @@
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import { Alert, Button , Panel } from '@navikt/ds-react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -13,28 +12,28 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
     const intl = useIntl();
     return (
         <EkspanderbartPanel
-                label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.checkbox')}
-                isPanelOpen={isPanelOpen}
-                togglePanel={togglePanel}
-            >
-                <Panel className="listepanel">
-                    <SkjemaGruppe
-                        legend={
-                            <h4 className="korrigering-legend">
-                                {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.legend')}
-                            </h4>
-                        }
-                        className="korrigering__skjemagruppe"
-                    >
-                        <AlertStripeInfo className="korrigering__infostripe">
-                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.info')}
-                        </AlertStripeInfo>
-                        <div className="soknadsperiodecontainer">
-                            <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav} />
-                        </div>
-                    </SkjemaGruppe>
-                </Panel>
-            </EkspanderbartPanel>
+            label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.checkbox')}
+            isPanelOpen={isPanelOpen}
+            togglePanel={togglePanel}
+        >
+            <Panel className="listepanel">
+                <SkjemaGruppe
+                    legend={
+                        <h4 className="korrigering-legend">
+                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.legend')}
+                        </h4>
+                    }
+                    className="korrigering__skjemagruppe"
+                >
+                    <Alert size="small" variant="info" className="korrigering__infostripe">
+                        {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.info')}
+                    </Alert>
+                    <div className="soknadsperiodecontainer">
+                        <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav} />
+                    </div>
+                </SkjemaGruppe>
+            </Panel>
+        </EkspanderbartPanel>
     );
 };
 

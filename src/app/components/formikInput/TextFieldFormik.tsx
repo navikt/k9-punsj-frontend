@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, TextFieldProps } from '@navikt/ds-react';
+import { TextField, TextFieldProps, Button } from '@navikt/ds-react';
 import { useField } from 'formik';
 
 export interface FormikTextFieldProps extends TextFieldProps {

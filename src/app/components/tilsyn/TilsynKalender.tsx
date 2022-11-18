@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Periode, Periodeinfo, IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter } from 'app/models/types';
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import dayjs from 'dayjs';
-import { Button, Modal } from '@navikt/ds-react';
+import { Button, Modal, Button } from '@navikt/ds-react';
 import { useIntl } from 'react-intl';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';

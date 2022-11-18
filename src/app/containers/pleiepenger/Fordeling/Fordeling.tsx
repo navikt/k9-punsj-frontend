@@ -1,4 +1,4 @@
-import { BodyShort, ErrorMessage, Loader, Select } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, Heading, HelpText, Loader, Modal, Select } from '@navikt/ds-react';
 import { Period } from '@navikt/k9-period-utils';
 import { finnFagsaker } from 'app/api/api';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
@@ -17,14 +17,8 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeAdvarsel, AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import { PopoverOrientering } from 'nav-frontend-popover';
+
 import { Checkbox } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -327,41 +321,41 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }, [identState.ident1, dokumenttype, gjelderPleiepengerEllerOmsorgspenger]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess && visGaaTilLos) {
         return (
-            <ModalWrapper
+            <Modal
                 key="opprettigosysokmodal"
-                onRequestClose={() => {
+                onClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
                 }}
-                contentLabel="settpaaventokmodal"
+                aria-label="settpaaventokmodal"
                 closeButton={false}
-                isOpen={!!opprettIGosysState.gosysOppgaveRequestSuccess}
+                open={!!opprettIGosysState.gosysOppgaveRequestSuccess}
             >
                 <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
-            </ModalWrapper>
+            </Modal>
         );
     }
 
     if (fordelingState.isAwaitingLukkOppgaveResponse) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (fordelingState.lukkOppgaveDone) {
         return (
-            <ModalWrapper
+            <Modal
                 key="lukkoppgaveokmodal"
-                onRequestClose={() => lukkOppgaveReset()}
-                contentLabel="settpaaventokmodal"
+                onClose={() => lukkOppgaveReset()}
+                aria-label="settpaaventokmodal"
                 closeButton={false}
-                isOpen={!!fordelingState.lukkOppgaveDone}
+                open={!!fordelingState.lukkOppgaveDone}
             >
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </ModalWrapper>
+            </Modal>
         );
     }
 
@@ -379,17 +373,21 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     {erInntektsmeldingUtenKrav && (
                         <>
                             <VerticalSpacer thirtyTwoPx />
-                            <Systemtittel>Inntektsmelding uten søknad</Systemtittel>
+                            <Heading level="1" size="medium">
+                                Inntektsmelding uten søknad
+                            </Heading>
                             <VerticalSpacer twentyPx />
                         </>
                     )}
                     <div className="fordeling-page">
                         {!!opprettIGosysState.gosysOppgaveRequestError && (
-                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.omfordeling.feil')}</AlertStripeFeil>
+                            <Alert size="small" variant="error">
+                                {intlHelper(intl, 'fordeling.omfordeling.feil')}
+                            </Alert>
                         )}
                         {erInntektsmeldingUtenKrav && (
                             <>
-                                <AlertStripeAdvarsel className="fordeling-alertstripeFeil">
+                                <Alert size="small" variant="warning" className="fordeling-alertstripeFeil">
                                     <ul className="punkliste">
                                         <li>
                                             <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.1" />
@@ -404,7 +402,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.infoboks.punkt.4" />
                                         </li>
                                     </ul>
-                                </AlertStripeAdvarsel>
+                                </Alert>
                                 <VerticalSpacer thirtyTwoPx />
                             </>
                         )}
@@ -524,13 +522,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
                             {gjelderPleiepengerEllerOmsorgspenger && !isFetchingFagsaker && !fordelingState.skalTilK9 && (
-                                <Knapp
-                                    mini
+                                <Button
+                                    variant="secondary"
+                                    size="small"
                                     onClick={() => handleVidereClick(dokumenttype)}
                                     disabled={disableVidereKnapp()}
                                 >
                                     {intlHelper(intl, 'fordeling.knapp.videre')}
-                                </Knapp>
+                                </Button>
                             )}
                         </div>
                         <VerticalSpacer sixteenPx />
@@ -550,18 +549,23 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         />
                         {fordelingState.skalTilK9 === false && (
                             <>
-                                <AlertStripeInfo className="infotrygd_info">
+                                <Alert size="small" variant="info" className="infotrygd_info">
                                     <FormattedMessage
                                         id="fordeling.infotrygd"
                                         values={{ identifikator: identState.ident2 ? `(${identState.ident2})` : '' }}
                                     />
-                                </AlertStripeInfo>
+                                </Alert>
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
                                     <div>
-                                        <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                                        <Alert
+                                            size="small"
+                                            variant="info"
+                                            className="fordeling-page__kanIkkeOppretteJPIGosys"
+                                        >
                                             <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
-                                        </AlertStripeInfo>
-                                        <Knapp
+                                        </Alert>
+                                        <Button
+                                            variant="secondary"
                                             onClick={() =>
                                                 lukkJournalpostOppgave(
                                                     journalpost?.journalpostId,
@@ -571,15 +575,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             }
                                         >
                                             <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                        </Knapp>
+                                        </Button>
                                     </div>
                                 )}
 
                                 {kanJournalforingsoppgaveOpprettesiGosys && (
                                     <>
                                         <GosysGjelderKategorier />
-                                        <Hovedknapp
-                                            mini
+                                        <Button
+                                            size="small"
                                             disabled={!fordelingState.valgtGosysKategori}
                                             onClick={() =>
                                                 omfordel(
@@ -590,7 +594,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             }
                                         >
                                             <FormattedMessage id="fordeling.sakstype.ANNET" />
-                                        </Hovedknapp>
+                                        </Button>
                                     </>
                                 )}
                             </>
@@ -598,13 +602,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         <VerticalSpacer sixteenPx />
                         {!!fordelingState.sjekkTilK9Error && (
-                            <AlertStripeFeil>{intlHelper(intl, 'fordeling.error')}</AlertStripeFeil>
+                            <Alert size="small" variant="error">
+                                {intlHelper(intl, 'fordeling.error')}
+                            </Alert>
                         )}
                         {!!fordelingState.sjekkTilK9JournalpostStottesIkke && (
                             <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">
-                                <AlertStripeFeil>
+                                <Alert size="small" variant="error">
                                     {intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}
-                                </AlertStripeFeil>
+                                </Alert>
                                 <VerticalSpacer sixteenPx />
                                 <div className="journalikkestottetkopi-checkboks">
                                     <Checkbox
@@ -614,13 +620,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         }}
                                         disabled={erInntektsmeldingUtenKrav}
                                     />
-                                    <Hjelpetekst
+                                    <HelpText
                                         className="journalikkestottetkopi-checkboks__hjelpetekst"
-                                        type={PopoverOrientering.Hoyre}
+                                        placement="right"
                                         tabIndex={-1}
                                     >
                                         {intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
-                                    </Hjelpetekst>
+                                    </HelpText>
                                 </div>
                                 <JournalPostKopiFelmeldinger
                                     skalVisesNårJournalpostSomIkkeStottesKopieres={
@@ -629,8 +635,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     fellesState={fellesState}
                                     intl={intl}
                                 />
-                                {!!fellesState.isAwaitingKopierJournalPostResponse && <NavFrontendSpinner />}
-                                <Knapp
+                                {!!fellesState.isAwaitingKopierJournalPostResponse && <Loader size="large" />}
+                                <Button
+                                    variant="secondary"
                                     onClick={() => {
                                         if (skalJournalpostSomIkkeStottesKopieres) {
                                             kopierJournalpostOgLukkOppgave();
@@ -644,17 +651,19 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     }}
                                 >
                                     <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                </Knapp>
+                                </Button>
                             </div>
                         )}
-                        {!!fordelingState.isAwaitingSjekkTilK9Response && <NavFrontendSpinner />}
+                        {!!fordelingState.isAwaitingSjekkTilK9Response && <Loader size="large" />}
                     </div>
                 </FormPanel>
             )}
             {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <JournalpostAlleredeBehandlet />}
             {!journalpost?.erSaksbehandler && (
                 <div>
-                    <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.ikkesaksbehandler')}</AlertStripeAdvarsel>
+                    <Alert size="small" variant="warning">
+                        {intlHelper(intl, 'fordeling.ikkesaksbehandler')}
+                    </Alert>
                 </div>
             )}
 

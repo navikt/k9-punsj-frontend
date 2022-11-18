@@ -1,30 +1,30 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 
-import * as Sentry from '@sentry/react';
-import Modal from 'nav-frontend-modal';
+import '@navikt/ds-css';
 import { Modal as DsModal } from '@navikt/ds-react';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
+import { composeWithDevTools } from '@redux-devtools/extension';
+import * as Sentry from '@sentry/react';
 import * as React from 'react';
 import { render } from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
-import { composeWithDevTools } from '@redux-devtools/extension';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { applyMiddleware, createStore } from 'redux';
+// eslint-disable-next-line camelcase
+import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
+import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
 import RedigeringRouter from './containers/redigering/RedigeringRouter';
 import SokIndex from './containers/sok/SokIndex';
 import { Locale } from './models/types';
+import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
 import './styles/globalStyles.less';
-import '@navikt/ft-plattform-komponenter/dist/style.css';
-import '@navikt/ds-css';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
-import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
-import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 
 const environment = window.location.hostname;
 
@@ -52,8 +52,8 @@ function prepare() {
 // @ts-ignore
 const store = window.Cypress
     ? // @ts-ignore
-      createStore(rootReducer, window.__initialState__, composeWithDevTools(applyMiddleware(logger, thunk)))
-    : createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)));
+      legacy_createStore(rootReducer, window.__initialState__, composeWithDevTools(applyMiddleware(logger, thunk)))
+    : legacy_createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)));
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
 
@@ -107,7 +107,6 @@ export const App: React.FunctionComponent = () => {
 };
 
 const root = document.getElementById('app');
-Modal.setAppElement('#app');
 DsModal?.setAppElement('#app');
 
 // venter med å rendre applikasjonen til MSW er klar

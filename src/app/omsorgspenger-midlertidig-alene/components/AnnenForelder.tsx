@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { Heading, Label, Select, Textarea, BodyShort } from '@navikt/ds-react';
+import { Heading, Label, Select, Textarea, BodyShort, Button , Panel } from '@navikt/ds-react';
 import set from 'lodash/set';
-import Panel from 'nav-frontend-paneler';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 import './annenForelder.less';

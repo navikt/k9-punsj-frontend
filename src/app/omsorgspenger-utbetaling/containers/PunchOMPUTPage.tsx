@@ -11,8 +11,7 @@ import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ApiPath } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import { Alert, Button , Panel } from '@navikt/ds-react';
 import { useParams } from 'react-router-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
@@ -71,9 +70,9 @@ const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) =>
     const content = () => {
         if (forbidden) {
             return (
-                <AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
                     <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
+                </Alert>
             );
         }
 

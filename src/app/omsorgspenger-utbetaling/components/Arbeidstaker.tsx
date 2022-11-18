@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Delete, AddCircle } from '@navikt/ds-icons';
 import { useQuery } from 'react-query';
-import { Button, Checkbox, Panel, Heading } from '@navikt/ds-react';
+import { Button, Checkbox, Panel, Heading, Button } from '@navikt/ds-react';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
 import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';

@@ -1,9 +1,8 @@
+import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Textarea } from 'nav-frontend-skjema';
-import { Element, Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
@@ -107,12 +106,12 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                     </CustomAlertstripeAdvarsel>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
-                    <AlertStripeInfo className="endringAvSøknadsperioder__alert">
+                    <Alert size="small" variant="info" className="endringAvSøknadsperioder__alert">
                         Du vil fjerne en periode i <b>slutten</b> av en eksisterende søknadsperiode. Vilkår for perioden
                         du fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder
                         enn den du fjerner.
                         {begrunnelsesfelt}
-                    </AlertStripeInfo>
+                    </Alert>
                 )}
             </>
         );
@@ -125,9 +124,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             tittel={intlHelper(intl, 'skjema.endringAvSøknadsperioder')}
             onClick={onClick}
         >
-            <Element>
+            <Label size="small">
                 Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
-            </Element>
+            </Label>
             <Periodepaneler
                 intl={intl}
                 periods={soknad.trekkKravPerioder || []}
@@ -146,9 +145,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             />
 
             {getAlertstriper()}
-            <Feilmelding className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+            <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
                 {begrunnelseForInnsendingFeilmelding()}
-            </Feilmelding>
+            </ErrorMessage>
         </EkspanderbartpanelBase>
     );
 };

@@ -1,21 +1,16 @@
 /* eslint-disable */
+import classNames from 'classnames';
+import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'formik';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import * as yup from 'yup';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import { ErrorSummary, Heading } from '@navikt/ds-react';
+import { Alert, Button, ErrorSummary, Heading, HelpText, Modal, Tag } from '@navikt/ds-react';
+
 import { CheckboksPanel } from 'nav-frontend-skjema';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { PopoverOrientering } from 'nav-frontend-popover';
+import { Loader } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
@@ -29,19 +24,18 @@ import {
 import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
+import Personvelger from 'app/components/person-velger/Personvelger';
 import VerticalSpacer from '../../components/VerticalSpacer';
-import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
-import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { RootStateType } from '../../state/RootState';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
-import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
-import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
-import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
-import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
+import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
+import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { RootStateType } from '../../state/RootState';
+import AnnenForelder from '../components/AnnenForelder';
+import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import {
     getOMPMASoknad,
     resetOMPMASoknadAction,
@@ -51,10 +45,11 @@ import {
     validerOMPMASoknad,
     validerOMPMASoknadResetAction,
 } from '../state/actions/OMPMAPunchFormActions';
-import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
+import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-import AnnenForelder from '../components/AnnenForelder';
-import Personvelger from 'app/components/person-velger/Personvelger';
+import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
+import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
+import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
 
 export interface IPunchOMPMAFormComponentProps {
     journalpostid: string;
@@ -187,12 +182,24 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         const className = 'statusetikett';
 
         if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
+            return (
+                <Tag variant="warning" {...{ className }}>
+                    Lagrer …
+                </Tag>
+            );
         }
         if (!!punchFormState.updateSoknadError) {
-            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
+            return (
+                <Tag variant="error" {...{ className }}>
+                    Lagring feilet
+                </Tag>
+            );
         }
-        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
+        return (
+            <Tag variant="success" {...{ className }}>
+                Lagret
+            </Tag>
+        );
     };
 
     const harFeilISkjema = (errors: FormikErrors<IOMPMASoknad>) =>
@@ -240,9 +247,9 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
+                            <HelpText className={'hjelpetext'} placement="top-end">
                                 {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
-                            </Hjelpetekst>
+                            </HelpText>
                         </>
                     )}
                 </Field>
@@ -260,9 +267,9 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
-                            <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
+                            <HelpText className={'hjelpetext'} placement="top-end">
                                 {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                            </Hjelpetekst>
+                            </HelpText>
                         </>
                     )}
                 </Field>
@@ -270,7 +277,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             <VerticalSpacer twentyPx={true} />
             {punchFormState.isAwaitingValidateResponse && (
                 <div className={classNames('loadingSpinner')}>
-                    <NavFrontendSpinner />
+                    <Loader size="large" />
                 </div>
             )}
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
@@ -289,7 +296,8 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             )}
             <div className={'submit-knapper'}>
                 <p className="sendknapp-wrapper">
-                    <Knapp
+                    <Button
+                        variant="secondary"
                         className={'send-knapp'}
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
@@ -299,35 +307,46 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
-                    </Knapp>
+                    </Button>
 
-                    <Knapp className={'vent-knapp'} onClick={() => setShowSettPaaVentModal(true)} disabled={false}>
+                    <Button
+                        variant="secondary"
+                        className={'vent-knapp'}
+                        onClick={() => setShowSettPaaVentModal(true)}
+                        disabled={false}
+                    >
                         {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                    </Knapp>
+                    </Button>
                 </p>
             </div>
             <VerticalSpacer sixteenPx={true} />
             {!!punchFormState.updateSoknadError && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                </Alert>
             )}
             {!!punchFormState.inputErrors?.length && (
-                <AlertStripeFeil className={'valideringstripefeil'}>
+                <Alert size="small" variant="error" className={'valideringstripefeil'}>
                     {intlHelper(intl, 'skjema.feil.validering')}
-                </AlertStripeFeil>
+                </Alert>
             )}
             {!!punchFormState.submitSoknadError && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_sendt')}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_sendt')}
+                </Alert>
             )}
             {!!punchFormState.submitSoknadConflict && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.konflikt')}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.konflikt')}
+                </Alert>
             )}
             {showSettPaaVentModal && (
-                <ModalWrapper
+                <Modal
                     key={'settpaaventmodal'}
                     className={'settpaaventmodal'}
-                    onRequestClose={() => setShowSettPaaVentModal(false)}
-                    contentLabel={'settpaaventmodal'}
-                    isOpen={showSettPaaVentModal}
+                    onClose={() => setShowSettPaaVentModal(false)}
+                    aria-label={'settpaaventmodal'}
+                    open={showSettPaaVentModal}
                     closeButton={false}
                 >
                     <div className="">
@@ -340,68 +359,69 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                             avbryt={() => setShowSettPaaVentModal(false)}
                         />
                     </div>
-                </ModalWrapper>
+                </Modal>
             )}
             {punchFormState.settPaaVentSuccess && (
-                <ModalWrapper
+                <Modal
                     key={'settpaaventokmodal'}
-                    onRequestClose={() => props.settPaaventResetAction()}
-                    contentLabel={'settpaaventokmodal'}
+                    onClose={() => props.settPaaventResetAction()}
+                    aria-label={'settpaaventokmodal'}
                     closeButton={false}
-                    isOpen={punchFormState.settPaaVentSuccess}
+                    open={punchFormState.settPaaVentSuccess}
                 >
                     <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
-                </ModalWrapper>
+                </Modal>
             )}
             {!!punchFormState.settPaaVentError && (
-                <ModalWrapper
+                <Modal
                     key={'settpaaventerrormodal'}
-                    onRequestClose={() => props.settPaaventResetAction()}
-                    contentLabel={'settpaaventokmodal'}
+                    onClose={() => props.settPaaventResetAction()}
+                    aria-label={'settpaaventokmodal'}
                     closeButton={false}
-                    isOpen={!!punchFormState.settPaaVentError}
+                    open={!!punchFormState.settPaaVentError}
                 >
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
-                </ModalWrapper>
+                </Modal>
             )}
             {props.punchFormState.isValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
-                <ModalWrapper
+                <Modal
                     key={'validertSoknadModal'}
                     className={'validertSoknadModal'}
-                    onRequestClose={() => props.validerSoknadReset()}
-                    contentLabel={'validertSoknadModal'}
+                    onClose={() => props.validerSoknadReset()}
+                    aria-label={'validertSoknadModal'}
                     closeButton={false}
-                    isOpen={!!props.punchFormState.isValid}
+                    open={!!props.punchFormState.isValid}
                 >
                     <div className={classNames('validertSoknadOppsummeringContainer')}>
                         <OMPMASoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
                     </div>
                     <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                        <Hovedknapp
-                            mini={true}
+                        <Button
+                            size="small"
                             className="validertSoknadOppsummeringContainer_knappVidere"
                             onClick={() => setVisErDuSikkerModal(true)}
                         >
                             {intlHelper(intl, 'fordeling.knapp.videre')}
-                        </Hovedknapp>
-                        <Knapp
-                            mini={true}
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            size="small"
                             className="validertSoknadOppsummeringContainer_knappTilbake"
                             onClick={() => props.validerSoknadReset()}
                         >
                             {intlHelper(intl, 'skjema.knapp.avbryt')}
-                        </Knapp>
+                        </Button>
                     </div>
-                </ModalWrapper>
+                </Modal>
             )}
             {visErDuSikkerModal && (
-                <ModalWrapper
+                <Modal
                     key={'erdusikkermodal'}
                     className={'erdusikkermodal'}
-                    onRequestClose={() => props.validerSoknadReset()}
-                    contentLabel={'erdusikkermodal'}
+                    onClose={() => props.validerSoknadReset()}
+                    aria-label={'erdusikkermodal'}
                     closeButton={false}
-                    isOpen={visErDuSikkerModal}
+                    open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
                         melding={'modal.erdusikker.sendinn'}
@@ -413,7 +433,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                             setVisErDuSikkerModal(false);
                         }}
                     />
-                </ModalWrapper>
+                </Modal>
             )}
         </>
     );

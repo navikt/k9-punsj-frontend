@@ -1,5 +1,5 @@
 import React from 'react';
-import { BodyShort, Heading, Label } from '@navikt/ds-react';
+import { BodyShort, Heading, Label, Button } from '@navikt/ds-react';
 import { periodToFormattedString, formatereTekstMedTimerOgMinutter } from 'app/utils';
 import { Fravaersperiode } from 'app/models/types/KvitteringTyper';
 import intlHelper from 'app/utils/intlUtils';

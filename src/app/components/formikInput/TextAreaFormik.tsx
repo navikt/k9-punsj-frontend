@@ -1,5 +1,5 @@
 import React from 'react';
-import { Textarea, TextareaProps } from '@navikt/ds-react';
+import { Textarea, TextareaProps, Button } from '@navikt/ds-react';
 import { useField } from 'formik';
 
 interface OwnProps extends Partial<TextareaProps> {

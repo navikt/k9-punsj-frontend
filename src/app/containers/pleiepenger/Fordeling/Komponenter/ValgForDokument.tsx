@@ -18,7 +18,7 @@ import {
 } from 'app/state/actions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert, Button } from '@navikt/ds-react';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -129,12 +129,18 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             <VerticalSpacer eightPx />
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
-                    <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
+                    <Alert size="small" variant="info">
+                        {' '}
+                        {intlHelper(intl, 'fordeling.infobox.opprettigosys')}
+                    </Alert>
                     <GosysGjelderKategorier />
                 </div>
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
-                <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>
+                <Alert size="small" variant="info">
+                    {' '}
+                    {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
+                </Alert>
             )}
             <Behandlingsknapp
                 norskIdent={identState.ident1}

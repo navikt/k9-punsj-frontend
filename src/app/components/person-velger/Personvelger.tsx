@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FieldArray, useField, useFormikContext } from 'formik';
 import { Personvalg } from 'app/models/types/Personvalg';
 
-import { Button } from '@navikt/ds-react';
+import { Button, Button } from '@navikt/ds-react';
 import { AddPerson } from '@navikt/ds-icons';
 import './personvelger.less';
 import { hentBarn } from 'app/api/api';

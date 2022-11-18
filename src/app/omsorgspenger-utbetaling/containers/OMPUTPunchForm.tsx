@@ -4,10 +4,8 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
+import { Alert, Button , Modal, Button , ErrorSummary, Heading, Panel, Button } from '@navikt/ds-react';
+
 import { useMutation } from 'react-query';
 import { debounce } from 'lodash';
 
@@ -243,7 +241,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             )}
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
-                    <Knapp
+                    <Button
+                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
@@ -254,18 +253,29 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
-                    </Knapp>
+                    </Button>
 
-                    <Knapp className="vent-knapp" onClick={() => setVisVentModal(true)} disabled={false}>
+                    <Button
+                        variant="secondary"
+                        className="vent-knapp"
+                        onClick={() => setVisVentModal(true)}
+                        disabled={false}
+                    >
                         {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                    </Knapp>
+                    </Button>
                 </p>
             </div>
             <VerticalSpacer sixteenPx />
             {mellomlagringError instanceof Error && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                </Alert>
             )}
-            {submitError instanceof Error && <AlertStripeFeil>{intlHelper(intl, submitError.message)}</AlertStripeFeil>}
+            {submitError instanceof Error && (
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, submitError.message)}
+                </Alert>
+            )}
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
@@ -283,13 +293,13 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             )}
 
             {visErDuSikkerModal && (
-                <ModalWrapper
+                <Modal
                     key="erdusikkermodal"
                     className="erdusikkermodal"
-                    onRequestClose={() => setVisErDuSikkerModal(false)}
-                    contentLabel="erdusikkermodal"
+                    onClose={() => setVisErDuSikkerModal(false)}
+                    aria-label="erdusikkermodal"
                     closeButton={false}
-                    isOpen={visErDuSikkerModal}
+                    open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.sendinn"
@@ -302,7 +312,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             setVisErDuSikkerModal(false);
                         }}
                     />
-                </ModalWrapper>
+                </Modal>
             )}
         </>
     );

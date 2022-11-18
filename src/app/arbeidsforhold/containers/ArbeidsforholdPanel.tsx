@@ -1,26 +1,23 @@
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { Alert, Panel } from '@navikt/ds-react';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DateInput from 'app/components/skjema/DateInput';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import Panel from 'nav-frontend-paneler';
 import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import { set } from 'lodash';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
-import { Arbeidstaker, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { CountrySelect } from '../../components/country-select/CountrySelect';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
-import { PeriodeinfoPaneler } from '../../containers/pleiepenger/PeriodeinfoPaneler';
-import { pfArbeidstider } from '../../containers/pleiepenger/pfArbeidstider';
-import { CountrySelect } from '../../components/country-select/CountrySelect';
+import { Arbeidstaker, IPeriode } from '../../models/types';
+import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 
 const erYngreEnn4år = (dato: string) => {
@@ -826,7 +823,9 @@ const ArbeidsforholdPanel = ({
             />
             {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
                 <>
-                    <AlertStripeInfo className="sn-alertstripe">{intlHelper(intl, 'skjema.sn.info')}</AlertStripeInfo>
+                    <Alert size="small" variant="info" className="sn-alertstripe">
+                        {intlHelper(intl, 'skjema.sn.info')}
+                    </Alert>
                     <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
                 </>
             )}

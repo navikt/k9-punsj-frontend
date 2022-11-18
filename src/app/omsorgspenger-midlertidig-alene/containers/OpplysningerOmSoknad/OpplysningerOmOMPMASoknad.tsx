@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Field, FieldProps, FormikValues } from 'formik';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import { Alert, Button , Panel , Heading, Alert, Button } from '@navikt/ds-react';
 import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
-import { Heading, Alert } from '@navikt/ds-react';
 import DateInput from 'app/components/skjema/DateInput';
 import { IntlShape } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -74,7 +72,9 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
                 }
             />
             {signert === JaNeiIkkeRelevant.NEI && (
-                <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
+                    {intlHelper(intl, 'skjema.usignert.info')}
+                </Alert>
             )}
         </Panel>
     </>

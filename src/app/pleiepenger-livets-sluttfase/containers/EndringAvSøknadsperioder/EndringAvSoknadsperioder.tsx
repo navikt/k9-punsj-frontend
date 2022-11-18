@@ -1,17 +1,16 @@
+import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Textarea } from 'nav-frontend-skjema';
-import { Element, Feilmelding } from 'nav-frontend-typografi';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
+import { Periodepaneler } from '../../../containers/pleiepenger/Periodepaneler';
+import { IPeriode, Periode } from '../../../models/types';
+import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
 import CustomAlertstripeAdvarsel from './CustomAlertstripeAdvarsel';
 import './endringAvSøknadsperioder.less';
-import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
-import { IPeriode, Periode } from '../../../models/types';
-import { Periodepaneler } from '../../../containers/pleiepenger/Periodepaneler';
 
 interface EndringAvSoknadsperioderProps {
     isOpen: boolean;
@@ -108,12 +107,12 @@ const EndringAvSoknadsperioder = (props: EndringAvSoknadsperioderProps): JSX.Ele
                     </CustomAlertstripeAdvarsel>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
-                    <AlertStripeInfo className="endringAvSøknadsperioder__alert">
+                    <Alert size="small" variant="info" className="endringAvSøknadsperioder__alert">
                         Du vil fjerne en periode i <b>slutten</b> av en eksisterende søknadsperiode. Vilkår for perioden
                         du fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder
                         enn den du fjerner.
                         {begrunnelsesfelt}
-                    </AlertStripeInfo>
+                    </Alert>
                 )}
             </>
         );
@@ -126,9 +125,9 @@ const EndringAvSoknadsperioder = (props: EndringAvSoknadsperioderProps): JSX.Ele
             tittel={intlHelper(intl, 'skjema.endringAvSøknadsperioder')}
             onClick={onClick}
         >
-            <Element>
+            <Label size="small">
                 Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
-            </Element>
+            </Label>
             <Periodepaneler
                 intl={intl}
                 periods={soknad.trekkKravPerioder || []}
@@ -147,9 +146,9 @@ const EndringAvSoknadsperioder = (props: EndringAvSoknadsperioderProps): JSX.Ele
             />
 
             {getAlertstriper()}
-            <Feilmelding className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+            <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
                 {begrunnelseForInnsendingFeilmelding()}
-            </Feilmelding>
+            </ErrorMessage>
         </EkspanderbartpanelBase>
     );
 };

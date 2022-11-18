@@ -4,7 +4,7 @@ import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Button , Alert, Button , Panel } from '@navikt/ds-react';
 import Page from 'app/components/page/Page';
 import 'app/containers/pleiepenger/punchPage.less';
 import useQuery from 'app/hooks/useQuery';
@@ -16,8 +16,6 @@ import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ApiPath } from 'app/apiConfig';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import PdfVisning from '../../components/pdf/PdfVisning';
@@ -103,25 +101,25 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
             case PunchStep.COMPLETED:
                 return (
                     <>
-                        <AlertStripeInfo className="fullfortmelding">
+                        <Alert size="small" variant="info" className="fullfortmelding">
                             <FormattedMessage id="skjema.sentInn" />
-                        </AlertStripeInfo>
+                        </Alert>
                         <div className="punchPage__knapper">
-                            <Hovedknapp
+                            <Button
                                 onClick={() => {
                                     window.location.href = getEnvironmentVariable('K9_LOS_URL');
                                 }}
                             >
                                 {intlHelper(intl, 'tilbaketilLOS')}
-                            </Hovedknapp>
+                            </Button>
                             {/*                             {!!punchFormState.linkTilBehandlingIK9 && (
-                                <Hovedknapp
+                                <Button
                                     onClick={() => {
                                         window.location.href = punchFormState.linkTilBehandlingIK9!;
                                     }}
                                 >
                                     {intlHelper(intl, 'tilBehandlingIK9')}
-                                </Hovedknapp>
+                                </Button>
                             )} */}
                         </div>
                         {!!punchFormState.innsentSoknad && (
@@ -135,9 +133,9 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
     const content = () => {
         if (forbidden) {
             return (
-                <AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
                     <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
+                </Alert>
             );
         }
         const journalpostDokumenter: IJournalpostDokumenter[] =

@@ -1,5 +1,5 @@
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import { Alert, Button } from '@navikt/ds-react';
+
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -76,7 +76,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
-            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
         );
     }
 
@@ -84,7 +86,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     const technicalError =
         eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
+            <Alert size="small" variant="error">
+                Teknisk feil.
+            </Alert>
         ) : null;
 
     const infoText = (journalpost: IJournalpost, index: number) => {
@@ -112,13 +116,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
+                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
-                </Knapp>
+                </Button>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} mini>
+                    <Button onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} size="small">
                         <FormattedMessage id="ident.knapp.nyregistrering" />
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>

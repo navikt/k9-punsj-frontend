@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import { Alert, Button , Panel , Heading, Alert, Button } from '@navikt/ds-react';
 import { Input } from 'nav-frontend-skjema';
-import { Heading, Alert } from '@navikt/ds-react';
 import { Collapse } from 'react-collapse';
 import DateInput from 'app/components/skjema/DateInput';
 import { useIntl } from 'react-intl';
@@ -64,7 +62,9 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                     />
                 )}
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
-                    <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
+                    <Alert size="small" variant="warning">
+                        {intlHelper(intl, 'skjema.usignert.info')}
+                    </Alert>
                 )}
             </Panel>
         </>

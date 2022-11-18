@@ -1,22 +1,24 @@
 @import (reference) '~nav-frontend-core/less/_variabler';
-@import (reference) '~nav-frontend-knapper-style/src/mixins.less';
 
 .calendarGridLayout() {
     display: grid;
     grid-template-columns: 2rem repeat(7, 1fr);
     width: 100%;
+
     > * {
         align-items: flex-start;
         display: flex;
         justify-content: left;
-        padding: 0.5rem 0.5rem;
+        padding: 0.5rem;
     }
+
     > *::before:not(:first-child) {
         content: '';
         display: inline-block;
         height: 0;
         padding-bottom: 100%;
     }
+
     > *.today {
         color: white;
         border: 0.1em solid white;
@@ -27,21 +29,25 @@
         &__allWeekDisabledContent {
             display: none;
         }
+
         &__day {
             &__content {
                 align-self: center;
                 width: 100%;
             }
         }
+
         &__weekNum_label {
             display: none;
             padding-right: 0.25rem;
         }
+
         &__week {
-            padding: 0.5rem 0.5rem;
+            padding: 0.5rem;
             margin-right: 1px;
             margin-top: 1rem;
         }
+
         &__weekNum {
             align-self: flex-start;
             justify-self: center;
@@ -50,17 +56,21 @@
             margin-top: 0.2rem;
             font-size: 0.8rem;
         }
+
         &__dayHeader {
-            padding: 0 0.5rem 0.5rem 0.5rem;
+            padding: 0 0.5rem 0.5rem;
             margin-bottom: 0.5rem;
             justify-self: center;
+
             &--week {
                 padding-left: 0;
             }
         }
+
         &__date_label {
             display: none;
         }
+
         &__date__full {
             display: none;
         }
@@ -69,36 +79,44 @@
 
 .calendarListLayout() {
     grid-template-columns: repeat(1, 1fr);
+
     .calendarGrid {
         &__allWeekDisabledContent {
             display: initial;
         }
+
         &__dayHeader {
             display: none;
         }
+
         &__day {
             padding: 0.25rem 0.5rem;
             min-height: 0;
             display: flex;
             align-items: center;
+
             &--disabled {
                 display: none;
             }
         }
+
         &__day + &__weekNum {
             margin-top: 1rem;
         }
+
         &__weekNum_label {
             display: inline;
         }
+
         &__weekNum {
             display: block;
             align-self: flex-start;
             justify-self: flex-start;
             font-weight: bold;
-            margin: 1rem 0 0.5rem 0;
+            margin: 1rem 0 0.5rem;
             font-size: 1rem;
         }
+
         &__date {
             left: initial;
             top: initial;
@@ -109,18 +127,23 @@
             flex: 1 1 80%;
             padding: 0.5rem 0;
         }
+
         &__date__full {
             display: block;
+
             &::first-letter {
                 text-transform: uppercase;
             }
         }
+
         &__date__short {
             display: none;
         }
+
         &__day--outsideMonth {
             display: none;
         }
+
         &--hideEmptyContentInListMode {
             .calendarGrid__weekNum--empty {
                 display: none;
@@ -132,6 +155,7 @@
 .disabledDay() {
     background-color: #e5e5e5;
     border-color: #f1f2f2;
+
     .calendarGrid__date__short,
     .calendarGrid__date__full,
     .calendarGrid__day__content {
@@ -148,6 +172,7 @@
         display: none;
         font-weight: normal;
     }
+
     &__day {
         display: block;
         min-height: 5rem;
@@ -155,12 +180,15 @@
         margin: 2px;
         border-radius: 0.125rem;
         border: 1px solid #c6c2bf;
+
         &--outsideMonth {
             border: none; // 1px dashed rgba(0, 0, 0, 0.3);
         }
+
         &--selected {
             .selected();
         }
+
         &--button {
             background-color: white;
             padding: 0;
@@ -168,39 +196,46 @@
             border: 1px solid #c6c2bf;
             border-width: 1px !important;
             cursor: pointer;
+
             &:active {
                 background-color: @navDypBla;
                 color: white;
             }
+
             &:hover {
                 .selected();
             }
         }
+
         &--disabled {
             .disabledDay();
         }
     }
+
     &__date {
         font-size: 0.8rem;
-        opacity: 1;
         position: absolute;
-        top: 0rem;
+        top: 0;
         right: 0.25rem;
         text-align: right;
         opacity: 0.75;
     }
+
     &__week {
-        padding: 0.5rem 0.5rem;
+        padding: 0.5rem;
         margin-top: 1rem;
     }
+
     &__weekNum {
         font-weight: bold;
     }
+
     &__dayHeader {
-        padding: 0.5rem 0.5rem;
+        padding: 0.5rem;
         margin-right: 1px;
         margin-top: 1rem;
         font-weight: bold;
+
         &--week {
             padding-left: 0;
         }
@@ -208,14 +243,17 @@
 
     &--grid {
         .calendarGridLayout();
+
         padding-bottom: 0.5rem;
     }
+
     &--list {
         .calendarListLayout();
     }
 
     @media screen and (max-width: 700px) {
         .calendarListLayout();
+
         &--grid {
             padding-bottom: 0;
             border-bottom: none;

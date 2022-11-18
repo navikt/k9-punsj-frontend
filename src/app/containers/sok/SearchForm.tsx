@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
+import { Alert, Button , Modal, Button } from '@navikt/ds-react';
+
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { connect } from 'react-redux';
 import Fagsak from 'app/types/Fagsak';
@@ -88,15 +87,15 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
 
         if (lukkOppgaveDone) {
             return (
-                <ModalWrapper
+                <Modal
                     key="lukkoppgaveokmodal"
-                    onRequestClose={() => lukkOppgaveReset()}
-                    contentLabel="settpaaventokmodal"
+                    onClose={() => lukkOppgaveReset()}
+                    aria-label="settpaaventokmodal"
                     closeButton={false}
                     isOpen
                 >
                     <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-                </ModalWrapper>
+                </Modal>
             );
         }
 
@@ -120,33 +119,35 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         </div>
 
                         {!!notFound && (
-                            <AlertStripeInfo>
+                            <Alert size="small" variant="info">
                                 <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
-                            </AlertStripeInfo>
+                            </Alert>
                         )}
 
                         {!!forbidden && (
-                            <AlertStripeAdvarsel>
+                            <Alert size="small" variant="warning">
                                 <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                            </AlertStripeAdvarsel>
+                            </Alert>
                         )}
 
                         {conflict &&
                             journalpostConflictError &&
                             journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <AlertStripeAdvarsel>
+                                <Alert size="small" variant="warning">
                                     <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                </AlertStripeAdvarsel>
+                                </Alert>
                             )}
 
                         {journalpostRequestError?.message && (
-                            <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
+                            <Alert size="small" variant="warning">
+                                {journalpostRequestError.message}
+                            </Alert>
                         )}
 
                         {!!journalpost && !journalpost?.kanSendeInn && (
-                            <AlertStripeAdvarsel>
+                            <Alert size="small" variant="warning">
                                 <FormattedMessage id="fordeling.kanikkesendeinn" />
-                            </AlertStripeAdvarsel>
+                            </Alert>
                         )}
                     </SkjemaGruppe>
                 </div>

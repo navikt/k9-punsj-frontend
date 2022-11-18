@@ -2,7 +2,7 @@ import React from 'react';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { Periode } from 'app/models/types';
 import { Field, FieldProps } from 'formik';
-import { Panel } from '@navikt/ds-react';
+import { Panel, Button } from '@navikt/ds-react';
 
 interface OwnProps {
     eksisterendePerioder: Periode[];

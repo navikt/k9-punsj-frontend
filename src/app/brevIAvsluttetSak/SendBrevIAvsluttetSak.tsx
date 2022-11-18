@@ -1,4 +1,4 @@
-import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+import { ErrorMessage, Heading, Loader, Modal, Select, TextField, Button } from '@navikt/ds-react';
 import { finnFagsaker } from 'app/api/api';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/BrevComponent';

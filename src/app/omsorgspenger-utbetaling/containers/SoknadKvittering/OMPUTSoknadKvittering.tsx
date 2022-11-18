@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import { useIntl } from 'react-intl';
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
 import { RootStateType } from 'app/state/RootState';
 import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';

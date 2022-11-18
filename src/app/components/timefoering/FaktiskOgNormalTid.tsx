@@ -1,4 +1,4 @@
-import { Button, Heading } from '@navikt/ds-react';
+import { Button, Heading, Button } from '@navikt/ds-react';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import { timerOgMinutter } from 'app/rules/yup';
 import React, { useState, useEffect } from 'react';

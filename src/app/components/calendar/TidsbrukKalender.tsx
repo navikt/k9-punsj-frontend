@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Modal, Button } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';

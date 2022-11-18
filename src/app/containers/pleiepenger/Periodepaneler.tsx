@@ -1,6 +1,6 @@
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
@@ -9,7 +9,6 @@ import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
-
 
 export interface IPeriodepanelerProps {
     intl: IntlShape;
@@ -32,7 +31,17 @@ export interface IPeriodepanelerProps {
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const { periods, intl, editSoknad, editSoknadState, kanHaFlere, getErrorMessage, feilkodeprefiks, textLeggTil, getUhaandterteFeil } = props;
+    const {
+        periods,
+        intl,
+        editSoknad,
+        editSoknadState,
+        kanHaFlere,
+        getErrorMessage,
+        feilkodeprefiks,
+        textLeggTil,
+        getUhaandterteFeil,
+    } = props;
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,

@@ -1,4 +1,4 @@
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';

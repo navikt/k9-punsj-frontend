@@ -1,7 +1,6 @@
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import { Alert, Button , Panel } from '@navikt/ds-react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -26,9 +25,9 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                     }
                     className="korrigering__skjemagruppe"
                 >
-                    <AlertStripeInfo className="korrigering__infostripe">
+                    <Alert size="small" variant="info" className="korrigering__infostripe">
                         {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
-                    </AlertStripeInfo>
+                    </Alert>
                     <div className="soknadsperiodecontainer">
                         <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.Trekkperioder} />
                     </div>

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Knapp } from 'nav-frontend-knapper';
+
 import { Form, useFormikContext } from 'formik';
 import { Nesteknapp, Tilbakeknapp } from 'nav-frontend-ikonknapper';
+import { Button } from '@navikt/ds-react';
 import { JaNei } from '../../../models/enums';
 import TextInput from '../../../components/skjema/TextInput';
 import { setHash } from '../../../utils';
@@ -76,14 +77,14 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
                     <FormattedMessage id="ident.knapp.forrigesteg" />
                 </Tilbakeknapp>
                 {erSignert && (
-                    <Nesteknapp htmlType="submit" type="hoved">
+                    <Nesteknapp htmlType="submit">
                         <FormattedMessage id="ident.knapp.nestesteg" />
                     </Nesteknapp>
                 )}
                 {signert === JaNei.NEI && (
-                    <Knapp htmlType="button" type="hoved" onClick={() => undefined}>
+                    <Button variant="secondary" onClick={() => undefined}>
                         <FormattedMessage id="ident.knapp.usignert" />
-                    </Knapp>
+                    </Button>
                 )}
             </Knapper>
         </Form>
