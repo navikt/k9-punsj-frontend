@@ -1,4 +1,4 @@
-import { Alert, Button , Loader, Button } from '@navikt/ds-react';
+import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';

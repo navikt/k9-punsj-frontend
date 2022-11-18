@@ -1,12 +1,12 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Button } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { IPeriode, ITimerOgMinutter, Periodeinfo, PeriodeMedTimerMinutter } from 'app/models/types';
+import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
-import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 import * as yup from 'yup';
-import TilsynPeriode from './TilsynPeriode';
 import VerticalSpacer from '../VerticalSpacer';
+import TilsynPeriode from './TilsynPeriode';
 
 const schema = yup.object({
     perioder: yup.array().of(periodeMedTimerOgMinutterSchema),

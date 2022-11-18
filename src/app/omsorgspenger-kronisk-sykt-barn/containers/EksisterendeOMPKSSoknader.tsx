@@ -1,3 +1,4 @@
+import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
@@ -10,11 +11,11 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Alert, Button , Modal, Button , Loader } from '@navikt/ds-react';
 
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPKSSoknadAction,
     closeEksisterendeOMPKSSoknadAction,
@@ -23,9 +24,8 @@ import {
     openEksisterendeOMPKSSoknadAction,
     resetOMPKSSoknadidAction,
 } from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 import { IEksisterendeOMPKSSoknaderState } from '../types/EksisterendeOMPKSSoknaderState';
-import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 
 export interface IEksisterendeOMPKSSoknaderStateProps {
     punchState: IPunchState;

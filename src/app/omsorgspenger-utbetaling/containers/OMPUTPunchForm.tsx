@@ -1,42 +1,41 @@
+import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button , Modal, Button , ErrorSummary, Heading, Panel, Button } from '@navikt/ds-react';
+import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
 
-import { useMutation } from 'react-query';
 import { debounce } from 'lodash';
+import { useMutation } from 'react-query';
 
-import { IInputError, Periode } from 'app/models/types';
-import { setIdentAction } from 'app/state/actions';
-import intlHelper from 'app/utils/intlUtils';
-import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
-import { feilFraYup } from 'app/utils/validationHelpers';
 import Personvelger from 'app/components/person-velger/Personvelger';
+import VentModal from 'app/components/ventModal/VentModal';
+import { IInputError, Periode } from 'app/models/types';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
+import intlHelper from 'app/utils/intlUtils';
+import { feilFraYup } from 'app/utils/validationHelpers';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
+import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
-import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
-import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
-import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
-import ArbeidsforholdVelger from './ArbeidsforholdVelger';
-import schema, { getSchemaContext } from '../schema';
-import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, korrigeringFilter } from '../utils';
-import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
-import Medlemskap from '../components/Medlemskap';
-import Utenlandsopphold from '../components/Utenlandsopphold';
 import EksisterendePerioder from '../components/EksisterendePerioder';
+import Medlemskap from '../components/Medlemskap';
 import NySoeknadEllerKorrigering from '../components/NySoeknadEllerKorrigering';
+import Utenlandsopphold from '../components/Utenlandsopphold';
+import schema, { getSchemaContext } from '../schema';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
+import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFilter } from '../utils';
+import ArbeidsforholdVelger from './ArbeidsforholdVelger';
+import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
+import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
+import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;

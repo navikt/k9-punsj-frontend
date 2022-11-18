@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Alert, Button , Modal, Button , Loader, Button } from '@navikt/ds-react';
+import { useState } from 'react';
 
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useQuery } from 'react-query';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;

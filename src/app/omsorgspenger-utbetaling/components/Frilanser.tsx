@@ -1,21 +1,21 @@
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel, Button } from '@navikt/ds-react';
+import { Button, Heading, Panel } from '@navikt/ds-react';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import React from 'react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import intlHelper from 'app/utils/intlUtils';
-import { useIntl } from 'react-intl';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { JaNei } from 'app/models/enums';
+import intlHelper from 'app/utils/intlUtils';
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize } from 'lodash';
-import Fravaersperiode from './Fravaersperiode';
+import React from 'react';
+import { useIntl } from 'react-intl';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import './arbeidsforhold.less';
+import Fravaersperiode from './Fravaersperiode';
 
 export default function Frilanser() {
     const { values } = useFormikContext<IOMPUTSoknad>();

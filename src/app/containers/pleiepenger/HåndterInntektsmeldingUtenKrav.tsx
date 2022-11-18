@@ -1,3 +1,4 @@
+import { Alert, Button, Modal } from '@navikt/ds-react';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -10,7 +11,6 @@ import {
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 import { RootStateType } from 'app/state/RootState';
-import { Alert, Button , Button , Modal, Button } from '@navikt/ds-react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';

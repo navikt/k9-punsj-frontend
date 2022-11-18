@@ -1,18 +1,18 @@
-import intlHelper from 'app/utils/intlUtils';
-import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
-import React, { useState } from 'react';
+import { Button, Modal } from '@navikt/ds-react';
 import {
+    ArbeidstidPeriodeMedTimer,
+    IArbeidstidPeriodeMedTimer,
+    IPeriode,
     ITimerOgMinutterString,
     Periode,
     Periodeinfo,
-    IArbeidstidPeriodeMedTimer,
-    IPeriode,
-    ArbeidstidPeriodeMedTimer,
 } from 'app/models/types';
-import { formats, removeDatesFromPeriods } from 'app/utils';
-import dayjs from 'dayjs';
-import { Button, Modal, Button } from '@navikt/ds-react';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import { formats, removeDatesFromPeriods } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';

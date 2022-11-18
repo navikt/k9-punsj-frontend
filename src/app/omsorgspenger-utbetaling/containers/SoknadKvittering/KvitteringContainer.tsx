@@ -1,7 +1,7 @@
 import { IOMPUTSoknadKvittering } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Alert, Button , Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router';

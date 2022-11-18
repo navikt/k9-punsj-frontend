@@ -139,7 +139,7 @@ const fullResponse: IPSBSoknadKvittering = {
     },
 };
 
-const size="small"malResponse: IPSBSoknadKvittering = {
+const minimalResponse: IPSBSoknadKvittering = {
     journalposter: [],
     mottattDato: '2020-10-12T12:53:00.000Z',
     ytelse: {
@@ -193,7 +193,7 @@ const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
 
 describe('SoknadKvittering', () => {
     const soknadKvitteringFull = setupSoknadKvittering(fullResponse);
-    const soknadKvitteringTom = setupSoknadKvittering(size="small"malResponse);
+    const soknadKvitteringTom = setupSoknadKvittering(minimalResponse);
 
     it('Viser søknadsperioder', () => {
         expect(soknadKvitteringFull.text().includes('skjema.soknadskvittering.soknadsperiode')).toBe(true);

@@ -1,4 +1,4 @@
-import { Button, Heading, Button } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { SplitView } from 'app/components/SplitView';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';

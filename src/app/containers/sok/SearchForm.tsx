@@ -1,12 +1,12 @@
+import { Alert, Modal } from '@navikt/ds-react';
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Alert, Button , Modal, Button } from '@navikt/ds-react';
 
+import Fagsak from 'app/types/Fagsak';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { connect } from 'react-redux';
-import Fagsak from 'app/types/Fagsak';
-import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
+import VerticalSpacer from '../../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { IError, IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
@@ -14,9 +14,9 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveRese
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
 import { RootStateType } from '../../state/RootState';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
-import './sok.less';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
+import './sok.less';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;

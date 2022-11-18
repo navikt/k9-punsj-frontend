@@ -66,7 +66,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
 
     return (
         <IntlProvider {...{ locale }}>
-            <BodyShort size="small" as="div" className="fit-window-height">
+            <div className="app fit-window-height">
                 <div className={isDev ? 'headercontainer' : ''}>
                     <Header title="K9-punsj" titleHref={REDIRECT_URL_LOS}>
                         <UserPanel name={authState.userName!} />
@@ -75,7 +75,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
                 <AppContainer>
                     <Router>{children}</Router>
                 </AppContainer>
-            </BodyShort>
+            </div>
         </IntlProvider>
     );
 };
