@@ -7,10 +7,10 @@ import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateI
 import { KalenderDag } from 'app/models/KalenderDag';
 import { uniq } from 'lodash';
 import CalendarGrid from './CalendarGrid';
-import './tidsbrukKalender.less';
-
 import DateRange from '../../models/types/DateRange';
 import Slett from '../buttons/Slett';
+
+import './tidsbrukKalender.less';
 
 interface OwnProps {
     gyldigePerioder: DateRange[];
@@ -159,7 +159,12 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                         )}
                     </div>
                     <Provider rootElement={document.getElementById(ref?.current?.id) || undefined}>
-                        <Modal className="modal" open={visModal} onClose={toggleModal} closeButton>
+                        <Modal
+                            className="venstrestilt registrer-tid-modal"
+                            open={visModal}
+                            onClose={toggleModal}
+                            closeButton
+                        >
                             <Modal.Content>
                                 {React.cloneElement(ModalContent, { selectedDates, toggleModal })}
                             </Modal.Content>
