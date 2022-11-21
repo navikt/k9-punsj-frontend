@@ -41,19 +41,25 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>
             ))}
         </div>
-        {Object.keys(perioder).map((periode) => (
-            <div
-                key={periode}
-                className={classNames(
-                    'visningAvPerioderSoknadKvitteringContainer',
-                    typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
-                )}
-            >
-                <p>{periodToFormattedString(periode)}</p>
+        {Object.keys(perioder)
+            .sort((a, b) => {
+                const fomA = a.split('/')?.[0];
+                const fomB = b.split('/')?.[0];
+                return new Date(fomA).getTime() - new Date(fomB).getTime();
+            })
+            .map((periode) => (
+                <div
+                    key={periode}
+                    className={classNames(
+                        'visningAvPerioderSoknadKvitteringContainer',
+                        typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
+                    )}
+                >
+                    <p>{periodToFormattedString(periode)}</p>
 
-                {properties && properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
-            </div>
-        ))}
+                    {properties && properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
+                </div>
+            ))}
     </div>
 );
 
