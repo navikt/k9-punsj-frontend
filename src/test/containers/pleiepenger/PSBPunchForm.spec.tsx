@@ -7,11 +7,10 @@ import {
 import { IPSBSoknad, IPunchPSBFormState, ISignaturState } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
+import { mocked } from 'jest-mock';
 import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import * as reactRedux from 'react-redux';
-import { mocked } from 'jest-mock';
-import OpplysningerOmSoknad from '../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
@@ -205,6 +204,7 @@ const getDateInputField = (punchFormComponent: ShallowWrapper, containerComponen
 
 describe('PunchForm', () => {
     const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+
     beforeEach(() => {
         useSelectorMock.mockClear();
     });
@@ -224,13 +224,18 @@ describe('PunchForm', () => {
 
     it('Viser spinner når søknaden lastes inn', () => {
         const punchForm = setupPunchForm({ isSoknadLoading: true });
-        expect(punchForm.find('NavFrontendSpinner')).toHaveLength(1);
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('size') === 'large')).toHaveLength(1);
     });
 
     it('Viser feilmelding når søknaden ikke er funnet', () => {
         const punchForm = setupPunchForm({ error: { status: 404 } });
-        expect(punchForm.find('ForwardRef')).toHaveLength(1);
-        expect(punchForm.find('ForwardRef').prop('children')).toEqual('skjema.feil.ikke_funnet');
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
+        expect(
+            punchForm
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
+                .childAt(0)
+                .text()
+        ).toEqual('skjema.feil.ikke_funnet');
     });
 
     it('Oppdaterer søknad når mottakelsesdato endres', () => {
@@ -385,8 +390,13 @@ describe('PunchForm', () => {
         );
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
-        expect(punchForm.find('ForwardRef')).toHaveLength(1);
-        expect(punchForm.find('ForwardRef').childAt(0).text()).toEqual('skjema.feil.validering');
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
+        expect(
+            punchForm
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
+                .childAt(0)
+                .text()
+        ).toEqual('skjema.feil.validering');
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', () => {
@@ -420,14 +430,18 @@ describe('PunchForm', () => {
             perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
         });
         expect(
-            punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')
+            punchForm
+                .find('Soknadsperioder')
+                .dive()
+                .find('.eksiterendesoknaderpanel')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning')
         ).toHaveLength(1);
         expect(
             punchForm
                 .find('Soknadsperioder')
                 .dive()
                 .find('.eksiterendesoknaderpanel')
-                .find('AlertStripeAdvarsel')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning')
                 .childAt(0)
                 .text()
         ).toEqual('skjema.soknadsperiode.overlapper');
@@ -475,7 +489,11 @@ describe('PunchForm', () => {
             { fom: '2021-01-30', tom: '2021-04-15' },
         ]);
         expect(
-            punchForm.find('.feriepanel').dive().find('.ekspanderbartPanel__innhold').find('AlertStripeInfo')
+            punchForm
+                .find('.feriepanel')
+                .dive()
+                .find('.ekspanderbartPanel__innhold')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')
         ).toHaveLength(1);
     });
 
@@ -486,7 +504,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('ForwardRef')).toHaveLength(1);
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(true);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(true);
     });
@@ -520,7 +538,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('ForwardRef')).toHaveLength(0);
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(0);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
     });
@@ -548,7 +566,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('ForwardRef')).toHaveLength(0);
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(0);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
     });
@@ -576,7 +594,7 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('ForwardRef')).toHaveLength(0);
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(0);
         expect(punchForm.find('.send-knapp').prop('disabled')).toEqual(false);
         expect(punchForm.find('.vent-knapp').prop('disabled')).toEqual(false);
     });
@@ -592,7 +610,11 @@ describe('PunchForm', () => {
             perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
         });
         expect(
-            punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')
+            punchForm
+                .find('Soknadsperioder')
+                .dive()
+                .find('.eksiterendesoknaderpanel')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
         ).toHaveLength(0);
     });
 
