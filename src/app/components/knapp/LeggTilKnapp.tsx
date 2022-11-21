@@ -11,7 +11,7 @@ interface ILeggTilKnappProps {
 }
 
 const LeggTilKnapp: React.FunctionComponent<ILeggTilKnappProps> = ({ onClick, tekstId }) => (
-    <Button variant="tertiary" onClick={onClick} size="small" className="leggtilknapp">
+    <Button variant="tertiary" type="button" onClick={onClick} size="small" className="leggtilknapp">
         <PlussSVG />
         <span>
             <FormattedMessage id={tekstId} />

@@ -26,6 +26,7 @@ const OpprettGosysOppgaveKnapp: React.FunctionComponent<OpprettGosysOppgaveKnapp
 }) => (
     // TODO ta en runda på journalpost og optional så det ikke er !.
     <Button
+        type="button"
         variant="secondary"
         onClick={() => opprettGosysOppgave(journalpost!.journalpostId, journalpost!.norskIdent!, '')}
     >

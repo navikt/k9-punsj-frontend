@@ -82,7 +82,7 @@ const OverføringIdentSjekk: React.FunctionComponent<IOverføringIdentSjekk> = (
                     </Button>
                 )}
                 {signert === JaNei.NEI && (
-                    <Button variant="secondary" onClick={() => undefined}>
+                    <Button type="button" variant="secondary" onClick={() => undefined}>
                         <FormattedMessage id="ident.knapp.usignert" />
                     </Button>
                 )}

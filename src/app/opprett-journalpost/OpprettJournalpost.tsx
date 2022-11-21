@@ -199,6 +199,7 @@ const OpprettJournalpost: React.FC = () => {
                 {submitSuccessful && (
                     <Button
                         onClick={() => window.location.assign(`journalpost/${opprettetJournalpostId}`)}
+                        type="button"
                         size="small"
                         className="submitButton"
                     >
