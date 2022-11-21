@@ -66,6 +66,7 @@ describe('Eksisterende søknader pleiepenger', () => {
         });
 
         cy.get('.punch_mappetabell').within(() => {
+            cy.contains(/Mottakelsesdato/i);
             cy.findByText('12.10.2020').should('exist');
             cy.findByText('16017725002').should('exist');
             cy.findByText('200').should('exist');
@@ -81,6 +82,5 @@ describe('Eksisterende søknader pleiepenger', () => {
                 'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
             );
         });
-
     });
 });
