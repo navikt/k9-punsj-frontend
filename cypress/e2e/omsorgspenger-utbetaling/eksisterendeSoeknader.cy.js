@@ -56,6 +56,9 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     });
 
     it('kan gå tilbake til fordeling', () => {
+        cy.contains(
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+        );
         cy.findByRole('button', { name: /tilbake/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
     });
@@ -65,7 +68,10 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             const { worker } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.nySoeknad);
         });
-        cy.contains(/start ny registrering/i)
+        cy.contains(
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+        );
+        cy.contains(/start ny registrering/i);
         cy.findByRole('button', { name: /start ny registrering/i }).click();
 
         cy.url().should(
@@ -79,6 +85,13 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             const { worker, rest } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
             worker.use(omsorgspengerutbetalingHandlers.nySoeknad);
+        });
+        cy.get('.registrering-page').within(() => {
+            cy.findByText(/Mottakelsesdato/i).should('exist');
+            cy.findByText(/JournalpostID/i).should('exist');
+            cy.findByText(/03.10.2022/i).should('exist');
+            cy.findByText(/201/i).should('exist');
+            cy.findByRole('button', { name: /fortsett/i }).click();
         });
 
         cy.findByRole('button', { name: /start ny registrering/i }).should('not.exist');
