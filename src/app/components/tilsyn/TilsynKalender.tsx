@@ -74,7 +74,11 @@ export default function TilsynKalender({
                 {intlHelper(intl, 'skjema.registrerTidLengrePeriode')}
             </Button>
             <VerticalSpacer twentyPx />
-            <Modal open={visLengrePerioder} onClose={toggleVisLengrePerioder} className="lengre-periode-modal">
+            <Modal
+                open={visLengrePerioder}
+                onClose={toggleVisLengrePerioder}
+                className="venstrestilt lengre-periode-modal"
+            >
                 <Modal.Content>
                     <TilsynPeriodeListe
                         heading="Periode med tilsyn"

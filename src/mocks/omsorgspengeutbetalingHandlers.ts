@@ -24,7 +24,7 @@ const omsorgspengerutbetalingHandlers = {
                         mottattDato: '10.03.2022',
                         klokkeslett: null,
                         barn: [],
-                        journalposter: ['201'],
+                        journalposter: ['200'],
                         bosteder: [],
                         utenlandsopphold: [],
                         opptjeningAktivitet: {
