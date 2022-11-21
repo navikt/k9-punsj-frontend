@@ -41,7 +41,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             cy.findByText(/Mottakelsesdato/i).should('exist');
             cy.findByText(/JournalpostID/i).should('exist');
             cy.findByText(/03.10.2022/i).should('exist');
-            cy.findByText(/201/i).should('exist');
+            cy.findByText(/200/i).should('exist');
             cy.findByRole('button', { name: /fortsett/i }).click();
         });
 
@@ -86,13 +86,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
             worker.use(omsorgspengerutbetalingHandlers.nySoeknad);
         });
-        cy.get('.registrering-page').within(() => {
-            cy.findByText(/Mottakelsesdato/i).should('exist');
-            cy.findByText(/JournalpostID/i).should('exist');
-            cy.findByText(/03.10.2022/i).should('exist');
-            cy.findByText(/201/i).should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).click();
-        });
+        cy.contains(/Mottakelsesdato/i);
 
         cy.findByRole('button', { name: /start ny registrering/i }).should('not.exist');
     });
