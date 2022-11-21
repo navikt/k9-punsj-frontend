@@ -694,19 +694,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
                 <div className={'submit-knapper'}>
                     <p className="sendknapp-wrapper">
-                        <Knapp
-                            className={'send-knapp'}
-                            onClick={() => this.handleSubmit()}
-                            disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
-                        >
+                        <Knapp className={'send-knapp'} onClick={() => this.handleSubmit()}>
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Knapp>
 
-                        <Knapp
-                            className={'vent-knapp'}
-                            onClick={() => this.setState({ showSettPaaVentModal: true })}
-                            disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
-                        >
+                        <Knapp className={'vent-knapp'} onClick={() => this.setState({ showSettPaaVentModal: true })}>
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
                         </Knapp>
                     </p>
@@ -723,9 +715,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
                 {!!punchFormState.submitSoknadConflict && (
                     <Alert variant="error">{intlHelper(intl, 'skjema.feil.konflikt')}</Alert>
-                )}
-                {!sjekkHvisArbeidstidErAngitt(this.props.punchFormState) && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</Alert>
                 )}
 
                 {this.state.showSettPaaVentModal && (
