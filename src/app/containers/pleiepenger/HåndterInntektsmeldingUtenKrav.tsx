@@ -147,7 +147,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     className="settpaaventmodal"
                     onClose={() => setShowSettPaaVentModal(false)}
                     aria-label="settpaaventmodal"
-                    isOpen
+                    open
                     closeButton={false}
                 >
                     <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
@@ -156,12 +156,12 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                 </Modal>
             )}
             {showSettPaaVentSuccessModal && (
-                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} isOpen>
+                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} open>
                     <OkGaaTilLosModal melding="modal.settpaavent.til" />
                 </Modal>
             )}
             {showSettPaaVentErrorModal && (
-                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} isOpen>
+                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} open>
                     <SettPaaVentErrorModal close={() => resetSetPåVent()} />
                 </Modal>
             )}
@@ -170,7 +170,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     onClose={() => setShowFerdigstillJournalpostModal(false)}
                     aria-label="ferdigstill journalpostmodal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <FerdigstillJournalpostModal
                         submit={() => handleFerdigstillJournalpost()}
@@ -185,7 +185,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     className="opprettOppgaveIGosysModal"
                     onClose={() => setShowOpprettOppgaveIGosysModal(false)}
                     aria-label="opprettOppgaveIGosysModal"
-                    isOpen
+                    open
                     closeButton={false}
                 >
                     <OpprettOppgaveIGosysModal
@@ -201,7 +201,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     onClose={() => resetFerdigstillJournalpost()}
                     aria-label="ferdigstill journalpostOkModal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <OkGaaTilLosModal melding="modal.ferdigstilljournalpost" />
                 </Modal>
@@ -211,7 +211,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     onClose={() => resetFerdigstillJournalpost()}
                     aria-label="ferdigstill journalpostFeilModal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <FerdigstillJournalpostErrorModal close={() => resetFerdigstillJournalpost()} />
                 </Modal>

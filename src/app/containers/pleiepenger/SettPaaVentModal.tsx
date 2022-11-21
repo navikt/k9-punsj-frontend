@@ -14,6 +14,7 @@ interface ISettPaaVentModalProps {
     avbryt: () => void;
     journalposter?: IJournalpostInfo[];
     soknadId?: string;
+    children?: React.ReactNode;
 }
 
 const pdfUrl = (journalpost: IJournalpostInfo) =>

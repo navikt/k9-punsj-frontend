@@ -7,6 +7,7 @@ import './okGaaTilLosModal.less';
 interface IFerdigstillJournalpostModalProps {
     submit: () => void;
     avbryt: () => void;
+    children?: React.ReactNode;
 }
 
 const FerdigstillJournalpostModal: React.FC<WrappedComponentProps & IFerdigstillJournalpostModalProps> = (props) => {

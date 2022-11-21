@@ -7,6 +7,7 @@ import './okGaaTilLosModal.less';
 interface OpprettOppgaveIGosysModalProps {
     submit: () => void;
     avbryt: () => void;
+    children?: React.ReactNode;
 }
 
 const OpprettOppgaveIGosysModal: React.FC<WrappedComponentProps & OpprettOppgaveIGosysModalProps> = (props) => {

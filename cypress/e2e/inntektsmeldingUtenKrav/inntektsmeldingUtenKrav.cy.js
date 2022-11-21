@@ -14,9 +14,9 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Sett på vent').should('exist');
     });
 
-   it('skal vise mulighet for å sende brev', () => {
+    it('skal vise mulighet for å sende brev', () => {
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
-       cy.findByLabelText('Mal').should('exist').select('Innhent dokumentasjon');
+        cy.findByLabelText('Mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Mottaker').should('exist');
         cy.findByLabelText('Fritekst').should('exist');
         cy.findByLabelText('Tittel').should('not.exist');
@@ -36,14 +36,14 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Avbryt').should('exist').click();
     });
 
-   it('skal vise infoboks dersom brev er fylt ut men ikke sendt', () => {
+    it('skal vise infoboks dersom brev er fylt ut men ikke sendt', () => {
         cy.findByLabelText('Fritekst').type('test');
         cy.findByText('Sett på vent').click();
         cy.findByRole('button', { name: /Sett på vent/i })
-          .should('exist')
-          .click();
+            .should('exist')
+            .click();
         cy.findByText(
-          'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.'
+            'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.'
         ).should('exist');
-    }); 
+    });
 });

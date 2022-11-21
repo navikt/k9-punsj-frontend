@@ -244,6 +244,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 size="small"
                                 loading={isSubmitting}
                                 disabled={isSubmitting}
+                                type="button"
                             >
                                 <SendIcon />
                                 {intl.formatMessage({ id: 'Messages.Submit' })}

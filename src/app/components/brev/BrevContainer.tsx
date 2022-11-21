@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import './brevContainer.less';
 import SendIcon from './SendIcon';
 
-const BrevContainer: React.FC = ({ children }) => {
+interface Props {
+    children?: React.ReactNode;
+}
+
+const BrevContainer: React.FC<Props> = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
