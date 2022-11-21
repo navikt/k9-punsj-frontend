@@ -31,11 +31,11 @@
         }
     ],
     "rules": {
+        "react/no-unused-prop-types": "warn",
         "react/forbid-prop-types": 0,
         "@typescript-eslint/no-use-before-define": ["error"],
         "@typescript-eslint/no-shadow": "error",
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-        "react/no-unused-prop-types": 0,
         "import/no-extraneous-dependencies": [
             "warn",
             { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"] }

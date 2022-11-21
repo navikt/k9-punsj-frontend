@@ -1,4 +1,4 @@
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
@@ -6,11 +6,11 @@ import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import React, { forwardRef, useEffect, useState } from 'react';
-import CalendarGrid from './CalendarGrid';
-import './tidsbrukKalender.less';
-
 import DateRange from '../../models/types/DateRange';
 import Slett from '../buttons/Slett';
+import CalendarGrid from './CalendarGrid';
+
+import './tidsbrukKalender.less';
 
 interface OwnProps {
     gyldigePerioder: DateRange[];
@@ -59,7 +59,9 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
         const [selectedDates, setSelectedDates] = useState<Date[]>([]);
         const [visKalender, setVisKalender] = useState<boolean>(false);
         const [visModal, setVisModal] = useState<boolean>(false);
-        const clearSelectedDates = () => setSelectedDates([]);
+        const clearSelectedDates = () => {
+            setSelectedDates([]);
+        };
 
         useOnClickOutside(ref, clearSelectedDates);
         const toggleKalender = () => {
@@ -156,17 +158,18 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                             </Slett>
                         )}
                     </div>
-                    <Modal
-                        className="modal"
-                        open={visModal}
-                        onClose={toggleModal}
-                        closeButton
-                        parentSelector={ref?.current?.id ? () => document.getElementById(ref?.current?.id) : undefined}
-                    >
-                        <Modal.Content>
-                            {React.cloneElement(ModalContent, { selectedDates, toggleModal })}
-                        </Modal.Content>
-                    </Modal>
+                    <Provider rootElement={document.getElementById(ref?.current?.id) || undefined}>
+                        <Modal
+                            className="venstrestilt registrer-tid-modal"
+                            open={visModal}
+                            onClose={toggleModal}
+                            closeButton
+                        >
+                            <Modal.Content>
+                                {React.cloneElement(ModalContent, { selectedDates, toggleModal })}
+                            </Modal.Content>
+                        </Modal>
+                    </Provider>
                 </div>
             </EkspanderbartPanel>
         );

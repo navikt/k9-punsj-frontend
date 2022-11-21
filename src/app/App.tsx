@@ -7,7 +7,7 @@ import '@navikt/ft-plattform-komponenter/dist/style.css';
 import { composeWithDevTools } from '@redux-devtools/extension';
 import * as Sentry from '@sentry/react';
 import * as React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -69,6 +69,10 @@ queryClient.setDefaultOptions({
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
+    React.useEffect(() => {
+        DsModal?.setAppElement('#app');
+    }, []);
+
     return (
         <Sentry.ErrorBoundary>
             <Provider store={store}>
@@ -106,13 +110,13 @@ export const App: React.FunctionComponent = () => {
     );
 };
 
-const root = document.getElementById('app');
-DsModal?.setAppElement('#app');
+const container = document.getElementById('app');
+const root = createRoot(container!);
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting
 prepare().then(() => {
-    render(<App />, root);
+    root.render(<App />);
 });
 
 // @ts-ignore

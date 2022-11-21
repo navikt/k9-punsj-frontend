@@ -29,12 +29,20 @@ describe('Eksisterende søknader pleiepenger', () => {
     });
 
     it('kan gå tilbake til fordeling', () => {
+        cy.contains(
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+        );
         cy.findByRole('button', { name: /tilbake/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
-        cy.findByRole('button', { name: /start ny registrering/i }).click();
+        cy.contains(
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+        );
+        cy.contains(/start ny registrering/i)
+            .should('be.visible')
+            .click();
         cy.url().should(
             'eq',
             'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
@@ -62,9 +70,9 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.findByText('16017725002').should('exist');
             cy.findByText('200').should('exist');
             cy.findByText('08.11.2021 - 11.11.2021').should('exist');
+            cy.findByRole('button', { name: /fortsett/i }).click();
         });
 
-        cy.findByRole('button', { name: /fortsett/i }).click();
         cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
         cy.findByRole('button', { name: /fortsett/i }).click();
 

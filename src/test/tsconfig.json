@@ -1,0 +1,8 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "jsx": "react"
+    },
+    "exclude": ["../../cypress.config.ts"],
+    "include": ["../../src/**/*", "../test/testConfig.js"]
+}

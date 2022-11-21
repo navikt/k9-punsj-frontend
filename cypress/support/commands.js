@@ -43,7 +43,7 @@ Cypress.Commands.add('soknadperioderInput', (fom, tom) => {
 });
 
 Cypress.Commands.add('sendInnSoknad', () => {
-    cy.findByRole('button', { name: /send inn/i })
+   cy.findByRole('button', { name: /send inn/i })
         .should('exist')
         .click();
 

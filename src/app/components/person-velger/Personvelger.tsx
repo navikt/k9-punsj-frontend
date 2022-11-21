@@ -60,9 +60,10 @@ const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProp
                         <Button
                             variant="tertiary"
                             size="small"
+                            icon={<AddPerson />}
+                            iconPosition="left"
                             onClick={() => arrayHelpers.push({ norskIdent: '', navn: '' })}
                         >
-                            <AddPerson />
                             Legg til person
                         </Button>
                     </>
