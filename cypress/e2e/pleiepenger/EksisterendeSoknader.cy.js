@@ -29,11 +29,17 @@ describe('Eksisterende søknader pleiepenger', () => {
     });
 
     it('kan gå tilbake til fordeling', () => {
+        cy.contains(
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+        );
         cy.findByRole('button', { name: /tilbake/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
+        cy.contains(
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+        );
         cy.contains(/start ny registrering/i)
             .should('be.visible')
             .click();
