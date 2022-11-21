@@ -90,7 +90,7 @@ export default function ArbeidstidKalender({
             <Modal
                 open={visArbeidstidLengrePerioder}
                 onClose={toggleVisArbeidstidLengrePerioder}
-                className="lengre-periode-modal"
+                className="venstrestilt lengre-periode-modal"
             >
                 <Modal.Content>
                     <ArbeidstidPeriodeListe
