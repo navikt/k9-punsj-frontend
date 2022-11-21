@@ -38,7 +38,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
         });
 
         cy.get('.registrering-page').within(() => {
-            cy.findByText(/Mottakelsesdato/i).should('exist');
+            cy.contains(/Mottakelsesdato/i);
             cy.findByText(/JournalpostID/i).should('exist');
             cy.findByText(/03.10.2022/i).should('exist');
             cy.findByText(/200/i).should('exist');
