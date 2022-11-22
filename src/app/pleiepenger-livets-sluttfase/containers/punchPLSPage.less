@@ -1,581 +1,584 @@
 @import (reference) '@{coreModulePath}nav-frontend-core/less/_variabler';
 
 .punch {
-  max-width: 100%;
-  margin: 0;
-  flex-basis: 100%;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 104px);
-  overflow: auto;
-
-  h1 {
-    width: 100%;
-  }
-
-  .input-row {
-    display: inline-flex;
-    width: 100%;
-    margin: 0.5rem 0 1rem 0;
-
-    .right {
-      margin-left: 30px;
-    }
-  }
-
-  .panels-wrapper {
+    max-width: 100%;
+    margin: 0;
     flex-basis: 100%;
     display: flex;
-    flex-direction: row;
-    padding-bottom: 1rem;
-    min-height: 100px;
+    flex-direction: column;
+    height: calc(100vh - 104px);
+    overflow: auto;
 
-    .punch_pdf_wrapper {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
+    h1 {
+        width: 100%;
     }
 
-    .pleiepenger_punch_form,
-    .omsorgspenger_punch_form {
-      margin-right: 0.5rem;
-      flex-basis: 100%;
-      overflow-y: auto;
-      border-color: @navGra40;
+    .input-row {
+        display: inline-flex;
+        width: 100%;
+        margin: 0.5rem 0 1rem;
 
-      .container {
-        text-align: left;
-        padding-top: 0;
-        padding-left: 0;
-        margin-left: 0;
-      }
-
-      &::-webkit-scrollbar {
-        width: 0.5rem;
-      }
-
-      &::-webkit-scrollbar-track {
-        border-radius: 2px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: @navGra40;
-        border-radius: 2px;
-
-        &:hover {
-          background: @navGra60;
+        .right {
+            margin-left: 30px;
         }
-      }
+    }
 
-      .submit-knapper {
+    .panels-wrapper {
+        flex-basis: 100%;
         display: flex;
+        flex-direction: row;
+        padding-bottom: 1rem;
+        min-height: 100px;
 
-        .vent-knapp {
-          margin-left: 1rem;
-        }
-      }
-
-      .ident-page {
-        h2:first-child {
-          margin-top: 0;
-        }
-
-        .knapp-usignert,
-        .knapp-tilbake {
-          margin-top: 1rem;
-        }
-
-        .knapperad {
-          margin-top: 1rem;
-        }
-
-        .alertstripe--advarsel {
-          margin-top: 1rem;
-        }
-      }
-
-      .knapperad .knapp1 {
-        margin-right: 1rem;
-      }
-
-      .statusetikett {
-        position: absolute;
-        top: 60px;
-        left: 1rem;
-        z-index: 5;
-      }
-
-      .arbeidstider {
-        margin-top: 1rem;
-
-        .arbeidstid-hjelpetext {
-          margin-left: 0.5rem;
-        }
-      }
-
-      .punchform__paneler {
-        margin-bottom: 0.5rem;
-      }
-
-      .ident-soker-2,
-      .inputs-barn .skjemaelement,
-      .inputs-soknad .skjemaelement {
-        margin-top: 1rem;
-      }
-
-      .klokkeslett {
-        margin-left: 0.5rem;
-      }
-
-      .arbeidstidInfo {
-        margin-top: 1rem;
-      }
-
-      .countryselect {
-        padding-top: 1rem;
-      }
-
-      .ikkeregistrert {
-        font-family: 'Source Sans Pro', Arial, sans-serif;
-        font-size: 1.1rem;
-        line-height: 1.375rem;
-        font-weight: 600;
-      }
-
-      .arbeidsknapper {
-        margin: -0.5rem;
-        width: calc(100% + 1rem);
-        max-width: calc(100% + 1rem);
-
-        .col {
-          padding: 0.5rem;
-          flex-grow: 1;
-          flex-basis: 0;
-
-          .knapp {
+        .punch_pdf_wrapper {
             width: 100%;
-          }
-        }
-      }
-
-      .frilanserpanel {
-        background-color: #eaeaea;
-        margin: 1rem 0 1rem 0;
-
-        .listepanel {
-          margin: 0.5rem 0 0 -1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
         }
 
-        .frilanser-startdato {
-          margin-bottom: 20px;
-        }
-
-        .frilanser-info {
-          margin-top: 20px;
-          font-weight: bold;
-          margin-bottom: auto;
-        }
-      }
-
-      .sn-alertstripe {
-        margin-top: 1rem;
-      }
-
-      .selvstendigpanel {
-        .infoContainer {
-          padding: 1rem 0 0 0;
-        }
-
-        background-color: #eaeaea;
-        padding-top: 0;
-        margin: 1rem 0 1rem 0;
-
-        .generelleopplysiniger {
-          margin-top: 0.5rem;
-
-          .virksomhetsNavn {
-            margin-bottom: 0.5rem;
-          }
-        }
-
-        .sn-regskasførernavn,
-        .sn-regskasførertlf,
-        .bruttoinntekt,
-        .endringdato {
-          margin-top: 0.5rem;
-        }
-
-        .endringinntekt {
-          margin: 0.5rem 0 0.5rem 0;
-        }
-
-        .listepanel {
-          margin: 0.5rem 0 0 -1rem;
-        }
-
-        .sn-startdatocontainer {
-          display: flex;
-          margin: 20px 0 10px 0;
-
-          .tom {
-            margin-left: 1rem;
-          }
-        }
-      }
-
-      .utenlandsoppholdpanel {
-        background-color: #eaeaea;
-        margin-top: 20px;
-      }
-
-      .listepaneler {
-        margin: 1rem 0 1rem 0;
-        border-radius: 5px;
-
-        .leggtillisteelementknapp {
-          font-family: 'Source Sans Pro', Arial, sans-serif;
-          font-size: 1rem;
-          line-height: 1.375rem;
-          font-weight: 400;
-          background: none;
-          border: none;
-          padding: 0;
-          display: inline-flex;
-          margin: 1rem 0 0 0;
-          color: #0067c5;
-          text-decoration: underline;
-          cursor: pointer;
-
-          .leggtilperiodeIcon {
+        .pleiepenger_punch_form.navds-panel,
+        .omsorgspenger_punch_form.navds-panel {
             margin-right: 0.5rem;
-          }
+            flex-basis: 100%;
+            overflow-y: auto;
+            border-color: @navGra40;
+
+            .container {
+                text-align: left;
+                padding-top: 0;
+                padding-left: 0;
+                margin-left: 0;
+            }
+
+            &::-webkit-scrollbar {
+                width: 0.5rem;
+            }
+
+            &::-webkit-scrollbar-track {
+                border-radius: 2px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: @navGra40;
+                border-radius: 2px;
+
+                &:hover {
+                    background: @navGra60;
+                }
+            }
+
+            .submit-knapper {
+                display: flex;
+
+                .vent-knapp {
+                    margin-left: 1rem;
+                }
+            }
+
+            .ident-page {
+                h2:first-child {
+                    margin-top: 0;
+                }
+
+                .knapp-usignert,
+                .knapp-tilbake {
+                    margin-top: 1rem;
+                }
+
+                .knapperad {
+                    margin-top: 1rem;
+                }
+
+                .alertstripe--advarsel {
+                    margin-top: 1rem;
+                }
+            }
+
+            .knapperad .knapp1.navds-button {
+                margin-right: 1rem;
+            }
+
+            .statusetikett {
+                position: absolute;
+                top: 60px;
+                left: 1rem;
+                z-index: 5;
+            }
+
+            .arbeidstider {
+                margin-top: 1rem;
+
+                .arbeidstid-hjelpetext {
+                    margin-left: 0.5rem;
+                }
+            }
+
+            .punchform__paneler {
+                margin-bottom: 0.5rem;
+            }
+
+            .ident-soker-2,
+            .inputs-barn .skjemaelement,
+            .inputs-soknad .skjemaelement {
+                margin-top: 1rem;
+            }
+
+            .klokkeslett {
+                margin-left: 0.5rem;
+            }
+
+            .arbeidstidInfo {
+                margin-top: 1rem;
+            }
+
+            .countryselect {
+                padding-top: 1rem;
+            }
+
+            .ikkeregistrert {
+                font-family: 'Source Sans Pro', Arial, sans-serif;
+                font-size: 1.1rem;
+                line-height: 1.375rem;
+                font-weight: 600;
+            }
+
+            .arbeidsknapper {
+                margin: -0.5rem;
+                width: calc(100% + 1rem);
+                max-width: calc(100% + 1rem);
+
+                .col {
+                    padding: 0.5rem;
+                    flex-grow: 1;
+                    flex-basis: 0;
+
+                    .knapp {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .frilanserpanel {
+                background-color: #eaeaea;
+                margin: 1rem 0;
+
+                .listepanel {
+                    margin: 0.5rem 0 0 -1rem;
+                }
+
+                .frilanser-startdato {
+                    margin-bottom: 20px;
+                }
+
+                .frilanser-info {
+                    margin-top: 20px;
+                    font-weight: bold;
+                    margin-bottom: auto;
+                }
+            }
+
+            .sn-alertstripe {
+                margin-top: 1rem;
+            }
+
+            .selvstendigpanel {
+                .infoContainer {
+                    padding: 1rem 0 0;
+                }
+
+                background-color: #eaeaea;
+                padding-top: 0;
+                margin: 1rem 0;
+
+                .generelleopplysiniger {
+                    margin-top: 0.5rem;
+
+                    .virksomhetsNavn {
+                        margin-bottom: 0.5rem;
+                    }
+                }
+
+                .sn-regskasførernavn,
+                .sn-regskasførertlf,
+                .bruttoinntekt,
+                .endringdato {
+                    margin-top: 0.5rem;
+                }
+
+                .endringinntekt {
+                    margin: 0.5rem 0;
+                }
+
+                .listepanel {
+                    margin: 0.5rem 0 0 -1rem;
+                }
+
+                .sn-startdatocontainer {
+                    display: flex;
+                    margin: 20px 0 10px;
+
+                    .tom {
+                        margin-left: 1rem;
+                    }
+                }
+            }
+
+            .utenlandsoppholdpanel {
+                background-color: #eaeaea;
+                margin-top: 20px;
+            }
+
+            .listepaneler {
+                margin: 1rem 0;
+                border-radius: 5px;
+
+                .leggtillisteelementknapp {
+                    font-family: 'Source Sans Pro', Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.375rem;
+                    font-weight: 400;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    display: inline-flex;
+                    margin: 1rem 0 0;
+                    color: #0067c5;
+                    text-decoration: underline;
+                    cursor: pointer;
+
+                    .leggtilperiodeIcon {
+                        margin-right: 0.5rem;
+                    }
+                }
+            }
+
+            .periodepanel {
+                background-color: #eaeaea;
+                margin: 1rem 0;
+
+                .periodepanel-input {
+                    display: flex;
+                    margin-bottom: 1rem;
+
+                    .fjern {
+                        padding: 0;
+                        background: none;
+                        border: none;
+                        display: inline-flex;
+                        color: #c30000;
+                        font-size: 16px;
+                        line-height: 22px;
+                        text-decoration-line: underline;
+                        margin: 40px 0 0.3rem auto;
+                        cursor: pointer;
+
+                        .slettIcon {
+                            margin-right: 0.5rem;
+                        }
+                    }
+
+                    .fjern-feil {
+                        .fjern();
+
+                        margin: auto 0 2.2rem -1.6rem;
+                    }
+                }
+
+                .leggtilperiode {
+                    font-family: 'Source Sans Pro', Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.375rem;
+                    font-weight: 400;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    display: inline-flex;
+                    margin: 1rem 0 0;
+                    color: #0067c5;
+                    text-decoration: underline;
+                    cursor: pointer;
+
+                    .leggtilperiodeIcon {
+                        margin-right: 0.5rem;
+                    }
+                }
+            }
+
+            .listepanel {
+                background-color: #eaeaea;
+                margin-bottom: 1rem;
+                padding: 1rem;
+                border-radius: 5px;
+
+                .fjernlisteelementknapp {
+                    padding: 0;
+                    border: none;
+                    background: none;
+                    margin-top: auto;
+                    margin-left: 0.5rem;
+                }
+
+                .listepanelbunn {
+                    display: inline-flex;
+                    float: right;
+                    padding: 5px;
+
+                    .fjernlisteelementknapp {
+                        display: inline-flex;
+                        color: #c30000;
+                        font-size: 16px;
+                        line-height: 22px;
+                        text-decoration-line: underline;
+                        cursor: pointer;
+                    }
+
+                    .slettIcon {
+                        margin-right: 0.5rem;
+                    }
+                }
+
+                .listepanelbunn_perioder {
+                    .listepanelbunn();
+
+                    margin-top: 2rem;
+                }
+
+                &.arbeidstakerpanel {
+                    .container {
+                        text-align: left;
+                        padding-top: 0;
+                        padding-left: 0;
+                        margin-left: 0;
+                    }
+
+                    .infoContainer {
+                        .col {
+                            padding: 0 0.5rem;
+                        }
+
+                        label {
+                            font-weight: bold;
+                        }
+
+                        .skjemaelement {
+                            margin-top: 1rem;
+                        }
+
+                        .org-person {
+                            display: inline-flex;
+
+                            .timer-normalt {
+                                margin-left: 0.3rem;
+                            }
+                        }
+                    }
+
+                    .leggtillisteelementknapp {
+                        margin: 0 1rem 1rem;
+                    }
+
+                    .listepaneler {
+                        background-color: #eaeaea;
+                        margin: 0.5rem 0 0 -1rem;
+                    }
+                }
+
+                &.beredskapspanel,
+                &.nattevaakspanel {
+                    .tilleggsinfo {
+                        margin: 1rem 1rem 0 0;
+                    }
+                }
+            }
+
+            .beskrivelseAvOmsorgsrollen {
+                margin-top: 1rem;
+            }
+
+            .sendknapp-wrapper {
+                margin-bottom: 0;
+            }
+
+            .fullfortmelding {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .skjema__feilomrade--harFeil {
+                @feilbg: fadeout(@pinkErrorBg, 40%);
+
+                background-color: @feilbg;
+                box-shadow: 0 0 0 8px @feilbg;
+            }
         }
-      }
 
-      .periodepanel {
-        background-color: #eaeaea;
-        margin: 1rem 0 1rem 0;
-
-        .periodepanel-input {
-          display: flex;
-          margin-bottom: 1rem;
-
-          .fjern {
-            padding: 0;
-            background: none;
+        .omsorgspenger_punch_form {
             border: none;
-            display: inline-flex;
-            color: #c30000;
-            font-size: 16px;
-            line-height: 22px;
-            text-decoration-line: underline;
-            margin: 40px 0 0.3rem auto;
-            cursor: pointer;
-
-            .slettIcon {
-              margin-right: 0.5rem;
-            }
-          }
-
-          .fjern-feil {
-            .fjern();
-            margin: auto 0 2.2rem -1.6rem;
-          }
         }
-
-        .leggtilperiode {
-          font-family: 'Source Sans Pro', Arial, sans-serif;
-          font-size: 1rem;
-          line-height: 1.375rem;
-          font-weight: 400;
-          background: none;
-          border: none;
-          padding: 0;
-          display: inline-flex;
-          margin: 1rem 0 0 0;
-          color: #0067c5;
-          text-decoration: underline;
-          cursor: pointer;
-
-          .leggtilperiodeIcon {
-            margin-right: 0.5rem;
-          }
-        }
-      }
-
-      .listepanel {
-        background-color: #eaeaea;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        border-radius: 5px;
-
-        .fjernlisteelementknapp {
-          padding: 0;
-          border: none;
-          background: none;
-          margin-top: auto;
-          margin-left: 0.5rem;
-        }
-
-        .listepanelbunn {
-          display: inline-flex;
-          float: right;
-          padding: 5px;
-
-          .fjernlisteelementknapp {
-            display: inline-flex;
-            color: #c30000;
-            font-size: 16px;
-            line-height: 22px;
-            text-decoration-line: underline;
-            cursor: pointer;
-          }
-
-          .slettIcon {
-            margin-right: 0.5rem;
-          }
-        }
-
-        .listepanelbunn_perioder {
-          .listepanelbunn();
-          margin-top: 2rem;
-        }
-
-        &.arbeidstakerpanel {
-          .container {
-            text-align: left;
-            padding-top: 0;
-            padding-left: 0;
-            margin-left: 0;
-          }
-
-          .infoContainer {
-            .col {
-              padding: 0 0.5rem;
-            }
-
-            label {
-              font-weight: bold;
-            }
-
-            .skjemaelement {
-              margin-top: 1rem;
-            }
-
-            .org-person {
-              display: inline-flex;
-
-              .timer-normalt {
-                margin-left: 0.3rem;
-              }
-            }
-          }
-
-          .leggtillisteelementknapp {
-            margin: 0 1rem 1rem 1rem;
-          }
-
-          .listepaneler {
-            background-color: #eaeaea;
-            margin: 0.5rem 0 0 -1rem;
-          }
-        }
-
-        &.beredskapspanel,
-        &.nattevaakspanel {
-          .tilleggsinfo {
-            margin: 1rem 1rem 0 0;
-          }
-        }
-      }
-
-      .beskrivelseAvOmsorgsrollen {
-        margin-top: 1rem;
-      }
-
-      .sendknapp-wrapper {
-        margin-bottom: 0;
-      }
-
-      .fullfortmelding {
-        margin-left: 0rem;
-        margin-top: 1rem;
-      }
-
-      .skjema__feilomrade--harFeil {
-        @feilbg: fadeout(@pinkErrorBg, 40%);
-        background-color: @feilbg;
-        box-shadow: 0 0 0 8px @feilbg;
-      }
     }
 
-    .omsorgspenger_punch_form {
-      border: none;
+    .punch_mappetabell tbody tr:hover {
+        background-color: @navLysBlaLighten80;
+        cursor: pointer;
     }
-  }
 
-  .punch_mappetabell tbody tr:hover {
-    background-color: @navLysBlaLighten80;
-    cursor: pointer;
-  }
+    .punch_mappetabell th {
+        padding-top: 0;
+    }
 
-  .punch_mappetabell th {
-    padding-top: 0;
-  }
+    .punch_mappetabell_tom_soknad {
+        text-align: center !important;
+        color: @navGra60;
+    }
 
-  .punch_mappetabell_tom_soknad {
-    text-align: center !important;
-    color: @navGra60;
-  }
-
-  .bold-label label {
-    font-weight: bold;
-  }
+    .bold-label label {
+        font-weight: bold;
+    }
 }
 
 .ReactModal__Content {
-  width: 50%;
-  border: 1px solid #0067c5;
-  box-sizing: border-box;
+    width: 50%;
+    border: 1px solid #0067c5;
+    box-sizing: border-box;
 }
 
 .modal_content {
-  padding: 2rem 2.5rem;
+    padding: 2rem 2.5rem;
 
-  p {
-    font-family: 'Source Sans Pro', Arial, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-  }
+    p {
+        font-family: 'Source Sans Pro', Arial, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+    }
 }
 
 .flex-container {
-  display: inline-flex;
-  width: 100%;
-
-  .hjelpetext {
-    margin: 1rem;
-
-    :last-child {
-      max-width: 30rem;
-    }
-  }
-
-  .inputPanel {
+    display: inline-flex;
     width: 100%;
-  }
+
+    .hjelpetext {
+        margin: 1rem;
+
+        :last-child {
+            max-width: 30rem;
+        }
+    }
+
+    .inputPanel {
+        width: 100%;
+    }
 }
 
 .punch_mappemodal_knapperad {
-  margin-top: 1rem;
-  display: flex;
+    margin-top: 1rem;
+    display: flex;
 
-  .knapp1 {
-    margin-right: 0.5rem;
-  }
+    .knapp1.navds-button {
+        margin-right: 0.5rem;
+    }
 
-  .knapp2 {
-    margin-left: 0.5rem;
-  }
+    .knapp2.navds-button {
+        margin-left: 0.5rem;
+    }
 }
 
 @read-modal-table-border: 1px solid #00000026;
 
 .read-modal {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 
-  ul {
-    margin: 0;
-    padding-inline-start: 20px;
+    ul {
+        margin: 0;
+        padding-inline-start: 20px;
 
-    p {
-      margin: 0;
+        p {
+            margin: 0;
+        }
     }
-  }
 
-  .row {
-    border-bottom: @read-modal-table-border;
-  }
-
-  .alertstripe {
-    margin: 0 0 1rem 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-
-    .alertstripe__tekst {
-      max-width: unset;
+    .row {
+        border-bottom: @read-modal-table-border;
     }
-  }
 
-  .col {
-    margin: 0 0.5rem;
-  }
+    .alertstripe {
+        margin: 0 0 1rem;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
 
-  .col:first-child {
-    padding-right: 0.5rem;
-    padding-left: 0;
-    margin: 0;
-  }
+        .alertstripe__tekst {
+            max-width: unset;
+        }
+    }
 
-  .col:last-child {
-    margin-right: 0 !important;
-  }
+    .col {
+        margin: 0 0.5rem;
+    }
 
-  &.enkel {
     .col:first-child {
-      flex-grow: 1;
+        padding-right: 0.5rem;
+        padding-left: 0;
+        margin: 0;
     }
 
     .col:last-child {
-      flex-grow: 2;
+        margin-right: 0 !important;
     }
-  }
 
-  .periodeliste {
-    padding-left: 1rem;
-    margin: 0;
-  }
+    &.enkel {
+        .col:first-child {
+            flex-grow: 1;
+        }
+
+        .col:last-child {
+            flex-grow: 2;
+        }
+    }
+
+    .periodeliste {
+        padding-left: 1rem;
+        margin: 0;
+    }
 }
 
 .validertSoknadOppsummeringContainerKnapper {
-  display: flex;
-  justify-content: center;
-  align-content: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 
-  .validertSoknadOppsummeringContainer_knappVidere,
-  .validertSoknadOppsummeringContainer_knappTilbake {
-    margin: 1rem 0.5rem 0 0.5rem;
-  }
+    .validertSoknadOppsummeringContainer_knappVidere.navds-button,
+    .validertSoknadOppsummeringContainer_knappTilbake.navds-button {
+        margin: 1rem 0.5rem 0;
+    }
 
-  .validertSoknadOppsummeringContainer_knappTilbake {
-    margin-top: 0.9rem;
-  }
+    .validertSoknadOppsummeringContainer_knappTilbake.navds-button {
+        margin-top: 0.9rem;
+    }
 }
 
 .loadingSpinner {
-  position: relative;
-  margin-bottom: -4rem;
-  padding-bottom: 3rem;
+    position: relative;
+    margin-bottom: -4rem;
+    padding-bottom: 3rem;
 }
 
 .validertSoknadOppsummeringContainer:first-child > div {
-  border: 0;
-  margin-top: 0;
-  padding-top: 0rem;
+    border: 0;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .punchPage__knapper {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 
-  button {
-    margin: 0rem 1rem 1rem 0rem;
-  }
+    button {
+        margin: 0 1rem 1rem 0;
+    }
 }
 
 .utregnetArbeidstid__container {
-  display: grid;
-  grid-template-columns: repeat(2, 243px);
+    display: grid;
+    grid-template-columns: repeat(2, 243px);
 }

@@ -1,14 +1,15 @@
+import { Alert } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
     korrigeringAvInntektsmeldingSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
+    omsorgspengerUtbetalingSakstyper,
     pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
     TilgjengeligSakstype,
-    omsorgspengerUtbetalingSakstyper,
 } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
@@ -18,7 +19,6 @@ import {
 } from 'app/state/actions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Alert, Button } from '@navikt/ds-react';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';

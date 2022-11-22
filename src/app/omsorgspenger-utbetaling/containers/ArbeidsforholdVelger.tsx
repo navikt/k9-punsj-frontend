@@ -1,12 +1,11 @@
-import React from 'react';
-import { useField, useFormikContext } from 'formik';
-import { Collapse } from 'react-collapse';
-import { ErrorMessage, Heading, Panel, Button } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { useField, useFormikContext } from 'formik';
+import React from 'react';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
-import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
 import Frilanser from '../components/Frilanser';
+import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
 const ArbeidsforholdVelger = () => {

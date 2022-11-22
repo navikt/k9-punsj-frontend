@@ -1,8 +1,8 @@
-import React from 'react';
-import { Heading, Panel, Button } from '@navikt/ds-react';
+import { Heading, Panel } from '@navikt/ds-react';
 import Periodevisning from 'app/components/periodevisning/Periodevisning';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { Periode } from 'app/models/types';
+import React from 'react';
 
 interface OwnProps {
     eksisterendePerioder: Periode[];

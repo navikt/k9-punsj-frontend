@@ -116,11 +116,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             />
 
             <div className="knapperad">
-                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
+                <Button variant="secondary" className="knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button onClick={newSoknad} className="knapp knapp2" disabled={valgtOption === ''} size="small">
+                    <Button onClick={newSoknad} className="knapp2" disabled={valgtOption === ''} size="small">
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>
                 )}

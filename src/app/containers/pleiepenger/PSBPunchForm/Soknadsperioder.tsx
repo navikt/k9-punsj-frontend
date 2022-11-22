@@ -1,5 +1,5 @@
+import { Alert, Panel } from '@navikt/ds-react';
 import { initializeDate } from 'app/utils';
-import { Alert, Button , Panel } from '@navikt/ds-react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';

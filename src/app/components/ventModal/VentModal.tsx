@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
+import { Modal } from '@navikt/ds-react';
+import { settJournalpostPaaVent } from 'app/api/api';
 import OkGaaTilLosModal from 'app/containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from 'app/containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/containers/pleiepenger/SettPaaVentModal';
-import { Modal, Button } from '@navikt/ds-react';
-import { settJournalpostPaaVent } from 'app/api/api';
 import { useMutation } from 'react-query';
 
 type OwnProps = {

@@ -1,8 +1,8 @@
-import React from 'react';
+import { HelpText } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
-import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues } from 'formik';
-import { HelpText, Button } from '@navikt/ds-react';
+import React from 'react';
+import { IntlShape } from 'react-intl';
 
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import VerticalSpacer from '../VerticalSpacer';

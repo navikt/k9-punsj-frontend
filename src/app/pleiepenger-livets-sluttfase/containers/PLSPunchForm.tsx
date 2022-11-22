@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Alert, HelpText, Modal, Tag, Button } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
 import {
     IInputError,
@@ -21,7 +21,6 @@ import classNames from 'classnames';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
 import { CheckboksPanel, Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
-import { Loader } from '@navikt/ds-react';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';

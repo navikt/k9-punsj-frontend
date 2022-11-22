@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Checkbox, CheckboxProps, Button } from '@navikt/ds-react';
+import { Checkbox, CheckboxProps } from '@navikt/ds-react';
 import { useField } from 'formik';
 
 interface OwnProps extends CheckboxProps {

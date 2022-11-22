@@ -1,8 +1,8 @@
-import React from 'react';
-import { BodyShort, Heading, Label, Button } from '@navikt/ds-react';
-import { periodToFormattedString, formatereTekstMedTimerOgMinutter } from 'app/utils';
+import { BodyShort, Heading, Label } from '@navikt/ds-react';
 import { Fravaersperiode } from 'app/models/types/KvitteringTyper';
+import { formatereTekstMedTimerOgMinutter, periodToFormattedString } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 export default function FravaersperiodeKvittering({ periode }: { periode: Fravaersperiode }) {

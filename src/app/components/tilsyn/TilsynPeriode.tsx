@@ -1,4 +1,4 @@
-import { Checkbox, Button } from '@navikt/ds-react';
+import { Checkbox } from '@navikt/ds-react';
 import { IPeriode, ITimerOgMinutter, Periodeinfo } from 'app/models/types';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';

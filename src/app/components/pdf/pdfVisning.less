@@ -1,98 +1,111 @@
 @import (reference) '@{coreModulePath}nav-frontend-core/less/_variabler';
 
 .punch_pdf_wrapper {
-  width:          100%;
-  display:        flex;
-  flex-direction: column;
-  align-items:    stretch;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 
-  .knapp:hover {
-    background-color: white;
-  }
+    .knapp:hover {
+        background-color: white;
+    }
 
-  &.pdf_closed {
-    width:      54px !important;
-    min-width:  54px !important;
-    transition: width .2s, min-width .2s;
-    div {
-      cursor: default !important;
+    &.pdf_closed {
+        width: 54px !important;
+        min-width: 54px !important;
+        transition: width 0.2s, min-width 0.2s;
+
+        div {
+            cursor: default !important;
+        }
+
+        iframe,
+        .knapperad {
+            display: none;
+        }
+
+        .button_open {
+            display: block;
+        }
+
+        .fleredokumenter {
+            display: none;
+        }
     }
-    iframe, .knapperad {
-      display: none;
-    }
-    .button_open {
-      display: block
-    }
-    .fleredokumenter {
-      display: none;
-    }
-  }
 }
 
 .punch_pdf {
-  @pdfPadding:      3px;
-  padding:          @pdfPadding;
-  margin-left:      0.5rem;
-  background-color: @navGra40;
-  height:           100%;
-  display:          flex;
-  flex-direction:   column;
-  align-items:      stretch;
+    @pdfPadding: 3px;
 
-  .fleredokumenter {
+    padding: @pdfPadding;
+    margin-left: 0.5rem;
+    background-color: @navGra40;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 
-    @buttonHeight: 40px;
-    display:       flex;
-    overflow: scroll;
+    .fleredokumenter {
+        @buttonHeight: 40px;
 
-    > div {
-      background-color: @white;
-      border-radius:    2px;
-      display:          flex;
-      p {margin: auto}
+        display: flex;
+        overflow: scroll;
+
+        > div {
+            background-color: @white;
+            border-radius: 2px;
+            display: flex;
+
+            p {
+                margin: auto;
+            }
+        }
+
+        > div,
+        .knapp {
+            flex-grow: 1;
+            height: @buttonHeight;
+        }
+
+        .knapp {
+            margin-left: @pdfPadding;
+
+            &.aktiv {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                height: calc(@buttonHeight + @pdfPadding);
+            }
+        }
     }
 
-    > div, .knapp {
-      flex-grow: 1;
-      height:    @buttonHeight;
+    iframe {
+        border-width: 0;
+        flex-basis: 100%;
     }
 
-    .knapp {
-      margin-left: @pdfPadding;
-      &.aktiv {
-        border-bottom-left-radius:  0;
-        border-bottom-right-radius: 0;
-        height:                     calc(@buttonHeight + @pdfPadding);
-      }
+    .knapperad {
+        display: flex;
+        flex-direction: row;
+        align-content: space-between;
+
+        .navds-button {
+            flex-grow: 1;
+            margin-top: @pdfPadding;
+
+            &.knapp1 {
+                margin-right: calc(@pdfPadding / 2);
+            }
+
+            &.knapp2 {
+                margin-left: calc(@pdfPadding / 2);
+            }
+        }
     }
-  }
 
-  iframe {
-    border-width: 0;
-    flex-basis:   100%;
-  }
-
-
-  .knapperad {
-
-    display:        flex;
-    flex-direction: row;
-    align-content:  space-between;
-
-    .knapp {
-      flex-grow:  1;
-      margin-top: @pdfPadding;
-
-      &.knapp1 {margin-right: calc(@pdfPadding / 2)}
-
-      &.knapp2 {margin-left: calc(@pdfPadding / 2)}
+    .button_open.navds-button {
+        width: 100%;
+        padding: 0;
+        height: 100%;
+        display: none;
     }
-  }
-
-  .button_open {
-    width:   100%;
-    padding: 0;
-    height:  100%;
-    display: none;
-  }
 }

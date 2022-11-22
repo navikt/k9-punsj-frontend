@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { Alert } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
-import { Alert, Button } from '@navikt/ds-react';
-import { Checkbox, Input } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
+import intlHelper from 'app/utils/intlUtils';
+import { Checkbox, Input } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from '../FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 
