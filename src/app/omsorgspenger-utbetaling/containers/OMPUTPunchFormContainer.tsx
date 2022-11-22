@@ -1,27 +1,25 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useContext, useState } from 'react';
 import { Formik, yupToFormErrors } from 'formik';
-import { connect, useDispatch } from 'react-redux';
+import React, { useContext, useState } from 'react';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
+import { connect, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { get } from 'lodash';
 
-import { Alert, Button , Loader } from '@navikt/ds-react';
+import { Alert, Button, Loader } from '@navikt/ds-react';
 
-
+import { Periode } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { Feil } from 'app/models/types/ValideringResponse';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { IIdentState } from 'app/models/types/IdentState';
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { Feil } from 'app/models/types/ValideringResponse';
-import { Periode } from 'app/models/types';
-import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import { OMPUTPunchForm } from './OMPUTPunchForm';
-import schema, { getSchemaContext } from '../schema';
 import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
+import schema, { getSchemaContext } from '../schema';
 import { backendTilFrontendMapping } from '../utils';
+import { OMPUTPunchForm } from './OMPUTPunchForm';
 
 interface OwnProps {
     journalpostid: string;

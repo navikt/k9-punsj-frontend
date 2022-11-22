@@ -1,4 +1,4 @@
-import { Tag, Button } from '@navikt/ds-react';
+import { Tag } from '@navikt/ds-react';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';

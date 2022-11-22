@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { Alert, Panel } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
 import { IPunchPageDispatchProps, IPunchPageQueryProps } from 'app/containers/pleiepenger/PunchPage';
 import 'app/containers/pleiepenger/punchPage.less';
-import useQuery from 'app/hooks/useQuery';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { IJournalpost, IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Alert, Button , Panel } from '@navikt/ds-react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
 import React from 'react';

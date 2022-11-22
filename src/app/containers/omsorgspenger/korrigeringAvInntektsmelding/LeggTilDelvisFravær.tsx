@@ -5,7 +5,7 @@ import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { Alert, Button , Panel } from '@navikt/ds-react';
+import { Alert, Panel } from '@navikt/ds-react';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { Row } from 'react-bootstrap';

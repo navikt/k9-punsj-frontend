@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import DateInput from 'app/components/skjema/DateInput';
-import { Alert, Button , Panel } from '@navikt/ds-react';
+import { Alert, Panel } from '@navikt/ds-react';
 import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';

@@ -1,4 +1,4 @@
-import { Tag, Button } from '@navikt/ds-react';
+import { Tag } from '@navikt/ds-react';
 import React from 'react';
 import './mellomlagringEtikett.less';
 

@@ -1,18 +1,18 @@
-import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { Alert, Button } from '@navikt/ds-react';
+import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { PunchStep } from '../../models/enums';
-import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { IIdentState } from '../../models/types/IdentState';
 import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
-import { setHash } from '../../utils';
-import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
+import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { RootStateType } from '../../state/RootState';
+import { setHash } from '../../utils';
+import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
+import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
 
 export interface IOMPKSRegistreringsValgComponentProps {
     journalpostid: string;
