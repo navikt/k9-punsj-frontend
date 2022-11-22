@@ -12,7 +12,11 @@ const BrevContainer: React.FC<Props> = ({ children }) => {
 
     return (
         <div className="brevContainer">
-            <button className="brevContainer__button" type="button" onClick={() => setIsOpen(!isOpen)}>
+            <button
+                className="brevContainer__button navds-button--tertiary"
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+            >
                 <SendIcon />
                 Send brev til arbeidsgiver eller søker
                 {isOpen ? (

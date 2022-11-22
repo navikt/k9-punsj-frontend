@@ -245,8 +245,8 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 loading={isSubmitting}
                                 disabled={isSubmitting}
                                 type="button"
+                                icon={<SendIcon />}
                             >
-                                <SendIcon />
                                 {intl.formatMessage({ id: 'Messages.Submit' })}
                             </Button>
                             {values.brevmalkode && (
