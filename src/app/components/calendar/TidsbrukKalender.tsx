@@ -1,7 +1,7 @@
 import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
+import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
 import { KalenderDag } from 'app/models/KalenderDag';
-import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
@@ -71,17 +71,35 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             }
         };
         const toggleModal = () => setVisModal(!visModal);
+        const datoerIGyldigePerioder = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
+        const disabledDates = getDatesInMonth(gyldigePerioder[0].fom)
+            .map((date) => {
+                if (!isDateInDates(date, datoerIGyldigePerioder) || (disableWeekends && isWeekend(date))) {
+                    return date;
+                }
+
+                return false;
+            })
+            .filter((v) => v instanceof Date) as Date[];
         const toggleDay = (date: Date) => {
             if (selectedDates.some((v) => dayjs(v).isSame(date))) {
                 setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)));
             } else {
-                setSelectedDates([...selectedDates, date]);
+                setSelectedDates(
+                    [...selectedDates, date].filter((v) =>
+                        disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(v))
+                    )
+                );
             }
             setPreviouslySelectedDate(date);
         };
 
         const selectDates = (dates: Date[]) => {
-            setSelectedDates(uniq([...selectedDates, ...dates]));
+            setSelectedDates(
+                uniq([...selectedDates, ...dates]).filter((date) =>
+                    disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(date))
+                )
+            );
         };
         const selectRange = (date: Date): void => {
             if (!previouslySelectedDate) {
@@ -92,18 +110,6 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             selectDates(getDatesInDateRange({ fom: dates[0], tom: dates[1] }));
         };
 
-        const datoerIGyldigePerioder = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
-        const disabledDates = getDatesInMonth(gyldigePerioder[0].fom)
-            .map((date) => {
-                const dateIsWeekend = [0, 6].includes(date.getDay());
-
-                if (!isDateInDates(date, datoerIGyldigePerioder) || (disableWeekends && dateIsWeekend)) {
-                    return date;
-                }
-
-                return false;
-            })
-            .filter((v) => v instanceof Date) as Date[];
         const someSelectedDaysHaveContent = kalenderdager
             ?.map((kalenderdag) => dayjs(kalenderdag.date).format(formats.DDMMYYYY))
             .some((date) =>
