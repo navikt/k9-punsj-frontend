@@ -12,7 +12,7 @@ const OpprettJournalpostInngang = () => {
                 <h1 className="heading">Opprett journalpost</h1>
                 <BodyLong>{intl.formatMessage({ id: 'OpprettJournalpostInngang.ingress' })}</BodyLong>
                 <Link
-                    className="linkButton knapp knapp--hoved"
+                    className="linkButton navds-button navds-button--primary navds-button--medium"
                     to="/opprett-journalpost"
                     data-testid="opprett-journalpost-inngang"
                 >

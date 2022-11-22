@@ -12,7 +12,7 @@ const SendBrevIAvsluttetSakInngang = () => {
                 <h1 className="heading">{intl.formatMessage({ id: 'SendBrevIAvsluttetSakInngang.heading' })}</h1>
                 <BodyLong>{intl.formatMessage({ id: 'SendBrevIAvsluttetSakInngang.ingress' })}</BodyLong>
                 <Link
-                    className="linkButton knapp knapp--hoved"
+                    className="linkButton navds-button navds-button--primary navds-button--medium"
                     to="/brev-avsluttet-sak"
                     data-testid="brev-avsluttet-sak-inngang"
                 >
