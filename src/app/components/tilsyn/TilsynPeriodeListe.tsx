@@ -53,8 +53,9 @@ export default function TilsynPeriodeListe({
                                 <Button
                                     variant="tertiary"
                                     onClick={() => arrayHelpers.push(new PeriodeMedTimerMinutter({}))}
+                                    icon={<AddCircle />}
                                 >
-                                    <AddCircle /> Legg til periode
+                                    Legg til periode
                                 </Button>
                                 <VerticalSpacer sixteenPx />
                                 <div style={{ display: 'flex' }}>
