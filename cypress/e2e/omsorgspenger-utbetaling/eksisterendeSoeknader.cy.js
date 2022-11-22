@@ -36,9 +36,8 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             const { worker } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
         });
-
         cy.get('.punch_mappetabell').within(() => {
-            cy.contains(/Mottakelsesdato/i);
+            cy.waitUntil(() => cy.contains(/Mottakelsesdato/i));
             cy.findByText(/JournalpostID/i).should('exist');
             cy.findByText(/03.10.2022/i).should('exist');
             cy.findByText(/200/i).should('exist');
