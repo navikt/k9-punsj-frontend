@@ -36,11 +36,17 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
         ref
     ) => {
         const [shiftKeydown, setShiftKeydown] = useState(false);
+        const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+        const [visKalender, setVisKalender] = useState<boolean>(false);
+        const [visModal, setVisModal] = useState<boolean>(false);
         const [previouslySelectedDate, setPreviouslySelectedDate] = useState<Date | null>(null);
         useEffect(() => {
             const onKeyDown = (event: KeyboardEvent) => {
                 if (event.key === 'Shift') {
                     setShiftKeydown(true);
+                }
+                if (event.key === 'Escape') {
+                    setSelectedDates([]);
                 }
             };
             const onKeyUp = (event: KeyboardEvent) => {
@@ -56,9 +62,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 document.removeEventListener('keyup', onKeyUp);
             };
         }, []);
-        const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-        const [visKalender, setVisKalender] = useState<boolean>(false);
-        const [visModal, setVisModal] = useState<boolean>(false);
+
         const clearSelectedDates = () => {
             setSelectedDates([]);
         };
@@ -85,11 +89,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             if (selectedDates.some((v) => dayjs(v).isSame(date))) {
                 setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)));
             } else {
-                setSelectedDates(
-                    [...selectedDates, date].filter((v) =>
-                        disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(v))
-                    )
-                );
+                setSelectedDates([...selectedDates, date]);
             }
             setPreviouslySelectedDate(date);
         };
