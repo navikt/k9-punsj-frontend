@@ -66,6 +66,7 @@ describe('Eksisterende søknader pleiepenger', () => {
         });
 
         cy.get('.punch_mappetabell').within(() => {
+            cy.waitUntil(() => cy.contains(/Mottakelsesdato/i));
             cy.contains(/Mottakelsesdato/i);
             cy.findByText('12.10.2020').should('exist');
             cy.findByText('16017725002').should('exist');
