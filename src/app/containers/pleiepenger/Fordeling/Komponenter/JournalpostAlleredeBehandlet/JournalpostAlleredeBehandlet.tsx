@@ -100,7 +100,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                     <ul>
                         <li>Må være inngående journalpost</li>
                         <li>Kan ikke være kopi av en annen journalpost</li>
-                        <li>Kan ikke være inntektsmelding uten krav</li>
+                        <li>Kan ikke være inntektsmelding uten søknad</li>
                     </ul>
                 </Alert>
             )}
