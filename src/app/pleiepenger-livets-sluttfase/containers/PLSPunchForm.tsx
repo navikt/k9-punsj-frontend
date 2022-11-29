@@ -682,26 +682,31 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             closeButton={false}
                             open={!!this.props.punchFormState.isValid}
                         >
-                            <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <PLSSoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
-                            </div>
-                            <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                <Button
-                                    size="small"
-                                    className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                >
-                                    {intlHelper(intl, 'fordeling.knapp.videre')}
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="small"
-                                    className="validertSoknadOppsummeringContainer_knappTilbake"
-                                    onClick={() => this.props.validerSoknadReset()}
-                                >
-                                    {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                </Button>
-                            </div>
+                            <Modal.Content>
+                                <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                    <PLSSoknadKvittering
+                                        intl={intl}
+                                        response={this.props.punchFormState.validertSoknad}
+                                    />
+                                </div>
+                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                                    <Button
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappVidere"
+                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                    >
+                                        {intlHelper(intl, 'fordeling.knapp.videre')}
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappTilbake"
+                                        onClick={() => this.props.validerSoknadReset()}
+                                    >
+                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                    </Button>
+                                </div>
+                            </Modal.Content>
                         </Modal>
                     )}
 

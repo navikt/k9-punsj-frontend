@@ -392,26 +392,28 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     closeButton={false}
                     open={!!props.punchFormState.isValid}
                 >
-                    <div className={classNames('validertSoknadOppsummeringContainer')}>
-                        <OMPMASoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
-                    </div>
-                    <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                        <Button
-                            size="small"
-                            className="validertSoknadOppsummeringContainer_knappVidere"
-                            onClick={() => setVisErDuSikkerModal(true)}
-                        >
-                            {intlHelper(intl, 'fordeling.knapp.videre')}
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="small"
-                            className="validertSoknadOppsummeringContainer_knappTilbake"
-                            onClick={() => props.validerSoknadReset()}
-                        >
-                            {intlHelper(intl, 'skjema.knapp.avbryt')}
-                        </Button>
-                    </div>
+                    <Modal.Content>
+                        <div className={classNames('validertSoknadOppsummeringContainer')}>
+                            <OMPMASoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
+                        </div>
+                        <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                            <Button
+                                size="small"
+                                className="validertSoknadOppsummeringContainer_knappVidere"
+                                onClick={() => setVisErDuSikkerModal(true)}
+                            >
+                                {intlHelper(intl, 'fordeling.knapp.videre')}
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="small"
+                                className="validertSoknadOppsummeringContainer_knappTilbake"
+                                onClick={() => props.validerSoknadReset()}
+                            >
+                                {intlHelper(intl, 'skjema.knapp.avbryt')}
+                            </Button>
+                        </div>
+                    </Modal.Content>
                 </Modal>
             )}
             {visErDuSikkerModal && (
