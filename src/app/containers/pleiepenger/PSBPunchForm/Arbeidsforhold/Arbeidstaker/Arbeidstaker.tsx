@@ -1,21 +1,21 @@
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
 import usePrevious from 'app/hooks/usePrevious';
+import { GetErrorMessage, IPeriode } from 'app/models/types';
+import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
+import { Arbeidstaker, IArbeidstaker, OrgOrPers } from 'app/models/types/søknadTypes/Arbeidstaker';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
-import { GetErrorMessage, IPeriode } from 'app/models/types';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { ApiPath } from '../../../../../apiConfig';
-import ArbeidsgiverResponse from '../../../../../models/types/ArbeidsgiverResponse';
-import { Arbeidstaker, IArbeidstaker, OrgOrPers } from '../../../../../models/types/Arbeidstaker';
 import ActionType from './actionTypes';
-import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 import './arbeidstaker.less';
+import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 
 interface ArbeidstakerComponentProps {
     søkerId: string;

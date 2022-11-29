@@ -4,10 +4,11 @@ import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
 import {
     IInputError,
     ISignaturState,
-    IUtenlandsOpphold,
-    SelvstendigNaeringsdrivendeOpptjening,
     SelvstendigNaerinsdrivende,
+    SelvstendigNaeringsdrivendeOpptjening,
+    IUtenlandsOpphold,
 } from 'app/models/types';
+
 import {
     resetPunchFormAction,
     setJournalpostPaaVentResetAction,
@@ -30,8 +31,8 @@ import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
-import { Arbeidstaker } from '../../models/types/Arbeidstaker';
-import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
+import { Arbeidstaker } from '../../models/types/søknadTypes/Arbeidstaker';
+import { FrilanserOpptjening } from '../../models/types/søknadTypes/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { IPeriode } from '../../models/types/Periode';
@@ -42,7 +43,7 @@ import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
-import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import { ArbeidstidInfo } from 'app/models/types/søknadTypes/ArbeidstidInfo';
 import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdPanel';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
@@ -682,26 +683,31 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             closeButton={false}
                             open={!!this.props.punchFormState.isValid}
                         >
-                            <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <PLSSoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
-                            </div>
-                            <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                <Button
-                                    size="small"
-                                    className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                >
-                                    {intlHelper(intl, 'fordeling.knapp.videre')}
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="small"
-                                    className="validertSoknadOppsummeringContainer_knappTilbake"
-                                    onClick={() => this.props.validerSoknadReset()}
-                                >
-                                    {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                </Button>
-                            </div>
+                            <Modal.Content>
+                                <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                    <PLSSoknadKvittering
+                                        intl={intl}
+                                        response={this.props.punchFormState.validertSoknad}
+                                    />
+                                </div>
+                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                                    <Button
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappVidere"
+                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                    >
+                                        {intlHelper(intl, 'fordeling.knapp.videre')}
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappTilbake"
+                                        onClick={() => this.props.validerSoknadReset()}
+                                    >
+                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                    </Button>
+                                </div>
+                            </Modal.Content>
                         </Modal>
                     )}
 

@@ -30,7 +30,7 @@ const isDev = window.location.hostname.includes('dev.adeo.no');
 
 const K9_LOS_URL = getEnvironmentVariable('K9_LOS_URL');
 const K9_LOS_URL_SET: boolean = !!K9_LOS_URL && K9_LOS_URL !== 'undefined';
-const REDIRECT_URL_LOS = K9_LOS_URL_SET ? K9_LOS_URL : 'http://localhost:8030';
+const REDIRECT_URL_LOS = K9_LOS_URL_SET ? K9_LOS_URL : 'http://localhost:8080';
 
 type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperComponentProps> &
     IApplicationWrapperStateProps &

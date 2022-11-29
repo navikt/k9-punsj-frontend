@@ -202,11 +202,14 @@ const getDateInputField = (punchFormComponent: ShallowWrapper, containerComponen
         .find(`#${fieldId}`)
         .dive();
 
-describe('PunchForm', () => {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
 
+describe('PunchForm', () => {
     beforeEach(() => {
-        useSelectorMock.mockClear();
+        reactRedux.useSelector.mockImplementation((callback) => callback({}));
     });
 
     it('Viser skjema', () => {
@@ -261,7 +264,13 @@ describe('PunchForm', () => {
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad }, {});
-        useSelectorMock.mockReturnValue({});
+        reactRedux.useSelector.mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {},
+                },
+            })
+        );
         expect(punchForm.find('Soknadsperioder').dive().find('Periodepaneler')).toHaveLength(1);
     });
 
@@ -425,10 +434,16 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        useSelectorMock.mockReturnValue({
-            soknad,
-            perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
-        });
+        reactRedux.useSelector.mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {
+                        soknad,
+                        perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
+                    },
+                },
+            })
+        );
         expect(
             punchForm
                 .find('Soknadsperioder')
@@ -503,10 +518,16 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }] }, {});
-        useSelectorMock.mockReturnValue({
-            soknad,
-            perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
-        });
+        reactRedux.useSelector.mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {
+                        soknad,
+                        perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
+                    },
+                },
+            })
+        );
         expect(
             punchForm
                 .find('Soknadsperioder')

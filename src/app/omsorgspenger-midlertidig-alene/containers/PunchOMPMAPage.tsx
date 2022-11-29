@@ -148,7 +148,7 @@ export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPagePro
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
+                <Panel className="punch_form" border>
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {underFnr()}
                 </Panel>

@@ -13,18 +13,14 @@ import intlHelper from '../../utils/intlUtils';
 export interface IPeriodepanelerProps {
     intl: IntlShape;
     periods: IPeriode[]; // Liste over periodisert informasjon
-    panelid: (periodeindex: number) => string; // String som skal brukes til å identifisere hvert enkelt element
     initialPeriode: IPeriode; // Objektet som legges til når man legger til en ny periode i lista
     editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
-    className?: string;
+    editSoknadState?: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     textLeggTil?: string;
     textFjern?: string;
-    panelClassName?: string;
     getErrorMessage?: GetErrorMessage;
     getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
-    minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
@@ -77,7 +73,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             periode={p || {}}
                             intl={intl}
                             onChange={(periode) => {
-                                editSoknadState(editPeriode(i, periode));
+                                if (editSoknadState) {
+                                    editSoknadState(editPeriode(i, periode));
+                                }
                             }}
                             onBlur={(periode) => {
                                 editSoknad(editPeriode(i, periode));
@@ -92,7 +90,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);
-                                editSoknadState(newArray);
+                                if (editSoknadState) {
+                                    editSoknadState(newArray);
+                                }
                                 editSoknad(newArray);
                                 if (props.onRemove) {
                                     props.onRemove();
@@ -121,7 +121,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         type="button"
                         onClick={() => {
                             const newArray: IPeriode[] = addItem();
-                            editSoknadState(newArray);
+                            if (editSoknadState) {
+                                editSoknadState(newArray);
+                            }
                             editSoknad(newArray);
                             if (props.onAdd) {
                                 props.onAdd();

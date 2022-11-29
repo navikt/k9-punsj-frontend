@@ -87,6 +87,13 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
             )}
 
             <RadioPanel
+                label={intlHelper(intl, FordelingDokumenttype.OPPLAERINGSPENGER)}
+                value={FordelingDokumenttype.OPPLAERINGSPENGER}
+                checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
+                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+            />
+
+            <RadioPanel
                 label={intlHelper(intl, FordelingDokumenttype.ANNET)}
                 value={FordelingDokumenttype.ANNET}
                 checked={valgtDokumentType === FordelingDokumenttype.ANNET}

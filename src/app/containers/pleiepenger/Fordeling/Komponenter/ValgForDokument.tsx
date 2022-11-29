@@ -6,6 +6,7 @@ import {
     omsorgspengerKroniskSyktBarnSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
     omsorgspengerUtbetalingSakstyper,
+    opplæringspengerSakstyper,
     pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     Sakstype,
@@ -38,7 +39,7 @@ interface IValgForDokument {
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     omfordel: typeof omfordelAction;
-    gjelderPleiepengerEllerOmsorgspenger: boolean;
+    gjelderPsbOmsOlp: boolean;
 }
 
 const ValgForDokument: React.FC<IValgForDokument> = ({
@@ -52,12 +53,12 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     omfordel,
     journalpost,
     lukkJournalpostOppgave,
-    gjelderPleiepengerEllerOmsorgspenger,
+    gjelderPsbOmsOlp,
     visValgForDokument,
 }) => {
     const intl = useIntl();
     const vis =
-        ((fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger) || visValgForDokument) &&
+        ((fordelingState.skalTilK9 && gjelderPsbOmsOlp) || visValgForDokument) &&
         dokumenttype !== FordelingDokumenttype.ANNET;
 
     if (!vis) {
@@ -88,13 +89,18 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     const omsorgspengerUtbetaling = () =>
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
+    const opplæringspenger = () =>
+        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER && opplæringspengerSakstyper;
+
     const sakstypekeys =
         korrigeringIM() ||
         pleiepengerSyktBarn() ||
         pleiepengerILivetsSluttfase() ||
         omsorgspengerKroniskSyktBarn() ||
         omsorgspengerMidlertidigAlene() ||
-        omsorgspengerUtbetaling();
+        omsorgspengerUtbetaling() ||
+        opplæringspenger() ||
+        [];
 
     const keys = sakstypekeys.filter((key) => {
         if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {

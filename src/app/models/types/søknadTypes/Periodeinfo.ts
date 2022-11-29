@@ -1,4 +1,4 @@
-import { IPeriode } from './Periode';
+import { IPeriode } from '../Periode';
 
 export type Periodeinfo<T> = {
     periode?: IPeriode;

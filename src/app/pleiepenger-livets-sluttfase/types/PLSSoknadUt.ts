@@ -11,9 +11,9 @@ import {
 } from './PLSSoknad';
 
 import { Arbeidstaker, IPeriode, Periode, Periodeinfo } from '../../models/types';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
-import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
+import { ArbeidstidInfo } from '../../models/types/søknadTypes/ArbeidstidInfo';
+import { FrilanserOpptjening } from '../../models/types/søknadTypes/FrilanserOpptjening';
+import BegrunnelseForInnsending from '../../models/types/søknadTypes/BegrunnelseForInnsending';
 
 export interface IPLSSoknadUt {
     soeknadId?: string;

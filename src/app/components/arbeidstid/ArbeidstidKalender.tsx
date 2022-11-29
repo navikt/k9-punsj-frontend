@@ -12,7 +12,7 @@ import {
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
-import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import { ArbeidstidInfo } from 'app/models/types/søknadTypes/ArbeidstidInfo';
 import { useIntl } from 'react-intl';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
@@ -23,7 +23,7 @@ import VerticalSpacer from '../VerticalSpacer';
 export interface ArbeidstidKalenderProps {
     arbeidstidInfo: ArbeidstidInfo;
     updateSoknad: (v: IArbeidstidPeriodeMedTimer[]) => void;
-    updateSoknadState: (v: IArbeidstidPeriodeMedTimer[]) => void;
+    updateSoknadState?: (v: IArbeidstidPeriodeMedTimer[]) => void;
     nyeSoknadsperioder: IPeriode[];
     eksisterendeSoknadsperioder: IPeriode[];
 }
@@ -52,7 +52,9 @@ export default function ArbeidstidKalender({
             );
 
             updateSoknad(perioderFiltert);
-            updateSoknadState(perioderFiltert);
+            if (updateSoknadState) {
+                updateSoknadState(perioderFiltert);
+            }
         };
 
     const lagreTimer = ({
@@ -78,7 +80,9 @@ export default function ArbeidstidKalender({
             jobberNormaltPerDag,
         }));
         updateSoknad([...eksisterendePerioderUtenSelectedDates, ...payload]);
-        updateSoknadState([...eksisterendePerioderUtenSelectedDates, ...payload]);
+        if (updateSoknadState) {
+            updateSoknadState([...eksisterendePerioderUtenSelectedDates, ...payload]);
+        }
     };
 
     return (
@@ -100,7 +104,9 @@ export default function ArbeidstidKalender({
                         nyeSoknadsperioder={nyeSoknadsperioder}
                         lagre={(periodeInfo) => {
                             updateSoknad(periodeInfo);
-                            updateSoknadState(periodeInfo);
+                            if (updateSoknadState) {
+                                updateSoknadState(periodeInfo);
+                            }
                             toggleVisArbeidstidLengrePerioder();
                         }}
                         avbryt={toggleVisArbeidstidLengrePerioder}

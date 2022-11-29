@@ -6,14 +6,15 @@ export interface FormikTextFieldProps extends TextFieldProps {
     label: string;
     name: string;
     filterPattern?: RegExp;
+    customError?: string;
 }
 
-const TextFieldFormik = ({ label, name, filterPattern, ...props }: FormikTextFieldProps) => {
+const TextFieldFormik = ({ label, name, filterPattern, customError, ...props }: FormikTextFieldProps) => {
     const [field, meta, helpers] = useField(name);
     return (
         <TextField
             label={label}
-            error={meta.touched && meta.error}
+            error={meta.touched && meta.error ? meta.error : customError}
             {...field}
             {...props}
             onChange={

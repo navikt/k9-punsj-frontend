@@ -2,7 +2,7 @@
 import { TimeFormat } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
-import { Periodeinfo } from './Periodeinfo';
+import { Periodeinfo } from './søknadTypes/Periodeinfo';
 import { initializeDate, datetime } from '../../utils/timeUtils';
 import DateRange from './DateRange';
 

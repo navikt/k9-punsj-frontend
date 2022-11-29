@@ -1,39 +1,24 @@
 /* eslint-disable max-classes-per-file */
-import { FrilanserOpptjening } from './FrilanserOpptjening';
+import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from '../Periode';
 import { Periodeinfo } from './Periodeinfo';
-import { IPeriode, Periode } from './Periode';
-import { Arbeidstaker } from './Arbeidstaker';
-import { ArbeidstidInfo } from './ArbeidstidInfo';
 
-import {
-    Barn,
-    IArbeidstid,
-    IBarn,
-    IOmsorg,
-    IOpptjeningAktivitet,
-    ISoknadsInfo,
-    ITilleggsinformasjon,
-    ITilsynsordning,
-    IUtenlandsOpphold,
-    IUttak,
-    Omsorg,
-    SelvstendigNaeringsdrivendeOpptjening,
-    SoknadsInfo,
-    Tilleggsinformasjon,
-    Tilsynsordning,
-    UtenlandsOpphold,
-    Uttak,
-} from './PSBSoknad';
+import { Arbeidstid, IArbeidstid } from './Arbeidstid';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+import { Barn, IBarn } from './IBarn';
+import { IOmsorg, Omsorg } from './Omsorg';
+import { IOpptjeningAktivitet, OpptjeningAktivitet } from './OpptjeningAktivitet';
+import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
+import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
+import { IUttak, Uttak } from './Uttak';
 
-export interface IPSBSoknadUt {
+export interface IPSBSoknad {
     soeknadId?: string;
     soekerId: string;
-    journalposter?: string[];
+    journalposter?: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;
-    soeknadsperiode?: IPeriode[] | null;
+    soeknadsperiode: IPeriode[];
     opptjeningAktivitet: IOpptjeningAktivitet;
     arbeidstid?: IArbeidstid;
     beredskap?: Periodeinfo<ITilleggsinformasjon>[];
@@ -53,63 +38,73 @@ export interface IPSBSoknadUt {
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 }
 
-export class ArbeidstidUt implements Required<IArbeidstid> {
-    arbeidstakerList: Arbeidstaker[];
+export interface ITilsynsordning {
+    perioder?: Periodeinfo<ITimerOgMinutter>[];
+}
 
-    frilanserArbeidstidInfo: ArbeidstidInfo | null;
+export class Tilsynsordning implements Required<ITilsynsordning> {
+    perioder: PeriodeMedTimerMinutter[];
 
-    selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | Record<string, unknown>;
+    constructor(t: ITilsynsordning) {
+        this.perioder = (t.perioder || []).map((p) => new PeriodeMedTimerMinutter(p));
+    }
 
-    constructor(a: IArbeidstid) {
-        this.arbeidstakerList = (a.arbeidstakerList || []).map((at) => new Arbeidstaker(at));
-        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidInfo(a.frilanserArbeidstidInfo) : null;
-        this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo
-            ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo)
-            : {};
+    values(): Required<ITimerOgMinutter>[] {
+        return this.perioder.map((p) => p.values());
     }
 }
 
-export class OpptjeningAktivitetUt implements Required<IOpptjeningAktivitet> {
-    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
+export interface ITilleggsinformasjon {
+    tilleggsinformasjon?: string;
+}
 
-    frilanser: FrilanserOpptjening | null;
+export class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinformasjon>> {
+    periode: Periode;
 
-    arbeidstaker: Arbeidstaker[];
+    tilleggsinformasjon: string;
 
-    constructor(arbeid: IOpptjeningAktivitet) {
-        this.arbeidstaker = (arbeid.arbeidstaker || []).map((at) => new Arbeidstaker(at));
-        this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende
-            ? new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende)
-            : null;
-        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
+    constructor(periodeinfo: Periodeinfo<ITilleggsinformasjon>) {
+        this.periode = new Periode(periodeinfo.periode || {});
+        this.tilleggsinformasjon = periodeinfo.tilleggsinformasjon || '';
+    }
+
+    values(): Required<Periodeinfo<ITilleggsinformasjon>> {
+        return {
+            periode: this.periode.values(),
+            tilleggsinformasjon: this.tilleggsinformasjon,
+        };
     }
 }
 
-const getTrekkKravPerioder = (soknad: IPSBSoknadUt) => {
+export interface IOppholdsLand {
+    land?: string;
+}
+
+const getTrekkKravPerioder = (soknad: IPSBSoknad) => {
     if (soknad.trekkKravPerioder) {
         return soknad.trekkKravPerioder.map((periode) => new Periode(periode));
     }
     return undefined;
 };
 
-export class PSBSoknadUt implements IPSBSoknadUt {
+export class PSBSoknad implements IPSBSoknad {
     soeknadId: string;
 
     soekerId: string;
 
-    journalposter: string[];
+    journalposter: Set<string>;
 
     mottattDato: string;
 
     klokkeslett: string;
 
-    barn: Barn | Record<string, unknown>;
+    barn: Barn;
 
-    soeknadsperiode: Periode[] | null;
+    soeknadsperiode: Periode[];
 
-    opptjeningAktivitet: OpptjeningAktivitetUt;
+    opptjeningAktivitet: OpptjeningAktivitet;
 
-    arbeidstid: ArbeidstidUt;
+    arbeidstid: Arbeidstid;
 
     beredskap: Tilleggsinformasjon[];
 
@@ -127,7 +122,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     lovbestemtFerieSomSkalSlettes: Periode[];
 
-    omsorg: Omsorg | Record<string, unknown>;
+    omsorg: Omsorg;
 
     bosteder: UtenlandsOpphold[];
 
@@ -141,16 +136,16 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
-    constructor(soknad: IPSBSoknadUt) {
+    constructor(soknad: IPSBSoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
-        this.journalposter = soknad.journalposter || [];
+        this.journalposter = new Set(soknad.journalposter || []);
         this.mottattDato = soknad.mottattDato || '';
         this.klokkeslett = soknad.klokkeslett || '';
-        this.barn = soknad.barn ? new Barn(soknad.barn) : {};
+        this.barn = new Barn(soknad.barn || {});
         this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
-        this.opptjeningAktivitet = new OpptjeningAktivitetUt(soknad.opptjeningAktivitet || {});
-        this.arbeidstid = new ArbeidstidUt(soknad.arbeidstid || {});
+        this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
+        this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.beredskap = (soknad.beredskap || []).map((b) => new Tilleggsinformasjon(b));
         this.nattevaak = (soknad.nattevaak || []).map((n) => new Tilleggsinformasjon(n));
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
@@ -161,7 +156,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
-        this.omsorg = soknad.omsorg ? new Omsorg(soknad.omsorg) : {};
+        this.omsorg = new Omsorg(soknad.omsorg || {});
         this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;

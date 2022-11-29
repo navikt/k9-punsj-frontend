@@ -29,7 +29,6 @@ interface IInnholdForDokumenttypeAnnetProps {
 }
 
 const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> = ({
-    dokumenttype,
     journalpost,
     kanJournalforingsoppgaveOpprettesiGosys,
     lukkJournalpostOppgave,
@@ -42,9 +41,6 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
 }): JSX.Element | null => {
     const intl = useIntl();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
-    if (dokumenttype !== FordelingDokumenttype.ANNET) {
-        return null;
-    }
 
     if (!kanJournalforingsoppgaveOpprettesiGosys) {
         return (

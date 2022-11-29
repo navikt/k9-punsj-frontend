@@ -22,20 +22,22 @@ const ForhaandsvisSoeknadModal = ({ videre, avbryt, intl, children }: OwnProps) 
         closeButton={false}
         open
     >
-        <div className={classNames('validertSoknadOppsummeringContainer')}>{children}</div>
-        <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-            <Button size="small" className="validertSoknadOppsummeringContainer_knappVidere" onClick={videre}>
-                {intlHelper(intl, 'fordeling.knapp.videre')}
-            </Button>
-            <Button
-                variant="secondary"
-                size="small"
-                className="validertSoknadOppsummeringContainer_knappTilbake"
-                onClick={avbryt}
-            >
-                {intlHelper(intl, 'skjema.knapp.avbryt')}
-            </Button>
-        </div>
+        <Modal.Content>
+            <div className={classNames('validertSoknadOppsummeringContainer')}>{children}</div>
+            <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                <Button size="small" className="validertSoknadOppsummeringContainer_knappVidere" onClick={videre}>
+                    {intlHelper(intl, 'fordeling.knapp.videre')}
+                </Button>
+                <Button
+                    variant="secondary"
+                    size="small"
+                    className="validertSoknadOppsummeringContainer_knappTilbake"
+                    onClick={avbryt}
+                >
+                    {intlHelper(intl, 'skjema.knapp.avbryt')}
+                </Button>
+            </div>
+        </Modal.Content>
     </Modal>
 );
 
