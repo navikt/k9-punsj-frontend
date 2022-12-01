@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
-import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates } from 'app/utils';
+import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { uniq } from 'lodash';
 import CalendarGrid from './CalendarGrid';
@@ -36,11 +36,17 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
         ref
     ) => {
         const [shiftKeydown, setShiftKeydown] = useState(false);
+        const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+        const [visKalender, setVisKalender] = useState<boolean>(false);
+        const [visModal, setVisModal] = useState<boolean>(false);
         const [previouslySelectedDate, setPreviouslySelectedDate] = useState<Date | null>(null);
         useEffect(() => {
             const onKeyDown = (event: KeyboardEvent) => {
                 if (event.key === 'Shift') {
                     setShiftKeydown(true);
+                }
+                if (event.key === 'Escape') {
+                    setSelectedDates([]);
                 }
             };
             const onKeyUp = (event: KeyboardEvent) => {
@@ -56,9 +62,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 document.removeEventListener('keyup', onKeyUp);
             };
         }, []);
-        const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-        const [visKalender, setVisKalender] = useState<boolean>(false);
-        const [visModal, setVisModal] = useState<boolean>(false);
+
         const clearSelectedDates = () => {
             setSelectedDates([]);
         };
@@ -71,6 +75,16 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             }
         };
         const toggleModal = () => setVisModal(!visModal);
+        const datoerIGyldigePerioder = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
+        const disabledDates = getDatesInMonth(gyldigePerioder[0].fom)
+            .map((date) => {
+                if (!isDateInDates(date, datoerIGyldigePerioder) || (disableWeekends && isWeekend(date))) {
+                    return date;
+                }
+
+                return false;
+            })
+            .filter((v) => v instanceof Date) as Date[];
         const toggleDay = (date: Date) => {
             if (selectedDates.some((v) => dayjs(v).isSame(date))) {
                 setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)));
@@ -81,7 +95,11 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
         };
 
         const selectDates = (dates: Date[]) => {
-            setSelectedDates(uniq([...selectedDates, ...dates]));
+            setSelectedDates(
+                uniq([...selectedDates, ...dates]).filter((date) =>
+                    disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(date))
+                )
+            );
         };
         const selectRange = (date: Date): void => {
             if (!previouslySelectedDate) {
@@ -92,18 +110,6 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             selectDates(getDatesInDateRange({ fom: dates[0], tom: dates[1] }));
         };
 
-        const datoerIGyldigePerioder = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
-        const disabledDates = getDatesInMonth(gyldigePerioder[0].fom)
-            .map((date) => {
-                const dateIsWeekend = [0, 6].includes(date.getDay());
-
-                if (!isDateInDates(date, datoerIGyldigePerioder) || (disableWeekends && dateIsWeekend)) {
-                    return date;
-                }
-
-                return false;
-            })
-            .filter((v) => v instanceof Date) as Date[];
         const someSelectedDaysHaveContent = kalenderdager
             ?.map((kalenderdag) => dayjs(kalenderdag.date).format(formats.DDMMYYYY))
             .some((date) =>

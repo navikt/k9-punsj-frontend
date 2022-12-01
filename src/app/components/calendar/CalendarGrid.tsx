@@ -5,7 +5,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
 import { groupBy } from 'lodash';
 import classNames from 'classnames';
-import { dateToISODate, getDatesInDateRange, getDatesInMonth, isDateInDates } from '../../utils/timeUtils';
+import { dateToISODate, getDatesInDateRange, getDatesInMonth, isDateInDates, isWeekend } from '../../utils/timeUtils';
 import CalendarGridDate from './CalendarGridDate';
 import './calendarGrid.less';
 
@@ -83,8 +83,7 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
 
     const renderDate = (date: Date) => {
         const dateKey = date.toDateString();
-        const dateIsWeekend = [0, 6].includes(date.getDay());
-        const dateIsDisabled = isDateInDates(date, disabledDates) || (disableWeekends && dateIsWeekend);
+        const dateIsDisabled = isDateInDates(date, disabledDates) || (disableWeekends && isWeekend(date));
         const renderAsButton = onDateClick !== undefined;
         const dateIsSelected = selectedDates?.find((v) => dayjs(v).isSame(date));
 

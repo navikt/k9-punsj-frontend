@@ -232,4 +232,6 @@ export const getMonthsInDateRange = (dateRange: DateRange, returnFullMonths = fa
     return months;
 };
 
+export const isWeekend = (date: Date) => [0, 6].includes(date.getDay());
+
 export const getMonthAndYear = (date: Date) => `${capitalize(dayjs(date).format('MMMM'))} ${date.getFullYear()}`;
