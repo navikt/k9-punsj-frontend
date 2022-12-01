@@ -24,6 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands';
+import 'cypress-wait-until';
 
 Cypress.Commands.add('soekPaaJournalpost', (journalpostId = '200') => {
     const input = cy.findByLabelText(/journalpost-id/i).should('exist');
@@ -43,7 +44,7 @@ Cypress.Commands.add('soknadperioderInput', (fom, tom) => {
 });
 
 Cypress.Commands.add('sendInnSoknad', () => {
-   cy.findByRole('button', { name: /send inn/i })
+    cy.findByRole('button', { name: /send inn/i })
         .should('exist')
         .click();
 

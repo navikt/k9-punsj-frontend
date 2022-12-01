@@ -1,9 +1,9 @@
 import { IJournalpost } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import React from 'react';
+import React, { useState } from 'react';
+import { Alert } from '@navikt/ds-react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
@@ -36,6 +36,8 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
     props: IJournalpostAlleredeBehandletProps
 ) => {
     const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpost } = props;
+    const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
+
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -44,12 +46,13 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
     if (journalpost?.norskIdent) {
         sokersIdent = journalpost?.norskIdent;
     } else {
-        return <AlertStripeAdvarsel>{intlHelper(intl, 'ident.usignert.feil.melding')}</AlertStripeAdvarsel>;
+        return <Alert variant="warning">{intlHelper(intl, 'ident.usignert.feil.melding')}</Alert>;
     }
 
     return (
         <div className="journalpostAlleredeBehandlet__container">
-            <AlertStripeAdvarsel>{intlHelper(intl, 'fordeling.kanikkesendeinn')}</AlertStripeAdvarsel>
+            <Alert variant="info">{intlHelper(intl, 'fordeling.kanikkesendeinn')}</Alert>
+            <VerticalSpacer thirtyTwoPx />
             <div>
                 <b>
                     <FormattedMessage id="journalpost.norskIdent" />
@@ -61,23 +64,26 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />
             )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
-            {!fellesState.kopierJournalpostSuccess && journalpost.kanKopieres && !erInntektsmeldingUtenKrav && (
-                <Knapp
-                    disabled={IdentRules.erUgyldigIdent(identState.ident2)}
-                    onClick={() => {
-                        if (!!sokersIdent && !!identState.ident2)
-                            kopiereJournalpost(
-                                sokersIdent,
-                                identState.ident2,
-                                sokersIdent,
-                                dedupkey,
-                                journalpost?.journalpostId
-                            );
-                    }}
-                >
-                    <FormattedMessage id="fordeling.kopiereJournal" />
-                </Knapp>
-            )}
+
+            <Knapp
+                disabled={IdentRules.erUgyldigIdent(identState.ident2) || fellesState.kopierJournalpostSuccess}
+                onClick={() => {
+                    if (fellesState.kopierJournalpostSuccess || true || erInntektsmeldingUtenKrav) {
+                        setVisKanIkkeKopiere(true);
+                        return;
+                    }
+                    if (!!sokersIdent && !!identState.ident2)
+                        kopiereJournalpost(
+                            sokersIdent,
+                            identState.ident2,
+                            sokersIdent,
+                            dedupkey,
+                            journalpost?.journalpostId
+                        );
+                }}
+            >
+                <FormattedMessage id="fordeling.kopiereJournal" />
+            </Knapp>
             {!!fellesState.kopierJournalpostSuccess && (
                 <Hovedknapp
                     onClick={() => {
@@ -86,6 +92,17 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}
                 </Hovedknapp>
+            )}
+            {visKanIkkeKopiere && (
+                <Alert variant="warning">
+                    Journalposten kan ikke kopieres. En journalpost kan kun kopieres dersom den oppfyller alle de
+                    følgende kriteriene.
+                    <ul>
+                        <li>Må være inngående journalpost</li>
+                        <li>Kan ikke være kopi av en annen journalpost</li>
+                        <li>Kan ikke være inntektsmelding uten søknad</li>
+                    </ul>
+                </Alert>
             )}
         </div>
     );

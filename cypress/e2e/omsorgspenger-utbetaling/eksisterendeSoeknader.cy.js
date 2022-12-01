@@ -36,18 +36,21 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             const { worker } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.mappeMedSøknad);
         });
-
-        cy.get('.registrering-page').within(() => {
-            cy.contains(/Mottakelsesdato/i);
+        cy.get('.punch_mappetabell').within(() => {
+            cy.waitUntil(() => cy.contains(/Mottakelsesdato/i));
             cy.findByText(/JournalpostID/i).should('exist');
             cy.findByText(/03.10.2022/i).should('exist');
             cy.findByText(/200/i).should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).click();
+            cy.findByRole('button', { name: /fortsett/i })
+                .should('be.visible')
+                .click();
         });
 
         cy.get('.modal_content').within(() => {
             cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).click();
+            cy.findByRole('button', { name: /fortsett/i })
+                .should('be.visible')
+                .click();
             cy.url().should(
                 'eq',
                 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/4e177e4d-922d-4205-a3e9-d3278da2abf7'

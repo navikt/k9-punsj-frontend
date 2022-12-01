@@ -66,17 +66,18 @@ describe('Eksisterende søknader pleiepenger', () => {
         });
 
         cy.get('.punch_mappetabell').within(() => {
+            cy.waitUntil(() => cy.contains(/Mottakelsesdato/i));
             cy.contains(/Mottakelsesdato/i);
             cy.findByText('12.10.2020').should('exist');
             cy.findByText('16017725002').should('exist');
             cy.findByText('200').should('exist');
             cy.findByText('08.11.2021 - 11.11.2021').should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).click();
+            cy.findByRole('button', { name: /fortsett/i }).should('be.visible').click();
         });
 
         cy.get('.modal_content').within(() => {
             cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).click();
+            cy.findByRole('button', { name: /fortsett/i }).should('be.visible').click();
             cy.url().should(
                 'eq',
                 'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
