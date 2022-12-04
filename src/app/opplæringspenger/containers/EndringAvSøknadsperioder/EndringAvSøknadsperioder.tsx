@@ -1,43 +1,41 @@
 import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
 import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
+import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
+import { IPeriode, Periode } from 'app/models/types/Periode';
+import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { useFormikContext } from 'formik';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { IPeriode, Periode } from '../../../../models/types/Periode';
-import { IPSBSoknad, PSBSoknad } from '../../../../models/types/søknadTypes/PSBSoknad';
-import { Periodepaneler } from '../../Periodepaneler';
+import { Periodepaneler } from '../Periodepaneler';
 import './endringAvSøknadsperioder.less';
 
 interface EndringAvSøknadsperioderProps {
     isOpen: boolean;
     onClick: () => void;
-    getErrorMessage: (attribute: string, indeks?: number) => React.ReactNode;
-    soknad: PSBSoknad;
-    updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
-    updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     eksisterendePerioder?: IPeriode[];
 }
 
 const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.Element | null => {
     const intl = useIntl();
-    const { isOpen, onClick, getErrorMessage, soknad, updateSoknad, updateSoknadState, eksisterendePerioder } = props;
-    const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
+    const { values, setFieldValue, errors } = useFormikContext<OLPSoknad>();
+    const { isOpen, onClick, eksisterendePerioder } = props;
+    const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(values.trekkKravPerioder || []);
 
     React.useEffect(() => {
-        if (selectedPeriods.length === 0 && soknad.trekkKravPerioder && soknad.trekkKravPerioder.length > 0) {
-            setSelectedPeriods(soknad.trekkKravPerioder);
+        if (selectedPeriods.length === 0 && values.trekkKravPerioder && values.trekkKravPerioder.length > 0) {
+            setSelectedPeriods(values.trekkKravPerioder);
         }
-    }, [soknad.trekkKravPerioder]);
+    }, [values.trekkKravPerioder]);
 
     if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
         return null;
     }
 
     const begrunnelseForInnsendingFeilmelding = () =>
-        getErrorMessage('begrunnelseForInnsending')
+        errors['begrunnelseForInnsending.tekst']
             ? intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding')
             : null;
 
@@ -67,19 +65,13 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
 
         const begrunnelsesfelt = (
             <div className="endringAvSøknadsperioder__begrunnelse">
-                <Textarea
+                <TextAreaFormik
                     label={intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse')}
-                    value={soknad.begrunnelseForInnsending?.tekst || ''}
-                    onChange={(event) => {
-                        const { value } = event.target;
-                        updateSoknad({ begrunnelseForInnsending: { tekst: value } });
-                        updateSoknadState({ begrunnelseForInnsending: { tekst: value } }, false);
-                    }}
-                    onBlur={(event) => {
-                        const { value } = event.target;
-                        updateSoknad({ begrunnelseForInnsending: { tekst: value } });
-                    }}
-                    feil={begrunnelseForInnsendingFeilmelding()}
+                    name="begrunnelseForInnsending.tekst"
+                    customErrorMessage={intlHelper(
+                        intl,
+                        'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding'
+                    )}
                 />
             </div>
         );
@@ -129,17 +121,14 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             </Label>
             <Periodepaneler
                 intl={intl}
-                periods={soknad.trekkKravPerioder || []}
-                panelid={(i) => `endringAvSøknadsperioder_${i}`}
+                periods={values.trekkKravPerioder || []}
                 initialPeriode={{ fom: '', tom: '' }}
-                editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
-                editSoknadState={(perioder, showStatus) => {
-                    updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
+                editSoknad={(perioder) => {
+                    setFieldValue('trekkKravPerioder', [...perioder]);
                     setSelectedPeriods(perioder);
                 }}
                 textLeggTil="skjema.perioder.legg_til"
                 textFjern="skjema.perioder.fjern"
-                getErrorMessage={getErrorMessage}
                 feilkodeprefiks="endringAvSøknadsperioder"
                 kanHaFlere
             />

@@ -3,18 +3,22 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, ErrorSummary, Modal } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, ErrorSummary, Modal } from '@navikt/ds-react';
 
 import { debounce } from 'lodash';
 
-import { IInputError, Periode } from 'app/models/types';
+import { IInputError, IUtenlandsOpphold, Periode } from 'app/models/types';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 
-import { IOLPSoknadBackend } from 'app/models/types/søknadTypes/OLPSoknad';
-import { useMutation } from 'react-query';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
+import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { useMutation } from 'react-query';
+import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
@@ -27,7 +31,9 @@ import schema, { getSchemaContext } from '../schema';
 import Soknadsperioder from './Soknadsperioder';
 // import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFilter } from '../utils';
 // import OpplysningerOmOLPSoknad from './OpplysningerOmSoknad/OpplysningerOmOLPSoknad';
+import { Utenlandsopphold } from './Utenlandsopphold';
 import { oppdaterSoeknad } from '../api';
+import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 
 export interface IPunchOLPFormComponentProps {
@@ -47,6 +53,8 @@ export interface IPunchOLPFormStateProps {
 
 type IPunchOLPFormProps = IPunchOLPFormComponentProps & WrappedComponentProps & IPunchOLPFormStateProps;
 
+const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
+
 export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const {
         intl,
@@ -65,8 +73,19 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
+    const [expandAll, setExpandAll] = useState(false);
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
-        useFormikContext<IOLPSoknadBackend>();
+        useFormikContext<OLPSoknad>();
+    const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
+    const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
+
+    const handlePanelClick = (panel: string) => {
+        if (åpnePaneler.includes(panel)) {
+            setÅpnePaneler(åpnePaneler.filter((p) => p !== panel));
+        } else {
+            setÅpnePaneler([...åpnePaneler, panel]);
+        }
+    };
 
     // const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
@@ -109,7 +128,8 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
     } = useMutation(
-        ({ submitSoknad }: { submitSoknad: boolean }) => submitSoknad ? oppdaterSoeknad(values) : oppdaterSoeknad(values),
+        ({ submitSoknad }: { submitSoknad: boolean }) =>
+            submitSoknad ? oppdaterSoeknad(values) : oppdaterSoeknad(values),
         {
             onSuccess: (data, { submitSoknad }) => {
                 setHarMellomlagret(true);
@@ -177,8 +197,22 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         return [];
     };
 
-    const harFeilISkjema = (errorList: FormikErrors<IOLPSoknadBackend>) =>
+    const harFeilISkjema = (errorList: FormikErrors<OLPSoknad>) =>
         !![...getUhaandterteFeil(''), ...Object.keys(errorList)].length;
+
+    const checkOpenState = (panel: string) => åpnePaneler.includes(panel);
+
+    const updateUtenlandsopphold = (jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) => {
+        setIUtlandet(jaNeiIkkeOpplyst);
+
+        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA && values.utenlandsopphold.length === 0) {
+            setFieldValue('utenlandsopphold', [{ land: undefined, periode: {} }]);
+        }
+
+        if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
+            setFieldValue('utenlandsopphold', []);
+        }
+    };
 
     return (
         <>
@@ -188,11 +222,58 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                 eksisterendePerioder={eksisterendePerioder}
                 hentEksisterendePerioderError={hentEksisterendePerioderError}
             />
-            {/* <OpplysningerOmOLPSoknad /> */}
             <VerticalSpacer sixteenPx />
             <OpplysningerOmSoknad />
-            {/* <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} /> */}
             <VerticalSpacer sixteenPx />
+            <Checkbox
+                onChange={(e) => {
+                    setExpandAll(e.target.checked);
+                }}
+            >
+                {intlHelper(intl, 'skjema.ekspander')}
+            </Checkbox>
+            <VerticalSpacer sixteenPx />
+            <EndringAvSøknadsperioder
+                onClick={() => handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                eksisterendePerioder={eksisterendePerioder}
+                isOpen={checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER) || expandAll}
+            />
+            <EkspanderbartpanelBase
+                apen={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                className="punchform__paneler"
+                tittel={intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}
+                onClick={() => handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
+            >
+                <RadioPanelGruppe
+                    className="horizontalRadios"
+                    radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
+                        label: intlHelper(intl, jnv),
+                        value: jnv,
+                    }))}
+                    name="utlandjaneiikeeopplyst"
+                    legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
+                    onChange={(event) =>
+                        updateUtenlandsopphold((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
+                    }
+                    checked={
+                        values.utenlandsopphold && values.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : iUtlandet
+                    }
+                />
+                {!!values.utenlandsopphold.length && (
+                    <Utenlandsopphold
+                        intl={intl}
+                        periods={values.utenlandsopphold}
+                        panelid={(i) => `utenlandsoppholdpanel_${i}`}
+                        initialPeriodeinfo={initialUtenlandsopphold}
+                        textLeggTil="skjema.perioder.legg_til"
+                        textFjern="skjema.perioder.fjern"
+                        className="utenlandsopphold"
+                        panelClassName="utenlandsoppholdpanel"
+                        kanHaFlere
+                        medSlettKnapp={false}
+                    />
+                )}
+            </EkspanderbartpanelBase>
             {/* <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} /> */}
             <VerticalSpacer fourtyPx />
             {/* <ArbeidsforholdVelger /> */}
@@ -234,7 +315,6 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                             validateForm(values).then((v) => {
                                 if (Object.keys(v).length) {
                                     // valider({ skalForhaandsviseSoeknad: false });
-                                    
                                 }
 
                                 // valider({ skalForhaandsviseSoeknad: true });

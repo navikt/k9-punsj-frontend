@@ -48,6 +48,10 @@ const getTrekkKravPerioder = (soknad: IOLPSoknadBackend) => {
     return undefined;
 };
 
+export interface IOppholdsLand {
+    land?: string;
+}
+
 export class OLPSoknad implements IOLPSoknadBackend {
     arbeidstid: Arbeidstid;
 
