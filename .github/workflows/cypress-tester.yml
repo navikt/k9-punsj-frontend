@@ -17,7 +17,7 @@ jobs:
         ci_total: [4]
     steps:
       - name: Hente kode
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.2.0
       - name: Sette opp Node
         uses: actions/setup-node@v3
         with:
