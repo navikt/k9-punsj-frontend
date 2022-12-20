@@ -137,7 +137,7 @@
         "@types/fetch-headers": "^2.0.0",
         "@types/intl": "^1.2.0",
         "@types/jest": "^29.2.1",
-        "@types/object-hash": "^2.2.1",
+        "@types/object-hash": "^3.0.2",
         "@types/react": "^18.0.21",
         "@types/react-aria-menubutton": "^6.2.9",
         "@types/react-collapse": "^5.0.0",
