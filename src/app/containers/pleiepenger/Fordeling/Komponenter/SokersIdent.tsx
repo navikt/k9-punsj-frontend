@@ -47,9 +47,8 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         FordelingDokumenttype.OMSORGSPENGER_UT,
         FordelingDokumenttype.KORRIGERING_IM,
         FordelingDokumenttype.OPPLAERINGSPENGER,
-        erInntektsmeldingUtenKrav,
     ];
-    const skalVises = !!dokumenttype && relevanteDokumenttyper.includes(dokumenttype);
+    const skalVises = erInntektsmeldingUtenKrav || (!!dokumenttype && relevanteDokumenttyper.includes(dokumenttype));
 
     const journalpostident = journalpost?.norskIdent;
 
