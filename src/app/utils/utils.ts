@@ -102,7 +102,7 @@ export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumentt
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_UT,
-            forkortelse: DokumenttypeForkortelse.OMP_UT,
+            forkortelse: DokumenttypeForkortelse.OMP,
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_KS,
