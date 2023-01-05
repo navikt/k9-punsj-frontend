@@ -1,7 +1,7 @@
 import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
-import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
 import { KalenderDag } from 'app/models/KalenderDag';
+import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
