@@ -14,7 +14,9 @@ type ownProps = {
     setAnnenPart: (annenPart: string) => void;
 };
 const AnnenPart = ({ vis, annenPart, setAnnenPart }: ownProps): JSX.Element | null => {
-    useEffect(() => () => setAnnenPart(''), []);
+    useEffect(() => {
+        setAnnenPart('');
+    }, []);
     const intl = useIntl();
     const [visFeil, setVisFeil] = useState<boolean>(false);
 
