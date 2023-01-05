@@ -1,5 +1,5 @@
 import { Periodeinfo } from './Periodeinfo';
-import { IArbeidstidPeriodeMedTimer, ArbeidstidPeriodeMedTimer } from '../Periode';
+import { IArbeidstidPeriodeMedTimer, ArbeidstidPeriodeMedTimer } from './Periode';
 
 export interface IArbeidstidInfo {
     perioder?: Periodeinfo<IArbeidstidPeriodeMedTimer>[];

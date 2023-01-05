@@ -1,5 +1,5 @@
 import Kvittering from 'app/models/forms/soeknader/Kvittering';
-import BegrunnelseForInnsending from 'app/models/types/søknadTypes/BegrunnelseForInnsending';
+import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
 import {
     Fravaersperiode,
     FrilanserAktivitet,

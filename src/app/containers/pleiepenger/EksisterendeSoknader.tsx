@@ -22,7 +22,7 @@ import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
-import { IPSBSoknad, PSBSoknad } from '../../models/types/søknadTypes/PSBSoknad';
+import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 import ErDuSikkerModal from './ErDuSikkerModal';
 
 export interface IEksisterendeSoknaderStateProps {

@@ -1,4 +1,4 @@
-import { IOLPSoknadBackend } from 'app/models/types/søknadTypes/OLPSoknad';
+import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
 
 export interface IOLPSoknadMappe {
     søker: string;

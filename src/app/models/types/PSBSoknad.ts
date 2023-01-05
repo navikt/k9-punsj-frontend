@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from '../Periode';
+import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 
 import { Arbeidstid, IArbeidstid } from './Arbeidstid';

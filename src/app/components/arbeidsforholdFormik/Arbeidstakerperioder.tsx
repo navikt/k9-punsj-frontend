@@ -7,8 +7,8 @@ import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmelding
 import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { Arbeidstaker } from 'app/models/types/søknadTypes/Arbeidstaker';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';

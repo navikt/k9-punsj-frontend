@@ -1,5 +1,5 @@
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import { useFormikContext } from 'formik';
 import { CheckboksPanel } from 'nav-frontend-skjema';

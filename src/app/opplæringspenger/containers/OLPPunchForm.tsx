@@ -8,7 +8,7 @@ import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/
 import { debounce } from 'lodash';
 
 import { IInputError, Periode } from 'app/models/types';
-import { Feil , ValideringResponse } from 'app/models/types/ValideringResponse';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 
@@ -21,7 +21,7 @@ import VentModal from 'app/components/ventModal/VentModal';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { RelasjonTilBarnet } from 'app/models/enums/RelasjonTilBarnet';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useMutation } from 'react-query';

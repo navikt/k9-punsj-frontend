@@ -5,7 +5,7 @@ import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsop
 import { erYngreEnn4år } from 'app/utils';
 import { get } from 'lodash';
 import nb from '../i18n/nb.json';
-import { IOLPSoknadBackend } from '../models/types/søknadTypes/OLPSoknad';
+import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
 
 export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder: IPeriode[]) => ({
     ...soknad.metadata.arbeidsforhold,

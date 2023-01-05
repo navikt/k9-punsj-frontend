@@ -7,7 +7,7 @@ import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
-import { IPSBSoknad, PSBSoknad } from '../../../../models/types/søknadTypes/PSBSoknad';
+import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { Periodepaneler } from '../../Periodepaneler';
 import './endringAvSøknadsperioder.less';
 

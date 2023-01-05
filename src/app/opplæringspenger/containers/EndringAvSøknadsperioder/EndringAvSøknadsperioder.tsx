@@ -2,7 +2,7 @@ import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
 import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import { IPeriode, Periode } from 'app/models/types/Periode';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { useFormikContext } from 'formik';

@@ -1,4 +1,4 @@
-import { Periode } from '../Periode';
+import { Periode } from './Periode';
 import { Arbeidstid } from './Arbeidstid';
 import { Barn, IBarn } from './IBarn';
 import { Klokkeslett } from './Klokkeslett';

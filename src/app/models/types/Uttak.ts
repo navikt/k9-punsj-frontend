@@ -1,5 +1,5 @@
 import { PerDag } from './PerDag';
-import { Periode } from '../Periode';
+import { Periode } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 
 export interface IUttak {

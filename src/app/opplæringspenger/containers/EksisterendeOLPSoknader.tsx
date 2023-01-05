@@ -11,7 +11,7 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useQuery } from 'react-query';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
-import { IOLPSoknadBackend } from '../../models/types/søknadTypes/OLPSoknad';
+import { IOLPSoknadBackend } from '../../models/types/OLPSoknad';
 
 export interface IEksisterendeOLPSoknaderComponentProps {
     ident1: string;

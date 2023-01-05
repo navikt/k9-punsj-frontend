@@ -1,7 +1,4 @@
-import {
-    ISelvstendigNaerinsdrivende,
-    SelvstendigNaerinsdrivende,
-} from 'app/models/types/søknadTypes/SelvstendigNaerinsdrivende';
+import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 
 export interface ISelvstendigNaeringsdrivendeOpptjening {
     virksomhetNavn?: string | null;

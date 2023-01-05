@@ -3,7 +3,7 @@ import { Button } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Field, FieldArrayRenderProps, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
 

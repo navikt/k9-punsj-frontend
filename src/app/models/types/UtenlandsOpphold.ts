@@ -1,4 +1,4 @@
-import { IPeriode, Periode } from '../Periode';
+import { IPeriode, Periode } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 
 export interface IUtenlandsOpphold {

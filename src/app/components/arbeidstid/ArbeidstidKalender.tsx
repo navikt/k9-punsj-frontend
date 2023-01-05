@@ -12,7 +12,7 @@ import {
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import dayjs from 'dayjs';
 import { Button, Modal } from '@navikt/ds-react';
-import { ArbeidstidInfo } from 'app/models/types/søknadTypes/ArbeidstidInfo';
+import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { useIntl } from 'react-intl';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';

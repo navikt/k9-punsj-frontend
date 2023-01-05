@@ -5,7 +5,7 @@ import usePrevious from 'app/hooks/usePrevious';
 import { GetErrorMessage, IPeriode } from 'app/models/types';
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { Arbeidstaker, IArbeidstaker, OrgOrPers } from 'app/models/types/søknadTypes/Arbeidstaker';
+import { Arbeidstaker, IArbeidstaker, OrgOrPers } from 'app/models/types/Arbeidstaker';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';

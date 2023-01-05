@@ -1,6 +1,6 @@
 import { Panel } from '@navikt/ds-react';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { FieldArray, useFormikContext } from 'formik';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';

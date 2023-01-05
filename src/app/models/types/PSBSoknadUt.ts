@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { FrilanserOpptjening } from './FrilanserOpptjening';
 import { Periodeinfo } from './Periodeinfo';
-import { IPeriode, Periode } from '../Periode';
+import { IPeriode, Periode } from './Periode';
 import { Arbeidstaker } from './Arbeidstaker';
 import { ArbeidstidInfo } from './ArbeidstidInfo';
 
