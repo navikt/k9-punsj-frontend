@@ -1,67 +1,63 @@
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Button, Panel } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
+import { IUtenlandsOpphold } from 'app/models/types';
+import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { utenlandsoppholdInitialValue } from '../initialValues';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
-const options = [
-    { value: 'ja', label: 'Ja' },
-    { value: 'nei', label: 'Nei' },
-    { value: 'ikke opplyst', label: 'Ikke opplyst' },
-];
+const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 
-const Medlemskap = () => {
+const Bosteder = () => {
     const intl = useIntl();
-    const { values, setFieldValue } = useFormikContext<IOMPUTSoknad>();
-    useEffect(() => {
-        if (values.bosteder.length && values.metadata.medlemskap !== 'ja') {
-            setFieldValue('bosteder', []);
-        }
-        if (!values.bosteder.length && values.metadata.medlemskap === 'ja') {
-            setFieldValue('bosteder', [utenlandsoppholdInitialValue]);
-        }
-    }, [values.metadata.medlemskap]);
+    const { values, setFieldValue } = useFormikContext<OLPSoknad>();
+    const [harBoddIUtlandet, setHarBoddIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
 
     return (
         <Panel border>
-            <Heading size="small" level="5">
-                Medlemskap
-            </Heading>
-            <RadioPanelGruppeFormik
+            <RadioPanelGruppe
+                className="horizontalRadios"
+                radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
+                    label: intlHelper(intl, jn),
+                    value: jn,
+                }))}
+                name="medlemskapjanei"
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                name="metadata.medlemskap"
-                options={options}
+                onChange={(event) => {
+                    const { value } = event.target;
+                    setHarBoddIUtlandet(value);
+                    if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {
+                        setFieldValue('bosteder', [initialUtenlandsopphold]);
+                    }
+                    if (value !== JaNeiIkkeOpplyst.JA) {
+                        setFieldValue('bosteder', []);
+                    }
+                }}
+                checked={values.bosteder.length > 0 ? JaNeiIkkeOpplyst.JA : harBoddIUtlandet}
             />
-            {values.metadata.medlemskap === 'ja' && (
+            {values.bosteder.length > 0 && (
                 <FieldArray
                     name="bosteder"
                     render={(arrayHelpers) => (
                         <>
-                            {values.bosteder?.map((_, bostedIndex, array) => (
+                            {values.bosteder?.map((_, index, array) => (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <div key={bostedIndex}>
+                                <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormik
-                                            label="Fra og med"
-                                            name={`bosteder[${bostedIndex}].periode.fom`}
-                                        />
-                                        <DatoInputFormik
-                                            label="Til og med"
-                                            name={`bosteder[${bostedIndex}].periode.tom`}
-                                        />
+                                        <DatoInputFormik label="Fra og med" name={`bosteder[${index}].periode.fom`} />
+                                        <DatoInputFormik label="Til og med" name={`bosteder[${index}].periode.tom`} />
                                         {array.length > 1 && (
                                             <Button
                                                 variant="tertiary"
                                                 size="small"
-                                                onClick={() => arrayHelpers.remove(bostedIndex)}
+                                                onClick={() => arrayHelpers.remove(index)}
                                                 style={{ float: 'right' }}
                                                 icon={<Delete />}
                                             >
@@ -71,7 +67,7 @@ const Medlemskap = () => {
                                     </div>
                                     <VerticalSpacer sixteenPx />
                                     <div style={{ maxWidth: '25%' }}>
-                                        <Field name={`bosteder[${bostedIndex}].land`}>
+                                        <Field name={`bosteder[${index}].land`}>
                                             {({ field, meta }: FieldProps<string>) => (
                                                 <CountrySelect
                                                     selectedcountry={field.value}
@@ -88,7 +84,7 @@ const Medlemskap = () => {
                             <Button
                                 variant="tertiary"
                                 size="small"
-                                onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
                                 icon={<AddCircle />}
                             >
                                 Legg til periode
@@ -101,4 +97,4 @@ const Medlemskap = () => {
     );
 };
 
-export default Medlemskap;
+export default Bosteder;

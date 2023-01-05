@@ -113,8 +113,8 @@ export default function Frilanser() {
                                         aktivitetsFravær: aktivitetsFravær.FRILANSER,
                                     })
                                 }
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>

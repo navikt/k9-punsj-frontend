@@ -137,31 +137,31 @@ export class PSBSoknad implements IPSBSoknad {
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
     constructor(soknad: IPSBSoknad) {
-        this.soeknadId = soknad.soeknadId || '';
-        this.soekerId = soknad.soekerId || '';
-        this.journalposter = new Set(soknad.journalposter || []);
-        this.mottattDato = soknad.mottattDato || '';
-        this.klokkeslett = soknad.klokkeslett || '';
-        this.barn = new Barn(soknad.barn || {});
-        this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
-        this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
+        this.barn = new Barn(soknad.barn || {});
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
         this.beredskap = (soknad.beredskap || []).map((b) => new Tilleggsinformasjon(b));
+        this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
+        this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
+        this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
+        this.journalposter = new Set(soknad.journalposter || []);
+        this.klokkeslett = soknad.klokkeslett || '';
+        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
+        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
+        this.mottattDato = soknad.mottattDato || '';
         this.nattevaak = (soknad.nattevaak || []).map((n) => new Tilleggsinformasjon(n));
+        this.omsorg = new Omsorg(soknad.omsorg || {});
+        this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
+        this.soekerId = soknad.soekerId || '';
+        this.soeknadId = soknad.soeknadId || '';
+        this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
+        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
-        this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
+        this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
         this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
             (u) => new UtenlandsOpphold(u)
         );
-        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
-        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
-        this.omsorg = new Omsorg(soknad.omsorg || {});
-        this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
-        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
-        this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
-        this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
-        this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
+        this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
     }
 }

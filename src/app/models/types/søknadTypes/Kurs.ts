@@ -1,30 +1,28 @@
+import { Periode } from '../Periode';
+
 export interface Kursholder {
-    holder: string;
-    institusjonsidentifikator: string;
+    institusjonsUuid: string;
 }
 
-export interface Kursperioder {
-    periode: string;
+export interface Kursperiode {
+    periode: Periode;
     avreise: string;
     hjemkomst: string;
 }
 
 export interface IKurs {
-    kursholder?: Kursholder | null;
-    formål?: string;
-    kursperioder?: Kursperioder[];
+    kursHolder?: Kursholder | null;
+
+    kursperioder?: Kursperiode[];
 }
 
 export class Kurs implements Required<IKurs> {
-    kursholder: Kursholder | null;
+    kursHolder: Kursholder | null;
 
-    formål: string;
-
-    kursperioder: Kursperioder[];
+    kursperioder: Kursperiode[];
 
     constructor(kurs: IKurs) {
-        this.kursholder = kurs.kursholder || null;
-        this.formål = kurs.formål || '';
+        this.kursHolder = kurs.kursHolder || null;
         this.kursperioder = kurs.kursperioder || [];
     }
 }

@@ -20,7 +20,7 @@ interface EndringAvSøknadsperioderProps {
 
 const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.Element | null => {
     const intl = useIntl();
-    const { values, setFieldValue, errors } = useFormikContext<OLPSoknad>();
+    const { values, errors } = useFormikContext<OLPSoknad>();
     const { isOpen, onClick, eksisterendePerioder } = props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(values.trekkKravPerioder || []);
 
@@ -120,16 +120,10 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                 Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
             </Label>
             <Periodepaneler
-                intl={intl}
                 periods={values.trekkKravPerioder || []}
-                initialPeriode={{ fom: '', tom: '' }}
-                editSoknad={(perioder) => {
-                    setFieldValue('trekkKravPerioder', [...perioder]);
-                    setSelectedPeriods(perioder);
-                }}
+                fieldName="trekkKravPerioder"
                 textLeggTil="skjema.perioder.legg_til"
                 textFjern="skjema.perioder.fjern"
-                feilkodeprefiks="endringAvSøknadsperioder"
                 kanHaFlere
             />
 

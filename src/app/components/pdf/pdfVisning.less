@@ -6,7 +6,7 @@
     flex-direction: column;
     align-items: stretch;
 
-    .knapp:hover {
+    .navds-button:hover {
         background-color: white;
     }
 
@@ -20,15 +20,15 @@
         }
 
         iframe,
-        .knapperad {
+        .navds-panel .knapperad {
             display: none;
         }
 
-        .button_open {
+        .navds-panel .button_open.navds-button {
             display: block;
         }
 
-        .fleredokumenter {
+        .navds-panel .fleredokumenter {
             display: none;
         }
     }
@@ -62,12 +62,12 @@
         }
 
         > div,
-        .knapp {
+        .navds-button {
             flex-grow: 1;
             height: @buttonHeight;
         }
 
-        .knapp {
+        .navds-button {
             margin-left: @pdfPadding;
 
             &.aktiv {

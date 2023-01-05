@@ -71,8 +71,13 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                 organisasjoner={organisasjoner}
                             />
                             {harMinstToArbeidsforhold && (
-                                <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
-                                    <Delete />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    className="slett"
+                                    onClick={slettArbeidsforhold}
+                                    icon={<Delete />}
+                                >
                                     Fjern arbeidsforhold
                                 </Button>
                             )}
@@ -115,8 +120,8 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                                 aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
                                             })
                                         }
+                                        icon={<AddCircle />}
                                     >
-                                        <AddCircle />
                                         Legg til periode
                                     </Button>
                                 </>

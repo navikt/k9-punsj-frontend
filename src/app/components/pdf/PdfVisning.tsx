@@ -113,17 +113,20 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                 )}
                 <iframe title="pdf" src={pdfUrl} />
                 <div className="knapperad">
-                    <Button variant="tertiary" onClick={togglePdf} className="knapp1">
+                    <Button
+                        variant="tertiary"
+                        onClick={togglePdf}
+                        className="knapp1"
+                        icon={<Next />}
+                        iconPosition="right"
+                    >
                         <FormattedMessage id="dokument.skjul" />
-                        <Next />
                     </Button>
                     <Button variant="tertiary" onClick={openPdfWindow} className="knapp2">
                         <FormattedMessage id="dokument.nyttvindu" />
                     </Button>
                 </div>
-                <Button variant="tertiary" onClick={togglePdf} className="button_open">
-                    <Back />
-                </Button>
+                <Button icon={<Back />} variant="tertiary" onClick={togglePdf} className="button_open" />
             </Panel>
         </Resizable>
     );

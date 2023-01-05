@@ -3,38 +3,41 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, Checkbox, ErrorSummary, Modal } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
 
 import { debounce } from 'lodash';
 
-import { IInputError, IUtenlandsOpphold, Periode } from 'app/models/types';
-import { Feil } from 'app/models/types/ValideringResponse';
+import { IInputError, Periode } from 'app/models/types';
+import { Feil , ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 
+import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
+import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
+import SelectFormik from 'app/components/formikInput/SelectFormik';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
-import { useMutation } from 'react-query';
+import VentModal from 'app/components/ventModal/VentModal';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
+import { RelasjonTilBarnet } from 'app/models/enums/RelasjonTilBarnet';
+import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import { useMutation } from 'react-query';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-// import EksisterendePerioder from '../components/EksisterendePerioder';
-// import Medlemskap from '../components/Medlemskap';
-// import NySoeknadEllerKorrigering from '../components/NySoeknadEllerKorrigering';
-// import Utenlandsopphold from '../components/Utenlandsopphold';
+import { oppdaterSoeknad, validerSoeknad } from '../api';
 import schema, { getSchemaContext } from '../schema';
-import Soknadsperioder from './Soknadsperioder';
-// import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFilter } from '../utils';
-// import OpplysningerOmOLPSoknad from './OpplysningerOmSoknad/OpplysningerOmOLPSoknad';
-import { Utenlandsopphold } from './Utenlandsopphold';
-import { oppdaterSoeknad } from '../api';
+import Bosteder from './Bosteder';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import KursComponent from './Kurs';
+import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
+import Soknadsperioder from './Soknadsperioder';
+import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
 
 export interface IPunchOLPFormComponentProps {
     journalpostid: string;
@@ -53,8 +56,6 @@ export interface IPunchOLPFormStateProps {
 
 type IPunchOLPFormProps = IPunchOLPFormComponentProps & WrappedComponentProps & IPunchOLPFormStateProps;
 
-const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
-
 export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const {
         intl,
@@ -71,10 +72,9 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
-    const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const [expandAll, setExpandAll] = useState(false);
-    const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
+    const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue, setFieldError } =
         useFormikContext<OLPSoknad>();
     const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
     const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
@@ -87,41 +87,78 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         }
     };
 
+    const getFormaterteUhaandterteFeilmeldinger = (formatErrors: Feil[]) =>
+        formatErrors?.filter((m: IInputError) => {
+            const felter = m.felt?.split('.') || [];
+            for (let index = felter.length - 1; index >= -1; index--) {
+                const felt = felter.slice(0, index + 1).join('.');
+                if (felt === '') {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+    useEffect(() => {
+        const panelerSomSkalÅpnes = [];
+        if (values.utenlandsopphold) {
+            panelerSomSkalÅpnes.push(PunchFormPaneler.UTENLANDSOPPHOLD);
+        }
+        if (values.lovbestemtFerie) {
+            panelerSomSkalÅpnes.push(PunchFormPaneler.FERIE);
+        }
+        if (
+            values.arbeidstid?.arbeidstakerList?.length > 0 ||
+            values.opptjeningAktivitet?.frilanser ||
+            values.opptjeningAktivitet?.selvstendigNaeringsdrivende
+        ) {
+            panelerSomSkalÅpnes.push(PunchFormPaneler.ARBEID);
+        }
+        if (values.omsorg.relasjonTilBarnet) {
+            panelerSomSkalÅpnes.push(PunchFormPaneler.OPPLYSINGER_OM_SOKER);
+        }
+        if (values.bosteder.length > 0) {
+            panelerSomSkalÅpnes.push(PunchFormPaneler.MEDLEMSKAP);
+        }
+
+        setÅpnePaneler([...åpnePaneler, ...panelerSomSkalÅpnes]);
+    }, []);
+
     // const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
-    // const { mutate: valider } = useMutation(
-    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
-    //         values.erKorrigering
-    //             ? validerSoeknad(
-    //                   korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
-    //                   identState.ident1
-    //               )
-    //             : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
-    //     {
-    //         onSuccess: (data: ValideringResponse | IOLPSoknadKvittering, { skalForhaandsviseSoeknad }) => {
-    //             if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
-    //                 const kvitteringResponse = data as IOLPSoknadKvittering;
-    //                 setVisForhaandsvisModal(true);
-    //                 if (setKvittering) {
-    //                     setKvittering(kvitteringResponse);
-    //                 } else {
-    //                     throw Error('Kvittering-context er ikke satt');
-    //                 }
-    //             }
-    //             if (data?.feil?.length) {
-    //                 setK9FormatErrors(data.feil);
-    //                 if (setKvittering) {
-    //                     setKvittering(undefined);
-    //                 } else {
-    //                     throw Error('Kvittering-context er ikke satt');
-    //                 }
-    //             } else {
-    //                 setK9FormatErrors([]);
-    //             }
-    //         },
-    //     }
-    // );
+    const { mutate: valider } = useMutation(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
+            validerSoeknad(values, identState.ident1),
+        {
+            onSuccess: (data: ValideringResponse | any, { skalForhaandsviseSoeknad }) => {
+                if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
+                    const kvitteringResponse = data as any;
+                    setVisForhaandsvisModal(true);
+                    // if (setKvittering) {
+                    //     setKvittering(kvitteringResponse);
+                    // } else {
+                    //     throw Error('Kvittering-context er ikke satt');
+                    // }
+                }
+                if (data?.feil?.length) {
+                    setK9FormatErrors(data.feil);
+                    // if (setKvittering) {
+                    //     setKvittering(undefined);
+                    // } else {
+                    //     throw Error('Kvittering-context er ikke satt');
+                    // }
+                    const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
+                    uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
+                        const feilmeldingKey = uhaandtertFeilmelding.felt.replace('ytelse.', '');
+                        setFieldError(feilmeldingKey, uhaandtertFeilmelding.feilmelding);
+                    });
+                } else {
+                    setK9FormatErrors([]);
+                }
+            },
+        }
+    );
 
     const {
         isLoading: mellomlagrer,
@@ -169,27 +206,15 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         }
     }, [harMellomlagret]);
 
-    // TODO: bør flytttes
-    const getUhaandterteFeil = (attribute: string): Feil[] => {
-        if (!feilmeldingStier.has(attribute)) {
-            setFeilmeldingStier(feilmeldingStier.add(attribute));
+    useEffect(() => {
+        if ((!values.barn || !values.barn.norskIdent) && identState.ident2) {
+            setFieldValue('barn.norskIdent', identState.ident2);
         }
+    }, [identState]);
 
-        const uhaandterteFeilmeldinger = k9FormatErrors?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || [];
-            for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(feilmeldingStier);
-                andreFeilmeldingStier.delete(attribute);
-                if (attribute === felt) {
-                    return true;
-                }
-                if (andreFeilmeldingStier.has(felt)) {
-                    return false;
-                }
-            }
-            return false;
-        });
+    // TODO: bør flytttes
+    const getUhaandterteFeil = (): Feil[] => {
+        const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(k9FormatErrors);
 
         if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
             return uhaandterteFeilmeldinger.map((error) => error).filter(Boolean);
@@ -198,7 +223,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     };
 
     const harFeilISkjema = (errorList: FormikErrors<OLPSoknad>) =>
-        !![...getUhaandterteFeil(''), ...Object.keys(errorList)].length;
+        !![...getUhaandterteFeil(), ...Object.keys(errorList)].length;
 
     const checkOpenState = (panel: string) => åpnePaneler.includes(panel);
 
@@ -206,11 +231,26 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         setIUtlandet(jaNeiIkkeOpplyst);
 
         if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA && values.utenlandsopphold.length === 0) {
-            setFieldValue('utenlandsopphold', [{ land: undefined, periode: {} }]);
+            setFieldValue('utenlandsopphold', [{ land: undefined, periode: {}, innleggelsesperioder: [] }]);
         }
 
         if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
             setFieldValue('utenlandsopphold', []);
+        }
+    };
+
+    const toggleAllePaneler = (erCheckboxChecked: boolean) => {
+        setExpandAll(erCheckboxChecked);
+        if (erCheckboxChecked) {
+            setÅpnePaneler([
+                PunchFormPaneler.UTENLANDSOPPHOLD,
+                PunchFormPaneler.FERIE,
+                PunchFormPaneler.ARBEID,
+                PunchFormPaneler.OPPLYSINGER_OM_SOKER,
+                PunchFormPaneler.MEDLEMSKAP,
+            ]);
+        } else {
+            setÅpnePaneler([]);
         }
     };
 
@@ -225,9 +265,11 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
             <VerticalSpacer sixteenPx />
             <OpplysningerOmSoknad />
             <VerticalSpacer sixteenPx />
+            <KursComponent />
+            <VerticalSpacer sixteenPx />
             <Checkbox
                 onChange={(e) => {
-                    setExpandAll(e.target.checked);
+                    toggleAllePaneler(e.target.checked);
                 }}
             >
                 {intlHelper(intl, 'skjema.ekspander')}
@@ -259,37 +301,76 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                         values.utenlandsopphold && values.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : iUtlandet
                     }
                 />
-                {!!values.utenlandsopphold.length && (
-                    <Utenlandsopphold
-                        intl={intl}
-                        periods={values.utenlandsopphold}
-                        panelid={(i) => `utenlandsoppholdpanel_${i}`}
-                        initialPeriodeinfo={initialUtenlandsopphold}
-                        textLeggTil="skjema.perioder.legg_til"
-                        textFjern="skjema.perioder.fjern"
-                        className="utenlandsopphold"
-                        panelClassName="utenlandsoppholdpanel"
-                        kanHaFlere
-                        medSlettKnapp={false}
+                {!!values.utenlandsopphold.length && <UtenlandsoppholdContainer />}
+            </EkspanderbartpanelBase>
+            <EkspanderbartpanelBase
+                apen={checkOpenState(PunchFormPaneler.FERIE)}
+                className="punchform__paneler"
+                tittel={intlHelper(intl, PunchFormPaneler.FERIE)}
+                onClick={() => handlePanelClick(PunchFormPaneler.FERIE)}
+            >
+                <LovbestemtFerie />
+            </EkspanderbartpanelBase>
+            <ArbeidsforholdPanel
+                isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
+                onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
+                eksisterendePerioder={eksisterendePerioder}
+            />
+            <EkspanderbartpanelBase
+                apen={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                className="punchform__paneler"
+                tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                onClick={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+            >
+                <SelectFormik
+                    value={values.omsorg.relasjonTilBarnet}
+                    label={intlHelper(intl, 'skjema.relasjontilbarnet')}
+                    name="omsorg.relasjonTilBarnet"
+                    options={Object.values(RelasjonTilBarnet).map((rel) => ({ value: rel, label: rel }))}
+                />
+                {values.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET && (
+                    <TextFieldFormik
+                        label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
+                        className="beskrivelseAvOmsorgsrollen"
+                        name="omsorg.beskrivelseAvOmsorgsrollen"
                     />
                 )}
             </EkspanderbartpanelBase>
-            {/* <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} /> */}
-            <VerticalSpacer fourtyPx />
-            {/* <ArbeidsforholdVelger /> */}
-            <VerticalSpacer fourtyPx />
-            {/* {!values.erKorrigering && (
-                <>
-                    <Medlemskap />
-                    <VerticalSpacer fourtyPx />
-                    <Utenlandsopphold />
-                </>
-            )} */}
-            {/* <IkkeRegistrerteOpplysninger intl={intl} /> */}
+            <EkspanderbartpanelBase
+                apen={checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
+                className="punchform__paneler"
+                tittel={intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}
+                onClick={() => handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
+            >
+                <Bosteder />
+            </EkspanderbartpanelBase>
+            <VerticalSpacer thirtyTwoPx />
+            <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p> {/* TODO: Hva er dette? */}
+            <div className="flex-container">
+                <CheckboksPanelFormik
+                    name="harMedisinskeOpplysninger"
+                    label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
+                    valueIsBoolean
+                />
+                <HelpText className="hjelpetext" placement="top-end">
+                    {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
+                </HelpText>
+            </div>
+            <VerticalSpacer eightPx />
+            <div className="flex-container">
+                <CheckboksPanelFormik
+                    name="harInfoSomIkkeKanPunsjes"
+                    label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                    valueIsBoolean
+                />
+                <HelpText className="hjelpetext" placement="top-end">
+                    {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                </HelpText>
+            </div>
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {getUhaandterteFeil('').map((feil) => (
+                    {getUhaandterteFeil().map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}
@@ -314,10 +395,10 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                             }
                             validateForm(values).then((v) => {
                                 if (Object.keys(v).length) {
-                                    // valider({ skalForhaandsviseSoeknad: false });
+                                    valider({ skalForhaandsviseSoeknad: false });
+                                } else {
+                                    valider({ skalForhaandsviseSoeknad: true });
                                 }
-
-                                // valider({ skalForhaandsviseSoeknad: true });
                             });
                         }}
                     >
@@ -345,9 +426,9 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                     {intlHelper(intl, submitError.message)}
                 </Alert>
             )}
-            {/* {visVentModal && (
+            {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
-            )} */}
+            )}
             {/* {visForhaandsvisModal && (
                 <ForhaandsvisSoeknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}
@@ -360,7 +441,6 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                     <OLPSoknadKvittering kvittering={kvittering} />
                 </ForhaandsvisSoeknadModal>
             )} */}
-
             {visErDuSikkerModal && (
                 <Modal
                     key="erdusikkermodal"
@@ -392,4 +472,3 @@ const mapStateToProps = (state: RootStateType): IPunchOLPFormStateProps => ({
 });
 
 export const OLPPunchForm = injectIntl(connect(mapStateToProps)(PunchOLPFormComponent));
-/* eslint-enable */

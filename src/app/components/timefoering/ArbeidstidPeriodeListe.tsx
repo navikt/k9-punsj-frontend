@@ -53,8 +53,9 @@ export default function ArbeidstidPeriodeListe({
                                 <Button
                                     variant="tertiary"
                                     onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
+                                    icon={<AddCircle />}
                                 >
-                                    <AddCircle /> Legg til periode
+                                    Legg til periode
                                 </Button>
                                 <VerticalSpacer eightPx />
                                 <div style={{ display: 'flex' }}>

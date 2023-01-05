@@ -8,6 +8,7 @@ import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types/Periode';
 import { Arbeidstaker } from 'app/models/types/søknadTypes/Arbeidstaker';
+import { FrilanserOpptjening } from 'app/models/types/søknadTypes/FrilanserOpptjening';
 import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
@@ -15,6 +16,9 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
+import { ArbeidstidInfo } from 'app/models/types/søknadTypes/ArbeidstidInfo';
+import { SelvstendigNaeringsdrivendeOpptjening } from 'app/models/types';
+import { SelvstendigNaerinsdrivende } from 'app/models/types/søknadTypes/SelvstendigNaerinsdrivende';
 import { OLPSoknad } from '../../models/types/søknadTypes/OLPSoknad';
 import { capitalize } from '../../utils/utils';
 import { CountrySelect } from '../country-select/CountrySelect';
@@ -36,34 +40,55 @@ const erEldreEnn4år = (dato: string) => {
     return new Date(dato) < fireAarSiden;
 };
 
+const initialPeriode: IPeriode = { fom: '', tom: '' };
+
 interface ArbeidsforholdPanelProps {
     isOpen: boolean;
     onPanelClick: () => void;
-    handleArbeidsforholdChange: (af: Arbeidsforhold, checked: boolean) => void;
-    getCheckedValueArbeid: (af: Arbeidsforhold) => boolean;
     eksisterendePerioder: IPeriode[];
-    initialArbeidstaker: Arbeidstaker;
-
-    getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
-    getUhaandterteFeil: (kode: string) => (string | undefined)[];
-    handleFrilanserChange: (jaNei: JaNei) => void;
-    updateVirksomhetstyper: (v: Virksomhetstyper, checked: boolean) => void;
 }
 
-const ArbeidsforholdPanel = ({
-    isOpen,
-    onPanelClick,
-    handleArbeidsforholdChange,
-    getCheckedValueArbeid,
-    getErrorMessage,
-    getUhaandterteFeil,
-
-    initialArbeidstaker,
-    eksisterendePerioder,
-}: ArbeidsforholdPanelProps): JSX.Element => {
+const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
+
+    const getSoknadsperiode = () => {
+        if (values?.soeknadsperiode && values.soeknadsperiode.length > 0) {
+            return values.soeknadsperiode;
+        }
+        return [initialPeriode];
+    };
+
+    const initialArbeidstaker = () =>
+        new Arbeidstaker({
+            arbeidstidInfo: {
+                perioder: [],
+            },
+            organisasjonsnummer: '',
+            norskIdent: null,
+        });
+
+    const initialFrilanser = () =>
+        new FrilanserOpptjening({
+            jobberFortsattSomFrilans: undefined,
+            startdato: undefined,
+        });
+
+    const initialSelvstedigNæringsdrivende = () =>
+        new SelvstendigNaerinsdrivende({
+            periode: getSoknadsperiode()[0],
+            virksomhetstyper: [],
+            registrertIUtlandet: false,
+            landkode: '',
+        });
+
+    const initialSelvstendigNæringsdrivendeOpptjening = () =>
+        new SelvstendigNaeringsdrivendeOpptjening({
+            virksomhetNavn: '',
+            organisasjonsnummer: '',
+            info: initialSelvstedigNæringsdrivende(),
+        });
 
     const frilanserperioder = () => (
         <>
@@ -72,7 +97,7 @@ const ArbeidsforholdPanel = ({
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
             />
-            <Field name="fortsattFrilanser">
+            <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
                 {({ field, form }: FieldProps<boolean>) => (
                     <RadioPanelGruppeFormik
                         legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
@@ -148,10 +173,10 @@ const ArbeidsforholdPanel = ({
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
-                            checked={field.value ? 'ja' : 'nei'}
+                            checked={field.value ? 'nei' : 'ja'}
                             name={field.name}
                             options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                            onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                            onChange={(e, value) => form.setFieldValue(field.name, value !== 'ja')}
                         />
                     )}
                 </Field>
@@ -302,11 +327,11 @@ const ArbeidsforholdPanel = ({
                         />
                     )}
                 </Field>
-                <UhaanderteFeilmeldinger
+                {/* <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>
                         getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
                     }
-                />
+                /> */}
             </Container>
         );
     };
@@ -321,33 +346,63 @@ const ArbeidsforholdPanel = ({
             <CheckboksPanel
                 label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
                 value={Arbeidsforhold.ARBEIDSTAKER}
-                onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
-                checked={getCheckedValueArbeid(Arbeidsforhold.ARBEIDSTAKER)}
+                onChange={(e) => {
+                    if (e.target.checked) {
+                        if (!values.arbeidstid || !values.arbeidstid.arbeidstakerList?.length) {
+                            setFieldValue('arbeidstid.arbeidstakerList', [initialArbeidstaker()]);
+                        }
+                    } else {
+                        setFieldValue('arbeidstid.arbeidstakerList', []);
+                    }
+                }}
+                checked={values.arbeidstid?.arbeidstakerList?.length > 0}
             />
             <VerticalSpacer eightPx />
             {!!values.arbeidstid?.arbeidstakerList?.length && (
                 <Arbeidstakerperioder
                     eksisterendePerioder={eksisterendePerioder}
-                    initialArbeidstaker={initialArbeidstaker}
-                    // updateSoknad={updateSoknad}
-                    // updateSoknadState={updateSoknadState}
-                    getErrorMessage={getErrorMessage}
-                    getUhaandterteFeil={getUhaandterteFeil}
+                    initialArbeidstaker={initialArbeidstaker()}
                 />
             )}
             <CheckboksPanel
                 label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                 value={Arbeidsforhold.FRILANSER}
-                onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
-                checked={getCheckedValueArbeid(Arbeidsforhold.FRILANSER)}
+                onChange={(e) => {
+                    if (e.target.checked) {
+                        if (!values.arbeidstid || !values.arbeidstid.frilanserArbeidstidInfo) {
+                            setFieldValue('arbeidstid.frilanserArbeidstidInfo', new ArbeidstidInfo({}));
+                            setFieldValue('opptjeningAktivitet.frilanser', initialFrilanser());
+                        }
+                    } else {
+                        setFieldValue('arbeidstid.frilanserArbeidstidInfo', null);
+                        setFieldValue('opptjeningAktivitet.frilanser', null);
+                    }
+                }}
+                checked={!!values.opptjeningAktivitet?.frilanser}
             />
             <VerticalSpacer eightPx />
             {!!values.opptjeningAktivitet.frilanser && <Panel className="frilanserpanel">{frilanserperioder()}</Panel>}
             <CheckboksPanel
                 label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                 value={Arbeidsforhold.SELVSTENDIG}
-                onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
-                checked={getCheckedValueArbeid(Arbeidsforhold.SELVSTENDIG)}
+                onChange={(e) => {
+                    if (e.target.checked) {
+                        if (!values.opptjeningAktivitet || !values.opptjeningAktivitet.selvstendigNaeringsdrivende) {
+                            setFieldValue(
+                                'opptjeningAktivitet.selvstendigNaeringsdrivende',
+                                initialSelvstendigNæringsdrivendeOpptjening()
+                            );
+                            setFieldValue(
+                                'arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo',
+                                new ArbeidstidInfo({})
+                            );
+                        }
+                    } else {
+                        setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende', null);
+                        setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo', null);
+                    }
+                }}
+                checked={!!values.opptjeningAktivitet?.selvstendigNaeringsdrivende}
             />
             {!!values.opptjeningAktivitet.selvstendigNaeringsdrivende && (
                 <>
@@ -357,9 +412,9 @@ const ArbeidsforholdPanel = ({
                     <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
                 </>
             )}
-            <UhaanderteFeilmeldinger
+            {/* <UhaanderteFeilmeldinger
                 getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
-            />
+            /> */}
         </EkspanderbartpanelBase>
     );
 };

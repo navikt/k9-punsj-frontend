@@ -45,8 +45,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     name,
 }): JSX.Element => {
     const harArbeidsgivere = arbeidsgivere?.length > 0;
-    const { values, setFieldValue } = useFormikContext<OLPSoknad>();
-    const thisArbeidstaker = values[name]; // TODO Sjekk at dette blir riktig
+    const { setFieldValue } = useFormikContext<OLPSoknad>();
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
         // eslint-disable-next-line react/destructuring-assignment
@@ -109,20 +108,19 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
             newNorskIdent = '';
         }
         setFieldValue(name, {
-            ...thisArbeidstaker,
+            ...arbeidstaker,
             organisasjonsnummer: newOrganisasjonsnummer,
             norskIdent: newNorskIdent,
         });
     };
 
     const {
-        orgOrPers,
-        // organisasjonsnummer,
+        organisasjonsnummer,
         // norskIdent,
         arbeidstidInfo,
     } = arbeidstaker;
 
-    const selectedType: OrgOrPers = orgOrPers();
+    const selectedType = organisasjonsnummer === null ? 'p' : 'o';
 
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
@@ -184,6 +182,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 onChange={(event) => {
                                     const { value } = event.target;
                                     dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
+                                    setFieldValue(`${name}.organisasjonsnummer`, value);
                                     if (!value) {
                                         dispatch({
                                             type: ActionType.SET_NAVN_ARBEIDSDGIVER,
@@ -205,7 +204,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                         selectedArbeidsgiver: '',
                                     });
                                     setFieldValue(name, {
-                                        ...thisArbeidstaker,
+                                        ...arbeidstaker,
                                         organisasjonsnummer: '',
                                     });
                                 }}
@@ -224,7 +223,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                             onChange={(event) => {
                                                 const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
                                                 setFieldValue(name, {
-                                                    ...thisArbeidstaker,
+                                                    ...arbeidstaker,
                                                     organisasjonsnummer: valueWithoutWhitespaces,
                                                 });
                                                 if (valueWithoutWhitespaces.length === 9) {
@@ -238,10 +237,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                             }}
                                             onBlur={(event) => {
                                                 const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
-                                                setFieldValue(name, {
-                                                    ...thisArbeidstaker,
-                                                    organisasjonsnummer: valueWithoutWhitespaces,
-                                                });
+
                                                 if (valueWithoutWhitespaces.length !== 9) {
                                                     dispatch({
                                                         type: ActionType.SET_SEARCH_ORGANISASJONSNUMMER_FAILED,

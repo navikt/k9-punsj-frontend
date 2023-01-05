@@ -9,7 +9,6 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { Arbeidstaker } from 'app/models/types/søknadTypes/Arbeidstaker';
 import { OLPSoknad } from 'app/models/types/søknadTypes/OLPSoknad';
-import { IPSBSoknad } from 'app/models/types/søknadTypes/PSBSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
@@ -18,23 +17,16 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 
-type ItemInfo = any;
-
 interface ArbeidstakerperioderProps {
     eksisterendePerioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
-    updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
-    updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
-    getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
+
     getUhaandterteFeil: (kode: string) => (string | undefined)[];
 }
 
 const Arbeidstakerperioder = ({
     initialArbeidstaker,
     eksisterendePerioder,
-    updateSoknad,
-    updateSoknadState,
-    getErrorMessage,
     getUhaandterteFeil,
 }: ArbeidstakerperioderProps): JSX.Element => {
     const intl = useIntl();
@@ -52,35 +44,6 @@ const Arbeidstakerperioder = ({
 
     const items = arbeidstid?.arbeidstakerList || [];
     const itemsWithInitialItem = items.length > 0 ? items : [initialArbeidstaker];
-
-    const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
-        index: number,
-        iteminfo: Partial<ItemInfo>
-    ) => {
-        const newInfo: ItemInfo = { ...items[index], ...iteminfo };
-        const newArray = itemsWithInitialItem;
-        newArray[index] = newInfo;
-        return newArray;
-    };
-
-    const editSoknadState = (arbeidstakerList: ItemInfo[], showStatus?: boolean) =>
-        updateSoknadState(
-            {
-                arbeidstid: {
-                    ...arbeidstid,
-                    arbeidstakerList,
-                },
-            },
-            showStatus
-        );
-
-    const editSoknad = (arbeidstakerList: ItemInfo[]) =>
-        updateSoknad({
-            arbeidstid: {
-                ...arbeidstid,
-                arbeidstakerList,
-            },
-        });
 
     return (
         <FieldArray
@@ -131,14 +94,7 @@ const Arbeidstakerperioder = ({
                                         søkerId={soekerId}
                                         arbeidstaker={currentItem as Arbeidstaker}
                                         listeelementindex={currentItemIndex}
-                                        // updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
-                                        //     editSoknad(editItem(currentItemIndex, info))
-                                        // }
-                                        // updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
-                                        //     editSoknadState(editItem(currentItemIndex, info), showStatus)
-                                        // }
                                         feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
-                                        getErrorMessage={getErrorMessage}
                                         getUhaandterteFeil={getUhaandterteFeil}
                                         intl={intl}
                                         arbeidsgivere={arbeidsgivere}

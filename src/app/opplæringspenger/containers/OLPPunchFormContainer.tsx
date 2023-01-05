@@ -3,7 +3,7 @@ import { Formik, yupToFormErrors } from 'formik';
 import React, { useContext, useState } from 'react';
 import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
@@ -11,7 +11,6 @@ import { Alert, Button, Loader } from '@navikt/ds-react';
 import { Periode } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Feil } from 'app/models/types/ValideringResponse';
-import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
@@ -37,7 +36,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
     const routingPaths = useContext(RoutingPathsContext);
-    const dispatch = useDispatch();
 
     const { mutate: hentPerioderK9, error: hentEksisterendePerioderError } = useMutation(
         (ident: string) => hentEksisterendePerioder(ident),
@@ -51,7 +49,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         error,
     } = useQuery(id, () => hentSoeknad(identState.ident1, id), {
         onSuccess: (data) => {
-            dispatch(setIdentFellesAction(data.soekerId));
             hentPerioderK9(data.soekerId);
         },
     });

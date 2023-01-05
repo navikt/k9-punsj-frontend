@@ -18,6 +18,7 @@ import PdfVisning from '../../components/pdf/PdfVisning';
 import { IJournalpost } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { hentSoeknad } from '../api';
+import './punchOLPPage.less';
 
 export interface IPunchOLPPageStateProps {
     journalpost?: IJournalpost;

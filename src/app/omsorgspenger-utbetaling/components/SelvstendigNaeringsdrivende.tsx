@@ -230,8 +230,8 @@ const SelvstendigNaeringsdrivende = () => {
                                         aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
                                     })
                                 }
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>
