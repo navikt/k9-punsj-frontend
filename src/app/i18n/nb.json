@@ -169,6 +169,7 @@
     "skjema.soknadsperiode": "Søknadsperiode",
     "skjema.eksisterende": "Eksisterende søknadsperioder:",
     "skjema.eksisterende.ingen": "Det finnes ingen eksisterende søknadsperioder. Du må legge til en ny søknadsperiode for å kunne registrere opplysninger. ",
+    "skjema.opplæringspenger.eksisterende.ingen": "Det finnes ingen eksisterende søknadsperioder. Du må legge inn en ny periode med opplæring for å kunne registrere opplysninger.",
     "skjema.eksisterende.feil": "Kunne ikke laste inn eksisterende søknadsperioder",
     "skjema.generellinfo": "Du kan etterrapportere på eksisterende søknadsperioder eller legge til ny søknadsperiode dersom du ønsker å registrere en ny søknad.",
     "skjema.knapp.tilbake": "Tilbake",

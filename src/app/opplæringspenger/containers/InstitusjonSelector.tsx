@@ -15,42 +15,27 @@ interface DiagnosekodeSelectorProps {
 //     fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
 
 const institusjoner = [
-    // { key: 'Stavanger Universitetssykehus', value: '1882473' },
-    // { key: 'St. Olavs Hospital', value: '1871536' },
-    // { key: 'Sunnaas sykehus', value: '1862774' },
-    // { key: 'Sykehus Asker/Bærum', value: '1873628' },
-    // { key: 'Sykehuset Buskerud (Drammen sykehus)', value: '1875973' },
-    // { key: 'Sykehuset i Vestfold', value: '1878077' },
-    // { key: 'Sykehuset Innlandet Elverum', value: '1862251' },
-    // { key: 'Sykehuset Innlandet Gjøvik', value: '1861395' },
-    // { key: 'Sykehuset Innlandet Hamar', value: '1862243' },
-    // { key: 'Sykehuset Innlandet Kongsvinger', value: '1862235' },
-    // { key: 'Sykehuset Innlandet Lillehammer', value: '1861409' },
-    // { key: 'Sykehuset Innlandet Tynset', value: '1862227' },
-    // { key: 'Sykehuset Telemark', value: '1878778' },
-    // { key: 'Sykehuset Østfold', value: '1873873' },
-    // { key: 'Sørlandet sykehus, Arendal', value: '1880896' },
-    // { key: 'Sørlandet sykehus, Farsund', value: '1881302' },
-    // { key: 'Sørlandet sykehus, Kristiansand', value: '1881469' },
-    // { key: 'Sørlandet sykehus, Mandal', value: '1881078' },
-    { key: 'Stavanger Universitetssykehus', value: 'Stavanger Universitetssykehus' },
-    { key: 'St. Olavs Hospital', value: 'St. Olavs Hospital' },
-    { key: 'Sunnaas sykehus', value: 'Sunnaas sykehus' },
-    { key: 'Sykehus Asker/Bærum', value: 'Sykehus Asker/Bærum' },
-    { key: 'Sykehuset Buskerud (Drammen sykehus)', value: 'Sykehuset Buskerud (Drammen sykehus)' },
-    { key: 'Sykehuset i Vestfold', value: 'Sykehuset i Vestfold' },
-    { key: 'Sykehuset Innlandet Elverum', value: 'Sykehuset Innlandet Elverum' },
-    { key: 'Sykehuset Innlandet Gjøvik', value: 'Sykehuset Innlandet Gjøvik' },
-    { key: 'Sykehuset Innlandet Hamar', value: 'Sykehuset Innlandet Hamar' },
-    { key: 'Sykehuset Innlandet Kongsvinger', value: 'Sykehuset Innlandet Kongsvinger' },
-    { key: 'Sykehuset Innlandet Lillehammer', value: 'Sykehuset Innlandet Lillehammer' },
-    { key: 'Sykehuset Innlandet Tynset', value: 'Sykehuset Innlandet Tynset' },
-    { key: 'Sykehuset Telemark', value: 'Sykehuset Telemark' },
-    { key: 'Sykehuset Østfold', value: 'Sykehuset Østfold' },
-    { key: 'Sørlandet sykehus, Arendal', value: 'Sørlandet sykehus, Arendal' },
-    { key: 'Sørlandet sykehus, Farsund', value: 'Sørlandet sykehus, Farsund' },
-    { key: 'Sørlandet sykehus, Kristiansand', value: 'Sørlandet sykehus, Kristiansand' },
-    { key: 'Sørlandet sykehus, Mandal', value: 'Sørlandet sykehus, Mandal' },
+    // { key: 'Stavanger Universitetssykehus', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'St. Olavs Hospital', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sunnaas sykehus', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehus Asker/Bærum', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Buskerud (Drammen sykehus)', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset i Vestfold', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Innlandet Elverum', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Innlandet Gjøvik', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Innlandet Hamar', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Innlandet Kongsvinger', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Innlandet Lillehammer', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Innlandet Tynset', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Telemark', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sykehuset Østfold', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sørlandet sykehus, Arendal', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sørlandet sykehus, Farsund', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sørlandet sykehus, Kristiansand', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    // { key: 'Sørlandet sykehus, Mandal', value: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    { value: 'Stavanger Universitetssykehus', key: 'bcbc78d9-465b-48c6-913a-bf9b1eeb0faf' },
+    { value: 'St. Olavs Hospital', key: '8671b60e-fd47-4097-b005-c376ea0fa240' },
+    { value: 'Sunnaas sykehus', key: '053a0d6d-37bc-4618-8dff-b6321e927534' },
 ];
 
 interface Institusjon {
@@ -58,10 +43,15 @@ interface Institusjon {
     value: string;
 }
 
+const findInstitusjonValue = (institusjonKey: string) =>
+    institusjoner.find((intstitusjon) => intstitusjon.key === institusjonKey)?.value || '';
+const findInstitusjonKey = (institusjonValue: string) =>
+    institusjoner.find((intstitusjon) => intstitusjon.value === institusjonValue)?.key;
+
 const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorProps): JSX.Element => {
     const [field, meta, helpers] = useField(name);
     const [suggestions, setSuggestions] = React.useState<Institusjon[]>(institusjoner);
-    const [inputValue, setInputValue] = React.useState(field.value);
+    const [inputValue, setInputValue] = React.useState(findInstitusjonValue(field.value));
     const [isLoading, setIsLoading] = React.useState(false);
     // React.useEffect(() => {
     //     const getInitialDiagnosekode = async () => {
@@ -73,10 +63,10 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
     //     getInitialDiagnosekode();
     // }, [initialDiagnosekodeValue]);
 
-    const onInputValueChange = async (v) => {
+    const onInputValueChange = async (v: string) => {
         const newSuggestionList = institusjoner.filter(
             (intstitusjon) =>
-                intstitusjon.key.toLowerCase().indexOf(v.toLowerCase()) > -1 || intstitusjon.value.indexOf(v) > -1
+                intstitusjon.value.toLowerCase().indexOf(v.toLowerCase()) > -1 || intstitusjon.key.indexOf(v) > -1
         );
         setSuggestions(newSuggestionList);
     };
@@ -94,10 +84,18 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
                     onChange={(e) => {
                         onInputValueChange(e);
                         setInputValue(e);
+                        helpers.setTouched(true);
                     }}
                     onSelect={(e) => {
                         setInputValue(e.value);
-                        helpers.setValue(e.value);
+                        helpers.setValue(findInstitusjonKey(e.value));
+                    }}
+                    onBlur={() => {
+                        if (!findInstitusjonKey(inputValue)) {
+                            helpers.setError('Du må velge en institusjon fra listen');
+                        } else {
+                            helpers.setError(undefined);
+                        }
                     }}
                     ariaLabel={label}
                     placeholder={label}

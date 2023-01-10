@@ -1,7 +1,7 @@
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
 
@@ -18,10 +18,12 @@ import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
+import { FordelingActionKeys } from 'app/models/enums';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { RelasjonTilBarnet } from 'app/models/enums/RelasjonTilBarnet';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import { IdentActionKeys } from 'app/state/actions/IdentActions';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useMutation } from 'react-query';
@@ -78,6 +80,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         useFormikContext<OLPSoknad>();
     const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
     const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
+    const dispatch = useDispatch();
 
     const handlePanelClick = (panel: string) => {
         if (åpnePaneler.includes(panel)) {
@@ -210,7 +213,15 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         if ((!values.barn || !values.barn.norskIdent) && identState.ident2) {
             setFieldValue('barn.norskIdent', identState.ident2);
         }
-    }, [identState]);
+        if ((values.barn && values.barn.norskIdent && !identState.ident2) || (values.soekerId && !identState.ident1)) {
+            const ident1 = identState.ident1 || values.soekerId;
+            const ident2 = identState.ident2 || values.barn?.norskIdent;
+            dispatch({ type: IdentActionKeys.IDENT_FELLES_SET, ident1, ident2 });
+            if (ident1) {
+                dispatch({ type: FordelingActionKeys.IDENT_BEKREFT_IDENT1, erIdent1Bekreftet: true });
+            }
+        }
+    }, [identState, values.barn]);
 
     // TODO: bør flytttes
     const getUhaandterteFeil = (): Feil[] => {

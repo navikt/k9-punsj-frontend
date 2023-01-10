@@ -44,7 +44,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
             {finnesIkkeEksisterendePerioder && (
                 <Alert size="small" variant="info">
-                    {intlHelper(intl, 'skjema.eksisterende.ingen')}
+                    {intlHelper(intl, 'skjema.opplæringspenger.eksisterende.ingen')}
                 </Alert>
             )}
         </Panel>
