@@ -25,11 +25,11 @@ export interface IOLPSoknadBackend {
     opptjeningAktivitet?: OpptjeningAktivitet;
     soekerId: string;
     soeknadId?: string;
-    soeknadsperiode?: Periode[];
+    soeknadsperiode?: Periode[] | null;
     soknadsinfo?: SoknadsInfo;
     trekkKravPerioder?: Periode[];
     utenlandsopphold?: UtenlandsOpphold[];
-    uttak?: Uttak[];
+    uttak?: Uttak[] | null;
 }
 
 export interface BegrunnelseForInnsending {
@@ -83,7 +83,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
 
     soeknadId: string;
 
-    soeknadsperiode: Periode[];
+    soeknadsperiode: Periode[] | null;
 
     soknadsinfo: SoknadsInfo;
 
@@ -91,7 +91,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
 
     utenlandsopphold: UtenlandsOpphold[];
 
-    uttak: Uttak[];
+    uttak: Uttak[] | null;
 
     constructor(soknad: IOLPSoknadBackend) {
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
@@ -109,10 +109,13 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
         this.soekerId = soknad.soekerId || '';
         this.soeknadId = soknad.soeknadId || '';
-        this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
+        this.soeknadsperiode =
+            soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0
+                ? soknad.soeknadsperiode.map((s) => new Periode(s))
+                : null;
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
-        this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
+        this.uttak = soknad.uttak && soknad.uttak.length > 0 ? soknad.uttak.map((t) => new Uttak(t)) : null;
     }
 }

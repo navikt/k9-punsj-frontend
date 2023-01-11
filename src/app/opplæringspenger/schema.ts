@@ -43,13 +43,17 @@ const selvstendigNaeringsdrivende = () =>
                 fom: yup.string().required().label('Fra og med'),
                 tom: yup.string().label('Til og med'),
             }),
-            virksomhetstyper: yup.string().required().label('Virksomhetstype'),
+            virksomhetstyper: yup.array().of(yup.string()).required().label('Virksomhetstype'),
             erFiskerPåBladB: yup
                 .string()
                 .when('virksomhetstyper', { is: 'Fisker', then: (schema) => schema.required() }),
             landkode: yup
                 .string()
-                .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
+                .when('registrertIUtlandet', {
+                    is: true,
+                    then: yup.string().required(),
+                    otherwise: yup.string().nullable(),
+                })
                 .label('Land'),
             regnskapsførerNavn: yup
                 .string()
@@ -71,15 +75,15 @@ const selvstendigNaeringsdrivende = () =>
                 .label('Varig endring'),
             endringInntekt: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required() })
+                .when('erVarigEndring', { is: true, then: yup.string().required(), otherwise: yup.string().nullable() })
                 .label(nb['skjema.sn.endringinntekt']),
             endringDato: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required() })
+                .when('erVarigEndring', { is: true, then: yup.string().required(), otherwise: yup.string().nullable() })
                 .label(nb['skjema.sn.varigendringdato']),
             endringBegrunnelse: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required() })
+                .when('erVarigEndring', { is: true, then: yup.string().required(), otherwise: yup.string().nullable() })
                 .label(nb['skjema.sn.endringbegrunnelse']),
         }),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),

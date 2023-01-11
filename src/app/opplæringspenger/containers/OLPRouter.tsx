@@ -7,8 +7,9 @@ import { ISakstypeComponentProps } from '../../models/Sakstype';
 import OLPPunchFormContainer from './OLPPunchFormContainer';
 import { OLPRegistreringsValg } from './OLPRegistreringsValg';
 import PunchOLPPage from './PunchOLPPage';
-// import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
-// import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
+import KvitteringContainer from './kvittering/KvitteringContainer';
+import { KvitteringContext } from './kvittering/KvitteringContext';
+import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 
 const OLPRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
     const OLPRootPath = punchPath;
@@ -23,25 +24,25 @@ const OLPRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpo
     );
 
     useRedirect(OLPRootPath, routingPaths.soeknader);
-    // const [kvittering, setKvittering] = React.useState<IOLPSoknadKvittering | undefined>(undefined);
-    // const kvitteringState = useMemo(() => ({ kvittering, setKvittering }), [kvittering, setKvittering]);
+    const [kvittering, setKvittering] = React.useState<IOLPSoknadKvittering | undefined>(undefined);
+    const kvitteringState = useMemo(() => ({ kvittering, setKvittering }), [kvittering, setKvittering]);
     return (
         <RoutingPathsContext.Provider value={routingPaths}>
-            {/* <KvitteringContext.Provider value={kvitteringState}> */}
-            <PunchOLPPage journalpostid={journalpostid}>
-                <Switch>
-                    <Route exact path={routingPaths.soeknader}>
-                        <OLPRegistreringsValg journalpostid={journalpostid} />
-                    </Route>
-                    <Route path={`${routingPaths.skjema}:id`}>
-                        <OLPPunchFormContainer journalpostid={journalpostid} />
-                    </Route>
-                    {/* <Route path={`${routingPaths.kvittering}:id`}>
+            <KvitteringContext.Provider value={kvitteringState}>
+                <PunchOLPPage journalpostid={journalpostid}>
+                    <Switch>
+                        <Route exact path={routingPaths.soeknader}>
+                            <OLPRegistreringsValg journalpostid={journalpostid} />
+                        </Route>
+                        <Route path={`${routingPaths.skjema}:id`}>
+                            <OLPPunchFormContainer journalpostid={journalpostid} />
+                        </Route>
+                        <Route path={`${routingPaths.kvittering}:id`}>
                             <KvitteringContainer kvittering={kvittering} />
-                        </Route> */}
-                </Switch>
-            </PunchOLPPage>
-            {/* </KvitteringContext.Provider> */}
+                        </Route>
+                    </Switch>
+                </PunchOLPPage>
+            </KvitteringContext.Provider>
         </RoutingPathsContext.Provider>
     );
 };

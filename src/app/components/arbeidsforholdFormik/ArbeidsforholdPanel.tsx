@@ -184,7 +184,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     <Row noGutters>
                         <TextFieldFormik
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende?.organisasjonsnummer"
+                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
                         />
                         {/* feil={getErrorMessage(
                                 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid'

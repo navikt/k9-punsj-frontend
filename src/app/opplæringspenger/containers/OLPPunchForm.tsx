@@ -1,7 +1,7 @@
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
 
@@ -13,6 +13,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 
 import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
+import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
@@ -29,17 +30,18 @@ import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useMutation } from 'react-query';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import schema, { getSchemaContext } from '../schema';
 import Bosteder from './Bosteder';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import KursComponent from './Kurs';
+import { KvitteringContext } from './kvittering/KvitteringContext';
 import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder';
 import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
+import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 
 export interface IPunchOLPFormComponentProps {
     journalpostid: string;
@@ -52,16 +54,11 @@ export interface IPunchOLPFormComponentProps {
     hentEksisterendePerioderError: boolean;
 }
 
-export interface IPunchOLPFormStateProps {
-    identState: IIdentState;
-}
-
-type IPunchOLPFormProps = IPunchOLPFormComponentProps & WrappedComponentProps & IPunchOLPFormStateProps;
+type IPunchOLPFormProps = IPunchOLPFormComponentProps & WrappedComponentProps;
 
 export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const {
         intl,
-        identState,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
         k9FormatErrors,
@@ -81,6 +78,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
     const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
     const dispatch = useDispatch();
+    const identState = useSelector((state: RootStateType) => state.identState);
 
     const handlePanelClick = (panel: string) => {
         if (åpnePaneler.includes(panel)) {
@@ -127,7 +125,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         setÅpnePaneler([...åpnePaneler, ...panelerSomSkalÅpnes]);
     }, []);
 
-    // const { kvittering, setKvittering } = React.useContext(KvitteringContext);
+    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -138,19 +136,19 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                 if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as any;
                     setVisForhaandsvisModal(true);
-                    // if (setKvittering) {
-                    //     setKvittering(kvitteringResponse);
-                    // } else {
-                    //     throw Error('Kvittering-context er ikke satt');
-                    // }
+                    if (setKvittering) {
+                        setKvittering(kvitteringResponse);
+                    } else {
+                        throw Error('Kvittering-context er ikke satt');
+                    }
                 }
                 if (data?.feil?.length) {
                     setK9FormatErrors(data.feil);
-                    // if (setKvittering) {
-                    //     setKvittering(undefined);
-                    // } else {
-                    //     throw Error('Kvittering-context er ikke satt');
-                    // }
+                    if (setKvittering) {
+                        setKvittering(undefined);
+                    } else {
+                        throw Error('Kvittering-context er ikke satt');
+                    }
                     const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
                     uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
                         const feilmeldingKey = uhaandtertFeilmelding.felt.replace('ytelse.', '');
@@ -182,7 +180,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
         if (harForsoektAaSendeInn) {
-            // valider({ skalForhaandsviseSoeknad: false });
+            valider({ skalForhaandsviseSoeknad: false });
             setTouched(setNestedObjectValues(values, true));
         }
         return mellomlagreSoeknad({ submitSoknad });
@@ -440,7 +438,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
-            {/* {visForhaandsvisModal && (
+            {visForhaandsvisModal && (
                 <ForhaandsvisSoeknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}
                     videre={() => {
@@ -449,9 +447,9 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                     }}
                     intl={intl}
                 >
-                    <OLPSoknadKvittering kvittering={kvittering} />
+                    {kvittering ? <OLPSoknadKvittering kvittering={kvittering} /> : null}
                 </ForhaandsvisSoeknadModal>
-            )} */}
+            )}
             {visErDuSikkerModal && (
                 <Modal
                     key="erdusikkermodal"
@@ -478,8 +476,4 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     );
 };
 
-const mapStateToProps = (state: RootStateType): IPunchOLPFormStateProps => ({
-    identState: state.identState,
-});
-
-export const OLPPunchForm = injectIntl(connect(mapStateToProps)(PunchOLPFormComponent));
+export const OLPPunchForm = injectIntl(PunchOLPFormComponent);

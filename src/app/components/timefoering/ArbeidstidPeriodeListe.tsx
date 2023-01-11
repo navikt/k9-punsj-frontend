@@ -25,12 +25,12 @@ export default function ArbeidstidPeriodeListe({
     lagre: (arbeidstidInfo: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => void;
     avbryt: () => void;
     soknadsperioder: IPeriode[];
-    nyeSoknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[] | null;
 }) {
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
         perioder: arbeidstidPerioder.length
             ? [...arbeidstidPerioder]
-            : nyeSoknadsperioder.map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
+            : (nyeSoknadsperioder || []).map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
     return (
         <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>

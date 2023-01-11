@@ -7,10 +7,10 @@ import {
     formattereDatoIArray,
     sjekkPropertyEksistererOgIkkeErNull,
     formattereLandTilNavn,
-} from '../../../../utils';
-import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../../models/types/PSBSoknadKvittering';
-import { ICountry } from '../../../../components/country-select/CountrySelect';
-import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
+} from '../../utils';
+import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../models/types/PSBSoknadKvittering';
+import { ICountry } from '../country-select/CountrySelect';
+import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
 
 interface IOwnProps {
     intl: any;

@@ -24,7 +24,7 @@ export interface ArbeidstidKalenderProps {
     arbeidstidInfo: ArbeidstidInfo;
     updateSoknad: (v: IArbeidstidPeriodeMedTimer[]) => void;
     updateSoknadState?: (v: IArbeidstidPeriodeMedTimer[]) => void;
-    nyeSoknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[] | null;
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
@@ -39,7 +39,7 @@ export default function ArbeidstidKalender({
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
     const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
 
-    const gyldigePerioder = [...nyeSoknadsperioder, ...eksisterendeSoknadsperioder].filter(Boolean);
+    const gyldigePerioder = [...(nyeSoknadsperioder || []), ...eksisterendeSoknadsperioder].filter(Boolean);
 
     const slettDager =
         (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {

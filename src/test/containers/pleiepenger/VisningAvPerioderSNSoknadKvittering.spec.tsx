@@ -4,7 +4,7 @@ import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'jest-mock';
 import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
-import VisningAvPerioderSNSoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSNSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 
 jest.mock('react-intl');
 jest.mock('react-router');

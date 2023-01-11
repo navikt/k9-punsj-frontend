@@ -1,50 +1,34 @@
 /* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { Alert } from '@navikt/ds-react';
 import Kopier from 'app/components/kopier/Kopier';
+import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
+import {
+    IOLPSoknadKvittering,
+    IOLPSoknadKvitteringArbeidstidInfo,
+    IOLPSoknadKvitteringLovbestemtFerie,
+    IOLPSoknadKvitteringUtenlandsoppholdInfo,
+} from 'app/opplæringspenger/OLPSoknadKvittering';
 import { RootStateType } from 'app/state/RootState';
+import { formattereTidspunktFraUTCTilGMT, getLocaleFromSessionStorage, periodToFormattedString } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { formatereTekstMedTimerOgMinutter, formattereDatoFraUTCTilGMT } from 'app/utils/timeUtils';
+import { formattereDatoIArray, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
-import { IntlShape } from 'react-intl';
-import { connect } from 'react-redux';
+import { IntlShape, useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { ICountry } from '../../../components/country-select/CountrySelect';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import {
-    IPSBSoknadKvittering,
-    IPSBSoknadKvitteringArbeidstidInfo,
-    IPSBSoknadKvitteringBosteder,
-    IPSBSoknadKvitteringLovbestemtFerie,
-    IPSBSoknadKvitteringTilsynsordning,
-    IPSBSoknadKvitteringUtenlandsopphold,
-} from '../../../models/types/PSBSoknadKvittering';
-import {
-    formatereTekstMedTimerOgMinutter,
-    formattereDatoFraUTCTilGMT,
-    formattereDatoIArray,
-    formattereTidspunktFraUTCTilGMT,
-    getLocaleFromSessionStorage,
-    periodToFormattedString,
-    sjekkPropertyEksistererOgIkkeErNull,
-} from '../../../utils';
-import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
-import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import './soknadKvittering.less';
-
-interface IOwnProps {
-    intl: any;
-    response: IPSBSoknadKvittering;
-    kopierJournalpostSuccess?: boolean;
-    annenSokerIdent?: string | null;
-}
+import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
-const formattereLandTilNavnIObjekt = (
-    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
-    countryList: ICountry[]
-) => {
+const formattereLandTilNavnIObjekt = (perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo, countryList: ICountry[]) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = countryList.find((country) => country.code === perioder[periode].land);
@@ -53,7 +37,7 @@ const formattereLandTilNavnIObjekt = (
     return kopiAvPerioder;
 };
 
-export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
+export const formattereTimerForArbeidstakerPerioder = (perioder: IOLPSoknadKvitteringArbeidstidInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
@@ -66,17 +50,7 @@ export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitt
     return kopiAvPerioder;
 };
 
-const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadKvitteringTilsynsordning) => {
-    const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach((periode) => {
-        kopiAvPerioder[periode].etablertTilsynTimerPerDag = formatereTekstMedTimerOgMinutter(
-            kopiAvPerioder[periode].etablertTilsynTimerPerDag
-        );
-    });
-    return kopiAvPerioder;
-};
-
-export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
+export const genererSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
         if (value.skalHaFerie) {
             acc[key] = value;
@@ -84,7 +58,7 @@ export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie
         return acc;
     }, {});
 
-export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
+export const genererIkkeSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
         if (!value.skalHaFerie) {
             acc[key] = value;
@@ -93,7 +67,7 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
     }, {});
 
 const formaterUtenlandsopphold = (
-    perioder: IPSBSoknadKvitteringUtenlandsopphold,
+    perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo,
     countryList: ICountry[],
     intl: IntlShape
 ) => {
@@ -117,7 +91,7 @@ const formaterUtenlandsopphold = (
             // eslint-disable-next-line no-param-reassign
             obj[key] = perioder[key];
             return obj;
-        }, {});
+        }, {} as IOLPSoknadKvitteringUtenlandsoppholdInfo);
     const perioderMedInnleggelse = Object.keys(perioder)
         .filter((key) => !!perioder[key].årsak)
         .reduce((obj, key) => {
@@ -126,7 +100,7 @@ const formaterUtenlandsopphold = (
             // eslint-disable-next-line no-param-reassign
             obj[key].årsak = årsaker.find((årsak) => årsak.value === obj[key].årsak)?.label;
             return obj;
-        }, {} as IPSBSoknadKvitteringUtenlandsopphold);
+        }, {} as IOLPSoknadKvitteringUtenlandsoppholdInfo);
 
     return (
         <>
@@ -155,26 +129,39 @@ const formaterUtenlandsopphold = (
     );
 };
 
-export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    response,
-    kopierJournalpostSuccess,
-    annenSokerIdent,
-}) => {
+interface IOwnProps {
+    kvittering: IOLPSoknadKvittering;
+}
+
+export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvittering }) => {
     const locale = getLocaleFromSessionStorage();
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+    const countryList: ICountry[] = [];
 
-    const { ytelse, journalposter } = response;
+    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
+        countryList.push({
+            code,
+            name: countries.getName(code, locale),
+        })
+    );
+    const intl = useIntl();
+    const kopierJournalpostSuccess = useSelector((state: RootStateType) => state.felles.kopierJournalpostSuccess);
+    const annenSokerIdent = useSelector((state: RootStateType) => state.identState.annenSokerIdent);
+
+    const { journalposter, ytelse } = kvittering || {};
+
+    if (!ytelse) {
+        return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
+    }
+
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
-    const visTrukkedePerioder =
-        sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) && ytelse.trekkKravPerioder.length > 0;
     const visBegrunnelseForInnsending =
-        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', response) &&
-        response.begrunnelseForInnsending.tekst;
-    const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', kvittering) &&
+        kvittering?.begrunnelseForInnsending.tekst;
+    const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', ytelse);
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
     const visFerieSomSkalSLettes =
@@ -189,19 +176,8 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     const visFrilanserArbeidstidInfo =
         ytelse.arbeidstid.frilanserArbeidstidInfo !== null ||
         sjekkPropertyEksistererOgIkkeErNull('frilanser', ytelse.opptjeningAktivitet);
-    const visOmsorgstilbud = sjekkHvisPerioderEksisterer('tilsynsordning', ytelse);
-    const visNattevak = sjekkHvisPerioderEksisterer('nattevåk', ytelse);
-    const visBeredskap = sjekkHvisPerioderEksisterer('beredskap', ytelse);
     const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
-
-    const countryList: ICountry[] = [];
-
-    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-        countryList.push({
-            code,
-            name: countries.getName(code, locale),
-        })
-    );
+    const visKurs = ytelse.kurs && ytelse.kurs.kursperioder.length > 0;
 
     const formaterSøknadsperioder = () =>
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
@@ -236,32 +212,36 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato
+                        {`${formattereDatoFraUTCTilGMT(kvittering.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+                            kvittering.mottattDato
                         )}`}
                     </p>
-                    {visTrukkedePerioder && (
-                        <p>
-                            <b>Perioder som er fjernet fra søknadsperioden: </b>
-                            {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
-                        </p>
-                    )}
                     {visBegrunnelseForInnsending && (
                         <p>
                             <b>Begrunnelse for endring: </b>
-                            {response.begrunnelseForInnsending.tekst}
+                            {kvittering.begrunnelseForInnsending.tekst}
                         </p>
                     )}
                 </div>
             )}
 
-            {visUtenlandsopphold && (
+            {visKurs && (
+                <div>
+                    <h3>Opplæring</h3>
+                    <hr className={classNames('linje')} />
+                    <p>Kursholder:</p>
+                    <p>{ytelse.kurs.kursholder.institusjonsidentifikator}</p>
+                    <VisningAvKursperioderSoknadKvittering kursperioder={ytelse.kurs.kursperioder} />
+                </div>
+            )}
+
+            {/* {visUtenlandsopphold && (
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
                     <hr className={classNames('linje')} />
                     {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, countryList, intl)}
                 </div>
-            )}
+            )} */}
 
             {visFerie && (
                 <div>
@@ -296,8 +276,8 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                         {ytelse.omsorg.relasjonTilBarnet === 'ANNET'
                             ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}`
                             : `${
-                                  ytelse.omsorg.relasjonTilBarnet!.charAt(0) +
-                                  ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()
+                                  ytelse.omsorg.relasjonTilBarnet.charAt(0) +
+                                  ytelse.omsorg.relasjonTilBarnet.slice(1).toLowerCase()
                               }`}
                     </p>
                 </div>
@@ -425,56 +405,6 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 </div>
             )}
 
-            {visOmsorgstilbud && (
-                <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}</h3>
-                    <hr className={classNames('linje')} />
-                    <VisningAvPerioderSoknadKvittering
-                        intl={intl}
-                        perioder={formattereTimerOgMinutterForOmsorgstilbudPerioder(ytelse.tilsynsordning.perioder)}
-                        tittel={['skjema.periode.overskrift', 'skjema.omsorgstilbud.gjennomsnittlig']}
-                        properties={['etablertTilsynTimerPerDag']}
-                        lessClassForAdjustment="visningAvPerioderOmsorgstilbud"
-                    />
-                </div>
-            )}
-
-            {(visNattevak || visBeredskap) && (
-                <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.BEREDSKAPNATTEVAAK)}</h3>
-                    <hr className={classNames('linje')} />
-                    {visBeredskap && (
-                        <>
-                            <h4 className="soknadKvitteringUnderTittel">
-                                {intlHelper(intl, 'skjema.beredskap.overskrift')}
-                            </h4>
-                            <VisningAvPerioderSoknadKvittering
-                                intl={intl}
-                                perioder={ytelse.beredskap.perioder}
-                                tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
-                                properties={['tilleggsinformasjon']}
-                                lessClassForAdjustment="visningAvPerioderSoknadBeredskap"
-                            />
-                        </>
-                    )}
-
-                    {visNattevak && (
-                        <div>
-                            <h4 className="soknadKvitteringUnderTittel">
-                                {intlHelper(intl, 'skjema.nattevaak.overskrift')}
-                            </h4>
-                            <VisningAvPerioderSoknadKvittering
-                                intl={intl}
-                                perioder={ytelse.nattevåk.perioder}
-                                tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
-                                properties={['tilleggsinformasjon']}
-                                lessClassForAdjustment="visningAvPerioderSoknadBeredskap"
-                            />
-                        </div>
-                    )}
-                </div>
-            )}
-
             {visMedlemskap && (
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
@@ -506,9 +436,4 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
-    annenSokerIdent: state.identState.annenSokerIdent,
-});
-
-export default connect(mapStateToProps)(SoknadKvittering);
+export default OLPSoknadKvittering;
