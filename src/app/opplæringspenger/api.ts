@@ -3,7 +3,7 @@ import { Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
 import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
-import { IOLPSoknadKvittering } from './types/OLPSoknadKvittering';
+import { IOLPSoknadKvittering } from './OLPSoknadKvittering';
 import { IOLPSoknadMappe } from './types/OLPSoknadMappe';
 
 export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOLPSoknadBackend> =>
