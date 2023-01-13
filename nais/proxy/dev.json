@@ -1,6 +1,6 @@
 {
     "azureTenant": "trygdeetaten.no",
-    "oidcAuthProxyImage": "ghcr.io/navikt/oidc-auth-proxy:2.2021.08.31-8f7558f",
+    "oidcAuthProxyImage": "ghcr.io/navikt/oidc-auth-proxy:2.2021.09.08-36c61fa",
     "ingresses": ["https://k9-punsj-oidc-auth-proxy.dev.intern.nav.no"],
     "k9PunsjScopes": "api://dev-fss.k9saksbehandling.k9-punsj/.default",
     "k9FormidlingScopes": "api://f25d1619-71b6-4961-a4d5-830cb9f57b0d/.default",
@@ -10,4 +10,3 @@
         "APPLICATION_BASE_URL": "value:https://k9-punsj-frontend.dev.adeo.no"
     }
 }
-
