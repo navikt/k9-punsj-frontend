@@ -256,7 +256,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 identState.ident2,
                 journalpost.journalpostId,
                 fagsakYtelseType,
-                identState.annenPart
+                identState.annenPart,
+                valgtFagsak
             );
         }
     };
@@ -692,8 +693,9 @@ const mapDispatchToProps = (dispatch: any) => ({
         ident2: string,
         jpid: string,
         fagsakYtelseType: FagsakYtelseType,
-        annenPart: string
-    ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, annenPart)),
+        annenPart: string,
+        valgtFagsak?: Fagsak
+    ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, annenPart, valgtFagsak)),
     resetSjekkSkalTilK9: () => dispatch(resetSkalTilK9()),
     kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
         dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),

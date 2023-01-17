@@ -204,7 +204,8 @@ export function sjekkOmSkalTilK9Sak(
     barnIdent: string,
     jpid: string,
     fagsakYtelseType: FagsakYtelseType,
-    annenPart: string
+    annenPart: string,
+    valgtFagsak?: Fagsak
 ) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
@@ -213,6 +214,7 @@ export function sjekkOmSkalTilK9Sak(
             journalpostId: jpid,
             fagsakYtelseType,
             annenPart: annenPart || null,
+            periode: valgtFagsak ? valgtFagsak.gyldigPeriode : null,
         };
 
         dispatch(sjekkSkalTilK9RequestAction());
