@@ -125,10 +125,10 @@ export const getModiaPath = (fødselsnummer?: string) => {
     if (!fødselsnummer) {
         return null;
     }
-    if (host === 'dev.adeo.no') {
+    if (host.includes('dev.adeo.no')) {
         return `https://app-q1.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
-    if (host === 'nais.adeo.no') {
+    if (host.includes('nais.adeo.no')) {
         return `https://app.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
     return null;
