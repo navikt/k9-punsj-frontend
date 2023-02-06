@@ -1,3 +1,6 @@
+import { ExternalLink } from '@navikt/ds-icons';
+import { Button, Link } from '@navikt/ds-react';
+import { getModiaPath } from 'app/utils';
 import Panel from 'nav-frontend-paneler';
 import React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
@@ -6,7 +9,6 @@ import { IFordelingState, IJournalpost } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
-import FlexRow from '../flexgrid/FlexRow';
 import LabelValue from '../skjema/LabelValue';
 import './journalpostPanel.less';
 
@@ -31,25 +33,41 @@ export const JournalpostPanelComponent: React.FunctionComponent<
         journalposter,
     } = props;
 
+    const ident = ident1 || journalpost?.norskIdent;
+    const modiaPath = getModiaPath(ident);
+
     return (
         <Panel border className="journalpostpanel">
-            <FlexRow wrap childrenMargin="medium">
+            <div>
                 <LabelValue
                     labelTextId="journalpost.id"
                     value={journalposter?.join(', ') || journalpost?.journalpostId}
                     retning="horisontal"
                 />
-
+            </div>
+            <div>
                 {fordelingState.erIdent1Bekreftet && (
-                    <LabelValue
-                        labelTextId="journalpost.norskIdent"
-                        value={
-                            ident1 || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
-                        }
-                        retning="horisontal"
-                        visKopier
-                    />
+                    <div>
+                        <LabelValue
+                            labelTextId="journalpost.norskIdent"
+                            value={
+                                ident1 ||
+                                journalpost?.norskIdent ||
+                                intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
+                            }
+                            retning="horisontal"
+                            visKopier
+                        />
+                        {modiaPath && (
+                            <Link className="modia-lenke" href={modiaPath}>
+                                {intlHelper(intl, 'modia.lenke')}
+                                <ExternalLink />
+                            </Link>
+                        )}
+                    </div>
                 )}
+            </div>
+            <div>
                 {!!ident2 && (
                     <LabelValue
                         labelTextId="journalpost.ident2"
@@ -57,7 +75,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                         retning="horisontal"
                     />
                 )}
-            </FlexRow>
+            </div>
         </Panel>
     );
 };
