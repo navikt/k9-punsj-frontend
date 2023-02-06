@@ -64,7 +64,7 @@ export interface IOMPUTSoknad extends SoeknadType {
         utenlandsopphold: string;
         signatur: string;
         harSoekerDekketOmsorgsdager: string;
-        fagsak?: Fagsak;
+        eksisterendeFagsak?: Fagsak;
     };
     opptjeningAktivitet: IOpptjeningAktivitet;
     bosteder: PeriodeMedUtenlandsopphold[];

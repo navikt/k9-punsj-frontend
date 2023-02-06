@@ -114,7 +114,7 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend, fagsak?: 
         ...omit(soknad, 'fravaersperioder'),
         metadata: {
             ...soknad.metadata,
-            fagsak: fagsak || soknad.metadata?.fagsak,
+            eksisterendeFagsak: fagsak || soknad.metadata?.eksisterendeFagsak,
         },
         opptjeningAktivitet: soknad.opptjeningAktivitet
             ? {
