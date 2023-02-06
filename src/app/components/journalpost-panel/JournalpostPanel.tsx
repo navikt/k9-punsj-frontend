@@ -1,5 +1,5 @@
 import { ExternalLink } from '@navikt/ds-icons';
-import { Button, Link } from '@navikt/ds-react';
+import { Link } from '@navikt/ds-react';
 import { getModiaPath } from 'app/utils';
 import Panel from 'nav-frontend-paneler';
 import React from 'react';
