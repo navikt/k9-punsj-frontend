@@ -1,4 +1,5 @@
 import { IPeriode, PersonEnkel } from 'app/models/types';
+import Fagsak from 'app/types/Fagsak';
 import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
 
 export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: FravaersperiodeType[] };
@@ -63,6 +64,7 @@ export interface IOMPUTSoknad extends SoeknadType {
         utenlandsopphold: string;
         signatur: string;
         harSoekerDekketOmsorgsdager: string;
+        fagsak?: Fagsak;
     };
     opptjeningAktivitet: IOpptjeningAktivitet;
     bosteder: PeriodeMedUtenlandsopphold[];

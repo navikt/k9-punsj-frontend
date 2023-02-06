@@ -1,3 +1,4 @@
+import Fagsak from 'app/types/Fagsak';
 import { get, omit, pick } from 'lodash';
 import { aktivitetsFravær } from './konstanter';
 import { Arbeidstaker, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
@@ -63,7 +64,7 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
     };
 };
 
-export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<IOMPUTSoknad> => {
+export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend, fagsak?: Fagsak): Partial<IOMPUTSoknad> => {
     const fraevaersperioderSelvstendigNaeringsdrivende = soknad.fravaersperioder?.filter(
         (periode) => periode.aktivitetsFravær === aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE
     );
@@ -111,6 +112,10 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend): Partial<
     const frilanser = { ...soknad.opptjeningAktivitet?.frilanser, fravaersperioder: fravaersperioderFrilanser };
     return {
         ...omit(soknad, 'fravaersperioder'),
+        metadata: {
+            ...soknad.metadata,
+            fagsak: fagsak || soknad.metadata.fagsak,
+        },
         opptjeningAktivitet: soknad.opptjeningAktivitet
             ? {
                   selvstendigNaeringsdrivende,
