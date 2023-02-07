@@ -54,6 +54,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
             medlemskap: soknad?.metadata?.medlemskap || '',
             utenlandsopphold: soknad?.metadata?.utenlandsopphold || '',
             signatur: soknad?.metadata?.signatur || '',
+            eksisterendeFagsak: soknad?.metadata?.eksisterendeFagsak || undefined,
             harSoekerDekketOmsorgsdager: soknad?.metadata?.harSoekerDekketOmsorgsdager || '',
         },
         barn: soknad?.barn || [],
