@@ -72,6 +72,7 @@
     "fordeling.sakstype.ANNET": "Opprett journalføringsoppgave i Gosys",
     "fordeling.sakstype.SKAL_IKKE_PUNSJES": "Lukk oppgave i LOS",
     "fordeling.sakstype.SEND_BREV": "Send brev og lukk oppgave i LOS",
+    "fordeling.sakstype.KLASSIFISER_OG_GAA_TIL_LOS": "Klassifiser journalpost og gå til LOS",
     "fordeling.knapp.punsj": "Bekreft",
     "fordeling.knapp.lukk": "Lukk oppgave",
     "fordeling.knapp.videre": "Videre",

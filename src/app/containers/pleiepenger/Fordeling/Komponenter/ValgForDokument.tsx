@@ -16,12 +16,14 @@ import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     setSakstypeAction as setSakstype,
 } from 'app/state/actions';
+import { RootStateType } from 'app/state/RootState';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
@@ -59,6 +61,8 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     const vis =
         ((fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger) || visValgForDokument) &&
         dokumenttype !== FordelingDokumenttype.ANNET;
+
+    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
 
     if (!vis) {
         return null;
@@ -108,6 +112,9 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                 {keys &&
                     keys.map((key) => {
                         if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                            return null;
+                        }
+                        if (key === TilgjengeligSakstype.KLASSIFISER_OG_GAA_TIL_LOS && !fagsak) {
                             return null;
                         }
                         if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {

@@ -19,6 +19,7 @@ export enum ApiPath {
     JOURNALPOST_SETT_PAA_VENT = '/journalpost/vent/{journalpostId}',
     JOURNALPOST_HENT = '/journalpost/hent',
     JOURNALPOST_GET = '/journalpost/{journalpostId}',
+    JOURNALPOST_MOTTAK = '/journalpost/mottak',
     JOURNALPOST_LUKK_OPPGAVE = '/journalpost/lukk/{journalpostId}',
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
     JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
