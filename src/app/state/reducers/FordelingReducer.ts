@@ -100,6 +100,7 @@ export function FordelingReducer(
                 skalTilK9: undefined,
                 sjekkTilK9Error: undefined,
                 sjekkTilK9JournalpostStottesIkke: undefined,
+                sakstype: undefined,
             };
 
         case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:

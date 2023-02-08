@@ -370,6 +370,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
         setIdentAction(identState.ident1, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
         setFagsak(nyValgtFagsak);
+        resetSjekkSkalTilK9();
     };
 
     return (
