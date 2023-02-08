@@ -37,7 +37,7 @@ export const finnFagsaker = (søkersFødselsnummer: string, callback: (response:
     get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);
 export const klassifiserDokument = (body: {
     brukerIdent: string;
-    barnIdent?: string;
+    pleietrengendeIdent?: string;
     annenPart?: string;
     journalpostId: string;
     fagsakYtelseTypeKode?: FagsakYtelseType;

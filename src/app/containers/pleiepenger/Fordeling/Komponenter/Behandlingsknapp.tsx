@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { useSelector } from 'react-redux';
 import { RootStateType } from 'app/state/RootState';
-import { klassifiserDokument } from 'app/api/api';
+import { Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
 import { setHash } from '../../../../utils';
 import { Sakstype } from '../../../../models/enums';
 import { IFordelingProps } from '../Fordeling';
+import KlassifiserModal from './KlassifiserModal';
 
 type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent: string;
@@ -23,8 +24,8 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     sakstypeConfig,
     gosysKategoriJournalforing,
 }) => {
+    const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
-    const { ident1, ident2, annenPart } = useSelector((state: RootStateType) => state.identState);
     if (!sakstypeConfig || !journalpost) {
         return null;
     }
@@ -40,21 +41,12 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if (sakstypeConfig.navn === Sakstype.KLASSIFISER_OG_GAA_TIL_LOS) {
         return (
-            <Hovedknapp
-                onClick={() =>
-                    klassifiserDokument({
-                        brukerIdent: ident1,
-                        barnIdent: ident2,
-                        annenPart,
-                        journalpostId: journalpost.journalpostId,
-                        fagsakYtelseTypeKode: fagsak?.sakstype,
-                        periode: fagsak?.gyldigPeriode,
-                        saksnummer: fagsak?.fagsakId,
-                    })
-                }
-            >
-                <FormattedMessage id="fordeling.knapp.bekreft" />
-            </Hovedknapp>
+            <>
+                {visKlassifiserModal && <KlassifiserModal lukkModal={() => setVisKlassifiserModal(false)} />}
+                <Hovedknapp onClick={() => setVisKlassifiserModal(true)}>
+                    <FormattedMessage id="fordeling.knapp.bekreft" />
+                </Hovedknapp>
+            </>
         );
     }
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
