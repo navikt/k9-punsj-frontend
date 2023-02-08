@@ -36,13 +36,13 @@ export function validerOMSKorrigering(korrigering: OMSKorrigering) {
 }
 
 export function createOMSKorrigering(
-    ident1: string,
+    søkerId: string,
     journalpostid: string,
     callback: (response: Response, data: any) => void
 ): void {
     const requestBody = {
         journalpostId: journalpostid,
-        norskIdent: ident1,
+        norskIdent: søkerId,
     };
 
     post(ApiPath.OMS_SOKNAD_CREATE, undefined, undefined, requestBody, callback);

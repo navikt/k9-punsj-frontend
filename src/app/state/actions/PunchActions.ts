@@ -2,8 +2,8 @@ import { PunchActionKeys, PunchStep } from 'app/models/enums';
 
 interface ISetIdentAction {
     type: PunchActionKeys.IDENT_SET;
-    ident1: string;
-    ident2: string | null;
+    søkerId: string;
+    pleietrengendeId: string | null;
 }
 
 interface ISetStepAction {
@@ -26,8 +26,8 @@ type INavigationTypes = ISetStepAction | IBackFromFormAction | IBackFromMapperOg
 
 export type IPunchActionTypes = IIdentActionTypes | INavigationTypes | IResetAction;
 
-export function setIdentAction(ident1: string, ident2?: string | null): ISetIdentAction {
-    return { type: PunchActionKeys.IDENT_SET, ident1, ident2: ident2 || null };
+export function setIdentAction(søkerId: string, pleietrengendeId?: string | null): ISetIdentAction {
+    return { type: PunchActionKeys.IDENT_SET, søkerId, pleietrengendeId: pleietrengendeId || null };
 }
 
 export function setStepAction(step: PunchStep): ISetStepAction {

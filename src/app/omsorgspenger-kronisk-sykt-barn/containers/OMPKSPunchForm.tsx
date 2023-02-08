@@ -144,7 +144,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 isFetched: true,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
+                this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
     }
@@ -559,7 +559,8 @@ const mapStateToProps = (state: RootStateType): IPunchOMPKSFormStateProps => ({
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getOMPKSSoknad(id)),
     resetSoknadAction: () => dispatch(resetOMPKSSoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPKSSoknadAction()),
     updateSoknad: (soknad: Partial<IOMPKSSoknadUt>) => dispatch(updateOMPKSSoknad(soknad)),

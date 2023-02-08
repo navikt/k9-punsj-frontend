@@ -244,9 +244,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.props.getSoknad(id);
         this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
-        const { ident1, ident2 } = this.props.identState;
-        if (ident1 && ident2) {
-            this.props.hentPerioder(ident1, ident2);
+        const { søkerId, pleietrengendeId } = this.props.identState;
+        if (søkerId && pleietrengendeId) {
+            this.props.hentPerioder(søkerId, pleietrengendeId);
         }
     }
 
@@ -263,7 +263,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.ident2 || '' } });
+                this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
     }
@@ -1378,9 +1378,11 @@ const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getSoknad(id)),
-    hentPerioder: (ident1: string, ident2: string) => dispatch(hentPerioderFraK9Sak(ident1, ident2)),
+    hentPerioder: (søkerId: string, pleietrengendeId: string) =>
+        dispatch(hentPerioderFraK9Sak(søkerId, pleietrengendeId)),
     resetSoknadAction: () => dispatch(resetSoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
     updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),

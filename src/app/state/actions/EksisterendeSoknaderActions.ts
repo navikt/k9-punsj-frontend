@@ -86,10 +86,10 @@ export function findEksisterendeSoknaderErrorAction(error: IError): IFindEksiste
     };
 }
 
-export function findEksisterendeSoknader(ident1: string, ident2: string | null) {
+export function findEksisterendeSoknader(søkerId: string, pleietrengendeId: string | null) {
     return (dispatch: any) => {
         dispatch(findEksisterendeSoknaderLoadingAction(true));
-        const idents = ident2 ? `${ident1},${ident2}` : ident1;
+        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
         return get(
             ApiPath.PSB_EKSISTERENDE_SOKNADER_FIND,
             undefined,
@@ -104,10 +104,10 @@ export function findEksisterendeSoknader(ident1: string, ident2: string | null) 
     };
 }
 
-export function sokEksisterendeSoknader(ident1: string, ident2: string | null) {
+export function sokEksisterendeSoknader(søkerId: string, pleietrengendeId: string | null) {
     return (dispatch: any) => {
         dispatch(findEksisterendeSoknaderLoadingAction(true));
-        const idents = ident2 ? `${ident1},${ident2}` : ident1;
+        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
         return get(ApiPath.EKSISTERENDE_SOKNADER_SOK, undefined, { 'X-Nav-NorskIdent': idents }, (response) => {
             if (response.ok) {
                 return response.json().then((r) => {
@@ -152,13 +152,13 @@ export function createSoknadErrorAction(error: IError): ICreateSoknadErrorAction
 export function resetSoknadidAction(): IResetSoknadidAction {
     return { type: EksisterendeSoknaderActionKeys.SOKNADID_RESET };
 }
-export function createSoknad(journalpostid: string, ident1: string, barnIdent: string | null) {
+export function createSoknad(journalpostid: string, søkerId: string, barnIdent: string | null) {
     return (dispatch: any) => {
         dispatch(createSoknadRequestAction());
 
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
-            norskIdent: ident1,
+            norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
             barnIdent,
         };

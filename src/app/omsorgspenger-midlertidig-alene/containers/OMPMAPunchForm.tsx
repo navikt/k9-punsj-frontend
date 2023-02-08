@@ -428,7 +428,8 @@ const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     resetSoknadAction: () => dispatch(resetOMPMASoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPMASoknadAction()),
     updateSoknad: (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid)),

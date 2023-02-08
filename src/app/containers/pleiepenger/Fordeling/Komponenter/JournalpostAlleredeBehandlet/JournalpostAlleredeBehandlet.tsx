@@ -66,16 +66,18 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
 
             <Knapp
-                disabled={IdentRules.erUgyldigIdent(identState.ident2) || fellesState.kopierJournalpostSuccess}
+                disabled={
+                    IdentRules.erUgyldigIdent(identState.pleietrengendeId) || fellesState.kopierJournalpostSuccess
+                }
                 onClick={() => {
                     if (fellesState.kopierJournalpostSuccess || true || erInntektsmeldingUtenKrav) {
                         setVisKanIkkeKopiere(true);
                         return;
                     }
-                    if (!!sokersIdent && !!identState.ident2)
+                    if (!!sokersIdent && !!identState.pleietrengendeId)
                         kopiereJournalpost(
                             sokersIdent,
-                            identState.ident2,
+                            identState.pleietrengendeId,
                             sokersIdent,
                             dedupkey,
                             journalpost?.journalpostId
@@ -116,8 +118,13 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    kopiereJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
-        dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
+    kopiereJournalpost: (
+        søkerId: string,
+        pleietrengendeId: string,
+        annenIdent: string,
+        dedupkey: string,
+        journalpostId: string
+    ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
 });
 
 const JournalpostAlleredeBehandlet = injectIntl(

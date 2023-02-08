@@ -8,8 +8,8 @@ const EksisterendeSoknaderInitialState = {
         },
         punchState: {
             step: 0,
-            ident1: '29099000129',
-            ident2: '16017725002',
+            søkerId: '29099000129',
+            pleietrengendeId: '16017725002',
         },
         signaturState: {
             signert: null,
@@ -75,7 +75,7 @@ const EksisterendeSoknaderInitialState = {
         isAwaitingLukkOppgaveResponse: false,
         lukkOppgaveDone: false,
         skalTilK9: true,
-        erIdent1Bekreftet: true,
+        erSøkerIdBekreftet: true,
         valgtGosysKategori: '',
     },
     authState: {
@@ -114,8 +114,8 @@ const EksisterendeSoknaderInitialState = {
         isJournalposterLoading: false,
     },
     identState: {
-        ident1: '29099000129',
-        ident2: '16017725002',
+        søkerId: '29099000129',
+        pleietrengendeId: '16017725002',
         barn: [],
         annenSokerIdent: null,
     },
