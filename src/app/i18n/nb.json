@@ -398,8 +398,8 @@
     "skjema.soknadskvittering.opprettetKopi.innhold": "Du har registrert at det er to søkere og opprettet en kopi av journalposten. Ny oppgave er tilgjengelig ved søk på annen søkers fødselsnummer.",
     "skjema.sentInn": "Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.",
     "journalpost.id": "Journalpostnummer:",
-    "journalpost.norskIdent": "Søkers fødselsnummer:",
-    "journalpost.ident2": "Pleietrengendes fødselsnummer:",
+    "journalpost.norskIdent": "Søkers ID:",
+    "journalpost.ident2": "Pleietrengendes ID:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
     "modia.lenke": "Se dialog i Modia",
 
