@@ -1,7 +1,5 @@
-@import (reference) '@{coreModulePath}nav-frontend-core/less/_variabler';
-
 .journalpostpanel {
-    background-color: @navLysGra;
+    background-color: var(--a-surface-subtle);
     margin-bottom: 1rem;
 }
 
@@ -13,8 +11,8 @@
     float: right;
     font-size: 16px;
     text-decoration: none !important;
+}
 
-    &:hover {
-        text-decoration: underline !important;
-    }
+.modia-lenke:hover {
+    text-decoration: underline !important;
 }
