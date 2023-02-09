@@ -571,7 +571,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     nyeSoknadsperioder={soknad.soeknadsperiode}
                                     eksisterendeSoknadsperioder={eksisterendePerioder}
                                     updateSoknad={(perioder) => {
-                                        console.log(perioder);
                                         this.updateSoknad({
                                             tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
                                         });
