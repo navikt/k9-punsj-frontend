@@ -37,10 +37,18 @@ export const finnFagsaker = (søkersFødselsnummer: string, callback: (response:
     get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);
 export const klassifiserDokument = (body: {
     brukerIdent: string;
-    pleietrengendeIdent?: string;
+    barnIdent?: string;
     annenPart?: string;
     journalpostId: string;
     fagsakYtelseTypeKode?: FagsakYtelseType;
     periode?: IPeriode;
     saksnummer?: string;
-}) => post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body);
+}) =>
+    post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
+        async (response) => {
+            if (!response.ok) {
+                throw await response.json();
+            }
+            return response.json();
+        }
+    );
