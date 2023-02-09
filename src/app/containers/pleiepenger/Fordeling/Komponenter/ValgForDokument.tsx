@@ -114,9 +114,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                         if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
                             return null;
                         }
-                        if (key === TilgjengeligSakstype.KLASSIFISER_OG_GAA_TIL_LOS && !fagsak) {
-                            return null;
-                        }
                         if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
                             return (
                                 <RadioPanel

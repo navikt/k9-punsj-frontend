@@ -1,13 +1,11 @@
 import React from 'react';
-import { Alert, BodyShort, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 import { RootStateType } from 'app/state/RootState';
 import { klassifiserDokument } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { useIntl } from 'react-intl';
-import intlHelper from 'app/utils/intlUtils';
-import FagsakVisning from './FagsakVisning';
+import KlassifiseringInfo from './KlassifiseringInfo';
 
 interface OwnProps {
     lukkModal: () => void;
@@ -17,11 +15,6 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
     const journalpostId = useSelector((state: RootStateType) => state.felles.journalpost?.journalpostId as string);
-    const intl = useIntl();
-
-    if (!fagsak) {
-        throw Error('Mangler fagsak');
-    }
 
     const { mutate, status, error, data } = useMutation({
         mutationFn: () =>
@@ -47,10 +40,10 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                     </Heading>
                     <VerticalSpacer thirtyTwoPx />
                     <BodyShort size="small">
-                        {`Er du sikker på at du vil knytte journalpost ${journalpostId} til fagsak ${fagsak.fagsakId}?`}
+                        {`Er du sikker på at du vil knytte følgende informasjon til journalpost ${journalpostId}?`}
                     </BodyShort>
                     <VerticalSpacer twentyPx />
-                    <FagsakVisning fagsak={fagsak} />
+                    <KlassifiseringInfo />
                     <VerticalSpacer twentyPx />
 
                     {data ? (
