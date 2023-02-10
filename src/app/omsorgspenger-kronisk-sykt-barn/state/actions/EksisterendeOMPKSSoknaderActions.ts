@@ -1,10 +1,10 @@
-import {ApiPath} from 'app/apiConfig';
-import {IError} from 'app/models/types';
-import {convertResponseToError, get, post} from 'app/utils';
-import {IOpprettSoknad} from '../../../models/types/RequestBodies';
-import {EksisterendeOMPKSSoknaderActionKeys} from '../../types/EksisterendeOMPKSSoknaderActionKeys';
-import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
-import {IOMPKSSoknadSvar} from '../../types/OMPKSSoknadSvar';
+import { ApiPath } from 'app/apiConfig';
+import { IError } from 'app/models/types';
+import { convertResponseToError, get, post } from 'app/utils';
+import { IOpprettSoknad } from '../../../models/types/RequestBodies';
+import { EksisterendeOMPKSSoknaderActionKeys } from '../../types/EksisterendeOMPKSSoknaderActionKeys';
+import { IOMPKSSoknad } from '../../types/OMPKSSoknad';
+import { IOMPKSSoknadSvar } from '../../types/OMPKSSoknadSvar';
 
 interface ISetEksisterendeOMPKSSoknaderAction {
     type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET;
@@ -69,7 +69,7 @@ type IOMPKSSoknadinfoActionTypes =
     | IUndoChoiceOfOMPKSSoknadAction;
 
 type ICreateOMPKSSoknadActions =
-    ICreateOMPKSSoknadRequestAction
+    | ICreateOMPKSSoknadRequestAction
     | ICreateOMPKSSoknadErrorAction
     | ICreateOMPKSSoknadSuccessAction;
 
@@ -79,14 +79,18 @@ export type IEksisterendeOMPKSSoknaderActionTypes =
     | ICreateOMPKSSoknadActions
     | IResetOMPKSSoknadidAction;
 
-export function setEksisterendeOMPKSSoknaderAction(EksisterendeOMPKSSoknaderSvar: IOMPKSSoknadSvar): ISetEksisterendeOMPKSSoknaderAction {
+export function setEksisterendeOMPKSSoknaderAction(
+    EksisterendeOMPKSSoknaderSvar: IOMPKSSoknadSvar
+): ISetEksisterendeOMPKSSoknaderAction {
     return {
         type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET,
         eksisterendeOMPKSSoknaderSvar: EksisterendeOMPKSSoknaderSvar,
     };
 }
 
-export function findEksisterendeOMPKSSoknaderLoadingAction(isLoading: boolean): IFindEksisterendeOMPKSSoknaderLoadingAction {
+export function findEksisterendeOMPKSSoknaderLoadingAction(
+    isLoading: boolean
+): IFindEksisterendeOMPKSSoknaderLoadingAction {
     return {
         type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_LOAD,
         isLoading,
@@ -100,14 +104,14 @@ export function findEksisterendeOMPKSSoknaderErrorAction(error: IError): IFindEk
     };
 }
 
-export function findEksisterendeOMPKSSoknader(ident1: string, ident2: string | null) {
+export function findEksisterendeOMPKSSoknader(søkerId: string, pleietrengendeId: string | null) {
     return (dispatch: any) => {
         dispatch(findEksisterendeOMPKSSoknaderLoadingAction(true));
-        const idents = ident2 ? `${ident1},${ident2}` : ident1;
+        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
         return get(
             ApiPath.OMP_KS_EKSISTERENDE_SOKNADER_FIND,
             undefined,
-            {'X-Nav-NorskIdent': idents},
+            { 'X-Nav-NorskIdent': idents },
             (response, soknader) => {
                 if (response.ok) {
                     return dispatch(setEksisterendeOMPKSSoknaderAction(soknader));
@@ -126,7 +130,7 @@ export function openEksisterendeOMPKSSoknadAction(soknadInfo: IOMPKSSoknad): IOp
 }
 
 export function closeEksisterendeOMPKSSoknadAction(): ICloseEksisterendeOMPKSSoknadAction {
-    return {type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CLOSE};
+    return { type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNAD_CLOSE };
 }
 
 export function chooseEksisterendeOMPKSSoknadAction(soknadInfo: IOMPKSSoknad): IChooseOMPKSSoknadAction {
@@ -143,28 +147,28 @@ export function undoChoiceOfEksisterendeOMPKSSoknadAction(): IUndoChoiceOfOMPKSS
 }
 
 export function createOMPKSSoknadRequestAction(): ICreateOMPKSSoknadRequestAction {
-    return {type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_REQUEST};
+    return { type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_REQUEST };
 }
 
 export function createOMPKSSoknadSuccessAction(id: string): ICreateOMPKSSoknadSuccessAction {
-    return {type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_SUCCESS, id};
+    return { type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_SUCCESS, id };
 }
 
 export function createOMPKSSoknadErrorAction(error: IError): ICreateOMPKSSoknadErrorAction {
-    return {type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_ERROR, error};
+    return { type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_ERROR, error };
 }
 
 export function resetOMPKSSoknadidAction(): IResetOMPKSSoknadidAction {
-    return {type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNADID_RESET};
+    return { type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNADID_RESET };
 }
 
-export function createOMPKSSoknad(journalpostid: string, ident1: string, barnIdent: string | null) {
+export function createOMPKSSoknad(journalpostid: string, søkerId: string, barnIdent: string | null) {
     return (dispatch: any) => {
         dispatch(createOMPKSSoknadRequestAction());
 
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
-            norskIdent: ident1,
+            norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
             barnIdent,
         };

@@ -32,8 +32,8 @@ export interface IPunchPageComponentProps {
 }
 
 export interface IPunchPageComponentState {
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
 }
 
 type IPunchPageProps = WrappedComponentProps &

@@ -34,8 +34,8 @@ const setupSokersBarn = (
     };
 
     const identState: IIdentState = {
-        ident1: '12345678901',
-        ident2: '',
+        søkerId: '12345678901',
+        pleietrengendeId: '',
         annenSokerIdent: '',
     };
 

@@ -83,9 +83,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             values.erKorrigering
                 ? validerSoeknad(
                       korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
-                      identState.ident1
+                      identState.søkerId
                   )
-                : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
+                : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.søkerId),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
                 if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {

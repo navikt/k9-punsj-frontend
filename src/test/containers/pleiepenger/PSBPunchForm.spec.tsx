@@ -24,8 +24,8 @@ jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
 const soknadId = 'abc';
-const ident1 = '01015012345';
-const ident2 = '22082067856';
+const søkerId = '01015012345';
+const pleietrengendeId = '22082067856';
 const journalpostid = '200';
 
 const initialSoknad: IPSBSoknad = {
@@ -36,7 +36,7 @@ const initialSoknad: IPSBSoknad = {
     },
     barn: {
         foedselsdato: '',
-        norskIdent: ident2,
+        norskIdent: pleietrengendeId,
     },
     beredskap: [],
     bosteder: [],
@@ -53,7 +53,7 @@ const initialSoknad: IPSBSoknad = {
         frilanser: null,
         selvstendigNaeringsdrivende: null,
     },
-    soekerId: ident1,
+    soekerId: søkerId,
     soeknadId: '123',
     soeknadsperiode: null,
     soknadsinfo: {
@@ -134,8 +134,8 @@ const setupPunchForm = (
     };
 
     const identState: IIdentState = {
-        ident1: '122345',
-        ident2: '678908',
+        søkerId: '122345',
+        pleietrengendeId: '678908',
         annenSokerIdent: null,
     };
 

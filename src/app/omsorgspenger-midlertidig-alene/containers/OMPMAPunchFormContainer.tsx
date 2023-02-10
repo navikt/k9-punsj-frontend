@@ -86,8 +86,8 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     }, []);
 
     useEffect(() => {
-        if (soknad?.soekerId || identState.ident1) {
-            henteBarn(soknad?.soekerId || identState.ident1);
+        if (soknad?.soekerId || identState.søkerId) {
+            henteBarn(soknad?.soekerId || identState.søkerId);
         }
     }, [soknad?.soekerId]);
 

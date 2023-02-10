@@ -3,18 +3,16 @@ import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux'
-import {PunchStep} from '../../models/enums';
-import {
-    createOMPKSSoknad, resetOMPKSSoknadidAction
-} from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import {hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction} from '../../state/actions/JournalposterPerIdentActions';
-import {IJournalposterPerIdentState} from '../../models/types/Journalpost/JournalposterPerIdentState';
-import {IIdentState} from '../../models/types/IdentState';
-import {IEksisterendeSoknaderState, IPunchState} from '../../models/types';
-import {setHash} from '../../utils';
-import {EksisterendeOMPKSSoknader} from './EksisterendeOMPKSSoknader';
-import {RootStateType} from '../../state/RootState';
+import { connect } from 'react-redux';
+import { PunchStep } from '../../models/enums';
+import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { IIdentState } from '../../models/types/IdentState';
+import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
+import { setHash } from '../../utils';
+import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
+import { RootStateType } from '../../state/RootState';
 
 export interface IOMPKSRegistreringsValgComponentProps {
     journalpostid: string;
@@ -44,7 +42,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
 
-    const { ident1, ident2 } = identState;
+    const { søkerId, pleietrengendeId } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -58,8 +56,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
-        props.getAlleJournalposter(ident1);
-    }, [ident1]);
+        props.getAlleJournalposter(søkerId);
+    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -67,12 +65,10 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     };
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return (
-            <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>
-        );
+        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
     }
 
-    const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
+    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
@@ -87,8 +83,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     return (
         <div className="registrering-page">
             <EksisterendeOMPKSSoknader
-                ident1={ident1}
-                ident2={ident2}
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
@@ -107,8 +103,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(createOMPKSSoknad(journalpostid, søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

@@ -54,7 +54,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         data: soeknadRespons,
         isLoading,
         error,
-    } = useQuery(id, () => hentSoeknad(identState.ident1, id), {
+    } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
         onSuccess: (data) => {
             dispatch(setIdentFellesAction(data.soekerId));
             hentPerioderK9({
@@ -63,7 +63,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             });
         },
     });
-    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.ident1), {
+    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
         onSuccess: () => {
             history.push(`${routingPaths.kvittering}${id}`);
         },
