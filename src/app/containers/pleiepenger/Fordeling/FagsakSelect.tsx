@@ -63,7 +63,7 @@ const FagsakSelect = ({
             onChange={() => {
                 setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
                 setValgtFagsak('');
-                setIdentAction(identState.ident1, '', identState.annenSokerIdent);
+                setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
             }}
         />
         <VerticalSpacer twentyPx />

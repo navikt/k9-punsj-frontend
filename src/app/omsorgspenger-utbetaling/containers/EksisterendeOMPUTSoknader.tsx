@@ -15,8 +15,8 @@ import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;
-    ident1: string;
-    ident2: string | null;
+    søkerId: string;
+    pleietrengendeId: string | null;
 }
 
 type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPUTSoknaderComponentProps;
@@ -24,22 +24,22 @@ type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPU
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
     props: IEksisterendeOMPUTSoknaderProps
 ) => {
-    const { intl, ident1, ident2 } = props;
+    const { intl, søkerId, pleietrengendeId } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
     const routingPaths = React.useContext(RoutingPathsContext);
 
     React.useEffect(() => {
-        if (!IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
+        if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             setHash('/');
         }
-    }, [ident1, ident2]);
+    }, [søkerId, pleietrengendeId]);
 
     const {
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(ident1));
+    } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
 
     if (lasterSoeknader) {
         return <Loader />;
@@ -129,7 +129,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     return (
         <Alert size="small" variant="info">
             {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: ident2 ? '2' : '1',
+                antallSokere: pleietrengendeId ? '2' : '1',
             })}
         </Alert>
     );

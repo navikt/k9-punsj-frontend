@@ -21,7 +21,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             cy.findByText(/Søkers fødselsnummer/i).should('exist');
 
             cy.findByText(initialState.felles.journalpost.journalpostId).should('exist');
-            cy.findByText(initialState.identState.ident1).should('exist');
+            cy.findByText(initialState.identState.søkerId).should('exist');
         });
     });
 

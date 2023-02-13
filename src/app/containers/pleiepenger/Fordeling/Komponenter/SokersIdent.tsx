@@ -12,12 +12,12 @@ import { FormattedMessage, useIntl } from 'react-intl';
 interface ISokersIdentProps {
     dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
-    handleIdent1Change: (event: any) => void;
-    handleIdent1Blur: (event: any) => void;
+    handleSøkerIdChange: (event: any) => void;
+    handleSøkerIdBlur: (event: any) => void;
     setVisSokersBarn: (event: any) => void;
     setSokersIdent: (event: any) => void;
     setIdentAction: typeof setIdentFellesAction;
-    setErIdent1Bekreftet: (event: any) => void;
+    setErSøkerIdBekreftet: (event: any) => void;
     setRiktigIdentIJournalposten: (event: any) => void;
     sokersIdent: string;
     identState: IIdentState;
@@ -27,14 +27,14 @@ interface ISokersIdentProps {
 const SokersIdent: React.FC<ISokersIdentProps> = ({
     dokumenttype,
     journalpost,
-    handleIdent1Change,
-    handleIdent1Blur,
+    handleSøkerIdChange,
+    handleSøkerIdBlur,
     sokersIdent,
     identState,
     setVisSokersBarn,
     setSokersIdent,
     setIdentAction,
-    setErIdent1Bekreftet,
+    setErSøkerIdBekreftet,
     setRiktigIdentIJournalposten,
     riktigIdentIJournalposten,
     erInntektsmeldingUtenKrav,
@@ -56,13 +56,13 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         setRiktigIdentIJournalposten(jn);
         setVisSokersBarn(false);
         if (jn === JaNei.JA) {
-            setIdentAction(journalpostident || '', identState.ident2);
+            setIdentAction(journalpostident || '', identState.pleietrengendeId);
             if (journalpost?.norskIdent) {
                 setVisSokersBarn(true);
             }
         } else {
             setSokersIdent('');
-            setIdentAction('', identState.ident2);
+            setIdentAction('', identState.pleietrengendeId);
         }
     };
 
@@ -90,7 +90,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                 }
                 checked={riktigIdentIJournalposten}
                 onChange={(event) => {
-                    setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA);
+                    setErSøkerIdBekreftet((event.target as HTMLInputElement).value === JaNei.JA);
                     handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei);
                 }}
             />
@@ -100,13 +100,13 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                     <VerticalSpacer sixteenPx />
                     <Input
                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                        onChange={handleIdent1Change}
-                        onBlur={handleIdent1Blur}
+                        onChange={handleSøkerIdChange}
+                        onBlur={handleSøkerIdBlur}
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
                         maxLength={11}
                         feil={
-                            identState.ident1 && IdentRules.erUgyldigIdent(identState.ident1)
+                            identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                 : undefined
                         }

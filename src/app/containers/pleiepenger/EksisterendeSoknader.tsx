@@ -42,8 +42,8 @@ export interface IEksisterendeSoknaderDispatchProps {
 }
 
 export interface IEksisterendeSoknaderComponentProps {
-    ident1: string;
-    ident2: string | null;
+    søkerId: string;
+    pleietrengendeId: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
@@ -55,20 +55,20 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
 export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps
 ) => {
-    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, ident1, ident2 } = props;
+    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
-            props.setIdentAction(ident1, ident2);
-            props.findEksisterendeSoknader(ident1, null);
+        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
+            props.setIdentAction(søkerId, pleietrengendeId);
+            props.findEksisterendeSoknader(søkerId, null);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
             props.resetPunchAction();
             setHash('/');
         }
-    }, [ident1, ident2]);
+    }, [søkerId, pleietrengendeId]);
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -81,7 +81,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
-    if (!ident1 || ident1 === '') {
+    if (!søkerId || søkerId === '') {
         return null;
     }
 
@@ -214,7 +214,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             {technicalError}
             <Alert size="small" variant="info">
                 {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: ident2 ? '2' : '1',
+                    antallSokere: pleietrengendeId ? '2' : '1',
                 })}
             </Alert>
         </>
@@ -227,16 +227,17 @@ const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps 
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-    findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
-        dispatch(findEksisterendeSoknader(ident1, ident2)),
+    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });

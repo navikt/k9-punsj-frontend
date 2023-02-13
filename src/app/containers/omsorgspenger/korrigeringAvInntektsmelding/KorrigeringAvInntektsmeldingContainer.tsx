@@ -16,19 +16,19 @@ const KorrigeringAvInntektsmelding: React.FC<KorrigeringAvInntektsmeldingContain
     identState,
     journalpost,
 }) => {
-    const { ident1 } = identState;
+    const { søkerId } = identState;
     const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
     useEffect(() => {
-        createOMSKorrigering(ident1, journalpost?.journalpostId || '', (response, data) => {
+        createOMSKorrigering(søkerId, journalpost?.journalpostId || '', (response, data) => {
             setSoknad(data);
         });
-    }, [ident1, journalpost]);
+    }, [søkerId, journalpost]);
     const journalposterFraSoknad = soknad?.journalposter || [];
 
     return (
         <SplitView soknad={soknad}>
             <KorrigeringAvInntektsmeldingForm
-                søkerId={ident1}
+                søkerId={søkerId}
                 søknadId={soknad?.soeknadId || ''}
                 journalposter={Array.from(journalposterFraSoknad)}
             />

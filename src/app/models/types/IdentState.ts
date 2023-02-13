@@ -1,6 +1,6 @@
 export interface IIdentState {
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
     annenSokerIdent: string | null;
     annenPart: string;
 }

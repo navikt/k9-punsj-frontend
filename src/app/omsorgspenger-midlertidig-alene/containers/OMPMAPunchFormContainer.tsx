@@ -5,7 +5,7 @@ import { Formik, FormikValues } from 'formik';
 import { connect } from 'react-redux';
 import { WrappedComponentProps } from 'react-intl';
 
-import { Alert, Button , Loader } from '@navikt/ds-react';
+import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import { RootStateType } from 'app/state/RootState';
 import { setHash } from 'app/utils';
@@ -85,8 +85,8 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     }, []);
 
     useEffect(() => {
-        if (soknad?.soekerId || identState.ident1) {
-            henteBarn(soknad?.soekerId || identState.ident1);
+        if (soknad?.soekerId || identState.søkerId) {
+            henteBarn(soknad?.soekerId || identState.søkerId);
         }
     }, [soknad?.soekerId]);
 

@@ -149,7 +149,7 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
                 </Alert>
             )}
             <Behandlingsknapp
-                norskIdent={identState.ident1}
+                norskIdent={identState.søkerId}
                 omfordel={omfordel}
                 lukkJournalpostOppgave={lukkJournalpostOppgave}
                 journalpost={journalpost}

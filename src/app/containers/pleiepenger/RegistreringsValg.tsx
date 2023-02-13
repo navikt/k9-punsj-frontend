@@ -43,7 +43,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
     const [valgtOption, setValgtOption] = useState<string>('nysoknad');
 
-    const { ident1, ident2 } = identState;
+    const { søkerId, pleietrengendeId } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -57,8 +57,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
-        props.getAlleJournalposter(ident1);
-    }, [ident1]);
+        props.getAlleJournalposter(søkerId);
+    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -66,7 +66,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     };
 
     const redirectToNextStep = () => {
-        props.createSoknad(journalpostid, ident1, ident2);
+        props.createSoknad(journalpostid, søkerId, pleietrengendeId);
         setHash(
             getPunchPath(PunchStep.FILL_FORM, {
                 id: eksisterendeSoknaderState.soknadid,
@@ -82,7 +82,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         );
     }
 
-    const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
+    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
 
     const technicalError =
         eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
@@ -109,8 +109,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     return (
         <div className="registrering-page">
             <EksisterendeSoknader
-                ident1={ident1}
-                ident2={ident2}
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
@@ -129,8 +129,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

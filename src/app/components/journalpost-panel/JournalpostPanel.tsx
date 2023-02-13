@@ -1,4 +1,6 @@
-import { Panel } from '@navikt/ds-react';
+import { Panel, Link } from '@navikt/ds-react';
+import { ExternalLink } from '@navikt/ds-icons';
+import { getModiaPath } from 'app/utils';
 import React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
@@ -6,7 +8,6 @@ import { IFordelingState, IJournalpost } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
-import FlexRow from '../flexgrid/FlexRow';
 import LabelValue from '../skjema/LabelValue';
 import './journalpostPanel.less';
 
@@ -27,37 +28,53 @@ export const JournalpostPanelComponent: React.FunctionComponent<
         intl,
         journalpost,
         fordelingState,
-        identState: { ident1, ident2 },
+        identState: { søkerId, pleietrengendeId },
         journalposter,
     } = props;
 
+    const ident = søkerId || journalpost?.norskIdent;
+    const modiaPath = getModiaPath(ident);
+
     return (
         <Panel border className="journalpostpanel">
-            <FlexRow wrap childrenMargin="medium">
+            <div>
                 <LabelValue
                     labelTextId="journalpost.id"
                     value={journalposter?.join(', ') || journalpost?.journalpostId}
                     retning="horisontal"
                 />
-
-                {fordelingState.erIdent1Bekreftet && (
+            </div>
+            <div>
+                {fordelingState.erSøkerIdBekreftet && (
+                    <div>
+                        <LabelValue
+                            labelTextId="journalpost.norskIdent"
+                            value={
+                                søkerId ||
+                                journalpost?.norskIdent ||
+                                intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
+                            }
+                            retning="horisontal"
+                            visKopier
+                        />
+                        {modiaPath && (
+                            <Link className="modia-lenke" href={modiaPath}>
+                                {intlHelper(intl, 'modia.lenke')}
+                                <ExternalLink />
+                            </Link>
+                        )}
+                    </div>
+                )}
+            </div>
+            <div>
+                {!!pleietrengendeId && (
                     <LabelValue
-                        labelTextId="journalpost.norskIdent"
-                        value={
-                            ident1 || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
-                        }
+                        labelTextId="journalpost.pleietrengendeId"
+                        value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                         retning="horisontal"
-                        visKopier
                     />
                 )}
-                {!!ident2 && (
-                    <LabelValue
-                        labelTextId="journalpost.ident2"
-                        value={ident2 || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
-                        retning="horisontal"
-                    />
-                )}
-            </FlexRow>
+            </div>
         </Panel>
     );
 };

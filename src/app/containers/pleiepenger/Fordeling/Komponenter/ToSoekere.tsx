@@ -39,7 +39,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
     const handleIdentAnnenSokerBlur = (event: any) =>
-        setIdentAction(identState.ident1, identState.ident2, event.target.value);
+        setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
     if (!skalVises) {
         return null;
     }
@@ -67,8 +67,8 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                         maxLength={11}
                         feil={visFeilmeldingForAnnenIdentVidJournalKopi(
                             identState.annenSokerIdent,
-                            identState.ident1,
-                            identState.ident2,
+                            identState.søkerId,
+                            identState.pleietrengendeId,
                             intl
                         )}
                         bredde="M"

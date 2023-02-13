@@ -214,25 +214,25 @@ export function updatePLSSoknad(soknad: Partial<IPLSSoknadUt>) {
 
 export function updatePLSSoknader(
     mappeid: string,
-    norskIdent1: string,
-    norskIdent2: string | null,
+    norskSøkerId: string,
+    norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IPLSSoknadUt>,
     soknad2: Partial<IPLSSoknadUt> | null
 ) {
     return (dispatch: any) => {
-        if (!norskIdent2 || !soknad2) {
+        if (!norskPleietrengendeId || !soknad2) {
             return dispatch(updatePLSSoknad(soknad1));
         }
 
         dispatch(updatePLSSoknadRequestAction());
         const request = {
             personer: {
-                [norskIdent1]: {
+                [norskSøkerId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad1,
                 },
-                [norskIdent2]: {
+                [norskPleietrengendeId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad2,
                 },
@@ -248,7 +248,7 @@ export function updatePLSSoknader(
                 case 400:
                     return response.json().then((mappe) => {
                         dispatch(setPLSSoknadAction(mappe));
-                        dispatch(updatePLSSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        dispatch(updatePLSSoknadSuccessAction(mappe.personer?.[norskSøkerId]?.mangler));
                     });
                 default:
                     return dispatch(updatePLSSoknadErrorAction(convertResponseToError(response)));

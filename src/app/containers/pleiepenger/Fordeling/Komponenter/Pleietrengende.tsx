@@ -68,12 +68,12 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     };
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
-        setIdentAction(identState.ident1, event.target.value, identState.annenSokerIdent);
+        setIdentAction(identState.søkerId, event.target.value, identState.annenSokerIdent);
     };
 
     const nullUtPleietrengendeIdent = () => {
         setPleietrengendeIdent('');
-        setIdentAction(identState.ident1, '', identState.annenSokerIdent);
+        setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
     };
 
     const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
@@ -81,7 +81,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
-            setIdentAction(identState.ident1, null);
+            setIdentAction(identState.søkerId, null);
         }
     };
 
@@ -133,14 +133,14 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             className="bold-label ident-soker-2"
                             maxLength={11}
                             feil={
-                                identState.ident2 && IdentRules.erUgyldigIdent(identState.ident2)
+                                identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId)
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }
                             bredde="M"
                             disabled={pleietrengendeHarIkkeFnr}
                         />
-                        {pleietrengendeIdent.length === 11 && !IdentRules.erUgyldigIdent(identState.ident2) && (
+                        {pleietrengendeIdent.length === 11 && !IdentRules.erUgyldigIdent(identState.pleietrengendeId) && (
                             <div className="dobbelSjekkIdent">
                                 <div>
                                     <WarningCircle />
@@ -179,9 +179,9 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
-    henteBarn: (ident1: string) => dispatch(hentBarn(ident1)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
+    henteBarn: (søkerId: string) => dispatch(hentBarn(søkerId)),
 });
 
 const Pleietrengende = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PleietrengendeComponent));

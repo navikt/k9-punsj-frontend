@@ -399,8 +399,9 @@
     "skjema.sentInn": "Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.",
     "journalpost.id": "Journalpostnummer:",
     "journalpost.norskIdent": "Søkers fødselsnummer:",
-    "journalpost.ident2": "Pleietrengendes fødselsnummer:",
+    "journalpost.pleietrengendeId": "Pleietrengendes fødselsnummer:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
+    "modia.lenke": "Se dialog i Modia",
 
     "registrering.nysoknad": "Ny søknad",
     "registrering.etterrapportering": "Etterrapportering",

@@ -38,8 +38,8 @@ const PleiepengerPunsjInitialState = {
         },
         punchState: {
             step: 1,
-            ident1: '29099000129',
-            ident2: '16017725002',
+            søkerId: '29099000129',
+            pleietrengendeId: '16017725002',
         },
         signaturState: {
             signert: null,
@@ -105,7 +105,7 @@ const PleiepengerPunsjInitialState = {
         isAwaitingLukkOppgaveResponse: false,
         lukkOppgaveDone: false,
         skalTilK9: true,
-        erIdent1Bekreftet: true,
+        erSøkerIdBekreftet: true,
         valgtGosysKategori: '',
     },
     authState: {
@@ -144,8 +144,8 @@ const PleiepengerPunsjInitialState = {
         isJournalposterLoading: false,
     },
     identState: {
-        ident1: '29099000129',
-        ident2: '16017725002',
+        søkerId: '29099000129',
+        pleietrengendeId: '16017725002',
         annenSokerIdent: null,
     },
     opprettIGosys: {

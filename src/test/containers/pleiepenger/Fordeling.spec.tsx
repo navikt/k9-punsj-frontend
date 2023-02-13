@@ -44,7 +44,7 @@ export const setupFordeling = (
         lukkJournalpostOppgave: jest.fn(),
         resetOmfordelAction: jest.fn(),
         lukkOppgaveReset: jest.fn(),
-        setErIdent1Bekreftet: jest.fn(),
+        setErSøkerIdBekreftet: jest.fn(),
         ...fordelingDispatchPropsPartial,
     };
 
@@ -72,14 +72,14 @@ export const setupFordeling = (
         isAwaitingSjekkTilK9Response: false,
         isAwaitingLukkOppgaveResponse: false,
         sakstype: Sakstype.PLEIEPENGER_SYKT_BARN,
-        erIdent1Bekreftet: false,
+        erSøkerIdBekreftet: false,
         valgtGosysKategori: 'Annet',
         ...fordelingStatePartial,
     };
 
     const identState: IIdentState = {
-        ident1: '12345678901',
-        ident2: '',
+        søkerId: '12345678901',
+        pleietrengendeId: '',
         annenSokerIdent: '',
     };
 

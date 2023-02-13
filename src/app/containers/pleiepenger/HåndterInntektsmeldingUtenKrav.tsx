@@ -24,13 +24,13 @@ import SettPaaVentModal from './SettPaaVentModal';
 
 interface Props {
     journalpost?: IJournalpost;
-    ident1: string;
+    søkerId: string;
 }
 
 const opprettJournalføringsoppgaveValue = 'opprettJournalføringsoppgave';
 const ferdigstillJournalpostValue = 'ferdigstillJournalpost';
 const settPåVentValue = 'settPåVent';
-const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 }) => {
+const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerId }) => {
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
     const [showOpprettOppgaveIGosysModal, setShowOpprettOppgaveIGosysModal] = useState(false);
@@ -56,7 +56,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
     };
 
     const handleFerdigstillJournalpost = () => {
-        dispatch(ferdigstillJournalpost(journalpost?.journalpostId || '', ident1));
+        dispatch(ferdigstillJournalpost(journalpost?.journalpostId || '', søkerId));
         setShowFerdigstillJournalpostModal(false);
     };
 
@@ -74,12 +74,12 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
     };
 
     const skalOppretteGosysoppgaveForInntektsmeldingUtenKrav = () =>
-        håndterInntektsmeldingUtenKravValg === opprettJournalføringsoppgaveValue && ident1;
+        håndterInntektsmeldingUtenKravValg === opprettJournalføringsoppgaveValue && søkerId;
     const skalFerdigstilleJournalpost = () =>
-        håndterInntektsmeldingUtenKravValg === ferdigstillJournalpostValue && ident1;
+        håndterInntektsmeldingUtenKravValg === ferdigstillJournalpostValue && søkerId;
 
     const skalSetteInntektsmeldingUtenKravPåVent = () =>
-        håndterInntektsmeldingUtenKravValg === settPåVentValue && ident1;
+        håndterInntektsmeldingUtenKravValg === settPåVentValue && søkerId;
 
     const getUtførValgKnapp = () => {
         if (skalOppretteGosysoppgaveForInntektsmeldingUtenKrav()) {
@@ -133,7 +133,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
             />
             <BrevContainer>
                 <BrevComponent
-                    søkerId={ident1}
+                    søkerId={søkerId}
                     journalpostId={journalpost?.journalpostId || ''}
                     setVisBrevIkkeSendtInfoboks={setVisBrevIkkeSendtInfoboks}
                     sakstype="OMP"
@@ -189,7 +189,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, ident1 
                     closeButton={false}
                 >
                     <OpprettOppgaveIGosysModal
-                        submit={() => dispatch(opprettGosysOppgave(journalpost.journalpostId, ident1, 'Annet'))}
+                        submit={() => dispatch(opprettGosysOppgave(journalpost.journalpostId, søkerId, 'Annet'))}
                         avbryt={() => setShowOpprettOppgaveIGosysModal(false)}
                     >
                         {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}

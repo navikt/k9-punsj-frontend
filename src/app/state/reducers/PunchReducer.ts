@@ -4,14 +4,11 @@ import { IPunchActionTypes } from 'app/state/actions';
 
 export const initialState: IPunchState = {
     step: PunchStep.CHOOSE_SOKNAD,
-    ident1: '',
-    ident2: null,
+    søkerId: '',
+    pleietrengendeId: null,
 };
 
-export function PunchReducer(
-    punchState: IPunchState = initialState,
-    action: IPunchActionTypes
-): IPunchState {
+export function PunchReducer(punchState: IPunchState = initialState, action: IPunchActionTypes): IPunchState {
     switch (action.type) {
         case PunchActionKeys.RESET:
             return initialState;
@@ -19,8 +16,8 @@ export function PunchReducer(
         case PunchActionKeys.IDENT_SET:
             return {
                 ...punchState,
-                ident1: action.ident1,
-                ident2: action.ident2,
+                søkerId: action.søkerId,
+                pleietrengendeId: action.pleietrengendeId,
             };
 
         case PunchActionKeys.STEP_SET:

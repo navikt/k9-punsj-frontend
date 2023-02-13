@@ -66,7 +66,7 @@ const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     fagsak: state.fordelingState.fagsak,
     dokumenttype: state.fordelingState.dokumenttype,
-    søkerId: state.identState.ident1,
+    søkerId: state.identState.søkerId,
 });
 const mapDispatchToProps = (dispatch) => ({
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>

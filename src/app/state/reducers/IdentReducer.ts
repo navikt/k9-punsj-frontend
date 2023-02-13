@@ -2,8 +2,8 @@ import { IIdentState } from '../../models/types/IdentState';
 import { IdentActionKeys, IIdentActions } from '../actions/IdentActions';
 
 export const initialState: IIdentState = {
-    ident1: '',
-    ident2: '',
+    søkerId: '',
+    pleietrengendeId: '',
     annenPart: '',
     annenSokerIdent: null,
 };
@@ -13,8 +13,8 @@ export function IdentReducer(identState: IIdentState = initialState, action: IId
         case IdentActionKeys.IDENT_FELLES_SET:
             return {
                 ...identState,
-                ident1: action.ident1,
-                ident2: action.ident2,
+                søkerId: action.søkerId,
+                pleietrengendeId: action.pleietrengendeId,
                 annenSokerIdent: action.annenSokerIdent,
             };
 
@@ -27,7 +27,7 @@ export function IdentReducer(identState: IIdentState = initialState, action: IId
         case IdentActionKeys.IDENT_RESET:
             return {
                 ...identState,
-                ident2: '',
+                pleietrengendeId: '',
                 annenSokerIdent: '',
             };
 

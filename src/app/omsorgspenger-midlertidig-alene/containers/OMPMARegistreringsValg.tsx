@@ -41,7 +41,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     props: IOMPMARegistreringsValgProps
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const { ident1, ident2, annenPart } = identState;
+    const { søkerId, pleietrengendeId, annenPart } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -55,8 +55,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
-        props.getAlleJournalposter(ident1);
-    }, [ident1]);
+        props.getAlleJournalposter(søkerId);
+    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -72,7 +72,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     }
 
     const newSoknad = () => {
-        props.createSoknad(journalpostid, ident1, annenPart);
+        props.createSoknad(journalpostid, søkerId, annenPart);
     };
 
     const kanStarteNyRegistrering = () => {
@@ -89,8 +89,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     return (
         <div className="registrering-page">
             <EksisterendeOMPMASoknader
-                ident1={ident1}
-                ident2={ident2}
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
@@ -109,8 +109,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, annenPart: string) =>
-        dispatch(createOMPMASoknad(journalpostid, ident1, annenPart)),
+    createSoknad: (journalpostid: string, søkerId: string, annenPart: string) =>
+        dispatch(createOMPMASoknad(journalpostid, søkerId, annenPart)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

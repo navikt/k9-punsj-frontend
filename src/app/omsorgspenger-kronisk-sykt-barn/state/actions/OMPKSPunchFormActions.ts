@@ -1,12 +1,12 @@
-import {ApiPath} from 'app/apiConfig';
-import {PunchFormActionKeys} from 'app/models/enums';
-import {IError} from 'app/models/types';
-import {IInputError} from 'app/models/types/InputError';
-import {convertResponseToError, get, post, put} from 'app/utils';
-import {ISendSoknad} from '../../../models/types/SendSoknad';
-import {IOMPKSSoknad} from '../../types/OMPKSSoknad';
-import {IOMPKSSoknadUt} from '../../types/OMPKSSoknadUt';
-import {IOMPKSSoknadKvittering} from '../../types/OMPKSSoknadKvittering';
+import { ApiPath } from 'app/apiConfig';
+import { PunchFormActionKeys } from 'app/models/enums';
+import { IError } from 'app/models/types';
+import { IInputError } from 'app/models/types/InputError';
+import { convertResponseToError, get, post, put } from 'app/utils';
+import { ISendSoknad } from '../../../models/types/SendSoknad';
+import { IOMPKSSoknad } from '../../types/OMPKSSoknad';
+import { IOMPKSSoknadUt } from '../../types/OMPKSSoknadUt';
+import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
 
 interface IResetPunchOMPKSFormAction {
     type: PunchFormActionKeys.RESET;
@@ -115,7 +115,7 @@ type IValiderOMPKSSoknadActionTypes =
     | IValiderOMPKSSoknadSuccessAction
     | IValiderOMPKSSoknadErrorAction
     | IValiderOMPKSSoknadResetAction
-    | IValiderOMPKSSoknadUncompleteAction
+    | IValiderOMPKSSoknadUncompleteAction;
 
 export type IPunchOMPKSFormActionTypes =
     | IResetPunchOMPKSFormAction
@@ -158,7 +158,7 @@ export const updateOMPKSSoknadErrorAction = (error: IError): IUpdateOMPKSSoknadE
 export function getOMPKSSoknad(id: string) {
     return (dispatch: any) => {
         dispatch(getOMPKSSoknadLoadingAction());
-        return get(ApiPath.OMP_KS_SOKNAD_GET, {id}, undefined, (response, soknad) => {
+        return get(ApiPath.OMP_KS_SOKNAD_GET, { id }, undefined, (response, soknad) => {
             if (response.ok || response.status === 400) {
                 return dispatch(setOMPKSSoknadAction(soknad));
             }
@@ -170,7 +170,7 @@ export function getOMPKSSoknad(id: string) {
 export function updateOMPKSSoknad(soknad: Partial<IOMPKSSoknadUt>) {
     return (dispatch: any) => {
         dispatch(updateOMPKSSoknadRequestAction());
-        return put(ApiPath.OMP_KS_SOKNAD_UPDATE, {id: soknad.soeknadId}, soknad, (response) => {
+        return put(ApiPath.OMP_KS_SOKNAD_UPDATE, { id: soknad.soeknadId }, soknad, (response) => {
             if (response.status === 200) {
                 return response.json().then((mappe) => {
                     dispatch(setOMPKSSoknadAction(mappe));
@@ -178,38 +178,37 @@ export function updateOMPKSSoknad(soknad: Partial<IOMPKSSoknadUt>) {
                 });
             }
             return dispatch(updateOMPKSSoknadErrorAction(convertResponseToError(response)));
-
         });
     };
 }
 
 export function updateOMPKSSoknader(
     mappeid: string,
-    norskIdent1: string,
-    norskIdent2: string | null,
+    norskSøkerId: string,
+    norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IOMPKSSoknadUt>,
     soknad2: Partial<IOMPKSSoknadUt> | null
 ) {
     return (dispatch: any) => {
-        if (!norskIdent2 || !soknad2) {
+        if (!norskPleietrengendeId || !soknad2) {
             return dispatch(updateOMPKSSoknad(soknad1));
         }
 
         dispatch(updateOMPKSSoknadRequestAction());
         const request = {
             personer: {
-                [norskIdent1]: {
+                [norskSøkerId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad1,
                 },
-                [norskIdent2]: {
+                [norskPleietrengendeId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad2,
                 },
             },
         };
-        return put(ApiPath.OMP_KS_SOKNAD_UPDATE, {id: mappeid}, request, (response) => {
+        return put(ApiPath.OMP_KS_SOKNAD_UPDATE, { id: mappeid }, request, (response) => {
             switch (response.status) {
                 case 200:
                     return response.json().then((mappe) => {
@@ -219,7 +218,7 @@ export function updateOMPKSSoknader(
                 case 400:
                     return response.json().then((mappe) => {
                         dispatch(setOMPKSSoknadAction(mappe));
-                        dispatch(updateOMPKSSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        dispatch(updateOMPKSSoknadSuccessAction(mappe.personer?.[norskSøkerId]?.mangler));
                     });
                 default:
                     return dispatch(updateOMPKSSoknadErrorAction(convertResponseToError(response)));
@@ -287,8 +286,8 @@ export function submitOMPKSSoknad(norskIdent: string, soeknadId: string) {
         dispatch(submitOMPKSSoknadRequestAction());
         post(
             ApiPath.OMP_KS_SOKNAD_SUBMIT,
-            {id: soeknadId},
-            {'X-Nav-NorskIdent': norskIdent},
+            { id: soeknadId },
+            { 'X-Nav-NorskIdent': norskIdent },
             requestBody,
             (response, responseData) => {
                 switch (response.status) {
@@ -313,8 +312,8 @@ export function validerOMPKSSoknad(soknad: IOMPKSSoknadUt, erMellomlagring?: boo
         dispatch(validerOMPKSSoknadRequestAction());
         post(
             ApiPath.OMP_KS_SOKNAD_VALIDER,
-            {id: soknad.soeknadId},
-            {'X-Nav-NorskIdent': norskIdent},
+            { id: soknad.soeknadId },
+            { 'X-Nav-NorskIdent': norskIdent },
             soknad,
             (response, data) => {
                 switch (response.status) {

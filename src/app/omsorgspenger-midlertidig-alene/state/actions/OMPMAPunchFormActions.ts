@@ -184,25 +184,25 @@ export function updateOMPMASoknad(soknad: Partial<IOMPMASoknadUt>) {
 
 export function updateOMPMASoknader(
     mappeid: string,
-    norskIdent1: string,
-    norskIdent2: string | null,
+    norskSøkerId: string,
+    norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IOMPMASoknadUt>,
     soknad2: Partial<IOMPMASoknadUt> | null
 ) {
     return (dispatch: any) => {
-        if (!norskIdent2 || !soknad2) {
+        if (!norskPleietrengendeId || !soknad2) {
             return dispatch(updateOMPMASoknad(soknad1));
         }
 
         dispatch(updateOMPMASoknadRequestAction());
         const request = {
             personer: {
-                [norskIdent1]: {
+                [norskSøkerId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad1,
                 },
-                [norskIdent2]: {
+                [norskPleietrengendeId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad2,
                 },
@@ -218,7 +218,7 @@ export function updateOMPMASoknader(
                 case 400:
                     return response.json().then((mappe) => {
                         dispatch(setOMPMASoknadAction(mappe));
-                        dispatch(updateOMPMASoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        dispatch(updateOMPMASoknadSuccessAction(mappe.personer?.[norskSøkerId]?.mangler));
                     });
                 default:
                     return dispatch(updateOMPMASoknadErrorAction(convertResponseToError(response)));
