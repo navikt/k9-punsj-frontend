@@ -249,25 +249,25 @@ export function updateSoknad(soknad: Partial<IPSBSoknadUt>) {
 
 export function updateSoknader(
     mappeid: string,
-    norskIdent1: string,
-    norskIdent2: string | null,
+    norskSøkerId: string,
+    norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IPSBSoknadUt>,
     soknad2: Partial<IPSBSoknadUt> | null
 ) {
     return (dispatch: any) => {
-        if (!norskIdent2 || !soknad2) {
+        if (!norskPleietrengendeId || !soknad2) {
             return dispatch(updateSoknad(soknad1));
         }
 
         dispatch(updateSoknadRequestAction());
         const request = {
             personer: {
-                [norskIdent1]: {
+                [norskSøkerId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad1,
                 },
-                [norskIdent2]: {
+                [norskPleietrengendeId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad2,
                 },
@@ -283,7 +283,7 @@ export function updateSoknader(
                 case 400:
                     return response.json().then((mappe) => {
                         dispatch(setSoknadAction(mappe));
-                        dispatch(updateSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        dispatch(updateSoknadSuccessAction(mappe.personer?.[norskSøkerId]?.mangler));
                     });
                 default:
                     return dispatch(updateSoknadErrorAction(convertResponseToError(response)));

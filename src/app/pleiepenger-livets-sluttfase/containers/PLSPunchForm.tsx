@@ -303,7 +303,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
         if (!prevProps.søkersIdent && !prevProps.pleietrengendeIdent && søkersIdent && pleietrengendeIdent) {
             hentPerioder(søkersIdent, pleietrengendeIdent);
-            if (!identState.ident1 || !identState.ident2) {
+            if (!identState.søkerId || !identState.pleietrengendeId) {
                 setIdentAction(søkersIdent, pleietrengendeIdent);
             }
         }
@@ -1205,9 +1205,10 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 }
 
 const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
-    const søkersIdent = state.identState.ident1 || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.soekerId;
+    const søkersIdent =
+        state.identState.søkerId || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.soekerId;
     const pleietrengendeIdent =
-        state.identState.ident2 ||
+        state.identState.pleietrengendeId ||
         state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
     return {
         punchFormState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState,
@@ -1221,14 +1222,15 @@ const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getPLSSoknad(id)),
-    hentPerioder: (ident1: string, ident2: string) => dispatch(hentPLSPerioderFraK9Sak(ident1, ident2)),
+    hentPerioder: (søkerId: string, pleietrengendeId: string) =>
+        dispatch(hentPLSPerioderFraK9Sak(søkerId, pleietrengendeId)),
     updateSoknad: (soknad: Partial<IPLSSoknadUt>) => dispatch(updatePLSSoknad(soknad)),
     validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitPLSSoknad(ident, soeknadid)),
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),

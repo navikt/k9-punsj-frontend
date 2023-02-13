@@ -4,8 +4,8 @@ import { IPunchActionTypes } from 'app/state/actions';
 
 export const initialState: IPunchState = {
     step: PunchStep.CHOOSE_SOKNAD,
-    ident1: '',
-    ident2: null,
+    søkerId: '',
+    pleietrengendeId: null,
 };
 
 export function PunchPLSReducer(punchState: IPunchState, action: IPunchActionTypes): IPunchState {
@@ -17,8 +17,8 @@ export function PunchPLSReducer(punchState: IPunchState, action: IPunchActionTyp
         case PunchActionKeys.IDENT_SET:
             return {
                 ...punchState,
-                ident1: action.ident1,
-                ident2: action.ident2,
+                søkerId: action.søkerId,
+                pleietrengendeId: action.pleietrengendeId,
             };
 
         case PunchActionKeys.STEP_SET:

@@ -47,8 +47,8 @@ export interface IEksisterendeOMPKSSoknaderDispatchProps {
 
 export interface IEksisterendeOMPKSSoknaderComponentProps {
     journalpostid: string;
-    ident1: string;
-    ident2: string | null;
+    søkerId: string;
+    pleietrengendeId: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
@@ -60,20 +60,20 @@ type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
 export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksisterendeOMPKSSoknaderProps> = (
     props: IEksisterendeOMPKSSoknaderProps
 ) => {
-    const { intl, punchState, eksisterendeOMPKSSoknaderState, getPunchPath, ident1, ident2 } = props;
+    const { intl, punchState, eksisterendeOMPKSSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
 
     const soknader = eksisterendeOMPKSSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
-            props.setIdentAction(ident1, ident2);
-            props.findEksisterendeSoknader(ident1, null);
+        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
+            props.setIdentAction(søkerId, pleietrengendeId);
+            props.findEksisterendeSoknader(søkerId, null);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
             props.resetPunchAction();
             setHash('/');
         }
-    }, [ident1, ident2]);
+    }, [søkerId, pleietrengendeId]);
 
     React.useEffect(() => {
         if (
@@ -89,7 +89,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         }
     }, [eksisterendeOMPKSSoknaderState.soknadid]);
 
-    if (!ident1) {
+    if (!søkerId) {
         return null;
     }
 
@@ -218,7 +218,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
             {technicalError}
             <Alert size="small" variant="info">
                 {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: ident2 ? '2' : '1',
+                    antallSokere: pleietrengendeId ? '2' : '1',
                 })}
             </Alert>
         </>
@@ -231,16 +231,17 @@ const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateP
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
-    findEksisterendeSoknader: (ident1: string, ident2: string | null) =>
-        dispatch(findEksisterendeOMPKSSoknader(ident1, ident2)),
+    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeOMPKSSoknader(søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createOMPKSSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(createOMPKSSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });

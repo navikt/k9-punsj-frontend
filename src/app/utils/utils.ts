@@ -102,7 +102,7 @@ export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumentt
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_UT,
-            forkortelse: DokumenttypeForkortelse.OMP_UT,
+            forkortelse: DokumenttypeForkortelse.OMP,
         },
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_KS,
@@ -118,4 +118,18 @@ export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumentt
         },
     ];
     return dokumenttyper.find((dt) => dt.navn === dokumenttype)?.forkortelse;
+};
+
+export const getModiaPath = (fødselsnummer?: string) => {
+    const { host } = window.location;
+    if (!fødselsnummer) {
+        return null;
+    }
+    if (host.includes('dev.adeo.no')) {
+        return `https://app-q1.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
+    }
+    if (host.includes('nais.adeo.no')) {
+        return `https://app.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
+    }
+    return null;
 };

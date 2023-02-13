@@ -90,9 +90,9 @@ interface IGosysGjelderErrorAction {
     type: FordelingActionKeys.GOSYS_GJELDER_ERROR;
     error: IError;
 }
-interface ISetErIdent1BekreftetAction {
+interface ISetErSøkerIdBekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
-    erIdent1Bekreftet: boolean;
+    erSøkerIdBekreftet: boolean;
 }
 
 interface ISetValgtGosysKategori {
@@ -126,9 +126,9 @@ export const gosysGjelderErrorAction = (error: IError): IGosysGjelderErrorAction
     error,
 });
 
-export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction => ({
+export const setErSøkerIdBekreftetAction = (identBekreftet: boolean): ISetErSøkerIdBekreftetAction => ({
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1,
-    erIdent1Bekreftet: identBekreftet,
+    erSøkerIdBekreftet: identBekreftet,
 });
 export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetValgtGosysKategori => ({
     type: FordelingActionKeys.VALGT_GOSYS_KATEGORI,
@@ -152,7 +152,7 @@ export type IFordelingActionTypes =
     | IGosysGjelderRequestAction
     | IGosysGjelderSuccessAction
     | IGosysGjelderErrorAction
-    | ISetErIdent1BekreftetAction
+    | ISetErSøkerIdBekreftetAction
     | ISetValgtGosysKategori
     | ISjekkOmSkalTilK9ResetAction
     | ISetDokumenttypeAction;
@@ -204,7 +204,8 @@ export function sjekkOmSkalTilK9Sak(
     barnIdent: string,
     jpid: string,
     fagsakYtelseType: FagsakYtelseType,
-    annenPart: string
+    annenPart: string,
+    valgtFagsak?: Fagsak
 ) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {
@@ -213,6 +214,7 @@ export function sjekkOmSkalTilK9Sak(
             journalpostId: jpid,
             fagsakYtelseType,
             annenPart: annenPart || null,
+            periode: valgtFagsak ? valgtFagsak.gyldigPeriode : null,
         };
 
         dispatch(sjekkSkalTilK9RequestAction());

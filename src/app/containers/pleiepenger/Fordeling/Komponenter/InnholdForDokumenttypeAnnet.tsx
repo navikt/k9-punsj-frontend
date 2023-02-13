@@ -20,8 +20,8 @@ interface IInnholdForDokumenttypeAnnetProps {
     journalpost: IJournalpost;
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-    handleIdent1Change: (event: any) => void;
-    handleIdent1Blur: (event: any) => void;
+    handleSøkerIdChange: (event: any) => void;
+    handleSøkerIdBlur: (event: any) => void;
     sokersIdent: string;
     identState: IIdentState;
     fordelingState: IFordelingState;
@@ -33,8 +33,8 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
     journalpost,
     kanJournalforingsoppgaveOpprettesiGosys,
     lukkJournalpostOppgave,
-    handleIdent1Change,
-    handleIdent1Blur,
+    handleSøkerIdChange,
+    handleSøkerIdBlur,
     sokersIdent,
     identState,
     fordelingState,
@@ -66,13 +66,13 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
         <div>
             <Input
                 label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                onChange={handleIdent1Change}
-                onBlur={handleIdent1Blur}
+                onChange={handleSøkerIdChange}
+                onBlur={handleSøkerIdBlur}
                 value={sokersIdent}
                 className="bold-label ident-soker-1"
                 maxLength={11}
                 feil={
-                    IdentRules.erUgyldigIdent(identState.ident1)
+                    IdentRules.erUgyldigIdent(identState.søkerId)
                         ? intlHelper(intl, 'ident.feil.ugyldigident')
                         : undefined
                 }
@@ -82,9 +82,9 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
             <GosysGjelderKategorier />
             <Button
                 size="small"
-                disabled={IdentRules.erUgyldigIdent(identState.ident1) || !fordelingState.valgtGosysKategori}
+                disabled={IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori}
                 onClick={() =>
-                    omfordel(journalpost?.journalpostId, identState.ident1, fordelingState.valgtGosysKategori)
+                    omfordel(journalpost?.journalpostId, identState.søkerId, fordelingState.valgtGosysKategori)
                 }
             >
                 <FormattedMessage id="fordeling.sakstype.ANNET" />

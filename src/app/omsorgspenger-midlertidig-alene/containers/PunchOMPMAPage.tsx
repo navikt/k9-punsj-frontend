@@ -51,8 +51,8 @@ export interface IPunchOMPMAPageComponentProps {
 }
 
 export interface IPunchOMPMAPageComponentState {
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
 }
 
 type IPunchOMPMAPageProps = WrappedComponentProps &
@@ -176,7 +176,8 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (ident1: string, ident2: string | null) => dispatch(setIdentAction(ident1, ident2)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     setStepAction: (step: number) => dispatch(setStepAction(step)),
 });
 

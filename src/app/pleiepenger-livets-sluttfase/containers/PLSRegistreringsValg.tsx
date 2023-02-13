@@ -44,7 +44,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
 
-    const { ident1, ident2 } = identState;
+    const { søkerId, pleietrengendeId } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
@@ -58,8 +58,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
-        props.getAlleJournalposter(ident1);
-    }, [ident1]);
+        props.getAlleJournalposter(søkerId);
+    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -74,7 +74,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
         );
     }
 
-    const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
+    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
@@ -89,8 +89,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     return (
         <div className="registrering-page">
             <EksisterendePLSSoknader
-                ident1={ident1}
-                ident2={ident2}
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
@@ -109,8 +109,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createPLSSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

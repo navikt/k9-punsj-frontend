@@ -10,12 +10,12 @@ export class IdentRules {
         return status === 'invalid';
     };
 
-    public static erAlleIdenterGyldige = (ident1: string, ident2: string | null): boolean => {
-        if (!ident1) return false;
-        if (!ident2) return !IdentRules.erUgyldigIdent(ident1);
+    public static erAlleIdenterGyldige = (søkerId: string, pleietrengendeId: string | null): boolean => {
+        if (!søkerId) return false;
+        if (!pleietrengendeId) return !IdentRules.erUgyldigIdent(søkerId);
 
-        return !IdentRules.erUgyldigIdent(ident1) && !IdentRules.erUgyldigIdent(ident2);
+        return !IdentRules.erUgyldigIdent(søkerId) && !IdentRules.erUgyldigIdent(pleietrengendeId);
     };
 
-    public static harFnr11Siffrer = (ident?: any) => typeof ident === 'string' ? /^\d{11}$/.test(ident) : false
+    public static harFnr11Siffrer = (ident?: any) => (typeof ident === 'string' ? /^\d{11}$/.test(ident) : false);
 }

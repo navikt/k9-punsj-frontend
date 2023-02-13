@@ -5,6 +5,7 @@ on:
       - 'nais/proxy/k9-punsj-oidc-auth-proxy.yml'
       - 'nais/proxy/dev.json'
       - 'nais/proxy/prod.json'
+  workflow_dispatch:
 jobs:
   deploy:
     name: deploy k9-punsj-oidc-auth-proxy

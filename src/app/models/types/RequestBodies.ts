@@ -30,6 +30,7 @@ export interface ISkalTilK9 {
     journalpostId: string;
     fagsakYtelseType: FagsakYtelseType | undefined;
     annenPart: string | null;
+    periode: ISoknadPeriode | null;
 }
 
 export enum FagsakYtelseType {

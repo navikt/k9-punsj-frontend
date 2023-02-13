@@ -35,8 +35,8 @@ export interface IPunchOMPUTPageComponentProps {
 }
 
 export interface IPunchOMPUTPageComponentState {
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
 }
 
 type IPunchOMPUTPageProps = WrappedComponentProps &
@@ -48,7 +48,7 @@ type IPunchOMPUTPageProps = WrappedComponentProps &
 const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, identState, children } = props;
     const id = useHistory().location.pathname.split('skjema/')[1];
-    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.ident1, id));
+    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.søkerId, id));
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
 

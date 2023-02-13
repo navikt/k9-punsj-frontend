@@ -5,7 +5,7 @@ import Fagsak from 'app/types/Fagsak';
 export interface IFordelingState {
     sakstype?: Sakstype;
     dokumenttype?: FordelingDokumenttype;
-    erIdent1Bekreftet: boolean;
+    erSøkerIdBekreftet: boolean;
     omfordelingDone: boolean;
     isAwaitingOmfordelingResponse: boolean;
     omfordelingError?: IError;

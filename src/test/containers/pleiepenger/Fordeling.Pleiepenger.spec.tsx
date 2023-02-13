@@ -67,7 +67,7 @@ describe('Fordeling: Flyt for pleiepenger', () => {
     it.skip('Kan ikke gå videre dersom barnets ident ikke er riktig', () => {
         fordeling.setProps({
             fellesState: { hentBarnSuccess: true, barn: [] },
-            identState: { ident2: '12' },
+            identState: { pleietrengendeId: '12' },
             journalpost: { kanKopieres: true, kanSendeInn: true, erSaksbehandler: true },
         });
         expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);

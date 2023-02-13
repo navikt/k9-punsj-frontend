@@ -10,7 +10,7 @@ import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
     resetSkalTilK9,
-    setErIdent1BekreftetAction,
+    setErSøkerIdBekreftetAction,
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
@@ -74,7 +74,7 @@ export interface IFordelingDispatchProps {
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
-    setErIdent1Bekreftet: typeof setErIdent1BekreftetAction;
+    setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
     resetSjekkSkalTilK9: typeof resetSkalTilK9;
     resetBarn: typeof resetBarnAction;
@@ -95,7 +95,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         lukkOppgaveReset,
         fellesState,
         setIdentAction,
-        setErIdent1Bekreftet,
+        setErSøkerIdBekreftet,
         setSakstypeAction: sakstypeAction,
         setFagsakAction: setFagsak,
         resetIdentStateAction,
@@ -120,7 +120,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         resetSjekkSkalTilK9();
         setVisValgForDokument(false);
-    }, [dokumenttype, identState.ident1, identState.ident2, identState.annenPart]);
+    }, [dokumenttype, identState.søkerId, identState.pleietrengendeId, identState.annenPart]);
 
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
     const [visGaaTilLos, setVisGaaTilLos] = useState(false);
@@ -150,7 +150,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const visPleietrengendeComponent =
         gjelderPleiepengerEllerOmsorgspenger && !isFetchingFagsaker && !brukEksisterendeFagsak;
-    const visFagsakSelect = gjelderPleiepengerEllerOmsorgspenger && harFagsaker && identState.ident1.length === 11;
+    const visFagsakSelect = gjelderPleiepengerEllerOmsorgspenger && harFagsaker && identState.søkerId.length === 11;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -168,29 +168,29 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (harFagsaker && brukEksisterendeFagsak) {
                 return !valgtFagsak;
             }
-            if (IdentRules.erUgyldigIdent(identState.ident2) && !barnetHarIkkeFnr) {
+            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
                 return true;
             }
         }
         if (dokumenttype === FordelingDokumenttype.KORRIGERING_IM && harFagsaker) {
             return !valgtFagsak;
         }
-        return IdentRules.erUgyldigIdent(identState.ident1) || disableVidereMidlertidigAlene;
+        return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
     };
 
-    const handleIdent1Change = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
         setSokersIdent(ident);
         if (ident.length === 11) {
-            setIdentAction(ident, identState.ident2);
-            setErIdent1Bekreftet(true);
+            setIdentAction(ident, identState.pleietrengendeId);
+            setErSøkerIdBekreftet(true);
             setVisSokersBarn(true);
         }
     };
 
-    const handleIdent1Blur = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIdentAction(event.target.value, identState.ident2);
-        setErIdent1Bekreftet(true);
+    const handleSøkerIdBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIdentAction(event.target.value, identState.pleietrengendeId);
+        setErSøkerIdBekreftet(true);
         setVisSokersBarn(true);
     };
 
@@ -201,7 +201,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-        !IdentRules.erUgyldigIdent(identState.ident1);
+        !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const utledFagsakYtelseType = (dokumentType: FordelingDokumenttype | undefined): FagsakYtelseType => {
         switch (dokumentType) {
@@ -224,16 +224,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const handleVidereClick = (dokumentType: FordelingDokumenttype) => {
         if (
-            identState.ident1 &&
-            identState.ident2 &&
+            identState.søkerId &&
+            identState.pleietrengendeId &&
             identState.annenSokerIdent &&
             journalpost?.journalpostId &&
             !!journalpost?.kanKopieres &&
             !erInntektsmeldingUtenKrav
         ) {
             props.kopierJournalpost(
-                identState.ident1,
-                identState.ident2,
+                identState.søkerId,
+                identState.pleietrengendeId,
                 identState.annenSokerIdent,
                 props.dedupkey,
                 journalpost.journalpostId
@@ -246,21 +246,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setVisValgForDokument(true);
         } else {
             props.sjekkOmSkalTilK9(
-                identState.ident1,
-                identState.ident2,
+                identState.søkerId,
+                identState.pleietrengendeId,
                 journalpost.journalpostId,
                 fagsakYtelseType,
-                identState.annenPart
+                identState.annenPart,
+                valgtFagsak
             );
         }
     };
 
     const kopierJournalpostOgLukkOppgave = () => {
-        if (identState.ident1 && identState.ident2 && journalpost?.journalpostId) {
+        if (identState.søkerId && identState.pleietrengendeId && journalpost?.journalpostId) {
             props.kopierJournalpost(
-                identState.ident1,
-                identState.ident2,
-                identState.ident1,
+                identState.søkerId,
+                identState.pleietrengendeId,
+                identState.søkerId,
                 props.dedupkey,
                 journalpost?.journalpostId
             );
@@ -269,15 +270,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
-            if (!identState.ident1 && !!journalpost?.norskIdent) {
+            if (!identState.søkerId && !!journalpost?.norskIdent) {
                 setSokersIdent(journalpost?.norskIdent);
-                setIdentAction(journalpost?.norskIdent, identState.ident2);
+                setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
             } else {
-                setSokersIdent(identState.ident1);
+                setSokersIdent(identState.søkerId);
             }
         } else {
             setSokersIdent('');
-            setIdentAction('', identState.ident2);
+            setIdentAction('', identState.pleietrengendeId);
         }
         setRiktigIdentIJournalposten(undefined);
         setDokumenttype(type);
@@ -291,18 +292,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             !!opprettIGosysState.gosysOppgaveRequestSuccess;
 
         if (lukkEtterJournalpostSomIkkeStottesKopieres && journalpost) {
-            lukkJournalpostOppgave(journalpost.journalpostId, identState.ident1, valgtFagsak);
+            lukkJournalpostOppgave(journalpost.journalpostId, identState.søkerId, valgtFagsak);
         } else if (opprettIGosysState.gosysOppgaveRequestSuccess) {
             setVisGaaTilLos(true);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
     useEffect(() => {
-        if (identState.ident1 && dokumenttype && gjelderPleiepengerEllerOmsorgspenger) {
+        if (identState.søkerId && dokumenttype && gjelderPleiepengerEllerOmsorgspenger) {
             setHenteFagsakFeilet(false);
             setIsFetchingFagsaker(true);
             setFagsak(undefined);
-            finnFagsaker(identState.ident1, (response, data: Fagsak[]) => {
+            finnFagsaker(identState.søkerId, (response, data: Fagsak[]) => {
                 setIsFetchingFagsaker(false);
                 if (response.status === 200) {
                     const dokumenttypeForkortelse = finnForkortelseForDokumenttype(dokumenttype);
@@ -318,7 +319,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 }
             });
         }
-    }, [identState.ident1, dokumenttype, gjelderPleiepengerEllerOmsorgspenger]);
+    }, [identState.søkerId, dokumenttype, gjelderPleiepengerEllerOmsorgspenger]);
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <Loader size="large" />;
@@ -361,7 +362,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const setValgtFagsak = (fagsakId: string) => {
         const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
-        setIdentAction(identState.ident1, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
+        setIdentAction(identState.søkerId, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
         setFagsak(nyValgtFagsak);
     };
 
@@ -423,8 +424,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 journalpost={journalpost}
                                 lukkJournalpostOppgave={lukkJournalpostOppgave}
                                 kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
-                                handleIdent1Blur={handleIdent1Blur}
-                                handleIdent1Change={handleIdent1Change}
+                                handleSøkerIdBlur={handleSøkerIdBlur}
+                                handleSøkerIdChange={handleSøkerIdChange}
                                 sokersIdent={sokersIdent}
                                 identState={identState}
                                 fordelingState={fordelingState}
@@ -434,14 +435,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <SokersIdent
                                     dokumenttype={dokumenttype}
                                     journalpost={journalpost}
-                                    handleIdent1Blur={handleIdent1Blur}
-                                    handleIdent1Change={handleIdent1Change}
+                                    handleSøkerIdBlur={handleSøkerIdBlur}
+                                    handleSøkerIdChange={handleSøkerIdChange}
                                     sokersIdent={sokersIdent}
                                     identState={identState}
                                     setVisSokersBarn={setVisSokersBarn}
                                     setSokersIdent={setSokersIdent}
                                     setIdentAction={setIdentAction}
-                                    setErIdent1Bekreftet={setErIdent1Bekreftet}
+                                    setErSøkerIdBekreftet={setErSøkerIdBekreftet}
                                     riktigIdentIJournalposten={riktigIdentIJournalposten}
                                     setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                                     erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
@@ -457,8 +458,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 setIdentAction={setIdentAction}
                             />
 
-                            {erInntektsmeldingUtenKrav && identState.ident1 ? (
-                                <HåndterInntektsmeldingUtenKrav ident1={identState.ident1} journalpost={journalpost} />
+                            {erInntektsmeldingUtenKrav && identState.søkerId ? (
+                                <HåndterInntektsmeldingUtenKrav
+                                    søkerId={identState.søkerId}
+                                    journalpost={journalpost}
+                                />
                             ) : (
                                 <VerticalSpacer twentyPx />
                             )}
@@ -501,7 +505,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         onChange={() => {
                                             setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
                                             setValgtFagsak('');
-                                            setIdentAction(identState.ident1, '', identState.annenSokerIdent);
+                                            setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
                                         }}
                                     />
                                     <VerticalSpacer twentyPx />
@@ -514,7 +518,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
                                         setBarnetHarIkkeFnr(harBarnetFnr)
                                     }
-                                    sokersIdent={identState.ident1}
+                                    sokersIdent={identState.søkerId}
                                     skalHenteBarn={
                                         dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                     }
@@ -552,7 +556,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <Alert size="small" variant="info" className="infotrygd_info">
                                     <FormattedMessage
                                         id="fordeling.infotrygd"
-                                        values={{ identifikator: identState.ident2 ? `(${identState.ident2})` : '' }}
+                                        values={{
+                                            identifikator: identState.pleietrengendeId
+                                                ? `(${identState.pleietrengendeId})`
+                                                : '',
+                                        }}
                                     />
                                 </Alert>
                                 {!kanJournalforingsoppgaveOpprettesiGosys && (
@@ -569,7 +577,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             onClick={() =>
                                                 lukkJournalpostOppgave(
                                                     journalpost?.journalpostId,
-                                                    identState.ident1,
+                                                    identState.søkerId,
                                                     valgtFagsak
                                                 )
                                             }
@@ -588,7 +596,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             onClick={() =>
                                                 omfordel(
                                                     journalpost.journalpostId,
-                                                    identState.ident1,
+                                                    identState.søkerId,
                                                     fordelingState.valgtGosysKategori
                                                 )
                                             }
@@ -644,7 +652,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         } else {
                                             lukkJournalpostOppgave(
                                                 journalpost?.journalpostId,
-                                                identState.ident1,
+                                                identState.søkerId,
                                                 valgtFagsak
                                             );
                                         }
@@ -693,19 +701,25 @@ const mapDispatchToProps = (dispatch: any) => ({
     setFagsakAction: (fagsak: Fagsak) => dispatch(setFagsakAction(fagsak)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
         dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
-    setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
-    setErIdent1Bekreftet: (erBekreftet: boolean) => dispatch(setErIdent1BekreftetAction(erBekreftet)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
+    setErSøkerIdBekreftet: (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet)),
     sjekkOmSkalTilK9: (
-        ident1: string,
-        ident2: string,
+        søkerId: string,
+        pleietrengendeId: string,
         jpid: string,
         fagsakYtelseType: FagsakYtelseType,
-        annenPart: string
-    ) => dispatch(sjekkOmSkalTilK9Sak(ident1, ident2, jpid, fagsakYtelseType, annenPart)),
+        annenPart: string,
+        valgtFagsak?: Fagsak
+    ) => dispatch(sjekkOmSkalTilK9Sak(søkerId, pleietrengendeId, jpid, fagsakYtelseType, annenPart, valgtFagsak)),
     resetSjekkSkalTilK9: () => dispatch(resetSkalTilK9()),
-    kopierJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
-        dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
+    kopierJournalpost: (
+        søkerId: string,
+        pleietrengendeId: string,
+        annenIdent: string,
+        dedupkey: string,
+        journalpostId: string
+    ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
