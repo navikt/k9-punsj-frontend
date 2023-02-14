@@ -49,15 +49,6 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
     const [suggestions, setSuggestions] = React.useState<Institusjon[]>(institusjoner);
     const [inputValue, setInputValue] = React.useState(findInstitusjonValue(field.value));
     const [isLoading, setIsLoading] = React.useState(false);
-    // React.useEffect(() => {
-    //     const getInitialDiagnosekode = async () => {
-    //         const diagnosekode = await getUpdatedSuggestions(initialDiagnosekodeValue);
-    //         if (diagnosekode.length > 0 && diagnosekode[0].value) {
-    //             setInputValue(diagnosekode[0].value);
-    //         }
-    //     };
-    //     getInitialDiagnosekode();
-    // }, [initialDiagnosekodeValue]);
 
     const onInputValueChange = async (v: string) => {
         const newSuggestionList = institusjoner.filter(

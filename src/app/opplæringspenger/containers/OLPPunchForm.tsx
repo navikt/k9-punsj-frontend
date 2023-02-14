@@ -130,7 +130,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const { mutate: valider } = useMutation(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
-            validerSoeknad(values, identState.ident1),
+            validerSoeknad(values, identState.søkerId),
         {
             onSuccess: (data: ValideringResponse | any, { skalForhaandsviseSoeknad }) => {
                 if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
@@ -208,15 +208,18 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     }, [harMellomlagret]);
 
     useEffect(() => {
-        if ((!values.barn || !values.barn.norskIdent) && identState.ident2) {
-            setFieldValue('barn.norskIdent', identState.ident2);
+        if ((!values.barn || !values.barn.norskIdent) && identState.pleietrengendeId) {
+            setFieldValue('barn.norskIdent', identState.pleietrengendeId);
         }
-        if ((values.barn && values.barn.norskIdent && !identState.ident2) || (values.soekerId && !identState.ident1)) {
-            const ident1 = identState.ident1 || values.soekerId;
-            const ident2 = identState.ident2 || values.barn?.norskIdent;
-            dispatch({ type: IdentActionKeys.IDENT_FELLES_SET, ident1, ident2 });
-            if (ident1) {
-                dispatch({ type: FordelingActionKeys.IDENT_BEKREFT_IDENT1, erIdent1Bekreftet: true });
+        if (
+            (values.barn && values.barn.norskIdent && !identState.pleietrengendeId) ||
+            (values.soekerId && !identState.søkerId)
+        ) {
+            const søkerId = identState.søkerId || values.soekerId;
+            const pleietrengendeId = identState.pleietrengendeId || values.barn?.norskIdent;
+            dispatch({ type: IdentActionKeys.IDENT_FELLES_SET, søkerId, pleietrengendeId });
+            if (søkerId) {
+                dispatch({ type: FordelingActionKeys.IDENT_BEKREFT_IDENT1, erSøkerIdBekreftet: true });
             }
         }
     }, [identState, values.barn]);

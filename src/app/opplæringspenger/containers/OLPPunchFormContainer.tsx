@@ -47,12 +47,12 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         data: soeknadRespons,
         isLoading,
         error,
-    } = useQuery(id, () => hentSoeknad(identState.ident1, id), {
+    } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
         onSuccess: (data) => {
             hentPerioderK9(data.soekerId);
         },
     });
-    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.ident1), {
+    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
         onSuccess: () => {
             history.push(`${routingPaths.kvittering}${id}`);
         },

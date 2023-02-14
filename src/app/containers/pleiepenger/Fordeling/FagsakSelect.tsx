@@ -13,7 +13,7 @@ interface Props {
     finnVisningsnavnForSakstype: (sakstype: string) => string;
     valgtFagsak: Fagsak | undefined;
     setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
-    setIdentAction: (ident1: string, ident2: string, annenSokerIdent: string | null) => void;
+    setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     identState: IIdentState;
 }
 

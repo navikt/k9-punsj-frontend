@@ -25,19 +25,19 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
 ) => {
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
-    const { ident1, ident2 } = identState;
+    const { søkerId, pleietrengendeId } = identState;
 
     const {
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, ident1), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId), {
         onSuccess: (soeknad) => {
             setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
         },
     });
 
-    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(ident1));
+    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(søkerId));
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -63,7 +63,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
 
     return (
         <div className="registrering-page">
-            <EksisterendeOLPSoknader ident1={ident1} ident2={ident2} journalpostid={journalpostid} />
+            <EksisterendeOLPSoknader
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
+                journalpostid={journalpostid}
+            />
 
             <div className="knapperad">
                 <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">

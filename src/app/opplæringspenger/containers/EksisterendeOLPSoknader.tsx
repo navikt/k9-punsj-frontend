@@ -14,8 +14,8 @@ import { hentEksisterendeSoeknader } from '../api';
 import { IOLPSoknadBackend } from '../../models/types/OLPSoknad';
 
 export interface IEksisterendeOLPSoknaderComponentProps {
-    ident1: string;
-    ident2: string | null;
+    søkerId: string;
+    pleietrengendeId: string | null;
 }
 
 type IEksisterendeOLPSoknaderProps = WrappedComponentProps & IEksisterendeOLPSoknaderComponentProps;
@@ -23,22 +23,22 @@ type IEksisterendeOLPSoknaderProps = WrappedComponentProps & IEksisterendeOLPSok
 export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksisterendeOLPSoknaderProps> = (
     props: IEksisterendeOLPSoknaderProps
 ) => {
-    const { intl, ident1, ident2 } = props;
+    const { intl, søkerId, pleietrengendeId } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOLPSoknadBackend | undefined>(undefined);
     const routingPaths = React.useContext(RoutingPathsContext);
 
     React.useEffect(() => {
-        if (!IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
+        if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             setHash('/');
         }
-    }, [ident1, ident2]);
+    }, [søkerId, pleietrengendeId]);
 
     const {
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(ident1));
+    } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(søkerId));
 
     if (lasterSoeknader) {
         return <Loader />;
@@ -128,7 +128,7 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
     return (
         <Alert size="small" variant="info">
             {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: ident2 ? '2' : '1',
+                antallSokere: pleietrengendeId ? '2' : '1',
             })}
         </Alert>
     );
