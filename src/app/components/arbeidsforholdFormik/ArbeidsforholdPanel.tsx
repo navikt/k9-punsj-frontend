@@ -315,6 +315,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         {intlHelper(intl, 'skjema.arbeidstid.info')}
                     </Alert>
                 </div>
+                <VerticalSpacer eightPx />
                 <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
                     {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                         <ArbeidstidKalender
