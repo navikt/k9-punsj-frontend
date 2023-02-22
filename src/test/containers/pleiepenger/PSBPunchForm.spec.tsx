@@ -317,7 +317,7 @@ describe('PunchForm', () => {
                 {
                     periode: {
                         fom: '2021-04-01',
-                        tom: '2021-04-22',
+                        tom: '2021-04-23',
                     },
                     tilleggsinformasjon: 'Dette er tillegsinformasjon',
                 },
