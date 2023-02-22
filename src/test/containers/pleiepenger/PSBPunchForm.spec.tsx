@@ -11,7 +11,6 @@ import * as React from 'react';
 import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
 import * as reactRedux from 'react-redux';
 import { mocked } from 'jest-mock';
-import OpplysningerOmSoknad from '../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
@@ -22,6 +21,11 @@ jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
+
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
 
 const soknadId = 'abc';
 const søkerId = '01015012345';
@@ -478,7 +482,6 @@ describe('PunchForm', () => {
             punchForm.find('.feriepanel').dive().find('.ekspanderbartPanel__innhold').find('AlertStripeInfo')
         ).toHaveLength(1);
     });
-
 
     it('Viser ikke advarsel om overlappende periode når periodene ikke overlapper', () => {
         const soknad = {
