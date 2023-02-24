@@ -38,7 +38,7 @@
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
         "import/no-extraneous-dependencies": [
             "warn",
-            { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"] }
+            { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx", "./split.js"] }
         ],
         "import/extensions": [
             "error",

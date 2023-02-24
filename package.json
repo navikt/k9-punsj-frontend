@@ -92,7 +92,7 @@
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
         "start-express": "node --icu-data-dir=node_modules/full-icu ./server.js",
         "build": "cross-env NODE_ENV=production SENTRY_RELEASE=$(git rev-parse --short HEAD) node ./src/build/scripts/production-build.js",
-        "test": "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --config ./jest.config.json",
+        "test": "node --icu-data-dir=node_modules/full-icu node_modules/jest/bin/jest.js --maxWorkers=2 --config ./jest.config.json",
         "lint": "eslint --quiet 'src/**/*.{ts,tsx}'",
         "eject": "react-scripts eject",
         "snyk-protect": "snyk protect",
@@ -164,6 +164,8 @@
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.3.0",
         "fetch-mock": "^9.10.7",
+        "glob": "^8.1.0",
+        "history": "4",
         "html-webpack-harddisk-plugin": "^2.0.0",
         "husky": ">=8.0.3",
         "intl": "^1.2.5",
@@ -223,6 +225,5 @@
     },
     "msw": {
         "workerDirectory": "dist"
-    },
-    "peerDependencies": {}
+    }
 }
