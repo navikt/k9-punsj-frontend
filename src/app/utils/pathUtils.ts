@@ -1,5 +1,5 @@
 import { IPath } from 'app/models/types';
-import * as querystring from 'querystring';
+import queryString from 'query-string';
 import { String } from 'typescript-string-operations';
 
 function formatForRouter(path: string) {
@@ -9,7 +9,7 @@ function formatForRouter(path: string) {
 export function getPathForValues(path: string, values?: any, query?: { [key: string]: string }) {
     return (
         (values ? String.Format(path, values) : formatForRouter(path)) +
-        (query ? `?${querystring.stringify(query)}` : '')
+        (query ? `?${queryString.stringify(query)}` : '')
     );
 }
 export function getPath(paths: IPath[], step: number, values?: any, query?: { [key: string]: string }) {
