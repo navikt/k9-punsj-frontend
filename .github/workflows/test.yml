@@ -1,28 +1,31 @@
 name: Test
 
 on:
-  workflow_call:
-    secrets: 
-      READER_TOKEN:
-        required: true
+    workflow_call:
+        secrets:
+            READER_TOKEN:
+                required: true
 
 jobs:
-  test:
-    name: Tester
-    runs-on: ubuntu-latest
-    steps:
-      - name: Hente kode
-        uses: actions/checkout@v3.3.0
-      - name: Sette opp Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          registry-url: https://npm.pkg.github.com/
-          scope: "@navikt"
-          cache: "yarn"
-      - name: Installere moduler
-        run: yarn install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-      - name: Kjøre tester
-        run: yarn test --maxWorkers=2
+    test:
+        name: Tester
+        runs-on: ubuntu-latest
+        steps:
+            - name: Hente kode
+              uses: actions/checkout@v3.3.0
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: 7
+            - name: Sette opp Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@navikt'
+                  cache: 'pnpm'
+            - name: Installere moduler
+              run: pnpm install --frozen-lockfile
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+            - name: Kjøre tester
+              run: pnpm test --maxWorkers=2

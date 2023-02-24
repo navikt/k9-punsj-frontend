@@ -12,19 +12,22 @@ jobs:
         steps:
             - name: Hente kode
               uses: actions/checkout@v3.3.0
+            - uses: pnpm/action-setup@v2
+              with:
+                  version: 7
             - name: Sette opp Node
               uses: actions/setup-node@v3
               with:
                   node-version: 16.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
-                  cache: 'yarn'
+                  cache: 'pnpm'
             - name: Installere moduler
-              run: yarn install
+              run: pnpm install --frozen-lockfile
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Bygge kode
-              run: yarn build
+              run: pnpm build
             - uses: actions/upload-artifact@v3
               with:
                   name: dist

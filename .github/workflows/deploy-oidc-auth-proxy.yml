@@ -1,30 +1,30 @@
 name: k9-punsj-oidc-auth-proxy
 on:
-  push:
-    paths:
-      - 'nais/proxy/k9-punsj-oidc-auth-proxy.yml'
-      - 'nais/proxy/dev.json'
-      - 'nais/proxy/prod.json'
-  workflow_dispatch:
+    push:
+        paths:
+            - 'nais/proxy/k9-punsj-oidc-auth-proxy.yml'
+            - 'nais/proxy/dev.json'
+            - 'nais/proxy/prod.json'
+    workflow_dispatch:
 jobs:
-  deploy:
-    name: deploy k9-punsj-oidc-auth-proxy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Hente kode
-        uses: actions/checkout@v3.3.0
-      - name: Deploy dev-fss
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
-          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
-          VARS: nais/proxy/dev.json
-      - name: Deploy prod-fss
-        if: github.ref == 'refs/heads/master'
-        uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-fss
-          RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
-          VARS: nais/proxy/prod.json
+    deploy:
+        name: deploy k9-punsj-oidc-auth-proxy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Hente kode
+              uses: actions/checkout@v3.3.0
+            - name: Deploy dev-fss
+              uses: nais/deploy/actions/deploy@v1
+              env:
+                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+                  CLUSTER: dev-fss
+                  RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
+                  VARS: nais/proxy/dev.json
+            - name: Deploy prod-fss
+              if: github.ref == 'refs/heads/master'
+              uses: nais/deploy/actions/deploy@v1
+              env:
+                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+                  CLUSTER: prod-fss
+                  RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
+                  VARS: nais/proxy/prod.json

@@ -103,7 +103,8 @@
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "docker-up": "docker-compose -f dev/docker-compose.yml up -d",
-        "docker-down": "docker-compose -f dev/docker-compose.yml down"
+        "docker-down": "docker-compose -f dev/docker-compose.yml down",
+        "preinstall": "npx only-allow pnpm"
     },
     "devDependencies": {
         "@babel/cli": "^7.21.0",
