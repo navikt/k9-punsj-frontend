@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
@@ -59,10 +58,6 @@ const webpackConfig = {
                         },
                     },
                 ],
-            },
-            {
-                test: /\.svg$/,
-                use: 'svg-sprite-loader',
             },
             { test: /\.css$/, use: ['style-loader', 'css-loader'] },
         ],
