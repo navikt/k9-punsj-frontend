@@ -1,4 +1,6 @@
 /* eslint-disable */
+import { Alert, Button, HelpText, Modal, Tag } from '@navikt/ds-react';
+import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
 import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
@@ -20,21 +22,16 @@ import {
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Alert } from '@navikt/ds-react';
+import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import { PopoverOrientering } from 'nav-frontend-popover';
+
+import { Loader } from '@navikt/ds-react';
 import { CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import { BeredskapNattevaak } from '../../models/enums/BeredskapNattevaak';
 import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
@@ -42,17 +39,14 @@ import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
 import { RelasjonTilBarnet } from '../../models/enums/RelasjonTilBarnet';
 import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
 import { Arbeidstaker } from '../../models/types/Arbeidstaker';
+import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
-import {
-    IPSBSoknad,
-    IUtenlandsOpphold,
-    PSBSoknad,
-    SelvstendigNaeringsdrivendeOpptjening,
-    Tilleggsinformasjon,
-} from '../../models/types/PSBSoknad';
+import { IPSBSoknad, PSBSoknad, Tilleggsinformasjon } from '../../models/types/PSBSoknad';
+import { IUtenlandsOpphold } from '../../models/types/UtenlandsOpphold';
+import { SelvstendigNaeringsdrivendeOpptjening } from '../../models/types/SelvstendigNaeringsdrivendeOpptjening';
 import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { RootStateType } from '../../state/RootState';
 import { initializeDate } from '../../utils/timeUtils';
@@ -64,15 +58,12 @@ import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
-import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
-import Feilmelding from '../../components/Feilmelding';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
-import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
-import { set } from 'lodash';
 import { Utenlandsopphold } from './Utenlandsopphold';
 
 export interface IPunchFormComponentProps {
@@ -281,7 +272,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
 
         if (punchFormState.isSoknadLoading) {
-            return <NavFrontendSpinner />;
+            return <Loader size="large" />;
         }
 
         if (!!punchFormState.error) {
@@ -289,7 +280,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <>
                     <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
                     <p>
-                        <Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
+                        <Button variant="secondary" onClick={this.handleStartButtonClick}>
+                            {intlHelper(intl, 'skjema.knapp.tilstart')}
+                        </Button>
                     </p>
                 </>
             );
@@ -479,7 +472,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             />
                             {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
                                 <>
-                                    <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
+                                    <Alert size="small" variant="info">
+                                        {intlHelper(intl, 'skjema.ferie.fjern.info')}
+                                    </Alert>
                                     <Periodepaneler
                                         intl={intl}
                                         periods={soknad.lovbestemtFerieSomSkalSlettes}
@@ -664,9 +659,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
+                    <HelpText className={'hjelpetext'} placement="top-end">
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
-                    </Hjelpetekst>
+                    </HelpText>
                 </div>
                 <VerticalSpacer eightPx={true} />
                 <div className={'flex-container'}>
@@ -676,9 +671,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
+                    <HelpText className={'hjelpetext'} placement="top-end">
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                    </Hjelpetekst>
+                    </HelpText>
                 </div>
                 <VerticalSpacer twentyPx={true} />
                 {this.getUhaandterteFeil('')
@@ -689,18 +684,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className={classNames('loadingSpinner')}>
-                        <NavFrontendSpinner />
+                        <Loader size="large" />
                     </div>
                 )}
                 <div className={'submit-knapper'}>
                     <p className="sendknapp-wrapper">
-                        <Knapp className={'send-knapp'} onClick={() => this.handleSubmit()}>
+                        <Button variant="secondary" className={'send-knapp'} onClick={() => this.handleSubmit()}>
                             {intlHelper(intl, 'skjema.knapp.send')}
-                        </Knapp>
+                        </Button>
 
-                        <Knapp className={'vent-knapp'} onClick={() => this.setState({ showSettPaaVentModal: true })}>
+                        <Button
+                            variant="secondary"
+                            className={'vent-knapp'}
+                            onClick={() => this.setState({ showSettPaaVentModal: true })}
+                        >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                        </Knapp>
+                        </Button>
                     </p>
                 </div>
                 <VerticalSpacer sixteenPx={true} />
@@ -718,12 +717,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
 
                 {this.state.showSettPaaVentModal && (
-                    <ModalWrapper
+                    <Modal
                         key={'settpaaventmodal'}
                         className={'settpaaventmodal'}
-                        onRequestClose={() => this.setState({ showSettPaaVentModal: false })}
-                        contentLabel={'settpaaventmodal'}
-                        isOpen={this.state.showSettPaaVentModal}
+                        onClose={() => this.setState({ showSettPaaVentModal: false })}
+                        aria-label={'settpaaventmodal'}
+                        open={this.state.showSettPaaVentModal}
                         closeButton={false}
                     >
                         <div>
@@ -736,72 +735,75 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 avbryt={() => this.setState({ showSettPaaVentModal: false })}
                             />
                         </div>
-                    </ModalWrapper>
+                    </Modal>
                 )}
                 {punchFormState.settPaaVentSuccess && (
-                    <ModalWrapper
+                    <Modal
                         key={'settpaaventokmodal'}
-                        onRequestClose={() => this.props.settPaaventResetAction()}
-                        contentLabel={'settpaaventokmodal'}
+                        onClose={() => this.props.settPaaventResetAction()}
+                        aria-label={'settpaaventokmodal'}
                         closeButton={false}
-                        isOpen={punchFormState.settPaaVentSuccess}
+                        open={punchFormState.settPaaVentSuccess}
                     >
                         <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
-                    </ModalWrapper>
+                    </Modal>
                 )}
                 {!!punchFormState.settPaaVentError && (
-                    <ModalWrapper
+                    <Modal
                         key={'settpaaventerrormodal'}
-                        onRequestClose={() => this.props.settPaaventResetAction()}
-                        contentLabel={'settpaaventokmodal'}
+                        onClose={() => this.props.settPaaventResetAction()}
+                        aria-label={'settpaaventokmodal'}
                         closeButton={false}
-                        isOpen={!!punchFormState.settPaaVentError}
+                        open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </ModalWrapper>
+                    </Modal>
                 )}
 
                 {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&
                     this.props.punchFormState.validertSoknad && (
-                        <ModalWrapper
+                        <Modal
                             key={'validertSoknadModal'}
                             className={'validertSoknadModal'}
-                            onRequestClose={() => this.props.validerSoknadReset()}
-                            contentLabel={'validertSoknadModal'}
+                            onClose={() => this.props.validerSoknadReset()}
+                            aria-label={'validertSoknadModal'}
                             closeButton={false}
-                            isOpen={!!this.props.punchFormState.isValid}
+                            open={!!this.props.punchFormState.isValid}
                         >
-                            <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
-                            </div>
-                            <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                <Hovedknapp
-                                    mini={true}
-                                    className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                >
-                                    {intlHelper(intl, 'fordeling.knapp.videre')}
-                                </Hovedknapp>
-                                <Knapp
-                                    mini={true}
-                                    className="validertSoknadOppsummeringContainer_knappTilbake"
-                                    onClick={() => this.props.validerSoknadReset()}
-                                >
-                                    {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                </Knapp>
-                            </div>
-                        </ModalWrapper>
+                            <Modal.Content>
+                                <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                    <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
+                                </div>
+                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                                    <Button
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappVidere"
+                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                    >
+                                        {intlHelper(intl, 'fordeling.knapp.videre')}
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappTilbake"
+                                        onClick={() => this.props.validerSoknadReset()}
+                                    >
+                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                    </Button>
+                                </div>
+                            </Modal.Content>
+                        </Modal>
                     )}
 
                 {this.state.visErDuSikkerModal && (
-                    <ModalWrapper
+                    <Modal
                         key={'erdusikkermodal'}
                         className={'erdusikkermodal'}
-                        onRequestClose={() => this.props.validerSoknadReset()}
-                        contentLabel={'erdusikkermodal'}
+                        onClose={() => this.props.validerSoknadReset()}
+                        aria-label={'erdusikkermodal'}
                         closeButton={false}
-                        isOpen={this.state.visErDuSikkerModal}
+                        open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
                             melding={'modal.erdusikker.sendinn'}
@@ -813,7 +815,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 this.setState({ visErDuSikkerModal: false });
                             }}
                         />
-                    </ModalWrapper>
+                    </Modal>
                 )}
             </>
         );
@@ -1360,12 +1362,24 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const className = 'statusetikett';
 
         if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
+            return (
+                <Tag variant="warning" {...{ className }}>
+                    Lagrer …
+                </Tag>
+            );
         }
         if (!!punchFormState.updateSoknadError) {
-            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
+            return (
+                <Tag variant="error" {...{ className }}>
+                    Lagring feilet
+                </Tag>
+            );
         }
-        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
+        return (
+            <Tag variant="success" {...{ className }}>
+                Lagret
+            </Tag>
+        );
     }
 }
 

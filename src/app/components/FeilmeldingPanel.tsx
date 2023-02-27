@@ -1,6 +1,6 @@
 import React from 'react';
-import { Undertittel } from 'nav-frontend-typografi';
-import Panel from 'nav-frontend-paneler';
+
+import { Heading, Panel } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
 import './feilmeldingPanel.less';
@@ -11,9 +11,9 @@ export interface IFeilmeldingPanel {
 
 const FeilmeldingPanel: React.FunctionComponent<IFeilmeldingPanel> = ({ messageId }) => (
     <Panel className="container">
-        <Undertittel>
+        <Heading size="small">
             <FormattedMessage id={messageId} />
-        </Undertittel>
+        </Heading>
     </Panel>
 );
 

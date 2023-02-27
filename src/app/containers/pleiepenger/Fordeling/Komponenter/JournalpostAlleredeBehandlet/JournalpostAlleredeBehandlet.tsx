@@ -1,9 +1,8 @@
 import { IJournalpost } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
@@ -65,12 +64,13 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
 
-            <Knapp
+            <Button
+                variant="secondary"
                 disabled={
                     IdentRules.erUgyldigIdent(identState.pleietrengendeId) || fellesState.kopierJournalpostSuccess
                 }
                 onClick={() => {
-                    if (fellesState.kopierJournalpostSuccess || true || erInntektsmeldingUtenKrav) {
+                    if (fellesState.kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
                         setVisKanIkkeKopiere(true);
                         return;
                     }
@@ -85,15 +85,15 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                 }}
             >
                 <FormattedMessage id="fordeling.kopiereJournal" />
-            </Knapp>
+            </Button>
             {!!fellesState.kopierJournalpostSuccess && (
-                <Hovedknapp
+                <Button
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
                     }}
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}
-                </Hovedknapp>
+                </Button>
             )}
             {visKanIkkeKopiere && (
                 <Alert variant="warning">

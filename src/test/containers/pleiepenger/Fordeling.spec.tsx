@@ -55,7 +55,7 @@ export const setupFordeling = (
         kanSendeInn: true,
         erSaksbehandler: true,
         kanOpprettesJournalføringsoppgave: true,
-        ...journalpostPartial
+        ...journalpostPartial,
     };
 
     const opprettIGosys: IGosysOppgaveState = {
@@ -105,7 +105,7 @@ export const setupFordeling = (
             kopierJournalpostSuccess: true,
         },
         fordelingSettPåVentState,
-        fordelingFerdigstillState
+        fordelingFerdigstillState,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
@@ -184,15 +184,20 @@ describe('Fordeling', () => {
     it('Viser spinner mens svar avventes', () => {
         const omfordel = jest.fn();
         const fordeling = setupFordeling(undefined, { omfordel }, { isAwaitingGosysOppgaveRequestResponse: true });
-        expect(fordeling.find('NavFrontendSpinner')).toHaveLength(1);
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('size') === 'large')).toHaveLength(1);
     });
 
     it('Viser feilmelding for omfordeling', () => {
         const fordeling = setupFordeling(undefined, undefined, {
             gosysOppgaveRequestError: { status: 404 },
         });
-        expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual('fordeling.omfordeling.feil');
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
+        expect(
+            fordeling
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
+                .children()
+                .text()
+        ).toEqual('fordeling.omfordeling.feil');
     });
 
     it('Viser feilmelding for omfordeling når journalpost ikke stöttes', () => {
@@ -205,11 +210,13 @@ describe('Fordeling', () => {
                 gosysOppgaveRequestError: undefined,
             }
         );
-        expect(fordeling.find('AlertStripeFeil')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeFeil').children().text()).toEqual(
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
+        expect(fordeling.find({ variant: 'error' }).children().text()).toEqual(
             'fordeling.infotrygd.journalpoststottesikke'
         );
-        expect(fordeling.find('Knapp')).toHaveLength(1);
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'secondary')).toHaveLength(
+            1
+        );
     });
 
     it.skip('Viser feilmelding når journalforingsoppgave i gosys ikke kan opprettes', () => {
@@ -220,10 +227,13 @@ describe('Fordeling', () => {
             .find('RadioPanel')
             .at(0)
             .simulate('change', { target: { value: 'ANNET' } });
-        expect(fordeling.find('AlertStripeInfo')).toHaveLength(1);
-        expect(fordeling.find('AlertStripeInfo').find('Memo(FormattedMessage)').prop('id')).toEqual(
-            'fordeling.kanIkkeOppretteJPIGosys.info'
-        );
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')).toHaveLength(1);
+        expect(
+            fordeling
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')
+                .find('Memo(FormattedMessage)')
+                .prop('id')
+        ).toEqual('fordeling.kanIkkeOppretteJPIGosys.info');
 
         expect(fordeling.find('Knapp')).toHaveLength(1);
     });

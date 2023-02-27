@@ -63,8 +63,8 @@ const Medlemskap = () => {
                                                 size="small"
                                                 onClick={() => arrayHelpers.remove(bostedIndex)}
                                                 style={{ float: 'right' }}
+                                                icon={<Delete />}
                                             >
-                                                <Delete />
                                                 Fjern periode
                                             </Button>
                                         )}
@@ -89,8 +89,8 @@ const Medlemskap = () => {
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>

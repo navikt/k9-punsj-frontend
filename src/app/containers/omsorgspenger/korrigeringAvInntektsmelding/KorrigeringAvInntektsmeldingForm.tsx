@@ -1,3 +1,4 @@
+import { Alert, Button, Modal, Panel } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -8,10 +9,6 @@ import {
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { Form, Formik } from 'formik';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import Panel from 'nav-frontend-paneler';
 import React, { useReducer } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { OMSKorrigering } from '../../../models/types/OMSKorrigering';
@@ -107,17 +104,17 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
     if (korrigeringErInnsendt && innsendteFormverdier) {
         return (
             <>
-                <AlertStripeInfo className="fullfortmelding">
+                <Alert size="small" variant="info" className="fullfortmelding">
                     <FormattedMessage id="skjema.sentInn" />
-                </AlertStripeInfo>
+                </Alert>
                 <div className="punchPage__knapper">
-                    <Hovedknapp
+                    <Button
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
                     >
                         {intlHelper(intl, 'tilbaketilLOS')}
-                    </Hovedknapp>
+                    </Button>
                 </div>
                 <OMSKvittering feltverdier={innsendteFormverdier} />
             </>
@@ -161,13 +158,13 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     <Form className="korrigering">
                         <Panel border>
                             <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
-                            <AlertStripeInfo className="korrigering__headerInfo">
+                            <Alert size="small" variant="info" className="korrigering__headerInfo">
                                 Korrigering av inntektsmelding skal benyttes til å:
                                 <ul>
                                     <li> Slette dager/timer arbeidsgiver melder fra de har fått for mye</li>
                                     <li>Endre dager til timer, når arbeidsgiver melder de har fått for mye</li>
                                 </ul>
-                            </AlertStripeInfo>
+                            </Alert>
                             <div className="korrigering__opplysningerOmKorrigeringContainer">
                                 <OpplysningerOmKorrigering />
                             </div>
@@ -221,17 +218,17 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                             )}
                         </Panel>
                         <div className="korrigering__buttonContainer">
-                            <Hovedknapp>Send inn</Hovedknapp>
+                            <Button>Send inn</Button>
                         </div>
                     </Form>
                     {visBekreftelsemodal && (
-                        <ModalWrapper
-                            onRequestClose={() => {
+                        <Modal
+                            onClose={() => {
                                 dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
                             }}
-                            contentLabel="Er du sikker?"
+                            aria-label="Er du sikker?"
                             closeButton={false}
-                            isOpen={visBekreftelsemodal}
+                            open={visBekreftelsemodal}
                         >
                             <BekreftInnsendingModal
                                 feltverdier={values}
@@ -242,16 +239,16 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL });
                                 }}
                             />
-                        </ModalWrapper>
+                        </Modal>
                     )}
                     {visErDuSikkerModal && (
-                        <ModalWrapper
-                            onRequestClose={() => {
+                        <Modal
+                            onClose={() => {
                                 dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                             }}
-                            contentLabel="Er du sikker?"
+                            aria-label="Er du sikker?"
                             closeButton={false}
-                            isOpen
+                            open
                         >
                             <ErDuSikkerModal
                                 melding="modal.erdusikker.sendinn"
@@ -262,7 +259,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                                 }}
                             />
-                        </ModalWrapper>
+                        </Modal>
                     )}
                 </>
             )}

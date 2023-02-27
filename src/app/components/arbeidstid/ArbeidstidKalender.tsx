@@ -23,8 +23,8 @@ import VerticalSpacer from '../VerticalSpacer';
 export interface ArbeidstidKalenderProps {
     arbeidstidInfo: ArbeidstidInfo;
     updateSoknad: (v: IArbeidstidPeriodeMedTimer[]) => void;
-    updateSoknadState: (v: IArbeidstidPeriodeMedTimer[]) => void;
-    nyeSoknadsperioder: IPeriode[];
+    updateSoknadState?: (v: IArbeidstidPeriodeMedTimer[]) => void;
+    nyeSoknadsperioder: IPeriode[] | null;
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
@@ -39,7 +39,7 @@ export default function ArbeidstidKalender({
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
     const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
 
-    const gyldigePerioder = [...nyeSoknadsperioder, ...eksisterendeSoknadsperioder].filter(Boolean);
+    const gyldigePerioder = [...(nyeSoknadsperioder || []), ...eksisterendeSoknadsperioder].filter(Boolean);
 
     const slettDager =
         (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {
@@ -52,7 +52,9 @@ export default function ArbeidstidKalender({
             );
 
             updateSoknad(perioderFiltert);
-            updateSoknadState(perioderFiltert);
+            if (updateSoknadState) {
+                updateSoknadState(perioderFiltert);
+            }
         };
 
     const lagreTimer = ({
@@ -78,7 +80,9 @@ export default function ArbeidstidKalender({
             jobberNormaltPerDag,
         }));
         updateSoknad([...eksisterendePerioderUtenSelectedDates, ...payload]);
-        updateSoknadState([...eksisterendePerioderUtenSelectedDates, ...payload]);
+        if (updateSoknadState) {
+            updateSoknadState([...eksisterendePerioderUtenSelectedDates, ...payload]);
+        }
     };
 
     return (
@@ -100,7 +104,9 @@ export default function ArbeidstidKalender({
                         nyeSoknadsperioder={nyeSoknadsperioder}
                         lagre={(periodeInfo) => {
                             updateSoknad(periodeInfo);
-                            updateSoknadState(periodeInfo);
+                            if (updateSoknadState) {
+                                updateSoknadState(periodeInfo);
+                            }
                             toggleVisArbeidstidLengrePerioder();
                         }}
                         avbryt={toggleVisArbeidstidLengrePerioder}

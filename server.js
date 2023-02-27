@@ -16,7 +16,7 @@ server.use(
                 defaultSrc: ["'self'"],
                 connectSrc: ["'self'", process.env.OIDC_AUTH_PROXY, 'https://sentry.gc.nav.no'],
                 frameSrc: ["'self'", process.env.OIDC_AUTH_PROXY],
-                fontSrc: ["'self'", 'data:'],
+                fontSrc: ["'self'", 'data:', 'https://cdn.nav.no'],
                 imgSrc: ["'self'", 'data:'],
                 styleSrc: ["'self'", "'unsafe-inline'"],
             },

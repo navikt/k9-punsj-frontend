@@ -6,6 +6,7 @@ interface IPageProps {
     className?: string;
     title: string;
     topContentRenderer?: () => React.ReactElement<any>;
+    children: React.ReactNode;
 }
 
 class Page extends React.Component<IPageProps> {
@@ -16,12 +17,11 @@ class Page extends React.Component<IPageProps> {
     render() {
         const { className, title, topContentRenderer, children } = this.props;
         return (
-            <DocumentTitle title={title}>
-                <>
-                    {topContentRenderer && topContentRenderer()}
-                    <div className={`page ${className}`}>{children}</div>
-                </>
-            </DocumentTitle>
+            <>
+                <DocumentTitle title={title} />
+                {topContentRenderer && topContentRenderer()}
+                <div className={`page ${className}`}>{children}</div>
+            </>
         );
     }
 }

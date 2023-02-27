@@ -1,13 +1,12 @@
+import { Alert, Modal } from '@navikt/ds-react';
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
+
+import Fagsak from 'app/types/Fagsak';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import { connect } from 'react-redux';
-import Fagsak from 'app/types/Fagsak';
-import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
+import VerticalSpacer from '../../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { IError, IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
@@ -15,9 +14,9 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveRese
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
 import { RootStateType } from '../../state/RootState';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
-import './sok.less';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
+import './sok.less';
 
 export interface ISearchFormStateProps {
     journalpost?: IJournalpost;
@@ -88,15 +87,15 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
 
         if (lukkOppgaveDone) {
             return (
-                <ModalWrapper
+                <Modal
                     key="lukkoppgaveokmodal"
-                    onRequestClose={() => lukkOppgaveReset()}
-                    contentLabel="settpaaventokmodal"
+                    onClose={() => lukkOppgaveReset()}
+                    aria-label="settpaaventokmodal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-                </ModalWrapper>
+                </Modal>
             );
         }
 
@@ -120,33 +119,35 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                         </div>
 
                         {!!notFound && (
-                            <AlertStripeInfo>
+                            <Alert size="small" variant="info">
                                 <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
-                            </AlertStripeInfo>
+                            </Alert>
                         )}
 
                         {!!forbidden && (
-                            <AlertStripeAdvarsel>
+                            <Alert size="small" variant="warning">
                                 <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                            </AlertStripeAdvarsel>
+                            </Alert>
                         )}
 
                         {conflict &&
                             journalpostConflictError &&
                             journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <AlertStripeAdvarsel>
+                                <Alert size="small" variant="warning">
                                     <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                </AlertStripeAdvarsel>
+                                </Alert>
                             )}
 
                         {journalpostRequestError?.message && (
-                            <AlertStripeAdvarsel>{journalpostRequestError.message}</AlertStripeAdvarsel>
+                            <Alert size="small" variant="warning">
+                                {journalpostRequestError.message}
+                            </Alert>
                         )}
 
                         {!!journalpost && !journalpost?.kanSendeInn && (
-                            <AlertStripeAdvarsel>
+                            <Alert size="small" variant="warning">
                                 <FormattedMessage id="fordeling.kanikkesendeinn" />
-                            </AlertStripeAdvarsel>
+                            </Alert>
                         )}
                     </SkjemaGruppe>
                 </div>

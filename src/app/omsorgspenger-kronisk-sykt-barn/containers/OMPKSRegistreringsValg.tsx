@@ -1,18 +1,18 @@
+import { Alert, Button } from '@navikt/ds-react';
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import React, { useState } from 'react';
+
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { PunchStep } from '../../models/enums';
-import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { IIdentState } from '../../models/types/IdentState';
 import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
-import { setHash } from '../../utils';
-import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
+import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { RootStateType } from '../../state/RootState';
+import { setHash } from '../../utils';
+import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
+import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
 
 export interface IOMPKSRegistreringsValgComponentProps {
     journalpostid: string;
@@ -65,7 +65,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     };
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
+        );
     }
 
     const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
@@ -90,13 +94,13 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
             />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
+                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
-                </Knapp>
+                </Button>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" mini>
+                    <Button onClick={newSoknad} className="knapp knapp2" size="small">
                         <FormattedMessage id="ident.knapp.nyregistrering" />
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>

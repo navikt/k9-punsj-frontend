@@ -27,6 +27,9 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
             case FordelingDokumenttype.OMSORGSPENGER_UT:
                 return getEnvironmentVariable('OMP_UT_FEATURE_TOGGLE') === 'true';
 
+            case FordelingDokumenttype.OPPLAERINGSPENGER:
+                return getEnvironmentVariable('OLP_ENABLED') === 'true';
+
             default:
                 return true;
         }
@@ -82,6 +85,14 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
                     label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE)}
                     value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
                     checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                    onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                />
+            )}
+            {toggleFordelingDokumentType(FordelingDokumenttype.OPPLAERINGSPENGER) && (
+                <RadioPanel
+                    label={intlHelper(intl, FordelingDokumenttype.OPPLAERINGSPENGER)}
+                    value={FordelingDokumenttype.OPPLAERINGSPENGER}
+                    checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                 />
             )}
