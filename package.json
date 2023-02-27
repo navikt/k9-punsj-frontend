@@ -22,7 +22,7 @@
         "bootstrap": "^4.5.3",
         "classnames": "^2.2.6",
         "css-minimizer-webpack-plugin": "^4.2.2",
-        "cypress": "^12.6.0",
+        "cypress": "^12.7.0",
         "dayjs": "^1.11.7",
         "dotenv": "^16.0.3",
         "fetch-headers": "^2.0.0",
