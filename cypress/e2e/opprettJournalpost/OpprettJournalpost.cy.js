@@ -6,6 +6,9 @@ describe('Opprett journalpost', () => {
     });
 
     it('skal kunne fylle ut skjema', () => {
+        cy.visit('/');
+        cy.findByTestId('opprett-journalpost-inngang').click();
+        cy.url().should('contains', '/opprett-journalpost');
         cy.findByLabelText('Søkers fødselsnummer').type('01234567891');
         cy.findByLabelText('Velg fagsak').select('1DMU93M');
         cy.findByLabelText('Tittel').type('Eksempel på tittel');

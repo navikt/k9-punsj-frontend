@@ -22,6 +22,11 @@ jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
+
 const soknadId = 'abc';
 const søkerId = '01015012345';
 const pleietrengendeId = '22082067856';

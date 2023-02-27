@@ -36,12 +36,9 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             bredde="XS"
                             value={timer}
                             onChange={(event) => {
-                                onChangeTimer(event.target.value.replaceAll(',', '').replaceAll('.', ''));
+                                onChangeTimer(event.target.value.replaceAll(/\D+/g, ''));
                             }}
-                            type="number"
                             onBlur={onBlur}
-                            inputMode="numeric"
-                            pattern="[0-9]*"
                             feil={!!error}
                         />
                         <div>
@@ -58,11 +55,8 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             bredde="XS"
                             value={minutter}
                             onChange={(event) => {
-                                onChangeMinutter(event.target.value.replaceAll(',', '').replaceAll('.', ''));
+                                onChangeMinutter(event.target.value.replaceAll(/\D+/g, ''));
                             }}
-                            type="number"
-                            inputMode="numeric"
-                            pattern="[0-9]*"
                             onBlur={onBlur}
                             feil={!!error}
                         />
