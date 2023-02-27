@@ -67,9 +67,6 @@ const webpackConfig = {
         new MiniCssExtractPlugin({
             filename: 'css/[name].css?[fullhash]-[chunkhash]-[name]',
         }),
-        new SpriteLoaderPlugin({
-            plainSprite: true,
-        }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
         new CopyPlugin({ patterns: [{ from: 'src/app/favicon.png' }] }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
