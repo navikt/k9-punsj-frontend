@@ -38,6 +38,14 @@ jobs:
             - name: Hente kode
               uses: actions/checkout@v3.3.0
 
+            - name: Setup .yarnrc.yml
+              run: |
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
             - name: Sette opp Node
               uses: actions/setup-node@v3
               with:
@@ -52,7 +60,7 @@ jobs:
                   path: ./dist
 
             - name: Installere moduler
-              run: yarn install
+              run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 

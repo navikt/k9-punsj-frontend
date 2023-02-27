@@ -222,5 +222,5 @@
     "msw": {
         "workerDirectory": "dist"
     },
-    "peerDependencies": {}
+    "packageManager": "yarn@3.4.1"
 }
