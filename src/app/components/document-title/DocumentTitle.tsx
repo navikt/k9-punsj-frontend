@@ -1,13 +1,12 @@
 import useDocumentTitle from 'app/hooks/useDocumentTitle';
-import React from 'react';
 
 interface IDocumentTitleProps {
     title: string;
 }
 
-const DocumentTitle: React.FunctionComponent<IDocumentTitleProps> = ({ title, children }) => {
+const DocumentTitle = ({ title }: IDocumentTitleProps) => {
     useDocumentTitle(title);
-    return children;
+    return null;
 };
 
 export default DocumentTitle;

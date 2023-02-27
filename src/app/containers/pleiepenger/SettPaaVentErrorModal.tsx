@@ -1,4 +1,4 @@
-import { Knapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
@@ -16,9 +16,9 @@ const SettPaaVentErrorModal = (props: WrappedComponentProps & ISettPaaVentErrorM
         <div className="sett-paa-vent-ok">
             <FeilCircleSvg title="check" />
             <div className="infoFeil">{intlHelper(intl, 'modal.settpaavent.feil')}</div>
-            <Knapp mini onClick={() => close()}>
+            <Button variant="secondary" size="small" onClick={() => close()}>
                 {intlHelper(intl, 'modal.settpaavent.ok')}
-            </Knapp>
+            </Button>
         </div>
     );
 };

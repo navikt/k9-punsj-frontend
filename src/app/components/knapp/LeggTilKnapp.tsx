@@ -1,6 +1,7 @@
+import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Knapp } from 'nav-frontend-knapper';
+
 import PlussSVG from '../../assets/SVG/PlussSVG';
 import './knapper.less';
 
@@ -10,12 +11,12 @@ interface ILeggTilKnappProps {
 }
 
 const LeggTilKnapp: React.FunctionComponent<ILeggTilKnappProps> = ({ onClick, tekstId }) => (
-    <Knapp onClick={onClick} htmlType="button" type="flat" mini className="leggtilknapp">
+    <Button variant="tertiary" type="button" onClick={onClick} size="small" className="leggtilknapp">
         <PlussSVG />
         <span>
             <FormattedMessage id={tekstId} />
         </span>
-    </Knapp>
+    </Button>
 );
 
 export default LeggTilKnapp;

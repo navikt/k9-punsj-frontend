@@ -1,19 +1,19 @@
 /* eslint-disable global-require */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import React from 'react';
-import { connect } from 'react-redux';
+import { Alert } from '@navikt/ds-react';
+import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
+import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { useIntl } from 'react-intl';
-import { Alert } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
-import { RootStateType } from 'app/state/RootState';
-import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
-import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
-import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import './ompUtSoknadKvittering.less';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
 import FravaersperiodeKvittering from './FravaersperiodeKvittering';
+import './ompUtSoknadKvittering.less';
 
 interface IOwnProps {
     kvittering?: IOMPUTSoknadKvittering;

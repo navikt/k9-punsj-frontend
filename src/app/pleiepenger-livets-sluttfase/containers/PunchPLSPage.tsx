@@ -1,32 +1,30 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
-import { useQueries } from 'react-query';
-import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Alert, Button, Panel } from '@navikt/ds-react';
+import { ApiPath } from 'app/apiConfig';
 import Page from 'app/components/page/Page';
 import useQuery from 'app/hooks/useQuery';
 import { PunchStep } from 'app/models/enums';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { setIdentAction, setStepAction } from 'app/state/actions';
 import { RootStateType } from 'app/state/RootState';
 import { get, getEnvironmentVariable, getPath } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { ApiPath } from 'app/apiConfig';
-import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
+import React from 'react';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useQueries } from 'react-query';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'nav-frontend-tabell-style';
-import PdfVisning from '../../components/pdf/PdfVisning';
-import { IIdentState } from '../../models/types/IdentState';
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
-import { plsPaths } from './PLSRoutes';
+import PdfVisning from '../../components/pdf/PdfVisning';
 import { IJournalpost, IPath, IPunchState } from '../../models/types';
+import { IIdentState } from '../../models/types/IdentState';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
-import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
-import { PLSRegistreringsValg } from './PLSRegistreringsValg';
 import { PLSPunchForm } from './PLSPunchForm';
+import { PLSRegistreringsValg } from './PLSRegistreringsValg';
+import { plsPaths } from './PLSRoutes';
+import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
 
 export interface IPunchPLSPageStateProps {
     punchState: IPunchState;
@@ -101,17 +99,17 @@ export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> 
             case PunchStep.COMPLETED:
                 return (
                     <>
-                        <AlertStripeInfo className="fullfortmelding">
+                        <Alert size="small" variant="info" className="fullfortmelding">
                             <FormattedMessage id="skjema.sentInn" />
-                        </AlertStripeInfo>
+                        </Alert>
                         <div className="punchPage__knapper">
-                            <Hovedknapp
+                            <Button
                                 onClick={() => {
                                     window.location.href = getEnvironmentVariable('K9_LOS_URL');
                                 }}
                             >
                                 {intlHelper(intl, 'tilbaketilLOS')}
-                            </Hovedknapp>
+                            </Button>
                         </div>
                         {!!punchFormState.innsentSoknad && (
                             <PLSSoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
@@ -124,9 +122,9 @@ export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> 
     const content = () => {
         if (forbidden) {
             return (
-                <AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
                     <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
+                </Alert>
             );
         }
 
@@ -150,7 +148,7 @@ export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> 
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
+                <Panel className="punch_form" border>
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {underFnr()}
                 </Panel>

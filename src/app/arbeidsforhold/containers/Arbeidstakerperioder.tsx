@@ -6,7 +6,7 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';

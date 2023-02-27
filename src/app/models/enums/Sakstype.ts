@@ -28,6 +28,7 @@ export enum TilgjengeligSakstype {
     ANNET = 'ANNET',
     SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES',
     SEND_BREV = 'SEND_BREV',
+    OPPLAERINGSPENGER = 'OPPLAERINGSPENGER',
 }
 
 const fellesSakstyper = [
@@ -57,6 +58,8 @@ export const omsorgspengerMidlertidigAleneSakstyper = [
     TilgjengeligSakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE,
     ...fellesSakstyper,
 ];
+
+export const opplæringspengerSakstyper = [TilgjengeligSakstype.OPPLAERINGSPENGER, ...fellesSakstyper];
 
 export const omsorgspengerUtbetalingSakstyper = [
     TilgjengeligSakstype.OMSORGSPENGER_UTBETALING,

@@ -15,6 +15,8 @@ export * from 'app/models/types/PunchPSBFormState';
 export * from 'app/models/types/PunchPath';
 export * from 'app/models/types/PunchState';
 export * from 'app/models/types/SelvstendigNaerinsdrivende';
+export * from 'app/models/types/SelvstendigNaeringsdrivendeOpptjening';
+export * from 'app/models/types/UtenlandsOpphold';
 export * from 'app/models/types/SignaturState';
 export * from 'app/models/types/PSBSoknad';
 export * from 'app/models/types/Ukedag';

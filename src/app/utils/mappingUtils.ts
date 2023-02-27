@@ -1,10 +1,11 @@
 import { KalenderDag } from 'app/models/KalenderDag';
 import { ArbeidstidPeriodeMedTimer, PeriodeMedTimerMinutter } from 'app/models/types';
+import { Periode } from 'app/models/types/Periode';
 import { getDatesInDateRange } from './timeUtils';
 
 // eslint-disable-next-line import/prefer-default-export
 export const arbeidstidPeriodeTilKalenderdag = (arbeidstid: ArbeidstidPeriodeMedTimer): KalenderDag[] => {
-    const dateRange = arbeidstid.periode.tilDateRange();
+    const dateRange = new Periode(arbeidstid.periode).tilDateRange();
     return getDatesInDateRange(dateRange).map((date) => ({
         date,
         tid: {
@@ -18,7 +19,7 @@ export const arbeidstidPeriodeTilKalenderdag = (arbeidstid: ArbeidstidPeriodeMed
     }));
 };
 export const periodeMedTimerTilKalenderdag = (periodeMedTimerOgMinutter: PeriodeMedTimerMinutter): KalenderDag[] => {
-    const dateRange = periodeMedTimerOgMinutter.periode.tilDateRange();
+    const dateRange = new Periode(periodeMedTimerOgMinutter.periode).tilDateRange();
     return getDatesInDateRange(dateRange).map((date) => ({
         date,
         tid: {

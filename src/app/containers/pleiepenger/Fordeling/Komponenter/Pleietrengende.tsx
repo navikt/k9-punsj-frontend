@@ -1,12 +1,11 @@
+import { Alert, Checkbox, Select } from '@navikt/ds-react';
+import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Checkbox, Select } from '@navikt/ds-react';
 import { Input } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
-import { IdentRules } from 'app/rules';
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { IIdentState } from '../../../../models/types/IdentState';
@@ -159,10 +158,10 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                                 {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
                             </Checkbox>
                             {pleietrengendeHarIkkeFnr && (
-                                <AlertStripeInfo className="infotrygd_info">
+                                <Alert size="small" variant="info" className="infotrygd_info">
                                     {' '}
                                     {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
-                                </AlertStripeInfo>
+                                </Alert>
                             )}
                         </>
                     )}

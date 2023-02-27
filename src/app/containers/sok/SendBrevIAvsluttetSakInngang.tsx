@@ -1,8 +1,8 @@
-import { Ingress } from 'nav-frontend-typografi';
+import { BodyLong } from '@navikt/ds-react';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import './sendBrevIAvsluttetSakInngang.less';
-import { useIntl } from 'react-intl';
 
 const SendBrevIAvsluttetSakInngang = () => {
     const intl = useIntl();
@@ -10,9 +10,9 @@ const SendBrevIAvsluttetSakInngang = () => {
         <div className="sendBrevIAvsluttetSakInngang">
             <div className="content">
                 <h1 className="heading">{intl.formatMessage({ id: 'SendBrevIAvsluttetSakInngang.heading' })}</h1>
-                <Ingress>{intl.formatMessage({ id: 'SendBrevIAvsluttetSakInngang.ingress' })}</Ingress>
+                <BodyLong>{intl.formatMessage({ id: 'SendBrevIAvsluttetSakInngang.ingress' })}</BodyLong>
                 <Link
-                    className="linkButton knapp knapp--hoved"
+                    className="linkButton navds-button navds-button--primary navds-button--medium"
                     to="/brev-avsluttet-sak"
                     data-testid="brev-avsluttet-sak-inngang"
                 >

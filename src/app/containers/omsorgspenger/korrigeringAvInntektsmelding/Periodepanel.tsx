@@ -6,7 +6,7 @@ import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
