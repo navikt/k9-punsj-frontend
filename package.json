@@ -84,7 +84,7 @@
         "typescript-string-operations": "^1.4.1",
         "ulid": "2.3.0",
         "uuid": "^9.0.0",
-        "yup": "^0.32.11"
+        "yup": "^1.0.1"
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node --icu-data-dir=node_modules/full-icu src/build/scripts/start-dev.js",
