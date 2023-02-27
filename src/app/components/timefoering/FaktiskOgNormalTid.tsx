@@ -1,7 +1,7 @@
 import { Button, Heading } from '@navikt/ds-react';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import { timerOgMinutter } from 'app/rules/yup';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TimerOgMinutter from './TimerOgMinutter';
 
 interface OwnProps {

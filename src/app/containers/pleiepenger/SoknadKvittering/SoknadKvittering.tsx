@@ -27,8 +27,8 @@ import {
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
-import VisningAvPerioderSNSoknadKvittering from './Komponenter/VisningAvPerioderSNSoknadKvittering';
-import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderSoknadKvittering';
+import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import './soknadKvittering.less';
 
 interface IOwnProps {

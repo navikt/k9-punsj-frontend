@@ -1,15 +1,15 @@
+import { Button, Modal } from '@navikt/ds-react';
+import { IPeriode, ITimerOgMinutter, Periode, Periodeinfo, PeriodeMedTimerMinutter } from 'app/models/types';
+import { formats, removeDatesFromPeriods } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { periodeMedTimerTilKalenderdag } from 'app/utils/mappingUtils';
-import React, { useState } from 'react';
-import { Periode, Periodeinfo, IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter } from 'app/models/types';
-import { formats, removeDatesFromPeriods } from 'app/utils';
 import dayjs from 'dayjs';
-import { Button, Modal } from '@navikt/ds-react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
-import TilsynPeriodeListe from './TilsynPeriodeListe';
 import VerticalSpacer from '../VerticalSpacer';
+import TilsynPeriodeListe from './TilsynPeriodeListe';
 import TilsynTid from './TilsynTid';
 
 interface OwnProps {

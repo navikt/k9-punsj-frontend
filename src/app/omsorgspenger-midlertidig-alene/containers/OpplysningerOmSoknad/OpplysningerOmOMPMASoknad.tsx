@@ -1,13 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
-import { Field, FieldProps, FormikValues } from 'formik';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
-import { Heading, Alert } from '@navikt/ds-react';
+import { Alert, Heading, Panel } from '@navikt/ds-react';
 import DateInput from 'app/components/skjema/DateInput';
-import { IntlShape } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { Field, FieldProps, FormikValues } from 'formik';
+import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
+import React from 'react';
+import { IntlShape } from 'react-intl';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
 import './opplysningerOmOMPMASoknad.less';
@@ -74,7 +72,9 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
                 }
             />
             {signert === JaNeiIkkeRelevant.NEI && (
-                <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
+                    {intlHelper(intl, 'skjema.usignert.info')}
+                </Alert>
             )}
         </Panel>
     </>

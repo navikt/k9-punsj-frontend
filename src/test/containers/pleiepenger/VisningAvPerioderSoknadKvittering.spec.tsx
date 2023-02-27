@@ -4,7 +4,7 @@ import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'jest-mock';
 import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
-import VisningAvPerioderSoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { formattereTimerForArbeidstakerPerioder } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
 
 jest.mock('react-intl');

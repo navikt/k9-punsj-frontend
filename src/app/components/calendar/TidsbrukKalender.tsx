@@ -1,14 +1,14 @@
-import React, { forwardRef, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
-import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
-import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
 import { KalenderDag } from 'app/models/KalenderDag';
+import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
+import dayjs from 'dayjs';
 import { uniq } from 'lodash';
-import CalendarGrid from './CalendarGrid';
+import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
+import React, { forwardRef, useEffect, useState } from 'react';
 import DateRange from '../../models/types/DateRange';
 import Slett from '../buttons/Slett';
+import CalendarGrid from './CalendarGrid';
 
 import './tidsbrukKalender.less';
 

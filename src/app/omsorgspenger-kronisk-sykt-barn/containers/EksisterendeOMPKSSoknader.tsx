@@ -1,3 +1,4 @@
+import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
@@ -10,13 +11,11 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+
 import * as React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';
+import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPKSSoknadAction,
     closeEksisterendeOMPKSSoknadAction,
@@ -25,9 +24,8 @@ import {
     openEksisterendeOMPKSSoknadAction,
     resetOMPKSSoknadidAction,
 } from '../state/actions/EksisterendeOMPKSSoknaderActions';
-import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 import { IEksisterendeOMPKSSoknaderState } from '../types/EksisterendeOMPKSSoknaderState';
-import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 
 export interface IEksisterendeOMPKSSoknaderStateProps {
     punchState: IPunchState;
@@ -96,7 +94,11 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     }
 
     if (eksisterendeOMPKSSoknaderState.eksisterendeSoknaderRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil i henting av mapper.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil i henting av mapper.
+            </Alert>
+        );
     }
 
     if (
@@ -104,16 +106,22 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         eksisterendeOMPKSSoknaderState.isEksisterendeSoknaderLoading ||
         eksisterendeOMPKSSoknaderState.isAwaitingSoknadCreation
     ) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (eksisterendeOMPKSSoknaderState.createSoknadRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
+        );
     }
 
     const technicalError =
         eksisterendeOMPKSSoknaderState.isSoknadCreated && !eksisterendeOMPKSSoknaderState.soknadid ? (
-            <AlertStripeFeil>Teknisk feil.</AlertStripeFeil>
+            <Alert size="small" variant="error">
+                Teknisk feil.
+            </Alert>
         ) : null;
 
     const chooseSoknad = (soknad: IOMPKSSoknad) => {
@@ -137,9 +145,14 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                     '',
                 Array.from(søknad.journalposter).join(', '),
 
-                <Knapp key={soknadId} mini onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}>
+                <Button
+                    variant="secondary"
+                    key={soknadId}
+                    size="small"
+                    onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
+                >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                </Knapp>,
+                </Button>,
             ];
             rows.push(
                 <tr key={soknadId}>
@@ -154,11 +167,11 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                 </tr>
             );
             modaler.push(
-                <ModalWrapper
+                <Modal
                     key={soknadId}
-                    onRequestClose={props.closeEksisterendeSoknadAction}
-                    contentLabel={soknadId}
-                    isOpen={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
+                    onClose={props.closeEksisterendeSoknadAction}
+                    aria-label={soknadId}
+                    open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                     closeButton={false}
                 >
                     <ErDuSikkerModal
@@ -167,7 +180,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
-                </ModalWrapper>
+                </Modal>
             );
         });
 
@@ -203,11 +216,11 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     return (
         <>
             {technicalError}
-            <AlertStripeInfo>
+            <Alert size="small" variant="info">
                 {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
                     antallSokere: pleietrengendeId ? '2' : '1',
                 })}
-            </AlertStripeInfo>
+            </Alert>
         </>
     );
 };

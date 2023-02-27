@@ -16,14 +16,13 @@ export default function UhaanderteFeilmeldinger({
 
     return (
         <>
-            {feilmeldinger
-                .map((feilmelding, index) => {
-                    if (!feilmelding) {
-                        return null;
-                    }
-                    // eslint-disable-next-line react/no-array-index-key
-                    return <Feilmelding key={feilmelding + index} feil={feilmelding} />;
-                })}
+            {feilmeldinger.map((feilmelding, index) => {
+                if (!feilmelding) {
+                    return null;
+                }
+                // eslint-disable-next-line react/no-array-index-key
+                return <Feilmelding key={feilmelding + index} feil={feilmelding} />;
+            })}
         </>
     );
 }

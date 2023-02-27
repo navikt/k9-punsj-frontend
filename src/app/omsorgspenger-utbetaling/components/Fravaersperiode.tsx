@@ -1,4 +1,3 @@
-import React from 'react';
 import { Delete } from '@navikt/ds-icons';
 import { Button, Panel } from '@navikt/ds-react';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
@@ -6,6 +5,7 @@ import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { fraværÅrsak, søknadÅrsak } from '../konstanter';
 import './fravaersperiode.less';
@@ -77,8 +77,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                     />
                 )}
                 {minstToPerioder && (
-                    <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode}>
-                        <Delete />
+                    <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode} icon={<Delete />}>
                         Fjern periode
                     </Button>
                 )}

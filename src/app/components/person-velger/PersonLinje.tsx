@@ -1,5 +1,5 @@
 import { Delete } from '@navikt/ds-icons';
-import { BodyShort, Label, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Label } from '@navikt/ds-react';
 import { Personvalg } from 'app/models/types/Personvalg';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { get, set } from 'lodash';

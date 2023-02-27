@@ -1,7 +1,7 @@
+import { ErrorMessage } from '@navikt/ds-react';
 import { useField } from 'formik';
 import { Datepicker } from 'nav-datovelger';
 import { InputProps, Label } from 'nav-frontend-skjema';
-import { Feilmelding } from 'nav-frontend-typografi';
 import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { fjernIndexFraLabel } from '../../../components/skjema/skjemaUtils';
@@ -20,7 +20,7 @@ const OverføringDateInput: React.FunctionComponent<IDateInputProps & InputProps
                 {label || <FormattedMessage id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`} />}
             </Label>
             <Datepicker locale="nb" inputId={name} value={value || ''} onChange={onChange} showYearSelector />
-            {touched && error ? <Feilmelding>{error}</Feilmelding> : null}
+            {touched && error ? <ErrorMessage size="small">{error}</ErrorMessage> : null}
         </>
     );
 };

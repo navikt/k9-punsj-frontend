@@ -37,8 +37,8 @@ const ArbeidstakerContainer = () => {
                                 ...arbeidstakerInitialValue,
                             })
                         }
+                        icon={<AddCircle />}
                     >
-                        <AddCircle />
                         Legg til arbeidsforhold
                     </Button>
                 </Panel>
