@@ -15293,7 +15293,7 @@ __metadata:
     regenerator-runtime: ^0.13.7
     snyk: 1.1109.0
     source-map-loader: ^4.0.1
-    start-server-and-test: ^1.15.5
+    start-server-and-test: ^2.0.0
     style-loader: ^3.3.1
     stylelint: ^15.2.0
     stylelint-config-prettier: ^9.0.5
@@ -21292,9 +21292,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"start-server-and-test@npm:^1.15.5":
-  version: 1.15.5
-  resolution: "start-server-and-test@npm:1.15.5"
+"start-server-and-test@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "start-server-and-test@npm:2.0.0"
   dependencies:
     arg: ^5.0.2
     bluebird: 3.7.2
@@ -21308,7 +21308,7 @@ __metadata:
     server-test: src/bin/start.js
     start-server-and-test: src/bin/start.js
     start-test: src/bin/start.js
-  checksum: 02c17414ad6a1a064851095c691333b12b38b6af6ce1eb679966f2a32a80013e718c6b415eec05e69ea831ebd4c3633690f2b21544bf426c0295a647aa2ecb76
+  checksum: 8788e59ad78275332c78325a804504ac558f06a112d47cb5bc3d012d2bda46add72c863cae2357836fe245ee4e22e2fec0b6d47dbdf5e0f0f5cfd1a57544d100
   languageName: node
   linkType: hard
 
