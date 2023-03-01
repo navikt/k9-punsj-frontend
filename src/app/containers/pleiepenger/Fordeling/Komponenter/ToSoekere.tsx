@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { Alert } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Checkbox, Input } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
+import intlHelper from 'app/utils/intlUtils';
+import { Checkbox, Input } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from '../FordelingFeilmeldinger';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 
@@ -55,9 +55,9 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
             <VerticalSpacer sixteenPx />
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">
-                    <AlertStripeInfo>
+                    <Alert size="small" variant="info">
                         {intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}
-                    </AlertStripeInfo>
+                    </Alert>
                     <Input
                         label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
                         onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}

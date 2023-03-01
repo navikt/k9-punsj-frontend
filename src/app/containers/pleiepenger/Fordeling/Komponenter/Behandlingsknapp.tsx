@@ -1,5 +1,5 @@
 import React from 'react';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Button } from '@navikt/ds-react';
 import { useSelector } from 'react-redux';
 import { RootStateType } from 'app/state/RootState';
 import { FormattedMessage } from 'react-intl';
@@ -30,27 +30,27 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     if ((sakstypeConfig as ISakstypePunch).punchPath) {
         const punchConfig = sakstypeConfig as ISakstypePunch;
         return (
-            <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
+            <Button onClick={() => setHash(punchConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
-            </Hovedknapp>
+            </Button>
         );
     }
 
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
         return (
-            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost.journalpostId, norskIdent, fagsak)}>
+            <Button onClick={() => lukkJournalpostOppgave(journalpost.journalpostId, norskIdent, fagsak)}>
                 <FormattedMessage id="fordeling.knapp.bekreft" />
-            </Hovedknapp>
+            </Button>
         );
     }
 
     return (
-        <Hovedknapp
+        <Button
             disabled={!gosysKategoriJournalforing}
             onClick={() => omfordel(journalpost.journalpostId, norskIdent, gosysKategoriJournalforing)}
         >
             <FormattedMessage id="fordeling.knapp.bekreft" />
-        </Hovedknapp>
+        </Button>
     );
 };
 

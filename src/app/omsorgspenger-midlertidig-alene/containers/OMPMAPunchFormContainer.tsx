@@ -5,9 +5,8 @@ import { Formik, FormikValues } from 'formik';
 import { connect } from 'react-redux';
 import { WrappedComponentProps } from 'react-intl';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
+import { Alert, Button, Loader } from '@navikt/ds-react';
+
 import { RootStateType } from 'app/state/RootState';
 import { setHash } from 'app/utils';
 import { PunchStep } from 'app/models/enums';
@@ -108,15 +107,19 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     }
 
     if (punchFormState.isSoknadLoading || !harHentBarnResponse) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (punchFormState.error) {
         return (
             <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}
+                </Alert>
                 <p>
-                    <Knapp onClick={handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
+                    <Button variant="secondary" onClick={handleStartButtonClick}>
+                        {intlHelper(intl, 'skjema.knapp.tilstart')}
+                    </Button>
                 </p>
             </>
         );

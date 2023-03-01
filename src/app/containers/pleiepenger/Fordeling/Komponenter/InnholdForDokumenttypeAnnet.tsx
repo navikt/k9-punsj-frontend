@@ -1,8 +1,8 @@
 import React from 'react';
 import { FordelingDokumenttype } from 'app/models/enums';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Alert, Button } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -29,7 +29,6 @@ interface IInnholdForDokumenttypeAnnetProps {
 }
 
 const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> = ({
-    dokumenttype,
     journalpost,
     kanJournalforingsoppgaveOpprettesiGosys,
     lukkJournalpostOppgave,
@@ -42,19 +41,19 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
 }): JSX.Element | null => {
     const intl = useIntl();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
-    if (dokumenttype !== FordelingDokumenttype.ANNET) {
-        return null;
-    }
 
     if (!kanJournalforingsoppgaveOpprettesiGosys) {
         return (
             <div>
-                <AlertStripeInfo className="fordeling-page__kanIkkeOppretteJPIGosys">
+                <Alert size="small" variant="info" className="fordeling-page__kanIkkeOppretteJPIGosys">
                     <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
-                </AlertStripeInfo>
-                <Knapp onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, sokersIdent, fagsak)}>
+                </Alert>
+                <Button
+                    variant="secondary"
+                    onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, sokersIdent, fagsak)}
+                >
                     <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                </Knapp>
+                </Button>
             </div>
         );
     }
@@ -77,15 +76,15 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
             />
             <VerticalSpacer eightPx />
             <GosysGjelderKategorier />
-            <Hovedknapp
-                mini
+            <Button
+                size="small"
                 disabled={IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori}
                 onClick={() =>
                     omfordel(journalpost?.journalpostId, identState.søkerId, fordelingState.valgtGosysKategori)
                 }
             >
                 <FormattedMessage id="fordeling.sakstype.ANNET" />
-            </Hovedknapp>
+            </Button>
         </div>
     );
 };

@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Delete, AddCircle } from '@navikt/ds-icons';
-import { useQuery } from 'react-query';
-import { Button, Checkbox, Panel, Heading } from '@navikt/ds-react';
+import { AddCircle, Delete } from '@navikt/ds-icons';
+import { Button, Checkbox, Heading, Panel } from '@navikt/ds-react';
+import { finnArbeidsgivere } from 'app/api/api';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
-import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { finnArbeidsgivere } from 'app/api/api';
+import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
-import Fravaersperiode from './Fravaersperiode';
 import './arbeidsforhold.less';
+import Fravaersperiode from './Fravaersperiode';
 
 interface OwnProps {
     index: number;
@@ -71,8 +71,13 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                 organisasjoner={organisasjoner}
                             />
                             {harMinstToArbeidsforhold && (
-                                <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
-                                    <Delete />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    className="slett"
+                                    onClick={slettArbeidsforhold}
+                                    icon={<Delete />}
+                                >
                                     Fjern arbeidsforhold
                                 </Button>
                             )}
@@ -115,8 +120,8 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                                 aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
                                             })
                                         }
+                                        icon={<AddCircle />}
                                     >
-                                        <AddCircle />
                                         Legg til periode
                                     </Button>
                                 </>

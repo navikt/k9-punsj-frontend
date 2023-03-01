@@ -1,7 +1,6 @@
+import { Panel, Link } from '@navikt/ds-react';
 import { ExternalLink } from '@navikt/ds-icons';
-import { Link } from '@navikt/ds-react';
 import { getModiaPath } from 'app/utils';
-import Panel from 'nav-frontend-paneler';
 import React from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect } from 'react-redux';

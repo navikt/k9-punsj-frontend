@@ -5,26 +5,16 @@ import { IPeriode, Periode } from './Periode';
 import { Arbeidstaker } from './Arbeidstaker';
 import { ArbeidstidInfo } from './ArbeidstidInfo';
 
-import {
-    Barn,
-    IArbeidstid,
-    IBarn,
-    IOmsorg,
-    IOpptjeningAktivitet,
-    ISoknadsInfo,
-    ITilleggsinformasjon,
-    ITilsynsordning,
-    IUtenlandsOpphold,
-    IUttak,
-    Omsorg,
-    SelvstendigNaeringsdrivendeOpptjening,
-    SoknadsInfo,
-    Tilleggsinformasjon,
-    Tilsynsordning,
-    UtenlandsOpphold,
-    Uttak,
-} from './PSBSoknad';
+import { ITilleggsinformasjon, ITilsynsordning, Tilleggsinformasjon, Tilsynsordning } from './PSBSoknad';
+import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
+import { IOmsorg, Omsorg } from './Omsorg';
+import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
+import { IUttak, Uttak } from './Uttak';
+import { IArbeidstid } from './Arbeidstid';
+import { SelvstendigNaeringsdrivendeOpptjening } from './SelvstendigNaeringsdrivendeOpptjening';
+import { Barn, IBarn } from './IBarn';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+import { IOpptjeningAktivitet } from './OpptjeningAktivitet';
 
 export interface IPSBSoknadUt {
     soeknadId?: string;

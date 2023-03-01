@@ -1,3 +1,4 @@
+import { Alert, Button, Modal } from '@navikt/ds-react';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -10,9 +11,6 @@ import {
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 import { RootStateType } from 'app/state/RootState';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -63,9 +61,9 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     };
 
     const getBrevIkkeSendtInfoboks = () => (
-        <AlertStripeAdvarsel className="fordeling-brevIkkeSendtinfo">
+        <Alert size="small" variant="warning" className="fordeling-brevIkkeSendtinfo">
             <FormattedMessage id="fordeling.inntektsmeldingUtenKrav.brevIkkeSendt" />
-        </AlertStripeAdvarsel>
+        </Alert>
     );
 
     const resetSetPåVent = () => dispatch(setJournalpostPaaVentResetAction());
@@ -86,25 +84,25 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     const getUtførValgKnapp = () => {
         if (skalOppretteGosysoppgaveForInntektsmeldingUtenKrav()) {
             return (
-                <Hovedknapp mini onClick={() => setShowOpprettOppgaveIGosysModal(true)}>
+                <Button size="small" onClick={() => setShowOpprettOppgaveIGosysModal(true)}>
                     <FormattedMessage id="fordeling.sakstype.ANNET" />
-                </Hovedknapp>
+                </Button>
             );
         }
 
         if (skalFerdigstilleJournalpost()) {
             return (
-                <Hovedknapp mini onClick={() => setShowFerdigstillJournalpostModal(true)}>
+                <Button size="small" onClick={() => setShowFerdigstillJournalpostModal(true)}>
                     <FormattedMessage id="skjema.knapp.ferdigstillJournalpost" />
-                </Hovedknapp>
+                </Button>
             );
         }
 
         if (skalSetteInntektsmeldingUtenKravPåVent()) {
             return (
-                <Hovedknapp mini onClick={() => setShowSettPaaVentModal(true)}>
+                <Button size="small" onClick={() => setShowSettPaaVentModal(true)}>
                     <FormattedMessage id="skjema.knapp.settpaavent" />
-                </Hovedknapp>
+                </Button>
             );
         }
         return null;
@@ -145,44 +143,34 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {getUtførValgKnapp()}
 
             {showSettPaaVentModal && (
-                <ModalWrapper
+                <Modal
                     className="settpaaventmodal"
-                    onRequestClose={() => setShowSettPaaVentModal(false)}
-                    contentLabel="settpaaventmodal"
-                    isOpen
+                    onClose={() => setShowSettPaaVentModal(false)}
+                    aria-label="settpaaventmodal"
+                    open
                     closeButton={false}
                 >
                     <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
                         {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
                     </SettPaaVentModal>
-                </ModalWrapper>
+                </Modal>
             )}
             {showSettPaaVentSuccessModal && (
-                <ModalWrapper
-                    onRequestClose={() => resetSetPåVent()}
-                    contentLabel="settpaaventokmodal"
-                    closeButton={false}
-                    isOpen
-                >
+                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} open>
                     <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                </ModalWrapper>
+                </Modal>
             )}
             {showSettPaaVentErrorModal && (
-                <ModalWrapper
-                    onRequestClose={() => resetSetPåVent()}
-                    contentLabel="settpaaventokmodal"
-                    closeButton={false}
-                    isOpen
-                >
+                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} open>
                     <SettPaaVentErrorModal close={() => resetSetPåVent()} />
-                </ModalWrapper>
+                </Modal>
             )}
             {showFerdigstillJournalpostModal && (
-                <ModalWrapper
-                    onRequestClose={() => setShowFerdigstillJournalpostModal(false)}
-                    contentLabel="ferdigstill journalpostmodal"
+                <Modal
+                    onClose={() => setShowFerdigstillJournalpostModal(false)}
+                    aria-label="ferdigstill journalpostmodal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <FerdigstillJournalpostModal
                         submit={() => handleFerdigstillJournalpost()}
@@ -190,14 +178,14 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                     >
                         {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
                     </FerdigstillJournalpostModal>
-                </ModalWrapper>
+                </Modal>
             )}
             {journalpost && showOpprettOppgaveIGosysModal && (
-                <ModalWrapper
+                <Modal
                     className="opprettOppgaveIGosysModal"
-                    onRequestClose={() => setShowOpprettOppgaveIGosysModal(false)}
-                    contentLabel="opprettOppgaveIGosysModal"
-                    isOpen
+                    onClose={() => setShowOpprettOppgaveIGosysModal(false)}
+                    aria-label="opprettOppgaveIGosysModal"
+                    open
                     closeButton={false}
                 >
                     <OpprettOppgaveIGosysModal
@@ -206,27 +194,27 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                     >
                         {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
                     </OpprettOppgaveIGosysModal>
-                </ModalWrapper>
+                </Modal>
             )}
             {showFerdigstillJournalpostSuccessModal && (
-                <ModalWrapper
-                    onRequestClose={() => resetFerdigstillJournalpost()}
-                    contentLabel="ferdigstill journalpostOkModal"
+                <Modal
+                    onClose={() => resetFerdigstillJournalpost()}
+                    aria-label="ferdigstill journalpostOkModal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <OkGaaTilLosModal melding="modal.ferdigstilljournalpost" />
-                </ModalWrapper>
+                </Modal>
             )}
             {showFerdigstillJournalpostErrorModal && (
-                <ModalWrapper
-                    onRequestClose={() => resetFerdigstillJournalpost()}
-                    contentLabel="ferdigstill journalpostFeilModal"
+                <Modal
+                    onClose={() => resetFerdigstillJournalpost()}
+                    aria-label="ferdigstill journalpostFeilModal"
                     closeButton={false}
-                    isOpen
+                    open
                 >
                     <FerdigstillJournalpostErrorModal close={() => resetFerdigstillJournalpost()} />
-                </ModalWrapper>
+                </Modal>
             )}
         </>
     );

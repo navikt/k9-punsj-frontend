@@ -10,7 +10,7 @@ import { hentArbeidsgivereMedId } from 'app/state/actions/OMSPunchFormActions';
 import intlHelper from 'app/utils/intlUtils';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import Lenke from 'nav-frontend-lenker';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';

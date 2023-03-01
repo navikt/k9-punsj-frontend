@@ -1,7 +1,7 @@
 import DateInput from 'app/components/skjema/DateInput';
 import intlHelper from 'app/utils/intlUtils';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';

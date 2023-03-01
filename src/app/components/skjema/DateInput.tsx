@@ -1,11 +1,11 @@
+import { ErrorMessage } from '@navikt/ds-react';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Datepicker } from 'nav-datovelger';
 import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
-import { Feilmelding } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
 
@@ -62,7 +62,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 inputProps={{ inputRef }}
                 limitations={limitations}
             />
-            {error && <Feilmelding>{error}</Feilmelding>}
+            {error && <ErrorMessage size="small">{error}</ErrorMessage>}
         </div>
     );
 };

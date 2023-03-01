@@ -1,12 +1,12 @@
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
+import { arbeidstimerPeriode } from 'app/rules/yup';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
-import { arbeidstimerPeriode } from 'app/rules/yup';
 import * as yup from 'yup';
-import ArbeidstidPeriode from './ArbeidstidPeriode';
 import VerticalSpacer from '../VerticalSpacer';
+import ArbeidstidPeriode from './ArbeidstidPeriode';
 
 const schema = yup.object({
     perioder: yup.array().of(arbeidstimerPeriode),
@@ -25,12 +25,12 @@ export default function ArbeidstidPeriodeListe({
     lagre: (arbeidstidInfo: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => void;
     avbryt: () => void;
     soknadsperioder: IPeriode[];
-    nyeSoknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[] | null;
 }) {
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
         perioder: arbeidstidPerioder.length
             ? [...arbeidstidPerioder]
-            : nyeSoknadsperioder.map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
+            : (nyeSoknadsperioder || []).map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
     return (
         <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
@@ -53,8 +53,9 @@ export default function ArbeidstidPeriodeListe({
                                 <Button
                                     variant="tertiary"
                                     onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
+                                    icon={<AddCircle />}
                                 >
-                                    <AddCircle /> Legg til periode
+                                    Legg til periode
                                 </Button>
                                 <VerticalSpacer eightPx />
                                 <div style={{ display: 'flex' }}>

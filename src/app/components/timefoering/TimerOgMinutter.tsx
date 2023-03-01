@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Detail, Label, ErrorMessage } from '@navikt/ds-react';
+import { Detail, ErrorMessage, Label } from '@navikt/ds-react';
 import { uniqueId } from 'lodash';
 import { Input } from 'nav-frontend-skjema';
 import React from 'react';

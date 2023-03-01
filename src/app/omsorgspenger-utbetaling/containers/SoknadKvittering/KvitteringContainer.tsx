@@ -1,8 +1,7 @@
 import { IOMPUTSoknadKvittering } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router';
@@ -20,17 +19,17 @@ export default function KvitteringContainer(props: OwnProps) {
     }
     return (
         <>
-            <AlertStripeInfo className="fullfortmelding">
+            <Alert size="small" variant="info" className="fullfortmelding">
                 <FormattedMessage id="skjema.sentInn" />
-            </AlertStripeInfo>
+            </Alert>
             <div className="punchPage__knapper">
-                <Hovedknapp
+                <Button
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
                     }}
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}
-                </Hovedknapp>
+                </Button>
             </div>
             <OMPUTSoknadKvittering {...props} />
         </>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import Panel from 'nav-frontend-paneler';
+import { Panel } from '@navikt/ds-react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';

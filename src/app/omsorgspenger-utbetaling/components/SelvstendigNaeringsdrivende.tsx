@@ -4,21 +4,21 @@ import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { JaNei } from 'app/models/enums';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize, get } from 'lodash';
 import React from 'react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { useIntl } from 'react-intl';
-import intlHelper from 'app/utils/intlUtils';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import './arbeidsforhold.less';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
-import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
@@ -230,8 +230,8 @@ const SelvstendigNaeringsdrivende = () => {
                                         aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
                                     })
                                 }
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>

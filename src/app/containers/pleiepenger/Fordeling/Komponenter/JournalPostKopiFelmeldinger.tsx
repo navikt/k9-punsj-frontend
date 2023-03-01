@@ -1,7 +1,7 @@
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
-import { AlertStripeFeil, AlertStripeInfo, AlertStripeSuksess } from 'nav-frontend-alertstriper';
-import intlHelper from '../../../../utils/intlUtils';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
+import intlHelper from '../../../../utils/intlUtils';
 
 interface IOwnProps {
     skalVisesNårJournalpostSomIkkeStottesKopieres?: boolean;
@@ -12,26 +12,38 @@ interface IOwnProps {
 const JournalPostKopiFelmeldinger: React.FunctionComponent<IOwnProps> = ({
     skalVisesNårJournalpostSomIkkeStottesKopieres,
     fellesState,
-    intl
+    intl,
 }) => {
-    const feilmeldingSkalVises = !skalVisesNårJournalpostSomIkkeStottesKopieres ? true : skalVisesNårJournalpostSomIkkeStottesKopieres;
-    return (<>
-        {feilmeldingSkalVises && fellesState.kopierJournalpostConflict &&
-        <AlertStripeInfo>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}</AlertStripeInfo>
-        }
+    const feilmeldingSkalVises = !skalVisesNårJournalpostSomIkkeStottesKopieres
+        ? true
+        : skalVisesNårJournalpostSomIkkeStottesKopieres;
+    return (
+        <>
+            {feilmeldingSkalVises && fellesState.kopierJournalpostConflict && (
+                <Alert size="small" variant="info">
+                    {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}
+                </Alert>
+            )}
 
-        {feilmeldingSkalVises && fellesState.kopierJournalpostSuccess &&
-        <AlertStripeSuksess>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}</AlertStripeSuksess>
-        }
+            {feilmeldingSkalVises && fellesState.kopierJournalpostSuccess && (
+                <Alert size="small" variant="success">
+                    {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}
+                </Alert>
+            )}
 
-        {feilmeldingSkalVises && fellesState.kopierJournalpostForbidden &&
-        <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}</AlertStripeFeil>
-        }
+            {feilmeldingSkalVises && fellesState.kopierJournalpostForbidden && (
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}
+                </Alert>
+            )}
 
-        {feilmeldingSkalVises && fellesState.kopierJournalpostError &&
-        <AlertStripeFeil>{intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}</AlertStripeFeil>
-        }
-    </>);
+            {feilmeldingSkalVises && fellesState.kopierJournalpostError && (
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}
+                </Alert>
+            )}
+        </>
+    );
 };
 
 export default JournalPostKopiFelmeldinger;

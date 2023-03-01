@@ -64,8 +64,8 @@ const Utenlandsopphold = () => {
                                                 size="small"
                                                 onClick={() => arrayHelpers.remove(index)}
                                                 style={{ float: 'right' }}
+                                                icon={<Delete />}
                                             >
-                                                <Delete />
                                                 Fjern periode
                                             </Button>
                                         )}
@@ -90,8 +90,8 @@ const Utenlandsopphold = () => {
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>

@@ -86,7 +86,7 @@ describe('JournalpostLoader', () => {
             />
         );
 
-        expect(journalpost.find('NavFrontendSpinner')).toHaveLength(1);
+        expect(journalpost.findWhere((n) => n.name() === 'ForwardRef' && n.prop('size') === 'large')).toHaveLength(1);
     });
 
     it('Viser feilmelding når journalposten ikke har tilhørende dokumenter', () => {
@@ -116,7 +116,7 @@ describe('JournalpostLoader', () => {
             />
         );
 
-        const alert = journalpost.find('AlertStripeFeil');
+        const alert = journalpost.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error');
         expect(alert).toHaveLength(1);
         expect(alert.childAt(0).prop('id')).toEqual('startPage.feil.ingendokumenter');
     });
@@ -189,7 +189,9 @@ describe('JournalpostLoader', () => {
             />
         );
 
-        const Modal = journalpost.find('ModalWrapper');
+        const Modal = journalpost.findWhere(
+            (n) => n.name() === 'ForwardRef' && n.prop('aria-label') === 'settpaaventokmodal'
+        );
         expect(Modal).toHaveLength(1);
     });
 });

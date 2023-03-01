@@ -1,6 +1,5 @@
+import { Alert, Panel } from '@navikt/ds-react';
 import { initializeDate } from 'app/utils';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -30,14 +29,14 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     getErrorMessage,
     soknad,
     updateSoknad,
-    getUhaandterteFeil
+    getUhaandterteFeil,
 }) => {
     const intl = useIntl();
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
-        !punchFormState.hentPerioderError && !punchFormState?.perioder?.length ;
+        !punchFormState.hentPerioderError && !punchFormState?.perioder?.length;
 
     const overlappendeSoknadsperiode = () => {
         const eksisterendePerioder = punchFormState.perioder;
@@ -73,7 +72,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
             {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
                 <>
-                    <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
+                    <Alert size="small" variant="info">
+                        {intlHelper(intl, 'skjema.generellinfo')}
+                    </Alert>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
                     {punchFormState.perioder.map((p, i) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
@@ -105,7 +106,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {finnesIkkeEksisterendePerioder && (
-                <AlertStripeInfo>{intlHelper(intl, 'skjema.eksisterende.ingen')}</AlertStripeInfo>
+                <Alert size="small" variant="info">
+                    {intlHelper(intl, 'skjema.eksisterende.ingen')}
+                </Alert>
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
@@ -132,7 +135,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                 </SkjemaGruppe>
             )}
             {overlappendeSoknadsperiode() && (
-                <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
+                    {intlHelper(intl, 'skjema.soknadsperiode.overlapper')}
+                </Alert>
             )}
         </Panel>
     );
