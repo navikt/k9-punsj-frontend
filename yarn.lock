@@ -15291,7 +15291,7 @@ __metadata:
     redux: ^4.2.1
     redux-logger: ^3.0.6
     regenerator-runtime: ^0.13.7
-    snyk: 1.1109.0
+    snyk: 1.1114.0
     source-map-loader: ^4.0.1
     start-server-and-test: ^1.15.5
     style-loader: ^3.3.1
@@ -20999,12 +20999,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"snyk@npm:1.1109.0":
-  version: 1.1109.0
-  resolution: "snyk@npm:1.1109.0"
+"snyk@npm:1.1114.0":
+  version: 1.1114.0
+  resolution: "snyk@npm:1.1114.0"
   bin:
     snyk: bin/snyk
-  checksum: 8317cda0a24cf1e481e558fed601a86f1c11c6470e96adebc767dd023ed1c3e6de07a2f02a892706772d695b98e2fe68611a9273097f70b503d6c16c5d3782f6
+  checksum: 40765f32c7f3176c53c1c5dad9d2097894f8d642f990e9c6995b46beb2a2587b62abb0dff0654e6a9e373d21b22bc055660596a0a246ea1c0902cf20f6540b7b
   languageName: node
   linkType: hard
 
