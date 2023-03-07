@@ -3515,9 +3515,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "@sentry/cli@npm:2.13.0"
+"@sentry/cli@npm:^2.14.4":
+  version: 2.14.4
+  resolution: "@sentry/cli@npm:2.14.4"
   dependencies:
     https-proxy-agent: ^5.0.0
     node-fetch: ^2.6.7
@@ -3526,7 +3526,7 @@ __metadata:
     which: ^2.0.2
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 459e30e6ab36352b2c708557e9ce05821ccd38ba7e2707fae8d97706fb5fec08181235a953d0f1b3003011c14be8bb7b9b7f2d0db0c22bac524de53e2c8e1e9c
+  checksum: 8cf53cd771839cec104e02afaafe4b7f70895565e56ecf311ef5e981a377d868f4b9afe0913856955714a14853101f1662677d809ef983d30517bcdc53ee3c0f
   languageName: node
   linkType: hard
 
@@ -15145,7 +15145,7 @@ __metadata:
     "@navikt/k9-period-utils": 1.0.1
     "@pmmmwh/react-refresh-webpack-plugin": ^0.5.10
     "@redux-devtools/extension": ^3.2.5
-    "@sentry/cli": ^2.13.0
+    "@sentry/cli": ^2.14.4
     "@sentry/react": ^7.38.0
     "@storybook/addon-actions": ^6.5.16
     "@storybook/addon-essentials": ^6.5.16
