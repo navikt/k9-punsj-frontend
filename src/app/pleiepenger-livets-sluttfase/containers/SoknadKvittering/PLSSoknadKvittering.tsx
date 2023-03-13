@@ -38,7 +38,9 @@ interface IOwnProps {
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
-const mutateLandkodeTilLandnavn = (perioder: IPLSSoknadKvitteringBosteder | IPLSSoknadKvitteringUtenlandsopphold) => {
+const endreLandkodeTilLandnavnIPerioder = (
+    perioder: IPLSSoknadKvitteringBosteder | IPLSSoknadKvitteringUtenlandsopphold
+) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
@@ -166,7 +168,7 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={mutateLandkodeTilLandnavn(ytelse.utenlandsopphold?.perioder)}
+                        perioder={endreLandkodeTilLandnavnIPerioder(ytelse.utenlandsopphold?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />
@@ -324,7 +326,7 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={mutateLandkodeTilLandnavn(ytelse.bosteder?.perioder)}
+                        perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />
