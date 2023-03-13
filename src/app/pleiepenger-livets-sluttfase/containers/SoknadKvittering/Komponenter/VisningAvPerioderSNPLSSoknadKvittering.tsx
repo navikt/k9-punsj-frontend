@@ -6,17 +6,15 @@ import {
     periodToFormattedString,
     formattereDatoIArray,
     sjekkPropertyEksistererOgIkkeErNull,
-    formattereLandTilNavn,
+    landkodeTilNavn,
 } from '../../../../utils';
 
-import { ICountry } from '../../../../components/country-select/CountrySelect';
 import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
 import { IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../types/PLSSoknadKvittering';
 
 interface IOwnProps {
     intl: any;
     perioder: IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
-    countryList: ICountry[];
 }
 
 const formaterTypeVirksomhet = (virksomheter: string[]) =>
@@ -33,11 +31,7 @@ const formaterTypeVirksomhet = (virksomheter: string[]) =>
         }
     });
 
-const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    perioder,
-    countryList,
-}) => (
+const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, perioder }) => (
     <div>
         {perioder.map((SN) =>
             Object.keys(SN.perioder).map((periode) => (
@@ -86,7 +80,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                     {sjekkPropertyEksistererOgIkkeErNull('landkode', SN.perioder[periode]) && (
                         <p>
                             <b>{`${intlHelper(intl, 'skjema.sn.registrertLand')} `}</b>
-                            {formattereLandTilNavn(SN.perioder[periode].landkode!, countryList)}
+                            {landkodeTilNavn(SN.perioder[periode].landkode!)}
                         </p>
                     )}
 

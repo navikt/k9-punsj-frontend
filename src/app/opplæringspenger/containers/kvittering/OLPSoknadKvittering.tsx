@@ -11,16 +11,14 @@ import {
     IOLPSoknadKvitteringUtenlandsoppholdInfo,
 } from 'app/opplæringspenger/OLPSoknadKvittering';
 import { RootStateType } from 'app/state/RootState';
-import { formattereTidspunktFraUTCTilGMT, getLocaleFromSessionStorage, periodToFormattedString } from 'app/utils';
+import { getCountryList, formattereTidspunktFraUTCTilGMT, periodToFormattedString } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { formatereTekstMedTimerOgMinutter, formattereDatoFraUTCTilGMT } from 'app/utils/timeUtils';
 import { formattereDatoIArray, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
 import classNames from 'classnames';
-import countries from 'i18n-iso-countries';
 import React from 'react';
 import { IntlShape, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { ICountry } from '../../../components/country-select/CountrySelect';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import './soknadKvittering.less';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
@@ -28,10 +26,10 @@ import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknad
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
-const formattereLandTilNavnIObjekt = (perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo, countryList: ICountry[]) => {
+const endreLandkodeTilLandnavnIPerioder = (perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
-        const landNavn = countryList.find((country) => country.code === perioder[periode].land);
+        const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
         if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
     });
     return kopiAvPerioder;
@@ -66,11 +64,7 @@ export const genererIkkeSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-const formaterUtenlandsopphold = (
-    perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo,
-    countryList: ICountry[],
-    intl: IntlShape
-) => {
+const formaterUtenlandsopphold = (perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo, intl: IntlShape) => {
     const årsaker = [
         {
             label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.norskOfftenligRegning'),
@@ -106,7 +100,7 @@ const formaterUtenlandsopphold = (
         <>
             <VisningAvPerioderSoknadKvittering
                 intl={intl}
-                perioder={formattereLandTilNavnIObjekt(perioderUtenInnleggelse, countryList)}
+                perioder={endreLandkodeTilLandnavnIPerioder(perioderUtenInnleggelse)}
                 tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                 properties={['land']}
             />
@@ -114,7 +108,7 @@ const formaterUtenlandsopphold = (
                 <div className={classNames('marginTop24')}>
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(perioderMedInnleggelse, countryList)}
+                        perioder={endreLandkodeTilLandnavnIPerioder(perioderMedInnleggelse)}
                         tittel={[
                             'skjema.perioder.innleggelse.overskrift',
                             'skjema.utenlandsopphold.land',
@@ -134,16 +128,6 @@ interface IOwnProps {
 }
 
 export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvittering }) => {
-    const locale = getLocaleFromSessionStorage();
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
-    const countryList: ICountry[] = [];
-
-    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-        countryList.push({
-            code,
-            name: countries.getName(code, locale),
-        })
-    );
     const intl = useIntl();
     const kopierJournalpostSuccess = useSelector((state: RootStateType) => state.felles.kopierJournalpostSuccess);
     const annenSokerIdent = useSelector((state: RootStateType) => state.identState.annenSokerIdent);
@@ -382,7 +366,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                 <VisningAvPerioderSNSoknadKvittering
                                     intl={intl}
                                     perioder={ytelse.opptjeningAktivitet.selvstendigNæringsdrivende!}
-                                    countryList={countryList}
                                 />
                             )}
 
@@ -411,7 +394,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(ytelse.bosteder?.perioder, countryList)}
+                        perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />

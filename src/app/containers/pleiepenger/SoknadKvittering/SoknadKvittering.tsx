@@ -4,11 +4,9 @@ import Kopier from 'app/components/kopier/Kopier';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import countries from 'i18n-iso-countries';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { ICountry } from '../../../components/country-select/CountrySelect';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     IPSBSoknadKvittering,
@@ -19,11 +17,11 @@ import {
     IPSBSoknadKvitteringUtenlandsopphold,
 } from '../../../models/types/PSBSoknadKvittering';
 import {
+    getCountryList,
     formatereTekstMedTimerOgMinutter,
     formattereDatoFraUTCTilGMT,
     formattereDatoIArray,
     formattereTidspunktFraUTCTilGMT,
-    getLocaleFromSessionStorage,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
@@ -41,13 +39,12 @@ interface IOwnProps {
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
-const formattereLandTilNavnIObjekt = (
-    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
-    countryList: ICountry[]
+const endreLandkodeTilLandnavnIPerioder = (
+    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold
 ) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
-        const landNavn = countryList.find((country) => country.code === perioder[periode].land);
+        const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
         if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
     });
     return kopiAvPerioder;
@@ -92,11 +89,7 @@ export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtF
         return acc;
     }, {});
 
-const formaterUtenlandsopphold = (
-    perioder: IPSBSoknadKvitteringUtenlandsopphold,
-    countryList: ICountry[],
-    intl: IntlShape
-) => {
+const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold, intl: IntlShape) => {
     const årsaker = [
         {
             label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.norskOfftenligRegning'),
@@ -132,7 +125,7 @@ const formaterUtenlandsopphold = (
         <>
             <VisningAvPerioderSoknadKvittering
                 intl={intl}
-                perioder={formattereLandTilNavnIObjekt(perioderUtenInnleggelse, countryList)}
+                perioder={endreLandkodeTilLandnavnIPerioder(perioderUtenInnleggelse)}
                 tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                 properties={['land']}
             />
@@ -140,7 +133,7 @@ const formaterUtenlandsopphold = (
                 <div className={classNames('marginTop24')}>
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(perioderMedInnleggelse, countryList)}
+                        perioder={endreLandkodeTilLandnavnIPerioder(perioderMedInnleggelse)}
                         tittel={[
                             'skjema.perioder.innleggelse.overskrift',
                             'skjema.utenlandsopphold.land',
@@ -161,9 +154,6 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
-    const locale = getLocaleFromSessionStorage();
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
-
     const { ytelse, journalposter } = response;
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
@@ -193,15 +183,6 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     const visNattevak = sjekkHvisPerioderEksisterer('nattevåk', ytelse);
     const visBeredskap = sjekkHvisPerioderEksisterer('beredskap', ytelse);
     const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
-
-    const countryList: ICountry[] = [];
-
-    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-        countryList.push({
-            code,
-            name: countries.getName(code, locale),
-        })
-    );
 
     const formaterSøknadsperioder = () =>
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
@@ -259,7 +240,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
                     <hr className={classNames('linje')} />
-                    {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, countryList, intl)}
+                    {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, intl)}
                 </div>
             )}
 
@@ -402,7 +383,6 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 <VisningAvPerioderSNSoknadKvittering
                                     intl={intl}
                                     perioder={ytelse.opptjeningAktivitet.selvstendigNæringsdrivende!}
-                                    countryList={countryList}
                                 />
                             )}
 
@@ -481,7 +461,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(ytelse.bosteder?.perioder, countryList)}
+                        perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />
