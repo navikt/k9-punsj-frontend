@@ -2,7 +2,7 @@ import { BodyShort } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import Fagsak from 'app/types/Fagsak';
 import React from 'react';
-import { Period } from '@navikt/k9-period-utils';
+import { Period } from '@navikt/k9-fe-period-utils';
 import { Checkbox, Select } from 'nav-frontend-skjema';
 import { IIdentState } from 'app/models/types/IdentState';
 
