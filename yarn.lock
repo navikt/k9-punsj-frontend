@@ -15319,7 +15319,7 @@ __metadata:
     redux: ^4.2.1
     redux-logger: ^3.0.6
     regenerator-runtime: ^0.13.11
-    snyk: 1.1117.0
+    snyk: 1.1118.0
     source-map-loader: ^4.0.1
     start-server-and-test: ^2.0.0
     style-loader: ^3.3.1
@@ -21079,15 +21079,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"snyk@npm:1.1117.0":
-  version: 1.1117.0
-  resolution: "snyk@npm:1.1117.0"
+"snyk@npm:1.1118.0":
+  version: 1.1118.0
+  resolution: "snyk@npm:1.1118.0"
   dependencies:
     "@sentry/node": ^7.36.0
     global-agent: ^3.0.0
   bin:
     snyk: bin/snyk
-  checksum: e7d1d627079450d6b5c1c3982c51d7551016f439af541d4dca907d33f0f109880a47bdb22b3be923a6ddeac1afeb49d936e146c33a782161131e87250e880622
+  checksum: c07b91b5170d6245fa28fd96e395c74b5c5b4a62c5dc6bf961aacf46869a3488cfc8d141c9df5784becc6da49441606a42353f347c4bdf5a2fd1f2f4966702cf
   languageName: node
   linkType: hard
 
