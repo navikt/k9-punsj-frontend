@@ -39,9 +39,7 @@ interface IOwnProps {
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
-const formattereLandTilNavnIObjekt = (
-    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold
-) => {
+const mutateLandkodeTilLandnavn = (perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
@@ -125,7 +123,7 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
         <>
             <VisningAvPerioderSoknadKvittering
                 intl={intl}
-                perioder={formattereLandTilNavnIObjekt(perioderUtenInnleggelse)}
+                perioder={mutateLandkodeTilLandnavn(perioderUtenInnleggelse)}
                 tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                 properties={['land']}
             />
@@ -133,7 +131,7 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
                 <div className={classNames('marginTop24')}>
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(perioderMedInnleggelse)}
+                        perioder={mutateLandkodeTilLandnavn(perioderMedInnleggelse)}
                         tittel={[
                             'skjema.perioder.innleggelse.overskrift',
                             'skjema.utenlandsopphold.land',
@@ -461,7 +459,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
-                        perioder={formattereLandTilNavnIObjekt(ytelse.bosteder?.perioder)}
+                        perioder={mutateLandkodeTilLandnavn(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />

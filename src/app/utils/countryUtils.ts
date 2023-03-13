@@ -30,7 +30,7 @@ const countryList = alpha3Codes()
 
 export const getCountryList = () => [...countryList];
 
-export const formattereLandTilNavn = (landskode: string) => {
+export const landkodeTilNavn = (landskode: string) => {
     const landNavn = getCountryList().find((country) => country.code === landskode);
     return typeof landNavn !== undefined ? landNavn?.name : '';
 };

@@ -6,7 +6,7 @@ import {
     periodToFormattedString,
     formattereDatoIArray,
     sjekkPropertyEksistererOgIkkeErNull,
-    formattereLandTilNavn,
+    landkodeTilNavn,
 } from '../../../../utils';
 
 import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
@@ -80,7 +80,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                     {sjekkPropertyEksistererOgIkkeErNull('landkode', SN.perioder[periode]) && (
                         <p>
                             <b>{`${intlHelper(intl, 'skjema.sn.registrertLand')} `}</b>
-                            {formattereLandTilNavn(SN.perioder[periode].landkode!)}
+                            {landkodeTilNavn(SN.perioder[periode].landkode!)}
                         </p>
                     )}
 
