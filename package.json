@@ -20,7 +20,7 @@
         "@types/classnames": "2.3.1",
         "@types/redux-logger": "3.0.9",
         "@types/uuid": "9.0.1",
-        "bootstrap": "4.5.3",
+        "bootstrap": "5.2.3",
         "classnames": "2.3.2",
         "css-minimizer-webpack-plugin": "4.2.2",
         "cypress": "12.7.0",
