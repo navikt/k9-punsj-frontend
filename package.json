@@ -207,6 +207,12 @@
         "webpack-cli": "5.0.1",
         "webpack-dev-server": "4.11.1"
     },
+    "resolutions": {
+        "json5": "2.2.3",
+        "trim-newlines": "3.0.1",
+        "glob-parent": "5.1.2",
+        "trim": "1.0.1"
+    },
     "browserslist": [
         ">0.2%",
         "not dead",
