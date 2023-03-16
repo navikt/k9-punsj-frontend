@@ -129,7 +129,7 @@
         "@types/enzyme-adapter-react-16": "1.0.6",
         "@types/fetch-headers": "2.0.0",
         "@types/intl": "1.2.0",
-        "@types/jest": "29.4.0",
+        "@types/jest": "29.4.4",
         "@types/object-hash": "3.0.2",
         "@types/react": "18.0.28",
         "@types/react-aria-menubutton": "6.2.9",
