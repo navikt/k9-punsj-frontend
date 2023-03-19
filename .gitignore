@@ -32,6 +32,7 @@ node_modules_bak
 cypress/screenshots/
 .pnp.*
 .yarn/*
+!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
