@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { ShallowWrapper, shallow } from 'enzyme';
 import React from 'react';
+import { WrappedComponentProps, createIntl } from 'react-intl';
+
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import { shallow, ShallowWrapper } from 'enzyme';
-import { createIntl, WrappedComponentProps } from 'react-intl';
 
 jest.mock('app/utils/intlUtils');
 
@@ -31,7 +32,7 @@ describe('PeriodInput', () => {
                 onBlur={jest.fn()}
                 {...wrappedComponentProps}
                 inputIdFom={id}
-            />
+            />,
         );
 
         const inputField = getDateInputField(periodInput, id);
@@ -49,7 +50,7 @@ describe('PeriodInput', () => {
                 onBlur={jest.fn()}
                 {...wrappedComponentProps}
                 inputIdTom={id}
-            />
+            />,
         );
 
         const inputField = getDateInputField(periodInput, id);

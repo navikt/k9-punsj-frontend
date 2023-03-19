@@ -3,10 +3,11 @@ import { PunchFormActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
+
 import { ISendSoknad } from '../../../models/types/SendSoknad';
 import { IOMPMASoknad } from '../../types/OMPMASoknad';
-import { IOMPMASoknadUt } from '../../types/OMPMASoknadUt';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
+import { IOMPMASoknadUt } from '../../types/OMPMASoknadUt';
 
 interface IResetPunchOMPMAFormAction {
     type: PunchFormActionKeys.RESET;
@@ -188,7 +189,7 @@ export function updateOMPMASoknader(
     norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IOMPMASoknadUt>,
-    soknad2: Partial<IOMPMASoknadUt> | null
+    soknad2: Partial<IOMPMASoknadUt> | null,
 ) {
     return (dispatch: any) => {
         if (!norskPleietrengendeId || !soknad2) {
@@ -232,7 +233,7 @@ export const submitOMPMASoknadRequestAction = (): ISubmitOMPMASoknadRequestActio
 });
 export const submitOMPMASoknadSuccessAction = (
     innsentSoknad: IOMPMASoknadKvittering,
-    linkTilBehandlingIK9: string | null
+    linkTilBehandlingIK9: string | null,
 ): ISubmitOMPMASoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
     innsentSoknad,
@@ -256,7 +257,7 @@ export const validerOMPMASoknadRequestAction = (): IValiderOMPMASoknadRequestAct
 });
 export const validerOMPMASoknadSuccessAction = (
     validertSoknad: IOMPMASoknadKvittering,
-    erMellomlagring?: boolean
+    erMellomlagring?: boolean,
 ): IValiderOMPMASoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
     validertSoknad,
@@ -300,7 +301,7 @@ export function submitOMPMASoknad(norskIdent: string, soeknadId: string) {
                     default:
                         return dispatch(submitOMPMASoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }
@@ -324,7 +325,7 @@ export function validerOMPMASoknad(soknad: IOMPMASoknadUt, erMellomlagring?: boo
                     default:
                         return dispatch(validerOMPMASoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }

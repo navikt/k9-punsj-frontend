@@ -1,20 +1,22 @@
-import { Alert, Button } from '@navikt/ds-react';
-
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+
 import { PunchStep } from '../../models/enums';
 import { IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { RootStateType } from '../../state/RootState';
-import { setHash } from '../../utils';
-import './plsRegistreringsValg.less';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
+import { RootStateType } from '../../state/RootState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { setHash } from '../../utils';
 import { createPLSSoknad, resetPLSSoknadidAction } from '../state/actions/EksisterendePLSSoknaderActions';
 import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
+import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
+import './plsRegistreringsValg.less';
 
 export interface IPLSRegistreringsValgComponentProps {
     journalpostid: string;
@@ -40,7 +42,7 @@ type IPLSRegistreringsValgProps = IPLSRegistreringsValgComponentProps &
     IPLSRegistreringsValgDispatchProps;
 
 export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistreringsValgProps> = (
-    props: IPLSRegistreringsValgProps
+    props: IPLSRegistreringsValgProps,
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
 
@@ -51,7 +53,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
@@ -80,7 +82,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid)
+                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
             );
         }
         return true;

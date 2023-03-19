@@ -1,14 +1,17 @@
+import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
+import set from 'lodash/set';
 import React, { useEffect } from 'react';
 import { IntlShape } from 'react-intl';
-import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { Heading, Label, Select, Textarea, BodyShort, Panel } from '@navikt/ds-react';
-import set from 'lodash/set';
+
+import { BodyShort, Heading, Label, Panel, Select, Textarea } from '@navikt/ds-react';
+
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import intlHelper from 'app/utils/intlUtils';
-import './annenForelder.less';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import intlHelper from 'app/utils/intlUtils';
+
 import { OMPMASoknad } from '../types/OMPMASoknad';
+import './annenForelder.less';
 
 const situasjonstyper = {
     INNLAGT_I_HELSEINSTITUSJON: 'INNLAGT_I_HELSEINSTITUSJON',
@@ -42,7 +45,7 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
             setFieldValue('annenForelder.periode.tom', '');
             handleBlur(
                 () => setFieldTouched('annenForelder.periode.tom'),
-                set({ ...values }, 'annenForelder.periode.tom', '')
+                set({ ...values }, 'annenForelder.periode.tom', ''),
             );
         }
     }, [tilOgMedErIkkeOppgitt, values.annenForelder.periode.tom]);

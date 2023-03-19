@@ -1,24 +1,27 @@
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Label, Panel } from '@navikt/ds-react';
-import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { JaNei } from 'app/models/enums';
-import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { kunTall } from 'app/utils/patterns';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize, get } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading, Label, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import { JaNei } from 'app/models/enums';
+import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { kunTall } from 'app/utils/patterns';
+
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
-import './arbeidsforhold.less';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
+import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
@@ -65,7 +68,7 @@ const SelvstendigNaeringsdrivende = () => {
                                 if (value !== 'Fiske') {
                                     form.setFieldValue(
                                         'opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB',
-                                        false
+                                        false,
                                     );
                                 }
                             }}
@@ -83,7 +86,7 @@ const SelvstendigNaeringsdrivende = () => {
                                         <RadioPanelGruppeFormik
                                             legend={intlHelper(
                                                 intl,
-                                                'skjema.arbeid.sn.virksomhetstype.erFiskerPåBladB'
+                                                'skjema.arbeid.sn.virksomhetstype.erFiskerPåBladB',
                                             )}
                                             name={field.name}
                                             options={Object.values(JaNei).map((v) => ({
@@ -219,7 +222,7 @@ const SelvstendigNaeringsdrivende = () => {
                                         antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}
                                         slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
                                     />
-                                )
+                                ),
                             )}
                             <Button
                                 variant="tertiary"

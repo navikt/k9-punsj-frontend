@@ -1,11 +1,12 @@
+import { FieldArray, Form } from 'formik';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { FieldArray, Form } from 'formik';
-
 import { Back, Close } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
+
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import FlexRow from '../../../components/flexgrid/FlexRow';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import Knapper from '../../../components/knapp/Knapper';
@@ -14,7 +15,6 @@ import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe'
 import NumberInput from '../../../components/skjema/NumberInput';
 import RadioInput from '../../../components/skjema/RadioInput';
 import TextInput from '../../../components/skjema/TextInput';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import { JaNei } from '../../../models/enums';
 import {
     Innsendingsstatus,

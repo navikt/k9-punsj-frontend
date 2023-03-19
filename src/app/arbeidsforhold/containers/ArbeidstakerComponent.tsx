@@ -1,20 +1,22 @@
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
-import usePrevious from 'app/hooks/usePrevious';
-import Organisasjon from 'app/models/types/Organisasjon';
-import { get } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import { Arbeidstaker, GetErrorMessage, IArbeidstaker, OrgOrPers, IPeriode } from 'app/models/types';
-import ActionType from '../types/actionTypes';
-import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
+import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
+import usePrevious from 'app/hooks/usePrevious';
+import { Arbeidstaker, GetErrorMessage, IArbeidstaker, IPeriode, OrgOrPers } from 'app/models/types';
+import Organisasjon from 'app/models/types/Organisasjon';
+import { get } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import { ApiPath } from '../../apiConfig';
-import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
 import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
+import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
+import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
+import ActionType from '../types/actionTypes';
 import './arbeidstakerComponent.less';
 
 interface ArbeidstakerComponentProps {
@@ -79,7 +81,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             searchOrganisasjonsnummerFailed: true,
                         });
                     }
-                }
+                },
             );
         }
     };

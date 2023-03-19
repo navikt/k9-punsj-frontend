@@ -1,9 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
+import { get } from 'lodash';
 
 import { IPeriode } from 'app/models/types';
-import yup, { passertDato, passertKlokkeslettPaaDato, barn, periode, utenlandsopphold } from 'app/rules/yup';
+import yup, { barn, passertDato, passertKlokkeslettPaaDato, periode, utenlandsopphold } from 'app/rules/yup';
 import { erYngreEnn4år } from 'app/utils';
-import { get } from 'lodash';
+
 import nb from '../i18n/nb.json';
 import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
 
@@ -27,7 +28,7 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             periode: periode(),
             faktiskTidPrDag: yup.string().required().label('Timer fravær per dag'),
             normalArbeidstidPrDag: yup.string().required().label('Normal arbeidstid per dag'),
-        })
+        }),
     );
 const arbeidstaker = () =>
     yup.object({
@@ -150,7 +151,7 @@ const OMPUTSchema = yup.object({
                     .test(
                         'maa-velge-ja',
                         '${path} - fordi bruker ikke har dekket 10 omsorgsdager selv, kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
-                        (v) => v === 'ja'
+                        (v) => v === 'ja',
                     ),
             })
             .label('Har dekket omsorgsdager'),

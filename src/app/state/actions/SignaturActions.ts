@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { JaNei, SignaturActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
+
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 
 interface ISetSignaturAction {
@@ -51,18 +52,18 @@ export const usignertResetAction = (): IUsignertResetAction => ({
 });
 
 export const usignert = (journalpostid: string) => (dispatch: any) => {
-        dispatch(usignertRequestAction());
+    dispatch(usignertRequestAction());
 
-        post(
-            ApiPath.JOURNALPOST_USIGNERT,
-            { journalpostId: journalpostid },
-            undefined,
-            { ytelse: 'PleiepegerSyktBarn' },
-            (response) => {
-                if (response.status === 204) {
-                    return dispatch(usignertSuccessAction());
-                }
-                return dispatch(usignertErrorAction(convertResponseToError(response)));
+    post(
+        ApiPath.JOURNALPOST_USIGNERT,
+        { journalpostId: journalpostid },
+        undefined,
+        { ytelse: 'PleiepegerSyktBarn' },
+        (response) => {
+            if (response.status === 204) {
+                return dispatch(usignertSuccessAction());
             }
-        );
-    };
+            return dispatch(usignertErrorAction(convertResponseToError(response)));
+        },
+    );
+};

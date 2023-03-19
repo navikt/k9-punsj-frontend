@@ -1,20 +1,21 @@
 import { ApiPath } from 'app/apiConfig';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
+
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
     søkerId: string,
     callback?: (response: Response, data: ArbeidsgivereResponse) => void,
     fom?: string,
-    tom?: string
+    tom?: string,
 ): Promise<Response> => {
     if (fom && tom) {
         return get(
             `${ApiPath.FINN_ARBEIDSGIVERE}?fom=${fom}&tom=${tom}`,
             { norskIdent: søkerId },
             { 'X-Nav-NorskIdent': søkerId },
-            callback
+            callback,
         );
     }
     return get(ApiPath.FINN_ARBEIDSGIVERE, { norskIdent: søkerId }, { 'X-Nav-NorskIdent': søkerId }, callback);
@@ -26,7 +27,7 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             if (!response.ok) {
                 throw Error('Det oppstod en feil når journalpost skulle settes på vent.');
             }
-        }
+        },
     );
 
 export const hentBarn = (norskIdent: string): Promise<Error | Response> =>

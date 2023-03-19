@@ -1,13 +1,16 @@
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+
 import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+
 import { finnFagsaker } from 'app/api/api';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/BrevComponent';
+import { IdentRules } from 'app/rules';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
-import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+
 import './sendBrevIAvsluttetSak.less';
-import { IdentRules } from 'app/rules';
 
 const SendBrevIAvsluttetSak = () => {
     if (Modal?.setAppElement) {

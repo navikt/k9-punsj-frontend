@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
+
 import { IdentRules } from './IdentRules';
 import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
 
@@ -31,7 +32,7 @@ export const passertKlokkeslettPaaDato = yup
         schema.test({
             test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
             message: 'Klokkeslett kan ikke være frem i tid',
-        })
+        }),
     )
     .label('Klokkeslett');
 
@@ -104,7 +105,7 @@ export const arbeidstimerPeriode = yup.object().shape({
 export const barn = yup.array().of(
     yup.object().shape({
         norskIdent: identifikator,
-    })
+    }),
 );
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {

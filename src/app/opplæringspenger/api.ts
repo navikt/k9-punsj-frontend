@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
+
 import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
 import { IOLPSoknadKvittering } from './OLPSoknadKvittering';
 import { IOLPSoknadMappe } from './types/OLPSoknadMappe';
@@ -24,7 +25,7 @@ export const oppdaterSoeknad = (soeknad: Partial<IOLPSoknadBackend>): Promise<Pa
 
 export const validerSoeknad = async (
     soeknad: Partial<IOLPSoknadBackend>,
-    ident: string
+    ident: string,
 ): Promise<IOLPSoknadKvittering | ValideringResponse> => {
     const response = await post(ApiPath.OLP_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
     return response.json();
@@ -40,13 +41,13 @@ export const hentEksisterendePerioder = async (ident: string): Promise<Periode[]
 
 export const sendSoeknad = async (
     soeknadId: string,
-    ident: string
+    ident: string,
 ): Promise<IOLPSoknadBackend | ValideringResponse> => {
     const response = await post(
         ApiPath.OLP_SOKNAD_SUBMIT,
         undefined,
         { 'X-Nav-NorskIdent': ident },
-        { norskIdent: ident, soeknadId }
+        { norskIdent: ident, soeknadId },
     );
     if (!response.ok) {
         if (response.status === 400) {

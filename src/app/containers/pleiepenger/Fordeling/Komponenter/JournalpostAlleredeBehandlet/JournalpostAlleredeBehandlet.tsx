@@ -1,20 +1,23 @@
+import React, { useState } from 'react';
+import { FormattedMessage, IntlShape, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
+import Kopier from 'app/components/kopier/Kopier';
 import { IJournalpost } from 'app/models/types';
+import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import React, { useState } from 'react';
-import { Alert, Button } from '@navikt/ds-react';
-import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
-import { connect } from 'react-redux';
-import Kopier from 'app/components/kopier/Kopier';
-import { IdentRules } from 'app/rules';
+
+import VerticalSpacer from '../../../../../components/VerticalSpacer';
+import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
+import { getEnvironmentVariable } from '../../../../../utils';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import { Pleietrengende } from '../Pleietrengende';
 import './journalpostAlleredeBehandlet.less';
-import { getEnvironmentVariable } from '../../../../../utils';
-import VerticalSpacer from '../../../../../components/VerticalSpacer';
-import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 
 export interface IJournalpostAlleredeBehandletStateProps {
     intl: IntlShape;
@@ -32,7 +35,7 @@ type IJournalpostAlleredeBehandletProps = IJournalpostAlleredeBehandletStateProp
     IJournalpostAlleredeBehandletDispatchProps;
 
 const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpostAlleredeBehandletProps> = (
-    props: IJournalpostAlleredeBehandletProps
+    props: IJournalpostAlleredeBehandletProps,
 ) => {
     const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpost } = props;
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
@@ -80,7 +83,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                             identState.pleietrengendeId,
                             sokersIdent,
                             dedupkey,
-                            journalpost?.journalpostId
+                            journalpost?.journalpostId,
                         );
                 }}
             >
@@ -123,12 +126,12 @@ const mapDispatchToProps = (dispatch: any) => ({
         pleietrengendeId: string,
         annenIdent: string,
         dedupkey: string,
-        journalpostId: string
+        journalpostId: string,
     ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
 });
 
 const JournalpostAlleredeBehandlet = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(JournalpostAlleredeBehandletComponent)
+    connect(mapStateToProps, mapDispatchToProps)(JournalpostAlleredeBehandletComponent),
 );
 
 export { JournalpostAlleredeBehandlet, JournalpostAlleredeBehandletComponent };

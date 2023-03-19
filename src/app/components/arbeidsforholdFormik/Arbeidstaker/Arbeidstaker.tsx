@@ -1,21 +1,23 @@
-import { ApiPath } from 'app/apiConfig';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import SelectFormik from 'app/components/formikInput/SelectFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import usePrevious from 'app/hooks/usePrevious';
-import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types';
-import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
-import Organisasjon from 'app/models/types/Organisasjon';
-import { Arbeidstaker, OrgOrPers } from 'app/models/types/Arbeidstaker';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import { get } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { kunTall } from 'app/utils/patterns';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { Checkbox, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+
+import { ApiPath } from 'app/apiConfig';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import SelectFormik from 'app/components/formikInput/SelectFormik';
+import usePrevious from 'app/hooks/usePrevious';
+import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types';
+import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
+import { Arbeidstaker, OrgOrPers } from 'app/models/types/Arbeidstaker';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import Organisasjon from 'app/models/types/Organisasjon';
+import { get } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { kunTall } from 'app/utils/patterns';
+
 import TextFieldFormik from '../../formikInput/TextFieldFormik';
 import ActionType from './actionTypes';
 import './arbeidstaker.less';
@@ -77,7 +79,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             searchOrganisasjonsnummerFailed: true,
                         });
                     }
-                }
+                },
             );
         }
     };
@@ -176,7 +178,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                     arbeidsgivere.map((arbeidsgiver) => ({
                                         label: `${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`,
                                         value: arbeidsgiver.organisasjonsnummer,
-                                    }))
+                                    })),
                                 )}
                                 name={`${name}.organisasjonsnummer`}
                                 onChange={(event) => {

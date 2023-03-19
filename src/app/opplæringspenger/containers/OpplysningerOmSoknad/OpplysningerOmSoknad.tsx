@@ -1,13 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+
 import { Alert, Panel } from '@navikt/ds-react';
+
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import intlHelper from 'app/utils/intlUtils';
-import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+
 import './opplysningerOmSoknad.less';
 
 const OpplysningerOmSoknad = () => {

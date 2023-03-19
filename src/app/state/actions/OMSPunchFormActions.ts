@@ -7,7 +7,7 @@ async function postPromise<BodyType>(
     parameters?: any,
     headers?: HeadersInit,
     body?: BodyType,
-    callbackIfError?: (error: any) => any
+    callbackIfError?: (error: any) => any,
 ): Promise<any> {
     try {
         const response = await fetch(apiUrl(path, parameters), {
@@ -31,14 +31,14 @@ export function validerOMSKorrigering(korrigering: OMSKorrigering) {
         ApiPath.OMS_SOKNAD_VALIDER,
         { id: korrigering.soeknadId },
         { 'X-Nav-NorskIdent': norskIdent },
-        korrigering
+        korrigering,
     );
 }
 
 export function createOMSKorrigering(
     søkerId: string,
     journalpostid: string,
-    callback: (response: Response, data: any) => void
+    callback: (response: Response, data: any) => void,
 ): void {
     const requestBody = {
         journalpostId: journalpostid,
@@ -51,7 +51,7 @@ export function createOMSKorrigering(
 export function submitOMSKorrigering(
     norskIdent: string,
     soeknadId: string,
-    callback: (response: Response, data: any) => void
+    callback: (response: Response, data: any) => void,
 ) {
     const requestBody = {
         norskIdent,

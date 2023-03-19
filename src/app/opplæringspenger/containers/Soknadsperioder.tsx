@@ -1,10 +1,13 @@
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import { Alert, Panel } from '@navikt/ds-react';
+
 import CalendarSvg from 'app/assets/SVG/CalendarSVG';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { Periode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import React from 'react';
-import { useIntl } from 'react-intl';
+
 import './soknadsperioder.less';
 
 interface IOwnProps {

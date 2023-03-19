@@ -1,5 +1,15 @@
 /* eslint-disable */
+import classNames from 'classnames';
+import { set } from 'lodash';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
 import { Alert, Button, HelpText, Modal, Tag } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
+
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
 import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
@@ -21,15 +31,7 @@ import {
 } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import { set } from 'lodash';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 
-import { Loader } from '@navikt/ds-react';
-import { CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { BeredskapNattevaak } from '../../models/enums/BeredskapNattevaak';
@@ -43,28 +45,28 @@ import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad, Tilleggsinformasjon } from '../../models/types/PSBSoknad';
-import { IUtenlandsOpphold } from '../../models/types/UtenlandsOpphold';
-import { SelvstendigNaeringsdrivendeOpptjening } from '../../models/types/SelvstendigNaeringsdrivendeOpptjening';
 import { IPSBSoknadUt, PSBSoknadUt } from '../../models/types/PSBSoknadUt';
+import { IPeriode, PeriodeMedTimerMinutter } from '../../models/types/Periode';
+import { SelvstendigNaeringsdrivendeOpptjening } from '../../models/types/SelvstendigNaeringsdrivendeOpptjening';
+import { IUtenlandsOpphold } from '../../models/types/UtenlandsOpphold';
 import { RootStateType } from '../../state/RootState';
 import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import OkGaaTilLosModal from './OkGaaTilLosModal';
-import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
-import { Periodepaneler } from './Periodepaneler';
-import { pfLand } from './pfLand';
-import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
-import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
+import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
+import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
+import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './Utenlandsopphold';
+import { pfLand } from './pfLand';
+import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -244,7 +246,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidUpdate(
         prevProps: Readonly<IPunchFormProps>,
         prevState: Readonly<IPunchFormComponentState>,
-        snapshot?: any
+        snapshot?: any,
     ): void {
         const { soknad } = this.props.punchFormState;
         if (!!soknad && !this.state.isFetched) {
@@ -416,7 +418,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             editSoknadState={(perioder, showStatus) => {
                                 this.updateSoknadState(
                                     { utenlandsopphold: perioder, utenlandsoppholdV2: perioder },
-                                    showStatus
+                                    showStatus,
                                 );
                             }}
                             textLeggTil="skjema.perioder.legg_til"
@@ -486,7 +488,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         editSoknadState={(perioder, showStatus) =>
                                             this.updateSoknadState(
                                                 { lovbestemtFerieSomSkalSlettes: perioder },
-                                                showStatus
+                                                showStatus,
                                             )
                                         }
                                         getErrorMessage={() => undefined}
@@ -576,7 +578,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                             {
                                                 tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
                                             },
-                                            true
+                                            true,
                                         )
                                     }
                                     perioderMedTimer={soknad.tilsynsordning.perioder}
@@ -728,7 +730,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <div>
                             <SettPaaVentModal
                                 journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid
+                                    (jp) => jp.journalpostId !== this.props.journalpostid,
                                 )}
                                 soknadId={soknad.soeknadId}
                                 submit={() => this.handleSettPaaVent()}
@@ -825,7 +827,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         let navarandeSoknad: IPSBSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
             ),
         };
         this.setState({ harForsoektAaSendeInn: true });
@@ -1280,15 +1282,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                       .replace(/\[\d+]/g, '[]')
                       .replace(
                           /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
                       )
                       .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
                       .replace(
                           /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
                       )
                       .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
+                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
               )
             : undefined;
     };

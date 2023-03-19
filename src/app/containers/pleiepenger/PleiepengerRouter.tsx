@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import useRedirect from '../../hooks/useRedirect';
-import { PunchStep } from '../../models/enums';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
+import { PunchStep } from '../../models/enums';
 import { IPath } from '../../models/types';
 import { getPath } from '../../utils';
 import { PunchPage } from './PunchPage';

@@ -1,17 +1,17 @@
 /* eslint-disable */
 import classNames from 'classnames';
 import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'formik';
+import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 
 import { Alert, Button, ErrorSummary, Heading, HelpText, Modal, Tag } from '@navikt/ds-react';
-
-import { CheckboksPanel } from 'nav-frontend-skjema';
 import { Loader } from '@navikt/ds-react';
 
+import Personvelger from 'app/components/person-velger/Personvelger';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
     resetPunchFormAction,
@@ -24,7 +24,6 @@ import {
 import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import Personvelger from 'app/components/person-velger/Personvelger';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
@@ -95,7 +94,7 @@ const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
             ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
                 message: capitalize(message),
                 path,
-            })
+            }),
         );
         return errors;
     }
@@ -352,7 +351,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     <div className="">
                         <SettPaaVentModal
                             journalposter={props.journalposterState.journalposter.filter(
-                                (jp) => jp.journalpostId !== props.journalpostid
+                                (jp) => jp.journalpostId !== props.journalpostid,
                             )}
                             soknadId={values.soeknadId}
                             submit={() => handleSettPaaVent()}

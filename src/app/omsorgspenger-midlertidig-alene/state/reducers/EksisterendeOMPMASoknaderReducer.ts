@@ -1,11 +1,7 @@
-import {
-    IEksisterendeOMPMASoknaderActionTypes
-} from '../actions/EksisterendeOMPMASoknaderActions';
-import {
-    IEksisterendeOMPMASoknaderState
-} from '../../types/EksisterendeOMPMASoknaderState';
-import {EksisterendeOMPMASoknaderActionKeys} from '../../types/EksisterendeOMPMASoknaderActionKeys';
-import {IOMPMASoknad} from '../../types/OMPMASoknad';
+import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';
+import { IEksisterendeOMPMASoknaderState } from '../../types/EksisterendeOMPMASoknaderState';
+import { IOMPMASoknad } from '../../types/OMPMASoknad';
+import { IEksisterendeOMPMASoknaderActionTypes } from '../actions/EksisterendeOMPMASoknaderActions';
 
 const initialState: IEksisterendeOMPMASoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -18,7 +14,7 @@ const initialState: IEksisterendeOMPMASoknaderState = {
 // eslint-disable-next-line import/prefer-default-export
 export function EksisterendeOMPMASoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeOMPMASoknaderState,
-    action: IEksisterendeOMPMASoknaderActionTypes
+    action: IEksisterendeOMPMASoknaderActionTypes,
 ): IEksisterendeOMPMASoknaderState {
     if (typeof eksisterendeSoknaderState === 'undefined') return initialState;
 

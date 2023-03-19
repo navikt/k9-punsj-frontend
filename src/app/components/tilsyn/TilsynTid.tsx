@@ -1,6 +1,9 @@
-import { Button, Heading } from '@navikt/ds-react';
-import { timerOgMinutter } from 'app/rules/yup';
 import React, { useEffect, useState } from 'react';
+
+import { Button, Heading } from '@navikt/ds-react';
+
+import { timerOgMinutter } from 'app/rules/yup';
+
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 interface OwnProps {

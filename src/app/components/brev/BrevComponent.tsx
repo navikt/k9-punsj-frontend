@@ -1,36 +1,38 @@
-import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
-import { ApiPath, URL_BACKEND } from 'app/apiConfig';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import { Person } from 'app/models/types';
-import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
-import Organisasjon from 'app/models/types/Organisasjon';
-import { get, post } from 'app/utils';
 import { Form, Formik } from 'formik';
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
+
+import { ApiPath, URL_BACKEND } from 'app/apiConfig';
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { Person } from 'app/models/types';
+import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
+import Organisasjon from 'app/models/types/Organisasjon';
+import BrevFormValues from 'app/models/types/brev/BrevFormValues';
+import { get, post } from 'app/utils';
+
 import { finnArbeidsgivere } from '../../api/api';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
-import './brev.less';
 import Brevmal from './Brevmal';
-import dokumentMalType from './dokumentMalType';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
+import './brev.less';
+import dokumentMalType from './dokumentMalType';
 
 const previewMessage = (
     values: BrevFormValues,
     aktørId: string,
     sakstype: string,
     journalpostId?: string,
-    fagsakId?: string
+    fagsakId?: string,
 ) => {
     const mottaker = {
         type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',

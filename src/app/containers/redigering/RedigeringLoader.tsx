@@ -5,6 +5,8 @@ interface IRedigeringProps {
     renderOnLoadComplete: () => React.ReactNode;
 }
 
-export const RedigeringLoaderImpl: React.FunctionComponent<IRedigeringProps> = ({ renderOnLoadComplete }) => <>{renderOnLoadComplete()}</>;
+export const RedigeringLoaderImpl: React.FunctionComponent<IRedigeringProps> = ({ renderOnLoadComplete }) => (
+    <>{renderOnLoadComplete()}</>
+);
 
 export default connect(RedigeringLoaderImpl);

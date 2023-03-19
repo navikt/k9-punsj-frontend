@@ -1,7 +1,9 @@
-import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
 import { useField } from 'formik';
 import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
+
+import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
+
 import './institusjonSelector.css';
 
 interface DiagnosekodeSelectorProps {
@@ -53,7 +55,7 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
     const onInputValueChange = async (v: string) => {
         const newSuggestionList = institusjoner.filter(
             (intstitusjon) =>
-                intstitusjon.value.toLowerCase().indexOf(v.toLowerCase()) > -1 || intstitusjon.key.indexOf(v) > -1
+                intstitusjon.value.toLowerCase().indexOf(v.toLowerCase()) > -1 || intstitusjon.key.indexOf(v) > -1,
         );
         setSuggestions(newSuggestionList);
     };

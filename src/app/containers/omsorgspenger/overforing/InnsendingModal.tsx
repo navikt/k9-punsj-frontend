@@ -1,8 +1,10 @@
-import { Heading, Label, Loader, Modal } from '@navikt/ds-react';
 import classNames from 'classnames';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+
+import { Heading, Label, Loader, Modal } from '@navikt/ds-react';
+
 import CheckSvg from '../../../assets/SVG/CheckSVG';
 import KryssSVG from '../../../assets/SVG/KryssSVG';
 import VerticalSpacer from '../../../components/VerticalSpacer';

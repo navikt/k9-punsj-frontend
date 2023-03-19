@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-
 import { IPeriode, PersonEnkel } from 'app/models/types';
 
 export interface IOMPMASoknad {

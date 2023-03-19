@@ -1,18 +1,20 @@
-import { Alert, Modal } from '@navikt/ds-react';
+import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { Alert, Modal } from '@navikt/ds-react';
 
 import Fagsak from 'app/types/Fagsak';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import { connect } from 'react-redux';
-import SokKnapp from '../../components/knapp/SokKnapp';
+
 import VerticalSpacer from '../../components/VerticalSpacer';
+import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { IError, IJournalpost } from '../../models/types';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
+import { RootStateType } from '../../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
-import { RootStateType } from '../../state/RootState';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';

@@ -1,10 +1,13 @@
-import { Alert, Button } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { getEnvironmentVariable } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router';
+
+import { Alert, Button } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { getEnvironmentVariable } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import { IOLPSoknadKvittering } from '../../OLPSoknadKvittering';
 import OLPSoknadKvittering from './OLPSoknadKvittering';
 

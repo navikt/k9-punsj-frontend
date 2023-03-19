@@ -1,18 +1,21 @@
-import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Checkbox, Heading, Panel } from '@navikt/ds-react';
-import { finnArbeidsgivere } from 'app/api/api';
-import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import Organisasjon from 'app/models/types/Organisasjon';
 import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
+
+import { AddCircle, Delete } from '@navikt/ds-icons';
+import { Button, Checkbox, Heading, Panel } from '@navikt/ds-react';
+
+import { finnArbeidsgivere } from 'app/api/api';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
+import Organisasjon from 'app/models/types/Organisasjon';
+
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
-import './arbeidsforhold.less';
 import Fravaersperiode from './Fravaersperiode';
+import './arbeidsforhold.less';
 
 interface OwnProps {
     index: number;
@@ -41,7 +44,7 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                 }
             },
             staleTime: 1000 * 60 * 5,
-        }
+        },
     );
 
     const harMinstToArbeidsforhold = antallArbeidsforhold > 1;

@@ -1,10 +1,13 @@
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading } from '@navikt/ds-react';
-import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
-import { arbeidstimerPeriode } from 'app/rules/yup';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
+
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading } from '@navikt/ds-react';
+
+import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
+import { arbeidstimerPeriode } from 'app/rules/yup';
+
 import VerticalSpacer from '../VerticalSpacer';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 

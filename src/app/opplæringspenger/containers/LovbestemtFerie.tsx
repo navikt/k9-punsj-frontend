@@ -1,10 +1,12 @@
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import intlHelper from 'app/utils/intlUtils';
 import { useFormikContext } from 'formik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import intlHelper from 'app/utils/intlUtils';
+
 import { Periodepaneler } from './Periodepaneler';
 
 const LovbestemtFerie = () => {

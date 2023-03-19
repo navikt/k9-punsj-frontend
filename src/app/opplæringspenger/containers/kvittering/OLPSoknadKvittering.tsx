@@ -1,6 +1,13 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
+import classNames from 'classnames';
+import React from 'react';
+import { IntlShape, useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
+
 import { Alert } from '@navikt/ds-react';
+
 import Kopier from 'app/components/kopier/Kopier';
 import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
@@ -11,17 +18,14 @@ import {
     IOLPSoknadKvitteringUtenlandsoppholdInfo,
 } from 'app/opplæringspenger/OLPSoknadKvittering';
 import { RootStateType } from 'app/state/RootState';
-import { getCountryList, formattereTidspunktFraUTCTilGMT, periodToFormattedString } from 'app/utils';
+import { formattereTidspunktFraUTCTilGMT, getCountryList, periodToFormattedString } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { formatereTekstMedTimerOgMinutter, formattereDatoFraUTCTilGMT } from 'app/utils/timeUtils';
 import { formattereDatoIArray, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
-import classNames from 'classnames';
-import React from 'react';
-import { IntlShape, useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import './soknadKvittering.less';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
+import './soknadKvittering.less';
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
@@ -197,7 +201,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${formattereDatoFraUTCTilGMT(kvittering.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            kvittering.mottattDato
+                            kvittering.mottattDato,
                         )}`}
                     </p>
                     {visBegrunnelseForInnsending && (
@@ -285,7 +289,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                                     intl,
                                                     skalOrgNummerVises
                                                         ? 'skjema.arbeid.arbeidstaker.orgnr'
-                                                        : 'skjema.arbeid.arbeidstaker.ident'
+                                                        : 'skjema.arbeid.arbeidstaker.ident',
                                                 )}: `}
                                             </b>
                                             {`${
@@ -298,7 +302,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                         <VisningAvPerioderSoknadKvittering
                                             intl={intl}
                                             perioder={formattereTimerForArbeidstakerPerioder(
-                                                arbeidstakerperiode.arbeidstidInfo.perioder
+                                                arbeidstakerperiode.arbeidstidInfo.perioder,
                                             )}
                                             tittel={[
                                                 'skjema.periode.overskrift',
@@ -328,7 +332,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                             {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
                                 sjekkPropertyEksistererOgIkkeErNull(
                                     'sluttdato',
-                                    ytelse.opptjeningAktivitet.frilanser
+                                    ytelse.opptjeningAktivitet.frilanser,
                                 ) &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
@@ -342,7 +346,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                 <VisningAvPerioderSoknadKvittering
                                     intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
-                                        ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder
+                                        ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder,
                                     )}
                                     tittel={[
                                         'skjema.periode.overskrift',
@@ -361,7 +365,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
 
                             {sjekkPropertyEksistererOgIkkeErNull(
                                 'selvstendigNæringsdrivende',
-                                ytelse.opptjeningAktivitet
+                                ytelse.opptjeningAktivitet,
                             ) && (
                                 <VisningAvPerioderSNSoknadKvittering
                                     intl={intl}
@@ -373,7 +377,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                 <VisningAvPerioderSoknadKvittering
                                     intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
-                                        ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder
+                                        ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder,
                                     )}
                                     tittel={[
                                         'skjema.periode.overskrift',

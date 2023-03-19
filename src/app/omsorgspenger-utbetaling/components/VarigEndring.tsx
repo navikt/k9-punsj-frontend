@@ -1,15 +1,16 @@
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
-import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { JaNei } from 'app/models/enums';
-import intlHelper from 'app/utils/intlUtils';
-import { kunTall } from 'app/utils/patterns';
 import { Field, FieldProps } from 'formik';
 import { capitalize } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import { JaNei } from 'app/models/enums';
+import intlHelper from 'app/utils/intlUtils';
+import { kunTall } from 'app/utils/patterns';
 
 export default function VarigEndring() {
     const intl = useIntl();

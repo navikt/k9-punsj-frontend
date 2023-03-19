@@ -1,9 +1,9 @@
+import { JaNei } from '../../../../../app/models/enums';
 import {
     ISignaturSkjema,
     validerSignaturSkjema,
 } from '../../../../../app/models/forms/omsorgspenger/overføring/SignaturSkjema';
 import { testIntl } from '../../../../testUtils';
-import { JaNei } from '../../../../../app/models/enums';
 
 jest.mock('app/utils/envUtils');
 

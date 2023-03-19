@@ -1,9 +1,10 @@
-import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import { IPeriodeinfo } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldProps } from 'formik';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import { IPeriodeinfo } from 'app/models/types';
+import intlHelper from 'app/utils/intlUtils';
 
 interface Props {
     periodeinfo: IPeriodeinfo;

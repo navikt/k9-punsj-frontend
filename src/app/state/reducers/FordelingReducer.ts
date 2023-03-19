@@ -20,7 +20,7 @@ const initialState: IFordelingState = {
 // eslint-disable-next-line import/prefer-default-export
 export function FordelingReducer(
     fordelingState: IFordelingState = initialState,
-    action: IFordelingActionTypes
+    action: IFordelingActionTypes,
 ): IFordelingState {
     switch (action.type) {
         case FordelingActionKeys.SAKSTYPE_SET:

@@ -1,9 +1,10 @@
-import React from 'react';
+import { Story, composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
-import { composeStories, Story } from '@storybook/react';
 import userEvent from '@testing-library/user-event';
-import * as stories from './ArbeidstidKalender.stories';
+import React from 'react';
+
 import ArbeidstidKalender from './ArbeidstidKalender';
+import * as stories from './ArbeidstidKalender.stories';
 
 const { Default, MedArbeidstidperiode } = composeStories(stories) as {
     [key: string]: Story<Partial<typeof ArbeidstidKalender>>;
@@ -20,7 +21,7 @@ describe('ArbeidstidKalender', () => {
         expect(
             screen.getByRole('button', {
                 name: /legg til periode/i,
-            })
+            }),
         ).toBeDefined();
         expect(screen.getAllByText(/normal arbeidstid/i)).toHaveLength(2);
     });
@@ -36,7 +37,7 @@ describe('ArbeidstidKalender', () => {
         expect(
             screen.getByRole('button', {
                 name: /legg til periode/i,
-            })
+            }),
         ).toBeDefined();
         expect(screen.getAllByText(/normal arbeidstid/i)).toHaveLength(1);
     });
@@ -47,7 +48,7 @@ describe('ArbeidstidKalender', () => {
         await userEvent.click(
             screen.getByRole('button', {
                 name: /september 2022 5 dager registrert/i,
-            })
+            }),
         );
         expect(screen.getAllByText(/8 t 0 min/i)).toHaveLength(5);
     });

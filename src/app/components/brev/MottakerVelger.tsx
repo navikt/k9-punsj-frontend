@@ -1,11 +1,13 @@
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import { Person } from 'app/models/types';
-import Organisasjon from 'app/models/types/Organisasjon';
-import { requiredValue } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { Person } from 'app/models/types';
+import Organisasjon from 'app/models/types/Organisasjon';
+import { requiredValue } from 'app/utils/validationHelpers';
+
 import VerticalSpacer from '../VerticalSpacer';
 
 interface MottakerVelgerProps {

@@ -1,14 +1,18 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Alert } from '@navikt/ds-react';
-import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert } from '@navikt/ds-react';
+
+import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
+
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
@@ -29,13 +33,13 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
         return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
     }
     const arbeidstakerFravaersperioder = kvittering.ytelse.fraværsperioder.filter((periode) =>
-        periode.aktivitetFravær.includes(aktivitetsFravær.ARBEIDSTAKER)
+        periode.aktivitetFravær.includes(aktivitetsFravær.ARBEIDSTAKER),
     );
     const frilanserFravaersperioder = kvittering.ytelse.fraværsperioder.filter((periode) =>
-        periode.aktivitetFravær.includes(aktivitetsFravær.FRILANSER)
+        periode.aktivitetFravær.includes(aktivitetsFravær.FRILANSER),
     );
     const selvstendigNaeringsdrivendeFravaersperioder = kvittering.ytelse.fraværsperioder.filter((periode) =>
-        periode.aktivitetFravær.includes(aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE)
+        periode.aktivitetFravær.includes(aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE),
     );
 
     return (
@@ -48,7 +52,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${periodToFormattedString(
-                            kvittering.mottattDato.substr(0, 10)
+                            kvittering.mottattDato.substr(0, 10),
                         )}  ${formattereTidspunktFraUTCTilGMT(kvittering.mottattDato)}`}
                     </p>
                 </div>

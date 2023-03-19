@@ -1,12 +1,17 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
-import Kopier from 'app/components/kopier/Kopier';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
+
+import Kopier from 'app/components/kopier/Kopier';
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
+
+import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     IPSBSoknadKvittering,
@@ -17,16 +22,14 @@ import {
     IPSBSoknadKvitteringUtenlandsopphold,
 } from '../../../models/types/PSBSoknadKvittering';
 import {
-    getCountryList,
     formatereTekstMedTimerOgMinutter,
     formattereDatoFraUTCTilGMT,
     formattereDatoIArray,
     formattereTidspunktFraUTCTilGMT,
+    getCountryList,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
-import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
-import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import './soknadKvittering.less';
 
 interface IOwnProps {
@@ -40,7 +43,7 @@ const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
 const endreLandkodeTilLandnavnIPerioder = (
-    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold
+    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
 ) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
@@ -67,7 +70,7 @@ const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadK
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         kopiAvPerioder[periode].etablertTilsynTimerPerDag = formatereTekstMedTimerOgMinutter(
-            kopiAvPerioder[periode].etablertTilsynTimerPerDag
+            kopiAvPerioder[periode].etablertTilsynTimerPerDag,
         );
     });
     return kopiAvPerioder;
@@ -218,7 +221,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato
+                            response.mottattDato,
                         )}`}
                     </p>
                     {visTrukkedePerioder && (
@@ -302,7 +305,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                                     intl,
                                                     skalOrgNummerVises
                                                         ? 'skjema.arbeid.arbeidstaker.orgnr'
-                                                        : 'skjema.arbeid.arbeidstaker.ident'
+                                                        : 'skjema.arbeid.arbeidstaker.ident',
                                                 )}: `}
                                             </b>
                                             {`${
@@ -315,7 +318,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                         <VisningAvPerioderSoknadKvittering
                                             intl={intl}
                                             perioder={formattereTimerForArbeidstakerPerioder(
-                                                arbeidstakerperiode.arbeidstidInfo.perioder
+                                                arbeidstakerperiode.arbeidstidInfo.perioder,
                                             )}
                                             tittel={[
                                                 'skjema.periode.overskrift',
@@ -345,7 +348,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                             {!ytelse.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans &&
                                 sjekkPropertyEksistererOgIkkeErNull(
                                     'sluttdato',
-                                    ytelse.opptjeningAktivitet.frilanser
+                                    ytelse.opptjeningAktivitet.frilanser,
                                 ) &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
@@ -359,7 +362,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 <VisningAvPerioderSoknadKvittering
                                     intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
-                                        ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder
+                                        ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder,
                                     )}
                                     tittel={[
                                         'skjema.periode.overskrift',
@@ -378,7 +381,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
                             {sjekkPropertyEksistererOgIkkeErNull(
                                 'selvstendigNæringsdrivende',
-                                ytelse.opptjeningAktivitet
+                                ytelse.opptjeningAktivitet,
                             ) && (
                                 <VisningAvPerioderSNSoknadKvittering
                                     intl={intl}
@@ -390,7 +393,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 <VisningAvPerioderSoknadKvittering
                                     intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
-                                        ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder
+                                        ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder,
                                     )}
                                     tittel={[
                                         'skjema.periode.overskrift',

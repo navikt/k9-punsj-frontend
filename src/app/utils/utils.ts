@@ -1,4 +1,5 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+
 import { getCountryList } from './countryUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {

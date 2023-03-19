@@ -1,8 +1,10 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { getCountryList } from 'app/utils';
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import * as React from 'react';
+
+import { getCountryList } from 'app/utils';
 
 interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     selectedcountry?: string;

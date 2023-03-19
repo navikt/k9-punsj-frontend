@@ -1,4 +1,5 @@
 import { ISoknaderSokState } from 'app/models/types';
+
 import { SoknaderVisningActionKeys } from '../../models/enums/SoknaderVisningActionKeys';
 import { ISoknaderVisningActionTypes } from '../actions/SoknaderVisningActions';
 
@@ -11,7 +12,7 @@ const initialState: ISoknaderSokState = {
 // eslint-disable-next-line import/prefer-default-export
 export function SoknaderSokReducer(
     soknaderVisningState: ISoknaderSokState = initialState,
-    action: ISoknaderVisningActionTypes | LocationChangeAction
+    action: ISoknaderVisningActionTypes | LocationChangeAction,
 ): ISoknaderSokState {
     switch (action.type) {
         case SoknaderVisningActionKeys.SOKNADER_SET:

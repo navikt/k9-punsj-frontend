@@ -1,15 +1,17 @@
 import React from 'react';
-import intlHelper from 'app/utils/intlUtils';
-import './visningAvPerioderSoknadKvittering.less';
 import { v4 as uuidv4 } from 'uuid';
-import {
-    periodToFormattedString,
-    formattereDatoIArray,
-    sjekkPropertyEksistererOgIkkeErNull,
-    landkodeTilNavn,
-} from '../../utils';
-import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../models/types/PSBSoknadKvittering';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
+import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../models/types/PSBSoknadKvittering';
+import {
+    formattereDatoIArray,
+    landkodeTilNavn,
+    periodToFormattedString,
+    sjekkPropertyEksistererOgIkkeErNull,
+} from '../../utils';
+import './visningAvPerioderSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -64,7 +66,7 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                                                 ? `${virksomhetstype}, `
                                                 : `${virksomhetstype}`}
                                         </span>
-                                    )
+                                    ),
                                 )}
                             </p>
                         )}
@@ -113,7 +115,7 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                                     intl,
                                     SN.perioder[periode].erVarigEndring
                                         ? 'skjema.sn.endringinntekt'
-                                        : 'skjema.sn.bruttoinntekt'
+                                        : 'skjema.sn.bruttoinntekt',
                                 )}: `}
                             </b>
                             {SN.perioder[periode].bruttoInntekt}
@@ -134,7 +136,7 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                         </p>
                     )}
                 </div>
-            ))
+            )),
         )}
     </div>
 );

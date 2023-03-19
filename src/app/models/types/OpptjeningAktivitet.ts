@@ -1,7 +1,7 @@
 import { Arbeidstaker, IArbeidstaker } from './Arbeidstaker';
 import { FrilanserOpptjening, IFrilanserOpptjening } from './FrilanserOpptjening';
-import { ISelvstendigNaerinsdrivende } from './SelvstendigNaerinsdrivende';
 import { SelvstendigNaeringsdrivendeOpptjening } from './SelvstendigNaeringsdrivendeOpptjening';
+import { ISelvstendigNaerinsdrivende } from './SelvstendigNaerinsdrivende';
 
 export interface IOpptjeningAktivitet {
     selvstendigNaeringsdrivende?: ISelvstendigNaeringsdrivendeOpptjening | null;

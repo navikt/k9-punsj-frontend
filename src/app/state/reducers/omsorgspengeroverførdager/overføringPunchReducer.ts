@@ -1,13 +1,14 @@
 import { Dispatch } from 'redux';
+
+import { ApiPath } from '../../../apiConfig';
 import {
-    Innsendingsstatus,
     IOverføringPunchSkjema,
+    Innsendingsstatus,
     tomtSkjema,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
-import { convertResponseToError, post } from '../../../utils';
-import { ApiPath } from '../../../apiConfig';
-import { RootStateType } from '../../RootState';
 import { IError } from '../../../models/types';
+import { convertResponseToError, post } from '../../../utils';
+import { RootStateType } from '../../RootState';
 import { resetDedupKey } from '../FellesReducer';
 
 export interface IOverføringPunchState {
@@ -99,7 +100,7 @@ export const sendInnSkjema =
                         return dispatch(innsendingsfeil(error));
                     }
                 }
-            }
+            },
         );
     };
 
@@ -110,7 +111,7 @@ const initialState: IOverføringPunchState = {
 
 export default function overføringPunchReducer(
     state: IOverføringPunchState = initialState,
-    action: Actions
+    action: Actions,
 ): IOverføringPunchState {
     switch (action.type) {
         case ActionTypes.SET_SKJEMA:

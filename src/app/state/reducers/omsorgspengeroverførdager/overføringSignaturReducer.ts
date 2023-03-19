@@ -37,7 +37,7 @@ const initialState: IOverføringSignaturState = {
 
 export default function overføringSignaturReducer(
     state: IOverføringSignaturState = initialState,
-    action: ISetSkjemaAction | ISlettSkjemaAction
+    action: ISetSkjemaAction | ISlettSkjemaAction,
 ): IOverføringSignaturState {
     switch (action.type) {
         case ActionTypes.SET_SKJEMA:

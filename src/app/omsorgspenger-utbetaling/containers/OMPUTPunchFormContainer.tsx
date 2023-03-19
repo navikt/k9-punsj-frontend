@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { Formik, yupToFormErrors } from 'formik';
 import React, { useContext, useState } from 'react';
-import { injectIntl, useIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,10 +11,11 @@ import { Alert, Button, Loader } from '@navikt/ds-react';
 import { IPeriode, Periode } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Feil } from 'app/models/types/ValideringResponse';
+import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
+
 import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
@@ -46,7 +47,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             hentEksisterendePerioder(soekerId, periode),
         {
             onSuccess: (data) => setEksisterendePerioder(data),
-        }
+        },
     );
     const {
         data: soeknadRespons,
@@ -101,7 +102,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                         {
                             abortEarly: false,
                             context: getSchemaContext(values, eksisterendePerioder),
-                        }
+                        },
                     )
                     .then(() => ({}))
                     .catch((err) => yupToFormErrors(err))

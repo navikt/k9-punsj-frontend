@@ -1,10 +1,12 @@
-import { HelpText } from '@navikt/ds-react';
-import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldProps, FormikValues } from 'formik';
+import { CheckboksPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
-import { CheckboksPanel } from 'nav-frontend-skjema';
+import { HelpText } from '@navikt/ds-react';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import VerticalSpacer from '../VerticalSpacer';
 
 type OwnProps = {

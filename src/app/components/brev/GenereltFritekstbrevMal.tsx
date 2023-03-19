@@ -1,10 +1,13 @@
-import { Tag } from '@navikt/ds-react';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import { validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import { Input, Textarea } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Tag } from '@navikt/ds-react';
+
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { validateText } from 'app/utils/validationHelpers';
+
 import VerticalSpacer from '../VerticalSpacer';
 
 interface GenereltFritekstbrevMalProps {

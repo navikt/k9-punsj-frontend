@@ -1,9 +1,10 @@
+import { RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { RadioPanel } from 'nav-frontend-skjema';
+
 import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
-import intlHelper from '../../../../utils/intlUtils';
 import { getEnvironmentVariable } from '../../../../utils';
+import intlHelper from '../../../../utils/intlUtils';
 import './DokumentTypeVelger.less';
 
 interface OwnProps {

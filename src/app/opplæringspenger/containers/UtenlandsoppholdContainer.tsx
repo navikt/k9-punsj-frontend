@@ -1,9 +1,12 @@
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
+
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+
 import Utenlandsopphold from './Utenlandsopphold';
 
 const utenlandsoppholdInitialValue = {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import './customAlertstripeAdvarsel.less';
 
 interface CustomAlertstripeAdvarselProps {

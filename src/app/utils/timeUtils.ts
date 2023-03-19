@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
+import 'dayjs/locale/nb';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isoWeek from 'dayjs/plugin/isoWeek';
 import utc from 'dayjs/plugin/utc';
-import 'dayjs/locale/nb';
-import { IntlShape } from 'react-intl';
 import { capitalize } from 'lodash';
+import { IntlShape } from 'react-intl';
+
 import { TimeFormat } from '../models/enums';
 import { Ukedag, UkedagNumber } from '../models/types';
 import DateRange from '../models/types/DateRange';
@@ -150,7 +151,7 @@ export const countDatesInDateRange = (dateRange: DateRange) => getDatesInDateRan
 export const removeDatesFromDateRange = (dateRange: DateRange, listOfDatesToRemove: Date[]) => {
     const datesInDateRange = getDatesInDateRange(dateRange);
     return datesInDateRange.filter(
-        (date) => !listOfDatesToRemove.some((dateToRemove) => dayjs(date).isSame(dateToRemove, 'day'))
+        (date) => !listOfDatesToRemove.some((dateToRemove) => dayjs(date).isSame(dateToRemove, 'day')),
     );
 };
 
@@ -164,7 +165,7 @@ export const findDateIntervalsFromDates = (dates: Date[]) => {
                     dateToAdd = currentDate;
                 }
                 return isSameDay;
-            })
+            }),
         );
         if (indexOfArrayToUpdate > -1 && dateToAdd) {
             const originalArray = accumulator[indexOfArrayToUpdate];

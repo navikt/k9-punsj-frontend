@@ -1,7 +1,9 @@
-import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
 import React, { useState } from 'react';
-import './brevContainer.less';
+
+import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
+
 import SendIcon from './SendIcon';
+import './brevContainer.less';
 
 interface Props {
     children?: React.ReactNode;

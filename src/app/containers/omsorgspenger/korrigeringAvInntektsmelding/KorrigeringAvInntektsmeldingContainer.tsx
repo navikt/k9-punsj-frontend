@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
-import { IJournalpost, IPSBSoknad } from 'app/models/types';
-import { RootStateType } from 'app/state/RootState';
-import { IIdentState } from 'app/models/types/IdentState';
 import { connect } from 'react-redux';
+
+import { IJournalpost, IPSBSoknad } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { RootStateType } from 'app/state/RootState';
+import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
+
 import { SplitView } from '../../../components/SplitView';
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 

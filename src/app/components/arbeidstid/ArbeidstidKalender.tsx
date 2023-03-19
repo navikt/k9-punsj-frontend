@@ -1,24 +1,27 @@
-import intlHelper from 'app/utils/intlUtils';
-import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+
+import { Button, Modal } from '@navikt/ds-react';
+
 import {
+    ArbeidstidPeriodeMedTimer,
+    IArbeidstidPeriodeMedTimer,
+    IPeriode,
     ITimerOgMinutterString,
     Periode,
     Periodeinfo,
-    IArbeidstidPeriodeMedTimer,
-    IPeriode,
-    ArbeidstidPeriodeMedTimer,
 } from 'app/models/types';
-import { formats, removeDatesFromPeriods } from 'app/utils';
-import dayjs from 'dayjs';
-import { Button, Modal } from '@navikt/ds-react';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
-import { useIntl } from 'react-intl';
+import { formats, removeDatesFromPeriods } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
+
+import VerticalSpacer from '../VerticalSpacer';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
 import ArbeidstidPeriodeListe from '../timefoering/ArbeidstidPeriodeListe';
 import FaktiskOgNormalTid from '../timefoering/FaktiskOgNormalTid';
-import VerticalSpacer from '../VerticalSpacer';
 
 export interface ArbeidstidKalenderProps {
     arbeidstidInfo: ArbeidstidInfo;
@@ -48,7 +51,7 @@ export default function ArbeidstidKalender({
             }
 
             const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates).map(
-                (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v)
+                (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v),
             );
 
             updateSoknad(perioderFiltert);
@@ -68,7 +71,7 @@ export default function ArbeidstidKalender({
     }) => {
         const eksisterendePerioderUtenSelectedDates = removeDatesFromPeriods(
             arbeidstidInfo.perioder,
-            selectedDates
+            selectedDates,
         ).map((v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v));
 
         const payload = selectedDates.map((day) => ({
@@ -118,7 +121,7 @@ export default function ArbeidstidKalender({
                     gyldigePerioder={gyldigePerioder}
                     ModalContent={<FaktiskOgNormalTid heading="Registrer arbeidstid" lagre={lagreTimer} />}
                     kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
-                        arbeidstidPeriodeTilKalenderdag(periode)
+                        arbeidstidPeriodeTilKalenderdag(periode),
                     )}
                     slettPeriode={slettDager(arbeidstidInfo.perioder)}
                     dateContentRenderer={DateContent}

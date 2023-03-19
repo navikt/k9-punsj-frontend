@@ -1,5 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'nav-frontend-tabell-style';
+import React from 'react';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { useQueries } from 'react-query';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+
 import { Alert, Panel } from '@navikt/ds-react';
+
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
@@ -11,13 +20,6 @@ import { IJournalpost, IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
-import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useQueries } from 'react-query';
-import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
 
 export interface IPunchPageStateProps {
     journalpost?: IJournalpost;

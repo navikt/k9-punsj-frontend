@@ -1,6 +1,11 @@
+import countries from 'i18n-iso-countries';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { IntlShape } from 'react-intl';
+
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     ListeComponent,
     Listepaneler,
@@ -15,10 +20,7 @@ import {
     IUtenlandsOpphold,
     Periodeinfo,
 } from 'app/models/types';
-import countries from 'i18n-iso-countries';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
-import { IntlShape } from 'react-intl';
+
 import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
@@ -35,7 +37,7 @@ export type PeriodeinfoComponent<T> = (
     updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
     feilkodeprefiksMedIndeks?: string,
     getErrorMessage?: GetErrorMessage,
-    intl?: IntlShape
+    intl?: IntlShape,
 ) => React.ReactElement;
 
 export interface IUtenlandsoppholdProps {
@@ -88,11 +90,11 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
     const [visInnlagtPerioder, setVisInnlagtPerioder] = useState(
         periods.some((periode) => periode.innleggelsesperioder && periode.innleggelsesperioder.length > 0)
             ? jaValue
-            : ''
+            : '',
     );
     const editInfo: (
         index: number,
-        periodeinfo: Partial<Periodeinfo<IUtenlandsOpphold>>
+        periodeinfo: Partial<Periodeinfo<IUtenlandsOpphold>>,
     ) => Periodeinfo<IUtenlandsOpphold>[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: Periodeinfo<IUtenlandsOpphold> = { ...periods[index], ...periodeinfo };
         const newArray = periods;
@@ -115,7 +117,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfo>,
         feilkodeprefiksMedIndeks: string,
         getErrorMessage: GetErrorMessage,
-        intlShape: IntlShape
+        intlShape: IntlShape,
     ) => {
         const removePeriode = () => {
             const newArray: Periodeinfo<IUtenlandsOpphold>[] = removeItem(periodeindeks);
@@ -186,7 +188,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         updatePeriodeinfoInSoknadState,
                         feilkodeprefiksMedIndeks,
                         getErrorMessage,
-                        intlShape
+                        intlShape,
                     )}
                 {land && (
                     <RadioPanelGruppe
@@ -204,7 +206,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         name={`arbeidsgivertype_${1}`}
                         legend={`Er, eller skal, barnet være innlagt i helseinstitusjon i ${countries.getName(
                             land,
-                            'nb'
+                            'nb',
                         )}?`}
                         onChange={(event) => {
                             const { value } = event.target as HTMLInputElement;
@@ -234,14 +236,14 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                 editSoknad(
                                     editInfo(periodeindeks, {
                                         innleggelsesperioder: perioder.map((p) => ({ periode: p })),
-                                    })
+                                    }),
                                 )
                             }
                             editSoknadState={(perioder, showStatus) =>
                                 editSoknadState(
                                     editInfo(periodeindeks, {
                                         innleggelsesperioder: perioder.map((p) => ({ periode: p })),
-                                    })
+                                    }),
                                 )
                             }
                             textLeggTil="skjema.perioder.legg_til"
@@ -285,7 +287,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                                   (innleggelsesperiode) => ({
                                                       ...innleggelsesperiode,
                                                       årsak: formattedValue,
-                                                  })
+                                                  }),
                                               )
                                             : [{ årsak: formattedValue }],
                                     });

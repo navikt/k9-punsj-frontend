@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 const useFocus = (
     currentListLength: number,
     previousListLength: number,
-    inputRef?: React.RefObject<HTMLInputElement>
+    inputRef?: React.RefObject<HTMLInputElement>,
 ): void => {
     const focusInput = () => {
         if (inputRef?.current) {

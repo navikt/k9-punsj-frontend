@@ -1,8 +1,9 @@
-import React from 'react';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import './visningAvPerioderPLSSoknadKvittering.less';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import { periodToFormattedString } from '../../../../utils';
 import {
     IPLSSoknadKvitteringBeredskapNattevak,
@@ -10,6 +11,7 @@ import {
     IPLSSoknadKvitteringLovbestemtFerie,
     IPLSSoknadKvitteringUtenlandsopphold,
 } from '../../../types/PLSSoknadKvittering';
+import './visningAvPerioderPLSSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -34,7 +36,7 @@ const VisningAvPerioderPLSSoknadKvittering: React.FunctionComponent<IOwnProps> =
         <div
             className={classNames(
                 'visningAvPerioderSoknadKvitteringContainer',
-                typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
+                typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : '',
             )}
         >
             {tittel.map((t) => (
@@ -46,7 +48,7 @@ const VisningAvPerioderPLSSoknadKvittering: React.FunctionComponent<IOwnProps> =
                 key={periode}
                 className={classNames(
                     'visningAvPerioderSoknadKvitteringContainer',
-                    typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
+                    typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : '',
                 )}
             >
                 <p>{periodToFormattedString(periode)}</p>

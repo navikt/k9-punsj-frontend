@@ -1,10 +1,17 @@
+import { Checkbox } from 'nav-frontend-skjema';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
 import { Alert, Button, ErrorMessage, Heading, HelpText, Loader, Modal } from '@navikt/ds-react';
+
 import { finnFagsaker } from 'app/api/api';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
+import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
@@ -13,18 +20,13 @@ import {
     setSakstypeAction,
     sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
 import intlHelper from 'app/utils/intlUtils';
 
-import { Checkbox } from 'nav-frontend-skjema';
-import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
 import FormPanel from '../../../components/FormPanel';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../../components/pdf/PdfVisning';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import { ISakstypeDefault } from '../../../models/Sakstype';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
@@ -41,17 +43,17 @@ import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
-import './fordeling.less';
 import AnnenPart from './Komponenter/AnnenPart';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
-import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
+import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import { Pleietrengende } from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgForDokument from './Komponenter/ValgForDokument';
+import './fordeling.less';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -106,7 +108,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
-        []
+        [],
     );
 
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
@@ -243,7 +245,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 identState.pleietrengendeId,
                 identState.annenSokerIdent,
                 props.dedupkey,
-                journalpost.journalpostId
+                journalpost.journalpostId,
             );
         }
 
@@ -258,7 +260,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 journalpost.journalpostId,
                 fagsakYtelseType,
                 identState.annenPart,
-                valgtFagsak
+                valgtFagsak,
             );
         }
     };
@@ -270,7 +272,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 identState.pleietrengendeId,
                 identState.søkerId,
                 props.dedupkey,
-                journalpost?.journalpostId
+                journalpost?.journalpostId,
             );
         }
     };
@@ -315,7 +317,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 if (response.status === 200) {
                     const dokumenttypeForkortelse = finnForkortelseForDokumenttype(dokumenttype);
                     const filtrerteFagsaker = data.filter(
-                        (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse
+                        (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse,
                     );
                     setFagsaker(filtrerteFagsaker);
                     if (filtrerteFagsaker.length > 0) {
@@ -553,7 +555,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 lukkJournalpostOppgave(
                                                     journalpost?.journalpostId,
                                                     identState.søkerId,
-                                                    valgtFagsak
+                                                    valgtFagsak,
                                                 )
                                             }
                                         >
@@ -572,7 +574,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 omfordel(
                                                     journalpost.journalpostId,
                                                     identState.søkerId,
-                                                    fordelingState.valgtGosysKategori
+                                                    fordelingState.valgtGosysKategori,
                                                 )
                                             }
                                         >
@@ -628,7 +630,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             lukkJournalpostOppgave(
                                                 journalpost?.journalpostId,
                                                 identState.søkerId,
-                                                valgtFagsak
+                                                valgtFagsak,
                                             );
                                         }
                                     }}
@@ -685,7 +687,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         jpid: string,
         fagsakYtelseType: FagsakYtelseType,
         annenPart: string,
-        valgtFagsak?: Fagsak
+        valgtFagsak?: Fagsak,
     ) => dispatch(sjekkOmSkalTilK9Sak(søkerId, pleietrengendeId, jpid, fagsakYtelseType, annenPart, valgtFagsak)),
     resetSjekkSkalTilK9: () => dispatch(resetSkalTilK9()),
     kopierJournalpost: (
@@ -693,7 +695,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         pleietrengendeId: string,
         annenIdent: string,
         dedupkey: string,
-        journalpostId: string
+        journalpostId: string,
     ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),

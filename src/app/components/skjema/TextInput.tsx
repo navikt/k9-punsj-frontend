@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react';
-import { Input, InputProps } from 'nav-frontend-skjema';
-
 import { useField } from 'formik';
+import { Input, InputProps } from 'nav-frontend-skjema';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ITextInputProps {

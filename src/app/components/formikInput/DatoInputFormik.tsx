@@ -1,6 +1,7 @@
-import React from 'react';
 import { FormikValues, useField, useFormikContext } from 'formik';
 import { set } from 'lodash';
+import React from 'react';
+
 import DateInput, { DateInputProps } from '../skjema/DateInput';
 
 interface OwnProps extends Omit<DateInputProps, 'value' | 'onChange'> {

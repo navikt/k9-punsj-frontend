@@ -1,5 +1,5 @@
-import React, { ReactNode, FunctionComponent } from 'react';
 import classNames from 'classnames';
+import React, { FunctionComponent, ReactNode } from 'react';
 
 import './flexRow.less';
 
@@ -41,7 +41,7 @@ const FlexRow: FunctionComponent<IOwnProps> = ({
             { childrenMarginMedium: childrenMargin === 'medium' },
             { childrenMarginBig: childrenMargin === 'big' },
             { autoFlex },
-            className
+            className,
         )}
     >
         {children}

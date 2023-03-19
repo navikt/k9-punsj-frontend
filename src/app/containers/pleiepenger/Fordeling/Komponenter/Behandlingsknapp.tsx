@@ -1,11 +1,14 @@
 import React from 'react';
-import { Button } from '@navikt/ds-react';
-import { useSelector } from 'react-redux';
-import { RootStateType } from 'app/state/RootState';
 import { FormattedMessage } from 'react-intl';
+import { useSelector } from 'react-redux';
+
+import { Button } from '@navikt/ds-react';
+
+import { RootStateType } from 'app/state/RootState';
+
 import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
-import { setHash } from '../../../../utils';
 import { Sakstype } from '../../../../models/enums';
+import { setHash } from '../../../../utils';
 import { IFordelingProps } from '../Fordeling';
 
 type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {

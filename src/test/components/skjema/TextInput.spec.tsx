@@ -1,6 +1,7 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
+
 import TextInput from '../../../app/components/skjema/TextInput';
 import { TestSkjema } from './testskjema';
 
@@ -13,7 +14,7 @@ describe('TextInput', () => {
                 }}
             >
                 <TextInput feltnavn="fødselsnummer" />
-            </TestSkjema>
+            </TestSkjema>,
         );
 
         const inputfelt = getByLabelText(/fødselsnummer/i);

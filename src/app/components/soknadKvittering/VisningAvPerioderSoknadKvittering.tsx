@@ -1,15 +1,17 @@
-import React from 'react';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import './visningAvPerioderSoknadKvittering.less';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { periodToFormattedString } from '../../utils';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import {
     IPSBSoknadKvitteringBeredskapNattevak,
     IPSBSoknadKvitteringBosteder,
     IPSBSoknadKvitteringLovbestemtFerie,
     IPSBSoknadKvitteringUtenlandsopphold,
 } from '../../models/types/PSBSoknadKvittering';
+import { periodToFormattedString } from '../../utils';
+import './visningAvPerioderSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -34,7 +36,7 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
         <div
             className={classNames(
                 'visningAvPerioderSoknadKvitteringContainer',
-                typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
+                typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : '',
             )}
         >
             {tittel.map((t) => (
@@ -52,7 +54,7 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     key={periode}
                     className={classNames(
                         'visningAvPerioderSoknadKvitteringContainer',
-                        typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : ''
+                        typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : '',
                     )}
                 >
                     <p>{periodToFormattedString(periode)}</p>

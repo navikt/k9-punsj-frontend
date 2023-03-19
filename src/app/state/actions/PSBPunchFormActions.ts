@@ -3,13 +3,13 @@ import { PunchFormActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
-import { IPSBSoknad } from '../../models/types/PSBSoknad';
-import { ISendSoknad } from '../../models/types/SendSoknad';
-import { IPSBSoknadUt } from '../../models/types/PSBSoknadUt';
 
+import { IPSBSoknad } from '../../models/types/PSBSoknad';
+import { IPSBSoknadKvittering } from '../../models/types/PSBSoknadKvittering';
+import { IPSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { Periode } from '../../models/types/Periode';
 import { IHentPerioder } from '../../models/types/RequestBodies';
-import { IPSBSoknadKvittering } from '../../models/types/PSBSoknadKvittering';
+import { ISendSoknad } from '../../models/types/SendSoknad';
 
 interface IResetPunchFormAction {
     type: PunchFormActionKeys.RESET;
@@ -253,7 +253,7 @@ export function updateSoknader(
     norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IPSBSoknadUt>,
-    soknad2: Partial<IPSBSoknadUt> | null
+    soknad2: Partial<IPSBSoknadUt> | null,
 ) {
     return (dispatch: any) => {
         if (!norskPleietrengendeId || !soknad2) {
@@ -297,7 +297,7 @@ export const submitSoknadRequestAction = (): ISubmitSoknadRequestAction => ({
 });
 export const submitSoknadSuccessAction = (
     innsentSoknad: IPSBSoknadKvittering,
-    linkTilBehandlingIK9: string | null
+    linkTilBehandlingIK9: string | null,
 ): ISubmitSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
     innsentSoknad,
@@ -321,7 +321,7 @@ export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({
 });
 export const validerSoknadSuccessAction = (
     validertSoknad: IPSBSoknadKvittering,
-    erMellomlagring?: boolean
+    erMellomlagring?: boolean,
 ): IValiderSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
     validertSoknad,
@@ -365,7 +365,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
                     default:
                         return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }
@@ -389,7 +389,7 @@ export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
                     default:
                         return dispatch(validerSoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }
@@ -424,7 +424,7 @@ export function settJournalpostPaaVent(journalpostid: string, soeknadId: string)
                     return dispatch(setJournalpostPaaVentSuccessAction());
                 }
                 return dispatch(setJournalpostPaaVentErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

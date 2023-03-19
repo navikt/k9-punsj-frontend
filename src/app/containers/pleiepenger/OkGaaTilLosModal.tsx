@@ -1,7 +1,9 @@
-import { Button } from '@navikt/ds-react';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+
+import { Button } from '@navikt/ds-react';
+
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
 import { getEnvironmentVariable } from '../../utils';
 import intlHelper from '../../utils/intlUtils';

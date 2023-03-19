@@ -1,4 +1,5 @@
 import { PunchFormActionKeys } from 'app/models/enums';
+
 import { IPunchPLSFormState } from '../../types/PunchPLSFormState';
 import { IPunchPLSFormActionTypes } from '../actions/PLSPunchFormActions';
 
@@ -15,7 +16,7 @@ const initialState: IPunchPLSFormState = {
 // eslint-disable-next-line import/prefer-default-export
 export function PunchPLSFormReducer(
     punchFormState: IPunchPLSFormState,
-    action: IPunchPLSFormActionTypes
+    action: IPunchPLSFormActionTypes,
 ): IPunchPLSFormState {
     if (typeof punchFormState === 'undefined') return initialState;
 

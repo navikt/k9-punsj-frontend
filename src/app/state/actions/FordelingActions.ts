@@ -4,6 +4,7 @@ import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models
 import { IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
+
 import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 
 interface ISetSakstypeAction {
@@ -195,7 +196,7 @@ export const lukkJournalpostOppgave =
                     return dispatch(lukkOppgaveSuccessAction());
                 }
                 return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 
@@ -205,7 +206,7 @@ export function sjekkOmSkalTilK9Sak(
     jpid: string,
     fagsakYtelseType: FagsakYtelseType,
     annenPart: string,
-    valgtFagsak?: Fagsak
+    valgtFagsak?: Fagsak,
 ) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {

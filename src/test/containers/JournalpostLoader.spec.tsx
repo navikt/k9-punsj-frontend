@@ -1,8 +1,9 @@
-import { render, RenderResult } from '@testing-library/react';
-import React from 'react';
+import { RenderResult, render } from '@testing-library/react';
 import { shallow } from 'enzyme';
-import { IJournalpost } from '../../app/models/types';
+import React from 'react';
+
 import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
+import { IJournalpost } from '../../app/models/types';
 
 jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
@@ -32,7 +33,7 @@ const setupLoader = ({
             notFound={notFound}
             lukkOppgaveReset={jest.fn()}
             lukkOppgaveDone={undefined}
-        />
+        />,
     );
 
     expect(getJournalpost).toHaveBeenCalledTimes(1);
@@ -83,7 +84,7 @@ describe('JournalpostLoader', () => {
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
                 lukkOppgaveDone={undefined}
-            />
+            />,
         );
 
         expect(journalpost.findWhere((n) => n.name() === 'ForwardRef' && n.prop('size') === 'large')).toHaveLength(1);
@@ -113,7 +114,7 @@ describe('JournalpostLoader', () => {
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
                 lukkOppgaveDone={undefined}
-            />
+            />,
         );
 
         const alert = journalpost.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error');
@@ -138,7 +139,7 @@ describe('JournalpostLoader', () => {
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
                 lukkOppgaveDone={undefined}
-            />
+            />,
         );
 
         const felmelding = journalpost.find('FeilmeldingPanel');
@@ -162,7 +163,7 @@ describe('JournalpostLoader', () => {
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
                 lukkOppgaveDone={undefined}
-            />
+            />,
         );
 
         const felmelding = journalpost.find('FeilmeldingPanel');
@@ -186,11 +187,11 @@ describe('JournalpostLoader', () => {
                 notFound={false}
                 lukkOppgaveReset={jest.fn()}
                 lukkOppgaveDone
-            />
+            />,
         );
 
         const Modal = journalpost.findWhere(
-            (n) => n.name() === 'ForwardRef' && n.prop('aria-label') === 'settpaaventokmodal'
+            (n) => n.name() === 'ForwardRef' && n.prop('aria-label') === 'settpaaventokmodal',
         );
         expect(Modal).toHaveLength(1);
     });

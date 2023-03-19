@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+
+import { Button } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
-import { Button } from '@navikt/ds-react';
 
 interface IErDuSikkerModalProps {
     melding: string;

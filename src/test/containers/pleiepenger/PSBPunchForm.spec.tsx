@@ -1,3 +1,9 @@
+import { ShallowWrapper, shallow } from 'enzyme';
+import { mocked } from 'jest-mock';
+import * as React from 'react';
+import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+import * as reactRedux from 'react-redux';
+
 import {
     IPunchFormComponentProps,
     IPunchFormDispatchProps,
@@ -6,11 +12,7 @@ import {
 } from 'app/containers/pleiepenger/PSBPunchForm';
 import { IPSBSoknad, IPunchPSBFormState, ISignaturState } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import { shallow, ShallowWrapper } from 'enzyme';
-import { mocked } from 'jest-mock';
-import * as React from 'react';
-import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import * as reactRedux from 'react-redux';
+
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
@@ -108,7 +110,7 @@ const validertSoknad: IPSBSoknadKvittering = {
 
 const setupPunchForm = (
     punchFormStateSetup?: Partial<IPunchPSBFormState>,
-    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>
+    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>,
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
@@ -191,7 +193,7 @@ const setupPunchForm = (
             {...punchFormStateProps}
             {...punchFormDispatchProps}
             /* eslint-enable react/jsx-props-no-spreading */
-        />
+        />,
     );
 };
 
@@ -242,7 +244,7 @@ describe('PunchForm', () => {
             punchForm
                 .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
                 .childAt(0)
-                .text()
+                .text(),
         ).toEqual('skjema.feil.ikke_funnet');
     });
 
@@ -274,7 +276,7 @@ describe('PunchForm', () => {
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {},
                 },
-            })
+            }),
         );
         expect(punchForm.find('Soknadsperioder').dive().find('Periodepaneler')).toHaveLength(1);
     });
@@ -369,7 +371,7 @@ describe('PunchForm', () => {
                     },
                 },
             },
-            { updateSoknad }
+            { updateSoknad },
         );
         punchForm.find('.tilsynsordning CheckboksPanel').simulate('change', { target: { checked: false } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
@@ -400,7 +402,7 @@ describe('PunchForm', () => {
                     },
                 ],
             },
-            { validateSoknad }
+            { validateSoknad },
         );
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
@@ -409,7 +411,7 @@ describe('PunchForm', () => {
             punchForm
                 .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
                 .childAt(0)
-                .text()
+                .text(),
         ).toEqual('skjema.feil.validering');
     });
 
@@ -447,14 +449,14 @@ describe('PunchForm', () => {
                         perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
                     },
                 },
-            })
+            }),
         );
         expect(
             punchForm
                 .find('Soknadsperioder')
                 .dive()
                 .find('.eksiterendesoknaderpanel')
-                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning'),
         ).toHaveLength(1);
         expect(
             punchForm
@@ -463,7 +465,7 @@ describe('PunchForm', () => {
                 .find('.eksiterendesoknaderpanel')
                 .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning')
                 .childAt(0)
-                .text()
+                .text(),
         ).toEqual('skjema.soknadsperiode.overlapper');
     });
 
@@ -481,7 +483,7 @@ describe('PunchForm', () => {
 
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(2);
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(0).prop('label')).toEqual(
-            'skjema.ferie.leggtil'
+            'skjema.ferie.leggtil',
         );
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(1).prop('label')).toEqual('skjema.ferie.fjern');
     });
@@ -513,7 +515,7 @@ describe('PunchForm', () => {
                 .find('.feriepanel')
                 .dive()
                 .find('.ekspanderbartPanel__innhold')
-                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info'),
         ).toHaveLength(1);
     });
 
@@ -531,14 +533,14 @@ describe('PunchForm', () => {
                         perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
                     },
                 },
-            })
+            }),
         );
         expect(
             punchForm
                 .find('Soknadsperioder')
                 .dive()
                 .find('.eksiterendesoknaderpanel')
-                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error'),
         ).toHaveLength(0);
     });
 

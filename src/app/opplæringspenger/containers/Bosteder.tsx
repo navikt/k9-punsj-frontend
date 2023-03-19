@@ -1,16 +1,18 @@
-import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
-import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import { IUtenlandsOpphold } from 'app/models/types';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+
+import { AddCircle, Delete } from '@navikt/ds-icons';
+import { Button, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
+import { IUtenlandsOpphold } from 'app/models/types';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import intlHelper from 'app/utils/intlUtils';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 

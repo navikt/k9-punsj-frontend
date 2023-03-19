@@ -1,6 +1,6 @@
 import { GosysOppgaveActionKeys } from '../../models/enums/GosysOppgaveActionKeys';
-import { IOpprettGosysOppgaveActionTypes } from '../actions/GosysOppgaveActions';
 import { IGosysOppgaveState } from '../../models/types/GosysOppgaveState';
+import { IOpprettGosysOppgaveActionTypes } from '../actions/GosysOppgaveActions';
 
 const initialState: IGosysOppgaveState = {
     isAwaitingGosysOppgaveRequestResponse: false,
@@ -9,7 +9,7 @@ const initialState: IGosysOppgaveState = {
 // eslint-disable-next-line import/prefer-default-export
 export function GosysOppgaveReducer(
     gosysOppgaveState: IGosysOppgaveState = initialState,
-    action: IOpprettGosysOppgaveActionTypes
+    action: IOpprettGosysOppgaveActionTypes,
 ): IGosysOppgaveState {
     switch (action.type) {
         case GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST:

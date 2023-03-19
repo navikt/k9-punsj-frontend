@@ -1,9 +1,12 @@
-import { Panel, Link } from '@navikt/ds-react';
-import { ExternalLink } from '@navikt/ds-icons';
-import { getModiaPath } from 'app/utils';
 import React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { ExternalLink } from '@navikt/ds-icons';
+import { Link, Panel } from '@navikt/ds-react';
+
+import { getModiaPath } from 'app/utils';
+
 import { IFordelingState, IJournalpost } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';

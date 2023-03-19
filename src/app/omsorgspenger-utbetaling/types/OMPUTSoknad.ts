@@ -1,5 +1,6 @@
 import { IPeriode, PersonEnkel } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
+
 import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
 
 export type Arbeidstaker = { organisasjonsnummer: string; fravaersperioder: FravaersperiodeType[] };

@@ -1,16 +1,13 @@
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
+import { debounce } from 'lodash';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useCallback, useEffect, useState } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
-
-import { debounce } from 'lodash';
-
-import { IInputError, Periode } from 'app/models/types';
-import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
-import intlHelper from 'app/utils/intlUtils';
-import { feilFraYup } from 'app/utils/validationHelpers';
 
 import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
@@ -23,11 +20,13 @@ import { FordelingActionKeys } from 'app/models/enums';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { RelasjonTilBarnet } from 'app/models/enums/RelasjonTilBarnet';
+import { IInputError, Periode } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { IdentActionKeys } from 'app/state/actions/IdentActions';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { useMutation } from 'react-query';
+import intlHelper from 'app/utils/intlUtils';
+import { feilFraYup } from 'app/utils/validationHelpers';
+
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { RootStateType } from '../../state/RootState';
@@ -36,11 +35,11 @@ import schema, { getSchemaContext } from '../schema';
 import Bosteder from './Bosteder';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import KursComponent from './Kurs';
-import { KvitteringContext } from './kvittering/KvitteringContext';
 import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder';
 import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
+import { KvitteringContext } from './kvittering/KvitteringContext';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 
 export interface IPunchOLPFormComponentProps {
@@ -158,7 +157,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                     setK9FormatErrors([]);
                 }
             },
-        }
+        },
     );
 
     const {
@@ -175,7 +174,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                     handleSubmit();
                 }
             },
-        }
+        },
     );
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
@@ -188,7 +187,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
 
     const debounceCallback = useCallback(
         debounce(() => updateSoknad({ submitSoknad: false }), 3000),
-        []
+        [],
     );
 
     useEffect(() => {
@@ -391,7 +390,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                             <ErrorSummary.Item key={`${error.path}-${error.message}`}>
                                 {error.message}
                             </ErrorSummary.Item>
-                        )
+                        ),
                     )}
                 </ErrorSummary>
             )}

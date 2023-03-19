@@ -1,10 +1,10 @@
-import { Periode } from './Periode';
 import { Arbeidstid } from './Arbeidstid';
 import { Barn, IBarn } from './IBarn';
 import { Klokkeslett } from './Klokkeslett';
 import { Kurs } from './Kurs';
 import { Omsorg } from './Omsorg';
 import { OpptjeningAktivitet } from './OpptjeningAktivitet';
+import { Periode } from './Periode';
 import { SoknadsInfo } from './SoknadsInfo';
 import { UtenlandsOpphold } from './UtenlandsOpphold';
 import { Uttak } from './Uttak';

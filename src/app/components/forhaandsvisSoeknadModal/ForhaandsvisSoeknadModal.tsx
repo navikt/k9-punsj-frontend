@@ -1,8 +1,8 @@
+import classNames from 'classnames';
 import React from 'react';
 import { IntlShape } from 'react-intl';
-import classNames from 'classnames';
 
-import { Modal, Button } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
 

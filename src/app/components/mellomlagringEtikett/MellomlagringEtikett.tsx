@@ -1,5 +1,7 @@
-import { Tag } from '@navikt/ds-react';
 import React from 'react';
+
+import { Tag } from '@navikt/ds-react';
+
 import './mellomlagringEtikett.less';
 
 type OwnProps = {

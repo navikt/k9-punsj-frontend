@@ -1,6 +1,8 @@
+import React from 'react';
+
 import { Delete } from '@navikt/ds-icons';
 import { Button, ButtonProps } from '@navikt/ds-react';
-import React from 'react';
+
 import './buttons.less';
 
 interface OwnProps extends Partial<ButtonProps> {

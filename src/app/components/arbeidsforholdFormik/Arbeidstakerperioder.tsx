@@ -1,20 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import classNames from 'classnames';
+import { FieldArray, useFormikContext } from 'formik';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import { Panel } from '@navikt/ds-react';
+
 import { finnArbeidsgivere } from 'app/api/api';
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
-import Organisasjon from 'app/models/types/Organisasjon';
 import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import { FieldArray, useFormikContext } from 'formik';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 
 interface ArbeidstakerperioderProps {
@@ -56,7 +59,7 @@ const Arbeidstakerperioder = ({
                             items.filter(
                                 (item) =>
                                     item.organisasjonsnummer &&
-                                    item.organisasjonsnummer === currentItem.organisasjonsnummer
+                                    item.organisasjonsnummer === currentItem.organisasjonsnummer,
                             ).length > 1;
                         return (
                             <Panel
@@ -107,7 +110,7 @@ const Arbeidstakerperioder = ({
                                         getFeilmeldinger={() =>
                                             (getUhaandterteFeil &&
                                                 getUhaandterteFeil(
-                                                    `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`
+                                                    `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`,
                                                 )) ||
                                             []
                                         }

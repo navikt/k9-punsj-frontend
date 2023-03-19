@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { KursperioderSoknadKvittering } from 'app/opplæringspenger/OLPSoknadKvittering';
 import { periodToFormattedString } from 'app/utils';
-import React from 'react';
 
 interface Props {
     kursperioder: KursperioderSoknadKvittering[];

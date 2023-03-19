@@ -1,6 +1,7 @@
-import { Search } from '@navikt/ds-react';
 import { useField } from 'formik';
 import React from 'react';
+
+import { Search } from '@navikt/ds-react';
 
 interface SearchFormikProps {
     label: string;

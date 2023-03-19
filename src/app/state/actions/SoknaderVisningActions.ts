@@ -1,9 +1,9 @@
-import { IError } from '../../models/types';
-import { SoknaderVisningActionKeys } from '../../models/enums/SoknaderVisningActionKeys';
-import { convertResponseToError, post } from '../../utils';
 import { ApiPath } from '../../apiConfig';
+import { SoknaderVisningActionKeys } from '../../models/enums/SoknaderVisningActionKeys';
+import { IError } from '../../models/types';
 import { IPSBSoknad } from '../../models/types/PSBSoknad';
 import { IHentSoknad } from '../../models/types/RequestBodies';
+import { convertResponseToError, post } from '../../utils';
 
 interface ISetSoknaderAction {
     type: SoknaderVisningActionKeys.SOKNADER_SET;
@@ -93,7 +93,7 @@ export function sokPsbSoknader(ident: string) {
                     return dispatch(setSoknaderAction(soknadSvar));
                 }
                 return dispatch(findSoknaderErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

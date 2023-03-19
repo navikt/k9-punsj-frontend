@@ -1,23 +1,26 @@
-import { Alert, Panel } from '@navikt/ds-react';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import DateInput from 'app/components/skjema/DateInput';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import { Arbeidsforhold, JaNei } from 'app/models/enums';
-import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
-import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
-import intlHelper from 'app/utils/intlUtils';
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
-import { CountrySelect } from '../../../../components/country-select/CountrySelect';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import DateInput from 'app/components/skjema/DateInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import { Arbeidsforhold, JaNei } from 'app/models/enums';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
+import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
+import intlHelper from 'app/utils/intlUtils';
+
 import VerticalSpacer from '../../../../components/VerticalSpacer';
+import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
-import { IPeriode } from '../../../../models/types/Periode';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
+import { IPeriode } from '../../../../models/types/Periode';
 import { arbeidstidInformasjon } from '../../ArbeidstidInfo';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 
@@ -90,7 +93,7 @@ const ArbeidsforholdPanel = ({
                                     },
                                 },
                             },
-                            false
+                            false,
                         );
                         updateSoknad({
                             opptjeningAktivitet: {
@@ -136,7 +139,7 @@ const ArbeidsforholdPanel = ({
                                         },
                                     },
                                 },
-                                false
+                                false,
                             );
                             updateSoknad({
                                 opptjeningAktivitet: {
@@ -225,8 +228,8 @@ const ArbeidsforholdPanel = ({
                     }))}
                     feil={getErrorMessage(
                         `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
-                            opptjening?.selvstendigNaeringsdrivende?.info?.periode
-                        )}].virksomhetstyper`
+                            opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                        )}].virksomhetstyper`,
                     )}
                     onChange={() => undefined}
                 />
@@ -248,7 +251,7 @@ const ArbeidsforholdPanel = ({
                                             },
                                         },
                                     },
-                                    false
+                                    false,
                                 )
                             }
                             onBlur={(event: any) =>
@@ -311,7 +314,7 @@ const ArbeidsforholdPanel = ({
                             value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
                             className="sn-organisasjonsnummer"
                             feil={getErrorMessage(
-                                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid'
+                                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid',
                             )}
                             onChange={(event: any) =>
                                 updateSoknadState(
@@ -324,7 +327,7 @@ const ArbeidsforholdPanel = ({
                                             },
                                         },
                                     },
-                                    false
+                                    false,
                                 )
                             }
                             onBlur={(event: any) =>
@@ -414,7 +417,7 @@ const ArbeidsforholdPanel = ({
                                                 },
                                             },
                                         },
-                                        false
+                                        false,
                                     )
                                 }
                                 onBlur={(event: any) =>
@@ -454,7 +457,7 @@ const ArbeidsforholdPanel = ({
                                                 },
                                             },
                                         },
-                                        false
+                                        false,
                                     )
                                 }
                                 onBlur={(event: any) =>
@@ -482,7 +485,7 @@ const ArbeidsforholdPanel = ({
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         errorMessage={getErrorMessage(
-                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
+                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder',
                         )}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
@@ -501,7 +504,7 @@ const ArbeidsforholdPanel = ({
                                         },
                                     },
                                 },
-                                false
+                                false,
                             );
                             updateSoknad({
                                 opptjeningAktivitet: {
@@ -541,7 +544,7 @@ const ArbeidsforholdPanel = ({
                                         },
                                     },
                                 },
-                                false
+                                false,
                             );
                             updateSoknad({
                                 opptjeningAktivitet: {
@@ -582,7 +585,7 @@ const ArbeidsforholdPanel = ({
                                             },
                                         },
                                     },
-                                    false
+                                    false,
                                 )
                             }
                             onBlur={(event: any) =>
@@ -663,7 +666,7 @@ const ArbeidsforholdPanel = ({
                                                 },
                                             },
                                         },
-                                        false
+                                        false,
                                     );
                                     updateSoknad({
                                         opptjeningAktivitet: {
@@ -701,7 +704,7 @@ const ArbeidsforholdPanel = ({
                                                 },
                                             },
                                         },
-                                        false
+                                        false,
                                     )
                                 }
                                 onBlur={(event: any) =>
@@ -739,7 +742,7 @@ const ArbeidsforholdPanel = ({
                                             },
                                         },
                                     },
-                                    false
+                                    false,
                                 )
                             }
                             onBlur={(event: any) =>

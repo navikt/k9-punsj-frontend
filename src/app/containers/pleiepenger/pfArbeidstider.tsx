@@ -1,17 +1,19 @@
-import {
-    PeriodeinfoComponent,
-    UpdatePeriodeinfoInSoknad,
-    UpdatePeriodeinfoInSoknadState,
-} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
 import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { HelpText } from '@navikt/ds-react';
+
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import {
+    PeriodeinfoComponent,
+    UpdatePeriodeinfoInSoknad,
+    UpdatePeriodeinfoInSoknadState,
+} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import { GetErrorMessage } from 'app/models/types';
+import intlHelper from 'app/utils/intlUtils';
+
 import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstidDesimaler';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
@@ -24,7 +26,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstidPeriodeMedTimer>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IArbeidstidPeriodeMedTimer>,
         feilprefiks: string,
-        getErrorMessage: GetErrorMessage
+        getErrorMessage: GetErrorMessage,
     ) => {
         const intl = useIntl();
         const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag, periode } = periodeinfo;

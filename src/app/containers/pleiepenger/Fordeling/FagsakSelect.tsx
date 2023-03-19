@@ -1,10 +1,12 @@
-import { BodyShort } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import Fagsak from 'app/types/Fagsak';
-import React from 'react';
-import { Period } from '@navikt/k9-fe-period-utils';
 import { Checkbox, Select } from 'nav-frontend-skjema';
+import React from 'react';
+
+import { BodyShort } from '@navikt/ds-react';
+import { Period } from '@navikt/k9-fe-period-utils';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { IIdentState } from 'app/models/types/IdentState';
+import Fagsak from 'app/types/Fagsak';
 
 interface Props {
     fagsaker: Fagsak[];
@@ -51,7 +53,7 @@ const FagsakSelect = ({
                             Periode:{' '}
                             {new Period(
                                 valgtFagsak.gyldigPeriode.fom,
-                                valgtFagsak.gyldigPeriode.tom
+                                valgtFagsak.gyldigPeriode.tom,
                             ).prettifyPeriodYears()}
                         </BodyShort>
                     )}

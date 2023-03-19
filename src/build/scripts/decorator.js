@@ -6,7 +6,7 @@ const { JSDOM } = jsdom;
 const requestDecorator = (callback) =>
     request(
         `${process.env.APPRES_CMS_URL}/common-html/v4/navno?header=true&styles=true&scripts=true&footer=true`,
-        callback
+        callback,
     );
 
 const getDecorator = () =>
@@ -19,7 +19,7 @@ const getDecorator = () =>
                     NAV_SCRIPTS: document.getElementById('scripts')[prop],
                     NAV_STYLES: document.getElementById('styles')[prop],
                     NAV_HEADING: document.getElementById('header')[prop],
-                    NAV_FOOTER: document.getElementById('footer')[prop]
+                    NAV_FOOTER: document.getElementById('footer')[prop],
                 };
                 resolve(data);
             } else {

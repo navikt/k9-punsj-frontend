@@ -1,4 +1,10 @@
+import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
+import { Input, Select, Textarea } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+
 import { Button, Label, Loader } from '@navikt/ds-react';
+
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
@@ -6,10 +12,7 @@ import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { requiredValue, validateText } from 'app/utils/validationHelpers';
-import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
-import { Input, Select, Textarea } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+
 import './opprettJournalpost.less';
 
 enum OpprettJournalpostFormKeys {

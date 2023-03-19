@@ -1,4 +1,12 @@
+import { Field, FieldProps, useFormikContext } from 'formik';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { CheckboksPanel } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { Container, Row } from 'react-bootstrap';
+import { useIntl } from 'react-intl';
+
 import { Alert, Panel } from '@navikt/ds-react';
+
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
@@ -6,26 +14,21 @@ import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmelding
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
-import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types/Periode';
-import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
-import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
-import intlHelper from 'app/utils/intlUtils';
-import { Field, FieldProps, useFormikContext } from 'formik';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel } from 'nav-frontend-skjema';
-import * as React from 'react';
-import { Container, Row } from 'react-bootstrap';
-import { useIntl } from 'react-intl';
-import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { SelvstendigNaeringsdrivendeOpptjening } from 'app/models/types';
+import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
+import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
+import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
+import intlHelper from 'app/utils/intlUtils';
+
 import { OLPSoknad } from '../../models/types/OLPSoknad';
 import { capitalize } from '../../utils/utils';
+import VerticalSpacer from '../VerticalSpacer';
 import { CountrySelect } from '../country-select/CountrySelect';
 import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../formikInput/TextAreaFormik';
 import TextFieldFormik from '../formikInput/TextFieldFormik';
-import VerticalSpacer from '../VerticalSpacer';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 
 const erYngreEnn4år = (dato: string) => {
@@ -219,7 +222,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         if (value === 'ja') {
                             setFieldValue(
                                 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn',
-                                ''
+                                '',
                             );
                             setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf', '');
                         }
@@ -391,11 +394,11 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         if (!values.opptjeningAktivitet || !values.opptjeningAktivitet.selvstendigNaeringsdrivende) {
                             setFieldValue(
                                 'opptjeningAktivitet.selvstendigNaeringsdrivende',
-                                initialSelvstendigNæringsdrivendeOpptjening()
+                                initialSelvstendigNæringsdrivendeOpptjening(),
                             );
                             setFieldValue(
                                 'arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo',
-                                new ArbeidstidInfo({})
+                                new ArbeidstidInfo({}),
                             );
                         }
                     } else {

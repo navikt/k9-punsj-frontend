@@ -1,6 +1,6 @@
+import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { IJournalposterPerIdentActions } from '../actions/JournalposterPerIdentActions';
-import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
 
 const initialState: IJournalposterPerIdentState = {
     journalposter: [],
@@ -11,7 +11,7 @@ const initialState: IJournalposterPerIdentState = {
 // eslint-disable-next-line import/prefer-default-export
 export function JournalposterPerIdentReducer(
     journalposterPerIdentState: IJournalposterPerIdentState = initialState,
-    action: IJournalposterPerIdentActions
+    action: IJournalposterPerIdentActions,
 ): IJournalposterPerIdentState {
     switch (action.type) {
         case JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_SET:

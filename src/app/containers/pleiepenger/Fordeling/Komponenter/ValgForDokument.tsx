@@ -1,7 +1,14 @@
+import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import { Alert } from '@navikt/ds-react';
+
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
+    Sakstype,
+    TilgjengeligSakstype,
     korrigeringAvInntektsmeldingSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
@@ -9,8 +16,6 @@ import {
     opplæringspengerSakstyper,
     pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
-    Sakstype,
-    TilgjengeligSakstype,
 } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
@@ -20,9 +25,7 @@ import {
 } from 'app/state/actions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
-import React from 'react';
-import { useIntl } from 'react-intl';
+
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';

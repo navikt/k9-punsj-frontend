@@ -1,14 +1,16 @@
+import { shallow } from 'enzyme';
+import { mocked } from 'jest-mock';
+import { Input } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { IntlShape, createIntl } from 'react-intl';
+
 import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
-import { shallow } from 'enzyme';
-import { Input } from 'nav-frontend-skjema';
-import * as React from 'react';
-import { createIntl, IntlShape } from 'react-intl';
-import { mocked } from 'jest-mock';
+
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 
 jest.mock('react-intl');
@@ -42,7 +44,7 @@ const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (
     periodeindex: number,
     updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
     updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
-    feilkodeprefiksMedIndeks?: string
+    feilkodeprefiksMedIndeks?: string,
 ) => (
     <Input
         label=""

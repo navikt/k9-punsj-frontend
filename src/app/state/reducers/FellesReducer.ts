@@ -1,8 +1,11 @@
 import { ulid } from 'ulid';
-import { IError, IJournalpost } from '../../models/types';
-import { convertResponseToError, get, post } from '../../utils';
+
 import { ApiPath } from '../../apiConfig';
+import { IError, IJournalpost } from '../../models/types';
+import { IBarn } from '../../models/types/Barn';
+import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 import { IKopierJournalpost } from '../../models/types/RequestBodies';
+import { convertResponseToError, get, post } from '../../utils';
 import {
     ActiontypesHentBarn,
     IHentBarnErrorAction,
@@ -10,8 +13,6 @@ import {
     IHentBarnRequestAction,
     IHentBarnSuccessAction,
 } from './HentBarn';
-import { IBarn } from '../../models/types/Barn';
-import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 
 export interface IFellesState {
     dedupKey: string;
@@ -153,7 +154,7 @@ export function getJournalpost(journalpostid: string) {
                     return dispatch(getJournalpostConflictAction(data));
                 default:
                     return dispatch(
-                        getJournalpostErrorAction({ ...convertResponseToError(response), message: data?.message })
+                        getJournalpostErrorAction({ ...convertResponseToError(response), message: data?.message }),
                     );
             }
         });
@@ -203,7 +204,7 @@ export function kopierJournalpost(
     kopierTilIdent: string,
     barnIdent: string,
     journalPostID: string,
-    dedupKey: string
+    dedupKey: string,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -230,7 +231,7 @@ export function kopierJournalpost(
                     default:
                         return dispatch(getJournalpostKopiereErrorAction());
                 }
-            }
+            },
         );
     };
 }
@@ -242,7 +243,7 @@ const initialState: IFellesState = {
 
 export default function FellesReducer(
     state: IFellesState = initialState,
-    action: IResetDedupKeyAction | IJournalpostActionTypes
+    action: IResetDedupKeyAction | IJournalpostActionTypes,
 ): IFellesState {
     switch (action.type) {
         case Actiontypes.RESET_DEDUP_KEY:

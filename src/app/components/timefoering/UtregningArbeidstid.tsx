@@ -1,10 +1,11 @@
-import React from 'react';
-import { useIntl } from 'react-intl';
-import intlHelper from 'app/utils/intlUtils';
-import { minutterTilSekunder, timerTilSekunder } from 'app/utils/numberUtils';
-import { verdiOgTekstHvisVerdi } from 'app/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
+import { verdiOgTekstHvisVerdi } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { minutterTilSekunder, timerTilSekunder } from 'app/utils/numberUtils';
 
 interface IUtregningArbeidstidProps {
     arbeidstid: {
@@ -58,7 +59,7 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeids
             )}
             {skalViseProsent && (
                 <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${tallTilString(
-                    Number(prosentArbeid)
+                    Number(prosentArbeid),
                 )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
             )}
         </div>
