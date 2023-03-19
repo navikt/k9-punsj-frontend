@@ -1,5 +1,5 @@
 import { IIdentState } from '../../models/types/IdentState';
-import { IdentActionKeys, IIdentActions } from '../actions/IdentActions';
+import { IIdentActions, IdentActionKeys } from '../actions/IdentActions';
 
 export const initialState: IIdentState = {
     søkerId: '',

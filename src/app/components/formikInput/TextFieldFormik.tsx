@@ -1,6 +1,7 @@
-import { TextField, TextFieldProps } from '@navikt/ds-react';
 import { useField } from 'formik';
 import React from 'react';
+
+import { TextField, TextFieldProps } from '@navikt/ds-react';
 
 export interface FormikTextFieldProps extends TextFieldProps {
     label: string;

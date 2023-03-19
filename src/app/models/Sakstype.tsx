@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { Sakstype } from './enums';
+
 import { ApiPath } from '../apiConfig';
+import { Sakstype } from './enums';
 
 export interface ISakstypeDefault {
     navn: Sakstype;

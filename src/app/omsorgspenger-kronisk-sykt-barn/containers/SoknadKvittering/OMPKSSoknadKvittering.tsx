@@ -1,20 +1,23 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
+import classNames from 'classnames';
+import countries from 'i18n-iso-countries';
 import React from 'react';
 import { connect } from 'react-redux';
-import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import './ompKSSoknadKvittering.less';
-import countries from 'i18n-iso-countries';
-import { RootStateType } from 'app/state/RootState';
+
 import Kopier from 'app/components/kopier/Kopier';
-import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
+
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
+import './ompKSSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -58,7 +61,7 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato
+                            response.mottattDato,
                         )}`}
                     </p>
                 </div>

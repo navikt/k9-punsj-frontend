@@ -30,7 +30,7 @@ export const setAnnenPartAction = (annenPart: string) => ({ type: IdentActionKey
 export function setIdentFellesAction(
     søkerId: string,
     pleietrengendeId?: string | null,
-    annenSokerIdent?: string | null
+    annenSokerIdent?: string | null,
 ): ISetIdentFellesAction {
     return {
         type: IdentActionKeys.IDENT_FELLES_SET,

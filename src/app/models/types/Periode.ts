@@ -1,10 +1,12 @@
 /* eslint-disable max-classes-per-file */
+import { IntlShape } from 'react-intl';
+
 import { TimeFormat } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-import { IntlShape } from 'react-intl';
-import { Periodeinfo } from './Periodeinfo';
-import { initializeDate, datetime } from '../../utils/timeUtils';
+
+import { datetime, initializeDate } from '../../utils/timeUtils';
 import DateRange from './DateRange';
+import { Periodeinfo } from './Periodeinfo';
 
 export interface IPeriode {
     fom?: string | null;

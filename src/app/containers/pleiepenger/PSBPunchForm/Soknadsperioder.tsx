@@ -1,14 +1,17 @@
-import { Alert, Panel } from '@navikt/ds-react';
-import { initializeDate } from 'app/utils';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import { initializeDate } from 'app/utils';
+
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
-import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { GetUhaandterteFeil, IPeriode, IPSBSoknad } from '../../../models/types';
+import { generateDateString } from '../../../components/skjema/skjemaUtils';
+import { GetUhaandterteFeil, IPSBSoknad, IPeriode } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
 import intlHelper from '../../../utils/intlUtils';
 import { Periodepaneler } from '../Periodepaneler';
@@ -49,8 +52,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             nyePerioder?.some(
                 (nyPeriode) =>
                     initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom))
-            )
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+            ),
         );
     };
 

@@ -1,18 +1,20 @@
-import Fagsak from 'app/types/Fagsak';
-
-import { Alert, Loader, Modal } from '@navikt/ds-react';
 import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Loader, Modal } from '@navikt/ds-react';
+
+import Fagsak from 'app/types/Fagsak';
+
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import VerticalSpacer from '../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
 import { IJournalpost } from '../models/types';
 import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
+import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-import { RootStateType } from '../state/RootState';
 import './journalpostLoader.less';
 import OkGaaTilLosModal from './pleiepenger/OkGaaTilLosModal';
 

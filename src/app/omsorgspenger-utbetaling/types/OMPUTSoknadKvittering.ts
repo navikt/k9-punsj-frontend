@@ -4,6 +4,7 @@ import {
     FrilanserAktivitet,
     SelvstendigNaeringsdrivendeAktivitet,
 } from 'app/models/types/KvitteringTyper';
+
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 
 export interface IOMPUTSoknadKvittering extends Kvittering {

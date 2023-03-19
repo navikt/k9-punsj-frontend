@@ -1,5 +1,7 @@
-import Fagsak from 'app/types/Fagsak';
 import { get, omit, pick } from 'lodash';
+
+import Fagsak from 'app/types/Fagsak';
+
 import { aktivitetsFravær } from './konstanter';
 import { Arbeidstaker, IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 
@@ -23,7 +25,7 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
                 at.fravaersperioder.map((fravaersperiode) => ({
                     ...fravaersperiode,
                     organisasjonsnummer: at.organisasjonsnummer || '',
-                }))
+                })),
             )
             ?.flat() || [];
 
@@ -66,19 +68,19 @@ export const frontendTilBackendMapping = (soknad: Partial<IOMPUTSoknad>): Partia
 
 export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend, fagsak?: Fagsak): Partial<IOMPUTSoknad> => {
     const fraevaersperioderSelvstendigNaeringsdrivende = soknad.fravaersperioder?.filter(
-        (periode) => periode.aktivitetsFravær === aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE
+        (periode) => periode.aktivitetsFravær === aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
     );
     const fravaersperioderFrilanser = soknad.fravaersperioder?.filter(
-        (periode) => periode.aktivitetsFravær === aktivitetsFravær.FRILANSER
+        (periode) => periode.aktivitetsFravær === aktivitetsFravær.FRILANSER,
     );
     const fravaersperioderArbeidstaker = soknad.fravaersperioder?.filter(
-        (periode) => periode.aktivitetsFravær === aktivitetsFravær.ARBEIDSTAKER
+        (periode) => periode.aktivitetsFravær === aktivitetsFravær.ARBEIDSTAKER,
     );
 
     const korrigeringArbeidstaker: Arbeidstaker[] = [];
     fravaersperioderArbeidstaker?.forEach((fravaersperiode) => {
         const index = korrigeringArbeidstaker.findIndex(
-            (arbeidstaker: Arbeidstaker) => arbeidstaker.organisasjonsnummer === fravaersperiode.organisasjonsnummer
+            (arbeidstaker: Arbeidstaker) => arbeidstaker.organisasjonsnummer === fravaersperiode.organisasjonsnummer,
         );
         if (index !== -1) {
             korrigeringArbeidstaker[index].fravaersperioder.push(fravaersperiode);
@@ -93,7 +95,7 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend, fagsak?: 
     const arbeidstaker = soknad.opptjeningAktivitet?.arbeidstaker?.map((at) => ({
         ...at,
         fravaersperioder: fravaersperioderArbeidstaker.filter(
-            (fravaersperiode) => fravaersperiode.organisasjonsnummer === at.organisasjonsnummer
+            (fravaersperiode) => fravaersperiode.organisasjonsnummer === at.organisasjonsnummer,
         ),
     }));
 
@@ -104,7 +106,7 @@ export const backendTilFrontendMapping = (soknad: IOMPUTSoknadBackend, fagsak?: 
             virksomhetstyper: get(
                 soknad,
                 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper',
-                []
+                [],
             )?.[0],
         },
         fravaersperioder: fraevaersperioderSelvstendigNaeringsdrivende,
@@ -135,7 +137,7 @@ export const filtrerVerdierFoerInnsending = (soknad: IOMPUTSoknad): Partial<IOMP
     const { arbeidsforhold } = soknad.metadata;
     const filtrertOpptjeningAktivitet = pick(
         opptjeningAktivitet,
-        Object.keys(arbeidsforhold).filter((key) => arbeidsforhold[key])
+        Object.keys(arbeidsforhold).filter((key) => arbeidsforhold[key]),
     );
 
     return { ...soknad, opptjeningAktivitet: filtrertOpptjeningAktivitet };

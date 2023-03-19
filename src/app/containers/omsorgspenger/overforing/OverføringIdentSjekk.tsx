@@ -1,13 +1,14 @@
+import { Form, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Back, Next } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-import { Form, useFormikContext } from 'formik';
+
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import Knapper from '../../../components/knapp/Knapper';
 import RadioInput from '../../../components/skjema/RadioInput';
 import TextInput from '../../../components/skjema/TextInput';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import { JaNei } from '../../../models/enums';
 import { ISignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
 import { setHash } from '../../../utils';

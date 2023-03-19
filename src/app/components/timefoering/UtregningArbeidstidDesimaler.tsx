@@ -1,5 +1,6 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
+
 import intlHelper from 'app/utils/intlUtils';
 
 interface IUtregningArbeidstidProps {
@@ -32,7 +33,7 @@ const UtregningArbeidstidDesimaler = ({
             <div>{`= ${convert(arbeidstid) * 5} ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerperuke')}`}</div>
             {skalViseProsent && (
                 <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${tallTilString(
-                    Number(prosentArbeid)
+                    Number(prosentArbeid),
                 )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
             )}
         </div>

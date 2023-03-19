@@ -1,5 +1,6 @@
 import countries from 'i18n-iso-countries';
 import nb from 'i18n-iso-countries/langs/nb.json';
+
 import { getLocaleFromSessionStorage } from './localeUtils';
 
 export interface ICountry {

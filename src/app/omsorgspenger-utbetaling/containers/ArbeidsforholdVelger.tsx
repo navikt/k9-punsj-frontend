@@ -1,8 +1,11 @@
-import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
-import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { useField, useFormikContext } from 'formik';
 import React from 'react';
+
+import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
+
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import Frilanser from '../components/Frilanser';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';

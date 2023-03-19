@@ -1,14 +1,17 @@
-import { Button, Modal } from '@navikt/ds-react';
-import { IPeriode, ITimerOgMinutter, Periode, Periodeinfo, PeriodeMedTimerMinutter } from 'app/models/types';
-import { formats, removeDatesFromPeriods } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { periodeMedTimerTilKalenderdag } from 'app/utils/mappingUtils';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+
+import { Button, Modal } from '@navikt/ds-react';
+
+import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
+import { formats, removeDatesFromPeriods } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+import { periodeMedTimerTilKalenderdag } from 'app/utils/mappingUtils';
+
+import VerticalSpacer from '../VerticalSpacer';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
-import VerticalSpacer from '../VerticalSpacer';
 import TilsynPeriodeListe from './TilsynPeriodeListe';
 import TilsynTid from './TilsynTid';
 
@@ -42,7 +45,7 @@ export default function TilsynKalender({
         selectedDates: Date[];
     }) => {
         const utenDagerSomAlleredeFinnes = selectedDates.filter(
-            (day) => !perioderMedTimer.some((periode) => periode.periode.includesDate(day))
+            (day) => !perioderMedTimer.some((periode) => periode.periode.includesDate(day)),
         );
         const payload = utenDagerSomAlleredeFinnes.map((day) => ({
             periode: new Periode({
@@ -62,7 +65,7 @@ export default function TilsynKalender({
         }
 
         const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates).map(
-            (v: Periodeinfo<ITimerOgMinutter>) => new PeriodeMedTimerMinutter(v)
+            (v: Periodeinfo<ITimerOgMinutter>) => new PeriodeMedTimerMinutter(v),
         );
 
         updateSoknad(perioderFiltert);

@@ -1,6 +1,7 @@
-import { IPath } from 'app/models/types';
 import * as querystring from 'querystring';
 import { String } from 'typescript-string-operations';
+
+import { IPath } from 'app/models/types';
 
 function formatForRouter(path: string) {
     return path.replace(/{/g, ':').replace(/}/g, '');

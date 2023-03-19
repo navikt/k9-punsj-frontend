@@ -1,5 +1,6 @@
-import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
+
+import intlHelper from 'app/utils/intlUtils';
 
 export interface IFrilanserOpptjening {
     startdato?: string;

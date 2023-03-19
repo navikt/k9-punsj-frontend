@@ -1,4 +1,3 @@
-import { ErrorMessage } from '@navikt/ds-react';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Datepicker } from 'nav-datovelger';
@@ -6,6 +5,8 @@ import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+import { ErrorMessage } from '@navikt/ds-react';
 
 dayjs.extend(customParseFormat);
 

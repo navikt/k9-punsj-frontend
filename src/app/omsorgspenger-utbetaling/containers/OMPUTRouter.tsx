@@ -1,7 +1,9 @@
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import * as React from 'react';
 import { useMemo } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
+
 import useRedirect from '../../hooks/useRedirect';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
@@ -20,7 +22,7 @@ const OMPUTRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journal
             skjema: `${OMPUTRootPath}/skjema/`,
             kvittering: `${OMPUTRootPath}/fullfort/`,
         }),
-        []
+        [],
     );
 
     useRedirect(OMPUTRootPath, routingPaths.soeknader);

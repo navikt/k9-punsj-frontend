@@ -1,18 +1,20 @@
+import { Input } from 'nav-frontend-skjema';
 import React from 'react';
-import { FordelingDokumenttype } from 'app/models/enums';
-import { Alert, Button } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 
+import { Alert, Button } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { FordelingDokumenttype } from 'app/models/enums';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { IdentRules } from 'app/rules';
+import { RootStateType } from 'app/state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
-import { Input } from 'nav-frontend-skjema';
-import { IdentRules } from 'app/rules';
-import { IIdentState } from 'app/models/types/IdentState';
-import { useSelector } from 'react-redux';
-import { RootStateType } from 'app/state/RootState';
+
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
 
 interface IInnholdForDokumenttypeAnnetProps {

@@ -1,20 +1,22 @@
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
+import { RootStateType } from 'app/state/RootState';
 import {
     resetPunchAction,
     setIdentAction,
     setStepAction,
     undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import {
@@ -59,7 +61,7 @@ type IEksisterendePLSSoknaderProps = WrappedComponentProps &
     IEksisterendePLSSoknaderDispatchProps;
 
 export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksisterendePLSSoknaderProps> = (
-    props: IEksisterendePLSSoknaderProps
+    props: IEksisterendePLSSoknaderProps,
 ) => {
     const { intl, punchState, eksisterendeSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
 
@@ -81,7 +83,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
@@ -163,7 +165,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                             Tom søknad
                         </td>
                     )}
-                </tr>
+                </tr>,
             );
             modaler.push(
                 <Modal
@@ -179,7 +181,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
-                </Modal>
+                </Modal>,
             );
         });
 
@@ -246,5 +248,5 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export const EksisterendePLSSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendePLSSoknaderComponent)
+    connect(mapStateToProps, mapDispatchToProps)(EksisterendePLSSoknaderComponent),
 );

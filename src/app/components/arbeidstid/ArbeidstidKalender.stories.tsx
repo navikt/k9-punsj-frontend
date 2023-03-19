@@ -1,6 +1,8 @@
-import React from 'react';
 import { Meta, Story } from '@storybook/react';
+import React from 'react';
+
 import { ArbeidstidPeriodeMedTimer } from 'app/models/types';
+
 import ArbeidstidKalender, { ArbeidstidKalenderProps } from './ArbeidstidKalender';
 
 const nyeSoknadsperioder = [

@@ -1,4 +1,4 @@
-import {IOMPMASoknad, OMPMASoknad} from './OMPMASoknad';
+import { IOMPMASoknad, OMPMASoknad } from './OMPMASoknad';
 
 export interface IOMPMASoknadSvar {
     søker?: string;

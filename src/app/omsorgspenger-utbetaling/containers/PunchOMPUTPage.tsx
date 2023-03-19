@@ -1,19 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Alert, Panel } from '@navikt/ds-react';
-import { ApiPath } from 'app/apiConfig';
-import Page from 'app/components/page/Page';
-import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { setIdentAction } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
-import { get } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'nav-frontend-tabell-style';
 import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries, useQuery } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, useHistory, withRouter } from 'react-router';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import { ApiPath } from 'app/apiConfig';
+import Page from 'app/components/page/Page';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
+import { RootStateType } from 'app/state/RootState';
+import { setIdentAction } from 'app/state/actions';
+import { get } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
 import { IJournalpost } from '../../models/types';

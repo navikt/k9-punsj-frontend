@@ -1,6 +1,7 @@
 import { KalenderDag } from 'app/models/KalenderDag';
 import { ArbeidstidPeriodeMedTimer, PeriodeMedTimerMinutter } from 'app/models/types';
 import { Periode } from 'app/models/types/Periode';
+
 import { getDatesInDateRange } from './timeUtils';
 
 // eslint-disable-next-line import/prefer-default-export

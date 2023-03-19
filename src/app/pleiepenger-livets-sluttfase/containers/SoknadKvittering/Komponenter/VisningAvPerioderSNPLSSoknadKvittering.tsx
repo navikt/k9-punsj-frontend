@@ -1,16 +1,17 @@
 import React from 'react';
-import intlHelper from 'app/utils/intlUtils';
-import './visningAvPerioderPLSSoknadKvittering.less';
 import { v4 as uuidv4 } from 'uuid';
-import {
-    periodToFormattedString,
-    formattereDatoIArray,
-    sjekkPropertyEksistererOgIkkeErNull,
-    landkodeTilNavn,
-} from '../../../../utils';
+
+import intlHelper from 'app/utils/intlUtils';
 
 import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
+import {
+    formattereDatoIArray,
+    landkodeTilNavn,
+    periodToFormattedString,
+    sjekkPropertyEksistererOgIkkeErNull,
+} from '../../../../utils';
 import { IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../types/PLSSoknadKvittering';
+import './visningAvPerioderPLSSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -65,7 +66,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                                                 ? `${virksomhetstype}, `
                                                 : `${virksomhetstype}`}
                                         </span>
-                                    )
+                                    ),
                                 )}
                             </p>
                         )}
@@ -114,7 +115,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                                     intl,
                                     SN.perioder[periode].erVarigEndring
                                         ? 'skjema.sn.endringinntekt'
-                                        : 'skjema.sn.bruttoinntekt'
+                                        : 'skjema.sn.bruttoinntekt',
                                 )}: `}
                             </b>
                             {SN.perioder[periode].bruttoInntekt}
@@ -135,7 +136,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                         </p>
                     )}
                 </div>
-            ))
+            )),
         )}
     </div>
 );

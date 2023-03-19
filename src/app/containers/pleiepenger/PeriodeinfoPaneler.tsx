@@ -1,23 +1,25 @@
+import * as React from 'react';
+import { IntlShape, useIntl } from 'react-intl';
+
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     ListeComponent,
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
 } from 'app/containers/pleiepenger/Listepaneler';
-import * as React from 'react';
-import { IntlShape, useIntl } from 'react-intl';
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     GetErrorMessage,
     GetUhaandterteFeil,
-    IPeriodeinfoExtension,
     IPeriodeinfo,
+    IPeriodeinfoExtension,
     Periodeinfo,
 } from 'app/models/types';
-import { IPeriode } from '../../models/types/Periode';
+
 import BinSvg from '../../assets/SVG/BinSVG';
+import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 import './periodeinfoPaneler.less';
 
@@ -31,7 +33,7 @@ export type PeriodeinfoComponent<T> = (
     updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<T>,
     feilkodeprefiksMedIndeks?: string,
     getErrorMessage?: GetErrorMessage,
-    intl?: IntlShape
+    intl?: IntlShape,
 ) => React.ReactElement;
 
 export interface IPeriodeinfopanelerProps {
@@ -61,7 +63,7 @@ export interface IPeriodeinfopanelerProps {
 }
 
 export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (
-    props: IPeriodeinfopanelerProps
+    props: IPeriodeinfopanelerProps,
 ) => {
     const {
         periods,
@@ -87,7 +89,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (
         index: number,
-        periodeinfo: Partial<IPeriodeinfo>
+        periodeinfo: Partial<IPeriodeinfo>,
     ) => {
         const newInfo: IPeriodeinfo = { ...periods[index], ...periodeinfo };
         const newArray = periods;
@@ -110,7 +112,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfo>,
         feilkodeprefiksMedIndeks: string,
         getErrorMessage: GetErrorMessage,
-        intlShape: IntlShape
+        intlShape: IntlShape,
     ) => {
         const removePeriode = () => {
             const newArray: IPeriodeinfo[] = removeItem(periodeindeks);
@@ -158,7 +160,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         updatePeriodeinfoInSoknadState,
                         feilkodeprefiksMedIndeks,
                         getErrorMessage,
-                        intlShape
+                        intlShape,
                     )}
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>

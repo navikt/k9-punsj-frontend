@@ -1,8 +1,10 @@
 import Headers from 'fetch-headers';
+import { String } from 'typescript-string-operations';
+
 import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
-import { String } from 'typescript-string-operations';
+
 import { canStringBeParsedToJSON } from './formatUtils';
 
 export const apiUrl = (path: ApiPath | string, parameters?: any) =>
@@ -18,7 +20,7 @@ export async function get(
     path: ApiPath | string,
     parameters?: any,
     headers?: HeadersInit,
-    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
 ): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         credentials: 'include',
@@ -40,7 +42,7 @@ export async function post<BodyType>(
     headers?: HeadersInit,
     body?: BodyType,
     callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
-    callbackIfError?: (error: any) => any
+    callbackIfError?: (error: any) => any,
 ): Promise<Response> {
     try {
         const response = await fetch(apiUrl(path, parameters), {
@@ -69,7 +71,7 @@ export async function put(
     path: ApiPath,
     parameters?: any,
     body?: any,
-    callbackIfAuth?: (response: Response) => Promise<Response> | void
+    callbackIfAuth?: (response: Response) => Promise<Response> | void,
 ): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         method: 'put',

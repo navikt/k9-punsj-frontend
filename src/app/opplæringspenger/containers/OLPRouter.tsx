@@ -1,15 +1,17 @@
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import * as React from 'react';
 import { useMemo } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
+import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
+
 import useRedirect from '../../hooks/useRedirect';
 import { ISakstypeComponentProps } from '../../models/Sakstype';
+import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import OLPPunchFormContainer from './OLPPunchFormContainer';
 import { OLPRegistreringsValg } from './OLPRegistreringsValg';
 import PunchOLPPage from './PunchOLPPage';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { KvitteringContext } from './kvittering/KvitteringContext';
-import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 
 const OLPRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
     const OLPRootPath = punchPath;
@@ -20,7 +22,7 @@ const OLPRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpo
             skjema: `${OLPRootPath}/skjema/`,
             kvittering: `${OLPRootPath}/fullfort/`,
         }),
-        []
+        [],
     );
 
     useRedirect(OLPRootPath, routingPaths.soeknader);

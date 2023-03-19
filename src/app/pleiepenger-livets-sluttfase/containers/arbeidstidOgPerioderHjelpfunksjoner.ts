@@ -2,7 +2,7 @@ import { IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from '../../models/
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 
 export const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (
-    periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[]
+    periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[],
 ): boolean => {
     if (periode.length > 0 && periode[0].faktiskArbeidTimerPerDag && periode[0].jobberNormaltTimerPerDag) {
         return true;
@@ -31,21 +31,21 @@ export const sjekkHvisArbeidstidErAngitt = (punchFormState: IPunchPLSFormState) 
         !!punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo &&
         !!punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder &&
         sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(
-            punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder
+            punchFormState.soknad?.arbeidstid?.arbeidstakerList[0].arbeidstidInfo.perioder,
         );
 
     const erFLArbeidstidFyltUt =
         !!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo &&
         !!punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder &&
         sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(
-            punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder
+            punchFormState.soknad?.arbeidstid?.frilanserArbeidstidInfo.perioder,
         );
 
     const erSNArbeidstidFyltUt =
         !!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo &&
         !!punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder &&
         sjekkHvisArbeidstidPeriodeMedTimerErFylltUt(
-            punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder
+            punchFormState.soknad?.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo.perioder,
         );
 
     if (

@@ -1,9 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Alert, Panel } from '@navikt/ds-react';
-import DateInput from 'app/components/skjema/DateInput';
 import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import DateInput from 'app/components/skjema/DateInput';
+
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';

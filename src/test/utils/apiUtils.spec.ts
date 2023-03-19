@@ -1,9 +1,9 @@
+import Headers from 'fetch-headers';
+import fetchMock from 'fetch-mock';
+
 import { ApiPath } from 'app/apiConfig';
 import { apiUrl, convertResponseToError, get, post, put } from 'app/utils';
 import { redirect } from 'app/utils/browserUtils';
-import fetchMock from 'fetch-mock';
-
-import Headers from 'fetch-headers';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');

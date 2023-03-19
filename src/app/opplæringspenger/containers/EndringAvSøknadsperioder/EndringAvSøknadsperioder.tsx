@@ -1,14 +1,17 @@
-import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
-import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
-import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
-import { IPeriode, Periode } from 'app/models/types/Periode';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { useFormikContext } from 'formik';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
+
+import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
+import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import { IPeriode, Periode } from 'app/models/types/Periode';
+import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import { Periodepaneler } from '../Periodepaneler';
 import './endringAvSøknadsperioder.less';
 
@@ -46,21 +49,21 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
         }
 
         const formaterteEksisterendePerioder = slåSammenSammenhengendePerioder(
-            eksisterendePerioder.map((periode) => new Periode(periode))
+            eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom)
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some(
                 (eksisterendePeriode) =>
                     initializeDate(periode.fom).isAfter(initializeDate(eksisterendePeriode.fom)) &&
-                    initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom))
-            )
+                    initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom)),
+            ),
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom)
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom),
         );
 
         const begrunnelsesfelt = (
@@ -70,7 +73,7 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                     name="begrunnelseForInnsending.tekst"
                     customErrorMessage={intlHelper(
                         intl,
-                        'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding'
+                        'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding',
                     )}
                 />
             </div>

@@ -1,10 +1,12 @@
+import dayjs from 'dayjs';
+import { uniqueId } from 'lodash';
+import React, { useRef } from 'react';
+
 import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
 import DateRange from 'app/models/types/DateRange';
 import { getMonthsInDateRange } from 'app/utils';
-import dayjs from 'dayjs';
-import { uniqueId } from 'lodash';
-import React, { useRef } from 'react';
+
 import TidsbrukKalender from './TidsbrukKalender';
 
 interface OwnProps {
@@ -33,7 +35,7 @@ const TidsbrukKalenderContainer = ({
 
     const reducer = (acc: DateRange[][], currentDateRange: DateRange) => {
         const indexOfArrayToInsertInto = acc.findIndex((dateRangeArr: DateRange[]) =>
-            dateRangeArr.some((dateRange) => dayjs(dateRange.fom).isSame(currentDateRange.fom, 'month'))
+            dateRangeArr.some((dateRange) => dayjs(dateRange.fom).isSame(currentDateRange.fom, 'month')),
         );
         if (indexOfArrayToInsertInto > -1 && currentDateRange) {
             const originalArray = acc[indexOfArrayToInsertInto];

@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError, PersonEnkel } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+
 import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';
 import { IOMPMASoknad } from '../../types/OMPMASoknad';
 import { IOMPMASoknadSvar } from '../../types/OMPMASoknadSvar';
@@ -86,7 +87,7 @@ export type IEksisterendeOMPMASoknaderActionTypes =
     | IResetOMPMASoknadidAction;
 
 export function setEksisterendeOMPMASoknaderAction(
-    EksisterendeOMPMASoknaderSvar: IOMPMASoknadSvar
+    EksisterendeOMPMASoknaderSvar: IOMPMASoknadSvar,
 ): ISetEksisterendeOMPMASoknaderAction {
     return {
         type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_SET,
@@ -95,7 +96,7 @@ export function setEksisterendeOMPMASoknaderAction(
 }
 
 export function findEksisterendeOMPMASoknaderLoadingAction(
-    isLoading: boolean
+    isLoading: boolean,
 ): IFindEksisterendeOMPMASoknaderLoadingAction {
     return {
         type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_LOAD,
@@ -123,7 +124,7 @@ export function findEksisterendeOMPMASoknader(søkerId: string, pleietrengendeId
                     return dispatch(setEksisterendeOMPMASoknaderAction(soknader));
                 }
                 return dispatch(findEksisterendeOMPMASoknaderErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

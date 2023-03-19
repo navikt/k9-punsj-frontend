@@ -1,4 +1,9 @@
+import { Form, Formik } from 'formik';
+import React, { useReducer } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import { Alert, Button, Modal, Panel } from '@navikt/ds-react';
+
 import Feilmelding from 'app/components/Feilmelding';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -8,25 +13,23 @@ import {
 } from 'app/state/actions/OMSPunchFormActions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Form, Formik } from 'formik';
-import React, { useReducer } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+
 import { OMSKorrigering } from '../../../models/types/OMSKorrigering';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ErDuSikkerModal from './ErDuSikkerModal';
-import { getFormErrors } from './korrigeringAvFormValidering';
-import ActionType from './korrigeringAvInntektsmeldingActions';
 import './KorrigeringAvInntektsmeldingForm.less';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær';
 import OMSKvittering from './OMSKvittering';
 import OpplysningerOmKorrigering from './OpplysningerOmKorrigering';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel';
+import { getFormErrors } from './korrigeringAvFormValidering';
+import ActionType from './korrigeringAvInntektsmeldingActions';
+import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
 
 interface KorrigeringAvInntektsmeldingFormProps {
     søkerId: string;
@@ -143,7 +146,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     .then((data: ValideringResponse) => {
                         const errors = getFormErrors(values, data);
                         const globalFormError = data?.feil?.find(
-                            (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal'
+                            (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal',
                         );
                         dispatch({
                             type: ActionType.SET_FORM_ERROR,

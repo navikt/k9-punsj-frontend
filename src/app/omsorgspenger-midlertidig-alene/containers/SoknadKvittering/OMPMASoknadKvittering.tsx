@@ -1,22 +1,25 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
+import classNames from 'classnames';
+import countries from 'i18n-iso-countries';
 import React from 'react';
 import { connect } from 'react-redux';
-import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import './ompMASoknadKvittering.less';
-import countries from 'i18n-iso-countries';
-import { RootStateType } from 'app/state/RootState';
+
 import Kopier from 'app/components/kopier/Kopier';
 import LabelValue from 'app/components/skjema/LabelValue';
-import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
+
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
+import './ompMASoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
@@ -60,7 +63,7 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato
+                            response.mottattDato,
                         )}`}
                     </p>
                 </div>
@@ -93,7 +96,7 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                         text={`${intlHelper(intl, 'skjema.annenForelder.situasjonstype')}:`}
                         value={intlHelper(
                             intl,
-                            `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`
+                            `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`,
                         )}
                         retning="horisontal"
                     />

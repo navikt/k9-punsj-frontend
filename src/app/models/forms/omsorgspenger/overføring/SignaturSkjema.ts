@@ -1,6 +1,7 @@
 import { IntlShape } from 'react-intl';
+
+import { IFeltValidator, fødselsnummervalidator, påkrevd, validerSkjema } from '../../../../rules/valideringer';
 import { JaNei } from '../../../enums';
-import { fødselsnummervalidator, IFeltValidator, påkrevd, validerSkjema } from '../../../../rules/valideringer';
 
 export interface ISignaturSkjema {
     identitetsnummer: string;

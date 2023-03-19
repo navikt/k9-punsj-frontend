@@ -3,11 +3,12 @@ import { PunchFormActionKeys } from 'app/models/enums';
 import { IError, Periode } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
+
+import { IHentPerioder } from '../../../models/types/RequestBodies';
+import { ISendSoknad } from '../../../models/types/SendSoknad';
 import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadKvittering } from '../../types/PLSSoknadKvittering';
 import { IPLSSoknadUt } from '../../types/PLSSoknadUt';
-import { IHentPerioder } from '../../../models/types/RequestBodies';
-import { ISendSoknad } from '../../../models/types/SendSoknad';
 
 interface IResetPunchPLSFormAction {
     type: PunchFormActionKeys.RESET;
@@ -218,7 +219,7 @@ export function updatePLSSoknader(
     norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IPLSSoknadUt>,
-    soknad2: Partial<IPLSSoknadUt> | null
+    soknad2: Partial<IPLSSoknadUt> | null,
 ) {
     return (dispatch: any) => {
         if (!norskPleietrengendeId || !soknad2) {
@@ -262,7 +263,7 @@ export const submitPLSSoknadRequestAction = (): ISubmitPLSSoknadRequestAction =>
 });
 export const submitPLSSoknadSuccessAction = (
     innsentSoknad: IPLSSoknadKvittering,
-    linkTilBehandlingIK9: string | null
+    linkTilBehandlingIK9: string | null,
 ): ISubmitPLSSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
     innsentSoknad,
@@ -286,7 +287,7 @@ export const validerPLSSoknadRequestAction = (): IValiderPLSSoknadRequestAction 
 });
 export const validerPLSSoknadSuccessAction = (
     validertSoknad: IPLSSoknadKvittering,
-    erMellomlagring?: boolean
+    erMellomlagring?: boolean,
 ): IValiderPLSSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
     validertSoknad,
@@ -330,7 +331,7 @@ export function submitPLSSoknad(norskIdent: string, soeknadId: string) {
                     default:
                         return dispatch(submitPLSSoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }
@@ -354,7 +355,7 @@ export function validerPLSSoknad(soknad: IPLSSoknadUt, erMellomlagring?: boolean
                     default:
                         return dispatch(validerPLSSoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }

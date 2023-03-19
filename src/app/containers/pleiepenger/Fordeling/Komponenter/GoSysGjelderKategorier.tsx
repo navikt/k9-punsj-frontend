@@ -1,11 +1,13 @@
-import { IFordelingState } from 'app/models/types';
-import { hentGjelderKategorierFraGosys, setValgtGosysKategoriAction } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import { Select } from 'nav-frontend-skjema';
 import React, { useEffect } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { IFordelingState } from 'app/models/types';
+import { RootStateType } from 'app/state/RootState';
+import { hentGjelderKategorierFraGosys, setValgtGosysKategoriAction } from 'app/state/actions';
+import intlHelper from 'app/utils/intlUtils';
+
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 
 export interface IOwnProps {
@@ -17,7 +19,7 @@ export interface IOwnProps {
 type IGosysGjelderKategorierProps = WrappedComponentProps & IOwnProps;
 
 const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKategorierProps> = (
-    props: IGosysGjelderKategorierProps
+    props: IGosysGjelderKategorierProps,
 ) => {
     const { intl, fordelingState, hentGjelderKategorier, setValgtGosysKategori } = props;
 
@@ -66,7 +68,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 const GosysGjelderKategorier = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(GosysGjelderKategorierComponent)
+    connect(mapStateToProps, mapDispatchToProps)(GosysGjelderKategorierComponent),
 );
 
 export { GosysGjelderKategorier, GosysGjelderKategorierComponent };

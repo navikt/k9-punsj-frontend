@@ -1,14 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import DateInput from 'app/components/skjema/DateInput';
-import { Alert, Panel } from '@navikt/ds-react';
 import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import DateInput from 'app/components/skjema/DateInput';
+
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
-import './opplysningerOmOMPKSSoknad.less';
 import { OMPKSSoknad } from '../../types/OMPKSSoknad';
+import './opplysningerOmOMPKSSoknad.less';
 
 interface IOwnProps {
     intl: IntlShape;

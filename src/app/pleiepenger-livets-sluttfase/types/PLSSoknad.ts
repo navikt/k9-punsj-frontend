@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
+
 import {
     Arbeidstaker,
     IArbeidstaker,
@@ -7,12 +8,12 @@ import {
     IPeriode,
     ITimerOgMinutter,
     Periode,
-    Periodeinfo,
     PeriodeMedTimerMinutter,
+    Periodeinfo,
 } from '../../models/types';
+import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
 import { FrilanserOpptjening, IFrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
 
 export interface IPLSSoknad {
     soeknadId?: string;

@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+
 import { IOpprettSoknad } from '../../../models/types/RequestBodies';
 import { EksisterendeOMPKSSoknaderActionKeys } from '../../types/EksisterendeOMPKSSoknaderActionKeys';
 import { IOMPKSSoknad } from '../../types/OMPKSSoknad';
@@ -80,7 +81,7 @@ export type IEksisterendeOMPKSSoknaderActionTypes =
     | IResetOMPKSSoknadidAction;
 
 export function setEksisterendeOMPKSSoknaderAction(
-    EksisterendeOMPKSSoknaderSvar: IOMPKSSoknadSvar
+    EksisterendeOMPKSSoknaderSvar: IOMPKSSoknadSvar,
 ): ISetEksisterendeOMPKSSoknaderAction {
     return {
         type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_SET,
@@ -89,7 +90,7 @@ export function setEksisterendeOMPKSSoknaderAction(
 }
 
 export function findEksisterendeOMPKSSoknaderLoadingAction(
-    isLoading: boolean
+    isLoading: boolean,
 ): IFindEksisterendeOMPKSSoknaderLoadingAction {
     return {
         type: EksisterendeOMPKSSoknaderActionKeys.EKSISTERENDE_OMP_KS_SOKNADER_LOAD,
@@ -117,7 +118,7 @@ export function findEksisterendeOMPKSSoknader(søkerId: string, pleietrengendeId
                     return dispatch(setEksisterendeOMPKSSoknaderAction(soknader));
                 }
                 return dispatch(findEksisterendeOMPKSSoknaderErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

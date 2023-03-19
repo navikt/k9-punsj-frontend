@@ -1,10 +1,11 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import utc from 'dayjs/plugin/utc';
 import { groupBy } from 'lodash';
-import classNames from 'classnames';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import { dateToISODate, getDatesInDateRange, getDatesInMonth, isDateInDates, isWeekend } from '../../utils/timeUtils';
 import CalendarGridDate from './CalendarGridDate';
 import './calendarGrid.less';
@@ -125,7 +126,7 @@ const CalendarGrid: React.FunctionComponent<Props> = ({
         const areAllDaysInWeekDisabledOrOutsideMonth =
             datesInWeek.filter(
                 (date) =>
-                    isDateInDates(date, disabledDates) === true || dayjs(date).isSame(month.fom, 'month') === false
+                    isDateInDates(date, disabledDates) === true || dayjs(date).isSame(month.fom, 'month') === false,
             ).length === datesInWeek.length;
 
         if (hideWeeksWithOnlyDisabledContent && areAllDaysInWeekDisabledOrOutsideMonth) {

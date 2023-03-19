@@ -1,11 +1,13 @@
-import { Delete } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
-import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Field, FieldArrayRenderProps, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
+
+import { Delete } from '@navikt/ds-icons';
+import { Button } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
 interface UtenlandsoppholdProps {
     fieldArrayIndex: number;

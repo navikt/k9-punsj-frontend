@@ -1,6 +1,7 @@
-import { Button } from '@navikt/ds-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+
+import { Button } from '@navikt/ds-react';
 
 import PlussSVG from '../../assets/SVG/PlussSVG';
 import './knapper.less';

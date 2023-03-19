@@ -1,11 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { setSkjema } from 'app/state/reducers/omsorgspengeroverførdager/overføringSignaturReducer';
-import OverføringIdentSjekk from './OverføringIdentSjekk';
-import { ISignaturSkjema, validerSignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
-import SkjemaContext from '../../../components/skjema/SkjemaContext';
-import { RootStateType } from '../../../state/RootState';
+
 import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
+import SkjemaContext from '../../../components/skjema/SkjemaContext';
+import { ISignaturSkjema, validerSignaturSkjema } from '../../../models/forms/omsorgspenger/overføring/SignaturSkjema';
+import { RootStateType } from '../../../state/RootState';
+import OverføringIdentSjekk from './OverføringIdentSjekk';
 
 interface ISignaturSkjemaContextProps {
     initialValues: ISignaturSkjema;

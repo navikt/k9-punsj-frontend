@@ -13,7 +13,7 @@ const initialState: IEksisterendeSoknaderState = {
 // eslint-disable-next-line import/prefer-default-export
 export function EksisterendeSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeSoknaderState = initialState,
-    action: IEksisterendeSoknaderActionTypes
+    action: IEksisterendeSoknaderActionTypes,
 ): IEksisterendeSoknaderState {
     switch (action.type) {
         case EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET:

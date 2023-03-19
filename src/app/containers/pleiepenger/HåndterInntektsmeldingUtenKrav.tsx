@@ -1,8 +1,15 @@
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Alert, Button, Modal } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { IJournalpost } from 'app/models/types';
+import { RootStateType } from 'app/state/RootState';
 import { setJournalpostPaaVentResetAction } from 'app/state/actions';
 import {
     ferdigstillJournalpost,
@@ -10,11 +17,7 @@ import {
 } from 'app/state/actions/FordelingFerdigstillJournalpostActions';
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
-import { RootStateType } from 'app/state/RootState';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
 import OkGaaTilLosModal from './OkGaaTilLosModal';
@@ -38,16 +41,16 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     const [håndterInntektsmeldingUtenKravValg, setHåndterInntektsmeldingUtenKravValg] = useState<string>('');
     const dispatch = useDispatch();
     const showSettPaaVentSuccessModal = useSelector(
-        (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentSuccess
+        (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentSuccess,
     );
     const showSettPaaVentErrorModal = useSelector(
-        (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentError
+        (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentError,
     );
     const showFerdigstillJournalpostSuccessModal = useSelector(
-        (state: RootStateType) => state.fordelingFerdigstillJournalpostState.ferdigstillJournalpostSuccess
+        (state: RootStateType) => state.fordelingFerdigstillJournalpostState.ferdigstillJournalpostSuccess,
     );
     const showFerdigstillJournalpostErrorModal = useSelector(
-        (state: RootStateType) => state.fordelingFerdigstillJournalpostState.ferdigstillJournalpostError
+        (state: RootStateType) => state.fordelingFerdigstillJournalpostState.ferdigstillJournalpostError,
     );
 
     const handleSettPaaVent = () => {

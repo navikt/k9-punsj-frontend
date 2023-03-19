@@ -1,8 +1,9 @@
 /* eslint-disable no-template-curly-in-string */
+import { string } from 'prop-types';
 
 import { IPeriode } from 'app/models/types';
 import yup, { passertDato, passertKlokkeslettPaaDato, periode, utenlandsopphold } from 'app/rules/yup';
-import { string } from 'prop-types';
+
 import nb from '../i18n/nb.json';
 import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
 
@@ -24,7 +25,7 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             periode: periode(),
             faktiskTidPrDag: yup.string().required().label('Timer fravær per dag'),
             normalArbeidstidPrDag: yup.string().required().label('Normal arbeidstid per dag'),
-        })
+        }),
     );
 const arbeidstaker = () =>
     yup.object({
@@ -122,7 +123,7 @@ const OLPSchema = yup.object({
                 periode: periode(),
                 avreise: yup.string().required(),
                 hjemkomst: yup.string().required(),
-            })
+            }),
         ),
     }),
 });

@@ -1,15 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import * as React from 'react';
+import { Row } from 'react-bootstrap';
+import { useIntl } from 'react-intl';
+
+import { Panel } from '@navikt/ds-react';
+
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { Panel } from '@navikt/ds-react';
-import * as React from 'react';
-import { Row } from 'react-bootstrap';
-import { useIntl } from 'react-intl';
+
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import useFocus from './useFocus';
 

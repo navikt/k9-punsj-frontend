@@ -1,14 +1,17 @@
-import { Button, Heading } from '@navikt/ds-react';
-import { SplitView } from 'app/components/SplitView';
-import { FordelingDokumenttype } from 'app/models/enums';
-import { IJournalpost } from 'app/models/types';
-import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
-import Fagsak from 'app/types/Fagsak';
-import { finnForkortelseForDokumenttype } from 'app/utils';
 import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+
+import { Button, Heading } from '@navikt/ds-react';
+
+import { SplitView } from 'app/components/SplitView';
+import { FordelingDokumenttype } from 'app/models/enums';
+import { IJournalpost } from 'app/models/types';
+import { RootStateType } from 'app/state/RootState';
+import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
+import Fagsak from 'app/types/Fagsak';
+import { finnForkortelseForDokumenttype } from 'app/utils';
+
 import BrevComponent from '../../components/brev/BrevComponent';
 import './sendBrevPåFagsak.less';
 

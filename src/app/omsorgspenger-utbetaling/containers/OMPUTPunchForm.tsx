@@ -1,13 +1,12 @@
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
+import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useMutation } from 'react-query';
 import { connect } from 'react-redux';
 
 import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
-
-import { debounce } from 'lodash';
-import { useMutation } from 'react-query';
 
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
@@ -80,7 +79,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             values.erKorrigering
                 ? validerSoeknad(
                       korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
-                      identState.søkerId
+                      identState.søkerId,
                   )
                 : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.søkerId),
         {
@@ -105,7 +104,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     setK9FormatErrors([]);
                 }
             },
-        }
+        },
     );
 
     const {
@@ -117,7 +116,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             if (values.erKorrigering) {
                 return submitSoknad
                     ? oppdaterSoeknad(
-                          korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
+                          korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
                       )
                     : oppdaterSoeknad(korrigeringFilter(frontendTilBackendMapping(values)));
             }
@@ -133,7 +132,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     handleSubmit();
                 }
             },
-        }
+        },
     );
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
@@ -146,7 +145,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     const debounceCallback = useCallback(
         debounce(() => updateSoknad({ submitSoknad: false }), 3000),
-        []
+        [],
     );
 
     useEffect(() => {
@@ -234,7 +233,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             <ErrorSummary.Item key={`${error.path}-${error.message}`}>
                                 {error.message}
                             </ErrorSummary.Item>
-                        )
+                        ),
                     )}
                 </ErrorSummary>
             )}

@@ -1,11 +1,12 @@
+import React from 'react';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect, useSelector } from 'react-redux';
+
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect, useSelector } from 'react-redux';
 import { IJournalpost } from '../../models/types';
-import { opprettGosysOppgave as opprettGosysOppgaveAction } from '../../state/actions/GosysOppgaveActions';
 import { RootStateType } from '../../state/RootState';
+import { opprettGosysOppgave as opprettGosysOppgaveAction } from '../../state/actions/GosysOppgaveActions';
 import intlHelper from '../../utils/intlUtils';
 
 export interface IOpprettOppgaveStateProps {
@@ -77,5 +78,5 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export const OpprettGosysOppgavePanel = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(OpprettGosysOppgaveComponent)
+    connect(mapStateToProps, mapDispatchToProps)(OpprettGosysOppgaveComponent),
 );

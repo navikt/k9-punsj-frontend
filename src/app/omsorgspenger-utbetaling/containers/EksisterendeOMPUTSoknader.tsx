@@ -1,14 +1,16 @@
+import { useState } from 'react';
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useQuery } from 'react-query';
+
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { useState } from 'react';
 
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { useQuery } from 'react-query';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -22,7 +24,7 @@ export interface IEksisterendeOMPUTSoknaderComponentProps {
 type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPUTSoknaderComponentProps;
 
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
-    props: IEksisterendeOMPUTSoknaderProps
+    props: IEksisterendeOMPUTSoknaderProps,
 ) => {
     const { intl, søkerId, pleietrengendeId } = props;
 
@@ -82,7 +84,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                             Tom søknad
                         </td>
                     )}
-                </tr>
+                </tr>,
             );
             modaler.push(
                 <Modal
@@ -98,7 +100,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                         onClose={() => setValgtSoeknad(undefined)}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
-                </Modal>
+                </Modal>,
             );
         });
 

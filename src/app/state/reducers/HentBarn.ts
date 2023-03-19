@@ -1,6 +1,6 @@
-import { get } from '../../utils';
 import { ApiPath } from '../../apiConfig';
 import { IBarn } from '../../models/types/Barn';
+import { get } from '../../utils';
 
 export enum ActiontypesHentBarn {
     HENTBARN_SUCCESS = 'FELLES/HENTBARN_SUCCESS',

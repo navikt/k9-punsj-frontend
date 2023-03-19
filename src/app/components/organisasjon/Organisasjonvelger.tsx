@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Organisasjon from 'app/models/types/Organisasjon';
+
 import SelectFormik, { FormikSelectProps } from '../formikInput/SelectFormik';
 
 interface OwnProps extends Partial<FormikSelectProps> {

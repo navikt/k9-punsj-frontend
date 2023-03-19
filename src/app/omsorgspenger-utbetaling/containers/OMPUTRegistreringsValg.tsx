@@ -1,15 +1,17 @@
-import { Alert, Button, Loader } from '@navikt/ds-react';
-
 import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import { useMutation, useQuery } from 'react-query';
+import { connect } from 'react-redux';
+
+import { Alert, Button, Loader } from '@navikt/ds-react';
+
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
+
 import { IIdentState } from '../../models/types/IdentState';
-import { setHash } from '../../utils';
-import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 import { RootStateType } from '../../state/RootState';
+import { setHash } from '../../utils';
 import api, { hentEksisterendeSoeknader } from '../api';
+import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 
 export interface IOMPUTRegistreringsValgComponentProps {
     journalpostid: string;
@@ -21,7 +23,7 @@ export interface IEksisterendeOMPUTSoknaderStateProps {
 type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEksisterendeOMPUTSoknaderStateProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistreringsValgProps> = (
-    props: IOMPUTRegistreringsValgProps
+    props: IOMPUTRegistreringsValgProps,
 ) => {
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
@@ -55,7 +57,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         const soknader = eksisterendeSoeknader?.søknader;
         if (soknader?.length) {
             return !soknader?.some((soknad) =>
-                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid)
+                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid),
             );
         }
         return true;

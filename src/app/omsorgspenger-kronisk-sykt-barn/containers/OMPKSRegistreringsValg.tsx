@@ -1,15 +1,17 @@
-import { Alert, Button } from '@navikt/ds-react';
-import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
-
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
+import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+
 import { PunchStep } from '../../models/enums';
 import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { RootStateType } from '../../state/RootState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
 import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
 import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
@@ -38,7 +40,7 @@ type IOMPKSRegistreringsValgProps = IOMPKSRegistreringsValgComponentProps &
     IEksisterendeOMPKSSoknaderStateProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistreringsValgProps> = (
-    props: IOMPKSRegistreringsValgProps
+    props: IOMPKSRegistreringsValgProps,
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
 
@@ -49,7 +51,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
@@ -78,7 +80,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid)
+                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
             );
         }
         return true;

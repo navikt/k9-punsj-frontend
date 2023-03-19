@@ -1,4 +1,5 @@
 import validator from '@navikt/fnrvalidator';
+
 import intlHelper from '../../../utils/intlUtils';
 
 export const erUgyldigIdent = (ident: string | null): boolean => {
@@ -12,7 +13,7 @@ export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     annenIdent: string | null,
     sokerIdent: string | null,
     barnIdent: string | null,
-    intl: any
+    intl: any,
 ) => {
     if (annenIdent && erUgyldigIdent(annenIdent)) return intlHelper(intl, 'ident.feil.ugyldigident');
     if (annenIdent && sokerIdent && annenIdent.length > 0 && annenIdent === sokerIdent)

@@ -1,5 +1,7 @@
-import { Alert } from '@navikt/ds-react';
 import React from 'react';
+
+import { Alert } from '@navikt/ds-react';
+
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import intlHelper from '../../../../utils/intlUtils';
 

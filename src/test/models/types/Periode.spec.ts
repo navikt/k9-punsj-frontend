@@ -1,7 +1,8 @@
+import { mocked } from 'jest-mock';
+import { IntlShape, createIntl } from 'react-intl';
+
 import { IPeriode, Periode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import { createIntl, IntlShape } from 'react-intl';
-import { mocked } from 'jest-mock';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');

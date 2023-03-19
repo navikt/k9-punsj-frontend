@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
+
 import dokumentMalType from './dokumentMalType';
 
 const lagDokumentdata = (values: BrevFormValues) => {
@@ -52,7 +52,7 @@ export class Brev {
         fagsakYtelseType: string,
         dokumentMal: string,
         journalpostId?: string,
-        fagsakId?: string
+        fagsakId?: string,
     ) {
         this.soekerId = søkerId;
         this.mottaker = mottaker;

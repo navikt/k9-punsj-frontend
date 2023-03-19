@@ -1,20 +1,22 @@
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
+import { RootStateType } from 'app/state/RootState';
 import {
     resetPunchAction,
     setIdentAction,
     setStepAction,
     undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPKSSoknadAction,
@@ -58,7 +60,7 @@ type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
     IEksisterendeOMPKSSoknaderDispatchProps;
 
 export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksisterendeOMPKSSoknaderProps> = (
-    props: IEksisterendeOMPKSSoknaderProps
+    props: IEksisterendeOMPKSSoknaderProps,
 ) => {
     const { intl, punchState, eksisterendeOMPKSSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
 
@@ -83,7 +85,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeOMPKSSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
@@ -164,7 +166,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                             Tom søknad
                         </td>
                     )}
-                </tr>
+                </tr>,
             );
             modaler.push(
                 <Modal
@@ -180,7 +182,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
-                </Modal>
+                </Modal>,
             );
         });
 
@@ -247,5 +249,5 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export const EksisterendeOMPKSSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendeOMPKSSoknaderComponent)
+    connect(mapStateToProps, mapDispatchToProps)(EksisterendeOMPKSSoknaderComponent),
 );

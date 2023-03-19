@@ -1,11 +1,14 @@
-import { Back, Next } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
-import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import classNames from 'classnames';
 import { ToggleGruppe } from 'nav-frontend-toggle';
 import { Resizable } from 're-resizable';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+
+import { Back, Next } from '@navikt/ds-icons';
+import { Button, Panel } from '@navikt/ds-react';
+
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
+
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
@@ -46,7 +49,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             // eslint-disable-next-line no-unsafe-optional-chaining
             ...current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)),
         ],
-        []
+        [],
     );
 
     const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter), [dokumenter, dok]);
@@ -59,7 +62,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                 journalpostId,
                 dokumentId,
             }),
-        [journalpostId, dokumentId]
+        [journalpostId, dokumentId],
     );
     const [showPdf, setShowPdf] = useState<boolean>(true);
 

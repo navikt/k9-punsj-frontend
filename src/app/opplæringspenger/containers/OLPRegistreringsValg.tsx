@@ -1,15 +1,17 @@
-import { Alert, Button } from '@navikt/ds-react';
-
 import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import { useMutation, useQuery } from 'react-query';
+import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
+
 import { IIdentState } from '../../models/types/IdentState';
-import { setHash } from '../../utils';
-import { EksisterendeOLPSoknader } from './EksisterendeOLPSoknader';
 import { RootStateType } from '../../state/RootState';
+import { setHash } from '../../utils';
 import api, { hentEksisterendeSoeknader } from '../api';
+import { EksisterendeOLPSoknader } from './EksisterendeOLPSoknader';
 
 export interface IOLPRegistreringsValgComponentProps {
     journalpostid: string;
@@ -21,7 +23,7 @@ export interface IEksisterendeOLPSoknaderStateProps {
 type IOLPRegistreringsValgProps = IOLPRegistreringsValgComponentProps & IEksisterendeOLPSoknaderStateProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistreringsValgProps> = (
-    props: IOLPRegistreringsValgProps
+    props: IOLPRegistreringsValgProps,
 ) => {
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
@@ -55,7 +57,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
         const soknader = eksisterendeSoeknader?.søknader;
         if (soknader?.length) {
             return !soknader?.some((soknad) =>
-                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid)
+                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid),
             );
         }
         return true;

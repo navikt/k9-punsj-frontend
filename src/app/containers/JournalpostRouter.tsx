@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { HashRouter, Route, useParams } from 'react-router-dom';
+
 import JournalpostLoader from './JournalpostLoader';
-import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 import { Sakstyper } from './SakstypeImpls';
 import SakstypeStepRouter from './SakstypeStepRouter';
+import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 
 interface IRouterParams {
     journalpostid: string;

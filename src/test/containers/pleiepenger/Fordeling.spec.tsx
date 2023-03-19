@@ -1,3 +1,8 @@
+import { shallow } from 'enzyme';
+import { mocked } from 'jest-mock';
+import * as React from 'react';
+import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+
 import {
     FordelingComponent,
     IFordelingDispatchProps,
@@ -8,10 +13,7 @@ import { IFordelingState, IJournalpost } from 'app/models/types';
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 import intlHelper from 'app/utils/intlUtils';
-import { shallow } from 'enzyme';
-import * as React from 'react';
-import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import { mocked } from 'jest-mock';
+
 import { IGosysOppgaveState } from '../../../app/models/types/GosysOppgaveState';
 import { IIdentState } from '../../../app/models/types/IdentState';
 
@@ -29,7 +31,7 @@ export const setupFordeling = (
     fordelingStatePartial?: Partial<IFordelingState>,
     fordelingDispatchPropsPartial?: Partial<IFordelingDispatchProps>,
     opprettIGosysStatePartial?: Partial<IGosysOppgaveState>,
-    journalpostPartial?: Partial<IJournalpost>
+    journalpostPartial?: Partial<IJournalpost>,
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
@@ -117,7 +119,7 @@ export const setupFordeling = (
             {...fordelingStateProps}
             {...fordelingDispatchProps}
             {...opprettIGosysStatePartial}
-        />
+        />,
         /* eslint-enable react/jsx-props-no-spreading */
     );
 };
@@ -196,7 +198,7 @@ describe('Fordeling', () => {
             fordeling
                 .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
                 .children()
-                .text()
+                .text(),
         ).toEqual('fordeling.omfordeling.feil');
     });
 
@@ -208,14 +210,14 @@ describe('Fordeling', () => {
             {
                 isAwaitingGosysOppgaveRequestResponse: false,
                 gosysOppgaveRequestError: undefined,
-            }
+            },
         );
         expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
         expect(fordeling.find({ variant: 'error' }).children().text()).toEqual(
-            'fordeling.infotrygd.journalpoststottesikke'
+            'fordeling.infotrygd.journalpoststottesikke',
         );
         expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'secondary')).toHaveLength(
-            1
+            1,
         );
     });
 
@@ -232,7 +234,7 @@ describe('Fordeling', () => {
             fordeling
                 .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')
                 .find('Memo(FormattedMessage)')
-                .prop('id')
+                .prop('id'),
         ).toEqual('fordeling.kanIkkeOppretteJPIGosys.info');
 
         expect(fordeling.find('Knapp')).toHaveLength(1);

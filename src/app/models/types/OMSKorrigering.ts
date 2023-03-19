@@ -1,4 +1,5 @@
 import { KorrigeringAvInntektsmeldingFormValues } from 'app/containers/omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingFormFieldsValues';
+
 import { IPeriode } from './Periode';
 
 export interface Fravaersperioder {
@@ -69,7 +70,7 @@ export class OMSKorrigering {
         values: KorrigeringAvInntektsmeldingFormValues,
         søknadId: string,
         søkerId: string,
-        journalposter: string[]
+        journalposter: string[],
     ) {
         this.mottattDato = values.OpplysningerOmKorrigering.dato;
         this.klokkeslett = values.OpplysningerOmKorrigering.klokkeslett;

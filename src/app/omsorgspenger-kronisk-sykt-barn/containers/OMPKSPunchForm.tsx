@@ -1,5 +1,13 @@
 /* eslint-disable */
+import classNames from 'classnames';
+import { CheckboksPanel } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
 import { Alert, Button, HelpText, Modal, Tag } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
+
 import { PunchStep } from 'app/models/enums';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
@@ -12,13 +20,7 @@ import {
 } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
 
-import { Loader } from '@navikt/ds-react';
-import { CheckboksPanel } from 'nav-frontend-skjema';
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -131,7 +133,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     componentDidUpdate(
         prevProps: Readonly<IPunchOMPKSFormProps>,
         prevState: Readonly<IPunchOMPKSFormComponentState>,
-        snapshot?: any
+        snapshot?: any,
     ): void {
         const { soknad } = this.props.punchFormState;
         if (!!soknad && !this.state.isFetched) {
@@ -287,7 +289,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         <div className="">
                             <SettPaaVentModal
                                 journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid
+                                    (jp) => jp.journalpostId !== this.props.journalpostid,
                                 )}
                                 soknadId={soknad.soeknadId}
                                 submit={() => this.handleSettPaaVent()}
@@ -389,7 +391,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         let navarandeSoknad: IOMPKSSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
             ),
         };
         this.setState({ harForsoektAaSendeInn: true });
@@ -497,15 +499,15 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                       .replace(/\[\d+]/g, '[]')
                       .replace(
                           /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
                       )
                       .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
                       .replace(
                           /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
                       )
                       .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
+                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
               )
             : undefined;
     };

@@ -1,11 +1,12 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
-import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'jest-mock';
-import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
-import intlHelper from '../../../app/utils/intlUtils';
+import * as React from 'react';
+import { IntlShape, createIntl } from 'react-intl';
+
 import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { formattereTimerForArbeidstakerPerioder } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
+import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -46,7 +47,7 @@ const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringAr
                 'skjema.arbeid.arbeidstaker.timerfaktisk',
             ]}
             properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
-        />
+        />,
     );
 };
 
@@ -57,18 +58,18 @@ describe('VisningAvPerioderSoknadKvittering', () => {
     it('Viser overskrifter', () => {
         expect(visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.periode.overskrift')).toBe(true);
         expect(
-            visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.arbeid.arbeidstaker.timernormalt')
+            visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.arbeid.arbeidstaker.timernormalt'),
         ).toBe(true);
         expect(
-            visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.arbeid.arbeidstaker.timerfaktisk')
+            visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.arbeid.arbeidstaker.timerfaktisk'),
         ).toBe(true);
 
         expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.periode.overskrift')).toBe(true);
         expect(
-            visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.arbeid.arbeidstaker.timernormalt')
+            visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.arbeid.arbeidstaker.timernormalt'),
         ).toBe(true);
         expect(
-            visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.arbeid.arbeidstaker.timerfaktisk')
+            visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.arbeid.arbeidstaker.timerfaktisk'),
         ).toBe(true);
     });
 

@@ -1,10 +1,11 @@
 /* eslint-disable no-template-curly-in-string */
-import { IntlShape } from 'react-intl';
 import { FormikErrors, getIn, setIn } from 'formik';
+import { IntlShape } from 'react-intl';
 
 import { initializeDate } from 'app/utils';
-import { IdentRules } from './IdentRules';
+
 import intlHelper from '../utils/intlUtils';
+import { IdentRules } from './IdentRules';
 
 export type Validator<VerdiType, Skjema> = (verdi: VerdiType, skjema: Skjema) => string | undefined;
 

@@ -1,11 +1,14 @@
+import { Input } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
 import { Alert, Checkbox, Select } from '@navikt/ds-react';
+
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { Input } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
+
 import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { IIdentState } from '../../../../models/types/IdentState';

@@ -38,7 +38,7 @@ describe('Arbeidstaker.orgOrPers', () => {
             setupArbeidstaker({
                 organisasjonsnummer: null,
                 norskIdent: null,
-            }).orgOrPers()
+            }).orgOrPers(),
         ).toEqual('o');
     });
 });

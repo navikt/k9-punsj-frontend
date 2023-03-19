@@ -1,7 +1,9 @@
-import { BodyLong } from '@navikt/ds-react';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+
+import { BodyLong } from '@navikt/ds-react';
+
 import './sendBrevIAvsluttetSakInngang.less';
 
 const SendBrevIAvsluttetSakInngang = () => {

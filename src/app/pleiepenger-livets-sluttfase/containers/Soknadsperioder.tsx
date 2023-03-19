@@ -1,13 +1,16 @@
-import { Alert, Panel } from '@navikt/ds-react';
-import { initializeDate } from 'app/utils';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import { initializeDate } from 'app/utils';
+
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import CalendarSvg from '../../assets/SVG/CalendarSVG';
-import { generateDateString } from '../../components/skjema/skjemaUtils';
 import VerticalSpacer from '../../components/VerticalSpacer';
+import { generateDateString } from '../../components/skjema/skjemaUtils';
 import { Periodepaneler } from '../../containers/pleiepenger/Periodepaneler';
 import { GetUhaandterteFeil, IPeriode } from '../../models/types';
 import { RootStateType } from '../../state/RootState';
@@ -50,8 +53,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             nyePerioder?.some(
                 (nyPeriode) =>
                     initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom))
-            )
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+            ),
         );
     };
 

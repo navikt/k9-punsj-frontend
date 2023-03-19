@@ -1,7 +1,8 @@
-import { Alert, Button } from '@navikt/ds-react';
-
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, Button } from '@navikt/ds-react';
+
 import { ApiPath } from '../../apiConfig';
 import VisSvg from '../../assets/SVG/VisSVG';
 import { IJournalpostInfo } from '../../models/types';

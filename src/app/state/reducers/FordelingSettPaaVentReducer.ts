@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-
 import FordelingSettPaaVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
+
 import { FordelingSettPaaVentActions } from '../actions/FordelingSettPaaVentActions';
 
 const initialState: FordelingSettPaaVentState = {
@@ -11,7 +11,7 @@ const initialState: FordelingSettPaaVentState = {
 
 export function FordelingSettPaaVentReducer(
     fordelingSettPåVentState: FordelingSettPaaVentState,
-    action: FordelingSettPaaVentActions
+    action: FordelingSettPaaVentActions,
 ): FordelingSettPaaVentState {
     if (typeof fordelingSettPåVentState === 'undefined') {
         return initialState;

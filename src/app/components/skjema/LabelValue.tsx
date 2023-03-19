@@ -1,10 +1,11 @@
-import React from 'react';
-import { Label } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
 import classNames from 'classnames';
+import { Label } from 'nav-frontend-skjema';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import intlHelper from '../../utils/intlUtils';
-import './labelValue.less';
 import Kopier from '../kopier/Kopier';
+import './labelValue.less';
 
 type ILabelValueProps = {
     value: string | undefined;

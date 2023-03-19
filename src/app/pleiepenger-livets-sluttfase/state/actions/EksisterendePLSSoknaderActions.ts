@@ -1,9 +1,10 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
-import { IPLSSoknad } from '../../types/PLSSoknad';
+
 import { IOpprettSoknad } from '../../../models/types/RequestBodies';
 import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
+import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadSvar } from '../../types/PLSSoknadSvar';
 
 interface ISetEksisterendePLSSoknaderAction {
@@ -80,7 +81,7 @@ export type IEksisterendePLSSoknaderActionTypes =
     | IResetPLSSoknadidAction;
 
 export function setEksisterendePLSSoknaderAction(
-    eksisterendeSoknaderSvar: IPLSSoknadSvar
+    eksisterendeSoknaderSvar: IPLSSoknadSvar,
 ): ISetEksisterendePLSSoknaderAction {
     return {
         type: EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNADER_SET,
@@ -89,7 +90,7 @@ export function setEksisterendePLSSoknaderAction(
 }
 
 export function findEksisterendePLSSoknaderLoadingAction(
-    isLoading: boolean
+    isLoading: boolean,
 ): IFindEksisterendePLSSoknaderLoadingAction {
     return {
         type: EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNADER_LOAD,
@@ -117,7 +118,7 @@ export function findEksisterendePLSSoknader(søkerId: string, pleietrengendeId: 
                     return dispatch(setEksisterendePLSSoknaderAction(soknader));
                 }
                 return dispatch(findEksisterendePLSSoknaderErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

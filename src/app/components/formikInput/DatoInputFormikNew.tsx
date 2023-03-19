@@ -1,9 +1,13 @@
 /* eslint-disable react/jsx-pascal-case */
+
 /* eslint-disable camelcase */
-import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import { dateToISODate, initializeDate } from 'app/utils';
 import { useField } from 'formik';
 import React, { useState } from 'react';
+
+import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
+
+import { dateToISODate, initializeDate } from 'app/utils';
+
 import { DateInputProps } from '../skjema/DateInput';
 
 const ISO_DATE_FORMAT = 'YYYY-MM-DD';

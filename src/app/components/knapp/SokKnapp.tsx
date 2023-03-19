@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import { Button } from '@navikt/ds-react';
+
 import './knapper.less';
 
 interface ISokKnappProps {

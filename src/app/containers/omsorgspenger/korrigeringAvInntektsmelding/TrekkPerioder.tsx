@@ -1,9 +1,12 @@
-import { Alert, Panel } from '@navikt/ds-react';
-import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
-import intlHelper from 'app/utils/intlUtils';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
+import intlHelper from 'app/utils/intlUtils';
+
 import EkspanderbartPanel from './EkspanderbartPanel';
 import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import { Periodepanel } from './Periodepanel';

@@ -1,8 +1,11 @@
-import { Checkbox } from '@navikt/ds-react';
-import { IPeriode, ITimerOgMinutter, Periodeinfo } from 'app/models/types';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Checkbox } from '@navikt/ds-react';
+
+import { IPeriode, ITimerOgMinutter, Periodeinfo } from 'app/models/types';
+
 import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';

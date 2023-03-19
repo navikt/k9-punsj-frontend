@@ -1,7 +1,8 @@
-import { Periode, IPeriode } from 'app/models/types/Periode';
+import { IntlShape } from 'react-intl';
+
+import { IPeriode, Periode } from 'app/models/types/Periode';
 import { Periodeinfo } from 'app/models/types/Periodeinfo';
 import intlHelper from 'app/utils/intlUtils';
-import { IntlShape } from 'react-intl';
 
 export interface IFrilanser {
     periode?: IPeriode | undefined;

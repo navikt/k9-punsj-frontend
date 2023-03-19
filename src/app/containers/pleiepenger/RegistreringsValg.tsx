@@ -1,18 +1,19 @@
-import { Alert, Button } from '@navikt/ds-react';
-
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
 import { PunchStep } from '../../models/enums';
 import { IEksisterendeSoknaderState, IJournalpost, IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { RootStateType } from '../../state/RootState';
 import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { RootStateType } from '../../state/RootState';
 import { setHash } from '../../utils';
 import { EksisterendeSoknader } from './EksisterendeSoknader';
 import './registreringsValg.less';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 
 export interface IRegistreringsValgComponentProps {
     journalpostid: string;
@@ -38,7 +39,7 @@ type IRegistreringsValgProps = IRegistreringsValgComponentProps &
     IRegistreringsValgDispatchProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (
-    props: IRegistreringsValgProps
+    props: IRegistreringsValgProps,
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
     const [valgtOption, setValgtOption] = useState<string>('nysoknad');
@@ -50,7 +51,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
@@ -70,7 +71,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         setHash(
             getPunchPath(PunchStep.FILL_FORM, {
                 id: eksisterendeSoknaderState.soknadid,
-            })
+            }),
         );
     };
 
@@ -100,7 +101,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid)
+                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
             );
         }
         return true;

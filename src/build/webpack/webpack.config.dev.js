@@ -19,20 +19,20 @@ webpackConfig.plugins.push(
         template: './src/app/index.html',
         inject: 'body',
         alwaysWriteToDisk: true,
-    })
+    }),
 );
 
 webpackConfig.plugins.push(
     new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, '../../../dist/dev'),
-    })
+    }),
 );
 
 webpackConfig.plugins.push(
     new CircularDependencyPlugin({
         exclude: /node_modules/,
         failOnError: false,
-    })
+    }),
 );
 
 webpackConfig.plugins.push(new ReactRefreshWebpackPlugin());

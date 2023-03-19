@@ -1,14 +1,17 @@
+import { FieldArray, useFormikContext } from 'formik';
+import React from 'react';
+
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, Checkbox, Heading, Label, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import SearchFormik from 'app/components/formikInput/SearchFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { Periode } from 'app/models/types/Periode';
 import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import { FieldArray, useFormikContext } from 'formik';
-import React from 'react';
+import { Periode } from 'app/models/types/Periode';
+
 import InstitusjonSelector from './InstitusjonSelector';
 import './kurs.less';
 

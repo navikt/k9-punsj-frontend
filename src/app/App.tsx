@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-underscore-dangle */
 
-import '@navikt/ds-css';
-import { Modal as DsModal } from '@navikt/ds-react';
-import '@navikt/ft-plattform-komponenter/dist/style.css';
+/* eslint-disable no-underscore-dangle */
 import { composeWithDevTools } from '@redux-devtools/extension';
 import * as Sentry from '@sentry/react';
 import * as React from 'react';
@@ -14,6 +11,11 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
+
+import '@navikt/ds-css';
+import { Modal as DsModal } from '@navikt/ds-react';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
+
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
@@ -21,8 +23,8 @@ import RedigeringRouter from './containers/redigering/RedigeringRouter';
 import SokIndex from './containers/sok/SokIndex';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
-import { thunk } from './state/middleware';
 import { rootReducer } from './state/RootState';
+import { thunk } from './state/middleware';
 import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 

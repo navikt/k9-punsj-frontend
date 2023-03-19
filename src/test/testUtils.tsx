@@ -5,8 +5,9 @@ import { IntlShape } from 'react-intl';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { createStore } from 'redux';
+
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
-import { rootReducer, RootStateType } from '../app/state/RootState';
+import { RootStateType, rootReducer } from '../app/state/RootState';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -22,7 +23,7 @@ export const renderWithRouterAndIntl = (component: ReactNode, history: any = cre
     render(
         <Router history={history}>
             <IntlProvider locale="nb">{component}</IntlProvider>
-        </Router>
+        </Router>,
     );
 
 interface IReduxTestProvider {

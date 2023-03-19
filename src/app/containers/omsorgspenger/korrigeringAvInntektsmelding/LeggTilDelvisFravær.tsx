@@ -1,15 +1,18 @@
+import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import React from 'react';
+import { Row } from 'react-bootstrap';
+import { useIntl } from 'react-intl';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { Alert, Panel } from '@navikt/ds-react';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import React from 'react';
-import { Row } from 'react-bootstrap';
-import { useIntl } from 'react-intl';
+
 import DateInput from '../../../components/skjema/DateInput';
 import EkspanderbartPanel from './EkspanderbartPanel';
 import {
@@ -42,7 +45,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     <h4 className="korrigering-legend">
                                         {intlHelper(
                                             intl,
-                                            'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend'
+                                            'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend',
                                         )}
                                     </h4>
                                 }
@@ -51,7 +54,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                 <Alert size="small" variant="info" className="korrigering__infostripe">
                                     {intlHelper(
                                         intl,
-                                        'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info'
+                                        'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info',
                                     )}
                                 </Alert>
                                 <Panel className="delvisFravaer__inputContainer">
@@ -111,7 +114,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                     </div>
                                                 </Row>
                                             );
-                                        }
+                                        },
                                     )}
                                 </Panel>
                             </SkjemaGruppe>

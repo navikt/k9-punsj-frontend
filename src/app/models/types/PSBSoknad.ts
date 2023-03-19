@@ -1,12 +1,11 @@
 /* eslint-disable max-classes-per-file */
-import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
-import { Periodeinfo } from './Periodeinfo';
-
 import { Arbeidstid, IArbeidstid } from './Arbeidstid';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 import { Barn, IBarn } from './IBarn';
 import { IOmsorg, Omsorg } from './Omsorg';
 import { IOpptjeningAktivitet, OpptjeningAktivitet } from './OpptjeningAktivitet';
+import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
+import { Periodeinfo } from './Periodeinfo';
 import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
 import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
 import { IUttak, Uttak } from './Uttak';
@@ -160,7 +159,7 @@ export class PSBSoknad implements IPSBSoknad {
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
         this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
-            (u) => new UtenlandsOpphold(u)
+            (u) => new UtenlandsOpphold(u),
         );
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
     }

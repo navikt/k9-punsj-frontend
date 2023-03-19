@@ -1,10 +1,12 @@
-import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
-import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
+
+import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
 
 import { Periodepaneler } from '../../../containers/pleiepenger/Periodepaneler';
 import { IPeriode, Periode } from '../../../models/types';
@@ -49,21 +51,21 @@ const EndringAvSoknadsperioder = (props: EndringAvSoknadsperioderProps): JSX.Ele
         }
 
         const formaterteEksisterendePerioder = slåSammenSammenhengendePerioder(
-            eksisterendePerioder.map((periode) => new Periode(periode))
+            eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom)
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some(
                 (eksisterendePeriode) =>
                     initializeDate(periode.fom).isAfter(initializeDate(eksisterendePeriode.fom)) &&
-                    initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom))
-            )
+                    initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom)),
+            ),
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom)
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom),
         );
 
         const begrunnelsesfelt = (

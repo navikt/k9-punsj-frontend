@@ -1,18 +1,20 @@
-import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
-import { Alert, Button } from '@navikt/ds-react';
-
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
+import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+
 import { PunchStep } from '../../models/enums';
-import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { IIdentState } from '../../models/types/IdentState';
 import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
-import { setHash } from '../../utils';
-import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
+import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { setHash } from '../../utils';
+import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
+import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
 
 export interface IOMPMARegistreringsValgComponentProps {
     journalpostid: string;
@@ -38,7 +40,7 @@ type IOMPMARegistreringsValgProps = IOMPMARegistreringsValgComponentProps &
     IEksisterendeOMPMASoknaderStateProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistreringsValgProps> = (
-    props: IOMPMARegistreringsValgProps
+    props: IOMPMARegistreringsValgProps,
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
     const { søkerId, pleietrengendeId, annenPart } = identState;
@@ -48,7 +50,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
@@ -80,7 +82,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((eksisterendeSoknad) =>
                 // eslint-disable-next-line eqeqeq
-                Array.from(eksisterendeSoknad.journalposter!).some((jp) => jp == journalpostid)
+                Array.from(eksisterendeSoknad.journalposter!).some((jp) => jp == journalpostid),
             );
         }
         return true;
