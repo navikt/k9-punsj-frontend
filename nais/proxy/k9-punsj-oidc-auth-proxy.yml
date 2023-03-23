@@ -6,7 +6,7 @@ metadata:
   labels:
     team: k9saksbehandling
 spec:
-  image: ghcr.io/navikt/oidc-auth-proxy:2.2023.03.23-b844739
+  image: {{oidcAuthProxyImage}}
   port: 8080
   azure:
     application:
