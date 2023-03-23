@@ -9,7 +9,7 @@ metadata:
     nais.io/run-as-group: "0"
     nais.io/read-only-file-system: "false"
 spec:
-  image: bitnami/redis:7.0.5
+  image: bitnami/redis:latest
   port: 6379
   replicas:
     min: 1
