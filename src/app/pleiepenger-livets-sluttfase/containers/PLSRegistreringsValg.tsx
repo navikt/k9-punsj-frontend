@@ -11,7 +11,6 @@ import { IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
 import { createPLSSoknad, resetPLSSoknadidAction } from '../state/actions/EksisterendePLSSoknaderActions';
 import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
@@ -27,7 +26,6 @@ export interface IPLSRegistreringsValgDispatchProps {
     undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     createSoknad: typeof createPLSSoknad;
     resetSoknadidAction: typeof resetPLSSoknadidAction;
-    getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
 export interface IEksisterendeSoknaderStateProps {
@@ -58,10 +56,6 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
             props.resetSoknadidAction();
         }
     }, [eksisterendeSoknaderState.soknadid]);
-
-    React.useEffect(() => {
-        props.getAlleJournalposter(søkerId);
-    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -115,7 +109,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
-    getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({

@@ -44,22 +44,3 @@ export function getJournalposterPerIdentErrorAction(error: IError): IGetJournalp
         error,
     };
 }
-
-export function hentAlleJournalposterForIdent(norskIdent: string) {
-    const requestBody: IHentSoknad = { norskIdent };
-    return (dispatch: any) => {
-        dispatch(getJournalposterPerIdentLoadAction(true));
-        return post(
-            ApiPath.JOURNALPOST_HENT,
-            undefined,
-            { 'X-Nav-NorskIdent': norskIdent },
-            requestBody,
-            (response, svar) => {
-                if (response.ok) {
-                    return dispatch(setJournalposterPerIdentAction(svar.poster));
-                }
-                return dispatch(getJournalposterPerIdentErrorAction(convertResponseToError(response)));
-            },
-        );
-    };
-}

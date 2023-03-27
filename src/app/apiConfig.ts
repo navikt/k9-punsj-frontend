@@ -17,7 +17,6 @@ export enum ApiPath {
     PSB_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
     SJEKK_OM_SKAL_TIL_K9SAK = '/journalpost/skaltilk9sak',
     JOURNALPOST_SETT_PAA_VENT = '/journalpost/vent/{journalpostId}',
-    JOURNALPOST_HENT = '/journalpost/hent',
     JOURNALPOST_GET = '/journalpost/{journalpostId}',
     JOURNALPOST_LUKK_OPPGAVE = '/journalpost/lukk/{journalpostId}',
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',

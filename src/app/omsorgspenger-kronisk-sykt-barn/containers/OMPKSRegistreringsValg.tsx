@@ -11,7 +11,6 @@ import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
 import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
 import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
@@ -25,7 +24,6 @@ export interface IOMPKSRegistreringsValgDispatchProps {
     undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     createSoknad: typeof createOMPKSSoknad;
     resetSoknadidAction: typeof resetOMPKSSoknadidAction;
-    getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
 export interface IEksisterendeOMPKSSoknaderStateProps {
@@ -113,7 +111,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(createOMPKSSoknad(journalpostid, søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
-    getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateProps => ({

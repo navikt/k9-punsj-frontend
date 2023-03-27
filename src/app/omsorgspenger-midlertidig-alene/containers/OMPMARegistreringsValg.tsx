@@ -11,7 +11,6 @@ import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
 import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
@@ -25,7 +24,6 @@ export interface IOMPMARegistreringsValgDispatchProps {
     undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     createSoknad: typeof createOMPMASoknad;
     resetSoknadidAction: typeof resetOMPMASoknadidAction;
-    getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
 export interface IEksisterendeOMPMASoknaderStateProps {
@@ -55,10 +53,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
             props.resetSoknadidAction();
         }
     }, [eksisterendeSoknaderState.soknadid]);
-
-    React.useEffect(() => {
-        props.getAlleJournalposter(søkerId);
-    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -115,7 +109,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(createOMPMASoknad(journalpostid, søkerId, annenPart)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
-    getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
