@@ -199,7 +199,7 @@
         "style-loader": "3.3.2",
         "stylelint": "15.3.0",
         "stylelint-config-prettier": "9.0.5",
-        "stylelint-config-standard": "30.0.1",
+        "stylelint-config-standard": "31.0.0",
         "terser-webpack-plugin": "5.3.7",
         "ts-jest": "29.0.5",
         "typescript": "5.0.2",
