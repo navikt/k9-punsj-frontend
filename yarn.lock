@@ -3733,12 +3733,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@snyk/protect@npm:1.1127.0":
-  version: 1.1127.0
-  resolution: "@snyk/protect@npm:1.1127.0"
+"@snyk/protect@npm:1.1128.0":
+  version: 1.1128.0
+  resolution: "@snyk/protect@npm:1.1128.0"
   bin:
     snyk-protect: bin/snyk-protect
-  checksum: 9126307a81681cadb0483a9234c90adf10a13d3d7fabcdc477eaadf20b1c8657bd5c266dbd63c240dd724b806ca4962909428a0b2ce872298ce3581ef93fbe56
+  checksum: cd7305fcf4e1e5b576be28de751fabb1af9a71886914ed73cd0d68f82844a1a4adc976f772e3b215ca09c9da0639d5d61f6001184edee95b31be7d64d60ab6bb
   languageName: node
   linkType: hard
 
@@ -15260,7 +15260,7 @@ __metadata:
     "@redux-devtools/extension": 3.2.5
     "@sentry/cli": 2.16.0
     "@sentry/react": 7.45.0
-    "@snyk/protect": 1.1127.0
+    "@snyk/protect": 1.1128.0
     "@storybook/addon-actions": 6.5.16
     "@storybook/addon-essentials": 6.5.16
     "@storybook/addon-interactions": 6.5.16
