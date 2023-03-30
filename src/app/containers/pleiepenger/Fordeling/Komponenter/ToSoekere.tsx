@@ -20,7 +20,6 @@ interface IToSoekereProps {
     journalpost: IJournalpost;
     identState: IIdentState;
     setIdentAction: typeof setIdentFellesAction;
-    skalJournalpostSomIkkeStottesKopieres: boolean;
     fellesState: IFellesState;
 }
 
@@ -28,7 +27,6 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     dokumenttype,
     journalpost,
     identState,
-    skalJournalpostSomIkkeStottesKopieres,
     fellesState,
     setIdentAction,
 }) => {
@@ -76,11 +74,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                         )}
                         bredde="M"
                     />
-                    <JournalPostKopiFelmeldinger
-                        skalVisesNårJournalpostSomIkkeStottesKopieres={!skalJournalpostSomIkkeStottesKopieres}
-                        fellesState={fellesState}
-                        intl={intl}
-                    />
+                    <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
                 </div>
             )}
         </>

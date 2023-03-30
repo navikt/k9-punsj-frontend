@@ -171,7 +171,6 @@ export function createOMPKSSoknad(journalpostid: string, søkerId: string, barnI
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
-            barnIdent,
         };
 
         post(ApiPath.OMP_KS_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

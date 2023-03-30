@@ -5,8 +5,6 @@ import { IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
 
-import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
-
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
     sakstype?: Sakstype;
@@ -47,24 +45,6 @@ export const setFagsakAction = (fagsak?: Fagsak): ISetFagsakAction => ({
     type: FordelingActionKeys.FAGSAK_SET,
     fagsak,
 });
-
-interface ISjekkOmSkalTilK9LoadingAction {
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST;
-}
-interface ISjekkOmSkalTilK9ResetAction {
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET;
-}
-interface ISjekkOmSkalTilK9ErrorAction {
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR;
-    error: IError;
-}
-interface ISjekkOmSkalTilK9SuccessAction {
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS;
-    k9sak: boolean;
-}
-interface ISjekkOmSkalTilK9JournalpostStottesIkkeAction {
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE;
-}
 
 interface ILukkOggpgaveRequestAction {
     type: FordelingActionKeys.LUKK_OPPGAVE_REQUEST;
@@ -142,10 +122,6 @@ export type IFordelingActionTypes =
     | IOmfordelingRequestAction
     | IOmfordelingSuccessAction
     | IOmfordelingErrorAction
-    | ISjekkOmSkalTilK9LoadingAction
-    | ISjekkOmSkalTilK9ErrorAction
-    | ISjekkOmSkalTilK9SuccessAction
-    | ISjekkOmSkalTilK9JournalpostStottesIkkeAction
     | ILukkOggpgaveRequestAction
     | ILukkOggpgaveErrorAction
     | ILukkOggpgaveSuccessAction
@@ -155,28 +131,7 @@ export type IFordelingActionTypes =
     | IGosysGjelderErrorAction
     | ISetErSøkerIdBekreftetAction
     | ISetValgtGosysKategori
-    | ISjekkOmSkalTilK9ResetAction
     | ISetDokumenttypeAction;
-
-export const sjekkSkalTilK9RequestAction = (): ISjekkOmSkalTilK9LoadingAction => ({
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST,
-});
-export const sjekkSkalTilK9ResetAction = (): ISjekkOmSkalTilK9ResetAction => ({
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET,
-});
-
-export const sjekkSkalTilK9SuccessAction = (k9sak: boolean): ISjekkOmSkalTilK9SuccessAction => ({
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS,
-    k9sak,
-});
-export const sjekkSkalTilK9ErrorAction = (error: IError): ISjekkOmSkalTilK9ErrorAction => ({
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR,
-    error,
-});
-
-export const sjekkSkalTilK9JournalpostStottesIkkeAction = (): ISjekkOmSkalTilK9JournalpostStottesIkkeAction => ({
-    type: FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE,
-});
 
 export const lukkJournalpostOppgave =
     (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) => (dispatch: any) => {
@@ -199,42 +154,6 @@ export const lukkJournalpostOppgave =
             },
         );
     };
-
-export function sjekkOmSkalTilK9Sak(
-    norskIdent: string,
-    barnIdent: string,
-    jpid: string,
-    fagsakYtelseType: FagsakYtelseType,
-    annenPart: string,
-    valgtFagsak?: Fagsak,
-) {
-    return (dispatch: any) => {
-        const requestBody: ISkalTilK9 = {
-            brukerIdent: norskIdent,
-            barnIdent: barnIdent || null,
-            journalpostId: jpid,
-            fagsakYtelseType,
-            annenPart: annenPart || null,
-            periode: valgtFagsak ? valgtFagsak.gyldigPeriode : null,
-        };
-
-        dispatch(sjekkSkalTilK9RequestAction());
-
-        post(ApiPath.SJEKK_OM_SKAL_TIL_K9SAK, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (res, svar) => {
-            if (res.ok) {
-                return dispatch(sjekkSkalTilK9SuccessAction(svar.k9sak));
-            }
-            if (res.status === 409) {
-                return dispatch(sjekkSkalTilK9JournalpostStottesIkkeAction());
-            }
-            return dispatch(sjekkSkalTilK9ErrorAction(convertResponseToError(res)));
-        });
-    };
-}
-
-export const resetSkalTilK9 = () => (dispatch: any) => {
-    dispatch(sjekkSkalTilK9ResetAction());
-};
 
 export function hentGjelderKategorierFraGosys() {
     return (dispatch: any) => {
