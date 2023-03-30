@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+
 import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
 
 describe('Fordeling', () => {
@@ -30,17 +31,19 @@ describe('Fordeling', () => {
         cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
         cy.findByLabelText(/Velg hva journalposten gjelder/i).should('exist');
     });
-    it('kan korrigere inntektsmelding uten at sjekkSkalTilK9 kjøres', () => {
+    it('kan korrigere inntektsmelding uten å sette behaldingsår kjøres', () => {
         cy.window().then((window) => {
             const { worker, rest } = window.msw;
             worker.use(
-                rest.post(`${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
-                    res.once(
-                        ctx.json({
-                            k9sak: false,
-                        })
-                    )
-                )
+                rest.post(
+                    `${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR}`,
+                    (req, res, ctx) =>
+                        res.once(
+                            ctx.json({
+                                k9sak: false,
+                            }),
+                        ),
+                ),
             );
         });
 

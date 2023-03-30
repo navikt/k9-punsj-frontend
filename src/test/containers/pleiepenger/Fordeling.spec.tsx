@@ -158,31 +158,6 @@ describe('Fordeling', () => {
         expect(fordeling.find('Input')).toHaveLength(1);
     });
 
-    // it('Kaller setSakstypeAction', () => {
-    //     const setSakstypeAction = jest.fn();
-    //     const fordeling = setupFordeling(
-    //         { skalTilK9: true },
-    //         { setSakstypeAction },
-    //         {
-    //             isAwaitingGosysOppgaveRequestResponse: false,
-    //             gosysOppgaveRequestError: undefined,
-    //         }
-    //     );
-    //     const newSakstype = Sakstype.ANNET;
-    //     fordeling.find('RadioPanel').at(1).simulate('change');
-    //     expect(setSakstypeAction).toHaveBeenCalledTimes(1);
-    //     expect(setSakstypeAction).toHaveBeenCalledWith(newSakstype);
-    // });
-
-    // it('Omfordeler', () => {
-    //     const omfordel = jest.fn();
-    //     const sakstype = Sakstype.ANNET;
-    //     const fordeling = setupFordeling({ sakstype, skalTilK9: true }, { omfordel });
-    //     fordeling.find('Behandlingsknapp').dive().simulate('click');
-    //     expect(omfordel).toHaveBeenCalledTimes(1);
-    //     expect(omfordel).toHaveBeenCalledWith(journalpostid, '12345678901', 'Annet');
-    // });
-
     it('Viser spinner mens svar avventes', () => {
         const omfordel = jest.fn();
         const fordeling = setupFordeling(undefined, { omfordel }, { isAwaitingGosysOppgaveRequestResponse: true });

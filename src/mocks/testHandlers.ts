@@ -133,13 +133,6 @@ export const testHandlers = {
             }),
         ),
     ),
-    skalTilK9Sak: rest.post(`${LOCAL_API_URL}${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
-        res(
-            ctx.json({
-                k9sak: true,
-            }),
-        ),
-    ),
     hentFagsaker: rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
         res(
             ctx.status(200),
