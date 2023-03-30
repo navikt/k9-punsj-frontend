@@ -39,9 +39,7 @@ describe('Fordeling', () => {
                     `${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR}`,
                     (req, res, ctx) =>
                         res.once(
-                            ctx.json({
-                                k9sak: false,
-                            }),
+                            ctx.status(200)),
                         ),
                 ),
             );
