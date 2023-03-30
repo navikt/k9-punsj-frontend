@@ -37,10 +37,7 @@ describe('Fordeling', () => {
             worker.use(
                 rest.post(
                     `${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR}`,
-                    (req, res, ctx) =>
-                        res.once(
-                            ctx.status(200)),
-                        ),
+                    (req, res, ctx) => res.once(ctx.status(200)),
                 ),
             );
         });
