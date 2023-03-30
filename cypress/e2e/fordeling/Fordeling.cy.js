@@ -31,7 +31,7 @@ describe('Fordeling', () => {
         cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
         cy.findByLabelText(/Velg hva journalposten gjelder/i).should('exist');
     });
-    it('kan korrigere inntektsmelding uten å sette behaldingsår kjøres', () => {
+    it('kan korrigere inntektsmelding uten å sette behandlingsår kjøres', () => {
         cy.window().then((window) => {
             const { worker, rest } = window.msw;
             worker.use(
