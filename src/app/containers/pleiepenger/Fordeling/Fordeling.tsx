@@ -250,7 +250,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             settBehandlingsÅrMutation.mutate({
                 journalpostId: journalpost.journalpostId,
                 søkerId: identState.søkerId,
-                behandlingsAar: valgtFagsak?.gyldigPeriode.fom
+                behandlingsAar: valgtFagsak?.gyldigPeriode?.fom
                     ? String(dayjs(valgtFagsak?.gyldigPeriode.fom).year())
                     : undefined,
             });
