@@ -1,15 +1,16 @@
-import { IntlShape } from 'react-intl';
 import { useFormikContext } from 'formik';
-import { JaNei } from '../../../enums';
+import { IntlShape } from 'react-intl';
+
 import {
+    IFeltValidator,
     fødselsnummervalidator,
     gyldigDato,
     gyldigFødselsdato,
-    IFeltValidator,
     positivtHeltall,
     påkrevd,
     validerSkjema,
 } from '../../../../rules/valideringer';
+import { JaNei } from '../../../enums';
 
 export enum Innsendingsstatus {
     IkkeSendtInn = 'IkkeSendtInn',
@@ -137,7 +138,7 @@ export const validatePunch = (intl: IntlShape) =>
             samboerSidenValidator,
             borINorgeValidator,
         ],
-        intl
+        intl,
     );
 
 export const useOverføringPunchSkjemaContext = () => useFormikContext<IOverføringPunchSkjema>();

@@ -1,21 +1,23 @@
+import React, { useState } from 'react';
+import { FormattedMessage, IntlShape, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
+import Kopier from 'app/components/kopier/Kopier';
 import { IJournalpost } from 'app/models/types';
+import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import React, { useState } from 'react';
-import { Alert } from '@navikt/ds-react';
-import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
-import { connect } from 'react-redux';
-import Kopier from 'app/components/kopier/Kopier';
-import { IdentRules } from 'app/rules';
+
+import VerticalSpacer from '../../../../../components/VerticalSpacer';
+import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
+import { getEnvironmentVariable } from '../../../../../utils';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import { Pleietrengende } from '../Pleietrengende';
 import './journalpostAlleredeBehandlet.less';
-import { getEnvironmentVariable } from '../../../../../utils';
-import VerticalSpacer from '../../../../../components/VerticalSpacer';
-import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 
 export interface IJournalpostAlleredeBehandletStateProps {
     intl: IntlShape;
@@ -33,7 +35,7 @@ type IJournalpostAlleredeBehandletProps = IJournalpostAlleredeBehandletStateProp
     IJournalpostAlleredeBehandletDispatchProps;
 
 const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpostAlleredeBehandletProps> = (
-    props: IJournalpostAlleredeBehandletProps
+    props: IJournalpostAlleredeBehandletProps,
 ) => {
     const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpost } = props;
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
@@ -65,33 +67,36 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
 
-            <Knapp
-                disabled={IdentRules.erUgyldigIdent(identState.ident2) || fellesState.kopierJournalpostSuccess}
+            <Button
+                variant="secondary"
+                disabled={
+                    IdentRules.erUgyldigIdent(identState.pleietrengendeId) || fellesState.kopierJournalpostSuccess
+                }
                 onClick={() => {
-                    if (fellesState.kopierJournalpostSuccess || true || erInntektsmeldingUtenKrav) {
+                    if (fellesState.kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
                         setVisKanIkkeKopiere(true);
                         return;
                     }
-                    if (!!sokersIdent && !!identState.ident2)
+                    if (!!sokersIdent && !!identState.pleietrengendeId)
                         kopiereJournalpost(
                             sokersIdent,
-                            identState.ident2,
+                            identState.pleietrengendeId,
                             sokersIdent,
                             dedupkey,
-                            journalpost?.journalpostId
+                            journalpost?.journalpostId,
                         );
                 }}
             >
                 <FormattedMessage id="fordeling.kopiereJournal" />
-            </Knapp>
+            </Button>
             {!!fellesState.kopierJournalpostSuccess && (
-                <Hovedknapp
+                <Button
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
                     }}
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}
-                </Hovedknapp>
+                </Button>
             )}
             {visKanIkkeKopiere && (
                 <Alert variant="warning">
@@ -116,12 +121,17 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    kopiereJournalpost: (ident1: string, ident2: string, annenIdent: string, dedupkey: string, journalpostId: string) =>
-        dispatch(kopierJournalpost(ident1, annenIdent, ident2, journalpostId, dedupkey)),
+    kopiereJournalpost: (
+        søkerId: string,
+        pleietrengendeId: string,
+        annenIdent: string,
+        dedupkey: string,
+        journalpostId: string,
+    ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
 });
 
 const JournalpostAlleredeBehandlet = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(JournalpostAlleredeBehandletComponent)
+    connect(mapStateToProps, mapDispatchToProps)(JournalpostAlleredeBehandletComponent),
 );
 
 export { JournalpostAlleredeBehandlet, JournalpostAlleredeBehandletComponent };

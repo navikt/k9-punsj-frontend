@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import { useSelector } from 'react-redux';
-import { RootStateType } from 'app/state/RootState';
-import { Modal } from '@navikt/ds-react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useSelector } from 'react-redux';
+
+import { Button } from '@navikt/ds-react';
+
+import { RootStateType } from 'app/state/RootState';
+
 import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
-import { setHash } from '../../../../utils';
 import { Sakstype } from '../../../../models/enums';
+import { setHash } from '../../../../utils';
 import { IFordelingProps } from '../Fordeling';
 import KlassifiserModal from './KlassifiserModal';
 
@@ -33,9 +36,9 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     if ((sakstypeConfig as ISakstypePunch).punchPath) {
         const punchConfig = sakstypeConfig as ISakstypePunch;
         return (
-            <Hovedknapp onClick={() => setHash(punchConfig.punchPath)}>
+            <Button onClick={() => setHash(punchConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
-            </Hovedknapp>
+            </Button>
         );
     }
 
@@ -51,19 +54,19 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     }
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
         return (
-            <Hovedknapp onClick={() => lukkJournalpostOppgave(journalpost.journalpostId, norskIdent, fagsak)}>
+            <Button onClick={() => lukkJournalpostOppgave(journalpost.journalpostId, norskIdent, fagsak)}>
                 <FormattedMessage id="fordeling.knapp.bekreft" />
-            </Hovedknapp>
+            </Button>
         );
     }
 
     return (
-        <Hovedknapp
+        <Button
             disabled={!gosysKategoriJournalforing}
             onClick={() => omfordel(journalpost.journalpostId, norskIdent, gosysKategoriJournalforing)}
         >
             <FormattedMessage id="fordeling.knapp.bekreft" />
-        </Hovedknapp>
+        </Button>
     );
 };
 

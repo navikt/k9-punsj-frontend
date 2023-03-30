@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-
 import FordelingFerdigstillJournalpostKeys from 'app/models/enums/FordelingFerdigstillJournalpostKeys';
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
+
 import { FordelingFerdigstillJournalpostActions } from '../actions/FordelingFerdigstillJournalpostActions';
 
 const initialState: FordelingFerdigstillJournalpostState = {
@@ -11,7 +11,7 @@ const initialState: FordelingFerdigstillJournalpostState = {
 
 export function FordelingFerdigstillJournalpostReducer(
     fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostState,
-    action: FordelingFerdigstillJournalpostActions
+    action: FordelingFerdigstillJournalpostActions,
 ): FordelingFerdigstillJournalpostState {
     if (typeof fordelingFerdigstillJournalpostState === 'undefined') {
         return initialState;

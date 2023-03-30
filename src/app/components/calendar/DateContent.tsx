@@ -1,7 +1,8 @@
-import { KalenderDag } from 'app/models/KalenderDag';
-import { verdiOgTekstHvisVerdi } from 'app/utils';
 import dayjs from 'dayjs';
 import React from 'react';
+
+import { KalenderDag } from 'app/models/KalenderDag';
+import { verdiOgTekstHvisVerdi } from 'app/utils';
 
 const DateContent = (kalenderdager: KalenderDag[]) => (date: Date) => {
     if (kalenderdager.length === 0) {

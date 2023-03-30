@@ -1,15 +1,16 @@
-import * as React from 'react';
-import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import { mocked } from 'jest-mock';
 import { shallow } from 'enzyme';
-import { IIdentState } from '../../../app/models/types/IdentState';
-import intlHelper from '../../../app/utils/intlUtils';
+import { mocked } from 'jest-mock';
+import * as React from 'react';
+import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+
 import {
     IPleietrengende,
     IPleietrengendeDispatchProps,
     IPleietrengendeStateProps,
     PleietrengendeComponent,
 } from '../../../app/containers/pleiepenger/Fordeling/Komponenter/Pleietrengende';
+import { IIdentState } from '../../../app/models/types/IdentState';
+import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -21,7 +22,7 @@ jest.mock('app/utils/pathUtils');
 const setupSokersBarn = (
     sokersBarnComponentPropsPartial?: Partial<IPleietrengende>,
     dispatchPropsPartial?: Partial<IPleietrengendeDispatchProps>,
-    sokersBarnStatePropsPartial?: Partial<IPleietrengendeStateProps>
+    sokersBarnStatePropsPartial?: Partial<IPleietrengendeStateProps>,
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
@@ -34,8 +35,8 @@ const setupSokersBarn = (
     };
 
     const identState: IIdentState = {
-        ident1: '12345678901',
-        ident2: '',
+        søkerId: '12345678901',
+        pleietrengendeId: '',
         annenSokerIdent: '',
     };
 
@@ -63,7 +64,7 @@ const setupSokersBarn = (
             {...dispatchProps}
             {...sokersBarnStateProps}
             {...sokersBarnComponentProps}
-        />
+        />,
     );
 };
 describe('Sokers barn', () => {

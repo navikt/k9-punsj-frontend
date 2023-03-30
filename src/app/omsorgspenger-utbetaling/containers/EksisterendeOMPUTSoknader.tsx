@@ -1,54 +1,58 @@
 import { useState } from 'react';
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useQuery } from 'react-query';
+
+import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import { datetime, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeFeil, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { useQuery } from 'react-query';
-import { Loader } from '@navikt/ds-react';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     journalpostid: string;
-    ident1: string;
-    ident2: string | null;
+    søkerId: string;
+    pleietrengendeId: string | null;
 }
 
 type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPUTSoknaderComponentProps;
 
 export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
-    props: IEksisterendeOMPUTSoknaderProps
+    props: IEksisterendeOMPUTSoknaderProps,
 ) => {
-    const { intl, ident1, ident2 } = props;
+    const { intl, søkerId, pleietrengendeId } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
     const routingPaths = React.useContext(RoutingPathsContext);
 
     React.useEffect(() => {
-        if (!IdentRules.erAlleIdenterGyldige(ident1, ident2)) {
+        if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             setHash('/');
         }
-    }, [ident1, ident2]);
+    }, [søkerId, pleietrengendeId]);
 
     const {
         data: eksisterendeSoeknader,
         isLoading: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(ident1));
+    } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
 
     if (lasterSoeknader) {
         return <Loader />;
     }
 
     if (eksisterendeSoeknaderError instanceof Error) {
-        return <AlertStripeFeil>{eksisterendeSoeknaderError.message}</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                {eksisterendeSoeknaderError.message}
+            </Alert>
+        );
     }
 
     const gaaVidereMedSoeknad = (soknad: IOMPUTSoknad) => {
@@ -66,9 +70,9 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                 søknad.soekerId,
                 Array.from(søknad.journalposter).join(', '),
 
-                <Knapp key={soknadId} mini onClick={() => setValgtSoeknad(søknad)}>
+                <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
-                </Knapp>,
+                </Button>,
             ];
             rows.push(
                 <tr key={soknadId}>
@@ -80,14 +84,14 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                             Tom søknad
                         </td>
                     )}
-                </tr>
+                </tr>,
             );
             modaler.push(
-                <ModalWrapper
+                <Modal
                     key={soknadId}
-                    onRequestClose={() => setValgtSoeknad(undefined)}
-                    contentLabel={soknadId}
-                    isOpen={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
+                    onClose={() => setValgtSoeknad(undefined)}
+                    aria-label={soknadId}
+                    open={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
                     closeButton={false}
                 >
                     <ErDuSikkerModal
@@ -96,7 +100,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                         onClose={() => setValgtSoeknad(undefined)}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
-                </ModalWrapper>
+                </Modal>,
             );
         });
 
@@ -125,11 +129,11 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     }
 
     return (
-        <AlertStripeInfo>
+        <Alert size="small" variant="info">
             {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: ident2 ? '2' : '1',
+                antallSokere: pleietrengendeId ? '2' : '1',
             })}
-        </AlertStripeInfo>
+        </Alert>
     );
 };
 

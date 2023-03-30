@@ -1,31 +1,20 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { getLocaleFromSessionStorage } from 'app/utils';
-import countries from 'i18n-iso-countries';
 import { Select, SelectProps } from 'nav-frontend-skjema';
 import * as React from 'react';
+
+import { getCountryList } from 'app/utils';
 
 interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     selectedcountry?: string;
     unselectedoption?: string;
 }
 
-export interface ICountry {
-    code: string;
-    name: string;
-}
-
+// eslint-disable-next-line import/prefer-default-export
 export const CountrySelect = (props: ICountrySelectProps) => {
-    const {unselectedoption, selectedcountry} = props;
-    const locale = getLocaleFromSessionStorage();
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
-
-    const countryList: ICountry[] = [];
-
-    Object.keys(countries.getAlpha3Codes()).forEach((code) =>
-        countryList.push({ code, name: countries.getName(code, locale) })
-    );
-    countryList.sort((a, b) => (a.name > b.name ? 1 : -1));
+    const countryList = getCountryList();
+    const { unselectedoption, selectedcountry } = props;
     if (unselectedoption) {
         countryList.unshift({ code: '', name: unselectedoption });
     }

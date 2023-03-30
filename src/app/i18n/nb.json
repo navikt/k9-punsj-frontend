@@ -170,6 +170,7 @@
     "skjema.soknadsperiode": "Søknadsperiode",
     "skjema.eksisterende": "Eksisterende søknadsperioder:",
     "skjema.eksisterende.ingen": "Det finnes ingen eksisterende søknadsperioder. Du må legge til en ny søknadsperiode for å kunne registrere opplysninger. ",
+    "skjema.opplæringspenger.eksisterende.ingen": "Det finnes ingen eksisterende søknadsperioder. Du må legge inn en ny periode med opplæring for å kunne registrere opplysninger.",
     "skjema.eksisterende.feil": "Kunne ikke laste inn eksisterende søknadsperioder",
     "skjema.generellinfo": "Du kan etterrapportere på eksisterende søknadsperioder eller legge til ny søknadsperiode dersom du ønsker å registrere en ny søknad.",
     "skjema.knapp.tilbake": "Tilbake",
@@ -556,6 +557,7 @@
     "OMSORGSPENGER_KS": "Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn",
     "OMSORGSPENGER_MA": "Ekstra omsorgsdager når du er midlertidig alene om omsorgen",
     "OMSORGSPENGER_UT": "Omsorgspenger: direkte utbetaling av omsorgspenger",
+    "OPPLAERINGSPENGER": "Opplæringspenger",
 
     "KORRIGERING_IM": "Korrigering av inntektsmelding omsorgspenger AG",
     "ANNET": "Annet",

@@ -61,7 +61,7 @@ export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, co
             ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
                 message: capitalize(message),
                 path,
-            })
+            }),
         );
         return errors;
     }

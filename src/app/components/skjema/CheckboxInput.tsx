@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
-import { CheckboksPanel, Checkbox } from 'nav-frontend-skjema';
 import { useField } from 'formik';
+import { CheckboksPanel, Checkbox } from 'nav-frontend-skjema';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ICheckboxInputProps {

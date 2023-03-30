@@ -1,3 +1,9 @@
+import { ShallowWrapper, shallow } from 'enzyme';
+import { mocked } from 'jest-mock';
+import * as React from 'react';
+import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+import * as reactRedux from 'react-redux';
+
 import {
     IPunchFormComponentProps,
     IPunchFormDispatchProps,
@@ -6,12 +12,7 @@ import {
 } from 'app/containers/pleiepenger/PSBPunchForm';
 import { IPSBSoknad, IPunchPSBFormState, ISignaturState } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import { shallow, ShallowWrapper } from 'enzyme';
-import * as React from 'react';
-import { createIntl, IntlShape, WrappedComponentProps } from 'react-intl';
-import * as reactRedux from 'react-redux';
-import { mocked } from 'jest-mock';
-import OpplysningerOmSoknad from '../../../app/containers/pleiepenger/PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
+
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
@@ -23,9 +24,14 @@ jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 jest.mock('app/utils/pathUtils');
 
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
+
 const soknadId = 'abc';
-const ident1 = '01015012345';
-const ident2 = '22082067856';
+const søkerId = '01015012345';
+const pleietrengendeId = '22082067856';
 const journalpostid = '200';
 
 const initialSoknad: IPSBSoknad = {
@@ -36,7 +42,7 @@ const initialSoknad: IPSBSoknad = {
     },
     barn: {
         foedselsdato: '',
-        norskIdent: ident2,
+        norskIdent: pleietrengendeId,
     },
     beredskap: [],
     bosteder: [],
@@ -53,7 +59,7 @@ const initialSoknad: IPSBSoknad = {
         frilanser: null,
         selvstendigNaeringsdrivende: null,
     },
-    soekerId: ident1,
+    soekerId: søkerId,
     soeknadId: '123',
     soeknadsperiode: null,
     soknadsinfo: {
@@ -104,7 +110,7 @@ const validertSoknad: IPSBSoknadKvittering = {
 
 const setupPunchForm = (
     punchFormStateSetup?: Partial<IPunchPSBFormState>,
-    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>
+    punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>,
 ) => {
     const wrappedComponentProps: WrappedComponentProps = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
@@ -134,8 +140,8 @@ const setupPunchForm = (
     };
 
     const identState: IIdentState = {
-        ident1: '122345',
-        ident2: '678908',
+        søkerId: '122345',
+        pleietrengendeId: '678908',
         annenSokerIdent: null,
     };
 
@@ -187,7 +193,7 @@ const setupPunchForm = (
             {...punchFormStateProps}
             {...punchFormDispatchProps}
             /* eslint-enable react/jsx-props-no-spreading */
-        />
+        />,
     );
 };
 
@@ -203,10 +209,14 @@ const getDateInputField = (punchFormComponent: ShallowWrapper, containerComponen
         .find(`#${fieldId}`)
         .dive();
 
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
+
 describe('PunchForm', () => {
-    const useSelectorMock = jest.spyOn(reactRedux, 'useSelector');
     beforeEach(() => {
-        useSelectorMock.mockClear();
+        reactRedux.useSelector.mockImplementation((callback) => callback({}));
     });
 
     it('Viser skjema', () => {
@@ -224,13 +234,18 @@ describe('PunchForm', () => {
 
     it('Viser spinner når søknaden lastes inn', () => {
         const punchForm = setupPunchForm({ isSoknadLoading: true });
-        expect(punchForm.find('NavFrontendSpinner')).toHaveLength(1);
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('size') === 'large')).toHaveLength(1);
     });
 
     it('Viser feilmelding når søknaden ikke er funnet', () => {
         const punchForm = setupPunchForm({ error: { status: 404 } });
-        expect(punchForm.find('ForwardRef')).toHaveLength(1);
-        expect(punchForm.find('ForwardRef').prop('children')).toEqual('skjema.feil.ikke_funnet');
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
+        expect(
+            punchForm
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
+                .childAt(0)
+                .text(),
+        ).toEqual('skjema.feil.ikke_funnet');
     });
 
     it('Oppdaterer søknad når mottakelsesdato endres', () => {
@@ -256,7 +271,13 @@ describe('PunchForm', () => {
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad }, {});
-        useSelectorMock.mockReturnValue({});
+        reactRedux.useSelector.mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {},
+                },
+            }),
+        );
         expect(punchForm.find('Soknadsperioder').dive().find('Periodepaneler')).toHaveLength(1);
     });
 
@@ -350,7 +371,7 @@ describe('PunchForm', () => {
                     },
                 },
             },
-            { updateSoknad }
+            { updateSoknad },
         );
         punchForm.find('.tilsynsordning CheckboksPanel').simulate('change', { target: { checked: false } });
         expect(updateSoknad).toHaveBeenCalledTimes(1);
@@ -381,12 +402,17 @@ describe('PunchForm', () => {
                     },
                 ],
             },
-            { validateSoknad }
+            { validateSoknad },
         );
         punchForm.find('.submit-knapper').find('.sendknapp-wrapper').find('.send-knapp').simulate('click');
         expect(validateSoknad).toHaveBeenCalledTimes(1);
-        expect(punchForm.find('ForwardRef')).toHaveLength(1);
-        expect(punchForm.find('ForwardRef').childAt(0).text()).toEqual('skjema.feil.validering');
+        expect(punchForm.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')).toHaveLength(1);
+        expect(
+            punchForm
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error')
+                .childAt(0)
+                .text(),
+        ).toEqual('skjema.feil.validering');
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', () => {
@@ -415,21 +441,31 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        useSelectorMock.mockReturnValue({
-            soknad,
-            perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
-        });
+        reactRedux.useSelector.mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {
+                        soknad,
+                        perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
+                    },
+                },
+            }),
+        );
         expect(
-            punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')
+            punchForm
+                .find('Soknadsperioder')
+                .dive()
+                .find('.eksiterendesoknaderpanel')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning'),
         ).toHaveLength(1);
         expect(
             punchForm
                 .find('Soknadsperioder')
                 .dive()
                 .find('.eksiterendesoknaderpanel')
-                .find('AlertStripeAdvarsel')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning')
                 .childAt(0)
-                .text()
+                .text(),
         ).toEqual('skjema.soknadsperiode.overlapper');
     });
 
@@ -447,7 +483,7 @@ describe('PunchForm', () => {
 
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(2);
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(0).prop('label')).toEqual(
-            'skjema.ferie.leggtil'
+            'skjema.ferie.leggtil',
         );
         expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(1).prop('label')).toEqual('skjema.ferie.fjern');
     });
@@ -475,10 +511,13 @@ describe('PunchForm', () => {
             { fom: '2021-01-30', tom: '2021-04-15' },
         ]);
         expect(
-            punchForm.find('.feriepanel').dive().find('.ekspanderbartPanel__innhold').find('AlertStripeInfo')
+            punchForm
+                .find('.feriepanel')
+                .dive()
+                .find('.ekspanderbartPanel__innhold')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info'),
         ).toHaveLength(1);
     });
-
 
     it('Viser ikke advarsel om overlappende periode når periodene ikke overlapper', () => {
         const soknad = {
@@ -486,12 +525,22 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }] }, {});
-        useSelectorMock.mockReturnValue({
-            soknad,
-            perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
-        });
+        reactRedux.useSelector.mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {
+                        soknad,
+                        perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }],
+                    },
+                },
+            }),
+        );
         expect(
-            punchForm.find('Soknadsperioder').dive().find('.eksiterendesoknaderpanel').find('AlertStripeAdvarsel')
+            punchForm
+                .find('Soknadsperioder')
+                .dive()
+                .find('.eksiterendesoknaderpanel')
+                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'error'),
         ).toHaveLength(0);
     });
 

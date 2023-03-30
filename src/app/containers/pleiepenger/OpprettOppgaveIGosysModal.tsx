@@ -1,12 +1,15 @@
-import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+
+import { Button } from '@navikt/ds-react';
+
 import intlHelper from '../../utils/intlUtils';
 import './okGaaTilLosModal.less';
 
 interface OpprettOppgaveIGosysModalProps {
     submit: () => void;
     avbryt: () => void;
+    children?: React.ReactNode;
 }
 
 const OpprettOppgaveIGosysModal: React.FC<WrappedComponentProps & OpprettOppgaveIGosysModalProps> = (props) => {
@@ -17,12 +20,12 @@ const OpprettOppgaveIGosysModal: React.FC<WrappedComponentProps & OpprettOppgave
             <h2>{intlHelper(intl, 'fordeling.sakstype.ANNET')}</h2>
             {children}
             <div className="knapper">
-                <Knapp onClick={() => submit()} mini>
+                <Button variant="secondary" onClick={() => submit()} size="small">
                     {intlHelper(intl, 'fordeling.sakstype.ANNET')}
-                </Knapp>
-                <Knapp onClick={() => avbryt()} mini>
+                </Button>
+                <Button variant="secondary" onClick={() => avbryt()} size="small">
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
-                </Knapp>
+                </Button>
             </div>
         </div>
     );

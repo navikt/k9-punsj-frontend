@@ -1,5 +1,5 @@
-import { initializeDate } from '../../utils/timeUtils';
 import { IPeriode } from '../../models/types/Periode';
+import { initializeDate } from '../../utils/timeUtils';
 
 export const fjernIndexFraLabel = (label: string) => label.replace(/\[.*\]/g, '[]');
 
@@ -7,12 +7,12 @@ export const generateDateString = (periode: IPeriode | IPeriode[] | null): strin
     if (periode) {
         if (!Array.isArray(periode)) {
             return `${initializeDate(periode.fom).format('DD.MM.YYYY')} - ${initializeDate(periode.tom).format(
-                'DD.MM.YYYY'
+                'DD.MM.YYYY',
             )}`;
         }
         if (periode.length > 0) {
             const formatertePerioder = periode.map(
-                (p) => `${initializeDate(p.fom).format('DD.MM.YYYY')} - ${initializeDate(p.tom).format('DD.MM.YYYY')}`
+                (p) => `${initializeDate(p.fom).format('DD.MM.YYYY')} - ${initializeDate(p.tom).format('DD.MM.YYYY')}`,
             );
             return formatertePerioder.join(', ');
         }
@@ -23,6 +23,6 @@ export const generateDateString = (periode: IPeriode | IPeriode[] | null): strin
 export const periodeSpenn = (periode: IPeriode | undefined): string =>
     periode
         ? `'${Object.values(periode)
-            .map((dato) => `${dato}` || '..')
-            .join('/')}'`
+              .map((dato) => `${dato}` || '..')
+              .join('/')}'`
         : '';

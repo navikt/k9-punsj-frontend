@@ -1,10 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import DateInput from 'app/components/skjema/DateInput';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import DateInput from 'app/components/skjema/DateInput';
+
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { PSBSoknad } from '../../../../models/types';
@@ -30,7 +32,9 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
 }) => (
     <Panel className="opplysningerOmSoknad">
         <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-        <AlertStripeInfo>{intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}</AlertStripeInfo>
+        <Alert size="small" variant="info">
+            {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+        </Alert>
         <SkjemaGruppe>
             <div className="input-row">
                 <DateInput
@@ -67,7 +71,9 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                 }
             />
             {signert === JaNeiIkkeRelevant.NEI && (
-                <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
+                    {intlHelper(intl, 'skjema.usignert.info')}
+                </Alert>
             )}
         </SkjemaGruppe>
     </Panel>

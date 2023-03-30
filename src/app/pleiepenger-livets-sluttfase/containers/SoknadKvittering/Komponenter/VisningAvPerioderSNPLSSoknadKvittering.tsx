@@ -1,22 +1,21 @@
 import React from 'react';
-import intlHelper from 'app/utils/intlUtils';
-import './visningAvPerioderPLSSoknadKvittering.less';
 import { v4 as uuidv4 } from 'uuid';
-import {
-    periodToFormattedString,
-    formattereDatoIArray,
-    sjekkPropertyEksistererOgIkkeErNull,
-    formattereLandTilNavn,
-} from '../../../../utils';
 
-import { ICountry } from '../../../../components/country-select/CountrySelect';
+import intlHelper from 'app/utils/intlUtils';
+
 import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
+import {
+    formattereDatoIArray,
+    landkodeTilNavn,
+    periodToFormattedString,
+    sjekkPropertyEksistererOgIkkeErNull,
+} from '../../../../utils';
 import { IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../types/PLSSoknadKvittering';
+import './visningAvPerioderPLSSoknadKvittering.less';
 
 interface IOwnProps {
     intl: any;
     perioder: IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode[];
-    countryList: ICountry[];
 }
 
 const formaterTypeVirksomhet = (virksomheter: string[]) =>
@@ -33,11 +32,7 @@ const formaterTypeVirksomhet = (virksomheter: string[]) =>
         }
     });
 
-const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    perioder,
-    countryList,
-}) => (
+const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ intl, perioder }) => (
     <div>
         {perioder.map((SN) =>
             Object.keys(SN.perioder).map((periode) => (
@@ -71,7 +66,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                                                 ? `${virksomhetstype}, `
                                                 : `${virksomhetstype}`}
                                         </span>
-                                    )
+                                    ),
                                 )}
                             </p>
                         )}
@@ -86,7 +81,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                     {sjekkPropertyEksistererOgIkkeErNull('landkode', SN.perioder[periode]) && (
                         <p>
                             <b>{`${intlHelper(intl, 'skjema.sn.registrertLand')} `}</b>
-                            {formattereLandTilNavn(SN.perioder[periode].landkode!, countryList)}
+                            {landkodeTilNavn(SN.perioder[periode].landkode!)}
                         </p>
                     )}
 
@@ -120,7 +115,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                                     intl,
                                     SN.perioder[periode].erVarigEndring
                                         ? 'skjema.sn.endringinntekt'
-                                        : 'skjema.sn.bruttoinntekt'
+                                        : 'skjema.sn.bruttoinntekt',
                                 )}: `}
                             </b>
                             {SN.perioder[periode].bruttoInntekt}
@@ -141,7 +136,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                         </p>
                     )}
                 </div>
-            ))
+            )),
         )}
     </div>
 );

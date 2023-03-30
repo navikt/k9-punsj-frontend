@@ -1,20 +1,20 @@
-import Fagsak from 'app/types/Fagsak';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Loader, Modal } from '@navikt/ds-react';
+
+import Fagsak from 'app/types/Fagsak';
+
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import VerticalSpacer from '../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
 import { IJournalpost } from '../models/types';
 import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
+import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-import { RootStateType } from '../state/RootState';
 import './journalpostLoader.less';
 import OkGaaTilLosModal from './pleiepenger/OkGaaTilLosModal';
 
@@ -66,7 +66,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
             <Container style={{ height: '100%' }}>
                 <Row className="justify-content-center align-items-center" style={{ height: '100%' }}>
                     <Col xs="auto">
-                        <NavFrontendSpinner />
+                        <Loader size="large" />
                     </Col>
                 </Row>
             </Container>
@@ -83,15 +83,15 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (lukkOppgaveDone) {
         return (
-            <ModalWrapper
+            <Modal
                 key="lukkoppgaveokmodal"
-                onRequestClose={() => lukkOppgaveReset()}
-                contentLabel="settpaaventokmodal"
+                onClose={() => lukkOppgaveReset()}
+                aria-label="settpaaventokmodal"
                 closeButton={false}
-                isOpen
+                open
             >
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </ModalWrapper>
+            </Modal>
         );
     }
 
@@ -114,9 +114,9 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (!journalpost.dokumenter.length) {
         return (
-            <AlertStripeFeil>
+            <Alert size="small" variant="error">
                 <FormattedMessage id="startPage.feil.ingendokumenter" />
-            </AlertStripeFeil>
+            </Alert>
         );
     }
 

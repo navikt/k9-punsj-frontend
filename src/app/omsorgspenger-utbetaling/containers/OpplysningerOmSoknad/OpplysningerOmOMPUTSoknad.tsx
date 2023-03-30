@@ -1,16 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 import { Input } from 'nav-frontend-skjema';
-import { Heading, Alert } from '@navikt/ds-react';
-import { Collapse } from 'react-collapse';
-import DateInput from 'app/components/skjema/DateInput';
+import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, Heading, Panel } from '@navikt/ds-react';
+
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import DateInput from 'app/components/skjema/DateInput';
 import { IOMPUTSoknad } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknad';
+
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
 import './opplysningerOmOMPUTSoknad.less';
@@ -64,7 +64,9 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                     />
                 )}
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
-                    <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.usignert.info')}</AlertStripeAdvarsel>
+                    <Alert size="small" variant="warning">
+                        {intlHelper(intl, 'skjema.usignert.info')}
+                    </Alert>
                 )}
             </Panel>
         </>

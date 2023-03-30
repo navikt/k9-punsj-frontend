@@ -1,7 +1,7 @@
 import { SoknaderSokActionKeys } from '../../models/enums/SoknaderSokActionKeys';
+import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
 import { ISoknaderVisningState } from '../../models/types/SoknaderVisningState';
 import { ISoknaderSokActionTypes } from '../actions/SoknaderSokActions';
-import { SoknaderVisningStep } from '../../models/enums/SoknaderVisningStep';
 
 export const initialState: ISoknaderVisningState = {
     step: SoknaderVisningStep.IDENT,
@@ -10,7 +10,7 @@ export const initialState: ISoknaderVisningState = {
 
 export function SoknaderVisningReducer(
     visningState: ISoknaderVisningState = initialState,
-    action: ISoknaderSokActionTypes
+    action: ISoknaderSokActionTypes,
 ): ISoknaderVisningState {
     switch (action.type) {
         case SoknaderSokActionKeys.IDENT_SET:

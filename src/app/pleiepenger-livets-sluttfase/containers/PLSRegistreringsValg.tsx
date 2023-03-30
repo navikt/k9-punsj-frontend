@@ -1,20 +1,22 @@
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+
 import { PunchStep } from '../../models/enums';
 import { IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { RootStateType } from '../../state/RootState';
-import { setHash } from '../../utils';
-import './plsRegistreringsValg.less';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
+import { RootStateType } from '../../state/RootState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { setHash } from '../../utils';
 import { createPLSSoknad, resetPLSSoknadidAction } from '../state/actions/EksisterendePLSSoknaderActions';
 import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
+import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
+import './plsRegistreringsValg.less';
 
 export interface IPLSRegistreringsValgComponentProps {
     journalpostid: string;
@@ -40,26 +42,26 @@ type IPLSRegistreringsValgProps = IPLSRegistreringsValgComponentProps &
     IPLSRegistreringsValgDispatchProps;
 
 export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistreringsValgProps> = (
-    props: IPLSRegistreringsValgProps
+    props: IPLSRegistreringsValgProps,
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
 
-    const { ident1, ident2 } = identState;
+    const { søkerId, pleietrengendeId } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
-        props.getAlleJournalposter(ident1);
-    }, [ident1]);
+        props.getAlleJournalposter(søkerId);
+    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -67,16 +69,20 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     };
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
+        );
     }
 
-    const newSoknad = () => props.createSoknad(journalpostid, ident1, ident2);
+    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid)
+                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
             );
         }
         return true;
@@ -85,28 +91,28 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     return (
         <div className="registrering-page">
             <EksisterendePLSSoknader
-                ident1={ident1}
-                ident2={ident2}
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
+                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
-                </Knapp>
+                </Button>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" mini>
+                    <Button onClick={newSoknad} className="knapp knapp2" size="small">
                         <FormattedMessage id="ident.knapp.nyregistrering" />
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, ident2: string | null) =>
-        dispatch(createPLSSoknad(journalpostid, ident1, ident2)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

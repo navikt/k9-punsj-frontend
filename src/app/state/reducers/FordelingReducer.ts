@@ -10,7 +10,7 @@ const initialState: IFordelingState = {
     isAwaitingLukkOppgaveResponse: false,
     lukkOppgaveDone: false,
     skalTilK9: undefined,
-    erIdent1Bekreftet: false,
+    erSøkerIdBekreftet: false,
     valgtGosysKategori: '',
     kanIkkeGaaTilK9: [],
     fagsak: undefined,
@@ -20,7 +20,7 @@ const initialState: IFordelingState = {
 // eslint-disable-next-line import/prefer-default-export
 export function FordelingReducer(
     fordelingState: IFordelingState = initialState,
-    action: IFordelingActionTypes
+    action: IFordelingActionTypes,
 ): IFordelingState {
     switch (action.type) {
         case FordelingActionKeys.SAKSTYPE_SET:
@@ -138,7 +138,7 @@ export function FordelingReducer(
         case FordelingActionKeys.IDENT_BEKREFT_IDENT1:
             return {
                 ...fordelingState,
-                erIdent1Bekreftet: action.erIdent1Bekreftet,
+                erSøkerIdBekreftet: action.erSøkerIdBekreftet,
             };
 
         case FordelingActionKeys.GOSYS_GJELDER_REQUEST:

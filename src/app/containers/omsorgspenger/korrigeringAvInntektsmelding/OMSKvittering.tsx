@@ -1,9 +1,11 @@
-import { IPeriode } from 'app/models/types';
-import { initializeDate } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { IPeriode } from 'app/models/types';
+import { initializeDate } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import './omsKvittering.less';
 
@@ -34,24 +36,24 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
         <div className="omsKvittering">
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
             <h3>{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>
-                <hr className={classNames('linje')} />
-                <p>
-                    <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                    {initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY')}
-                </p>
+            <hr className={classNames('linje')} />
+            <p>
+                <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                {initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY')}
+            </p>
             <h3>Virksomhet</h3>
-                <hr className={classNames('linje')} />
-                <p>
-                    <b>{`Organisasjonsnummer: `}</b>
-                    {Virksomhet}
-                </p>
-                {ArbeidsforholdId && (
-                    <>
-                        <h3>ArbeidsforholdId</h3>
-                        <hr className={classNames('linje')} />
-                        <p>{ArbeidsforholdId}</p>
-                    </>
-                )}
+            <hr className={classNames('linje')} />
+            <p>
+                <b>{`Organisasjonsnummer: `}</b>
+                {Virksomhet}
+            </p>
+            {ArbeidsforholdId && (
+                <>
+                    <h3>ArbeidsforholdId</h3>
+                    <hr className={classNames('linje')} />
+                    <p>{ArbeidsforholdId}</p>
+                </>
+            )}
             {visTrekkperioder() && (
                 <>
                     <h3>Perioder arbeidsgiver ønsker å trekke krav om refusjon</h3>
@@ -65,7 +67,7 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
                     <hr className={classNames('linje')} />
                     <p>
                         {PerioderMedRefusjonskrav.map((periodeMedRefusjonskrav) =>
-                            formaterPerioder(periodeMedRefusjonskrav)
+                            formaterPerioder(periodeMedRefusjonskrav),
                         ).join(', ')}
                     </p>
                 </>
@@ -76,7 +78,7 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
                     <hr className={classNames('linje')} />
                     <p>
                         {DagerMedDelvisFravær.filter(
-                            (dagMedDelvisFravær) => dagMedDelvisFravær.dato && dagMedDelvisFravær.timer
+                            (dagMedDelvisFravær) => dagMedDelvisFravær.dato && dagMedDelvisFravær.timer,
                         )
                             .map((dagMedDelvisFravær) => {
                                 const dag = initializeDate(dagMedDelvisFravær.dato).format('DD.MM.YYYY');

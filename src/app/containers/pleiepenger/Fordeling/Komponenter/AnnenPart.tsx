@@ -1,12 +1,14 @@
-import { TextField } from '@navikt/ds-react';
-import { getValidationErrors, identifikator } from 'app/rules/yup';
-import { setAnnenPartAction } from 'app/state/actions/IdentActions';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+
+import { TextField } from '@navikt/ds-react';
+
+import { getValidationErrors, identifikator } from 'app/rules/yup';
+import { RootStateType } from 'app/state/RootState';
+import { setAnnenPartAction } from 'app/state/actions/IdentActions';
+import intlHelper from 'app/utils/intlUtils';
 
 type ownProps = {
     vis: boolean;

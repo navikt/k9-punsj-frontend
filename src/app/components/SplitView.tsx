@@ -1,25 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'nav-frontend-tabell-style';
+import React from 'react';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { useQueries } from 'react-query';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
 import { IPunchPageDispatchProps, IPunchPageQueryProps } from 'app/containers/pleiepenger/PunchPage';
 import 'app/containers/pleiepenger/punchPage.less';
-import useQuery from 'app/hooks/useQuery';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { IJournalpost, IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
-import React from 'react';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useQueries } from 'react-query';
-import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
 
 export interface IPunchPageStateProps {
     journalpost?: IJournalpost;
@@ -32,8 +32,8 @@ export interface IPunchPageComponentProps {
 }
 
 export interface IPunchPageComponentState {
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
 }
 
 type IPunchPageProps = WrappedComponentProps &
@@ -72,9 +72,9 @@ export const SplitViewComponent: React.FC<IPunchPageProps> = (props) => {
     const content = () => {
         if (forbidden) {
             return (
-                <AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
                     <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
+                </Alert>
             );
         }
 

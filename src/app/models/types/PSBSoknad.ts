@@ -1,12 +1,14 @@
 /* eslint-disable max-classes-per-file */
-import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
-import { Arbeidstaker, IArbeidstaker } from './Arbeidstaker';
-import { FrilanserOpptjening, IFrilanserOpptjening } from './FrilanserOpptjening';
-import { IArbeidstidPeriodeMedTimer, IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
-import { Periodeinfo } from './Periodeinfo';
-import { ArbeidstidInfo } from './ArbeidstidInfo';
-
+import { Arbeidstid, IArbeidstid } from './Arbeidstid';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+import { Barn, IBarn } from './IBarn';
+import { IOmsorg, Omsorg } from './Omsorg';
+import { IOpptjeningAktivitet, OpptjeningAktivitet } from './OpptjeningAktivitet';
+import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
+import { Periodeinfo } from './Periodeinfo';
+import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
+import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
+import { IUttak, Uttak } from './Uttak';
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -35,88 +37,6 @@ export interface IPSBSoknad {
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 }
 
-export interface ISelvstendigNaeringsdrivendeOpptjening {
-    virksomhetNavn?: string | null;
-    organisasjonsnummer?: string | null;
-    info?: ISelvstendigNaerinsdrivende | null;
-}
-
-export class SelvstendigNaeringsdrivendeOpptjening implements Required<ISelvstendigNaeringsdrivendeOpptjening> {
-    virksomhetNavn: string;
-
-    organisasjonsnummer: string;
-
-    info: SelvstendigNaerinsdrivende | null;
-
-    constructor(s: ISelvstendigNaeringsdrivendeOpptjening) {
-        this.virksomhetNavn = s.virksomhetNavn || '';
-        this.organisasjonsnummer = s.organisasjonsnummer || '';
-        this.info = s.info ? new SelvstendigNaerinsdrivende(s.info) : null;
-    }
-}
-
-export interface IOpptjeningAktivitet {
-    selvstendigNaeringsdrivende?: ISelvstendigNaeringsdrivendeOpptjening | null;
-    frilanser?: IFrilanserOpptjening | null;
-    arbeidstaker?: IArbeidstaker[];
-}
-
-export class OpptjeningAktivitet implements IOpptjeningAktivitet {
-    selvstendigNaeringsdrivende: SelvstendigNaeringsdrivendeOpptjening | null;
-
-    frilanser: FrilanserOpptjening | null;
-
-    arbeidstaker: Arbeidstaker[];
-
-    constructor(arbeid: IOpptjeningAktivitet) {
-        this.arbeidstaker = (arbeid.arbeidstaker || []).map((at) => new Arbeidstaker(at));
-        this.selvstendigNaeringsdrivende = arbeid.selvstendigNaeringsdrivende
-            ? new SelvstendigNaeringsdrivendeOpptjening(arbeid.selvstendigNaeringsdrivende)
-            : null;
-        this.frilanser = arbeid.frilanser ? new FrilanserOpptjening(arbeid.frilanser) : null;
-    }
-}
-
-export interface IArbeidstidInfo {
-    perioder?: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
-}
-export interface IArbeidstid {
-    arbeidstakerList?: IArbeidstaker[];
-    frilanserArbeidstidInfo?: IArbeidstidInfo | null;
-    selvstendigNæringsdrivendeArbeidstidInfo?: IArbeidstidInfo | null;
-}
-export class Arbeidstid implements Required<IArbeidstid> {
-    arbeidstakerList: Arbeidstaker[];
-
-    frilanserArbeidstidInfo: ArbeidstidInfo | null;
-
-    selvstendigNæringsdrivendeArbeidstidInfo: ArbeidstidInfo | null;
-
-    constructor(a: IArbeidstid) {
-        this.arbeidstakerList = a.arbeidstakerList ? a.arbeidstakerList.map((ab) => new Arbeidstaker(ab)) : [];
-        this.frilanserArbeidstidInfo = a.frilanserArbeidstidInfo ? new ArbeidstidInfo(a.frilanserArbeidstidInfo) : null;
-        this.selvstendigNæringsdrivendeArbeidstidInfo = a.selvstendigNæringsdrivendeArbeidstidInfo
-            ? new ArbeidstidInfo(a.selvstendigNæringsdrivendeArbeidstidInfo)
-            : null;
-    }
-}
-
-export interface ISoknadsInfo {
-    samtidigHjemme?: boolean | null;
-    harMedsøker?: boolean | null;
-}
-
-export class SoknadsInfo implements ISoknadsInfo {
-    samtidigHjemme: boolean | null;
-
-    harMedsøker: boolean | null;
-
-    constructor(s: ISoknadsInfo) {
-        this.samtidigHjemme = s.samtidigHjemme || null;
-        this.harMedsøker = s.harMedsøker || null;
-    }
-}
-
 export interface ITilsynsordning {
     perioder?: Periodeinfo<ITimerOgMinutter>[];
 }
@@ -130,59 +50,6 @@ export class Tilsynsordning implements Required<ITilsynsordning> {
 
     values(): Required<ITimerOgMinutter>[] {
         return this.perioder.map((p) => p.values());
-    }
-}
-
-export interface IOmsorg {
-    relasjonTilBarnet?: string;
-    beskrivelseAvOmsorgsrollen?: string;
-}
-
-export class Omsorg implements Required<IOmsorg> {
-    relasjonTilBarnet: string;
-
-    beskrivelseAvOmsorgsrollen: string;
-
-    constructor(omsorg: IOmsorg) {
-        this.relasjonTilBarnet = omsorg.relasjonTilBarnet || '';
-        this.beskrivelseAvOmsorgsrollen = omsorg.beskrivelseAvOmsorgsrollen || '';
-    }
-}
-
-export interface IUttak {
-    periode?: Periode;
-    etablertTilsynTimerPerDag?: string;
-}
-
-export class Uttak implements Required<Periodeinfo<IUttak>> {
-    periode: Periode;
-
-    etablertTilsynTimerPerDag: string;
-
-    constructor(tilsynsordning: Periodeinfo<IUttak>) {
-        this.periode = new Periode(tilsynsordning.periode || {});
-        this.etablertTilsynTimerPerDag = tilsynsordning.etablertTilsynTimerPerDag || '';
-    }
-}
-
-export interface IBarn {
-    norskIdent?: string;
-    foedselsdato?: string;
-}
-
-export class Barn implements Required<IBarn> {
-    norskIdent: string;
-
-    foedselsdato: string;
-
-    constructor(barn: IBarn) {
-        this.norskIdent = barn.norskIdent || '';
-        this.foedselsdato = barn.foedselsdato || '';
-    }
-
-    values(): Required<IBarn> {
-        const { norskIdent, foedselsdato } = this; // tslint:disable-line:no-this-assignment
-        return { norskIdent, foedselsdato };
     }
 }
 
@@ -210,34 +77,6 @@ export class Tilleggsinformasjon implements Required<Periodeinfo<ITilleggsinform
 
 export interface IOppholdsLand {
     land?: string;
-}
-
-export interface IUtenlandsOpphold {
-    land?: string;
-
-    innleggelsesperioder?: { periode?: IPeriode; årsak?: string | null }[];
-}
-
-export class UtenlandsOpphold implements Required<Periodeinfo<IUtenlandsOpphold>> {
-    periode: Periode;
-
-    land: string;
-
-    innleggelsesperioder: { periode?: IPeriode; årsak?: string | null }[];
-
-    constructor(periodeinfo: Periodeinfo<IUtenlandsOpphold>) {
-        this.periode = new Periode(periodeinfo.periode || {});
-        this.land = periodeinfo.land || '';
-        this.innleggelsesperioder = periodeinfo.innleggelsesperioder || [];
-    }
-
-    values(): Required<Periodeinfo<IUtenlandsOpphold>> {
-        return {
-            periode: this.periode.values(),
-            land: this.land,
-            innleggelsesperioder: this.innleggelsesperioder,
-        };
-    }
 }
 
 const getTrekkKravPerioder = (soknad: IPSBSoknad) => {
@@ -297,31 +136,31 @@ export class PSBSoknad implements IPSBSoknad {
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
     constructor(soknad: IPSBSoknad) {
-        this.soeknadId = soknad.soeknadId || '';
-        this.soekerId = soknad.soekerId || '';
-        this.journalposter = new Set(soknad.journalposter || []);
-        this.mottattDato = soknad.mottattDato || '';
-        this.klokkeslett = soknad.klokkeslett || '';
-        this.barn = new Barn(soknad.barn || {});
-        this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
-        this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
+        this.barn = new Barn(soknad.barn || {});
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
         this.beredskap = (soknad.beredskap || []).map((b) => new Tilleggsinformasjon(b));
-        this.nattevaak = (soknad.nattevaak || []).map((n) => new Tilleggsinformasjon(n));
-        this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
-        this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
-        this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
-        this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
-            (u) => new UtenlandsOpphold(u)
-        );
-        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
-        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
-        this.omsorg = new Omsorg(soknad.omsorg || {});
         this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
-        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
+        this.journalposter = new Set(soknad.journalposter || []);
+        this.klokkeslett = soknad.klokkeslett || '';
+        this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
+        this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));
+        this.mottattDato = soknad.mottattDato || '';
+        this.nattevaak = (soknad.nattevaak || []).map((n) => new Tilleggsinformasjon(n));
+        this.omsorg = new Omsorg(soknad.omsorg || {});
+        this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
+        this.soekerId = soknad.soekerId || '';
+        this.soeknadId = soknad.soeknadId || '';
+        this.soeknadsperiode = (soknad.soeknadsperiode || []).map((s) => new Periode(s));
+        this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
+        this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
+        this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
+        this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
+            (u) => new UtenlandsOpphold(u),
+        );
+        this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
     }
 }

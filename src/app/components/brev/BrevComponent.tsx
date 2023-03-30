@@ -1,39 +1,38 @@
-import { Alert } from '@navikt/ds-react';
-import { ApiPath, URL_BACKEND } from 'app/apiConfig';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import { Person } from 'app/models/types';
-import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
-import Organisasjon from 'app/models/types/Organisasjon';
-import { get, post } from 'app/utils';
 import { Form, Formik } from 'formik';
-import { Knapp } from 'nav-frontend-knapper';
-import { Feilmelding } from 'nav-frontend-typografi';
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import ModalWrapper from 'nav-frontend-modal';
+
+import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
+
+import { ApiPath, URL_BACKEND } from 'app/apiConfig';
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { Person } from 'app/models/types';
+import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
+import Organisasjon from 'app/models/types/Organisasjon';
+import BrevFormValues from 'app/models/types/brev/BrevFormValues';
+import { get, post } from 'app/utils';
+
 import { finnArbeidsgivere } from '../../api/api';
+import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
-import './brev.less';
 import Brevmal from './Brevmal';
-import dokumentMalType from './dokumentMalType';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import SendIcon from './SendIcon';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
+import './brev.less';
+import dokumentMalType from './dokumentMalType';
 
 const previewMessage = (
     values: BrevFormValues,
     aktørId: string,
     sakstype: string,
     journalpostId?: string,
-    fagsakId?: string
+    fagsakId?: string,
 ) => {
     const mottaker = {
         type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
@@ -136,7 +135,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     }, [søkerId]);
 
     if (hentBrevmalerError) {
-        return <Feilmelding>Henting av brevmaler feilet</Feilmelding>;
+        return <ErrorMessage size="small">Henting av brevmaler feilet</ErrorMessage>;
     }
 
     if (!brevmaler) {
@@ -187,13 +186,13 @@ const BrevComponent: React.FC<BrevProps> = ({
         >
             {({ values, isSubmitting, handleSubmit }) => (
                 <div className="brev">
-                    <ModalWrapper
+                    <Modal
                         className="modalContainer"
                         key="erdusikkerpåatsendebrevmodal"
-                        onRequestClose={() => setVisErDuSikkerModal(false)}
-                        contentLabel="erdusikkerpåatsendebrevmodal"
+                        onClose={() => setVisErDuSikkerModal(false)}
+                        aria-label="erdusikkerpåatsendebrevmodal"
                         closeButton={false}
-                        isOpen={visErDuSikkerModal}
+                        open={visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
                             submitKnappText="modal.erdusikker.fortsett"
@@ -204,7 +203,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                             }}
                             onClose={() => setVisErDuSikkerModal(false)}
                         />
-                    </ModalWrapper>
+                    </Modal>
                     <Form>
                         <MalVelger
                             resetBrevStatus={() => {
@@ -240,17 +239,18 @@ const BrevComponent: React.FC<BrevProps> = ({
                         )}
                         <VerticalSpacer sixteenPx />
                         <div className="buttonRow">
-                            <Knapp
+                            <Button
+                                variant="secondary"
                                 className="sendBrevButton"
                                 onClick={() => setVisErDuSikkerModal(true)}
-                                mini
-                                spinner={isSubmitting}
+                                size="small"
+                                loading={isSubmitting}
                                 disabled={isSubmitting}
-                                htmlType="button"
+                                type="button"
+                                icon={<SendIcon />}
                             >
-                                <SendIcon />
                                 {intl.formatMessage({ id: 'Messages.Submit' })}
-                            </Knapp>
+                            </Button>
                             {values.brevmalkode && (
                                 <button
                                     type="button"

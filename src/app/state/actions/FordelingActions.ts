@@ -4,6 +4,7 @@ import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models
 import { IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
+
 import { FagsakYtelseType, ISkalTilK9 } from '../../models/types/RequestBodies';
 
 interface ISetSakstypeAction {
@@ -90,9 +91,9 @@ interface IGosysGjelderErrorAction {
     type: FordelingActionKeys.GOSYS_GJELDER_ERROR;
     error: IError;
 }
-interface ISetErIdent1BekreftetAction {
+interface ISetErSøkerIdBekreftetAction {
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1;
-    erIdent1Bekreftet: boolean;
+    erSøkerIdBekreftet: boolean;
 }
 
 interface ISetValgtGosysKategori {
@@ -126,9 +127,9 @@ export const gosysGjelderErrorAction = (error: IError): IGosysGjelderErrorAction
     error,
 });
 
-export const setErIdent1BekreftetAction = (identBekreftet: boolean): ISetErIdent1BekreftetAction => ({
+export const setErSøkerIdBekreftetAction = (identBekreftet: boolean): ISetErSøkerIdBekreftetAction => ({
     type: FordelingActionKeys.IDENT_BEKREFT_IDENT1,
-    erIdent1Bekreftet: identBekreftet,
+    erSøkerIdBekreftet: identBekreftet,
 });
 export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetValgtGosysKategori => ({
     type: FordelingActionKeys.VALGT_GOSYS_KATEGORI,
@@ -152,7 +153,7 @@ export type IFordelingActionTypes =
     | IGosysGjelderRequestAction
     | IGosysGjelderSuccessAction
     | IGosysGjelderErrorAction
-    | ISetErIdent1BekreftetAction
+    | ISetErSøkerIdBekreftetAction
     | ISetValgtGosysKategori
     | ISjekkOmSkalTilK9ResetAction
     | ISetDokumenttypeAction;
@@ -195,7 +196,7 @@ export const lukkJournalpostOppgave =
                     return dispatch(lukkOppgaveSuccessAction());
                 }
                 return dispatch(lukkOppgaveErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 
@@ -205,7 +206,7 @@ export function sjekkOmSkalTilK9Sak(
     jpid: string,
     fagsakYtelseType: FagsakYtelseType,
     annenPart: string,
-    valgtFagsak?: Fagsak
+    valgtFagsak?: Fagsak,
 ) {
     return (dispatch: any) => {
         const requestBody: ISkalTilK9 = {

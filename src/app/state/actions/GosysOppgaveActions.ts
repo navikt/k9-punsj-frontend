@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
+
 import { GosysOppgaveActionKeys } from '../../models/enums/GosysOppgaveActionKeys';
 
 interface IOpprettGosysOppgaveRequestAction {
@@ -37,7 +38,8 @@ export const opprettGosysOppgaveResetAction = (): IOpprettGosysOppgaveResetActio
     type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_RESET,
 });
 
-export const opprettGosysOppgave = (journalpostid: string, norskident: string, gosysKategori: string) => (dispatch: any) => {
+export const opprettGosysOppgave =
+    (journalpostid: string, norskident: string, gosysKategori: string) => (dispatch: any) => {
         dispatch(opprettGosysOppgaveRequestAction());
 
         post(
@@ -47,13 +49,13 @@ export const opprettGosysOppgave = (journalpostid: string, norskident: string, g
             {
                 journalpostId: journalpostid,
                 norskIdent: norskident,
-                gjelder: gosysKategori
+                gjelder: gosysKategori,
             },
             (response) => {
                 if (response.status === 200) {
                     return dispatch(opprettGosysOppgaveSuccessAction());
                 }
                 return dispatch(opprettGosysOppgaveErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };

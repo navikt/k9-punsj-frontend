@@ -1,12 +1,15 @@
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading } from '@navikt/ds-react';
-import { IPeriode, ITimerOgMinutter, Periodeinfo, PeriodeMedTimerMinutter } from 'app/models/types';
 import { FieldArray, Formik } from 'formik';
 import React from 'react';
-import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 import * as yup from 'yup';
-import TilsynPeriode from './TilsynPeriode';
+
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading } from '@navikt/ds-react';
+
+import { IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
+import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
+
 import VerticalSpacer from '../VerticalSpacer';
+import TilsynPeriode from './TilsynPeriode';
 
 const schema = yup.object({
     perioder: yup.array().of(periodeMedTimerOgMinutterSchema),
@@ -53,8 +56,9 @@ export default function TilsynPeriodeListe({
                                 <Button
                                     variant="tertiary"
                                     onClick={() => arrayHelpers.push(new PeriodeMedTimerMinutter({}))}
+                                    icon={<AddCircle />}
                                 >
-                                    <AddCircle /> Legg til periode
+                                    Legg til periode
                                 </Button>
                                 <VerticalSpacer sixteenPx />
                                 <div style={{ display: 'flex' }}>

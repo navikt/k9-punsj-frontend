@@ -1,32 +1,33 @@
 import { combineReducers } from 'redux';
-import {
-    AuthReducer,
-    FordelingReducer,
-    GosysOppgaveReducer,
-    EksisterendeSoknaderReducer,
-    SoknaderSokReducer,
-    PunchFormReducer,
-    PunchReducer,
-    SignaturReducer,
-    FordelingSettPaaVentReducer,
-} from './reducers';
-import FellesReducer from './reducers/FellesReducer';
+
 import { Sakstype } from '../models/enums';
-import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
-import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
-import { SoknaderVisningReducer } from './reducers/SoknaderVisningReducer';
-import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
-import { IdentReducer } from './reducers/IdentReducer';
-import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
 import { EksisterendeOMPKSSoknaderReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
 import { PunchOMPKSFormReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
 import { PunchOMPKSReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSReducer';
 import { EksisterendeOMPMASoknaderReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
 import { PunchOMPMAFormReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
 import { PunchOMPMAReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAReducer';
+import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
 import { PunchPLSFormReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
 import { PunchPLSReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSReducer';
-import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
+import {
+    AuthReducer,
+    EksisterendeSoknaderReducer,
+    FordelingReducer,
+    FordelingSettPaaVentReducer,
+    GosysOppgaveReducer,
+    PunchFormReducer,
+    PunchReducer,
+    SignaturReducer,
+    SoknaderSokReducer,
+} from './reducers';
+import FellesReducer from './reducers/FellesReducer';
+import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
+import { IdentReducer } from './reducers/IdentReducer';
+import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
+import { SoknaderVisningReducer } from './reducers/SoknaderVisningReducer';
+import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 
 export const rootReducer = combineReducers({
     [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({

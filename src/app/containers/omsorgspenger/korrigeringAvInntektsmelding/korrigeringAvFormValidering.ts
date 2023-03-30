@@ -3,6 +3,7 @@ import { IPeriode } from 'app/models/types';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { initializeDate } from 'app/utils';
+
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 
 interface FormErrors {
@@ -37,7 +38,7 @@ const getPeriodeFeil = (value: IPeriode, response: ValideringResponse) => {
                 feilIndex = index;
             }
             return feil.felt === feltStreng;
-        })
+        }),
     );
     return harMatchendeFeil ? response?.feil[feilIndex]?.feilmelding : null;
 };

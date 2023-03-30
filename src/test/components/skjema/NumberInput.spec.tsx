@@ -1,8 +1,9 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TestSkjema } from './testskjema';
+import React from 'react';
+
 import NumberInput from '../../../app/components/skjema/NumberInput';
+import { TestSkjema } from './testskjema';
 
 describe('<NumberInput>', () => {
     const initAlder = 4;
@@ -14,7 +15,7 @@ describe('<NumberInput>', () => {
                 }}
             >
                 <NumberInput feltnavn="alder" />
-            </TestSkjema>
+            </TestSkjema>,
         );
 
     test('plussknapp øker verdi med 1', async () => {

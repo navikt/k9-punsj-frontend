@@ -1,4 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import classNames from 'classnames';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import { Panel } from '@navikt/ds-react';
+
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -6,11 +13,7 @@ import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import Panel from 'nav-frontend-paneler';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+
 import { finnArbeidsgivere } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
@@ -54,7 +57,7 @@ const Arbeidstakerperioder = ({
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
         index: number,
-        iteminfo: Partial<ItemInfo>
+        iteminfo: Partial<ItemInfo>,
     ) => {
         const newInfo: ItemInfo = { ...items[index], ...iteminfo };
         const newArray = itemsWithInitialItem;
@@ -82,7 +85,7 @@ const Arbeidstakerperioder = ({
                     arbeidstakerList,
                 },
             },
-            showStatus
+            showStatus,
         );
 
     const editSoknad = (arbeidstakerList: ItemInfo[]) =>
@@ -112,7 +115,7 @@ const Arbeidstakerperioder = ({
                 const getHarDuplikatOrgnr = () =>
                     items.filter(
                         (item) =>
-                            item.organisasjonsnummer && item.organisasjonsnummer === currentItem.organisasjonsnummer
+                            item.organisasjonsnummer && item.organisasjonsnummer === currentItem.organisasjonsnummer,
                     ).length > 1;
                 return (
                     <Panel
@@ -169,7 +172,7 @@ const Arbeidstakerperioder = ({
                                 getFeilmeldinger={() =>
                                     (getUhaandterteFeil &&
                                         getUhaandterteFeil(
-                                            `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`
+                                            `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`,
                                         )) ||
                                     []
                                 }

@@ -1,5 +1,7 @@
-import { ApiPath } from 'app/apiConfig';
 import { rest } from 'msw';
+
+import { ApiPath } from 'app/apiConfig';
+
 import { LOCAL_API_URL } from './konstanter';
 
 const omsorgspengerutbetalingHandlers = {
@@ -9,8 +11,8 @@ const omsorgspengerutbetalingHandlers = {
                 søker: '29099000129',
                 fagsakTypeKode: 'OMP',
                 søknader: [],
-            })
-        )
+            }),
+        ),
     ),
     mappeMedSøknad: rest.get(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe`, (req, res, ctx) =>
         res(
@@ -122,8 +124,8 @@ const omsorgspengerutbetalingHandlers = {
                         },
                     },
                 ],
-            })
-        )
+            }),
+        ),
     ),
     nySoeknad: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad`, (req, res, ctx) =>
         res(
@@ -141,8 +143,8 @@ const omsorgspengerutbetalingHandlers = {
                 harInfoSomIkkeKanPunsjes: null,
                 harMedisinskeOpplysninger: null,
                 metadata: null,
-            })
-        )
+            }),
+        ),
     ),
     soknad: rest.get(
         `${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe/bc12baac-0f0c-427e-a059-b9fbf9a3adff`,
@@ -162,14 +164,14 @@ const omsorgspengerutbetalingHandlers = {
                     harInfoSomIkkeKanPunsjes: null,
                     harMedisinskeOpplysninger: null,
                     metadata: null,
-                })
-            )
+                }),
+            ),
     ),
     oppdater: rest.put(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/oppdater`, (req, res, ctx) =>
-        res(ctx.json({}))
+        res(ctx.json({})),
     ),
     ingenEksisterendePerioder: rest.post(`${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`, (req, res, ctx) =>
-        res(ctx.json([]))
+        res(ctx.json([])),
     ),
     eksisterendePerioderOmsorgspengeutbetaling: rest.post(
         `${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`,
@@ -196,8 +198,8 @@ const omsorgspengerutbetalingHandlers = {
                         fom: '2022-09-26',
                         tom: '2022-09-29',
                     },
-                ])
-            )
+                ]),
+            ),
     ),
     sendInn: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/send`, (req, res, ctx) =>
         res(
@@ -243,8 +245,8 @@ const omsorgspengerutbetalingHandlers = {
                 begrunnelseForInnsending: {
                     tekst: null,
                 },
-            })
-        )
+            }),
+        ),
     ),
     valider: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/valider`, (req, res, ctx) =>
         res(
@@ -290,8 +292,8 @@ const omsorgspengerutbetalingHandlers = {
                 begrunnelseForInnsending: {
                     tekst: null,
                 },
-            })
-        )
+            }),
+        ),
     ),
     validerFeil: rest.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/valider`, (req, res, ctx) =>
         res(
@@ -305,8 +307,8 @@ const omsorgspengerutbetalingHandlers = {
                     },
                 ],
                 søknadIdDto: '27b0ffe6-26b3-4381-94f4-574ce4022b08',
-            })
-        )
+            }),
+        ),
     ),
 };
 

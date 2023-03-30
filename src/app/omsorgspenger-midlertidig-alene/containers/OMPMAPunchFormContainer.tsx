@@ -1,28 +1,29 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-template-curly-in-string */
-import React, { useEffect } from 'react';
-import { Formik, FormikValues } from 'formik';
-import { connect } from 'react-redux';
-import { WrappedComponentProps } from 'react-intl';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import { RootStateType } from 'app/state/RootState';
-import { setHash } from 'app/utils';
+/* eslint-disable no-template-curly-in-string */
+import { Formik, FormikValues } from 'formik';
+import React, { useEffect } from 'react';
+import { WrappedComponentProps } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { Alert, Button, Loader } from '@navikt/ds-react';
+
 import { PunchStep } from 'app/models/enums';
-import intlHelper from 'app/utils/intlUtils';
-import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
-import { hentBarn } from 'app/state/reducers/HentBarn';
+import { IBarn } from 'app/models/types/Barn';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Personvalg } from 'app/models/types/Personvalg';
-import { IBarn } from 'app/models/types/Barn';
-import { IOMPMASoknad } from '../types/OMPMASoknad';
-import { OMPMAPunchForm } from './OMPMAPunchForm';
-import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
-import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
+import { RootStateType } from 'app/state/RootState';
+import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
+import { hentBarn } from 'app/state/reducers/HentBarn';
+import { setHash } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import schema from '../schema';
+import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
+import { IOMPMASoknad } from '../types/OMPMASoknad';
+import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
+import { OMPMAPunchForm } from './OMPMAPunchForm';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
@@ -86,8 +87,8 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     }, []);
 
     useEffect(() => {
-        if (soknad?.soekerId || identState.ident1) {
-            henteBarn(soknad?.soekerId || identState.ident1);
+        if (soknad?.soekerId || identState.søkerId) {
+            henteBarn(soknad?.soekerId || identState.søkerId);
         }
     }, [soknad?.soekerId]);
 
@@ -108,15 +109,19 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     }
 
     if (punchFormState.isSoknadLoading || !harHentBarnResponse) {
-        return <NavFrontendSpinner />;
+        return <Loader size="large" />;
     }
 
     if (punchFormState.error) {
         return (
             <>
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}
+                </Alert>
                 <p>
-                    <Knapp onClick={handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
+                    <Button variant="secondary" onClick={handleStartButtonClick}>
+                        {intlHelper(intl, 'skjema.knapp.tilstart')}
+                    </Button>
                 </p>
             </>
         );
@@ -130,7 +135,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
                     norskIdent: barnet.identitetsnummer,
                     navn: `${barnet.fornavn} ${barnet.etternavn}`,
                     låsIdentitetsnummer: true,
-                }))
+                })),
             )}
             validationSchema={schema}
             onSubmit={(values) => handleSubmit(values)}
@@ -141,7 +146,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
 };
 
 const mapStateToProps = (
-    state: RootStateType
+    state: RootStateType,
 ): Pick<OwnProps, 'identState' | 'barn' | 'harHentBarnResponse'> & IPunchOMPMAFormStateProps => ({
     identState: state.identState,
     barn: state.felles.barn,

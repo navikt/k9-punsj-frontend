@@ -1,8 +1,10 @@
-import { Ingress } from 'nav-frontend-typografi';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './opprettJournalpostInngang.less';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
+
+import { BodyLong } from '@navikt/ds-react';
+
+import './opprettJournalpostInngang.less';
 
 const OpprettJournalpostInngang = () => {
     const intl = useIntl();
@@ -10,9 +12,9 @@ const OpprettJournalpostInngang = () => {
         <div className="opprettJournalpostInngang">
             <div className="content">
                 <h1 className="heading">Opprett journalpost</h1>
-                <Ingress>{intl.formatMessage({ id: 'OpprettJournalpostInngang.ingress' })}</Ingress>
+                <BodyLong>{intl.formatMessage({ id: 'OpprettJournalpostInngang.ingress' })}</BodyLong>
                 <Link
-                    className="linkButton knapp knapp--hoved"
+                    className="linkButton navds-button navds-button--primary navds-button--medium"
                     to="/opprett-journalpost"
                     data-testid="opprett-journalpost-inngang"
                 >

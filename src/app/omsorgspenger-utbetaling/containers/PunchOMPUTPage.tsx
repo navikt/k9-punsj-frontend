@@ -1,25 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'nav-frontend-tabell-style';
 import React from 'react';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries, useQuery } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, useHistory, withRouter } from 'react-router';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import { ApiPath } from 'app/apiConfig';
 import Page from 'app/components/page/Page';
-import { setIdentAction } from 'app/state/actions';
+import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { RootStateType } from 'app/state/RootState';
+import { setIdentAction } from 'app/state/actions';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { ApiPath } from 'app/apiConfig';
-import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
-import { useParams } from 'react-router-dom';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
-import { IIdentState } from '../../models/types/IdentState';
-import { IJournalpost } from '../../models/types';
+
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
+import { IJournalpost } from '../../models/types';
+import { IIdentState } from '../../models/types/IdentState';
 import { hentSoeknad } from '../api';
 
 export interface IPunchOMPUTPageStateProps {
@@ -37,8 +38,8 @@ export interface IPunchOMPUTPageComponentProps {
 }
 
 export interface IPunchOMPUTPageComponentState {
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
 }
 
 type IPunchOMPUTPageProps = WrappedComponentProps &
@@ -50,7 +51,7 @@ type IPunchOMPUTPageProps = WrappedComponentProps &
 const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, identState, children } = props;
     const id = useHistory().location.pathname.split('skjema/')[1];
-    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.ident1, id));
+    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.søkerId, id));
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
 
@@ -71,9 +72,9 @@ const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) =>
     const content = () => {
         if (forbidden) {
             return (
-                <AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
                     <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                </AlertStripeAdvarsel>
+                </Alert>
             );
         }
 
@@ -97,7 +98,7 @@ const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) =>
 
         return (
             <div className="panels-wrapper" id="panels-wrapper">
-                <Panel className="pleiepenger_punch_form" border>
+                <Panel className="punch_form" border>
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                     {children}
                 </Panel>

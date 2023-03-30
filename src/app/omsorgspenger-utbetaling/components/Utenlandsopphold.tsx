@@ -1,13 +1,16 @@
-import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
-import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
+
+import { AddCircle, Delete } from '@navikt/ds-icons';
+import { Button, Heading, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import intlHelper from 'app/utils/intlUtils';
+
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
@@ -64,8 +67,8 @@ const Utenlandsopphold = () => {
                                                 size="small"
                                                 onClick={() => arrayHelpers.remove(index)}
                                                 style={{ float: 'right' }}
+                                                icon={<Delete />}
                                             >
-                                                <Delete />
                                                 Fjern periode
                                             </Button>
                                         )}
@@ -90,8 +93,8 @@ const Utenlandsopphold = () => {
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>

@@ -1,16 +1,18 @@
+import { Input } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { Row } from 'react-bootstrap';
+import { IntlShape } from 'react-intl';
+
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
-import * as React from 'react';
-import { IntlShape } from 'react-intl';
-import { Input } from 'nav-frontend-skjema';
-import { Row } from 'react-bootstrap';
 import { GetErrorMessage } from 'app/models/types';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
+import intlHelper from 'app/utils/intlUtils';
+
 import { ITimerOgMinutter } from '../../models/types/Periode';
+import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { stringToNumber } from '../../utils';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -22,7 +24,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITimerOgMinutter>,
         feilprefiks: string,
         getErrorMessage: GetErrorMessage,
-        intl: IntlShape
+        intl: IntlShape,
     ) => {
         const { timer, minutter } = periodeinfo;
         return (

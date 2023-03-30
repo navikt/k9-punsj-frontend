@@ -3,10 +3,11 @@ import { PunchFormActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
+
 import { ISendSoknad } from '../../../models/types/SendSoknad';
 import { IOMPMASoknad } from '../../types/OMPMASoknad';
-import { IOMPMASoknadUt } from '../../types/OMPMASoknadUt';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
+import { IOMPMASoknadUt } from '../../types/OMPMASoknadUt';
 
 interface IResetPunchOMPMAFormAction {
     type: PunchFormActionKeys.RESET;
@@ -184,25 +185,25 @@ export function updateOMPMASoknad(soknad: Partial<IOMPMASoknadUt>) {
 
 export function updateOMPMASoknader(
     mappeid: string,
-    norskIdent1: string,
-    norskIdent2: string | null,
+    norskSøkerId: string,
+    norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IOMPMASoknadUt>,
-    soknad2: Partial<IOMPMASoknadUt> | null
+    soknad2: Partial<IOMPMASoknadUt> | null,
 ) {
     return (dispatch: any) => {
-        if (!norskIdent2 || !soknad2) {
+        if (!norskPleietrengendeId || !soknad2) {
             return dispatch(updateOMPMASoknad(soknad1));
         }
 
         dispatch(updateOMPMASoknadRequestAction());
         const request = {
             personer: {
-                [norskIdent1]: {
+                [norskSøkerId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad1,
                 },
-                [norskIdent2]: {
+                [norskPleietrengendeId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad2,
                 },
@@ -218,7 +219,7 @@ export function updateOMPMASoknader(
                 case 400:
                     return response.json().then((mappe) => {
                         dispatch(setOMPMASoknadAction(mappe));
-                        dispatch(updateOMPMASoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        dispatch(updateOMPMASoknadSuccessAction(mappe.personer?.[norskSøkerId]?.mangler));
                     });
                 default:
                     return dispatch(updateOMPMASoknadErrorAction(convertResponseToError(response)));
@@ -232,7 +233,7 @@ export const submitOMPMASoknadRequestAction = (): ISubmitOMPMASoknadRequestActio
 });
 export const submitOMPMASoknadSuccessAction = (
     innsentSoknad: IOMPMASoknadKvittering,
-    linkTilBehandlingIK9: string | null
+    linkTilBehandlingIK9: string | null,
 ): ISubmitOMPMASoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
     innsentSoknad,
@@ -256,7 +257,7 @@ export const validerOMPMASoknadRequestAction = (): IValiderOMPMASoknadRequestAct
 });
 export const validerOMPMASoknadSuccessAction = (
     validertSoknad: IOMPMASoknadKvittering,
-    erMellomlagring?: boolean
+    erMellomlagring?: boolean,
 ): IValiderOMPMASoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
     validertSoknad,
@@ -300,7 +301,7 @@ export function submitOMPMASoknad(norskIdent: string, soeknadId: string) {
                     default:
                         return dispatch(submitOMPMASoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }
@@ -324,7 +325,7 @@ export function validerOMPMASoknad(soknad: IOMPMASoknadUt, erMellomlagring?: boo
                     default:
                         return dispatch(validerOMPMASoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }

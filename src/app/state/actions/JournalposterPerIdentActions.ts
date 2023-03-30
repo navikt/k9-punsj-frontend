@@ -1,8 +1,8 @@
-import { IError, IJournalpostInfo } from '../../models/types';
-import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
-import { convertResponseToError, get, post } from '../../utils';
 import { ApiPath } from '../../apiConfig';
+import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
+import { IError, IJournalpostInfo } from '../../models/types';
 import { IHentSoknad } from '../../models/types/RequestBodies';
+import { convertResponseToError, get, post } from '../../utils';
 
 interface ISetJournalposterPerIdentAction {
     type: JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_SET;
@@ -59,7 +59,7 @@ export function hentAlleJournalposterForIdent(norskIdent: string) {
                     return dispatch(setJournalposterPerIdentAction(svar.poster));
                 }
                 return dispatch(getJournalposterPerIdentErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

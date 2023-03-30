@@ -1,5 +1,7 @@
-import { Periodeinfo } from 'app/models/types';
 import dayjs from 'dayjs';
+
+import { Periodeinfo } from 'app/models/types';
+
 import { IArbeidstidPeriodeMedTimer, ITimerOgMinutter, Periode } from '../models/types/Periode';
 import { formats } from './formatUtils';
 import {
@@ -113,7 +115,7 @@ export const slåSammenSammenhengendePerioder = (periods: Periode[]): Periode[] 
 
 export const removeDatesFromPeriods = (
     periods: Periodeinfo<IArbeidstidPeriodeMedTimer | ITimerOgMinutter>[],
-    datesToBeRemoved: Date[]
+    datesToBeRemoved: Date[],
 ) =>
     periods
         .map((periodeMedTimer) => {

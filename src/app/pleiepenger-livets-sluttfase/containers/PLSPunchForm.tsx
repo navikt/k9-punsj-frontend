@@ -1,4 +1,14 @@
 /* eslint-disable */
+import classNames from 'classnames';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { CheckboksPanel, Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { Alert, Button, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
+
+import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
 import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
 import {
     IInputError,
@@ -7,6 +17,7 @@ import {
     SelvstendigNaeringsdrivendeOpptjening,
     SelvstendigNaerinsdrivende,
 } from 'app/models/types';
+import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import {
     resetPunchFormAction,
     setJournalpostPaaVentResetAction,
@@ -16,22 +27,16 @@ import {
 } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import classNames from 'classnames';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Alert } from '@navikt/ds-react';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { EtikettAdvarsel, EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import { PopoverOrientering } from 'nav-frontend-popover';
-import { CheckboksPanel, Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
+
+import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdPanel';
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
+import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
+import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
+import { PeriodeinfoPaneler } from '../../containers/pleiepenger/PeriodeinfoPaneler';
+import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
+import { pfLand } from '../../containers/pleiepenger/pfLand';
 import { JaNeiIkkeOpplyst } from '../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
@@ -41,25 +46,10 @@ import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { IPeriode } from '../../models/types/Periode';
-import { setIdentFellesAction } from '../../state/actions/IdentActions';
 import { RootStateType } from '../../state/RootState';
+import { setIdentFellesAction } from '../../state/actions/IdentActions';
 import { initializeDate } from '../../utils/timeUtils';
-import { IPunchPLSFormState } from '../types/PunchPLSFormState';
-import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
-
-import { PeriodeinfoPaneler } from '../../containers/pleiepenger/PeriodeinfoPaneler';
-import Soknadsperioder from './Soknadsperioder';
-import EndringAvSoknadsperioder from './EndringAvSøknadsperioder/EndringAvSoknadsperioder';
-import { pfLand } from '../../containers/pleiepenger/pfLand';
-import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdPanel';
-import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
-import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
-import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
-import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IPLSSoknadUt, PLSSoknadUt } from '../types/PLSSoknadUt';
-import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSoknad';
-import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
+import { undoChoiceOfEksisterendePLSSoknadAction } from '../state/actions/EksisterendePLSSoknaderActions';
 import {
     getPLSSoknad,
     hentPLSPerioderFraK9Sak,
@@ -70,9 +60,14 @@ import {
     validerPLSSoknad,
     validerPLSSoknadResetAction,
 } from '../state/actions/PLSPunchFormActions';
-import { undoChoiceOfEksisterendePLSSoknadAction } from '../state/actions/EksisterendePLSSoknaderActions';
-import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
+import { IPLSSoknadUt, PLSSoknadUt } from '../types/PLSSoknadUt';
+import { IPunchPLSFormState } from '../types/PunchPLSFormState';
+import EndringAvSoknadsperioder from './EndringAvSøknadsperioder/EndringAvSoknadsperioder';
+import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSoknad';
+import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
+import Soknadsperioder from './Soknadsperioder';
+import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
 
 export interface IPunchPLSFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -289,7 +284,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     componentDidUpdate(
         prevProps: Readonly<IPunchPLSFormProps>,
         prevState: Readonly<IPunchPLSFormComponentState>,
-        snapshot?: any
+        snapshot?: any,
     ): void {
         const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } =
             this.props;
@@ -309,7 +304,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
         if (!prevProps.søkersIdent && !prevProps.pleietrengendeIdent && søkersIdent && pleietrengendeIdent) {
             hentPerioder(søkersIdent, pleietrengendeIdent);
-            if (!identState.ident1 || !identState.ident2) {
+            if (!identState.søkerId || !identState.pleietrengendeId) {
                 setIdentAction(søkersIdent, pleietrengendeIdent);
             }
         }
@@ -328,7 +323,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
 
         if (punchFormState.isSoknadLoading) {
-            return <NavFrontendSpinner />;
+            return <Loader size="large" />;
         }
 
         if (!!punchFormState.error) {
@@ -336,7 +331,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 <>
                     <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
                     <p>
-                        <Knapp onClick={this.handleStartButtonClick}>{intlHelper(intl, 'skjema.knapp.tilstart')}</Knapp>
+                        <Button variant="secondary" onClick={this.handleStartButtonClick}>
+                            {intlHelper(intl, 'skjema.knapp.tilstart')}
+                        </Button>
                     </p>
                 </>
             );
@@ -473,7 +470,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             />
                             {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
                                 <>
-                                    <AlertStripeInfo>{intlHelper(intl, 'skjema.ferie.fjern.info')}</AlertStripeInfo>
+                                    <Alert size="small" variant="info">
+                                        {intlHelper(intl, 'skjema.ferie.fjern.info')}
+                                    </Alert>
                                     <Periodepaneler
                                         intl={intl}
                                         periods={soknad.lovbestemtFerieSomSkalSlettes}
@@ -485,7 +484,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         editSoknadState={(perioder, showStatus) =>
                                             this.updateSoknadState(
                                                 { lovbestemtFerieSomSkalSlettes: perioder },
-                                                showStatus
+                                                showStatus,
                                             )
                                         }
                                         getErrorMessage={() => undefined}
@@ -563,9 +562,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
+                    <HelpText className={'hjelpetext'} placement="top-end">
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
-                    </Hjelpetekst>
+                    </HelpText>
                 </div>
                 <VerticalSpacer eightPx={true} />
                 <div className={'flex-container'}>
@@ -575,9 +574,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
-                    <Hjelpetekst className={'hjelpetext'} type={PopoverOrientering.OverHoyre}>
+                    <HelpText className={'hjelpetext'} placement="top-end">
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                    </Hjelpetekst>
+                    </HelpText>
                 </div>
                 <VerticalSpacer twentyPx={true} />
                 {this.getUhaandterteFeil('')
@@ -588,26 +587,28 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className={classNames('loadingSpinner')}>
-                        <NavFrontendSpinner />
+                        <Loader size="large" />
                     </div>
                 )}
                 <div className={'submit-knapper'}>
                     <p className="sendknapp-wrapper">
-                        <Knapp
+                        <Button
+                            variant="secondary"
                             className={'send-knapp'}
                             onClick={() => this.handleSubmit()}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
                             {intlHelper(intl, 'skjema.knapp.send')}
-                        </Knapp>
+                        </Button>
 
-                        <Knapp
+                        <Button
+                            variant="secondary"
                             className={'vent-knapp'}
                             onClick={() => this.setState({ showSettPaaVentModal: true })}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                        </Knapp>
+                        </Button>
                     </p>
                 </div>
                 <VerticalSpacer sixteenPx={true} />
@@ -628,90 +629,96 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 )}
 
                 {this.state.showSettPaaVentModal && (
-                    <ModalWrapper
+                    <Modal
                         key={'settpaaventmodal'}
                         className={'settpaaventmodal'}
-                        onRequestClose={() => this.setState({ showSettPaaVentModal: false })}
-                        contentLabel={'settpaaventmodal'}
-                        isOpen={this.state.showSettPaaVentModal}
+                        onClose={() => this.setState({ showSettPaaVentModal: false })}
+                        aria-label={'settpaaventmodal'}
+                        open={this.state.showSettPaaVentModal}
                         closeButton={false}
                     >
                         <div className="">
                             <SettPaaVentModal
                                 journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid
+                                    (jp) => jp.journalpostId !== this.props.journalpostid,
                                 )}
                                 soknadId={soknad.soeknadId}
                                 submit={() => this.handleSettPaaVent()}
                                 avbryt={() => this.setState({ showSettPaaVentModal: false })}
                             />
                         </div>
-                    </ModalWrapper>
+                    </Modal>
                 )}
                 {punchFormState.settPaaVentSuccess && (
-                    <ModalWrapper
+                    <Modal
                         key={'settpaaventokmodal'}
-                        onRequestClose={() => this.props.settPaaventResetAction()}
-                        contentLabel={'settpaaventokmodal'}
+                        onClose={() => this.props.settPaaventResetAction()}
+                        aria-label={'settpaaventokmodal'}
                         closeButton={false}
-                        isOpen={punchFormState.settPaaVentSuccess}
+                        open={punchFormState.settPaaVentSuccess}
                     >
                         <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
-                    </ModalWrapper>
+                    </Modal>
                 )}
                 {!!punchFormState.settPaaVentError && (
-                    <ModalWrapper
+                    <Modal
                         key={'settpaaventerrormodal'}
-                        onRequestClose={() => this.props.settPaaventResetAction()}
-                        contentLabel={'settpaaventokmodal'}
+                        onClose={() => this.props.settPaaventResetAction()}
+                        aria-label={'settpaaventokmodal'}
                         closeButton={false}
-                        isOpen={!!punchFormState.settPaaVentError}
+                        open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </ModalWrapper>
+                    </Modal>
                 )}
 
                 {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&
                     this.props.punchFormState.validertSoknad && (
-                        <ModalWrapper
+                        <Modal
                             key={'validertSoknadModal'}
                             className={'validertSoknadModal'}
-                            onRequestClose={() => this.props.validerSoknadReset()}
-                            contentLabel={'validertSoknadModal'}
+                            onClose={() => this.props.validerSoknadReset()}
+                            aria-label={'validertSoknadModal'}
                             closeButton={false}
-                            isOpen={!!this.props.punchFormState.isValid}
+                            open={!!this.props.punchFormState.isValid}
                         >
-                            <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                <PLSSoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
-                            </div>
-                            <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                <Hovedknapp
-                                    mini={true}
-                                    className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                >
-                                    {intlHelper(intl, 'fordeling.knapp.videre')}
-                                </Hovedknapp>
-                                <Knapp
-                                    mini={true}
-                                    className="validertSoknadOppsummeringContainer_knappTilbake"
-                                    onClick={() => this.props.validerSoknadReset()}
-                                >
-                                    {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                </Knapp>
-                            </div>
-                        </ModalWrapper>
+                            <Modal.Content>
+                                <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                    <PLSSoknadKvittering
+                                        intl={intl}
+                                        response={this.props.punchFormState.validertSoknad}
+                                    />
+                                </div>
+                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
+                                    <Button
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappVidere"
+                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                    >
+                                        {intlHelper(intl, 'fordeling.knapp.videre')}
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="small"
+                                        className="validertSoknadOppsummeringContainer_knappTilbake"
+                                        onClick={() => this.props.validerSoknadReset()}
+                                    >
+                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                    </Button>
+                                </div>
+                            </Modal.Content>
+                        </Modal>
                     )}
 
                 {this.state.visErDuSikkerModal && (
-                    <ModalWrapper
+                    <Modal
                         key={'erdusikkermodal'}
                         className={'erdusikkermodal'}
-                        onRequestClose={() => this.props.validerSoknadReset()}
-                        contentLabel={'erdusikkermodal'}
+                        onClose={() => this.props.validerSoknadReset()}
+                        aria-label={'erdusikkermodal'}
                         closeButton={false}
-                        isOpen={this.state.visErDuSikkerModal}
+                        open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
                             melding={'modal.erdusikker.sendinn'}
@@ -723,7 +730,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                 this.setState({ visErDuSikkerModal: false });
                             }}
                         />
-                    </ModalWrapper>
+                    </Modal>
                 )}
             </>
         );
@@ -733,7 +740,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         let navarandeSoknad: IPLSSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
-                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : []
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
             ),
         };
         this.setState({ harForsoektAaSendeInn: true });
@@ -1108,15 +1115,15 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                       .replace(/\[\d+]/g, '[]')
                       .replace(
                           /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED'
+                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
                       )
                       .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
                       .replace(
                           /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED'
+                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
                       )
                       .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES')
+                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
               )
             : undefined;
     };
@@ -1177,19 +1184,32 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const className = 'statusetikett';
 
         if (punchFormState.isAwaitingUpdateResponse) {
-            return <EtikettFokus {...{ className }}>Lagrer …</EtikettFokus>;
+            return (
+                <Tag variant="warning" {...{ className }}>
+                    Lagrer …
+                </Tag>
+            );
         }
         if (!!punchFormState.updateSoknadError) {
-            return <EtikettAdvarsel {...{ className }}>Lagring feilet</EtikettAdvarsel>;
+            return (
+                <Tag variant="error" {...{ className }}>
+                    Lagring feilet
+                </Tag>
+            );
         }
-        return <EtikettSuksess {...{ className }}>Lagret</EtikettSuksess>;
+        return (
+            <Tag variant="success" {...{ className }}>
+                Lagret
+            </Tag>
+        );
     }
 }
 
 const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
-    const søkersIdent = state.identState.ident1 || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.soekerId;
+    const søkersIdent =
+        state.identState.søkerId || state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.soekerId;
     const pleietrengendeIdent =
-        state.identState.ident2 ||
+        state.identState.pleietrengendeId ||
         state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
     return {
         punchFormState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState,
@@ -1203,14 +1223,15 @@ const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getPLSSoknad(id)),
-    hentPerioder: (ident1: string, ident2: string) => dispatch(hentPLSPerioderFraK9Sak(ident1, ident2)),
+    hentPerioder: (søkerId: string, pleietrengendeId: string) =>
+        dispatch(hentPLSPerioderFraK9Sak(søkerId, pleietrengendeId)),
     updateSoknad: (soknad: Partial<IPLSSoknadUt>) => dispatch(updatePLSSoknad(soknad)),
     validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitPLSSoknad(ident, soeknadid)),
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
-    setIdentAction: (ident1: string, ident2: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(ident1, ident2, annenSokerIdent)),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),

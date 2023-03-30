@@ -30,3 +30,11 @@ node_modules_bak
 .eslintcache
 *.mp4
 cypress/screenshots/
+.pnp.*
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

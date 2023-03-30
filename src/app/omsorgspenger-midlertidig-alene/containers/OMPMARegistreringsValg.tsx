@@ -1,18 +1,20 @@
-import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Alert, Button } from '@navikt/ds-react';
+
+import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+
 import { PunchStep } from '../../models/enums';
-import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { IIdentState } from '../../models/types/IdentState';
 import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
-import { setHash } from '../../utils';
-import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
+import { IIdentState } from '../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
+import { setHash } from '../../utils';
+import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
+import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
 
 export interface IOMPMARegistreringsValgComponentProps {
     journalpostid: string;
@@ -38,25 +40,25 @@ type IOMPMARegistreringsValgProps = IOMPMARegistreringsValgComponentProps &
     IEksisterendeOMPMASoknaderStateProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistreringsValgProps> = (
-    props: IOMPMARegistreringsValgProps
+    props: IOMPMARegistreringsValgProps,
 ) => {
     const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
-    const { ident1, ident2, annenPart } = identState;
+    const { søkerId, pleietrengendeId, annenPart } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
             setHash(
                 getPunchPath(PunchStep.FILL_FORM, {
                     id: eksisterendeSoknaderState.soknadid,
-                })
+                }),
             );
             props.resetSoknadidAction();
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
-        props.getAlleJournalposter(ident1);
-    }, [ident1]);
+        props.getAlleJournalposter(søkerId);
+    }, [søkerId]);
 
     const redirectToPreviousStep = () => {
         setHash('/');
@@ -64,11 +66,15 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     };
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return <AlertStripeFeil>Det oppsto en feil under opprettelse av søknad.</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
+        );
     }
 
     const newSoknad = () => {
-        props.createSoknad(journalpostid, ident1, annenPart);
+        props.createSoknad(journalpostid, søkerId, annenPart);
     };
 
     const kanStarteNyRegistrering = () => {
@@ -76,7 +82,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((eksisterendeSoknad) =>
                 // eslint-disable-next-line eqeqeq
-                Array.from(eksisterendeSoknad.journalposter!).some((jp) => jp == journalpostid)
+                Array.from(eksisterendeSoknad.journalposter!).some((jp) => jp == journalpostid),
             );
         }
         return true;
@@ -85,28 +91,28 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     return (
         <div className="registrering-page">
             <EksisterendeOMPMASoknader
-                ident1={ident1}
-                ident2={ident2}
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
                 getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
+                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
-                </Knapp>
+                </Button>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={newSoknad} className="knapp knapp2" mini>
+                    <Button onClick={newSoknad} className="knapp knapp2" size="small">
                         <FormattedMessage id="ident.knapp.nyregistrering" />
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, ident1: string, annenPart: string) =>
-        dispatch(createOMPMASoknad(journalpostid, ident1, annenPart)),
+    createSoknad: (journalpostid: string, søkerId: string, annenPart: string) =>
+        dispatch(createOMPMASoknad(journalpostid, søkerId, annenPart)),
     undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),

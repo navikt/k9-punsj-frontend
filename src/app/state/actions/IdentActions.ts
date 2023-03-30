@@ -6,8 +6,8 @@ export enum IdentActionKeys {
 
 interface ISetIdentFellesAction {
     type: IdentActionKeys.IDENT_FELLES_SET;
-    ident1: string;
-    ident2: string;
+    søkerId: string;
+    pleietrengendeId: string;
     annenSokerIdent: string | null;
 }
 
@@ -28,14 +28,14 @@ export const resetIdentState = () => ({
 export const setAnnenPartAction = (annenPart: string) => ({ type: IdentActionKeys.IDENT_SET_ANNEN_PART, annenPart });
 
 export function setIdentFellesAction(
-    ident1: string,
-    ident2?: string | null,
-    annenSokerIdent?: string | null
+    søkerId: string,
+    pleietrengendeId?: string | null,
+    annenSokerIdent?: string | null,
 ): ISetIdentFellesAction {
     return {
         type: IdentActionKeys.IDENT_FELLES_SET,
-        ident1,
-        ident2: ident2 || '',
+        søkerId,
+        pleietrengendeId: pleietrengendeId || '',
         annenSokerIdent: annenSokerIdent || null,
     };
 }

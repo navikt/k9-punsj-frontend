@@ -1,20 +1,23 @@
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { capitalize } from 'lodash';
+import React from 'react';
+import { useIntl } from 'react-intl';
+
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Panel } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import React from 'react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import intlHelper from 'app/utils/intlUtils';
-import { useIntl } from 'react-intl';
 import { JaNei } from 'app/models/enums';
-import { capitalize } from 'lodash';
-import Fravaersperiode from './Fravaersperiode';
+import intlHelper from 'app/utils/intlUtils';
+
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import Fravaersperiode from './Fravaersperiode';
 import './arbeidsforhold.less';
 
 export default function Frilanser() {
@@ -113,8 +116,8 @@ export default function Frilanser() {
                                         aktivitetsFravær: aktivitetsFravær.FRILANSER,
                                     })
                                 }
+                                icon={<AddCircle />}
                             >
-                                <AddCircle />
                                 Legg til periode
                             </Button>
                         </>

@@ -1,5 +1,6 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
-import { ICountry } from '../components/country-select/CountrySelect';
+
+import { getCountryList } from './countryUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
@@ -18,11 +19,6 @@ export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: an
         return true;
     }
     return false;
-};
-
-export const formattereLandTilNavn = (landskode: string, countryList: ICountry[]) => {
-    const landNavn = countryList.find((country) => country.code === landskode);
-    return typeof landNavn !== undefined ? landNavn?.name : '';
 };
 
 export const nummerPrefiks = (tekst: string, number: number) => `${number}. ${tekst}`;

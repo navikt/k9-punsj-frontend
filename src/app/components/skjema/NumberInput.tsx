@@ -1,13 +1,13 @@
-import React, { ReactNode, useMemo } from 'react';
-import { Input, Label } from 'nav-frontend-skjema';
-
 import { useField } from 'formik';
+import { Input, Label } from 'nav-frontend-skjema';
+import React, { ReactNode, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
-import PlussSVG from '../../assets/SVG/PlussSVG';
+
 import MinusSVG from '../../assets/SVG/MinusSVG';
-import './numberInput.less';
+import PlussSVG from '../../assets/SVG/PlussSVG';
 import intlHelper from '../../utils/intlUtils';
+import './numberInput.less';
 import { fjernIndexFraLabel } from './skjemaUtils';
 
 interface ITextInputProps {

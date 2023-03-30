@@ -1,6 +1,8 @@
-import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+
+import { Button } from '@navikt/ds-react';
+
 import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
 import intlHelper from '../../utils/intlUtils';
 import './okGaaTilLosModal.less';
@@ -16,9 +18,9 @@ const FerdigstillJournalpostErrorModal = (props: WrappedComponentProps & IFerdig
         <div>
             <FeilCircleSvg title="check" />
             <div className="infoFeil">{intlHelper(intl, 'modal.ferdigstilljournalpost.feil')}</div>
-            <Knapp mini onClick={() => close()}>
+            <Button variant="secondary" size="small" onClick={() => close()}>
                 {intlHelper(intl, 'modal.ferdigstilljournalpost.ok')}
-            </Knapp>
+            </Button>
         </div>
     );
 };

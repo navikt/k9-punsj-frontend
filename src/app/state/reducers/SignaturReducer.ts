@@ -10,7 +10,7 @@ const initialState: ISignaturState = {
 // eslint-disable-next-line import/prefer-default-export
 export function SignaturReducer(
     signaturState: ISignaturState = initialState,
-    action: SignaturActionTypes
+    action: SignaturActionTypes,
 ): ISignaturState {
     switch (action.type) {
         case SignaturActionKeys.SET:

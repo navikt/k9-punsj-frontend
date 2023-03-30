@@ -1,29 +1,33 @@
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import {
-    FordelingDokumenttype,
-    korrigeringAvInntektsmeldingSakstyper,
-    omsorgspengerKroniskSyktBarnSakstyper,
-    omsorgspengerMidlertidigAleneSakstyper,
-    pleiepengerILivetsSluttfaseSakstyper,
-    pleiepengerSakstyper,
-    Sakstype,
-    TilgjengeligSakstype,
-    omsorgspengerUtbetalingSakstyper,
-} from 'app/models/enums';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
-import {
-    lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
-    setSakstypeAction as setSakstype,
-} from 'app/state/actions';
-import { RootStateType } from 'app/state/RootState';
-import { getEnvironmentVariable } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+
+import { Alert } from '@navikt/ds-react';
+
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import {
+    FordelingDokumenttype,
+    Sakstype,
+    TilgjengeligSakstype,
+    korrigeringAvInntektsmeldingSakstyper,
+    omsorgspengerKroniskSyktBarnSakstyper,
+    omsorgspengerMidlertidigAleneSakstyper,
+    omsorgspengerUtbetalingSakstyper,
+    opplæringspengerSakstyper,
+    pleiepengerILivetsSluttfaseSakstyper,
+    pleiepengerSakstyper,
+} from 'app/models/enums';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { RootStateType } from 'app/state/RootState';
+import {
+    lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
+    setSakstypeAction as setSakstype,
+} from 'app/state/actions';
+import { getEnvironmentVariable } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
+
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
@@ -40,7 +44,7 @@ interface IValgForDokument {
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     omfordel: typeof omfordelAction;
-    gjelderPleiepengerEllerOmsorgspenger: boolean;
+    gjelderPsbOmsOlp: boolean;
 }
 
 const ValgForDokument: React.FC<IValgForDokument> = ({
@@ -54,12 +58,12 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     omfordel,
     journalpost,
     lukkJournalpostOppgave,
-    gjelderPleiepengerEllerOmsorgspenger,
+    gjelderPsbOmsOlp,
     visValgForDokument,
 }) => {
     const intl = useIntl();
     const vis =
-        ((fordelingState.skalTilK9 && gjelderPleiepengerEllerOmsorgspenger) || visValgForDokument) &&
+        ((fordelingState.skalTilK9 && gjelderPsbOmsOlp) || visValgForDokument) &&
         dokumenttype !== FordelingDokumenttype.ANNET;
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
@@ -92,13 +96,18 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     const omsorgspengerUtbetaling = () =>
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
+    const opplæringspenger = () =>
+        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER && opplæringspengerSakstyper;
+
     const sakstypekeys =
         korrigeringIM() ||
         pleiepengerSyktBarn() ||
         pleiepengerILivetsSluttfase() ||
         omsorgspengerKroniskSyktBarn() ||
         omsorgspengerMidlertidigAlene() ||
-        omsorgspengerUtbetaling();
+        omsorgspengerUtbetaling() ||
+        opplæringspenger() ||
+        [];
 
     const keys = sakstypekeys.filter((key) => {
         if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {
@@ -133,15 +142,21 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             <VerticalSpacer eightPx />
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
-                    <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.opprettigosys')}</AlertStripeInfo>
+                    <Alert size="small" variant="info">
+                        {' '}
+                        {intlHelper(intl, 'fordeling.infobox.opprettigosys')}
+                    </Alert>
                     <GosysGjelderKategorier />
                 </div>
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
-                <AlertStripeInfo> {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}</AlertStripeInfo>
+                <Alert size="small" variant="info">
+                    {' '}
+                    {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
+                </Alert>
             )}
             <Behandlingsknapp
-                norskIdent={identState.ident1}
+                norskIdent={identState.søkerId}
                 omfordel={omfordel}
                 lukkJournalpostOppgave={lukkJournalpostOppgave}
                 journalpost={journalpost}

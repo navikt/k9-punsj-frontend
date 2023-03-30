@@ -1,29 +1,30 @@
+import { FieldArray, Form } from 'formik';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Knapp } from 'nav-frontend-knapper';
-import { FieldArray, Form } from 'formik';
-import { Undertittel } from 'nav-frontend-typografi';
-import { Tilbakeknapp, Xknapp } from 'nav-frontend-ikonknapper';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
+
+import { Back, Close } from '@navikt/ds-icons';
+import { Button, Heading } from '@navikt/ds-react';
+
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import FlexRow from '../../../components/flexgrid/FlexRow';
+import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
 import Knapper from '../../../components/knapp/Knapper';
-import RadioInput from '../../../components/skjema/RadioInput';
-import { JaNei } from '../../../models/enums';
-import TextInput from '../../../components/skjema/TextInput';
+import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
+import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe';
 import NumberInput from '../../../components/skjema/NumberInput';
+import RadioInput from '../../../components/skjema/RadioInput';
+import TextInput from '../../../components/skjema/TextInput';
+import { JaNei } from '../../../models/enums';
 import {
     Innsendingsstatus,
     Mottaker,
     useOverføringPunchSkjemaContext,
 } from '../../../models/forms/omsorgspenger/overføring/PunchSkjema';
-import CheckboxInputGruppe from '../../../components/skjema/CheckboxInputGruppe';
-import FlexRow from '../../../components/flexgrid/FlexRow';
-import VerticalSpacer from '../../../components/VerticalSpacer';
-import './overføringPunchSkjema.less';
 import { IError } from '../../../models/types';
-import OverføringDateInput from './OverføringDateInput';
 import InnsendingModal from './InnsendingModal';
-import LeggTilKnapp from '../../../components/knapp/LeggTilKnapp';
-import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
+import OverføringDateInput from './OverføringDateInput';
+import './overføringPunchSkjema.less';
 
 interface IOverføringPunchSkjema {
     gåTilForrigeSteg: () => void;
@@ -83,9 +84,9 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 <JournalpostPanel />
                 <OverføringDateInput feltnavn="mottaksdato" bredde="M" />
                 <VerticalSpacer twentyPx dashed />
-                <Undertittel tag="h2">
+                <Heading size="small" level="2">
                     <FormattedMessage id="omsorgsdager.overføring.punch.omsøkeren" />
-                </Undertittel>
+                </Heading>
                 <VerticalSpacer sixteenPx />
                 <CheckboxInputGruppe
                     feltnavn="arbeidssituasjon"
@@ -111,9 +112,9 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                     disabled={disabled}
                 />
                 <VerticalSpacer dashed twentyPx />
-                <Undertittel tag="h2">
+                <Heading size="small" level="2">
                     <FormattedMessage id="skjema.felt.barn" />
-                </Undertittel>
+                </Heading>
                 <VerticalSpacer sixteenPx />
                 <FieldArray
                     name="barn"
@@ -131,11 +132,14 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                                         <TextInput feltnavn={`barn[${index}].norskIdent`} bredde="M" />
                                         <OverføringDateInput feltnavn={`barn[${index}].fødselsdato`} bredde="M" />
                                         {values.barn.length > 1 && (
-                                            <Xknapp
-                                                htmlType="button"
+                                            <Button
+                                                icon={<Close aria-hidden />}
+                                                type="button"
                                                 onClick={() => remove(index)}
                                                 className="alignMedInputFelt"
-                                            />
+                                            >
+                                                <span className="sr-only">Lukk</span>
+                                            </Button>
                                         )}
                                     </FlexRow>
                                 </SkjemaGruppe>
@@ -148,9 +152,9 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                     )}
                 />
                 <VerticalSpacer dashed twentyPx />
-                <Undertittel tag="h2">
+                <Heading size="small" level="2">
                     <FormattedMessage id="omsorgsdager.overføring.punch.omsorgendelesmed" />
-                </Undertittel>
+                </Heading>
                 <VerticalSpacer sixteenPx />
                 <TextInput feltnavn="omsorgenDelesMed.norskIdent" bredde="M" disabled={disabled} />
                 <VerticalSpacer sixteenPx />
@@ -170,17 +174,28 @@ const OverføringPunchSkjema: React.FunctionComponent<IOverføringPunchSkjema> =
                 )}
                 <NumberInput feltnavn="omsorgenDelesMed.antallOverførteDager" />
                 <Knapper>
-                    <Tilbakeknapp htmlType="button" onClick={gåTilForrigeSteg} disabled={disabled}>
+                    <Button
+                        variant="tertiary"
+                        icon={<Back aria-hidden />}
+                        type="button"
+                        onClick={gåTilForrigeSteg}
+                        disabled={disabled}
+                    >
                         <FormattedMessage id="ident.knapp.forrigesteg" />
-                    </Tilbakeknapp>
-                    <Knapp htmlType="submit" type="hoved" disabled={disabled} onClick={() => setVisModalVedFeil(true)}>
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        type="submit"
+                        disabled={disabled}
+                        onClick={() => setVisModalVedFeil(true)}
+                    >
                         <FormattedMessage id="omsorgsdager.overføring.punch.sendinn" />
-                    </Knapp>
+                    </Button>
                 </Knapper>
                 <InnsendingModal
                     innsendingsstatus={innsendingsstatus}
                     vis={visModal}
-                    onRequestClose={() => setVisModalVedFeil(false)}
+                    onClose={() => setVisModalVedFeil(false)}
                     innsendingsfeil={innsendingsfeil}
                 />
             </section>

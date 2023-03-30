@@ -1,10 +1,12 @@
-import { ExternalLink } from '@navikt/ds-icons';
-import { Link } from '@navikt/ds-react';
-import { getModiaPath } from 'app/utils';
-import Panel from 'nav-frontend-paneler';
 import React from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { ExternalLink } from '@navikt/ds-icons';
+import { Link, Panel } from '@navikt/ds-react';
+
+import { getModiaPath } from 'app/utils';
+
 import { IFordelingState, IJournalpost } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
@@ -29,11 +31,11 @@ export const JournalpostPanelComponent: React.FunctionComponent<
         intl,
         journalpost,
         fordelingState,
-        identState: { ident1, ident2 },
+        identState: { søkerId, pleietrengendeId },
         journalposter,
     } = props;
 
-    const ident = ident1 || journalpost?.norskIdent;
+    const ident = søkerId || journalpost?.norskIdent;
     const modiaPath = getModiaPath(ident);
 
     return (
@@ -46,12 +48,12 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 />
             </div>
             <div>
-                {fordelingState.erIdent1Bekreftet && (
+                {fordelingState.erSøkerIdBekreftet && (
                     <div>
                         <LabelValue
                             labelTextId="journalpost.norskIdent"
                             value={
-                                ident1 ||
+                                søkerId ||
                                 journalpost?.norskIdent ||
                                 intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                             }
@@ -68,10 +70,10 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 )}
             </div>
             <div>
-                {!!ident2 && (
+                {!!pleietrengendeId && (
                     <LabelValue
-                        labelTextId="journalpost.ident2"
-                        value={ident2 || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
+                        labelTextId="journalpost.pleietrengendeId"
+                        value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                         retning="horisontal"
                     />
                 )}

@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
-import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'jest-mock';
+import * as React from 'react';
+import { IntlShape, createIntl } from 'react-intl';
+
 import { SoknadKvittering } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';

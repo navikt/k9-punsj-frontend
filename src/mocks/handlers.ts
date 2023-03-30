@@ -1,8 +1,12 @@
 /* eslint-disable import/no-mutable-exports */
+
 /* eslint-disable import/no-extraneous-dependencies */
+
 /* eslint-disable import/prefer-default-export */
-import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { rest } from 'msw';
+
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
+
 import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 import { testHandlers } from './testHandlers';
 
@@ -16,8 +20,8 @@ let handlers = [
                 ctx.json({
                     INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
                     GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
-                })
-            )
+                }),
+            ),
     ),
     rest.get('http://localhost:8101/api/k9-punsj/journalpost/202', (req, res, ctx) =>
         res(
@@ -37,8 +41,8 @@ let handlers = [
                 journalpostStatus: 'MOTTATT',
                 kanOpprettesJournalføringsoppgave: true,
                 kanKopieres: true,
-            })
-        )
+            }),
+        ),
     ),
     rest.post('http://localhost:8101/api/k9-punsj/brev/bestill', (req, res, ctx) => res(ctx.status(200))),
     rest.get('http://localhost:8101/api/k9-punsj/person', (req, res, ctx) =>
@@ -51,12 +55,12 @@ let handlers = [
                 identitetsnummer: '18128103429',
                 mellomnavn: null,
                 sammensattNavn: 'TUNGSINDIG KAKE',
-            })
-        )
+            }),
+        ),
     ),
     testHandlers.barn,
     rest.post('http://localhost:8101/api/k9-punsj/notat/opprett', (req, res, ctx) =>
-        res(ctx.status(201), ctx.delay(500), ctx.json({ journalpostId: '200' }))
+        res(ctx.status(201), ctx.delay(500), ctx.json({ journalpostId: '200' })),
     ),
 ];
 

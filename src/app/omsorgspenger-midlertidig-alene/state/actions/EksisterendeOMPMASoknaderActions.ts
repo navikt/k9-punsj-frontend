@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError, PersonEnkel } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+
 import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';
 import { IOMPMASoknad } from '../../types/OMPMASoknad';
 import { IOMPMASoknadSvar } from '../../types/OMPMASoknadSvar';
@@ -86,7 +87,7 @@ export type IEksisterendeOMPMASoknaderActionTypes =
     | IResetOMPMASoknadidAction;
 
 export function setEksisterendeOMPMASoknaderAction(
-    EksisterendeOMPMASoknaderSvar: IOMPMASoknadSvar
+    EksisterendeOMPMASoknaderSvar: IOMPMASoknadSvar,
 ): ISetEksisterendeOMPMASoknaderAction {
     return {
         type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_SET,
@@ -95,7 +96,7 @@ export function setEksisterendeOMPMASoknaderAction(
 }
 
 export function findEksisterendeOMPMASoknaderLoadingAction(
-    isLoading: boolean
+    isLoading: boolean,
 ): IFindEksisterendeOMPMASoknaderLoadingAction {
     return {
         type: EksisterendeOMPMASoknaderActionKeys.EKSISTERENDE_OMP_MA_SOKNADER_LOAD,
@@ -110,10 +111,10 @@ export function findEksisterendeOMPMASoknaderErrorAction(error: IError): IFindEk
     };
 }
 
-export function findEksisterendeOMPMASoknader(ident1: string, ident2: string | null) {
+export function findEksisterendeOMPMASoknader(søkerId: string, pleietrengendeId: string | null) {
     return (dispatch: any) => {
         dispatch(findEksisterendeOMPMASoknaderLoadingAction(true));
-        const idents = ident2 ? `${ident1},${ident2}` : ident1;
+        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
         return get(
             ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND,
             undefined,
@@ -123,7 +124,7 @@ export function findEksisterendeOMPMASoknader(ident1: string, ident2: string | n
                     return dispatch(setEksisterendeOMPMASoknaderAction(soknader));
                 }
                 return dispatch(findEksisterendeOMPMASoknaderErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }
@@ -168,15 +169,15 @@ export function resetOMPMASoknadidAction(): IResetOMPMASoknadidAction {
     return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET };
 }
 
-export function createOMPMASoknad(journalpostid: string, ident1: string, annenPart: string) {
+export function createOMPMASoknad(journalpostid: string, søkerId: string, annenPart: string) {
     return (dispatch: any) => {
         dispatch(createOMPMASoknadRequestAction());
 
         const requestBody: IOpprettMASoknad = {
             journalpostId: journalpostid,
-            norskIdent: ident1,
+            norskIdent: søkerId,
             annenPart,
-            // 07.05.2022 barn kan fjernes etter backend tillater opprettelse av søknad uten 
+            // 07.05.2022 barn kan fjernes etter backend tillater opprettelse av søknad uten
             barn: [],
         };
 

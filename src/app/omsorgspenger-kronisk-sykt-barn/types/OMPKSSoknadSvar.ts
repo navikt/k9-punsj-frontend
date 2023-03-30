@@ -1,4 +1,4 @@
-import {IOMPKSSoknad, OMPKSSoknad} from './OMPKSSoknad';
+import { IOMPKSSoknad, OMPKSSoknad } from './OMPKSSoknad';
 
 export interface IOMPKSSoknadSvar {
     søker?: string;

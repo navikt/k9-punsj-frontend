@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Detail, Label, ErrorMessage } from '@navikt/ds-react';
 import { uniqueId } from 'lodash';
 import { Input } from 'nav-frontend-skjema';
 import React from 'react';
+
+import { Detail, ErrorMessage, Label } from '@navikt/ds-react';
+
 import './timerOgMinutter.less';
 
 interface OwnProps {
@@ -36,12 +38,9 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             bredde="XS"
                             value={timer}
                             onChange={(event) => {
-                                onChangeTimer(event.target.value.replaceAll(',', '').replaceAll('.', ''));
+                                onChangeTimer(event.target.value.replaceAll(/\D+/g, ''));
                             }}
-                            type="number"
                             onBlur={onBlur}
-                            inputMode="numeric"
-                            pattern="[0-9]*"
                             feil={!!error}
                         />
                         <div>
@@ -58,11 +57,8 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             bredde="XS"
                             value={minutter}
                             onChange={(event) => {
-                                onChangeMinutter(event.target.value.replaceAll(',', '').replaceAll('.', ''));
+                                onChangeMinutter(event.target.value.replaceAll(/\D+/g, ''));
                             }}
-                            type="number"
-                            inputMode="numeric"
-                            pattern="[0-9]*"
                             onBlur={onBlur}
                             feil={!!error}
                         />

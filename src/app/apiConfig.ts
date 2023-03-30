@@ -73,6 +73,13 @@ export enum ApiPath {
     PLS_K9SAK_PERIODER = '/pleiepenger-livets-sluttfase-soknad/k9sak/info',
     OPPRETT_NOTAT = '/notat/opprett',
     HENT_FAGSAK_PÅ_IDENT = '/saker/hent',
+    OLP_EKSISTERENDE_SOKNADER_FIND = '/opplaeringspenger-soknad/mappe',
+    OLP_SOKNAD_GET = '/opplaeringspenger-soknad/mappe/{id}',
+    OLP_SOKNAD_CREATE = '/opplaeringspenger-soknad',
+    OLP_SOKNAD_UPDATE = '/opplaeringspenger-soknad/oppdater',
+    OLP_SOKNAD_VALIDER = '/opplaeringspenger-soknad/valider',
+    OLP_SOKNAD_SUBMIT = '/opplaeringspenger-soknad/send',
+    OLP_K9_PERIODER = '/opplaeringspenger-soknad/k9sak/info',
 }
 
 export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;

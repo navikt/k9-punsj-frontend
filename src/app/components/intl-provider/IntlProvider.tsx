@@ -1,6 +1,8 @@
-import { Locale } from 'app/models/types';
 import * as React from 'react';
 import { IntlProvider as Provider } from 'react-intl';
+
+import { Locale } from 'app/models/types';
+
 import bokmalstekster from '../../i18n/nb.json';
 import nynorsktekster from '../../i18n/nn.json';
 

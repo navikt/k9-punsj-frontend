@@ -1,20 +1,22 @@
-import { initializeDate } from 'app/utils';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import './soknadsperioder.less';
+
+import { Alert, Panel } from '@navikt/ds-react';
+
+import { initializeDate } from 'app/utils';
+
+import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
+import CalendarSvg from '../../assets/SVG/CalendarSVG';
+import VerticalSpacer from '../../components/VerticalSpacer';
+import { generateDateString } from '../../components/skjema/skjemaUtils';
+import { Periodepaneler } from '../../containers/pleiepenger/Periodepaneler';
 import { GetUhaandterteFeil, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../types/PLSSoknad';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
-import CalendarSvg from '../../assets/SVG/CalendarSVG';
-import { generateDateString } from '../../components/skjema/skjemaUtils';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
-import { Periodepaneler } from '../../containers/pleiepenger/Periodepaneler';
+import { IPLSSoknad } from '../types/PLSSoknad';
+import './soknadsperioder.less';
 
 interface IOwnProps {
     updateSoknadState: (soknad: Partial<IPLSSoknad>) => void;
@@ -51,8 +53,8 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             nyePerioder?.some(
                 (nyPeriode) =>
                     initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom))
-            )
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+            ),
         );
     };
 
@@ -74,7 +76,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
             {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
                 <>
-                    <AlertStripeInfo>{intlHelper(intl, 'skjema.generellinfo')}</AlertStripeInfo>
+                    <Alert size="small" variant="info">
+                        {intlHelper(intl, 'skjema.generellinfo')}
+                    </Alert>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
                     {punchFormState.perioder.map((p, i) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
@@ -106,7 +110,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {finnesIkkeEksisterendePerioder && (
-                <AlertStripeInfo>{intlHelper(intl, 'skjema.eksisterende.ingen')}</AlertStripeInfo>
+                <Alert size="small" variant="info">
+                    {intlHelper(intl, 'skjema.eksisterende.ingen')}
+                </Alert>
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
@@ -133,7 +139,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                 </SkjemaGruppe>
             )}
             {overlappendeSoknadsperiode() && (
-                <AlertStripeAdvarsel>{intlHelper(intl, 'skjema.soknadsperiode.overlapper')}</AlertStripeAdvarsel>
+                <Alert size="small" variant="warning">
+                    {intlHelper(intl, 'skjema.soknadsperiode.overlapper')}
+                </Alert>
             )}
         </Panel>
     );

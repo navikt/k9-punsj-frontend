@@ -1,7 +1,8 @@
 import { IError } from 'app/models/types/Error';
 import { IInputError } from 'app/models/types/InputError';
-import {IOMPKSSoknad} from './OMPKSSoknad';
-import {IOMPKSSoknadKvittering} from './OMPKSSoknadKvittering';
+
+import { IOMPKSSoknad } from './OMPKSSoknad';
+import { IOMPKSSoknadKvittering } from './OMPKSSoknadKvittering';
 
 export interface IPunchOMPKSFormState {
     soknad?: Partial<IOMPKSSoknad>;

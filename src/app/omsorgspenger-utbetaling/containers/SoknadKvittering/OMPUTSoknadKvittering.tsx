@@ -1,19 +1,23 @@
 /* eslint-disable global-require */
+
 /* eslint-disable @typescript-eslint/no-var-requires */
-import React from 'react';
-import { connect } from 'react-redux';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import { useIntl } from 'react-intl';
-import { Alert } from '@navikt/ds-react';
 import countries from 'i18n-iso-countries';
-import { RootStateType } from 'app/state/RootState';
+import React from 'react';
+import { useIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { Alert } from '@navikt/ds-react';
+
 import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
-import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
-import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
+
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import './ompUtSoknadKvittering.less';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
 import FravaersperiodeKvittering from './FravaersperiodeKvittering';
+import './ompUtSoknadKvittering.less';
 
 interface IOwnProps {
     kvittering?: IOMPUTSoknadKvittering;
@@ -29,13 +33,13 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
         return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
     }
     const arbeidstakerFravaersperioder = kvittering.ytelse.fraværsperioder.filter((periode) =>
-        periode.aktivitetFravær.includes(aktivitetsFravær.ARBEIDSTAKER)
+        periode.aktivitetFravær.includes(aktivitetsFravær.ARBEIDSTAKER),
     );
     const frilanserFravaersperioder = kvittering.ytelse.fraværsperioder.filter((periode) =>
-        periode.aktivitetFravær.includes(aktivitetsFravær.FRILANSER)
+        periode.aktivitetFravær.includes(aktivitetsFravær.FRILANSER),
     );
     const selvstendigNaeringsdrivendeFravaersperioder = kvittering.ytelse.fraværsperioder.filter((periode) =>
-        periode.aktivitetFravær.includes(aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE)
+        periode.aktivitetFravær.includes(aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE),
     );
 
     return (
@@ -48,7 +52,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${periodToFormattedString(
-                            kvittering.mottattDato.substr(0, 10)
+                            kvittering.mottattDato.substr(0, 10),
                         )}  ${formattereTidspunktFraUTCTilGMT(kvittering.mottattDato)}`}
                     </p>
                 </div>

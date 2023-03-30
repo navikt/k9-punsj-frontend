@@ -1,5 +1,6 @@
-import React from 'react';
 import { Form, FormikErrors } from 'formik';
+import React from 'react';
+
 import SkjemaContext from '../../../app/components/skjema/SkjemaContext';
 import TestIntlProvider from '../intl/TestIntlProvider';
 
@@ -33,16 +34,16 @@ export const TestSkjema: React.FunctionComponent<ITestSkjemaProps> = ({
     valider = () => ({}),
     children,
 }) => (
-        <TestIntlProvider>
-            <SkjemaContext
-                initialValues={{
-                    ...tomtSkjema,
-                    ...initialValues,
-                }}
-                onSubmitCallback={() => undefined}
-                validerSkjema={() => valider}
-            >
-                <Form>{children}</Form>
-            </SkjemaContext>
-        </TestIntlProvider>
-    );
+    <TestIntlProvider>
+        <SkjemaContext
+            initialValues={{
+                ...tomtSkjema,
+                ...initialValues,
+            }}
+            onSubmitCallback={() => undefined}
+            validerSkjema={() => valider}
+        >
+            <Form>{children}</Form>
+        </SkjemaContext>
+    </TestIntlProvider>
+);

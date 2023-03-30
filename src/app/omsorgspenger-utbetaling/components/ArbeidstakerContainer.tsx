@@ -1,7 +1,9 @@
-import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
 import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
+
+import { AddCircle } from '@navikt/ds-icons';
+import { Button, Heading, Panel } from '@navikt/ds-react';
+
 import { arbeidstakerInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Arbeidstaker from './Arbeidstaker';
@@ -37,8 +39,8 @@ const ArbeidstakerContainer = () => {
                                 ...arbeidstakerInitialValue,
                             })
                         }
+                        icon={<AddCircle />}
                     >
-                        <AddCircle />
                         Legg til arbeidsforhold
                     </Button>
                 </Panel>

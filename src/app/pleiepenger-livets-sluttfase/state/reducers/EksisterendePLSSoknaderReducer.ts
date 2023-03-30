@@ -1,7 +1,7 @@
 import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
-import { IEksisterendePLSSoknaderActionTypes } from '../actions/EksisterendePLSSoknaderActions';
 import { IEksisterendePLSSoknaderState } from '../../types/EksisterendePLSSoknaderState';
 import { IPLSSoknad } from '../../types/PLSSoknad';
+import { IEksisterendePLSSoknaderActionTypes } from '../actions/EksisterendePLSSoknaderActions';
 
 const initialState: IEksisterendePLSSoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -14,7 +14,7 @@ const initialState: IEksisterendePLSSoknaderState = {
 // eslint-disable-next-line import/prefer-default-export
 export function EksisterendePLSSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState,
-    action: IEksisterendePLSSoknaderActionTypes
+    action: IEksisterendePLSSoknaderActionTypes,
 ): IEksisterendePLSSoknaderState {
     if (typeof eksisterendeSoknaderState === 'undefined') return initialState;
 

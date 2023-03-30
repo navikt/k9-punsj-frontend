@@ -1,10 +1,11 @@
-import { IListepanelerProps, ListeComponent, Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
-import intlHelper from 'app/utils/intlUtils';
 import { shallow } from 'enzyme';
+import { mocked } from 'jest-mock';
 import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { createIntl, IntlShape } from 'react-intl';
-import { mocked } from 'jest-mock';
+import { IntlShape, createIntl } from 'react-intl';
+
+import { IListepanelerProps, ListeComponent, Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
+import intlHelper from 'app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -26,7 +27,7 @@ const testkomponent: ListeComponent<ITestItem> = (
     itemIndex: number,
     updateListeinfoInSoknad: (info: Partial<ITestItem>) => any,
     updateListeinfoInSoknadState: (info: Partial<ITestItem>, showStatus: boolean) => any,
-    feilkodeprefiksMedIndeks?: string
+    feilkodeprefiksMedIndeks?: string,
 ) => (
     <Input
         label=""
@@ -101,9 +102,7 @@ describe('Listepaneler', () => {
         const listepaneler = setupListepaneler({ feilkodeprefiks });
         expect(listepaneler.find('.testinput')).toHaveLength(testItems.length);
         expect(listepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
-        expect(listepaneler.find(`#${testinputid(1)}`).prop('feil')).toEqual(
-            `Feilmelding med kode ${feilkodeprefiks}`
-        );
+        expect(listepaneler.find(`#${testinputid(1)}`).prop('feil')).toEqual(`Feilmelding med kode ${feilkodeprefiks}`);
     });
 
     it('Kaller updateListeinfoInSoknadState med ny verdi', () => {
@@ -114,7 +113,7 @@ describe('Listepaneler', () => {
         expect(editSoknadState).toHaveBeenCalledTimes(1);
         expect(editSoknadState).toHaveBeenCalledWith(
             expect.arrayContaining([{ ...testItems[1], test: newValue }]),
-            false
+            false,
         );
     });
 

@@ -1,7 +1,9 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import { Row } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+
+import { Button } from '@navikt/ds-react';
+
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
 import { getEnvironmentVariable } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
@@ -34,15 +36,15 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
                     <FormattedMessage id="modal.okgaatillos.tillos" />
                 </Row>
             </div>
-            <Hovedknapp
+            <Button
                 className="okknapp"
-                mini
+                size="small"
                 onClick={() => {
                     window.location.href = getEnvironmentVariable('K9_LOS_URL');
                 }}
             >
                 {intlHelper(intl, 'modal.okgaatillos.ok')}
-            </Hovedknapp>
+            </Button>
         </div>
     );
 };

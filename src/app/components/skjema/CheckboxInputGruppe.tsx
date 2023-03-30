@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react';
-import { CheckboxGruppe } from 'nav-frontend-skjema';
-import { useField } from 'formik';
 import classNames from 'classnames';
+import { useField } from 'formik';
+import { CheckboxGruppe } from 'nav-frontend-skjema';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import CheckboxInput from './CheckboxInput';
 import './checkboxInputGruppe.less';
 

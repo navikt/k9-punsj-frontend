@@ -15,7 +15,7 @@ const initialState: IPunchPSBFormState = {
 // eslint-disable-next-line import/prefer-default-export
 export function PunchFormReducer(
     punchFormState: IPunchPSBFormState = initialState,
-    action: IPunchFormActionTypes
+    action: IPunchFormActionTypes,
 ): IPunchPSBFormState {
     switch (action.type) {
         case PunchFormActionKeys.RESET:

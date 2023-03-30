@@ -1,13 +1,16 @@
+import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
 import React, { useState } from 'react';
-import { Delete, AddCircle } from '@navikt/ds-icons';
 import { useQuery } from 'react-query';
-import { Button, Checkbox, Panel, Heading } from '@navikt/ds-react';
+
+import { AddCircle, Delete } from '@navikt/ds-icons';
+import { Button, Checkbox, Heading, Panel } from '@navikt/ds-react';
+
+import { finnArbeidsgivere } from 'app/api/api';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
-import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import Organisasjon from 'app/models/types/Organisasjon';
-import { finnArbeidsgivere } from 'app/api/api';
+
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -41,7 +44,7 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                 }
             },
             staleTime: 1000 * 60 * 5,
-        }
+        },
     );
 
     const harMinstToArbeidsforhold = antallArbeidsforhold > 1;
@@ -71,8 +74,13 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                 organisasjoner={organisasjoner}
                             />
                             {harMinstToArbeidsforhold && (
-                                <Button variant="tertiary" size="small" className="slett" onClick={slettArbeidsforhold}>
-                                    <Delete />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    className="slett"
+                                    onClick={slettArbeidsforhold}
+                                    icon={<Delete />}
+                                >
                                     Fjern arbeidsforhold
                                 </Button>
                             )}
@@ -115,8 +123,8 @@ const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArb
                                                 aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
                                             })
                                         }
+                                        icon={<AddCircle />}
                                     >
-                                        <AddCircle />
                                         Legg til periode
                                     </Button>
                                 </>

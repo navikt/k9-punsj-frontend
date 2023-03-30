@@ -1,17 +1,18 @@
+import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
+import { Input, Select, Textarea } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
+
+import { Button, Label, Loader } from '@navikt/ds-react';
+
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import Fagsak from 'app/types/Fagsak';
-import { finnVisningsnavnForSakstype, get, post } from 'app/utils';
+import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { requiredValue, validateText } from 'app/utils/validationHelpers';
-import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Input, Select, Textarea } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
-import { Element } from 'nav-frontend-typografi';
-import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+
 import './opprettJournalpost.less';
 
 enum OpprettJournalpostFormKeys {
@@ -118,7 +119,7 @@ const OpprettJournalpost: React.FC = () => {
                                                 </option>
                                             ))}
                                         </Select>
-                                        {isFetchingFagsaker && <NavFrontendSpinner type="XS" />}
+                                        {isFetchingFagsaker && <Loader size="small" />}
                                     </div>
                                 )}
                             </Field>
@@ -154,45 +155,44 @@ const OpprettJournalpost: React.FC = () => {
                                 )}
                             </Field>
                             {!submitSuccessful && (
-                                <Hovedknapp
-                                    mini
-                                    kompakt
-                                    htmlType="submit"
+                                <Button
+                                    size="small"
+                                    type="submit"
                                     className="submitButton"
-                                    spinner={isSubmittingJournalpost}
+                                    loading={isSubmittingJournalpost}
                                 >
                                     {intl.formatMessage({ id: 'OpprettJournalpost.opprettJournalpost' })}
-                                </Hovedknapp>
+                                </Button>
                             )}
                             <div className="statusContainer">
                                 {opprettJournalpostFeilet && (
                                     <>
                                         <ErrorIcon />
-                                        <Element className="statusText">
+                                        <Label size="small" className="statusText">
                                             {intl.formatMessage({
                                                 id: 'OpprettJournalpost.opprettingAvJournalpostFeilet',
                                             })}
-                                        </Element>
+                                        </Label>
                                     </>
                                 )}
                                 {henteFagsakFeilet && (
                                     <>
                                         <ErrorIcon />
-                                        <Element className="statusText">
+                                        <Label size="small" className="statusText">
                                             {intl.formatMessage({
                                                 id: 'OpprettJournalpost.hentingAvFagsakFeilet',
                                             })}
-                                        </Element>
+                                        </Label>
                                     </>
                                 )}
                                 {submitSuccessful && (
                                     <>
                                         <SuccessIcon />
-                                        <Element className="statusText">
+                                        <Label size="small" className="statusText">
                                             {intl.formatMessage({
                                                 id: 'OpprettJournalpost.journalpostOpprettet',
                                             })}
-                                        </Element>
+                                        </Label>
                                     </>
                                 )}
                             </div>
@@ -200,17 +200,16 @@ const OpprettJournalpost: React.FC = () => {
                     )}
                 </Formik>
                 {submitSuccessful && (
-                    <Hovedknapp
+                    <Button
                         onClick={() => window.location.assign(`journalpost/${opprettetJournalpostId}`)}
-                        mini
-                        kompakt
-                        htmlType="button"
+                        type="button"
+                        size="small"
                         className="submitButton"
                     >
                         {intl.formatMessage({
                             id: 'OpprettJournalpost.gåTilJournalpost',
                         })}
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>

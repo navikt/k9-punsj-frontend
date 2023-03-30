@@ -1,10 +1,11 @@
 import { shallow } from 'enzyme';
-import * as React from 'react';
-import { createIntl, IntlShape } from 'react-intl';
 import { mocked } from 'jest-mock';
+import * as React from 'react';
+import { IntlShape, createIntl } from 'react-intl';
+
+import VisningAvPerioderSNSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
-import VisningAvPerioderSNSoknadKvittering from '../../../app/containers/pleiepenger/SoknadKvittering/Komponenter/VisningAvPerioderSNSoknadKvittering';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -56,7 +57,7 @@ const varigEndring: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
 ];
 
 const setupVisningAvPerioderSNSoknadKvittering = (
-    response: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[]
+    response: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[],
 ) => {
     const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
@@ -72,14 +73,14 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
     it('Viser orgnummer', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.arbeidstaker.orgnr')).toBe(true);
         expect(
-            visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].organisasjonsnummer)
+            visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].organisasjonsnummer),
         ).toBe(true);
     });
 
     it('Viser orgnavn', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.virksomhetsnavn')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].virksomhetNavn)).toBe(
-            true
+            true,
         );
     });
 
@@ -98,7 +99,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Ja')).toBe(true);
 
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
@@ -106,7 +107,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
 
     it('Viser att virksomheten er registrert i annet land', () => {
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
@@ -122,17 +123,17 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Ja')).toBe(true);
 
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendringdato')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('16.3.2021')).toBe(true);
 
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('egrunnelse')).toBe(true);
 
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('egrunnelse')).toBe(true);
     });
@@ -144,12 +145,12 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
 
     it('Viser om informasjon om regnskapsfører', () => {
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførernavn')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Ola Nordmann')).toBe(true);
 
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførertlf')).toBe(
-            true
+            true,
         );
         expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('00000000')).toBe(true);
     });

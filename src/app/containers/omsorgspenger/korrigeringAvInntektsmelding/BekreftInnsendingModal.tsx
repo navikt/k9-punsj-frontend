@@ -1,10 +1,13 @@
-import intlHelper from 'app/utils/intlUtils';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import './bekreftInnsendingModal.less';
+
+import { Button } from '@navikt/ds-react';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import OMSKvittering from './OMSKvittering';
+import './bekreftInnsendingModal.less';
 
 interface BekreftInnsendingModalProps {
     feltverdier: KorrigeringAvInntektsmeldingFormValues;
@@ -19,12 +22,17 @@ const BekreftInnsendingModal: React.FC<BekreftInnsendingModalProps> = ({ feltver
         <div className="bekreftInnsendingModal">
             <OMSKvittering feltverdier={feltverdier} />
             <div className="bekreftInnsendingModal__buttonContainer">
-                <Hovedknapp mini className="bekreftInnsendingModal__knappVidere" onClick={() => handleVidere()}>
+                <Button size="small" className="bekreftInnsendingModal__knappVidere" onClick={() => handleVidere()}>
                     {intlHelper(intl, 'fordeling.knapp.videre')}
-                </Hovedknapp>
-                <Knapp mini className="validertSoknadOppsummeringContainer_knappTilbake" onClick={() => lukkModal()}>
+                </Button>
+                <Button
+                    variant="secondary"
+                    size="small"
+                    className="validertSoknadOppsummeringContainer_knappTilbake"
+                    onClick={() => lukkModal()}
+                >
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
-                </Knapp>
+                </Button>
             </div>
         </div>
     );

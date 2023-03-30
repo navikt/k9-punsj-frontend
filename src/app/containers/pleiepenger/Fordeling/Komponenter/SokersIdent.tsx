@@ -1,3 +1,7 @@
+import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype, JaNei } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
@@ -5,19 +9,16 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
-import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
-import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 interface ISokersIdentProps {
     dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
-    handleIdent1Change: (event: any) => void;
-    handleIdent1Blur: (event: any) => void;
+    handleSøkerIdChange: (event: any) => void;
+    handleSøkerIdBlur: (event: any) => void;
     setVisSokersBarn: (event: any) => void;
     setSokersIdent: (event: any) => void;
     setIdentAction: typeof setIdentFellesAction;
-    setErIdent1Bekreftet: (event: any) => void;
+    setErSøkerIdBekreftet: (event: any) => void;
     setRiktigIdentIJournalposten: (event: any) => void;
     sokersIdent: string;
     identState: IIdentState;
@@ -27,39 +28,42 @@ interface ISokersIdentProps {
 const SokersIdent: React.FC<ISokersIdentProps> = ({
     dokumenttype,
     journalpost,
-    handleIdent1Change,
-    handleIdent1Blur,
+    handleSøkerIdChange,
+    handleSøkerIdBlur,
     sokersIdent,
     identState,
     setVisSokersBarn,
     setSokersIdent,
     setIdentAction,
-    setErIdent1Bekreftet,
+    setErSøkerIdBekreftet,
     setRiktigIdentIJournalposten,
     riktigIdentIJournalposten,
     erInntektsmeldingUtenKrav,
 }) => {
-    const skalVises =
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
-        erInntektsmeldingUtenKrav;
+    const relevanteDokumenttyper = [
+        FordelingDokumenttype.PLEIEPENGER,
+        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+        FordelingDokumenttype.OMSORGSPENGER_KS,
+        FordelingDokumenttype.OMSORGSPENGER_MA,
+        FordelingDokumenttype.OMSORGSPENGER_UT,
+        FordelingDokumenttype.KORRIGERING_IM,
+        FordelingDokumenttype.OPPLAERINGSPENGER,
+    ];
+    const skalVises = erInntektsmeldingUtenKrav || (!!dokumenttype && relevanteDokumenttyper.includes(dokumenttype));
+
     const journalpostident = journalpost?.norskIdent;
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
         setVisSokersBarn(false);
         if (jn === JaNei.JA) {
-            setIdentAction(journalpostident || '', identState.ident2);
+            setIdentAction(journalpostident || '', identState.pleietrengendeId);
             if (journalpost?.norskIdent) {
                 setVisSokersBarn(true);
             }
         } else {
             setSokersIdent('');
-            setIdentAction('', identState.ident2);
+            setIdentAction('', identState.pleietrengendeId);
         }
     };
 
@@ -87,7 +91,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                 }
                 checked={riktigIdentIJournalposten}
                 onChange={(event) => {
-                    setErIdent1Bekreftet((event.target as HTMLInputElement).value === JaNei.JA);
+                    setErSøkerIdBekreftet((event.target as HTMLInputElement).value === JaNei.JA);
                     handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei);
                 }}
             />
@@ -97,13 +101,13 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                     <VerticalSpacer sixteenPx />
                     <Input
                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                        onChange={handleIdent1Change}
-                        onBlur={handleIdent1Blur}
+                        onChange={handleSøkerIdChange}
+                        onBlur={handleSøkerIdBlur}
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
                         maxLength={11}
                         feil={
-                            identState.ident1 && IdentRules.erUgyldigIdent(identState.ident1)
+                            identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                 : undefined
                         }

@@ -1,44 +1,40 @@
+import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
+import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useMutation } from 'react-query';
 import { connect } from 'react-redux';
 
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
-import ModalWrapper from 'nav-frontend-modal';
-import { ErrorSummary, Heading, Panel } from '@navikt/ds-react';
-import { useMutation } from 'react-query';
-import { debounce } from 'lodash';
+import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
 
-import { IInputError, Periode } from 'app/models/types';
-import { setIdentAction } from 'app/state/actions';
-import intlHelper from 'app/utils/intlUtils';
-import VentModal from 'app/components/ventModal/VentModal';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
-import { feilFraYup } from 'app/utils/validationHelpers';
 import Personvelger from 'app/components/person-velger/Personvelger';
+import VentModal from 'app/components/ventModal/VentModal';
+import { IInputError, Periode } from 'app/models/types';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
+import intlHelper from 'app/utils/intlUtils';
+import { feilFraYup } from 'app/utils/validationHelpers';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
+import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IOMPUTSoknad } from '../types/OMPUTSoknad';
-import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
-import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
-import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
-import ArbeidsforholdVelger from './ArbeidsforholdVelger';
-import schema, { getSchemaContext } from '../schema';
-import { frontendTilBackendMapping, filtrerVerdierFoerInnsending, korrigeringFilter } from '../utils';
-import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
-import Medlemskap from '../components/Medlemskap';
-import Utenlandsopphold from '../components/Utenlandsopphold';
 import EksisterendePerioder from '../components/EksisterendePerioder';
+import Medlemskap from '../components/Medlemskap';
 import NySoeknadEllerKorrigering from '../components/NySoeknadEllerKorrigering';
+import Utenlandsopphold from '../components/Utenlandsopphold';
+import schema, { getSchemaContext } from '../schema';
+import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
+import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFilter } from '../utils';
+import ArbeidsforholdVelger from './ArbeidsforholdVelger';
+import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
+import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
+import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 
 export interface IPunchOMPUTFormComponentProps {
     journalpostid: string;
@@ -83,9 +79,9 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             values.erKorrigering
                 ? validerSoeknad(
                       korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
-                      identState.ident1
+                      identState.søkerId,
                   )
-                : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.ident1),
+                : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.søkerId),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
                 if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
@@ -108,7 +104,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     setK9FormatErrors([]);
                 }
             },
-        }
+        },
     );
 
     const {
@@ -120,7 +116,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             if (values.erKorrigering) {
                 return submitSoknad
                     ? oppdaterSoeknad(
-                          korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
+                          korrigeringFilter(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values))),
                       )
                     : oppdaterSoeknad(korrigeringFilter(frontendTilBackendMapping(values)));
             }
@@ -136,7 +132,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     handleSubmit();
                 }
             },
-        }
+        },
     );
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
@@ -149,7 +145,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     const debounceCallback = useCallback(
         debounce(() => updateSoknad({ submitSoknad: false }), 3000),
-        []
+        [],
     );
 
     useEffect(() => {
@@ -237,13 +233,14 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             <ErrorSummary.Item key={`${error.path}-${error.message}`}>
                                 {error.message}
                             </ErrorSummary.Item>
-                        )
+                        ),
                     )}
                 </ErrorSummary>
             )}
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
-                    <Knapp
+                    <Button
+                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
@@ -261,18 +258,29 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         }}
                     >
                         {intlHelper(intl, 'skjema.knapp.send')}
-                    </Knapp>
+                    </Button>
 
-                    <Knapp className="vent-knapp" onClick={() => setVisVentModal(true)} disabled={false}>
+                    <Button
+                        variant="secondary"
+                        className="vent-knapp"
+                        onClick={() => setVisVentModal(true)}
+                        disabled={false}
+                    >
                         {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                    </Knapp>
+                    </Button>
                 </p>
             </div>
             <VerticalSpacer sixteenPx />
             {mellomlagringError instanceof Error && (
-                <AlertStripeFeil>{intlHelper(intl, 'skjema.feil.ikke_lagret')}</AlertStripeFeil>
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                </Alert>
             )}
-            {submitError instanceof Error && <AlertStripeFeil>{intlHelper(intl, submitError.message)}</AlertStripeFeil>}
+            {submitError instanceof Error && (
+                <Alert size="small" variant="error">
+                    {intlHelper(intl, submitError.message)}
+                </Alert>
+            )}
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
@@ -290,13 +298,13 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             )}
 
             {visErDuSikkerModal && (
-                <ModalWrapper
+                <Modal
                     key="erdusikkermodal"
                     className="erdusikkermodal"
-                    onRequestClose={() => setVisErDuSikkerModal(false)}
-                    contentLabel="erdusikkermodal"
+                    onClose={() => setVisErDuSikkerModal(false)}
+                    aria-label="erdusikkermodal"
                     closeButton={false}
-                    isOpen={visErDuSikkerModal}
+                    open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.sendinn"
@@ -309,7 +317,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             setVisErDuSikkerModal(false);
                         }}
                     />
-                </ModalWrapper>
+                </Modal>
             )}
         </>
     );

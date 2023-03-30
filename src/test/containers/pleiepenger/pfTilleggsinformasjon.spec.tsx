@@ -1,15 +1,17 @@
+import { shallow } from 'enzyme';
+import { mocked } from 'jest-mock';
+import { IntlShape, createIntl } from 'react-intl';
+
 import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import { pfTilleggsinformasjon } from 'app/containers/pleiepenger/pfTilleggsinformasjon';
-import intlHelper from 'app/utils/intlUtils';
-import { shallow } from 'enzyme';
-import { createIntl, IntlShape } from 'react-intl';
-import { mocked } from 'jest-mock';
 import { GetErrorMessage } from 'app/models/types';
-import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
+import intlHelper from 'app/utils/intlUtils';
+
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
+import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 
 jest.mock('app/utils/intlUtils');
 
@@ -34,7 +36,7 @@ const setupPfTilleggsinformasjon = (
     optionalFeilprefiks?: string,
     optionalGetErrorMessage?: GetErrorMessage,
     optionalIntl?: IntlShape,
-    optionalKodeord?: string
+    optionalKodeord?: string,
 ) => {
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
 
@@ -46,8 +48,8 @@ const setupPfTilleggsinformasjon = (
             optionalUpdatePeriodeinfoInSoknadState || testUpdatePeriodeinfoInSoknadState,
             optionalFeilprefiks || testFeilprefiks,
             optionalGetErrorMessage || testGetErrorMessage,
-            optionalIntl || testIntl
-        )
+            optionalIntl || testIntl,
+        ),
     );
 };
 
@@ -94,6 +96,8 @@ describe('pfTilleggsinformasjon', () => {
     it('Viser feilmelding', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
         expect(testGetErrorMessage).toHaveBeenCalledTimes(1);
-        expect(testGetErrorMessage).toHaveBeenCalledWith(`${testFeilprefiks}.perioder['2020-01-01/2020-12-31'].tilleggsinformasjon`);
+        expect(testGetErrorMessage).toHaveBeenCalledWith(
+            `${testFeilprefiks}.perioder['2020-01-01/2020-12-31'].tilleggsinformasjon`,
+        );
     });
 });

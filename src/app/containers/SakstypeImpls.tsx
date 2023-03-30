@@ -1,17 +1,19 @@
 import React from 'react';
+
 import { ApiPath } from '../apiConfig';
-import { Sakstype } from '../models/enums';
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
-import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
+import { Sakstype } from '../models/enums';
+import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
+import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
+import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
+import OLPRouter from '../opplæringspenger/containers/OLPRouter';
+import PLSRouter from '../pleiepenger-livets-sluttfase/containers/PLSRouter';
+import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 import { OpprettGosysOppgavePanel } from './omsorgspenger/OpprettGosysOppgave';
+import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import OverføringIdentSjekkContainer from './omsorgspenger/overforing/OverføringIdentSjekkContainer';
 import OverføringPunchContainer from './omsorgspenger/overforing/OverføringPunchContainer';
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
-import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
-import PLSRouter from '../pleiepenger-livets-sluttfase/containers/PLSRouter';
-import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
-import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
-import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
@@ -101,6 +103,13 @@ export const OmsorgspengerOverføring: ISakstypePunch = {
     ],
 };
 
+export const OpplæringspengerPunch: ISakstypePunch = {
+    navn: Sakstype.OPPLAERINGSPENGER,
+    punchPath: '/opplaeringspenger',
+    getComponent: ({ journalpostid, punchPath }) => <OLPRouter journalpostid={journalpostid} punchPath={punchPath} />,
+    steps: [],
+};
+
 export const OmsorgspengerKroniskSyktBarnOmfordeling: ISakstypeOmfordeling = {
     navn: Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN,
 };
@@ -152,6 +161,7 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding,
         SendBrevPåEksisterendeFagsak,
+        OpplæringspengerPunch,
     ],
     omfordelingssakstyper: [
         OmsorgspengerKroniskSyktBarnOmfordeling,
@@ -159,7 +169,6 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerAleneomsorg,
         OmsorgspengerSelvstendigFrilans,
         OmsorgspengerArbeidsgiverIkkeBetaler,
-        Opplæringspenger,
         PleiepengerLivetsSluttfase,
         Annet,
         SkalIkkePunsjes,

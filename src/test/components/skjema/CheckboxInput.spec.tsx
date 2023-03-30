@@ -1,8 +1,9 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TestSkjema } from './testskjema';
+import React from 'react';
+
 import CheckboxInput from '../../../app/components/skjema/CheckboxInput';
+import { TestSkjema } from './testskjema';
 
 describe('<CheckboxInput>', () => {
     test('rendrer checkbox', async () => {
@@ -16,7 +17,7 @@ describe('<CheckboxInput>', () => {
                 }}
             >
                 <CheckboxInput feltnavn="erBlond" />
-            </TestSkjema>
+            </TestSkjema>,
         );
 
         const checkbox = screen.getByLabelText(/blond/i);

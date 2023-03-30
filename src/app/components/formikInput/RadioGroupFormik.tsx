@@ -1,6 +1,8 @@
-import React from 'react';
-import { RadioGroup, RadioGroupProps } from '@navikt/ds-react';
 import { useField } from 'formik';
+import React from 'react';
+
+import { RadioGroup, RadioGroupProps } from '@navikt/ds-react';
+
 import RadioFormik from './RadioFormik';
 
 interface OwnProps extends Partial<RadioGroupProps> {

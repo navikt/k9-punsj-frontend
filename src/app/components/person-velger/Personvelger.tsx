@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
 import { FieldArray, useField, useFormikContext } from 'formik';
-import { Personvalg } from 'app/models/types/Personvalg';
+import React, { useEffect } from 'react';
 
-import { Button } from '@navikt/ds-react';
 import { AddPerson } from '@navikt/ds-icons';
-import './personvelger.less';
+import { Button } from '@navikt/ds-react';
+
 import { hentBarn } from 'app/api/api';
 import { Person } from 'app/models/types';
+import { Personvalg } from 'app/models/types/Personvalg';
+
 import PersonLinje from './PersonLinje';
+import './personvelger.less';
 
 interface OwnProps {
     handleBlur?: (callback: () => any) => void;
@@ -31,7 +33,7 @@ const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProp
                                     norskIdent: barnet.identitetsnummer,
                                     navn: `${barnet.fornavn} ${barnet.etternavn}`,
                                     låsIdentitetsnummer: true,
-                                })
+                                }),
                             );
                             setFieldValue(name, barn);
                         }

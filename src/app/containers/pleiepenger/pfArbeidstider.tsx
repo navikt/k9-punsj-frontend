@@ -1,20 +1,22 @@
+import { Input } from 'nav-frontend-skjema';
+import * as React from 'react';
+import { Row } from 'react-bootstrap';
+import { useIntl } from 'react-intl';
+
+import { HelpText } from '@navikt/ds-react';
+
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
-import * as React from 'react';
-import { useIntl } from 'react-intl';
-import { Input } from 'nav-frontend-skjema';
-import { Row } from 'react-bootstrap';
-import { PopoverOrientering } from 'nav-frontend-popover';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
+import intlHelper from 'app/utils/intlUtils';
+
+import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstidDesimaler';
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
-import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstidDesimaler';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
@@ -24,7 +26,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstidPeriodeMedTimer>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IArbeidstidPeriodeMedTimer>,
         feilprefiks: string,
-        getErrorMessage: GetErrorMessage
+        getErrorMessage: GetErrorMessage,
     ) => {
         const intl = useIntl();
         const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag, periode } = periodeinfo;
@@ -49,9 +51,9 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             }}
                             feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].jobberNormaltTimerPerDag`)}
                         />
-                        <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>
+                        <HelpText className="arbeidstid-hjelpetext" placement="right" tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
-                        </Hjelpetekst>
+                        </HelpText>
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
                             value={faktiskArbeidTimerPerDag}
@@ -69,9 +71,9 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].faktiskArbeidTimerPerDag`)}
                             bredde="XS"
                         />
-                        <Hjelpetekst className="arbeidstid-hjelpetext" type={PopoverOrientering.Hoyre} tabIndex={-1}>
+                        <HelpText className="arbeidstid-hjelpetext" placement="right" tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}
-                        </Hjelpetekst>
+                        </HelpText>
                     </div>
                 </Row>
                 <div className="utregnetArbeidstid__container">

@@ -1,10 +1,12 @@
-import React from 'react';
-import intlHelper from 'app/utils/intlUtils';
-import { IntlShape } from 'react-intl';
 import { Field, FieldProps, FormikValues } from 'formik';
-import Hjelpetekst from 'nav-frontend-hjelpetekst';
-import { PopoverOrientering } from 'nav-frontend-popover';
 import { CheckboksPanel } from 'nav-frontend-skjema';
+import React from 'react';
+import { IntlShape } from 'react-intl';
+
+import { HelpText } from '@navikt/ds-react';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import VerticalSpacer from '../VerticalSpacer';
 
 type OwnProps = {
@@ -25,9 +27,9 @@ const IkkeRegistrerteOpplysninger = ({ intl }: OwnProps) => (
                             {...field}
                             value=""
                         />
-                        <Hjelpetekst className="hjelpetext" type={PopoverOrientering.OverHoyre}>
+                        <HelpText className="hjelpetext" placement="top-end">
                             {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
-                        </Hjelpetekst>
+                        </HelpText>
                     </>
                 )}
             </Field>
@@ -44,9 +46,9 @@ const IkkeRegistrerteOpplysninger = ({ intl }: OwnProps) => (
                             {...field}
                             value=""
                         />
-                        <Hjelpetekst className="hjelpetext" type={PopoverOrientering.OverHoyre}>
+                        <HelpText className="hjelpetext" placement="top-end">
                             {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                        </Hjelpetekst>
+                        </HelpText>
                     </>
                 )}
             </Field>

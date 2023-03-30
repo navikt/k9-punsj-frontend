@@ -53,7 +53,7 @@ export function settJournalpostPaaVent(journalpostid: string) {
                     return dispatch(setJournalpostPaaVentSuccessAction());
                 }
                 return dispatch(setJournalpostPaaVentErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

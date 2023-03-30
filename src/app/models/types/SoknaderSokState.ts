@@ -1,4 +1,5 @@
 import { IError } from 'app/models/types/Error';
+
 import { IPSBSoknad } from './PSBSoknad';
 
 export interface ISoknaderSokState {

@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
+
 import { SakstypeStepRouterImpl } from '../../app/containers/SakstypeStepRouter';
 import { Sakstype } from '../../app/models/enums';
 
@@ -35,7 +36,7 @@ describe('SakstypeStepRouter', () => {
                     steps,
                 }}
                 dokumenter={[]}
-            />
+            />,
         );
 
         const routes = wrapper.find('Route');

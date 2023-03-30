@@ -1,5 +1,7 @@
 import { IntlShape } from 'react-intl';
-import intlHelper from '../../utils/intlUtils';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import { IPeriode, Periode } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 

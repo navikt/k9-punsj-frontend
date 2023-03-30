@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
-import { IJournalpost, IPSBSoknad } from 'app/models/types';
-import { RootStateType } from 'app/state/RootState';
-import { IIdentState } from 'app/models/types/IdentState';
 import { connect } from 'react-redux';
+
+import { IJournalpost, IPSBSoknad } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { RootStateType } from 'app/state/RootState';
+import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
+
 import { SplitView } from '../../../components/SplitView';
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
@@ -16,19 +18,19 @@ const KorrigeringAvInntektsmelding: React.FC<KorrigeringAvInntektsmeldingContain
     identState,
     journalpost,
 }) => {
-    const { ident1 } = identState;
+    const { søkerId } = identState;
     const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
     useEffect(() => {
-        createOMSKorrigering(ident1, journalpost?.journalpostId || '', (response, data) => {
+        createOMSKorrigering(søkerId, journalpost?.journalpostId || '', (response, data) => {
             setSoknad(data);
         });
-    }, [ident1, journalpost]);
+    }, [søkerId, journalpost]);
     const journalposterFraSoknad = soknad?.journalposter || [];
 
     return (
         <SplitView soknad={soknad}>
             <KorrigeringAvInntektsmeldingForm
-                søkerId={ident1}
+                søkerId={søkerId}
                 søknadId={soknad?.soeknadId || ''}
                 journalposter={Array.from(journalposterFraSoknad)}
             />

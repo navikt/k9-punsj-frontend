@@ -1,10 +1,13 @@
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import { validateText } from 'app/utils/validationHelpers';
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { EtikettFokus } from 'nav-frontend-etiketter';
 import { Input, Textarea } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Tag } from '@navikt/ds-react';
+
+import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { validateText } from 'app/utils/validationHelpers';
+
 import VerticalSpacer from '../VerticalSpacer';
 
 interface GenereltFritekstbrevMalProps {
@@ -48,9 +51,9 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                             maxLength={100000}
                             feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         />
-                        <EtikettFokus mini className="språkEtikett">
+                        <Tag variant="warning" size="small" className="språkEtikett">
                             Bokmål
-                        </EtikettFokus>
+                        </Tag>
                     </div>
                 )}
             </Field>

@@ -1,7 +1,8 @@
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
+
+import { Alert, Button } from '@navikt/ds-react';
+
 import { ApiPath } from '../../apiConfig';
 import VisSvg from '../../assets/SVG/VisSVG';
 import { IJournalpostInfo } from '../../models/types';
@@ -14,6 +15,7 @@ interface ISettPaaVentModalProps {
     avbryt: () => void;
     journalposter?: IJournalpostInfo[];
     soknadId?: string;
+    children?: React.ReactNode;
 }
 
 const pdfUrl = (journalpost: IJournalpostInfo) =>
@@ -34,17 +36,19 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
             <p>{intlHelper(intl, 'skjema.settpaavent.periode')}</p>
             {children}
             <div className="knapper">
-                <Knapp onClick={() => submit()} mini>
+                <Button variant="secondary" onClick={() => submit()} size="small">
                     {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                </Knapp>
-                <Knapp onClick={() => avbryt()} mini>
+                </Button>
+                <Button variant="secondary" onClick={() => avbryt()} size="small">
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
-                </Knapp>
+                </Button>
             </div>
             {journalposter && journalposter.length > 0 && soknadId && (
                 <>
                     <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
-                    <AlertStripeInfo>{intlHelper(intl, 'modal.settpaavent.info')}</AlertStripeInfo>
+                    <Alert size="small" variant="info">
+                        {intlHelper(intl, 'modal.settpaavent.info')}
+                    </Alert>
 
                     <table className="tabell tabell--stripet punch_mappetabell">
                         <thead>
@@ -72,14 +76,15 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                                         </a>
                                     </td>
                                     <td>
-                                        <Knapp
-                                            mini
+                                        <Button
+                                            variant="secondary"
+                                            size="small"
                                             onClick={() => {
                                                 window.location.href = urlTilNyJournalpost(soknadId, j.journalpostId);
                                             }}
                                         >
                                             {intlHelper(intl, 'modal.settpaavent.registrer')}
-                                        </Knapp>
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}

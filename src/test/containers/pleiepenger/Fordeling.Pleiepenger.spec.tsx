@@ -40,10 +40,10 @@ describe('Fordeling: Flyt for pleiepenger', () => {
         });
         expect(fordeling.find('Checkbox')).toHaveLength(1);
         fordeling.find('Checkbox').simulate('change', { target: { checked: true } });
-        expect(fordeling.find('AlertStripeInfo')).toHaveLength(1);
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')).toHaveLength(1);
         expect(fordeling.find('Input')).toHaveLength(1);
         fordeling.find('Checkbox').simulate('change', { target: { checked: false } });
-        expect(fordeling.find('AlertStripeInfo')).toHaveLength(0);
+        expect(fordeling.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')).toHaveLength(0);
         expect(fordeling.find('Input')).toHaveLength(0);
 
         fordeling.setProps({
@@ -67,7 +67,7 @@ describe('Fordeling: Flyt for pleiepenger', () => {
     it.skip('Kan ikke gå videre dersom barnets ident ikke er riktig', () => {
         fordeling.setProps({
             fellesState: { hentBarnSuccess: true, barn: [] },
-            identState: { ident2: '12' },
+            identState: { pleietrengendeId: '12' },
             journalpost: { kanKopieres: true, kanSendeInn: true, erSaksbehandler: true },
         });
         expect(fordeling.find('Knapp').prop('disabled')).toEqual(true);

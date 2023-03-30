@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 
-import { RedigeringLoaderImpl } from './RedigeringLoader';
 import { Sakstyper } from '../SakstypeImpls';
 import SakstypeStepRouter from '../SakstypeStepRouter';
+import { RedigeringLoaderImpl } from './RedigeringLoader';
 
 const RedigeringRouter: React.FunctionComponent = () => (
     <RedigeringLoaderImpl

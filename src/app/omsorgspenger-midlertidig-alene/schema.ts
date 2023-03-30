@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
-import { initializeDate } from 'app/utils/timeUtils';
 import yup, { identifikator, periode } from 'app/rules/yup';
+import { initializeDate } from 'app/utils/timeUtils';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();
@@ -28,13 +28,13 @@ const OMPMASchema = yup.object({
             schema.test({
                 test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
                 message: 'Klokkeslett kan ikke være frem i tid',
-            })
+            }),
         )
         .label('Klokkeslett'),
     barn: yup.array().of(
         yup.object().shape({
             norskIdent: identifikator,
-        })
+        }),
     ),
     annenForelder: yup.object().shape({
         norskIdent: identifikator,

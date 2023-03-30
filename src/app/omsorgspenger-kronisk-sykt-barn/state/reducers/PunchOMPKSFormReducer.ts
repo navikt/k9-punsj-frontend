@@ -1,6 +1,7 @@
-import {PunchFormActionKeys} from 'app/models/enums';
-import {IPunchOMPKSFormActionTypes} from '../actions/OMPKSPunchFormActions';
-import {IPunchOMPKSFormState} from '../../types/PunchOMPKSFormState';
+import { PunchFormActionKeys } from 'app/models/enums';
+
+import { IPunchOMPKSFormState } from '../../types/PunchOMPKSFormState';
+import { IPunchOMPKSFormActionTypes } from '../actions/OMPKSPunchFormActions';
 
 const initialState: IPunchOMPKSFormState = {
     isSoknadLoading: false,
@@ -15,9 +16,9 @@ const initialState: IPunchOMPKSFormState = {
 // eslint-disable-next-line import/prefer-default-export
 export function PunchOMPKSFormReducer(
     punchFormState: IPunchOMPKSFormState,
-    action: IPunchOMPKSFormActionTypes
+    action: IPunchOMPKSFormActionTypes,
 ): IPunchOMPKSFormState {
-    if (typeof punchFormState === 'undefined') return initialState
+    if (typeof punchFormState === 'undefined') return initialState;
 
     switch (action.type) {
         case PunchFormActionKeys.RESET:
@@ -119,7 +120,7 @@ export function PunchOMPKSFormReducer(
             };
 
         case PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS: {
-            const {erMellomlagring} = action;
+            const { erMellomlagring } = action;
             return {
                 ...punchFormState,
                 validertSoknad: action.validertSoknad,

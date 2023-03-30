@@ -1,9 +1,11 @@
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+
+import intlHelper from 'app/utils/intlUtils';
+
 import { IPeriode } from '../../models/types/Periode';
 import DateInput, { DateInputProps } from '../skjema/DateInput';
 import './periodInput.less';

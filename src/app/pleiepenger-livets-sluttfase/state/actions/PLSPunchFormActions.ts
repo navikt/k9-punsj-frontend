@@ -3,11 +3,12 @@ import { PunchFormActionKeys } from 'app/models/enums';
 import { IError, Periode } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
+
+import { IHentPerioder } from '../../../models/types/RequestBodies';
+import { ISendSoknad } from '../../../models/types/SendSoknad';
 import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadKvittering } from '../../types/PLSSoknadKvittering';
 import { IPLSSoknadUt } from '../../types/PLSSoknadUt';
-import { IHentPerioder } from '../../../models/types/RequestBodies';
-import { ISendSoknad } from '../../../models/types/SendSoknad';
 
 interface IResetPunchPLSFormAction {
     type: PunchFormActionKeys.RESET;
@@ -214,25 +215,25 @@ export function updatePLSSoknad(soknad: Partial<IPLSSoknadUt>) {
 
 export function updatePLSSoknader(
     mappeid: string,
-    norskIdent1: string,
-    norskIdent2: string | null,
+    norskSøkerId: string,
+    norskPleietrengendeId: string | null,
     journalpostid: string,
     soknad1: Partial<IPLSSoknadUt>,
-    soknad2: Partial<IPLSSoknadUt> | null
+    soknad2: Partial<IPLSSoknadUt> | null,
 ) {
     return (dispatch: any) => {
-        if (!norskIdent2 || !soknad2) {
+        if (!norskPleietrengendeId || !soknad2) {
             return dispatch(updatePLSSoknad(soknad1));
         }
 
         dispatch(updatePLSSoknadRequestAction());
         const request = {
             personer: {
-                [norskIdent1]: {
+                [norskSøkerId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad1,
                 },
-                [norskIdent2]: {
+                [norskPleietrengendeId]: {
                     journalpostId: journalpostid,
                     soeknad: soknad2,
                 },
@@ -248,7 +249,7 @@ export function updatePLSSoknader(
                 case 400:
                     return response.json().then((mappe) => {
                         dispatch(setPLSSoknadAction(mappe));
-                        dispatch(updatePLSSoknadSuccessAction(mappe.personer?.[norskIdent1]?.mangler));
+                        dispatch(updatePLSSoknadSuccessAction(mappe.personer?.[norskSøkerId]?.mangler));
                     });
                 default:
                     return dispatch(updatePLSSoknadErrorAction(convertResponseToError(response)));
@@ -262,7 +263,7 @@ export const submitPLSSoknadRequestAction = (): ISubmitPLSSoknadRequestAction =>
 });
 export const submitPLSSoknadSuccessAction = (
     innsentSoknad: IPLSSoknadKvittering,
-    linkTilBehandlingIK9: string | null
+    linkTilBehandlingIK9: string | null,
 ): ISubmitPLSSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS,
     innsentSoknad,
@@ -286,7 +287,7 @@ export const validerPLSSoknadRequestAction = (): IValiderPLSSoknadRequestAction 
 });
 export const validerPLSSoknadSuccessAction = (
     validertSoknad: IPLSSoknadKvittering,
-    erMellomlagring?: boolean
+    erMellomlagring?: boolean,
 ): IValiderPLSSoknadSuccessAction => ({
     type: PunchFormActionKeys.SOKNAD_VALIDER_SUCCESS,
     validertSoknad,
@@ -330,7 +331,7 @@ export function submitPLSSoknad(norskIdent: string, soeknadId: string) {
                     default:
                         return dispatch(submitPLSSoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }
@@ -354,7 +355,7 @@ export function validerPLSSoknad(soknad: IPLSSoknadUt, erMellomlagring?: boolean
                     default:
                         return dispatch(validerPLSSoknadErrorAction(convertResponseToError(response)));
                 }
-            }
+            },
         );
     };
 }

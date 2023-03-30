@@ -1,6 +1,7 @@
-import React from 'react';
-import { Select, SelectProps } from '@navikt/ds-react';
 import { useField } from 'formik';
+import React from 'react';
+
+import { Select, SelectProps } from '@navikt/ds-react';
 
 type Option = {
     label: string;
@@ -11,12 +12,13 @@ export interface FormikSelectProps extends Partial<SelectProps> {
     label: string;
     name: string;
     options: Option[];
+    customError?: string;
 }
 
-const SelectFormik = ({ label, name, options, ...props }: FormikSelectProps) => {
+const SelectFormik = ({ label, name, options, customError, ...props }: FormikSelectProps) => {
     const [field, meta] = useField(name);
     return (
-        <Select label={label} error={meta.touched && meta.error} {...field} {...props}>
+        <Select label={label} error={meta.touched && meta.error ? meta.error : customError} {...field} {...props}>
             {options.length
                 ? options.map((option) => (
                       <option key={option.value} value={option.value}>

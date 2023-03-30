@@ -1,5 +1,6 @@
 import { IError } from 'app/models/types/Error';
 import { IInputError } from 'app/models/types/InputError';
+
 import { IPSBSoknad } from './PSBSoknad';
 import { IPSBSoknadKvittering } from './PSBSoknadKvittering';
 import { IPeriode } from './Periode';

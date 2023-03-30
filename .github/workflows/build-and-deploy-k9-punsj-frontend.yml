@@ -36,7 +36,15 @@ jobs:
         needs: [lint, test, test-cypress, build]
         steps:
             - name: Hente kode
-              uses: actions/checkout@v3.0.2
+              uses: actions/checkout@v3.3.0
+
+            - name: Setup .yarnrc.yml
+              run: |
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
             - name: Sette opp Node
               uses: actions/setup-node@v3
@@ -44,7 +52,6 @@ jobs:
                   node-version: 16.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
-                  cache: 'yarn'
 
             - uses: actions/download-artifact@v3
               with:
@@ -52,7 +59,7 @@ jobs:
                   path: ./dist
 
             - name: Installere moduler
-              run: yarn install
+              run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
@@ -61,7 +68,7 @@ jobs:
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-            - uses: docker/login-action@v2.0.0
+            - uses: docker/login-action@v2.1.0
               with:
                   registry: ghcr.io
                   username: ${{ github.REPOSITORY_OWNER }}

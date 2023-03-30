@@ -1,7 +1,6 @@
-import React from 'react';
-
 import { useField } from 'formik';
 import { CheckboksPanel, CheckboksPanelProps } from 'nav-frontend-skjema';
+import React from 'react';
 
 interface OwnProps extends CheckboksPanelProps {
     name: string;

@@ -1,9 +1,10 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
-import { IPLSSoknad } from '../../types/PLSSoknad';
+
 import { IOpprettSoknad } from '../../../models/types/RequestBodies';
 import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
+import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadSvar } from '../../types/PLSSoknadSvar';
 
 interface ISetEksisterendePLSSoknaderAction {
@@ -80,7 +81,7 @@ export type IEksisterendePLSSoknaderActionTypes =
     | IResetPLSSoknadidAction;
 
 export function setEksisterendePLSSoknaderAction(
-    eksisterendeSoknaderSvar: IPLSSoknadSvar
+    eksisterendeSoknaderSvar: IPLSSoknadSvar,
 ): ISetEksisterendePLSSoknaderAction {
     return {
         type: EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNADER_SET,
@@ -89,7 +90,7 @@ export function setEksisterendePLSSoknaderAction(
 }
 
 export function findEksisterendePLSSoknaderLoadingAction(
-    isLoading: boolean
+    isLoading: boolean,
 ): IFindEksisterendePLSSoknaderLoadingAction {
     return {
         type: EksisterendePLSSoknaderActionKeys.EKSISTERENDE_PLS_SOKNADER_LOAD,
@@ -104,10 +105,10 @@ export function findEksisterendePLSSoknaderErrorAction(error: IError): IFindEksi
     };
 }
 
-export function findEksisterendePLSSoknader(ident1: string, ident2: string | null) {
+export function findEksisterendePLSSoknader(søkerId: string, pleietrengendeId: string | null) {
     return (dispatch: any) => {
         dispatch(findEksisterendePLSSoknaderLoadingAction(true));
-        const idents = ident2 ? `${ident1},${ident2}` : ident1;
+        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
         return get(
             ApiPath.PLS_EKSISTERENDE_SOKNADER_FIND,
             undefined,
@@ -117,15 +118,15 @@ export function findEksisterendePLSSoknader(ident1: string, ident2: string | nul
                     return dispatch(setEksisterendePLSSoknaderAction(soknader));
                 }
                 return dispatch(findEksisterendePLSSoknaderErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }
 
-export function sokEksisterendePLSSoknader(ident1: string, ident2: string | null) {
+export function sokEksisterendePLSSoknader(søkerId: string, pleietrengendeId: string | null) {
     return (dispatch: any) => {
         dispatch(findEksisterendePLSSoknaderLoadingAction(true));
-        const idents = ident2 ? `${ident1},${ident2}` : ident1;
+        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
         return get(ApiPath.EKSISTERENDE_SOKNADER_SOK, undefined, { 'X-Nav-NorskIdent': idents }, (response) => {
             if (response.ok) {
                 return response.json().then((r) => {
@@ -178,13 +179,13 @@ export function resetPLSSoknadidAction(): IResetPLSSoknadidAction {
     return { type: EksisterendePLSSoknaderActionKeys.PLS_SOKNADID_RESET };
 }
 
-export function createPLSSoknad(journalpostid: string, ident1: string, barnIdent: string | null) {
+export function createPLSSoknad(journalpostid: string, søkerId: string, barnIdent: string | null) {
     return (dispatch: any) => {
         dispatch(createPLSSoknadRequestAction());
 
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
-            norskIdent: ident1,
+            norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
             barnIdent,
         };

@@ -1,30 +1,19 @@
 /* eslint-disable max-classes-per-file */
-import { FrilanserOpptjening } from './FrilanserOpptjening';
-import { Periodeinfo } from './Periodeinfo';
-import { IPeriode, Periode } from './Periode';
 import { Arbeidstaker } from './Arbeidstaker';
+import { IArbeidstid } from './Arbeidstid';
 import { ArbeidstidInfo } from './ArbeidstidInfo';
-
-import {
-    Barn,
-    IArbeidstid,
-    IBarn,
-    IOmsorg,
-    IOpptjeningAktivitet,
-    ISoknadsInfo,
-    ITilleggsinformasjon,
-    ITilsynsordning,
-    IUtenlandsOpphold,
-    IUttak,
-    Omsorg,
-    SelvstendigNaeringsdrivendeOpptjening,
-    SoknadsInfo,
-    Tilleggsinformasjon,
-    Tilsynsordning,
-    UtenlandsOpphold,
-    Uttak,
-} from './PSBSoknad';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
+import { FrilanserOpptjening } from './FrilanserOpptjening';
+import { Barn, IBarn } from './IBarn';
+import { IOmsorg, Omsorg } from './Omsorg';
+import { IOpptjeningAktivitet } from './OpptjeningAktivitet';
+import { ITilleggsinformasjon, ITilsynsordning, Tilleggsinformasjon, Tilsynsordning } from './PSBSoknad';
+import { IPeriode, Periode } from './Periode';
+import { Periodeinfo } from './Periodeinfo';
+import { SelvstendigNaeringsdrivendeOpptjening } from './SelvstendigNaeringsdrivendeOpptjening';
+import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
+import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
+import { IUttak, Uttak } from './Uttak';
 
 export interface IPSBSoknadUt {
     soeknadId?: string;
@@ -157,7 +146,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
         this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
-            (u) => new UtenlandsOpphold(u)
+            (u) => new UtenlandsOpphold(u),
         );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.lovbestemtFerieSomSkalSlettes = (soknad.lovbestemtFerieSomSkalSlettes || []).map((p) => new Periode(p));

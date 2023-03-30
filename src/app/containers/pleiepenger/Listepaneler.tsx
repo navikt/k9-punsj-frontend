@@ -1,11 +1,14 @@
-import * as React from 'react';
-import intlHelper from 'app/utils/intlUtils';
 import classNames from 'classnames';
-import Panel from 'nav-frontend-paneler';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
+import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
-import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
+
+import { Panel } from '@navikt/ds-react';
+
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
+import intlHelper from 'app/utils/intlUtils';
+
 import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../assets/SVG/BinSVG';
 
@@ -19,7 +22,7 @@ export type ListeComponent<T> = (
     updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<T>,
     feilkodeprefiksMedIndeks?: string,
     getErrorMessage?: GetErrorMessage,
-    intl?: IntlShape
+    intl?: IntlShape,
 ) => React.ReactElement;
 
 export interface IListepanelerProps<T> {
@@ -46,7 +49,7 @@ export interface IListepanelerProps<T> {
 type ItemInfo = any;
 
 export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (
-    props: IListepanelerProps<ItemInfo>
+    props: IListepanelerProps<ItemInfo>,
 ) => {
     const { items, initialItem, className, textLeggTil } = props;
     const itemsWithInitialItem = items.length > 0 ? items : [initialItem];
@@ -64,7 +67,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
         index: number,
-        iteminfo: Partial<ItemInfo>
+        iteminfo: Partial<ItemInfo>,
     ) => {
         const newInfo: ItemInfo = { ...items[index], ...iteminfo };
         const newArray = itemsWithInitialItem;
@@ -148,7 +151,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         (info, showStatus) => editSoknadState(editItem(itemIndex, info), showStatus),
                                         feilkodeprefiks,
                                         getErrorMessage,
-                                        intl
+                                        intl,
                                     )}
                             </SkjemaGruppe>
                         </Panel>

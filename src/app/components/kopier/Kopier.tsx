@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Copy } from '@navikt/ds-icons';
+
 import './kopier.less';
 
 export default function Kopier({ verdi }: { verdi?: string }): JSX.Element | null {
@@ -10,5 +12,9 @@ export default function Kopier({ verdi }: { verdi?: string }): JSX.Element | nul
     if (!verdi) {
         return null;
     }
-    return <Copy className="kopier" onClick={() => kopierTilClipboard(verdi)} />;
+    return (
+        <button aria-label="Kopier" className="kopier" type="button" onClick={() => kopierTilClipboard(verdi)}>
+            <Copy />
+        </button>
+    );
 }

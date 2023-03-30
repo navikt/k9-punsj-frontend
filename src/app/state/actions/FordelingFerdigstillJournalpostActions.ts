@@ -53,7 +53,7 @@ export function ferdigstillJournalpost(journalpostid: string, søkerId: string) 
                     return dispatch(ferdigstillJournalpostSuccessAction());
                 }
                 return dispatch(ferdigstillJournalpostErrorAction(convertResponseToError(response)));
-            }
+            },
         );
     };
 }

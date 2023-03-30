@@ -1,5 +1,6 @@
-import { IOMPUTSoknadKvittering } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 import { createContext } from 'react';
+
+import { IOMPUTSoknadKvittering } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 
 export interface IKvitteringContext {
     kvittering: IOMPUTSoknadKvittering | undefined;

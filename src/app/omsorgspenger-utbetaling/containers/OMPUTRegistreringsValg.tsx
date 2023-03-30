@@ -1,16 +1,17 @@
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import { useMutation, useQuery } from 'react-query';
+import { connect } from 'react-redux';
+
+import { Alert, Button, Loader } from '@navikt/ds-react';
+
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { Loader } from '@navikt/ds-react';
+
 import { IIdentState } from '../../models/types/IdentState';
-import { setHash } from '../../utils';
-import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 import { RootStateType } from '../../state/RootState';
+import { setHash } from '../../utils';
 import api, { hentEksisterendeSoeknader } from '../api';
+import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 
 export interface IOMPUTRegistreringsValgComponentProps {
     journalpostid: string;
@@ -22,37 +23,41 @@ export interface IEksisterendeOMPUTSoknaderStateProps {
 type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEksisterendeOMPUTSoknaderStateProps;
 
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistreringsValgProps> = (
-    props: IOMPUTRegistreringsValgProps
+    props: IOMPUTRegistreringsValgProps,
 ) => {
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
-    const { ident1, ident2 } = identState;
+    const { søkerId, pleietrengendeId } = identState;
 
     const {
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, ident1), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId), {
         onSuccess: (soeknad) => {
             setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
         },
     });
 
-    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(ident1));
+    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
 
     const redirectToPreviousStep = () => {
         setHash('/');
     };
 
     if (opprettSoknadError instanceof Error) {
-        return <AlertStripeFeil>{opprettSoknadError.message}</AlertStripeFeil>;
+        return (
+            <Alert size="small" variant="error">
+                {opprettSoknadError.message}
+            </Alert>
+        );
     }
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoeknader?.søknader;
         if (soknader?.length) {
             return !soknader?.some((soknad) =>
-                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid)
+                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid),
             );
         }
         return true;
@@ -60,16 +65,20 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPUTSoknader ident1={ident1} ident2={ident2} journalpostid={journalpostid} />
+            <EksisterendeOMPUTSoknader
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
+                journalpostid={journalpostid}
+            />
 
             <div className="knapperad">
-                <Knapp className="knapp knapp1" onClick={redirectToPreviousStep} mini>
+                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
-                </Knapp>
+                </Button>
                 {kanStarteNyRegistrering() && (
-                    <Hovedknapp onClick={() => opprettSoknad()} className="knapp knapp2" mini>
+                    <Button onClick={() => opprettSoknad()} className="knapp knapp2" size="small">
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </div>

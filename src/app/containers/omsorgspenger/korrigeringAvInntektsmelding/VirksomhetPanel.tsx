@@ -1,5 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+import Lenke from 'nav-frontend-lenker';
+import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import React, { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+
 import { ExternalLink } from '@navikt/ds-icons';
+import { Panel } from '@navikt/ds-react';
+
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
 import usePrevious from 'app/hooks/usePrevious';
@@ -8,12 +16,7 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import OrganisasjonMedArbeidsforhold from 'app/models/types/OrganisasjonMedArbeidsforhold';
 import { hentArbeidsgivereMedId } from 'app/state/actions/OMSPunchFormActions';
 import intlHelper from 'app/utils/intlUtils';
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import Lenke from 'nav-frontend-lenker';
-import Panel from 'nav-frontend-paneler';
-import { Input, Select, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+
 import { AAREG_URL } from '../../../constants/eksterneLenker';
 import {
     KorrigeringAvInntektsmeldingFormFields,
@@ -41,7 +44,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                     setArbeidsgivereMedNavn(data?.organisasjoner || []);
                 },
                 `${årstallForKorrigering}-01-01`,
-                `${årstallForKorrigering}-12-31`
+                `${årstallForKorrigering}-12-31`,
             );
 
             hentArbeidsgivereMedId(søkerId, årstallForKorrigering)
@@ -115,7 +118,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             bredde="l"
                             label={intlHelper(
                                 intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet'
+                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet',
                             )}
                             disabled={!arbeidsgivereMedId}
                             {...field}
@@ -147,7 +150,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             bredde="l"
                             label={intlHelper(
                                 intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId'
+                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId',
                             )}
                             disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
                             feil={

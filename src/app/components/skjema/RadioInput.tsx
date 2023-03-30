@@ -1,7 +1,8 @@
-import React from 'react';
+import classNames from 'classnames';
 import { useField } from 'formik';
 import { Radio, RadioPanel, SkjemaGruppe } from 'nav-frontend-skjema';
-import classNames from 'classnames';
+import React from 'react';
+
 import './radioInput.less';
 
 interface IRadioInputProps {

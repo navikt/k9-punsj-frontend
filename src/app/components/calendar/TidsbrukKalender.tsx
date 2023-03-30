@@ -1,15 +1,17 @@
-import React, { forwardRef, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
-import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
-import useOnClickOutside from 'app/hooks/useOnClickOutside';
-import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
-import { KalenderDag } from 'app/models/KalenderDag';
 import { uniq } from 'lodash';
-import CalendarGrid from './CalendarGrid';
+import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
+import React, { forwardRef, useEffect, useState } from 'react';
+
+import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
+
+import useOnClickOutside from 'app/hooks/useOnClickOutside';
+import { KalenderDag } from 'app/models/KalenderDag';
+import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
+
 import DateRange from '../../models/types/DateRange';
 import Slett from '../buttons/Slett';
-
+import CalendarGrid from './CalendarGrid';
 import './tidsbrukKalender.less';
 
 interface OwnProps {
@@ -33,7 +35,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             disableWeekends = true,
             tittelRenderer = getMonthAndYear,
         },
-        ref
+        ref,
     ) => {
         const [shiftKeydown, setShiftKeydown] = useState(false);
         const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -97,8 +99,8 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
         const selectDates = (dates: Date[]) => {
             setSelectedDates(
                 uniq([...selectedDates, ...dates]).filter((date) =>
-                    disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(date))
-                )
+                    disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(date)),
+                ),
             );
         };
         const selectRange = (date: Date): void => {
@@ -113,12 +115,12 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
         const someSelectedDaysHaveContent = kalenderdager
             ?.map((kalenderdag) => dayjs(kalenderdag.date).format(formats.DDMMYYYY))
             .some((date) =>
-                selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date)
+                selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date),
             );
         const hasSelectedDisabledDate = disabledDates
             .map((date) => dayjs(date).format(formats.DDMMYYYY))
             .some((date) =>
-                selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date)
+                selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date),
             );
         const kalenderdagerIGyldigePerioder = kalenderdager
             ?.map((kalenderdag) => kalenderdag.date)
@@ -179,7 +181,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 </div>
             </EkspanderbartPanel>
         );
-    }
+    },
 );
 
 export default TidsbrukKalender;
