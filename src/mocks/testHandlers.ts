@@ -149,4 +149,7 @@ export const testHandlers = {
             ]),
         ),
     ),
+    settBehandlingsaar: rest.post(`${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`, (req, res, ctx) =>
+        res(ctx.status(200)),
+    ),
 };

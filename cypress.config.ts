@@ -8,7 +8,6 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             return require('./cypress/plugins/index.js')(on, config);
         },
-        testIsolation: true,
         baseUrl: 'http://localhost:8080',
         specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
     },

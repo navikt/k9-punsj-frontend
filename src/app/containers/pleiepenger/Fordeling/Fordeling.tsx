@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 
-import { finnFagsaker } from 'app/api/api';
+import { finnFagsaker, settBehandlingsAar } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
@@ -130,13 +130,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             journalpostId: string;
             søkerId: string;
             behandlingsAar?: string;
-        }) =>
-            post(
-                ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR,
-                { journalpostId },
-                { 'X-Nav-NorskIdent': søkerId },
-                { behandlingsAar },
-            ),
+        }) => settBehandlingsAar(journalpostId, søkerId, behandlingsAar),
         { onSuccess: () => setHarLagretBehandlingsår(true) },
     );
 
@@ -503,7 +497,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         />
 
                         <VerticalSpacer sixteenPx />
-                        {settBehandlingsÅrMutation.error && (
+                        {!!settBehandlingsÅrMutation.error && (
                             <Alert size="small" variant="error">
                                 {intlHelper(intl, 'fordeling.error')}
                             </Alert>
