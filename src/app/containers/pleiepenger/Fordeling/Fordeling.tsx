@@ -30,7 +30,6 @@ import PdfVisning from '../../../components/pdf/PdfVisning';
 import { ISakstypeDefault } from '../../../models/Sakstype';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
-import { FagsakYtelseType } from '../../../models/types/RequestBodies';
 import { setDokumenttypeAction, setFagsakAction } from '../../../state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
@@ -114,6 +113,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [harLagretBehandlingsår, setHarLagretBehandlingsår] = useState(false);
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
     const [visValgForDokument, setVisValgForDokument] = useState<boolean>(false);
+    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
+    const [visGaaTilLos, setVisGaaTilLos] = useState(false);
+    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
+    const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
+    const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
+    const [brukEksisterendeFagsak, setBrukEksisterendeFagsak] = useState(false);
+    const harFagsaker = fagsaker?.length > 0;
 
     const settBehandlingsÅrMutation = useMutation(
         ({
@@ -144,15 +150,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setVisValgForDokument(false);
         setHarLagretBehandlingsår(false);
     }, [dokumenttype, identState.søkerId, identState.pleietrengendeId, identState.annenPart, valgtFagsak]);
-
-    const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
-    const [visGaaTilLos, setVisGaaTilLos] = useState(false);
-
-    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
-    const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
-    const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
-    const [brukEksisterendeFagsak, setBrukEksisterendeFagsak] = useState(false);
-    const harFagsaker = fagsaker?.length > 0;
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
