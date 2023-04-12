@@ -135,9 +135,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
 
     useEffect(() => {
-        if (!identState.søkerId) {
+        if (valgtFagsak) {
             setFagsak(undefined);
         }
+    }, [dokumenttype, identState.søkerId]);
+
+    useEffect(() => {
         setVisValgForDokument(false);
         setHarLagretBehandlingsår(false);
     }, [dokumenttype, identState.søkerId, identState.pleietrengendeId, identState.annenPart, valgtFagsak]);
