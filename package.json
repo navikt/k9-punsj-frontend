@@ -132,7 +132,7 @@
         "@types/intl": "1.2.0",
         "@types/jest": "29.5.0",
         "@types/object-hash": "3.0.2",
-        "@types/react": "18.0.29",
+        "@types/react": "18.0.35",
         "@types/react-aria-menubutton": "6.2.9",
         "@types/react-collapse": "5.0.1",
         "@types/react-document-title": "2.0.5",
