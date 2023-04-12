@@ -143,6 +143,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (valgtFagsak) {
             setFagsak(undefined);
+            setBrukEksisterendeFagsak(false);
         }
     }, [dokumenttype, identState.søkerId]);
 
