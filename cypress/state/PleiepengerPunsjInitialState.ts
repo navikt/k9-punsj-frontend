@@ -104,7 +104,6 @@ const PleiepengerPunsjInitialState = {
         isAwaitingSjekkTilK9Response: false,
         isAwaitingLukkOppgaveResponse: false,
         lukkOppgaveDone: false,
-        skalTilK9: true,
         erSøkerIdBekreftet: true,
         valgtGosysKategori: '',
     },

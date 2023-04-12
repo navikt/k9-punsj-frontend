@@ -1,5 +1,6 @@
-import { ApiPath } from 'app/apiConfig';
-import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
+import { rest } from 'msw';
+
+import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
 
 describe('Fordeling', () => {
     beforeEach(() => {
@@ -30,20 +31,7 @@ describe('Fordeling', () => {
         cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
         cy.findByLabelText(/Velg hva journalposten gjelder/i).should('exist');
     });
-    it('kan korrigere inntektsmelding uten at sjekkSkalTilK9 kjøres', () => {
-        cy.window().then((window) => {
-            const { worker, rest } = window.msw;
-            worker.use(
-                rest.post(`${BACKEND_BASE_URL}/api/k9-punsj${ApiPath.SJEKK_OM_SKAL_TIL_K9SAK}`, (req, res, ctx) =>
-                    res.once(
-                        ctx.json({
-                            k9sak: false,
-                        })
-                    )
-                )
-            );
-        });
-
+    it('kan korrigere inntektsmelding uten å sette behandlingsår kjøres', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Korrigering av inntektsmelding omsorgspenger AG/i).click();
         cy.findByText('Ja').click();
@@ -73,6 +61,21 @@ describe('Fordeling', () => {
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
+    });
+    it('Omsorgspenger - blir stoppet hvis behandlingsaar ikke settes', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(
+                rest.post(`${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`, (req, res, ctx) =>
+                    res(ctx.status(403)),
+                ),
+            );
+        });
+        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
+        cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
+        cy.findByText(/Ja/i).click();
+        cy.findByRole('button', { name: /Videre/i }).click();
+        cy.findByText(/Kunne ikke sjekke opplysninger. Prøv igjen senere./i).should('exist');
     });
 
     it('validering av fødselsnummer virker', () => {

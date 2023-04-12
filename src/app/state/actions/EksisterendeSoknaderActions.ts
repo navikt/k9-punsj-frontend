@@ -1,10 +1,10 @@
 import { ApiPath } from 'app/apiConfig';
-import { EksisterendeSoknaderActionKeys, JaNeiVetikke } from 'app/models/enums';
+import { EksisterendeSoknaderActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
 
 import { IPSBSoknad } from '../../models/types/PSBSoknad';
-import { IOpprettSoknad, ISkalTilK9 } from '../../models/types/RequestBodies';
+import { IOpprettSoknad } from '../../models/types/RequestBodies';
 import { ISoknadSvar } from '../../models/types/SoknadSvar';
 
 interface ISetEksisterendeSoknaderAction {
@@ -161,7 +161,6 @@ export function createSoknad(journalpostid: string, søkerId: string, barnIdent:
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
-            barnIdent,
         };
 
         post(ApiPath.PSB_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

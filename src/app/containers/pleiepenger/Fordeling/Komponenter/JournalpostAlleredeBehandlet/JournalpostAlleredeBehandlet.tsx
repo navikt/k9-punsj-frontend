@@ -69,6 +69,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
 
             <Button
                 variant="secondary"
+                className="kopier__button"
                 disabled={
                     IdentRules.erUgyldigIdent(identState.pleietrengendeId) || fellesState.kopierJournalpostSuccess
                 }
