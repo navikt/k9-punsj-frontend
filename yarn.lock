@@ -15906,7 +15906,7 @@ __metadata:
     webpack-bundle-analyzer: 4.8.0
     webpack-cli: 5.0.1
     webpack-dev-server: 4.13.2
-    yup: 1.0.2
+    yup: 1.1.0
   languageName: unknown
   linkType: soft
 
@@ -24735,15 +24735,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yup@npm:1.0.2":
-  version: 1.0.2
-  resolution: "yup@npm:1.0.2"
+"yup@npm:1.1.0":
+  version: 1.1.0
+  resolution: "yup@npm:1.1.0"
   dependencies:
     property-expr: ^2.0.5
     tiny-case: ^1.0.3
     toposort: ^2.0.2
     type-fest: ^2.19.0
-  checksum: 1cb9c490853739aa0c576c87a81008dd3612985dd2da5ff6127b77640465fa906bb47ed30a7c97824b4a3f525010b2d7f614ebbd442b02e16433675c4d66f0b8
+  checksum: a584148e79cbec28d11c409b5efc5d1b908bf0bb13fcc2155e5528c0291068e6db251d952e7795b3bed965b744803a9d13078d6049369317c7a83b463336e133
   languageName: node
   linkType: hard
 
