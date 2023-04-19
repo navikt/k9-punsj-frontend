@@ -33,7 +33,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId), {
         onSuccess: (soeknad) => {
             setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
         },
