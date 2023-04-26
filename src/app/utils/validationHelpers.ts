@@ -36,7 +36,7 @@ export const validateText = (value: string, maxLength: number, exactLength?: boo
     if (exactLength && value.length !== maxLength) {
         return `Feltet må være ${maxLength} tegn`;
     }
-    if (value.length < 3) {
+    if (value.trim().length < 3) {
         return 'Du må skrive minst 3 tegn';
     }
     if (value.length > maxLength) {
