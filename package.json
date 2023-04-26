@@ -136,7 +136,7 @@
         "@types/react-aria-menubutton": "6.2.9",
         "@types/react-collapse": "5.0.1",
         "@types/react-document-title": "2.0.5",
-        "@types/react-dom": "18.0.11",
+        "@types/react-dom": "18.2.1",
         "@types/react-intl": "3.0.0",
         "@types/react-router": "5.1.20",
         "@types/react-router-dom": "5.3.3",
