@@ -6483,14 +6483,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.0.38":
-  version: 18.0.38
-  resolution: "@types/react@npm:18.0.38"
+"@types/react@npm:18.2.6":
+  version: 18.2.6
+  resolution: "@types/react@npm:18.2.6"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 34481c79f4f7ea2aefbaa45281319dc183200230d932d968463eba1643bd3635073d0a17c5c613150a69e36ca18b811ecffafea6384fa3dff3b5203866339d69
+  checksum: dea9d232d8df7ac357367a69dcb557711ab3d5501807ffa77cebeee73d49ee94d095f298e36853c63ed47cce097eee4c7eae2aaa8c02fac3f0171ec1b523a819
   languageName: node
   linkType: hard
 
@@ -15999,7 +15999,7 @@ __metadata:
     "@types/intl": 1.2.0
     "@types/jest": 29.5.1
     "@types/object-hash": 3.0.2
-    "@types/react": 18.0.38
+    "@types/react": 18.2.6
     "@types/react-aria-menubutton": 6.2.9
     "@types/react-collapse": 5.0.1
     "@types/react-document-title": 2.0.5
