@@ -114,7 +114,7 @@
         "@babel/preset-typescript": "7.21.5",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
         "@sentry/cli": "2.17.5",
-        "@storybook/addon-actions": "6.5.16",
+        "@storybook/addon-actions": "7.0.9",
         "@storybook/addon-essentials": "6.5.16",
         "@storybook/addon-interactions": "6.5.16",
         "@storybook/addon-links": "6.5.16",
