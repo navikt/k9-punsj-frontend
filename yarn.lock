@@ -4170,6 +4170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remix-run/router@npm:1.6.1":
+  version: 1.6.1
+  resolution: "@remix-run/router@npm:1.6.1"
+  checksum: 4ca65d9c7d6fa277227ad8fd4ef53bebab99460b714d835b609c998f9a7e7c33a964ce2b8af853b50025a60d9113968f256abc5f71f451939ff14a5187d327fe
+  languageName: node
+  linkType: hard
+
 "@restart/context@npm:^2.1.4":
   version: 2.1.4
   resolution: "@restart/context@npm:2.1.4"
@@ -16214,7 +16221,7 @@ __metadata:
     react-redux: 8.0.5
     react-refresh: 0.14.0
     react-router: 5.3.4
-    react-router-dom: 5.3.4
+    react-router-dom: 6.11.1
     redux: 4.2.1
     redux-logger: 3.0.6
     regenerator-runtime: 0.13.11
@@ -20687,20 +20694,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:5.3.4":
-  version: 5.3.4
-  resolution: "react-router-dom@npm:5.3.4"
+"react-router-dom@npm:6.11.1":
+  version: 6.11.1
+  resolution: "react-router-dom@npm:6.11.1"
   dependencies:
-    "@babel/runtime": ^7.12.13
-    history: ^4.9.0
-    loose-envify: ^1.3.1
-    prop-types: ^15.6.2
-    react-router: 5.3.4
-    tiny-invariant: ^1.0.2
-    tiny-warning: ^1.0.0
+    "@remix-run/router": 1.6.1
+    react-router: 6.11.1
   peerDependencies:
-    react: ">=15"
-  checksum: b86a6f2f5222f041e38adf4e4b32c7643d6735a1a915ef25855b2db285fd059d72ba8d62e5bcd5d822b8ef9520a80453209e55077f5a90d0f72e908979b8f535
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 44566e10cb1ff475c73be47425dba66e8e834e695e80c572c63ca82543ad03d41f4a1d8e974bf998143150f497792f74ba99714b1219df1c923c62a3b67f187b
   languageName: node
   linkType: hard
 
@@ -20720,6 +20723,17 @@ __metadata:
   peerDependencies:
     react: ">=15"
   checksum: 892d4e274a23bf4f39abc2efca54472fb646d3aed4b584020cf49654d2f50d09a2bacebe7c92b4ec7cb8925077376dfcd0664bad6442a73604397cefec9f01f9
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.11.1":
+  version: 6.11.1
+  resolution: "react-router@npm:6.11.1"
+  dependencies:
+    "@remix-run/router": 1.6.1
+  peerDependencies:
+    react: ">=16.8"
+  checksum: c5cafbaac13564d0e325f84ce6e4cbc42de5c381b0f619209f3b101d2b6eae4a8f9ee87b492875e869909dd9bb549d05d2f677085708f79622b872bd45d14bbb
   languageName: node
   linkType: hard
 
