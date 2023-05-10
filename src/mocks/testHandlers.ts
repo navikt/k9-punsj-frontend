@@ -1,8 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
 
-import { ApiPath } from 'app/apiConfig';
-
 import arbeidsgivere from '../../cypress/fixtures/arbeidsgivere.json';
 import journalpost from '../../cypress/fixtures/journalpost.json';
 import korrigeringAvInntektsmeldingSoknad from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknad.json';
@@ -21,7 +19,9 @@ export const testHandlers = {
     me: rest.get(`${BACKEND_BASE_URL}/me`, (req, res, ctx) =>
         res(ctx.status(200), ctx.json({ name: 'Bobby Binders' })),
     ),
-    hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/200`, (req, res, ctx) => res(ctx.json(journalpost))),
+    hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/:id`, (req, res, ctx) =>
+        res(ctx.json({ ...journalpost, journalpostId: req.params.id })),
+    ),
     opprettePleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`, (req, res, ctx) =>
         res(ctx.status(201), ctx.json(pleiepengerSoknad)),
     ),

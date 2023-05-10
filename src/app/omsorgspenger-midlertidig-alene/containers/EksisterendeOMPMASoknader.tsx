@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
 
+import { areBothDatesDefined, generateDateString } from 'app/components/skjema/skjemaUtils';
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
@@ -143,6 +144,9 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.barn?.map((barn) => barn.norskIdent).join(', '),
                 Array.from(søknad.journalposter).join(', '),
+                areBothDatesDefined(søknad.annenForelder.periode)
+                    ? generateDateString(søknad.annenForelder.periode)
+                    : '',
 
                 <Button
                     variant="secondary"

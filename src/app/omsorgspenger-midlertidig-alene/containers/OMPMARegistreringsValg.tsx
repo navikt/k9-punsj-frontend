@@ -14,6 +14,7 @@ import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
 import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
+import { IEksisterendeOMPMASoknaderState } from '../types/EksisterendeOMPMASoknaderState';
 import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
 
 export interface IOMPMARegistreringsValgComponentProps {
@@ -30,7 +31,7 @@ export interface IOMPMARegistreringsValgDispatchProps {
 
 export interface IEksisterendeOMPMASoknaderStateProps {
     punchState: IPunchState;
-    eksisterendeSoknaderState: IEksisterendeSoknaderState;
+    eksisterendeSoknaderState: IEksisterendeOMPMASoknaderState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
 }
@@ -120,7 +121,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
     punchState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchState,
-    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
+    eksisterendeSoknaderState: state.eksisterendeOMPMASoknaderState,
     journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });
