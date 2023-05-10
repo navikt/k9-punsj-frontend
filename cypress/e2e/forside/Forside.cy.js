@@ -1,3 +1,5 @@
+import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
+
 describe('forside', () => {
     it('kan søke opp journalpost', () => {
         cy.visit('/');
@@ -6,8 +8,9 @@ describe('forside', () => {
     });
 
     it('får feilmelding når journalposten ikke finnes', () => {
-        cy.intercept('GET', '/api/k9-punsj/journalpost/201', {
-            statusCode: 404,
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(rest.get(`${LOCAL_API_URL}/journalpost/201`, (req, res, ctx) => res(ctx.status(404))));
         });
 
         cy.visit('/');
@@ -16,6 +19,10 @@ describe('forside', () => {
     });
 
     it('viser feilmelding ved forbidden', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(rest.get(`${LOCAL_API_URL}/journalpost/203`, (req, res, ctx) => res(ctx.status(404))));
+        });
         cy.intercept('GET', '/api/k9-punsj/journalpost/203', {
             statusCode: 403,
         });
