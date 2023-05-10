@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import yup, { identifikator, periode } from 'app/rules/yup';
+import yup, { identifikator } from 'app/rules/yup';
 import { initializeDate } from 'app/utils/timeUtils';
 
 function erIkkeFremITid(dato: string) {
@@ -26,7 +26,7 @@ const OMPMASchema = yup.object({
         .required()
         .when('mottattDato', (mottattDato, schema) =>
             schema.test({
-                test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
+                test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato as unknown as string, klokkeslett),
                 message: 'Klokkeslett kan ikke være frem i tid',
             }),
         )
@@ -38,13 +38,13 @@ const OMPMASchema = yup.object({
     ),
     annenForelder: yup.object().shape({
         norskIdent: identifikator,
-        situasjonType: yup.string().required().nullable(true).label('Situasjonstype'),
-        situasjonBeskrivelse: yup.string().required().min(5).nullable(true).label('Situasjonsbeskrivelse'),
+        situasjonType: yup.string().required().label('Situasjonstype'),
+        situasjonBeskrivelse: yup.string().required().min(5).label('Situasjonsbeskrivelse'),
         periode: yup.object().shape({
             fom: yup.string().required().label('Fra og med'),
             tom: yup
                 .string()
-                .when('tilOgMedErIkkeOppgitt', { is: false, then: yup.string().required() })
+                .when('tilOgMedErIkkeOppgitt', { is: false, then: () => yup.string().required() })
                 .label('Til og med'),
             tilOgMedErIkkeOppgitt: yup.bool(),
         }),
