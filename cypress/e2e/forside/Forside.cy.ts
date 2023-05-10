@@ -1,3 +1,5 @@
+import { rest } from 'msw';
+
 import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
 
 describe('forside', () => {
