@@ -53,6 +53,13 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
         };
     }
 
+    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const journalpostId = e.target.value;
+        // Only allow numbers (0-9)
+        const sanitizedJournalpostId = journalpostId.replace(/[^0-9]/g, '');
+        this.setState({ journalpostid: sanitizedJournalpostId });
+    };
+
     onClick = (): void => {
         const { journalpostid } = this.state;
         const { getJournalpost } = this.props;
@@ -76,7 +83,6 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             journalpostConflictError,
             journalpostRequestError,
             journalpost,
-            lukkJournalpostOppgave,
             lukkOppgaveDone,
             lukkOppgaveReset,
         } = this.props;
@@ -112,7 +118,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                             <Input
                                 value={journalpostid}
                                 bredde="L"
-                                onChange={(e) => this.setState({ journalpostid: e.target.value })}
+                                onChange={this.onChange}
                                 label={<FormattedMessage id="søk.label.jpid" />}
                                 onKeyDown={this.handleKeydown}
                             />

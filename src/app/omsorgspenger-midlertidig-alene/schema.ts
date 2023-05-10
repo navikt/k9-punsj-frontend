@@ -44,8 +44,7 @@ const OMPMASchema = yup.object({
             fom: yup.string().required().label('Fra og med'),
             tom: yup
                 .string()
-                .when('tilOgMedErIkkeOppgitt', { is: false, then: () => yup.string().required() })
-                .label('Til og med'),
+                .when('tilOgMedErIkkeOppgitt', { is: false, then: () => yup.string().required().label('Til og med') }),
             tilOgMedErIkkeOppgitt: yup.bool(),
         }),
     }),

@@ -1,26 +1,33 @@
+import { rest } from 'msw';
+
+import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
+
 describe('forside', () => {
+    beforeEach(() => {
+        cy.visit('/', {
+            onBeforeLoad: (window) => {},
+        });
+    });
     it('kan søke opp journalpost', () => {
-        cy.visit('/');
         cy.soekPaaJournalpost();
         cy.url().should('contains', '/journalpost/200#/');
     });
 
     it('får feilmelding når journalposten ikke finnes', () => {
-        cy.intercept('GET', '/api/k9-punsj/journalpost/201', {
-            statusCode: 404,
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(rest.get(`${LOCAL_API_URL}/journalpost/201`, (req, res, ctx) => res(ctx.status(404))));
         });
 
-        cy.visit('/');
         cy.soekPaaJournalpost('201');
         cy.contains(/Det finnes ingen journalposter med ID 201/i).should('exist');
     });
 
     it('viser feilmelding ved forbidden', () => {
-        cy.intercept('GET', '/api/k9-punsj/journalpost/203', {
-            statusCode: 403,
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(rest.get(`${LOCAL_API_URL}/journalpost/203`, (req, res, ctx) => res(ctx.status(404))));
         });
-
-        cy.visit('/');
         cy.soekPaaJournalpost('203');
         cy.contains(/Du har ikke tilgang til å slå opp denne personen/i).should('exist');
     });
