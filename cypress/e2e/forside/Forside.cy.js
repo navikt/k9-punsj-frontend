@@ -1,11 +1,18 @@
 import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
 
 describe('forside', () => {
-    it('kan søke opp journalpost', () => {
-        cy.visit('/');
-        cy.soekPaaJournalpost();
-        cy.url().should('contains', '/journalpost/200#/');
-    });
+    onBeforeLoad: (window) => {
+        window.__initialState__ = initialState;
+    },
+        it('kan søke opp journalpost', () => {
+            cy.visit('/', {
+                onBeforeLoad: (window) => {
+                    window.__initialState__ = initialState;
+                },
+            });
+            cy.soekPaaJournalpost();
+            cy.url().should('contains', '/journalpost/200#/');
+        });
 
     it('får feilmelding når journalposten ikke finnes', () => {
         cy.window().then((window) => {
