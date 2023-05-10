@@ -1,8 +1,10 @@
 import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
 
 describe('forside', () => {
-    cy.visit('/', {
-        onBeforeLoad: (window) => {},
+    beforeEach(() => {
+        cy.visit('/', {
+            onBeforeLoad: (window) => {},
+        });
     });
     it('kan søke opp journalpost', () => {
         cy.soekPaaJournalpost();
