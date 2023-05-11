@@ -1,8 +1,8 @@
-import { FagsakYtelseType } from 'app/models/types/RequestBodies';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 
 interface Fagsak {
     fagsakId: string;
-    sakstype: FagsakYtelseType;
+    sakstype: DokumenttypeForkortelse;
     pleietrengendeIdent: string;
     gyldigPeriode: { fom: string; tom: string };
 }

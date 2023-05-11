@@ -18,9 +18,9 @@ const KlassifiseringInfo = () => {
     );
     return (
         <div className="fagsakContainer">
-            {identState.ident1 && (
+            {identState.søkerId && (
                 <div>
-                    <LabelValue text="Søker" value={identState.ident1} />
+                    <LabelValue text="Søker" value={identState.søkerId} />
                 </div>
             )}
             <div>
@@ -39,9 +39,12 @@ const KlassifiseringInfo = () => {
                 </div>
             )}
             {fagsak?.pleietrengendeIdent ||
-                (identState.ident2 && (
+                (identState.pleietrengendeId && (
                     <div>
-                        <LabelValue text="Pleietrengende" value={fagsak?.pleietrengendeIdent || identState.ident2} />
+                        <LabelValue
+                            text="Pleietrengende"
+                            value={fagsak?.pleietrengendeIdent || identState.pleietrengendeId}
+                        />
                     </div>
                 ))}
 

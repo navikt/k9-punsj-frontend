@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IPeriode } from 'app/models/types';
 import { FagsakYtelseType } from 'app/models/types/RequestBodies';
 import Fagsak from 'app/types/Fagsak';
@@ -56,7 +57,7 @@ export const klassifiserDokument = (body: {
     barnIdent?: string;
     annenPart?: string;
     journalpostId: string;
-    fagsakYtelseTypeKode?: FagsakYtelseType;
+    fagsakYtelseTypeKode?: DokumenttypeForkortelse;
     periode?: IPeriode;
     saksnummer?: string;
 }) =>

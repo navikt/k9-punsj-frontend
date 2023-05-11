@@ -1,10 +1,15 @@
 import React from 'react';
-import { Alert, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
-import { RootStateType } from 'app/state/RootState';
+
+import { Alert, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+
 import { klassifiserDokument } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { FordelingDokumenttype } from 'app/models/enums';
+import { RootStateType } from 'app/state/RootState';
+import { finnForkortelseForDokumenttype } from 'app/utils';
+
 import KlassifiseringInfo from './KlassifiseringInfo';
 
 interface OwnProps {
@@ -15,15 +20,18 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
     const journalpostId = useSelector((state: RootStateType) => state.felles.journalpost?.journalpostId as string);
+    const dokumenttype = useSelector(
+        (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
+    );
 
     const { mutate, status, error, data } = useMutation({
         mutationFn: () =>
             klassifiserDokument({
-                brukerIdent: identState.ident1,
-                barnIdent: identState.ident2,
-                annenPart: identState.annenPart,
+                brukerIdent: identState.søkerId,
+                barnIdent: identState.pleietrengendeId,
+                annenPart: identState.annenPart ? identState.annenPart : undefined,
                 journalpostId,
-                fagsakYtelseTypeKode: fagsak?.sakstype,
+                fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,
                 saksnummer: fagsak?.fagsakId,
             }),

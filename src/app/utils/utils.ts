@@ -1,6 +1,5 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
-
-import { getCountryList } from './countryUtils';
+import { FagsakYtelseType } from 'app/models/types/RequestBodies';
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
@@ -75,7 +74,9 @@ export const finnVisningsnavnForSakstype = (kode: string) => {
     return sakstyper.find((st) => st.kode === kode)?.navn || kode;
 };
 
-export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumenttype) => {
+export const finnForkortelseForDokumenttype = (
+    dokumenttype?: FordelingDokumenttype,
+): DokumenttypeForkortelse | undefined => {
     if (!dokumenttype) {
         return undefined;
     }
