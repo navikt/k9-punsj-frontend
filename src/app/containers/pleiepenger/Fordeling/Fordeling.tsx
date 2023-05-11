@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 
 import { finnFagsaker, settBehandlingsAar } from 'app/api/api';
-import { ApiPath } from 'app/apiConfig';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
@@ -340,7 +339,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
         setIdentAction(identState.søkerId, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
         setFagsak(nyValgtFagsak);
-        resetSjekkSkalTilK9();
     };
 
     return (

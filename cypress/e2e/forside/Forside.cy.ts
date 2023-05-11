@@ -26,7 +26,7 @@ describe('forside', () => {
     it('viser feilmelding ved forbidden', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
-            worker.use(rest.get(`${LOCAL_API_URL}/journalpost/203`, (req, res, ctx) => res(ctx.status(404))));
+            worker.use(rest.get(`${LOCAL_API_URL}/journalpost/203`, (req, res, ctx) => res(ctx.status(403))));
         });
         cy.soekPaaJournalpost('203');
         cy.contains(/Du har ikke tilgang til å slå opp denne personen/i).should('exist');
