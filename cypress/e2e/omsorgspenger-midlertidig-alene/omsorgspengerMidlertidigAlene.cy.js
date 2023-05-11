@@ -21,7 +21,7 @@ describe('Eksisterende søknader midlertidig alene', () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Søkers ID/i).should('exist');
-            cy.findByText(/Pleietrengendes ID/i).should('exist');
+            cy.findByText(/Pleietrengendes ID/i).should('not.exist');
 
             cy.findByText(initialState.felles.journalpost.journalpostId).should('exist');
             cy.findByText(initialState.identState.søkerId).should('exist');
