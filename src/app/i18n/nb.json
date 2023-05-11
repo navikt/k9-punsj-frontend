@@ -129,7 +129,7 @@
     "ident.feil.identitetsnummer.lengde": "Fødsels- eller D-nummer må ha 11 siffer.",
     "ident.feil.ugyldigident": "Dette er ikke et gyldig fødsels- eller D-nummer.",
     "ident.feil.annenSøkerJournalkopiSoker": "Fødselsnummeret kan ikke være søkers fødselsnummer.",
-    "ident.feil.annenSøkerJournalkopiBarn": "Fødselsnummeret kan ikke være pleietrengedes fødselsnummer.",
+    "ident.feil.annenSøkerJournalkopiBarn": "Fødselsnummeret kan ikke være pleietrengendes fødselsnummer.",
     "arbeidsforhold.arbeidstaker": "Arbeidstaker",
     "arbeidsforhold.annet": "Annet",
     "mapper.infoboks": "Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.",
