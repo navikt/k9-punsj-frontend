@@ -62,10 +62,15 @@ export const sendSoeknad = async (
     return response.json();
 };
 
-export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOLPSoknadBackend> =>
+export const opprettSoeknad = (
+    journalpostId: string,
+    ident: string,
+    pleietrengendeId: string,
+): Promise<IOLPSoknadBackend> =>
     post(ApiPath.OLP_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
+        pleietrengendeId,
     }).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under opprettelse av søknad.');

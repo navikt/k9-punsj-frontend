@@ -6,13 +6,10 @@ const initialState: IFordelingState = {
     sakstype: undefined,
     omfordelingDone: false,
     isAwaitingOmfordelingResponse: false,
-    isAwaitingSjekkTilK9Response: false,
     isAwaitingLukkOppgaveResponse: false,
     lukkOppgaveDone: false,
-    skalTilK9: undefined,
     erSøkerIdBekreftet: false,
     valgtGosysKategori: '',
-    kanIkkeGaaTilK9: [],
     fagsak: undefined,
     dokumenttype: undefined,
 };
@@ -62,45 +59,6 @@ export function FordelingReducer(
                 omfordelingDone: false,
                 isAwaitingOmfordelingResponse: false,
                 omfordelingError: action.error,
-            };
-
-        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_REQUEST:
-            return {
-                ...fordelingState,
-                isAwaitingSjekkTilK9Response: true,
-                sjekkTilK9Error: undefined,
-            };
-
-        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_ERROR:
-            return {
-                ...fordelingState,
-                isAwaitingSjekkTilK9Response: false,
-                sjekkTilK9Error: action.error,
-            };
-
-        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_SUCCESS:
-            return {
-                ...fordelingState,
-                isAwaitingSjekkTilK9Response: false,
-                sjekkTilK9Error: undefined,
-                skalTilK9: action.k9sak,
-            };
-
-        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_JOURNALPOST_STOTTES_IKKE:
-            return {
-                ...fordelingState,
-                isAwaitingSjekkTilK9Response: false,
-                sjekkTilK9Error: undefined,
-                sjekkTilK9JournalpostStottesIkke: true,
-            };
-        case FordelingActionKeys.SJEKK_SKAL_TIL_K9_RESET:
-            return {
-                ...fordelingState,
-                isAwaitingSjekkTilK9Response: false,
-                skalTilK9: undefined,
-                sjekkTilK9Error: undefined,
-                sjekkTilK9JournalpostStottesIkke: undefined,
-                sakstype: undefined,
             };
 
         case FordelingActionKeys.LUKK_OPPGAVE_REQUEST:

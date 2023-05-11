@@ -31,6 +31,21 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             }
         },
     );
+export const settBehandlingsAar = (
+    journalpostid: string,
+    søkerId: string,
+    behandlingsAar?: string,
+): Promise<Error | void> =>
+    post(
+        ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR,
+        { journalpostId: journalpostid },
+        { 'X-Nav-NorskIdent': søkerId },
+        { behandlingsAar },
+    ).then((response) => {
+        if (!response.ok) {
+            throw Error('Det oppstod en feil.');
+        }
+    });
 
 export const hentBarn = (norskIdent: string): Promise<Error | Response> =>
     get(ApiPath.BARN_GET, { norskIdent }, { 'X-Nav-NorskIdent': norskIdent });

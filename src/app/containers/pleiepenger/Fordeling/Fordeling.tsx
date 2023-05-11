@@ -1,11 +1,13 @@
-import { Checkbox } from 'nav-frontend-skjema';
+import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { useMutation } from 'react-query';
 import { connect } from 'react-redux';
 
-import { Alert, Button, ErrorMessage, Heading, HelpText, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 
-import { finnFagsaker } from 'app/api/api';
+import { finnFagsaker, settBehandlingsAar } from 'app/api/api';
+import { ApiPath } from 'app/apiConfig';
 import { FordelingDokumenttype, JaNei, Sakstype } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
@@ -15,10 +17,8 @@ import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
-    resetSkalTilK9,
     setErSøkerIdBekreftetAction,
     setSakstypeAction,
-    sjekkOmSkalTilK9Sak,
 } from 'app/state/actions';
 import Fagsak from 'app/types/Fagsak';
 import intlHelper from 'app/utils/intlUtils';
@@ -30,7 +30,6 @@ import PdfVisning from '../../../components/pdf/PdfVisning';
 import { ISakstypeDefault } from '../../../models/Sakstype';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
-import { FagsakYtelseType } from '../../../models/types/RequestBodies';
 import { setDokumenttypeAction, setFagsakAction } from '../../../state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
@@ -38,16 +37,14 @@ import {
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state/reducers/FellesReducer';
-import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype } from '../../../utils';
+import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype, post } from '../../../utils';
 import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
 import AnnenPart from './Komponenter/AnnenPart';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
-import { GosysGjelderKategorier } from './Komponenter/GoSysGjelderKategorier';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
-import JournalPostKopiFelmeldinger from './Komponenter/JournalPostKopiFelmeldinger';
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import { Pleietrengende } from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
@@ -71,14 +68,12 @@ export interface IFordelingDispatchProps {
     setFagsakAction: typeof setFagsakAction;
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
-    sjekkOmSkalTilK9: typeof sjekkOmSkalTilK9Sak;
     kopierJournalpost: typeof kopierJournalpost;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
     setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
-    resetSjekkSkalTilK9: typeof resetSkalTilK9;
     resetBarn: typeof resetBarnAction;
 }
 
@@ -101,7 +96,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setSakstypeAction: sakstypeAction,
         setFagsakAction: setFagsak,
         resetIdentStateAction,
-        resetSjekkSkalTilK9,
         setDokumenttype,
         resetBarn,
     } = props;
@@ -116,24 +110,41 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
     const [sokersIdent, setSokersIdent] = useState<string>('');
+    const [harLagretBehandlingsår, setHarLagretBehandlingsår] = useState(false);
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
     const [visValgForDokument, setVisValgForDokument] = useState<boolean>(false);
-
-    useEffect(() => {
-        resetSjekkSkalTilK9();
-        setVisValgForDokument(false);
-    }, [dokumenttype, identState.søkerId, identState.pleietrengendeId, identState.annenPart]);
-
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
     const [visGaaTilLos, setVisGaaTilLos] = useState(false);
-
-    const [skalJournalpostSomIkkeStottesKopieres, setSkalJournalpostSomIkkeStottesKopieres] = useState<boolean>(false);
-
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [brukEksisterendeFagsak, setBrukEksisterendeFagsak] = useState(false);
     const harFagsaker = fagsaker?.length > 0;
+
+    const settBehandlingsÅrMutation = useMutation(
+        ({
+            journalpostId,
+            søkerId,
+            behandlingsAar,
+        }: {
+            journalpostId: string;
+            søkerId: string;
+            behandlingsAar?: string;
+        }) => settBehandlingsAar(journalpostId, søkerId, behandlingsAar),
+        { onSuccess: () => setHarLagretBehandlingsår(true) },
+    );
+
+    useEffect(() => {
+        if (valgtFagsak) {
+            setFagsak(undefined);
+            setBrukEksisterendeFagsak(false);
+        }
+    }, [dokumenttype, identState.søkerId]);
+
+    useEffect(() => {
+        setVisValgForDokument(false);
+        setHarLagretBehandlingsår(false);
+    }, [dokumenttype, identState.søkerId, identState.pleietrengendeId, identState.annenPart, valgtFagsak]);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
@@ -210,27 +221,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER) &&
         !IdentRules.erUgyldigIdent(identState.søkerId);
 
-    const utledFagsakYtelseType = (dokumentType: FordelingDokumenttype | undefined): FagsakYtelseType => {
-        switch (dokumentType) {
-            case FordelingDokumenttype.OMSORGSPENGER_KS:
-                return FagsakYtelseType.OMSORGSPENGER_KS;
-            case FordelingDokumenttype.PLEIEPENGER:
-                return FagsakYtelseType.PLEIEPENGER_SYKT_BARN;
-            case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
-                return FagsakYtelseType.PLEIEPENGER_NÆRSTÅENDE;
-            case FordelingDokumenttype.KORRIGERING_IM:
-                return FagsakYtelseType.OMSORGSPENGER;
-            case FordelingDokumenttype.OMSORGSPENGER_MA:
-                return FagsakYtelseType.OMSORGSPENGER_MA;
-            case FordelingDokumenttype.OMSORGSPENGER_UT:
-                return FagsakYtelseType.OMSORGSPENGER_UT;
-            case FordelingDokumenttype.OPPLAERINGSPENGER:
-                return FagsakYtelseType.OPPLÆRINGSPENGER;
-            default:
-                throw new Error(`${dokumentType} har ikke en tilsvarende FagsakYtelseType mapping.`);
-        }
-    };
-
     const handleVidereClick = (dokumentType: FordelingDokumenttype) => {
         if (
             identState.søkerId &&
@@ -249,31 +239,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             );
         }
 
-        const fagsakYtelseType = utledFagsakYtelseType(dokumentType);
-
         if (ikkeSjekkSkalTilK9Dokumenttype.includes(dokumentType)) {
             setVisValgForDokument(true);
         } else {
-            props.sjekkOmSkalTilK9(
-                identState.søkerId,
-                identState.pleietrengendeId,
-                journalpost.journalpostId,
-                fagsakYtelseType,
-                identState.annenPart,
-                valgtFagsak,
-            );
-        }
-    };
-
-    const kopierJournalpostOgLukkOppgave = () => {
-        if (identState.søkerId && identState.pleietrengendeId && journalpost?.journalpostId) {
-            props.kopierJournalpost(
-                identState.søkerId,
-                identState.pleietrengendeId,
-                identState.søkerId,
-                props.dedupkey,
-                journalpost?.journalpostId,
-            );
+            settBehandlingsÅrMutation.mutate({
+                journalpostId: journalpost.journalpostId,
+                søkerId: identState.søkerId,
+                behandlingsAar: valgtFagsak?.gyldigPeriode?.fom
+                    ? String(dayjs(valgtFagsak?.gyldigPeriode.fom).year())
+                    : undefined,
+            });
         }
     };
 
@@ -294,15 +269,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     };
 
     useEffect(() => {
-        const lukkEtterJournalpostSomIkkeStottesKopieres: boolean =
-            skalJournalpostSomIkkeStottesKopieres &&
-            !fellesState.isAwaitingKopierJournalPostResponse &&
-            !!fellesState.kopierJournalpostSuccess &&
-            !!opprettIGosysState.gosysOppgaveRequestSuccess;
-
-        if (lukkEtterJournalpostSomIkkeStottesKopieres && journalpost) {
-            lukkJournalpostOppgave(journalpost.journalpostId, identState.søkerId, valgtFagsak);
-        } else if (opprettIGosysState.gosysOppgaveRequestSuccess) {
+        if (opprettIGosysState.gosysOppgaveRequestSuccess) {
             setVisGaaTilLos(true);
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
@@ -464,7 +431,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
                                 identState={identState}
-                                skalJournalpostSomIkkeStottesKopieres={skalJournalpostSomIkkeStottesKopieres}
                                 fellesState={fellesState}
                                 setIdentAction={setIdentAction}
                             />
@@ -503,7 +469,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     visPleietrengende={visPleietrengende}
                                 />
                             )}
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !fordelingState.skalTilK9 && (
+                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !harLagretBehandlingsår && (
                                 <Button
                                     variant="secondary"
                                     size="small"
@@ -523,124 +489,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             identState={identState}
                             konfigForValgtSakstype={konfigForValgtSakstype}
                             fordelingState={fordelingState}
+                            harLagretBehandlingsår={harLagretBehandlingsår}
                             setSakstypeAction={sakstypeAction}
                             visValgForDokument={visValgForDokument}
                             lukkJournalpostOppgave={lukkJournalpostOppgave}
                             omfordel={omfordel}
                             gjelderPsbOmsOlp={gjelderPsbOmsOlp}
                         />
-                        {fordelingState.skalTilK9 === false && (
-                            <>
-                                <Alert size="small" variant="info" className="infotrygd_info">
-                                    <FormattedMessage
-                                        id="fordeling.infotrygd"
-                                        values={{
-                                            identifikator: identState.pleietrengendeId
-                                                ? `(${identState.pleietrengendeId})`
-                                                : '',
-                                        }}
-                                    />
-                                </Alert>
-                                {!kanJournalforingsoppgaveOpprettesiGosys && (
-                                    <div>
-                                        <Alert
-                                            size="small"
-                                            variant="info"
-                                            className="fordeling-page__kanIkkeOppretteJPIGosys"
-                                        >
-                                            <FormattedMessage id="fordeling.kanIkkeOppretteJPIGosys.info" />
-                                        </Alert>
-                                        <Button
-                                            variant="secondary"
-                                            onClick={() =>
-                                                lukkJournalpostOppgave(
-                                                    journalpost?.journalpostId,
-                                                    identState.søkerId,
-                                                    valgtFagsak,
-                                                )
-                                            }
-                                        >
-                                            <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                        </Button>
-                                    </div>
-                                )}
-
-                                {kanJournalforingsoppgaveOpprettesiGosys && (
-                                    <>
-                                        <GosysGjelderKategorier />
-                                        <Button
-                                            size="small"
-                                            disabled={!fordelingState.valgtGosysKategori}
-                                            onClick={() =>
-                                                omfordel(
-                                                    journalpost.journalpostId,
-                                                    identState.søkerId,
-                                                    fordelingState.valgtGosysKategori,
-                                                )
-                                            }
-                                        >
-                                            <FormattedMessage id="fordeling.sakstype.ANNET" />
-                                        </Button>
-                                    </>
-                                )}
-                            </>
-                        )}
 
                         <VerticalSpacer sixteenPx />
-                        {!!fordelingState.sjekkTilK9Error && (
+                        {!!settBehandlingsÅrMutation.error && (
                             <Alert size="small" variant="error">
                                 {intlHelper(intl, 'fordeling.error')}
                             </Alert>
                         )}
-                        {!!fordelingState.sjekkTilK9JournalpostStottesIkke && (
-                            <div className="fordeling-page__sjekk-til-K9-journalpost-stottes-ikke">
-                                <Alert size="small" variant="error">
-                                    {intlHelper(intl, 'fordeling.infotrygd.journalpoststottesikke')}
-                                </Alert>
-                                <VerticalSpacer sixteenPx />
-                                <div className="journalikkestottetkopi-checkboks">
-                                    <Checkbox
-                                        label={intlHelper(intl, 'fordeling.kopiereJournal')}
-                                        onChange={(e) => {
-                                            setSkalJournalpostSomIkkeStottesKopieres(e.target.checked);
-                                        }}
-                                        disabled={erInntektsmeldingUtenKrav}
-                                    />
-                                    <HelpText
-                                        className="journalikkestottetkopi-checkboks__hjelpetekst"
-                                        placement="right"
-                                        tabIndex={-1}
-                                    >
-                                        {intlHelper(intl, 'fordeling.kopiereJournal.hjelpetekst')}
-                                    </HelpText>
-                                </div>
-                                <JournalPostKopiFelmeldinger
-                                    skalVisesNårJournalpostSomIkkeStottesKopieres={
-                                        skalJournalpostSomIkkeStottesKopieres
-                                    }
-                                    fellesState={fellesState}
-                                    intl={intl}
-                                />
-                                {!!fellesState.isAwaitingKopierJournalPostResponse && <Loader size="large" />}
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => {
-                                        if (skalJournalpostSomIkkeStottesKopieres) {
-                                            kopierJournalpostOgLukkOppgave();
-                                        } else {
-                                            lukkJournalpostOppgave(
-                                                journalpost?.journalpostId,
-                                                identState.søkerId,
-                                                valgtFagsak,
-                                            );
-                                        }
-                                    }}
-                                >
-                                    <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
-                                </Button>
-                            </div>
-                        )}
-                        {!!fordelingState.isAwaitingSjekkTilK9Response && <Loader size="large" />}
+
+                        {settBehandlingsÅrMutation.isLoading && <Loader size="large" />}
                     </div>
                 </FormPanel>
             )}
@@ -682,15 +546,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     setErSøkerIdBekreftet: (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet)),
-    sjekkOmSkalTilK9: (
-        søkerId: string,
-        pleietrengendeId: string,
-        jpid: string,
-        fagsakYtelseType: FagsakYtelseType,
-        annenPart: string,
-        valgtFagsak?: Fagsak,
-    ) => dispatch(sjekkOmSkalTilK9Sak(søkerId, pleietrengendeId, jpid, fagsakYtelseType, annenPart, valgtFagsak)),
-    resetSjekkSkalTilK9: () => dispatch(resetSkalTilK9()),
     kopierJournalpost: (
         søkerId: string,
         pleietrengendeId: string,

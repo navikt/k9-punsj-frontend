@@ -40,7 +40,11 @@ const selvstendigNaeringsdrivende = () =>
         virksomhetNavn: yup.string().required().label('Virksomhetsnavn'),
         organisasjonsnummer: yup
             .string()
-            .when('$registrertIUtlandet', { is: false, then: yup.string().required(), otherwise: yup.string() })
+            .when('$registrertIUtlandet', {
+                is: false,
+                then: () => yup.string().required(),
+                otherwise: () => yup.string(),
+            })
             .label('Organisasjonsnummer'),
         info: yup.object({
             periode: yup.object({
@@ -53,11 +57,15 @@ const selvstendigNaeringsdrivende = () =>
                 .when('virksomhetstyper', { is: 'Fisker', then: (schema) => schema.required() }),
             landkode: yup
                 .string()
-                .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
+                .when('registrertIUtlandet', {
+                    is: true,
+                    then: () => yup.string().required(),
+                    otherwise: () => yup.string(),
+                })
                 .label('Land'),
             regnskapsførerNavn: yup
                 .string()
-                .when('harSøkerRegnskapsfører', { is: true, then: yup.string().required() })
+                .when('harSøkerRegnskapsfører', { is: true, then: () => yup.string().required() })
                 .label(nb['skjema.arbeid.sn.regnskapsførernavn']),
             regnskapsførerTlf: yup
                 .string()
@@ -67,23 +75,23 @@ const selvstendigNaeringsdrivende = () =>
             registrertIUtlandet: yup.boolean(),
             bruttoInntekt: yup
                 .string()
-                .when('$erNyoppstartet', { is: true, then: yup.string().required() })
+                .when('$erNyoppstartet', { is: true, then: () => yup.string().required() })
                 .label(nb['skjema.sn.bruttoinntekt']),
             erVarigEndring: yup
                 .boolean()
-                .when('$erNyoppstartet', { is: false, then: yup.boolean().required() })
+                .when('$erNyoppstartet', { is: false, then: () => yup.boolean().required() })
                 .label('Varig endring'),
             endringInntekt: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required() })
+                .when('erVarigEndring', { is: true, then: () => yup.string().required() })
                 .label(nb['skjema.sn.endringinntekt']),
             endringDato: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required() })
+                .when('erVarigEndring', { is: true, then: () => yup.string().required() })
                 .label(nb['skjema.sn.varigendringdato']),
             endringBegrunnelse: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required() })
+                .when('erVarigEndring', { is: true, then: () => yup.string().required() })
                 .label(nb['skjema.sn.endringbegrunnelse']),
         }),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
@@ -93,13 +101,21 @@ const selvstendigNaeringsdrivendeKorrigering = () =>
     yup.object({
         organisasjonsnummer: yup
             .string()
-            .when('$registrertIUtlandet', { is: false, then: yup.string().required(), otherwise: yup.string() })
+            .when('$registrertIUtlandet', {
+                is: false,
+                then: () => yup.string().required(),
+                otherwise: () => yup.string(),
+            })
             .label('Organisasjonsnummer'),
         info: yup.object({
             virksomhetstyper: yup.string().required().label('Virksomhetstype'),
             landkode: yup
                 .string()
-                .when('registrertIUtlandet', { is: true, then: yup.string().required(), otherwise: yup.string() })
+                .when('registrertIUtlandet', {
+                    is: true,
+                    then: () => yup.string().required(),
+                    otherwise: () => yup.string(),
+                })
                 .label('Land'),
             registrertIUtlandet: yup.boolean(),
             periode: yup.object({
@@ -117,7 +133,7 @@ const frilanser = () =>
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: yup.string().required(),
+                then: () => yup.string().required(),
             })
             .label('Sluttdato'),
         jobberFortsattSomFrilans: yup.boolean(),
@@ -134,48 +150,58 @@ const OMPUTSchema = yup.object({
         }),
         medlemskap: yup
             .string()
-            .when('$erKorrigering', { is: false, then: yup.string().required() })
+            .when('$erKorrigering', { is: false, then: () => yup.string().required() })
             .label('Medlemskap'),
         utenlandsopphold: yup
             .string()
-            .when('$erKorrigering', { is: false, then: yup.string().required() })
+            .when('$erKorrigering', { is: false, then: () => yup.string().required() })
             .label('Utenlandsopphold'),
-        signatur: yup.string().when('$erKorrigering', { is: false, then: yup.string().required() }).label('Signatur'),
+        signatur: yup
+            .string()
+            .when('$erKorrigering', { is: false, then: () => yup.string().required() })
+            .label('Signatur'),
         harSoekerDekketOmsorgsdager: yup
             .string()
             .when(['$selvstendigNaeringsdrivende', '$frilanser', '$erKorrigering'], {
                 is: (sn: boolean, fl: boolean, erKorrigering: boolean) =>
                     (sn || fl) === true && erKorrigering === false,
-                then: yup
-                    .string()
-                    .test(
-                        'maa-velge-ja',
-                        '${path} - fordi bruker ikke har dekket 10 omsorgsdager selv, kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
-                        (v) => v === 'ja',
-                    ),
+                then: () =>
+                    yup
+                        .string()
+                        .test(
+                            'maa-velge-ja',
+                            '${path} - fordi bruker ikke har dekket 10 omsorgsdager selv, kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
+                            (v) => v === 'ja',
+                        ),
             })
             .label('Har dekket omsorgsdager'),
     }),
     opptjeningAktivitet: yup.object().when('$erKorrigering', {
         is: false,
-        then: yup.object({
-            arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
-            selvstendigNaeringsdrivende: yup
-                .object()
-                .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
-            frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
-        }),
-        otherwise: yup.object({
-            arbeidstaker: yup.array().when('$arbeidstaker', { is: true, then: yup.array().of(arbeidstaker()) }),
-            selvstendigNaeringsdrivende: yup.object().when('$selvstendigNaeringsdrivende', {
-                is: true,
-                then: selvstendigNaeringsdrivendeKorrigering(),
+        then: () =>
+            yup.object({
+                arbeidstaker: yup
+                    .array()
+                    .when('$arbeidstaker', { is: true, then: () => yup.array().of(arbeidstaker()) }),
+                selvstendigNaeringsdrivende: yup
+                    .object()
+                    .when('$selvstendigNaeringsdrivende', { is: true, then: selvstendigNaeringsdrivende }),
+                frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
             }),
-            frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
-        }),
+        otherwise: () =>
+            yup.object({
+                arbeidstaker: yup
+                    .array()
+                    .when('$arbeidstaker', { is: true, then: () => yup.array().of(arbeidstaker()) }),
+                selvstendigNaeringsdrivende: yup.object().when('$selvstendigNaeringsdrivende', {
+                    is: true,
+                    then: selvstendigNaeringsdrivendeKorrigering,
+                }),
+                frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
+            }),
     }),
-    bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
-    utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
+    bosteder: yup.array().when('$medlemskap', { is: 'ja', then: () => yup.array().of(utenlandsopphold) }),
+    utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: () => yup.array().of(utenlandsopphold) }),
     barn,
 });
 export default OMPUTSchema;

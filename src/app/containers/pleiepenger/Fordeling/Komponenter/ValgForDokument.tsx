@@ -45,6 +45,7 @@ interface IValgForDokument {
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     omfordel: typeof omfordelAction;
     gjelderPsbOmsOlp: boolean;
+    harLagretBehandlingsår: boolean;
 }
 
 const ValgForDokument: React.FC<IValgForDokument> = ({
@@ -54,6 +55,7 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     setSakstypeAction,
     konfigForValgtSakstype,
     fordelingState,
+    harLagretBehandlingsår,
     identState,
     omfordel,
     journalpost,
@@ -63,7 +65,7 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
 }) => {
     const intl = useIntl();
     const vis =
-        ((fordelingState.skalTilK9 && gjelderPsbOmsOlp) || visValgForDokument) &&
+        ((harLagretBehandlingsår && gjelderPsbOmsOlp) || visValgForDokument) &&
         dokumenttype !== FordelingDokumenttype.ANNET;
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
