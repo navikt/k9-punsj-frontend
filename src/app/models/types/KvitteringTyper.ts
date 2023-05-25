@@ -5,7 +5,7 @@ export interface SelvstendigNaeringsdrivendeAktivitet {
             regnskapsførerNavn: string;
             regnskapsførerTlf: string;
             erVarigEndring: boolean;
-            endringDato: number[];
+            endringDato: string;
             endringBegrunnelse: string;
             bruttoInntekt: number;
             erNyoppstartet: boolean;
@@ -18,8 +18,8 @@ export interface SelvstendigNaeringsdrivendeAktivitet {
 }
 
 export interface FrilanserAktivitet {
-    startdato: number[] | null;
-    sluttdato: number[] | null;
+    startdato: string | null;
+    sluttdato: string | null;
     jobberFortsattSomFrilans: boolean;
 }
 
