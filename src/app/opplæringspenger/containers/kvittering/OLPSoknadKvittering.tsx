@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import React from 'react';
-import { IntlShape, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { Alert } from '@navikt/ds-react';
@@ -21,7 +21,7 @@ import { RootStateType } from 'app/state/RootState';
 import { formattereTidspunktFraUTCTilGMT, getCountryList, periodToFormattedString } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { formatereTekstMedTimerOgMinutter, formattereDatoFraUTCTilGMT } from 'app/utils/timeUtils';
-import { formattereDatoIArray, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
+import { formatDato, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
 
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
@@ -67,65 +67,6 @@ export const genererIkkeSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtF
         }
         return acc;
     }, {});
-
-const formaterUtenlandsopphold = (perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo, intl: IntlShape) => {
-    const årsaker = [
-        {
-            label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.norskOfftenligRegning'),
-            value: 'barnetInnlagtIHelseinstitusjonForNorskOffentligRegning',
-        },
-        {
-            label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.trygdeavtaleMedAnnetLand'),
-            value: 'barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd',
-        },
-        {
-            label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.søkerDekkerSelv'),
-            value: 'barnetInnlagtIHelseinstitusjonDekketAvSøker',
-        },
-    ];
-    const perioderUtenInnleggelse = Object.keys(perioder)
-        .filter((key) => !perioder[key].årsak)
-        .reduce((obj, key) => {
-            // eslint-disable-next-line no-param-reassign
-            obj[key] = perioder[key];
-            return obj;
-        }, {} as IOLPSoknadKvitteringUtenlandsoppholdInfo);
-    const perioderMedInnleggelse = Object.keys(perioder)
-        .filter((key) => !!perioder[key].årsak)
-        .reduce((obj, key) => {
-            // eslint-disable-next-line no-param-reassign
-            obj[key] = perioder[key];
-            // eslint-disable-next-line no-param-reassign
-            obj[key].årsak = årsaker.find((årsak) => årsak.value === obj[key].årsak)?.label;
-            return obj;
-        }, {} as IOLPSoknadKvitteringUtenlandsoppholdInfo);
-
-    return (
-        <>
-            <VisningAvPerioderSoknadKvittering
-                intl={intl}
-                perioder={endreLandkodeTilLandnavnIPerioder(perioderUtenInnleggelse)}
-                tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
-                properties={['land']}
-            />
-            {Object.keys(perioderMedInnleggelse).length > 0 ? (
-                <div className={classNames('marginTop24')}>
-                    <VisningAvPerioderSoknadKvittering
-                        intl={intl}
-                        perioder={endreLandkodeTilLandnavnIPerioder(perioderMedInnleggelse)}
-                        tittel={[
-                            'skjema.perioder.innleggelse.overskrift',
-                            'skjema.utenlandsopphold.land',
-                            'skjema.utenlandsopphold.utgifterTilInnleggelse',
-                        ]}
-                        properties={['land', 'årsak']}
-                        lessClassForAdjustment="widerLastCell"
-                    />
-                </div>
-            ) : null}
-        </>
-    );
-};
 
 interface IOwnProps {
     kvittering: IOLPSoknadKvittering;
@@ -325,7 +266,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato?.length > 0 && (
                                     <p>
                                         <b>{`${intlHelper(intl, 'skjema.frilanserdato')} `}</b>
-                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato)}
+                                        {formatDato(ytelse.opptjeningAktivitet.frilanser?.startdato)}
                                     </p>
                                 )}
 
@@ -338,7 +279,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
                                     <p>
                                         <b>{`${intlHelper(intl, 'skjema.frilanserdato.slutt')} `}</b>
-                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
+                                        {formatDato(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
                                     </p>
                                 )}
 

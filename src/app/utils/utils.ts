@@ -1,14 +1,8 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
 
-import { getCountryList } from './countryUtils';
-
-export const formattereDatoIArray = (dato: number[]) => {
-    const formatertDato: string[] = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i = dato.length - 1; i >= 0; i--) {
-        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
-    }
-    return formatertDato.join('');
+export const formatDato = (dato: string) => {
+    const [year, month, day] = dato.split('-');
+    return `${day}.${month}.${year}`;
 };
 
 export const sjekkPropertyEksistererOgIkkeErNull = (property: string, object: any) => {

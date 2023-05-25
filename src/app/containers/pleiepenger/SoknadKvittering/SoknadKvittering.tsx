@@ -22,9 +22,9 @@ import {
     IPSBSoknadKvitteringUtenlandsopphold,
 } from '../../../models/types/PSBSoknadKvittering';
 import {
+    formatDato,
     formatereTekstMedTimerOgMinutter,
     formattereDatoFraUTCTilGMT,
-    formattereDatoIArray,
     formattereTidspunktFraUTCTilGMT,
     getCountryList,
     periodToFormattedString,
@@ -295,7 +295,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     {visArbeidsforhold && (
                         <div>
                             <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
-                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
+                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode: any) => {
                                 const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                                 return (
                                     <>
@@ -341,7 +341,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato?.length > 0 && (
                                     <p>
                                         <b>{`${intlHelper(intl, 'skjema.frilanserdato')} `}</b>
-                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato)}
+                                        {formatDato(ytelse.opptjeningAktivitet.frilanser?.startdato)}
                                     </p>
                                 )}
 
@@ -354,7 +354,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
                                     <p>
                                         <b>{`${intlHelper(intl, 'skjema.frilanserdato.slutt')} `}</b>
-                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
+                                        {formatDato(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
                                     </p>
                                 )}
 

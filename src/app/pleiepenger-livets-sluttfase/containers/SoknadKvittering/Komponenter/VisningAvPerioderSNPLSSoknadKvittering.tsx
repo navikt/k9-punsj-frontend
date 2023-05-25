@@ -5,7 +5,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
 import {
-    formattereDatoIArray,
+    formatDato,
     landkodeTilNavn,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
@@ -95,7 +95,7 @@ const VisningAvPerioderSNPLSSoknadKvittering: React.FunctionComponent<IOwnProps>
                             {sjekkPropertyEksistererOgIkkeErNull('endringDato', SN.perioder[periode]) && (
                                 <p>
                                     <b>{`${intlHelper(intl, 'skjema.sn.varigendringdato')} `}</b>
-                                    {formattereDatoIArray(SN.perioder[periode].endringDato)}
+                                    {formatDato(SN.perioder[periode].endringDato)}
                                 </p>
                             )}
 

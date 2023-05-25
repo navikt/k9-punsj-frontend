@@ -32,7 +32,7 @@ const fullResponse: IPSBSoknadKvittering = {
         søknadsperiode: ['2021-06-01/2021-06-30'],
         opptjeningAktivitet: {
             frilanser: {
-                startdato: [2021, 1, 1],
+                startdato: '2021-01-01',
                 sluttdato: null,
                 jobberFortsattSomFrilans: false,
             },
@@ -44,7 +44,7 @@ const fullResponse: IPSBSoknadKvittering = {
                             regnskapsførerNavn: 'Test ',
                             regnskapsførerTlf: '46320852',
                             erVarigEndring: true,
-                            endringDato: [2021, 2, 24],
+                            endringDato: '2021-02-24',
                             endringBegrunnelse: 'begunnelse',
                             bruttoInntekt: 1000000,
                             erNyoppstartet: false,
@@ -238,10 +238,10 @@ describe('SoknadKvittering', () => {
 
     it('Viser frilanser', () => {
         expect(soknadKvitteringFull.text().includes('skjema.frilanserdato')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('1.1.2021')).toBe(true);
+        expect(soknadKvitteringFull.text().includes('01.01.2021')).toBe(true);
 
         expect(soknadKvitteringTom.text().includes('skjema.frilanserdato')).toBe(false);
-        expect(soknadKvitteringTom.text().includes('1.1.2021')).toBe(false);
+        expect(soknadKvitteringTom.text().includes('01.01.2021')).toBe(false);
     });
 
     it('Viser SN', () => {
