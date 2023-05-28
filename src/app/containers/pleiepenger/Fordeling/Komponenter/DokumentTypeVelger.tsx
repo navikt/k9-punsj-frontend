@@ -28,6 +28,9 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
             case FordelingDokumenttype.OMSORGSPENGER_UT:
                 return getEnvironmentVariable('OMP_UT_FEATURE_TOGGLE') === 'true';
 
+            case FordelingDokumenttype.OMSORGSPENGER_AO:
+                return getEnvironmentVariable('OMP_AO_ENABLED') === 'true';
+
             case FordelingDokumenttype.OPPLAERINGSPENGER:
                 return getEnvironmentVariable('OLP_ENABLED') === 'true';
 
@@ -48,6 +51,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumentt
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_MA ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
+        valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_AO ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
 
     return (

@@ -158,6 +158,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
         FordelingDokumenttype.OMSORGSPENGER_KS,
         FordelingDokumenttype.OMSORGSPENGER_MA,
+        FordelingDokumenttype.OMSORGSPENGER_AO,
         FordelingDokumenttype.OMSORGSPENGER_UT,
         FordelingDokumenttype.KORRIGERING_IM,
         FordelingDokumenttype.OPPLAERINGSPENGER,

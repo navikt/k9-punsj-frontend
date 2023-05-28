@@ -1,5 +1,7 @@
 import React from 'react';
 
+import OMPAORouter from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORouter';
+
 import { ApiPath } from '../apiConfig';
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
@@ -49,6 +51,12 @@ export const OmsorgspengerUtbetaling: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_UTBETALING,
     punchPath: '/omsorgspenger-utbetaling',
     getComponent: ({ journalpostid, punchPath }) => <OMPUTRouter journalpostid={journalpostid} punchPath={punchPath} />,
+    steps: [],
+};
+export const omsorgspengerAleneOmOmsorgen: ISakstypePunch = {
+    navn: Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN,
+    punchPath: '/omsorgspenger-alene-om-omsorgen',
+    getComponent: ({ journalpostid, punchPath }) => <OMPAORouter journalpostid={journalpostid} punchPath={punchPath} />,
     steps: [],
 };
 
@@ -118,10 +126,6 @@ export const OmsorgspengerLegeerklæring: ISakstypeOmfordeling = {
     navn: Sakstype.OMSORGSPENGER_LEGEERKLÆRING,
 };
 
-export const OmsorgspengerAleneomsorg: ISakstypeOmfordeling = {
-    navn: Sakstype.OMSORGSPENGER_ALENE_OM_OMSORG,
-};
-
 export const OmsorgspengerSelvstendigFrilans: ISakstypeOmfordeling = {
     navn: Sakstype.OMSORGSPENGER_SELVST_FRILANS,
 };
@@ -154,6 +158,7 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerKroniskSyktBarnSakstypePunch,
         OmsorgspengerMidlertidigAlene,
         OmsorgspengerUtbetaling,
+        omsorgspengerAleneOmOmsorgen,
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding,
         SendBrevPåEksisterendeFagsak,
@@ -162,7 +167,6 @@ export const Sakstyper: ISakstyper = {
     omfordelingssakstyper: [
         OmsorgspengerKroniskSyktBarnOmfordeling,
         OmsorgspengerLegeerklæring,
-        OmsorgspengerAleneomsorg,
         OmsorgspengerSelvstendigFrilans,
         OmsorgspengerArbeidsgiverIkkeBetaler,
         PleiepengerLivetsSluttfase,
