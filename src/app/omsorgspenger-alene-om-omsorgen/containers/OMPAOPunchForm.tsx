@@ -12,7 +12,6 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import Personvelger from 'app/components/person-velger/Personvelger';
 import VentModal from 'app/components/ventModal/VentModal';
 import { IInputError, Periode } from 'app/models/types';
 import { Feil } from 'app/models/types/ValideringResponse';

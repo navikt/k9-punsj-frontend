@@ -8,7 +8,7 @@ import { IOMPAOSoknadKvittering } from './types/OMPAOSoknadKvittering';
 import { IOMPAOSoknadSvar } from './types/OMPAOSoknadSvar';
 
 export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPAOSoknadBackend> =>
-    get(ApiPath.OMP_UT_SOKNAD_GET, { id: soeknadId }, { 'X-Nav-NorskIdent': ident }).then((response) => {
+    get(ApiPath.OMP_AO_SOKNAD_GET, { id: soeknadId }, { 'X-Nav-NorskIdent': ident }).then((response) => {
         if (!response.ok) {
             throw Error('Kunne ikke hente søknad.');
         }
@@ -16,7 +16,7 @@ export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPAOSok
     });
 
 export const oppdaterSoeknad = (soeknad: Partial<IOMPAOSoknadBackend>): Promise<Partial<IOMPAOSoknadBackend>> =>
-    put(ApiPath.OMP_UT_SOKNAD_UPDATE, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
+    put(ApiPath.OMP_AO_SOKNAD_UPDATE, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under lagring.');
         }
@@ -27,13 +27,13 @@ export const validerSoeknad = async (
     soeknad: Partial<IOMPAOSoknadBackend>,
     ident: string,
 ): Promise<IOMPAOSoknadKvittering | ValideringResponse> => {
-    const response = await post(ApiPath.OMP_UT_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
+    const response = await post(ApiPath.OMP_AO_SOKNAD_VALIDER, undefined, { 'X-Nav-NorskIdent': ident }, soeknad);
     return response.json();
 };
 
 export const hentEksisterendePerioder = async (ident: string, periode?: IPeriode): Promise<Periode[]> => {
     const response = await post(
-        ApiPath.OMP_UT_K9_PERIODER,
+        ApiPath.OMP_AO_K9_PERIODER,
         {},
         { 'X-Nav-NorskIdent': ident },
         { brukerIdent: ident, periode },
@@ -46,7 +46,7 @@ export const hentEksisterendePerioder = async (ident: string, periode?: IPeriode
 
 export const sendSoeknad = async (soeknadId: string, ident: string): Promise<IOMPAOSoknad | ValideringResponse> => {
     const response = await post(
-        ApiPath.OMP_UT_SOKNAD_SUBMIT,
+        ApiPath.OMP_AO_SOKNAD_SUBMIT,
         undefined,
         { 'X-Nav-NorskIdent': ident },
         { norskIdent: ident, soeknadId },
@@ -65,7 +65,7 @@ export const sendSoeknad = async (soeknadId: string, ident: string): Promise<IOM
 };
 
 export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOMPAOSoknadBackend> =>
-    post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {
+    post(ApiPath.OMP_AO_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
     }).then((response) => {
@@ -76,7 +76,7 @@ export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IO
     });
 
 export const hentEksisterendeSoeknader = (ident: string): Promise<IOMPAOSoknadSvar> =>
-    get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, undefined, { 'X-Nav-NorskIdent': ident }).then((response) => {
+    get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, undefined, { 'X-Nav-NorskIdent': ident }).then((response) => {
         if (!response.ok) {
             throw Error('Kunne ikke hente påbegynte registreringer.');
         }
