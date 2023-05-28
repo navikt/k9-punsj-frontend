@@ -151,12 +151,14 @@ export const PunchOMPAOFormComponent: React.FC<IPunchOMPAOFormProps> = (props) =
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPAOSoknad />
             <VerticalSpacer sixteenPx />
-            <Panel border>
-                <Heading size="small">Søknadsperiode</Heading>
+            <Panel border className="my-12">
+                <Heading size="small" className="mb-4">
+                    Søknadsperiode
+                </Heading>
 
-                <div className="fom-tom-rad">
-                    <DatoInputFormik label="Fra og med" name={`${fieldNames.soeknadsperiode}.periode.fom`} />
-                    <DatoInputFormik label="Til og med" name={`${fieldNames.soeknadsperiode}.periode.tom`} />
+                <div className="fom-tom-rad mb-4">
+                    <DatoInputFormik label="Fra og med" name={`${fieldNames.soeknadsperiode}.fom`} />
+                    <DatoInputFormik label="Til og med" name={`${fieldNames.soeknadsperiode}.tom`} />
                 </div>
             </Panel>
             <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />

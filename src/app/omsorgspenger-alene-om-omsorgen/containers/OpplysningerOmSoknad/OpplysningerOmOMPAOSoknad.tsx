@@ -20,8 +20,8 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
     const intl = useIntl();
 
     return (
-        <>
-            <Heading size="small">Alene om omsorgen</Heading>
+        <div className="mt-12">
+            <Heading size="medium">Alene om omsorgen</Heading>
             <VerticalSpacer sixteenPx />
             <Panel border>
                 <Alert variant="info" className="alert">
@@ -67,7 +67,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                     </Alert>
                 )}
             </Panel>
-        </>
+        </div>
     );
 };
 export default OpplysningerOmOMPAOSoknad;

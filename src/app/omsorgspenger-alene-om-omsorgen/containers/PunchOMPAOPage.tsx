@@ -13,7 +13,6 @@ import { ApiPath } from 'app/apiConfig';
 import Page from 'app/components/page/Page';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentAction } from 'app/state/actions';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
