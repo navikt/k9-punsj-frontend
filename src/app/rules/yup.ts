@@ -39,7 +39,6 @@ export const passertKlokkeslettPaaDato = yup
 export const identifikator = yup
     .string()
     .required()
-    .nullable(true)
     .length(11)
     .test({
         test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
@@ -67,19 +66,15 @@ export const utenlandsopphold = yup.object().shape({
 export const timer = yup
     .number()
     .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
-    .min(0)
-    .max(23)
     .label('Timer');
 export const minutter = yup
     .number()
     .transform((parsedValue, originalValue) => (originalValue === '' ? -1 : parsedValue))
-    .min(0)
-    .max(59)
     .label('Minutter');
 
 export const timerOgMinutter = yup.object({
-    timer: timer.required(),
-    minutter: minutter.required(),
+    timer,
+    minutter,
 });
 
 export const periodeMedTimerOgMinutter = yup.object({
@@ -87,8 +82,8 @@ export const periodeMedTimerOgMinutter = yup.object({
         fom: yup.string().required().label('Fra og med'),
         tom: yup.string().required().label('Til og med'),
     }),
-    timer: timer.required(),
-    minutter: minutter.required(),
+    timer,
+    minutter,
 });
 export const arbeidstimerPeriode = yup.object().shape({
     periode: yup.object({

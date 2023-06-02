@@ -5,23 +5,20 @@ import React from 'react';
 
 import { Detail, ErrorMessage, Label } from '@navikt/ds-react';
 
-import './timerOgMinutter.less';
+import './timerMedDesimaler.less';
 
 interface OwnProps {
     label: string;
-    onChangeTimer: (value: string) => void;
-    onChangeMinutter: (value: string) => void;
+    onChange: (value: string) => void;
     onBlur: () => void;
     timer: string;
-    minutter: string;
     error?: string;
 }
 
-const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer, minutter, error }: OwnProps) => {
+const TimerMedDesimaler = ({ label, onChange, onBlur, timer, error }: OwnProps) => {
     const id = uniqueId();
 
     const timerId = `timer-${id}`;
-    const minutterId = `minutter-${id}`;
 
     return (
         <div className="timer-og-minutter">
@@ -38,7 +35,7 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             bredde="XS"
                             value={timer}
                             onChange={(event) => {
-                                onChangeTimer(event.target.value.replaceAll(/\D+/g, ''));
+                                onChange(event.target.value.replace(/[^0-9.]/g, ''));
                             }}
                             onBlur={onBlur}
                             feil={!!error}
@@ -49,29 +46,10 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             </label>
                         </div>
                     </div>
-                    <div className="input-container minutter">
-                        <Input
-                            id={minutterId}
-                            style={{ textAlign: 'center' }}
-                            className="input"
-                            bredde="XS"
-                            value={minutter}
-                            onChange={(event) => {
-                                onChangeMinutter(event.target.value.replaceAll(/\D+/g, ''));
-                            }}
-                            onBlur={onBlur}
-                            feil={!!error}
-                        />
-                        <div>
-                            <label htmlFor={minutterId}>
-                                <Detail>Minutter</Detail>
-                            </label>
-                        </div>
-                    </div>
                 </div>
                 {error && <ErrorMessage size="small">{error}</ErrorMessage>}
             </div>
         </div>
     );
 };
-export default TimerOgMinutter;
+export default TimerMedDesimaler;
