@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 
-import { BodyShort, Button, ExpansionCard, Modal, Provider } from '@navikt/ds-react';
+import { BodyShort, Button, ExpansionCard, Heading, Modal, Provider } from '@navikt/ds-react';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
@@ -158,7 +158,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
 
         const tittel = (
             <>
-                {tittelRenderer(gyldigePerioder[0].fom)}
+                <Heading size="xsmall">{tittelRenderer(gyldigePerioder[0].fom)}</Heading>
                 {kalenderdagerIGyldigePerioder?.length ? (
                     <BodyShort>{`${kalenderdagerIGyldigePerioder?.length} dager registrert`}</BodyShort>
                 ) : (
@@ -173,6 +173,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                 onToggle={toggleKalender}
                 aria-labelledby={gyldigePerioder[0].fom.toISOString()}
                 ref={ref}
+                className="mt-3"
             >
                 <ExpansionCard.Header>
                     <ExpansionCard.Title id={gyldigePerioder[0].fom.toISOString()}>{tittel}</ExpansionCard.Title>

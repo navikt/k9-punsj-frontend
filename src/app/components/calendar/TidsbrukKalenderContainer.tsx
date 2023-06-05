@@ -58,12 +58,12 @@ const TidsbrukKalenderContainer = ({
 
     const gyldigePerioderPerÅr = useMemo(
         () =>
-            Object.entries(groupBy(gyldigePerioderPerMåned, (perioder) => dayjs(perioder[0].fom).year())).map(
-                ([year, perioder]) => ({
+            Object.entries(groupBy(gyldigePerioderPerMåned, (perioder) => dayjs(perioder[0].fom).year()))
+                .map(([year, perioder]) => ({
                     aar: parseInt(year, 10),
                     perioder,
-                }),
-            ),
+                }))
+                .sort((a, b) => b.aar - a.aar),
         [gyldigePerioderPerMåned],
     );
 
@@ -74,15 +74,17 @@ const TidsbrukKalenderContainer = ({
             {gyldigePerioderPerÅr.map(({ perioder, aar }) => {
                 const kalenderdagerIÅr = kalenderdagerForYear(aar);
                 return (
-                    <TidsbrukKalenderÅr
-                        aar={aar}
-                        key={aar}
-                        perioder={perioder}
-                        ModalContent={ModalContent}
-                        dateContentRenderer={dateContentRenderer(kalenderdagerIÅr)}
-                        kalenderdager={kalenderdagerIÅr}
-                        slettPeriode={slettPeriode}
-                    />
+                    <div className="mt-3">
+                        <TidsbrukKalenderÅr
+                            aar={aar}
+                            key={aar}
+                            perioder={perioder}
+                            ModalContent={ModalContent}
+                            dateContentRenderer={dateContentRenderer(kalenderdagerIÅr)}
+                            kalenderdager={kalenderdagerIÅr}
+                            slettPeriode={slettPeriode}
+                        />
+                    </div>
                 );
             })}
         </div>

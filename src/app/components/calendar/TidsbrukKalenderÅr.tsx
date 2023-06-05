@@ -34,7 +34,7 @@ const TidsbrukKalenderÅr = ({
     return (
         <ExpansionCard open={ekspandert} onToggle={toggleEkspandert} aria-labelledby="tidsbruk-kalender-år">
             <ExpansionCard.Header>
-                <Heading size="medium">{aar}</Heading>
+                <Heading size="small">{aar}</Heading>
             </ExpansionCard.Header>
             <ExpansionCard.Content>
                 {ekspandert &&
