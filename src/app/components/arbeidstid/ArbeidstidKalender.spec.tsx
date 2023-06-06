@@ -45,11 +45,8 @@ describe('ArbeidstidKalender', () => {
     test('Viser hele arbeidstidperioden i kalenderkomponenten', async () => {
         render(<MedArbeidstidperiode />);
 
-        await userEvent.click(
-            screen.getByRole('button', {
-                name: /september 2022 5 dager registrert/i,
-            }),
-        );
+        await userEvent.click(screen.getByRole('button', { name: /vis mer/i }));
+        await userEvent.click(screen.getAllByRole('button', { name: /vis mer/i })[1]);
         expect(screen.getAllByText(/8 t 0 min/i)).toHaveLength(5);
     });
 });
