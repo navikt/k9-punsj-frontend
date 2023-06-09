@@ -14,7 +14,7 @@ describe('Pleiepenger punsj', () => {
         cy.sendInnSoknad();
 
         cy.findByText(
-            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.'
+            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.',
         ).should('exist');
         cy.findByText('Oppsummering').should('exist');
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
@@ -49,7 +49,7 @@ describe('Pleiepenger punsj', () => {
             cy.findAllByLabelText('Timer').eq(3).clear().type(7);
             cy.findByRole('button', { name: /Lagre/i }).click();
         });
-
+        cy.findByRole('button', { name: /vis mer/i }).click();
         cy.findByText(/10 dager registrert/i).should('exist');
     });
 
