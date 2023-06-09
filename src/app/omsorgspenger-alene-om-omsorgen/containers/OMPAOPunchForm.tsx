@@ -2,14 +2,14 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
-import { connect } from 'react-redux';
 
 import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
 
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
@@ -20,7 +20,7 @@ import intlHelper from 'app/utils/intlUtils';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
-import { RootStateType } from '../../state/RootState';
+import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
 import EksisterendePerioder from '../components/EksisterendePerioder';
 import { fieldNames } from '../initialValues';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
@@ -44,9 +44,8 @@ export interface IPunchOMPAOFormStateProps {
 
 type IPunchOMPAOFormProps = IPunchOMPAOFormComponentProps & WrappedComponentProps & IPunchOMPAOFormStateProps;
 
-export const PunchOMPAOFormComponent: React.FC<IPunchOMPAOFormProps> = (props) => {
+const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     const {
-        intl,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
         k9FormatErrors,
@@ -61,28 +60,23 @@ export const PunchOMPAOFormComponent: React.FC<IPunchOMPAOFormProps> = (props) =
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const { values, errors, setTouched, handleSubmit, validateForm, setFieldValue } = useFormikContext<IOMPAOSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
+    const intl = useIntl();
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
-    const { mutate: valider } = useMutation(({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad: boolean }) => {
-        throw Error('not implemented');
-    }, {});
+    const { mutate: valider } = useValiderSoeknadMutation(values);
 
     const {
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(
-        ({ submitSoknad }: { submitSoknad: boolean }) => {
-            throw Error('not implemented');
+    } = useOppdaterSoeknadMutation(values, {
+        onSuccess: (data, { submitSoknad }) => {
+            console.log(data);
+            setHarMellomlagret(true);
+            if (submitSoknad) {
+                handleSubmit();
+            }
         },
-        {
-            onSuccess: (data, { submitSoknad }) => {
-                setHarMellomlagret(true);
-                if (submitSoknad) {
-                    handleSubmit();
-                }
-            },
-        },
-    );
+    });
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
         if (harForsoektAaSendeInn) {
@@ -161,6 +155,17 @@ export const PunchOMPAOFormComponent: React.FC<IPunchOMPAOFormProps> = (props) =
                 </div>
             </Panel>
             <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
+            <Panel border className="my-12">
+                <Heading size="small" className="mb-4">
+                    Begrunnelse for innsending
+                </Heading>
+
+                <TextAreaFormik
+                    label="Begrunnelse for innsending"
+                    name={`${fieldNames.begrunnelseForInnsending}`}
+                    hideLabel
+                />
+            </Panel>
             <VerticalSpacer sixteenPx />
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} />
@@ -258,9 +263,5 @@ export const PunchOMPAOFormComponent: React.FC<IPunchOMPAOFormProps> = (props) =
     );
 };
 
-const mapStateToProps = (state: RootStateType): IPunchOMPAOFormStateProps => ({
-    identState: state.identState,
-});
-
-export const OMPAOPunchForm = injectIntl(connect(mapStateToProps)(PunchOMPAOFormComponent));
+export default OMPAOPunchForm;
 /* eslint-enable */

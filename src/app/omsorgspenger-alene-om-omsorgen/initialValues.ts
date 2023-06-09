@@ -25,7 +25,10 @@ export const initialValues = (soknad: Partial<IOMPAOSoknad> | undefined): IOMPAO
         metadata: {
             signatur: soknad?.metadata?.signatur || '',
         },
-        barn: soknad?.barn || [],
+        barn: soknad?.barn || {
+            norskIdent: '',
+            foedselsdato: '',
+        },
         soeknadId: soknad?.soeknadId || '',
         soekerId: soknad?.soekerId || '',
         mottattDato: soknad?.mottattDato || '',

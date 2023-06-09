@@ -10,6 +10,6 @@ export interface IOMPAOSoknad extends SoeknadType {
         fom: string;
         tom: string;
     };
-    barn: PersonEnkel[];
+    barn: PersonEnkel;
     begrunnelseForInnsending: string;
 }

@@ -16,10 +16,10 @@ import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import intlHelper from 'app/utils/intlUtils';
 
-import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
+import { hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema from '../schema';
-import { OMPAOPunchForm } from './OMPAOPunchForm';
+import OMPAOPunchForm from './OMPAOPunchForm';
 
 interface OwnProps {
     journalpostid: string;
@@ -34,20 +34,12 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
     const { identState } = props;
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
-    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
     const routingPaths = useContext(RoutingPathsContext);
     const dispatch = useDispatch();
 
-    const { mutate: hentPerioderK9 } = useMutation(
-        ({ soekerId, periode }: { soekerId: string; periode?: IPeriode }) =>
-            hentEksisterendePerioder(soekerId, periode),
-        {
-            onSuccess: (data) => setEksisterendePerioder(data),
-        },
-    );
     const {
         data: soeknadRespons,
         isLoading,
@@ -55,10 +47,6 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
     } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
         onSuccess: (data) => {
             dispatch(setIdentFellesAction(data.soekerId));
-            hentPerioderK9({
-                soekerId: data.soekerId,
-                periode: fagsak?.gyldigPeriode || data.metadata?.eksisterendeFagsak?.gyldigPeriode,
-            });
         },
     });
     const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
