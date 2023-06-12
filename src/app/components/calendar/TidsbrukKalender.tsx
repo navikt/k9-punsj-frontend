@@ -212,11 +212,18 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                                 <Modal
                                     className="venstrestilt registrer-tid-modal exempt-from-click-outside"
                                     open={visModal}
-                                    onClose={toggleModal}
+                                    onClose={() => {
+                                        toggleModal();
+                                        clearSelectedDates();
+                                    }}
                                     closeButton
                                 >
                                     <Modal.Content>
-                                        {React.cloneElement(ModalContent, { selectedDates, toggleModal })}
+                                        {React.cloneElement(ModalContent, {
+                                            selectedDates,
+                                            toggleModal,
+                                            clearSelectedDates,
+                                        })}
                                     </Modal.Content>
                                 </Modal>
                             </Provider>
