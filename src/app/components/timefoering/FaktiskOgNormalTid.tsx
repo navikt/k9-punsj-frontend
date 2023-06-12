@@ -12,17 +12,9 @@ interface OwnProps {
     toggleModal: () => void;
     selectedDates?: Date[];
     heading?: string;
-    clearSelectedDates?: () => void;
 }
 
-const FaktiskOgNormalTid = ({
-    lagre,
-    heading,
-    selectedDates,
-    toggleModal,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    clearSelectedDates = () => {},
-}: OwnProps) => {
+const FaktiskOgNormalTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => {
     const [normaltTimer, setNormaltTimer] = useState('0');
     const [normaltMinutter, setNormaltMinutter] = useState('0');
     const [normaltError, setNormaltError] = useState('');
@@ -101,21 +93,13 @@ const FaktiskOgNormalTid = ({
                             setVisNormaltError(true);
                             if (!faktiskError && !normaltError) {
                                 lagre(payload);
-                                clearSelectedDates();
                                 toggleModal();
                             }
                         }}
                     >
                         Lagre
                     </Button>
-                    <Button
-                        style={{ flexGrow: 1 }}
-                        variant="tertiary"
-                        onClick={() => {
-                            toggleModal();
-                            clearSelectedDates();
-                        }}
-                    >
+                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={toggleModal}>
                         Avbryt
                     </Button>
                 </div>
