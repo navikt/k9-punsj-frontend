@@ -1,19 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
-import yup, { identifikator } from 'app/rules/yup';
-import { initializeDate } from 'app/utils/timeUtils';
+import yup, { identifikator, passertKlokkeslettPaaMottattDato } from 'app/rules/yup';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();
     return naa > new Date(dato);
 }
-
-const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
-    const naa = new Date();
-    if (mottattDato && klokkeslett && new Date(mottattDato).getDate() === naa.getDate()) {
-        return initializeDate(naa).format('HH:mm') < klokkeslett;
-    }
-    return false;
-};
 
 const OMPMASchema = yup.object({
     mottattDato: yup
@@ -21,16 +12,7 @@ const OMPMASchema = yup.object({
         .required()
         .test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' })
         .label('Mottatt dato'),
-    klokkeslett: yup
-        .string()
-        .required()
-        .when('mottattDato', (mottattDato, schema) =>
-            schema.test({
-                test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato as unknown as string, klokkeslett),
-                message: 'Klokkeslett kan ikke være frem i tid',
-            }),
-        )
-        .label('Klokkeslett'),
+    klokkeslett: passertKlokkeslettPaaMottattDato.label('Klokkeslett'),
     barn: yup.array().of(
         yup.object().shape({
             norskIdent: identifikator,

@@ -25,7 +25,7 @@ export const passertDato = yup
     .required()
     .test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' });
 
-export const passertKlokkeslettPaaDato = yup
+export const passertKlokkeslettPaaMottattDato = yup
     .string()
     .required()
     .when('mottattDato', (mottattDato, schema) =>

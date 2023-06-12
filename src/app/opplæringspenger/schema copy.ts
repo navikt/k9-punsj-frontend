@@ -2,7 +2,7 @@
 import { get } from 'lodash';
 
 import { IPeriode } from 'app/models/types';
-import yup, { barn, passertDato, passertKlokkeslettPaaDato, periode, utenlandsopphold } from 'app/rules/yup';
+import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 import { erYngreEnn4år } from 'app/utils';
 
 import nb from '../i18n/nb.json';
@@ -126,7 +126,7 @@ const frilanser = () =>
 
 const OMPUTSchema = yup.object({
     mottattDato: passertDato,
-    klokkeslett: passertKlokkeslettPaaDato,
+    klokkeslett: passertKlokkeslettPaaMottattDato,
     metadata: yup.object({
         arbeidsforhold: yup.object().test({
             test: (arbeidsforhold) => Object.values(arbeidsforhold).some((v) => v),
