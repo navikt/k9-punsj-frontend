@@ -25,12 +25,15 @@ export const passertDato = yup
     .required()
     .test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' });
 
+const klokkeslettErFremITidForDato = (mottattDato: string) => (klokkeslett: string) =>
+    !klokkeslettErFremITid(mottattDato, klokkeslett);
+
 export const passertKlokkeslettPaaMottattDato = yup
     .string()
     .required()
     .when('mottattDato', (mottattDato, schema) =>
         schema.test({
-            test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
+            test: typeof mottattDato === 'string' ? klokkeslettErFremITidForDato(mottattDato) : () => false,
             message: 'Klokkeslett kan ikke være frem i tid',
         }),
     )
