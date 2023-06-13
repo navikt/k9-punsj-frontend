@@ -17,7 +17,6 @@ import { hentEksisterendeSoeknader } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 
 export interface Props {
-    journalpostid: string;
     søkerId: string;
     pleietrengendeId: string | null;
 }
