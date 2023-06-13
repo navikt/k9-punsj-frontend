@@ -82,9 +82,12 @@ export function erIkkeFremITid(dato: string) {
 }
 
 export const klokkeslettErFremITid = (mottattDato?: string, klokkeslett?: string) => {
-    const naa = new Date();
-    if (mottattDato && klokkeslett && new Date(mottattDato).getDate() === naa.getDate()) {
-        return initializeDate(naa).format('HH:mm') < klokkeslett;
+    if (!mottattDato || !klokkeslett) {
+        return false;
     }
-    return false;
+    const now = new Date();
+    const receivedDate = new Date(mottattDato);
+    const isSameDay = receivedDate.toDateString() === now.toDateString();
+    const isFutureTime = initializeDate(now).format('HH:mm') < klokkeslett;
+    return isSameDay && isFutureTime;
 };
