@@ -39,7 +39,6 @@ export const passertKlokkeslettPaaDato = yup
 export const identifikator = yup
     .string()
     .required()
-    .nullable(true)
     .length(11)
     .test({
         test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
@@ -102,11 +101,9 @@ export const arbeidstimerPeriode = yup.object().shape({
     }),
 });
 
-export const barn = yup.array().of(
-    yup.object().shape({
-        norskIdent: identifikator,
-    }),
-);
+export const barn = yup.object().shape({
+    norskIdent: identifikator,
+});
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
     try {

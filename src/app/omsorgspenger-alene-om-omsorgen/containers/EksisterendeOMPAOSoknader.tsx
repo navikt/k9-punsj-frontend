@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
@@ -15,18 +15,16 @@ import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntekt
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 
-export interface IEksisterendeOMPAOSoknaderComponentProps {
+export interface Props {
     journalpostid: string;
     søkerId: string;
     pleietrengendeId: string | null;
 }
 
-type IEksisterendeOMPAOSoknaderProps = WrappedComponentProps & IEksisterendeOMPAOSoknaderComponentProps;
+const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
+    const { søkerId, pleietrengendeId } = props;
 
-export const EksisterendeOMPAOSoknaderComponent: React.FunctionComponent<IEksisterendeOMPAOSoknaderProps> = (
-    props: IEksisterendeOMPAOSoknaderProps,
-) => {
-    const { intl, søkerId, pleietrengendeId } = props;
+    const intl = useIntl();
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPAOSoknad | undefined>(undefined);
     const routingPaths = React.useContext(RoutingPathsContext);
@@ -138,4 +136,4 @@ export const EksisterendeOMPAOSoknaderComponent: React.FunctionComponent<IEksist
     );
 };
 
-export const EksisterendeOMPAOSoknader = injectIntl(EksisterendeOMPAOSoknaderComponent);
+export default EksisterendeOMPAOSoknader;

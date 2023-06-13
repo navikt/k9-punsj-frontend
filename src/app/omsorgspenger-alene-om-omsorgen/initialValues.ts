@@ -36,7 +36,10 @@ export const initialValues = (soknad: Partial<IOMPAOSoknad> | undefined): IOMPAO
         klokkeslett: soknad?.klokkeslett || '',
         harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
         harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
-        soeknadsperiode: soknad?.soeknadsperiode || periodeInitialValue,
+        soeknadsperiode: {
+            fom: soknad?.soeknadsperiode?.fom ? soknad?.soeknadsperiode?.fom : periodeInitialValue.fom,
+            tom: soknad?.soeknadsperiode?.tom ? soknad?.soeknadsperiode?.tom : periodeInitialValue.tom,
+        },
         begrunnelseForInnsending: soknad?.begrunnelseForInnsending || '',
     };
 };

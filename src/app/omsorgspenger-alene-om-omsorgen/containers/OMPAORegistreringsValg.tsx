@@ -11,7 +11,7 @@ import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { setHash } from '../../utils';
 import api, { hentEksisterendeSoeknader } from '../api';
-import { EksisterendeOMPAOSoknader } from './EksisterendeOMPAOSoknader';
+import EksisterendeOMPAOSoknader from './EksisterendeOMPAOSoknader';
 
 export interface IOMPAORegistreringsValgComponentProps {
     journalpostid: string;
@@ -33,7 +33,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPAORegistrer
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId), {
         onSuccess: (soeknad) => {
             setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
         },

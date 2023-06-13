@@ -219,7 +219,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER) &&
+            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO) &&
         !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const handleVidereClick = (dokumentType: FordelingDokumenttype) => {

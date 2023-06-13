@@ -53,10 +53,11 @@ export const sendSoeknad = async (soeknadId: string, ident: string): Promise<IOM
     return response.json();
 };
 
-export const opprettSoeknad = (journalpostId: string, ident: string): Promise<IOMPAOSoknad> =>
+export const opprettSoeknad = (journalpostId: string, ident: string, pleietrengendeId: string): Promise<IOMPAOSoknad> =>
     post(ApiPath.OMP_AO_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
+        pleietrengendeIdent: pleietrengendeId,
     }).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under opprettelse av søknad.');

@@ -2,8 +2,7 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
-import { useMutation } from 'react-query';
+import { WrappedComponentProps, useIntl } from 'react-intl';
 
 import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
 
@@ -16,6 +15,7 @@ import VentModal from 'app/components/ventModal/VentModal';
 import { IInputError, Periode } from 'app/models/types';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
+import { feilFraYup } from 'app/utils/validationHelpers';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -23,6 +23,7 @@ import { IIdentState } from '../../models/types/IdentState';
 import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
 import EksisterendePerioder from '../components/EksisterendePerioder';
 import { fieldNames } from '../initialValues';
+import schema from '../schema';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import OpplysningerOmOMPAOSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPAOSoknad';
 import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
@@ -70,7 +71,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         mutate: mellomlagreSoeknad,
     } = useOppdaterSoeknadMutation(values, {
         onSuccess: (data, { submitSoknad }) => {
-            console.log(data);
             setHarMellomlagret(true);
             if (submitSoknad) {
                 handleSubmit();
@@ -112,7 +112,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         if (!feilmeldingStier.has(attribute)) {
             setFeilmeldingStier(feilmeldingStier.add(attribute));
         }
-
         const uhaandterteFeilmeldinger = k9FormatErrors?.filter((m: IInputError) => {
             const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
@@ -174,6 +173,10 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                     {getUhaandterteFeil('').map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
+                    ))}
+                    {/* Denne bør byttes ut med errors fra formik */}
+                    {feilFraYup(schema, values)?.map((error: { message: string; path: string }) => (
+                        <ErrorSummary.Item key={`${error.path}-${error.message}`}>{error.message}</ErrorSummary.Item>
                     ))}
                 </ErrorSummary>
             )}
