@@ -110,7 +110,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     }, [harMellomlagret]);
 
     const harFeilISkjema = (errorList: FormikErrors<IOMPAOSoknad>) =>
-        !![k9FormatErrors, ...Object.keys(errorList)].length;
+        !![...k9FormatErrors, ...Object.keys(errorList)].length;
 
     return (
         <>
@@ -132,7 +132,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                 <Heading size="small" className="mb-4">
                     Begrunnelse for innsending
                 </Heading>
-
                 <TextAreaFormik
                     label="Begrunnelse for innsending"
                     name={`${fieldNames.begrunnelseForInnsending}`}

@@ -13,7 +13,7 @@ import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString, prettifyDateRange } from '../../../utils';
 import { IOMPAOSoknadKvittering } from '../../types/OMPAOSoknadKvittering';
 import './OMPAOSoknadKvittering.less';
 
@@ -25,7 +25,8 @@ export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
     const intl = useIntl();
 
-    const { journalposter, mottattDato } = kvittering || {};
+    const { journalposter, mottattDato, ytelse } = kvittering || {};
+    const { barn, periode } = ytelse || {};
 
     if (!kvittering) {
         return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
@@ -46,10 +47,21 @@ export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     </p>
                 </div>
             )}
-            <div>
-                <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
-                <hr className={classNames('linje')} />
-            </div>
+
+            {periode && (
+                <p>
+                    <b>{`Søknadsperiode: `}</b>
+                    {periode ? prettifyDateRange(periode) : ''}
+                </p>
+            )}
+
+            {barn?.norskIdentitetsnummer && (
+                <p>
+                    <b>Barn: </b>
+                    {barn ? barn.norskIdentitetsnummer : ''}
+                </p>
+            )}
+
             <div>
                 {!!journalposter && journalposter.length > 0 && (
                     <div>
