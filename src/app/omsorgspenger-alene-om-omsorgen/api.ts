@@ -83,7 +83,6 @@ export const useValiderSoeknadMutation = (payload: any, isValid: boolean, hooks:
                 const kvitteringResponse = data as IOMPAOSoknadKvittering;
                 hooks.setVisForhaandsvisModal(true);
                 hooks.setKvittering?.(kvitteringResponse);
-                return;
             }
             if ('feil' in data && data?.feil?.length) {
                 hooks.setK9FormatErrors(data.feil);

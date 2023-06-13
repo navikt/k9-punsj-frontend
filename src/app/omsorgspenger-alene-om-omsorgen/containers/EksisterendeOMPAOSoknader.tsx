@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+import { Period } from '@navikt/k9-fe-period-utils';
 
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
@@ -67,8 +68,9 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.soekerId,
                 Array.from(søknad.journalposter).join(', '),
-                søknad.periode ? datetime(intl, TimeFormat.DATE_RANGE, søknad.periode) : '',
-
+                søknad.soeknadsperiode && søknad.soeknadsperiode.fom && søknad.soeknadsperiode.tom
+                    ? new Period(søknad.soeknadsperiode.fom, søknad.soeknadsperiode.tom).prettifyPeriod()
+                    : '',
                 <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Button>,
@@ -95,7 +97,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
-                        onSubmit={() => gaaVidereMedSoeknad(valgtSoeknad)}
+                        onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
                         onClose={() => setValgtSoeknad(undefined)}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />

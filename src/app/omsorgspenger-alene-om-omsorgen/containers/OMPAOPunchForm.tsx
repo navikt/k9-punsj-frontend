@@ -12,7 +12,7 @@ import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
-import { IInputError, Periode } from 'app/models/types';
+import { IInputError } from 'app/models/types';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
@@ -21,7 +21,6 @@ import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
 import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
-import EksisterendePerioder from '../components/EksisterendePerioder';
 import { fieldNames } from '../initialValues';
 import schema from '../schema';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
@@ -36,7 +35,6 @@ export interface IPunchOMPAOFormComponentProps {
     k9FormatErrors: Feil[];
     setK9FormatErrors: (feil: Feil[]) => void;
     submitError: unknown;
-    eksisterendePerioder: Periode[];
 }
 
 export interface IPunchOMPAOFormStateProps {
@@ -53,7 +51,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         setK9FormatErrors,
         journalpostid,
         submitError,
-        eksisterendePerioder,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
@@ -159,7 +156,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                     <DatoInputFormik label="Til og med" name={`${fieldNames.soeknadsperiode}.tom`} />
                 </div>
             </Panel>
-            <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
             <Panel border className="my-12">
                 <Heading size="small" className="mb-4">
                     Begrunnelse for innsending

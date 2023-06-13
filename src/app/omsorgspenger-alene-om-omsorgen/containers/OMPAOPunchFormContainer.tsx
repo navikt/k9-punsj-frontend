@@ -8,7 +8,6 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { Periode } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
@@ -36,7 +35,6 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
     const history = useHistory();
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
-    const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
     const routingPaths = useContext(RoutingPathsContext);
     const dispatch = useDispatch();
 
@@ -99,7 +97,6 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
                 visForhaandsvisModal={visForhaandsvisModal}
                 setVisForhaandsvisModal={setVisForhaandsvisModal}
                 k9FormatErrors={k9FormatErrors}
-                eksisterendePerioder={eksisterendePerioder}
                 setK9FormatErrors={setK9FormatErrors}
                 submitError={submitError}
                 {...props}

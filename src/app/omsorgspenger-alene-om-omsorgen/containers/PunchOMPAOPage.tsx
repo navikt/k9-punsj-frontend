@@ -46,7 +46,9 @@ type IPunchOMPAOPageProps = WrappedComponentProps &
 const PunchOMPAOPage: React.FunctionComponent<IPunchOMPAOPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, identState, children } = props;
     const id = useHistory().location.pathname.split('skjema/')[1];
-    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.søkerId, id));
+    const { data: soeknad } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
+        enabled: !!id,
+    });
     const journalposterFraSoknad = soeknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
 
