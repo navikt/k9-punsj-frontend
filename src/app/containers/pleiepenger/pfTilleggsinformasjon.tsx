@@ -33,9 +33,6 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                     value={tilleggsinformasjon || ''}
                     onChange={(event) => {
                         updatePeriodeinfoInSoknadState({ tilleggsinformasjon: event.target.value }, false);
-                        updatePeriodeinfoInSoknad({
-                            tilleggsinformasjon: event.target.value,
-                        });
                     }}
                     onBlur={(event) =>
                         updatePeriodeinfoInSoknad({
