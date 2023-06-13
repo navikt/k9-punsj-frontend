@@ -1,7 +1,6 @@
-import { MutationFunction, UseMutationResult, useMutation } from 'react-query';
+import { UseMutationResult, useMutation } from 'react-query';
 
 import { ApiPath } from 'app/apiConfig';
-import { IPeriode, Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
 
@@ -17,7 +16,7 @@ export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOMPAOSok
         return response.json();
     });
 
-export const oppdaterSoeknad = (soeknad: Partial<IOMPAOSoknad>): Promise<Partial<IOMPAOSoknad>> =>
+export const oppdaterSoeknad = (soeknad: Partial<IOMPAOSoknad>): Promise<IOMPAOSoknad> =>
     put(ApiPath.OMP_AO_SOKNAD_UPDATE, { soeknadId: soeknad.soeknadId }, soeknad).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under lagring.');
@@ -73,13 +72,38 @@ export const hentEksisterendeSoeknader = (ident: string): Promise<IOMPAOSoknadSv
         return response.json();
     });
 
-type OppdaterSoeknadMutationVariables = Partial<IOMPAOSoknad>;
-
-export const useOppdaterSoeknadMutation = (payload, options): UseMutationResult<IOMPAOSoknad> =>
+export const useOppdaterSoeknadMutation = (payload: any, options: any): UseMutationResult<IOMPAOSoknad> =>
     useMutation(() => oppdaterSoeknad(payload), options);
 
-export const useValiderSoeknadMutation = (payload, options): UseMutationResult<IOMPAOSoknadKvittering> =>
-    useMutation(() => validerSoeknad(payload, payload.norskIdent), options);
+export const useValiderSoeknadMutation = (payload: any, isValid: boolean, hooks: any): UseMutationResult<void> => {
+    const validateSoeknad = async (skalForhaandsviseSoeknad: boolean) => {
+        try {
+            const data = await validerSoeknad(payload, payload.norskIdent);
+            if ('ytelse' in data && skalForhaandsviseSoeknad && isValid) {
+                const kvitteringResponse = data as IOMPAOSoknadKvittering;
+                hooks.setVisForhaandsvisModal(true);
+                hooks.setKvittering?.(kvitteringResponse);
+                return;
+            }
+            if ('feil' in data && data?.feil?.length) {
+                hooks.setK9FormatErrors(data.feil);
+                hooks.setKvittering?.(undefined);
+            } else {
+                hooks.setK9FormatErrors([]);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    return useMutation(validateSoeknad, {
+        onSuccess: () => {
+            if (!hooks.setKvittering) {
+                throw Error('Kvittering-context er ikke satt');
+            }
+        },
+    });
+};
 
 export default {
     opprettSoeknad,

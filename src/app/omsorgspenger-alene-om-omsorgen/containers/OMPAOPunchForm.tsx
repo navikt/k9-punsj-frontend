@@ -50,6 +50,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         visForhaandsvisModal,
         setVisForhaandsvisModal,
         k9FormatErrors,
+        setK9FormatErrors,
         journalpostid,
         submitError,
         eksisterendePerioder,
@@ -59,18 +60,23 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
-    const { values, errors, setTouched, handleSubmit, validateForm, setFieldValue } = useFormikContext<IOMPAOSoknad>();
+    const { values, errors, isValid, setTouched, handleSubmit, validateForm, setFieldValue } =
+        useFormikContext<IOMPAOSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     const intl = useIntl();
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
-    const { mutate: valider } = useValiderSoeknadMutation(values);
+    const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
+        setKvittering,
+        setK9FormatErrors,
+        setVisForhaandsvisModal,
+    });
 
     const {
         isLoading: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
     } = useOppdaterSoeknadMutation(values, {
-        onSuccess: (data, { submitSoknad }) => {
+        onSuccess: (data: any, { submitSoknad }: { submitSoknad: boolean }) => {
             setHarMellomlagret(true);
             if (submitSoknad) {
                 handleSubmit();

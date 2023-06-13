@@ -1,20 +1,11 @@
 import Kvittering from 'app/models/forms/soeknader/Kvittering';
-import {
-    Fravaersperiode,
-    FrilanserAktivitet,
-    SelvstendigNaeringsdrivendeAktivitet,
-} from 'app/models/types/KvitteringTyper';
-
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
+import { PersonEnkel } from 'app/models/types';
+import Ytelse from 'app/models/types/Ytelse';
 
 export interface IOMPAOSoknadKvittering extends Kvittering {
     ytelse: {
-        type: string;
-        aktivitet: {
-            frilanser?: FrilanserAktivitet;
-            selvstendigNæringsdrivende: SelvstendigNaeringsdrivendeAktivitet;
-        };
-        fraværsperioder: Fravaersperiode[];
+        type: Ytelse;
+        barn: PersonEnkel;
+        periode: string;
     };
-    begrunnelseForInnsending: BegrunnelseForInnsending;
 }

@@ -84,7 +84,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.søkerId),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
-                if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
+                if ('ytelse' in data && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
                     if (setKvittering) {
@@ -93,7 +93,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         throw Error('Kvittering-context er ikke satt');
                     }
                 }
-                if (data?.feil?.length) {
+                if ('feil' in data && data?.feil?.length) {
                     setK9FormatErrors(data.feil);
                     if (setKvittering) {
                         setKvittering(undefined);
