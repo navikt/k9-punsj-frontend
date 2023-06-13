@@ -31,7 +31,7 @@ const klokkeslettErFremITidForDato = (mottattDato: string) => (klokkeslett: stri
 export const passertKlokkeslettPaaMottattDato = yup
     .string()
     .required()
-    .when('mottattDato', (mottattDato, schema) =>
+    .when('mottattDato', ([mottattDato], schema) =>
         schema.test({
             test: typeof mottattDato === 'string' ? klokkeslettErFremITidForDato(mottattDato) : () => false,
             message: 'Klokkeslett kan ikke være frem i tid',

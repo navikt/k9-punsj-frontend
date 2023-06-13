@@ -12,7 +12,6 @@ import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
-import { IInputError } from 'app/models/types';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
@@ -52,10 +51,10 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         journalpostid,
         submitError,
     } = props;
+
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
-    const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const { values, errors, isValid, setTouched, handleSubmit, validateForm, setFieldValue } =
         useFormikContext<IOMPAOSoknad>();
@@ -110,35 +109,8 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         }
     }, [harMellomlagret]);
 
-    // TODO: bør flytttes
-    const getUhaandterteFeil = (attribute: string): Feil[] => {
-        if (!feilmeldingStier.has(attribute)) {
-            setFeilmeldingStier(feilmeldingStier.add(attribute));
-        }
-        const uhaandterteFeilmeldinger = k9FormatErrors?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || [];
-            for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(feilmeldingStier);
-                andreFeilmeldingStier.delete(attribute);
-                if (attribute === felt) {
-                    return true;
-                }
-                if (andreFeilmeldingStier.has(felt)) {
-                    return false;
-                }
-            }
-            return false;
-        });
-
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => error).filter(Boolean);
-        }
-        return [];
-    };
-
     const harFeilISkjema = (errorList: FormikErrors<IOMPAOSoknad>) =>
-        !![...getUhaandterteFeil(''), ...Object.keys(errorList)].length;
+        !![k9FormatErrors, ...Object.keys(errorList)].length;
 
     return (
         <>
@@ -173,7 +145,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {getUhaandterteFeil('').map((feil) => (
+                    {k9FormatErrors.map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}
