@@ -60,7 +60,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         useFormikContext<IOMPAOSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     const intl = useIntl();
-    // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
+
     const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
         setKvittering,
         setK9FormatErrors,
