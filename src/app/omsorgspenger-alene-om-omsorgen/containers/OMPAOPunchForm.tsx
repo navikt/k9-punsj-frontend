@@ -115,9 +115,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     return (
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VerticalSpacer sixteenPx />
-            <OpplysningerOmOMPAOSoknad />
-            <VerticalSpacer sixteenPx />
+            <Heading size="medium">Alene om omsorgen</Heading>
             <Panel border className="my-12">
                 <Heading size="small" className="mb-4">
                     Søknadsperiode
@@ -128,6 +126,9 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                     <DatoInputFormik label="Til og med" name={`${fieldNames.soeknadsperiode}.tom`} />
                 </div>
             </Panel>
+            <VerticalSpacer sixteenPx />
+            <OpplysningerOmOMPAOSoknad />
+            <VerticalSpacer sixteenPx />
             <Panel border className="my-12">
                 <Heading size="small" className="mb-4">
                     Begrunnelse for innsending
