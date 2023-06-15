@@ -24,8 +24,6 @@ import FellesReducer from './reducers/FellesReducer';
 import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
 import { IdentReducer } from './reducers/IdentReducer';
 import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
-import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
-import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 
 export const rootReducer = combineReducers({
     [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -50,10 +48,6 @@ export const rootReducer = combineReducers({
     }),
     [Sakstype.OMSORGSPENGER_UTBETALING]: combineReducers({
         signaturState: SignaturReducer,
-    }),
-    [Sakstype.OMSORGSPENGER_OVERFØRING]: combineReducers({
-        signatur: overføringSignaturReducer,
-        punch: overføringPunchReducer,
     }),
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
