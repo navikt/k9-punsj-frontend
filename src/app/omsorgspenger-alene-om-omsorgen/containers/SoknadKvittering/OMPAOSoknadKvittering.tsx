@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
+import dayjs from 'dayjs';
 import countries from 'i18n-iso-countries';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -50,8 +51,8 @@ export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
 
             {periode && (
                 <p>
-                    <b>{`Søknadsperiode: `}</b>
-                    {periode ? prettifyDateRange(periode) : ''}
+                    <b>Alene om omsorgen fra og med</b>
+                    {periode ? dayjs(periode).format('DD.MM.YYYY') : ''}
                 </p>
             )}
 

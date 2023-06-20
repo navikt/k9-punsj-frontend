@@ -1,10 +1,10 @@
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 
 import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
-import { Period } from '@navikt/k9-fe-period-utils';
 
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
@@ -67,9 +67,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.soekerId,
                 Array.from(søknad.journalposter).join(', '),
-                søknad.soeknadsperiode && søknad.soeknadsperiode.fom && søknad.soeknadsperiode.tom
-                    ? new Period(søknad.soeknadsperiode.fom, søknad.soeknadsperiode.tom).prettifyPeriod()
-                    : '',
+                søknad.periode && søknad.periode.fom ? dayjs(søknad.periode.fom).format('DD.MM.YYYY') : '',
                 <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Button>,

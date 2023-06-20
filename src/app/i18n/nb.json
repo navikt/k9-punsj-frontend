@@ -105,8 +105,8 @@
     "ident.identifikasjon.felt": "Søkers fødselsnummer eller D-nummer:",
     "ident.identifikasjon.felt1": "Første søkers fødselsnummer eller D-nummer:",
     "ident.identifikasjon.pleietrengende": "Pleietrengendes fødselsnummer",
-    "ident.identifikasjon.velgPleietrengende": "Velg hvilken pleietrengende det gjelder",
-    "ident.identifikasjon.annetPleietrengende": "Det gjelder en annen pleietrengende",
+    "ident.identifikasjon.velgBarn": "Velg hvilket barn det gjelder",
+    "ident.identifikasjon.annetBarn": "Det gjelder et annet barn",
     "ident.identifikasjon.pleietrengendeHarIkkeFnr": "Pleietrengende har ikke fødselsnummer",
     "ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon": "Dokumentet kan ikke sendes til K9 uten pleietrengendes fødselsnummer. Registrer opplysningene fra dokumentet og sett Punsj-oppgaven på vent.",
     "ident.identifikasjon.dobbelsjekkident": "Det er viktig at fødselsnummer er riktig. Dobbeltsjekk at fødselsnummer er korrekt.",
@@ -400,6 +400,7 @@
     "journalpost.id": "Journalpostnummer:",
     "journalpost.norskIdent": "Søkers fødselsnummer:",
     "journalpost.pleietrengendeId": "Pleietrengendes fødselsnummer:",
+    "journalpost.barnetsId": "Barnets fødselsnummer:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
     "modia.lenke": "Se dialog i Modia",
 

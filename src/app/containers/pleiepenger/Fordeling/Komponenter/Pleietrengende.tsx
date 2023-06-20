@@ -116,7 +116,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         }}
                         checked={gjelderAnnenPleietrengende}
                     >
-                        {intlHelper(intl, 'ident.identifikasjon.annetPleietrengende')}
+                        {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                     </Checkbox>
                 </>
             )}
