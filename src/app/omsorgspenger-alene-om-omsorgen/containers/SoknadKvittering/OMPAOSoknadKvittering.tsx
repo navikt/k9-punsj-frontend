@@ -51,7 +51,7 @@ export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
 
             {periode && (
                 <p>
-                    <b>Alene om omsorgen fra og med</b>
+                    <b>Alene om omsorgen fra og med: </b>
                     {periode ? dayjs(periode).format('DD.MM.YYYY') : ''}
                 </p>
             )}
