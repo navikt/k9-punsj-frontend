@@ -6,10 +6,8 @@ export interface IOMPAOSoknad extends SoeknadType {
     metadata: {
         signatur: string;
     };
-    soeknadsperiode: {
+    periode: {
         fom: string;
-        tom: string;
     };
     barn: PersonEnkel;
-    begrunnelseForInnsending: string;
 }

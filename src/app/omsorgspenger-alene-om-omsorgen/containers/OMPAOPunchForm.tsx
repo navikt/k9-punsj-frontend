@@ -2,13 +2,12 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { WrappedComponentProps, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
 
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
-import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
@@ -18,7 +17,6 @@ import { feilFraYup } from 'app/utils/validationHelpers';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IIdentState } from '../../models/types/IdentState';
 import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
 import { fieldNames } from '../initialValues';
 import schema from '../schema';
@@ -36,11 +34,7 @@ export interface IPunchOMPAOFormComponentProps {
     submitError: unknown;
 }
 
-export interface IPunchOMPAOFormStateProps {
-    identState: IIdentState;
-}
-
-type IPunchOMPAOFormProps = IPunchOMPAOFormComponentProps & WrappedComponentProps & IPunchOMPAOFormStateProps;
+type IPunchOMPAOFormProps = IPunchOMPAOFormComponentProps;
 
 const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     const {
@@ -60,6 +54,8 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         useFormikContext<IOMPAOSoknad>();
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     const intl = useIntl();
+
+    console.log(values);
 
     const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
         setKvittering,
@@ -116,18 +112,11 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         <>
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <Heading size="medium">Alene om omsorgen</Heading>
-            <Panel border className="my-12">
-                <Heading size="small" className="mb-4">
-                    Søknadsperiode
-                </Heading>
-
-                <div className="fom-tom-rad mb-4">
-                    <DatoInputFormik label="Fra og med" name={`${fieldNames.soeknadsperiode}.fom`} />
-                    <DatoInputFormik label="Til og med" name={`${fieldNames.soeknadsperiode}.tom`} />
-                </div>
-            </Panel>
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPAOSoknad />
+            <Panel border className="my-12">
+                <DatoInputFormik label="Søker er alene om omsorgen fra og med" name={`${fieldNames.periode}.fom`} />
+            </Panel>
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx />

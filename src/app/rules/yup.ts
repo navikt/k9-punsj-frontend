@@ -104,6 +104,16 @@ export const arbeidstimerPeriode = yup.object().shape({
     }),
 });
 
+// valid date format: YYYY-MM-DD
+export const datoYYYYMMDD = yup
+    .string()
+    .required()
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Må være på formatet YYYY-MM-DD')
+    .test({
+        test: (v) => !gyldigDato(v || ''),
+        message: 'Må ha en gyldig dato',
+    });
+
 export const barn = yup.object().shape({
     norskIdent: identifikator,
 });

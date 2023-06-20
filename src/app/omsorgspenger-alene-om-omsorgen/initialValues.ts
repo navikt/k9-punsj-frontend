@@ -2,13 +2,11 @@ import { IOMPAOSoknad } from './types/OMPAOSoknad';
 
 export const periodeInitialValue = {
     fom: '',
-    tom: '',
 };
 
 export const fieldNames = {
-    soeknadsperiode: 'soeknadsperiode',
+    periode: 'periode',
     barn: 'barn',
-    begrunnelseForInnsending: 'begrunnelseForInnsending',
     harInfoSomIkkeKanPunsjes: 'harInfoSomIkkeKanPunsjes',
     harMedisinskeOpplysninger: 'harMedisinskeOpplysninger',
     soeknadId: 'soeknadId',
@@ -36,10 +34,8 @@ export const initialValues = (soknad: Partial<IOMPAOSoknad> | undefined): IOMPAO
         klokkeslett: soknad?.klokkeslett || '',
         harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
         harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
-        soeknadsperiode: {
-            fom: soknad?.soeknadsperiode?.fom ? soknad?.soeknadsperiode?.fom : periodeInitialValue.fom,
-            tom: soknad?.soeknadsperiode?.tom ? soknad?.soeknadsperiode?.tom : periodeInitialValue.tom,
+        periode: {
+            fom: soknad?.periode?.fom ? soknad?.periode?.fom : periodeInitialValue.fom,
         },
-        begrunnelseForInnsending: soknad?.begrunnelseForInnsending || '',
     };
 };

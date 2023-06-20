@@ -1,4 +1,4 @@
-import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode } from 'app/rules/yup';
+import yup, { barn, datoYYYYMMDD, passertDato, passertKlokkeslettPaaMottattDato, periode } from 'app/rules/yup';
 
 const OMPAOSchema = yup.object({
     metadata: yup.object({
@@ -6,8 +6,9 @@ const OMPAOSchema = yup.object({
     }),
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,
-    begrunnelseForInnsending: yup.string(),
-    soeknadsperiode: periode(),
+    periode: yup.object({
+        fom: datoYYYYMMDD,
+    }),
     barn,
 });
 
