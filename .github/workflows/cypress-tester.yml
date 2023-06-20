@@ -10,11 +10,6 @@ jobs:
     test:
         name: Cypress-tester
         runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
-            matrix:
-                ci_index: [0, 1, 2, 3]
-                ci_total: [4]
         steps:
             - name: Hente kode
               uses: actions/checkout@v3.3.0
@@ -31,7 +26,7 @@ jobs:
                   node-version: 16.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
-                  
+
             - name: Installere moduler
               run: yarn install --immutable
               env:
