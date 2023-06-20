@@ -53,7 +53,7 @@ export const OmsorgspengerUtbetaling: ISakstypePunch = {
     getComponent: ({ journalpostid, punchPath }) => <OMPUTRouter journalpostid={journalpostid} punchPath={punchPath} />,
     steps: [],
 };
-export const omsorgspengerAleneOmOmsorgen: ISakstypePunch = {
+export const OmsorgspengerAleneOmOmsorgen: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN,
     punchPath: '/omsorgspenger-alene-om-omsorgen',
     getComponent: ({ journalpostid, punchPath }) => <OMPAORouter journalpostid={journalpostid} punchPath={punchPath} />,
@@ -158,7 +158,7 @@ export const Sakstyper: ISakstyper = {
         OmsorgspengerKroniskSyktBarnSakstypePunch,
         OmsorgspengerMidlertidigAlene,
         OmsorgspengerUtbetaling,
-        omsorgspengerAleneOmOmsorgen,
+        OmsorgspengerAleneOmOmsorgen,
         OmsorgspengerOverføring,
         KorrigeringAvInntektsmelding,
         SendBrevPåEksisterendeFagsak,
