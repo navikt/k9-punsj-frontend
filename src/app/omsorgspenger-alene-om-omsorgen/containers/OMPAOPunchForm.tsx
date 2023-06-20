@@ -128,18 +128,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
             </Panel>
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPAOSoknad />
-            <VerticalSpacer sixteenPx />
-            <Panel border className="my-12">
-                <Heading size="small" className="mb-4">
-                    Begrunnelse for innsending
-                </Heading>
-                <TextAreaFormik
-                    label="Begrunnelse for innsending"
-                    name={`${fieldNames.begrunnelseForInnsending}`}
-                    hideLabel
-                />
-            </Panel>
-            <VerticalSpacer sixteenPx />
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx />

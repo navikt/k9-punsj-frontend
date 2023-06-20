@@ -25,7 +25,7 @@ export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
     const intl = useIntl();
 
-    const { journalposter, mottattDato, ytelse, begrunnelseForInnsending } = kvittering || {};
+    const { journalposter, mottattDato, ytelse } = kvittering || {};
     const { barn, periode } = ytelse || {};
 
     if (!kvittering) {
@@ -59,13 +59,6 @@ export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                 <p>
                     <b>Barn: </b>
                     {barn ? barn.norskIdentitetsnummer : ''}
-                </p>
-            )}
-
-            {begrunnelseForInnsending?.tekst && (
-                <p>
-                    <b>Begrunnelse for endring: </b>
-                    {begrunnelseForInnsending.tekst}
                 </p>
             )}
 
