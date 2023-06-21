@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM cgr.dev/chainguard/node:18
 
 WORKDIR /usr/src/app
 
