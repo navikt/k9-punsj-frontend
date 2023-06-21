@@ -9,4 +9,4 @@ COPY package.json .
 COPY src/build/envVariables.js ./envVariables.js
 
 EXPOSE 8080
-CMD ["npm", "run", "start-express"]
+CMD ["/usr/bin/npm", "run", "start-express"]
