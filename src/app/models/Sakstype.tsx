@@ -7,8 +7,6 @@ export interface ISakstypeDefault {
     navn: Sakstype;
 }
 
-export type ISakstypeOmfordeling = ISakstypeDefault;
-
 export interface ISakstypeComponentProps {
     journalpostid: string;
     punchPath: string;
@@ -36,5 +34,4 @@ export interface ISakstypePunch extends ISakstypeDefault {
 
 export interface ISakstyper {
     punchSakstyper: ISakstypePunch[];
-    omfordelingssakstyper: ISakstypeOmfordeling[];
 }

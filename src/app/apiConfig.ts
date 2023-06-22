@@ -27,7 +27,6 @@ export enum ApiPath {
     DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
     OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
     OPPRETT_GOSYS_OPPGAVE = '/gosys/opprettJournalforingsoppgave/',
-    PSB_MAPPE_SOK = '/k9-sak/pleiepenger-sykt-barn-soknad',
     K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
     GOSYS_GJELDER = '/gosys/gjelder',
     FINN_ARBEIDSGIVERE = '/arbeidsgivere',
