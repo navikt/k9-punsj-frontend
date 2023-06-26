@@ -100,7 +100,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetBarn,
     } = props;
     const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
-    const sakstyper: ISakstypeDefault[] = useMemo(() => [...Sakstyper.punchSakstyper], []);
+    const sakstyper: ISakstypeDefault[] = useMemo(
+        () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
+        [],
+    );
 
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
@@ -155,7 +158,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
         FordelingDokumenttype.OMSORGSPENGER_KS,
         FordelingDokumenttype.OMSORGSPENGER_MA,
-        FordelingDokumenttype.OMSORGSPENGER_AO,
         FordelingDokumenttype.OMSORGSPENGER_UT,
         FordelingDokumenttype.KORRIGERING_IM,
         FordelingDokumenttype.OPPLAERINGSPENGER,
@@ -216,8 +218,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO) &&
+            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER) &&
         !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const handleVidereClick = (dokumentType: FordelingDokumenttype) => {

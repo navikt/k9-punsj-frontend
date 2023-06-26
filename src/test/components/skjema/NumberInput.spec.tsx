@@ -1,0 +1,50 @@
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import React from 'react';
+
+import NumberInput from '../../../app/components/skjema/NumberInput';
+import { TestSkjema } from './testskjema';
+
+describe('<NumberInput>', () => {
+    const initAlder = 4;
+    const renderInputFelt = () =>
+        render(
+            <TestSkjema
+                initialValues={{
+                    alder: initAlder,
+                }}
+            >
+                <NumberInput feltnavn="alder" />
+            </TestSkjema>,
+        );
+
+    test('plussknapp øker verdi med 1', async () => {
+        const { getByLabelText, getAllByRole } = renderInputFelt();
+        const inputfelt = getByLabelText(/alder/i);
+        expect(inputfelt.getAttribute('value')).toEqual(`${initAlder}`);
+
+        const knapper = getAllByRole('button');
+
+        const plussknapp = knapper.find((knapp) => knapp.innerHTML.match(/øk/i));
+        expect(plussknapp).toBeDefined();
+
+        await userEvent.click(plussknapp);
+
+        expect(inputfelt.getAttribute('value')).toEqual(`${initAlder + 1}`);
+    });
+
+    test('minusknapp minsker verdi med 1', async () => {
+        const { getByLabelText, getAllByRole } = renderInputFelt();
+        const inputfelt = getByLabelText(/alder/i);
+        expect(inputfelt.getAttribute('value')).toEqual(`${initAlder}`);
+
+        const knapper = getAllByRole('button');
+
+        const minusknapp = knapper.find((knapp) => knapp.innerHTML.match(/mink/i));
+        expect(minusknapp).toBeDefined();
+
+        await userEvent.click(minusknapp);
+
+        expect(inputfelt.getAttribute('value')).toEqual(`${initAlder - 1}`);
+    });
+});

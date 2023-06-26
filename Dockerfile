@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/node:18
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
 
@@ -9,4 +9,4 @@ COPY package.json .
 COPY src/build/envVariables.js ./envVariables.js
 
 EXPOSE 8080
-CMD ["/usr/bin/npm", "run", "start-express"]
+CMD ["npm", "run", "start-express"]

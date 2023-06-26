@@ -13,7 +13,7 @@ import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysning
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import VentModal from 'app/components/ventModal/VentModal';
-import { Periode } from 'app/models/types';
+import { IInputError, Periode } from 'app/models/types';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
@@ -67,6 +67,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
+    const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
@@ -83,7 +84,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                 : validerSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)), identState.søkerId),
         {
             onSuccess: (data: ValideringResponse | IOMPUTSoknadKvittering, { skalForhaandsviseSoeknad }) => {
-                if ('ytelse' in data && skalForhaandsviseSoeknad && isValid) {
+                if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
                     const kvitteringResponse = data as IOMPUTSoknadKvittering;
                     setVisForhaandsvisModal(true);
                     if (setKvittering) {
@@ -92,7 +93,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         throw Error('Kvittering-context er ikke satt');
                     }
                 }
-                if ('feil' in data && data?.feil?.length) {
+                if (data?.feil?.length) {
                     setK9FormatErrors(data.feil);
                     if (setKvittering) {
                         setKvittering(undefined);
@@ -143,7 +144,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     };
 
     const debounceCallback = useCallback(
-        debounce(() => updateSoknad({ submitSoknad: false }), 1000),
+        debounce(() => updateSoknad({ submitSoknad: false }), 3000),
         [],
     );
 
@@ -163,8 +164,36 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         }
     }, [harMellomlagret]);
 
+    // TODO: bør flytttes
+    const getUhaandterteFeil = (attribute: string): Feil[] => {
+        if (!feilmeldingStier.has(attribute)) {
+            setFeilmeldingStier(feilmeldingStier.add(attribute));
+        }
+
+        const uhaandterteFeilmeldinger = k9FormatErrors?.filter((m: IInputError) => {
+            const felter = m.felt?.split('.') || [];
+            for (let index = felter.length - 1; index >= -1; index--) {
+                const felt = felter.slice(0, index + 1).join('.');
+                const andreFeilmeldingStier = new Set(feilmeldingStier);
+                andreFeilmeldingStier.delete(attribute);
+                if (attribute === felt) {
+                    return true;
+                }
+                if (andreFeilmeldingStier.has(felt)) {
+                    return false;
+                }
+            }
+            return false;
+        });
+
+        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
+            return uhaandterteFeilmeldinger.map((error) => error).filter(Boolean);
+        }
+        return [];
+    };
+
     const harFeilISkjema = (errorList: FormikErrors<IOMPUTSoknad>) =>
-        !![...k9FormatErrors, ...Object.keys(errorList)].length;
+        !![...getUhaandterteFeil(''), ...Object.keys(errorList)].length;
 
     return (
         <>
@@ -195,7 +224,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {k9FormatErrors.map((feil) => (
+                    {getUhaandterteFeil('').map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}

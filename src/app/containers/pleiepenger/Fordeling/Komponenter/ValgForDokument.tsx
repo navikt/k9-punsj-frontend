@@ -10,7 +10,6 @@ import {
     Sakstype,
     TilgjengeligSakstype,
     korrigeringAvInntektsmeldingSakstyper,
-    omsorgspengerAleneOmOmsorgenSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
     omsorgspengerUtbetalingSakstyper,
@@ -92,10 +91,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     function omsorgspengerMidlertidigAlene() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA && omsorgspengerMidlertidigAleneSakstyper;
     }
-
-    const omsorgspengerAleneOmOmsorgen = () =>
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO && omsorgspengerAleneOmOmsorgenSakstyper;
-
     const omsorgspengerUtbetaling = () =>
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
@@ -108,7 +103,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         pleiepengerILivetsSluttfase() ||
         omsorgspengerKroniskSyktBarn() ||
         omsorgspengerMidlertidigAlene() ||
-        omsorgspengerAleneOmOmsorgen() ||
         omsorgspengerUtbetaling() ||
         opplæringspenger() ||
         [];

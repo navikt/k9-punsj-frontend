@@ -202,6 +202,6 @@ const OMPUTSchema = yup.object({
     }),
     bosteder: yup.array().when('$medlemskap', { is: 'ja', then: () => yup.array().of(utenlandsopphold) }),
     utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: () => yup.array().of(utenlandsopphold) }),
-    barn: yup.array().of(barn),
+    barn,
 });
 export default OMPUTSchema;

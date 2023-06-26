@@ -19,11 +19,15 @@ import {
     PunchFormReducer,
     PunchReducer,
     SignaturReducer,
+    SoknaderSokReducer,
 } from './reducers';
 import FellesReducer from './reducers/FellesReducer';
 import { FordelingFerdigstillJournalpostReducer } from './reducers/FordelingFerdigstillJournalpostReducer';
 import { IdentReducer } from './reducers/IdentReducer';
 import { JournalposterPerIdentReducer } from './reducers/JournalposterPerIdentReducer';
+import { SoknaderVisningReducer } from './reducers/SoknaderVisningReducer';
+import overføringPunchReducer from './reducers/omsorgspengeroverførdager/overføringPunchReducer';
+import overføringSignaturReducer from './reducers/omsorgspengeroverførdager/overføringSignaturReducer';
 
 export const rootReducer = combineReducers({
     [Sakstype.PLEIEPENGER_SYKT_BARN]: combineReducers({
@@ -49,8 +53,16 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_UTBETALING]: combineReducers({
         signaturState: SignaturReducer,
     }),
+    [Sakstype.OMSORGSPENGER_OVERFØRING]: combineReducers({
+        signatur: overføringSignaturReducer,
+        punch: overføringPunchReducer,
+    }),
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
+    }),
+    SØK: combineReducers({
+        soknaderSokState: SoknaderSokReducer,
+        visningState: SoknaderVisningReducer,
     }),
     fordelingState: FordelingReducer,
     authState: AuthReducer,
