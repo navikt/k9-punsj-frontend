@@ -46,7 +46,6 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         FordelingDokumenttype.OMSORGSPENGER_KS,
         FordelingDokumenttype.OMSORGSPENGER_MA,
         FordelingDokumenttype.OMSORGSPENGER_UT,
-        FordelingDokumenttype.OMSORGSPENGER_AO,
         FordelingDokumenttype.KORRIGERING_IM,
         FordelingDokumenttype.OPPLAERINGSPENGER,
     ];

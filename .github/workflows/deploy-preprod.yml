@@ -39,6 +39,7 @@ jobs:
                   node-version: 16.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
+                  
 
             - uses: actions/download-artifact@v3
               with:

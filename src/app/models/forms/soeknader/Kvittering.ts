@@ -1,7 +1,6 @@
 import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
 
 export interface Journalpost {
-    inneholderInfomasjonSomIkkeKanPunsjes?: boolean;
     inneholderInformasjonSomIkkeKanPunsjes?: boolean;
     inneholderMedisinskeOpplysninger?: boolean;
     journalpostId: string;

@@ -95,7 +95,7 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
-                        onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
+                        onSubmit={() => gaaVidereMedSoeknad(valgtSoeknad)}
                         onClose={() => setValgtSoeknad(undefined)}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />

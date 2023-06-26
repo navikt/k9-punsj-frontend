@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { ExternalLink } from '@navikt/ds-icons';
 import { Link, Panel } from '@navikt/ds-react';
 
-import { Sakstype } from 'app/models/enums';
 import { getModiaPath } from 'app/utils';
 
 import { IFordelingState, IJournalpost } from '../../models/types';
@@ -73,11 +72,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
             <div>
                 {!!pleietrengendeId && (
                     <LabelValue
-                        labelTextId={
-                            fordelingState.sakstype !== Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN
-                                ? 'journalpost.pleietrengendeId'
-                                : 'journalpost.barnetsId'
-                        }
+                        labelTextId="journalpost.pleietrengendeId"
                         value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                         retning="horisontal"
                     />

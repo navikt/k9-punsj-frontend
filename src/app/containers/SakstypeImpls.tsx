@@ -1,7 +1,5 @@
 import React from 'react';
 
-import OMPAORouter from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORouter';
-
 import { ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
 import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
@@ -50,12 +48,6 @@ export const OmsorgspengerUtbetaling: ISakstypePunch = {
     getComponent: ({ journalpostid, punchPath }) => <OMPUTRouter journalpostid={journalpostid} punchPath={punchPath} />,
     steps: [],
 };
-export const OmsorgspengerAleneOmOmsorgen: ISakstypePunch = {
-    navn: Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN,
-    punchPath: '/omsorgspenger-alene-om-omsorgen',
-    getComponent: ({ journalpostid, punchPath }) => <OMPAORouter journalpostid={journalpostid} punchPath={punchPath} />,
-    steps: [],
-};
 
 export const OmsorgspengerFordeling: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_FORDELING,
@@ -97,7 +89,6 @@ export const Sakstyper: ISakstyper = {
         PleiepengerILivetsSluttfase,
         OmsorgspengerFordeling,
         OmsorgspengerKroniskSyktBarnSakstypePunch,
-        OmsorgspengerAleneOmOmsorgen,
         OmsorgspengerMidlertidigAlene,
         OmsorgspengerUtbetaling,
         KorrigeringAvInntektsmelding,

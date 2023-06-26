@@ -6,7 +6,6 @@ import * as Sentry from '@sentry/react';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // eslint-disable-next-line camelcase
@@ -80,7 +79,6 @@ export const App: React.FunctionComponent = () => {
         <Sentry.ErrorBoundary>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
-                    <ReactQueryDevtools initialIsOpen={false} />
                     <ApplicationWrapper
                         locale={locale}
                         onChangeLocale={(activeLocale: Locale) => {

@@ -53,17 +53,6 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentsoknader');
     });
 
-    it('Alene om omsorgen - kan navigere til eksisterende søknader', () => {
-        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
-        cy.findByText(/Ekstra omsorgsdager når du er alene om omsorgen/i).click();
-        cy.findByText(/Ja/i).click();
-        cy.findByLabelText(/Velg hvilket barn det gjelder/i).select('Geir-Paco Gundersen - 02021477330');
-        cy.findByRole('button', { name: /Videre/i }).click();
-        cy.findByText(/Registrer søknad - alene om omsorgen/i).click();
-        cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/soeknader');
-    });
-
     it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();

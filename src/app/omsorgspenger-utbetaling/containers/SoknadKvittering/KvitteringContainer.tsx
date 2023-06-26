@@ -25,7 +25,7 @@ export default function KvitteringContainer(props: OwnProps) {
             <Alert size="small" variant="info" className="fullfortmelding">
                 <FormattedMessage id="skjema.sentInn" />
             </Alert>
-            <div className="punchPage__knapper mt-8">
+            <div className="punchPage__knapper">
                 <Button
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
