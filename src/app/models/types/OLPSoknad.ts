@@ -16,7 +16,7 @@ export interface IOLPSoknadBackend {
     bosteder?: Bosteder[];
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
-    journalposter?: string[];
+    journalposter: string[];
     klokkeslett?: string;
     kurs?: Kurs;
     lovbestemtFerie?: Periode[];

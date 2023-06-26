@@ -25,6 +25,7 @@ export enum DokumenttypeForkortelse {
 
 export enum FordelingOmsorgspengerSubMenyValg {
     OMSORGSPENGER_KS = 'OMSORGSPENGER_KS',
+    OMSORGSPENGER_AO = 'OMSORGSPENGER_AO',
     OMSORGSPENGER_MA = 'OMSORGSPENGER_MA',
     OMSORGSPENGER_UT = 'OMSORGSPENGER_UT',
     KORRIGERING_IM = 'KORRIGERING_IM',
