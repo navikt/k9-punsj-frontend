@@ -94,7 +94,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 <>
                     <Select
                         className="pleietrengendeSelect"
-                        label={intlHelper(intl, 'ident.identifikasjon.velgPleietrengende')}
+                        label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                         onChange={(e) => {
                             pleietrengendeIdentInputFieldOnChange(e);
                             oppdaterStateMedPleietrengendeFnr(e);
@@ -116,7 +116,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         }}
                         checked={gjelderAnnenPleietrengende}
                     >
-                        {intlHelper(intl, 'ident.identifikasjon.annetPleietrengende')}
+                        {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                     </Checkbox>
                 </>
             )}

@@ -105,7 +105,7 @@ export const PunchOMPKSPageComponent: React.FunctionComponent<IPunchOMPKSPagePro
                         <Alert size="small" variant="info" className="fullfortmelding">
                             <FormattedMessage id="skjema.sentInn" />
                         </Alert>
-                        <div className="punchPage__knapper">
+                        <div className="punchPage__knapper mt-8">
                             <Button
                                 onClick={() => {
                                     window.location.href = getEnvironmentVariable('K9_LOS_URL');
