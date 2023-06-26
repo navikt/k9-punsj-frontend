@@ -22,7 +22,7 @@ const fullstendigResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriod
                 regnskapsførerNavn: 'Ola Nordmann',
                 regnskapsførerTlf: '00000000',
                 erVarigEndring: false,
-                endringDato: [],
+                endringDato: '',
                 endringBegrunnelse: '',
                 bruttoInntekt: 100000,
                 erNyoppstartet: false,
@@ -43,7 +43,7 @@ const varigEndring: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
                 regnskapsførerNavn: 'Ola Nordmann',
                 regnskapsførerTlf: '00000000',
                 erVarigEndring: true,
-                endringDato: [2021, 3, 16],
+                endringDato: '2021-03-16',
                 endringBegrunnelse: 'Begrunnelse',
                 bruttoInntekt: 100000,
                 erNyoppstartet: false,
@@ -125,7 +125,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendringdato')).toBe(
             true,
         );
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('16.3.2021')).toBe(true);
+        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('16.03.2021')).toBe(true);
 
         expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
             true,

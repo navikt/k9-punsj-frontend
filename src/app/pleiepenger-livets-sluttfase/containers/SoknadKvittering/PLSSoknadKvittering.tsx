@@ -11,9 +11,9 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
+    formatDato,
     formatereTekstMedTimerOgMinutter,
     formattereDatoFraUTCTilGMT,
-    formattereDatoIArray,
     formattereTidspunktFraUTCTilGMT,
     getCountryList,
     periodToFormattedString,
@@ -255,7 +255,7 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato?.length > 0 && (
                                     <p>
                                         <b>{`${intlHelper(intl, 'skjema.frilanserdato')} `}</b>
-                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.startdato)}
+                                        {formatDato(ytelse.opptjeningAktivitet.frilanser?.startdato)}
                                     </p>
                                 )}
 
@@ -268,7 +268,7 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
                                     <p>
                                         <b>{`${intlHelper(intl, 'skjema.frilanserdato.slutt')} `}</b>
-                                        {formattereDatoIArray(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
+                                        {formatDato(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
                                     </p>
                                 )}
 

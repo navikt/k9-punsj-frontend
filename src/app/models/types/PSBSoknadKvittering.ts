@@ -61,7 +61,7 @@ export interface IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode {
             regnskapsførerNavn: string;
             regnskapsførerTlf: string;
             erVarigEndring: boolean;
-            endringDato: number[];
+            endringDato: string;
             endringBegrunnelse: string;
             bruttoInntekt: number;
             erNyoppstartet: boolean;

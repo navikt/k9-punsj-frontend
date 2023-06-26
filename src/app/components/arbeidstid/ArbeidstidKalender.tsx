@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Button, Modal } from '@navikt/ds-react';
+import { Button, Heading, Modal } from '@navikt/ds-react';
 
 import {
     ArbeidstidPeriodeMedTimer,
@@ -90,6 +90,9 @@ export default function ArbeidstidKalender({
 
     return (
         <>
+            <Heading size="small" className="mb-4">
+                Arbeidstid i søknadsperioden
+            </Heading>
             <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>
                 {intlHelper(intl, 'skjema.arbeid.registrerArbeidstidLengrePeriode')}
             </Button>

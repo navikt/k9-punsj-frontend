@@ -5,12 +5,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
 import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../models/types/PSBSoknadKvittering';
-import {
-    formattereDatoIArray,
-    landkodeTilNavn,
-    periodToFormattedString,
-    sjekkPropertyEksistererOgIkkeErNull,
-} from '../../utils';
+import { formatDato, landkodeTilNavn, periodToFormattedString, sjekkPropertyEksistererOgIkkeErNull } from '../../utils';
 import './visningAvPerioderSoknadKvittering.less';
 
 interface IOwnProps {
@@ -95,7 +90,7 @@ const VisningAvPerioderSNSoknadKvittering: React.FunctionComponent<IOwnProps> = 
                             {sjekkPropertyEksistererOgIkkeErNull('endringDato', SN.perioder[periode]) && (
                                 <p>
                                     <b>{`${intlHelper(intl, 'skjema.sn.varigendringdato')} `}</b>
-                                    {formattereDatoIArray(SN.perioder[periode].endringDato)}
+                                    {formatDato(SN.perioder[periode].endringDato)}
                                 </p>
                             )}
 

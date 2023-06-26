@@ -25,12 +25,15 @@ export const passertDato = yup
     .required()
     .test({ test: erIkkeFremITid, message: 'Dato kan ikke være frem i tid' });
 
-export const passertKlokkeslettPaaDato = yup
+const klokkeslettErFremITidForDato = (mottattDato: string) => (klokkeslett: string) =>
+    !klokkeslettErFremITid(mottattDato, klokkeslett);
+
+export const passertKlokkeslettPaaMottattDato = yup
     .string()
     .required()
-    .when('mottattDato', (mottattDato, schema) =>
+    .when('mottattDato', ([mottattDato], schema) =>
         schema.test({
-            test: (klokkeslett: string) => !klokkeslettErFremITid(mottattDato, klokkeslett),
+            test: typeof mottattDato === 'string' ? klokkeslettErFremITidForDato(mottattDato) : () => false,
             message: 'Klokkeslett kan ikke være frem i tid',
         }),
     )
@@ -39,7 +42,6 @@ export const passertKlokkeslettPaaDato = yup
 export const identifikator = yup
     .string()
     .required()
-    .nullable(true)
     .length(11)
     .test({
         test: (identifikasjonsnummer: string) => !IdentRules.erUgyldigIdent(identifikasjonsnummer),
@@ -102,11 +104,19 @@ export const arbeidstimerPeriode = yup.object().shape({
     }),
 });
 
-export const barn = yup.array().of(
-    yup.object().shape({
-        norskIdent: identifikator,
-    }),
-);
+// valid date format: YYYY-MM-DD
+export const datoYYYYMMDD = yup
+    .string()
+    .required()
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Må være på formatet YYYY-MM-DD')
+    .test({
+        test: (v) => !gyldigDato(v || ''),
+        message: 'Må ha en gyldig dato',
+    });
+
+export const barn = yup.object().shape({
+    norskIdent: identifikator,
+});
 
 export const validate = (validator: yup.AnySchema, value: any): boolean | string => {
     try {

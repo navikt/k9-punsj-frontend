@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
-import { uniqueId } from 'lodash';
-import React, { useRef } from 'react';
+import { groupBy } from 'lodash';
+import React, { useMemo } from 'react';
 
 import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
 import DateRange from 'app/models/types/DateRange';
 import { getMonthsInDateRange } from 'app/utils';
 
-import TidsbrukKalender from './TidsbrukKalender';
+import TidsbrukKalenderÅr from './TidsbrukKalenderÅr';
 
 interface OwnProps {
     gyldigePerioder: IPeriode[];
@@ -24,44 +24,71 @@ const TidsbrukKalenderContainer = ({
     dateContentRenderer,
     slettPeriode,
 }: OwnProps) => {
-    const ref = useRef();
-    const dateRanges = gyldigePerioder
-        .filter((periode) => periode.fom && periode.tom)
-        .map((periode) => ({ fom: new Date(periode.fom), tom: new Date(periode.tom) }));
-    const months = dateRanges
-        .map((dateRange) => getMonthsInDateRange(dateRange))
-        .flat()
-        .sort((a, b) => (a.fom > b.fom ? 1 : -1));
+    const dateRanges = useMemo(
+        () =>
+            gyldigePerioder
+                .filter((periode) => periode.fom && periode.tom)
+                .map((periode) => ({ fom: new Date(periode.fom), tom: new Date(periode.tom) })),
+        [gyldigePerioder],
+    );
+    const months = useMemo(
+        () =>
+            dateRanges
+                .map((dateRange) => getMonthsInDateRange(dateRange))
+                .flat()
+                .sort((a, b) => (a.fom > b.fom ? 1 : -1)),
+        [dateRanges],
+    );
 
-    const reducer = (acc: DateRange[][], currentDateRange: DateRange) => {
-        const indexOfArrayToInsertInto = acc.findIndex((dateRangeArr: DateRange[]) =>
-            dateRangeArr.some((dateRange) => dayjs(dateRange.fom).isSame(currentDateRange.fom, 'month')),
-        );
-        if (indexOfArrayToInsertInto > -1 && currentDateRange) {
-            const originalArray = acc[indexOfArrayToInsertInto];
-            const mutableAccumulator = acc;
-            mutableAccumulator[indexOfArrayToInsertInto] = [...originalArray, currentDateRange];
-            return mutableAccumulator;
-        }
-        return [...acc, [currentDateRange]];
-    };
-    const gyldigePerioderPerMåned = months.reduce(reducer, []);
-    const id = uniqueId('tidsbrukKalender');
+    const gyldigePerioderPerMåned = useMemo(() => {
+        const reducer = (acc: DateRange[][], currentDateRange: DateRange) => {
+            const indexOfArrayToInsertInto = acc.findIndex((dateRangeArr: DateRange[]) =>
+                dateRangeArr.some((dateRange) => dayjs(dateRange.fom).isSame(currentDateRange.fom, 'month')),
+            );
+            if (indexOfArrayToInsertInto > -1 && currentDateRange) {
+                const originalArray = acc[indexOfArrayToInsertInto];
+                const mutableAccumulator = acc;
+                mutableAccumulator[indexOfArrayToInsertInto] = [...originalArray, currentDateRange];
+                return mutableAccumulator;
+            }
+            return [...acc, [currentDateRange]];
+        };
+        return months.reduce(reducer, []);
+    }, [months]);
+
+    const gyldigePerioderPerÅr = useMemo(
+        () =>
+            Object.entries(groupBy(gyldigePerioderPerMåned, (perioder) => dayjs(perioder[0].fom).year()))
+                .map(([year, perioder]) => ({
+                    aar: parseInt(year, 10),
+                    perioder,
+                }))
+                .sort((a, b) => b.aar - a.aar),
+        [gyldigePerioderPerMåned],
+    );
+
+    const kalenderdagerForYear = (year: number) =>
+        kalenderdager.filter((kalenderdag) => dayjs(kalenderdag.date).year() === year);
     return (
-        <div style={{ maxWidth: '1000px' }} id={id} ref={ref}>
-            {gyldigePerioderPerMåned.map((perioder) => (
-                <TidsbrukKalender
-                    ref={ref}
-                    key={perioder[0].fom.toString()}
-                    gyldigePerioder={perioder}
-                    ModalContent={ModalContent}
-                    dateContentRenderer={dateContentRenderer(kalenderdager)}
-                    kalenderdager={kalenderdager}
-                    slettPeriode={slettPeriode}
-                />
-            ))}
+        <div style={{ maxWidth: '1000px' }}>
+            {gyldigePerioderPerÅr.map(({ perioder, aar }) => {
+                const kalenderdagerIÅr = kalenderdagerForYear(aar);
+                return (
+                    <div className="mt-3">
+                        <TidsbrukKalenderÅr
+                            aar={aar}
+                            key={aar}
+                            perioder={perioder}
+                            ModalContent={ModalContent}
+                            dateContentRenderer={dateContentRenderer(kalenderdagerIÅr)}
+                            kalenderdager={kalenderdagerIÅr}
+                            slettPeriode={slettPeriode}
+                        />
+                    </div>
+                );
+            })}
         </div>
     );
 };
 
-export default TidsbrukKalenderContainer;
+export default React.memo(TidsbrukKalenderContainer);

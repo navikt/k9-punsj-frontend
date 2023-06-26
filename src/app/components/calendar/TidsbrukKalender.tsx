@@ -1,9 +1,8 @@
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
-import EkspanderbartPanel from 'nav-frontend-ekspanderbartpanel';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 
-import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
+import { BodyShort, Button, ExpansionCard, Heading, Modal, Provider } from '@navikt/ds-react';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
@@ -24,7 +23,7 @@ interface OwnProps {
     tittelRenderer?: () => string | React.FunctionComponent;
 }
 
-export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
+export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
     (
         {
             gyldigePerioder,
@@ -69,24 +68,47 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             setSelectedDates([]);
         };
 
-        useOnClickOutside(ref, clearSelectedDates);
         const toggleKalender = () => {
             setVisKalender(!visKalender);
             if (selectedDates.length) {
                 setSelectedDates([]);
             }
         };
-        const toggleModal = () => setVisModal(!visModal);
-        const datoerIGyldigePerioder = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
-        const disabledDates = getDatesInMonth(gyldigePerioder[0].fom)
-            .map((date) => {
-                if (!isDateInDates(date, datoerIGyldigePerioder) || (disableWeekends && isWeekend(date))) {
-                    return date;
-                }
 
-                return false;
-            })
-            .filter((v) => v instanceof Date) as Date[];
+        useOnClickOutside(ref, (event) => {
+            if (visModal) {
+                return;
+            }
+            if (!event?.target.closest('.exempt-from-click-outside, .ReactModal__Overlay')) {
+                clearSelectedDates();
+            }
+        });
+
+        const toggleModal = () => setVisModal(!visModal);
+
+        const formatDate = (date: string | Date) => dayjs(date).format('YYYY-MM-DD');
+
+        const datoerIGyldigePerioder = useMemo(
+            () =>
+                new Set(
+                    gyldigePerioder.flatMap((gyldigPeriode) =>
+                        Array.from(getDatesInDateRange(gyldigPeriode)).map(formatDate),
+                    ),
+                ),
+            [gyldigePerioder],
+        );
+        const disabledDates = useMemo(() => {
+            const datoer = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
+            return getDatesInMonth(gyldigePerioder[0].fom)
+                .map((date) => {
+                    if (!isDateInDates(date, datoer) || (disableWeekends && isWeekend(date))) {
+                        return date;
+                    }
+                    return false;
+                })
+                .filter((v) => v instanceof Date) as Date[];
+        }, [gyldigePerioder, disableWeekends]);
+
         const toggleDay = (date: Date) => {
             if (selectedDates.some((v) => dayjs(v).isSame(date))) {
                 setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)));
@@ -103,6 +125,7 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 ),
             );
         };
+
         const selectRange = (date: Date): void => {
             if (!previouslySelectedDate) {
                 toggleDay(date);
@@ -122,15 +145,20 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
             .some((date) =>
                 selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date),
             );
-        const kalenderdagerIGyldigePerioder = kalenderdager
-            ?.map((kalenderdag) => kalenderdag.date)
-            .map((date) => isDateInDates(date, datoerIGyldigePerioder))
-            .filter(Boolean);
+        const kalenderdagerIGyldigePerioder = useMemo(
+            () =>
+                kalenderdager
+                    ?.map((kalenderdag) => formatDate(kalenderdag.date))
+                    .filter((date) => datoerIGyldigePerioder.has(date)),
+            [kalenderdager, datoerIGyldigePerioder],
+        );
+
         const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
         const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
+
         const tittel = (
             <>
-                {tittelRenderer(gyldigePerioder[0].fom)}
+                <Heading size="xsmall">{tittelRenderer(gyldigePerioder[0].fom)}</Heading>
                 {kalenderdagerIGyldigePerioder?.length ? (
                     <BodyShort>{`${kalenderdagerIGyldigePerioder?.length} dager registrert`}</BodyShort>
                 ) : (
@@ -138,50 +166,73 @@ export const TidsbrukKalender: React.FunctionComponent<OwnProps> = forwardRef(
                 )}
             </>
         );
+
         return (
-            <EkspanderbartPanel tittel={tittel} apen={visKalender} onClick={toggleKalender}>
-                <div>
-                    <CalendarGrid
-                        onDateClick={(date) => (shiftKeydown ? selectRange(date) : toggleDay(date))}
-                        month={gyldigePerioder[0]}
-                        disabledDates={disabledDates as Date[]}
-                        disableWeekends={disableWeekends}
-                        dateContentRenderer={dateContentRenderer}
-                        selectedDates={selectedDates}
-                    />
-                    <div style={{ marginTop: '1.875rem' }}>
-                        {!!kanRegistrereTid && (
-                            <Button variant="primary" onClick={toggleModal}>
-                                Registrer tid
-                            </Button>
-                        )}
-                        {kanSletteTid && (
-                            <Slett
-                                onClick={() => {
-                                    slettPeriode(selectedDates);
-                                    clearSelectedDates();
-                                }}
-                            >
-                                Slett registrert tid
-                            </Slett>
-                        )}
-                    </div>
-                    <Provider rootElement={document.getElementById(ref?.current?.id) || undefined}>
-                        <Modal
-                            className="venstrestilt registrer-tid-modal"
-                            open={visModal}
-                            onClose={toggleModal}
-                            closeButton
-                        >
-                            <Modal.Content>
-                                {React.cloneElement(ModalContent, { selectedDates, toggleModal })}
-                            </Modal.Content>
-                        </Modal>
-                    </Provider>
-                </div>
-            </EkspanderbartPanel>
+            <ExpansionCard
+                open={visKalender}
+                onToggle={toggleKalender}
+                aria-labelledby={gyldigePerioder[0].fom.toISOString()}
+                ref={ref}
+                className="mt-3"
+            >
+                <ExpansionCard.Header>
+                    <ExpansionCard.Title id={gyldigePerioder[0].fom.toISOString()}>{tittel}</ExpansionCard.Title>
+                </ExpansionCard.Header>
+                <ExpansionCard.Content>
+                    {visKalender && (
+                        <div className="exempt-from-click-outside">
+                            <CalendarGrid
+                                onDateClick={(date) => (shiftKeydown ? selectRange(date) : toggleDay(date))}
+                                month={gyldigePerioder[0]}
+                                disabledDates={disabledDates as Date[]}
+                                disableWeekends={disableWeekends}
+                                dateContentRenderer={dateContentRenderer}
+                                selectedDates={selectedDates}
+                            />
+                            <div style={{ marginTop: '1.875rem' }}>
+                                <Button
+                                    variant="primary"
+                                    style={{ display: kanRegistrereTid ? 'inherit' : 'none' }}
+                                    onClick={toggleModal}
+                                >
+                                    Registrer tid
+                                </Button>
+                                {kanSletteTid && (
+                                    <Slett
+                                        onClick={() => {
+                                            slettPeriode(selectedDates);
+                                            clearSelectedDates();
+                                        }}
+                                    >
+                                        Slett registrert tid
+                                    </Slett>
+                                )}
+                            </div>
+                            <Provider rootElement={document.getElementById(ref?.current?.id) || undefined}>
+                                <Modal
+                                    className="venstrestilt registrer-tid-modal exempt-from-click-outside"
+                                    open={visModal}
+                                    onClose={() => {
+                                        toggleModal();
+                                        clearSelectedDates();
+                                    }}
+                                    closeButton
+                                >
+                                    <Modal.Content>
+                                        {React.cloneElement(ModalContent, {
+                                            selectedDates,
+                                            toggleModal,
+                                            clearSelectedDates,
+                                        })}
+                                    </Modal.Content>
+                                </Modal>
+                            </Provider>
+                        </div>
+                    )}
+                </ExpansionCard.Content>
+            </ExpansionCard>
         );
     },
 );
 
-export default TidsbrukKalender;
+export default React.memo(TidsbrukKalender);

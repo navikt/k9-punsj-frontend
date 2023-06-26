@@ -186,7 +186,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     };
 
     const debounceCallback = useCallback(
-        debounce(() => updateSoknad({ submitSoknad: false }), 3000),
+        debounce(() => updateSoknad({ submitSoknad: false }), 1000),
         [],
     );
 

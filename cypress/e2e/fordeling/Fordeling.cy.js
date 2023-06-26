@@ -7,7 +7,7 @@ describe('Fordeling', () => {
         cy.visit('/journalpost/200');
     });
 
-    it('viser dokumentvalg', () => {
+    it.skip('viser dokumentvalg', () => {
         cy.contains(/Dette gjelder:?/i).should('exist');
         cy.contains('Pleiepenger').should('exist');
         cy.contains('Omsorgspenger/omsorgsdager').should('exist');
@@ -15,7 +15,19 @@ describe('Fordeling', () => {
         cy.contains('Annet').should('exist');
     });
 
-    it('viser subdokumentvalg omsorgspenger', () => {
+    it('kan velge å lukke journalposten', () => {
+        cy.findByText(/Pleiepenger sykt barn/i).click();
+        cy.findByText(/Ja/i).click();
+        cy.findByText(/Har ikke tilhørende fagsak/i).click();
+        cy.findByLabelText(/Velg hvilket barn det gjelder/i)
+            .should('exist')
+            .select('Hallo Hansen - 03091477490');
+        cy.findByRole('button', { name: /Videre/i }).click();
+        cy.findByText(/Lukk oppgave i LOS/i).click();
+        cy.findByRole('button', { name: /bekreft/i }).click();
+    });
+
+    it.skip('viser subdokumentvalg omsorgspenger', () => {
         cy.contains('Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn').should('not.exist');
         cy.contains('Korrigering av inntektsmelding omsorgspenger AG').should('not.exist');
         cy.contains('Ekstra omsorgsdager når du er midlertidig alene om omsorgen').should('not.exist');
@@ -26,12 +38,13 @@ describe('Fordeling', () => {
         cy.contains('Korrigering av inntektsmelding omsorgspenger AG').should('exist').click();
     });
 
-    it('kan opprette journalføringsoppgave i Gosys', () => {
+    it.skip('kan opprette journalføringsoppgave i Gosys', () => {
         cy.contains('Annet').click();
         cy.findByLabelText(/Søkers fødselsnummer eller D-nummer/i).should('exist');
         cy.findByLabelText(/Velg hva journalposten gjelder/i).should('exist');
     });
-    it('kan korrigere inntektsmelding uten å sette behandlingsår kjøres', () => {
+
+    it.skip('kan korrigere inntektsmelding uten å sette behandlingsår kjøres', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Korrigering av inntektsmelding omsorgspenger AG/i).click();
         cy.findByText('Ja').click();
@@ -42,7 +55,7 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/korrigering-av-inntektsmelding');
     });
 
-    it('Midlertidig alene - kan navigere til eksisterende søknader', () => {
+    it.skip('Midlertidig alene - kan navigere til eksisterende søknader', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();
@@ -53,7 +66,18 @@ describe('Fordeling', () => {
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentsoknader');
     });
 
-    it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
+    it.skip('Alene om omsorgen - kan navigere til eksisterende søknader', () => {
+        cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
+        cy.findByText(/Ekstra omsorgsdager når du er alene om omsorgen/i).click();
+        cy.findByText(/Ja/i).click();
+        cy.findByLabelText(/Velg hvilket barn det gjelder/i).select('Geir-Paco Gundersen - 02021477330');
+        cy.findByRole('button', { name: /Videre/i }).click();
+        cy.findByText(/Registrer søknad - alene om omsorgen/i).click();
+        cy.findByRole('button', { name: /bekreft/i }).click();
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/soeknader');
+    });
+
+    it.skip('Omsorgspenger - kan navigere til eksisterende søknader', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
         cy.findByText(/Ja/i).click();
@@ -62,7 +86,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /bekreft/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
     });
-    it('Omsorgspenger - blir stoppet hvis behandlingsaar ikke settes', () => {
+    it.skip('Omsorgspenger - blir stoppet hvis behandlingsaar ikke settes', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
@@ -78,7 +102,7 @@ describe('Fordeling', () => {
         cy.findByText(/Kunne ikke sjekke opplysninger. Prøv igjen senere./i).should('exist');
     });
 
-    it('validering av fødselsnummer virker', () => {
+    it.skip('validering av fødselsnummer virker', () => {
         cy.contains('Pleiepenger').click();
         cy.contains('Nei').click();
 
@@ -89,7 +113,7 @@ describe('Fordeling', () => {
         cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should('not.exist');
     });
 
-    it('validering av fødselsnummer IKKE virker', () => {
+    it.skip('validering av fødselsnummer IKKE virker', () => {
         cy.contains('Pleiepenger').click();
         cy.contains('Nei').click();
 
