@@ -100,7 +100,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetBarn,
     } = props;
     const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
-    const sakstyper: ISakstypeDefault[] = useMemo(() => [...Sakstyper.punchSakstyper], []);
+    const sakstyper: ISakstypeDefault[] = useMemo(
+        () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
+        [],
+    );
 
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
