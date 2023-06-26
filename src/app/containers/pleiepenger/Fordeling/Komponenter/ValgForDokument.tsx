@@ -50,6 +50,7 @@ interface IValgForDokument {
 const ValgForDokument: React.FC<IValgForDokument> = ({
     dokumenttype,
     kanJournalforingsoppgaveOpprettesiGosys,
+    erJournalfoertEllerFerdigstilt,
     setSakstypeAction,
     konfigForValgtSakstype,
     fordelingState,
@@ -123,6 +124,9 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
                 {keys &&
                     keys.map((key) => {
+                        if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                            return null;
+                        }
                         if (!(key === TilgjengeligSakstype.ANNET && !kanJournalforingsoppgaveOpprettesiGosys)) {
                             return (
                                 <RadioPanel
