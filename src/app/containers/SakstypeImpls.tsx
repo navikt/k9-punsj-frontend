@@ -116,5 +116,5 @@ export const Sakstyper: ISakstyper = {
         SendBrevPåEksisterendeFagsak,
         OpplæringspengerPunch,
     ],
-    omfordelingssakstyper: [Annet, SkalIkkePunsjes],
+    omfordelingssakstyper: [Annet, SkalIkkePunsjes, klassifiserDokument],
 };

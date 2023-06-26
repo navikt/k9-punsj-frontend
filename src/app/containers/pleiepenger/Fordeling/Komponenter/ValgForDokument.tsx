@@ -69,8 +69,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         ((harLagretBehandlingsår && gjelderPsbOmsOlp) || visValgForDokument) &&
         dokumenttype !== FordelingDokumenttype.ANNET;
 
-    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
-
     if (!vis) {
         return null;
     }
@@ -118,9 +116,18 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         [];
 
     const keys = sakstypekeys.filter((key) => {
-        if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {
-            return key !== TilgjengeligSakstype.SEND_BREV;
+        const sendBrevEnabledOgLukkOppgaveEnabled =
+            getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'true';
+        const postmottakEnabled = getEnvironmentVariable('POSTMOTTAK_TOGGLE') === 'true';
+
+        if (!sendBrevEnabledOgLukkOppgaveEnabled && key === TilgjengeligSakstype.SEND_BREV) {
+            return false;
         }
+
+        if (!postmottakEnabled && key === TilgjengeligSakstype.KLASSIFISER_OG_GAA_TIL_LOS) {
+            return false;
+        }
+
         return true;
     });
     return (
