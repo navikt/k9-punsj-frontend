@@ -96,7 +96,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
-                        onSubmit={() => gaaVidereMedSoeknad(valgtSoeknad)}
+                        onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
                         onClose={() => setValgtSoeknad(undefined)}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
