@@ -2,7 +2,7 @@ import React from 'react';
 
 import OMPAORouter from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORouter';
 
-import { ISakstypePunch, ISakstyper } from '../models/Sakstype';
+import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
 import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
 import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
@@ -91,6 +91,14 @@ export const OpplæringspengerPunch: ISakstypePunch = {
     steps: [],
 };
 
+export const Annet: ISakstypeOmfordeling = {
+    navn: Sakstype.ANNET,
+};
+
+export const SkalIkkePunsjes: ISakstypeOmfordeling = {
+    navn: Sakstype.SKAL_IKKE_PUNSJES,
+};
+
 export const Sakstyper: ISakstyper = {
     punchSakstyper: [
         Pleiepenger,
@@ -104,4 +112,5 @@ export const Sakstyper: ISakstyper = {
         SendBrevPåEksisterendeFagsak,
         OpplæringspengerPunch,
     ],
+    omfordelingssakstyper: [Annet, SkalIkkePunsjes],
 };
