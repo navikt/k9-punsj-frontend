@@ -17,7 +17,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     it('viser informasjon om journalpost og søker', () => {
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Journalpostnummer/i).should('exist');
-            cy.findByText(/Søkers fødselsnummer/i).should('exist');
+            cy.findByText(/Søkers ID/i).should('exist');
 
             cy.findByText(initialState.felles.journalpost.journalpostId).should('exist');
             cy.findByText(initialState.identState.søkerId).should('exist');
