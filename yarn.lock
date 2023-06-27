@@ -13652,18 +13652,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"full-icu@npm:1.5.0":
-  version: 1.5.0
-  resolution: "full-icu@npm:1.5.0"
-  dependencies:
-    yauzl: ^2.10.0
-  bin:
-    full-icu: node-full-icu.js
-    node-full-icu-path: node-icu-data.js
-  checksum: 28881850ad582b7fecc0a3e313042a02d66cf4ce0b28f9b03d13546df94032a63c843a8ed9f5b0544e813804825be6ab3178e99117051782a21bab6293728d48
-  languageName: node
-  linkType: hard
-
 "function-bind@npm:^1.1.1":
   version: 1.1.1
   resolution: "function-bind@npm:1.1.1"
@@ -16819,7 +16807,6 @@ __metadata:
     fetch-headers: 2.0.0
     fetch-mock: 9.11.0
     formik: 2.4.0
-    full-icu: 1.5.0
     helmet: 7.0.0
     html-webpack-harddisk-plugin: 2.0.0
     html-webpack-plugin: 5.5.3
