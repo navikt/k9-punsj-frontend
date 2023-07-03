@@ -15,6 +15,7 @@ export enum Sakstype {
     ANNET = 'ANNET',
     SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES',
     SEND_BREV = 'SEND_BREV',
+    KLASSIFISER_OG_GAA_TIL_LOS = 'KLASSIFISER_OG_GAA_TIL_LOS',
 }
 
 export enum TilgjengeligSakstype {
@@ -28,11 +29,13 @@ export enum TilgjengeligSakstype {
     ANNET = 'ANNET',
     SKAL_IKKE_PUNSJES = 'SKAL_IKKE_PUNSJES',
     SEND_BREV = 'SEND_BREV',
+    KLASSIFISER_OG_GAA_TIL_LOS = 'KLASSIFISER_OG_GAA_TIL_LOS',
     OPPLAERINGSPENGER = 'OPPLAERINGSPENGER',
 }
 
 const fellesSakstyper = [
     TilgjengeligSakstype.SEND_BREV,
+    TilgjengeligSakstype.KLASSIFISER_OG_GAA_TIL_LOS,
     TilgjengeligSakstype.ANNET,
     TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
 ];

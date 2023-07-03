@@ -1,5 +1,13 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
 
+export const formattereDatoIArray = (dato: number[]) => {
+    const formatertDato: string[] = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = dato.length - 1; i >= 0; i--) {
+        formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
+    }
+    return formatertDato.join('');
+};
 export const formatDato = (dato: string) => {
     const [year, month, day] = dato.split('-');
     return `${day}.${month}.${year}`;
@@ -69,7 +77,9 @@ export const finnVisningsnavnForSakstype = (kode: string) => {
     return sakstyper.find((st) => st.kode === kode)?.navn || kode;
 };
 
-export const finnForkortelseForDokumenttype = (dokumenttype?: FordelingDokumenttype) => {
+export const finnForkortelseForDokumenttype = (
+    dokumenttype?: FordelingDokumenttype,
+): DokumenttypeForkortelse | undefined => {
     if (!dokumenttype) {
         return undefined;
     }
@@ -115,7 +125,7 @@ export const getModiaPath = (fødselsnummer?: string) => {
     if (!fødselsnummer) {
         return null;
     }
-    if (host.includes('dev.adeo.no')) {
+    if (host.includes('dev.adeo.no') || host.includes('localhost')) {
         return `https://app-q1.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
     if (host.includes('nais.adeo.no')) {

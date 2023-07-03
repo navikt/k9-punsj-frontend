@@ -1,4 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
+import { DokumenttypeForkortelse } from 'app/models/enums';
+import { IPeriode } from 'app/models/types';
+import { FagsakYtelseType } from 'app/models/types/RequestBodies';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 
@@ -49,3 +52,19 @@ export const hentBarn = (norskIdent: string): Promise<Error | Response> =>
     get(ApiPath.BARN_GET, { norskIdent }, { 'X-Nav-NorskIdent': norskIdent });
 export const finnFagsaker = (søkersFødselsnummer: string, callback: (response: Response, data: Fagsak[]) => void) =>
     get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);
+export const klassifiserDokument = (body: {
+    brukerIdent: string;
+    barnIdent?: string;
+    annenPart?: string;
+    journalpostId: string;
+    fagsakYtelseTypeKode?: DokumenttypeForkortelse;
+    periode?: IPeriode;
+    saksnummer?: string;
+}) =>
+    post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
+        async (response) => {
+            if (!response.ok) {
+                throw Error('Det oppstod en feil.');
+            }
+        },
+    );

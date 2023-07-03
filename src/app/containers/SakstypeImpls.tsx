@@ -95,6 +95,10 @@ export const Annet: ISakstypeOmfordeling = {
     navn: Sakstype.ANNET,
 };
 
+export const klassifiserDokument: ISakstypeOmfordeling = {
+    navn: Sakstype.KLASSIFISER_OG_GAA_TIL_LOS,
+};
+
 export const SkalIkkePunsjes: ISakstypeOmfordeling = {
     navn: Sakstype.SKAL_IKKE_PUNSJES,
 };
@@ -112,5 +116,5 @@ export const Sakstyper: ISakstyper = {
         SendBrevPåEksisterendeFagsak,
         OpplæringspengerPunch,
     ],
-    omfordelingssakstyper: [Annet, SkalIkkePunsjes],
+    omfordelingssakstyper: [Annet, SkalIkkePunsjes, klassifiserDokument],
 };

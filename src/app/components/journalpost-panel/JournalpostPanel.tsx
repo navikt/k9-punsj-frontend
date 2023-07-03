@@ -13,7 +13,7 @@ import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
 import LabelValue from '../skjema/LabelValue';
-import './journalpostPanel.less';
+import './journalpostPanel.css';
 
 export interface IJournalpostPanelStateProps {
     journalpost?: IJournalpost;

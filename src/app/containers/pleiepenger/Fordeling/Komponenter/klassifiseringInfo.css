@@ -1,0 +1,14 @@
+.fagsakContainer {
+    border-radius: 3%;
+    padding: 1rem;
+    background-color: var(--a-surface-subtle);
+    max-width: 26rem;
+}
+
+.fagsakContainer div {
+    display: flex;
+}
+
+.fagsakContainer label {
+    min-width: 7rem;
+}

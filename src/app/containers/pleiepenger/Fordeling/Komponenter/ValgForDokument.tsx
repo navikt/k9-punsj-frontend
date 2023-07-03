@@ -1,6 +1,7 @@
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 
 import { Alert } from '@navikt/ds-react';
 
@@ -20,6 +21,7 @@ import {
 } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
+import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     setSakstypeAction as setSakstype,
@@ -114,9 +116,18 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         [];
 
     const keys = sakstypekeys.filter((key) => {
-        if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {
-            return key !== TilgjengeligSakstype.SEND_BREV;
+        const sendBrevEnabledOgLukkOppgaveEnabled =
+            getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'true';
+        const postmottakEnabled = getEnvironmentVariable('POSTMOTTAK_TOGGLE') === 'true';
+
+        if (!sendBrevEnabledOgLukkOppgaveEnabled && key === TilgjengeligSakstype.SEND_BREV) {
+            return false;
         }
+
+        if (!postmottakEnabled && key === TilgjengeligSakstype.KLASSIFISER_OG_GAA_TIL_LOS) {
+            return false;
+        }
+
         return true;
     });
     return (
