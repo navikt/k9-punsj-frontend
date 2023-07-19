@@ -196,7 +196,7 @@
         "react-refresh": "0.14.0",
         "regenerator-runtime": "0.13.11",
         "style-loader": "3.3.3",
-        "stylelint": "15.8.0",
+        "stylelint": "15.10.2",
         "stylelint-config-prettier": "9.0.5",
         "stylelint-config-standard": "30.0.1",
         "terser-webpack-plugin": "5.3.9",
