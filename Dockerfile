@@ -1,12 +1,9 @@
-FROM cgr.dev/chainguard/node:18
+FROM nginxinc/nginx-unprivileged:1.23.1-alpine
 
-WORKDIR /usr/src/app
-
-COPY dist ./dist
-COPY server.js .
-COPY node_modules ./node_modules
-COPY package.json .
-COPY src/build/envVariables.js ./envVariables.js
-
+COPY dist /usr/share/nginx/html
+COPY start-server.sh /start-server.sh
+COPY server.nginx /etc/nginx/conf.d/app.conf.template
 EXPOSE 8080
-CMD ["/usr/bin/npm", "run", "start-express"]
+
+
+CMD sh /start-server.sh          
