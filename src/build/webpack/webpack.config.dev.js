@@ -35,7 +35,6 @@ webpackConfig.plugins.push(
     }),
 );
 
-webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
 webpackConfig.plugins.push(new ReactRefreshWebpackPlugin());
 webpackConfig.plugins.push(new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }));
 
