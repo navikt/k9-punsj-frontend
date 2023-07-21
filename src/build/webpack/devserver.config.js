@@ -4,7 +4,7 @@ const envVariables = require('../envVariables');
 const path = require('path');
 
 const configureDevServer = (decoratorFragments) => ({
-    onBeforeSetupMiddleware: (devServer) => {
+    setupMiddlewares: (middlewares, devServer) => {
         const { app } = devServer;
         app.engine('html', mustacheExpress());
         app.set('views', `${__dirname}/../../../dist/dev`);
@@ -17,12 +17,14 @@ const configureDevServer = (decoratorFragments) => ({
             res.set('content-type', 'application/javascript');
             res.sendFile(path.resolve(`dist/mockServiceWorker.js`));
         });
-        app.get(/^\/(?!.*dist).*$/, (req, res) => {
+        app.get('/', (req, res) => {
             res.render('index.html', Object.assign(decoratorFragments));
         });
+
+        return middlewares;
     },
     devMiddleware: {
-        publicPath: '/dist',
+        publicPath: '/',
         stats: 'minimal',
     },
     static: ['app'],
