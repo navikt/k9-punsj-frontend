@@ -225,7 +225,7 @@
         "src/app/**/*.{ts,tsx,js,jsx,css,less}": "prettier --write"
     },
     "msw": {
-        "workerDirectory": "dist"
+        "workerDirectory": "src/mocks"
     },
     "packageManager": "yarn@3.4.1"
 }

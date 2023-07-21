@@ -15,7 +15,7 @@ const configureDevServer = (decoratorFragments) => ({
         });
         app.get('/mockServiceWorker.js', (req, res) => {
             res.set('content-type', 'application/javascript');
-            res.sendFile(path.resolve(`dist/mockServiceWorker.js`));
+            res.sendFile(path.resolve(`mockServiceWorker.js`));
         });
         app.get('/', (req, res) => {
             res.render('index.html', Object.assign(decoratorFragments));
