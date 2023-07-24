@@ -12,7 +12,7 @@ const configureDevServer = () => ({
 
         app.get(`/getEnvVariables`, (req, res) => {
             res.set('content-type', 'application/javascript');
-            res.send(`${envVariables()}`);
+            res.json(envVariables());
         });
         app.get('/mockServiceWorker.js', (req, res) => {
             res.set('content-type', 'application/javascript');
