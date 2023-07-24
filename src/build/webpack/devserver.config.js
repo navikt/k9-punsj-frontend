@@ -4,7 +4,7 @@ const express = require('express');
 const envVariables = require('../envVariables');
 const path = require('path');
 
-const configureDevServer = (decoratorFragments) => ({
+const configureDevServer = () => ({
     setupMiddlewares: (middlewares, devServer) => {
         const { app } = devServer;
         app.engine('html', mustacheExpress());
@@ -20,7 +20,7 @@ const configureDevServer = (decoratorFragments) => ({
             res.sendFile(path.resolve(`${__dirname}/../../mocks/mockServiceWorker.js`));
         });
         app.get('/*', (req, res) => {
-            res.render('index.html', Object.assign(decoratorFragments));
+            res.render('index.html');
         });
 
         return middlewares;
