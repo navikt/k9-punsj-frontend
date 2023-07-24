@@ -6,6 +6,7 @@ export const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://lo
 export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
 
 export enum ApiPath {
+    ENV_VARIABLES = '/envVariables',
     EKSISTERENDE_SOKNADER_SOK = '/mapper',
     BARN_GET = '/barn',
     PSB_EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',

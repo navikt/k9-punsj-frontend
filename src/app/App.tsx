@@ -17,6 +17,7 @@ import '@navikt/ds-css';
 import { Modal as DsModal } from '@navikt/ds-react';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
+import { ApiPath } from './apiConfig';
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
@@ -74,6 +75,24 @@ export const App: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         DsModal?.setAppElement('#app');
+        fetch(ApiPath.ENV_VARIABLES).then((response) => {
+            response.json().then((data) => {
+                const envVariables = data.reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {});
+                const appSettings = {
+                    OIDC_AUTH_PROXY: envVariables.OIDC_AUTH_PROXY,
+                    K9_LOS_URL: envVariables.K9_LOS_URL,
+                    OMP_KS_ENABLED: envVariables.OMP_KS_ENABLED,
+                    PLS_ENABLED: envVariables.PLS_ENABLED,
+                    OMP_MA_FEATURE_TOGGLE: envVariables.OMP_MA_FEATURE_TOGGLE,
+                    OMP_UT_FEATURE_TOGGLE: envVariables.OMP_UT_FEATURE_TOGGLE,
+                    SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: envVariables.SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE,
+                    OLP_ENABLED: envVariables.OLP_ENABLED,
+                    OMP_AO_ENABLED: envVariables.OMP_AO_ENABLED,
+                    POSTMOTTAK_TOGGLE: envVariables.POSTMOTTAK_TOGGLE,
+                };
+                window.appSettings = JSON.parse(JSON.stringify(appSettings));
+            });
+        });
     }, []);
 
     return (
