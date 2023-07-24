@@ -22,7 +22,7 @@ import ApplicationWrapper from './components/application-wrapper/ApplicationWrap
 import JournalpostRouter from './containers/JournalpostRouter';
 import RedigeringRouter from './containers/redigering/RedigeringRouter';
 import SokIndex from './containers/sok/SokIndex';
-import withEnvVariables from './hooks/withAppSettings';
+import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { rootReducer } from './state/RootState';
