@@ -1,6 +1,5 @@
 require('dotenv').config();
 const mustacheExpress = require('mustache-express');
-const express = require('express');
 const envVariables = require('../envVariables');
 const path = require('path');
 
@@ -10,7 +9,7 @@ const configureDevServer = () => ({
         app.engine('html', mustacheExpress());
         app.set('views', `${__dirname}/../../../dist`);
         app.set('view engine', 'mustache');
-        app.use('/dist', express.static(path.resolve(__dirname, './../../../dist')));
+
         app.get(`/getEnvVariables`, (req, res) => {
             res.set('content-type', 'application/javascript');
             res.send(`${envVariables()}`);
@@ -19,15 +18,12 @@ const configureDevServer = () => ({
             res.set('content-type', 'application/javascript');
             res.sendFile(path.resolve(`${__dirname}/../../mocks/mockServiceWorker.js`));
         });
-        app.get('/*', (req, res) => {
+
+        app.get(/^\/(?!.*dist).*$/, (req, res) => {
             res.render('index.html');
         });
 
         return middlewares;
-    },
-    devMiddleware: {
-        publicPath: '/',
-        stats: 'minimal',
     },
     static: ['app'],
     client: {
