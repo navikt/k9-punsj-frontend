@@ -10,8 +10,7 @@ _shutdown_() {
 }
 
 [ -d /tmp/k9-punsj/] && echo "Feature toggle-directory finnes fra før, tilbakestiller" && rm -r /tmp/k9-punsj/* || mkdir -p  /tmp/k9-punsj/
-ls /usr/share/nginx/html/
-envsubst < /usr/share/nginx/html/envVariablesForEnvSubst.json > /tmp/k9-punsj/env.json
+envsubst < /usr/share/nginx/html/dist/envVariablesForEnvSubst.json > /tmp/k9-punsj/env.json
 export APP_HOSTNAME="${HOSTNAME:-localhost}"
 export APP_PORT="${APP_PORT:-443}"
 export APP_NAME="${APP_NAME:-devimg}"

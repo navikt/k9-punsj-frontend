@@ -61,8 +61,8 @@ map $upstream_http_cache_control $custom_cache_control {
 
         root   /usr/share/nginx/html;
         index  index.html index.htm;
-        try_files $uri $uri/ =404;
-    }
+        try_files $uri $uri/ /index.html;    
+        }
 
     location = /getEnvVariables {
               alias   /tmp/k9-punsj/env.json;
@@ -70,6 +70,10 @@ map $upstream_http_cache_control $custom_cache_control {
               
               }
 
+    location /dist {
+        root   /usr/share/nginx/html;
+        try_files $uri $uri/ =404;
+    }
 
 
       # Health check for NAIS
