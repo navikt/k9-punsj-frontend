@@ -1,2 +1,7 @@
 // eslint-disable-next-line import/prefer-default-export
-export const getEnvironmentVariable = (variableName: string) => (window as any).appSettings?.[variableName];
+export function getEnvironmentVariable(variableName: string) {
+    if (window.appSettings && variableName in window.appSettings) {
+        return window.appSettings[variableName];
+    }
+    return undefined;
+}
