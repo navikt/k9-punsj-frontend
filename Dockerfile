@@ -1,10 +1,18 @@
-FROM nginxinc/nginx-unprivileged:1.23.1-alpine
+# Stage 1: Perform environment substitution in a full-featured base image
+FROM alpine:3.14 AS builder
 
+RUN apk add --no-cache gettext
 COPY dist /usr/share/nginx/html/dist
 COPY dist/index.html /usr/share/nginx/html/index.html
-COPY start-server.sh /start-server.sh
 COPY server.nginx /etc/nginx/conf.d/app.conf.template
-EXPOSE 8080
+COPY start-server.sh /start-server.sh
 
 
-CMD sh /start-server.sh          
+RUN sh /start-server.sh
+
+# Stage 2: Copy the resulting files into a distroless base image
+FROM cgr.dev/chainguard/nginx:latest
+COPY --from=builder /usr/share/nginx/html/dist /usr/share/nginx/html/dist
+COPY --from=builder /tmp/k9-punsj/env.json /usr/share/nginx/html/getEnvVariables
+COPY --from=builder /usr/share/nginx/html /usr/share/nginx/html
+COPY --from=builder /etc/nginx/conf.d /etc/nginx/conf.d

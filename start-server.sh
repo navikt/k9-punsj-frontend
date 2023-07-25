@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-_shutdown_() {
-  # https://nav-it.slack.com/archives/C5KUST8N6/p1543497847341300
-  echo "shutdown initialized, allowing incoming requests for 5 seconds before continuing"
-  sleep 5
-  nginx -s quit
-  wait "$pid"
-}
+
 
 [ -d /tmp/k9-punsj/] && echo "Feature toggle-directory finnes fra før, tilbakestiller" && rm -r /tmp/k9-punsj/* || mkdir -p  /tmp/k9-punsj/
 envsubst < /usr/share/nginx/html/dist/envVariablesForEnvSubst.json > /tmp/k9-punsj/env.json
@@ -20,7 +14,3 @@ envsubst '$APP_PORT $APP_HOSTNAME $APP_NAME $OIDC_AUTH_PROXY' < /etc/nginx/conf.
 
 echo "### Nginx conf ###"
 cat /etc/nginx/conf.d/default.conf
-
-nginx -g "daemon off;" &
-pid=$!
-wait "$pid"
