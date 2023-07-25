@@ -119,38 +119,39 @@ export const SearchFormComponent: React.FC<ISearchFormProps> = ({
                         <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
                         <VerticalSpacer sixteenPx />
                     </div>
-
-                    {!!notFound && (
-                        <Alert size="small" variant="info">
-                            <FormattedMessage id="søk.jp.notfound" values={{ jpid: sanitizedJournalpostId }} />
-                        </Alert>
-                    )}
-
-                    {!!forbidden && (
-                        <Alert size="small" variant="warning">
-                            <FormattedMessage id="søk.jp.forbidden" values={{ jpid: sanitizedJournalpostId }} />
-                        </Alert>
-                    )}
-
-                    {conflict &&
-                        journalpostConflictError &&
-                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                    <div className="max-w-[500px] m-auto">
+                        {!!notFound && (
+                            <Alert size="small" variant="info">
+                                <FormattedMessage id="søk.jp.notfound" values={{ jpid: sanitizedJournalpostId }} />
                             </Alert>
                         )}
 
-                    {journalpostRequestError?.message && (
-                        <Alert size="small" variant="warning">
-                            {journalpostRequestError.message}
-                        </Alert>
-                    )}
+                        {!!forbidden && (
+                            <Alert size="small" variant="warning">
+                                <FormattedMessage id="søk.jp.forbidden" values={{ jpid: sanitizedJournalpostId }} />
+                            </Alert>
+                        )}
 
-                    {!!journalpost && !journalpost?.kanSendeInn && (
-                        <Alert size="small" variant="warning">
-                            <FormattedMessage id="fordeling.kanikkesendeinn" />
-                        </Alert>
-                    )}
+                        {conflict &&
+                            journalpostConflictError &&
+                            journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                                <Alert size="small" variant="warning">
+                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                </Alert>
+                            )}
+
+                        {journalpostRequestError?.message && (
+                            <Alert size="small" variant="warning">
+                                {journalpostRequestError.message}
+                            </Alert>
+                        )}
+
+                        {!!journalpost && !journalpost?.kanSendeInn && (
+                            <Alert size="small" variant="warning">
+                                <FormattedMessage id="fordeling.kanikkesendeinn" />
+                            </Alert>
+                        )}
+                    </div>
                 </SkjemaGruppe>
             </div>
             <div className="inngangContainer">
