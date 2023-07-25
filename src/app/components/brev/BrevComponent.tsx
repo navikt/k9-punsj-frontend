@@ -41,7 +41,7 @@ const previewMessage = (
 
     const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
 
-    fetch(`${URL_BACKEND}/api/k9-formidling/brev/forhaandsvis`, {
+    fetch(`${URL_BACKEND()}/api/k9-formidling/brev/forhaandsvis`, {
         method: 'post',
         credentials: 'include',
         body: JSON.stringify({
@@ -101,7 +101,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState<boolean>(false);
 
     useEffect(() => {
-        fetch(`${URL_BACKEND}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
+        fetch(`${URL_BACKEND()}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {
