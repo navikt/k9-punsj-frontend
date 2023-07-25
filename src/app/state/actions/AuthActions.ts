@@ -38,7 +38,7 @@ const authErrorAction = (error: IError): IAuthErrorAction => ({
 export function checkAuth() {
     return (dispatch: any) => {
         dispatch(loadingAction());
-        fetch(URL_AUTH_CHECK, { credentials: 'include' }).then((response) => {
+        fetch(URL_AUTH_CHECK(), { credentials: 'include' }).then((response) => {
             switch (response.status) {
                 case 200:
                     return response.json().then((user) => dispatch(authOkAction(user.name)));

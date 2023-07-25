@@ -1,9 +1,10 @@
 import { getEnvironmentVariable } from 'app/utils/envUtils';
 
-const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
-const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
-export const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
-export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
+const OICD_AUTH_PROXY = () => getEnvironmentVariable('OIDC_AUTH_PROXY') as string;
+const IS_OICD_AUTH_PROXY_SET = () => !!OICD_AUTH_PROXY() && OICD_AUTH_PROXY() !== 'undefined';
+export const URL_BACKEND = () => (IS_OICD_AUTH_PROXY_SET() ? OICD_AUTH_PROXY() : 'http://localhost:8101');
+
+export const URL_API = () => `${URL_BACKEND()}/api/k9-punsj`;
 
 export enum ApiPath {
     ENV_VARIABLES = '/envVariables',
@@ -88,5 +89,5 @@ export enum ApiPath {
     OLP_K9_PERIODER = '/opplaeringspenger-soknad/k9sak/info',
 }
 
-export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
-export const URL_AUTH_LOGIN = `${URL_BACKEND}/login?redirect_uri={uri}`;
+export const URL_AUTH_CHECK = () => `${URL_BACKEND()}/me`;
+export const URL_AUTH_LOGIN = () => `${URL_BACKEND()}/login?redirect_uri={uri}`;

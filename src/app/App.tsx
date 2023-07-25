@@ -14,7 +14,7 @@ import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
 
 import '@navikt/ds-css';
-import { Modal as DsModal } from '@navikt/ds-react';
+import { Modal as DsModal, Loader } from '@navikt/ds-react';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
@@ -75,6 +75,10 @@ export const App: React.FunctionComponent = () => {
     React.useEffect(() => {
         DsModal?.setAppElement('#app');
     }, []);
+
+    if (!window.appSettings) {
+        return <Loader />;
+    }
 
     return (
         <Sentry.ErrorBoundary>
