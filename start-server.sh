@@ -6,6 +6,7 @@ set -e
 [ -d /tmp/k9-punsj/] && echo "Feature toggle-directory finnes fra før, tilbakestiller" && rm -r /tmp/k9-punsj/* || mkdir -p  /tmp/k9-punsj/
 # echo the  OIDC_AUTH_PROXY env variable
 echo "OIDC_AUTH_PROXY: $OIDC_AUTH_PROXY"
+printenv
 
 envsubst < /usr/share/nginx/html/dist/envVariablesForEnvSubst.json > /tmp/k9-punsj/env.json
 export APP_HOSTNAME="${HOSTNAME:-localhost}"
