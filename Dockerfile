@@ -2,11 +2,11 @@
 FROM alpine:3.14 AS builder
 
 RUN apk add --no-cache gettext
+ENV OIDC_AUTH_PROXY=https://k9-punsj-oidc-auth-proxy.dev.intern.nav.no
 COPY dist /usr/share/nginx/html/dist
 COPY dist/index.html /usr/share/nginx/html/index.html
 COPY server.nginx /etc/nginx/conf.d/app.conf.template
 COPY start-server.sh /start-server.sh
-
 
 RUN sh /start-server.sh
 
