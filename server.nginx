@@ -64,7 +64,7 @@ map $upstream_http_cache_control $custom_cache_control {
         }
 
     location = /getEnvVariables {
-        alias /tmp/k9-punsj/env.json
+        alias /tmp/k9-punsj/env.json;
         default_type application/json;
       }
 
