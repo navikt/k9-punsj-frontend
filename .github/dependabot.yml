@@ -25,6 +25,8 @@ updates:
           - "@storybook/*"
         exclude-patterns:
           - "@storybook/storybook-deployer"
+          - "@storybook/testing-react"
+          - "@storybook/testing-library"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
