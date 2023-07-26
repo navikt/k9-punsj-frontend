@@ -5,6 +5,23 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 20
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+      babel:
+        patterns:
+          - "@babel*"
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint*"
+      storybook:
+        patterns:
+          - "@storybook*"
+        exclude-patterns:
+          - "@storybook/storybook-deployer"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
