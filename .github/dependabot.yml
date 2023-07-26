@@ -22,7 +22,7 @@ updates:
           - "@typescript-eslint*"
       storybook:
         patterns:
-          - "@storybook*"
+          - "@storybook/*"
         exclude-patterns:
           - "@storybook/storybook-deployer"
   - package-ecosystem: github-actions
