@@ -1,8 +1,9 @@
 import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 
+import Row from 'app/components/Row';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
@@ -120,7 +121,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
             <Container>
-                <Row noGutters>
+                <Row>
                     <RadioPanelGruppe
                         className="horizontalRadios"
                         radios={[
@@ -203,7 +204,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         {gjelderAnnenArbeidsgiver && (
                             <>
                                 <VerticalSpacer sixteenPx />
-                                <Row noGutters>
+                                <Row>
                                     <div className="input-row">
                                         <Input
                                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
@@ -251,7 +252,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </>
                 )}
-                <Row noGutters>
+                <Row>
                     <div className="input-row">
                         {selectedType === 'p' && (
                             <Input

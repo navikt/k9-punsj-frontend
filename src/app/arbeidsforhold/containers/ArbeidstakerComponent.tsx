@@ -122,7 +122,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
             <Container>
-                <Row noGutters>
+                <Row>
                     <RadioPanelGruppe
                         className="horizontalRadios"
                         radios={[
@@ -205,7 +205,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         {gjelderAnnenArbeidsgiver && (
                             <>
                                 <VerticalSpacer sixteenPx />
-                                <Row noGutters>
+                                <Row>
                                     <div className="input-row">
                                         <Input
                                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
@@ -253,7 +253,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </>
                 )}
-                <Row noGutters>
+                <Row>
                     <div className="input-row">
                         {selectedType === 'p' && (
                             <Input

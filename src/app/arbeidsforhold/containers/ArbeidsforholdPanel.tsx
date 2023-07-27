@@ -2,11 +2,12 @@ import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
+import Row from 'app/components/Row';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DateInput from 'app/components/skjema/DateInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -232,7 +233,7 @@ const ArbeidsforholdPanel = ({
                     onChange={() => undefined}
                 />
                 <div className="generelleopplysiniger">
-                    <Row noGutters>
+                    <Row>
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
                             bredde="M"
@@ -305,7 +306,7 @@ const ArbeidsforholdPanel = ({
                     }}
                 />
                 {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <Row noGutters>
+                    <Row>
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             bredde="M"
@@ -395,7 +396,7 @@ const ArbeidsforholdPanel = ({
                 />
                 {harRegnskapsfører && (
                     <div className="generelleopplysiniger">
-                        <Row noGutters>
+                        <Row>
                             <Input
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                 bredde="M"
@@ -434,7 +435,7 @@ const ArbeidsforholdPanel = ({
                                 }
                             />
                         </Row>
-                        <Row noGutters>
+                        <Row>
                             <Input
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
                                 bredde="M"
@@ -645,7 +646,7 @@ const ArbeidsforholdPanel = ({
                     )}
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
-                        <Row noGutters>
+                        <Row>
                             <DateInput
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
@@ -681,7 +682,7 @@ const ArbeidsforholdPanel = ({
                                 }}
                             />
                         </Row>
-                        <Row noGutters>
+                        <Row>
                             <Input
                                 bredde="M"
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Alert, Loader, Modal } from '@navikt/ds-react';
 
+import Row from 'app/components/Row';
 import Fagsak from 'app/types/Fagsak';
 
 import FeilmeldingPanel from '../components/FeilmeldingPanel';

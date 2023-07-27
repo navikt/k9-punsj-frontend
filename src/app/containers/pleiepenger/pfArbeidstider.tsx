@@ -1,10 +1,10 @@
 import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { HelpText } from '@navikt/ds-react';
 
+import Row from 'app/components/Row';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     PeriodeinfoComponent,
@@ -33,7 +33,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         const feltindeks = periodeSpenn(periode);
         return (
             <div className="arbeidstider">
-                <Row noGutters>
+                <Row>
                     <div className="input-row">
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 
 import { Button } from '@navikt/ds-react';
+
+import Row from 'app/components/Row';
 
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
 import { getEnvironmentVariable } from '../../utils';

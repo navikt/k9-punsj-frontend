@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
+import Row from 'app/components/Row';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
@@ -43,7 +43,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <Row noGutters key={index}>
+                                <Row key={index}>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>
                                             {({ field }: FieldProps) => (
@@ -77,7 +77,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                             );
                         })}
 
-                        <Row noGutters>
+                        <Row>
                             <button
                                 id="leggtilperiode"
                                 className="leggtilperiode"

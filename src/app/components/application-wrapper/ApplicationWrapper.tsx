@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { BodyShort, Loader } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
+import Row from 'app/components/Row';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';

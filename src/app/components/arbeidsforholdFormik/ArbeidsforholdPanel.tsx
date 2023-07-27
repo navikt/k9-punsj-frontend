@@ -2,15 +2,15 @@ import { Field, FieldProps, useFormikContext } from 'formik';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
+import Row from 'app/components/Row';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
@@ -164,7 +164,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     )} */}
 
                 <div className="generelleopplysiniger">
-                    <Row noGutters>
+                    <Row>
                         <TextFieldFormik
                             size="small"
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
@@ -184,7 +184,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     )}
                 </Field>
                 {!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <Row noGutters>
+                    <Row>
                         <TextFieldFormik
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
@@ -231,14 +231,14 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
                 {harRegnskapsfører && (
                     <div className="generelleopplysiniger">
-                        <Row noGutters>
+                        <Row>
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
                                 className="regnskapsførerNavn"
                             />
                         </Row>
-                        <Row noGutters>
+                        <Row>
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
@@ -288,14 +288,14 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     )}
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
-                        <Row noGutters>
+                        <Row>
                             <DatoInputFormik
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                             />
                         </Row>
-                        <Row noGutters>
+                        <Row>
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"

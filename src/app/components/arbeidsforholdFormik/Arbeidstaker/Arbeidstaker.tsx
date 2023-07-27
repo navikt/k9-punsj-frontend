@@ -1,10 +1,11 @@
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { Checkbox, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 
 import { ApiPath } from 'app/apiConfig';
+import Row from 'app/components/Row';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
@@ -127,7 +128,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
             <Container>
-                <Row noGutters>
+                <Row>
                     {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (
                             <RadioPanelGruppeFormik
@@ -216,7 +217,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         {gjelderAnnenArbeidsgiver && (
                             <>
                                 <VerticalSpacer sixteenPx />
-                                <Row noGutters>
+                                <Row>
                                     <div className="input-row">
                                         <TextFieldFormik
                                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
@@ -262,7 +263,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         )}
                     </>
                 )}
-                <Row noGutters>
+                <Row>
                     <div className="input-row">
                         {selectedType === 'p' && (
                             <TextFieldFormik

@@ -1,10 +1,10 @@
 import { FieldArray, useFormikContext } from 'formik';
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
 
+import Row from 'app/components/Row';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
@@ -40,7 +40,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             const fieldMeta = getFieldMeta(fieldName);
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <Row noGutters key={index}>
+                                <Row key={index}>
                                     <div className="periodepanel-input">
                                         <PeriodInput
                                             periode={period || {}}
@@ -81,7 +81,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
             )} */}
 
                         {kanHaFlere && (
-                            <Row noGutters>
+                            <Row>
                                 <button
                                     id="leggtilperiode"
                                     className="leggtilperiode"

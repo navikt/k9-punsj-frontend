@@ -1,13 +1,13 @@
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
+import Row from 'app/components/Row';
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
@@ -65,7 +65,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                 previousListLength < currentListLength &&
                                                 index === currentListLength - 1;
                                             return (
-                                                <Row noGutters key={fieldName}>
+                                                <Row key={fieldName}>
                                                     <div className="delvisFravaer__inputfelter">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
@@ -118,7 +118,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     )}
                                 </Panel>
                             </SkjemaGruppe>
-                            <Row noGutters>
+                            <Row>
                                 <button
                                     id="leggTilDag"
                                     className="leggtilperiode"
