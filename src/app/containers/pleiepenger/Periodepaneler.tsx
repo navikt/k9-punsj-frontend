@@ -87,9 +87,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
+                        <span className="mr-3" />
                         <button
                             id="slett"
-                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
+                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'fjern'}
                             type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);

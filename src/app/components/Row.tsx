@@ -5,6 +5,6 @@ interface Props {
     className?: string;
 }
 
-const Row = ({ children, className }: Props) => <div className={`flex flex-wrap ${className}`}>{children}</div>;
+const Row = ({ children, className }: Props) => <div className={`flex flex-wrap ${className || ''}`}>{children}</div>;
 
 export default Row;

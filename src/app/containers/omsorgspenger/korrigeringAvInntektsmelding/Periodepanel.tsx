@@ -43,7 +43,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <Row key={index}>
+                                <Row>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>
                                             {({ field }: FieldProps) => (
@@ -58,7 +58,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                                 />
                                             )}
                                         </Field>
-
+                                        <span className="mr-3" />
                                         <button
                                             id="slett"
                                             className="fjern"

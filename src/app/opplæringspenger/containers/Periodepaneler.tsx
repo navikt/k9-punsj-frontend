@@ -43,6 +43,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 <Row key={index}>
                                     <div className="periodepanel-input">
                                         <PeriodInput
+                                            className="mr-3"
                                             periode={period || {}}
                                             intl={intl}
                                             onChange={(periode) => {
