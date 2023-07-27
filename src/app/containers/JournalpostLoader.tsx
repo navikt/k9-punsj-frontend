@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Col, Container } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -64,13 +63,11 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (isJournalpostLoading) {
         return (
-            <Container style={{ height: '100%' }}>
-                <Row className="justify-content-center align-items-center" style={{ height: '100%' }}>
-                    <Col xs="auto">
-                        <Loader size="large" />
-                    </Col>
+            <div className="h-screen">
+                <Row className="justify-content-center align-items-center h-screen">
+                    <Loader size="large" />
                 </Row>
-            </Container>
+            </div>
         );
     }
 

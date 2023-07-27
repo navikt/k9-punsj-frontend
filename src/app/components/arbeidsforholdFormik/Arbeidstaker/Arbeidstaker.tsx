@@ -1,7 +1,6 @@
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { Checkbox, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
-import { Container } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 
 import { ApiPath } from 'app/apiConfig';
@@ -127,9 +126,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
 
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
-            <Container>
-                <Row>
-                    {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
+            <Row>
+                {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (
                             <RadioPanelGruppeFormik
                                 legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
@@ -151,143 +149,140 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             />
                         )}
                     </Field> */}
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={[
-                            {
-                                label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'),
-                                value: 'o',
-                            },
-                            {
-                                label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'),
-                                value: 'p',
-                            },
-                        ]}
-                        name={`arbeidsgivertype_${1}_${listeelementindex}`}
-                        legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                        onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
-                        checked={selectedType}
-                    />
-                </Row>
-                {selectedType === 'o' && (
-                    <>
-                        {harArbeidsgivere && (
-                            <SelectFormik
-                                value={selectedArbeidsgiver}
-                                label="Velg hvilken arbeidsgiver det gjelder"
-                                options={[{ value: '', label: '' }].concat(
-                                    arbeidsgivere.map((arbeidsgiver) => ({
-                                        label: `${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`,
-                                        value: arbeidsgiver.organisasjonsnummer,
-                                    })),
-                                )}
-                                name={`${name}.organisasjonsnummer`}
-                                onChange={(event) => {
-                                    const { value } = event.target;
-                                    dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
-                                    setFieldValue(`${name}.organisasjonsnummer`, value);
-                                    if (!value) {
-                                        dispatch({
-                                            type: ActionType.SET_NAVN_ARBEIDSDGIVER,
-                                            navnPåArbeidsgiver: '',
-                                        });
-                                    }
-                                }}
-                                disabled={gjelderAnnenArbeidsgiver}
-                                customError={harDuplikatOrgnr ? 'Organisasjonsnummeret er valgt flere ganger.' : ''}
-                            />
-                        )}
-                        <VerticalSpacer eightPx />
-                        {harArbeidsgivere && (
-                            <Checkbox
-                                label="Det gjelder annen arbeidsgiver"
-                                onChange={() => {
+                <RadioPanelGruppe
+                    className="horizontalRadios"
+                    radios={[
+                        {
+                            label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'),
+                            value: 'o',
+                        },
+                        {
+                            label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'),
+                            value: 'p',
+                        },
+                    ]}
+                    name={`arbeidsgivertype_${1}_${listeelementindex}`}
+                    legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
+                    onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
+                    checked={selectedType}
+                />
+            </Row>
+            {selectedType === 'o' && (
+                <>
+                    {harArbeidsgivere && (
+                        <SelectFormik
+                            value={selectedArbeidsgiver}
+                            label="Velg hvilken arbeidsgiver det gjelder"
+                            options={[{ value: '', label: '' }].concat(
+                                arbeidsgivere.map((arbeidsgiver) => ({
+                                    label: `${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`,
+                                    value: arbeidsgiver.organisasjonsnummer,
+                                })),
+                            )}
+                            name={`${name}.organisasjonsnummer`}
+                            onChange={(event) => {
+                                const { value } = event.target;
+                                dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
+                                setFieldValue(`${name}.organisasjonsnummer`, value);
+                                if (!value) {
                                     dispatch({
-                                        type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
-                                        selectedArbeidsgiver: '',
+                                        type: ActionType.SET_NAVN_ARBEIDSDGIVER,
+                                        navnPåArbeidsgiver: '',
                                     });
-                                    setFieldValue(name, {
-                                        ...arbeidstaker,
-                                        organisasjonsnummer: '',
-                                    });
-                                }}
-                                checked={gjelderAnnenArbeidsgiver}
-                            />
-                        )}
-                        {gjelderAnnenArbeidsgiver && (
-                            <>
-                                <VerticalSpacer sixteenPx />
-                                <Row>
-                                    <div className="input-row">
-                                        <TextFieldFormik
-                                            label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                            name={`${name}.organisasjonsnummer`}
-                                            className="arbeidstaker-organisasjonsnummer"
-                                            onChange={(event) => {
-                                                const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
-                                                setFieldValue(name, {
-                                                    ...arbeidstaker,
-                                                    organisasjonsnummer: valueWithoutWhitespaces,
-                                                });
-                                                if (valueWithoutWhitespaces.length === 9) {
-                                                    søkPåArbeidsgiver(valueWithoutWhitespaces);
-                                                } else if (navnPåArbeidsgiver) {
-                                                    dispatch({
-                                                        type: ActionType.SET_NAVN_ARBEIDSDGIVER,
-                                                        navnPåArbeidsgiver: '',
-                                                    });
-                                                }
-                                            }}
-                                            onBlur={(event) => {
-                                                const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
-
-                                                if (valueWithoutWhitespaces.length !== 9) {
-                                                    dispatch({
-                                                        type: ActionType.SET_SEARCH_ORGANISASJONSNUMMER_FAILED,
-                                                        searchOrganisasjonsnummerFailed: true,
-                                                    });
-                                                }
-                                            }}
-                                            customError={
-                                                searchOrganisasjonsnummerFailed
-                                                    ? 'Ingen treff på organisasjonsnummer'
-                                                    : ''
-                                            }
-                                        />
-                                        {navnPåArbeidsgiver && (
-                                            <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
-                                        )}
-                                    </div>
-                                </Row>
-                            </>
-                        )}
-                    </>
-                )}
-                <Row>
-                    <div className="input-row">
-                        {selectedType === 'p' && (
-                            <TextFieldFormik
-                                label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
-                                name={`${name}.norskIdent`}
-                                className="arbeidstaker-norskIdent"
-                                filterPattern={kunTall}
-                            />
-                        )}
-                    </div>
-                </Row>
-                <Field name={`${name}.arbeidstidInfo.perioder`}>
-                    {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                        <ArbeidstidKalender
-                            nyeSoknadsperioder={nyeSoknadsperioder}
-                            eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
-                            updateSoknad={(perioder) => {
-                                form.setFieldValue(field.name, [...perioder]);
+                                }
                             }}
-                            arbeidstidInfo={arbeidstidInfo}
+                            disabled={gjelderAnnenArbeidsgiver}
+                            customError={harDuplikatOrgnr ? 'Organisasjonsnummeret er valgt flere ganger.' : ''}
                         />
                     )}
-                </Field>
-            </Container>
+                    <VerticalSpacer eightPx />
+                    {harArbeidsgivere && (
+                        <Checkbox
+                            label="Det gjelder annen arbeidsgiver"
+                            onChange={() => {
+                                dispatch({
+                                    type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
+                                    selectedArbeidsgiver: '',
+                                });
+                                setFieldValue(name, {
+                                    ...arbeidstaker,
+                                    organisasjonsnummer: '',
+                                });
+                            }}
+                            checked={gjelderAnnenArbeidsgiver}
+                        />
+                    )}
+                    {gjelderAnnenArbeidsgiver && (
+                        <>
+                            <VerticalSpacer sixteenPx />
+                            <Row>
+                                <div className="input-row">
+                                    <TextFieldFormik
+                                        label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
+                                        name={`${name}.organisasjonsnummer`}
+                                        className="arbeidstaker-organisasjonsnummer"
+                                        onChange={(event) => {
+                                            const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
+                                            setFieldValue(name, {
+                                                ...arbeidstaker,
+                                                organisasjonsnummer: valueWithoutWhitespaces,
+                                            });
+                                            if (valueWithoutWhitespaces.length === 9) {
+                                                søkPåArbeidsgiver(valueWithoutWhitespaces);
+                                            } else if (navnPåArbeidsgiver) {
+                                                dispatch({
+                                                    type: ActionType.SET_NAVN_ARBEIDSDGIVER,
+                                                    navnPåArbeidsgiver: '',
+                                                });
+                                            }
+                                        }}
+                                        onBlur={(event) => {
+                                            const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
+
+                                            if (valueWithoutWhitespaces.length !== 9) {
+                                                dispatch({
+                                                    type: ActionType.SET_SEARCH_ORGANISASJONSNUMMER_FAILED,
+                                                    searchOrganisasjonsnummerFailed: true,
+                                                });
+                                            }
+                                        }}
+                                        customError={
+                                            searchOrganisasjonsnummerFailed ? 'Ingen treff på organisasjonsnummer' : ''
+                                        }
+                                    />
+                                    {navnPåArbeidsgiver && (
+                                        <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
+                                    )}
+                                </div>
+                            </Row>
+                        </>
+                    )}
+                </>
+            )}
+            <Row>
+                <div className="input-row">
+                    {selectedType === 'p' && (
+                        <TextFieldFormik
+                            label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
+                            name={`${name}.norskIdent`}
+                            className="arbeidstaker-norskIdent"
+                            filterPattern={kunTall}
+                        />
+                    )}
+                </div>
+            </Row>
+            <Field name={`${name}.arbeidstidInfo.perioder`}>
+                {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
+                    <ArbeidstidKalender
+                        nyeSoknadsperioder={nyeSoknadsperioder}
+                        eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
+                        updateSoknad={(perioder) => {
+                            form.setFieldValue(field.name, [...perioder]);
+                        }}
+                        arbeidstidInfo={arbeidstidInfo}
+                    />
+                )}
+            </Field>
         </SkjemaGruppe>
     );
 };

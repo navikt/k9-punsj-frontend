@@ -2,8 +2,9 @@ import React from 'react';
 
 interface Props {
     children: React.ReactNode;
+    className?: string;
 }
 
-const Row = ({ children }: Props) => <div className="flex flex-wrap -mr-6 -ml-6">{children}</div>;
+const Row = ({ children, className }: Props) => <div className={`flex flex-wrap ${className}`}>{children}</div>;
 
 export default Row;

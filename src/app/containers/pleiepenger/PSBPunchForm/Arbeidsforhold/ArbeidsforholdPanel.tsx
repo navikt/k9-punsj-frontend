@@ -2,7 +2,6 @@ import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
@@ -212,12 +211,10 @@ const ArbeidsforholdPanel = ({
     };
 
     const selvstendigperioder = () => {
-        const soknadsperioder = [...soknad.soeknadsperiode, ...eksisterendePerioder].filter(Boolean);
-
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
         return (
-            <Container className="infoContainer">
+            <div className="infoContainer">
                 <CheckboksPanelGruppe
                     className="virksomhetstypercheckbox"
                     legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
@@ -786,7 +783,7 @@ const ArbeidsforholdPanel = ({
                         getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
                     }
                 />
-            </Container>
+            </div>
         );
     };
 

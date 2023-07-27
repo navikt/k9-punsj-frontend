@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Col, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -58,13 +57,9 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
 
     if (authState.isLoading) {
         return (
-            <Container>
-                <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
-                    <Col xs="auto">
-                        <Loader size="large" />
-                    </Col>
-                </Row>
-            </Container>
+            <Row className="justify-content-center align-items-center h-screen">
+                <Loader size="large" />
+            </Row>
         );
     }
 

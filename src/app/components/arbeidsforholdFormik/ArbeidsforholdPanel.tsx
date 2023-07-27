@@ -2,7 +2,6 @@ import { Field, FieldProps, useFormikContext } from 'formik';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
@@ -148,7 +147,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
     const selvstendigperioder = () => {
         const { opptjeningAktivitet } = values;
         return (
-            <Container className="infoContainer">
+            <div className="infoContainer">
                 <CheckboxGroupFormik
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
                     legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
@@ -336,7 +335,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
                     }
                 /> */}
-            </Container>
+            </div>
         );
     };
 
