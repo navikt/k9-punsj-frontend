@@ -4,7 +4,6 @@ import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
 
 import { ApiPath } from 'app/apiConfig';
-import Row from 'app/components/Row';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
@@ -126,7 +125,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
 
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
-            <Row>
+            <div className="flex flex-wrap">
                 {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (
                             <RadioPanelGruppeFormik
@@ -166,7 +165,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
                     checked={selectedType}
                 />
-            </Row>
+            </div>
             {selectedType === 'o' && (
                 <>
                     {harArbeidsgivere && (
@@ -215,7 +214,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     {gjelderAnnenArbeidsgiver && (
                         <>
                             <VerticalSpacer sixteenPx />
-                            <Row>
+                            <div className="flex flex-wrap">
                                 <div className="input-row">
                                     <TextFieldFormik
                                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
@@ -254,12 +253,12 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                         <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
                                     )}
                                 </div>
-                            </Row>
+                            </div>
                         </>
                     )}
                 </>
             )}
-            <Row>
+            <div className="flex flex-wrap">
                 <div className="input-row">
                     {selectedType === 'p' && (
                         <TextFieldFormik
@@ -270,7 +269,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         />
                     )}
                 </div>
-            </Row>
+            </div>
             <Field name={`${name}.arbeidstidInfo.perioder`}>
                 {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                     <ArbeidstidKalender

@@ -7,7 +7,6 @@ import { Alert, Panel } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
-import Row from 'app/components/Row';
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
@@ -65,7 +64,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                 previousListLength < currentListLength &&
                                                 index === currentListLength - 1;
                                             return (
-                                                <Row key={fieldName}>
+                                                <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="delvisFravaer__inputfelter">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
@@ -112,13 +111,13 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                             {intlHelper(intl, 'skjema.liste.fjern_dag')}
                                                         </button>
                                                     </div>
-                                                </Row>
+                                                </div>
                                             );
                                         },
                                     )}
                                 </Panel>
                             </SkjemaGruppe>
-                            <Row>
+                            <div className="flex flex-wrap">
                                 <button
                                     id="leggTilDag"
                                     className="leggtilperiode"
@@ -132,7 +131,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     </div>
                                     {intlHelper(intl, 'skjema.dag.legg_til')}
                                 </button>
-                            </Row>
+                            </div>
                         </>
                     )}
                 </FieldArray>

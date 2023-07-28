@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
-import Row from 'app/components/Row';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DateInput from 'app/components/skjema/DateInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -232,7 +231,7 @@ const ArbeidsforholdPanel = ({
                     onChange={() => undefined}
                 />
                 <div className="generelleopplysiniger">
-                    <Row>
+                    <div className="flex flex-wrap">
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
                             bredde="M"
@@ -264,7 +263,7 @@ const ArbeidsforholdPanel = ({
                                 })
                             }
                         />
-                    </Row>
+                    </div>
                 </div>
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -305,7 +304,7 @@ const ArbeidsforholdPanel = ({
                     }}
                 />
                 {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <Row>
+                    <div className="flex flex-wrap">
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             bredde="M"
@@ -340,7 +339,7 @@ const ArbeidsforholdPanel = ({
                                 })
                             }
                         />
-                    </Row>
+                    </div>
                 )}
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <CountrySelect
@@ -395,7 +394,7 @@ const ArbeidsforholdPanel = ({
                 />
                 {harRegnskapsfører && (
                     <div className="generelleopplysiniger">
-                        <Row>
+                        <div className="flex flex-wrap">
                             <Input
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                 bredde="M"
@@ -433,8 +432,8 @@ const ArbeidsforholdPanel = ({
                                     })
                                 }
                             />
-                        </Row>
-                        <Row>
+                        </div>
+                        <div className="flex flex-wrap">
                             <Input
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
                                 bredde="M"
@@ -473,7 +472,7 @@ const ArbeidsforholdPanel = ({
                                     })
                                 }
                             />
-                        </Row>
+                        </div>
                     </div>
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
@@ -645,7 +644,7 @@ const ArbeidsforholdPanel = ({
                     )}
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
-                        <Row>
+                        <div className="flex flex-wrap">
                             <DateInput
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
@@ -680,8 +679,8 @@ const ArbeidsforholdPanel = ({
                                     });
                                 }}
                             />
-                        </Row>
-                        <Row>
+                        </div>
+                        <div className="flex flex-wrap">
                             <Input
                                 bredde="M"
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
@@ -720,7 +719,7 @@ const ArbeidsforholdPanel = ({
                                     })
                                 }
                             />
-                        </Row>
+                        </div>
 
                         <Textarea
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}

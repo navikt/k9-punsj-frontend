@@ -7,7 +7,6 @@ import { Panel } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
-import Row from 'app/components/Row';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
@@ -43,7 +42,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <Row>
+                                <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>
                                             {({ field }: FieldProps) => (
@@ -73,11 +72,11 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                             {intlHelper(intl, textFjern || 'skjema.liste.fjern_periode')}
                                         </button>
                                     </div>
-                                </Row>
+                                </div>
                             );
                         })}
 
-                        <Row>
+                        <div className="flex flex-wrap">
                             <button
                                 id="leggtilperiode"
                                 className="leggtilperiode"
@@ -91,7 +90,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 </div>
                                 {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til_dag_periode')}
                             </button>
-                        </Row>
+                        </div>
                     </>
                 )}
             </FieldArray>

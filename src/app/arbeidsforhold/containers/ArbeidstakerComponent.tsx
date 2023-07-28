@@ -2,7 +2,6 @@ import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-fro
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
 
-import Row from 'app/components/Row';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
@@ -121,7 +120,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
 
     return (
         <SkjemaGruppe className="arbeidstaker-panel">
-            <Row>
+            <div className="flex flex-wrap">
                 <RadioPanelGruppe
                     className="horizontalRadios"
                     radios={[
@@ -139,7 +138,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
                     checked={selectedType}
                 />
-            </Row>
+            </div>
             {selectedType === 'o' && (
                 <>
                     {harArbeidsgivere && (
@@ -201,7 +200,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     {gjelderAnnenArbeidsgiver && (
                         <>
                             <VerticalSpacer sixteenPx />
-                            <Row>
+                            <div className="flex flex-wrap">
                                 <div className="input-row">
                                     <Input
                                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
@@ -244,12 +243,12 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                         <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
                                     )}
                                 </div>
-                            </Row>
+                            </div>
                         </>
                     )}
                 </>
             )}
-            <Row>
+            <div className="flex flex-wrap">
                 <div className="input-row">
                     {selectedType === 'p' && (
                         <Input
@@ -269,7 +268,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                         />
                     )}
                 </div>
-            </Row>
+            </div>
             {arbeidstidInformasjon(intl)}
             <VerticalSpacer eightPx />
             <ArbeidstidKalender

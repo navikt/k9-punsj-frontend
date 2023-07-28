@@ -3,8 +3,6 @@ import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl'
 
 import { Button } from '@navikt/ds-react';
 
-import Row from 'app/components/Row';
-
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
 import { getEnvironmentVariable } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
@@ -32,10 +30,10 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
             <CheckCircleSvg title="check" />
             <div className="vl" />
             <div className="info">
-                <Row>{utledMelding(melding)}</Row>
-                <Row>
+                <div className="flex flex-wrap">{utledMelding(melding)}</div>
+                <div className="flex flex-wrap">
                     <FormattedMessage id="modal.okgaatillos.tillos" />
-                </Row>
+                </div>
             </div>
             <Button
                 className="okknapp"

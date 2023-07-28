@@ -3,7 +3,6 @@ import { IntlShape } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
 
-import Row from 'app/components/Row';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
@@ -70,7 +69,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         <Panel className="periodepanel">
             {periods.map((p, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Row key={i}>
+                <div className="flex flex-wrap" key={i}>
                     <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}
@@ -109,7 +108,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                         </button>
                     </div>
-                </Row>
+                </div>
             ))}
             {feilkodeprefiks && (
                 <UhaanderteFeilmeldinger
@@ -118,7 +117,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
             )}
 
             {kanHaFlere && (
-                <Row>
+                <div className="flex flex-wrap">
                     <button
                         id="leggtilperiode"
                         className="leggtilperiode"
@@ -139,7 +138,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         </div>
                         {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
                     </button>
-                </Row>
+                </div>
             )}
         </Panel>
     );

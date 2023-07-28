@@ -2,7 +2,6 @@ import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
 
-import Row from 'app/components/Row';
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
@@ -29,7 +28,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
         const { timer, minutter } = periodeinfo;
         return (
             <div className="timerminutter">
-                <Row>
+                <div className="flex flex-wrap">
                     <p>{intlHelper(intl, 'skjema.omsorgstilbud.gjennomsnittlig')}</p>
                     <div className="input-row">
                         <Input
@@ -75,7 +74,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
                             feil={getErrorMessage(`${feilprefiks}.minutter`)}
                         />
                     </div>
-                </Row>
+                </div>
             </div>
         );
     };

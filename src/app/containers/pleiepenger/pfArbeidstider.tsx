@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 
 import { HelpText } from '@navikt/ds-react';
 
-import Row from 'app/components/Row';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     PeriodeinfoComponent,
@@ -33,7 +32,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         const feltindeks = periodeSpenn(periode);
         return (
             <div className="arbeidstider">
-                <Row>
+                <div className="flex flex-wrap">
                     <div className="input-row">
                         <Input
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}
@@ -75,7 +74,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}
                         </HelpText>
                     </div>
-                </Row>
+                </div>
                 <div className="utregnetArbeidstid__container">
                     <div>
                         <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag} />

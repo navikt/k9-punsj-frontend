@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
-import Row from 'app/components/Row';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
@@ -163,13 +162,13 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     )} */}
 
                 <div className="generelleopplysiniger">
-                    <Row>
+                    <div className="flex flex-wrap">
                         <TextFieldFormik
                             size="small"
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
                         />
-                    </Row>
+                    </div>
                 </div>
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
@@ -183,7 +182,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     )}
                 </Field>
                 {!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <Row>
+                    <div className="flex flex-wrap">
                         <TextFieldFormik
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
@@ -191,7 +190,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         {/* feil={getErrorMessage(
                                 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid'
                             )} */}
-                    </Row>
+                    </div>
                 )}
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
@@ -230,21 +229,21 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
                 {harRegnskapsfører && (
                     <div className="generelleopplysiniger">
-                        <Row>
+                        <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
                                 className="regnskapsførerNavn"
                             />
-                        </Row>
-                        <Row>
+                        </div>
+                        <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
                                 className="sn-regskasførertlf"
                                 type="number"
                             />
-                        </Row>
+                        </div>
                     </div>
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
@@ -287,21 +286,21 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     )}
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
-                        <Row>
+                        <div className="flex flex-wrap">
                             <DatoInputFormik
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                             />
-                        </Row>
-                        <Row>
+                        </div>
+                        <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
                                 className="endringinntekt"
                                 type="number"
                             />
-                        </Row>
+                        </div>
                         <TextAreaFormik
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
                             className="endringbegrunnelse"

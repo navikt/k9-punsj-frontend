@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { Alert, Loader, Modal } from '@navikt/ds-react';
 
-import Row from 'app/components/Row';
 import Fagsak from 'app/types/Fagsak';
 
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
@@ -64,9 +63,9 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     if (isJournalpostLoading) {
         return (
             <div className="h-screen">
-                <Row className="justify-content-center align-items-center h-screen">
+                <div className="justify-content-center align-items-center h-screen flex flex-wrap">
                     <Loader size="large" />
-                </Row>
+                </div>
             </div>
         );
     }

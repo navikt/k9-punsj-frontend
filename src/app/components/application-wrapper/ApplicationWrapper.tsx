@@ -6,7 +6,6 @@ import { Loader } from '@navikt/ds-react';
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
-import Row from 'app/components/Row';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
@@ -57,9 +56,9 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
 
     if (authState.isLoading) {
         return (
-            <Row className="justify-content-center align-items-center h-screen">
+            <div className="justify-content-center align-items-center h-screen flex flex-wrap">
                 <Loader size="large" />
-            </Row>
+            </div>
         );
     }
 
