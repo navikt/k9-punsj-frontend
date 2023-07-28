@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { Loader } from '@navikt/ds-react';
+
 import setEnvVariables from 'app/env';
 
 interface Props {
@@ -15,7 +17,7 @@ function withEnvVariables<T extends Props>(WrappedComponent: React.ComponentType
         }, []);
 
         if (!envVariablesLoaded) {
-            return <div>Loading...</div>; // or any other loading indicator you prefer
+            return <Loader />; // or any other loading indicator you prefer
         }
 
         return <WrappedComponent {...props} />;

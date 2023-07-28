@@ -76,10 +76,6 @@ export const App: React.FunctionComponent = () => {
         DsModal?.setAppElement('#app');
     }, []);
 
-    if (!window.appSettings) {
-        return <Loader />;
-    }
-
     return (
         <Sentry.ErrorBoundary>
             <Provider store={store}>
