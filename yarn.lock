@@ -9768,13 +9768,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-headers@npm:2.0.0":
-  version: 2.0.0
-  resolution: "fetch-headers@npm:2.0.0"
-  checksum: 38b0f4900cecbb125ca3dd0ce30f7aae38c24714d9b784c1e1006f7e8c650d2238fba3ff49bfd24c78b7b3c786b7ed67777a61a5317ec6957a9e5a7ad23c9d75
-  languageName: node
-  linkType: hard
-
 "fetch-mock@npm:9.11.0":
   version: 9.11.0
   resolution: "fetch-mock@npm:9.11.0"
@@ -12749,7 +12742,6 @@ __metadata:
     eslint-plugin-prettier: 4.2.1
     eslint-plugin-react: 7.33.1
     eslint-plugin-react-hooks: 4.6.0
-    fetch-headers: 2.0.0
     fetch-mock: 9.11.0
     formik: 2.4.2
     helmet: 7.0.0
