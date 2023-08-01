@@ -32,7 +32,7 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             }
         },
     );
-export const settBehandlingsAar = (
+export const postBehandlingsAar = (
     journalpostid: string,
     søkerId: string,
     behandlingsAar?: string,

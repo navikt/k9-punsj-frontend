@@ -17,6 +17,7 @@ interface Props {
     setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     identState: IIdentState;
+    setBehandlingsAar: (behandlingsAar: string | undefined) => void;
 }
 
 const FagsakSelect = ({
@@ -28,6 +29,7 @@ const FagsakSelect = ({
     setBrukEksisterendeFagsak,
     setIdentAction,
     identState,
+    setBehandlingsAar,
 }: Props) => (
     <>
         <div className="fagsakSelectContainer">
@@ -66,6 +68,7 @@ const FagsakSelect = ({
                 setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
                 setValgtFagsak('');
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+                setBehandlingsAar(undefined);
             }}
         />
         <VerticalSpacer twentyPx />
