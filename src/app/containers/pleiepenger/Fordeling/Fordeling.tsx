@@ -147,6 +147,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         behandlingsAar,
     ]);
 
+    useEffect(() => {
+        if (sakstype) {
+            setSakstypeAction(undefined);
+        }
+    }, [dokumenttype]);
+
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
 
