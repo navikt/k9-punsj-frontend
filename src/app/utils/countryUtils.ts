@@ -33,5 +33,5 @@ export const getCountryList = () => [...countryList];
 
 export const landkodeTilNavn = (landskode: string) => {
     const landNavn = getCountryList().find((country) => country.code === landskode);
-    return typeof landNavn !== undefined ? landNavn?.name : '';
+    return landNavn ? landNavn?.name : '';
 };

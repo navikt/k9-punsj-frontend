@@ -2,10 +2,9 @@ import React from 'react';
 
 interface IVisSVGProps {
     title: React.ReactNode;
-    className?: string;
 }
 
-const VisSvg: React.FunctionComponent<IVisSVGProps> = ({ title, className }) => (
+const VisSvg: React.FunctionComponent<IVisSVGProps> = ({ title }) => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>{title}</title>
         <g stroke="none" strokeWidth="1" fill="#0067C5" fillRule="evenodd">

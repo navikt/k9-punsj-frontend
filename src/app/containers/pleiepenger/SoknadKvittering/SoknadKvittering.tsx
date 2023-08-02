@@ -48,7 +48,7 @@ const endreLandkodeTilLandnavnIPerioder = (
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
-        if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
+        if (landNavn) kopiAvPerioder[periode].land = landNavn?.name;
     });
     return kopiAvPerioder;
 };

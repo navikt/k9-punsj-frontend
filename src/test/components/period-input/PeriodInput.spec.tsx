@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
+import { expect } from '@jest/globals';
 import * as React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
 
@@ -23,7 +24,7 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
         ...periodInputPropsPartial,
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodInput {...periodInputProps} />);

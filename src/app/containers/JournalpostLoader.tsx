@@ -34,7 +34,6 @@ interface IJournalpostProps {
 
 interface IDispatchProps {
     getJournalpost: typeof getJournalpostAction;
-    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
 }
 
@@ -44,7 +43,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     renderOnLoadComplete,
     isJournalpostLoading,
     getJournalpost,
-    lukkJournalpostOppgave,
     lukkOppgaveReset,
     journalpostId,
     journalpost,
