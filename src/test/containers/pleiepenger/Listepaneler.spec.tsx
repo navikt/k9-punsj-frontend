@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { Input } from 'nav-frontend-skjema';

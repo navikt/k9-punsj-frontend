@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { ShallowWrapper, shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import * as React from 'react';

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import * as React from 'react';
@@ -35,7 +36,7 @@ const flerePerioder: IPSBSoknadKvitteringArbeidstidInfo = {
 
 const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringArbeidstidInfo) => {
     const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
         <VisningAvPerioderSoknadKvittering
