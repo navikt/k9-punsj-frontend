@@ -39,7 +39,7 @@ const setupPfTilleggsinformasjon = (
     optionalIntl?: IntlShape,
     optionalKodeord?: string,
 ) => {
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
         pfTilleggsinformasjon(optionalKodeord || testKodeord)(
@@ -95,7 +95,7 @@ describe('pfTilleggsinformasjon', () => {
     });
 
     it('Viser feilmelding', () => {
-        const tilleggsinformasjon = setupPfTilleggsinformasjon();
+        setupPfTilleggsinformasjon();
         expect(testGetErrorMessage).toHaveBeenCalledTimes(1);
         expect(testGetErrorMessage).toHaveBeenCalledWith(
             `${testFeilprefiks}.perioder['2020-01-01/2020-12-31'].tilleggsinformasjon`,

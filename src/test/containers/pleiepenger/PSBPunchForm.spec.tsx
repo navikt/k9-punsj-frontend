@@ -184,7 +184,7 @@ const setupPunchForm = (
         id: soknadId,
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
         /* eslint-disable react/jsx-props-no-spreading */
