@@ -1,6 +1,6 @@
-import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
+import { TextField } from '@navikt/ds-react';
 
 import {
     PeriodeinfoComponent,
@@ -31,11 +31,10 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
                 <div className="flex flex-wrap">
                     <p>{intlHelper(intl, 'skjema.omsorgstilbud.gjennomsnittlig')}</p>
                     <div className="input-row">
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.perioder.timer')}
                             value={timer}
-                            bredde="XS"
-                            className="timer"
+                            className="timer w-12"
                             onChange={(event) =>
                                 updatePeriodeinfoInSoknadState({
                                     ...periodeinfo,
@@ -50,13 +49,12 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
                                     minutter: periodeinfo.minutter,
                                 })
                             }
-                            feil={getErrorMessage(`${feilprefiks}.timer`)}
+                            error={getErrorMessage(`${feilprefiks}.timer`)}
                         />
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.perioder.minutter')}
                             value={minutter}
-                            bredde="XS"
-                            className="right"
+                            className="right w-12"
                             onChange={(event) =>
                                 updatePeriodeinfoInSoknadState({
                                     ...periodeinfo,
@@ -71,7 +69,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
                                     minutter: stringToNumber(event.target.value.replace(/\s/g, '')),
                                 })
                             }
-                            feil={getErrorMessage(`${feilprefiks}.minutter`)}
+                            error={getErrorMessage(`${feilprefiks}.minutter`)}
                         />
                     </div>
                 </div>

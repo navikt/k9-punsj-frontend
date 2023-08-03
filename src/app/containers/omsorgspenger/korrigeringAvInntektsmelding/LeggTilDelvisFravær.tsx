@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Panel, TextField } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
@@ -84,11 +84,11 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                         </Field>
                                                         <Field name={`${fieldName}.timer`}>
                                                             {({ field, meta }: FieldProps) => (
-                                                                <Input
+                                                                <TextField
                                                                     {...field}
                                                                     label={intlHelper(intl, 'skjema.perioder.timer')}
-                                                                    bredde="XS"
-                                                                    feil={
+                                                                    className="w-12"
+                                                                    error={
                                                                         meta.error &&
                                                                         meta.touched && (
                                                                             <ErrorMessage name={`${fieldName}.timer`} />

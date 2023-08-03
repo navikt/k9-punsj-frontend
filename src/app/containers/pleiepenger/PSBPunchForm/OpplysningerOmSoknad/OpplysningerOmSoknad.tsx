@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Panel, TextField } from '@navikt/ds-react';
 
 import DateInput from 'app/components/skjema/DateInput';
 
@@ -46,7 +46,7 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                         mottattDato: selectedDate,
                     }))}
                 />
-                <Input
+                <TextField
                     value={soknad.klokkeslett || ''}
                     type="time"
                     className="klokkeslett"
@@ -54,7 +54,7 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                     {...changeAndBlurUpdatesSoknad((event: any) => ({
                         klokkeslett: event.target.value,
                     }))}
-                    feil={getErrorMessage('klokkeslett')}
+                    error={getErrorMessage('klokkeslett')}
                 />
             </div>
             <RadioPanelGruppe

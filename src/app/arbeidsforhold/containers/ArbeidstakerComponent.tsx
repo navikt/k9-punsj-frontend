@@ -1,6 +1,7 @@
-import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Checkbox, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
+import { TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -202,9 +203,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             <VerticalSpacer sixteenPx />
                             <div className="flex flex-wrap">
                                 <div className="input-row">
-                                    <Input
+                                    <TextField
                                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                        bredde="M"
                                         value={organisasjonsnummer || ''}
                                         className="arbeidstaker-organisasjonsnummer"
                                         onChange={(event) => {
@@ -233,7 +233,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                                 });
                                             }
                                         }}
-                                        feil={
+                                        error={
                                             searchOrganisasjonsnummerFailed
                                                 ? 'Ingen treff på organisasjonsnummer'
                                                 : getErrorMessage(`${feilkodeprefiks}.identified`)
@@ -251,10 +251,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
             <div className="flex flex-wrap">
                 <div className="input-row">
                     {selectedType === 'p' && (
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                             value={norskIdent || ''}
-                            bredde="M"
                             className="arbeidstaker-norskIdent"
                             onChange={(event) =>
                                 updateListeinfoInSoknadState({
@@ -264,7 +263,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             onBlur={(event) =>
                                 updateListeinfoInSoknad({ norskIdent: event.target.value.replace(/\s/g, '') })
                             }
-                            feil={getErrorMessage(`${feilkodeprefiks}.identified`)}
+                            error={getErrorMessage(`${feilkodeprefiks}.identified`)}
                         />
                     )}
                 </div>

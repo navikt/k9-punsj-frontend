@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import { Input } from 'nav-frontend-skjema';
+import { TextField } from '@navikt/ds-react';
 import * as React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
 
@@ -30,14 +30,14 @@ const testkomponent: ListeComponent<ITestItem> = (
     updateListeinfoInSoknadState: (info: Partial<ITestItem>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string,
 ) => (
-    <Input
+    <TextField
         label=""
         id={testinputid(itemIndex)}
         className="testinput"
         value={info.test}
         onChange={(event) => updateListeinfoInSoknadState({ test: event.target.value }, false)}
         onBlur={(event) => updateListeinfoInSoknad({ test: event.target.value })}
-        feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
+        error={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
     />
 );
 

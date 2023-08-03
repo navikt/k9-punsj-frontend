@@ -1,8 +1,7 @@
-import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { HelpText } from '@navikt/ds-react';
+import { HelpText, TextField } from '@navikt/ds-react';
 
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
@@ -34,9 +33,9 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
             <div className="arbeidstider">
                 <div className="flex flex-wrap">
                     <div className="input-row">
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timernormalt')}
-                            bredde="XS"
+                            className="w-12"
                             value={jobberNormaltTimerPerDag}
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
@@ -48,15 +47,15 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     jobberNormaltTimerPerDag: event.target.value.replace(/\s/g, ''),
                                 });
                             }}
-                            feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].jobberNormaltTimerPerDag`)}
+                            error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].jobberNormaltTimerPerDag`)}
                         />
                         <HelpText className="arbeidstid-hjelpetext" placement="right" tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
                         </HelpText>
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerfaktisk')}
                             value={faktiskArbeidTimerPerDag}
-                            className="right"
+                            className="right w-12"
                             onChange={(event) => {
                                 updatePeriodeinfoInSoknadState({
                                     faktiskArbeidTimerPerDag: event.target.value.replace(/\s/g, ''),
@@ -67,8 +66,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     faktiskArbeidTimerPerDag: event.target.value.replace(/\s/g, ''),
                                 });
                             }}
-                            feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].faktiskArbeidTimerPerDag`)}
-                            bredde="XS"
+                            error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].faktiskArbeidTimerPerDag`)}
                         />
                         <HelpText className="arbeidstid-hjelpetext" placement="right" tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}

@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { Field, FieldProps, FormikValues } from 'formik';
-import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
-import { Alert, Heading, Panel } from '@navikt/ds-react';
+import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DateInput from 'app/components/skjema/DateInput';
@@ -48,12 +48,12 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
                 </Field>
                 <Field name="klokkeslett">
                     {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                        <Input
+                        <TextField
                             id="klokkeslett"
                             type="time"
                             className="klokkeslett"
                             label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                            feil={meta.touched && meta.error}
+                            error={meta.touched && meta.error}
                             {...field}
                             onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
                             onBlur={(e) => handleBlur(() => field.onBlur(e))}

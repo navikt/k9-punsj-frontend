@@ -1,7 +1,7 @@
 import { useField } from 'formik';
-import { Input, InputProps } from 'nav-frontend-skjema';
 import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { TextField, TextFieldProps } from '@navikt/ds-react';
 
 import { fjernIndexFraLabel } from './skjemaUtils';
 
@@ -11,7 +11,7 @@ interface ITextInputProps {
     disabled?: boolean;
 }
 
-const TextInput: React.FunctionComponent<ITextInputProps & InputProps> = ({
+const TextInput: React.FunctionComponent<ITextInputProps & TextFieldProps> = ({
     label,
     feltnavn,
     disabled = false,
@@ -20,11 +20,11 @@ const TextInput: React.FunctionComponent<ITextInputProps & InputProps> = ({
     const [{ name, value, onBlur, onChange }, { error, touched }] = useField(feltnavn);
 
     return (
-        <Input
+        <TextField
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...inputProps}
             label={label || <FormattedMessage id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`} />}
-            feil={touched && error}
+            error={touched && error}
             name={name}
             value={value || ''}
             onBlur={onBlur}

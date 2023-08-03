@@ -1,9 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { uniqueId } from 'lodash';
-import { Input } from 'nav-frontend-skjema';
 import React from 'react';
 
-import { Detail, ErrorMessage, Label } from '@navikt/ds-react';
+import { Detail, ErrorMessage, Label, TextField } from '@navikt/ds-react';
 
 import './timerOgMinutter.less';
 
@@ -31,17 +30,17 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
             <div className="tid-container">
                 <div className="input-row">
                     <div className="input-container">
-                        <Input
+                        <TextField
                             id={timerId}
-                            style={{ textAlign: 'center' }}
-                            className="input"
-                            bredde="XS"
+                            className="input text-center w-12"
+                            label="Timer"
+                            hideLabel
                             value={timer}
                             onChange={(event) => {
                                 onChangeTimer(event.target.value.replaceAll(/\D+/g, ''));
                             }}
                             onBlur={onBlur}
-                            feil={!!error}
+                            error={!!error}
                         />
                         <div>
                             <label htmlFor={timerId}>
@@ -50,17 +49,17 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                         </div>
                     </div>
                     <div className="input-container minutter">
-                        <Input
+                        <TextField
                             id={minutterId}
-                            style={{ textAlign: 'center' }}
-                            className="input"
-                            bredde="XS"
+                            className="input text-center w-12"
                             value={minutter}
+                            label="Minutter"
+                            hideLabel
                             onChange={(event) => {
                                 onChangeMinutter(event.target.value.replaceAll(/\D+/g, ''));
                             }}
                             onBlur={onBlur}
-                            feil={!!error}
+                            error={!!error}
                         />
                         <div>
                             <label htmlFor={minutterId}>

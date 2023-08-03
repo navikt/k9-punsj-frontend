@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Input, Textarea } from 'nav-frontend-skjema';
+import { Textarea } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Tag } from '@navikt/ds-react';
+import { Tag, TextField } from '@navikt/ds-react';
 
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { validateText } from 'app/utils/validationHelpers';
@@ -25,11 +25,11 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                 validate={(value: string) => validateText(value, 200)}
             >
                 {({ field, meta }: FieldProps) => (
-                    <Input
+                    <TextField
                         {...field}
                         label={intl.formatMessage({ id: 'Messages.FritekstTittel' })}
                         maxLength={200}
-                        feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                     />
                 )}
             </Field>

@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
-import { Input, Select, Textarea } from 'nav-frontend-skjema';
+import { Select, Textarea } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Button, Label, Loader } from '@navikt/ds-react';
+import { Button, Label, Loader, TextField } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
@@ -83,11 +83,11 @@ const OpprettJournalpost: React.FC = () => {
                                 validate={(value: string) => validateText(value, 11, true)}
                             >
                                 {({ field, meta }: FieldProps) => (
-                                    <Input
+                                    <TextField
                                         {...field}
-                                        bredde="L"
+                                        className="w-64"
                                         label={intl.formatMessage({ id: 'OpprettJournalpost.søkersFødselsnummer' })}
-                                        feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         maxLength={11}
                                         onChange={(event) => {
                                             const { value } = event.target;
@@ -128,13 +128,12 @@ const OpprettJournalpost: React.FC = () => {
                                 validate={(value: string) => validateText(value, 200)}
                             >
                                 {({ field, meta }: FieldProps) => (
-                                    <Input
+                                    <TextField
                                         {...field}
-                                        className="input"
-                                        bredde="XXL"
+                                        className="input w-[400px]"
                                         label={intl.formatMessage({ id: 'OpprettJournalpost.tittel' })}
                                         maxLength={200}
-                                        feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                     />
                                 )}
                             </Field>

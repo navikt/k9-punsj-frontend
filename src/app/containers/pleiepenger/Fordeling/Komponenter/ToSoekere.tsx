@@ -1,8 +1,8 @@
-import { Checkbox, Input } from 'nav-frontend-skjema';
+import { Checkbox } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
@@ -59,20 +59,19 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                     <Alert size="small" variant="info">
                         {intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}
                     </Alert>
-                    <Input
+                    <TextField
                         label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
                         onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
                         onBlur={handleIdentAnnenSokerBlur}
                         value={annenSokerIdent}
                         className="bold-label"
                         maxLength={11}
-                        feil={visFeilmeldingForAnnenIdentVidJournalKopi(
+                        error={visFeilmeldingForAnnenIdentVidJournalKopi(
                             identState.annenSokerIdent,
                             identState.søkerId,
                             identState.pleietrengendeId,
                             intl,
                         )}
-                        bredde="M"
                     />
                     <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
                 </div>
