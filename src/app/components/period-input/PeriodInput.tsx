@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
+
+import { Fieldset } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
 
@@ -58,7 +59,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     };
 
     return (
-        <SkjemaGruppe feil={errorMessage} className={classNames('periodInput', className)}>
+        <Fieldset feil={errorMessage} className={classNames('periodInput', className)}>
             <div className="flex flex-wrap">
                 <DateInput
                     className="periodInput__fom-container"
@@ -93,6 +94,6 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     />
                 </div>
             </div>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };

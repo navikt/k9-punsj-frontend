@@ -1,9 +1,8 @@
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel, TextField } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel, TextField } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
@@ -39,7 +38,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
                     {({ push, remove }) => (
                         <>
-                            <SkjemaGruppe
+                            <Fieldset
                                 legend={
                                     <h4 className="korrigering-legend">
                                         {intlHelper(
@@ -116,7 +115,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                         },
                                     )}
                                 </Panel>
-                            </SkjemaGruppe>
+                            </Fieldset>
                             <div className="flex flex-wrap">
                                 <button
                                     id="leggTilDag"

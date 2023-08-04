@@ -1,9 +1,9 @@
 import { Field, FieldProps, useFormikContext } from 'formik';
-import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
 
-import { Checkbox } from '@navikt/ds-react';
+import { Checkbox, Fieldset } from '@navikt/ds-react';
 
 import { ApiPath } from 'app/apiConfig';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -126,7 +126,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType = organisasjonsnummer === null ? 'p' : 'o';
 
     return (
-        <SkjemaGruppe className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel">
             <div className="flex flex-wrap">
                 {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (
@@ -285,7 +285,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     />
                 )}
             </Field>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

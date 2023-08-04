@@ -1,8 +1,8 @@
-import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
 
-import { Checkbox, Select, TextField } from '@navikt/ds-react';
+import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -119,7 +119,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
-        <SkjemaGruppe className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel">
             <div className="flex flex-wrap">
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -286,7 +286,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                 }
                 arbeidstidInfo={arbeidstidInfo}
             />
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

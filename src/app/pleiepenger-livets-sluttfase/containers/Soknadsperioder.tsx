@@ -1,9 +1,8 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel } from '@navikt/ds-react';
 
 import { initializeDate } from 'app/utils';
 
@@ -49,13 +48,12 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
         }
-        return eksisterendePerioder.some(
-            (ep) =>
-                nyePerioder?.some(
-                    (nyPeriode) =>
-                        initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                        initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
-                ),
+        return eksisterendePerioder.some((ep) =>
+            nyePerioder?.some(
+                (nyPeriode) =>
+                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+            ),
         );
     };
 
@@ -117,7 +115,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
-                <SkjemaGruppe>
+                <Fieldset>
                     <div className="soknadsperiodecontainer">
                         <Periodepaneler
                             intl={intl}
@@ -136,7 +134,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             onRemove={() => setHarSlettetPerioder(true)}
                         />
                     </div>
-                </SkjemaGruppe>
+                </Fieldset>
             )}
             {overlappendeSoknadsperiode() && (
                 <Alert size="small" variant="warning">

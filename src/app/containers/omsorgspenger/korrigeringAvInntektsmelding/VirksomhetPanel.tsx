@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Link, Panel, Select, TextField } from '@navikt/ds-react';
+import { Fieldset, Link, Panel, Select, TextField } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -88,7 +87,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     };
 
     return (
-        <SkjemaGruppe
+        <Fieldset
             legend={
                 <h3 className="korrigering-legend">
                     {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend')}
@@ -182,6 +181,6 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                     )}
                 </Field>
             </Panel>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 }

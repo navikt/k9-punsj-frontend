@@ -49,7 +49,7 @@ describe('PerodInput', () => {
     it('Skal vise feilmelding', () => {
         const errorMessage = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({ errorMessage });
-        expect(periodInput.find('SkjemaGruppe').prop('feil')).toEqual(errorMessage);
+        expect(periodInput.find('Fieldset').prop('feil')).toEqual(errorMessage);
     });
 
     it('Skal vise feilmelding for fom-dato', () => {

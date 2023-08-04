@@ -1,8 +1,7 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel } from '@navikt/ds-react';
 
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
@@ -20,7 +19,7 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
             togglePanel={togglePanel}
         >
             <Panel className="listepanel">
-                <SkjemaGruppe
+                <Fieldset
                     legend={
                         <h4 className="korrigering-legend">
                             {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.legend')}
@@ -34,7 +33,7 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
                     <div className="soknadsperiodecontainer">
                         <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav} />
                     </div>
-                </SkjemaGruppe>
+                </Fieldset>
             </Panel>
         </EkspanderbartPanel>
     );

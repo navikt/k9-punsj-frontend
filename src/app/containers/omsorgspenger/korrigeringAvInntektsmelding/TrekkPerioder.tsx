@@ -1,8 +1,7 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel } from '@navikt/ds-react';
 
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
@@ -20,13 +19,13 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
             togglePanel={togglePanel}
         >
             <Panel className="listepanel">
-                <SkjemaGruppe
+                <Fieldset
                     legend={
                         <h4 className="korrigering-legend">
                             {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend')}
                         </h4>
                     }
-                    className="korrigering__skjemagruppe"
+                    className="korrigering__Fieldset"
                 >
                     <Alert size="small" variant="info" className="korrigering__infostripe">
                         {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
@@ -34,7 +33,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                     <div className="soknadsperiodecontainer">
                         <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.Trekkperioder} />
                     </div>
-                </SkjemaGruppe>
+                </Fieldset>
             </Panel>
         </EkspanderbartPanel>
     );
