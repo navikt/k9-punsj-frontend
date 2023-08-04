@@ -1,10 +1,10 @@
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
+import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel, TextField } from '@navikt/ds-react';
+import { Alert, Panel, TextField, Textarea } from '@navikt/ds-react';
 
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DateInput from 'app/components/skjema/DateInput';

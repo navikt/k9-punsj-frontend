@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
-import { Select, Textarea } from 'nav-frontend-skjema';
+import { Select } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Button, Label, Loader, TextField } from '@navikt/ds-react';
+import { Button, Label, Loader, TextField, Textarea } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
@@ -145,10 +145,10 @@ const OpprettJournalpost: React.FC = () => {
                                     <div className="notatContainer input">
                                         <Textarea
                                             {...field}
-                                            textareaClass="notat"
+                                            className="notat"
                                             label={intl.formatMessage({ id: 'OpprettJournalpost.notat' })}
                                             maxLength={100000}
-                                            feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         />
                                     </div>
                                 )}

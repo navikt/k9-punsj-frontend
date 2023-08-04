@@ -1,9 +1,8 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Textarea } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Tag, TextField } from '@navikt/ds-react';
+import { Tag, TextField, Textarea } from '@navikt/ds-react';
 
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { validateText } from 'app/utils/validationHelpers';
@@ -49,7 +48,7 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                             }}
                             label={intl.formatMessage({ id: 'Messages.Fritekst' })}
                             maxLength={100000}
-                            feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         />
                         <Tag variant="warning" size="small" className="språkEtikett">
                             Bokmål
