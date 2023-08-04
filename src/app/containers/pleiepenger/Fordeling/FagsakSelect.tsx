@@ -1,7 +1,7 @@
-import { Checkbox, Select } from 'nav-frontend-skjema';
+import { Checkbox } from 'nav-frontend-skjema';
 import React from 'react';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Select } from '@navikt/ds-react';
 import { Period } from '@navikt/k9-fe-period-utils';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';

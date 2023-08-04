@@ -2,12 +2,12 @@
 import classNames from 'classnames';
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel, Checkbox, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
+import { CheckboksPanel, Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, HelpText, Modal, Tag, TextField } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Modal, Select, Tag, TextField } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
@@ -457,7 +457,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             getErrorMessage={this.getErrorMessage}
                             getUhaandterteFeil={this.getUhaandterteFeil}
                             feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                            minstEn={false}
                             kanHaFlere={true}
                         />
                     )}
@@ -491,7 +490,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         getErrorMessage={() => undefined}
                                         getUhaandterteFeil={this.getUhaandterteFeil}
                                         feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                                        minstEn={false}
                                         kanHaFlere={true}
                                     />
                                 </>

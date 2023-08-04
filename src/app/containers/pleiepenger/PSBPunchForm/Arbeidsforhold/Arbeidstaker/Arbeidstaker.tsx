@@ -1,7 +1,7 @@
-import { Checkbox, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { Checkbox, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
-import { TextField } from '@navikt/ds-react';
+import { Select, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -143,7 +143,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     {harArbeidsgivere && (
                         <Select
                             value={selectedArbeidsgiver}
-                            bredde="l"
+                            className="w-64"
                             label="Velg hvilken arbeidsgiver det gjelder"
                             onChange={(event) => {
                                 const { value } = event.target;
@@ -162,8 +162,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 }
                             }}
                             disabled={gjelderAnnenArbeidsgiver}
-                            selected={selectedArbeidsgiver}
-                            feil={
+                            error={
                                 harDuplikatOrgnr
                                     ? 'Organisasjonsnummeret er valgt flere ganger.'
                                     : getErrorMessage(`${feilkodeprefiks}.identified`)

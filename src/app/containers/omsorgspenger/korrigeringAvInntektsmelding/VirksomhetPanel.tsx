@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Link, Panel, TextField } from '@navikt/ds-react';
+import { Link, Panel, Select, TextField } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -114,14 +114,14 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
                     {({ field, meta }: FieldProps) => (
                         <Select
-                            bredde="l"
+                            className="w-64"
                             label={intlHelper(
                                 intl,
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet',
                             )}
                             disabled={!arbeidsgivereMedId}
                             {...field}
-                            feil={
+                            error={
                                 meta.touched &&
                                 meta.error && <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.Virksomhet} />
                             }
@@ -146,13 +146,13 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 >
                     {({ field, meta }: FieldProps) => (
                         <Select
-                            bredde="l"
+                            className="w-64"
                             label={intlHelper(
                                 intl,
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId',
                             )}
                             disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
-                            feil={
+                            error={
                                 meta.touched &&
                                 meta.error && (
                                     <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId} />
