@@ -1,4 +1,3 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -46,9 +45,9 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
         return (
             <>
                 {visKlassifiserModal && <KlassifiserModal lukkModal={() => setVisKlassifiserModal(false)} />}
-                <Hovedknapp onClick={() => setVisKlassifiserModal(true)}>
+                <Button variant="primary" onClick={() => setVisKlassifiserModal(true)}>
                     <FormattedMessage id="fordeling.knapp.bekreft" />
-                </Hovedknapp>
+                </Button>
             </>
         );
     }

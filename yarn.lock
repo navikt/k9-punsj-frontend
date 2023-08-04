@@ -12843,15 +12843,22 @@ __metadata:
     msw: 1.2.3
     mustache-express: 1.3.2
     nav-datovelger: 12.6.0
+    nav-frontend-chevron-style: ^1.0.4
     nav-frontend-core: 6.0.1
     nav-frontend-ekspanderbartpanel: 4.0.4
     nav-frontend-ekspanderbartpanel-style: 2.0.2
     nav-frontend-js-utils: 1.0.20
+    nav-frontend-knapper-style: ^2.1.2
+    nav-frontend-lenker: ^2.0.2
+    nav-frontend-lenker-style: ^2.0.2
+    nav-frontend-paneler-style: ^2.0.2
     nav-frontend-skjema: 4.0.6
     nav-frontend-skjema-style: 3.0.3
     nav-frontend-tabell-style: 2.1.2
     nav-frontend-toggle: 2.1.3
     nav-frontend-toggle-style: 2.1.2
+    nav-frontend-typografi: ^4.0.2
+    nav-frontend-typografi-style: ^2.0.2
     object-hash: 3.0.0
     popper.js: 1.16.1
     postcss: ^8.4.27
@@ -14003,7 +14010,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-core@npm:6.0.1":
+"nav-frontend-chevron-style@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "nav-frontend-chevron-style@npm:1.0.4"
+  checksum: c4c4e8c63a9d9802060fbc451f8d82fa48ced9763b2820c0ff6e0801b5e9c8624a92d83ccb8c914f65cb29ed78dedf7ed92ce8c42c91fc6ffe29421f1a788630
+  languageName: node
+  linkType: hard
+
+"nav-frontend-core@npm:6.0.1, nav-frontend-core@npm:^6.0.1":
   version: 6.0.1
   resolution: "nav-frontend-core@npm:6.0.1"
   checksum: 7673f42a2a93a08fa6952d2c32d8e5d424de437910b76d84363d7cb86a7c0691e5f475a3623c8964366b3bbd33a6defb8e3907bc61b41c3434b4619aab7567d2
@@ -14046,6 +14060,46 @@ __metadata:
     prop-types: ^15.5.10
     react: ^16.8.0 || ^17.0.0
   checksum: c572c63794715c27eed790911fcb4f0ac71934184813d4b9d3ad33827a5f05164f4563c22aac8d577bbbb7cf9c95e0da2383f247f539da1d4032d831193f915a
+  languageName: node
+  linkType: hard
+
+"nav-frontend-knapper-style@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "nav-frontend-knapper-style@npm:2.1.2"
+  peerDependencies:
+    nav-frontend-core: ^6.0.0
+    nav-frontend-typografi-style: ^2.0.0
+  checksum: b2801d4fdeb74c21dd8dad3e686bb243213ef6c56df1ea7b36212d8e819a2c69836ecb2d62e6ed45d8fc36ca10c5921b3552abd95562743414be7ae9613a53c3
+  languageName: node
+  linkType: hard
+
+"nav-frontend-lenker-style@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "nav-frontend-lenker-style@npm:2.0.2"
+  peerDependencies:
+    nav-frontend-core: ^6.0.0
+  checksum: d3352a66744afbad6c93a3bc56e5f442bf65efd33a587bf57a1e87a345eaa593214c0cb77575085ebf654c9bc3aea9278446238a2615c58b15f4257d9f713879
+  languageName: node
+  linkType: hard
+
+"nav-frontend-lenker@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "nav-frontend-lenker@npm:2.0.2"
+  peerDependencies:
+    classnames: ^2.2.5
+    nav-frontend-lenker-style: ^2.0.0
+    prop-types: ^15.5.10
+    react: ^16.8.0 || ^17.0.0
+  checksum: 135fc940765ec6947a594d7b18dd12c0862509646eba77db85386c2b87a695c7b69c72da4dc20e70abcaa06dafca7c4c2c6c6c1a46950727e09a8cade8f4cf60
+  languageName: node
+  linkType: hard
+
+"nav-frontend-paneler-style@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "nav-frontend-paneler-style@npm:2.0.2"
+  peerDependencies:
+    nav-frontend-core: ^6.0.0
+  checksum: 7d4b15e3b1a6cc127eca837ae17c42736ef69da9f7f2ca617180809d244c3abda7e4385dd144478c0befc3831c5bec686f5cae281c31235aacba8b79f032cc5d
   languageName: node
   linkType: hard
 
@@ -14108,6 +14162,28 @@ __metadata:
     prop-types: ^15.5.10
     react: ^16.8.0 || ^17.0.0
   checksum: 7b3b0166480f90d4f4c1c66d7e8fae48f4ed150b2af1833f25941ab965502ce23d1d65d832a86eb33c9bd5a1c60df74595e43f2e5745da25d96b14429b3ab228
+  languageName: node
+  linkType: hard
+
+"nav-frontend-typografi-style@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "nav-frontend-typografi-style@npm:2.0.2"
+  dependencies:
+    nav-frontend-core: ^6.0.1
+  checksum: ca3f1ce19ad9b6009021bd9f27ccc5db32fe63988e734b647adfa229d2ab8a091efcc8de23ef9cbad7db0f1c8ef7e2c1ad1a01e062a8f8565271b8333645618e
+  languageName: node
+  linkType: hard
+
+"nav-frontend-typografi@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "nav-frontend-typografi@npm:4.0.2"
+  peerDependencies:
+    classnames: ^2.2.5
+    nav-frontend-core: ^6.0.0
+    nav-frontend-typografi-style: ^2.0.0
+    prop-types: ^15.5.10
+    react: ^16.8.0 || ^17.0.0
+  checksum: e41f89c1676c81fb6042583462a0533bab239c9acc0c66b205e56cfc39ae145424aa62779c9e0cc5c217fe47dee1db3d849aa3845b9987c850a4ead059e1993c
   languageName: node
   linkType: hard
 

@@ -122,7 +122,6 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                         <Periodepaneler
                             intl={intl}
                             periods={getPerioder()}
-                            panelid={(i) => `søknadsperioder_${i}`}
                             initialPeriode={initialPeriode}
                             editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
                             editSoknadState={(perioder) => {

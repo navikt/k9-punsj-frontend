@@ -1,23 +1,18 @@
 import classNames from 'classnames';
-import { ToggleGruppe } from 'nav-frontend-toggle';
 import { Resizable } from 're-resizable';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Back, Next } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
+import { Button, Panel, ToggleGroup } from '@navikt/ds-react';
 
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
-import { apiUrl, setQueryInHash } from '../../utils';
+import { apiUrl } from '../../utils';
 import './pdfVisning.less';
-
-const goToDok = (nr: number) => {
-    setQueryInHash({ dok: nr.toString() });
-};
 
 const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
     let doknr: number;
@@ -39,6 +34,7 @@ interface IDokumentMedJournalpost {
 
 const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
     const dok = useQuery().get('dok');
+    const [aktivtDokument, setAktivtDokument] = useState<string>('1');
     const mapDokument = (dokument: IDokument, journalpostid: string) => ({
         journalpostid,
         dokumentId: dokument.dokumentId,
@@ -96,22 +92,13 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             <Panel className="punch_pdf">
                 {dokumenter.length > 1 && (
                     <div className="fleredokumenter">
-                        <ToggleGruppe
-                            kompakt
-                            defaultToggles={dokumenter.map((_: unknown, i: number) => ({
-                                children: (
-                                    <FormattedMessage
-                                        id="dokument.flere"
-                                        values={{
-                                            doknr: `${i + 1}`,
-                                            totalnr: dokumenter.length.toString(),
-                                        }}
-                                    />
-                                ),
-                                pressed: dokumentnummer === i + 1,
-                                onClick: () => goToDok(i + 1),
-                            }))}
-                        />
+                        <ToggleGroup onChange={(v) => setAktivtDokument(v)} value={aktivtDokument}>
+                            {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
+                                <ToggleGroup.Item value={String(i + 1)}>
+                                    {`${i + 1} / ${array.length}`}
+                                </ToggleGroup.Item>
+                            ))}
+                        </ToggleGroup>
                     </div>
                 )}
                 <iframe title="pdf" src={pdfUrl} />
