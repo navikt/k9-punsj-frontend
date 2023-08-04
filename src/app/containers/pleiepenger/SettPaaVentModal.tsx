@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, Table } from '@navikt/ds-react';
 
 import { ApiPath } from '../../apiConfig';
 import VisSvg from '../../assets/SVG/VisSVG';
@@ -50,32 +50,31 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                         {intlHelper(intl, 'modal.settpaavent.info')}
                     </Alert>
 
-                    <table className="tabell tabell--stripet punch_mappetabell">
-                        <thead>
-                            <tr>
-                                <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
-                                <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                                <th>{intlHelper(intl, 'tabell.typeinnsdending')}</th>
-                                <th aria-label={intlHelper(intl, 'modal.settpaavent.visjournalpost')} />
-                                <th aria-label={intlHelper(intl, 'modal.settpaavent.registrer')} />
-                            </tr>
-                            <tr />
-                        </thead>
-                        <tbody>
+                    <Table className="punch_mappetabell">
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                                <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
+                                <Table.HeaderCell>{intlHelper(intl, 'tabell.typeinnsdending')}</Table.HeaderCell>
+                                <Table.HeaderCell aria-label={intlHelper(intl, 'modal.settpaavent.visjournalpost')} />
+                                <Table.HeaderCell aria-label={intlHelper(intl, 'modal.settpaavent.registrer')} />
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
                             {journalposter.map((j) => (
-                                <tr key={j.journalpostId}>
-                                    <td>{j.journalpostId}</td>
-                                    <td>{j.dato}</td>
-                                    <td>{j.punsjInnsendingType.navn}</td>
-                                    <td>
+                                <Table.Row key={j.journalpostId}>
+                                    <Table.DataCell>{j.journalpostId}</Table.DataCell>
+                                    <Table.DataCell>{j.dato}</Table.DataCell>
+                                    <Table.DataCell>{j.punsjInnsendingType.navn}</Table.DataCell>
+                                    <Table.DataCell>
                                         <a className="visjp" href={pdfUrl(j)} target="_blank" rel="noreferrer">
                                             <VisSvg title="vis" />
                                             <div className="vistext">
                                                 {intlHelper(intl, 'modal.settpaavent.visjournalpost')}
                                             </div>
                                         </a>
-                                    </td>
-                                    <td>
+                                    </Table.DataCell>
+                                    <Table.DataCell>
                                         <Button
                                             variant="secondary"
                                             size="small"
@@ -85,11 +84,11 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                                         >
                                             {intlHelper(intl, 'modal.settpaavent.registrer')}
                                         </Button>
-                                    </td>
-                                </tr>
+                                    </Table.DataCell>
+                                </Table.Row>
                             ))}
-                        </tbody>
-                    </table>
+                        </Table.Body>
+                    </Table>
                 </>
             )}
         </div>

@@ -11,7 +11,7 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { ApiPath } from '../../apiConfig';
 import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
-import { apiUrl } from '../../utils';
+import { apiUrl, setQueryInHash } from '../../utils';
 import './pdfVisning.less';
 
 const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
@@ -21,6 +21,10 @@ const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = 
         doknr = 1;
     }
     return doknr;
+};
+
+const goToDok = (dok: string) => {
+    setQueryInHash({ dok });
 };
 
 interface IPdfVisningProps {
@@ -34,7 +38,9 @@ interface IDokumentMedJournalpost {
 
 const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
     const dok = useQuery().get('dok');
-    const [aktivtDokument, setAktivtDokument] = useState<string>('1');
+
+    const [aktivtDokument, setAktivtDokument] = useState<string>(dok || '1');
+
     const mapDokument = (dokument: IDokument, journalpostid: string) => ({
         journalpostid,
         dokumentId: dokument.dokumentId,
@@ -92,10 +98,16 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             <Panel className="punch_pdf">
                 {dokumenter.length > 1 && (
                     <div className="fleredokumenter">
-                        <ToggleGroup onChange={(v) => setAktivtDokument(v)} value={aktivtDokument}>
+                        <ToggleGroup
+                            onChange={(v) => {
+                                setAktivtDokument(v);
+                                goToDok(v);
+                            }}
+                            value={aktivtDokument}
+                        >
                             {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
                                 <ToggleGroup.Item value={String(i + 1)}>
-                                    {`${i + 1} / ${array.length}`}
+                                    {`Dokument ${i + 1} / ${array.length}`}
                                 </ToggleGroup.Item>
                             ))}
                         </ToggleGroup>
