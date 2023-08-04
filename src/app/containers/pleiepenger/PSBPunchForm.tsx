@@ -2,12 +2,12 @@
 import classNames from 'classnames';
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel, Checkbox, RadioPanelGruppe } from 'nav-frontend-skjema';
+import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, HelpText, Modal, Select, Tag, TextField } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, HelpText, Modal, Select, Tag, TextField } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
@@ -362,12 +362,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <Checkbox
-                    label={intlHelper(intl, 'skjema.ekspander')}
                     onChange={(e) => {
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
-                />
+                >
+                    {intlHelper(intl, 'skjema.ekspander')}
+                </Checkbox>
                 <VerticalSpacer sixteenPx={true} />
                 <EndringAvSøknadsperioder
                     isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}

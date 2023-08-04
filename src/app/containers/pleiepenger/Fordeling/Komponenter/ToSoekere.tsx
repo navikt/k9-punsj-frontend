@@ -1,8 +1,7 @@
-import { Checkbox } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, TextField } from '@navikt/ds-react';
+import { Alert, Checkbox, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
@@ -48,11 +47,12 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         <>
             <VerticalSpacer eightPx />
             <Checkbox
-                label={intlHelper(intl, 'ident.identifikasjon.tosokere')}
                 onChange={(e) => {
                     setToSokereIJournalpost(e.target.checked);
                 }}
-            />
+            >
+                {intlHelper(intl, 'ident.identifikasjon.tosokere')}
+            </Checkbox>
             <VerticalSpacer sixteenPx />
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">

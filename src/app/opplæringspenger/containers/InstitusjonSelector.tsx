@@ -1,7 +1,7 @@
 import { useField } from 'formik';
-import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
 
+import { Label } from '@navikt/ds-react';
 import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
 
 import './institusjonSelector.css';

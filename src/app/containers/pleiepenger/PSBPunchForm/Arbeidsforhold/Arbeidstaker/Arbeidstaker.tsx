@@ -1,7 +1,8 @@
-import { Checkbox, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
-import { Select, TextField } from '@navikt/ds-react';
+
+import { Checkbox, Select, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -179,7 +180,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     <VerticalSpacer eightPx />
                     {harArbeidsgivere && (
                         <Checkbox
-                            label="Det gjelder annen arbeidsgiver"
                             onChange={() => {
                                 dispatch({
                                     type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
@@ -193,7 +193,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 });
                             }}
                             checked={gjelderAnnenArbeidsgiver}
-                        />
+                        >
+                            Det gjelder annen arbeidsgiver
+                        </Checkbox>
                     )}
                     {gjelderAnnenArbeidsgiver && (
                         <>
