@@ -103,7 +103,9 @@ describe('Listepaneler', () => {
         const listepaneler = setupListepaneler({ feilkodeprefiks });
         expect(listepaneler.find('.testinput')).toHaveLength(testItems.length);
         expect(listepaneler.find(`#${testinputid(1)}`)).toHaveLength(1);
-        expect(listepaneler.find(`#${testinputid(1)}`).prop('feil')).toEqual(`Feilmelding med kode ${feilkodeprefiks}`);
+        expect(listepaneler.find(`#${testinputid(1)}`).prop('error')).toEqual(
+            `Feilmelding med kode ${feilkodeprefiks}`,
+        );
     });
 
     it('Kaller updateListeinfoInSoknadState med ny verdi', () => {
