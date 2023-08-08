@@ -44,6 +44,7 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                                 id="klokkeslett"
                                 type="time"
                                 className="klokkeslett"
+                                size="small"
                                 label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                 error={meta.touched && meta.error}
                                 {...field}

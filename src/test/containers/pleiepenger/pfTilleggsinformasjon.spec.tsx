@@ -3,6 +3,8 @@ import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
 
+import { Textarea } from '@navikt/ds-react';
+
 import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
@@ -63,23 +65,24 @@ describe('pfTilleggsinformasjon', () => {
 
     it('Viser tekstområde', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        expect(tilleggsinformasjon.find('Textarea')).toHaveLength(1);
+        tilleggsinformasjon.debug();
+        expect(tilleggsinformasjon.find(Textarea)).toHaveLength(1);
     });
 
     it('Viser riktig etikett', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        expect(tilleggsinformasjon.find('Textarea').prop('label')).toEqual(`skjema.${testKodeord}.tilleggsinfo`);
+        expect(tilleggsinformasjon.find(Textarea).prop('label')).toEqual(`skjema.${testKodeord}.tilleggsinfo`);
     });
 
     it('Viser riktig tekst i tekstområde', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        expect(tilleggsinformasjon.find('Textarea').prop('value')).toEqual(testPeriodeinfo.tilleggsinformasjon);
+        expect(tilleggsinformasjon.find(Textarea).prop('value')).toEqual(testPeriodeinfo.tilleggsinformasjon);
     });
 
     it('Kaller updatePeriodeinfoInSoknadState på onChange', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
         const newValue = 'Integer ut ligula sed est.';
-        tilleggsinformasjon.find('Textarea').simulate('change', { target: { value: newValue } });
+        tilleggsinformasjon.find(Textarea).simulate('change', { target: { value: newValue } });
         expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledTimes(1);
         expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledWith({ tilleggsinformasjon: newValue }, false);
     });
@@ -87,7 +90,7 @@ describe('pfTilleggsinformasjon', () => {
     it('Kaller updatePeriodeinfoInSoknad på onBlur', () => {
         const tilleggsinformasjon = setupPfTilleggsinformasjon();
         const newValue = 'Integer ut ligula sed est.';
-        tilleggsinformasjon.find('Textarea').simulate('blur', { target: { value: newValue } });
+        tilleggsinformasjon.find(Textarea).simulate('blur', { target: { value: newValue } });
         expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledTimes(1);
         expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledWith({
             tilleggsinformasjon: newValue,

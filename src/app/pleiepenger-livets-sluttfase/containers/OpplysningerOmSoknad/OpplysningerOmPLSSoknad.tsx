@@ -50,6 +50,7 @@ const OpplysningerOmPLSSoknad: React.FunctionComponent<IOwnProps> = ({
                     value={soknad.klokkeslett || ''}
                     type="time"
                     className="klokkeslett"
+                    size="small"
                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                     {...changeAndBlurUpdatesSoknad((event: any) => ({
                         klokkeslett: event.target.value,

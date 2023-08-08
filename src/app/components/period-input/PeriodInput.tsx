@@ -59,7 +59,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     };
 
     return (
-        <Fieldset feil={errorMessage} className={classNames('periodInput', className)}>
+        <Fieldset error={errorMessage} className={classNames('periodInput', className)}>
             <div className="flex flex-wrap">
                 <DateInput
                     className="periodInput__fom-container"

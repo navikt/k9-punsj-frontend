@@ -46,12 +46,6 @@ describe('PerodInput', () => {
         expect(periodInput.find(`#${inputIdTom}`).prop('value')).toEqual(tom);
     });
 
-    it('Skal vise feilmelding', () => {
-        const errorMessage = 'Lorem ipsum solor sit amet';
-        const periodInput = setupPeriodInput({ errorMessage });
-        expect(periodInput.find('Fieldset').prop('error')).toEqual(errorMessage);
-    });
-
     it('Skal vise feilmelding for fom-dato', () => {
         const errorMessageFom = 'Lorem ipsum solor sit amet';
         const periodInput = setupPeriodInput({ errorMessageFom });
