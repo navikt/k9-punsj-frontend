@@ -192,7 +192,7 @@
     "prettier": "3.0.0",
     "react-refresh": "0.14.0",
     "regenerator-runtime": "0.13.11",
-    "storybook": "7.1.1",
+    "storybook": "7.2.1",
     "style-loader": "3.3.3",
     "stylelint": "15.10.2",
     "stylelint-config-prettier": "9.0.5",
