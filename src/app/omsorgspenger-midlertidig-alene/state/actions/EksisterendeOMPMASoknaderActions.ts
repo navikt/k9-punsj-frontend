@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { IError, PersonEnkel } from 'app/models/types';
+import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
 
 import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';

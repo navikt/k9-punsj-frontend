@@ -33,12 +33,7 @@ const VisningAvPerioderPLSSoknadKvittering: React.FunctionComponent<IOwnProps> =
     lessClassForAdjustment,
 }) => (
     <div>
-        <div
-            className={classNames(
-                'visningAvPerioderSoknadKvitteringContainer',
-                typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : '',
-            )}
-        >
+        <div className={classNames('visningAvPerioderSoknadKvitteringContainer', lessClassForAdjustment || '')}>
             {tittel.map((t) => (
                 <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>
             ))}
@@ -46,10 +41,7 @@ const VisningAvPerioderPLSSoknadKvittering: React.FunctionComponent<IOwnProps> =
         {Object.keys(perioder).map((periode) => (
             <div
                 key={periode}
-                className={classNames(
-                    'visningAvPerioderSoknadKvitteringContainer',
-                    typeof lessClassForAdjustment !== undefined ? lessClassForAdjustment : '',
-                )}
+                className={classNames('visningAvPerioderSoknadKvitteringContainer', lessClassForAdjustment || '')}
             >
                 <p>{periodToFormattedString(periode)}</p>
 

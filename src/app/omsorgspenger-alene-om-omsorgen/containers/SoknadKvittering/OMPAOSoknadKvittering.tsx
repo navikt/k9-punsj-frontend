@@ -14,7 +14,7 @@ import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import { formattereTidspunktFraUTCTilGMT, periodToFormattedString, prettifyDateRange } from '../../../utils';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
 import { IOMPAOSoknadKvittering } from '../../types/OMPAOSoknadKvittering';
 import './OMPAOSoknadKvittering.less';
 

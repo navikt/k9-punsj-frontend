@@ -1,4 +1,3 @@
-import Headers from 'fetch-headers';
 import fetchMock from 'fetch-mock';
 
 import { ApiPath } from 'app/apiConfig';

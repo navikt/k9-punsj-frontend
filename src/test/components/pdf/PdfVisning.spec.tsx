@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { expect } from '@jest/globals';
+import { screen } from '@testing-library/react';
 import React from 'react';
 
 import PdfVisning from '../../../app/components/pdf/PdfVisning';

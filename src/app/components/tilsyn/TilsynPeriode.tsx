@@ -18,8 +18,8 @@ interface OwnProps {
 
 const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const formik = useFormikContext();
-    const [_, tidMeta] = useField(`${name}.timer`);
-    const [__, periodeFomMeta] = useField(`${name}.periode.fom`);
+    const [, tidMeta] = useField(`${name}.timer`);
+    const [, periodeFomMeta] = useField(`${name}.periode.fom`);
 
     const intl = useIntl();
 

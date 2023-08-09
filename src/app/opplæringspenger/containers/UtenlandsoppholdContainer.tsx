@@ -27,7 +27,7 @@ const UtenlandsoppholdContainer = () => {
                 name="utenlandsopphold"
                 render={(arrayHelpers) => (
                     <>
-                        {values.utenlandsopphold?.map((_, index, array) => (
+                        {values.utenlandsopphold?.map((_, index) => (
                             <Utenlandsopphold
                                 // eslint-disable-next-line react/no-array-index-key
                                 key={index}

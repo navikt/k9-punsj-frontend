@@ -1,7 +1,6 @@
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 
 import { Alert } from '@navikt/ds-react';
 
@@ -21,7 +20,6 @@ import {
 } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
-import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     setSakstypeAction as setSakstype,
