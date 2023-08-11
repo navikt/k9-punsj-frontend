@@ -1,15 +1,46 @@
 require('dotenv').config();
 
-const envVariables = () => {
-    const appSettings =
-        `window.appSettings = {OIDC_AUTH_PROXY: '${process.env.OIDC_AUTH_PROXY}', K9_LOS_URL: '${process.env.K9_LOS_URL}', OMP_KS_ENABLED: '${process.env.OMP_KS_ENABLED}', PLS_ENABLED: '${process.env.PLS_ENABLED}', OMP_MA_FEATURE_TOGGLE: '${process.env.OMP_MA_FEATURE_TOGGLE}', OMP_UT_FEATURE_TOGGLE: '${process.env.OMP_UT_FEATURE_TOGGLE}', SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: '${process.env.SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE}', OLP_ENABLED: '${process.env.OLP_ENABLED}', OMP_AO_ENABLED: '${process.env.OMP_AO_ENABLED}', POSTMOTTAK_TOGGLE: '${process.env.POSTMOTTAK_TOGGLE}' };`
-            .trim()
-            .replace(/ /g, '');
-    try {
-        return appSettings;
-    } catch (e) {
-        console.error(e);
-    }
-};
+const envVariables = () => [
+    {
+        key: 'OIDC_AUTH_PROXY',
+        value: process.env.OIDC_AUTH_PROXY,
+    },
+    {
+        key: 'K9_LOS_URL',
+        value: process.env.K9_LOS_URL,
+    },
+    {
+        key: 'OMP_KS_ENABLED',
+        value: process.env.OMP_KS_ENABLED,
+    },
+    {
+        key: 'PLS_ENABLED',
+        value: process.env.PLS_ENABLED,
+    },
+    {
+        key: 'OMP_MA_FEATURE_TOGGLE',
+        value: process.env.OMP_MA_FEATURE_TOGGLE,
+    },
+    {
+        key: 'OMP_UT_FEATURE_TOGGLE',
+        value: process.env.OMP_UT_FEATURE_TOGGLE,
+    },
+    {
+        key: 'SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE',
+        value: process.env.SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE,
+    },
+    {
+        key: 'OLP_ENABLED',
+        value: process.env.OLP_ENABLED,
+    },
+    {
+        key: 'OMP_AO_ENABLED',
+        value: process.env.OMP_AO_ENABLED,
+    },
+    {
+        key: 'POSTMOTTAK_TOGGLE',
+        value: process.env.POSTMOTTAK_TOGGLE,
+    },
+];
 
 module.exports = envVariables;

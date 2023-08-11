@@ -70,7 +70,12 @@ const webpackConfig = {
             filename: 'css/[name].css?[fullhash]-[chunkhash]-[name]',
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
-        new CopyPlugin({ patterns: [{ from: 'src/app/favicon.png' }] }),
+        new CopyPlugin({
+            patterns: [
+                { from: 'src/app/favicon.png' },
+                { from: 'src/build/envVariablesForEnvSubst.json', to: 'envVariablesForEnvSubst.json' },
+            ],
+        }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
 };
