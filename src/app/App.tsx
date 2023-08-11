@@ -21,6 +21,7 @@ import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
 import SokIndex from './containers/sok/SokIndex';
+import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { rootReducer } from './state/RootState';
@@ -70,7 +71,6 @@ queryClient.setDefaultOptions({
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
-
     React.useEffect(() => {
         DsModal?.setAppElement('#app');
     }, []);
@@ -116,8 +116,9 @@ const root = createRoot(container!);
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting
+const AppWithEnvVariables = withEnvVariables(App);
 prepare().then(() => {
-    root.render(<App />);
+    root.render(<AppWithEnvVariables />);
 });
 
 // @ts-ignore

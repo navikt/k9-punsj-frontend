@@ -47,12 +47,13 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
         }
-        return eksisterendePerioder.some((ep) =>
-            nyePerioder?.some(
-                (nyPeriode) =>
-                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
-            ),
+        return eksisterendePerioder.some(
+            (ep) =>
+                nyePerioder?.some(
+                    (nyPeriode) =>
+                        initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                        initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+                ),
         );
     };
 
