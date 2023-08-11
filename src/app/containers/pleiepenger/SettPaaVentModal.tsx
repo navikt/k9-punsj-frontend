@@ -62,7 +62,7 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                             <tr />
                         </thead>
                         <tbody>
-                            {journalposter.map((j, i) => (
+                            {journalposter.map((j) => (
                                 <tr key={j.journalpostId}>
                                     <td>{j.journalpostId}</td>
                                     <td>{j.dato}</td>

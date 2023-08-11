@@ -2,10 +2,9 @@ import React from 'react';
 
 interface ICheckCircleSVGProps {
     title: React.ReactNode;
-    className?: string;
 }
 
-const CheckCircleSvg: React.FunctionComponent<ICheckCircleSVGProps> = ({ title, className }) => (
+const CheckCircleSvg: React.FunctionComponent<ICheckCircleSVGProps> = ({ title }) => (
     <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>{title}</title>
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">

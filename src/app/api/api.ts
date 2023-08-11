@@ -1,7 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IPeriode } from 'app/models/types';
-import { FagsakYtelseType } from 'app/models/types/RequestBodies';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 
@@ -32,7 +31,7 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             }
         },
     );
-export const settBehandlingsAar = (
+export const postBehandlingsAar = (
     journalpostid: string,
     søkerId: string,
     behandlingsAar?: string,

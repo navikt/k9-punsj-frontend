@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "paths": {
+            "app/*": ["app/*"]
+        },
         "outDir": "build/dist",
         "module": "esnext",
         "target": "esnext",

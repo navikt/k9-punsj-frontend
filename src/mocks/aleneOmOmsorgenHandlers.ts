@@ -1,7 +1,5 @@
 import { rest } from 'msw';
 
-import { ApiPath } from 'app/apiConfig';
-
 import { LOCAL_API_URL } from './konstanter';
 
 const omsorgspengerutbetalingHandlers = {

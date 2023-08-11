@@ -1,6 +1,5 @@
 import { Arbeidstid } from './Arbeidstid';
 import { Barn, IBarn } from './IBarn';
-import { Klokkeslett } from './Klokkeslett';
 import { Kurs } from './Kurs';
 import { Omsorg } from './Omsorg';
 import { OpptjeningAktivitet } from './OpptjeningAktivitet';

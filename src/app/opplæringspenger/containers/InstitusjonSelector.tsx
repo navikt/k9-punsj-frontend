@@ -51,6 +51,7 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
     const [suggestions, setSuggestions] = React.useState<Institusjon[]>(institusjoner);
     const [inputValue, setInputValue] = React.useState(findInstitusjonValue(field.value));
     const [isLoading, setIsLoading] = React.useState(false);
+    console.error('isLoading skal vel settes???', setIsLoading);
 
     const onInputValueChange = async (v: string) => {
         const newSuggestionList = institusjoner.filter(

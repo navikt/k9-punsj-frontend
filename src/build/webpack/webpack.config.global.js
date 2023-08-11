@@ -17,7 +17,6 @@ const webpackConfig = {
         extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.less'],
         alias: {
             app: path.resolve(__dirname, './../../app'),
-            common: path.resolve(__dirname, './../../common'),
         },
     },
     module: {

@@ -19,9 +19,9 @@ interface OwnProps {
 
 const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const formik = useFormikContext();
-    const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltPerDag.timer`);
-    const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag.timer`);
-    const [periodeFomField, periodeFomMeta] = useField(`${name}.periode.fom`);
+    const [, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltPerDag.timer`);
+    const [, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag.timer`);
+    const [, periodeFomMeta] = useField(`${name}.periode.fom`);
 
     const intl = useIntl();
     const velgSoknadsperiode = (periode: IPeriode) => {

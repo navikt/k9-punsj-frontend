@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel } from '@navikt/ds-react';
@@ -65,7 +64,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                 previousListLength < currentListLength &&
                                                 index === currentListLength - 1;
                                             return (
-                                                <Row noGutters key={fieldName}>
+                                                <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="delvisFravaer__inputfelter">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
@@ -112,13 +111,13 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                             {intlHelper(intl, 'skjema.liste.fjern_dag')}
                                                         </button>
                                                     </div>
-                                                </Row>
+                                                </div>
                                             );
                                         },
                                     )}
                                 </Panel>
                             </SkjemaGruppe>
-                            <Row noGutters>
+                            <div className="flex flex-wrap">
                                 <button
                                     id="leggTilDag"
                                     className="leggtilperiode"
@@ -132,7 +131,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     </div>
                                     {intlHelper(intl, 'skjema.dag.legg_til')}
                                 </button>
-                            </Row>
+                            </div>
                         </>
                     )}
                 </FieldArray>

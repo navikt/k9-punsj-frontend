@@ -34,7 +34,7 @@ const endreLandkodeTilLandnavnIPerioder = (perioder: IOLPSoknadKvitteringUtenlan
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
-        if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
+        if (landNavn) kopiAvPerioder[periode].land = landNavn?.name;
     });
     return kopiAvPerioder;
 };
@@ -91,7 +91,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
         sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', kvittering) &&
         kvittering?.begrunnelseForInnsending.tekst;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', ytelse);
-    const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
     const visFerieSomSkalSLettes =
         sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalIkkeHaFerieListe).length > 0;

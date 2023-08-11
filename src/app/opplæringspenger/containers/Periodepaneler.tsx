@@ -1,6 +1,5 @@
 import { FieldArray, useFormikContext } from 'formik';
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
@@ -40,9 +39,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             const fieldMeta = getFieldMeta(fieldName);
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <Row noGutters key={index}>
+                                <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <PeriodInput
+                                            className="mr-3"
                                             periode={period || {}}
                                             intl={intl}
                                             onChange={(periode) => {
@@ -71,7 +71,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                                         </button>
                                     </div>
-                                </Row>
+                                </div>
                             );
                         })}
                         {/* {feilkodeprefiks && (
@@ -81,7 +81,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
             )} */}
 
                         {kanHaFlere && (
-                            <Row noGutters>
+                            <div className="flex flex-wrap">
                                 <button
                                     id="leggtilperiode"
                                     className="leggtilperiode"
@@ -98,7 +98,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                     </div>
                                     {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
                                 </button>
-                            </Row>
+                            </div>
                         )}
                     </>
                 )}

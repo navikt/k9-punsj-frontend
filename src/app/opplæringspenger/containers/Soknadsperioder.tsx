@@ -36,7 +36,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                         {intlHelper(intl, 'skjema.generellinfo')}
                     </Alert>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
-                    {eksisterendePerioder.map((p, i) => (
+                    {eksisterendePerioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
                             <CalendarSvg title="calendar" />
                             <div className="periode">{generateDateString(p)}</div>

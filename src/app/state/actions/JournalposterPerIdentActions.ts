@@ -2,7 +2,7 @@ import { ApiPath } from '../../apiConfig';
 import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
 import { IError, IJournalpostInfo } from '../../models/types';
 import { IHentSoknad } from '../../models/types/RequestBodies';
-import { convertResponseToError, get, post } from '../../utils';
+import { convertResponseToError, post } from '../../utils';
 
 interface ISetJournalposterPerIdentAction {
     type: JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_SET;

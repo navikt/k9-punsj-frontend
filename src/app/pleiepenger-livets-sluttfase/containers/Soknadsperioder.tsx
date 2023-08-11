@@ -49,12 +49,13 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
         }
-        return eksisterendePerioder.some((ep) =>
-            nyePerioder?.some(
-                (nyPeriode) =>
-                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
-            ),
+        return eksisterendePerioder.some(
+            (ep) =>
+                nyePerioder?.some(
+                    (nyPeriode) =>
+                        initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                        initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+                ),
         );
     };
 
@@ -80,7 +81,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                         {intlHelper(intl, 'skjema.generellinfo')}
                     </Alert>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
-                    {punchFormState.perioder.map((p, i) => (
+                    {punchFormState.perioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
                             <CalendarSvg title="calendar" />
                             <div className="periode">{generateDateString(p)}</div>
