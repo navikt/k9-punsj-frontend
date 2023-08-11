@@ -47,7 +47,6 @@ type ISearchFormProps = WrappedComponentProps &
     ISearchFormComponentState;
 
 export const SearchFormComponent: React.FC<ISearchFormProps> = ({
-    journalpostid,
     notFound,
     forbidden,
     conflict,
