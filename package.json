@@ -14,7 +14,7 @@
     "@navikt/k9-fe-period-utils": "1.0.6",
     "@popperjs/core": "^2.11.8",
     "@redux-devtools/extension": "3.2.5",
-    "@sentry/react": "7.61.0",
+    "@sentry/react": "7.63.0",
     "@storybook/testing-react": "2.0.1",
     "@testing-library/cypress": "9.0.0",
     "@types/classnames": "2.3.1",
