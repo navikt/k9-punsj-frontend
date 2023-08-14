@@ -4693,6 +4693,7 @@ __metadata:
     telejson: ^7.0.3
     ts-dedent: ^2.0.0
   peerDependencies:
+    "@babel/core": ^7.22.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: d0d4264b2df0bb6a49e3f7c079bcbb23e1ad987690acd94061579fa68d856d33a044abd6823be55fe812ee78c81921647ce45e53ded67d80df6e6018bc16a035
@@ -13455,41 +13456,22 @@ __metadata:
     msw: 1.2.3
     mustache-express: 1.3.2
     nav-datovelger: 12.6.0
-    nav-frontend-alertstriper: 4.0.2
-    nav-frontend-alertstriper-style: 3.0.2
-    nav-frontend-chevron: 1.0.30
-    nav-frontend-chevron-style: 1.0.4
+    nav-frontend-chevron-style: ^1.0.4
     nav-frontend-core: 6.0.1
     nav-frontend-ekspanderbartpanel: 4.0.4
     nav-frontend-ekspanderbartpanel-style: 2.0.2
-    nav-frontend-etiketter: 3.0.3
-    nav-frontend-etiketter-style: 2.0.3
-    nav-frontend-hjelpetekst: 3.1.3
-    nav-frontend-hjelpetekst-style: 3.0.2
-    nav-frontend-ikoner-assets: 3.0.1
-    nav-frontend-ikonknapper: 2.1.3
     nav-frontend-js-utils: 1.0.20
-    nav-frontend-knapper: 3.1.3
-    nav-frontend-knapper-style: 2.1.2
-    nav-frontend-lenker: 2.0.2
-    nav-frontend-lenker-style: 2.0.2
-    nav-frontend-lukknapp: 2.0.2
-    nav-frontend-lukknapp-style: 2.0.2
-    nav-frontend-modal: 2.0.2
-    nav-frontend-modal-style: 2.0.2
-    nav-frontend-paneler: 3.0.2
-    nav-frontend-paneler-style: 2.0.2
-    nav-frontend-popover: 2.0.4
-    nav-frontend-popover-style: 2.0.2
+    nav-frontend-knapper-style: ^2.1.2
+    nav-frontend-lenker: ^2.0.2
+    nav-frontend-lenker-style: ^2.0.2
+    nav-frontend-paneler-style: ^2.0.2
     nav-frontend-skjema: 4.0.6
     nav-frontend-skjema-style: 3.0.3
-    nav-frontend-spinner: 3.0.1
-    nav-frontend-spinner-style: 1.0.2
-    nav-frontend-tabell-style: 2.1.2
+    nav-frontend-tabell-style: ^2.1.2
     nav-frontend-toggle: 2.1.3
     nav-frontend-toggle-style: 2.1.2
-    nav-frontend-typografi: 4.0.2
-    nav-frontend-typografi-style: 2.0.2
+    nav-frontend-typografi: ^4.0.2
+    nav-frontend-typografi-style: ^2.0.2
     object-hash: 3.0.0
     popper.js: 1.16.1
     postcss: ^8.4.27
@@ -14641,48 +14623,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-alertstriper-style@npm:3.0.2":
-  version: 3.0.2
-  resolution: "nav-frontend-alertstriper-style@npm:3.0.2"
-  peerDependencies:
-    nav-frontend-core: ^6.0.0
-    nav-frontend-ikoner-assets: ^3.0.0
-    nav-frontend-paneler-style: ^2.0.0
-    nav-frontend-typografi-style: ^2.0.0
-  checksum: 5632fe0c54cca67183e1aa615ea059c8bbaf9e0edd78ac24bc8513bb3194d2cce80544acd2f14c16512af935477287d7eeeb006d1f70ba1bd3c997a84fe8f9bb
-  languageName: node
-  linkType: hard
-
-"nav-frontend-alertstriper@npm:4.0.2":
-  version: 4.0.2
-  resolution: "nav-frontend-alertstriper@npm:4.0.2"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-alertstriper-style: ^3.0.0
-    nav-frontend-ikoner-assets: ^3.0.0
-    nav-frontend-typografi: ^4.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 37eb283685186cf5e19948f22efa8e148dbf1f1815cf17858c2e4fe4289cda388844636631c968d9652ccd93966b0854da4260b928943107495db7816bd8344b
-  languageName: node
-  linkType: hard
-
-"nav-frontend-chevron-style@npm:1.0.4":
+"nav-frontend-chevron-style@npm:^1.0.4":
   version: 1.0.4
   resolution: "nav-frontend-chevron-style@npm:1.0.4"
   checksum: c4c4e8c63a9d9802060fbc451f8d82fa48ced9763b2820c0ff6e0801b5e9c8624a92d83ccb8c914f65cb29ed78dedf7ed92ce8c42c91fc6ffe29421f1a788630
-  languageName: node
-  linkType: hard
-
-"nav-frontend-chevron@npm:1.0.30":
-  version: 1.0.30
-  resolution: "nav-frontend-chevron@npm:1.0.30"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-chevron-style: ^1.0.4
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 3f587f8abc5c2c00e1d14d9e188ca7417d074d024f5ead095b75029bb3a2ffdb157a514e0172d9ce12ce17c87320c2e333cb1f6f7c0d70dca33af0979c006a3d
   languageName: node
   linkType: hard
 
@@ -14719,73 +14663,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-etiketter-style@npm:2.0.3":
-  version: 2.0.3
-  resolution: "nav-frontend-etiketter-style@npm:2.0.3"
-  peerDependencies:
-    nav-frontend-core: ^6.0.0
-  checksum: 156253db8a24b8ba3fa70282b9f68902c72e8e51a7a6f851a1a4e90e721293e85606f9f44f90dbf78872bef8d4010b72c004b044634150a5609cd8d69bf1e52c
-  languageName: node
-  linkType: hard
-
-"nav-frontend-etiketter@npm:3.0.3":
-  version: 3.0.3
-  resolution: "nav-frontend-etiketter@npm:3.0.3"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-core: ^6.0.0
-    nav-frontend-etiketter-style: ^2.0.0
-    nav-frontend-typografi: ^4.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 8b0552ead6616f7d22f9d8fad291c2929a7568f004093eb4da08ea6dcdcd5eed13e32d0963d1ecf790ab3629597ee3006e7c110c09dce6b60220d52d1e12209c
-  languageName: node
-  linkType: hard
-
-"nav-frontend-hjelpetekst-style@npm:3.0.2":
-  version: 3.0.2
-  resolution: "nav-frontend-hjelpetekst-style@npm:3.0.2"
-  peerDependencies:
-    nav-frontend-core: ^6.0.0
-    nav-frontend-typografi-style: ^2.0.0
-  checksum: a27c99fff89109b937eb54f66306908c6e8a9857c63beae05d0b47aee43473bb4daa1c5d900f8d4a955f175ec0394e06eecf9001126690a6435acbeeeda519b0
-  languageName: node
-  linkType: hard
-
-"nav-frontend-hjelpetekst@npm:3.1.3":
-  version: 3.1.3
-  resolution: "nav-frontend-hjelpetekst@npm:3.1.3"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-hjelpetekst-style: ^3.0.0
-    nav-frontend-ikoner-assets: ^3.0.0
-    nav-frontend-js-utils: ^1.0.19
-    nav-frontend-popover: ^2.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 186e1b1e1acf55abeac6a7c3764de2ae98c80717c2fb9682a8e924d370b7ec177dc96002b8af6203930def578cb78948551f9e6e7f8b251c21b9d9fec01510cc
-  languageName: node
-  linkType: hard
-
-"nav-frontend-ikoner-assets@npm:3.0.1":
-  version: 3.0.1
-  resolution: "nav-frontend-ikoner-assets@npm:3.0.1"
-  checksum: 6d6bce01b95555d56333cd11cbadc715e5a4021a62a5981c30c4a8ba3d5807267cb04f6410bad2bc7804f377c0e020eb79e6d389c8bb19942a2b9d1f70b551d9
-  languageName: node
-  linkType: hard
-
-"nav-frontend-ikonknapper@npm:2.1.3":
-  version: 2.1.3
-  resolution: "nav-frontend-ikonknapper@npm:2.1.3"
-  peerDependencies:
-    nav-frontend-chevron: ^1.0.29
-    nav-frontend-ikoner-assets: ^3.0.0
-    nav-frontend-knapper: ^3.0.0
-    react: ^16.8.0 || ^17.0.0
-  checksum: f51fddf774fcebf3349769a95a03476f08eaf82892272664bfd59a471b817858d8317bf2c675324dfba82618136bdf9beed1e34c42f3179ff6d1519237c0794b
-  languageName: node
-  linkType: hard
-
 "nav-frontend-js-utils@npm:1.0.20":
   version: 1.0.20
   resolution: "nav-frontend-js-utils@npm:1.0.20"
@@ -14799,7 +14676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-knapper-style@npm:2.1.2":
+"nav-frontend-knapper-style@npm:^2.1.2":
   version: 2.1.2
   resolution: "nav-frontend-knapper-style@npm:2.1.2"
   peerDependencies:
@@ -14809,20 +14686,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-knapper@npm:3.1.3":
-  version: 3.1.3
-  resolution: "nav-frontend-knapper@npm:3.1.3"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-js-utils: ^1.0.19
-    nav-frontend-knapper-style: ^2.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 7f76b51730f550379c8d2a6add956060e76af05ff70574c6f743653330e82b05f443bd763322cef1b6cfc5d59d2e8a3a3f23cc391a938c5bf63ff61b0ed2af61
-  languageName: node
-  linkType: hard
-
-"nav-frontend-lenker-style@npm:2.0.2":
+"nav-frontend-lenker-style@npm:^2.0.2":
   version: 2.0.2
   resolution: "nav-frontend-lenker-style@npm:2.0.2"
   peerDependencies:
@@ -14831,7 +14695,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-lenker@npm:2.0.2":
+"nav-frontend-lenker@npm:^2.0.2":
   version: 2.0.2
   resolution: "nav-frontend-lenker@npm:2.0.2"
   peerDependencies:
@@ -14843,96 +14707,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-lukknapp-style@npm:2.0.2":
-  version: 2.0.2
-  resolution: "nav-frontend-lukknapp-style@npm:2.0.2"
-  peerDependencies:
-    nav-frontend-core: ^6.0.0
-  checksum: 3bf5da61f61a0f23cec4abf271d5252729da4b57ff62c646c28151c0a55b4e7cf0eebe48645ac6d967d8d99fda318ad8519dc91aafe5cec7dcf16d88342f45ed
-  languageName: node
-  linkType: hard
-
-"nav-frontend-lukknapp@npm:2.0.2":
-  version: 2.0.2
-  resolution: "nav-frontend-lukknapp@npm:2.0.2"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-lukknapp-style: ^2.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 56adeb220696aea940bd9ca9e20775ccb0d2f3b61513e9dfdaf9044f88cf6f4137fdc4823db2d41a1db59f5d25236482b69664a3424a4e07686e42cca7d3d988
-  languageName: node
-  linkType: hard
-
-"nav-frontend-modal-style@npm:2.0.2":
-  version: 2.0.2
-  resolution: "nav-frontend-modal-style@npm:2.0.2"
-  peerDependencies:
-    nav-frontend-core: ^6.0.0
-    nav-frontend-lukknapp-style: ^2.0.0
-    nav-frontend-paneler-style: ^2.0.0
-  checksum: 4b994e42e167689c21a6f40390a39c7e70d56832a396761f3d940611ed8b75827bcb8a80bbb2c45b81e8e8ac298d2f80df0e09b4c1c99a32cec94bf03a79dd33
-  languageName: node
-  linkType: hard
-
-"nav-frontend-modal@npm:2.0.2":
-  version: 2.0.2
-  resolution: "nav-frontend-modal@npm:2.0.2"
-  peerDependencies:
-    "@types/react-modal": ^3.1.2
-    classnames: ^2.2.5
-    nav-frontend-lukknapp: ^2.0.0
-    nav-frontend-modal-style: ^2.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-    react-modal: ^2.2.4 || ^3.3.1
-  checksum: 264f32dbf190eabd126f3e2459b99089366e9b3287c38e43a34aab81382f30c6af9e0a85c5ce57bf71bdbffcb523b49caecc340b241938d5a83c0c2039e23c56
-  languageName: node
-  linkType: hard
-
-"nav-frontend-paneler-style@npm:2.0.2":
+"nav-frontend-paneler-style@npm:^2.0.2":
   version: 2.0.2
   resolution: "nav-frontend-paneler-style@npm:2.0.2"
   peerDependencies:
     nav-frontend-core: ^6.0.0
   checksum: 7d4b15e3b1a6cc127eca837ae17c42736ef69da9f7f2ca617180809d244c3abda7e4385dd144478c0befc3831c5bec686f5cae281c31235aacba8b79f032cc5d
-  languageName: node
-  linkType: hard
-
-"nav-frontend-paneler@npm:3.0.2":
-  version: 3.0.2
-  resolution: "nav-frontend-paneler@npm:3.0.2"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-paneler-style: ^2.0.0
-    nav-frontend-typografi: ^4.0.0
-    nav-frontend-typografi-style: ^2.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 61203dc41c3b6e49cbf3a2b6225ffe769715f643a75cc4df5352e6181ff549ae8f51361dcc62d69e25f6923d596eb795be4a22c2cd6b4661180dcb496a82df66
-  languageName: node
-  linkType: hard
-
-"nav-frontend-popover-style@npm:2.0.2":
-  version: 2.0.2
-  resolution: "nav-frontend-popover-style@npm:2.0.2"
-  peerDependencies:
-    nav-frontend-core: ^6.0.0
-  checksum: 9d49bbf850bceb7b87798b10af047436016961c29bc1b65959df5701b495465e922e45a2fdf20456dd9c6a4ed209025d06545f98c342889b1ccf2673732805a1
-  languageName: node
-  linkType: hard
-
-"nav-frontend-popover@npm:2.0.4":
-  version: 2.0.4
-  resolution: "nav-frontend-popover@npm:2.0.4"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-js-utils: ^1.0.19
-    nav-frontend-popover-style: ^2.0.0
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 94b5c81104666aa706f703d4a7ffa80862ad8992632e12eec73f30d239e219f26df773e6f03feb3b7207e9df81274349e4dcb40cdd7adb5d8efec7f6561eec82
   languageName: node
   linkType: hard
 
@@ -14963,27 +14743,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-spinner-style@npm:1.0.2":
-  version: 1.0.2
-  resolution: "nav-frontend-spinner-style@npm:1.0.2"
-  checksum: 28e376811be644987470012a513d4c4a22231263631e8911355cc15080301a54334ac8163a45503146706bf76483b3243a3495b1272b1321b4535a0e5103977f
-  languageName: node
-  linkType: hard
-
-"nav-frontend-spinner@npm:3.0.1":
-  version: 3.0.1
-  resolution: "nav-frontend-spinner@npm:3.0.1"
-  peerDependencies:
-    classnames: ^2.2.5
-    nav-frontend-ikoner-assets: ^3.0.0
-    nav-frontend-spinner-style: ^1.0.2
-    prop-types: ^15.5.10
-    react: ^16.8.0 || ^17.0.0
-  checksum: 16b52e8de4077c0d01957f914f668ee4f21671f788d3d171ad0cbd02947f8d77ce90d8c8b1566e7d1dc77cafcdcfcfb87a55cddeb0be2c5d25d67340da27736a
-  languageName: node
-  linkType: hard
-
-"nav-frontend-tabell-style@npm:2.1.2":
+"nav-frontend-tabell-style@npm:^2.1.2":
   version: 2.1.2
   resolution: "nav-frontend-tabell-style@npm:2.1.2"
   peerDependencies:
@@ -15018,7 +14778,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-typografi-style@npm:2.0.2":
+"nav-frontend-typografi-style@npm:^2.0.2":
   version: 2.0.2
   resolution: "nav-frontend-typografi-style@npm:2.0.2"
   dependencies:
@@ -15027,7 +14787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nav-frontend-typografi@npm:4.0.2":
+"nav-frontend-typografi@npm:^4.0.2":
   version: 4.0.2
   resolution: "nav-frontend-typografi@npm:4.0.2"
   peerDependencies:

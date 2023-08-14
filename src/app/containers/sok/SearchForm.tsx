@@ -1,10 +1,8 @@
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-import { Alert, Modal } from '@navikt/ds-react';
+import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
 
 import Fagsak from 'app/types/Fagsak';
 
@@ -46,88 +44,96 @@ type ISearchFormProps = WrappedComponentProps &
     ISearchFormDispatchProps &
     ISearchFormComponentState;
 
-export const SearchFormComponent: React.FC<ISearchFormProps> = ({
-    notFound,
-    forbidden,
-    conflict,
-    journalpostConflictError,
-    journalpostRequestError,
-    journalpost,
-    lukkOppgaveDone,
-    lukkOppgaveReset,
-    getJournalpost,
-}) => {
-    const [sanitizedJournalpostId, setSanitizedJournalpostId] = useState<string>('');
+export class SearchFormComponent extends React.Component<ISearchFormProps, ISearchFormComponentState> {
+    constructor(props: ISearchFormProps) {
+        super(props);
+        this.state = {
+            journalpostid: '',
+        };
+    }
 
-    const history = useHistory();
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const journalpostId = e.target.value;
         // Only allow numbers (0-9)
-        const sanitizedValue = journalpostId.replace(/[^0-9]/g, '');
-        setSanitizedJournalpostId(sanitizedValue);
+        const sanitizedJournalpostId = journalpostId.replace(/[^0-9]/g, '');
+        this.setState({ journalpostid: sanitizedJournalpostId });
     };
 
-    const onClick = (): void => {
-        if (sanitizedJournalpostId) {
-            getJournalpost(sanitizedJournalpostId);
+    onClick = (): void => {
+        const { journalpostid } = this.state;
+        const { getJournalpost } = this.props;
+        if (journalpostid) {
+            getJournalpost(journalpostid);
         }
     };
 
-    const handleKeydown = (event: React.KeyboardEvent): void => {
+    handleKeydown = (event: React.KeyboardEvent): void => {
         if (event.key === 'Enter') {
-            onClick();
+            this.onClick();
         }
     };
 
-    if (journalpost?.journalpostId) {
-        history.push(`/journalpost/${journalpost.journalpostId}`);
-    }
+    render() {
+        const { journalpostid } = this.state;
+        const {
+            notFound,
+            forbidden,
+            conflict,
+            journalpostConflictError,
+            journalpostRequestError,
+            journalpost,
+            lukkOppgaveDone,
+            lukkOppgaveReset,
+        } = this.props;
 
-    if (lukkOppgaveDone) {
+        const disabled = !journalpostid;
+
+        if (journalpost?.journalpostId) {
+            window.location.assign(`journalpost/${journalpostid}`);
+        }
+
+        if (lukkOppgaveDone) {
+            return (
+                <Modal
+                    key="lukkoppgaveokmodal"
+                    onClose={() => lukkOppgaveReset()}
+                    aria-label="settpaaventokmodal"
+                    closeButton={false}
+                    open
+                >
+                    <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
+                </Modal>
+            );
+        }
+
         return (
-            <Modal
-                key="lukkoppgaveokmodal"
-                onClose={() => lukkOppgaveReset()}
-                aria-label="settpaaventokmodal"
-                closeButton={false}
-                open
-            >
-                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </Modal>
-        );
-    }
+            <>
+                <div className="sok-container">
+                    <h1 className="sok-heading">
+                        <FormattedMessage id="søk.overskrift" />
+                    </h1>
+                    <Fieldset>
+                        <div className="input-rad">
+                            <TextField
+                                value={journalpostid}
+                                className="w-64"
+                                onChange={this.onChange}
+                                label={<FormattedMessage id="søk.label.jpid" />}
+                                onKeyDown={this.handleKeydown}
+                            />
+                            <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                            <VerticalSpacer sixteenPx />
+                        </div>
 
-    const disabled = !sanitizedJournalpostId;
-
-    return (
-        <>
-            <div className="sok-container">
-                <h1 className="sok-heading">
-                    <FormattedMessage id="søk.overskrift" />
-                </h1>
-                <SkjemaGruppe>
-                    <div className="input-rad">
-                        <Input
-                            value={sanitizedJournalpostId}
-                            bredde="L"
-                            onChange={onChange}
-                            label={<FormattedMessage id="søk.label.jpid" />}
-                            onKeyDown={handleKeydown}
-                        />
-                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
-                        <VerticalSpacer sixteenPx />
-                    </div>
-                    <div className="max-w-[500px] m-auto">
                         {!!notFound && (
                             <Alert size="small" variant="info">
-                                <FormattedMessage id="søk.jp.notfound" values={{ jpid: sanitizedJournalpostId }} />
+                                <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
                             </Alert>
                         )}
 
                         {!!forbidden && (
                             <Alert size="small" variant="warning">
-                                <FormattedMessage id="søk.jp.forbidden" values={{ jpid: sanitizedJournalpostId }} />
+                                <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                             </Alert>
                         )}
 
@@ -150,16 +156,16 @@ export const SearchFormComponent: React.FC<ISearchFormProps> = ({
                                 <FormattedMessage id="fordeling.kanikkesendeinn" />
                             </Alert>
                         )}
-                    </div>
-                </SkjemaGruppe>
-            </div>
-            <div className="inngangContainer">
-                <OpprettJournalpostInngang />
-                <SendBrevIAvsluttetSakInngang />
-            </div>
-        </>
-    );
-};
+                    </Fieldset>
+                </div>
+                <div className="inngangContainer">
+                    <OpprettJournalpostInngang />
+                    <SendBrevIAvsluttetSakInngang />
+                </div>
+            </>
+        );
+    }
+}
 
 const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,

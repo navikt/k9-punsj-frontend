@@ -1,8 +1,5 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { Select, SelectProps } from 'nav-frontend-skjema';
 import * as React from 'react';
+import { Select, SelectProps } from '@navikt/ds-react';
 
 import { getCountryList } from 'app/utils';
 

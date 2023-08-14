@@ -1,6 +1,8 @@
-import { Checkbox, Input, RadioPanelGruppe, Select, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
+
+import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -119,7 +121,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
-        <SkjemaGruppe className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel">
             <div className="flex flex-wrap">
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -144,8 +146,8 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     {harArbeidsgivere && (
                         <Select
                             value={selectedArbeidsgiver}
-                            bredde="l"
                             label="Velg hvilken arbeidsgiver det gjelder"
+                            className="w-72"
                             onChange={(event) => {
                                 const { value } = event.target;
                                 dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
@@ -163,8 +165,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 }
                             }}
                             disabled={gjelderAnnenArbeidsgiver}
-                            selected={selectedArbeidsgiver}
-                            feil={
+                            error={
                                 harDuplikatOrgnr
                                     ? 'Organisasjonsnummeret er valgt flere ganger.'
                                     : getErrorMessage(`${feilkodeprefiks}.identified`)
@@ -181,7 +182,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     <VerticalSpacer eightPx />
                     {harArbeidsgivere && (
                         <Checkbox
-                            label="Det gjelder annen arbeidsgiver"
                             onChange={() => {
                                 dispatch({
                                     type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
@@ -195,16 +195,17 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                 });
                             }}
                             checked={gjelderAnnenArbeidsgiver}
-                        />
+                        >
+                            Det gjelder annen arbeidsgiver
+                        </Checkbox>
                     )}
                     {gjelderAnnenArbeidsgiver && (
                         <>
                             <VerticalSpacer sixteenPx />
                             <div className="flex flex-wrap">
                                 <div className="input-row">
-                                    <Input
+                                    <TextField
                                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                                        bredde="M"
                                         value={organisasjonsnummer || ''}
                                         className="arbeidstaker-organisasjonsnummer"
                                         onChange={(event) => {
@@ -233,7 +234,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                                 });
                                             }
                                         }}
-                                        feil={
+                                        error={
                                             searchOrganisasjonsnummerFailed
                                                 ? 'Ingen treff på organisasjonsnummer'
                                                 : getErrorMessage(`${feilkodeprefiks}.identified`)
@@ -251,10 +252,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
             <div className="flex flex-wrap">
                 <div className="input-row">
                     {selectedType === 'p' && (
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                             value={norskIdent || ''}
-                            bredde="M"
                             className="arbeidstaker-norskIdent"
                             onChange={(event) =>
                                 updateListeinfoInSoknadState({
@@ -264,7 +264,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             onBlur={(event) =>
                                 updateListeinfoInSoknad({ norskIdent: event.target.value.replace(/\s/g, '') })
                             }
-                            feil={getErrorMessage(`${feilkodeprefiks}.identified`)}
+                            error={getErrorMessage(`${feilkodeprefiks}.identified`)}
                         />
                     )}
                 </div>
@@ -290,7 +290,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                 }
                 arbeidstidInfo={arbeidstidInfo}
             />
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

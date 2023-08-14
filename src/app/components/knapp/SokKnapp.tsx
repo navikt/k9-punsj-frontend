@@ -12,7 +12,7 @@ interface ISokKnappProps {
 }
 
 const SokKnapp: React.FunctionComponent<ISokKnappProps> = ({ onClick, tekstId, disabled }) => (
-    <Button onClick={() => onClick()} size="small" className="sokknapp" disabled={disabled}>
+    <Button onClick={() => onClick()} size="small" className="sokknapp my-4" disabled={disabled}>
         <FormattedMessage id={tekstId} />
     </Button>
 );

@@ -1,9 +1,8 @@
 import classNames from 'classnames';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 
-import { Panel } from '@navikt/ds-react';
+import { Fieldset, Panel } from '@navikt/ds-react';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
@@ -107,7 +106,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
     };
 
     return (
-        <SkjemaGruppe className={classNames('listepaneler', className)}>
+        <Fieldset className={classNames('listepaneler', className)}>
             {!!items &&
                 items!.map((itemInfo, itemIndex) => {
                     const panelid = props.panelid(itemIndex);
@@ -118,7 +117,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                             id={panelid}
                             key={panelid}
                         >
-                            <SkjemaGruppe>
+                            <Fieldset>
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
                                     <h2>
                                         <FormattedMessage
@@ -153,7 +152,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         getErrorMessage,
                                         intl,
                                     )}
-                            </SkjemaGruppe>
+                            </Fieldset>
                         </Panel>
                     );
                 })}
@@ -176,6 +175,6 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                     {intlHelper(intl, textLeggTil || 'skjema.liste.legg_til')}
                 </button>
             )}
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };

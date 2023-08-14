@@ -1,9 +1,8 @@
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, ErrorMessage, Label } from '@navikt/ds-react';
+import { Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 
 import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
@@ -82,7 +81,7 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                         const { value } = event.target;
                         updateSoknad({ begrunnelseForInnsending: { tekst: value } });
                     }}
-                    feil={begrunnelseForInnsendingFeilmelding()}
+                    error={begrunnelseForInnsendingFeilmelding()}
                 />
             </div>
         );
@@ -133,7 +132,6 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             <Periodepaneler
                 intl={intl}
                 periods={soknad.trekkKravPerioder || []}
-                panelid={(i) => `endringAvSøknadsperioder_${i}`}
                 initialPeriode={{ fom: '', tom: '' }}
                 editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
                 editSoknadState={(perioder, showStatus) => {

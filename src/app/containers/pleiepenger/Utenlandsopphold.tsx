@@ -168,7 +168,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                     />
                     <button
                         id="slett"
-                        className="removePeriodeKnapp"
+                        className="removePeriodeKnapp ml-3"
                         type="button"
                         onClick={removePeriode}
                         tabIndex={0}

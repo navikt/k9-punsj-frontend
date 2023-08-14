@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { Select } from '@navikt/ds-react';
 
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
@@ -30,8 +30,8 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({ resetBrevStatus, aktør
                         {...field}
                         label={intl.formatMessage({ id: 'Messages.Recipient' })}
                         placeholder={intl.formatMessage({ id: 'Messages.ChooseRecipient' })}
-                        bredde="xxl"
-                        feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                        className="w-[400px]"
+                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         onChange={(event) => {
                             setFieldValue(field.name, event.target.value);
                             resetBrevStatus();

@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
 import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries, useQuery } from 'react-query';

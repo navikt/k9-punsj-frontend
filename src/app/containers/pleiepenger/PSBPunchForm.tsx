@@ -2,12 +2,12 @@
 import classNames from 'classnames';
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel, Checkbox, Input, RadioPanelGruppe, Select } from 'nav-frontend-skjema';
+import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, HelpText, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, HelpText, Modal, Select, Tag, TextField } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
@@ -58,7 +58,6 @@ import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPan
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
-import { sjekkHvisArbeidstidErAngitt } from './PSBPunchForm/arbeidstidOgPerioderHjelpfunksjoner';
 import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
@@ -363,12 +362,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 />
                 <VerticalSpacer sixteenPx={true} />
                 <Checkbox
-                    label={intlHelper(intl, 'skjema.ekspander')}
                     onChange={(e) => {
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
-                />
+                >
+                    {intlHelper(intl, 'skjema.ekspander')}
+                </Checkbox>
                 <VerticalSpacer sixteenPx={true} />
                 <EndringAvSøknadsperioder
                     isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
@@ -450,7 +450,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Periodepaneler
                             intl={intl}
                             periods={soknad.lovbestemtFerie}
-                            panelid={(i) => `ferieperiodepanel_${i}`}
                             initialPeriode={this.initialPeriode}
                             editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
                             editSoknadState={(perioder, showStatus) =>
@@ -459,7 +458,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             getErrorMessage={this.getErrorMessage}
                             getUhaandterteFeil={this.getUhaandterteFeil}
                             feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                            minstEn={false}
                             kanHaFlere={true}
                         />
                     )}
@@ -480,7 +478,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     <Periodepaneler
                                         intl={intl}
                                         periods={soknad.lovbestemtFerieSomSkalSlettes}
-                                        panelid={(i) => `ferieperiodepanel_${i}`}
                                         initialPeriode={this.initialPeriode}
                                         editSoknad={(perioder) =>
                                             this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
@@ -494,7 +491,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         getErrorMessage={() => undefined}
                                         getUhaandterteFeil={this.getUhaandterteFeil}
                                         feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                                        minstEn={false}
                                         kanHaFlere={true}
                                     />
                                 </>
@@ -537,8 +533,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         ))}
                     </Select>
                     {soknad.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET && (
-                        <Input
-                            bredde={'M'}
+                        <TextField
                             label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
                             className="beskrivelseAvOmsorgsrollen"
                             value={soknad.omsorg.beskrivelseAvOmsorgsrollen}

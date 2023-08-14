@@ -2,7 +2,7 @@ import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IEksisterendeSoknaderState, IPunchState } from 'app/models/types';
@@ -156,11 +156,11 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
                         // eslint-disable-next-line react/no-array-index-key
-                        rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
+                        rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
-                        <td colSpan={4} className="punch_mappetabell_tom_soknad">
+                        <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
                             Tom søknad
-                        </td>
+                        </Table.DataCell>
                     )}
                 </tr>,
             );
@@ -184,19 +184,18 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
-                <table className="tabell tabell--stripet punch_mappetabell">
-                    <thead>
-                        <tr>
-                            <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
-                            <th>{intlHelper(intl, 'skjema.periode')}</th>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
-                        </tr>
-                    </thead>
-                    <tbody>{rows}</tbody>
-                </table>
+                <Table zebraStripes className="punch_mappetabell">
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
+                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>{rows}</Table.Body>
+                </Table>
                 {modaler}
             </>
         );
