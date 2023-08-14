@@ -106,6 +106,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                             value={aktivtDokument}
                         >
                             {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
+                                // eslint-disable-next-line react/no-array-index-key
                                 <ToggleGroup.Item key={i} value={String(i + 1)}>
                                     {`Dokument ${i + 1} / ${array.length}`}
                                 </ToggleGroup.Item>
