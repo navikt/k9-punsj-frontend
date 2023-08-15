@@ -21,6 +21,8 @@ const JournalpostRouter: React.FunctionComponent = () => {
                     <Route exact path="/">
                         <Fordeling journalpostId={journalpostid} />
                     </Route>
+
+                    {/* Denne koden gjør at riktig man kommer videre til visning for valgt sakstype. Fjernes den rendres ingenting når man går videre fra fordeling. */}
                     {Sakstyper.punchSakstyper.map((sakstypeConfig) => (
                         <Route key={sakstypeConfig.navn} path={sakstypeConfig.punchPath}>
                             {sakstypeConfig.getComponent ? (

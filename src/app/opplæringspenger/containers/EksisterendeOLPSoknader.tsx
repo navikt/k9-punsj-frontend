@@ -3,7 +3,7 @@ import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 
-import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
@@ -77,11 +77,11 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
                         // eslint-disable-next-line react/no-array-index-key
-                        rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
+                        rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
-                        <td colSpan={4} className="punch_mappetabell_tom_soknad">
+                        <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
                             Tom søknad
-                        </td>
+                        </Table.DataCell>
                     )}
                 </tr>,
             );
@@ -95,7 +95,7 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
-                        onSubmit={() => gaaVidereMedSoeknad(valgtSoeknad)}
+                        onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
                         onClose={() => setValgtSoeknad(undefined)}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
@@ -106,18 +106,18 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
         return (
             <>
                 <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
-                <table className="tabell tabell--stripet punch_mappetabell">
-                    <thead>
-                        <tr>
-                            <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</th>
-                            <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
-                            <th>{intlHelper(intl, 'skjema.periode')}</th>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
-                        </tr>
-                    </thead>
+                <Table className="punch_mappetabell">
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
+                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                        </Table.Row>
+                    </Table.Header>
                     <tbody>{rows}</tbody>
-                </table>
+                </Table>
                 {modaler}
             </>
         );

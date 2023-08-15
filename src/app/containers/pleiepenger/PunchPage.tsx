@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import 'nav-frontend-tabell-style';
 import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries } from 'react-query';
@@ -107,7 +106,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                         <Alert size="small" variant="info" className="fullfortmelding">
                             <FormattedMessage id="skjema.sentInn" />
                         </Alert>
-                        <div className="punchPage__knapper">
+                        <div className="punchPage__knapper mt-8">
                             <Button
                                 onClick={() => {
                                     window.location.href = getEnvironmentVariable('K9_LOS_URL');

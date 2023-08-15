@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Container, Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
+
+import { Fieldset } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
 
@@ -59,43 +59,41 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     };
 
     return (
-        <SkjemaGruppe feil={errorMessage} className={classNames('periodInput', className)}>
-            <Container>
-                <Row noGutters>
+        <Fieldset error={errorMessage} className={classNames('periodInput', className)}>
+            <div className="flex flex-wrap">
+                <DateInput
+                    className="periodInput__fom-container"
+                    value={renderDato('fom')}
+                    onChange={(selectedDate) => {
+                        onChange({ fom: selectedDate, tom: periode?.tom || '' });
+                        if (onBlur) {
+                            onBlur({ fom: selectedDate, tom: periode?.tom || '' });
+                        }
+                    }}
+                    id={inputIdFom}
+                    disabled={disabled || disabledFom}
+                    errorMessage={errorMessageFom}
+                    label={intlHelper(intl, 'skjema.perioder.fom')}
+                    inputRef={fomInputRef}
+                    limitations={limitations}
+                />
+                <div className="periodInput__tom-container">
                     <DateInput
-                        className="periodInput__fom-container"
-                        value={renderDato('fom')}
+                        value={renderDato('tom')}
                         onChange={(selectedDate) => {
-                            onChange({ fom: selectedDate, tom: periode?.tom || '' });
+                            onChange({ fom: periode?.fom || '', tom: selectedDate });
                             if (onBlur) {
-                                onBlur({ fom: selectedDate, tom: periode?.tom || '' });
+                                onBlur({ fom: periode?.fom || '', tom: selectedDate });
                             }
                         }}
-                        id={inputIdFom}
-                        disabled={disabled || disabledFom}
-                        errorMessage={errorMessageFom}
-                        label={intlHelper(intl, 'skjema.perioder.fom')}
-                        inputRef={fomInputRef}
+                        id={inputIdTom}
+                        disabled={disabled || disabledTom}
+                        errorMessage={errorMessageTom}
                         limitations={limitations}
+                        label={intlHelper(intl, 'skjema.perioder.tom')}
                     />
-                    <div className="periodInput__tom-container">
-                        <DateInput
-                            value={renderDato('tom')}
-                            onChange={(selectedDate) => {
-                                onChange({ fom: periode?.fom || '', tom: selectedDate });
-                                if (onBlur) {
-                                    onBlur({ fom: periode?.fom || '', tom: selectedDate });
-                                }
-                            }}
-                            id={inputIdTom}
-                            disabled={disabled || disabledTom}
-                            errorMessage={errorMessageTom}
-                            limitations={limitations}
-                            label={intlHelper(intl, 'skjema.perioder.tom')}
-                        />
-                    </div>
-                </Row>
-            </Container>
-        </SkjemaGruppe>
+                </div>
+            </div>
+        </Fieldset>
     );
 };

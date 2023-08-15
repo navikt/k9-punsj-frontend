@@ -78,7 +78,6 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         getErrorMessage: errorMessageFunc,
         getUhaandterteFeil,
         className,
-        minstEn,
         feilkodeprefiks,
         periodeFeilkode,
         onAdd,
@@ -169,7 +168,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                     />
                     <button
                         id="slett"
-                        className="removePeriodeKnapp"
+                        className="removePeriodeKnapp ml-3"
                         type="button"
                         onClick={removePeriode}
                         tabIndex={0}
@@ -230,7 +229,6 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         <Periodepaneler
                             intl={intl}
                             periods={getInnleggelsesperioder()}
-                            panelid={(i) => `innleggelsesperiod${i}`}
                             initialPeriode={{ fom: '', tom: '' }}
                             editSoknad={(perioder) =>
                                 editSoknad(
@@ -239,7 +237,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                     }),
                                 )
                             }
-                            editSoknadState={(perioder, showStatus) =>
+                            editSoknadState={(perioder) =>
                                 editSoknadState(
                                     editInfo(periodeindeks, {
                                         innleggelsesperioder: perioder.map((p) => ({ periode: p })),
@@ -317,7 +315,6 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             getErrorMessage={errorMessageFunc}
             getUhaandterteFeil={getUhaandterteFeil}
             className={className}
-            minstEn={minstEn}
             feilkodeprefiks={feilkodeprefiks}
             component={utenlandsoppholdComponent}
             onAdd={onAdd}

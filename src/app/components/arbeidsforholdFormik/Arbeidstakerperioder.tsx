@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Panel } from '@navikt/ds-react';
+import { Fieldset, Panel } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
@@ -52,7 +51,7 @@ const Arbeidstakerperioder = ({
         <FieldArray
             name="arbeidstid.arbeidstakerList"
             render={(arrayHelpers) => (
-                <SkjemaGruppe className="listepaneler">
+                <Fieldset className="listepaneler">
                     {items?.map((currentItem, currentItemIndex) => {
                         const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                         const getHarDuplikatOrgnr = () =>
@@ -68,7 +67,7 @@ const Arbeidstakerperioder = ({
                                 id={panelid}
                                 key={panelid}
                             >
-                                <SkjemaGruppe>
+                                <Fieldset>
                                     {itemsWithInitialItem.length > 1 && (
                                         <h2>
                                             <FormattedMessage
@@ -115,7 +114,7 @@ const Arbeidstakerperioder = ({
                                             []
                                         }
                                     />
-                                </SkjemaGruppe>
+                                </Fieldset>
                             </Panel>
                         );
                     })}
@@ -130,7 +129,7 @@ const Arbeidstakerperioder = ({
                         </div>
                         {intlHelper(intl, 'skjema.arbeid.arbeidstaker.leggtilperiode')}
                     </button>
-                </SkjemaGruppe>
+                </Fieldset>
             )}
         />
     );

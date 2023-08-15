@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Select } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { Select } from '@navikt/ds-react';
 
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { requiredValue } from 'app/utils/validationHelpers';
@@ -25,8 +25,8 @@ const MalVelger: React.FC<MalVelgerProps> = ({ resetBrevStatus, brevmaler }) => 
                     {...field}
                     label={intl.formatMessage({ id: 'Messages.Template' })}
                     placeholder={intl.formatMessage({ id: 'Messages.ChooseTemplate' })}
-                    bredde="xxl"
-                    feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                    className="w-[400px]"
+                    error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                     onChange={(event) => {
                         setFieldValue(field.name, event.target.value);
                         resetBrevStatus();

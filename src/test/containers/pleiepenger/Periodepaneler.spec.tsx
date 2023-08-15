@@ -1,8 +1,9 @@
+import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import { Input } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { IntlShape, createIntl } from 'react-intl';
+import { TextField } from '@navikt/ds-react';
+import { IntlShape } from 'react-intl';
 
 import {
     IPeriodeinfopanelerProps,
@@ -46,14 +47,14 @@ const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (
     updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string,
 ) => (
-    <Input
+    <TextField
         label=""
         id={testinputid(periodeindex)}
         className="testinput"
         value={info.test}
         onChange={(event) => updatePeriodeinfoInSoknadState({ test: event.target.value }, false)}
         onBlur={(event) => updatePeriodeinfoInSoknad({ test: event.target.value })}
-        feil={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
+        error={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
     />
 );
 
@@ -65,7 +66,6 @@ const initialperiodetest: Testperiodeinfo = {
 const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopanelerProps>) => {
     const periodepanelerProps: IPeriodeinfopanelerProps = {
         periods: testperioder,
-        intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
         initialPeriodeinfo: initialperiodetest,
         panelid: (index: number) => `testperiode_${index}`,
         component: testkomponent,
@@ -76,7 +76,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
         ...periodepanelerPropsPartial,
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodeinfoPaneler {...periodepanelerProps} />);

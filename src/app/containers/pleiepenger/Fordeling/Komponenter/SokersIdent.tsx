@@ -1,7 +1,8 @@
-import { Input, RadioPanelGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
+import { TextField } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype, JaNei } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
@@ -46,6 +47,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         FordelingDokumenttype.OMSORGSPENGER_KS,
         FordelingDokumenttype.OMSORGSPENGER_MA,
         FordelingDokumenttype.OMSORGSPENGER_UT,
+        FordelingDokumenttype.OMSORGSPENGER_AO,
         FordelingDokumenttype.KORRIGERING_IM,
         FordelingDokumenttype.OPPLAERINGSPENGER,
     ];
@@ -99,19 +101,18 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
             {riktigIdentIJournalposten === JaNei.NEI && (
                 <>
                     <VerticalSpacer sixteenPx />
-                    <Input
+                    <TextField
                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
                         onChange={handleSøkerIdChange}
                         onBlur={handleSøkerIdBlur}
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
                         maxLength={11}
-                        feil={
+                        error={
                             identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                 : undefined
                         }
-                        bredde="M"
                     />
                 </>
             )}

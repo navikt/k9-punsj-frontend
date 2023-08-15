@@ -3,27 +3,27 @@ const mustacheExpress = require('mustache-express');
 const envVariables = require('../envVariables');
 const path = require('path');
 
-const configureDevServer = (decoratorFragments) => ({
-    onBeforeSetupMiddleware: (devServer) => {
+const configureDevServer = () => ({
+    setupMiddlewares: (middlewares, devServer) => {
         const { app } = devServer;
         app.engine('html', mustacheExpress());
-        app.set('views', `${__dirname}/../../../dist/dev`);
+        app.set('views', `${__dirname}/../../../dist`);
         app.set('view engine', 'mustache');
+
         app.get(`/getEnvVariables`, (req, res) => {
             res.set('content-type', 'application/javascript');
-            res.send(`${envVariables()}`);
+            res.json(envVariables());
         });
         app.get('/mockServiceWorker.js', (req, res) => {
             res.set('content-type', 'application/javascript');
-            res.sendFile(path.resolve(`dist/mockServiceWorker.js`));
+            res.sendFile(path.resolve(`${__dirname}/../../mocks/mockServiceWorker.js`));
         });
+
         app.get(/^\/(?!.*dist).*$/, (req, res) => {
-            res.render('index.html', Object.assign(decoratorFragments));
+            res.render('index.html');
         });
-    },
-    devMiddleware: {
-        publicPath: '/dist',
-        stats: 'minimal',
+
+        return middlewares;
     },
     static: ['app'],
     client: {
@@ -32,6 +32,7 @@ const configureDevServer = (decoratorFragments) => ({
             warnings: false,
         },
     },
+    historyApiFallback: true,
 });
 
 module.exports = configureDevServer;

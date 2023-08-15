@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames';
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Panel } from '@navikt/ds-react';
+import { Fieldset, Panel } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
@@ -108,7 +107,7 @@ const Arbeidstakerperioder = ({
     };
 
     return (
-        <SkjemaGruppe className="listepaneler">
+        <Fieldset className="listepaneler">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                 const getHarDuplikatOrgnr = () =>
@@ -123,7 +122,7 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <SkjemaGruppe>
+                        <Fieldset>
                             {itemsWithInitialItem.length > 1 && (
                                 <h2>
                                     <FormattedMessage
@@ -176,7 +175,7 @@ const Arbeidstakerperioder = ({
                                     []
                                 }
                             />
-                        </SkjemaGruppe>
+                        </Fieldset>
                     </Panel>
                 );
             })}
@@ -191,7 +190,7 @@ const Arbeidstakerperioder = ({
                 </div>
                 {intlHelper(intl, 'skjema.arbeid.arbeidstaker.leggtilperiode')}
             </button>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 export default Arbeidstakerperioder;

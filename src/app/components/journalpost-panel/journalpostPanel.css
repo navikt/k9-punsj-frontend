@@ -1,0 +1,18 @@
+.journalpostpanel {
+    background-color: var(--a-surface-subtle);
+    margin-bottom: 1rem;
+}
+
+.journalpostpanel label {
+    min-width: 10rem;
+}
+
+.modia-lenke {
+    float: right;
+    font-size: 16px;
+    text-decoration: none !important;
+}
+
+.modia-lenke:hover {
+    text-decoration: underline !important;
+}

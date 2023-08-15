@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { IntlShape } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
@@ -70,7 +69,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
         <Panel className="periodepanel">
             {periods.map((p, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Row noGutters key={i}>
+                <div className="flex flex-wrap" key={i}>
                     <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}
@@ -87,9 +86,10 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
                         />
+                        <span className="mr-3" />
                         <button
                             id="slett"
-                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil' : 'fjern'}
+                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'fjern'}
                             type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);
@@ -108,7 +108,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
                         </button>
                     </div>
-                </Row>
+                </div>
             ))}
             {feilkodeprefiks && (
                 <UhaanderteFeilmeldinger
@@ -117,7 +117,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
             )}
 
             {kanHaFlere && (
-                <Row noGutters>
+                <div className="flex flex-wrap">
                     <button
                         id="leggtilperiode"
                         className="leggtilperiode"
@@ -138,7 +138,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         </div>
                         {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
                     </button>
-                </Row>
+                </div>
             )}
         </Panel>
     );

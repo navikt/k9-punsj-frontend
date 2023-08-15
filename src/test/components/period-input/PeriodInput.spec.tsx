@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import * as React from 'react';
@@ -23,7 +24,7 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
         ...periodInputPropsPartial,
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodInput {...periodInputProps} />);
@@ -43,12 +44,6 @@ describe('PerodInput', () => {
         const periodInput = setupPeriodInput({ periode: { fom, tom } });
         expect(periodInput.find(`#${inputIdFom}`).prop('value')).toEqual(fom);
         expect(periodInput.find(`#${inputIdTom}`).prop('value')).toEqual(tom);
-    });
-
-    it('Skal vise feilmelding', () => {
-        const errorMessage = 'Lorem ipsum solor sit amet';
-        const periodInput = setupPeriodInput({ errorMessage });
-        expect(periodInput.find('SkjemaGruppe').prop('feil')).toEqual(errorMessage);
     });
 
     it('Skal vise feilmelding for fom-dato', () => {

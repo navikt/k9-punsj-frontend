@@ -1,9 +1,8 @@
-import { Input } from 'nav-frontend-skjema';
 import React, { useEffect, useState } from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Checkbox, Select } from '@navikt/ds-react';
+import { Alert, Checkbox, Select, TextField } from '@navikt/ds-react';
 
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
@@ -94,7 +93,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 <>
                     <Select
                         className="pleietrengendeSelect"
-                        label={intlHelper(intl, 'ident.identifikasjon.velgPleietrengende')}
+                        label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                         onChange={(e) => {
                             pleietrengendeIdentInputFieldOnChange(e);
                             oppdaterStateMedPleietrengendeFnr(e);
@@ -116,7 +115,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         }}
                         checked={gjelderAnnenPleietrengende}
                     >
-                        {intlHelper(intl, 'ident.identifikasjon.annetPleietrengende')}
+                        {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                     </Checkbox>
                 </>
             )}
@@ -128,19 +127,18 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
                     <div className="fyllUtIdentAnnetBarnContainer">
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
                             onChange={pleietrengendeIdentInputFieldOnChange}
                             onBlur={oppdaterStateMedPleietrengendeFnr}
                             value={pleietrengendeIdent}
                             className="bold-label ident-soker-2"
                             maxLength={11}
-                            feil={
+                            error={
                                 identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId)
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }
-                            bredde="M"
                             disabled={pleietrengendeHarIkkeFnr}
                         />
                         {pleietrengendeIdent.length === 11 &&

@@ -1,9 +1,8 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Textarea } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Tag } from '@navikt/ds-react';
+import { Tag, Textarea } from '@navikt/ds-react';
 
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { validateText } from 'app/utils/validationHelpers';
@@ -32,7 +31,7 @@ const InnhentDokumentasjonMal: React.FC<InnhentDokumentasjonMalProps> = ({ setVi
                             }}
                             label={intl.formatMessage({ id: 'Messages.Fritekst' })}
                             maxLength={4000}
-                            feil={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         />
                         <Tag variant="warning" size="small" className="språkEtikett">
                             Bokmål
