@@ -5397,9 +5397,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@testing-library/jest-dom@npm:6.0.0"
+"@testing-library/jest-dom@npm:6.1.0":
+  version: 6.1.0
+  resolution: "@testing-library/jest-dom@npm:6.1.0"
   dependencies:
     "@adobe/css-tools": ^4.0.1
     "@babel/runtime": ^7.9.2
@@ -5423,7 +5423,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 9b978e993f084553f8e39215b08f6e09e84a4c78e578db35d361bb4259aed84418f1b17ce52f23ead4d81cc7cad5ae5b18a6596d6d531a6d2252be66409e7167
+  checksum: e921886592554fd15f8a300a6cd94b2c4c688ef339a5cdde2c781f442dfd629ce1805b437bdec38830eea2190d18266e691085938d3a9ebe5bcad35f0c1413de
   languageName: node
   linkType: hard
 
@@ -13660,7 +13660,7 @@ __metadata:
     "@storybook/testing-library": 0.2.0
     "@storybook/testing-react": 2.0.1
     "@testing-library/cypress": 9.0.0
-    "@testing-library/jest-dom": 6.0.0
+    "@testing-library/jest-dom": 6.1.0
     "@testing-library/react": 14.0.0
     "@testing-library/user-event": 14.4.3
     "@trivago/prettier-plugin-sort-imports": ^4.2.0
