@@ -6,6 +6,8 @@ on:
       - 'nais/proxy/dev.json'
       - 'nais/proxy/prod.json'
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 6' # At 02:00 on Saturday.
 jobs:
   deploy:
     name: deploy k9-punsj-oidc-auth-proxy
