@@ -24,7 +24,7 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
 
-    const { mutate, status, error, data } = useMutation({
+    const { mutate, status, error, isSuccess } = useMutation({
         mutationFn: () =>
             klassifiserDokument({
                 brukerIdent: identState.søkerId,
@@ -53,8 +53,13 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                     <VerticalSpacer twentyPx />
                     <KlassifiseringInfo />
                     <VerticalSpacer twentyPx />
+                    {isSuccess && (
+                        <Alert variant="success" className="mb-2">
+                            Journalposten er nå ferdigstilt og du kan fortsette til LOS.
+                        </Alert>
+                    )}
 
-                    {data ? (
+                    {isSuccess ? (
                         <Button>Gå til LOS</Button>
                     ) : (
                         <div>
@@ -79,7 +84,6 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                     )}
                     <VerticalSpacer sixteenPx />
                     {error && <Alert variant="error">Noe gikk galt under lagring</Alert>}
-                    {data && <Alert variant="success">Sakstypen ble lagret til journalpost</Alert>}
                 </>
             </Modal.Content>
         </Modal>
