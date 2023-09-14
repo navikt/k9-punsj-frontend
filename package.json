@@ -28,7 +28,7 @@
         "formik": "2.4.3",
         "helmet": "7.0.0",
         "html-webpack-plugin": "5.5.3",
-        "i18n-iso-countries": "7.6.0",
+        "i18n-iso-countries": "7.7.0",
         "lodash": "4.17.21",
         "lodash.throttle": "4.1.1",
         "mini-css-extract-plugin": "2.7.6",
