@@ -60,8 +60,8 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             Velg hele søknadsperioden
                         </Checkbox>
                     )}
-                    <div style={{ display: 'flex', marginTop: '1.5625rem', maxWidth: '9rem' }}>
-                        <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
+                    <div className="flex gap-4 mt-6">
+                        <div className="max-w-[11rem]">
                             <TimerOgMinutter
                                 label="Normal arbeidstid"
                                 onChangeTimer={(v) => formik.setFieldValue(`${name}.jobberNormaltPerDag.timer`, v)}
@@ -80,7 +80,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                                     formik.setFieldTouched(`${name}.jobberNormaltMinutterPerDag`);
                                 }}
                             />
-                            <div style={{ marginTop: '1.0625rem', marginBottom: '3.5625rem' }}>
+                            <div className="mt-1 mb-14">
                                 <UtregningArbeidstid arbeidstid={field.value.jobberNormaltPerDag} />
                             </div>
                         </div>
@@ -103,7 +103,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                                     formik.setFieldTouched(`${name}.faktiskArbeidMinutterPerDag`);
                                 }}
                             />
-                            <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
+                            <div className="mt-1 mb-14">
                                 <UtregningArbeidstid
                                     arbeidstid={field.value.faktiskArbeidPerDag}
                                     normalArbeidstid={field.value.jobberNormaltPerDag}

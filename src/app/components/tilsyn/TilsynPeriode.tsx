@@ -60,7 +60,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                         </Checkbox>
                     )}
                     <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
-                        <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
+                        <div>
                             <TimerOgMinutter
                                 label="Tid i omsorgstilbud"
                                 onChangeTimer={(v) => formik.setFieldValue(`${name}.timer`, v)}
