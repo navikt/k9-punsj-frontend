@@ -40,7 +40,7 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
 
     return (
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        <Modal open onClose={!disabled ? lukkModal : () => {}} aria-labelledby="modal-heading">
+        <Modal open onClose={lukkModal} closeButton={!disabled} aria-labelledby="modal-heading">
             <Modal.Content>
                 <>
                     <Heading spacing level="1" size="small" id="modal-heading">
