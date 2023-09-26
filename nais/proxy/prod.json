@@ -1,6 +1,6 @@
 {
     "azureTenant": "nav.no",
-    "oidcAuthProxyImage": "ghcr.io/navikt/oidc-auth-proxy:2.2023.03.23-b844739",
+    "oidcAuthProxyImage": "ghcr.io/navikt/oidc-auth-proxy:3.2023.09.26-1b4fa48",
     "ingresses": ["https://k9-punsj-oidc-auth-proxy.intern.nav.no"],
     "k9PunsjScopes": "api://prod-fss.k9saksbehandling.k9-punsj/.default",
     "k9FormidlingScopes": "api://prod-fss.k9saksbehandling.k9-formidling/.default",
