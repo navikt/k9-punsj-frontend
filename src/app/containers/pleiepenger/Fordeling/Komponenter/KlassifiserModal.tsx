@@ -8,7 +8,7 @@ import { klassifiserDokument } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype } from 'app/utils';
+import { finnForkortelseForDokumenttype, getEnvironmentVariable } from 'app/utils';
 
 import KlassifiseringInfo from './KlassifiseringInfo';
 
@@ -60,7 +60,13 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                     )}
 
                     {isSuccess ? (
-                        <Button>Gå til LOS</Button>
+                        <Button
+                            onClick={() => {
+                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            }}
+                        >
+                            Gå til LOS
+                        </Button>
                     ) : (
                         <div>
                             <Button
