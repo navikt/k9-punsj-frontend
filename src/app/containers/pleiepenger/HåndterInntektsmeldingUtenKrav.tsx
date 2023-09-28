@@ -148,10 +148,9 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {showSettPaaVentModal && (
                 <Modal
                     className="settpaaventmodal"
-                    onClose={() => setShowSettPaaVentModal(false)}
+                    onBeforeClose={() => setShowSettPaaVentModal(false)}
                     aria-label="settpaaventmodal"
                     open
-                    closeButton={false}
                 >
                     <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
                         {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
@@ -159,20 +158,31 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 </Modal>
             )}
             {showSettPaaVentSuccessModal && (
-                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} open>
+                <Modal
+                    onBeforeClose={() => {
+                        resetSetPåVent();
+                    }}
+                    aria-label="settpaaventokmodal"
+                    open
+                >
                     <OkGaaTilLosModal melding="modal.settpaavent.til" />
                 </Modal>
             )}
             {showSettPaaVentErrorModal && (
-                <Modal onClose={() => resetSetPåVent()} aria-label="settpaaventokmodal" closeButton={false} open>
+                <Modal
+                    onBeforeClose={() => {
+                        resetSetPåVent();
+                    }}
+                    aria-label="settpaaventokmodal"
+                    open
+                >
                     <SettPaaVentErrorModal close={() => resetSetPåVent()} />
                 </Modal>
             )}
             {showFerdigstillJournalpostModal && (
                 <Modal
-                    onClose={() => setShowFerdigstillJournalpostModal(false)}
+                    onBeforeClose={() => setShowFerdigstillJournalpostModal(false)}
                     aria-label="ferdigstill journalpostmodal"
-                    closeButton={false}
                     open
                 >
                     <FerdigstillJournalpostModal
@@ -186,10 +196,9 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {journalpost && showOpprettOppgaveIGosysModal && (
                 <Modal
                     className="opprettOppgaveIGosysModal"
-                    onClose={() => setShowOpprettOppgaveIGosysModal(false)}
+                    onBeforeClose={() => setShowOpprettOppgaveIGosysModal(false)}
                     aria-label="opprettOppgaveIGosysModal"
                     open
-                    closeButton={false}
                 >
                     <OpprettOppgaveIGosysModal
                         submit={() => dispatch(opprettGosysOppgave(journalpost.journalpostId, søkerId, 'Annet'))}
@@ -201,9 +210,10 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showFerdigstillJournalpostSuccessModal && (
                 <Modal
-                    onClose={() => resetFerdigstillJournalpost()}
+                    onBeforeClose={() => {
+                        resetFerdigstillJournalpost();
+                    }}
                     aria-label="ferdigstill journalpostOkModal"
-                    closeButton={false}
                     open
                 >
                     <OkGaaTilLosModal melding="modal.ferdigstilljournalpost" />
@@ -211,9 +221,10 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showFerdigstillJournalpostErrorModal && (
                 <Modal
-                    onClose={() => resetFerdigstillJournalpost()}
+                    onBeforeClose={() => {
+                        resetFerdigstillJournalpost();
+                    }}
                     aria-label="ferdigstill journalpostFeilModal"
-                    closeButton={false}
                     open
                 >
                     <FerdigstillJournalpostErrorModal close={() => resetFerdigstillJournalpost()} />

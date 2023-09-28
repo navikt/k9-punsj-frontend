@@ -96,9 +96,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
             return (
                 <Modal
                     key="lukkoppgaveokmodal"
-                    onClose={() => lukkOppgaveReset()}
+                    onBeforeClose={() => lukkOppgaveReset()}
                     aria-label="settpaaventokmodal"
-                    closeButton={false}
                     open
                 >
                     <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />

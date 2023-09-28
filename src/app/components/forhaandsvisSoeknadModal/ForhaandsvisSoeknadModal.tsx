@@ -19,10 +19,9 @@ const ForhaandsvisSoeknadModal = ({ videre, avbryt, intl, children }: OwnProps) 
         className="validertSoknadModal"
         onClose={avbryt}
         aria-label="validertSoknadModal"
-        closeButton={false}
         open
     >
-        <Modal.Content>
+        <Modal.Body>
             <div className={classNames('validertSoknadOppsummeringContainer')}>{children}</div>
             <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                 <Button size="small" className="validertSoknadOppsummeringContainer_knappVidere" onClick={videre}>
@@ -37,7 +36,7 @@ const ForhaandsvisSoeknadModal = ({ videre, avbryt, intl, children }: OwnProps) 
                     {intlHelper(intl, 'skjema.knapp.avbryt')}
                 </Button>
             </div>
-        </Modal.Content>
+        </Modal.Body>
     </Modal>
 );
 

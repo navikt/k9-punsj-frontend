@@ -78,13 +78,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (lukkOppgaveDone) {
         return (
-            <Modal
-                key="lukkoppgaveokmodal"
-                onClose={() => lukkOppgaveReset()}
-                aria-label="settpaaventokmodal"
-                closeButton={false}
-                open
-            >
+            <Modal key="lukkoppgaveokmodal" onClose={() => lukkOppgaveReset()} aria-label="settpaaventokmodal" open>
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
             </Modal>
         );

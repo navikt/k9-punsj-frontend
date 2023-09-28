@@ -38,7 +38,6 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
                 onClose={() => setVisHovedmodal(false)}
                 aria-label="settpaaventmodal"
                 open
-                closeButton={false}
             >
                 <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => visModalFn(false)} />
             </Modal>
@@ -52,7 +51,6 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
                     visModalFn(false);
                 }}
                 aria-label="settpaaventokmodal"
-                closeButton={false}
                 open
             >
                 <OkGaaTilLosModal melding="modal.settpaavent.til" />
@@ -62,13 +60,7 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
 
     if (visErrorModal) {
         return (
-            <Modal
-                key="settpaaventerrormodal"
-                onClose={() => visModalFn(false)}
-                aria-label="settpaaventokmodal"
-                closeButton={false}
-                open
-            >
+            <Modal key="settpaaventerrormodal" onClose={() => visModalFn(false)} aria-label="settpaaventokmodal" open>
                 <SettPaaVentErrorModal close={() => visModalFn(false)} />
             </Modal>
         );
