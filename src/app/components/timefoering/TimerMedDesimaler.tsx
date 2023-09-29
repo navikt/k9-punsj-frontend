@@ -5,7 +5,7 @@ import React from 'react';
 
 import { Detail, ErrorMessage, Label } from '@navikt/ds-react';
 
-import './timerMedDesimaler.less';
+import './timerOgMinutter.less';
 
 interface OwnProps {
     label: string;
