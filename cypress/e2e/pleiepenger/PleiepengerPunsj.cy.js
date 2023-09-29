@@ -43,7 +43,7 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
-        cy.get('.ReactModalPortal').within(() => {
+        cy.get('.navds-modal').within(() => {
             cy.findAllByLabelText('Timer').eq(0).clear().type(7);
             cy.findAllByLabelText('Timer').eq(1).clear().type(2);
             cy.findAllByLabelText('Timer').eq(3).clear().type(7);
