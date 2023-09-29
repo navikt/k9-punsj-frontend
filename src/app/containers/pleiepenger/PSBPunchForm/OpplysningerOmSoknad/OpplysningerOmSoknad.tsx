@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Input, RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel, TextField } from '@navikt/ds-react';
 
 import DateInput from 'app/components/skjema/DateInput';
 
@@ -35,7 +35,7 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
         <Alert size="small" variant="info">
             {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
         </Alert>
-        <SkjemaGruppe>
+        <Fieldset legend="">
             <div className="input-row">
                 <DateInput
                     value={soknad.mottattDato}
@@ -46,15 +46,16 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                         mottattDato: selectedDate,
                     }))}
                 />
-                <Input
+                <TextField
                     value={soknad.klokkeslett || ''}
                     type="time"
                     className="klokkeslett"
+                    size="small"
                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                     {...changeAndBlurUpdatesSoknad((event: any) => ({
                         klokkeslett: event.target.value,
                     }))}
-                    feil={getErrorMessage('klokkeslett')}
+                    error={getErrorMessage('klokkeslett')}
                 />
             </div>
             <RadioPanelGruppe
@@ -75,7 +76,7 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                     {intlHelper(intl, 'skjema.usignert.info')}
                 </Alert>
             )}
-        </SkjemaGruppe>
+        </Fieldset>
     </Panel>
 );
 export default OpplysningerOmSoknad;

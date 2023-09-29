@@ -1,4 +1,3 @@
-import Headers from 'fetch-headers';
 import { String } from 'typescript-string-operations';
 
 import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
@@ -8,9 +7,9 @@ import { getLocation, redirect } from 'app/utils/browserUtils';
 import { canStringBeParsedToJSON } from './formatUtils';
 
 export const apiUrl = (path: ApiPath | string, parameters?: any) =>
-    URL_API + (parameters ? String.Format(path, parameters) : path);
+    URL_API() + (parameters ? String.Format(path, parameters) : path);
 
-export const loginUrl = () => String.Format(URL_AUTH_LOGIN, { uri: encodeURIComponent(getLocation()) });
+export const loginUrl = () => String.Format(URL_AUTH_LOGIN(), { uri: encodeURIComponent(getLocation()) });
 
 export function login() {
     redirect(loginUrl());

@@ -1,9 +1,8 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel } from '@navikt/ds-react';
 
 import { initializeDate } from 'app/utils';
 
@@ -49,12 +48,13 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
         }
-        return eksisterendePerioder.some((ep) =>
-            nyePerioder?.some(
-                (nyPeriode) =>
-                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
-            ),
+        return eksisterendePerioder.some(
+            (ep) =>
+                nyePerioder?.some(
+                    (nyPeriode) =>
+                        initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                        initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+                ),
         );
     };
 
@@ -80,7 +80,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                         {intlHelper(intl, 'skjema.generellinfo')}
                     </Alert>
                     <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
-                    {punchFormState.perioder.map((p, i) => (
+                    {punchFormState.perioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
                             <CalendarSvg title="calendar" />
                             <div className="periode">{generateDateString(p)}</div>
@@ -116,12 +116,11 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
-                <SkjemaGruppe>
+                <Fieldset>
                     <div className="soknadsperiodecontainer">
                         <Periodepaneler
                             intl={intl}
                             periods={getPerioder()}
-                            panelid={(i) => `søknadsperioder_${i}`}
                             initialPeriode={initialPeriode}
                             editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
                             editSoknadState={(perioder) => {
@@ -136,7 +135,7 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                             onRemove={() => setHarSlettetPerioder(true)}
                         />
                     </div>
-                </SkjemaGruppe>
+                </Fieldset>
             )}
             {overlappendeSoknadsperiode() && (
                 <Alert size="small" variant="warning">

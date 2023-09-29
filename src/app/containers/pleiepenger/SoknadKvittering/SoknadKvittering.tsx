@@ -48,7 +48,7 @@ const endreLandkodeTilLandnavnIPerioder = (
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
-        if (typeof landNavn !== undefined) kopiAvPerioder[periode].land = landNavn?.name;
+        if (landNavn) kopiAvPerioder[periode].land = landNavn?.name;
     });
     return kopiAvPerioder;
 };
@@ -295,10 +295,15 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     {visArbeidsforhold && (
                         <div>
                             <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
-                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode: any) => {
+                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
                                 const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                                 return (
-                                    <>
+                                    <React.Fragment
+                                        key={
+                                            arbeidstakerperiode.norskIdentitetsnummer ||
+                                            arbeidstakerperiode.organisasjonsnummer
+                                        }
+                                    >
                                         <p className={classNames('soknadKvitteringUnderTittel')}>
                                             <b>
                                                 {`${intlHelper(
@@ -327,7 +332,7 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                             ]}
                                             properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
                                         />
-                                    </>
+                                    </React.Fragment>
                                 );
                             })}
                         </div>

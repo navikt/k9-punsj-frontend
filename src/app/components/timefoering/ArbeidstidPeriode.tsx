@@ -27,7 +27,7 @@ enum Tidsformat {
 const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const formik = useFormikContext();
     const [periodeFomField, periodeFomMeta] = useField(`${name}.periode.fom`);
-    const [periodeTomField, periodeTomMeta] = useField(`${name}.periode.tom`);
+    const [periodeTomField, periodeTomMeta] = useField(`${name}.periode.fom`);
     const [tidsformat, setTidsformat] = useState<Tidsformat>(Tidsformat.TimerOgMin);
 
     const intl = useIntl();
@@ -104,47 +104,45 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltPerDag`);
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag`);
     return (
-        <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
-            <div style={{ display: 'flex', marginTop: '1.5625rem', maxWidth: '9rem' }}>
-                <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
-                    <TimerOgMinutter
-                        label="Normal arbeidstid"
-                        onChangeTimer={(v) => formik.setFieldValue(`${name}.jobberNormaltPerDag.timer`, v)}
-                        onChangeMinutter={(v) => formik.setFieldValue(`${name}.jobberNormaltPerDag.minutter`, v)}
-                        timer={String(normaltField.value.timer)}
-                        minutter={String(normaltField.value.minutter)}
-                        error={
-                            jobberNormaltPerDagMeta.touched &&
-                            (jobberNormaltPerDagMeta?.error?.timer || jobberNormaltPerDagMeta?.error?.minutter)
-                        }
-                        onBlur={() => {
-                            formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`);
-                            formik.setFieldTouched(`${name}.jobberNormaltMinutterPerDag`);
-                        }}
-                    />
-                    <div style={{ marginTop: '1.0625rem', marginBottom: '3.5625rem' }}>
-                        <UtregningArbeidstid arbeidstid={normaltField.value} />
-                    </div>
+        <div className="flex gap-4 mt-6">
+            <div className="max-w-[11rem]">
+                <TimerOgMinutter
+                    label="Normal arbeidstid"
+                    onChangeTimer={(v) => formik.setFieldValue(`${name}.jobberNormaltPerDag.timer`, v)}
+                    onChangeMinutter={(v) => formik.setFieldValue(`${name}.jobberNormaltPerDag.minutter`, v)}
+                    timer={String(normaltField.value.timer)}
+                    minutter={String(normaltField.value.minutter)}
+                    error={
+                        jobberNormaltPerDagMeta.touched &&
+                        (jobberNormaltPerDagMeta.error?.timer || jobberNormaltPerDagMeta?.error?.minutter)
+                    }
+                    onBlur={() => {
+                        formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`);
+                        formik.setFieldTouched(`${name}.jobberNormaltMinutterPerDag`);
+                    }}
+                />
+                <div className="mt-1 mb-14">
+                    <UtregningArbeidstid arbeidstid={normaltField.value} />
                 </div>
-                <div>
-                    <TimerOgMinutter
-                        label="Faktisk arbeidstid"
-                        onChangeTimer={(v) => formik.setFieldValue(`${name}.faktiskArbeidPerDag.timer`, v)}
-                        onChangeMinutter={(v) => formik.setFieldValue(`${name}.faktiskArbeidPerDag.minutter`, v)}
-                        timer={String(faktiskField.value.timer)}
-                        minutter={String(faktiskField.value.minutter)}
-                        error={
-                            faktiskPerDagMeta.touched &&
-                            (faktiskPerDagMeta.error?.timer || faktiskPerDagMeta.error?.minutter)
-                        }
-                        onBlur={() => {
-                            formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`);
-                            formik.setFieldTouched(`${name}.faktiskArbeidMinutterPerDag`);
-                        }}
-                    />
-                    <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
-                        <UtregningArbeidstid arbeidstid={faktiskField.value} normalArbeidstid={normaltField.value} />
-                    </div>
+            </div>
+            <div>
+                <TimerOgMinutter
+                    label="Faktisk arbeidstid"
+                    onChangeTimer={(v) => formik.setFieldValue(`${name}.faktiskArbeidPerDag.timer`, v)}
+                    onChangeMinutter={(v) => formik.setFieldValue(`${name}.faktiskArbeidPerDag.minutter`, v)}
+                    timer={String(faktiskField.value.timer)}
+                    minutter={String(faktiskField.value.minutter)}
+                    error={
+                        faktiskPerDagMeta.touched &&
+                        (faktiskPerDagMeta.error?.timer || faktiskPerDagMeta?.error?.minutter)
+                    }
+                    onBlur={() => {
+                        formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`);
+                        formik.setFieldTouched(`${name}.faktiskArbeidMinutterPerDag`);
+                    }}
+                />
+                <div className="mt-1 mb-14">
+                    <UtregningArbeidstid arbeidstid={faktiskField.value} normalArbeidstid={normaltField.value} />
                 </div>
             </div>
         </div>
@@ -163,7 +161,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                     <TimerMedDesimaler
                         label="Normal arbeidstid"
                         onChange={(v) => formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, v)}
-                        timer={String(jobberNormaltPerDagMeta.value)}
+                        timer={String(normaltField.value)}
                         error={jobberNormaltPerDagMeta.touched && faktiskPerDagMeta.error}
                         onBlur={() => {
                             formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`);
@@ -177,7 +175,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                     <TimerMedDesimaler
                         label="Faktisk arbeidstid"
                         onChange={(v) => formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, v)}
-                        timer={String(faktiskPerDagMeta.value)}
+                        timer={String(faktiskField.value)}
                         error={faktiskPerDagMeta.touched && faktiskPerDagMeta.error}
                         onBlur={() => {
                             formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`);

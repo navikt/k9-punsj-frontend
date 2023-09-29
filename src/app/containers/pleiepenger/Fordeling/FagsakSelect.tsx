@@ -1,7 +1,6 @@
-import { Checkbox, Select } from 'nav-frontend-skjema';
 import React from 'react';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Select } from '@navikt/ds-react';
 import { Period } from '@navikt/k9-fe-period-utils';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -17,6 +16,7 @@ interface Props {
     setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     identState: IIdentState;
+    setBehandlingsAar: (behandlingsAar: string | undefined) => void;
 }
 
 const FagsakSelect = ({
@@ -28,6 +28,7 @@ const FagsakSelect = ({
     setBrukEksisterendeFagsak,
     setIdentAction,
     identState,
+    setBehandlingsAar,
 }: Props) => (
     <>
         <div className="fagsakSelectContainer">
@@ -61,13 +62,15 @@ const FagsakSelect = ({
             )}
         </div>
         <Checkbox
-            label="Har ikke tilhørende fagsak"
             onChange={() => {
                 setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
                 setValgtFagsak('');
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+                setBehandlingsAar(undefined);
             }}
-        />
+        >
+            Har ikke tilhørende fagsak
+        </Checkbox>
         <VerticalSpacer twentyPx />
     </>
 );

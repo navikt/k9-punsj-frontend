@@ -17,7 +17,7 @@ const CountrySelectWrapper = ({ periodeinfo }: Props) => {
     return (
         <div className="countryselect">
             <Field name="land">
-                {({ field, form, meta }: FieldProps<string>) => (
+                {({ field, meta }: FieldProps<string>) => (
                     <CountrySelect
                         label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
                         unselectedoption="Velg land"

@@ -7,9 +7,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 
 import { PunchStep } from '../../models/enums';
-import { IEksisterendeSoknaderState, IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
@@ -30,9 +28,7 @@ export interface IOMPMARegistreringsValgDispatchProps {
 }
 
 export interface IEksisterendeOMPMASoknaderStateProps {
-    punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendeOMPMASoknaderState;
-    journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
 }
 
@@ -120,9 +116,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
-    punchState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchState,
     eksisterendeSoknaderState: state.eksisterendeOMPMASoknaderState,
-    journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });
 

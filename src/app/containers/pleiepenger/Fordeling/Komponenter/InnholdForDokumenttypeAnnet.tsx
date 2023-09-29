@@ -1,9 +1,8 @@
-import { Input } from 'nav-frontend-skjema';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
@@ -62,19 +61,18 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
 
     return (
         <div>
-            <Input
+            <TextField
                 label={intlHelper(intl, 'ident.identifikasjon.felt')}
                 onChange={handleSøkerIdChange}
                 onBlur={handleSøkerIdBlur}
                 value={sokersIdent}
                 className="bold-label ident-soker-1"
                 maxLength={11}
-                feil={
+                error={
                     IdentRules.erUgyldigIdent(identState.søkerId)
                         ? intlHelper(intl, 'ident.feil.ugyldigident')
                         : undefined
                 }
-                bredde="M"
             />
             <VerticalSpacer eightPx />
             <GosysGjelderKategorier />

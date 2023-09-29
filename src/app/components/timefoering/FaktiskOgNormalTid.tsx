@@ -12,9 +12,17 @@ interface OwnProps {
     toggleModal: () => void;
     selectedDates?: Date[];
     heading?: string;
+    clearSelectedDates?: () => void;
 }
 
-const FaktiskOgNormalTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => {
+const FaktiskOgNormalTid = ({
+    lagre,
+    heading,
+    selectedDates,
+    toggleModal,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    clearSelectedDates = () => {},
+}: OwnProps) => {
     const [normaltTimer, setNormaltTimer] = useState('0');
     const [normaltMinutter, setNormaltMinutter] = useState('0');
     const [normaltError, setNormaltError] = useState('');
@@ -51,8 +59,8 @@ const FaktiskOgNormalTid = ({ lagre, heading, selectedDates, toggleModal }: OwnP
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
             {heading && <Heading size="medium">{heading}</Heading>}
-            <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
-                <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
+            <div className="flex gap-4 mt-6">
+                <div>
                     <TimerOgMinutter
                         label="Normal arbeidstid"
                         onChangeTimer={setNormaltTimer}
@@ -93,13 +101,21 @@ const FaktiskOgNormalTid = ({ lagre, heading, selectedDates, toggleModal }: OwnP
                             setVisNormaltError(true);
                             if (!faktiskError && !normaltError) {
                                 lagre(payload);
+                                clearSelectedDates();
                                 toggleModal();
                             }
                         }}
                     >
                         Lagre
                     </Button>
-                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={toggleModal}>
+                    <Button
+                        style={{ flexGrow: 1 }}
+                        variant="tertiary"
+                        onClick={() => {
+                            toggleModal();
+                            clearSelectedDates();
+                        }}
+                    >
                         Avbryt
                     </Button>
                 </div>

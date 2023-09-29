@@ -1,9 +1,8 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Panel } from '@navikt/ds-react';
+import { Fieldset, Panel, TextField } from '@navikt/ds-react';
 
 import DateInput from 'app/components/skjema/DateInput';
 import intlHelper from 'app/utils/intlUtils';
@@ -19,7 +18,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
     const { setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     return (
-        <SkjemaGruppe
+        <Fieldset
             legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>}
         >
             <Panel className="listepanel opplysningerOmKorrigering">
@@ -44,7 +43,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     </Field>
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
                         {({ field }: FieldProps) => (
-                            <Input
+                            <TextField
                                 {...field}
                                 type="time"
                                 className="klokkeslett"
@@ -54,7 +53,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     </Field>
                 </div>
             </Panel>
-        </SkjemaGruppe>
+        </Fieldset>
     );
 };
 

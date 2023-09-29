@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { JaNei, SignaturActionKeys } from 'app/models/enums';
+import { SignaturActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
 

@@ -36,23 +36,21 @@ const TilsynTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => 
     }, [timer, minutter]);
 
     return (
-        <div style={{ marginLeft: '1rem' }}>
+        <div className="mt-4">
             {heading && <Heading size="small">{heading}</Heading>}
-            <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
-                <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
-                    <TimerOgMinutter
-                        label="Tid i omsorgstilbud"
-                        onChangeTimer={setTimer}
-                        onChangeMinutter={setMinutter}
-                        onBlur={() => setVisError(true)}
-                        timer={timer}
-                        minutter={minutter}
-                        error={visError ? error : undefined}
-                    />
-                </div>
+            <div className="flex mt-6">
+                <TimerOgMinutter
+                    label="Tid i omsorgstilbud"
+                    onChangeTimer={setTimer}
+                    onChangeMinutter={setMinutter}
+                    onBlur={() => setVisError(true)}
+                    timer={timer}
+                    minutter={minutter}
+                    error={visError ? error : undefined}
+                />
             </div>
             {lagre && (
-                <div style={{ display: 'flex' }}>
+                <div className="flex">
                     <Button
                         style={{ flexGrow: 1 }}
                         onClick={() => {

@@ -17,7 +17,6 @@ const webpackConfig = {
         extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.less'],
         alias: {
             app: path.resolve(__dirname, './../../app'),
-            common: path.resolve(__dirname, './../../common'),
         },
     },
     module: {
@@ -59,7 +58,10 @@ const webpackConfig = {
                     },
                 ],
             },
-            { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
+            },
         ],
     },
     plugins: [
@@ -68,7 +70,12 @@ const webpackConfig = {
             filename: 'css/[name].css?[fullhash]-[chunkhash]-[name]',
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
-        new CopyPlugin({ patterns: [{ from: 'src/app/favicon.png' }] }),
+        new CopyPlugin({
+            patterns: [
+                { from: 'src/app/favicon.png' },
+                { from: 'src/build/envVariablesForEnvSubst.json', to: 'envVariablesForEnvSubst.json' },
+            ],
+        }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
 };

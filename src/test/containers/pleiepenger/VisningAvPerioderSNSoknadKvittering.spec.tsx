@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import * as React from 'react';
@@ -61,9 +62,9 @@ const setupVisningAvPerioderSNSoknadKvittering = (
 ) => {
     const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string, value?: { [key: string]: string }) => id);
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    return shallow(<VisningAvPerioderSNSoknadKvittering intl={intlMock} countryList={[]} perioder={response} />);
+    return shallow(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={response} />);
 };
 
 describe('VisningAvPerioderSNSoknadKvittering', () => {

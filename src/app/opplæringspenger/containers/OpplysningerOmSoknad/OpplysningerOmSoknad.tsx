@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { RadioPanelGruppe, SkjemaGruppe } from 'nav-frontend-skjema';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Fieldset, Panel } from '@navikt/ds-react';
 
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
@@ -22,7 +22,7 @@ const OpplysningerOmSoknad = () => {
             <Alert size="small" variant="info">
                 {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
             </Alert>
-            <SkjemaGruppe>
+            <Fieldset>
                 <div className="input-row">
                     <DatoInputFormik label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
                     <TextFieldFormik
@@ -51,7 +51,7 @@ const OpplysningerOmSoknad = () => {
                         {intlHelper(intl, 'skjema.usignert.info')}
                     </Alert>
                 )}
-            </SkjemaGruppe>
+            </Fieldset>
         </Panel>
     );
 };

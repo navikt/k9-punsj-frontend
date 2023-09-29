@@ -13,8 +13,8 @@ describe('Eksisterende søknader pleiepenger', () => {
     it('viser informasjon om journalpost, søker og søkers barn', () => {
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Journalpostnummer/i).should('exist');
-            cy.findByText(/Søkers fødselsnummer/i).should('exist');
-            cy.findByText(/Pleietrengendes fødselsnummer/i).should('exist');
+            cy.findByText(/Søkers ID/i).should('exist');
+            cy.findByText(/Pleietrengendes ID/i).should('exist');
 
             cy.findByText(/200/i).should('exist');
             cy.findByText(/29099000129/i).should('exist');
@@ -72,12 +72,16 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.findByText('16017725002').should('exist');
             cy.findByText('200').should('exist');
             cy.findByText('08.11.2021 - 11.11.2021').should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).should('be.visible').click();
+            cy.findByRole('button', { name: /fortsett/i })
+                .should('be.visible')
+                .click();
         });
 
         cy.get('.modal_content').within(() => {
             cy.findByText(/Er du sikker på at du vil fortsette på denne søknaden?/i).should('exist');
-            cy.findByRole('button', { name: /fortsett/i }).should('be.visible').click();
+            cy.findByRole('button', { name: /fortsett/i })
+                .should('be.visible')
+                .click();
             cy.url().should(
                 'eq',
                 'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'

@@ -2,10 +2,9 @@ import React from 'react';
 
 interface ICalendarSVGProps {
     title: React.ReactNode;
-    className?: string;
 }
 
-const CalendarSvg: React.FunctionComponent<ICalendarSVGProps> = ({ title, className }) => (
+const CalendarSvg: React.FunctionComponent<ICalendarSVGProps> = ({ title }) => (
     <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
         <title>{title}</title>
         <g stroke="none" strokeWidth="1" fill="#262626" fillRule="evenodd">

@@ -3,13 +3,17 @@ on:
   push:
     paths:
       - 'nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml'
+      - '.github/workflows/deploy-redis.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * 6' # At 02:00 on Saturday.
 jobs:
   deploy:
     name: deploy redis
     runs-on: ubuntu-latest
     steps:
       - name: Hente kode
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3
       - name: Deploy dev-fss
         uses: nais/deploy/actions/deploy@v1
         env:

@@ -1,9 +1,8 @@
-import { Input, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Modal } from '@navikt/ds-react';
+import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
 
 import Fagsak from 'app/types/Fagsak';
 
@@ -113,11 +112,11 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                     <h1 className="sok-heading">
                         <FormattedMessage id="søk.overskrift" />
                     </h1>
-                    <SkjemaGruppe>
+                    <Fieldset>
                         <div className="input-rad">
-                            <Input
+                            <TextField
                                 value={journalpostid}
-                                bredde="L"
+                                className="w-64"
                                 onChange={this.onChange}
                                 label={<FormattedMessage id="søk.label.jpid" />}
                                 onKeyDown={this.handleKeydown}
@@ -157,7 +156,7 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                                 <FormattedMessage id="fordeling.kanikkesendeinn" />
                             </Alert>
                         )}
-                    </SkjemaGruppe>
+                    </Fieldset>
                 </div>
                 <div className="inngangContainer">
                     <OpprettJournalpostInngang />

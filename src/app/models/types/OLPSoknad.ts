@@ -1,6 +1,5 @@
 import { Arbeidstid } from './Arbeidstid';
 import { Barn, IBarn } from './IBarn';
-import { Klokkeslett } from './Klokkeslett';
 import { Kurs } from './Kurs';
 import { Omsorg } from './Omsorg';
 import { OpptjeningAktivitet } from './OpptjeningAktivitet';
@@ -16,7 +15,7 @@ export interface IOLPSoknadBackend {
     bosteder?: Bosteder[];
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
-    journalposter?: string[];
+    journalposter: string[];
     klokkeslett?: string;
     kurs?: Kurs;
     lovbestemtFerie?: Periode[];

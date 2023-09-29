@@ -2,7 +2,7 @@ import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { PunchStep, TimeFormat } from 'app/models/enums';
 import { IPunchState } from 'app/models/types';
@@ -39,17 +39,14 @@ export interface IEksisterendePLSSoknaderDispatchProps {
     setIdentAction: typeof setIdentAction;
     setStepAction: typeof setStepAction;
     findEksisterendeSoknader: typeof findEksisterendePLSSoknader;
-    undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     openEksisterendeSoknadAction: typeof openEksisterendePLSSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendePLSSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendePLSSoknadAction;
-    createSoknad: typeof createPLSSoknad;
     resetSoknadidAction: typeof resetPLSSoknadidAction;
     resetPunchAction: typeof resetPunchAction;
 }
 
 export interface IEksisterendePLSSoknaderComponentProps {
-    journalpostid: string;
     søkerId: string;
     pleietrengendeId: string | null;
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -159,11 +156,11 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
                         // eslint-disable-next-line react/no-array-index-key
-                        rowContent.map((v, i) => <td key={`${soknadId}_${i}`}>{v}</td>)
+                        rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
-                        <td colSpan={4} className="punch_mappetabell_tom_soknad">
+                        <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
                             Tom søknad
-                        </td>
+                        </Table.DataCell>
                     )}
                 </tr>,
             );
@@ -188,18 +185,18 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         return (
             <>
                 <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
-                <table className="tabell tabell--stripet punch_mappetabell">
-                    <thead>
-                        <tr>
-                            <th>{intlHelper(intl, 'tabell.mottakelsesdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</th>
-                            <th>{intlHelper(intl, 'tabell.journalpostid')}</th>
-                            <th>{intlHelper(intl, 'skjema.periode')}</th>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
-                        </tr>
-                    </thead>
+                <Table className="punch_mappetabell">
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
+                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                        </Table.Row>
+                    </Table.Header>
                     <tbody>{rows}</tbody>
-                </table>
+                </Table>
                 {modaler}
             </>
         );

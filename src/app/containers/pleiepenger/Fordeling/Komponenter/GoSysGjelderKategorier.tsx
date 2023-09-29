@@ -1,7 +1,8 @@
-import { Select } from 'nav-frontend-skjema';
 import React, { useEffect } from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
+import { Select } from '@navikt/ds-react';
 
 import { IFordelingState } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
@@ -41,7 +42,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
             <VerticalSpacer sixteenPx />
             <Select
                 value={fordelingState.valgtGosysKategori}
-                bredde="l"
+                className="w-64"
                 label={intlHelper(intl, 'fordeling.kategoriGosys')}
                 onChange={(e) => setValgtGosysKategori(e.target.value)}
             >

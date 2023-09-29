@@ -1,8 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
-import { string } from 'prop-types';
-
 import { IPeriode } from 'app/models/types';
-import yup, { passertDato, passertKlokkeslettPaaDato, periode, utenlandsopphold } from 'app/rules/yup';
+import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 
 import nb from '../i18n/nb.json';
 import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
@@ -106,7 +104,7 @@ const frilanser = () =>
 
 const OLPSchema = yup.object({
     mottattDato: passertDato,
-    klokkeslett: passertKlokkeslettPaaDato,
+    klokkeslett: passertKlokkeslettPaaMottattDato,
     opptjeningAktivitet: yup.object({
         arbeidstaker: yup.array().of(arbeidstaker()),
         selvstendigNaeringsdrivende: selvstendigNaeringsdrivende().nullable(),

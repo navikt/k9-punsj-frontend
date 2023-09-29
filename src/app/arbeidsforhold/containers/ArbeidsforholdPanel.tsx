@@ -1,11 +1,10 @@
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel, CheckboksPanelGruppe, Input, RadioPanelGruppe, Textarea } from 'nav-frontend-skjema';
+import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Container, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { Alert, Panel, TextField, Textarea } from '@navikt/ds-react';
 
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import DateInput from 'app/components/skjema/DateInput';
@@ -214,7 +213,7 @@ const ArbeidsforholdPanel = ({
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
         return (
-            <Container className="infoContainer">
+            <div className="infoContainer">
                 <CheckboksPanelGruppe
                     className="virksomhetstypercheckbox"
                     legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
@@ -232,10 +231,9 @@ const ArbeidsforholdPanel = ({
                     onChange={() => undefined}
                 />
                 <div className="generelleopplysiniger">
-                    <Row noGutters>
-                        <Input
+                    <div className="flex flex-wrap">
+                        <TextField
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
-                            bredde="M"
                             value={soknad.opptjeningAktivitet.selvstendigNaeringsdrivende?.virksomhetNavn || ''}
                             className="virksomhetsNavn"
                             onChange={(event: any) =>
@@ -264,7 +262,7 @@ const ArbeidsforholdPanel = ({
                                 })
                             }
                         />
-                    </Row>
+                    </div>
                 </div>
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -305,13 +303,12 @@ const ArbeidsforholdPanel = ({
                     }}
                 />
                 {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <Row noGutters>
-                        <Input
+                    <div className="flex flex-wrap">
+                        <TextField
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
-                            bredde="M"
                             value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
                             className="sn-organisasjonsnummer"
-                            feil={getErrorMessage(
+                            error={getErrorMessage(
                                 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid',
                             )}
                             onChange={(event: any) =>
@@ -340,7 +337,7 @@ const ArbeidsforholdPanel = ({
                                 })
                             }
                         />
-                    </Row>
+                    </div>
                 )}
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <CountrySelect
@@ -395,10 +392,9 @@ const ArbeidsforholdPanel = ({
                 />
                 {harRegnskapsfører && (
                     <div className="generelleopplysiniger">
-                        <Row noGutters>
-                            <Input
+                        <div className="flex flex-wrap">
+                            <TextField
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
-                                bredde="M"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn || ''}
                                 className="regnskapsførerNavn"
                                 onChange={(event: any) =>
@@ -433,11 +429,10 @@ const ArbeidsforholdPanel = ({
                                     })
                                 }
                             />
-                        </Row>
-                        <Row noGutters>
-                            <Input
+                        </div>
+                        <div className="flex flex-wrap">
+                            <TextField
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
-                                bredde="M"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerTlf || ''}
                                 className="sn-regskasførertlf"
                                 type="number"
@@ -473,7 +468,7 @@ const ArbeidsforholdPanel = ({
                                     })
                                 }
                             />
-                        </Row>
+                        </div>
                     </div>
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
@@ -564,9 +559,8 @@ const ArbeidsforholdPanel = ({
                 </div>
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <Input
+                        <TextField
                             label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
-                            bredde="M"
                             className="bruttoinntekt"
                             value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
                             onChange={(event: any) =>
@@ -645,7 +639,7 @@ const ArbeidsforholdPanel = ({
                     )}
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
-                        <Row noGutters>
+                        <div className="flex flex-wrap">
                             <DateInput
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
@@ -680,10 +674,9 @@ const ArbeidsforholdPanel = ({
                                     });
                                 }}
                             />
-                        </Row>
-                        <Row noGutters>
-                            <Input
-                                bredde="M"
+                        </div>
+                        <div className="flex flex-wrap">
+                            <TextField
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
                                 type="number"
                                 className="endringinntekt"
@@ -720,7 +713,7 @@ const ArbeidsforholdPanel = ({
                                     })
                                 }
                             />
-                        </Row>
+                        </div>
 
                         <Textarea
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
@@ -783,7 +776,7 @@ const ArbeidsforholdPanel = ({
                         getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
                     }
                 />
-            </Container>
+            </div>
         );
     };
 

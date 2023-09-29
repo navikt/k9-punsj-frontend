@@ -1,6 +1,6 @@
-import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
+import { Textarea } from '@navikt/ds-react';
 
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
@@ -33,16 +33,13 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                     value={tilleggsinformasjon || ''}
                     onChange={(event) => {
                         updatePeriodeinfoInSoknadState({ tilleggsinformasjon: event.target.value }, false);
-                        updatePeriodeinfoInSoknad({
-                            tilleggsinformasjon: event.target.value,
-                        });
                     }}
                     onBlur={(event) =>
                         updatePeriodeinfoInSoknad({
                             tilleggsinformasjon: event.target.value,
                         })
                     }
-                    feil={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].tilleggsinformasjon`)}
+                    error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].tilleggsinformasjon`)}
                 />
             </div>
         );

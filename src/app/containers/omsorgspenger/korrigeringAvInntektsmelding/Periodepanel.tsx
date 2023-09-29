@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import * as React from 'react';
-import { Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
@@ -43,7 +42,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <Row noGutters key={index}>
+                                <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>
                                             {({ field }: FieldProps) => (
@@ -58,7 +57,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                                 />
                                             )}
                                         </Field>
-
+                                        <span className="mr-3" />
                                         <button
                                             id="slett"
                                             className="fjern"
@@ -73,11 +72,11 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                             {intlHelper(intl, textFjern || 'skjema.liste.fjern_periode')}
                                         </button>
                                     </div>
-                                </Row>
+                                </div>
                             );
                         })}
 
-                        <Row noGutters>
+                        <div className="flex flex-wrap">
                             <button
                                 id="leggtilperiode"
                                 className="leggtilperiode"
@@ -91,7 +90,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                                 </div>
                                 {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til_dag_periode')}
                             </button>
-                        </Row>
+                        </div>
                     </>
                 )}
             </FieldArray>

@@ -8,7 +8,7 @@ interface OwnProps extends CheckboksPanelProps {
 }
 
 const CheckboksPanelFormik = ({ name, type, value, valueIsBoolean, ...props }: OwnProps) => {
-    const [field, meta, helpers] = useField({ name, type, value });
+    const [field, , helpers] = useField({ name, type, value });
 
     const booleanToggle = (e: React.ChangeEvent<HTMLInputElement>): void => helpers.setValue(e.target.checked);
 

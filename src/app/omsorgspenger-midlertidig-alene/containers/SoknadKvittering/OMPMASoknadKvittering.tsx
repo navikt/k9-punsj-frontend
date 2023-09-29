@@ -44,8 +44,8 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
             {kopierJournalpostSuccess && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
                     <hr className={classNames('linje')} />
+                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
                     {annenSokerIdent && (
                         <p>
@@ -58,8 +58,8 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visOpplysningerOmSoknad && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
+                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
@@ -69,9 +69,9 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 </div>
             )}
             <div>
-                <h3>{intlHelper(intl, 'skjema.kvittering.barn')}</h3>
                 <hr className={classNames('linje')} />
-                {ytelse.barn.map((barn) => (
+                <h3>{intlHelper(intl, 'skjema.kvittering.barn')}</h3>
+                {ytelse.barn?.map((barn) => (
                     <p key={barn.norskIdentitetsnummer}>
                         <LabelValue
                             text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}

@@ -10,6 +10,7 @@ import {
     Sakstype,
     TilgjengeligSakstype,
     korrigeringAvInntektsmeldingSakstyper,
+    omsorgspengerAleneOmOmsorgenSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
     omsorgspengerUtbetalingSakstyper,
@@ -48,8 +49,8 @@ interface IValgForDokument {
 
 const ValgForDokument: React.FC<IValgForDokument> = ({
     dokumenttype,
-    erJournalfoertEllerFerdigstilt,
     kanJournalforingsoppgaveOpprettesiGosys,
+    erJournalfoertEllerFerdigstilt,
     setSakstypeAction,
     konfigForValgtSakstype,
     fordelingState,
@@ -91,6 +92,10 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
     function omsorgspengerMidlertidigAlene() {
         return dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA && omsorgspengerMidlertidigAleneSakstyper;
     }
+
+    const omsorgspengerAleneOmOmsorgen = () =>
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO && omsorgspengerAleneOmOmsorgenSakstyper;
+
     const omsorgspengerUtbetaling = () =>
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
@@ -103,14 +108,24 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
         pleiepengerILivetsSluttfase() ||
         omsorgspengerKroniskSyktBarn() ||
         omsorgspengerMidlertidigAlene() ||
+        omsorgspengerAleneOmOmsorgen() ||
         omsorgspengerUtbetaling() ||
         opplæringspenger() ||
         [];
 
     const keys = sakstypekeys.filter((key) => {
-        if (getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'false') {
-            return key !== TilgjengeligSakstype.SEND_BREV;
+        const sendBrevEnabledOgLukkOppgaveEnabled =
+            getEnvironmentVariable('SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE') === 'true';
+        const postmottakEnabled = getEnvironmentVariable('POSTMOTTAK_TOGGLE') === 'true';
+
+        if (!sendBrevEnabledOgLukkOppgaveEnabled && key === TilgjengeligSakstype.SEND_BREV) {
+            return false;
         }
+
+        if (!postmottakEnabled && key === TilgjengeligSakstype.KLASSIFISER_OG_GAA_TIL_LOS) {
+            return false;
+        }
+
         return true;
     });
     return (

@@ -6,8 +6,9 @@ import * as Sentry from '@sentry/react';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
@@ -19,8 +20,8 @@ import '@navikt/ft-plattform-komponenter/dist/style.css';
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import JournalpostRouter from './containers/JournalpostRouter';
-import RedigeringRouter from './containers/redigering/RedigeringRouter';
 import SokIndex from './containers/sok/SokIndex';
+import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { rootReducer } from './state/RootState';
@@ -70,7 +71,6 @@ queryClient.setDefaultOptions({
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
-
     React.useEffect(() => {
         DsModal?.setAppElement('#app');
     }, []);
@@ -79,6 +79,7 @@ export const App: React.FunctionComponent = () => {
         <Sentry.ErrorBoundary>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
+                    <ReactQueryDevtools initialIsOpen={false} />
                     <ApplicationWrapper
                         locale={locale}
                         onChangeLocale={(activeLocale: Locale) => {
@@ -88,9 +89,6 @@ export const App: React.FunctionComponent = () => {
                     >
                         <BrowserRouter>
                             <Switch>
-                                <Route path="/rediger/">
-                                    <RedigeringRouter />
-                                </Route>
                                 <Route path="/journalpost/:journalpostid/">
                                     <JournalpostRouter />
                                 </Route>
@@ -100,9 +98,10 @@ export const App: React.FunctionComponent = () => {
                                 <Route path="/brev-avsluttet-sak">
                                     <SendBrevIAvsluttetSak />
                                 </Route>
-                                <Route path="/">
+                                <Route exact path="/">
                                     <SokIndex />
                                 </Route>
+                                <Redirect to="/" />
                             </Switch>
                         </BrowserRouter>
                     </ApplicationWrapper>
@@ -117,8 +116,9 @@ const root = createRoot(container!);
 
 // venter med å rendre applikasjonen til MSW er klar
 // https://mswjs.io/docs/recipes/deferred-mounting
+const AppWithEnvVariables = withEnvVariables(App);
 prepare().then(() => {
-    root.render(<App />);
+    root.render(<AppWithEnvVariables />);
 });
 
 // @ts-ignore

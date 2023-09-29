@@ -1,11 +1,13 @@
 import { getEnvironmentVariable } from 'app/utils/envUtils';
 
-const OICD_AUTH_PROXY = getEnvironmentVariable('OIDC_AUTH_PROXY');
-const IS_OICD_AUTH_PROXY_SET: boolean = !!OICD_AUTH_PROXY && OICD_AUTH_PROXY !== 'undefined';
-export const URL_BACKEND = IS_OICD_AUTH_PROXY_SET ? OICD_AUTH_PROXY : 'http://localhost:8101';
-export const URL_API = `${URL_BACKEND}/api/k9-punsj`;
+const OICD_AUTH_PROXY = () => getEnvironmentVariable('OIDC_AUTH_PROXY') as string;
+const IS_OICD_AUTH_PROXY_SET = () => !!OICD_AUTH_PROXY() && OICD_AUTH_PROXY() !== 'undefined';
+export const URL_BACKEND = () => (IS_OICD_AUTH_PROXY_SET() ? OICD_AUTH_PROXY() : 'http://localhost:8101');
+
+export const URL_API = () => `${URL_BACKEND()}/api/k9-punsj`;
 
 export enum ApiPath {
+    ENV_VARIABLES = '/envVariables',
     EKSISTERENDE_SOKNADER_SOK = '/mapper',
     BARN_GET = '/barn',
     PSB_EKSISTERENDE_SOKNADER_FIND = '/pleiepenger-sykt-barn-soknad/mappe',
@@ -14,10 +16,10 @@ export enum ApiPath {
     PSB_SOKNAD_UPDATE = '/pleiepenger-sykt-barn-soknad/oppdater',
     PSB_SOKNAD_VALIDER = '/pleiepenger-sykt-barn-soknad/valider',
     PSB_SOKNAD_SUBMIT = '/pleiepenger-sykt-barn-soknad/send',
-    PSB_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
     JOURNALPOST_SETT_PAA_VENT = '/journalpost/vent/{journalpostId}',
     JOURNALPOST_HENT = '/journalpost/hent',
     JOURNALPOST_GET = '/journalpost/{journalpostId}',
+    JOURNALPOST_MOTTAK = '/journalpost/mottak',
     JOURNALPOST_SETT_BEHANDLINGSÅR = '/journalpost/settBehandlingsAar/{journalpostId}',
     JOURNALPOST_LUKK_OPPGAVE = '/journalpost/lukk/{journalpostId}',
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
@@ -27,14 +29,12 @@ export enum ApiPath {
     DOKUMENT = '/journalpost/{journalpostId}/dokument/{dokumentId}',
     OMS_OVERFØR_DAGER = '/omsorgspenger-overfoer-dager-soknad',
     OPPRETT_GOSYS_OPPGAVE = '/gosys/opprettJournalforingsoppgave/',
-    PSB_MAPPE_SOK = '/k9-sak/pleiepenger-sykt-barn-soknad',
     K9SAK_PERIODER = '/pleiepenger-sykt-barn-soknad/k9sak/info',
     GOSYS_GJELDER = '/gosys/gjelder',
     FINN_ARBEIDSGIVERE = '/arbeidsgivere',
     OMS_FINN_ARBEIDSFORHOLD = '/omsorgspenger-soknad/k9sak/arbeidsforholdIder',
     SØK_ORGNUMMER = '/arbeidsgiver',
     OMS_EKSISTERENDE_SOKNADER_FIND = '/omsorgspenger-soknad/mappe',
-    OMS_FAGSAKER_FIND = '/fagsak/find?ytelse=pleiepenger-sykt-barn',
     OMS_MAPPE_SOK = '/k9-sak/omsorgspenger-soknad',
     OMS_SOKNAD_CREATE = '/omsorgspenger-soknad',
     OMS_SOKNAD_GET = '/omsorgspenger-soknad/mappe/{id}',
@@ -53,6 +53,12 @@ export enum ApiPath {
     OMP_MA_SOKNAD_UPDATE = '/omsorgspenger-midlertidig-alene-soknad/oppdater',
     OMP_MA_SOKNAD_VALIDER = '/omsorgspenger-midlertidig-alene-soknad/valider',
     OMP_MA_SOKNAD_SUBMIT = '/omsorgspenger-midlertidig-alene-soknad/send',
+    OMP_AO_EKSISTERENDE_SOKNADER_FIND = '/omsorgspenger-alene-om-omsorgen-soknad/mappe',
+    OMP_AO_SOKNAD_GET = '/omsorgspenger-alene-om-omsorgen-soknad/mappe/{id}',
+    OMP_AO_SOKNAD_CREATE = '/omsorgspenger-alene-om-omsorgen-soknad',
+    OMP_AO_SOKNAD_UPDATE = '/omsorgspenger-alene-om-omsorgen-soknad/oppdater',
+    OMP_AO_SOKNAD_VALIDER = '/omsorgspenger-alene-om-omsorgen-soknad/valider',
+    OMP_AO_SOKNAD_SUBMIT = '/omsorgspenger-alene-om-omsorgen-soknad/send',
     OMP_UT_EKSISTERENDE_SOKNADER_FIND = '/omsorgspengerutbetaling-soknad/mappe',
     OMP_UT_SOKNAD_GET = '/omsorgspengerutbetaling-soknad/mappe/{id}',
     OMP_UT_SOKNAD_CREATE = '/omsorgspengerutbetaling-soknad',
@@ -81,5 +87,5 @@ export enum ApiPath {
     OLP_K9_PERIODER = '/opplaeringspenger-soknad/k9sak/info',
 }
 
-export const URL_AUTH_CHECK = `${URL_BACKEND}/me`;
-export const URL_AUTH_LOGIN = `${URL_BACKEND}/login?redirect_uri={uri}`;
+export const URL_AUTH_CHECK = () => `${URL_BACKEND()}/me`;
+export const URL_AUTH_LOGIN = () => `${URL_BACKEND()}/login?redirect_uri={uri}`;
