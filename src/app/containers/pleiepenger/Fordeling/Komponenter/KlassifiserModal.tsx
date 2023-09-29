@@ -42,7 +42,7 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         <Modal open onBeforeClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={!disabled}>
-                <Heading spacing level="1" size="small" id="modal-heading">
+                <Heading level="1" size="small" id="modal-heading">
                     Lagre sakstype på journalpost
                 </Heading>
             </Modal.Header>
@@ -89,8 +89,13 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                             </Button>
                         </div>
                     )}
-                    <VerticalSpacer sixteenPx />
-                    {error && <Alert variant="error">Noe gikk galt under lagring</Alert>}
+
+                    {error && (
+                        <>
+                            <VerticalSpacer sixteenPx />
+                            <Alert variant="error">Noe gikk galt under lagring</Alert>
+                        </>
+                    )}
                 </>
             </Modal.Body>
         </Modal>
