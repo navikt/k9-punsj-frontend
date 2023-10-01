@@ -44,9 +44,9 @@ describe('Pleiepenger punsj', () => {
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
         cy.get('.navds-modal').within(() => {
-            cy.findAllByLabelText('Timer').eq(0).clear().type(7);
-            cy.findAllByLabelText('Timer').eq(1).clear().type(2);
-            cy.findAllByLabelText('Timer').eq(3).clear().type(7);
+            cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
+            cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
+            cy.findAllByLabelText('Timer').eq(3).clear({ force: true }).type(7, { force: true });
             cy.findByRole('button', { name: /Lagre/i }).click();
         });
         cy.findByRole('button', { name: /vis mer/i }).click();
