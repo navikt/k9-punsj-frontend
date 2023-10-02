@@ -119,7 +119,7 @@ export default function ArbeidstidKalender({
                     />
                 </Modal.Content>
             </Modal>
-            {gyldigePerioder && (
+            {!!gyldigePerioder.length && (
                 <TidsbrukKalenderContainer
                     gyldigePerioder={gyldigePerioder}
                     ModalContent={<FaktiskOgNormalTid heading="Registrer arbeidstid" lagre={lagreTimer} />}

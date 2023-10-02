@@ -11,11 +11,11 @@ interface OwnProps {
     label: string;
     onChange: (value: string) => void;
     onBlur: () => void;
-    timer: string;
+    value: string;
     error?: string;
 }
 
-const TimerMedDesimaler = ({ label, onChange, onBlur, timer, error }: OwnProps) => {
+const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) => {
     const id = uniqueId();
 
     const timerId = `timer-${id}`;
@@ -32,9 +32,9 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, timer, error }: OwnProps) 
                             id={timerId}
                             className="input text-center"
                             bredde="XS"
-                            value={timer}
+                            value={value}
                             onChange={(event) => {
-                                onChange(event.target.value.replace(/[^0-9.]/g, ''));
+                                onChange(event.target.value.replaceAll(/[^\d,.]+/g, '').replace(',', '.'));
                             }}
                             onBlur={onBlur}
                             feil={!!error}

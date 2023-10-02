@@ -4,7 +4,7 @@ import { IntlShape } from 'react-intl';
 import { TimeFormat } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 
-import { datetime, initializeDate } from '../../utils/timeUtils';
+import { Tidsformat, datetime, initializeDate } from '../../utils/timeUtils';
 import DateRange from './DateRange';
 import { Periodeinfo } from './Periodeinfo';
 
@@ -108,6 +108,7 @@ export interface IArbeidstidPeriodeMedTimer {
     jobberNormaltTimerPerDag?: string;
     jobberNormaltPerDag?: ITimerOgMinutterString;
     faktiskArbeidPerDag?: ITimerOgMinutterString;
+    tidsformat?: Tidsformat;
 }
 
 export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidstidPeriodeMedTimer>> {
@@ -121,6 +122,8 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
     faktiskArbeidPerDag: ITimerOgMinutterString;
 
+    tidsformat: Tidsformat;
+
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
         this.periode = new Periode(pmf.periode || {});
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
@@ -133,6 +136,7 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
             timer: '',
             minutter: '',
         };
+        this.tidsformat = pmf.tidsformat || Tidsformat.TimerOgMin;
     }
 
     fomTekstKort(intl: IntlShape) {

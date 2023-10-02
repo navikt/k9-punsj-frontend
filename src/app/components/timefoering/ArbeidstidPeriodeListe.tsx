@@ -7,6 +7,7 @@ import { Button, Heading } from '@navikt/ds-react';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
+import { Tidsformat } from 'app/utils';
 
 import VerticalSpacer from '../VerticalSpacer';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
@@ -35,8 +36,41 @@ export default function ArbeidstidPeriodeListe({
             ? [...arbeidstidPerioder]
             : (nyeSoknadsperioder || []).map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
+
+    function hoursToTimeArray(timerOgDesimaler: number): [string, string] {
+        const totalMinutes = Math.round(timerOgDesimaler * 60);
+        const minutes = String(totalMinutes % 60);
+        const timer = String(Math.floor(totalMinutes / 60));
+        return [timer, minutes];
+    }
+    const konverterTidTilTimerOgMinutter = (periode: Periodeinfo<IArbeidstidPeriodeMedTimer>) => {
+        if (periode.tidsformat === Tidsformat.Desimaler) {
+            const [normaltTimer, normaltMinutter] = hoursToTimeArray(Number(periode.jobberNormaltTimerPerDag || 0));
+            const [faktiskTimer, faktiskMinutter] = hoursToTimeArray(Number(periode.faktiskArbeidTimerPerDag || 0));
+            return new ArbeidstidPeriodeMedTimer({
+                periode: periode.periode,
+                jobberNormaltPerDag: {
+                    timer: normaltTimer,
+                    minutter: normaltMinutter,
+                },
+                faktiskArbeidPerDag: {
+                    timer: faktiskTimer,
+                    minutter: faktiskMinutter,
+                },
+            });
+        }
+        return new ArbeidstidPeriodeMedTimer({
+            periode: periode.periode,
+            jobberNormaltPerDag: periode.jobberNormaltPerDag,
+            faktiskArbeidPerDag: periode.faktiskArbeidPerDag,
+        });
+    };
     return (
-        <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={(values) => lagre(values.perioder.map((v) => konverterTidTilTimerOgMinutter(v)))}
+            validationSchema={schema}
+        >
             {({ handleSubmit, values }) => (
                 <>
                     {heading && <Heading size="small">{heading}</Heading>}
