@@ -155,19 +155,17 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidTimerPerDag`);
 
     return (
-        <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
-            <div style={{ display: 'flex', marginTop: '1.5625rem', maxWidth: '9rem' }}>
-                <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
+        <div className="ml-4 mt-7">
+            <div className="flex gap-8 mt-6">
+                <div>
                     <TimerMedDesimaler
                         label="Normal arbeidstid"
                         onChange={(v) => formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, v)}
                         timer={String(normaltField.value)}
                         error={jobberNormaltPerDagMeta.touched && faktiskPerDagMeta.error}
-                        onBlur={() => {
-                            formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`);
-                        }}
+                        onBlur={() => formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`)}
                     />
-                    <div style={{ marginTop: '1.0625rem', marginBottom: '3.5625rem' }}>
+                    <div className="mt-4 mb-14">
                         <UtregningArbeidstidDesimaler arbeidstid={normaltField.value} />
                     </div>
                 </div>
@@ -177,11 +175,9 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                         onChange={(v) => formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, v)}
                         timer={String(faktiskField.value)}
                         error={faktiskPerDagMeta.touched && faktiskPerDagMeta.error}
-                        onBlur={() => {
-                            formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`);
-                        }}
+                        onBlur={() => formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`)}
                     />
-                    <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
+                    <div className="mt-3 mb-10">
                         <UtregningArbeidstidDesimaler
                             arbeidstid={faktiskField.value}
                             normalArbeidstid={normaltField.value}

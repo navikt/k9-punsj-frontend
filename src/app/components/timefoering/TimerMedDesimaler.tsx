@@ -21,7 +21,7 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, timer, error }: OwnProps) 
     const timerId = `timer-${id}`;
 
     return (
-        <div className="timer-og-minutter">
+        <div className="timer-og-minutter min-w-[8rem]">
             <div>
                 <Label size="small">{label}</Label>
             </div>
@@ -30,8 +30,7 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, timer, error }: OwnProps) 
                     <div className="input-container">
                         <Input
                             id={timerId}
-                            style={{ textAlign: 'center' }}
-                            className="input"
+                            className="input text-center"
                             bredde="XS"
                             value={timer}
                             onChange={(event) => {
