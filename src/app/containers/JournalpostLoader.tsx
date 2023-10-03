@@ -9,7 +9,7 @@ import Fagsak from 'app/types/Fagsak';
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import VerticalSpacer from '../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
-import { IJournalpost } from '../models/types';
+import { IError, IJournalpost } from '../models/types';
 import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
 import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
@@ -21,6 +21,7 @@ interface IJournaPostStateProps {
     journalpost?: IJournalpost;
     isJournalpostLoading?: boolean;
     journalpostConflictError?: IJournalpostConflictResponse;
+    journalpostRequestError?: IError;
     forbidden?: boolean;
     conflict?: boolean;
     notFound?: boolean;
@@ -47,6 +48,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     journalpostId,
     journalpost,
     journalpostConflictError,
+    journalpostRequestError,
     forbidden,
     conflict,
     notFound,
@@ -103,6 +105,10 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
+    if (journalpostRequestError) {
+        return <FeilmeldingPanel messageId="startPage.feil.internalServerError" />;
+    }
+
     if (!journalpost) {
         return null;
     }
@@ -124,6 +130,7 @@ const mapStateToProps = ({ felles, fordelingState }: RootStateType): IJournaPost
     forbidden: felles.journalpostForbidden,
     conflict: felles.journalpostConflict,
     journalpostConflictError: felles.journalpostConflictError,
+    journalpostRequestError: felles.journalpostRequestError,
     notFound: felles.journalpostNotFound,
     lukkOppgaveDone: fordelingState.lukkOppgaveDone,
 });
