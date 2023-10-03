@@ -5,8 +5,12 @@ import { Copy } from '@navikt/ds-icons';
 import './kopier.less';
 
 export default function Kopier({ verdi }: { verdi?: string }): JSX.Element | null {
-    const kopierTilClipboard = (v: string) => {
-        navigator.clipboard.writeText(v);
+    const kopierTilClipboard = async (v: string) => {
+        try {
+            await navigator.clipboard.writeText(v);
+        } catch (error) {
+            console.error('Failed to copy to clipboard:', error);
+        }
     };
 
     if (!verdi) {
