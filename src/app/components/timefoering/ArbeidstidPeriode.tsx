@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -73,8 +74,8 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             }}
                             value={tidsformatField.value}
                         >
-                            <ToggleGroup.Item value={Tidsformat.TimerOgMin}>I timer og minutter</ToggleGroup.Item>
-                            <ToggleGroup.Item value={Tidsformat.Desimaler}>I timer med desimaltall</ToggleGroup.Item>
+                            <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
+                            <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
                         </ToggleGroup>
                     </div>
 
@@ -108,7 +109,7 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
                         formik.setFieldTouched(`${name}.jobberNormaltPerDag`);
                     }}
                 />
-                <div className="mt-1 mb-14">
+                <div className="mt-1">
                     <UtregningArbeidstid arbeidstid={normaltField.value} />
                 </div>
             </div>
@@ -127,7 +128,7 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
                         formik.setFieldTouched(`${name}.faktiskArbeidPerDag`);
                     }}
                 />
-                <div className="mt-1 mb-14">
+                <div className="mt-1">
                     <UtregningArbeidstid arbeidstid={faktiskField.value} normalArbeidstid={normaltField.value} />
                 </div>
             </div>
@@ -154,7 +155,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                         }
                         onBlur={() => formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`)}
                     />
-                    <div className="mt-4 mb-14">
+                    <div className="mt-1">
                         <UtregningArbeidstidDesimaler arbeidstid={normaltField.value} />
                     </div>
                 </div>
@@ -166,7 +167,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                         error={faktiskPerDagMeta.touched && faktiskPerDagMeta.error ? faktiskPerDagMeta.error : ''}
                         onBlur={() => formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`)}
                     />
-                    <div className="mt-3 mb-10">
+                    <div className="mt-1">
                         <UtregningArbeidstidDesimaler
                             arbeidstid={faktiskField.value}
                             normalArbeidstid={normaltField.value}

@@ -40,7 +40,7 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) 
                             feil={!!error}
                         />
                         <div>
-                            <label htmlFor={timerId}>
+                            <label htmlFor={timerId} className="sr-only">
                                 <Detail>Timer</Detail>
                             </label>
                         </div>

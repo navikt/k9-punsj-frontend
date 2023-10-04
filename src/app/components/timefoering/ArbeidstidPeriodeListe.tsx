@@ -9,7 +9,6 @@ import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Period
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { Tidsformat } from 'app/utils';
 
-import VerticalSpacer from '../VerticalSpacer';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
 const schema = yup.object({
@@ -87,14 +86,15 @@ export default function ArbeidstidPeriodeListe({
                                         remove={() => arrayHelpers.remove(index)}
                                     />
                                 ))}
-                                <Button
-                                    variant="tertiary"
-                                    onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
-                                    icon={<AddCircle />}
-                                >
-                                    Legg til periode
-                                </Button>
-                                <VerticalSpacer eightPx />
+                                <div className="mb-8 mt-4">
+                                    <Button
+                                        variant="tertiary"
+                                        onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
+                                        icon={<AddCircle />}
+                                    >
+                                        Legg til periode
+                                    </Button>
+                                </div>
                                 <div style={{ display: 'flex' }}>
                                     <Button
                                         style={{ flexGrow: 1, marginRight: '0.9375rem' }}
