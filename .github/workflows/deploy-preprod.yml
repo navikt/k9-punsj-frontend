@@ -25,6 +25,8 @@ jobs:
         permissions:
             packages: write
         needs: [lint, test, test-cypress, build]
+        outputs:
+            image: ${{ steps.docker-push.outputs.image }}
         steps:
             - name: Hente kode
               uses: actions/checkout@v3
@@ -76,3 +78,16 @@ jobs:
                   CLUSTER: dev-fss
                   RESOURCE: nais/frontend/k9-punsj-frontend.yml
                   VARS: nais/frontend/dev.json
+            - name: Set image output
+              id: docker-push
+              run: echo "IMAGE=$DOCKER_IMAGE:$TAG" >> $GITHUB_OUTPUT
+    trivy:
+        needs: [deploy-dev]
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy-ghcr.yml@main
+        permissions:
+            contents: write
+            security-events: write
+            actions: read
+        secrets: inherit
+        with:
+            image: ${{ needs.deploy-dev.outputs.image }}
