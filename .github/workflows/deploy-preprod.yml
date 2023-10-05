@@ -80,7 +80,7 @@ jobs:
                   VARS: nais/frontend/dev.json
             - name: Set image output
               id: docker-push
-              run: echo "IMAGE=$IMAGE_BASE:$TAG" >> $GITHUB_OUTPUT
+              run: echo "IMAGE=$DOCKER_IMAGE:$TAG" >> $GITHUB_OUTPUT
     trivy:
         needs: [deploy-dev]
         uses: navikt/sif-gha-workflows/.github/workflows/trivy-ghcr.yml@main
