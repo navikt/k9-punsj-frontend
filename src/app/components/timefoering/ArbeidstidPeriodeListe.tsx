@@ -7,7 +7,7 @@ import { Button, Heading } from '@navikt/ds-react';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
-import { konverterTidTilTimerOgMinutter } from 'app/utils';
+import { konverterPeriodeTilTimerOgMinutter } from 'app/utils';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
@@ -39,7 +39,7 @@ export default function ArbeidstidPeriodeListe({
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values) => lagre(values.perioder.map((v) => konverterTidTilTimerOgMinutter(v)))}
+            onSubmit={(values) => lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)))}
             validationSchema={schema}
         >
             {({ handleSubmit, values }) => (

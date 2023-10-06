@@ -4,7 +4,7 @@ import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import { timerOgMinutter } from 'app/rules/yup';
-import { Tidsformat, konverterTidTilTimerOgMinutterLazyCopy } from 'app/utils';
+import { Tidsformat, konverterPeriodeTilTimerOgMinutter } from 'app/utils';
 
 import TimerOgMinutter from './TimerOgMinutter';
 import TimerMedDesimaler from './TimerMedDesimaler';
@@ -117,7 +117,7 @@ const FaktiskOgNormalTid = ({
                 </div>
             )}
             {tidsformat === Tidsformat.Desimaler && (
-                <div className="ml-4 mt-7">
+                <div className="ml-4 mt-7 mb-4">
                     <div className="flex gap-8 mt-6">
                         <div>
                             <TimerMedDesimaler
@@ -153,7 +153,7 @@ const FaktiskOgNormalTid = ({
                             setVisFaktiskError(true);
                             setVisNormaltError(true);
                             if (!faktiskError && !normaltError) {
-                                lagre(konverterTidTilTimerOgMinutterLazyCopy(payload), selectedDates);
+                                lagre(konverterPeriodeTilTimerOgMinutter(payload), selectedDates);
                                 clearSelectedDates();
                                 toggleModal();
                             }
