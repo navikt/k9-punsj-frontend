@@ -60,21 +60,22 @@ export default function ArbeidstidKalender({
             }
         };
 
-    const lagreTimer = ({
-        faktiskArbeidPerDag,
-        jobberNormaltPerDag,
-        selectedDates,
-    }: {
-        faktiskArbeidPerDag: ITimerOgMinutterString;
-        jobberNormaltPerDag: ITimerOgMinutterString;
-        selectedDates: Date[];
-    }) => {
+    const lagreTimer = (
+        {
+            faktiskArbeidPerDag,
+            jobberNormaltPerDag,
+        }: {
+            faktiskArbeidPerDag: ITimerOgMinutterString;
+            jobberNormaltPerDag: ITimerOgMinutterString;
+        },
+        selectedDates: Date[],
+    ) => {
         const eksisterendePerioderUtenSelectedDates = removeDatesFromPeriods(
             arbeidstidInfo.perioder,
             selectedDates,
         ).map((v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v));
 
-        const payload = selectedDates.map((day) => ({
+        const payload = selectedDates.map((day: Date) => ({
             periode: new Periode({
                 fom: dayjs(day).format(formats.YYYYMMDD),
                 tom: dayjs(day).format(formats.YYYYMMDD),

@@ -1,4 +1,11 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import {
+    ArbeidstidPeriodeMedTimer,
+    IArbeidstidPeriodeMedTimer,
+    ITimerOgMinutterString,
+    Periodeinfo,
+} from 'app/models/types';
+import { Tidsformat } from './timeUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
@@ -132,4 +139,88 @@ export const getModiaPath = (fødselsnummer?: string) => {
         return `https://app.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
     return null;
+};
+
+function TimerMedDesimalerTilTimerOgMinutter(timerOgDesimaler: number): [string, string] {
+    const totalMinutes = Math.round(timerOgDesimaler * 60);
+    const minutes = String(totalMinutes % 60);
+    const timer = String(Math.floor(totalMinutes / 60));
+    return [timer, minutes];
+}
+export const konverterTidTilTimerOgMinutter = (periode: Periodeinfo<IArbeidstidPeriodeMedTimer>) => {
+    if (periode.tidsformat === Tidsformat.Desimaler) {
+        const [normaltTimer, normaltMinutter] = TimerMedDesimalerTilTimerOgMinutter(
+            Number(periode.jobberNormaltTimerPerDag || 0),
+        );
+        const [faktiskTimer, faktiskMinutter] = TimerMedDesimalerTilTimerOgMinutter(
+            Number(periode.faktiskArbeidTimerPerDag || 0),
+        );
+        return new ArbeidstidPeriodeMedTimer({
+            ...periode,
+            periode: periode.periode,
+            jobberNormaltPerDag: {
+                timer: normaltTimer,
+                minutter: normaltMinutter,
+            },
+            faktiskArbeidPerDag: {
+                timer: faktiskTimer,
+                minutter: faktiskMinutter,
+            },
+        });
+    }
+    return new ArbeidstidPeriodeMedTimer({
+        ...periode,
+        periode: periode.periode,
+        jobberNormaltPerDag: {
+            timer: periode.jobberNormaltPerDag?.timer || '0',
+            minutter: periode.jobberNormaltPerDag?.minutter || '0',
+        },
+        faktiskArbeidPerDag: {
+            timer: periode.faktiskArbeidPerDag?.timer || '0',
+            minutter: periode.faktiskArbeidPerDag?.minutter || '0',
+        },
+    });
+};
+
+export const konverterTidTilTimerOgMinutterLazyCopy = ({
+    tidsformat,
+    faktiskArbeidTimerPerDag,
+    jobberNormaltTimerPerDag,
+    jobberNormaltPerDag,
+    faktiskArbeidPerDag,
+}: {
+    tidsformat: Tidsformat;
+    faktiskArbeidTimerPerDag?: string;
+    jobberNormaltTimerPerDag?: string;
+    jobberNormaltPerDag: ITimerOgMinutterString;
+    faktiskArbeidPerDag: ITimerOgMinutterString;
+}) => {
+    if (tidsformat === Tidsformat.Desimaler) {
+        const [normaltTimer, normaltMinutter] = TimerMedDesimalerTilTimerOgMinutter(
+            Number(jobberNormaltTimerPerDag || 0),
+        );
+        const [faktiskTimer, faktiskMinutter] = TimerMedDesimalerTilTimerOgMinutter(
+            Number(faktiskArbeidTimerPerDag || 0),
+        );
+        return new ArbeidstidPeriodeMedTimer({
+            jobberNormaltPerDag: {
+                timer: normaltTimer,
+                minutter: normaltMinutter,
+            },
+            faktiskArbeidPerDag: {
+                timer: faktiskTimer,
+                minutter: faktiskMinutter,
+            },
+        });
+    }
+    return new ArbeidstidPeriodeMedTimer({
+        jobberNormaltPerDag: {
+            timer: jobberNormaltPerDag?.timer || '0',
+            minutter: jobberNormaltPerDag?.minutter || '0',
+        },
+        faktiskArbeidPerDag: {
+            timer: faktiskArbeidPerDag?.timer || '0',
+            minutter: faktiskArbeidPerDag?.minutter || '0',
+        },
+    });
 };

@@ -10,7 +10,7 @@ import './timerOgMinutter.less';
 interface OwnProps {
     label: string;
     onChange: (value: string) => void;
-    onBlur: () => void;
+    onBlur?: () => void;
     value: string;
     error?: string;
 }
