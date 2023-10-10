@@ -1966,7 +1966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom@npm:^2.0.0":
+"@floating-ui/react-dom@npm:^2.0.0, @floating-ui/react-dom@npm:^2.0.2":
   version: 2.0.2
   resolution: "@floating-ui/react-dom@npm:2.0.2"
   dependencies:
@@ -1978,17 +1978,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react@npm:0.24.1":
-  version: 0.24.1
-  resolution: "@floating-ui/react@npm:0.24.1"
+"@floating-ui/react@npm:0.25.4":
+  version: 0.25.4
+  resolution: "@floating-ui/react@npm:0.25.4"
   dependencies:
-    "@floating-ui/react-dom": ^2.0.0
-    aria-hidden: ^1.1.3
+    "@floating-ui/react-dom": ^2.0.2
+    "@floating-ui/utils": ^0.1.1
     tabbable: ^6.0.1
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 89e525412a5f71be1437ce74a3a76f4a6c771074e1dca62dddf11062dd9eca7b967091906c369427a0c8f9c9a7c6c7ae06525917e6809d60d832443a4acfc3f3
+  checksum: 816a0aa5bfc122c147e073563c0888333bdf58e79972757e37095c788323c8e87ace18d9196d95be8b8f4fe11d90cdeec36b23e5373a791a71a7873bf805590f
   languageName: node
   linkType: hard
 
@@ -2519,10 +2519,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^4.12.1":
-  version: 4.12.1
-  resolution: "@navikt/aksel-icons@npm:4.12.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F4.12.1%2F1055d322e956e073b83dca8e8b3a6be62879e1f1"
-  checksum: 7c4d671c1cda7fed95f3d740a60cbc1c9885518c04073b2636430322da18b4b4e4dbb48af9be87bb707880c3df5745d890e692fadaf435a2aaf9a628ed9b5c89
+"@navikt/aksel-icons@npm:^5.6.4":
+  version: 5.6.4
+  resolution: "@navikt/aksel-icons@npm:5.6.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F5.6.4%2Fe19deb88ecdc0324aaaba732fd7c2c1b448ab514"
+  checksum: 2b96ae12902f5d0086a8a8e792dcd8ccfab1b03e83e4aae703e5d792f9854c5f342c88808404e214cfff57aacf2f53366c735faed23b29dc8426f9d1e18c45fb
   languageName: node
   linkType: hard
 
@@ -2543,22 +2543,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:4.12.1":
-  version: 4.12.1
-  resolution: "@navikt/ds-react@npm:4.12.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F4.12.1%2F75b4207b51213a3de620f9dd8b5b72095c741bbe"
+"@navikt/ds-react@npm:5.6.4":
+  version: 5.6.4
+  resolution: "@navikt/ds-react@npm:5.6.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F5.6.4%2Ffeb661e7668d7fe7af94685553735b29b92981fe"
   dependencies:
-    "@floating-ui/react": 0.24.1
-    "@navikt/aksel-icons": ^4.12.1
+    "@floating-ui/react": 0.25.4
+    "@navikt/aksel-icons": ^5.6.4
+    "@navikt/ds-tokens": ^5.6.4
     "@radix-ui/react-tabs": 1.0.0
     "@radix-ui/react-toggle-group": 1.0.0
     clsx: ^1.2.1
     date-fns: 2.29.3
     react-day-picker: 8.3.4
-    react-modal: 3.15.1
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: a680b5c6a9353d2b8be0f1ff6527703973709dbd231db63be5bc954ffc4e11efd52aade1d0787554240371278811025673c58fb817ec272b8ebe615e687f5edc
+  checksum: 590bea7ce6a14047886dc8c2cfda2a891ee50c87c7a59562c03d21e6617a0f4e060082f136f1ace5da672c13b7bc6ce2bae59dfc0e5edf8bcc77270390dc2dee
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-tokens@npm:^5.6.4":
+  version: 5.6.4
+  resolution: "@navikt/ds-tokens@npm:5.6.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F5.6.4%2F6c068cc57bd75e82926762432596a7da61892ab9"
+  checksum: 15f1972c3fe18f407e12bb2822f080fa5360e811fad4a4c171c903879073a92395e2f4953b3449788846b44b962f71206d37d3eb5177c4b0d9f5fc1b8df5c1aa
   languageName: node
   linkType: hard
 
@@ -6490,7 +6497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aria-hidden@npm:^1.1.1, aria-hidden@npm:^1.1.3":
+"aria-hidden@npm:^1.1.1":
   version: 1.2.3
   resolution: "aria-hidden@npm:1.2.3"
   dependencies:
@@ -13048,7 +13055,7 @@ __metadata:
     "@babel/runtime": 7.22.11
     "@navikt/ds-css": 4.12.3
     "@navikt/ds-icons": 3.4.3
-    "@navikt/ds-react": 4.12.1
+    "@navikt/ds-react": 5.6.4
     "@navikt/fnrvalidator": 1.3.3
     "@navikt/ft-plattform-komponenter": 2.3.0
     "@navikt/k9-fe-period-utils": 1.0.8
@@ -16444,21 +16451,6 @@ __metadata:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
-  languageName: node
-  linkType: hard
-
-"react-modal@npm:3.15.1":
-  version: 3.15.1
-  resolution: "react-modal@npm:3.15.1"
-  dependencies:
-    exenv: ^1.2.0
-    prop-types: ^15.7.2
-    react-lifecycles-compat: ^3.0.0
-    warning: ^4.0.3
-  peerDependencies:
-    react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
-    react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
-  checksum: ee99ca312c35bcec9ef0868babf970ce03c52801731e29be336bb6bdc867a1ecf00a73e1fb5bc3b1b1ef66ceb0c9b4a0199fadb85b1b9829f731409951b018f0
   languageName: node
   linkType: hard
 
