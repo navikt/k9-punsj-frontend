@@ -5,10 +5,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-
-import { Alert } from '@navikt/ds-react';
-
-import Kopier from 'app/components/kopier/Kopier';
+import { Alert, CopyButton, HStack } from '@navikt/ds-react';
 import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import {
@@ -22,7 +19,6 @@ import { formattereTidspunktFraUTCTilGMT, getCountryList, periodToFormattedStrin
 import intlHelper from 'app/utils/intlUtils';
 import { formatereTekstMedTimerOgMinutter, formattereDatoFraUTCTilGMT } from 'app/utils/timeUtils';
 import { formatDato, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
-
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
 import './soknadKvittering.less';
@@ -120,8 +116,10 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
                     {annenSokerIdent && (
                         <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
+                            <HStack gap="1" align="center">
+                                {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
+                                <CopyButton size="small" copyText={annenSokerIdent} />
+                            </HStack>
                         </p>
                     )}
                 </div>

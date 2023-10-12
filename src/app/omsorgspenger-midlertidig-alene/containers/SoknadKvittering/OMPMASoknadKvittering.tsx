@@ -5,12 +5,10 @@ import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
 import { connect } from 'react-redux';
-
-import Kopier from 'app/components/kopier/Kopier';
 import LabelValue from 'app/components/skjema/LabelValue';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
+import { CopyButton, HStack } from '@navikt/ds-react';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
@@ -49,8 +47,10 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
                     {annenSokerIdent && (
                         <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
+                            <HStack gap="1" align="center">
+                                {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
+                                <CopyButton size="small" copyText={annenSokerIdent} />
+                            </HStack>
                         </p>
                     )}
                 </div>

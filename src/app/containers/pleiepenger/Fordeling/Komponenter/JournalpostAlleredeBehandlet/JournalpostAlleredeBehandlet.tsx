@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedMessage, IntlShape, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-
-import { Alert, Button } from '@navikt/ds-react';
-
-import Kopier from 'app/components/kopier/Kopier';
+import { Alert, Button, CopyButton, HStack } from '@navikt/ds-react';
 import { IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../../models/types/IdentState';
@@ -55,12 +51,12 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
         <div className="journalpostAlleredeBehandlet__container">
             <Alert variant="info">{intlHelper(intl, 'fordeling.kanikkesendeinn')}</Alert>
             <VerticalSpacer thirtyTwoPx />
-            <div>
+            <HStack gap="1" align="center">
                 <b>
                     <FormattedMessage id="journalpost.norskIdent" />
                 </b>{' '}
-                {sokersIdent} <Kopier verdi={sokersIdent} />
-            </div>
+                {sokersIdent} <CopyButton size="small" copyText={sokersIdent} />
+            </HStack>
             <VerticalSpacer eightPx />
             {!fellesState.kopierJournalpostSuccess && (
                 <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />

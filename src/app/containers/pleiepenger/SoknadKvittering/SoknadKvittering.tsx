@@ -5,8 +5,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
-
-import Kopier from 'app/components/kopier/Kopier';
+import { CopyButton, HStack } from '@navikt/ds-react';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -200,8 +199,10 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
                     {annenSokerIdent && (
                         <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
+                            <HStack gap="1" align="center">
+                                {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
+                                <CopyButton size="small" copyText={annenSokerIdent} />
+                            </HStack>
                         </p>
                     )}
                 </div>

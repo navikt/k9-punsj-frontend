@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import { Label } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
-
+import { CopyButton, HStack } from '@navikt/ds-react';
 import intlHelper from '../../utils/intlUtils';
-import Kopier from '../kopier/Kopier';
+// import Kopier from '../kopier/Kopier';
 import './labelValue.less';
 
 type ILabelValueProps = {
@@ -28,11 +28,14 @@ const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
                 'horisontal-label': retning === 'horisontal',
             })}
         >
-            <Label htmlFor={`journalpostpanel.${text || labelTextId}.label`}>
-                {text || intlHelper(intl, labelTextId || '')}
-            </Label>
-            <div id={`journalpostpanel.${text || labelTextId}.value`}>{value}</div>
-            {visKopier && <Kopier verdi={value} />}
+            <HStack gap="1" align="center">
+                <Label htmlFor={`journalpostpanel.${text || labelTextId}.label`}>
+                    {text || intlHelper(intl, labelTextId || '')}
+                </Label>
+
+                <div id={`journalpostpanel.${text || labelTextId}.value`}>{value}</div>
+                {visKopier && value && <CopyButton size="small" copyText={value} />}
+            </HStack>
         </div>
     );
 };
