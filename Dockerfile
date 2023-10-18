@@ -1,7 +1,7 @@
 FROM nginx as builder
 
 # Copy necessary files for envsubst
-COPY dist/envVariablesForEnvSubst.json /dist/
+COPY dist/envVariablesForEnvSubst.json /
 COPY server.nginx /
 
 # Set and substitute environment variables
@@ -9,7 +9,7 @@ RUN export APP_HOSTNAME="${HOSTNAME:-localhost}" \
     && export APP_PORT="${APP_PORT:-443}" \
     && export APP_NAME="${APP_NAME:-devimg}" \
     && envsubst '$APP_PORT $APP_HOSTNAME $APP_NAME $OIDC_AUTH_PROXY' < server.nginx > default.conf \
-    && envsubst < /dist/envVariablesForEnvSubst.json > env.json
+    && envsubst < envVariablesForEnvSubst.json > env.json
 
 # Use security hardened nginx image
 FROM cgr.dev/chainguard/nginx:latest
