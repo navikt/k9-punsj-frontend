@@ -76,6 +76,9 @@
         "uuid": "9.0.0",
         "yup": "1.2.0"
     },
+    "resolutions": {
+        "@babel/traverse": "7.23.2"
+    },
     "scripts": {
         "dev": "yarn run dev-env-variables node src/build/scripts/start-dev.js",
         "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true",
@@ -185,10 +188,6 @@
         "webpack-bundle-analyzer": "4.9.1",
         "webpack-cli": "5.1.4",
         "webpack-dev-server": "4.15.1"
-    },
-    "resolutions": {
-        "@navikt/ds-react": "4.12.1",
-        "@navikt/ds-css": "4.12.3"
     },
     "browserslist": [
         ">0.2%",
