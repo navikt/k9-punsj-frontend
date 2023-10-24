@@ -5,7 +5,7 @@
     "repository": "https://github.com/navikt/k9-punsj-frontend",
     "license": "MIT",
     "dependencies": {
-        "@babel/runtime": "7.22.11",
+        "@babel/runtime": "7.23.2",
         "@navikt/ds-css": "4.12.3",
         "@navikt/ds-icons": "3.4.3",
         "@navikt/ds-react": "4.12.1",
@@ -77,6 +77,9 @@
         "uuid": "9.0.0",
         "yup": "1.2.0"
     },
+    "resolutions": {
+        "@babel/traverse": "7.23.2"
+    },
     "scripts": {
         "dev": "yarn run dev-env-variables node src/build/scripts/start-dev.js",
         "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true",
@@ -96,12 +99,12 @@
         "docker-down": "docker-compose -f dev/docker-compose.yml down"
     },
     "devDependencies": {
-        "@babel/cli": "7.22.10",
-        "@babel/core": "7.22.11",
-        "@babel/plugin-transform-runtime": "7.22.10",
-        "@babel/preset-env": "7.22.14",
+        "@babel/cli": "7.23.0",
+        "@babel/core": "7.23.2",
+        "@babel/plugin-transform-runtime": "7.23.2",
+        "@babel/preset-env": "7.23.2",
         "@babel/preset-react": "7.22.5",
-        "@babel/preset-typescript": "7.22.11",
+        "@babel/preset-typescript": "7.23.2",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.11",
         "@sentry/cli": "2.20.6",
         "@storybook/addon-actions": "7.4.0",
@@ -168,7 +171,7 @@
         "msw": "1.3.0",
         "nav-frontend-ekspanderbartpanel-style": "2.0.2",
         "nav-frontend-skjema-style": "3.0.3",
-        "postcss": "^8.4.29",
+        "postcss": "^8.4.31",
         "postcss-less": "6.0.0",
         "postcss-loader": "7.3.3",
         "prettier": "3.0.3",
@@ -186,10 +189,6 @@
         "webpack-bundle-analyzer": "4.9.1",
         "webpack-cli": "5.1.4",
         "webpack-dev-server": "4.15.1"
-    },
-    "resolutions": {
-        "@navikt/ds-react": "4.12.1",
-        "@navikt/ds-css": "4.12.3"
     },
     "browserslist": [
         ">0.2%",

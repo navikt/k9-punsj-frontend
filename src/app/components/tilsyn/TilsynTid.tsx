@@ -11,9 +11,10 @@ interface OwnProps {
     toggleModal: () => void;
     selectedDates?: Date[];
     heading?: string;
+    clearSelectedDates?: () => void;
 }
 
-const TilsynTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => {
+const TilsynTid = ({ lagre, heading, selectedDates, toggleModal, clearSelectedDates = () => {} }: OwnProps) => {
     const [timer, setTimer] = useState('');
     const [minutter, setMinutter] = useState('');
     const [error, setError] = useState('');
@@ -58,12 +59,20 @@ const TilsynTid = ({ lagre, heading, selectedDates, toggleModal }: OwnProps) => 
                             if (!error) {
                                 lagre(payload);
                                 toggleModal();
+                                clearSelectedDates();
                             }
                         }}
                     >
                         Lagre
                     </Button>
-                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={toggleModal}>
+                    <Button
+                        style={{ flexGrow: 1 }}
+                        variant="tertiary"
+                        onClick={() => {
+                            toggleModal();
+                            clearSelectedDates();
+                        }}
+                    >
                         Avbryt
                     </Button>
                 </div>
