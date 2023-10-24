@@ -4,7 +4,12 @@ import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import { timerOgMinutter } from 'app/rules/yup';
-import { Tidsformat, konverterPeriodeTilTimerOgMinutter } from 'app/utils';
+import {
+    Tidsformat,
+    konverterPeriodeTilTimerOgMinutter,
+    timerMedDesimalerTilTimerOgMinutter,
+    timerOgMinutterTilTimerMedDesimaler,
+} from 'app/utils';
 
 import TimerOgMinutter from './TimerOgMinutter';
 import TimerMedDesimaler from './TimerMedDesimaler';
@@ -73,7 +78,32 @@ const FaktiskOgNormalTid = ({
                     label="Hvordan vil du oppgi arbeidstid?"
                     defaultValue={Tidsformat.TimerOgMin}
                     size="small"
-                    onChange={(v: Tidsformat) => setTidsformat(v)}
+                    onChange={(v: Tidsformat) => {
+                        setTidsformat(v);
+                        if (v === Tidsformat.Desimaler) {
+                            const normalt = timerOgMinutterTilTimerMedDesimaler({
+                                timer: normaltTimer || '0',
+                                minutter: normaltMinutter || '0',
+                            });
+                            const faktisk = timerOgMinutterTilTimerMedDesimaler({
+                                timer: faktiskTimer || '0',
+                                minutter: faktiskMinutter || '0',
+                            });
+
+                            setNormaltDesimaler(normalt);
+                            setFaktiskDesimaler(faktisk);
+                        }
+
+                        if (v === Tidsformat.TimerOgMin) {
+                            const normalt = timerMedDesimalerTilTimerOgMinutter(Number(normaltDesimaler));
+                            const faktisk = timerMedDesimalerTilTimerOgMinutter(Number(faktiskDesimaler));
+
+                            setNormaltTimer(normalt[0]);
+                            setNormaltMinutter(normalt[1]);
+                            setFaktiskTimer(faktisk[0]);
+                            setFaktiskMinutter(faktisk[1]);
+                        }
+                    }}
                     value={tidsformat}
                 >
                     <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>

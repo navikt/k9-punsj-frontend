@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl';
 import { Checkbox, ToggleGroup } from '@navikt/ds-react';
 
 import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
-import { Tidsformat } from 'app/utils';
+import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 
 import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
@@ -26,6 +26,10 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [, periodeTomMeta] = useField(`${name}.periode.tom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
+    const [normaltField] = useField(`${name}.jobberNormaltPerDag`);
+    const [faktiskField] = useField(`${name}.faktiskArbeidPerDag`);
+    const [normaltDesimalerField] = useField(`${name}.jobberNormaltTimerPerDag`);
+    const [faktiskDesimalerField] = useField(`${name}.faktiskArbeidTimerPerDag`);
     const intl = useIntl();
     const velgSoknadsperiode = (periode: IPeriode) => {
         formik.setFieldValue(`${name}.periode`, periode);
@@ -71,6 +75,23 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             size="small"
                             onChange={(v: Tidsformat) => {
                                 formik.setFieldValue(`${name}.tidsformat`, v);
+                                if (v === Tidsformat.Desimaler) {
+                                    const normalDesimaler = timerOgMinutterTilTimerMedDesimaler(normaltField.value);
+                                    const faktiskDesimaler = timerOgMinutterTilTimerMedDesimaler(faktiskField.value);
+                                    formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, normalDesimaler);
+                                    formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, faktiskDesimaler);
+                                }
+
+                                if (v === Tidsformat.TimerOgMin) {
+                                    const normalTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
+                                        normaltDesimalerField.value,
+                                    );
+                                    const faktiskTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
+                                        faktiskDesimalerField.value,
+                                    );
+                                    formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, normalTimerOgMinutter);
+                                    formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, faktiskTimerOgMinutter);
+                                }
                             }}
                             value={tidsformatField.value}
                         >

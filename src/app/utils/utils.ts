@@ -136,7 +136,13 @@ export const getModiaPath = (fødselsnummer?: string) => {
     return null;
 };
 
-function timerMedDesimalerTilTimerOgMinutter(timerOgDesimaler = 0): [string, string] {
+export function timerOgMinutterTilTimerMedDesimaler({ timer, minutter }: { timer: string; minutter: string }): string {
+    const totalMinutes = parseInt(timer, 10) * 60 + parseInt(minutter, 10);
+    const timerOgDesimaler = totalMinutes / 60;
+    return String(timerOgDesimaler);
+}
+
+export function timerMedDesimalerTilTimerOgMinutter(timerOgDesimaler = 0): [string, string] {
     const totalMinutes = Math.round(timerOgDesimaler * 60);
     const minutes = String(totalMinutes % 60);
     const timer = String(Math.floor(totalMinutes / 60));
