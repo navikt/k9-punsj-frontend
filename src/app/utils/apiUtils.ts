@@ -35,6 +35,27 @@ export async function get(
     return response;
 }
 
+export async function getOrgInfo(
+    orgnummer: string,
+    callback: (response: Response, responseData?: any) => Promise<Response> | void,
+) {
+    const url = `https://data.brreg.no/enhetsregisteret/api/enheter/${orgnummer}`;
+    const headers = {
+        Accept: 'application/vnd.brreg.enhetsregisteret.enhet.v2+json;charset=UTF-8',
+    };
+    const response = await fetch(url, {
+        method: 'GET',
+        headers,
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        callback(response, data);
+    } else {
+        await callback(response);
+    }
+}
+
 export async function post<BodyType>(
     path: ApiPath,
     parameters?: any,

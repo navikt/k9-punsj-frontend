@@ -3023,7 +3023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^5.2.1":
+"@navikt/aksel-icons@npm:^5.2.1, @navikt/aksel-icons@npm:^5.7.6":
   version: 5.7.6
   resolution: "@navikt/aksel-icons@npm:5.7.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F5.7.6%2F0c3fc6f5044f60eb47358df7412be01365b82622"
   checksum: bb2e4e652682992716a010f2a1f58bbde3ffad773dedee079f2af3ab3f8d45580cb2fa97ed446d7b4d36818e3d9b0bf0269736b9dbe51f3e43ab36042531ec18
@@ -13648,6 +13648,7 @@ __metadata:
     "@babel/preset-react": 7.22.5
     "@babel/preset-typescript": 7.23.2
     "@babel/runtime": 7.23.2
+    "@navikt/aksel-icons": ^5.7.6
     "@navikt/ds-css": 4.12.3
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 4.12.1

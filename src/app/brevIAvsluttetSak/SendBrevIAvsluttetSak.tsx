@@ -65,7 +65,10 @@ const SendBrevIAvsluttetSak = () => {
                 <TextField
                     className="fnrInput"
                     label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     onChange={(event) => {
                         const { value } = event.target;
                         setSøkerId(value);

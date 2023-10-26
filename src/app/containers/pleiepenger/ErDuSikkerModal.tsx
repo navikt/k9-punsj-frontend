@@ -30,6 +30,7 @@ const ErDuSikkerModal = (props: WrappedComponentProps & IErDuSikkerModalProps) =
                         onSubmit();
                         onClose();
                     }}
+                    type="button"
                 >
                     {intlHelper(intl, submitKnappText)}
                 </Button>

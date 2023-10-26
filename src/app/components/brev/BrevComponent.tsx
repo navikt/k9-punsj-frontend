@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-
+import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
 
 import { ApiPath, URL_BACKEND } from 'app/apiConfig';
@@ -23,7 +23,6 @@ import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
-import SendIcon from './SendIcon';
 import './brev.less';
 import dokumentMalType from './dokumentMalType';
 
@@ -36,7 +35,7 @@ const previewMessage = (
 ) => {
     const mottaker = {
         type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
-        id: values.mottaker,
+        id: values.velgAnnetMottaker ? values.orgNummer : values.mottaker,
     };
 
     const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
@@ -99,6 +98,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [forrigeSendteBrevHash, setForrigeSendteBrevHash] = useState('');
     const [visSammeBrevError, setVisSammeBrevError] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState<boolean>(false);
+    const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
 
     useEffect(() => {
         fetch(`${URL_BACKEND()}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
@@ -111,6 +111,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                 return setHentBrevmalerError(true);
             })
             .catch((error) => {
+                // eslint-disable-next-line no-console
                 console.log(error);
                 setHentBrevmalerError(true);
             });
@@ -148,6 +149,8 @@ const BrevComponent: React.FC<BrevProps> = ({
                 [BrevFormKeys.brevmalkode]: '',
                 [BrevFormKeys.mottaker]: '',
                 [BrevFormKeys.fritekst]: '',
+                [BrevFormKeys.velgAnnetMottaker]: false,
+                [BrevFormKeys.orgNummer]: '',
                 [BrevFormKeys.fritekstbrev]: {
                     overskrift: '',
                     brødtekst: '',
@@ -155,12 +158,15 @@ const BrevComponent: React.FC<BrevProps> = ({
             }}
             onSubmit={(values, actions) => {
                 setBrevErSendt(false);
+
                 const mottaker = {
                     type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
-                    id: values.mottaker,
+                    id: values.velgAnnetMottaker ? values.orgNummer : values.mottaker,
                 };
+
                 const brev = new Brev(values, søkerId, mottaker, sakstype, values.brevmalkode, journalpostId, fagsakId);
                 const brevHash = hash(brev);
+
                 if (brevHash !== forrigeSendteBrevHash) {
                     setVisSammeBrevError(false);
                     post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
@@ -185,7 +191,7 @@ const BrevComponent: React.FC<BrevProps> = ({
             }}
         >
             {({ values, isSubmitting, handleSubmit }) => (
-                <div className="brev">
+                <>
                     <Modal
                         className="modalContainer"
                         key="erdusikkerpåatsendebrevmodal"
@@ -205,82 +211,93 @@ const BrevComponent: React.FC<BrevProps> = ({
                         />
                     </Modal>
                     <Form>
-                        <MalVelger
-                            resetBrevStatus={() => {
-                                setBrevErSendt(false);
-                                setSendBrevFeilet(false);
-                            }}
-                            brevmaler={brevmaler}
-                        />
-
-                        <MottakerVelger
-                            resetBrevStatus={() => {
-                                setBrevErSendt(false);
-                                setSendBrevFeilet(false);
-                            }}
-                            aktørId={aktørId}
-                            person={person}
-                            arbeidsgivereMedNavn={arbeidsgivereMedNavn}
-                        />
-
-                        {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
-                            <InnhentDokumentasjonMal
-                                setVisBrevIkkeSendtInfoboks={() =>
-                                    setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
-                                }
+                        <div className="brev">
+                            <MalVelger
+                                resetBrevStatus={() => {
+                                    setBrevErSendt(false);
+                                    setSendBrevFeilet(false);
+                                }}
+                                brevmaler={brevmaler}
                             />
-                        )}
-                        {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
-                            <GenereltFritekstbrevMal
-                                setVisBrevIkkeSendtInfoboks={() =>
-                                    setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
-                                }
+
+                            <MottakerVelger
+                                resetBrevStatus={() => {
+                                    setBrevErSendt(false);
+                                    setSendBrevFeilet(false);
+                                }}
+                                setOrgInfoPending={(value: boolean) => {
+                                    setOrgInfoPending(value);
+                                }}
+                                orgInfoPending={orgInfoPending}
+                                aktørId={aktørId}
+                                person={person}
+                                arbeidsgivereMedNavn={arbeidsgivereMedNavn}
                             />
-                        )}
-                        <VerticalSpacer sixteenPx />
-                        <div className="buttonRow">
+
+                            {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
+                                <InnhentDokumentasjonMal
+                                    setVisBrevIkkeSendtInfoboks={() =>
+                                        setVisBrevIkkeSendtInfoboks &&
+                                        setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                    }
+                                />
+                            )}
+                            {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
+                                <GenereltFritekstbrevMal
+                                    setVisBrevIkkeSendtInfoboks={() =>
+                                        setVisBrevIkkeSendtInfoboks &&
+                                        setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                    }
+                                />
+                            )}
+                            <VerticalSpacer sixteenPx />
+
+                            {values.brevmalkode && (
+                                <Button
+                                    size="small"
+                                    type="button"
+                                    variant="tertiary"
+                                    icon={<FileSearchIcon aria-hidden />}
+                                    onClick={() => previewMessage(values, aktørId, sakstype, journalpostId, fagsakId)}
+                                >
+                                    {intl.formatMessage({ id: 'Messages.Preview' })}
+                                </Button>
+                            )}
+
+                            <div className="brevStatusContainer">
+                                {brevErSendt && (
+                                    <Alert variant="success" size="medium" fullWidth inline>
+                                        Brev sendt! Du kan nå sende nytt brev til annen mottaker.
+                                    </Alert>
+                                )}
+                                {sendBrevFeilet && (
+                                    <Alert variant="error" size="medium" fullWidth inline>
+                                        Sending av brev feilet.
+                                    </Alert>
+                                )}
+                                {visSammeBrevError && (
+                                    <Alert variant="error" size="medium" fullWidth inline>
+                                        Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
+                                    </Alert>
+                                )}
+                            </div>
+                        </div>
+                        <div className="mt-7 pb-20">
                             <Button
-                                variant="secondary"
+                                variant="primary"
                                 className="sendBrevButton"
                                 onClick={() => setVisErDuSikkerModal(true)}
                                 size="small"
-                                loading={isSubmitting}
-                                disabled={isSubmitting}
+                                loading={isSubmitting || orgInfoPending}
+                                disabled={isSubmitting || orgInfoPending}
                                 type="button"
-                                icon={<SendIcon />}
+                                icon={<PaperplaneIcon />}
                             >
                                 {intl.formatMessage({ id: 'Messages.Submit' })}
                             </Button>
-                            {values.brevmalkode && (
-                                <button
-                                    type="button"
-                                    onClick={() => previewMessage(values, aktørId, sakstype, journalpostId, fagsakId)}
-                                    className="previewLink lenke lenke--frittstaende"
-                                >
-                                    {intl.formatMessage({ id: 'Messages.Preview' })}
-                                </button>
-                            )}
-                        </div>
-
-                        <div className="brevStatusContainer">
-                            {brevErSendt && (
-                                <Alert variant="success" size="medium" fullWidth inline>
-                                    Brev sendt! Du kan nå sende nytt brev til annen mottaker.
-                                </Alert>
-                            )}
-                            {sendBrevFeilet && (
-                                <Alert variant="error" size="medium" fullWidth inline>
-                                    Sending av brev feilet.
-                                </Alert>
-                            )}
-                            {visSammeBrevError && (
-                                <Alert variant="error" size="medium" fullWidth inline>
-                                    Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
-                                </Alert>
-                            )}
                         </div>
                     </Form>
-                </div>
+                </>
             )}
         </Formik>
     );

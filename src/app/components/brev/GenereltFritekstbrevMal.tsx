@@ -46,7 +46,7 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                                 setFieldValue(field.name, event.target.value);
                                 setVisBrevIkkeSendtInfoboks();
                             }}
-                            label={intl.formatMessage({ id: 'Messages.Fritekst' })}
+                            label={intl.formatMessage({ id: 'Messages.InnholdIBrev' })}
                             maxLength={100000}
                             error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         />
