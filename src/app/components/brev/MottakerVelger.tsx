@@ -61,7 +61,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             }
         });
     };
-    if (values.velgAnnetMottaker === false && orgInfoPending) {
+    if (values.velgAnnenMottaker === false && orgInfoPending) {
         setOrgInfoPending(false);
     }
     return (
@@ -70,7 +70,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             <Field
                 name={BrevFormKeys.mottaker}
                 validate={(value: string) => {
-                    if (values.velgAnnetMottaker) {
+                    if (values.velgAnnenMottaker) {
                         return undefined;
                     }
                     return requiredValue(value);
@@ -87,7 +87,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             setFieldValue(field.name, event.target.value);
                             resetBrevStatus();
                         }}
-                        disabled={values.velgAnnetMottaker === true}
+                        disabled={values.velgAnnenMottaker === true}
                     >
                         <option disabled key="default" value="" label="">
                             Velg
@@ -104,15 +104,15 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                 )}
             </Field>
             <VerticalSpacer sixteenPx />
-            <Field name={BrevFormKeys.velgAnnetMottaker}>
+            <Field name={BrevFormKeys.velgAnnenMottaker}>
                 {({ field }: FieldProps) => (
                     <Checkbox {...field}>
-                        <FormattedMessage id="Messages.velgAnnetMottaker" />
+                        <FormattedMessage id="Messages.velgAnnenMottaker" />
                     </Checkbox>
                 )}
             </Field>
-            {values.velgAnnetMottaker && (
-                <div className="annetMottakerInfo">
+            {values.velgAnnenMottaker && (
+                <div className="flex">
                     <Field
                         name={BrevFormKeys.orgNummer}
                         validate={(value: string) => {
@@ -158,7 +158,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         <VStack gap="2" className="ml-7">
                             <BodyShort>
                                 <span className="font-extrabold">
-                                    <FormattedMessage id="Messages.annetMottaker.navn" />
+                                    <FormattedMessage id="Messages.annenMottaker.navn" />
                                 </span>
                             </BodyShort>
                             {orgInfoPending && <Loader size="small" title="venter..." />}
@@ -168,7 +168,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                                     {orgInfo.navn}{' '}
                                     {orgInfo.konkurs && (
                                         <span className="text-red-600">
-                                            <FormattedMessage id="Messages.annetMottaker.konkurs" />
+                                            <FormattedMessage id="Messages.annenMottaker.konkurs" />
                                         </span>
                                     )}
                                 </BodyShort>

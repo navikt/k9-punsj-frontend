@@ -34,10 +34,10 @@ const previewMessage = (
     fagsakId?: string,
 ) => {
     const mottaker = {
-        type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
-        id: values.velgAnnetMottaker ? values.orgNummer : values.mottaker,
+        type: values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR',
+        id: values.velgAnnenMottaker ? values.orgNummer : values.mottaker,
     };
-
+    console.log('mottaker: ', mottaker);
     const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
 
     fetch(`${URL_BACKEND()}/api/k9-formidling/brev/forhaandsvis`, {
@@ -149,7 +149,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                 [BrevFormKeys.brevmalkode]: '',
                 [BrevFormKeys.mottaker]: '',
                 [BrevFormKeys.fritekst]: '',
-                [BrevFormKeys.velgAnnetMottaker]: false,
+                [BrevFormKeys.velgAnnenMottaker]: false,
                 [BrevFormKeys.orgNummer]: '',
                 [BrevFormKeys.fritekstbrev]: {
                     overskrift: '',
@@ -160,10 +160,10 @@ const BrevComponent: React.FC<BrevProps> = ({
                 setBrevErSendt(false);
 
                 const mottaker = {
-                    type: values.mottaker === aktørId ? 'AKTØRID' : 'ORGNR',
-                    id: values.velgAnnetMottaker ? values.orgNummer : values.mottaker,
+                    type: values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR',
+                    id: values.velgAnnenMottaker ? values.orgNummer : values.mottaker,
                 };
-
+                console.log('mottaker: ', mottaker);
                 const brev = new Brev(values, søkerId, mottaker, sakstype, values.brevmalkode, journalpostId, fagsakId);
                 const brevHash = hash(brev);
 

@@ -1,7 +1,7 @@
 enum BrevFormKeys {
     brevmalkode = 'brevmalkode',
     mottaker = 'mottaker',
-    velgAnnetMottaker = 'velgAnnetMottaker',
+    velgAnnenMottaker = 'velgAnnenMottaker',
     orgNummer = 'orgNummer',
     fritekst = 'fritekst',
     fritekstbrev = 'fritekstbrev',
