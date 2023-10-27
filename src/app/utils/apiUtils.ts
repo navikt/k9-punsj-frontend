@@ -1,6 +1,6 @@
 import { String } from 'typescript-string-operations';
 
-import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
+import { ApiPath, URL_API, URL_AUTH_LOGIN, URL_BRREG } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 
@@ -39,7 +39,7 @@ export async function getOrgInfo(
     orgnummer: string,
     callback: (response: Response, responseData?: any) => Promise<Response> | void,
 ) {
-    const url = `https://data.brreg.no/enhetsregisteret/api/enheter/${orgnummer}`;
+    const url = URL_BRREG(orgnummer);
     const headers = {
         Accept: 'application/vnd.brreg.enhetsregisteret.enhet.v2+json;charset=UTF-8',
     };
