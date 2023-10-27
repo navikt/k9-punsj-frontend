@@ -1,7 +1,15 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { BodyShort, Checkbox, Select, TextField, VStack, Loader } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Checkbox,
+    Select,
+    TextField,
+    VStack,
+    Loader,
+    ErrorMessage as ErrorMesageDs,
+} from '@navikt/ds-react';
 
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
@@ -154,11 +162,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                                 </span>
                             </BodyShort>
                             {orgInfoPending && <Loader size="small" title="venter..." />}
-                            {errorOrgInfo && (
-                                <BodyShort>
-                                    <span className="text-red-600">{errorOrgInfo}</span>
-                                </BodyShort>
-                            )}
+                            {errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
                             {orgInfo && (
                                 <BodyShort>
                                     {orgInfo.navn}{' '}
