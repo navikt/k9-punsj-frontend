@@ -37,7 +37,7 @@ const previewMessage = (
         type: values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR',
         id: values.velgAnnenMottaker ? values.orgNummer : values.mottaker,
     };
-    console.log('mottaker: ', mottaker);
+
     const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
 
     fetch(`${URL_BACKEND()}/api/k9-formidling/brev/forhaandsvis`, {
@@ -163,7 +163,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                     type: values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR',
                     id: values.velgAnnenMottaker ? values.orgNummer : values.mottaker,
                 };
-                console.log('mottaker: ', mottaker);
+
                 const brev = new Brev(values, søkerId, mottaker, sakstype, values.brevmalkode, journalpostId, fagsakId);
                 const brevHash = hash(brev);
 
