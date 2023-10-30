@@ -59,8 +59,8 @@ const FaktiskOgNormalTid = ({
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
             {heading && <Heading size="medium">{heading}</Heading>}
-            <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
-                <div style={{ margin: '0 4.5rem 1.075rem 0' }}>
+            <div className="flex gap-4 mt-6">
+                <div>
                     <TimerOgMinutter
                         label="Normal arbeidstid"
                         onChangeTimer={setNormaltTimer}

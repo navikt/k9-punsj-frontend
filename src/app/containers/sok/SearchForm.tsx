@@ -146,8 +146,8 @@ export class SearchFormComponent extends React.Component<ISearchFormProps, ISear
                             )}
 
                         {journalpostRequestError?.message && (
-                            <Alert size="small" variant="warning">
-                                {journalpostRequestError.message}
+                            <Alert size="small" variant="error">
+                                <FormattedMessage id="søk.jp.internalServerError" />
                             </Alert>
                         )}
 

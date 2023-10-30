@@ -8,7 +8,7 @@ import { klassifiserDokument } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype } from 'app/utils';
+import { finnForkortelseForDokumenttype, getEnvironmentVariable } from 'app/utils';
 
 import KlassifiseringInfo from './KlassifiseringInfo';
 
@@ -24,7 +24,7 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
 
-    const { mutate, status, error, data } = useMutation({
+    const { mutate, status, error, isSuccess } = useMutation({
         mutationFn: () =>
             klassifiserDokument({
                 brukerIdent: identState.søkerId,
@@ -40,7 +40,7 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
 
     return (
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        <Modal open onClose={!disabled ? lukkModal : () => {}} aria-labelledby="modal-heading">
+        <Modal open onClose={lukkModal} closeButton={!disabled} aria-labelledby="modal-heading">
             <Modal.Content>
                 <>
                     <Heading spacing level="1" size="small" id="modal-heading">
@@ -53,9 +53,20 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                     <VerticalSpacer twentyPx />
                     <KlassifiseringInfo />
                     <VerticalSpacer twentyPx />
+                    {isSuccess && (
+                        <Alert variant="success" className="mb-2">
+                            Journalposten er nå ferdigstilt og du kan fortsette til LOS.
+                        </Alert>
+                    )}
 
-                    {data ? (
-                        <Button>Gå til LOS</Button>
+                    {isSuccess ? (
+                        <Button
+                            onClick={() => {
+                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            }}
+                        >
+                            Gå til LOS
+                        </Button>
                     ) : (
                         <div>
                             <Button
@@ -79,7 +90,6 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                     )}
                     <VerticalSpacer sixteenPx />
                     {error && <Alert variant="error">Noe gikk galt under lagring</Alert>}
-                    {data && <Alert variant="success">Sakstypen ble lagret til journalpost</Alert>}
                 </>
             </Modal.Content>
         </Modal>
