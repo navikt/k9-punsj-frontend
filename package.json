@@ -75,7 +75,8 @@
         "yup": "1.3.2"
     },
     "resolutions": {
-        "@babel/traverse": "7.23.2"
+        "@babel/traverse": "7.23.2",
+        "postcss": "8.4.31"
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node src/build/scripts/start-dev.js",
