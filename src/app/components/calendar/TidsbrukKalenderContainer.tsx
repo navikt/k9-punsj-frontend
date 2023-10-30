@@ -74,10 +74,9 @@ const TidsbrukKalenderContainer = ({
             {gyldigePerioderPerÅr.map(({ perioder, aar }) => {
                 const kalenderdagerIÅr = kalenderdagerForYear(aar);
                 return (
-                    <div className="mt-3">
+                    <div className="mt-3" key={aar}>
                         <TidsbrukKalenderÅr
                             aar={aar}
-                            key={aar}
                             perioder={perioder}
                             ModalContent={ModalContent}
                             dateContentRenderer={dateContentRenderer(kalenderdagerIÅr)}
