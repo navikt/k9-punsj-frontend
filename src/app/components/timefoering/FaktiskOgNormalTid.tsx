@@ -82,12 +82,12 @@ const FaktiskOgNormalTid = ({
                         setTidsformat(v);
                         if (v === Tidsformat.Desimaler) {
                             const normalt = timerOgMinutterTilTimerMedDesimaler({
-                                timer: normaltTimer || '0',
-                                minutter: normaltMinutter || '0',
+                                timer: normaltTimer,
+                                minutter: normaltMinutter,
                             });
                             const faktisk = timerOgMinutterTilTimerMedDesimaler({
-                                timer: faktiskTimer || '0',
-                                minutter: faktiskMinutter || '0',
+                                timer: faktiskTimer,
+                                minutter: faktiskMinutter,
                             });
 
                             setNormaltDesimaler(normalt);

@@ -139,14 +139,14 @@ export const getModiaPath = (fødselsnummer?: string) => {
 export function timerOgMinutterTilTimerMedDesimaler({ timer, minutter }: { timer: string; minutter: string }): string {
     const totalMinutes = parseInt(timer, 10) * 60 + parseInt(minutter, 10);
     const timerOgDesimaler = totalMinutes / 60;
-    return String(timerOgDesimaler);
+    return !Number.isNaN ? String(timerOgDesimaler) : '0';
 }
 
 export function timerMedDesimalerTilTimerOgMinutter(timerOgDesimaler = 0): [string, string] {
     const totalMinutes = Math.round(timerOgDesimaler * 60);
-    const minutes = String(totalMinutes % 60);
-    const timer = String(Math.floor(totalMinutes / 60));
-    return [timer, minutes];
+    const minutes = totalMinutes % 60;
+    const timer = Math.floor(totalMinutes / 60);
+    return [!Number.isNaN ? String(timer) : '0', !Number.isNaN ? String(minutes) : '0'];
 }
 export const konverterPeriodeTilTimerOgMinutter = (periode: Periodeinfo<IArbeidstidPeriodeMedTimer>) => {
     const { tidsformat, faktiskArbeidTimerPerDag, jobberNormaltTimerPerDag, jobberNormaltPerDag, faktiskArbeidPerDag } =

@@ -76,21 +76,33 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             onChange={(v: Tidsformat) => {
                                 formik.setFieldValue(`${name}.tidsformat`, v);
                                 if (v === Tidsformat.Desimaler) {
-                                    const normalDesimaler = timerOgMinutterTilTimerMedDesimaler(normaltField.value);
-                                    const faktiskDesimaler = timerOgMinutterTilTimerMedDesimaler(faktiskField.value);
+                                    const normalDesimaler = timerOgMinutterTilTimerMedDesimaler({
+                                        timer: normaltField.value.timer,
+                                        minutter: normaltField.value.minutter,
+                                    });
+                                    const faktiskDesimaler = timerOgMinutterTilTimerMedDesimaler({
+                                        timer: faktiskField.value.timer,
+                                        minutter: faktiskField.value.minutter,
+                                    });
                                     formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, normalDesimaler);
                                     formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, faktiskDesimaler);
                                 }
 
                                 if (v === Tidsformat.TimerOgMin) {
                                     const normalTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
-                                        normaltDesimalerField.value,
+                                        Number(normaltDesimalerField.value),
                                     );
                                     const faktiskTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
-                                        faktiskDesimalerField.value,
+                                        Number(faktiskDesimalerField.value),
                                     );
-                                    formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, normalTimerOgMinutter);
-                                    formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, faktiskTimerOgMinutter);
+                                    formik.setFieldValue(`${name}.jobberNormaltPerDag`, {
+                                        timer: normalTimerOgMinutter[0],
+                                        minutter: normalTimerOgMinutter[1],
+                                    });
+                                    formik.setFieldValue(`${name}.faktiskArbeidPerDag`, {
+                                        timer: faktiskTimerOgMinutter[0],
+                                        minutter: faktiskTimerOgMinutter[1],
+                                    });
                                 }
                             }}
                             value={tidsformatField.value}
