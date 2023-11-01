@@ -3,7 +3,7 @@ import { uniqueId } from 'lodash';
 import { Input } from 'nav-frontend-skjema';
 import React from 'react';
 
-import { Detail, ErrorMessage, Label } from '@navikt/ds-react';
+import { ErrorMessage, Label } from '@navikt/ds-react';
 
 import './timerOgMinutter.less';
 
@@ -23,7 +23,9 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) 
     return (
         <div className="timer-og-minutter min-w-[8rem]">
             <div>
-                <Label size="small">{label}</Label>
+                <Label size="small" htmlFor={timerId}>
+                    {label}
+                </Label>
             </div>
             <div className="tid-container">
                 <div className="input-row">
@@ -39,11 +41,6 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) 
                             onBlur={onBlur}
                             feil={!!error}
                         />
-                        <div>
-                            <label htmlFor={timerId} className="sr-only">
-                                <Detail>Timer</Detail>
-                            </label>
-                        </div>
                     </div>
                 </div>
                 {error && <ErrorMessage size="small">{error}</ErrorMessage>}

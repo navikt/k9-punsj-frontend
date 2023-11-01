@@ -137,7 +137,7 @@ export const getModiaPath = (fødselsnummer?: string) => {
 };
 
 export function timerOgMinutterTilTimerMedDesimaler({ timer, minutter }: { timer: string; minutter: string }): string {
-    const totalMinutes = parseInt(timer, 10) * 60 + parseInt(minutter, 10);
+    const totalMinutes = parseInt(timer || '0', 10) * 60 + parseInt(minutter || '0', 10);
     const timerOgDesimaler = totalMinutes / 60;
     if (Number.isNaN(timerOgDesimaler)) {
         return '0';
