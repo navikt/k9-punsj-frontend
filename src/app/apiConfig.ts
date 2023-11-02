@@ -89,4 +89,3 @@ export enum ApiPath {
 
 export const URL_AUTH_CHECK = () => `${URL_BACKEND()}/me`;
 export const URL_AUTH_LOGIN = () => `${URL_BACKEND()}/login?redirect_uri={uri}`;
-export const URL_BRREG = (orgnummer: string) => `https://data.brreg.no/enhetsregisteret/api/enheter/${orgnummer}`;

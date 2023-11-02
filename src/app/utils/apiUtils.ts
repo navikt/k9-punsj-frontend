@@ -1,6 +1,6 @@
 import { String } from 'typescript-string-operations';
 
-import { ApiPath, URL_API, URL_AUTH_LOGIN, URL_BRREG } from 'app/apiConfig';
+import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { getLocation, redirect } from 'app/utils/browserUtils';
 
@@ -33,27 +33,6 @@ export async function get(
         await callbackIfAuth(response, jsonData);
     }
     return response;
-}
-
-export async function getOrgInfo(
-    orgnummer: string,
-    callback: (response: Response, responseData?: any) => Promise<Response> | void,
-) {
-    const url = URL_BRREG(orgnummer);
-    const headers = {
-        Accept: 'application/vnd.brreg.enhetsregisteret.enhet.v2+json;charset=UTF-8',
-    };
-    const response = await fetch(url, {
-        method: 'GET',
-        headers,
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        callback(response, data);
-    } else {
-        await callback(response);
-    }
 }
 
 export async function post<BodyType>(

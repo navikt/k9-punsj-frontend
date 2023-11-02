@@ -17,7 +17,9 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { requiredValue } from 'app/utils/validationHelpers';
 import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
-import { getOrgInfo } from 'app/utils';
+import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
+import { get } from 'app/utils/apiUtils';
+import { ApiPath } from 'app/apiConfig';
 import VerticalSpacer from '../VerticalSpacer';
 
 export interface OrgInfo {
@@ -45,22 +47,31 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 }) => {
     const intl = useIntl();
     const { values, setFieldValue } = useFormikContext<BrevFormValues>();
-    const [orgInfo, setOrgInfo] = useState<OrgInfo | undefined>();
+    const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
     const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
 
-    const hentOrgInfo = (orgnummer: string) => {
+    const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
-        getOrgInfo(orgnummer, (response, data: OrgInfo) => {
-            if (response.status === 200) {
-                setOrgInfoPending(false);
-                setErrorOrgInfo(undefined);
-                setOrgInfo(data);
-            } else {
-                setOrgInfoPending(false);
-                setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }));
-            }
-        });
+        get(
+            `${ApiPath.SØK_ORGNUMMER}?organisasjonsnummer=${orgnr}`,
+            { norskIdent: aktørId },
+            { 'X-Nav-NorskIdent': aktørId },
+            (response, data: ArbeidsgiverResponse) => {
+                if (response.status === 200) {
+                    if (data.navn) {
+                        setOrgInfoPending(false);
+                        setErrorOrgInfo(undefined);
+                        setOrgInfo(data);
+                    }
+                }
+                if (response.status === 404) {
+                    setOrgInfoPending(false);
+                    setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }));
+                }
+            },
+        );
     };
+
     if (values.velgAnnenMottaker === false && orgInfoPending) {
         setOrgInfoPending(false);
     }
@@ -117,9 +128,6 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         name={BrevFormKeys.orgNummer}
                         validate={(value: string) => {
                             const error = getOrgNumberValidator({ required: true })(value);
-                            if (orgInfo && orgInfo.konkurs) {
-                                return intl.formatMessage({ id: 'ValidationMessage.brev.orgNummer.konkurs' });
-                            }
 
                             if (errorOrgInfo) {
                                 return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' });
@@ -163,16 +171,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             </BodyShort>
                             {orgInfoPending && <Loader size="small" title="venter..." />}
                             {errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
-                            {orgInfo && (
-                                <BodyShort>
-                                    {orgInfo.navn}{' '}
-                                    {orgInfo.konkurs && (
-                                        <span className="text-red-600">
-                                            <FormattedMessage id="Messages.annenMottaker.konkurs" />
-                                        </span>
-                                    )}
-                                </BodyShort>
-                            )}
+                            {orgInfo && <BodyShort>{orgInfo.navn}</BodyShort>}
                         </VStack>
                     )}
                 </div>
