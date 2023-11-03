@@ -3182,17 +3182,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:4.12.3":
-  version: 4.12.3
-  resolution: "@navikt/ds-css@npm:4.12.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F4.12.3%2F49e36eb3a1060bb5d4d73975accbdb4ec5a79f8b"
-  checksum: c516028db7005059fe1cdcd00611210fbf0b632562f555d065d53adc5df265885dc6bfd1218d449d3d550f6fe0a874582d58d0f7272ba954ffb5dd6444eab9ae
-  languageName: node
-  linkType: hard
-
 "@navikt/ds-css@npm:5.7.6":
   version: 5.7.6
   resolution: "@navikt/ds-css@npm:5.7.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.7.6%2Ffef98381e0ed44b133390f7e2ed272b6fb5ec89e"
   checksum: 52f83487fb8d3d7070ccf9540c2fd41199a6e03af0c59099abadb0ed243002e770a92e6cdfe6e43641c413db843411a462f5903944abe76c08aa9c1d37a1242b
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-css@npm:5.9.2":
+  version: 5.9.2
+  resolution: "@navikt/ds-css@npm:5.9.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.9.2%2F1ec33efe65cd9a20d1a5e9e5a119702626c568d7"
+  checksum: e2c37ba22580e8f1bebdc35c1d6f2e8ed86a34902bb264a84ff5226905a003e8d9f30cc48393e64ba88a68391d7c14d116b3aec228c7b65f30ca20bbc04d8682
   languageName: node
   linkType: hard
 
@@ -14095,7 +14095,7 @@ __metadata:
     "@babel/preset-react": 7.22.15
     "@babel/preset-typescript": 7.23.2
     "@babel/runtime": 7.23.2
-    "@navikt/ds-css": 4.12.3
+    "@navikt/ds-css": 5.9.2
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 4.12.1
     "@navikt/fnrvalidator": 1.3.3
