@@ -5,14 +5,18 @@ export interface IJournalpost {
     norskIdent?: string;
     dokumenter: IDokument[];
     dato?: string;
-    punsjInnsendingType?: {
-        kode: string;
-        navn: string;
-        erScanning: boolean;
-    };
+    punsjInnsendingType: Partial<IInnsendingType>;
     journalpostStatus: journalpostStatus;
     kanKopieres?: boolean;
     kanOpprettesJournalføringsoppgave?: boolean;
+    erFerdigstilt: boolean;
+    registrertInformasjon: {
+        brukerIdent: string;
+        annenPart?: string;
+        pleietrengendeIdent?: string;
+        barnIdent?: string;
+        ytelsestype: string;
+    };
     kanSendeInn: boolean;
     erSaksbehandler: boolean;
 }

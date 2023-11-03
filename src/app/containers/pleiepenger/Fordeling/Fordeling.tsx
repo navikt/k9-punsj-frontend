@@ -348,7 +348,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
         setIdentAction(identState.søkerId, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
         setFagsak(nyValgtFagsak);
-        if (nyValgtFagsak && nyValgtFagsak.gyldigPeriode) {
+        if (nyValgtFagsak?.gyldigPeriode) {
             setBehandlingsAar(String(dayjs(nyValgtFagsak.gyldigPeriode.fom).year()));
         }
     };

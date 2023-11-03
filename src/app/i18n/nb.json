@@ -527,9 +527,9 @@
     "søk.label.jpid": "Journalpost-ID",
     "søk.knapp.label": "Søk",
     "søk.info.perioder": "Velg perioden for søknaden:",
-    "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
-    "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
-    "søk.jp.internalServerError": "Noe gikk galt",
+    "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}.",
+    "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen.",
+    "søk.jp.internalServerError": "Noe gikk galt.",
 
     "OpprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
     "OpprettJournalpostInngang.link": "Opprett journalpost",

@@ -1,187 +1,162 @@
-import React from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
+import { Alert, TextField, Modal, Fieldset, Button } from '@navikt/ds-react';
 
-import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
-
-import Fagsak from 'app/types/Fagsak';
-
-import VerticalSpacer from '../../components/VerticalSpacer';
-import SokKnapp from '../../components/knapp/SokKnapp';
-import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
-import { IError, IJournalpost } from '../../models/types';
-import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import { RootStateType } from '../../state/RootState';
-import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../../state/actions';
-import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
+import { lukkOppgaveResetAction } from '../../state/actions';
+import { getJournalpost, resetJournalpostAction } from '../../state/reducers/FellesReducer';
+
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
+import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
+
 import './sok.less';
 
-export interface ISearchFormStateProps {
-    journalpost?: IJournalpost;
-    notFound: boolean;
-    forbidden: boolean;
-    conflict?: boolean;
-    journalpostConflictError?: IJournalpostConflictResponse;
-    journalpostRequestError?: IError;
-    lukkOppgaveDone?: boolean;
-    lukkOppgaveReset: () => void;
-}
+const SearchForm = () => {
+    const intl = useIntl();
+    const dispatch = useDispatch();
+    const [journalpostid, setJournalpostid] = useState('');
 
-export interface ISearchFormDispatchProps {
-    getJournalpost: typeof fellesReducerGetJournalpost;
-    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-}
+    const {
+        journalpost,
+        notFound,
+        forbidden,
+        conflict,
+        journalpostConflictError,
+        journalpostRequestError,
+        lukkOppgaveDone,
+        isJournalpostLoading,
+    } = useSelector((state: RootStateType) => ({
+        journalpost: state.felles.journalpost,
+        notFound: state.felles.journalpostNotFound,
+        forbidden: state.felles.journalpostForbidden,
+        conflict: state.felles.journalpostConflict,
+        journalpostConflictError: state.felles.journalpostConflictError,
+        journalpostRequestError: state.felles.journalpostRequestError,
+        lukkOppgaveDone: state.fordelingState.lukkOppgaveDone,
+        isJournalpostLoading: state.felles.isJournalpostLoading,
+    }));
 
-export interface ISearchFormComponentState {
-    journalpostid?: string;
-}
+    const prevJournalpostidRef = useRef(journalpostid);
+    useEffect(() => {
+        const prevJournalpostid = prevJournalpostidRef.current;
+        dispatch(resetJournalpostAction());
 
-type ISearchFormProps = WrappedComponentProps &
-    ISearchFormStateProps &
-    ISearchFormDispatchProps &
-    ISearchFormComponentState;
+        if (journalpostid !== prevJournalpostid) {
+            dispatch(resetJournalpostAction());
+        }
 
-export class SearchFormComponent extends React.Component<ISearchFormProps, ISearchFormComponentState> {
-    constructor(props: ISearchFormProps) {
-        super(props);
-        this.state = {
-            journalpostid: '',
-        };
+        prevJournalpostidRef.current = journalpostid;
+    }, [journalpostid]);
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const journalpostId = e.target.value.replace(/[^0-9]/g, '');
+        setJournalpostid(journalpostId);
+    };
+
+    const onClick = () => {
+        if (journalpostid) {
+            dispatch(getJournalpost(journalpostid));
+        }
+    };
+
+    const handleKeydown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            onClick();
+        }
+    };
+
+    const lukkOppgaveReset = () => {
+        dispatch(lukkOppgaveResetAction());
+    };
+
+    // Redirect logic can be handled through React Router or other means rather than window.location
+    if (journalpost?.journalpostId) {
+        window.location.assign(`journalpost/${journalpostid}`);
     }
 
-    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const journalpostId = e.target.value;
-        // Only allow numbers (0-9)
-        const sanitizedJournalpostId = journalpostId.replace(/[^0-9]/g, '');
-        this.setState({ journalpostid: sanitizedJournalpostId });
-    };
-
-    onClick = (): void => {
-        const { journalpostid } = this.state;
-        const { getJournalpost } = this.props;
-        if (journalpostid) {
-            getJournalpost(journalpostid);
-        }
-    };
-
-    handleKeydown = (event: React.KeyboardEvent): void => {
-        if (event.key === 'Enter') {
-            this.onClick();
-        }
-    };
-
-    render() {
-        const { journalpostid } = this.state;
-        const {
-            notFound,
-            forbidden,
-            conflict,
-            journalpostConflictError,
-            journalpostRequestError,
-            journalpost,
-            lukkOppgaveDone,
-            lukkOppgaveReset,
-        } = this.props;
-
-        const disabled = !journalpostid;
-
-        if (journalpost?.journalpostId) {
-            window.location.assign(`journalpost/${journalpostid}`);
-        }
-
-        if (lukkOppgaveDone) {
-            return (
-                <Modal
-                    key="lukkoppgaveokmodal"
-                    onClose={() => lukkOppgaveReset()}
-                    aria-label="settpaaventokmodal"
-                    closeButton={false}
-                    open
-                >
-                    <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-                </Modal>
-            );
-        }
-
-        return (
-            <>
-                <div className="sok-container">
-                    <h1 className="sok-heading">
-                        <FormattedMessage id="søk.overskrift" />
-                    </h1>
-                    <Fieldset>
-                        <div className="input-rad">
-                            <TextField
-                                value={journalpostid}
-                                className="w-64"
-                                onChange={this.onChange}
-                                label={<FormattedMessage id="søk.label.jpid" />}
-                                onKeyDown={this.handleKeydown}
-                            />
-                            <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
-                            <VerticalSpacer sixteenPx />
+    return (
+        <>
+            <div className="sok-container">
+                <h1 className="sok-heading">{intl.formatMessage({ id: 'søk.overskrift' })}</h1>
+                <Fieldset>
+                    <div className="input-rad">
+                        <TextField
+                            value={journalpostid}
+                            className="w-64"
+                            onChange={onChange}
+                            label={intl.formatMessage({ id: 'søk.label.jpid' })}
+                            onKeyDown={handleKeydown}
+                        />
+                        <div className="mt-8 ml-6">
+                            <Button
+                                onClick={() => onClick()}
+                                size="small"
+                                className="h-12 w-24"
+                                disabled={!journalpostid}
+                                loading={isJournalpostLoading}
+                            >
+                                {intl.formatMessage({ id: 'søk.knapp.label' })}
+                            </Button>
                         </div>
-
-                        {!!notFound && (
-                            <Alert size="small" variant="info">
-                                <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
+                        <VerticalSpacer sixteenPx />
+                    </div>
+                    <div className="flex justify-center items-start flex-shrink-0">
+                        {notFound && (
+                            <Alert variant="warning" className="mt-2 flex-shrink-0">
+                                {intl.formatMessage({ id: 'søk.jp.notfound' }, { jpid: journalpostid })}
                             </Alert>
                         )}
 
-                        {!!forbidden && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                        {forbidden && (
+                            <Alert variant="error" className="mt-2 flex-shrink-0">
+                                {intl.formatMessage({ id: 'søk.jp.forbidden' }, { jpid: journalpostid })}
                             </Alert>
                         )}
 
                         {conflict &&
                             journalpostConflictError &&
                             journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <Alert size="small" variant="warning">
-                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                <Alert variant="info" className="mt-2 flex-shrink-0">
+                                    {intl.formatMessage({ id: 'startPage.feil.ikkeStøttet' })}
                                 </Alert>
                             )}
 
                         {journalpostRequestError?.message && (
-                            <Alert size="small" variant="error">
-                                <FormattedMessage id="søk.jp.internalServerError" />
+                            <Alert variant="error" className="mt-2 flex-shrink-0">
+                                {intl.formatMessage({ id: 'søk.jp.internalServerError' })}
                             </Alert>
                         )}
 
                         {!!journalpost && !journalpost?.kanSendeInn && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="fordeling.kanikkesendeinn" />
+                            <Alert variant="warning" className="mt-2 flex-shrink-0">
+                                {intl.formatMessage({ id: 'fordeling.kanikkesendeinn' })}
                             </Alert>
                         )}
-                    </Fieldset>
-                </div>
-                <div className="inngangContainer">
-                    <OpprettJournalpostInngang />
-                    <SendBrevIAvsluttetSakInngang />
-                </div>
-            </>
-        );
-    }
-}
+                    </div>{' '}
+                </Fieldset>
+            </div>
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    notFound: state.felles.journalpostNotFound,
-    forbidden: state.felles.journalpostForbidden,
-    conflict: state.felles.journalpostConflict,
-    journalpostConflictError: state.felles.journalpostConflictError,
-    journalpostRequestError: state.felles.journalpostRequestError,
-    lukkOppgaveDone: state.fordelingState.lukkOppgaveDone,
-});
+            {lukkOppgaveDone && (
+                <Modal
+                    key="lukkoppgaveokmodal"
+                    onClose={lukkOppgaveReset}
+                    aria-label={intl.formatMessage({ id: 'modal.ariaLabel' })}
+                    open
+                >
+                    <OkGaaTilLosModal melding={intl.formatMessage({ id: 'fordeling.lukkoppgave.utfort' })} />
+                </Modal>
+            )}
 
-const mapDispatchToProps = (dispatch: any) => ({
-    getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
-    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
-    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
-});
+            <div className="inngangContainer">
+                <OpprettJournalpostInngang />
+                <SendBrevIAvsluttetSakInngang />
+            </div>
+        </>
+    );
+};
 
-export const SearchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent));
+export default SearchForm;

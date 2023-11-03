@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SearchForm } from './SearchForm';
+import SearchForm from './SearchForm';
 
 export const SokIndex: React.FunctionComponent = () => <SearchForm />;
 

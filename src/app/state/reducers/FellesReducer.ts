@@ -49,6 +49,7 @@ enum Actiontypes {
     JOURNALPOST_KOPIERE_SUCCESS = 'FELLES/JOURNALPOST_KOPIERE_SUCCESS',
     JOURNALPOST_KOPIERE_REQUEST = 'FELLES/JOURNALPOST_KOPIERE_REQUEST',
     JOURNALPOST_KOPIERE_ERROR = 'FELLES/JOURNALPOST_KOPIERE_ERROR',
+    JOURNALPOST_RESET = 'FELLES/JOURNALPOST_RESET',
     RESET_BARN = 'FELLES/RESET_BARN',
 }
 
@@ -103,6 +104,10 @@ interface IJournalpostKopiereErrorAction {
     type: Actiontypes.JOURNALPOST_KOPIERE_ERROR;
 }
 
+interface IResetJournalpostAction {
+    type: Actiontypes.JOURNALPOST_RESET;
+}
+
 interface IResetBarnAction {
     type: Actiontypes.RESET_BARN;
 }
@@ -134,6 +139,10 @@ export function getJournalpostConflictAction(response: IJournalpostConflictRespo
     return { type: Actiontypes.JOURNALPOST_CONFLICT, response };
 }
 
+export function resetJournalpostAction(): IResetJournalpostAction {
+    return { type: Actiontypes.JOURNALPOST_RESET };
+}
+
 export function resetBarnAction(): IResetBarnAction {
     return { type: Actiontypes.RESET_BARN };
 }
@@ -141,7 +150,7 @@ export function resetBarnAction(): IResetBarnAction {
 export function getJournalpost(journalpostid: string) {
     return (dispatch: any) => {
         dispatch(getJournalpostLoadAction());
-        return get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostid }, undefined, (response, data) => {
+        get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostid }, undefined, (response, data) => {
             if (response.ok) {
                 return dispatch(setJournalpostAction(data));
             }
@@ -188,6 +197,7 @@ type IJournalpostActionTypes =
     | IGetJournalpostNotFoundAction
     | IGetJournalpostForbiddenAction
     | IGetJournalpostConflictAction
+    | IResetJournalpostAction
     | IJournalpostKopiereForbiddenAction
     | IJournalpostKopiereConflictAction
     | IJournalpostKopiereRequestAction
@@ -299,6 +309,18 @@ export default function FellesReducer(
                 isJournalpostLoading: false,
                 journalpostConflict: true,
                 journalpostConflictError: action.response,
+            };
+
+        case Actiontypes.JOURNALPOST_RESET:
+            return {
+                ...state,
+                journalpost: undefined,
+                isJournalpostLoading: undefined,
+                journalpostNotFound: undefined,
+                journalpostForbidden: undefined,
+                journalpostConflict: undefined,
+                journalpostRequestError: undefined,
+                journalpostConflictError: undefined,
             };
 
         case Actiontypes.JOURNALPOST_KOPIERE_REQUEST:
