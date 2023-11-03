@@ -23,7 +23,8 @@ jobs:
         name: Deploye til DEV
         runs-on: ubuntu-latest
         permissions:
-            packages: write
+            contents: read
+            id-token: write # for nais
         needs: [lint, test, test-cypress, build]
         steps:
             - name: Hente kode
