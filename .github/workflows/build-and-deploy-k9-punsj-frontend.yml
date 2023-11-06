@@ -36,9 +36,11 @@ jobs:
         permissions:
             packages: write
         needs: [lint, test, test-cypress, build]
+        outputs:
+            image: ${{ steps.docker-push.outputs.image }}
         steps:
             - name: Hente kode
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup .yarnrc.yml
               run: |
@@ -49,7 +51,7 @@ jobs:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
             - name: Sette opp Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: 18.x
                   registry-url: https://npm.pkg.github.com/
@@ -70,7 +72,8 @@ jobs:
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-            - uses: docker/login-action@v2
+
+            - uses: docker/login-action@v2.2.0
               with:
                   registry: ghcr.io
                   username: ${{ github.REPOSITORY_OWNER }}
@@ -94,3 +97,16 @@ jobs:
                   CLUSTER: prod-fss
                   RESOURCE: nais/frontend/k9-punsj-frontend.yml
                   VARS: nais/frontend/prod.json
+            - name: Set image output
+              id: docker-push
+              run: echo "IMAGE=$DOCKER_IMAGE:$TAG" >> $GITHUB_OUTPUT
+    trivy:
+        needs: [deploy]
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy-ghcr.yml@main
+        permissions:
+            contents: write
+            security-events: write
+            actions: read
+        secrets: inherit
+        with:
+            image: ${{ needs.deploy.outputs.image }}

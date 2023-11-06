@@ -53,6 +53,7 @@
     "startPage.feil.journalpost": "Kunne ikke finne journalpost.",
     "startPage.feil.ingendokumenter": "Journalposten har ingen tilhørende dokumenter",
     "startPage.feil.ikketilgang": "Du har ikke tilgang til journalposten",
+    "startPage.feil.internalServerError": "Noe gikk galt",
     "startPage.feil.ikkeStøttet": "Journalposten er utgått, avbrutt eller feilregistrert og kan ikke sendes inn til K9.",
     "fordeling.overskrift": "Hva ønsker du å gjøre med dokumentet?",
     "fordeling.sakstype.PLEIEPENGER_SYKT_BARN": "Registrere opplysninger til K9",
@@ -528,6 +529,7 @@
     "søk.info.perioder": "Velg perioden for søknaden:",
     "søk.jp.notfound": "Det finnes ingen journalposter med ID {jpid}",
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
+    "søk.jp.internalServerError": "Noe gikk galt",
 
     "OpprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
     "OpprettJournalpostInngang.link": "Opprett journalpost",
