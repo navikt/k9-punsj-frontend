@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
-import { Alert, TextField, Modal, Fieldset, Button } from '@navikt/ds-react';
+import { Alert, TextField, Modal, Button } from '@navikt/ds-react';
 
+import { getEnvironmentVariable } from 'app/utils';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { RootStateType } from '../../state/RootState';
 import { lukkOppgaveResetAction } from '../../state/actions';
@@ -20,33 +21,23 @@ const SearchForm = () => {
     const dispatch = useDispatch();
     const [journalpostid, setJournalpostid] = useState('');
 
-    const {
-        journalpost,
-        notFound,
-        forbidden,
-        conflict,
-        journalpostConflictError,
-        journalpostRequestError,
-        lukkOppgaveDone,
-        isJournalpostLoading,
-    } = useSelector((state: RootStateType) => ({
-        journalpost: state.felles.journalpost,
-        notFound: state.felles.journalpostNotFound,
-        forbidden: state.felles.journalpostForbidden,
-        conflict: state.felles.journalpostConflict,
-        journalpostConflictError: state.felles.journalpostConflictError,
-        journalpostRequestError: state.felles.journalpostRequestError,
-        lukkOppgaveDone: state.fordelingState.lukkOppgaveDone,
-        isJournalpostLoading: state.felles.isJournalpostLoading,
-    }));
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const notFound = useSelector((state: RootStateType) => state.felles.journalpostNotFound);
+    const forbidden = useSelector((state: RootStateType) => state.felles.journalpostForbidden);
+    const conflict = useSelector((state: RootStateType) => state.felles.journalpostConflict);
+    const journalpostConflictError = useSelector((state: RootStateType) => state.felles.journalpostConflictError);
+    const journalpostRequestError = useSelector((state: RootStateType) => state.felles.journalpostRequestError);
+    const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
+    const isJournalpostLoading = useSelector((state: RootStateType) => state.felles.isJournalpostLoading);
 
     const prevJournalpostidRef = useRef(journalpostid);
     useEffect(() => {
         const prevJournalpostid = prevJournalpostidRef.current;
-        dispatch(resetJournalpostAction());
 
         if (journalpostid !== prevJournalpostid) {
-            dispatch(resetJournalpostAction());
+            if (notFound || forbidden || conflict || journalpostRequestError || journalpostConflictError) {
+                dispatch(resetJournalpostAction());
+            }
         }
 
         prevJournalpostidRef.current = journalpostid;
@@ -75,6 +66,9 @@ const SearchForm = () => {
 
     // Redirect logic can be handled through React Router or other means rather than window.location
     if (journalpost?.journalpostId) {
+        if (journalpost.erFerdigstilt && getEnvironmentVariable('POSTMOTTAK_TOGGLE') === 'true') {
+            window.location.assign(`journalpost/${journalpostid}/fordeling`);
+        }
         window.location.assign(`journalpost/${journalpostid}`);
     }
 
@@ -82,62 +76,60 @@ const SearchForm = () => {
         <>
             <div className="sok-container">
                 <h1 className="sok-heading">{intl.formatMessage({ id: 'søk.overskrift' })}</h1>
-                <Fieldset>
-                    <div className="input-rad">
-                        <TextField
-                            value={journalpostid}
-                            className="w-64"
-                            onChange={onChange}
-                            label={intl.formatMessage({ id: 'søk.label.jpid' })}
-                            onKeyDown={handleKeydown}
-                        />
-                        <div className="mt-8 ml-6">
-                            <Button
-                                onClick={() => onClick()}
-                                size="small"
-                                className="h-12 w-24"
-                                disabled={!journalpostid}
-                                loading={isJournalpostLoading}
-                            >
-                                {intl.formatMessage({ id: 'søk.knapp.label' })}
-                            </Button>
-                        </div>
-                        <VerticalSpacer sixteenPx />
+                <div className="input-rad">
+                    <TextField
+                        value={journalpostid}
+                        className="w-64"
+                        onChange={onChange}
+                        label={intl.formatMessage({ id: 'søk.label.jpid' })}
+                        onKeyDown={handleKeydown}
+                    />
+                    <div className="mt-8 ml-6">
+                        <Button
+                            onClick={() => onClick()}
+                            size="small"
+                            className="h-12 w-24"
+                            disabled={!journalpostid}
+                            loading={isJournalpostLoading}
+                        >
+                            {intl.formatMessage({ id: 'søk.knapp.label' })}
+                        </Button>
                     </div>
-                    <div className="flex justify-center items-start flex-shrink-0">
-                        {notFound && (
-                            <Alert variant="warning" className="mt-2 flex-shrink-0">
-                                {intl.formatMessage({ id: 'søk.jp.notfound' }, { jpid: journalpostid })}
+                    <VerticalSpacer sixteenPx />
+                </div>
+                <div className="flex justify-center items-start flex-shrink-0">
+                    {notFound && (
+                        <Alert variant="warning" className="mt-2 flex-shrink-0">
+                            {intl.formatMessage({ id: 'søk.jp.notfound' }, { jpid: journalpostid })}
+                        </Alert>
+                    )}
+
+                    {forbidden && (
+                        <Alert variant="error" className="mt-2 flex-shrink-0">
+                            {intl.formatMessage({ id: 'søk.jp.forbidden' }, { jpid: journalpostid })}
+                        </Alert>
+                    )}
+
+                    {conflict &&
+                        journalpostConflictError &&
+                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                            <Alert variant="info" className="mt-2 flex-shrink-0">
+                                {intl.formatMessage({ id: 'startPage.feil.ikkeStøttet' })}
                             </Alert>
                         )}
 
-                        {forbidden && (
-                            <Alert variant="error" className="mt-2 flex-shrink-0">
-                                {intl.formatMessage({ id: 'søk.jp.forbidden' }, { jpid: journalpostid })}
-                            </Alert>
-                        )}
+                    {journalpostRequestError?.message && (
+                        <Alert variant="error" className="mt-2 flex-shrink-0">
+                            {intl.formatMessage({ id: 'søk.jp.internalServerError' })}
+                        </Alert>
+                    )}
 
-                        {conflict &&
-                            journalpostConflictError &&
-                            journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <Alert variant="info" className="mt-2 flex-shrink-0">
-                                    {intl.formatMessage({ id: 'startPage.feil.ikkeStøttet' })}
-                                </Alert>
-                            )}
-
-                        {journalpostRequestError?.message && (
-                            <Alert variant="error" className="mt-2 flex-shrink-0">
-                                {intl.formatMessage({ id: 'søk.jp.internalServerError' })}
-                            </Alert>
-                        )}
-
-                        {!!journalpost && !journalpost?.kanSendeInn && (
-                            <Alert variant="warning" className="mt-2 flex-shrink-0">
-                                {intl.formatMessage({ id: 'fordeling.kanikkesendeinn' })}
-                            </Alert>
-                        )}
-                    </div>{' '}
-                </Fieldset>
+                    {!!journalpost && !journalpost?.kanSendeInn && (
+                        <Alert variant="warning" className="mt-2 flex-shrink-0">
+                            {intl.formatMessage({ id: 'fordeling.kanikkesendeinn' })}
+                        </Alert>
+                    )}
+                </div>
             </div>
 
             {lukkOppgaveDone && (

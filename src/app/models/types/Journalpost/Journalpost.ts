@@ -5,7 +5,7 @@ export interface IJournalpost {
     norskIdent?: string;
     dokumenter: IDokument[];
     dato?: string;
-    punsjInnsendingType: Partial<IInnsendingType>;
+    punsjInnsendingType?: Partial<IInnsendingType>;
     journalpostStatus: journalpostStatus;
     kanKopieres?: boolean;
     kanOpprettesJournalføringsoppgave?: boolean;

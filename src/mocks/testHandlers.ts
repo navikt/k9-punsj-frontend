@@ -13,6 +13,7 @@ import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
 import { BACKEND_BASE_URL, LOCAL_API_URL } from './konstanter';
+import { ferdigstiltJournalpost } from './mockdata/journalpost';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
@@ -21,6 +22,9 @@ export const testHandlers = {
     ),
     hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/:id`, (req, res, ctx) =>
         res(ctx.json({ ...journalpost, journalpostId: req.params.id })),
+    ),
+    ferdigstiltJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/1337`, (req, res, ctx) =>
+        res(ctx.json(ferdigstiltJournalpost)),
     ),
     opprettePleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`, (req, res, ctx) =>
         res(ctx.status(201), ctx.json(pleiepengerSoknad)),
