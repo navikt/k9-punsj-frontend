@@ -40,13 +40,14 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
 
     return (
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        <Modal open onClose={lukkModal} closeButton={!disabled} aria-labelledby="modal-heading">
-            <Modal.Content>
+        <Modal open onBeforeClose={lukkModal} aria-labelledby="modal-heading">
+            <Modal.Header closeButton={!disabled}>
+                <Heading level="1" size="small" id="modal-heading">
+                    Lagre sakstype på journalpost
+                </Heading>
+            </Modal.Header>
+            <Modal.Body>
                 <>
-                    <Heading spacing level="1" size="small" id="modal-heading">
-                        Lagre sakstype på journalpost
-                    </Heading>
-                    <VerticalSpacer thirtyTwoPx />
                     <BodyShort size="small">
                         {`Er du sikker på at du vil knytte følgende informasjon til journalpost ${journalpostId}?`}
                     </BodyShort>
@@ -88,10 +89,15 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
                             </Button>
                         </div>
                     )}
-                    <VerticalSpacer sixteenPx />
-                    {error && <Alert variant="error">Noe gikk galt under lagring</Alert>}
+
+                    {error && (
+                        <>
+                            <VerticalSpacer sixteenPx />
+                            <Alert variant="error">Noe gikk galt under lagring</Alert>
+                        </>
+                    )}
                 </>
-            </Modal.Content>
+            </Modal.Body>
         </Modal>
     );
 }

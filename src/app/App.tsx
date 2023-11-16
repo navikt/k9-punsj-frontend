@@ -14,7 +14,6 @@ import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
 
 import '@navikt/ds-css';
-import { Modal as DsModal } from '@navikt/ds-react';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
@@ -71,9 +70,6 @@ queryClient.setDefaultOptions({
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
-    React.useEffect(() => {
-        DsModal?.setAppElement('#app');
-    }, []);
 
     return (
         <Sentry.ErrorBoundary>

@@ -346,7 +346,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     onClose={() => setShowSettPaaVentModal(false)}
                     aria-label={'settpaaventmodal'}
                     open={showSettPaaVentModal}
-                    closeButton={false}
                 >
                     <div className="">
                         <SettPaaVentModal
@@ -365,7 +364,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     key={'settpaaventokmodal'}
                     onClose={() => props.settPaaventResetAction()}
                     aria-label={'settpaaventokmodal'}
-                    closeButton={false}
                     open={punchFormState.settPaaVentSuccess}
                 >
                     <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
@@ -376,7 +374,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     key={'settpaaventerrormodal'}
                     onClose={() => props.settPaaventResetAction()}
                     aria-label={'settpaaventokmodal'}
-                    closeButton={false}
                     open={!!punchFormState.settPaaVentError}
                 >
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
@@ -388,10 +385,9 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     className={'validertSoknadModal'}
                     onClose={() => props.validerSoknadReset()}
                     aria-label={'validertSoknadModal'}
-                    closeButton={false}
                     open={!!props.punchFormState.isValid}
                 >
-                    <Modal.Content>
+                    <Modal.Body>
                         <div className={classNames('validertSoknadOppsummeringContainer')}>
                             <OMPMASoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
                         </div>
@@ -412,7 +408,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 {intlHelper(intl, 'skjema.knapp.avbryt')}
                             </Button>
                         </div>
-                    </Modal.Content>
+                    </Modal.Body>
                 </Modal>
             )}
             {visErDuSikkerModal && (
@@ -421,7 +417,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     className={'erdusikkermodal'}
                     onClose={() => props.validerSoknadReset()}
                     aria-label={'erdusikkermodal'}
-                    closeButton={false}
                     open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
