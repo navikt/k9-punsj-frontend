@@ -60,7 +60,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     const { intl, punchState, eksisterendeSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             props.setIdentAction(søkerId, pleietrengendeId);
@@ -214,9 +213,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         <>
             {technicalError}
             <Alert size="small" variant="info">
-                {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: pleietrengendeId ? '2' : '1',
-                })}
+                {intlHelper(intl, 'mapper.infoboks.ingensoknader')}
             </Alert>
         </>
     );

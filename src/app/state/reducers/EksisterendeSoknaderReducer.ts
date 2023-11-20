@@ -5,6 +5,7 @@ import { IEksisterendeSoknaderActionTypes } from 'app/state/actions';
 const initialState: IEksisterendeSoknaderState = {
     eksisterendeSoknaderSvar: {},
     isEksisterendeSoknaderLoading: false,
+    eksisterendeSoknaderSuccess: false,
     eksisterendeSoknaderRequestError: undefined,
     isSoknadCreated: false,
     isAwaitingSoknadCreation: false,
@@ -20,6 +21,7 @@ export function EksisterendeSoknaderReducer(
             return {
                 ...eksisterendeSoknaderState,
                 eksisterendeSoknaderSvar: action.eksisterendeSoknaderSvar,
+                eksisterendeSoknaderSuccess: true,
                 isEksisterendeSoknaderLoading: false,
                 eksisterendeSoknaderRequestError: undefined,
             };

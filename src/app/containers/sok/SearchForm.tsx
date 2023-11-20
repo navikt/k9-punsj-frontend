@@ -67,9 +67,10 @@ const SearchForm = () => {
     // Redirect logic can be handled through React Router or other means rather than window.location
     if (journalpost?.journalpostId) {
         if (journalpost.erFerdigstilt && getEnvironmentVariable('POSTMOTTAK_TOGGLE') === 'true') {
-            window.location.assign(`journalpost/${journalpostid}/fordeling`);
+            window.location.assign(`journalpost/${journalpostid}/fordeling/pleiepenger/hentsoknader`);
+        } else {
+            window.location.assign(`journalpost/${journalpostid}`);
         }
-        window.location.assign(`journalpost/${journalpostid}`);
     }
 
     return (

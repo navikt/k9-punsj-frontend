@@ -215,9 +215,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         <>
             {technicalError}
             <Alert size="small" variant="info">
-                {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: pleietrengendeId ? '2' : '1',
-                })}
+                {intlHelper(intl, 'mapper.infoboks.ingensoknader')}
             </Alert>
         </>
     );

@@ -74,6 +74,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+        if (!eksisterendeSoknaderState.eksisterendeSoknaderSuccess) {
+            return false;
+        }
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
                 Array.from(es.journalposter!).some((jp) => jp === journalpostid),

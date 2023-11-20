@@ -11,7 +11,6 @@ import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 import { testHandlers } from './testHandlers';
 
 let handlers = [
-    rest.get('/api/test', (req, res, ctx) => res(ctx.status(200), ctx.json({ name: 'Bobby Binders' }))),
     rest.get(
         'http://localhost:8101/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ',
         (req, res, ctx) =>
@@ -68,6 +67,10 @@ if (process.env.MSW_MODE === 'test') {
     handlers = handlers
         .concat(Object.values(testHandlers))
         .concat([omsorgspengerutbetalingHandlers.eksisterendePerioderOmsorgspengeutbetaling]);
+}
+
+if (process.env.MSW_MODE === 'dev') {
+    handlers = handlers.concat([testHandlers.ferdigstiltJournalpost]);
 }
 
 export { handlers };

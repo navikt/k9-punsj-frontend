@@ -7,6 +7,7 @@ export interface IEksisterendeSoknaderState {
     eksisterendeSoknaderSvar: ISoknadSvar;
     isEksisterendeSoknaderLoading?: boolean;
     eksisterendeSoknaderRequestError?: IError;
+    eksisterendeSoknaderSuccess: boolean;
     chosenSoknad?: IPSBSoknad;
     isAwaitingSoknadCreation?: boolean;
     createSoknadRequestError?: IError;
