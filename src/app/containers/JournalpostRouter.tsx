@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { HashRouter, Route, useParams } from 'react-router-dom';
+import { JournalpostOgPdfVisning } from 'app/components/JournalpostOgPdfVisning';
 
 import JournalpostLoader from './JournalpostLoader';
 import { Sakstyper } from './SakstypeImpls';
@@ -18,7 +19,9 @@ const JournalpostRouter: React.FunctionComponent = () => {
             renderOnLoadComplete={() => (
                 <HashRouter>
                     <Route exact path="/">
-                        <Fordeling journalpostId={journalpostid} />
+                        <JournalpostOgPdfVisning journalposter={[journalpostid]}>
+                            <Fordeling />
+                        </JournalpostOgPdfVisning>
                     </Route>
 
                     {Sakstyper.punchSakstyper.map((sakstypeConfig) => (

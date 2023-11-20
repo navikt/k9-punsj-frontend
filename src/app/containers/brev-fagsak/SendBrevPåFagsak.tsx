@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 
 import { Button, Heading } from '@navikt/ds-react';
 
-import { SplitView } from 'app/components/SplitView';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
@@ -42,26 +41,24 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     const sakstype = fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype) || '';
 
     return (
-        <SplitView>
-            <div className="sendBrevPåFagsak">
-                <Heading size="small" level="1">
-                    Send brev og lukk oppgave i LOS
-                </Heading>
-                <BrevComponent
-                    søkerId={søkerId}
-                    sakstype={sakstype}
-                    fagsakId={fagsak?.fagsakId}
-                    journalpostId={journalpost?.journalpostId}
-                />
-                <Button
-                    className="submitButton"
-                    size="small"
-                    onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, søkerId, fagsak)}
-                >
-                    Lukk oppgave
-                </Button>
-            </div>
-        </SplitView>
+        <div className="sendBrevPåFagsak">
+            <Heading size="small" level="1">
+                Send brev og lukk oppgave i LOS
+            </Heading>
+            <BrevComponent
+                søkerId={søkerId}
+                sakstype={sakstype}
+                fagsakId={fagsak?.fagsakId}
+                journalpostId={journalpost?.journalpostId}
+            />
+            <Button
+                className="submitButton"
+                size="small"
+                onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, søkerId, fagsak)}
+            >
+                Lukk oppgave
+            </Button>
+        </div>
     );
 };
 
