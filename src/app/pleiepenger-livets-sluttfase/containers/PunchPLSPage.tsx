@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, useIntl } from 'react-intl';
 import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -10,46 +10,29 @@ import { Alert, Button, Panel } from '@navikt/ds-react';
 
 import { ApiPath } from 'app/apiConfig';
 import Page from 'app/components/page/Page';
-import useQuery from 'app/hooks/useQuery';
-import { PunchStep } from 'app/models/enums';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentAction, setStepAction } from 'app/state/actions';
-import { get, getEnvironmentVariable, getPath } from 'app/utils';
+import { get, getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import { JournalpostPanel } from '../../components/journalpost-panel/JournalpostPanel';
 import PdfVisning from '../../components/pdf/PdfVisning';
-import { IJournalpost, IPath, IPunchState } from '../../models/types';
-import { IIdentState } from '../../models/types/IdentState';
+import { IJournalpost } from '../../models/types';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 import { PLSPunchForm } from './PLSPunchForm';
 import { PLSRegistreringsValg } from './PLSRegistreringsValg';
-import { plsPaths } from './PLSRoutes';
 import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
 
 export interface IPunchPLSPageStateProps {
-    punchState: IPunchState;
     journalpost?: IJournalpost;
-    identState: IIdentState;
     forbidden: boolean | undefined;
     punchFormState: IPunchPLSFormState;
 }
 
-export interface IPunchPLSPageDispatchProps {
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
-}
-
-export interface IPunchPLSPageQueryProps {
-    dok?: string | null;
-}
-
 export interface IPunchPLSPageComponentProps {
     match?: any;
-    step: PunchStep;
+    step: number;
     journalpostid?: string;
-    paths: IPath[];
 }
 
 export interface IPunchPLSPageComponentState {
@@ -60,16 +43,13 @@ export interface IPunchPLSPageComponentState {
 type IPunchPLSPageProps = WrappedComponentProps &
     RouteComponentProps &
     IPunchPLSPageComponentProps &
-    IPunchPLSPageStateProps &
-    IPunchPLSPageDispatchProps &
-    IPunchPLSPageQueryProps;
+    IPunchPLSPageStateProps;
 
 export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> = (props) => {
-    const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
+    const { journalpostid, journalpost, forbidden, match, punchFormState, step } = props;
+    const intl = useIntl();
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
     const journalposter = (journalposterFraSoknad && Array.from(journalposterFraSoknad)) || [];
-    const getPunchPath = (punchStep: PunchStep, values?: any) =>
-        getPath(plsPaths, punchStep, values, dok ? { dok } : undefined);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
@@ -87,18 +67,13 @@ export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> 
 
     // eslint-disable-next-line consistent-return
     const underFnr = () => {
-        const commonProps = {
-            journalpostid: journalpostid || '',
-            getPunchPath,
-        };
-
         // eslint-disable-next-line default-case
         switch (step) {
-            case PunchStep.CHOOSE_SOKNAD:
-                return <PLSRegistreringsValg {...commonProps} />;
-            case PunchStep.FILL_FORM:
-                return <PLSPunchForm {...commonProps} id={match.params.id} />;
-            case PunchStep.COMPLETED:
+            case 0:
+                return <PLSRegistreringsValg journalpostid={journalpostid || ''} />;
+            case 1:
+                return <PLSPunchForm journalpostid={journalpostid || ''} id={match.params.id} />;
+            case 2:
                 return (
                     <>
                         <Alert size="small" variant="info" className="fullfortmelding">
@@ -169,7 +144,6 @@ export const PunchPLSPageComponent: React.FunctionComponent<IPunchPLSPageProps> 
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
@@ -177,17 +151,4 @@ const mapStateToProps = (state: RootStateType) => ({
     journalposterIAktivPunchForm: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.journalposter,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: number) => dispatch(setStepAction(step)),
-});
-
-const PunchPLSPageComponentWithQuery: React.FunctionComponent<IPunchPLSPageProps> = (props: IPunchPLSPageProps) => {
-    const dok = useQuery().get('dok');
-    return <PunchPLSPageComponent {...props} dok={dok} />;
-};
-
-export const PunchPLSPage = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPLSPageComponentWithQuery)),
-);
+export const PunchPLSPage = withRouter(connect(mapStateToProps)(PunchPLSPageComponent));

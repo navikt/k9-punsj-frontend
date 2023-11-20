@@ -1,40 +1,28 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import useRedirect from '../../hooks/useRedirect';
-import { ISakstypeComponentProps } from '../../models/Sakstype';
-import { PunchStep } from '../../models/enums';
-import { IPath } from '../../models/types';
-import { getPath } from '../../utils';
 import { PunchPLSPage } from './PunchPLSPage';
 
-const PLSRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpostid, punchPath }) => {
-    const plsRootPath = punchPath;
+const PLS_ROOT_PATH = '/pleiepenger-i-livets-sluttfase';
 
-    const paths: IPath[] = [
-        {
-            step: PunchStep.CHOOSE_SOKNAD,
-            path: `${plsRootPath}/hentsoknader`,
-        },
-        { step: PunchStep.FILL_FORM, path: `${plsRootPath}/skjema/{id}` },
-        { step: PunchStep.COMPLETED, path: `${plsRootPath}/fullfort` },
-    ];
-    const chooseSoknadPath = getPath(paths, PunchStep.CHOOSE_SOKNAD);
-
-    useRedirect(plsRootPath, chooseSoknadPath);
-
-    return (
-        <Switch>
-            {Object.keys(PunchStep)
-                .map(Number)
-                .filter((step) => !Number.isNaN(step))
-                .map((step) => (
-                    <Route exact key={`hashroute_${step}`} path={getPath(paths, step)}>
-                        <PunchPLSPage {...{ journalpostid, step, paths }} />
-                    </Route>
-                ))}
-        </Switch>
-    );
+export const PLS_PATHS = {
+    CHOOSE_SOKNAD: `${PLS_ROOT_PATH}/hentsoknader`,
+    FILL_FORM: `${PLS_ROOT_PATH}/skjema/:id`,
+    COMPLETED: `${PLS_ROOT_PATH}/fullfort`,
 };
+
+const PLSRouter: React.FunctionComponent<{ journalpostid: string }> = ({ journalpostid }) => (
+    <Switch>
+        <Route path={PLS_PATHS.CHOOSE_SOKNAD}>
+            <PunchPLSPage {...{ journalpostid, step: 0 }} />
+        </Route>
+        <Route path={PLS_PATHS.FILL_FORM}>
+            <PunchPLSPage {...{ journalpostid, step: 1 }} />
+        </Route>
+        <Route path={PLS_PATHS.COMPLETED}>
+            <PunchPLSPage {...{ journalpostid, step: 2 }} />
+        </Route>
+    </Switch>
+);
 
 export default PLSRouter;

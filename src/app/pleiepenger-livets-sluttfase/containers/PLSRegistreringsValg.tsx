@@ -6,10 +6,7 @@ import { Alert, Button } from '@navikt/ds-react';
 
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 
-import { PunchStep } from '../../models/enums';
-import { IPunchState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { setHash } from '../../utils';
@@ -20,7 +17,6 @@ import './plsRegistreringsValg.less';
 
 export interface IPLSRegistreringsValgComponentProps {
     journalpostid: string;
-    getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
 export interface IPLSRegistreringsValgDispatchProps {
@@ -31,9 +27,7 @@ export interface IPLSRegistreringsValgDispatchProps {
 }
 
 export interface IEksisterendeSoknaderStateProps {
-    punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
-    journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
 }
 
@@ -44,17 +38,13 @@ type IPLSRegistreringsValgProps = IPLSRegistreringsValgComponentProps &
 export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistreringsValgProps> = (
     props: IPLSRegistreringsValgProps,
 ) => {
-    const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
+    const { journalpostid, identState, eksisterendeSoknaderState } = props;
 
     const { søkerId, pleietrengendeId } = identState;
 
     React.useEffect(() => {
         if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
-            setHash(
-                getPunchPath(PunchStep.FILL_FORM, {
-                    id: eksisterendeSoknaderState.soknadid,
-                }),
-            );
+            // TODO:NAVIGATE
             props.resetSoknadidAction();
         }
     }, [eksisterendeSoknaderState.soknadid]);
@@ -90,13 +80,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
 
     return (
         <div className="registrering-page">
-            <EksisterendePLSSoknader
-                søkerId={søkerId}
-                pleietrengendeId={pleietrengendeId}
-                getPunchPath={getPunchPath}
-                journalpostid={journalpostid}
-            />
-
+            <EksisterendePLSSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
             <div className="knapperad">
                 <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
                     Tilbake
@@ -119,9 +103,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
-    punchState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchState,
     eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
-    journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
 });
 

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
-import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
+import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,
     ISignaturState,
@@ -70,7 +70,6 @@ import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
 
 export interface IPunchPLSFormComponentProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
 }
@@ -89,7 +88,6 @@ export interface IPunchPLSFormDispatchProps {
     hentPerioder: typeof hentPLSPerioderFraK9Sak;
     resetSoknadAction: typeof resetPLSSoknadAction;
     setIdentAction: typeof setIdentFellesAction;
-    setStepAction: typeof setStepAction;
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendePLSSoknadAction;
     updateSoknad: typeof updatePLSSoknad;
     submitSoknad: typeof submitPLSSoknad;
@@ -193,15 +191,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             norskIdent: null,
         });
 
-    private initialArbeidstidInfo = () =>
-        new ArbeidstidInfo({
-            perioder: this.getSoknadsperiode().map((periode) => ({
-                periode,
-                faktiskArbeidTimerPerDag: '',
-                jobberNormaltTimerPerDag: '',
-            })),
-        });
-
     private initialFrilanser = new FrilanserOpptjening({
         jobberFortsattSomFrilans: undefined,
         startdato: undefined,
@@ -273,7 +262,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     componentDidMount(): void {
         const { id, søkersIdent, pleietrengendeIdent } = this.props;
         this.props.getSoknad(id);
-        this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
 
         if (søkersIdent && pleietrengendeIdent) {
@@ -318,7 +306,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const eksisterendePerioder = punchFormState.perioder || [];
 
         if (punchFormState.isComplete) {
-            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
+            // TODO navigate
             return null;
         }
 
@@ -409,7 +397,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     />
                     {!!soknad.utenlandsopphold.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.utenlandsopphold}
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
@@ -447,7 +434,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         <Periodepaneler
                             intl={intl}
                             periods={soknad.lovbestemtFerie}
-                            panelid={(i) => `ferieperiodepanel_${i}`}
                             initialPeriode={this.initialPeriode}
                             editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
                             editSoknadState={(perioder, showStatus) =>
@@ -456,7 +442,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             getErrorMessage={this.getErrorMessage}
                             getUhaandterteFeil={this.getUhaandterteFeil}
                             feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                            minstEn={false}
                             kanHaFlere={true}
                         />
                     )}
@@ -477,7 +462,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     <Periodepaneler
                                         intl={intl}
                                         periods={soknad.lovbestemtFerieSomSkalSlettes}
-                                        panelid={(i) => `ferieperiodepanel_${i}`}
                                         initialPeriode={this.initialPeriode}
                                         editSoknad={(perioder) =>
                                             this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
@@ -491,7 +475,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         getErrorMessage={() => undefined}
                                         getUhaandterteFeil={this.getUhaandterteFeil}
                                         feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                                        minstEn={false}
                                         kanHaFlere={true}
                                     />
                                 </>
@@ -535,7 +518,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     />
                     {!!soknad.bosteder.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.bosteder}
                             component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
@@ -1228,7 +1210,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),
     resetPunchFormAction: () => dispatch(resetPLSPunchFormAction()),

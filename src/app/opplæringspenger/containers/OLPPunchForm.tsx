@@ -3,9 +3,9 @@ import { debounce } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useCallback, useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
 
@@ -42,7 +42,7 @@ import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
 import { KvitteringContext } from './kvittering/KvitteringContext';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 
-export interface IPunchOLPFormComponentProps {
+export interface OwnProps {
     journalpostid: string;
     visForhaandsvisModal: boolean;
     setVisForhaandsvisModal: (vis: boolean) => void;
@@ -53,11 +53,8 @@ export interface IPunchOLPFormComponentProps {
     hentEksisterendePerioderError: boolean;
 }
 
-type IPunchOLPFormProps = IPunchOLPFormComponentProps & WrappedComponentProps;
-
-export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
+export const OLPPunchForm: React.FC<OwnProps> = (props) => {
     const {
-        intl,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
         k9FormatErrors,
@@ -77,6 +74,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
     const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
     const dispatch = useDispatch();
+    const intl = useIntl();
     const identState = useSelector((state: RootStateType) => state.identState);
 
     const handlePanelClick = (panel: string) => {
@@ -476,5 +474,3 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         </>
     );
 };
-
-export const OLPPunchForm = injectIntl(PunchOLPFormComponent);

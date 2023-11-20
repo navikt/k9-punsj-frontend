@@ -11,7 +11,6 @@ export type ISakstypeOmfordeling = ISakstypeDefault;
 
 export interface ISakstypeComponentProps {
     journalpostid: string;
-    punchPath: string;
 }
 
 interface IStepComponentProps {
@@ -30,7 +29,7 @@ export interface ISakstypeStep {
 export interface ISakstypePunch extends ISakstypeDefault {
     punchPath: string;
     apiUrl?: ApiPath;
-    getComponent?: (props: ISakstypeComponentProps) => ReactNode;
+    getComponent: (props: ISakstypeComponentProps) => ReactNode;
     steps: ISakstypeStep[];
 }
 
