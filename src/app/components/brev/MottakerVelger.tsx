@@ -90,6 +90,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                 {({ field, meta }: FieldProps) => (
                     <Select
                         {...field}
+                        size="small"
                         label={intl.formatMessage({ id: 'Messages.ChooseRecipient' })}
                         placeholder={intl.formatMessage({ id: 'Messages.ChooseRecipient' })}
                         className="w-[400px] "
@@ -117,7 +118,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             <VerticalSpacer sixteenPx />
             <Field name={BrevFormKeys.velgAnnenMottaker}>
                 {({ field }: FieldProps) => (
-                    <Checkbox {...field}>
+                    <Checkbox {...field} size="small">
                         <FormattedMessage id="Messages.velgAnnenMottaker" />
                     </Checkbox>
                 )}
@@ -140,6 +141,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                                 label={intl.formatMessage({ id: 'Messages.orgNummer' })}
                                 {...field}
                                 type="text"
+                                size="small"
                                 inputMode="numeric"
                                 pattern="[0-9]*"
                                 autoComplete="off"

@@ -66,6 +66,7 @@ const SendBrevIAvsluttetSak = () => {
                     className="fnrInput"
                     label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
                     type="text"
+                    size="small"
                     inputMode="numeric"
                     pattern="[0-9]*"
                     autoComplete="off"
@@ -82,7 +83,6 @@ const SendBrevIAvsluttetSak = () => {
                             }
                         }
                     }}
-                    size="medium"
                 />
                 {fødselsnummerError && (
                     <ErrorMessage>
@@ -99,6 +99,7 @@ const SendBrevIAvsluttetSak = () => {
                                 label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velgFagsak' })}
                                 disabled={fagsaker.length === 0}
                                 onChange={(event) => setValgtFagsak(event.target.value)}
+                                size="small"
                             >
                                 <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
                                 {fagsaker.map(({ fagsakId, sakstype }) => (

@@ -23,6 +23,7 @@ const MalVelger: React.FC<MalVelgerProps> = ({ resetBrevStatus, brevmaler }) => 
             {({ field, meta }: FieldProps) => (
                 <Select
                     {...field}
+                    size="small"
                     label={intl.formatMessage({ id: 'Messages.Template' })}
                     placeholder={intl.formatMessage({ id: 'Messages.ChooseTemplate' })}
                     className="w-[400px]"
