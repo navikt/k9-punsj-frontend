@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Button } from '@navikt/ds-react';
 
+import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 
 import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
@@ -27,6 +29,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     gosysKategoriJournalforing,
 }) => {
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
+    const navigate = useNavigate();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     if (!sakstypeConfig || !journalpost) {
         return null;
@@ -34,6 +37,13 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if ((sakstypeConfig as ISakstypePunch).punchPath) {
         const punchConfig = sakstypeConfig as ISakstypePunch;
+        if (sakstypeConfig.navn === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE) {
+            return (
+                <Button onClick={() => navigate(`${ROUTES.PLS_ROOT}${ROUTES.PLS_VELG_SOKNAD}`)}>
+                    <FormattedMessage id="fordeling.knapp.punsj" />
+                </Button>
+            );
+        }
         return (
             <Button onClick={() => setHash(punchConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />

@@ -4,7 +4,6 @@ import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
 
 import { Alert, Button, Panel } from '@navikt/ds-react';
 
@@ -58,7 +57,6 @@ export interface IPunchPageComponentState {
 }
 
 type IPunchPageProps = WrappedComponentProps &
-    RouteComponentProps &
     IPunchPageComponentProps &
     IPunchPageStateProps &
     IPunchPageDispatchProps &
@@ -180,12 +178,10 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -199,6 +195,4 @@ const PunchPageComponentWithQuery: React.FunctionComponent<IPunchPageProps> = (p
     return <PunchPageComponent {...props} dok={dok} />;
 };
 
-export const PunchPage = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponentWithQuery)),
-);
+export const PunchPage = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchPageComponentWithQuery));

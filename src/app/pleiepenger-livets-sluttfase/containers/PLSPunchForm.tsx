@@ -68,12 +68,11 @@ import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSok
 import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
-
+import { useParams } from 'react-router-dom';
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
     id: string;
 }
-
 export interface IPunchPLSFormStateProps {
     punchFormState: IPunchPLSFormState;
     signaturState: ISignaturState;
@@ -130,6 +129,13 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
     WrappedComponentProps &
     IPunchPLSFormStateProps &
     IPunchPLSFormDispatchProps;
+
+function withParams(Component) {
+    return (props) => {
+        const { id, journalpostid } = useParams();
+        return <Component {...props} id={id} journalpostid={journalpostid} />;
+    };
+}
 
 export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPunchPLSFormComponentState> {
     state: IPunchPLSFormComponentState = {
@@ -1219,5 +1225,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
 });
 
-export const PLSPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
+export const PLSPunchForm = withParams(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
 /* eslint-enable */

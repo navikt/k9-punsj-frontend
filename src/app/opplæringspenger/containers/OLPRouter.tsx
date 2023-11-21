@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 
@@ -32,7 +32,7 @@ const OLPRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpo
         <RoutingPathsContext.Provider value={routingPaths}>
             <KvitteringContext.Provider value={kvitteringState}>
                 <PunchOLPPage journalpostid={journalpostid}>
-                    <Switch>
+                    <Routes>
                         <Route exact path={routingPaths.soeknader}>
                             <OLPRegistreringsValg journalpostid={journalpostid} />
                         </Route>
@@ -42,7 +42,7 @@ const OLPRouter: React.FunctionComponent<ISakstypeComponentProps> = ({ journalpo
                         <Route path={`${routingPaths.kvittering}:id`}>
                             <KvitteringContainer kvittering={kvittering} />
                         </Route>
-                    </Switch>
+                    </Routes>
                 </PunchOLPPage>
             </KvitteringContext.Provider>
         </RoutingPathsContext.Provider>

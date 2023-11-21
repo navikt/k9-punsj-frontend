@@ -98,7 +98,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
     const intl = useIntl();
     const sakstyper: ISakstypeDefault[] = useMemo(
-        () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
+        () => [
+            ...Sakstyper.punchSakstyper.filter((v) => v.navn === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE),
+            ...Sakstyper.omfordelingssakstyper,
+        ],
         [],
     );
 

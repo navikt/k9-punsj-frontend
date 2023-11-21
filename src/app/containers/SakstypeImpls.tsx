@@ -8,7 +8,6 @@ import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRout
 import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
 import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
 import OLPRouter from '../opplæringspenger/containers/OLPRouter';
-import PLSRouter from '../pleiepenger-livets-sluttfase/containers/PLSRouter';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
@@ -25,7 +24,6 @@ export const Pleiepenger: ISakstypePunch = {
 export const PleiepengerILivetsSluttfase: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
     punchPath: '/pleiepenger-i-livets-sluttfase',
-    getComponent: ({ journalpostid, punchPath }) => <PLSRouter journalpostid={journalpostid} punchPath={punchPath} />,
 };
 
 export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {

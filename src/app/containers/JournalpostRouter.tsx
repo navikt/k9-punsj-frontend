@@ -1,39 +1,35 @@
 import * as React from 'react';
-import { HashRouter, Route, useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { JournalpostOgPdfVisning } from 'app/components/JournalpostOgPdfVisning';
 
-import JournalpostLoader from './JournalpostLoader';
-import { Sakstyper } from './SakstypeImpls';
+import { PLSRegistreringsValg } from 'app/pleiepenger-livets-sluttfase/containers/PLSRegistreringsValg';
+import { PLSPunchForm } from 'app/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
+import { PLSKvittering } from 'app/pleiepenger-livets-sluttfase/containers/PLSKvittering';
+import { ROUTES } from 'app/constants/routes';
 import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 
-interface IRouterParams {
-    journalpostid: string;
-}
-
 const JournalpostRouter: React.FunctionComponent = () => {
-    const { journalpostid } = useParams<IRouterParams>();
+    const { journalpostid } = useParams<{ journalpostid: string }>();
+
+    if (!journalpostid) {
+        return null;
+    }
 
     return (
-        <JournalpostLoader
-            journalpostId={journalpostid}
-            renderOnLoadComplete={() => (
-                <HashRouter>
-                    <Route exact path="/">
-                        <JournalpostOgPdfVisning journalposter={[journalpostid]}>
-                            <Fordeling />
-                        </JournalpostOgPdfVisning>
+        <JournalpostOgPdfVisning journalposter={[journalpostid]}>
+            <Routes>
+                <Route path={ROUTES.PLS_ROOT}>
+                    <Route
+                        path={ROUTES.PLS_VELG_SOKNAD}
+                        element={<PLSRegistreringsValg journalpostid={journalpostid} />}
+                    />
+                    <Route path={ROUTES.PLS_PUNCH} element={<PLSPunchForm journalpostid={journalpostid} />}>
+                        <Route path={ROUTES.PLS_KVITTERING} element={<PLSKvittering />} />
                     </Route>
-
-                    {Sakstyper.punchSakstyper.map((sakstypeConfig) => (
-                        <Route key={sakstypeConfig.navn} path={sakstypeConfig.punchPath}>
-                            {sakstypeConfig.getComponent({
-                                journalpostid,
-                            })}
-                        </Route>
-                    ))}
-                </HashRouter>
-            )}
-        />
+                </Route>
+                <Route path="/" element={<Fordeling />} />
+            </Routes>
+        </JournalpostOgPdfVisning>
     );
 };
 

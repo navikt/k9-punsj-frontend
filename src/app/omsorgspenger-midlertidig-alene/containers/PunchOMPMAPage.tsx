@@ -4,7 +4,7 @@ import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries } from 'react-query';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 
 import { Alert, Button, Panel } from '@navikt/ds-react';
 
@@ -64,6 +64,7 @@ type IPunchOMPMAPageProps = WrappedComponentProps &
     IPunchOMPMAPageDispatchProps &
     IPunchOMPMAPageQueryProps;
 
+// TODO: FIKS DENNE
 export const PunchOMPMAPageComponent: React.FunctionComponent<IPunchOMPMAPageProps> = (props) => {
     const { intl, dok, journalpostid, journalpost, forbidden, step, match, punchFormState } = props;
     const journalposterFraSoknad = punchFormState.soknad?.journalposter;
@@ -174,7 +175,6 @@ const mapStateToProps = (state: RootStateType) => ({
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
     punchFormState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState,
-    journalposterIAktivPunchForm: state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -190,6 +190,6 @@ const PunchOMPMAPageComponentWithQuery: React.FunctionComponent<IPunchOMPMAPageP
     return <PunchOMPMAPageComponent {...props} dok={dok} />;
 };
 
-export const PunchOMPMAPage = withRouter(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAPageComponentWithQuery)),
+export const PunchOMPMAPage = injectIntl(
+    connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAPageComponentWithQuery),
 );

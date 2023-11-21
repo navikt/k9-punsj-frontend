@@ -4,7 +4,7 @@ import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries, useQuery } from 'react-query';
 import { connect } from 'react-redux';
-import { RouteComponentProps, useHistory, withRouter } from 'react-router';
+import { RouteComponentProps, useHistory } from 'react-router';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
@@ -12,7 +12,6 @@ import { ApiPath } from 'app/apiConfig';
 import Page from 'app/components/page/Page';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentAction } from 'app/state/actions';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -29,9 +28,6 @@ export interface IPunchOMPUTPageStateProps {
     children: JSX.Element;
 }
 
-export interface IPunchOMPUTPageDispatchProps {
-    setIdentAction: typeof setIdentAction;
-}
 export interface IPunchOMPUTPageComponentProps {
     journalpostid?: string;
 }
@@ -44,9 +40,9 @@ export interface IPunchOMPUTPageComponentState {
 type IPunchOMPUTPageProps = WrappedComponentProps &
     RouteComponentProps &
     IPunchOMPUTPageComponentProps &
-    IPunchOMPUTPageStateProps &
-    IPunchOMPUTPageDispatchProps;
+    IPunchOMPUTPageStateProps;
 
+// TODO: FIKS DENNE
 const PunchOMPUTPage: React.FunctionComponent<IPunchOMPUTPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, identState, children } = props;
     const id = useHistory().location.pathname.split('skjema/')[1];
@@ -121,4 +117,4 @@ const mapStateToProps = (state: RootStateType) => ({
     forbidden: state.felles.journalpostForbidden,
 });
 
-export default withRouter(injectIntl(connect(mapStateToProps)(PunchOMPUTPage)));
+export default injectIntl(connect(mapStateToProps)(PunchOMPUTPage));

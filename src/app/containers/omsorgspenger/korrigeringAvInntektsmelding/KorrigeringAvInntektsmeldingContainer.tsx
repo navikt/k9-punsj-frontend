@@ -43,7 +43,6 @@ const mapStateToProps = (state: RootStateType) => ({
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const KorrigeringAvInntektsmeldingContainer = connect(mapStateToProps)(KorrigeringAvInntektsmelding);

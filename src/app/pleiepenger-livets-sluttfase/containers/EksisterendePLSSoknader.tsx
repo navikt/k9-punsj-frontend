@@ -3,12 +3,14 @@ import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { redirect, useNavigate } from 'react-router';
 
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import { resetPunchAction, setIdentAction, undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
-import { datetime, setHash } from 'app/utils';
+import { ROUTES } from 'app/constants/routes';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import { generateDateString } from '../../components/skjema/skjemaUtils';
@@ -52,6 +54,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 ) => {
     const { eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
     const intl = useIntl();
+    const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
@@ -61,16 +64,9 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             props.findEksisterendeSoknader(søkerId, null);
         } else {
             props.resetPunchAction();
-            setHash('/');
+            redirect(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
-
-    React.useEffect(() => {
-        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
-            // TODO:NAVIGATE
-            props.resetSoknadidAction();
-        }
-    }, [eksisterendeSoknaderState.soknadid]);
 
     if (!søkerId || søkerId === '') {
         return null;
@@ -108,8 +104,13 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         ) : null;
 
     const chooseSoknad = (soknad: IPLSSoknad) => {
-        props.chooseEksisterendeSoknadAction(soknad);
-        // TODO:NAVIGATE
+        if (soknad.soeknadId) {
+            props.chooseEksisterendeSoknadAction(soknad);
+            props.resetSoknadidAction();
+            navigate(`../${ROUTES.PLS_PUNCH.replace(':id', soknad.soeknadId)}`);
+        } else {
+            throw new Error('Søknad mangler søknadid');
+        }
     };
 
     function showSoknader() {

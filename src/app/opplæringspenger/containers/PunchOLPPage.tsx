@@ -4,7 +4,7 @@ import React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQueries, useQuery } from 'react-query';
 import { connect } from 'react-redux';
-import { RouteComponentProps, useHistory, withRouter } from 'react-router';
+import { RouteComponentProps, useHistory } from 'react-router';
 
 import { Alert, Panel } from '@navikt/ds-react';
 
@@ -43,6 +43,7 @@ type IPunchOLPPageProps = WrappedComponentProps &
     IPunchOLPPageComponentProps &
     IPunchOLPPageStateProps;
 
+// TODO: FIKS DENNE
 const PunchOLPPage: React.FunctionComponent<IPunchOLPPageProps> = (props) => {
     const { intl, journalpostid, journalpost, forbidden, identState, children } = props;
     const id = useHistory().location.pathname.split('skjema/')[1];
@@ -116,4 +117,4 @@ const mapStateToProps = (state: RootStateType) => ({
     forbidden: state.felles.journalpostForbidden,
 });
 
-export default withRouter(injectIntl(connect(mapStateToProps)(PunchOLPPage)));
+export default injectIntl(connect(mapStateToProps)(PunchOLPPage));
