@@ -274,7 +274,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     className="erdusikkermodal"
                     onClose={() => setVisErDuSikkerModal(false)}
                     aria-label="erdusikkermodal"
-                    closeButton={false}
                     open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal

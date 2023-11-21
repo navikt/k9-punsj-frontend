@@ -13,9 +13,6 @@ import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 import './sendBrevIAvsluttetSak.less';
 
 const SendBrevIAvsluttetSak = () => {
-    if (Modal?.setAppElement) {
-        Modal.setAppElement(document.body);
-    }
     const [søkerId, setSøkerId] = useState('');
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
@@ -129,7 +126,7 @@ const SendBrevIAvsluttetSak = () => {
                 )}
             </div>
             {visLosModal && (
-                <Modal closeButton={false} open aria-label="Gå til LOS-modal" className="losModal" onClose={() => null}>
+                <Modal open aria-label="Gå til LOS-modal" className="losModal" onClose={() => null}>
                     <div className="modalContent">
                         <SuccessIcon />
                         <Heading spacing size="xsmall" level="3">

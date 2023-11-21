@@ -91,7 +91,6 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
                     onClose={() => setValgtSoeknad(undefined)}
                     aria-label={soknadId}
                     open={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
-                    closeButton={false}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"

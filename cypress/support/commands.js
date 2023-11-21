@@ -52,7 +52,9 @@ Cypress.Commands.add('sendInnSoknad', () => {
         .should('exist')
         .click();
 
-    cy.findByRole('button', { name: /send inn/i })
-        .should('exist')
-        .click();
+    cy.get('.navds-modal').within(() => {
+        cy.findByRole('button', { name: /send inn/i })
+            .should('exist')
+            .click();
+    })
 });

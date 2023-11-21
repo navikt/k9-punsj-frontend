@@ -170,7 +170,6 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                     onClose={props.closeEksisterendeSoknadAction}
                     aria-label={soknadId}
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
-                    closeButton={false}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
