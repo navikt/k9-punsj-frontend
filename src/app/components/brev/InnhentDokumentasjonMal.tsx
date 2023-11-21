@@ -25,6 +25,7 @@ const InnhentDokumentasjonMal: React.FC<InnhentDokumentasjonMalProps> = ({ setVi
                     <div className="textareaContainer">
                         <Textarea
                             {...field}
+                            size="small"
                             onChange={(event) => {
                                 setFieldValue(field.name, event.target.value);
                                 setVisBrevIkkeSendtInfoboks();
