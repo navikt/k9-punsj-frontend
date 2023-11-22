@@ -144,7 +144,7 @@
         "copy-webpack-plugin": "11.0.0",
         "cross-env": "7.0.3",
         "css-loader": "6.8.1",
-        "cypress": "13.3.3",
+        "cypress": "13.6.0",
         "cypress-wait-until": "2.0.1",
         "enzyme": "3.11.0",
         "eslint": "8.52.0",
