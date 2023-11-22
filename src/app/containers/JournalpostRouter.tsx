@@ -20,8 +20,6 @@ const JournalpostRouter: React.FunctionComponent = () => {
         return null;
     }
 
-    throw Error('Tester sentry');
-
     return (
         <JournalpostOgPdfVisning journalposter={[journalpostid]}>
             <ErrorBoundary fallback={<ErrorFallback />}>
