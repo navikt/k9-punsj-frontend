@@ -7,6 +7,7 @@ import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 
+import { useNavigate } from 'react-router';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { setHash } from '../../utils';
@@ -28,6 +29,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
     const { søkerId, pleietrengendeId } = identState;
+    const navigate = useNavigate();
 
     const {
         isLoading: oppretterSoknad,
@@ -40,10 +42,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     });
 
     const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
-
-    const redirectToPreviousStep = () => {
-        setHash('/');
-    };
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -72,7 +70,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
             />
 
             <div className="knapperad">
-                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
+                <Button variant="secondary" className="knapp knapp1" onClick={() => navigate(-1)} size="small">
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (

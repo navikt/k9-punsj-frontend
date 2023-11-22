@@ -8,15 +8,14 @@ import { Button } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 
-import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
+import { ISakstypePunch } from '../../../../models/Sakstype';
 import { Sakstype } from '../../../../models/enums';
-import { setHash } from '../../../../utils';
 import { IFordelingProps } from '../Fordeling';
 import KlassifiserModal from './KlassifiserModal';
 
 type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent: string;
-    sakstypeConfig?: ISakstypeDefault;
+    sakstypeConfig?: ISakstypePunch;
     gosysKategoriJournalforing: string;
 };
 
@@ -35,17 +34,9 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
         return null;
     }
 
-    if ((sakstypeConfig as ISakstypePunch).punchPath) {
-        const punchConfig = sakstypeConfig as ISakstypePunch;
-        if (sakstypeConfig.navn === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE) {
-            return (
-                <Button onClick={() => navigate(`${ROUTES.PLS_ROOT}${ROUTES.PLS_VELG_SOKNAD}`)}>
-                    <FormattedMessage id="fordeling.knapp.punsj" />
-                </Button>
-            );
-        }
+    if (sakstypeConfig?.punchPath) {
         return (
-            <Button onClick={() => setHash(punchConfig.punchPath)}>
+            <Button onClick={() => navigate(`${sakstypeConfig.punchPath}${ROUTES.VELG_SOKNAD}`)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
             </Button>
         );

@@ -107,7 +107,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         if (soknad.soeknadId) {
             props.chooseEksisterendeSoknadAction(soknad);
             props.resetSoknadidAction();
-            navigate(`../${ROUTES.PLS_PUNCH.replace(':id', soknad.soeknadId)}`);
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
         } else {
             throw new Error('Søknad mangler søknadid');
         }

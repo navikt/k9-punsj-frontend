@@ -152,7 +152,7 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
     );
 };
 
-export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
+export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     intl,
     response,
     kopierJournalpostSuccess,
@@ -502,4 +502,4 @@ const mapStateToProps = (state: RootStateType) => ({
     annenSokerIdent: state.identState.annenSokerIdent,
 });
 
-export default connect(mapStateToProps)(SoknadKvittering);
+export default connect(mapStateToProps)(PSBSoknadKvittering);

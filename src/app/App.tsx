@@ -37,12 +37,7 @@ Sentry.init({
     release: process.env.SENTRY_RELEASE || 'unknown',
     environment,
     integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
-    beforeSend: (event) => {
-        if (environment === 'localhost') {
-            return null;
-        }
-        return event;
-    },
+    beforeSend: (event) => event,
 });
 
 function prepare() {

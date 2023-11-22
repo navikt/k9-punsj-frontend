@@ -25,7 +25,7 @@ import { IIdentState } from '../../models/types/IdentState';
 import { PSBPunchForm } from './PSBPunchForm';
 import { peiepengerPaths } from './PeiepengerRoutes';
 import { RegistreringsValg } from './RegistreringsValg';
-import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 
 export interface IPunchPageStateProps {
     punchState: IPunchState;
@@ -123,7 +123,7 @@ export const PunchPageComponent: React.FunctionComponent<IPunchPageProps> = (pro
                             )} */}
                         </div>
                         {!!punchFormState.innsentSoknad && (
-                            <SoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
+                            <PSBSoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
                         )}
                     </>
                 );

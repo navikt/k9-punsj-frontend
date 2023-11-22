@@ -128,6 +128,8 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
 
         return true;
     });
+    console.log('keys', keys);
+    console.log(konfigForValgtSakstype);
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">
@@ -156,7 +158,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
                     <Alert size="small" variant="info">
-                        {' '}
                         {intlHelper(intl, 'fordeling.infobox.opprettigosys')}
                     </Alert>
                     <GosysGjelderKategorier />
@@ -164,7 +165,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
                 <Alert size="small" variant="info">
-                    {' '}
                     {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
                 </Alert>
             )}

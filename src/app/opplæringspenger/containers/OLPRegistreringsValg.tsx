@@ -28,6 +28,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     const { journalpostid, identState } = props;
     const routingPaths = useContext(RoutingPathsContext);
     const { søkerId, pleietrengendeId } = identState;
+    const navigate = useNavigate();
 
     const {
         isLoading: oppretterSoknad,
@@ -40,10 +41,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     });
 
     const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(søkerId));
-
-    const redirectToPreviousStep = () => {
-        setHash('/');
-    };
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -72,7 +69,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
             />
 
             <div className="knapperad">
-                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
+                <Button variant="secondary" className="knapp knapp1" onClick={() => navigate(-1)} size="small">
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (

@@ -29,8 +29,8 @@ export interface ISakstypeStep {
 export interface ISakstypePunch extends ISakstypeDefault {
     punchPath: string;
     apiUrl?: ApiPath;
-    getComponent: (props: ISakstypeComponentProps) => ReactNode;
-    steps: ISakstypeStep[];
+    getComponent?: (props: ISakstypeComponentProps) => ReactNode;
+    steps?: ISakstypeStep[];
 }
 
 export interface ISakstyper {

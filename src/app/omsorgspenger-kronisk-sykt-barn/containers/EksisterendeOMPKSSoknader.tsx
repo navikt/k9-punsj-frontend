@@ -21,7 +21,6 @@ import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntekt
 import {
     chooseEksisterendeOMPKSSoknadAction,
     closeEksisterendeOMPKSSoknadAction,
-    createOMPKSSoknad,
     findEksisterendeOMPKSSoknader,
     openEksisterendeOMPKSSoknadAction,
     resetOMPKSSoknadidAction,
@@ -240,8 +239,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     openEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(createOMPKSSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetOMPKSSoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
 });

@@ -62,10 +62,11 @@ import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
-import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './Utenlandsopphold';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
+import { useParams } from 'react-router-dom';
 
 export interface IPunchFormComponentProps {
     getPunchPath: (step: PunchStep, values?: any) => string;
@@ -78,6 +79,13 @@ export interface IPunchFormStateProps {
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
+}
+
+function withParams(Component) {
+    return (props) => {
+        const { id, journalpostid } = useParams();
+        return <Component {...props} id={id} journalpostid={journalpostid} />;
+    };
 }
 
 export interface IPunchFormDispatchProps {
@@ -765,7 +773,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                    <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
+                                    <PSBSoknadKvittering
+                                        intl={intl}
+                                        response={this.props.punchFormState.validertSoknad}
+                                    />
                                 </div>
                                 <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                     <Button
@@ -1402,5 +1413,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
-export const PSBPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
+export const PSBPunchForm = withParams(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
 /* eslint-enable */

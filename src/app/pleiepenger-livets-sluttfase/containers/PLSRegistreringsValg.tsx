@@ -20,6 +20,7 @@ export interface IPLSRegistreringsValgComponentProps {
 
 export interface IPLSRegistreringsValgDispatchProps {
     createSoknad: typeof createPLSSoknad;
+    resetSoknadidAction: typeof resetPLSSoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
@@ -45,7 +46,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
             eksisterendeSoknaderState.isSoknadCreated &&
             eksisterendeSoknaderState.soknadid
         ) {
-            navigate(`../${ROUTES.PLS_PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
+            props.resetSoknadidAction();
+            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
         }
     }, [eksisterendeSoknaderState.soknadid]);
     React.useEffect(() => {

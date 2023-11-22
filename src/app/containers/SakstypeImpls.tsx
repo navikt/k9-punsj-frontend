@@ -1,6 +1,7 @@
 import React from 'react';
 
 import OMPAORouter from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORouter';
+import { ROUTES } from 'app/constants/routes';
 
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
@@ -10,20 +11,15 @@ import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
 import OLPRouter from '../opplæringspenger/containers/OLPRouter';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
-import PleiepengerRouter from './pleiepenger/PleiepengerRouter';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
-    punchPath: '/pleiepenger',
-    getComponent: ({ journalpostid, punchPath }) => (
-        <PleiepengerRouter journalpostid={journalpostid} punchPath={punchPath} />
-    ),
-    steps: [],
+    punchPath: ROUTES.PSB_ROOT,
 };
 
 export const PleiepengerILivetsSluttfase: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
-    punchPath: '/pleiepenger-i-livets-sluttfase',
+    punchPath: ROUTES.PLS_ROOT,
 };
 
 export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {
