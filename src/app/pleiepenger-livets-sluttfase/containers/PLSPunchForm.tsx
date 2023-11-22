@@ -22,7 +22,6 @@ import {
     resetPunchFormAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
@@ -68,10 +67,12 @@ import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSok
 import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
-import { useParams } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from 'app/constants/routes';
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
     id: string;
+    navigate: NavigateFunction;
 }
 export interface IPunchPLSFormStateProps {
     punchFormState: IPunchPLSFormState;
@@ -130,10 +131,11 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
     IPunchPLSFormStateProps &
     IPunchPLSFormDispatchProps;
 
-function withParams(Component) {
+function withHooks(Component) {
     return (props) => {
         const { id, journalpostid } = useParams();
-        return <Component {...props} id={id} journalpostid={journalpostid} />;
+        const navigate = useNavigate();
+        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
     };
 }
 
@@ -282,7 +284,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     ): void {
         const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } =
             this.props;
-        const { soknad } = punchFormState;
+        const { soknad, innsentSoknad, isComplete } = punchFormState;
+
+        if (isComplete && innsentSoknad) {
+            this.props.navigate(ROUTES.KVITTERING);
+        }
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PLSSoknad(soknad as IPLSSoknad),
@@ -310,11 +316,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const soknad = new PLSSoknad(this.state.soknad);
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
-
-        if (punchFormState.isComplete) {
-            // TODO navigate
-            return null;
-        }
 
         if (punchFormState.isSoknadLoading) {
             return <Loader size="large" />;
@@ -1225,5 +1226,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
 });
 
-export const PLSPunchForm = withParams(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
+export const PLSPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
 /* eslint-enable */

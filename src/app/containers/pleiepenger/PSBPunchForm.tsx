@@ -66,12 +66,13 @@ import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './Utenlandsopphold';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
-import { useParams } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from 'app/constants/routes';
 
 export interface IPunchFormComponentProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
+    navigate: NavigateFunction;
 }
 
 export interface IPunchFormStateProps {
@@ -81,10 +82,11 @@ export interface IPunchFormStateProps {
     identState: IIdentState;
 }
 
-function withParams(Component) {
+function withHooks(Component) {
     return (props) => {
         const { id, journalpostid } = useParams();
-        return <Component {...props} id={id} journalpostid={journalpostid} />;
+        const navigate = useNavigate();
+        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
     };
 }
 
@@ -254,8 +256,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         prevProps: Readonly<IPunchFormProps>,
         prevState: Readonly<IPunchFormComponentState>,
         snapshot?: any,
-    ): void {
-        const { soknad } = this.props.punchFormState;
+    ): void | null {
+        const { soknad, innsentSoknad, isComplete } = this.props.punchFormState;
+
+        if (isComplete && innsentSoknad) {
+            this.props.navigate(ROUTES.KVITTERING);
+            return null;
+        }
+
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
@@ -274,11 +282,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const soknad = new PSBSoknad(this.state.soknad);
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
-
-        if (punchFormState.isComplete) {
-            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
-            return null;
-        }
 
         if (punchFormState.isSoknadLoading) {
             return <Loader size="large" />;
@@ -773,10 +776,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                    <PSBSoknadKvittering
-                                        intl={intl}
-                                        response={this.props.punchFormState.validertSoknad}
-                                    />
+                                    <PSBSoknadKvittering innsendtSøknad={this.props.punchFormState.validertSoknad} />
                                 </div>
                                 <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                     <Button
@@ -1413,5 +1413,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
-export const PSBPunchForm = withParams(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
+export const PSBPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
 /* eslint-enable */

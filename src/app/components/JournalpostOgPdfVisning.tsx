@@ -34,22 +34,19 @@ export const JournalpostOgPdfVisning = (props: Props) => {
             get(ApiPath.JOURNALPOST_GET, { journalpostId: journalpostidentifikator }).then((res) => {
                 if (!res.ok) {
                     throw new Error(`Fetch mot ${ApiPath.JOURNALPOST_GET} feilet`);
-                } else {
-                    return res.json();
                 }
+                return res.json();
             }),
     }));
 
     const queries = useQueries(queryObjects);
 
-    const journalpostDokumenter: IJournalpostDokumenter[] =
-        (queries.every((query) => query.isSuccess) &&
-            queries.map((query) => {
-                const data = query?.data;
-
-                return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
-            })) ||
-        [];
+    const journalpostDokumenter: IJournalpostDokumenter[] = queries.every((query) => query.isSuccess)
+        ? queries.map((query) => {
+              const { data } = query;
+              return { journalpostid: data?.journalpostId, dokumenter: data?.dokumenter };
+          })
+        : [];
     const left = () => (
         <Panel className="omsorgspenger_punch_form" border>
             <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />

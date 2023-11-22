@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
@@ -68,7 +68,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
             props.resetPunchAction();
-            redirect(ROUTES.HOME);
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
 

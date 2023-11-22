@@ -7,5 +7,5 @@ export const ROUTES = {
     PSB_ROOT: 'pleiepenger-sykt-barn/',
     VELG_SOKNAD: 'hentSoknader/',
     PUNCH: `skjema/:id/`,
-    KVITTERING: `fullfort`,
+    KVITTERING: `kvittering/`,
 };

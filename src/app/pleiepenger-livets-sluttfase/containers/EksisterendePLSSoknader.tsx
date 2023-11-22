@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
-import { redirect, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
@@ -64,7 +64,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             props.findEksisterendeSoknader(søkerId, null);
         } else {
             props.resetPunchAction();
-            redirect(ROUTES.HOME);
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
 
