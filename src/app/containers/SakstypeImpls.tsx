@@ -5,8 +5,6 @@ import { ROUTES } from 'app/constants/routes';
 
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
-import OMPKSRouter from '../omsorgspenger-kronisk-sykt-barn/containers/OMPKSRouter';
-import OMPMARouter from '../omsorgspenger-midlertidig-alene/containers/OMPMARouter';
 import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
 import OLPRouter from '../opplæringspenger/containers/OLPRouter';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
@@ -24,16 +22,12 @@ export const PleiepengerILivetsSluttfase: ISakstypePunch = {
 
 export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN,
-    punchPath: '/omsorgspenger-kronisk-sykt-barn',
-    getComponent: ({ journalpostid, punchPath }) => <OMPKSRouter journalpostid={journalpostid} punchPath={punchPath} />,
-    steps: [],
+    punchPath: ROUTES.OMPKS_ROOT,
 };
 
 export const OmsorgspengerMidlertidigAlene: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE,
-    punchPath: '/omsorgspenger-midlertidig-alene',
-    getComponent: ({ journalpostid, punchPath }) => <OMPMARouter journalpostid={journalpostid} punchPath={punchPath} />,
-    steps: [],
+    punchPath: ROUTES.OMPMA_ROOT,
 };
 
 export const OmsorgspengerUtbetaling: ISakstypePunch = {

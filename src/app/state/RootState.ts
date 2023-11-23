@@ -34,28 +34,31 @@ export const rootReducer = combineReducers({
         punchFormState: PunchOMPKSFormReducer,
         signaturState: SignaturReducer,
     }),
+    // trenger ikke være global
     [Sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE]: combineReducers({
         punchFormState: PunchOMPMAFormReducer,
         signaturState: SignaturReducer,
     }),
+    // trenger ikke være global
     [Sakstype.OMSORGSPENGER_UTBETALING]: combineReducers({
         signaturState: SignaturReducer,
     }),
+    // trenger ikke være global
     [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
         opprettIGosys: GosysOppgaveReducer,
     }),
-    fordelingState: FordelingReducer,
+    fordelingState: FordelingReducer, // trenger ikke være global
     authState: AuthReducer,
     felles: FellesReducer,
     journalposterPerIdentState: JournalposterPerIdentReducer,
     identState: IdentReducer,
-    opprettIGosys: GosysOppgaveReducer,
+    opprettIGosys: GosysOppgaveReducer, // trenger ikke være global
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
-    fordelingSettPåVentState: FordelingSettPaaVentReducer,
-    fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer,
-    eksisterendePLSSoknaderState: EksisterendePLSSoknaderReducer,
-    eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer,
-    eksisterendeOMPMASoknaderState: EksisterendeOMPMASoknaderReducer,
+    fordelingSettPåVentState: FordelingSettPaaVentReducer, // trenger ikke være global
+    fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer, // trenger ikke være global
+    eksisterendePLSSoknaderState: EksisterendePLSSoknaderReducer, // trenger ikke være global
+    eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer, // trenger ikke være global
+    eksisterendeOMPMASoknaderState: EksisterendeOMPMASoknaderReducer, // trenger ikke være global
 });
 
 export type RootStateType = ReturnType<typeof rootReducer>;

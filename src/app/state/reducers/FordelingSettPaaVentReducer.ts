@@ -3,6 +3,7 @@ import FordelingSettPaaVentKeys from 'app/models/enums/FordelingSettPaaVentKeys'
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 
 import { FordelingSettPaaVentActions } from '../actions/FordelingSettPaaVentActions';
+import { RESET_ALL } from '../actions/GlobalActions';
 
 const initialState: FordelingSettPaaVentState = {
     settPaaVentError: undefined,
@@ -42,6 +43,9 @@ export function FordelingSettPaaVentReducer(
                 settPaaVentSuccess: false,
                 settPaaVentError: undefined,
             };
+        case RESET_ALL: {
+            return { ...initialState };
+        }
         default:
             return fordelingSettPåVentState;
     }

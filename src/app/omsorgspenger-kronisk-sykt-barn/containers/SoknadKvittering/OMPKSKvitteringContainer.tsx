@@ -1,15 +1,17 @@
 import React from 'react';
-import { Alert, Button } from '@navikt/ds-react';
-import { RootStateType } from 'app/state/RootState';
-import { getEnvironmentVariable } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
+import { RootStateType } from 'app/state/RootState';
+import { Alert, Button } from '@navikt/ds-react';
+import { getEnvironmentVariable } from 'app/utils';
+import { FormattedMessage, useIntl } from 'react-intl';
+import intlHelper from 'app/utils/intlUtils';
+import OMPKSSoknadKvittering from './OMPKSSoknadKvittering';
 
-export const PLSKvitteringContainer = () => {
+export const OMPKSKvitteringContainer = () => {
+    const { innsentSoknad } = useSelector(
+        (state: RootStateType) => state.OMSORGSPENGER_KRONISK_SYKT_BARN.punchFormState,
+    );
     const intl = useIntl();
-    const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState);
     return (
         <>
             <Alert size="small" variant="info" className="fullfortmelding">
@@ -24,9 +26,7 @@ export const PLSKvitteringContainer = () => {
                     {intlHelper(intl, 'tilbaketilLOS')}
                 </Button>
             </div>
-            {!!punchFormState.innsentSoknad && (
-                <PLSSoknadKvittering response={punchFormState.innsentSoknad} intl={intl} />
-            )}
+            {innsentSoknad && <OMPKSSoknadKvittering response={innsentSoknad} />}
         </>
     );
 };

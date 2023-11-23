@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import FordelingSettPaaVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
+import { IResetStateAction } from './GlobalActions';
 
 interface ISettJournalpostPaaVentAction {
     type: FordelingSettPaaVentKeys.JOURNALPOST_SETT_PAA_VENT;
@@ -62,4 +63,5 @@ export type FordelingSettPaaVentActions =
     | ISettJournalpostPaaVentAction
     | ISettJournalpostPaaVentSuccessAction
     | ISettJournalpostPaaVentErrorAction
-    | ISettJournalpostPaaVentResetAction;
+    | ISettJournalpostPaaVentResetAction
+    | IResetStateAction;

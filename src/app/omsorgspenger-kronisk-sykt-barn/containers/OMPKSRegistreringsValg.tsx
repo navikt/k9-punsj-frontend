@@ -6,9 +6,7 @@ import { useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
-import { ROUTES } from 'app/constants/routes';
 
-import { PunchStep } from '../../models/enums';
 import { IEksisterendeSoknaderState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
@@ -18,12 +16,10 @@ import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
 
 export interface IOMPKSRegistreringsValgComponentProps {
     journalpostid: string;
-    getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
 export interface IOMPKSRegistreringsValgDispatchProps {
     createSoknad: typeof createOMPKSSoknad;
-    resetSoknadidAction: typeof resetOMPKSSoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
 }
 
@@ -39,22 +35,11 @@ type IOMPKSRegistreringsValgProps = IOMPKSRegistreringsValgComponentProps &
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistreringsValgProps> = (
     props: IOMPKSRegistreringsValgProps,
 ) => {
-    const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
+    const { journalpostid, identState, eksisterendeSoknaderState } = props;
 
     const { søkerId, pleietrengendeId } = identState;
 
     const navigate = useNavigate();
-
-    React.useEffect(() => {
-        if (
-            !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
-            eksisterendeSoknaderState.isSoknadCreated &&
-            eksisterendeSoknaderState.soknadid
-        ) {
-            props.resetSoknadidAction();
-            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
-        }
-    }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
         props.getAlleJournalposter(søkerId);
@@ -85,7 +70,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
             <EksisterendeOMPKSSoknader
                 søkerId={søkerId}
                 pleietrengendeId={pleietrengendeId}
-                getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
 

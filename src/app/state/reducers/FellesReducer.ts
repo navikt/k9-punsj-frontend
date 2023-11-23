@@ -13,6 +13,7 @@ import {
     IHentBarnRequestAction,
     IHentBarnSuccessAction,
 } from './HentBarn';
+import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
 
 export interface IFellesState {
     dedupKey: string;
@@ -50,6 +51,7 @@ enum Actiontypes {
     JOURNALPOST_KOPIERE_REQUEST = 'FELLES/JOURNALPOST_KOPIERE_REQUEST',
     JOURNALPOST_KOPIERE_ERROR = 'FELLES/JOURNALPOST_KOPIERE_ERROR',
     RESET_BARN = 'FELLES/RESET_BARN',
+    RESET_FELLES = 'FELLES/RESET_FELLES',
 }
 
 interface IResetDedupKeyAction {
@@ -138,6 +140,10 @@ export function resetBarnAction(): IResetBarnAction {
     return { type: Actiontypes.RESET_BARN };
 }
 
+export function resetFellesAction() {
+    return { type: Actiontypes.RESET_FELLES };
+}
+
 export function getJournalpost(journalpostid: string) {
     return (dispatch: any) => {
         dispatch(getJournalpostLoadAction());
@@ -197,7 +203,8 @@ type IJournalpostActionTypes =
     | IHentBarnRequestAction
     | IHentBarnSuccessAction
     | IHentBarnErrorAction
-    | IResetBarnAction;
+    | IResetBarnAction
+    | IResetStateAction;
 
 export function kopierJournalpost(
     kopierFraIdent: string,
@@ -375,6 +382,10 @@ export default function FellesReducer(
                 isAwaitingHentBarnResponse: undefined,
                 hentBarnSuccess: undefined,
                 harHentBarnResponse: undefined,
+            };
+        case RESET_ALL:
+            return {
+                ...initialState,
             };
 
         default:

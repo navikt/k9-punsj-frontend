@@ -8,7 +8,6 @@ import { Alert, Button } from '@navikt/ds-react';
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { ROUTES } from 'app/constants/routes';
 
-import { PunchStep } from '../../models/enums';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
@@ -18,11 +17,9 @@ import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
 
 export interface IOMPMARegistreringsValgComponentProps {
     journalpostid: string;
-    getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
 export interface IOMPMARegistreringsValgDispatchProps {
-    undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     createSoknad: typeof createOMPMASoknad;
     resetSoknadidAction: typeof resetOMPMASoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
@@ -40,7 +37,7 @@ type IOMPMARegistreringsValgProps = IOMPMARegistreringsValgComponentProps &
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistreringsValgProps> = (
     props: IOMPMARegistreringsValgProps,
 ) => {
-    const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
+    const { journalpostid, identState, eksisterendeSoknaderState } = props;
     const { søkerId, pleietrengendeId, annenPart } = identState;
 
     const navigate = useNavigate();
@@ -88,7 +85,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
             <EksisterendeOMPMASoknader
                 søkerId={søkerId}
                 pleietrengendeId={pleietrengendeId}
-                getPunchPath={getPunchPath}
                 journalpostid={journalpostid}
             />
 

@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
+import { ROUTES } from 'app/constants/routes';
 import { areBothDatesDefined, generateDateString } from 'app/components/skjema/skjemaUtils';
 import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IPunchState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import {
@@ -15,8 +16,9 @@ import {
     setStepAction,
     undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
-import { datetime, setHash } from 'app/utils';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
@@ -31,28 +33,21 @@ import { IEksisterendeOMPMASoknaderState } from '../types/EksisterendeOMPMASokna
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 
 export interface IEksisterendeOMPMASoknaderStateProps {
-    punchState: IPunchState;
     eksisterendeOMPMASoknaderState: IEksisterendeOMPMASoknaderState;
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
     setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     findEksisterendeSoknader: typeof findEksisterendeOMPMASoknader;
-    undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     openEksisterendeSoknadAction: typeof openEksisterendeOMPMASoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeOMPMASoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendeOMPMASoknadAction;
-    createSoknad: typeof createOMPMASoknad;
-    resetSoknadidAction: typeof resetOMPMASoknadidAction;
-    resetPunchAction: typeof resetPunchAction;
+    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendeOMPMASoknaderComponentProps {
-    journalpostid: string;
     søkerId: string;
     pleietrengendeId: string | null;
-    getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
 type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
@@ -63,7 +58,9 @@ type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
 export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksisterendeOMPMASoknaderProps> = (
     props: IEksisterendeOMPMASoknaderProps,
 ) => {
-    const { intl, punchState, eksisterendeOMPMASoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
+    const { eksisterendeOMPMASoknaderState, søkerId, pleietrengendeId } = props;
+    const intl = useIntl();
+    const navigate = useNavigate();
 
     const soknader = eksisterendeOMPMASoknaderState.eksisterendeSoknaderSvar.søknader;
 
@@ -71,26 +68,11 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
-            props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            props.resetPunchAction();
-            setHash('/');
+            props.resetAllAction();
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
-
-    React.useEffect(() => {
-        if (
-            !!eksisterendeOMPMASoknaderState.eksisterendeSoknaderSvar &&
-            eksisterendeOMPMASoknaderState.isSoknadCreated
-        ) {
-            setHash(
-                getPunchPath(PunchStep.FILL_FORM, {
-                    id: eksisterendeOMPMASoknaderState.soknadid,
-                }),
-            );
-            props.resetSoknadidAction();
-        }
-    }, [eksisterendeOMPMASoknaderState.soknadid]);
 
     if (!søkerId) {
         return null;
@@ -105,7 +87,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
     }
 
     if (
-        punchState.step !== PunchStep.CHOOSE_SOKNAD ||
         eksisterendeOMPMASoknaderState.isEksisterendeSoknaderLoading ||
         eksisterendeOMPMASoknaderState.isAwaitingSoknadCreation
     ) {
@@ -128,8 +109,12 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         ) : null;
 
     const chooseSoknad = (soknad: IOMPMASoknad) => {
-        props.chooseEksisterendeSoknadAction(soknad);
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
+        if (soknad.soeknadId) {
+            props.chooseEksisterendeSoknadAction(soknad);
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
+        } else {
+            throw new Error('Søknad mangler søknadid');
+        }
     };
 
     function showSoknader() {
@@ -144,7 +129,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.barn?.map((barn) => barn.norskIdent).join(', '),
                 Array.from(søknad.journalposter).join(', '),
-                areBothDatesDefined(søknad.annenForelder.periode)
+                søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)
                     : '',
 
@@ -230,7 +215,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
 };
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
-    punchState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchState,
     eksisterendeOMPMASoknaderState: state.eksisterendeOMPMASoknaderState,
 });
 
@@ -248,6 +232,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(createOMPMASoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     resetPunchAction: () => dispatch(resetPunchAction()),
+    resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
 export const EksisterendeOMPMASoknader = injectIntl(

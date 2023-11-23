@@ -8,10 +8,11 @@ import { useNavigate } from 'react-router';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { resetPunchAction, setIdentAction, undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+import { setIdentAction, undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { ROUTES } from 'app/constants/routes';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -37,7 +38,7 @@ export interface IEksisterendePLSSoknaderDispatchProps {
     closeEksisterendeSoknadAction: typeof closeEksisterendePLSSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendePLSSoknadAction;
     resetSoknadidAction: typeof resetPLSSoknadidAction;
-    resetPunchAction: typeof resetPunchAction;
+    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendePLSSoknaderComponentProps {
@@ -63,7 +64,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
         } else {
-            props.resetPunchAction();
+            props.resetAllAction();
             navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
@@ -221,7 +222,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
-    resetPunchAction: () => dispatch(resetPunchAction()),
+    resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
 export const EksisterendePLSSoknader = connect(mapStateToProps, mapDispatchToProps)(EksisterendePLSSoknaderComponent);

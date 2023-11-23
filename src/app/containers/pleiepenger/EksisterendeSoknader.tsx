@@ -15,7 +15,6 @@ import {
     closeEksisterendeSoknadAction,
     findEksisterendeSoknader,
     openEksisterendeSoknadAction,
-    resetPunchAction,
     resetSoknadidAction,
     setIdentAction,
     setStepAction,
@@ -23,6 +22,7 @@ import {
 } from 'app/state/actions';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
@@ -40,7 +40,7 @@ export interface IEksisterendeSoknaderDispatchProps {
     closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
     resetSoknadidAction: typeof resetSoknadidAction;
-    resetPunchAction: typeof resetPunchAction;
+    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendeSoknaderComponentProps {
@@ -67,16 +67,10 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             props.findEksisterendeSoknader(søkerId, null);
             props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            props.resetPunchAction();
+            props.resetAllAction();
             navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
-
-    React.useEffect(() => {
-        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
-            props.resetSoknadidAction();
-        }
-    }, [eksisterendeSoknaderState.soknadid]);
 
     if (!søkerId || søkerId === '') {
         return null;
@@ -234,7 +228,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
-    resetPunchAction: () => dispatch(resetPunchAction()),
+    resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
 export const EksisterendeSoknader = injectIntl(

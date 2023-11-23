@@ -3,8 +3,8 @@
 /* eslint-disable no-template-curly-in-string */
 import { Formik, FormikValues } from 'formik';
 import React, { useEffect } from 'react';
-import { WrappedComponentProps } from 'react-intl';
-import { connect } from 'react-redux';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { connect, useDispatch } from 'react-redux';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
@@ -15,8 +15,11 @@ import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
 import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
 import { hentBarn } from 'app/state/reducers/HentBarn';
-import { setHash } from 'app/utils';
+import { getEnvironmentVariable, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { useNavigate, useParams } from 'react-router';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { ROUTES } from 'app/constants/routes';
 
 import schema from '../schema';
 import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
@@ -24,6 +27,7 @@ import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import { OMPMAPunchForm } from './OMPMAPunchForm';
+import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
@@ -47,8 +51,6 @@ const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personva
 });
 
 interface OwnProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
-    id: string;
     journalpostid: string;
     identState: IIdentState;
     barn?: IBarn[];
@@ -66,25 +68,25 @@ export interface IPunchOMPMAFormDispatchProps {
     henteBarn: typeof hentBarn;
 }
 
-type IPunchOMPMAFormProps = OwnProps & WrappedComponentProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
+type IPunchOMPMAFormProps = OwnProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
-    const {
-        intl,
-        getPunchPath,
-        punchFormState,
-        resetPunchFormAction,
-        barn,
-        henteBarn,
-        identState,
-        harHentBarnResponse,
-    } = props;
+    const { punchFormState, resetPunchFormAction, barn, henteBarn, identState, harHentBarnResponse } = props;
+    const intl = useIntl();
     const { soknad } = punchFormState;
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const { id } = props;
+        if (!id) {
+            dispatch(resetAllStateAction());
+            navigate(ROUTES.HOME);
+        }
+    });
+    useEffect(() => {
         props.getSoknad(id);
-        props.setStepAction(PunchStep.FILL_FORM);
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (soknad?.soekerId || identState.søkerId) {
@@ -103,9 +105,24 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         setHash('/');
     };
 
-    if (punchFormState.isComplete) {
-        setHash(getPunchPath(PunchStep.COMPLETED));
-        return null;
+    if (punchFormState.isComplete && punchFormState.innsentSoknad) {
+        return (
+            <>
+                <Alert size="small" variant="info" className="fullfortmelding">
+                    <FormattedMessage id="skjema.sentInn" />
+                </Alert>
+                <div className="punchPage__knapper mt-8">
+                    <Button
+                        onClick={() => {
+                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                        }}
+                    >
+                        {intlHelper(intl, 'tilbaketilLOS')}
+                    </Button>
+                </div>
+                <OMPMASoknadKvittering response={punchFormState.innsentSoknad} />
+            </>
+        );
     }
 
     if (punchFormState.isSoknadLoading || !harHentBarnResponse) {
@@ -140,7 +157,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
             validationSchema={schema}
             onSubmit={(values) => handleSubmit(values)}
         >
-            {(formik) => <OMPMAPunchForm formik={formik} schema={schema} {...props} />}
+            {(formik) => <OMPMAPunchForm formik={formik} schema={schema} id={id} {...props} />}
         </Formik>
     );
 };

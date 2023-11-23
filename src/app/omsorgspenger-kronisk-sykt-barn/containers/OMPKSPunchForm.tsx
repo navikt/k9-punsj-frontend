@@ -48,9 +48,10 @@ import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';
 import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
 import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
+import { useParams } from 'react-router-dom';
+import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
 
 export interface IPunchOMPKSFormComponentProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
 }
@@ -96,6 +97,13 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
     WrappedComponentProps &
     IPunchOMPKSFormStateProps &
     IPunchOMPKSFormDispatchProps;
+
+function withHooks(Component) {
+    return (props) => {
+        const { id, journalpostid } = useParams();
+        return <Component {...props} id={id} journalpostid={journalpostid} />;
+    };
+}
 
 export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProps, IPunchOMPKSFormComponentState> {
     state: IPunchOMPKSFormComponentState = {
@@ -154,8 +162,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         const { signert } = signaturState;
 
         if (punchFormState.isComplete) {
-            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
-            return null;
+            return <OMPKSKvitteringContainer />;
         }
 
         if (punchFormState.isSoknadLoading) {
@@ -332,10 +339,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                    <OMPKSSoknadKvittering
-                                        intl={intl}
-                                        response={this.props.punchFormState.validertSoknad}
-                                    />
+                                    <OMPKSSoknadKvittering response={this.props.punchFormState.validertSoknad} />
                                 </div>
                                 <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                     <Button
@@ -597,5 +601,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerOMPKSSoknadResetAction()),
 });
 
-export const OMPKSPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent));
+export const OMPKSPunchForm = withHooks(
+    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent)),
+);
 /* eslint-enable */

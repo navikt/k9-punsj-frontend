@@ -134,8 +134,7 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
 function withHooks(Component) {
     return (props) => {
         const { id, journalpostid } = useParams();
-        const navigate = useNavigate();
-        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
+        return <Component {...props} id={id} journalpostid={journalpostid} />;
     };
 }
 

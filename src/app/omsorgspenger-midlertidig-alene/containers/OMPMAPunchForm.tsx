@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'form
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 
@@ -18,7 +18,6 @@ import {
     setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
 import { capitalize } from 'app/utils';
@@ -68,8 +67,6 @@ export interface IPunchOMPMAFormDispatchProps {
     getSoknad: typeof getOMPMASoknad;
     resetSoknadAction: typeof resetOMPMASoknadAction;
     setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
-    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPMASoknadAction;
     updateSoknad: typeof updateOMPMASoknad;
     submitSoknad: typeof submitOMPMASoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
@@ -80,10 +77,7 @@ export interface IPunchOMPMAFormDispatchProps {
     validerSoknadReset: typeof validerOMPMASoknadResetAction;
 }
 
-type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps &
-    WrappedComponentProps &
-    IPunchOMPMAFormStateProps &
-    IPunchOMPMAFormDispatchProps;
+type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     try {
@@ -107,13 +101,13 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const {
-        intl,
         punchFormState,
         signaturState,
         schema,
         formik: { values, handleSubmit, errors },
     } = props;
     const { signert } = signaturState;
+    const intl = useIntl();
 
     const updateSoknad = (soknad: IOMPMASoknad) => {
         setShowStatus(true);
@@ -389,7 +383,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                 >
                     <Modal.Body>
                         <div className={classNames('validertSoknadOppsummeringContainer')}>
-                            <OMPMASoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
+                            <OMPMASoknadKvittering response={props.punchFormState.validertSoknad} />
                         </div>
                         <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                             <Button
@@ -459,5 +453,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerOMPMASoknadResetAction()),
 });
 
-export const OMPMAPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAFormComponent));
+export const OMPMAPunchForm = connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAFormComponent);
 /* eslint-enable */
