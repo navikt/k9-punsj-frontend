@@ -58,7 +58,9 @@ export const SearchForm = () => {
 
     useEffect(() => {
         if (journalpost?.journalpostId) {
-            // Her har jeg lagt inn en reset av redux state, fordi
+            // Her har jeg lagt inn en reset av redux state fordi tidligere ble window.location.href brukt for å navigere til journalposten.
+            // så hvis man ikke resetter state først skjer det rare ting.
+            // TODO: fiks dette så vi slipper å kjøre kall for å hente ut journalpost to ganger
             dispatch(resetAllStateAction());
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
