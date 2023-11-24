@@ -56,7 +56,6 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     const intl = useIntl();
     const navigate = useNavigate();
     const soknader = eksisterendeOMPKSSoknaderState.eksisterendeSoknaderSvar.søknader;
-
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             props.setIdentAction(søkerId, pleietrengendeId);

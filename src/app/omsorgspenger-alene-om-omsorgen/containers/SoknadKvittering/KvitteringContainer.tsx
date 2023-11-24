@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 import { Alert, Button } from '@navikt/ds-react';
 
 import { IOMPAOSoknadKvittering } from 'app/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
 import { getEnvironmentVariable } from 'app/utils';
+import { ROUTES } from 'app/constants/routes';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import OMPAOSoknadKvittering from './OMPAOSoknadKvittering';
 
@@ -14,12 +17,18 @@ interface OwnProps {
     kvittering?: IOMPAOSoknadKvittering;
 }
 
-export default function KvitteringContainer(props: OwnProps) {
+export default function KvitteringContainer({ kvittering }: OwnProps) {
     const intl = useIntl();
-    const history = useHistory();
-    if (!props.kvittering) {
-        history.push('/');
-    }
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!kvittering) {
+            dispatch(resetAllStateAction());
+            navigate(ROUTES.HOME);
+        }
+    }, [kvittering]);
+
     return (
         <>
             <Alert size="small" variant="info" className="fullfortmelding">
@@ -34,7 +43,7 @@ export default function KvitteringContainer(props: OwnProps) {
                     {intlHelper(intl, 'tilbaketilLOS')}
                 </Button>
             </div>
-            <OMPAOSoknadKvittering {...props} />
+            <OMPAOSoknadKvittering kvittering={kvittering} />
         </>
     );
 }

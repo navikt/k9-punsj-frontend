@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+import { ROUTES } from 'app/constants/routes';
 
-import { IEksisterendeSoknaderState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { createOMPKSSoknad, resetOMPKSSoknadidAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
 import { EksisterendeOMPKSSoknader } from './EksisterendeOMPKSSoknader';
+import { IEksisterendeOMPKSSoknaderState } from '../types/EksisterendeOMPKSSoknaderState';
 
 export interface IOMPKSRegistreringsValgComponentProps {
     journalpostid: string;
@@ -24,7 +25,7 @@ export interface IOMPKSRegistreringsValgDispatchProps {
 }
 
 export interface IEksisterendeOMPKSSoknaderStateProps {
-    eksisterendeSoknaderState: IEksisterendeSoknaderState;
+    eksisterendeSoknaderState: IEksisterendeOMPKSSoknaderState;
     identState: IIdentState;
 }
 
@@ -38,8 +39,12 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     const { journalpostid, identState, eksisterendeSoknaderState } = props;
 
     const { søkerId, pleietrengendeId } = identState;
-
     const navigate = useNavigate();
+    React.useEffect(() => {
+        if (eksisterendeSoknaderState.isSoknadCreated && eksisterendeSoknaderState.soknadid) {
+            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
+        }
+    }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
         props.getAlleJournalposter(søkerId);
@@ -58,20 +63,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (soknader?.length) {
-            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
-            );
+            return !soknader?.some((es) => Array.from(es.journalposter!).some((jp) => jp === journalpostid));
         }
         return true;
     };
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPKSSoknader
-                søkerId={søkerId}
-                pleietrengendeId={pleietrengendeId}
-                journalpostid={journalpostid}
-            />
+            <EksisterendeOMPKSSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
 
             <div className="knapperad">
                 <Button variant="secondary" className="knapp knapp1" onClick={() => navigate(-1)} size="small">
@@ -95,7 +94,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateProps => ({
-    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
+    eksisterendeSoknaderState: state.eksisterendeOMPKSSoknaderState,
     identState: state.identState,
 });
 

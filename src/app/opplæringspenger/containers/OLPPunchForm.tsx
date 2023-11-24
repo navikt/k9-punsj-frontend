@@ -39,8 +39,8 @@ import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder';
 import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
-import { KvitteringContext } from './kvittering/KvitteringContext';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
+import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 
 export interface OwnProps {
     journalpostid: string;
@@ -51,6 +51,8 @@ export interface OwnProps {
     submitError: unknown;
     eksisterendePerioder: Periode[];
     hentEksisterendePerioderError: boolean;
+    setKvittering?: (kvittering?: IOLPSoknadKvittering) => void;
+    kvittering: IOLPSoknadKvittering | undefined;
 }
 
 export const OLPPunchForm: React.FC<OwnProps> = (props) => {
@@ -63,6 +65,8 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         submitError,
         eksisterendePerioder,
         hentEksisterendePerioderError,
+        setKvittering,
+        kvittering,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
@@ -122,7 +126,6 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         setÅpnePaneler([...åpnePaneler, ...panelerSomSkalÅpnes]);
     }, []);
 
-    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -135,16 +138,12 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     setVisForhaandsvisModal(true);
                     if (setKvittering) {
                         setKvittering(kvitteringResponse);
-                    } else {
-                        throw Error('Kvittering-context er ikke satt');
                     }
                 }
                 if (data?.feil?.length) {
                     setK9FormatErrors(data.feil);
                     if (setKvittering) {
                         setKvittering(undefined);
-                    } else {
-                        throw Error('Kvittering-context er ikke satt');
                     }
                     const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
                     uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {

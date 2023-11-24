@@ -2,13 +2,16 @@ import { useState } from 'react';
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { datetime, setHash } from 'app/utils';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
@@ -28,11 +31,13 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
     const { intl, søkerId, pleietrengendeId } = props;
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOLPSoknadBackend | undefined>(undefined);
-    const routingPaths = React.useContext(RoutingPathsContext);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            setHash('/');
+            dispatch(resetAllStateAction());
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
 
@@ -55,7 +60,7 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
     }
 
     const gaaVidereMedSoeknad = (soknad: IOLPSoknadBackend) => {
-        setHash(`${routingPaths.skjema}${soknad.soeknadId}`);
+        navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
 
     const showSoknader = () => {

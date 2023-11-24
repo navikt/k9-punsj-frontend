@@ -8,6 +8,7 @@ export const ROUTES = {
     PSB_ROOT: 'pleiepenger-sykt-barn/',
     OMPKS_ROOT: 'omsorgspenger-kronisk-sykt-barn/',
     OMPMA_ROOT: 'omsorgspenger-midlertidig-alene/',
+    OMPAO_ROOT: 'omsorgspenger-alene-om-omsorgen/',
     OLP_ROOT: 'opplaeringspenger/',
     OMPUT_ROOT: 'omsorgspenger-utbetaling/',
     ALENE_OMSORG_ROOT: 'omsorgspenger-alene-om-omsorgen/',

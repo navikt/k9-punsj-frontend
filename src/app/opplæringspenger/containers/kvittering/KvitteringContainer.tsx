@@ -1,33 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 import { Alert, Button } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { getEnvironmentVariable } from 'app/utils';
+import { ROUTES } from 'app/constants/routes';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { IOLPSoknadKvittering } from 'app/opplæringspenger/OLPSoknadKvittering';
 
-import { IOLPSoknadKvittering } from '../../OLPSoknadKvittering';
 import OLPSoknadKvittering from './OLPSoknadKvittering';
 
 interface OwnProps {
-    kvittering?: IOLPSoknadKvittering;
+    kvittering: IOLPSoknadKvittering;
 }
 
-export default function KvitteringContainer(props: OwnProps) {
+export default function KvitteringContainer({ kvittering }: OwnProps) {
     const intl = useIntl();
-    const history = useHistory();
-    if (!props.kvittering) {
-        history.push('/');
-        return null;
-    }
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!kvittering) {
+            dispatch(resetAllStateAction());
+            navigate(ROUTES.HOME);
+        }
+    }, [kvittering]);
+
     return (
         <>
             <Alert size="small" variant="info" className="fullfortmelding">
                 <FormattedMessage id="skjema.sentInn" />
             </Alert>
-            <VerticalSpacer sixteenPx />
             <div className="punchPage__knapper mt-8">
                 <Button
                     onClick={() => {
@@ -37,7 +43,7 @@ export default function KvitteringContainer(props: OwnProps) {
                     {intlHelper(intl, 'tilbaketilLOS')}
                 </Button>
             </div>
-            <OLPSoknadKvittering kvittering={props.kvittering} />
+            <OLPSoknadKvittering kvittering={kvittering} />
         </>
     );
 }

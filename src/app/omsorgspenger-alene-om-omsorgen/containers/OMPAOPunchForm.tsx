@@ -22,8 +22,8 @@ import { fieldNames } from '../initialValues';
 import schema from '../schema';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import OpplysningerOmOMPAOSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPAOSoknad';
-import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import { OMPAOSoknadKvittering } from './SoknadKvittering/OMPAOSoknadKvittering';
+import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
 
 export interface IPunchOMPAOFormComponentProps {
     journalpostid: string;
@@ -32,6 +32,8 @@ export interface IPunchOMPAOFormComponentProps {
     k9FormatErrors: Feil[];
     setK9FormatErrors: (feil: Feil[]) => void;
     submitError: unknown;
+    setKvittering: (kvittering?: IOMPAOSoknadKvittering) => void;
+    kvittering?: IOMPAOSoknadKvittering;
 }
 
 type IPunchOMPAOFormProps = IPunchOMPAOFormComponentProps;
@@ -44,6 +46,8 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
         setK9FormatErrors,
         journalpostid,
         submitError,
+        setKvittering,
+        kvittering,
     } = props;
 
     const [harMellomlagret, setHarMellomlagret] = useState(false);
@@ -52,10 +56,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const { values, errors, isValid, setTouched, handleSubmit, validateForm, setFieldValue } =
         useFormikContext<IOMPAOSoknad>();
-    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     const intl = useIntl();
-
-    console.log(values);
 
     const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
         setKvittering,

@@ -3,7 +3,7 @@ import { IPeriode, Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
 
-import { IOMPUTSoknad, IOMPUTSoknadBackend } from './types/OMPUTSoknad';
+import { IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 import { IOMPUTSoknadKvittering } from './types/OMPUTSoknadKvittering';
 import { IOMPUTSoknadSvar } from './types/OMPUTSoknadSvar';
 
@@ -44,7 +44,10 @@ export const hentEksisterendePerioder = async (ident: string, periode?: IPeriode
     return response.json();
 };
 
-export const sendSoeknad = async (soeknadId: string, ident: string): Promise<IOMPUTSoknad | ValideringResponse> => {
+export const sendSoeknad = async (
+    soeknadId: string,
+    ident: string,
+): Promise<IOMPUTSoknadKvittering | ValideringResponse> => {
     const response = await post(
         ApiPath.OMP_UT_SOKNAD_SUBMIT,
         undefined,

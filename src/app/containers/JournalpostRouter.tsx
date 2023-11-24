@@ -10,6 +10,12 @@ import { OMPKSRegistreringsValg } from 'app/omsorgspenger-kronisk-sykt-barn/cont
 import { OMPKSPunchForm } from 'app/omsorgspenger-kronisk-sykt-barn/containers/OMPKSPunchForm';
 import { OMPMARegistreringsValg } from 'app/omsorgspenger-midlertidig-alene/containers/OMPMARegistreringsValg';
 import OMPMAPunchFormContainer from 'app/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer';
+import { OMPUTRegistreringsValg } from 'app/omsorgspenger-utbetaling/containers/OMPUTRegistreringsValg';
+import OMPUTPunchFormContainer from 'app/omsorgspenger-utbetaling/containers/OMPUTPunchFormContainer';
+import { OLPRegistreringsValg } from 'app/opplæringspenger/containers/OLPRegistreringsValg';
+import OLPPunchFormContainer from 'app/opplæringspenger/containers/OLPPunchFormContainer';
+import { OMPAORegistreringsValg } from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORegistreringsValg';
+import OMPAOPunchFormContainer from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainer';
 import { ROUTES } from 'app/constants/routes';
 import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/RegistreringsValg';
@@ -61,7 +67,33 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             element={<OMPMAPunchFormContainer journalpostid={journalpostid} />}
                         />
                     </Route>
-
+                    <Route path={ROUTES.OMPUT_ROOT}>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OMPUTRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route
+                            path={ROUTES.PUNCH}
+                            element={<OMPUTPunchFormContainer journalpostid={journalpostid} />}
+                        />
+                    </Route>
+                    <Route path={ROUTES.OMPAO_ROOT}>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OMPAORegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route
+                            path={ROUTES.PUNCH}
+                            element={<OMPAOPunchFormContainer journalpostid={journalpostid} />}
+                        />
+                    </Route>
+                    <Route path={ROUTES.OLP_ROOT}>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OLPRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.PUNCH} element={<OLPPunchFormContainer journalpostid={journalpostid} />} />
+                    </Route>
                     <Route path="/" element={<Fordeling />} />
                 </Routes>
             </ErrorBoundary>

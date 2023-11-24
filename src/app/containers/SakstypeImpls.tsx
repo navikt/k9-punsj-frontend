@@ -1,12 +1,9 @@
 import React from 'react';
 
-import OMPAORouter from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORouter';
 import { ROUTES } from 'app/constants/routes';
 
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
-import OMPUTRouter from '../omsorgspenger-utbetaling/containers/OMPUTRouter';
-import OLPRouter from '../opplæringspenger/containers/OLPRouter';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 
@@ -32,15 +29,16 @@ export const OmsorgspengerMidlertidigAlene: ISakstypePunch = {
 
 export const OmsorgspengerUtbetaling: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_UTBETALING,
-    punchPath: '/omsorgspenger-utbetaling',
-    getComponent: ({ journalpostid, punchPath }) => <OMPUTRouter journalpostid={journalpostid} punchPath={punchPath} />,
-    steps: [],
+    punchPath: ROUTES.OMPUT_ROOT,
 };
 export const OmsorgspengerAleneOmOmsorgen: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN,
-    punchPath: '/omsorgspenger-alene-om-omsorgen',
-    getComponent: ({ journalpostid, punchPath }) => <OMPAORouter journalpostid={journalpostid} punchPath={punchPath} />,
-    steps: [],
+    punchPath: ROUTES.OMPAO_ROOT,
+};
+
+export const OpplæringspengerPunch: ISakstypePunch = {
+    navn: Sakstype.OPPLAERINGSPENGER,
+    punchPath: ROUTES.OLP_ROOT,
 };
 
 export const KorrigeringAvInntektsmelding: ISakstypePunch = {
@@ -54,13 +52,6 @@ export const SendBrevPåEksisterendeFagsak: ISakstypePunch = {
     navn: Sakstype.SEND_BREV,
     punchPath: '/send-brev-fagsak',
     getComponent: () => <SendBrevPåFagsak />,
-    steps: [],
-};
-
-export const OpplæringspengerPunch: ISakstypePunch = {
-    navn: Sakstype.OPPLAERINGSPENGER,
-    punchPath: '/opplaeringspenger',
-    getComponent: ({ journalpostid, punchPath }) => <OLPRouter journalpostid={journalpostid} punchPath={punchPath} />,
     steps: [],
 };
 

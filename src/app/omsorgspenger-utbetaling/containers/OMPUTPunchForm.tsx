@@ -33,7 +33,6 @@ import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFilter } from '../utils';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
-import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 
 export interface IPunchOMPUTFormComponentProps {
@@ -44,6 +43,8 @@ export interface IPunchOMPUTFormComponentProps {
     setK9FormatErrors: (feil: Feil[]) => void;
     submitError: unknown;
     eksisterendePerioder: Periode[];
+    setKvittering: (kvittering?: IOMPUTSoknadKvittering) => void;
+    kvittering?: IOMPUTSoknadKvittering;
 }
 
 export interface IPunchOMPUTFormStateProps {
@@ -63,6 +64,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         journalpostid,
         submitError,
         eksisterendePerioder,
+        kvittering,
+        setKvittering,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
@@ -70,7 +73,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
-    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

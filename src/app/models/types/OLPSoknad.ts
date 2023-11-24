@@ -23,7 +23,7 @@ export interface IOLPSoknadBackend {
     omsorg?: Omsorg;
     opptjeningAktivitet?: OpptjeningAktivitet;
     soekerId: string;
-    soeknadId?: string;
+    soeknadId: string;
     soeknadsperiode?: Periode[] | null;
     soknadsinfo?: SoknadsInfo;
     trekkKravPerioder?: Periode[];
