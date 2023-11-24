@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 
 import PdfVisning from '../../../app/components/pdf/PdfVisning';
-import { renderWithIntl, renderWithRouterAndIntl } from '../../testUtils';
+import { renderWithIntl } from '../../testUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
