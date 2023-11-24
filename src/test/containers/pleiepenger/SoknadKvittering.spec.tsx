@@ -187,10 +187,8 @@ const minimalResponse: IPSBSoknadKvittering = {
 };
 
 const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
-    const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
-    return shallow(<PSBSoknadKvittering intl={intlMock} response={response} />);
+    return shallow(<PSBSoknadKvittering innsendtSøknad={response} />);
 };
 
 describe('SoknadKvittering', () => {
