@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, Heading } from '@navikt/ds-react';
 
@@ -32,9 +32,9 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     lukkJournalpostOppgave,
     dokumenttype,
 }) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     if (!søkerId || !journalpost) {
-        history.goBack();
+        navigate(-1);
         return null;
     }
 

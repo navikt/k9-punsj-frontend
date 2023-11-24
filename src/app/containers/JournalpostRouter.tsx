@@ -22,6 +22,8 @@ import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/Registr
 import { PSBPunchForm } from './pleiepenger/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
 import { PSBKvitteringContainer } from './pleiepenger/SoknadKvittering/SoknadKvitteringContainer';
+import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
+import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 
 const JournalpostRouter: React.FunctionComponent = () => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
@@ -94,6 +96,11 @@ const JournalpostRouter: React.FunctionComponent = () => {
                         />
                         <Route path={ROUTES.PUNCH} element={<OLPPunchFormContainer journalpostid={journalpostid} />} />
                     </Route>
+                    <Route
+                        path={ROUTES.KORRIGERING_INNTEKTSMELDING}
+                        element={<KorrigeringAvInntektsmeldingContainer />}
+                    />
+                    <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
                     <Route path="/" element={<Fordeling />} />
                 </Routes>
             </ErrorBoundary>

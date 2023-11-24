@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 
 import { Button } from '@navikt/ds-react';
 
-import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 
 import { ISakstypePunch } from '../../../../models/Sakstype';
@@ -36,7 +35,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if (sakstypeConfig?.punchPath) {
         return (
-            <Button onClick={() => navigate(`${sakstypeConfig.punchPath}${ROUTES.VELG_SOKNAD}`)}>
+            <Button onClick={() => navigate(sakstypeConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
             </Button>
         );

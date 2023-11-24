@@ -1,58 +1,50 @@
-import React from 'react';
-
 import { ROUTES } from 'app/constants/routes';
 
 import { ISakstypeOmfordeling, ISakstypePunch, ISakstyper } from '../models/Sakstype';
 import { Sakstype } from '../models/enums';
-import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
-import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 
 export const Pleiepenger: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_SYKT_BARN,
-    punchPath: ROUTES.PSB_ROOT,
+    punchPath: ROUTES.PSB_ROOT + ROUTES.VELG_SOKNAD,
 };
 
 export const PleiepengerILivetsSluttfase: ISakstypePunch = {
     navn: Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
-    punchPath: ROUTES.PLS_ROOT,
+    punchPath: ROUTES.PLS_ROOT + ROUTES.VELG_SOKNAD,
 };
 
 export const OmsorgspengerKroniskSyktBarnSakstypePunch: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN,
-    punchPath: ROUTES.OMPKS_ROOT,
+    punchPath: ROUTES.OMPKS_ROOT + ROUTES.VELG_SOKNAD,
 };
 
 export const OmsorgspengerMidlertidigAlene: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE,
-    punchPath: ROUTES.OMPMA_ROOT,
+    punchPath: ROUTES.OMPMA_ROOT + ROUTES.VELG_SOKNAD,
 };
 
 export const OmsorgspengerUtbetaling: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_UTBETALING,
-    punchPath: ROUTES.OMPUT_ROOT,
+    punchPath: ROUTES.OMPUT_ROOT + ROUTES.VELG_SOKNAD,
 };
 export const OmsorgspengerAleneOmOmsorgen: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN,
-    punchPath: ROUTES.OMPAO_ROOT,
+    punchPath: ROUTES.OMPAO_ROOT + ROUTES.VELG_SOKNAD,
 };
 
 export const OpplæringspengerPunch: ISakstypePunch = {
     navn: Sakstype.OPPLAERINGSPENGER,
-    punchPath: ROUTES.OLP_ROOT,
+    punchPath: ROUTES.OLP_ROOT + ROUTES.VELG_SOKNAD,
 };
 
 export const KorrigeringAvInntektsmelding: ISakstypePunch = {
     navn: Sakstype.OMSORGSPENGER_KORRIGERING_AV_INNTEKTSMELDING,
-    punchPath: '/korrigering-av-inntektsmelding',
-    getComponent: () => <KorrigeringAvInntektsmeldingContainer />,
-    steps: [],
+    punchPath: ROUTES.KORRIGERING_INNTEKTSMELDING,
 };
 
 export const SendBrevPåEksisterendeFagsak: ISakstypePunch = {
     navn: Sakstype.SEND_BREV,
-    punchPath: '/send-brev-fagsak',
-    getComponent: () => <SendBrevPåFagsak />,
-    steps: [],
+    punchPath: ROUTES.SEND_BREV_FAGSAK,
 };
 
 export const Annet: ISakstypeOmfordeling = {
