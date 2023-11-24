@@ -54,7 +54,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText('Korrigere/trekke refusjonskrav omsorgspenger').click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/korrigering-av-inntektsmelding');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/korrigering-av-inntektsmelding');
     });
 
     it('Midlertidig alene - kan navigere til eksisterende søknader', () => {
@@ -65,7 +65,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - ekstra omsorgsdager/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentSoeknader');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentSoknader');
     });
 
     it('Alene om omsorgen - kan navigere til eksisterende søknader', () => {
