@@ -48,13 +48,13 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
         cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Velg mottaker').should('exist');
-        cy.findByLabelText('Velg annen mottaker').should('exist');
+        cy.findByLabelText('Send til tredjepart').should('exist');
         cy.findByLabelText('Innhold i brev').should('exist');
         cy.findByLabelText('Tittel').should('not.exist');
         cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
         cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
-        cy.findByLabelText('Velg annen mottaker').should('exist');
+        cy.findByLabelText('Send til tredjepart').should('exist');
         cy.findByLabelText('Tittel').should('exist').type('Tittel');
         cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
 
@@ -78,7 +78,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
         cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Velg mottaker').should('exist');
-        cy.findByLabelText('Velg annen mottaker').should('exist');
+        cy.findByLabelText('Send til tredjepart').should('exist');
         cy.findByLabelText('Innhold i brev').should('exist');
         cy.findByLabelText('Tittel').should('not.exist');
         cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');

@@ -1,4 +1,4 @@
-import { Form, Formik } from 'formik';
+import { Formik, Form } from 'formik';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
@@ -156,6 +156,8 @@ const BrevComponent: React.FC<BrevProps> = ({
                     brødtekst: '',
                 },
             }}
+            // validateOnChange={false}
+            // validateOnBlur={false}
             onSubmit={(values, actions) => {
                 setBrevErSendt(false);
 
@@ -218,7 +220,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 }}
                                 brevmaler={brevmaler}
                             />
-
                             <MottakerVelger
                                 resetBrevStatus={() => {
                                     setBrevErSendt(false);
@@ -232,7 +233,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 person={person}
                                 arbeidsgivereMedNavn={arbeidsgivereMedNavn}
                             />
-
                             {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                                 <InnhentDokumentasjonMal
                                     setVisBrevIkkeSendtInfoboks={() =>
@@ -250,7 +250,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 />
                             )}
                             <VerticalSpacer sixteenPx />
-
                             {values.brevmalkode && (
                                 <Button
                                     size="small"
@@ -262,7 +261,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     {intl.formatMessage({ id: 'Messages.Preview' })}
                                 </Button>
                             )}
-
                             <div className="brevStatusContainer">
                                 {brevErSendt && (
                                     <Alert variant="success" size="medium" fullWidth inline>
