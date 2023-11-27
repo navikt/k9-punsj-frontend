@@ -171,7 +171,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                     : getErrorMessage(`${feilkodeprefiks}.identified`)
                             }
                         >
-                            <option key="default" value="" label="" aria-label="Tomt valg" />)
+                            <option key="default" value="" label="" aria-label="Tomt valg" />
                             {arbeidsgivere.map((arbeidsgiver) => (
                                 <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
                                     {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
