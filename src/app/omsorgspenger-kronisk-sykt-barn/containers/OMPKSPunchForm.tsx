@@ -8,14 +8,11 @@ import { connect } from 'react-redux';
 import { Alert, Button, HelpText, Modal, Tag } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 
-import { PunchStep } from 'app/models/enums';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
     resetPunchFormAction,
-    setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
@@ -66,8 +63,6 @@ export interface IPunchOMPKSFormStateProps {
 export interface IPunchOMPKSFormDispatchProps {
     getSoknad: typeof getOMPKSSoknad;
     resetSoknadAction: typeof resetOMPKSSoknadAction;
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPKSSoknadAction;
     updateSoknad: typeof updateOMPKSSoknad;
     submitSoknad: typeof submitOMPKSSoknad;
@@ -134,7 +129,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     componentDidMount(): void {
         const { id } = this.props;
         this.props.getSoknad(id);
-        this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
     }
 
@@ -585,9 +579,6 @@ const mapStateToProps = (state: RootStateType): IPunchOMPKSFormStateProps => ({
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getOMPKSSoknad(id)),
     resetSoknadAction: () => dispatch(resetOMPKSSoknadAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPKSSoknadAction()),
     updateSoknad: (soknad: Partial<IOMPKSSoknadUt>) => dispatch(updateOMPKSSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPKSSoknad(ident, soeknadid)),

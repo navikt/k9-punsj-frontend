@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
-import { PunchStep, TimeFormat } from 'app/models/enums';
+import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentAction, setStepAction, undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ROUTES } from 'app/constants/routes';

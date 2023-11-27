@@ -11,17 +11,15 @@ import { Alert, Button, Checkbox, HelpText, Modal, Select, Tag, TextField } from
 import { Loader } from '@navikt/ds-react';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
-import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
+import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
     hentPerioderFraK9Sak,
     resetPunchFormAction,
     resetSoknadAction,
-    setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
     submitSoknad,
     undoChoiceOfEksisterendeSoknadAction,
@@ -94,8 +92,6 @@ export interface IPunchFormDispatchProps {
     getSoknad: typeof getSoknad;
     hentPerioder: typeof hentPerioderFraK9Sak;
     resetSoknadAction: typeof resetSoknadAction;
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeSoknadAction;
     updateSoknad: typeof updateSoknad;
     submitSoknad: typeof submitSoknad;
@@ -244,7 +240,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidMount(): void {
         const { id } = this.props;
         this.props.getSoknad(id);
-        this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
         const { søkerId, pleietrengendeId } = this.props.identState;
         if (søkerId && pleietrengendeId) {
@@ -1397,9 +1392,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     hentPerioder: (søkerId: string, pleietrengendeId: string) =>
         dispatch(hentPerioderFraK9Sak(søkerId, pleietrengendeId)),
     resetSoknadAction: () => dispatch(resetSoknadAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
     updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitSoknad(ident, soeknadid)),

@@ -7,15 +7,9 @@ import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 import { areBothDatesDefined, generateDateString } from 'app/components/skjema/skjemaUtils';
-import { PunchStep, TimeFormat } from 'app/models/enums';
+import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import {
-    resetPunchAction,
-    setIdentAction,
-    setStepAction,
-    undoSearchForEksisterendeSoknaderAction,
-} from 'app/state/actions';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
@@ -37,7 +31,6 @@ export interface IEksisterendeOMPMASoknaderStateProps {
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
     findEksisterendeSoknader: typeof findEksisterendeOMPMASoknader;
     openEksisterendeSoknadAction: typeof openEksisterendeOMPMASoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeOMPMASoknadAction;
@@ -219,19 +212,14 @@ const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateP
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendeOMPMASoknader(søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IOMPMASoknad) => dispatch(openEksisterendeOMPMASoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPMASoknadAction()),
     chooseEksisterendeSoknadAction: (info: IOMPMASoknad) => dispatch(chooseEksisterendeOMPMASoknadAction(info)),
     createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createOMPMASoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
-    resetPunchAction: () => dispatch(resetPunchAction()),
     resetAllAction: () => dispatch(resetAllStateAction()),
 });
 

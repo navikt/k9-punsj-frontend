@@ -9,7 +9,7 @@ import { ROUTES } from 'app/constants/routes';
 import { IEksisterendeSoknaderState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-import { createSoknad, resetSoknadidAction, undoSearchForEksisterendeSoknaderAction } from '../../state/actions';
+import { createSoknad, resetSoknadidAction } from '../../state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { EksisterendeSoknader } from './EksisterendeSoknader';
 import './registreringsValg.less';
@@ -101,7 +101,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });

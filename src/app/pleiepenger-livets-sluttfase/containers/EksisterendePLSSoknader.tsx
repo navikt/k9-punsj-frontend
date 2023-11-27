@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentAction, undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { ROUTES } from 'app/constants/routes';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -32,7 +31,6 @@ export interface IEksisterendePLSSoknaderStateProps {
 }
 
 export interface IEksisterendePLSSoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
     findEksisterendeSoknader: typeof findEksisterendePLSSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendePLSSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendePLSSoknadAction;
@@ -211,11 +209,8 @@ const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStatePro
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendePLSSoknader(søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(openEksisterendePLSSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendePLSSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(chooseEksisterendePLSSoknadAction(info)),

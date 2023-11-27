@@ -15,7 +15,6 @@ import Personvelger from 'app/components/person-velger/Personvelger';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
     resetPunchFormAction,
-    setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
     settJournalpostPaaVent,
@@ -66,7 +65,6 @@ export interface IPunchOMPMAFormStateProps {
 export interface IPunchOMPMAFormDispatchProps {
     getSoknad: typeof getOMPMASoknad;
     resetSoknadAction: typeof resetOMPMASoknadAction;
-    setIdentAction: typeof setIdentAction;
     updateSoknad: typeof updateOMPMASoknad;
     submitSoknad: typeof submitOMPMASoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
@@ -438,8 +436,6 @@ const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     resetSoknadAction: () => dispatch(resetOMPMASoknadAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPMASoknadAction()),
     updateSoknad: (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid)),

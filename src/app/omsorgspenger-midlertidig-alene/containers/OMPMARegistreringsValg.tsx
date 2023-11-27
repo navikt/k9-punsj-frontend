@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
 
-import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
 import { ROUTES } from 'app/constants/routes';
 
 import { IIdentState } from '../../models/types/IdentState';
@@ -82,11 +81,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPMASoknader
-                søkerId={søkerId}
-                pleietrengendeId={pleietrengendeId}
-                journalpostid={journalpostid}
-            />
+            <EksisterendeOMPMASoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
 
             <div className="knapperad">
                 <Button
@@ -109,7 +104,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
 const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, søkerId: string, annenPart: string) =>
         dispatch(createOMPMASoknad(journalpostid, søkerId, annenPart)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });

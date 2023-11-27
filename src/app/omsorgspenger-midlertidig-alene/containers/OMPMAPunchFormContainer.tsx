@@ -8,12 +8,11 @@ import { connect, useDispatch } from 'react-redux';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { PunchStep } from 'app/models/enums';
 import { IBarn } from 'app/models/types/Barn';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
-import { resetPunchFormAction as resetPunchAction, setStepAction } from 'app/state/actions';
+import { resetPunchFormAction as resetPunchAction } from 'app/state/actions';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getEnvironmentVariable, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -62,7 +61,6 @@ export interface IPunchOMPMAFormStateProps {
 
 export interface IPunchOMPMAFormDispatchProps {
     getSoknad: typeof getOMPMASoknad;
-    setStepAction: typeof setStepAction;
     validateSoknad: typeof validerOMPMASoknad;
     resetPunchFormAction: typeof resetPunchAction;
     henteBarn: typeof hentBarn;
@@ -84,6 +82,9 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
             navigate(ROUTES.HOME);
         }
     });
+    if (!id) {
+        throw Error('Mangler id');
+    }
     useEffect(() => {
         props.getSoknad(id);
     }, [id]);
@@ -176,7 +177,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(validerOMPMASoknad(soknad, erMellomlagring)),
     resetPunchFormAction: () => dispatch(resetPunchOMPMAFormAction()),
     getSoknad: (id: string) => dispatch(getOMPMASoknad(id)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     henteBarn: (sokersIdent: string) => dispatch(hentBarn(sokersIdent)),
 });
 

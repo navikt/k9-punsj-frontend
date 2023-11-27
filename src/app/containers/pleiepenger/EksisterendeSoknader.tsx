@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
-import { PunchStep, TimeFormat } from 'app/models/enums';
+import { TimeFormat } from 'app/models/enums';
 import { IEksisterendeSoknaderState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
@@ -16,9 +16,6 @@ import {
     findEksisterendeSoknader,
     openEksisterendeSoknadAction,
     resetSoknadidAction,
-    setIdentAction,
-    setStepAction,
-    undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -33,8 +30,6 @@ export interface IEksisterendeSoknaderStateProps {
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     findEksisterendeSoknader: typeof findEksisterendeSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
@@ -63,9 +58,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
-            props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
             props.resetAllAction();
             navigate(ROUTES.HOME);
@@ -214,12 +207,8 @@ const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps 
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
