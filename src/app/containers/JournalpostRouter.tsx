@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { ErrorBoundary } from '@sentry/react';
 
 import { JournalpostOgPdfVisning } from 'app/components/JournalpostOgPdfVisning';
@@ -17,6 +18,7 @@ import OLPPunchFormContainer from 'app/opplæringspenger/containers/OLPPunchForm
 import { OMPAORegistreringsValg } from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORegistreringsValg';
 import OMPAOPunchFormContainer from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainer';
 import { ROUTES } from 'app/constants/routes';
+import { RootStateType } from 'app/state/RootState';
 import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/RegistreringsValg';
 import { PSBPunchForm } from './pleiepenger/PSBPunchForm';
@@ -27,13 +29,16 @@ import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 
 const JournalpostRouter: React.FunctionComponent = () => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
+    const journalposterIAapenSoknad = useSelector((state: RootStateType) => state.felles.journalposterIAapenSoknad);
 
     if (!journalpostid) {
         return null;
     }
 
     return (
-        <JournalpostOgPdfVisning journalposter={[journalpostid]}>
+        <JournalpostOgPdfVisning
+            journalposter={journalposterIAapenSoknad?.length ? journalposterIAapenSoknad : [journalpostid]}
+        >
             <ErrorBoundary fallback={<ErrorFallback />}>
                 <Routes>
                     <Route path={ROUTES.PSB_ROOT}>

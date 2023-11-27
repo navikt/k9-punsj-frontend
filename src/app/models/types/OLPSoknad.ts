@@ -64,7 +64,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
 
     harMedisinskeOpplysninger: boolean;
 
-    journalposter?: string[];
+    journalposter: string[];
 
     klokkeslett?: string;
 

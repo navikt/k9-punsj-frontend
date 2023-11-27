@@ -17,6 +17,7 @@ import {
 } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
@@ -184,6 +185,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
         return (
             <>
+                <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
 

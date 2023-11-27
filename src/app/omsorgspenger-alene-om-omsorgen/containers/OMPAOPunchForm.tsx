@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 
 import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
 
+import JournalposterSync from 'app/components/JournalposterSync';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
@@ -111,6 +112,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
 
     return (
         <>
+            <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <Heading size="medium">Alene om omsorgen</Heading>
             <VerticalSpacer sixteenPx />

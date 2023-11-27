@@ -66,6 +66,8 @@ import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
+import { WithJournalposterProps, withJournalposter } from 'app/components/withJournalposter';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -134,6 +136,7 @@ export interface IPunchFormComponentState {
 
 type IPunchFormProps = IPunchFormComponentProps &
     WrappedComponentProps &
+    WithJournalposterProps &
     IPunchFormStateProps &
     IPunchFormDispatchProps;
 
@@ -253,7 +256,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         snapshot?: any,
     ): void | null {
         const { soknad, innsentSoknad, isComplete } = this.props.punchFormState;
-
+        // this.props.updateJournalposter(this.state.soknad.journalposter);
         if (isComplete && innsentSoknad) {
             this.props.navigate(ROUTES.KVITTERING);
             return null;
@@ -269,6 +272,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
+    }
+
+    componentWillUnmount(): void {
+        this.props.resetSoknadAction();
+        this.props.resetPunchFormAction();
+        this.props.undoChoiceOfEksisterendeSoknadAction();
+        this.props.validerSoknadReset();
+        this.props.settPaaventResetAction();
+        this.props.cleanupJournalposter();
     }
 
     render() {
@@ -347,6 +359,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         return (
             <>
+                <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
                 <Soknadsperioder
@@ -1405,5 +1418,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
-export const PSBPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
+export const PSBPunchForm = withJournalposter(
+    withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent))),
+);
+
 /* eslint-enable */

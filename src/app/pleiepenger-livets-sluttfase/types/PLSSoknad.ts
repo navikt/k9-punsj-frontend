@@ -18,7 +18,7 @@ import { FrilanserOpptjening, IFrilanserOpptjening } from '../../models/types/Fr
 export interface IPLSSoknad {
     soeknadId: string;
     soekerId: string;
-    journalposter?: Set<string>;
+    journalposter: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
     soeknadsperiode?: IPeriode[] | null;

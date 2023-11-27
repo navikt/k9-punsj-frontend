@@ -26,6 +26,7 @@ import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { IdentActionKeys } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -264,6 +265,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
 
     return (
         <>
+            <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <Soknadsperioder

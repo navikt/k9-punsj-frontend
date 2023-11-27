@@ -69,6 +69,7 @@ import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
+import JournalposterSync from 'app/components/JournalposterSync';
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
     id: string;
@@ -341,6 +342,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
         return (
             <>
+                <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
                 <Soknadsperioder

@@ -43,15 +43,11 @@ export const rootReducer = combineReducers({
     [Sakstype.OMSORGSPENGER_UTBETALING]: combineReducers({
         signaturState: SignaturReducer,
     }),
-    // trenger ikke være global
-    [Sakstype.OMSORGSPENGER_FORDELING]: combineReducers({
-        opprettIGosys: GosysOppgaveReducer,
-    }),
     fordelingState: FordelingReducer, // trenger ikke være global
     authState: AuthReducer,
     felles: FellesReducer,
-    journalposterPerIdentState: JournalposterPerIdentReducer,
-    identState: IdentReducer,
+    journalposterPerIdentState: JournalposterPerIdentReducer, // Jeg tror ikke denne trenger å være global. Tror den kun brukes inne i forms når man setter på vent for å sjekke andre journalposter på søker.
+    identState: IdentReducer, //
     opprettIGosys: GosysOppgaveReducer, // trenger ikke være global
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     fordelingSettPåVentState: FordelingSettPaaVentReducer, // trenger ikke være global

@@ -47,11 +47,12 @@ import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
 import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 export interface IPunchOMPMAFormComponentProps {
     journalpostid: string;
     id: string;
-    formik: FormikProps<FormikValues>;
+    formik: FormikProps<IOMPMASoknad>;
     schema: yup.AnyObjectSchema;
 }
 
@@ -204,6 +205,8 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
 
     return (
         <>
+            <JournalposterSync journalposter={values.journalposter} />
+
             {statusetikett()}
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPMASoknad

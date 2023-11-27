@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { Formik, yupToFormErrors } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -39,6 +39,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { id } = useParams<{ id: string }>();
     const intl = useIntl();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
 
@@ -50,14 +51,6 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     if (!id) {
         throw Error('Mangler id');
     }
-
-    useEffect(() => {
-        if (!id) {
-            throw Error('Mangler id');
-        }
-    }, [id]);
-
-    const dispatch = useDispatch();
 
     const { mutate: hentPerioderK9 } = useMutation(
         ({ soekerId, periode }: { soekerId: string; periode?: IPeriode }) =>
