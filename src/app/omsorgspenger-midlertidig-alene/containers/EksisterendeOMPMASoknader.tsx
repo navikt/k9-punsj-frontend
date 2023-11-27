@@ -59,7 +59,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
 
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
         } else {
             props.resetAllAction();

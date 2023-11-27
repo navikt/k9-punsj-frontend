@@ -29,7 +29,6 @@ export interface IEksisterendeOMPKSSoknaderStateProps {
 }
 
 export interface IEksisterendeOMPKSSoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
     findEksisterendeSoknader: typeof findEksisterendeOMPKSSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendeOMPKSSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeOMPKSSoknadAction;
@@ -57,7 +56,6 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     const soknader = eksisterendeOMPKSSoknaderState.eksisterendeSoknaderSvar.søknader;
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
         } else {
             props.resetAllAction();
@@ -211,12 +209,8 @@ const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateP
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendeOMPKSSoknader(søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(openEksisterendeOMPKSSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPKSSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IOMPKSSoknad) => dispatch(chooseEksisterendeOMPKSSoknadAction(info)),

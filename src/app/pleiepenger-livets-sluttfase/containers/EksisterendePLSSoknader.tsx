@@ -59,7 +59,6 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
         } else {
             props.resetAllAction();
