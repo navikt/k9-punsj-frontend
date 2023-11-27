@@ -8,6 +8,7 @@ import { rest } from 'msw';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 
 import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
+import midlertidigAleneHandlers from './omsorgspengerMidlertidigAleneHandlers';
 import { testHandlers } from './testHandlers';
 
 let handlers = [
@@ -67,7 +68,8 @@ let handlers = [
 if (process.env.MSW_MODE === 'test') {
     handlers = handlers
         .concat(Object.values(testHandlers))
-        .concat([omsorgspengerutbetalingHandlers.eksisterendePerioderOmsorgspengeutbetaling]);
+        .concat(Object.values(omsorgspengerutbetalingHandlers))
+        .concat(Object.values(midlertidigAleneHandlers));
 }
 
 export { handlers };

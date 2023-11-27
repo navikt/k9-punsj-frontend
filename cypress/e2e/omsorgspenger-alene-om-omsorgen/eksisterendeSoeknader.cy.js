@@ -4,7 +4,7 @@ import { initialState } from '../../state/omsorgspenger-alene-om-omsorgen/eksist
 
 describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200#/omsorgspenger-alene-om-omsorgen/hentSoknader', {
+        cy.visit('/journalpost/200/omsorgspenger-alene-om-omsorgen/hentSoknader/', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
@@ -52,7 +52,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
                 .click();
             cy.url().should(
                 'eq',
-                'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/skjema/9356c863-ab88-41eb-89ec-3ca8cd555537',
+                'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/skjema/9356c863-ab88-41eb-89ec-3ca8cd555537/',
             );
         });
     });
@@ -62,7 +62,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
         cy.findByRole('button', { name: /tilbake/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200');
     });
 
     it('kan starte ny registrering av omsorgen alene', () => {
@@ -78,7 +78,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
 
         cy.url().should(
             'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/skjema/9356c863-ab88-41eb-89ec-3ca8cd555537',
+            'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/skjema/9356c863-ab88-41eb-89ec-3ca8cd555537/',
         );
     });
 

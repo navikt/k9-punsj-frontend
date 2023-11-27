@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
@@ -23,12 +23,13 @@ export interface IEksisterendeOLPSoknaderComponentProps {
     pleietrengendeId: string | null;
 }
 
-type IEksisterendeOLPSoknaderProps = WrappedComponentProps & IEksisterendeOLPSoknaderComponentProps;
+type IEksisterendeOLPSoknaderProps = IEksisterendeOLPSoknaderComponentProps;
 
-export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksisterendeOLPSoknaderProps> = (
+export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSoknaderProps> = (
     props: IEksisterendeOLPSoknaderProps,
 ) => {
-    const { intl, søkerId, pleietrengendeId } = props;
+    const { søkerId, pleietrengendeId } = props;
+    const intl = useIntl();
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOLPSoknadBackend | undefined>(undefined);
     const navigate = useNavigate();
@@ -139,5 +140,3 @@ export const EksisterendeOLPSoknaderComponent: React.FunctionComponent<IEksister
         </Alert>
     );
 };
-
-export const EksisterendeOLPSoknader = injectIntl(EksisterendeOLPSoknaderComponent);

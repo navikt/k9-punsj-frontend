@@ -10,6 +10,6 @@ describe('Send brev på fagsak', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Send brev og lukk oppgave i LOS/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/send-brev-fagsak');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/send-brev-fagsak/');
     });
 });

@@ -72,10 +72,6 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         }
     }, [søkerId, pleietrengendeId]);
 
-    if (!søkerId || søkerId === '') {
-        return null;
-    }
-
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <Alert size="small" variant="error">

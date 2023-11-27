@@ -6,7 +6,6 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { RootStateType } from 'app/state/RootState';
 import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
 
-import { JournalpostOgPdfVisning } from '../../../components/JournalpostOgPdfVisning';
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
 export interface KorrigeringAvInntektsmeldingContainerProps {
@@ -28,13 +27,11 @@ const KorrigeringAvInntektsmelding: React.FC<KorrigeringAvInntektsmeldingContain
     const journalposterFraSoknad = soknad?.journalposter || [];
     const journalposter = Array.from(journalposterFraSoknad);
     return (
-        <JournalpostOgPdfVisning journalposter={journalposter}>
-            <KorrigeringAvInntektsmeldingForm
-                søkerId={søkerId}
-                søknadId={soknad?.soeknadId || ''}
-                journalposter={journalposter}
-            />
-        </JournalpostOgPdfVisning>
+        <KorrigeringAvInntektsmeldingForm
+            søkerId={søkerId}
+            søknadId={soknad?.soeknadId || ''}
+            journalposter={journalposter}
+        />
     );
 };
 

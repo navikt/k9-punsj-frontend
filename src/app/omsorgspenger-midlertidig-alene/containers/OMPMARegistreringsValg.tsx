@@ -89,7 +89,12 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
             />
 
             <div className="knapperad">
-                <Button variant="secondary" className="knapp knapp1" onClick={() => navigate(-1)} size="small">
+                <Button
+                    variant="secondary"
+                    className="knapp knapp1"
+                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
+                    size="small"
+                >
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (

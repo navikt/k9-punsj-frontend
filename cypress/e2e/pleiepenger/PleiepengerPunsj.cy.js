@@ -2,7 +2,7 @@ import initialState from '../../state/PleiepengerPunsjInitialState';
 
 describe('Pleiepenger punsj', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe', {
+        cy.visit('/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
