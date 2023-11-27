@@ -65,7 +65,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - ekstra omsorgsdager/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-midlertidig-alene/hentSoknader/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-midlertidig-alene/soknader/');
     });
 
     it('Alene om omsorgen - kan navigere til eksisterende søknader', () => {
@@ -76,7 +76,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - alene om omsorgen/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/hentSoknader/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/soknader/');
     });
 
     it('Omsorgspenger - behandlingsår vises når fagsaker ikke finnes', () => {
@@ -94,7 +94,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/hentSoknader/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/soknader/');
     });
 
     it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
@@ -107,7 +107,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/hentSoknader/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/soknader/');
     });
     it('Omsorgspenger - blir stoppet hvis behandlingsaar ikke settes', () => {
         cy.window().then((window) => {
