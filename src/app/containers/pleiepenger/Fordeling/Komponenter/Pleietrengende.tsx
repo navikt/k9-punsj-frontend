@@ -96,7 +96,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         }}
                         disabled={gjelderAnnenPleietrengende}
                     >
-                        <option key="default" value="" label=" " />)
+                        <option key="default" value="" label=" " aria-label="Tomt valg" />
                         {fellesState.barn.map((b) => (
                             <option key={b.identitetsnummer} value={b.identitetsnummer}>
                                 {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}

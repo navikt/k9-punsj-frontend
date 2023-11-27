@@ -1,6 +1,7 @@
 import initialState from '../../state/EksisterendeSoknaderInitialState';
 import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
 import pleiepengerSoknadSomKanSendesInn from '../../fixtures/pleiepengerSoknadSomKanSendesInn';
+import { testHandlers } from 'mocks/testHandlers';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
@@ -37,6 +38,10 @@ describe('Eksisterende søknader pleiepenger', () => {
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(testHandlers.opprettePleiepengesoknad);
+        });
         cy.contains(
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
@@ -51,16 +56,14 @@ describe('Eksisterende søknader pleiepenger', () => {
 
     it('kan fortsette på eksisterende sak', () => {
         cy.window().then((window) => {
-            const { worker, rest } = window.msw;
+            const { worker, http, HttpResponse } = window.msw;
             worker.use(
-                rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
-                    res(
-                        ctx.json({
-                            søker: '29099000129',
-                            fagsakTypeKode: 'PSB',
-                            søknader: [pleiepengerSoknadSomKanSendesInn],
-                        }),
-                    ),
+                http.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, () =>
+                    HttpResponse.json({
+                        søker: '29099000129',
+                        fagsakTypeKode: 'PSB',
+                        søknader: [pleiepengerSoknadSomKanSendesInn],
+                    }),
                 ),
             );
         });

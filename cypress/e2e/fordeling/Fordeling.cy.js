@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
 
@@ -82,7 +82,7 @@ describe('Fordeling', () => {
     it('Omsorgspenger - behandlingsår vises når fagsaker ikke finnes', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
-            worker.use(rest.get(`${LOCAL_API_URL}/saker/hent`, (req, res, ctx) => res(ctx.status(200), ctx.json([]))));
+            worker.use(http.get(`${LOCAL_API_URL}/saker/hent`, () => HttpResponse.json([], { status: 200 })));
         });
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
@@ -113,8 +113,9 @@ describe('Fordeling', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                rest.post(`${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`, (req, res, ctx) =>
-                    res(ctx.status(403)),
+                http.post(
+                    `${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`,
+                    () => new HttpResponse(null, { status: 403 }),
                 ),
             );
         });
