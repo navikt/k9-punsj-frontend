@@ -66,7 +66,6 @@ import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
-import { WithJournalposterProps, withJournalposter } from 'app/components/withJournalposter';
 import JournalposterSync from 'app/components/JournalposterSync';
 
 export interface IPunchFormComponentProps {
@@ -136,7 +135,6 @@ export interface IPunchFormComponentState {
 
 type IPunchFormProps = IPunchFormComponentProps &
     WrappedComponentProps &
-    WithJournalposterProps &
     IPunchFormStateProps &
     IPunchFormDispatchProps;
 
@@ -1409,8 +1407,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
-export const PSBPunchForm = withJournalposter(
-    withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent))),
-);
+export const PSBPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
 
 /* eslint-enable */
