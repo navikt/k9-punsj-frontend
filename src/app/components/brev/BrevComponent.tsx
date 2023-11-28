@@ -191,7 +191,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                         key="erdusikkerpåatsendebrevmodal"
                         onClose={() => setVisErDuSikkerModal(false)}
                         aria-label="erdusikkerpåatsendebrevmodal"
-                        closeButton={false}
                         open={visErDuSikkerModal}
                     >
                         <ErDuSikkerModal

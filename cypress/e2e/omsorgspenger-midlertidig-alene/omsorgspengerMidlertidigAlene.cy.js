@@ -120,7 +120,9 @@ describe('Eksisterende søknader midlertidig alene', () => {
 
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
         cy.url().should('eq', 'http://localhost:8080/journalpost/205#/omsorgspenger-midlertidig-alene/fullfort');
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');

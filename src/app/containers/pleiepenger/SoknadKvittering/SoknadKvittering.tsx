@@ -9,6 +9,7 @@ import { CopyButton, HStack } from '@navikt/ds-react';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
+import { Heading } from '@navikt/ds-react';
 import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
@@ -191,7 +192,9 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
-            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
+            <Heading size="medium" level="2">
+                {intlHelper(intl, 'skjema.kvittering.oppsummering')}
+            </Heading>
             {kopierJournalpostSuccess && (
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>

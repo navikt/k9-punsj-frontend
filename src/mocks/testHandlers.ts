@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { rest } from 'msw';
-
+import { http, HttpResponse, delay } from 'msw';
 import arbeidsgivere from '../../cypress/fixtures/arbeidsgivere.json';
 import journalpost from '../../cypress/fixtures/journalpost.json';
 import korrigeringAvInntektsmeldingSoknad from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknad.json';
@@ -16,128 +15,137 @@ import { BACKEND_BASE_URL, LOCAL_API_URL } from './konstanter';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
-    me: rest.get(`${BACKEND_BASE_URL}/me`, (req, res, ctx) =>
-        res(ctx.status(200), ctx.json({ name: 'Bobby Binders' })),
+    me: http.get(`${BACKEND_BASE_URL}/me`, () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
+    hentJournalpost: http.get(`${LOCAL_API_URL}/journalpost/:id`, ({ params }) =>
+        HttpResponse.json({ ...journalpost, journalpostId: params.id }),
     ),
-    hentJournalpost: rest.get(`${LOCAL_API_URL}/journalpost/:id`, (req, res, ctx) =>
-        res(ctx.json({ ...journalpost, journalpostId: req.params.id })),
+    opprettePleiepengesoknad: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`, () =>
+        HttpResponse.json(pleiepengerSoknad, { status: 201 }),
     ),
-    opprettePleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`, (req, res, ctx) =>
-        res(ctx.status(201), ctx.json(pleiepengerSoknad)),
+    hentSoknader: http.post(`${LOCAL_API_URL}/journalpost/hent`, () => HttpResponse.json({ poster: [] })),
+    hentMappe: http.get(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe`, () =>
+        HttpResponse.json({
+            søker: '29099000129',
+            fagsakTypeKode: 'PSB',
+            søknader: [],
+        }),
     ),
-    hentSoknader: rest.post(`${LOCAL_API_URL}/journalpost/hent`, (req, res, ctx) => res(ctx.json({ poster: [] }))),
-    hentMappe: rest.get(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
-        res(
-            ctx.json({
-                søker: '29099000129',
-                fagsakTypeKode: 'PSB',
-                søknader: [],
-            }),
-        ),
-    ),
-    infoPleiepenger: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/k9sak/info`, (req, res, ctx) =>
-        res(ctx.json([])),
-    ),
-    eksisterendePleiepengesoknad: rest.get(
+    infoPleiepenger: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/k9sak/info`, () => HttpResponse.json([])),
+    eksisterendePleiepengesoknad: http.get(
         `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe`,
-        (req, res, ctx) => res(ctx.json(journalpost)),
+        () => HttpResponse.json(journalpost),
     ),
-    oppdaterPleiepengesoknad: rest.put(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/oppdater`, (req, res, ctx) =>
-        res(ctx.json(pleiepengerSoknadSomKanSendesInn)),
+    oppdaterPleiepengesoknad: http.put(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/oppdater`, () =>
+        HttpResponse.json(pleiepengerSoknadSomKanSendesInn),
     ),
-    validerPleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/valider`, (req, res, ctx) =>
-        res(ctx.status(202), ctx.json(pleiepengerSoknadValidering)),
+
+    validerPleiepengesoknad: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/valider`, () =>
+        HttpResponse.json(pleiepengerSoknadValidering, { status: 202 }),
     ),
-    sendPleiepengesoknad: rest.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/send`, (req, res, ctx) =>
-        res(ctx.status(202), ctx.json(pleiepengerSoknadValidering)),
+    sendPleiepengesoknad: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/send`, () =>
+        HttpResponse.json(pleiepengerSoknadValidering, { status: 202 }),
     ),
-    hentArbeidsgivere: rest.get(`${LOCAL_API_URL}/arbeidsgivere`, (req, res, ctx) =>
-        res(ctx.status(202), ctx.json(arbeidsgivere)),
+
+    hentArbeidsgivere: http.get(`${LOCAL_API_URL}/arbeidsgivere`, () =>
+        HttpResponse.json(arbeidsgivere, { status: 202 }),
     ),
-    hentArbeidsforholdMedIDer: rest.post(
-        `${LOCAL_API_URL}/omsorgspenger-soknad/k9sak/arbeidsforholdIder`,
-        (req, res, ctx) => res(ctx.status(202), ctx.json([])),
+    hentArbeidsforholdMedIDer: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad/k9sak/arbeidsforholdIder`, () =>
+        HttpResponse.json([], { status: 202 }),
     ),
-    oppretteKorrigering: rest.post(`${LOCAL_API_URL}/omsorgspenger-soknad`, (req, res, ctx) =>
-        res(ctx.status(201), ctx.json(korrigeringAvInntektsmeldingSoknad)),
+
+    oppretteKorrigering: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad`, () =>
+        HttpResponse.json(korrigeringAvInntektsmeldingSoknad, { status: 201 }),
     ),
-    oppdaterKorrigering: rest.put(`${LOCAL_API_URL}/omsorgspenger-soknad/oppdater`, (req, res, ctx) =>
-        res(ctx.json(korrigeringAvInntektsmeldingSoknadSomKanSendesInn)),
+
+    oppdaterKorrigering: http.put(`${LOCAL_API_URL}/omsorgspenger-soknad/oppdater`, () =>
+        HttpResponse.json(korrigeringAvInntektsmeldingSoknadSomKanSendesInn),
     ),
-    validerKorrigering: rest.post(`${LOCAL_API_URL}/omsorgspenger-soknad/valider`, (req, res, ctx) => {
-        if (req?.body && typeof req.body === 'object' && req.body.fravaersperioder?.length === 0) {
-            return res(ctx.status(400), ctx.json(korrigeringAvInntektsmeldingSoknadValideringFailed));
+
+    validerKorrigering: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad/valider`, async ({ request }) => {
+        const body = await request.json();
+
+        if (
+            body !== null &&
+            typeof body === 'object' &&
+            Object.prototype.hasOwnProperty.call(body, 'fravaersperioder') &&
+            Array.isArray(body.fravaersperioder) &&
+            body.fravaersperioder.length === 0
+        ) {
+            const jsonData = JSON.parse(JSON.stringify(korrigeringAvInntektsmeldingSoknadValideringFailed));
+            return HttpResponse.json(jsonData, { status: 400 });
         }
-        return res(ctx.status(202), ctx.json(korrigeringAvInntektsmeldingSoknadValidering));
+
+        return HttpResponse.json(korrigeringAvInntektsmeldingSoknadValidering, { status: 202 });
     }),
-    sendKorrigering: rest.post(`${LOCAL_API_URL}/omsorgspenger-soknad/send`, (req, res, ctx) =>
-        res(ctx.status(202), ctx.json(korrigeringAvInntektsmeldingSoknadValidering)),
+    sendKorrigering: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad/send`, () =>
+        HttpResponse.json(korrigeringAvInntektsmeldingSoknadValidering, { status: 202 }),
     ),
-    aktørId: rest.get('http://localhost:8101/api/k9-punsj/brev/aktorId', (req, res, ctx) =>
-        res(ctx.json(200), ctx.json(81549300)),
+
+    aktørId: http.get('http://localhost:8101/api/k9-punsj/brev/aktorId', () =>
+        HttpResponse.json(81549300, { status: 200 }),
     ),
 
     /**
      * Omsorgspenger kronisk sykt barn
      */
-    hentOmsorgspengerKroniskSyktBarnMappe: rest.get(
+    hentOmsorgspengerKroniskSyktBarnMappe: http.get(
         `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/mappe`,
-        (req, res, ctx) =>
-            res(
-                ctx.json({
-                    søker: '29099000129',
-                    fagsakTypeKode: 'OMP_KS',
-                    søknader: [],
-                }),
-            ),
+        () =>
+            HttpResponse.json({
+                søker: '29099000129',
+                fagsakTypeKode: 'OMP_KS',
+                søknader: [],
+            }),
     ),
-    oppdaterOmsorgspengerKroniskSyktBarnSøknad: rest.put(
+
+    oppdaterOmsorgspengerKroniskSyktBarnSøknad: http.put(
         `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/oppdater`,
-        (req, res, ctx) => res(ctx.json(omsorgspengerKsSoknadSomKanSendesInn)),
+        () => HttpResponse.json(omsorgspengerKsSoknadSomKanSendesInn),
     ),
-    validerOmsorgspengerKroniskSyktBarnSøknad: rest.post(
+
+    validerOmsorgspengerKroniskSyktBarnSøknad: http.post(
         `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/valider`,
-        (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering)),
+        () => HttpResponse.json(omsorgspengerKsSoknadValidering, { status: 202 }),
     ),
-    sendOmsorgspengerKroniskSyktBarnSøknad: rest.post(
+
+    sendOmsorgspengerKroniskSyktBarnSøknad: http.post(
         `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/send`,
-        (req, res, ctx) => res(ctx.status(202), ctx.json(omsorgspengerKsSoknadValidering)),
+        () => HttpResponse.json(omsorgspengerKsSoknadValidering, { status: 202 }),
     ),
 
     /*
         Omsorgspenger - utbetaling
     */
 
-    barn: rest.get(`${LOCAL_API_URL}/barn`, (req, res, ctx) =>
-        res(
-            ctx.status(200),
-            ctx.json({
+    barn: http.get(`${LOCAL_API_URL}/barn`, () =>
+        HttpResponse.json(
+            {
                 barn: [
                     { fornavn: 'Geir-Paco', etternavn: 'Gundersen', identitetsnummer: '02021477330' },
                     { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
                     { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
                 ],
-            }),
+            },
+            { status: 200 },
         ),
     ),
-    gosysKategorier: rest.get(`${LOCAL_API_URL}/gosys/gjelder`, (req, res, ctx) =>
-        res(
-            ctx.json({
-                Anke: 'Anke',
-                Annet: 'Gjelder noe annet, må velges i Gosys',
-                Klage: 'Klage',
-                Omsorgspenger: 'Omsorgspenger',
-                Opplæringspenger: 'Opplæringspenger',
-                PleiepengerPårørende: 'Pleiepenger pårørende',
-                PleiepengerSyktBarn: 'Pleiepenger ny ordning',
-            }),
-        ),
+
+    gosysKategorier: http.get(`${LOCAL_API_URL}/gosys/gjelder`, () =>
+        HttpResponse.json({
+            Anke: 'Anke',
+            Annet: 'Gjelder noe annet, må velges i Gosys',
+            Klage: 'Klage',
+            Omsorgspenger: 'Omsorgspenger',
+            Opplæringspenger: 'Opplæringspenger',
+            PleiepengerPårørende: 'Pleiepenger pårørende',
+            PleiepengerSyktBarn: 'Pleiepenger ny ordning',
+        }),
     ),
-    hentFagsaker: rest.get('http://localhost:8101/api/k9-punsj/saker/hent', (req, res, ctx) =>
-        res(
-            ctx.status(200),
-            ctx.delay(500),
-            ctx.json([
+
+    hentFagsaker: http.get('http://localhost:8101/api/k9-punsj/saker/hent', async () => {
+        await delay(500);
+        return HttpResponse.json(
+            [
                 {
                     fagsakId: '1DMU93M',
                     sakstype: 'PSB',
@@ -146,10 +154,16 @@ export const testHandlers = {
                     fagsakId: '1DMUDF6',
                     sakstype: 'OMP',
                 },
-            ]),
-        ),
-    ),
-    settBehandlingsaar: rest.post(`${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`, (req, res, ctx) =>
-        res(ctx.status(200)),
+            ],
+            { status: 200 },
+        );
+    }),
+
+    settBehandlingsaar: http.post(
+        `${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`,
+        () =>
+            new HttpResponse(null, {
+                status: 200,
+            }),
     ),
 };

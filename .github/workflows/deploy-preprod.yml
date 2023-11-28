@@ -27,7 +27,7 @@ jobs:
         needs: [lint, test, test-cypress, build]
         steps:
             - name: Hente kode
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Setup .yarnrc.yml
               run: |
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
@@ -36,7 +36,7 @@ jobs:
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Sette opp Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: 18.x
                   registry-url: https://npm.pkg.github.com/
@@ -52,7 +52,7 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-            - uses: docker/login-action@v2
+            - uses: docker/login-action@v2.2.0
               with:
                   registry: ghcr.io
                   username: ${{ github.REPOSITORY_OWNER }}

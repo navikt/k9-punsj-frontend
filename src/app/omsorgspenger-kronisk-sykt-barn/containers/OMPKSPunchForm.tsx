@@ -284,7 +284,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         onClose={() => this.setState({ showSettPaaVentModal: false })}
                         aria-label={'settpaaventmodal'}
                         open={this.state.showSettPaaVentModal}
-                        closeButton={false}
                     >
                         <div className="">
                             <SettPaaVentModal
@@ -304,7 +303,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         key={'settpaaventokmodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={punchFormState.settPaaVentSuccess}
                     >
                         <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
@@ -316,7 +314,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         key={'settpaaventerrormodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
@@ -331,10 +328,9 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                             className={'validertSoknadModal'}
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label={'validertSoknadModal'}
-                            closeButton={false}
                             open={!!this.props.punchFormState.isValid}
                         >
-                            <Modal.Content>
+                            <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
                                     <OMPKSSoknadKvittering
                                         intl={intl}
@@ -358,7 +354,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                                         {intlHelper(intl, 'skjema.knapp.avbryt')}
                                     </Button>
                                 </div>
-                            </Modal.Content>
+                            </Modal.Body>
                         </Modal>
                     )}
 
@@ -368,7 +364,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         className={'erdusikkermodal'}
                         onClose={() => this.props.validerSoknadReset()}
                         aria-label={'erdusikkermodal'}
-                        closeButton={false}
                         open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
