@@ -4,7 +4,6 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { CopyButton, HStack } from '@navikt/ds-react';
 import intlHelper from '../../utils/intlUtils';
-// import Kopier from '../kopier/Kopier';
 import './labelValue.less';
 
 type ILabelValueProps = {
