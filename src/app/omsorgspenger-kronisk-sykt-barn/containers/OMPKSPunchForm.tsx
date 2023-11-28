@@ -150,6 +150,12 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         }
     }
 
+    componentWillUnmount(): void {
+        this.props.resetSoknadAction();
+        this.props.resetPunchFormAction();
+        this.props.validerSoknadReset();
+    }
+
     render() {
         const { intl, punchFormState, signaturState } = this.props;
 

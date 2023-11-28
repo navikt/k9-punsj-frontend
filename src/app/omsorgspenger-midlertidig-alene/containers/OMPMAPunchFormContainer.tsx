@@ -21,7 +21,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 
 import schema from '../schema';
-import { getOMPMASoknad, resetPunchOMPMAFormAction, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
+import { getOMPMASoknad, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
@@ -174,7 +174,6 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch: any) => ({
     validateSoknad: (soknad: IOMPMASoknadUt, erMellomlagring: boolean) =>
         dispatch(validerOMPMASoknad(soknad, erMellomlagring)),
-    resetPunchFormAction: () => dispatch(resetPunchOMPMAFormAction()),
     getSoknad: (id: string) => dispatch(getOMPMASoknad(id)),
     henteBarn: (sokersIdent: string) => dispatch(hentBarn(sokersIdent)),
 });
