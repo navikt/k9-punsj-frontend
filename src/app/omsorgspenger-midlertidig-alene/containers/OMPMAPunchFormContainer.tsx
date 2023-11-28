@@ -14,7 +14,7 @@ import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
 import { resetPunchFormAction as resetPunchAction } from 'app/state/actions';
 import { hentBarn } from 'app/state/reducers/HentBarn';
-import { getEnvironmentVariable, setHash } from 'app/utils';
+import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { useNavigate, useParams } from 'react-router';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
@@ -69,7 +69,7 @@ export interface IPunchOMPMAFormDispatchProps {
 type IPunchOMPMAFormProps = OwnProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
-    const { punchFormState, resetPunchFormAction, barn, henteBarn, identState, harHentBarnResponse } = props;
+    const { punchFormState, barn, henteBarn, identState, harHentBarnResponse } = props;
     const intl = useIntl();
     const { soknad } = punchFormState;
     const { id } = useParams();
@@ -102,8 +102,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     };
 
     const handleStartButtonClick = () => {
-        resetPunchFormAction();
-        setHash('/');
+        navigate(-1);
     };
 
     if (punchFormState.isComplete && punchFormState.innsentSoknad) {

@@ -65,8 +65,8 @@ import { Utenlandsopphold } from './Utenlandsopphold';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
-import { ROUTES } from 'app/constants/routes';
 import JournalposterSync from 'app/components/JournalposterSync';
+import { PSBKvitteringContainer } from './SoknadKvittering/SoknadKvitteringContainer';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -253,13 +253,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         prevState: Readonly<IPunchFormComponentState>,
         snapshot?: any,
     ): void | null {
-        const { soknad, innsentSoknad, isComplete } = this.props.punchFormState;
+        const { soknad } = this.props.punchFormState;
         // this.props.updateJournalposter(this.state.soknad.journalposter);
-        if (isComplete && innsentSoknad) {
-            this.props.navigate(ROUTES.KVITTERING);
-            return null;
-        }
-
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
@@ -279,6 +274,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
 
+        if (punchFormState.isComplete && punchFormState.innsentSoknad) {
+            return <PSBKvitteringContainer />;
+        }
         if (punchFormState.isSoknadLoading) {
             return <Loader size="large" />;
         }
@@ -1321,8 +1319,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
+        this.props.navigate(-1);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPSBSoknad>) => ({

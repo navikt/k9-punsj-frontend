@@ -24,7 +24,7 @@ import {
     setSignaturAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
-import { nummerPrefiks, setHash } from 'app/utils';
+import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdPanel';
@@ -70,6 +70,7 @@ import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjon
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
 import JournalposterSync from 'app/components/JournalposterSync';
+import { PSBKvitteringContainer } from 'app/containers/pleiepenger/SoknadKvittering/SoknadKvitteringContainer';
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
     id: string;
@@ -286,9 +287,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.props;
         const { soknad, innsentSoknad, isComplete } = punchFormState;
 
-        if (isComplete && innsentSoknad) {
-            this.props.navigate(ROUTES.KVITTERING);
-        }
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PLSSoknad(soknad as IPLSSoknad),
@@ -316,6 +314,10 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const soknad = new PLSSoknad(this.state.soknad);
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
+
+        if (punchFormState.isComplete && punchFormState.innsentSoknad) {
+            return <PSBKvitteringContainer />;
+        }
 
         if (punchFormState.isSoknadLoading) {
             return <Loader size="large" />;
@@ -1143,8 +1145,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
+        this.props.navigate(-1);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPLSSoknad>) => ({

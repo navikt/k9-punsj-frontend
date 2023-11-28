@@ -15,5 +15,4 @@ export const ROUTES = {
     KORRIGERING_INNTEKTSMELDING: 'korrigering-av-inntektsmelding/',
     VELG_SOKNAD: 'soknader/',
     PUNCH: `skjema/:id/`,
-    KVITTERING: `kvittering/`,
 };
