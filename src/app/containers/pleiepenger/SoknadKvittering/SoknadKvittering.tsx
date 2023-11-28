@@ -5,11 +5,10 @@ import classNames from 'classnames';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { CopyButton, HStack } from '@navikt/ds-react';
+import { CopyButton, HStack, Heading } from '@navikt/ds-react';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import { Heading } from '@navikt/ds-react';
 import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
