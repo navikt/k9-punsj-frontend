@@ -46,12 +46,15 @@ import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';
 import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
 import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
-import { useParams } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
+import { ROUTES } from 'app/constants/routes';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 export interface IPunchOMPKSFormComponentProps {
     journalpostid: string;
     id: string;
+    navigate: NavigateFunction;
 }
 
 export interface IPunchOMPKSFormStateProps {
@@ -68,6 +71,7 @@ export interface IPunchOMPKSFormDispatchProps {
     updateSoknad: typeof updateOMPKSSoknad;
     submitSoknad: typeof submitOMPKSSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
+    resetAllStateAction: typeof resetAllStateAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
@@ -97,7 +101,8 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
 function withHooks(Component) {
     return (props) => {
         const { id, journalpostid } = useParams();
-        return <Component {...props} id={id} journalpostid={journalpostid} />;
+        const navigate = useNavigate();
+        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
     };
 }
 
@@ -538,8 +543,8 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     };
 
     private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPKSSoknad>) => ({
@@ -592,6 +597,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPKSSoknad(ident, soeknadid)),
     resetPunchFormAction: () => dispatch(resetPunchOMPKSFormAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
+    resetAllStateAction: () => dispatch(resetAllStateAction()),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),

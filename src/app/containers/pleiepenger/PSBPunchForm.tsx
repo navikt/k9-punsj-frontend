@@ -67,6 +67,8 @@ import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import JournalposterSync from 'app/components/JournalposterSync';
 import { PSBKvitteringContainer } from './SoknadKvittering/SoknadKvitteringContainer';
+import { ROUTES } from 'app/constants/routes';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -97,6 +99,7 @@ export interface IPunchFormDispatchProps {
     updateSoknad: typeof updateSoknad;
     submitSoknad: typeof submitSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
+    resetAllStateAction: typeof resetAllStateAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
@@ -1325,7 +1328,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private handleStartButtonClick = () => {
-        this.props.navigate(-1);
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPSBSoknad>) => ({
@@ -1401,6 +1405,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitSoknad(ident, soeknadid)),
     resetPunchFormAction: () => dispatch(resetPunchFormAction()),
+    resetAllStateAction: () => dispatch(resetAllStateAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),

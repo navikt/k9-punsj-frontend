@@ -71,6 +71,8 @@ import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
 import JournalposterSync from 'app/components/JournalposterSync';
 import { PSBKvitteringContainer } from 'app/containers/pleiepenger/SoknadKvittering/SoknadKvitteringContainer';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
     id: string;
@@ -93,6 +95,7 @@ export interface IPunchPLSFormDispatchProps {
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendePLSSoknadAction;
     updateSoknad: typeof updatePLSSoknad;
     submitSoknad: typeof submitPLSSoknad;
+    resetAllStateAction: typeof resetAllStateAction;
     resetPunchFormAction: typeof resetPunchFormAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
@@ -136,7 +139,8 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
 function withHooks(Component) {
     return (props) => {
         const { id, journalpostid } = useParams();
-        return <Component {...props} id={id} journalpostid={journalpostid} />;
+        const navigate = useNavigate();
+        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
     };
 }
 
@@ -1151,7 +1155,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private handleStartButtonClick = () => {
-        this.props.navigate(-1);
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPLSSoknad>) => ({
@@ -1223,6 +1228,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitPLSSoknad(ident, soeknadid)),
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
+    resetAllStateAction: () => dispatch(resetAllStateAction()),
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),

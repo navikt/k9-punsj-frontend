@@ -12,7 +12,6 @@ import { IBarn } from 'app/models/types/Barn';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
-import { resetPunchFormAction as resetPunchAction } from 'app/state/actions';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -62,14 +61,13 @@ export interface IPunchOMPMAFormStateProps {
 export interface IPunchOMPMAFormDispatchProps {
     getSoknad: typeof getOMPMASoknad;
     validateSoknad: typeof validerOMPMASoknad;
-    resetPunchFormAction: typeof resetPunchAction;
     henteBarn: typeof hentBarn;
 }
 
 type IPunchOMPMAFormProps = OwnProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
-    const { punchFormState, barn, henteBarn, identState, harHentBarnResponse } = props;
+    const { punchFormState, barn, henteBarn, identState } = props;
     const intl = useIntl();
     const { soknad } = punchFormState;
     const { id } = useParams();
@@ -77,14 +75,17 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!id) {
+        if (!id || !identState.søkerId) {
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
         }
-    });
+    }, [id, identState.søkerId]);
+
+    // for å fjerne warning om manglende id
     if (!id) {
         throw Error('Mangler id');
     }
+
     useEffect(() => {
         props.getSoknad(id);
     }, [id]);
@@ -102,7 +103,8 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     };
 
     const handleStartButtonClick = () => {
-        navigate(-1);
+        dispatch(resetAllStateAction());
+        navigate(ROUTES.HOME);
     };
 
     if (punchFormState.isComplete && punchFormState.innsentSoknad) {
@@ -125,7 +127,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         );
     }
 
-    if (punchFormState.isSoknadLoading || !harHentBarnResponse) {
+    if (punchFormState.isSoknadLoading) {
         return <Loader size="large" />;
     }
 
@@ -133,7 +135,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         return (
             <>
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id: props.id })}
+                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}
                 </Alert>
                 <p>
                     <Button variant="secondary" onClick={handleStartButtonClick}>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes, useParams, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from '@sentry/react';
 
@@ -45,6 +45,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             element={<PSBRegistreringsValg journalpostid={journalpostid} />}
                         />
                         <Route path={ROUTES.PUNCH} element={<PSBPunchForm journalpostid={journalpostid} />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route path={ROUTES.PLS_ROOT}>
                         <Route
@@ -52,6 +53,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             element={<PLSRegistreringsValg journalpostid={journalpostid} />}
                         />
                         <Route path={ROUTES.PUNCH} element={<PLSPunchForm journalpostid={journalpostid} />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route path={ROUTES.OMPKS_ROOT}>
                         <Route
@@ -59,6 +61,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             element={<OMPKSRegistreringsValg journalpostid={journalpostid} />}
                         />
                         <Route path={ROUTES.PUNCH} element={<OMPKSPunchForm journalpostid={journalpostid} />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route path={ROUTES.OMPMA_ROOT}>
                         <Route
@@ -69,6 +72,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             path={ROUTES.PUNCH}
                             element={<OMPMAPunchFormContainer journalpostid={journalpostid} />}
                         />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route path={ROUTES.OMPUT_ROOT}>
                         <Route
@@ -79,6 +83,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             path={ROUTES.PUNCH}
                             element={<OMPUTPunchFormContainer journalpostid={journalpostid} />}
                         />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route path={ROUTES.OMPAO_ROOT}>
                         <Route
@@ -89,6 +94,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             path={ROUTES.PUNCH}
                             element={<OMPAOPunchFormContainer journalpostid={journalpostid} />}
                         />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route path={ROUTES.OLP_ROOT}>
                         <Route
@@ -96,6 +102,7 @@ const JournalpostRouter: React.FunctionComponent = () => {
                             element={<OLPRegistreringsValg journalpostid={journalpostid} />}
                         />
                         <Route path={ROUTES.PUNCH} element={<OLPPunchFormContainer journalpostid={journalpostid} />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
                     <Route
                         path={ROUTES.KORRIGERING_INNTEKTSMELDING}
