@@ -67,15 +67,15 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
-        cy.get('.ReactModalPortal').within(() => {
-            cy.findAllByLabelText('Timer').eq(0).clear().type(7);
-            cy.findAllByLabelText('Minutter').eq(0).clear().type(30);
-            cy.findAllByLabelText('Timer').eq(1).clear().type(2);
+        cy.get('.navds-modal').within(() => {
+            cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
+            cy.findAllByLabelText('Minutter').eq(0).clear({ force: true }).type(30, { force: true });
+            cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
             cy.findByRole('radio', { name: /Desimaltall/i }).click();
             cy.findByLabelText('Normal arbeidstid').should('have.value', '7.5');
             cy.findByLabelText('Faktisk arbeidstid').should('have.value', '2');
-            cy.findByLabelText('Normal arbeidstid').clear().type(5.75);
-            cy.findByLabelText('Faktisk arbeidstid').clear().type(4);
+            cy.findByLabelText('Normal arbeidstid').clear({ force: true }).type(5.75, { force: true });
+            cy.findByLabelText('Faktisk arbeidstid').clear({ force: true }).type(4, { force: true });
             cy.findByRole('radio', { name: /Timer og minutter/i }).click();
             cy.findAllByLabelText('Timer').eq(0).should('have.value', '5');
             cy.findAllByLabelText('Minutter').eq(0).should('have.value', '45');

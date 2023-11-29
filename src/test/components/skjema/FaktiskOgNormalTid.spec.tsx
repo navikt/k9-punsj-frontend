@@ -1,8 +1,8 @@
 import React from 'react';
+import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithIntl } from '../../testUtils';
 import FaktiskOgNormalTid from '../../../app/components/timefoering/FaktiskOgNormalTid';
-import { waitFor } from '@testing-library/react';
 
 describe('FaktiskOgNormalTid', () => {
     const mockLagre = jest.fn();
