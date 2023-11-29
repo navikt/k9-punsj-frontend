@@ -79,10 +79,10 @@ export default function TilsynKalender({
             <VerticalSpacer twentyPx />
             <Modal
                 open={visLengrePerioder}
-                onClose={toggleVisLengrePerioder}
+                onClose={() => setVisLengrePerioder(false)}
                 className="venstrestilt lengre-periode-modal"
             >
-                <Modal.Content>
+                <Modal.Body>
                     <TilsynPeriodeListe
                         heading="Periode med tilsyn"
                         perioder={perioderMedTimer}
@@ -95,7 +95,7 @@ export default function TilsynKalender({
                         }}
                         avbryt={toggleVisLengrePerioder}
                     />
-                </Modal.Content>
+                </Modal.Body>
             </Modal>
             {gyldigePerioder && (
                 <TidsbrukKalenderContainer

@@ -1,6 +1,7 @@
 import initialState from '../../state/EksisterendeSoknaderInitialState';
 import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
 import pleiepengerSoknadSomKanSendesInn from '../../fixtures/pleiepengerSoknadSomKanSendesInn';
+import { testHandlers } from 'mocks/testHandlers';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
@@ -24,44 +25,46 @@ describe('Eksisterende søknader pleiepenger', () => {
 
     it('viser infoboks når det ikke finnes søknader fra før av', () => {
         cy.contains(
-            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
     });
 
     it('kan gå tilbake til fordeling', () => {
         cy.contains(
-            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
         cy.findByRole('button', { name: /tilbake/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(testHandlers.opprettePleiepengesoknad);
+        });
         cy.contains(
-            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.'
+            'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
         cy.contains(/start ny registrering/i)
             .should('be.visible')
             .click();
         cy.url().should(
             'eq',
-            'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
+            'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe',
         );
     });
 
     it('kan fortsette på eksisterende sak', () => {
         cy.window().then((window) => {
-            const { worker, rest } = window.msw;
+            const { worker, http, HttpResponse } = window.msw;
             worker.use(
-                rest.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, (req, res, ctx) =>
-                    res(
-                        ctx.json({
-                            søker: '29099000129',
-                            fagsakTypeKode: 'PSB',
-                            søknader: [pleiepengerSoknadSomKanSendesInn],
-                        })
-                    )
-                )
+                http.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, () =>
+                    HttpResponse.json({
+                        søker: '29099000129',
+                        fagsakTypeKode: 'PSB',
+                        søknader: [pleiepengerSoknadSomKanSendesInn],
+                    }),
+                ),
             );
         });
 
@@ -84,7 +87,7 @@ describe('Eksisterende søknader pleiepenger', () => {
                 .click();
             cy.url().should(
                 'eq',
-                'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'
+                'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe',
             );
         });
     });

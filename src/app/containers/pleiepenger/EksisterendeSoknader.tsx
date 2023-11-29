@@ -167,10 +167,11 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
             modaler.push(
                 <Modal
                     key={soknadId}
-                    onClose={props.closeEksisterendeSoknadAction}
+                    onBeforeClose={() => {
+                        props.closeEksisterendeSoknadAction();
+                    }}
                     aria-label={soknadId}
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
-                    closeButton={false}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"

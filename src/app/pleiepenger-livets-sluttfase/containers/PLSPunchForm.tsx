@@ -636,7 +636,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         onClose={() => this.setState({ showSettPaaVentModal: false })}
                         aria-label={'settpaaventmodal'}
                         open={this.state.showSettPaaVentModal}
-                        closeButton={false}
                     >
                         <div className="">
                             <SettPaaVentModal
@@ -655,7 +654,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         key={'settpaaventokmodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={punchFormState.settPaaVentSuccess}
                     >
                         <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
@@ -666,7 +664,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         key={'settpaaventerrormodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
@@ -681,10 +678,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             className={'validertSoknadModal'}
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label={'validertSoknadModal'}
-                            closeButton={false}
                             open={!!this.props.punchFormState.isValid}
                         >
-                            <Modal.Content>
+                            <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
                                     <PLSSoknadKvittering
                                         intl={intl}
@@ -708,7 +704,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         {intlHelper(intl, 'skjema.knapp.avbryt')}
                                     </Button>
                                 </div>
-                            </Modal.Content>
+                            </Modal.Body>
                         </Modal>
                     )}
 
@@ -718,7 +714,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         className={'erdusikkermodal'}
                         onClose={() => this.props.validerSoknadReset()}
                         aria-label={'erdusikkermodal'}
-                        closeButton={false}
                         open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal

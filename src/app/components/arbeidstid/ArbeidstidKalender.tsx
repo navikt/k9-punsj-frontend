@@ -100,10 +100,10 @@ export default function ArbeidstidKalender({
             <VerticalSpacer twentyPx />
             <Modal
                 open={visArbeidstidLengrePerioder}
-                onClose={toggleVisArbeidstidLengrePerioder}
+                onClose={() => setVisArbeidstidLengrePerioder(false)}
                 className="venstrestilt lengre-periode-modal"
             >
-                <Modal.Content>
+                <Modal.Body>
                     <ArbeidstidPeriodeListe
                         heading="Periode med jobb"
                         arbeidstidPerioder={arbeidstidInfo.perioder}
@@ -118,7 +118,7 @@ export default function ArbeidstidKalender({
                         }}
                         avbryt={toggleVisArbeidstidLengrePerioder}
                     />
-                </Modal.Content>
+                </Modal.Body>
             </Modal>
             {!!gyldigePerioder.length && (
                 <TidsbrukKalenderContainer

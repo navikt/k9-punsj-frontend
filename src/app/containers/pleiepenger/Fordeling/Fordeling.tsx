@@ -313,12 +313,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="opprettigosysokmodal"
-                onClose={() => {
+                onBeforeClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
                 }}
                 aria-label="settpaaventokmodal"
-                closeButton={false}
                 open={!!opprettIGosysState.gosysOppgaveRequestSuccess}
             >
                 <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
@@ -334,9 +333,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="lukkoppgaveokmodal"
-                onClose={() => lukkOppgaveReset()}
+                onBeforeClose={() => {
+                    lukkOppgaveReset();
+                }}
                 aria-label="settpaaventokmodal"
-                closeButton={false}
                 open={!!fordelingState.lukkOppgaveDone}
             >
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />

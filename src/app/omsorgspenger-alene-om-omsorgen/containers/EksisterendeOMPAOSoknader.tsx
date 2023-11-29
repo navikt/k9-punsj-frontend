@@ -89,7 +89,6 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                     onClose={() => setValgtSoeknad(undefined)}
                     aria-label={soknadId}
                     open={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
-                    closeButton={false}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
