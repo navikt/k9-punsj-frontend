@@ -71,9 +71,9 @@ const FaktiskOgNormalTid = ({
     }, [normaltTimer, faktiskTimer, faktiskMinutter, normaltMinutter]);
 
     return (
-        <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
+        <div className="ml-4 mt-7">
             {heading && <Heading size="medium">{heading}</Heading>}
-            <div style={{ marginTop: '1.5625rem' }}>
+            <div className="mt-6">
                 <ToggleGroup
                     label="Hvordan vil du oppgi arbeidstid?"
                     defaultValue={Tidsformat.TimerOgMin}
@@ -123,7 +123,7 @@ const FaktiskOgNormalTid = ({
                             minutter={normaltMinutter}
                             error={visNormaltError ? normaltError : undefined}
                         />
-                        <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
+                        <div className="mt-3 mb-10">
                             <UtregningArbeidstid arbeidstid={{ timer: normaltTimer, minutter: normaltMinutter }} />
                         </div>
                     </div>
@@ -137,7 +137,7 @@ const FaktiskOgNormalTid = ({
                             minutter={faktiskMinutter}
                             error={visFaktiskError ? faktiskError : undefined}
                         />
-                        <div style={{ marginTop: '0.8125rem', marginBottom: '2.5rem' }}>
+                        <div className="mt-3 mb-10">
                             <UtregningArbeidstid
                                 arbeidstid={{ timer: faktiskTimer, minutter: faktiskMinutter }}
                                 normalArbeidstid={{ timer: normaltTimer, minutter: normaltMinutter }}
@@ -176,9 +176,9 @@ const FaktiskOgNormalTid = ({
                 </div>
             )}
             {lagre && (
-                <div style={{ display: 'flex' }}>
+                <div className="flex">
                     <Button
-                        style={{ flexGrow: 1 }}
+                        className="flex-grow"
                         onClick={() => {
                             setVisFaktiskError(true);
                             setVisNormaltError(true);
@@ -192,7 +192,7 @@ const FaktiskOgNormalTid = ({
                         Lagre
                     </Button>
                     <Button
-                        style={{ flexGrow: 1 }}
+                        className="flex-grow"
                         variant="tertiary"
                         onClick={() => {
                             toggleModal();
