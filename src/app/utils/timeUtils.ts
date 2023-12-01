@@ -21,6 +21,11 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
 dayjs.locale('nb');
 
+export enum Tidsformat {
+    TimerOgMin = 'timerOgMin',
+    Desimaler = 'desimaler',
+}
+
 export const initializeDate = (date?: string | Date | null, format?: string | string[]): dayjs.Dayjs => {
     if (date) {
         return dayjs(date, format).utc(true);

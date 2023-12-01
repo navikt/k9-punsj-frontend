@@ -53,9 +53,36 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/10 dager registrert/i).should('exist');
     });
 
-    // sjekke at journalpostnummer fra flere saker vises
-    // sjekk av validering og feilmeldinger på alle felter
-    // sjekk at man ikke får sende inn dersom man har valideringsfeil
-    // sjekk at alle input-felter fungerer og oppdaterer state?
-    // sjekke at eksisterende søknadsperioder vises?
+    it('kan bytte bytte mellom timer og minutter og desimaler i arbeidstid', () => {
+        cy.get('.soknadsperiodecontainer').within(() => {
+            cy.findByLabelText(/Fra og med/i)
+                .should('exist')
+                .type('08.11.2021');
+            cy.findByLabelText(/Til og med/i)
+                .should('exist')
+                .type('11.11.2021');
+        });
+
+        cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+        cy.findByText(/Arbeidstaker/i).click();
+        cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
+
+        cy.get('.navds-modal').within(() => {
+            cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
+            cy.findAllByLabelText('Minutter').eq(0).clear({ force: true }).type(30, { force: true });
+            cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
+            cy.findByRole('radio', { name: /Desimaltall/i }).click();
+            cy.findByLabelText('Normal arbeidstid').should('have.value', '7.5');
+            cy.findByLabelText('Faktisk arbeidstid').should('have.value', '2');
+            cy.findByLabelText('Normal arbeidstid').clear({ force: true }).type(5.75, { force: true });
+            cy.findByLabelText('Faktisk arbeidstid').clear({ force: true }).type(4, { force: true });
+            cy.findByRole('radio', { name: /Timer og minutter/i }).click();
+            cy.findAllByLabelText('Timer').eq(0).should('have.value', '5');
+            cy.findAllByLabelText('Minutter').eq(0).should('have.value', '45');
+            cy.findAllByLabelText('Timer').eq(1).should('have.value', '4');
+            cy.findByRole('button', { name: /Lagre/i }).click();
+        });
+        cy.findByRole('button', { name: /vis mer/i }).click();
+        cy.findByText(/4 dager registrert/i).should('exist');
+    });
 });

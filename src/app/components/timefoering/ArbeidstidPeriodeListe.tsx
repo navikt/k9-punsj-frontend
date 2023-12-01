@@ -7,8 +7,8 @@ import { Button, Heading } from '@navikt/ds-react';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
+import { konverterPeriodeTilTimerOgMinutter } from 'app/utils';
 
-import VerticalSpacer from '../VerticalSpacer';
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
 const schema = yup.object({
@@ -35,8 +35,13 @@ export default function ArbeidstidPeriodeListe({
             ? [...arbeidstidPerioder]
             : (nyeSoknadsperioder || []).map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
+
     return (
-        <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={(values) => lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)))}
+            validationSchema={schema}
+        >
             {({ handleSubmit, values }) => (
                 <>
                     {heading && <Heading size="small">{heading}</Heading>}
@@ -53,14 +58,15 @@ export default function ArbeidstidPeriodeListe({
                                         remove={() => arrayHelpers.remove(index)}
                                     />
                                 ))}
-                                <Button
-                                    variant="tertiary"
-                                    onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
-                                    icon={<AddCircle />}
-                                >
-                                    Legg til periode
-                                </Button>
-                                <VerticalSpacer eightPx />
+                                <div className="mb-8 mt-4">
+                                    <Button
+                                        variant="tertiary"
+                                        onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
+                                        icon={<AddCircle />}
+                                    >
+                                        Legg til periode
+                                    </Button>
+                                </div>
                                 <div style={{ display: 'flex' }}>
                                     <Button
                                         style={{ flexGrow: 1, marginRight: '0.9375rem' }}

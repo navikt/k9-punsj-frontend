@@ -4,7 +4,7 @@ import { IntlShape } from 'react-intl';
 import { TimeFormat } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 
-import { datetime, initializeDate } from '../../utils/timeUtils';
+import { Tidsformat, datetime, initializeDate } from '../../utils/timeUtils';
 import DateRange from './DateRange';
 import { Periodeinfo } from './Periodeinfo';
 
@@ -106,10 +106,9 @@ export interface IArbeidstidPeriodeMedTimer {
     periode?: IPeriode;
     faktiskArbeidTimerPerDag?: string;
     jobberNormaltTimerPerDag?: string;
-    faktiskArbeidMinutterPerDag?: string;
-    jobberNormaltMinutterPerDag?: string;
     jobberNormaltPerDag?: ITimerOgMinutterString;
     faktiskArbeidPerDag?: ITimerOgMinutterString;
+    tidsformat?: Tidsformat;
 }
 
 export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidstidPeriodeMedTimer>> {
@@ -117,30 +116,27 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
     faktiskArbeidTimerPerDag: string;
 
-    faktiskArbeidMinutterPerDag: string;
-
     jobberNormaltTimerPerDag: string;
-
-    jobberNormaltMinutterPerDag: string;
 
     jobberNormaltPerDag: ITimerOgMinutterString;
 
     faktiskArbeidPerDag: ITimerOgMinutterString;
 
+    tidsformat: Tidsformat;
+
     constructor(pmf: Periodeinfo<IArbeidstidPeriodeMedTimer>) {
         this.periode = new Periode(pmf.periode || {});
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
-        this.faktiskArbeidMinutterPerDag = pmf.faktiskArbeidMinutterPerDag || '';
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
-        this.jobberNormaltMinutterPerDag = pmf.jobberNormaltMinutterPerDag || '';
         this.jobberNormaltPerDag = pmf.jobberNormaltPerDag || {
-            timer: '0',
-            minutter: '0',
+            timer: '',
+            minutter: '',
         };
         this.faktiskArbeidPerDag = pmf.faktiskArbeidPerDag || {
-            timer: '0',
-            minutter: '0',
+            timer: '',
+            minutter: '',
         };
+        this.tidsformat = pmf.tidsformat || Tidsformat.TimerOgMin;
     }
 
     fomTekstKort(intl: IntlShape) {
