@@ -130,19 +130,26 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         this.setState(this.state);
     }
 
-    componentDidUpdate(
-        prevProps: Readonly<IPunchOMPKSFormProps>,
-        prevState: Readonly<IPunchOMPKSFormComponentState>,
-        snapshot?: any,
-    ): void {
+    componentDidUpdate(): void {
         const { soknad } = this.props.punchFormState;
+
         if (!!soknad && !this.state.isFetched) {
+            const barn: Partial<IOMPKSSoknad> = {
+                barn: { norskIdent: this.props.identState.pleietrengendeId || '', foedselsdato: '' },
+            };
+            const soknadForState = () => {
+                if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
+                    return { ...new OMPKSSoknad(soknad as IOMPKSSoknad), ...barn };
+                }
+                return new OMPKSSoknad(soknad as IOMPKSSoknad);
+            };
+
             this.setState({
-                soknad: new OMPKSSoknad(this.props.punchFormState.soknad as IOMPKSSoknad),
+                soknad: soknadForState(),
                 isFetched: true,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
+                this.updateSoknad(barn);
             }
         }
     }
@@ -383,7 +390,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     }
 
     private handleSubmit = () => {
-        let navarandeSoknad: IOMPKSSoknad = this.state.soknad;
+        const navarandeSoknad: IOMPKSSoknad = this.state.soknad;
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
