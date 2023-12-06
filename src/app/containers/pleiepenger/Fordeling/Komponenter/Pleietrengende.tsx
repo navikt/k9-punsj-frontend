@@ -51,10 +51,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         skalHenteBarn,
     } = props;
 
-    if (!visPleietrengende) {
-        return null;
-    }
-
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
@@ -86,7 +82,9 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.søkerId, null);
         }
     };
-
+    if (!visPleietrengende) {
+        return null;
+    }
     return (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
