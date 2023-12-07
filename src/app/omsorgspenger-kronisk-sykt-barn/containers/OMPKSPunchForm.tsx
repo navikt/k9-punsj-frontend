@@ -135,7 +135,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     componentDidUpdate() {
         const { soknad } = this.props.punchFormState;
 
-        if (!!soknad && !this.state.isFetched) {
+        if (soknad && !this.state.isFetched) {
             const barn: Partial<IOMPKSSoknad> = {
                 barn: { norskIdent: this.props.identState.pleietrengendeId || '', foedselsdato: '' },
             };
@@ -199,11 +199,11 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             }
         }
 
-        if (attribute === 'mottattDato' && !!mottattDato && erFremITid(mottattDato)) {
+        if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
-        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
+        if (attribute === 'klokkeslett' && klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
@@ -300,7 +300,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             };
             return {
                 soknad: updatedSoknad,
-                showStatus: !!showStatus || prevState.showStatus,
+                showStatus: showStatus || prevState.showStatus,
             };
         });
     };
@@ -401,7 +401,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     <CheckboksPanel
                         id="medisinskeopplysningercheckbox"
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                        checked={!!soknad.harMedisinskeOpplysninger}
+                        checked={soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
                     <HelpText className="hjelpetext" placement="top-end">
@@ -414,7 +414,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     <CheckboksPanel
                         id="opplysningerikkepunsjetcheckbox"
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
+                        checked={soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
                     <HelpText className="hjelpetext" placement="top-end">
@@ -459,22 +459,22 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 <VerticalSpacer sixteenPx />
 
-                {!!punchFormState.updateSoknadError && (
+                {punchFormState.updateSoknadError && (
                     <Alert size="small" variant="error">
                         {intlHelper(intl, 'skjema.feil.ikke_lagret')}
                     </Alert>
                 )}
-                {!!punchFormState.inputErrors?.length && (
+                {punchFormState.inputErrors?.length && (
                     <Alert size="small" variant="error" className="valideringstripefeil">
                         {intlHelper(intl, 'skjema.feil.validering')}
                     </Alert>
                 )}
-                {!!punchFormState.submitSoknadError && (
+                {punchFormState.submitSoknadError && (
                     <Alert size="small" variant="error">
                         {intlHelper(intl, 'skjema.feil.ikke_sendt')}
                     </Alert>
                 )}
-                {!!punchFormState.submitSoknadConflict && (
+                {punchFormState.submitSoknadConflict && (
                     <Alert size="small" variant="error">
                         {intlHelper(intl, 'skjema.feil.konflikt')}
                     </Alert>
@@ -531,7 +531,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                             className="validertSoknadModal"
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label="validertSoknadModal"
-                            open={!!this.props.punchFormState.isValid}
+                            open={this.props.punchFormState.isValid}
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
