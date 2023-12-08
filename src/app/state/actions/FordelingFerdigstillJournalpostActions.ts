@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import FordelingFerdigstillJournalpostKeys from 'app/models/enums/FordelingFerdigstillJournalpostKeys';
 import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
+import { IResetStateAction } from './GlobalActions';
 
 interface IFerdigstillJournalpostAction {
     type: FordelingFerdigstillJournalpostKeys.JOURNALPOST_FERDIGSTILL;
@@ -62,4 +63,5 @@ export type FordelingFerdigstillJournalpostActions =
     | IFerdigstillJournalpostAction
     | IFerdigstillJournalpostSuccessAction
     | IFerdigstillJournalpostErrorAction
-    | IFerdigstillJournalpostResetAction;
+    | IFerdigstillJournalpostResetAction
+    | IResetStateAction;

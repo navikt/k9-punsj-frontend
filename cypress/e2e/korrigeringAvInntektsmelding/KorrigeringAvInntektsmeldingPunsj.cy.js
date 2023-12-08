@@ -2,7 +2,7 @@ import initialState from '../../state/PleiepengerPunsjInitialState';
 
 describe('Korrigering av inntektsmelding punsj', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200#/korrigering-av-inntektsmelding', {
+        cy.visit('/journalpost/200/korrigering-av-inntektsmelding', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
@@ -26,12 +26,13 @@ describe('Korrigering av inntektsmelding punsj', () => {
             .type('01112021');
         cy.findByLabelText(/Til og med/i)
             .should('exist')
-            .type('02112021').blur();
+            .type('02112021')
+            .blur();
 
         cy.sendInnSoknad();
 
         cy.findByText(
-            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.'
+            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.',
         ).should('exist');
         cy.findByText('Oppsummering').should('exist');
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');

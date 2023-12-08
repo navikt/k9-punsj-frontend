@@ -1,5 +1,6 @@
 import { GosysOppgaveActionKeys } from '../../models/enums/GosysOppgaveActionKeys';
 import { IGosysOppgaveState } from '../../models/types/GosysOppgaveState';
+import { RESET_ALL } from '../actions/GlobalActions';
 import { IOpprettGosysOppgaveActionTypes } from '../actions/GosysOppgaveActions';
 
 const initialState: IGosysOppgaveState = {
@@ -43,6 +44,9 @@ export function GosysOppgaveReducer(
                 gosysOppgaveRequestSuccess: false,
                 gosysOppgaveRequestError: undefined,
             };
+        case RESET_ALL: {
+            return { ...initialState };
+        }
 
         default:
             return gosysOppgaveState;

@@ -4,6 +4,7 @@ import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models
 import { IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
+import { IResetStateAction } from './GlobalActions';
 
 interface ISetSakstypeAction {
     type: FordelingActionKeys.SAKSTYPE_SET;
@@ -116,6 +117,10 @@ export const setValgtGosysKategoriAction = (valgtGosysKategori: string): ISetVal
     valgtGosysKategori,
 });
 
+export const resetFordeling = () => ({
+    type: FordelingActionKeys.RESET_FORDELING,
+});
+
 export type IFordelingActionTypes =
     | ISetSakstypeAction
     | ISetFagsakAction
@@ -131,7 +136,9 @@ export type IFordelingActionTypes =
     | IGosysGjelderErrorAction
     | ISetErSøkerIdBekreftetAction
     | ISetValgtGosysKategori
-    | ISetDokumenttypeAction;
+    | ISetDokumenttypeAction
+    | { type: FordelingActionKeys.RESET_FORDELING }
+    | IResetStateAction;
 
 export const lukkJournalpostOppgave =
     (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) => (dispatch: any) => {

@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Button } from '@navikt/ds-react';
 
 import { RootStateType } from 'app/state/RootState';
 
-import { ISakstypeDefault, ISakstypePunch } from '../../../../models/Sakstype';
+import { ISakstypePunch } from '../../../../models/Sakstype';
 import { Sakstype } from '../../../../models/enums';
-import { setHash } from '../../../../utils';
 import { IFordelingProps } from '../Fordeling';
 import KlassifiserModal from './KlassifiserModal';
 
 type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent: string;
-    sakstypeConfig?: ISakstypeDefault;
+    sakstypeConfig?: ISakstypePunch;
     gosysKategoriJournalforing: string;
 };
 
@@ -27,15 +27,15 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     gosysKategoriJournalforing,
 }) => {
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
+    const navigate = useNavigate();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     if (!sakstypeConfig || !journalpost) {
         return null;
     }
 
-    if ((sakstypeConfig as ISakstypePunch).punchPath) {
-        const punchConfig = sakstypeConfig as ISakstypePunch;
+    if (sakstypeConfig?.punchPath) {
         return (
-            <Button onClick={() => setHash(punchConfig.punchPath)}>
+            <Button onClick={() => navigate(sakstypeConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
             </Button>
         );

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import React from 'react';
-import { IntlShape } from 'react-intl';
+import { IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import Kopier from 'app/components/kopier/Kopier';
@@ -34,8 +34,7 @@ import {
 import './soknadKvittering.less';
 
 interface IOwnProps {
-    intl: any;
-    response: IPSBSoknadKvittering;
+    innsendtSøknad: IPSBSoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
@@ -152,23 +151,20 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
     );
 };
 
-export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    response,
+export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
+    innsendtSøknad,
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
-    const { ytelse, journalposter } = response;
+    const { ytelse, begrunnelseForInnsending, mottattDato, journalposter } = innsendtSøknad;
+    const intl = useIntl();
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
         sjekkPropertyEksistererOgIkkeErNull('søknadsperiode', ytelse) && ytelse.søknadsperiode.length > 0;
     const visTrukkedePerioder =
         sjekkPropertyEksistererOgIkkeErNull('trekkKravPerioder', ytelse) && ytelse.trekkKravPerioder.length > 0;
-    const visBegrunnelseForInnsending =
-        sjekkPropertyEksistererOgIkkeErNull('begrunnelseForInnsending', response) &&
-        response.begrunnelseForInnsending.tekst;
-    const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+
     const visUtenlandsopphold = sjekkHvisPerioderEksisterer('utenlandsopphold', ytelse);
     const visFerie = sjekkHvisPerioderEksisterer('lovbestemtFerie', ytelse) && Object.keys(skalHaferieListe).length > 0;
     const visFerieSomSkalSLettes =
@@ -217,15 +213,13 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                 </div>
             )}
 
-            {visOpplysningerOmSoknad && (
+            {mottattDato && (
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
                     <p>
                         <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
-                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato,
-                        )}`}
+                        {`${formattereDatoFraUTCTilGMT(mottattDato)} - ${formattereTidspunktFraUTCTilGMT(mottattDato)}`}
                     </p>
                     {visTrukkedePerioder && (
                         <p>
@@ -233,10 +227,10 @@ export const SoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
                         </p>
                     )}
-                    {visBegrunnelseForInnsending && (
+                    {begrunnelseForInnsending && (
                         <p>
                             <b>Begrunnelse for endring: </b>
-                            {response.begrunnelseForInnsending.tekst}
+                            {begrunnelseForInnsending.tekst}
                         </p>
                     )}
                 </div>
@@ -502,4 +496,4 @@ const mapStateToProps = (state: RootStateType) => ({
     annenSokerIdent: state.identState.annenSokerIdent,
 });
 
-export default connect(mapStateToProps)(SoknadKvittering);
+export default connect(mapStateToProps)(PSBSoknadKvittering);

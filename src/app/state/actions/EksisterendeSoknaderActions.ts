@@ -6,6 +6,7 @@ import { convertResponseToError, get, post } from 'app/utils';
 import { IPSBSoknad } from '../../models/types/PSBSoknad';
 import { IOpprettSoknad } from '../../models/types/RequestBodies';
 import { ISoknadSvar } from '../../models/types/SoknadSvar';
+import { IResetStateAction } from './GlobalActions';
 
 interface ISetEksisterendeSoknaderAction {
     type: EksisterendeSoknaderActionKeys.EKSISTERENDE_SOKNADER_SET;
@@ -66,7 +67,8 @@ export type IEksisterendeSoknaderActionTypes =
     | IMapperActionTypes
     | ISoknadinfoActionTypes
     | ICreateSoknadActions
-    | IResetSoknadidAction;
+    | IResetSoknadidAction
+    | IResetStateAction;
 
 export function setEksisterendeSoknaderAction(eksisterendeSoknaderSvar: ISoknadSvar): ISetEksisterendeSoknaderAction {
     return {

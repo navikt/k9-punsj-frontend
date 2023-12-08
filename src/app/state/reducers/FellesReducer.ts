@@ -13,10 +13,12 @@ import {
     IHentBarnRequestAction,
     IHentBarnSuccessAction,
 } from './HentBarn';
+import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
 
 export interface IFellesState {
     dedupKey: string;
     journalpost?: IJournalpost;
+    journalposterIAapenSoknad?: string[];
     isJournalpostLoading?: boolean;
     journalpostNotFound?: boolean;
     journalpostForbidden?: boolean;
@@ -50,6 +52,8 @@ enum Actiontypes {
     JOURNALPOST_KOPIERE_REQUEST = 'FELLES/JOURNALPOST_KOPIERE_REQUEST',
     JOURNALPOST_KOPIERE_ERROR = 'FELLES/JOURNALPOST_KOPIERE_ERROR',
     RESET_BARN = 'FELLES/RESET_BARN',
+    RESET_FELLES = 'FELLES/RESET_FELLES',
+    SET_JOURNALPOSTER_AAPEN_SOKNAD = 'FELLES/SET_JOURNALPOSTER_AAPEN_SOKNAD',
 }
 
 interface IResetDedupKeyAction {
@@ -102,6 +106,10 @@ interface IJournalpostKopiereRequestAction {
 interface IJournalpostKopiereErrorAction {
     type: Actiontypes.JOURNALPOST_KOPIERE_ERROR;
 }
+interface ISetJournalposterIAapenSoknad {
+    type: Actiontypes.SET_JOURNALPOSTER_AAPEN_SOKNAD;
+    journalposter: string[];
+}
 
 interface IResetBarnAction {
     type: Actiontypes.RESET_BARN;
@@ -136,6 +144,10 @@ export function getJournalpostConflictAction(response: IJournalpostConflictRespo
 
 export function resetBarnAction(): IResetBarnAction {
     return { type: Actiontypes.RESET_BARN };
+}
+
+export function resetFellesAction() {
+    return { type: Actiontypes.RESET_FELLES };
 }
 
 export function getJournalpost(journalpostid: string) {
@@ -180,6 +192,9 @@ export function getJournalpostKopiereSuccessAction(): IJournalpostKopiereSuccess
 export function getJournalpostKopiereErrorAction(): IJournalpostKopiereErrorAction {
     return { type: Actiontypes.JOURNALPOST_KOPIERE_ERROR };
 }
+export function setJournalposterFraAapenSoknad(journalposter: string[]): ISetJournalposterIAapenSoknad {
+    return { type: Actiontypes.SET_JOURNALPOSTER_AAPEN_SOKNAD, journalposter };
+}
 
 type IJournalpostActionTypes =
     | ISetJournalpostAction
@@ -197,7 +212,9 @@ type IJournalpostActionTypes =
     | IHentBarnRequestAction
     | IHentBarnSuccessAction
     | IHentBarnErrorAction
-    | IResetBarnAction;
+    | IResetBarnAction
+    | IResetStateAction
+    | ISetJournalposterIAapenSoknad;
 
 export function kopierJournalpost(
     kopierFraIdent: string,
@@ -239,6 +256,7 @@ export function kopierJournalpost(
 const initialState: IFellesState = {
     dedupKey: ulid(),
     journalpost: undefined,
+    journalposterIAapenSoknad: [],
 };
 
 export default function FellesReducer(
@@ -375,6 +393,16 @@ export default function FellesReducer(
                 isAwaitingHentBarnResponse: undefined,
                 hentBarnSuccess: undefined,
                 harHentBarnResponse: undefined,
+            };
+        case Actiontypes.SET_JOURNALPOSTER_AAPEN_SOKNAD: {
+            return {
+                ...state,
+                journalposterIAapenSoknad: action.journalposter,
+            };
+        }
+        case RESET_ALL:
+            return {
+                ...initialState,
             };
 
         default:

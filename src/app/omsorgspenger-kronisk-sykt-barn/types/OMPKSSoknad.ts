@@ -3,7 +3,7 @@
 export interface IOMPKSSoknad {
     soeknadId?: string;
     soekerId: string;
-    journalposter?: Set<string>;
+    journalposter: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;

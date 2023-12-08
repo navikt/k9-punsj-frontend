@@ -6,52 +6,12 @@ const EksisterendeSoknaderInitialState = {
             isValid: false,
             awaitingSettPaaVentResponse: false,
         },
-        punchState: {
-            step: 0,
-            søkerId: '29099000129',
-            pleietrengendeId: '16017725002',
-        },
         signaturState: {
             signert: null,
             isAwaitingUsignertRequestResponse: false,
         },
     },
-    OMSORGSPENGER_OVERFØRING: {
-        signatur: {
-            skjema: {
-                identitetsnummer: '',
-                signert: null,
-                sammeIdentSomRegistrert: null,
-            },
-        },
-        punch: {
-            skjema: {
-                norskIdent: null,
-                arbeidssituasjon: {
-                    erArbeidstaker: false,
-                    erFrilanser: false,
-                    erSelvstendigNæringsdrivende: false,
-                    metaHarFeil: null,
-                },
-                borINorge: null,
-                omsorgenDelesMed: {
-                    norskIdent: '',
-                    antallOverførteDager: 0,
-                    mottaker: null,
-                    samboerSiden: null,
-                },
-                aleneOmOmsorgen: null,
-                barn: [
-                    {
-                        norskIdent: null,
-                        fødselsdato: null,
-                    },
-                ],
-                mottaksdato: null,
-            },
-            innsendingsstatus: 'IkkeSendtInn',
-        },
-    },
+
     OMSORGSPENGER_FORDELING: {
         opprettIGosys: {
             isAwaitingGosysOppgaveRequestResponse: false,

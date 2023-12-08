@@ -1,6 +1,7 @@
 import { FordelingActionKeys } from 'app/models/enums';
 import { IFordelingState } from 'app/models/types';
 import { IFordelingActionTypes } from 'app/state/actions';
+import { RESET_ALL } from '../actions/GlobalActions';
 
 const initialState: IFordelingState = {
     sakstype: undefined,
@@ -123,6 +124,16 @@ export function FordelingReducer(
             return {
                 ...fordelingState,
                 valgtGosysKategori: action.valgtGosysKategori,
+            };
+
+        case FordelingActionKeys.RESET_FORDELING:
+            return {
+                ...initialState,
+            };
+
+        case RESET_ALL:
+            return {
+                ...initialState,
             };
 
         default:
