@@ -10,6 +10,7 @@ import { IPSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { Periode } from '../../models/types/Periode';
 import { IHentPerioder } from '../../models/types/RequestBodies';
 import { ISendSoknad } from '../../models/types/SendSoknad';
+import { IResetStateAction } from './GlobalActions';
 
 interface IResetPunchFormAction {
     type: PunchFormActionKeys.RESET;
@@ -185,7 +186,8 @@ export type IPunchFormActionTypes =
     | ISoknadSubmitActionTypes
     | IPerioderActionTypes
     | ISettPaaVentActionTypes
-    | IValiderSoknadActionTypes;
+    | IValiderSoknadActionTypes
+    | IResetStateAction;
 
 export const resetPunchFormAction = (): IResetPunchFormAction => ({
     type: PunchFormActionKeys.RESET,

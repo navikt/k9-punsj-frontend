@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
 import { connect } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import Kopier from 'app/components/kopier/Kopier';
 import { RootStateType } from 'app/state/RootState';
@@ -20,14 +21,12 @@ import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
 import './ompKSSoknadKvittering.less';
 
 interface IOwnProps {
-    intl: any;
     response: IOMPKSSoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
 export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
     response,
     kopierJournalpostSuccess,
     annenSokerIdent,
@@ -36,6 +35,7 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
     const { journalposter } = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+    const intl = useIntl();
 
     return (
         <div className={classNames('OMPKSSoknadKvitteringContainer')}>

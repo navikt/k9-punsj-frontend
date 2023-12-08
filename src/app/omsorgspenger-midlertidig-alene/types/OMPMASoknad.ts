@@ -5,7 +5,7 @@ export interface IOMPMASoknad {
     soeknadId: string;
     soekerId: string;
     barn: PersonEnkel[];
-    journalposter?: Set<string>;
+    journalposter: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
     annenForelder: AnnenForelderType;

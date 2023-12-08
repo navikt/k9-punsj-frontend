@@ -2,9 +2,9 @@ import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import * as React from 'react';
-import { IntlShape, createIntl } from 'react-intl';
+import { IntlShape } from 'react-intl';
 
-import { SoknadKvittering } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { PSBSoknadKvittering } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 
@@ -187,10 +187,8 @@ const minimalResponse: IPSBSoknadKvittering = {
 };
 
 const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
-    const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
-    return shallow(<SoknadKvittering intl={intlMock} response={response} />);
+    return shallow(<PSBSoknadKvittering innsendtSøknad={response} />);
 };
 
 describe('SoknadKvittering', () => {

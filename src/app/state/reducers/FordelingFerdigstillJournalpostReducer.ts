@@ -3,6 +3,7 @@ import FordelingFerdigstillJournalpostKeys from 'app/models/enums/FordelingFerdi
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
 
 import { FordelingFerdigstillJournalpostActions } from '../actions/FordelingFerdigstillJournalpostActions';
+import { RESET_ALL } from '../actions/GlobalActions';
 
 const initialState: FordelingFerdigstillJournalpostState = {
     ferdigstillJournalpostError: undefined,
@@ -42,6 +43,9 @@ export function FordelingFerdigstillJournalpostReducer(
                 ferdigstillJournalpostSuccess: false,
                 ferdigstillJournalpostError: undefined,
             };
+        case RESET_ALL: {
+            return { ...initialState };
+        }
         default:
             return fordelingFerdigstillJournalpostState;
     }

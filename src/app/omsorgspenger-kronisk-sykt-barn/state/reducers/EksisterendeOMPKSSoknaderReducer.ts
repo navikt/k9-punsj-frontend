@@ -83,7 +83,6 @@ export function EksisterendeOMPKSSoknaderReducer(
                 isSoknadCreated: true,
                 isAwaitingSoknadCreation: false,
                 createSoknadRequestError: undefined,
-                eksisterendeSoknaderSvar: {},
             };
 
         case EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNAD_CREATE_ERROR:

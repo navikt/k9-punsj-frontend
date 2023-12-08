@@ -1,4 +1,5 @@
 import { IIdentState } from '../../models/types/IdentState';
+import { RESET_ALL } from '../actions/GlobalActions';
 import { IIdentActions, IdentActionKeys } from '../actions/IdentActions';
 
 export const initialState: IIdentState = {
@@ -29,7 +30,12 @@ export function IdentReducer(identState: IIdentState = initialState, action: IId
                 ...identState,
                 pleietrengendeId: '',
                 annenSokerIdent: '',
+                annenPart: '',
             };
+
+        case RESET_ALL: {
+            return { ...initialState };
+        }
 
         default:
             return identState;

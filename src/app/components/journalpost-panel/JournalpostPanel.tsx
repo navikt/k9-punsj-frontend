@@ -1,5 +1,5 @@
 import React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { ExternalLink } from '@navikt/ds-icons';
@@ -26,10 +26,9 @@ interface IJournalpostComponentStateProps {
 }
 
 export const JournalpostPanelComponent: React.FunctionComponent<
-    WrappedComponentProps & IJournalpostPanelStateProps & IJournalpostComponentStateProps
+    IJournalpostPanelStateProps & IJournalpostComponentStateProps
 > = (props) => {
     const {
-        intl,
         journalpost,
         fordelingState,
         identState: { søkerId, pleietrengendeId },
@@ -38,6 +37,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
 
     const ident = søkerId || journalpost?.norskIdent;
     const modiaPath = getModiaPath(ident);
+    const intl = useIntl();
 
     return (
         <Panel border className="journalpostpanel">
@@ -93,4 +93,4 @@ const mapStateToProps = (state: RootStateType): IJournalpostPanelStateProps => (
     fordelingState: state.fordelingState,
 });
 
-export const JournalpostPanel = injectIntl(connect(mapStateToProps)(JournalpostPanelComponent));
+export const JournalpostPanel = connect(mapStateToProps)(JournalpostPanelComponent);

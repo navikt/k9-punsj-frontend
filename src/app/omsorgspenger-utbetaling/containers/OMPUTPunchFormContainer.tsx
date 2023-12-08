@@ -1,10 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
 import { Formik, yupToFormErrors } from 'formik';
-import React, { useContext, useState } from 'react';
-import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
@@ -13,14 +13,17 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { ROUTES } from 'app/constants/routes';
 
 import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { backendTilFrontendMapping } from '../utils';
 import { OMPUTPunchForm } from './OMPUTPunchForm';
+import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
+import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 
 interface OwnProps {
     journalpostid: string;
@@ -29,18 +32,25 @@ export interface IPunchOMPUTFormStateProps {
     identState: IIdentState;
 }
 
-type IPunchOMPUTFormProps = OwnProps & WrappedComponentProps & IPunchOMPUTFormStateProps;
+type IPunchOMPUTFormProps = OwnProps & IPunchOMPUTFormStateProps;
 
 const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
     const { identState } = props;
     const { id } = useParams<{ id: string }>();
-    const history = useHistory();
+    const intl = useIntl();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
+    const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
+
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
-    const routingPaths = useContext(RoutingPathsContext);
-    const dispatch = useDispatch();
+    const [erSendtInn, setErSendtInn] = useState(false);
+
+    if (!id) {
+        throw Error('Mangler id');
+    }
 
     const { mutate: hentPerioderK9 } = useMutation(
         ({ soekerId, periode }: { soekerId: string; periode?: IPeriode }) =>
@@ -63,19 +73,24 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         },
     });
     const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
-        onSuccess: () => {
-            history.push(`${routingPaths.kvittering}${id}`);
+        onSuccess: (data) => {
+            if ('søknadId' in data) {
+                setErSendtInn(true);
+            }
         },
     });
 
-    const intl = useIntl();
-
     const handleStartButtonClick = () => {
-        history.push('/');
+        dispatch(resetAllStateAction());
+        navigate(ROUTES.HOME);
     };
 
     if (isLoading) {
         return <Loader size="large" />;
+    }
+
+    if (erSendtInn && kvittering) {
+        return <KvitteringContainer kvittering={kvittering} />;
     }
 
     if (error || !soeknadRespons) {
@@ -116,6 +131,8 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                 eksisterendePerioder={eksisterendePerioder}
                 setK9FormatErrors={setK9FormatErrors}
                 submitError={submitError}
+                setKvittering={setKvittering}
+                kvittering={kvittering}
                 {...props}
             />
         </Formik>
@@ -126,4 +143,4 @@ const mapStateToProps = (state: RootStateType): Partial<IPunchOMPUTFormStateProp
     identState: state.identState,
 });
 
-export default injectIntl(connect(mapStateToProps)(OMPUTPunchFormContainer));
+export default connect(mapStateToProps)(OMPUTPunchFormContainer);

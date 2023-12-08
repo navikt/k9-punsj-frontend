@@ -121,8 +121,6 @@ const setupPunchForm = (
         getSoknad: jest.fn(),
         hentPerioder: jest.fn(),
         resetSoknadAction: jest.fn(),
-        setStepAction: jest.fn(),
-        setIdentAction: jest.fn(),
         resetPunchFormAction: jest.fn(),
         submitSoknad: jest.fn(),
         undoChoiceOfEksisterendeSoknadAction: jest.fn(),

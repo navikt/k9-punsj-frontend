@@ -4,7 +4,7 @@ import { initialState } from '../../state/omsorgspenger-utbetaling/eksisterendeS
 
 describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200#/omsorgspenger-utbetaling/soeknader', {
+        cy.visit('/journalpost/200/omsorgspenger-utbetaling/soknader/', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
@@ -52,7 +52,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
                 .click();
             cy.url().should(
                 'eq',
-                'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/4e177e4d-922d-4205-a3e9-d3278da2abf7',
+                'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/skjema/4e177e4d-922d-4205-a3e9-d3278da2abf7/',
             );
         });
     });
@@ -62,7 +62,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
         cy.findByRole('button', { name: /tilbake/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200');
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
@@ -78,7 +78,7 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
 
         cy.url().should(
             'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
+            'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff/',
         );
     });
 

@@ -13,7 +13,7 @@ import { IUttak, Uttak } from './Uttak';
 export interface IPSBSoknad {
     soeknadId?: string;
     soekerId: string;
-    journalposter?: Set<string>;
+    journalposter: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
     barn: IBarn;

@@ -1,3 +1,5 @@
+import { IResetStateAction } from './GlobalActions';
+
 export enum IdentActionKeys {
     IDENT_FELLES_SET = 'IDENT_SET_FELLES',
     IDENT_RESET = 'IDENT_RESET',
@@ -19,7 +21,7 @@ export type IIdentSetAnnenPart = {
     annenPart: string;
 };
 
-export type IIdentActions = ISetIdentFellesAction | IIdentReset | IIdentSetAnnenPart;
+export type IIdentActions = ISetIdentFellesAction | IIdentReset | IIdentSetAnnenPart | IResetStateAction;
 
 export const resetIdentState = () => ({
     type: IdentActionKeys.IDENT_RESET,

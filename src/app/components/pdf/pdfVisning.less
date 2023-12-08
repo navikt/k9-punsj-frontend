@@ -13,7 +13,9 @@
     &.pdf_closed {
         width: 54px !important;
         min-width: 54px !important;
-        transition: width 0.2s, min-width 0.2s;
+        transition:
+            width 0.2s,
+            min-width 0.2s;
 
         div {
             cursor: default !important;
@@ -46,35 +48,21 @@
     align-items: stretch;
 
     .fleredokumenter {
-        @buttonHeight: 40px;
+        @buttonHeight: 60px;
 
         display: flex;
-        overflow: scroll;
 
         > div {
             background-color: @white;
             border-radius: 2px;
-            display: flex;
 
-            p {
+            span {
                 margin: auto;
             }
         }
 
-        > div,
-        .navds-button {
-            flex-grow: 1;
-            height: @buttonHeight;
-        }
-
-        .navds-button {
-            margin-left: @pdfPadding;
-
-            &.aktiv {
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-                height: calc(@buttonHeight + @pdfPadding);
-            }
+        .navds-toggle-group {
+            display: block;
         }
     }
 
